@@ -168,7 +168,7 @@ class CorSer(PyLayers):
             filesc = filter(lambda x : 'Sc'+scenario in x ,files)
             self._fileTCR = filter(lambda x : 'R'+str(run) in x ,filsc)[0]
             self.scenario= scenario
-            self.run = str(run) 
+            self.run = str(run)
 
         filename = dirname + '/'+ self._fileTCR
         dtTCR = pd.read_csv(filename)
@@ -367,6 +367,13 @@ class CorSer(PyLayers):
 
     def pltlk(self,a,b,t0=0,t1=10,fig=[],ax=[],figsize=(8,8),reciprocal=True,data=True):
         """
+        Parameters
+        ----------
+
+        a : node name
+        b : node name
+        t0 : start time 
+        t1 : stop time
         """
         ia = self.hkb[a]-1
         ib = self.hkb[b]-1
