@@ -17,9 +17,13 @@ class CorSer(PyLayers):
 
     """
 
-    def __init__(self,serie=6,day=11,root='/home/uguen/svn2/measures/CORMORAN/',source='UR1'):
+    def __init__(self,serie=6,day=11,source='UR1'):
 
-        self.root =root
+        try:
+            self.root =os.environ['CORMORAN']
+        except:
+            raise NameError('Please add a CORMORAN environement variable \
+                            pointing to the data')  
         self.serie = serie
         self.day = day
 
@@ -139,7 +143,10 @@ class CorSer(PyLayers):
 
         files = os.listdir(dirname)
         if serie != '':
-            self._fileTCR = filter(lambda x : 'S'+str(serie) in x ,files)[0]
+            try:
+                self._fileTCR = filter(lambda x : 'S'+str(serie) in x ,files)[0]
+            except:
+                self._fileTCR = filter(lambda x : 's'+str(serie) in x ,files)[0]
         else:
             filesc = filter(lambda x : 'Sc'+scenario in x ,files)
             self._fileTCR = filter(lambda x : 'R'+str(run) in x ,filsc)[0]
@@ -173,6 +180,7 @@ class CorSer(PyLayers):
         """ load BeSpoon data
 
         """
+
         self.dBS = {157:'LeftWrist?',74:'RightAnckle?'}
         if day==11:
             dirname = self.root+'/POST-TREATED/11-06-2014/BeSpoon'
@@ -181,7 +189,10 @@ class CorSer(PyLayers):
 
         files = os.listdir(dirname)
         if serie != '':
-            self._fileBS = filter(lambda x : 'S'+str(serie) in x ,files)[0]
+            try:
+                self._fileBS = filter(lambda x : 'S'+str(serie) in x ,files)[0]
+            except:
+                self._fileBS = filter(lambda x : 's'+str(serie) in x ,files)[0]
         else:
             filesc = filter(lambda x : 'Sc'+scenario in x ,files)
             self._fileBS = filter(lambda x : 'R'+str(run) in x ,filsc)[0]
