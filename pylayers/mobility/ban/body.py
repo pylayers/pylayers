@@ -1089,7 +1089,8 @@ class Body(PyLayers):
                     'sstep':2,
                     'planes':['xz','xy','yz'],
                     'dev':False,
-                    'figsize':(10,10)
+                    'figsize':(10,10),
+                    'sharex':False
                     }
 
         fargs={}
@@ -1110,7 +1111,7 @@ class Body(PyLayers):
         vstep=np.arange(0,len(frange))*fargs['sstep']
 
 
-        fig,axs = plt.subplots(nrows =len(fargs['planes']),ncols=1,sharex=True,figsize=fargs['figsize'])
+        fig,axs = plt.subplots(nrows =len(fargs['planes']),ncols=1,sharex=fargs['sharex'],figsize=fargs['figsize'])
         if not isinstance(axs,np.ndarray):
             axs=np.array([axs])
         for p,ax in enumerate(axs):
@@ -1119,18 +1120,18 @@ class Body(PyLayers):
                                  widthfactor=50,offset=vstep[uf],
                                  frameId=f,fig=fig,ax=ax)
 
-            ax.set_aspect('auto')
-            ax.set_ylabel('position (m)')
-            ax.set_title(fargs['planes'][p])
-            ax.set_xlabel('time (s)')
-            ax.set_xlim(vstep[0]-fargs['sstep'] ,vstep[-1]+fargs['sstep'])
-            if 'z' in fargs['planes'][p]:
-                ax.set_ylim(0,2)
-            else :
-                ax.set_ylim(-2,2)
-           
-            ax.set_xticklabels(labrange)
+                ax.set_aspect('auto')
+                ax.set_ylabel('position (m)')
+                ax.set_title('Plane ' + fargs['planes'][p])
+                ax.set_xlabel('time (s)')
+                ax.set_xlim(vstep[0]-fargs['sstep'] ,vstep[-1]+fargs['sstep'])
+                if 'z' in fargs['planes'][p]:
+                    ax.set_ylim(0,2)
+                else :
+                    ax.set_ylim(-2,2)
+                ax.set_xticklabels(labrange)
 
+        plt.tight_layout()
         return fig,ax
 
     def movie(self,**kwargs):

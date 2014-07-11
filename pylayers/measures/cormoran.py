@@ -171,9 +171,9 @@ class CorSer(PyLayers):
         files = os.listdir(dirname)
         if serie != '':
             try:
-                self._fileTCR = filter(lambda x : 'S'+str(serie) in x ,files)[0]
+                self._fileTCR = filter(lambda x : '_S'+str(serie)+'_' in x ,files)[0]
             except:
-                self._fileTCR = filter(lambda x : 's'+str(serie) in x ,files)[0]
+                self._fileTCR = filter(lambda x : '_s'+str(serie)+'_' in x ,files)[0]
             tt = self._fileTCR.split('_')
             self.scenario=tt[0].replace('Sc','')
             self.run = tt[2].replace('R','')
