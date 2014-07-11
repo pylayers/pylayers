@@ -1097,6 +1097,7 @@ class Body(PyLayers):
                     'tstep':5,
                     'sstep':2,
                     'planes':['xz','xy','yz'],
+                    'dev':False,
                     'figsize':(10,10)
                     }
 
@@ -1122,7 +1123,9 @@ class Body(PyLayers):
             axs=np.array([axs])
         for p,ax in enumerate(axs):
             for uf,f in enumerate(frange):
-                fig,ax=self.show(color='b',plane=fargs['planes'][p],widthfactor=50,offset=vstep[uf],frameId=f,fig=fig,ax=ax)
+                fig,ax=self.show(color='b',plane=fargs['planes'][p],dev=fargs['dev'],
+                                 widthfactor=50,offset=vstep[uf],
+                                 frameId=f,fig=fig,ax=ax)
 
             ax.set_aspect('auto')
             ax.set_ylabel(fargs['planes'][p])
@@ -1434,10 +1437,15 @@ class Body(PyLayers):
                     'widthfactor' : 1.,
                     'tube_sides' : 6,
                     'pattern':False,
+
                     'lccs':[],
+
+                    'dev':False,
+
                     'ccs':False,
 
                     'dcs':False,
+                    'devcolor':'green',
                     'color':'white',
                     'k':0,
                     'save':False}
@@ -1498,6 +1506,17 @@ class Body(PyLayers):
         # partnames = [self.name +' ' +self.idcyl[k] for k in range(self.ncyl)]
         # [f.children[k].__setattr__('name', partnames[k]+str(k))
         #  for k in range(self.ncyl)]
+
+        if kwargs['dev']:
+            if 'topos' in dir(self):
+                colhex = cold[kwargs['devcolor']]
+                dev_color = tuple(pyu.rgb(colhex)/255.)
+                dev = self.dev.keys()
+                X=np.array(self.getdevp(dev)).T
+                mlab.points3d(X[0,:],X[1,:], X[2,:], 
+                              scale_factor=0.1, 
+                              resolution=10, 
+                              color = dev_color)
 
         if kwargs['ccs']:
             # to be improved
@@ -1582,6 +1601,7 @@ class Body(PyLayers):
         defaults = {'frameId' : 0,
                     'plane': 'yz',
                     'widthfactor' : 10,
+                    'dev':False,
                     'topos':False,
                     'offset':0}
 
@@ -1623,7 +1643,10 @@ class Body(PyLayers):
                 phe =  np.array([self.d[ax1, khe, fId], self.d[ax2, khe, fId]])[:,np.newaxis]
 
             fig,ax = plu.displot(pta+offset,phe+offset,linewidth = cylrad*kwargs['widthfactor'],**args)
-
+        if kwargs['dev']:
+            if 'topos' in dir(self):
+                pdev=np.array(self.getdevp(self.dev.keys()))
+                ax.plot(pdev[:,ax1]+offset[0],pdev[:,ax2]+offset[1],'og')
         # plt.axis('scaled')
         return(fig,ax)
 
