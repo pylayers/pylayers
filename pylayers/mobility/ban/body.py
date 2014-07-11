@@ -1104,6 +1104,7 @@ class Body(PyLayers):
         mocaptres = self.Tmocap/self.nframes
         step = int(fargs['tstep']/mocaptres)
         trange=np.arange(fargs['tstart'],fargs['tend'],fargs['tstep'])
+        labrange = np.arange(fargs['tstart']-fargs['tstep'],fargs['tend']+fargs['tstep'],fargs['tstep'])
         frange=range(fstart,fend,step)
 
         vstep=np.arange(0,len(frange))*fargs['sstep']
@@ -1119,14 +1120,16 @@ class Body(PyLayers):
                                  frameId=f,fig=fig,ax=ax)
 
             ax.set_aspect('auto')
-            ax.set_ylabel(fargs['planes'][p])
+            ax.set_ylabel('position (m)')
+            ax.set_title(fargs['planes'][p])
             ax.set_xlabel('time (s)')
-            ax.set_xlim(vstep[0],vstep[-1])
+            ax.set_xlim(vstep[0]-fargs['sstep'] ,vstep[-1]+fargs['sstep'])
             if 'z' in fargs['planes'][p]:
                 ax.set_ylim(0,2)
             else :
                 ax.set_ylim(-2,2)
-            ax.set_xticklabels(trange)
+           
+            ax.set_xticklabels(labrange)
 
         return fig,ax
 
