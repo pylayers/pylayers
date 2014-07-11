@@ -53,12 +53,7 @@ class CorSer(PyLayers):
             elif (self.typ=='TCR'):
                 self.subject=['Bernard']
 
-        if self.typ == 'TCR':
-            scenario = self.scenario[2:].replace('.','')
-            run = self.run.replace('r','')
-            self._filename = 'Sc' + scenario + '_S' + str(self.serie) + '_R' + str(run) + '_' + self.typ
-        else :
-            self._filename = 'Sc' + self.scenario + '_S' + str(self.serie) + '_R' + str(self.run) + '_' + self.typ
+        self._filename = 'Sc' + self.scenario + '_S' + str(self.serie) + '_R' + str(self.run) + '_' + self.typ
 
     def __repr__(self):
         st = ''
@@ -317,6 +312,8 @@ class CorSer(PyLayers):
         plt.subplot(111)
         plt.imshow(F0)
         plt.title('t = '+str(t0)+'s')
+        if save :
+            plt.savefig(self._filename +'_'+str(t0) + '_snap.png',format='png')
 
 
 

@@ -908,11 +908,13 @@ class Body(PyLayers):
         ----------
 
         filename : string
-        file name
+            file name
         nframes : int
-        number of frames
-
-
+            number of frames
+        unit : str (mm|cm|mm
+            unit of c3d file
+        rot : list ['x','y','z']
+            swap axes of the c3d file
         """
 
 
@@ -933,6 +935,7 @@ class Body(PyLayers):
         # p : list of points name
         # f : nframe x npoints x 3
         #
+
 
         self.unit = unit
         if unit == 'cm':
@@ -1029,7 +1032,7 @@ class Body(PyLayers):
 
         device position
         """
-        if not 'topos' in dir(self):
+        if not 'dcs' in dir(self):
             raise AttributeError('Body\'s topos not yet set')
         if isinstance(id,list):
             return [self.dcs[i][:,0] for i in id]
@@ -1074,8 +1077,10 @@ class Body(PyLayers):
             spatial step (distance between 2 instant)
         planes : list
             list of planes to be displayed ['xz','xy','yz']
-
-
+        dev : bool
+            show devices
+        dev : bool
+            show devices ids
         See Also
         --------
 
@@ -1088,7 +1093,6 @@ class Body(PyLayers):
                     'tstep':5,
                     'sstep':2,
                     'planes':['xz','xy','yz'],
-                    'dev':False,
                     'figsize':(10,10),
                     'sharex':False
                     }
@@ -1105,31 +1109,30 @@ class Body(PyLayers):
         mocaptres = self.Tmocap/self.nframes
         step = int(fargs['tstep']/mocaptres)
         trange=np.arange(fargs['tstart'],fargs['tend'],fargs['tstep'])
-        labrange = np.arange(fargs['tstart']-fargs['tstep'],fargs['tend']+fargs['tstep'],fargs['tstep'])
         frange=range(fstart,fend,step)
 
         vstep=np.arange(0,len(frange))*fargs['sstep']
-
 
         fig,axs = plt.subplots(nrows =len(fargs['planes']),ncols=1,sharex=fargs['sharex'],figsize=fargs['figsize'])
         if not isinstance(axs,np.ndarray):
             axs=np.array([axs])
         for p,ax in enumerate(axs):
             for uf,f in enumerate(frange):
-                fig,ax=self.show(color='b',plane=fargs['planes'][p],dev=fargs['dev'],
-                                 widthfactor=50,offset=vstep[uf],
-                                 frameId=f,fig=fig,ax=ax)
+                fig,ax=self.show(color='b',plane=fargs['planes'][p],
+                                 offset=vstep[uf], frameId=f,fig=fig,ax=ax, **kwargs)
 
-                ax.set_aspect('auto')
-                ax.set_ylabel('position (m)')
-                ax.set_title('Plane ' + fargs['planes'][p])
-                ax.set_xlabel('time (s)')
-                ax.set_xlim(vstep[0]-fargs['sstep'] ,vstep[-1]+fargs['sstep'])
-                if 'z' in fargs['planes'][p]:
-                    ax.set_ylim(0,2)
-                else :
-                    ax.set_ylim(-2,2)
-                ax.set_xticklabels(labrange)
+            ax.set_aspect('auto')
+            ax.set_ylabel('position (m)')
+            ax.set_title('Plane ' + fargs['planes'][p])
+            ax.set_xlabel('time (s)')
+            ax.set_xlim(vstep[0]-fargs['sstep'] ,vstep[-1]+fargs['sstep'])
+            if 'z' in fargs['planes'][p]:
+                ax.set_ylim(0,2)
+            else :
+                ax.set_ylim(-2,2)
+            tl = ax.get_xticklabels()
+            labrange = np.linspace(fargs['tstart']-fargs['tstep'],fargs['tend']+fargs['tstep'],len(tl))
+            ax.set_xticklabels(labrange)
 
         plt.tight_layout()
         return fig,ax
@@ -1512,15 +1515,21 @@ class Body(PyLayers):
         #  for k in range(self.ncyl)]
 
         if kwargs['dev']:
-            if 'topos' in dir(self):
-                colhex = cold[kwargs['devcolor']]
-                dev_color = tuple(pyu.rgb(colhex)/255.)
+            colhex = cold[kwargs['devcolor']]
+            dev_color = tuple(pyu.rgb(colhex)/255.)
+            if 'dcs' in dir(self):
                 dev = self.dev.keys()
                 X=np.array(self.getdevp(dev)).T
-                mlab.points3d(X[0,:],X[1,:], X[2,:], 
-                              scale_factor=0.1, 
-                              resolution=10, 
-                              color = dev_color)
+            else:
+                udev = [self.dev[i]['uc3d'][0] for i in self.dev]
+                center = self.pg[:,fId]
+                X=self._f[fId,udev,:].T-center[:,np.newaxis]
+
+
+            mlab.points3d(X[0,:],X[1,:], X[2,:], 
+                          scale_factor=0.1, 
+                          resolution=10, 
+                          color = dev_color)
 
         if kwargs['ccs']:
             # to be improved
@@ -1607,6 +1616,7 @@ class Body(PyLayers):
                     'plane': 'yz',
                     'widthfactor' : 10,
                     'dev':False,
+                    'devid':False,
                     'topos':False,
                     'offset':0}
 
@@ -1649,10 +1659,25 @@ class Body(PyLayers):
 
             fig,ax = plu.displot(pta+offset,phe+offset,linewidth = cylrad*kwargs['widthfactor'],**args)
         if kwargs['dev']:
-            if 'topos' in dir(self):
+            if 'dcs' in dir(self):
                 pdev=np.array(self.getdevp(self.dev.keys()))
                 ax.plot(pdev[:,ax1]+offset[0],pdev[:,ax2]+offset[1],'og')
-        # plt.axis('scaled')
+            else :
+                iudev = [(i,self.dev[i]['uc3d'][0]) for i in self.dev]
+                udev = [i[1] for i in iudev]
+                center = self.pg[:,fId]
+               
+                ax.plot(self._f[fId,udev,ax1]+offset[0]-center[ax1],self._f[fId,udev,ax2]+offset[1]-center[ax2],'or')
+                if kwargs['devid']:
+                    for u in iudev:
+                        ax.text(self._f[fId,u[1],ax1]+offset[0]-center[ax1],self._f[fId,u[1],ax2]+offset[1]-center[ax2],u[0])
+
+
+
+                # print center
+                #ax.plot(self._f[fId,udev,1]+offset[0]-center[1],self._f[fId,udev,2]+offset[1]-center[0],'or')
+                
+        plt.axis('scaled')
         return(fig,ax)
 
 
