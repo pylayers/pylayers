@@ -9,6 +9,7 @@ import numpy.ma as ma
 import scipy.io as io
 from pylayers.util.project import *
 from pylayers.mobility.ban.body import *
+from pylayers.gis.layout import *
 
 from moviepy.editor import *
 from skimage import img_as_ubyte
@@ -27,9 +28,14 @@ class CorSer(PyLayers):
             self.rootdir =os.environ['CORMORAN']
         except:
             raise NameError('Please add a CORMORAN environement variable \
-                            pointing to the data')  
+                            pointing to the data')
+
+        # infos
         self.serie = serie
         self.day = day
+        self.loadlog()
+
+        # Measures
 
         if day==11:
             stcr = [1,2,3,4,10,11,12,32,33,34,35,9,17,18,19,20,25,26]
@@ -53,12 +59,19 @@ class CorSer(PyLayers):
 
         self._filename = 'Sc' + self.scenario + '_S' + str(self.serie) + '_R' + str(self.run) + '_' + self.typ
 
-        self.loadlog()
 
+        # BODY
         self.subject = [str(self.log['Subject'].values[0])]
-
         if serie in mocap :
             self.loadbody(serie=serie,day=day)
+
+
+        # Layout
+        self.L= Layout('MOCAP.ini')
+
+        self.loadinfranodes()
+        
+
 
     def __repr__(self):
         st = ''
@@ -91,6 +104,21 @@ class CorSer(PyLayers):
         return(st)
 
 
+    def loadinfranodes(self):
+        """ load infrastrucutre nodes
+        """
+        a,self.infraname,pts,i = c3d.ReadC3d('scene.c3d')
+
+        pts=pts/1000.
+        mpts = np.mean(pts,axis=0)
+        # self.pts= np.empty((12,3))
+        # self.pts[:,0]= -mpts[:,1]
+        # self.pts[:,1]= mpts[:,0]
+        # self.pts[:,2]= mpts[:,2]
+        self.pts=mpts
+        self.dist = np.sqrt(np.sum((mpts[:,np.newaxis,:]-mpts[np.newaxis,:])**2,axis=2))
+
+
     def loadlog(self):
         """ load in self.log the log of current serie 
             from MeasurementLog.csv 
@@ -105,7 +133,7 @@ class CorSer(PyLayers):
     def loadbody(self,day=11,serie=''):
         """ load log file
         """
-        self.body=[]
+        self.B=[]
         for subject in self.subject:
             
             seriestr = str(self.serie).zfill(3)
@@ -114,10 +142,16 @@ class CorSer(PyLayers):
             baw = self.rootdir + '/POST-TREATED/' + str(self.day)+'-06-2014/BodyandWear/'
             filebody = baw + subject + '.ini'
             filewear = baw + subject + '_'  +str(self.day)+'-06-2014_' + self.typ + '.ini'
-            self.body.append(Body(_filebody=filebody,
+
+            self.B.append(Body(_filebody=filebody,
                              _filemocap=filemocap,unit = 'mm',
                              _filewear=filewear))
 
+        if len(self.subject) == 1:
+            self.B = self.B[0]
+
+
+        
 
     def loadTCR(self,day=11,serie='',scenario='20',run=1):
         """ load TCR data
@@ -373,6 +407,24 @@ class CorSer(PyLayers):
         plt.imshow(F1)
         plt.title('t = '+str(t1)+'s')
 
+    def show(self):
+
+        fig,ax = self.L.showG('s')
+        ax.plot(self.pts[:,0],self.pts[:,1],'o')
+
+    def _show3(self):
+        self.L._show3(opacity=0.5)
+        mlab.points3d(self.pts[:,0],self.pts[:,1], self.pts[:,2],scale_factor=0.05)
+        #[mlab.text3d(self.pts[i,0],self.pts[i,1], self.pts[i,2],self.infraname[i],scale=0.5)
+        #for i in range(len(self.pts))]
+        for i in range(0,100,5):
+            self.B.settopos(t=i,cs=True)
+            self.B._show3(dev=True)
+        mlab.view(54.989781407516112,
+         64.187477298584483,
+         20.433867676075128,
+         np.array([-0.81123488, -1.65632874, -1.49091462]))
+
 
 
     def topandas(self):
@@ -455,14 +507,24 @@ class CorSer(PyLayers):
         Parameters
         ----------
 
-        a : node name
-        b : node name
+        a : node name | number
+        b : node name |number
         t0 : start time
         t1 : stop time
 
         """
-        ia = self.hkb[a]-1
-        ib = self.hkb[b]-1
+        if isinstance(a,str):
+            ia = self.hkb[a]-1
+        else:
+            ia = a
+            a = self.ihkb[a]
+        
+        if isinstance(b,str):
+            ib = self.hkb[b]-1
+        else:
+            ib = b
+            b = self.ihkb[b]
+            
 
         if fig==[]:
             fig = plt.figure(figsize=figsize)

@@ -1047,14 +1047,14 @@ class Body(PyLayers):
         return traj
 
 
-    def getdevp(self,id):
+    def getdevp(self,id=-1):
         """ get device position
 
         Parameters
         ----------
 
         id : str | list
-            device id
+            device id. 
 
 
         Returns
@@ -1064,12 +1064,14 @@ class Body(PyLayers):
         """
         if not 'dcs' in dir(self):
             raise AttributeError('Body\'s topos not yet set')
+        if id == -1:
+            return np.array([self.dcs[i][:,0] for i in self.dcs.keys()])
         if isinstance(id,list):
-            return [self.dcs[i][:,0] for i in id]
+            return np.array([self.dcs[i][:,0] for i in id])
         else :
             return self.dcs[id][:,0]
 
-    def getdevT(self,id):
+    def getdevT(self,id=-1):
         """ get device orientation
 
         Parameters
@@ -1086,8 +1088,13 @@ class Body(PyLayers):
         """
         if not 'topos' in dir(self):
             raise AttributeError('Body\'s topos not yet set')
-        return self.dcs[id][:,1:]
 
+        if id == -1:
+            return np.array([self.dcs[i][:,1:] for i in self.dcs.keys()])
+        if isinstance(id,list):
+            return np.array([self.dcs[i][:,1:] for i in id])
+        else :
+            return self.dcs[id][:,1:]
 
 
     def chronophoto(self,**kwargs):
