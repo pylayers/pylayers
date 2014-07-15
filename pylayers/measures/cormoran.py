@@ -1,3 +1,5 @@
+# -*- coding:Utf-8 -*-
+
 import os
 import pdb
 import sys
@@ -6,6 +8,8 @@ import numpy as np
 import numpy.ma as ma
 import scipy.io as io
 from pylayers.util.project import *
+from pylayers.mobility.ban.body import *
+
 from moviepy.editor import *
 from skimage import img_as_ubyte
 import matplotlib.pyplot as plt
@@ -20,7 +24,7 @@ class CorSer(PyLayers):
     def __init__(self,serie=6,day=11,source='UR1'):
 
         try:
-            self.root =os.environ['CORMORAN']
+            self.rootdir =os.environ['CORMORAN']
         except:
             raise NameError('Please add a CORMORAN environement variable \
                             pointing to the data')  
@@ -47,13 +51,14 @@ class CorSer(PyLayers):
         if serie in sbs:
             self.loadBS(serie=serie,day=day)
 
-        if day==11:
-            if ((self.typ=='HKBS') or (self.typ=='Full')):
-                self.subject=['Nicolas']
-            elif (self.typ=='TCR'):
-                self.subject=['Bernard']
-
         self._filename = 'Sc' + self.scenario + '_S' + str(self.serie) + '_R' + str(self.run) + '_' + self.typ
+
+        self.loadlog()
+
+        self.subject = [str(self.log['Subject'].values[0])]
+
+        if serie in mocap :
+            self.loadbody(serie=serie,day=day)
 
     def __repr__(self):
         st = ''
@@ -67,8 +72,10 @@ class CorSer(PyLayers):
 
         for k in self.subject:
             st = st + k + ' '
-        st = st + '\n\n\n'
+        st = st + '\n\n'
 
+        st = st+'Body available: ' + str('body' in dir(self)) + '\n\n'
+        
         try :
             st = st+'BeSPoon : '+self._fileBS+'\n'
         except:
@@ -82,6 +89,34 @@ class CorSer(PyLayers):
         except:
             pass
         return(st)
+
+
+    def loadlog(self):
+        """ load in self.log the log of current serie 
+            from MeasurementLog.csv 
+        """
+
+        filelog = self.rootdir + '/RAW/Doc/MeasurementLog.csv'
+        log = pd.read_csv(filelog)
+        date = str(self.day)+'/06/14'
+        self.log = log[(log['Meas Serie'] == self.serie) & (log['Date'] == date)]
+
+
+    def loadbody(self,day=11,serie=''):
+        """ load log file
+        """
+        self.body=[]
+        for subject in self.subject:
+            
+            seriestr = str(self.serie).zfill(3)
+            filemocap = self.rootdir + '/RAW/' + \
+                        str(self.day)+'-06-2014/MOCAP/serie_' + seriestr + '.c3d'
+            baw = self.rootdir + '/POST-TREATED/' + str(self.day)+'-06-2014/BodyandWear/'
+            filebody = baw + subject + '.ini'
+            filewear = baw + subject + '_'  +str(self.day)+'-06-2014_' + self.typ + '.ini'
+            self.body.append(Body(_filebody=filebody,
+                             _filemocap=filemocap,unit = 'mm',
+                             _filewear=filewear))
 
 
     def loadTCR(self,day=11,serie='',scenario='20',run=1):
@@ -127,11 +162,11 @@ class CorSer(PyLayers):
                   'KneeLeft':33,
                   'AnckleRight':36,
                   'AnckleLeft':37}
-            dirname = self.root+'/POST-TREATED/11-06-2014/TCR'
+            dirname = self.rootdir+'/POST-TREATED/11-06-2014/TCR'
 
 
         if day==12:
-            dirname = self.root+'/POST-TREATED/12-06-2014/TCR'
+            dirname = self.rootdir+'/POST-TREATED/12-06-2014/TCR'
             self.TCR ={ 'COORD':31,
                         'AP1':32,
                         'AP2':24,
@@ -211,9 +246,9 @@ class CorSer(PyLayers):
         """
         self.dBS = {157:'LeftWrist?',74:'RightAnckle?'}
         if day==11:
-            dirname = self.root+'/POST-TREATED/11-06-2014/BeSpoon'
+            dirname = self.rootdir+'/POST-TREATED/11-06-2014/BeSpoon'
         if day==12:
-            dirname = self.root+'/POST-TREATED/12-06-2014/BeSpoon'
+            dirname = self.rootdir+'/POST-TREATED/12-06-2014/BeSpoon'
 
         files = os.listdir(dirname)
         if serie != '':
@@ -239,17 +274,17 @@ class CorSer(PyLayers):
             self.hkb ={'AP1':1,'AP2':2,'AP3':3,'AP4':4,
                        'HeadRight':5,'TorsoTopRight':6,'TorsoTopLeft':7,'BackCenter':8,'ElbowRight':9,'ElbowLeft':10,'HipRight':11,'WristRight':12,'WristLeft':13,'KneeLeft':14,'AnckleRight':16,'AnckleLeft':15}
             if source=='UR1':
-                dirname = self.root+'/POST-TREATED/11-06-2014/HIKOB'
+                dirname = self.rootdir+'/POST-TREATED/11-06-2014/HIKOB'
             elif source=='CITI':
-                dirname = self.root+'/POST-TREATED/11-06-2014/HIKOB/CITI'
+                dirname = self.rootdir+'/POST-TREATED/11-06-2014/HIKOB/CITI'
         if day==12:
             self.hkb= {'AP1':1,'AP2':2,'AP3':3,'AP4':4,'Jihad:TorsoTopRight':10,'Jihad:TorsoTopLeft':9,'Jihad:BackCenter':11,'JihadShoulderLeft':12,
              'Nicolas:TorsoTopRight':6,'Nicolas:TorsoTopLeft':5,'Nicolas:BackCenter':7,'Nicolas:ShoulderLeft':8,
              'Eric:TorsoTopRight':15,'Eric:TorsoTopLeft':13,'Eric:BackCenter':16,'Eric:ShoulderLeft':14}
             if source=='UR1':
-                dirname = self.root+'/POST-TREATED/12-06-2014/HIKOB'
+                dirname = self.rootdir+'/POST-TREATED/12-06-2014/HIKOB'
             elif source=='CITI':
-                dirname = self.root+'/POST-TREATED/12-06-2014/HIKOB/CITI'
+                dirname = self.rootdir+'/POST-TREATED/12-06-2014/HIKOB/CITI'
 
         files = os.listdir(dirname)
 
@@ -287,7 +322,7 @@ class CorSer(PyLayers):
     def vlc(self):
         """ play video of the associated serie
         """
-        videofile = self.root+'/POST-TREATED/' +str(self.day) + '-06-2014/Videos/'
+        videofile = self.rootdir+'/POST-TREATED/' +str(self.day) + '-06-2014/Videos/'
         ldir = os.listdir(videofile)
         luldir = map(lambda x : self._filename in x,ldir)
         uldir = luldir.index(True)
@@ -300,7 +335,7 @@ class CorSer(PyLayers):
     def snapshot(self,t0=0,offset=15.5,save=False):
         """
         """
-        videofile = self.root+'/POST-TREATED/' +str(self.day) + '-06-2014/Videos/'
+        videofile = self.rootdir+'/POST-TREATED/' +str(self.day) + '-06-2014/Videos/'
         ldir = os.listdir(videofile)
         luldir = map(lambda x : self._filename in x,ldir)
         uldir = luldir.index(True)
@@ -320,7 +355,7 @@ class CorSer(PyLayers):
     def snapshots(self,t0=0,t1=10,offset=15.5):
         """
         """
-        videofile = self.root+'/POST-TREATED/' +str(self.day) + '-06-2014/Videos/'
+        videofile = self.rootdir+'/POST-TREATED/' +str(self.day) + '-06-2014/Videos/'
         ldir = os.listdir(videofile)
         luldir = map(lambda x : self._filename in x,ldir)
         uldir = luldir.index(True)

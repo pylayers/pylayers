@@ -735,7 +735,7 @@ def read_c3d(_filename='07_01.c3d',verbose=False):
             Frames[i, j, 1] = -Markers[i][j].y
             Frames[i, j, 2] = -Markers[i][j].z
     return(Subjects, Point, Frames,dinfo)
-def ReadC3d(_filename='07_01.c3d',verbose=False):
+def ReadC3d(_filename='07_01.c3d', verbose=False):
     """ read c3d file
 
     Parameters
@@ -743,10 +743,13 @@ def ReadC3d(_filename='07_01.c3d',verbose=False):
 
     _filename : string
     verbose : boolean
-
     """
 
-    FullFileName = pyu.getlong(_filename, 'body/c3d')
+    # check if local or global path
+    if ('/' or '\\') in _filename:
+        FullFileName=_filename
+    else: 
+        FullFileName = pyu.getlong(_filename, 'body/c3d')
     Markers = []
     VideoFrameRate = 0
     AnalogSignals = []

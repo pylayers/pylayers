@@ -103,7 +103,8 @@ class Body(PyLayers):
 
     """
 
-    def __init__(self,_filebody='John.ini',_filemocap=[],traj=[],unit=[]):
+    def __init__(self,_filebody='John.ini',_filemocap=[],_filewear = [],
+                traj=[],unit=[]):
         """ object constructor
 
         Parameters
@@ -111,7 +112,11 @@ class Body(PyLayers):
 
         _filebody : string
         _filemocap : string
-         traj : tr.Trajectory
+        unit : str 
+            unit of the mocap file m|cm|mm
+        _filewear : string
+        traj : tr.Trajectory
+
 
         See Also
         --------
@@ -121,11 +126,11 @@ class Body(PyLayers):
         """
 
         self.name = _filebody.replace('.ini','')
-        di = self.load(_filebody)
-        if _filemocap != []:
-            if unit==[]:
-                raise AttributeError('Please set the unit of the mocap file mm|cm|m')
-            self.loadC3D(filename=_filemocap,unit=unit)
+        di = self.load(_filebody,_filemocap,unit,_filewear)
+        # if _filemocap != []:
+        #     if unit==[]:
+        #         raise AttributeError('Please set the unit of the mocap file mm|cm|m')
+        #     self.loadC3D(filename=_filemocap,unit=unit)
         self.cylfromc3d(centered=True)
         if isinstance(traj,tr.Trajectory):
             self.traj=traj
@@ -161,6 +166,9 @@ class Body(PyLayers):
             st = st+ 'I am nowhere yet\n\n'
         else :
             st = st + 'My centroid position is \n'+ str(self.centroid)+"\n"
+
+        if 'filewear' in dir(self):
+            st = st +'filewear : '+ self.filewear +'\n'
         if 'filename' in dir(self):
             st = st +'filename : '+ self.filename +'\n'
         if 'nframes' in dir(self):
@@ -179,7 +187,7 @@ class Body(PyLayers):
         return(st)
 
 
-    def load(self,_filebody='John.ini',_filemocap=[],unit=[]):
+    def load(self,_filebody='John.ini',_filemocap=[],unit=[],_filewear=[]):
         """ load a body ini file
 
         Parameters
@@ -200,7 +208,13 @@ class Body(PyLayers):
         + section [mocap]
 
         """
-        filebody = pyu.getlong(_filebody,pstruc['DIRBODY'])
+         # check if local or global path
+        if ('/' or '\\') in _filebody:
+            filebody = _filebody
+            ne = os.path.basename(_filebody)
+            self.name = os.path.splitext(ne)[0]
+        else :
+            filebody = pyu.getlong(_filebody,pstruc['DIRBODY'])
         if not os.path.isfile(filebody):
             raise NameError(_filebody + ' cannot be found in'
                              + pyu.getlong('',pstruc['DIRBODY']))
@@ -256,8 +270,9 @@ class Body(PyLayers):
             nframes = di['mocap']['nframes']
             self.loadC3D(di['mocap']['file'],nframes = nframes, unit = unit)
         else:
+            if unit  == []:
+                raise AttributeError('Please indicate the unit of the motion capture file')
             self.loadC3D(_filemocap, unit = unit)
-
 
         #
         # update devices dict from wearable file
@@ -268,10 +283,25 @@ class Body(PyLayers):
             pass
         self.dev={}
 
-        devfilename = pyu.getlong(di['wearable']['file'],pstruc['DIRWEAR'])
+
+        # read default in ini file
+        if _filewear == []:
+            devfilename = pyu.getlong(di['wearable']['file'],pstruc['DIRWEAR'])
+            self.filewear = di['wearable']['file']
+        else : 
+            # check if local or global path
+            if ('/' or '\\') in _filewear:
+                devfilename = _filewear
+            else :
+                devfilename = pyu.getlong(_filewear,pstruc['DIRWEAR'])
+            self.filewear = devfilename
+
         if not os.path.exists(devfilename):
             raise AttributeError('the wareable file '+di['wearable']['file']+
                              ' cannot be found in $BASENAME/'+pstruc['DIRWEAR'])
+
+        
+
 
         devconf = ConfigParser.ConfigParser()
         devconf.read(devfilename)
