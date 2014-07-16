@@ -231,6 +231,97 @@ def zone(pt,rm=1000):
         cb = fig.colorbar(im,cax)
         cb.set_label('Height (meters)')
 
+class DEM(PyLayers):
+    """ Class Digital Elevation Model
+    """
+    def __init__(self):
+        pass
+
+    def loadsrtm(self,_filehgt='N48W002.HGT'):
+        """
+            load hgt and lcv files from srtm directory
+
+        """
+
+        (lom,loM,lam,laM) = decsrtm(_filehgt)
+
+        self.lonmin = lom
+        self.lonmax = loM
+        self.latmin = lam
+        self.latmax = laM
+        self.lon_0  = (lom+loM)/2.
+        self.lat_0  = (lam+laM)/2.
+
+        _filelcv = _filehgt.replace('.HGT','.lcv')
+
+        filehgt = pyu.getlong(_filehgt,'gis/hgt')
+        filelcv = pyu.getlong(_filelcv,'gis/hgt')
+
+        data = np.fromfile(filehgt,dtype='>i2')
+        self.hgt = data.reshape(1201,1201)
+
+        data = np.fromfile(filelcv,dtype='>i1')
+        self.lcv = data.reshape(1201,1201)
+
+        self.m = Basemap(llcrnrlon = self.lonmin,
+                         llcrnrlat = self.latmin,
+                         urcrnrlon = self.lonmax,
+                         urcrnrlat = self.latmax,
+                         resolution = 'i',projection='cass',
+                         lon_0 = self.lon_0,
+                         lat_0 = self.lat_0)
+
+    def loadaster(self,_fileaster='ASTGTM2_N48W002_dem.tif'):
+        """ Load Aster files
+
+        Parameters
+        ----------
+
+        """
+        fileaster = pyu.getlong(_fileaster,'gis/aster')
+        f = gdal.Open(fileaster)
+        self.hgt = f.ReadAsArray()
+        self.lonmin = -2
+        self.lonmax = -1
+        self.latmin = 48
+        self.latmax = 49
+
+
+
+    def show(self,**kwargs):
+        """ Ezone vizualisation
+
+        Parameters
+        ----------
+
+        cmap : colormap
+
+        """
+        defaults ={'cmap': plt.cm.jet}
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+        if 'fig' in kwargs:
+            fig = kwargs['fig']
+        else:
+            fig = plt.figure()
+
+        if 'ax' in kwargs:
+            ax = kwargs['ax']
+        else:
+            ax =  fig.add_subplot(111)
+
+        #im = ax.imshow(dem[ilat[0]:(ilat[-1]+1),ilon[0]:(ilon[-1]+1)],extent=(lonmin,lonmax,latmin,latmax))
+        im = ax.imshow(self.hgt,extent=(self.lonmin,self.lonmax,self.latmin,self.latmax))
+
+        # handling colorbar
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes("right", size="5%", pad=0.05)
+        cb = fig.colorbar(im,cax)
+        cb.set_label('Height (meters)')
+
 class Ezone(PyLayers):
     """
         An Ezone is a region of earth delimited by
@@ -276,7 +367,12 @@ class Ezone(PyLayers):
 
         return(st)
 
-    def load(self,_fileh5):
+    def ls(self):
+        files = os.listdir(basename+'/gis/h5')
+        for f in files:
+            print f
+
+    def loadh5(self,_fileh5):
         """ load an Ezone from hdf5 file
 
         Parameters
@@ -701,20 +797,24 @@ class Ezone(PyLayers):
         #try:
         f = h5py.File(fileh5,'w')
         f.create_group('osm')
+        dem = f.create_group('dem')
+        srtm  = dem.create_group('srtm')
+        aster = aster.create_group('aster')
         f['extent'] = self.extent
         for city in self.dcity:
             dt = self.dcity[city]
             f['osm'].create_group(city)
             f['osm'][city].create_dataset('bdpt',shape=dt['bdpt'].shape,data=dt['bdpt'])
-            f['osm'][city].create_dataset('bdma',shape=dt['bdma'].shape,data=dt['bdma'])
+            f['osm'][city].create_dataset('bdhgt',shape=dt['bdhgt'].shape,data=dt['bdhgt'])
             f['osm'][city].create_dataset('extent',data=dt['extent'])
         #f['osm'].create_group('Rennes')
         #f['osm']['Rennes'].create_dataset('bdpt',shape=self.bdpt.shape,data=self.bdpt)
         #f['osm']['Rennes'].create_dataset('bdma',shape=self.bdma.shape,data=self.bdma)
         #f['osm']['Rennes'].create_dataset('extent',data=self.extentc)
 
-        f.create_dataset('hgt',shape=self.hgt.shape,data=self.hgt)
-        f.create_dataset('lcv',shape=self.lcv.shape,data=self.lcv)
+        srtm.create_dataset('hgt',shape=self.hgt.shape,data=self.hgts)
+        srtm.create_dataset('lcv',shape=self.lcv.shape,data=self.lcvs)
+        aster.create_dataset('hgt',shape=self.hgt.shape,data=self.hgta)
         f.close()
         #except:
         #    f.close()
