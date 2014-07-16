@@ -21,6 +21,7 @@ import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import axes3d
+from matplotlib.collections import PolyCollection
 from matplotlib import cm
 import doctest
 import pdb
@@ -599,6 +600,51 @@ def cylinder(fig,pa,pb,R):
     t = np.arange(0,1,0.05)
     p = pa[:,:,np.newaxis]+t[np.newaxis,np.newaxis,:]*(pb[:,:,np.newaxis]-pa[:,:,np.newaxis])
     ax.plot(p[0,0,:], p[1,0,:], p[2,0,:], label='parametric curve',color='b')
+
+def polycol(lpoly,var=[],**kwargs):
+    """ plot a collection of polygon
+
+    lpoly : list of polygons
+
+    Examples
+    --------
+
+        >>> from pylayers.util.plotutil import *
+        >>> npoly, nverts = 100, 4
+        >>> centers = 100 * (np.random.random((npoly,2)) - 0.5)
+        >>> offsets = 10 * (np.random.random((nverts,npoly,2)) - 0.5)
+        >>> verts = centers + offsets
+        >>> verts = np.swapaxes(verts, 0, 1)
+        >>> var = np.random.random(npoly)*200
+        >>> f,a = polycol(verts,var)
+    """
+    defaults = {'edgecolor':'none',
+                'cmap':cm.jet,
+                'closed':False,
+                'colorbar':True,
+                'm':[]}
+    for k in defaults:
+        if k not in kwargs:
+            kwargs[k]=defaults[k]
+
+    if 'fig' not in kwargs:
+        fig,ax = plt.subplots(1,1)
+    else:
+        fig = kwargs['fig']
+
+    if len(var)>0:
+        polc = PolyCollection(lpoly,array=var,cmap=kwargs['cmap'],
+                       closed=kwargs['closed'],edgecolor=kwargs['edgecolor'])
+    else:
+        kwargs['colorbar']=False
+        polc = PolyCollection(lpoly,closed=kwargs['closed'],edgecolor=kwargs['edgecolor'])
+    ax.add_collection(polc)
+    ax.autoscale_view()
+
+    if kwargs['colorbar']:
+        fig.colorbar(polc,ax=ax)
+
+    return(fig,ax)
 
 
 if (__name__ == "__main__"):

@@ -83,13 +83,16 @@ Utility Functions
 # This module provides classes to handle open stree map objects
 #
 #
-#
-#
 
 
+from osmapi import OsmApi
+import urllib
+import urllib2 as url
 from pylayers.util.project import *
+import pylayers.util.pyutil as pyu
 import pylayers.util.geomutil as geu
 from mpl_toolkits.basemap import Basemap
+from matplotlib.collections import PolyCollection
 import matplotlib.pyplot as plt
 # imposm is required for handling osm files
 # the installation of imposm is not straightforward
@@ -176,7 +179,7 @@ class Coords(object):
     minlat :
     maxlat :
     boundary : np.array
-        (minlat,minlon,maxlat,maxlon) 
+        (minlon,minlat,maxlon,maxlat) 
 
     Notes
     -----
@@ -226,9 +229,9 @@ class Coords(object):
             self.maxlat = max(lat,self.maxlat)
 
             self.cpt += 1
-        self.boundary=np.array([self.minlat,self.minlon,self.maxlat,self.maxlon])
+        self.boundary=np.array([self.minlon,self.minlat,self.maxlon,self.maxlat])
 
-    def cartesian(self):
+    def cartesian(self,cart=False):
         """ convert Latitude/Longitude in cartesian
 
         Notes
@@ -252,19 +255,24 @@ class Coords(object):
         Warning
         -------
 
-        If boundariee are modified coordinates change.
+        If boundary is modified cartesian coordinates change.
+
 
         """
         bd = self.boundary
-        lon_0 = (bd[1]+bd[3])/2.
-        lat_0 = (bd[0]+bd[2])/2.
+        lon_0 = (bd[0]+bd[2])/2.
+        lat_0 = (bd[1]+bd[3])/2.
 
-        m = Basemap(llcrnrlon=bd[1]-0.01, llcrnrlat=bd[0]-0.01,
-                    urcrnrlon=bd[3]+0.01, urcrnrlat=bd[2]+0.01,
+        m = Basemap(llcrnrlon=bd[0]-0.01, llcrnrlat=bd[1]-0.01,
+                    urcrnrlon=bd[2]+0.01, urcrnrlat=bd[3]+0.01,
                 resolution='i', projection='cass', lon_0=lon_0, lat_0=lat_0)
 
         for id in self.latlon:
-            x, y = m(self.latlon[id][0], self.latlon[id][1])
+            if cart:
+                x, y = m(self.latlon[id][0], self.latlon[id][1])
+            else:
+                x, y = (self.latlon[id][0], self.latlon[id][1])
+
             self.xy[id]  = np.array([x,y])
 
         return(m)
@@ -300,9 +308,9 @@ class Ways(object):
     Attributes
     ----------
 
-    w
-    way
-    cpt
+    w : dict
+    way : dict
+    cpt : int
 
     Methods
     -------
@@ -320,8 +328,8 @@ class Ways(object):
         """ general callback function
         """
         for osmid, tags, refs in ways:
-                self.w[osmid] = (refs,tags)
-                self.cpt += 1
+            self.w[osmid] = [refs,tags]
+            self.cpt += 1
 
     def clean(self):
         self.w = {}
@@ -333,7 +341,12 @@ class Ways(object):
         """
         for osmid, tags, refs in ways:
             if 'building' in tags:
-                self.w[osmid] = (refs,tags)
+                if 'height' in tags:
+                    tags = {'height':tags['height']}
+                else:
+                    tags = {'height':8.5}
+
+                self.w[osmid] = [refs,tags]
                 self.cpt += 1
 
     def eval(self,coords):
@@ -345,6 +358,7 @@ class Ways(object):
         coords : osm coordinates
 
         """
+
         for osmid in self.w:
             refs = self.w[osmid][0]
             tags = self.w[osmid][1]
@@ -361,8 +375,8 @@ class Ways(object):
         fig : figure
         ax  : axe
         typ : 0|1|2 (default)
-                0 : display only way of typ 0
-                1 : display only way of typ 1
+                0 : display only way of typ 0  (Polygon)
+                1 : display only way of typ 1  (Linestring)
                 2 : display all way (default)
         """
         if 'fig' not in kwargs:
@@ -375,19 +389,26 @@ class Ways(object):
         else:
             ax = kwargs['ax']
 
-        #
-        # This a slow way to display all buildings
-        #
+        lonmin = 360
+        lonmax = -360
+        latmin = 360
+        latmax = -360
         for b in self.way:
             if typ==0:
                 if self.way.typ==0:
-                    fig,ax = self.way[b].shp.plot(fig=fig,ax=ax)
+                    p =ways.way[b].shp
             if typ==1:
                 if self.way.typ==1:
-                    fig,ax = self.way[b].shp.plot(fig=fig,ax=ax)
+                    p = self.way[b].shp
             if typ==2:
-                fig,ax = self.way[b].shp.plot(fig=fig,ax=ax)
+                p = self.way[b].shp
 
+            lpoly.append(p)
+        city = PolyCollection(lpoly,closed=False)
+
+        ax.axis((lonmin,lonmax,latmin,latmax))
+        ax.add_collection(city)
+        ax.autoscale_view()
         plt.axis('scaled')
         return(fig,ax)
 
@@ -585,7 +606,7 @@ class FloorPlan(nx.DiGraph):
 #     getbdg
 #
 #
-def osmparse(filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True):
+def osmparse(_filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True,cart=False):
     """ parse osm files
 
     Parameters
@@ -613,7 +634,10 @@ def osmparse(filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True)
     relations :
 
     """
-
+    filename = pyu.getlong(_filename,'gis/osm')
+    #
+    # Read coords and create basemap converter
+    #
     if c:
         coords = Coords()
         coords.clean()
@@ -622,13 +646,16 @@ def osmparse(filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True)
             print "parsing coords"
 
         coords_parser.parse(filename)
-        m = coords.cartesian()
+
+        m = coords.cartesian(cart=cart)
 
         if verbose:
             print str(coords.cpt)
     else:
         coords = None
-
+    #
+    # Read nodes
+    #
     if n:
         nodes = Nodes()
         nodes.clean()
@@ -644,6 +671,9 @@ def osmparse(filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True)
     else:
         nodes = None
 
+    #
+    # Read ways
+    #
     if w:
         ways = Ways()
         ways.clean()
@@ -663,7 +693,9 @@ def osmparse(filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True)
     else:
         ways = None
 
-
+    #
+    # Read realtions
+    #
     if r:
         relations = Relations()
         relations.clean()
@@ -731,7 +763,7 @@ def extract(alat,alon,fileosm,fileout):
 
     return(m)
 
-def getbdg(fileosm):
+def getbdg(fileosm,verbose=False):
     """ get building from osm file
 
     Parameters
@@ -746,9 +778,8 @@ def getbdg(fileosm):
 
     """
 
-    coords,nodes,ways,relation,m = osmparse(fileosm,typ='building')
+    coords,nodes,ways,relation,m = osmparse(fileosm,typ='building',verbose=verbose)
     zone = []
-    pdb.set_trace()
     for w in ways.way:
         zone.append(w.shp)
     return(zone)
