@@ -69,7 +69,7 @@ class CorSer(PyLayers):
         # Layout
         self.L= Layout('MOCAP.ini')
 
-        self.loadinfranodes()
+        # self.loadinfranodes()
         
 
 
@@ -106,17 +106,55 @@ class CorSer(PyLayers):
 
     def loadinfranodes(self):
         """ load infrastrucutre nodes
+
+
+
+                        A4 
+                    mpts[6,7,8]
+                        X 
+
+            A3                     A3 
+        mpts[9,10,11]        mpts[3,4,5]
+            X                      X
+
+                        A2 
+                    mpts[0,1,2]
+                        X 
+
+
+        TCR = mpts[0,3,6,9]
+        HKB = mpts[1,2,
+                   4,5,
+                   7,8,
+                   10,11]
+
+
         """
         a,self.infraname,pts,i = c3d.ReadC3d('scene.c3d')
 
         pts=pts/1000.
         mpts = np.mean(pts,axis=0)
+        self.din={}
+        if 'HK' in self.typ:
+            uhkb=np.array([[1,2],[4,5],[7,8],[10,11]])
+            mphkb = np.mean(mpts[uhkb],axis=1)
+
+            self.din.update({'1':mphkb[1],
+                 '2':mphkb[0],
+                 '3':mphkb[3],
+                 '4':mphkb[2]})
+        if 'TCR' in self.typ:
+            self.din.update({'32':mpts[3],
+                 '24':mpts[0],
+                 '27':mpts[9],
+                 '28':mpts[6]})
+        
         # self.pts= np.empty((12,3))
         # self.pts[:,0]= -mpts[:,1]
         # self.pts[:,1]= mpts[:,0]
         # self.pts[:,2]= mpts[:,2]
-        self.pts=mpts
-        self.dist = np.sqrt(np.sum((mpts[:,np.newaxis,:]-mpts[np.newaxis,:])**2,axis=2))
+        # return mpts
+        # self.dist = np.sqrt(np.sum((mpts[:,np.newaxis,:]-mpts[np.newaxis,:])**2,axis=2))
 
 
     def loadlog(self):
@@ -180,7 +218,7 @@ class CorSer(PyLayers):
         21:49}
 
         if day==11:
-            self.TCR ={'Unused':49,
+            self.dTCR ={'Unused':49,
                   'COORD':31,
                   'AP1':32,
                   'AP2':24,
@@ -201,7 +239,7 @@ class CorSer(PyLayers):
 
         if day==12:
             dirname = self.rootdir+'/POST-TREATED/12-06-2014/TCR'
-            self.TCR ={ 'COORD':31,
+            self.dTCR ={ 'COORD':31,
                         'AP1':32,
                         'AP2':24,
                         'AP3':27,
@@ -223,13 +261,13 @@ class CorSer(PyLayers):
         # iTCR : (MAC , Name)
         # dTCR : (NodeId, Name)
         #
-        self.iTCR={}
-        for k in self.TCR:
-            self.iTCR[self.TCR[k]]=k
+        self.idTCR={}
+        for k in self.dTCR:
+            self.idTCR[self.dTCR[k]]=k
 
-        self.dTCR={}
+        dTCRni={}
         for k in self.TNET.keys():
-            self.dTCR[k]=self.iTCR[self.TNET[k]]
+            dTCRni[k]=self.idTCR[self.TNET[k]]
 
 
         files = os.listdir(dirname)
@@ -252,8 +290,8 @@ class CorSer(PyLayers):
         filename = dirname + '/'+ self._fileTCR
         dtTCR = pd.read_csv(filename)
         tcr={}
-        for k in self.dTCR:
-            for l in self.dTCR:
+        for k in dTCRni:
+            for l in dTCRni:
                 if k!=l:
                     d = dtTCR[((dtTCR['ida']==k) & (dtTCR['idb']==l))]
                     d.drop_duplicates('time',inplace=True)
@@ -265,7 +303,7 @@ class CorSer(PyLayers):
                     del d['time']
                     if len(d)!=0:
                         sr = pd.Series(d['dist']/1000,index=d.index)
-                        tcr[self.dTCR[k]+'_'+self.dTCR[l]]= sr
+                        tcr[dTCRni[k]+'_'+dTCRni[l]]= sr
 
         self.tcr = pd.DataFrame(tcr)
         self.tcr = self.tcr.fillna(0)
@@ -278,7 +316,7 @@ class CorSer(PyLayers):
         """ load BeSpoon data
 
         """
-        self.dBS = {157:'LeftWrist?',74:'RightAnckle?'}
+        self.dBS = {'LeftWrist?':157,'RightAnckle?':74}
         if day==11:
             dirname = self.rootdir+'/POST-TREATED/11-06-2014/BeSpoon'
         if day==12:
@@ -305,14 +343,14 @@ class CorSer(PyLayers):
     def loadhkb(self,day=11,serie='',scenario='20',run=1,source='UR1'):
 
         if day==11:
-            self.hkb ={'AP1':1,'AP2':2,'AP3':3,'AP4':4,
+            self.dHKB ={'AP1':1,'AP2':2,'AP3':3,'AP4':4,
                        'HeadRight':5,'TorsoTopRight':6,'TorsoTopLeft':7,'BackCenter':8,'ElbowRight':9,'ElbowLeft':10,'HipRight':11,'WristRight':12,'WristLeft':13,'KneeLeft':14,'AnckleRight':16,'AnckleLeft':15}
             if source=='UR1':
                 dirname = self.rootdir+'/POST-TREATED/11-06-2014/HIKOB'
             elif source=='CITI':
                 dirname = self.rootdir+'/POST-TREATED/11-06-2014/HIKOB/CITI'
         if day==12:
-            self.hkb= {'AP1':1,'AP2':2,'AP3':3,'AP4':4,'Jihad:TorsoTopRight':10,'Jihad:TorsoTopLeft':9,'Jihad:BackCenter':11,'JihadShoulderLeft':12,
+            self.dHKB= {'AP1':1,'AP2':2,'AP3':3,'AP4':4,'Jihad:TorsoTopRight':10,'Jihad:TorsoTopLeft':9,'Jihad:BackCenter':11,'JihadShoulderLeft':12,
              'Nicolas:TorsoTopRight':6,'Nicolas:TorsoTopLeft':5,'Nicolas:BackCenter':7,'Nicolas:ShoulderLeft':8,
              'Eric:TorsoTopRight':15,'Eric:TorsoTopLeft':13,'Eric:BackCenter':16,'Eric:ShoulderLeft':14}
             if source=='UR1':
@@ -322,9 +360,9 @@ class CorSer(PyLayers):
 
         files = os.listdir(dirname)
 
-        self.ihkb={}
-        for k in self.hkb:
-            self.ihkb[self.hkb[k]]=k
+        self.idHKB={}
+        for k in self.dHKB:
+            self.idHKB[self.dHKB[k]]=k
 
         if serie != '':
             self._filehkb = filter(lambda x : 'S'+str(serie) in x ,files)[0]
@@ -350,7 +388,26 @@ class CorSer(PyLayers):
             self.t = np.arange(np.shape(self.rssi)[2])*25.832e-3
 
         self.topandas()
-        self.df = self.df[self.df!=0]
+        self.hkb = self.hkb[self.hkb!=0]
+
+
+    def _distancematix(self):
+
+        c3ds = self.B._f.shape
+        if 'Full' in self.typ:
+            pdev= np.empty((c3ds[0],len(self.dHKB)+len(self.tcr)+len(bs),3))
+        elif 'HK' in self.typ:
+            pdev= np.empty((c3ds[0],len(self.dHKB)+len(bs),3))
+        elif 'TCR' in self.typ:
+            pdev= np.empty((c3ds[0],len(self.tcr),3))
+        else:
+            raise AttributeError('invalid self.typ')
+
+        
+        ludev = np.array([[i,self.B.dev[i]['uc3d'][0]] for i in self.B.dev])
+        for i in ludev:
+            pdev[:,eval(i[0])-1,:] = self.B._f[:,i[1],:]
+        # self.dist = np.sqrt(np.sum((mpts[:,np.newaxis,:]-mpts[np.newaxis,:])**2,axis=2))
 
 
     def vlc(self):
@@ -414,12 +471,13 @@ class CorSer(PyLayers):
 
     def _show3(self):
         self.L._show3(opacity=0.5)
+        self.din.items()
         mlab.points3d(self.pts[:,0],self.pts[:,1], self.pts[:,2],scale_factor=0.05)
-        #[mlab.text3d(self.pts[i,0],self.pts[i,1], self.pts[i,2],self.infraname[i],scale=0.5)
-        #for i in range(len(self.pts))]
-        for i in range(0,100,5):
-            self.B.settopos(t=i,cs=True)
-            self.B._show3(dev=True)
+        [mlab.text3d(self.pts[i,0],self.pts[i,1], self.pts[i,2],str(i),scale=0.5)
+        for i in range(len(self.pts))]
+        # for i in range(0,100,5):
+        #     self.B.settopos(t=i,cs=True)
+        #     self.B._show3(dev=True)
         mlab.view(54.989781407516112,
          64.187477298584483,
          20.433867676075128,
@@ -429,15 +487,15 @@ class CorSer(PyLayers):
 
     def topandas(self):
         try:
-            self.df = pd.DataFrame(index=self.t[0])
+            self.hkb = pd.DataFrame(index=self.t[0])
         except:
-            self.df = pd.DataFrame(index=self.t)
-        for k in self.ihkb:
-            for l in self.ihkb:
+            self.hkb = pd.DataFrame(index=self.t)
+        for k in self.idHKB:
+            for l in self.idHKB:
                 if k!=l:
-                    column = self.ihkb[k]+'-'+self.ihkb[l]
+                    column = self.idHKB[k]+'-'+self.idHKB[l]
                     rssi  = self.rssi[k-1,l-1,:]
-                    self.df[column] = rssi
+                    self.hkb[column] = rssi
 
 
     def imshow(self,time=100,kind='time'):
@@ -471,7 +529,7 @@ class CorSer(PyLayers):
         ax1 = fig.add_subplot(121)
         #img1 = ax1.imshow(self.rssi[:,:,timeindex],interpolation='nearest',origin='lower')
         img1 = ax1.imshow(dt1,interpolation='nearest')
-        labels = map(lambda x : self.ihkb[x],range(1,17))
+        labels = map(lambda x : self.idHKB[x],range(1,17))
         plt.xticks(range(16),labels,rotation=80,fontsize=14)
         plt.yticks(range(16),labels,fontsize=14)
         if kind=='time':
@@ -514,16 +572,16 @@ class CorSer(PyLayers):
 
         """
         if isinstance(a,str):
-            ia = self.hkb[a]-1
+            ia = self.dHKB[a]-1
         else:
             ia = a
-            a = self.ihkb[a]
+            a = self.idHKB[a]
         
         if isinstance(b,str):
-            ib = self.hkb[b]-1
+            ib = self.dHKB[b]-1
         else:
             ib = b
-            b = self.ihkb[b]
+            b = self.idHKB[b]
             
 
         if fig==[]:
@@ -536,15 +594,15 @@ class CorSer(PyLayers):
             #ax.plot(self.t[0],self.rssi[ib,ia,:])
             if reciprocal==True:
                 plt.subplot(211)
-            sab = self.df[a+'-'+b]
-            sba = self.df[b+'-'+a]
+            sab = self.hkb[a+'-'+b]
+            sba = self.hkb[b+'-'+a]
             sab[t0:t1].plot()
             sba[t0:t1].plot()
             plt.title(a+'-'+b)
         if reciprocal==True:
             if data==True:
                 plt.subplot(212)
-            r = self.df[a+'-'+b][self.df[a+'-'+b]!=0]- self.df[b+'-'+a][self.df[b+'-'+a]!=0]
+            r = self.hkb[a+'-'+b][self.hkb[a+'-'+b]!=0]- self.hkb[b+'-'+a][self.hkb[b+'-'+a]!=0]
             r[t0:t1].plot()
             plt.title('Reciprocity offset')
 

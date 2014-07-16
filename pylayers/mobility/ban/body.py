@@ -283,7 +283,6 @@ class Body(PyLayers):
             pass
         self.dev={}
 
-
         # read default in ini file
         if _filewear == []:
             devfilename = pyu.getlong(di['wearable']['file'],pstruc['DIRWEAR'])
@@ -660,7 +659,7 @@ class Body(PyLayers):
 
         return(kf,kt,vsn,wsn,vtn,wtn)
 
-    def settopos(self,traj=[],t=0,cs=False,treadmill=False,p0=np.array(([0.,0.,0.]))):
+    def settopos(self,traj=[],t=0,cs=True,treadmill=False,p0=np.array(([0.,0.,0.]))):
         """ translate the body on a time stamped trajectory
 
         Parameters
@@ -767,14 +766,34 @@ class Body(PyLayers):
         self._phe = np.array([self.topos[0, khe], self.topos[1, khe], self.topos[2, khe]])
         # if asked for calculation of coordinates systems
         if cs:
-            # calculate cylinder coordinate system 
-            self.setccs(topos=True)
-            # calculate device coordinate system 
-            self.setdcs(topos=True)
-            # calculate antenna coordinate system 
-            self.setacs()
+            self.setcs(topos=True)
 
 
+    def setcs(self, topos = True, frameId =0):
+        """ set coordinates systems from a topos or a frame id
+
+        Parameters
+        ----------
+
+        topos : boolean
+                default : True
+        frameId : int
+                default 0
+
+        See Also
+        --------
+
+        pylayers.mobility.ban.body.setccs()
+        pylayers.mobility.ban.body.setdcs()
+        pylayers.mobility.ban.body.setacs()
+
+        """
+        # calculate cylinder coordinate system 
+        self.setccs(topos=topos,frameId=frameId)
+        # calculate device coordinate system 
+        self.setdcs(topos=topos,frameId=frameId)
+        # calculate antenna coordinate system 
+        self.setacs()
 
 
     def setdcs(self, topos = True, frameId =0):
@@ -1055,15 +1074,28 @@ class Body(PyLayers):
 
         id : str | list
             device id. 
-
+        frameId : int
+            frameid
+        t : float
+            time
 
         Returns
         -------
 
         device position
         """
+    
+        # if frameId != []:
+        #     self.setcs(topos=False,frameId=frameId)
+        # elif t !=[]:
+        #     fId,kt,vsn,wsn,vtn,wtn = self.posvel(self.traj,t)
+        #     print fId
+        #     self.setcs(topos=False,frameId=fId)
+        # else:
         if not 'dcs' in dir(self):
-            raise AttributeError('Body\'s topos not yet set')
+            raise AttributeError('Body\'s dcs not yet set.\
+                                  Use settopos() or precise a frameId or time')
+
         if id == -1:
             return np.array([self.dcs[i][:,0] for i in self.dcs.keys()])
         if isinstance(id,list):
@@ -1071,23 +1103,44 @@ class Body(PyLayers):
         else :
             return self.dcs[id][:,0]
 
-    def getdevT(self,id=-1):
+
+    def _rdposition(self):
+        """ real devices positions
+        """
+
+        dp = {}
+        dev = self.dev.keys()
+        udev = np.array([self.dev[i]['uc3d'][0] for i in dev])
+        p = self._f[:,udev,:]
+        dist = np.sqrt(np.sum((p[:,:,np.newaxis,:]-p[:,np.newaxis,:,:])**2,axis=3))
+        
+        for ud,d in enumerate(dev) :
+            dp[d]=p[:,ud,:]
+        return dist,dp
+
+
+    def getdevT(self,id=-1,t=[],frameId=[]):
         """ get device orientation
 
         Parameters
         ----------
 
-        id : str
-            device id
 
+        id : str | list
+            device id. 
+        frameId : int
+            frameid
+        t : float
+            time
 
         Returns
         -------
 
         device orientation
         """
-        if not 'topos' in dir(self):
-            raise AttributeError('Body\'s topos not yet set')
+        if not 'dcs' in dir(self):
+            raise AttributeError('Body\'s dcs not yet set.\
+                            Use settopos() or precise a frameId or time')
 
         if id == -1:
             return np.array([self.dcs[i][:,1:] for i in self.dcs.keys()])
