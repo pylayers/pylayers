@@ -5,6 +5,10 @@
 
 This class handles the description of an earth zone
 
+An earth zone gathers raster and vector data
+raster data comes either from srtm or aster data
+vector data comes from openstreetmap
+
 .. autosummary::
     :toctree: generated
 
