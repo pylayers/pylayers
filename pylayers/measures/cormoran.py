@@ -682,24 +682,26 @@ class CorSer(PyLayers):
         if kwargs['fig']==[]:
             fig = plt.figure(figsize=kwargs['figsize'])
         if kwargs['ax'] ==[]:
-            ax = fig.add_subplot(111)
+            if kwargs['reciprocal']==True:
+                ax = fig.add_subplot(211)
+                ax2 = fig.add_subplot(212)
+            else :
+                ax = fig.add_subplot(111)
 
         if kwargs['data']==True:
             #ax.plot(self.t[0],self.rssi[ia,ib,:])
             #ax.plot(self.t[0],self.rssi[ib,ia,:])
-            if kwargs['reciprocal']==True:
-                plt.subplot(211)
             sab = self.hkb[a+'-'+b]
             sba = self.hkb[b+'-'+a]
-            sab[t0:t1].plot()
-            sba[t0:t1].plot()
-            plt.title(a+'-'+b)
+            sab[t0:t1].plot(ax=ax)
+            sba[t0:t1].plot(ax=ax)
+            ax.set_title(a+'-'+b)
         if kwargs['reciprocal']==True:
-            if kwargs['data']==True:
-                plt.subplot(212)
+            # if kwargs['data']==True:
+            #     ax2=fig.add_subplot(212)
             r = self.hkb[a+'-'+b][self.hkb[a+'-'+b]!=0]- self.hkb[b+'-'+a][self.hkb[b+'-'+a]!=0]
-            r[t0:t1].plot()
-            plt.title('Reciprocity offset')
+            r[t0:t1].plot(ax=ax2)
+            ax2.set_title('Reciprocity offset')
 
         return fig,ax
 
@@ -720,7 +722,6 @@ class CorSer(PyLayers):
                      'fig':[],
                      'ax':[],
                      'figsize':(8,8),
-                     'reciprocal':True,
                      'data':True
                     }
         
@@ -755,19 +756,11 @@ class CorSer(PyLayers):
         if kwargs['data']==True:
             #ax.plot(self.t[0],self.rssi[ia,ib,:])
             #ax.plot(self.t[0],self.rssi[ib,ia,:])
-            if kwargs['reciprocal']==True:
-                plt.subplot(211)
             sab = self.tcr[a+'-'+b]
             sba = self.tcr[b+'-'+a]
-            sab[t0:t1].plot()
-            sba[t0:t1].plot()
-            plt.title(a+'-'+b)
-        if kwargs['reciprocal']==True:
-            if kwargs['data']==True:
-                plt.subplot(212)
-            r = self.tcr[a+'-'+b][self.tcr[a+'-'+b]!=0]- self.tcr[b+'-'+a][self.tcr[b+'-'+a]!=0]
-            r[t0:t1].plot()
-            plt.title('Reciprocity offset')
+            sab[t0:t1].plot(ax=ax)
+            sba[t0:t1].plot(ax=ax)
+            ax.set_title(a+'-'+b)
 
         return fig,ax
 

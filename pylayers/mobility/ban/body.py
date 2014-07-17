@@ -324,9 +324,20 @@ class Body(PyLayers):
         # filter real device and get devices 
         #
         rd = dict(filter(lambda x: x[1]['status']== 'real',self.dev.items()))
-        a=[]
+        
+        # 1 remove prefix
+        prefix = ['Bernard:','Bernard_','NicolasCormoran:']
+        nodes = self._p
+        for p in prefix:
+            tmpnode=[]
+            for n in nodes:
+                tmpnode.append(n.replace(p,''))
+                nodes = tmpnode
+
+        # 2 remove multiple entries due to orientation marker
+        nodes = [n.split(':')[0] for n in nodes]
         for d in rd :
-            bd = [self.dev[d]['radiomarkname'] in p for p in self._p]
+            bd = [self.dev[d]['radiomarkname'] in n for n in nodes]
             self.dev[d]['uc3d'] = np.where(bd)[0]
 
         return(di)
@@ -900,6 +911,8 @@ class Body(PyLayers):
                     vm = vm[:3]
                     mvm = np.sqrt(np.sum((vm*vm),axis=0))
                     T = vm/mvm
+                    import ipdb
+                    ipdb.set_trace()
                     T[:,2]=np.cross(T[:,0],T[:,1])
                     T[:,1]=np.cross(T[:,0],T[:,2])
                     Tn = T/np.sqrt(np.sum(T*T,axis=0))
@@ -1543,6 +1556,8 @@ class Body(PyLayers):
                     'ccs':False,
                     'dcs':False,
                     'devcolor':'green',
+                    'devid':True,
+                    'devopacity':1,
                     'color':'white',
                     'k':0,
                     'save':False}
@@ -1614,12 +1629,18 @@ class Body(PyLayers):
                 udev = [self.dev[i]['uc3d'][0] for i in self.dev]
                 center = self.pg[:,fId]
                 X=self._f[fId,udev,:].T-center[:,np.newaxis]
-
-
+                
             mlab.points3d(X[0,:],X[1,:], X[2,:], 
                           scale_factor=0.1, 
                           resolution=10, 
-                          color = dev_color)
+                          color = dev_color,
+                          opacity=kwargs['devopacity'])
+            nodename = self.dev.keys()
+            if kwargs['devid']:
+                [mlab.text3d(X[0,i],X[1,i], X[2,i],nodename[i],
+                                    scale=0.05,
+                                    color=(1,0,0)) for i in range(len(nodename))]
+
 
         if kwargs['ccs']:
             # to be improved
