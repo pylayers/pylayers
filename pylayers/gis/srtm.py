@@ -16,6 +16,7 @@ import os
 import zipfile
 import array
 import math
+import pdb
 
 class NoSuchTileError(Exception):
     """Raised when there is no tile for a region."""
@@ -394,5 +395,5 @@ class parseHTMLDirectoryListing(HTMLParser):
 if __name__ == '__main__':
     downloader = SRTMDownloader()
     downloader.loadFileList()
-    tile = downloader.getTile(49, 12)
-    print tile.getAltitudeFromLatLon(49.1234, 12.56789)
+    tile = downloader.getTile(48,-2)
+#    print tile.getAltitudeFromLatLon(49.1234, 12.56789)
