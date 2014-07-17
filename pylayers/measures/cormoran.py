@@ -653,7 +653,9 @@ class CorSer(PyLayers):
                      'ax':[],
                      'figsize':(8,8),
                      'reciprocal':True,
-                     'data':True
+                     'data':True,
+                     'colorab':'g',
+                     'colorba':'b'
                     }
         
         for k in defaults:
@@ -681,20 +683,25 @@ class CorSer(PyLayers):
 
         if kwargs['fig']==[]:
             fig = plt.figure(figsize=kwargs['figsize'])
+        else :
+            fig=kwargs['fig']
+
         if kwargs['ax'] ==[]:
             if kwargs['reciprocal']==True:
                 ax = fig.add_subplot(211)
                 ax2 = fig.add_subplot(212)
             else :
                 ax = fig.add_subplot(111)
+        else :
+            ax = kwargs['ax']
 
         if kwargs['data']==True:
             #ax.plot(self.t[0],self.rssi[ia,ib,:])
             #ax.plot(self.t[0],self.rssi[ib,ia,:])
             sab = self.hkb[a+'-'+b]
             sba = self.hkb[b+'-'+a]
-            sab[t0:t1].plot(ax=ax)
-            sba[t0:t1].plot(ax=ax)
+            sab[t0:t1].plot(ax=ax,color=kwargs['colorab'])
+            sba[t0:t1].plot(ax=ax,color=kwargs['colorba'])
             ax.set_title(a+'-'+b)
         if kwargs['reciprocal']==True:
             # if kwargs['data']==True:
@@ -722,7 +729,9 @@ class CorSer(PyLayers):
                      'fig':[],
                      'ax':[],
                      'figsize':(8,8),
-                     'data':True
+                     'data':True,
+                     'colorab':'g',
+                     'colorba':'b'
                     }
         
         for k in defaults:
@@ -750,56 +759,106 @@ class CorSer(PyLayers):
 
         if kwargs['fig']==[]:
             fig = plt.figure(figsize=kwargs['figsize'])
+        else:
+            fig = kwargs['fig']
+
         if kwargs['ax'] ==[]:
             ax = fig.add_subplot(111)
+        else :
+            ax=kwargs['ax']
 
         if kwargs['data']==True:
             #ax.plot(self.t[0],self.rssi[ia,ib,:])
             #ax.plot(self.t[0],self.rssi[ib,ia,:])
             sab = self.tcr[a+'-'+b]
             sba = self.tcr[b+'-'+a]
-            sab[t0:t1].plot(ax=ax)
-            sba[t0:t1].plot(ax=ax)
+            sab[t0:t1].plot(ax=ax,color=kwargs['colorab'])
+            sba[t0:t1].plot(ax=ax,color=kwargs['colorba'])
             ax.set_title(a+'-'+b)
 
         return fig,ax
 
-    def pltlk(self):
+    def pltlk(self,a,b,**kwargs):
+        """ plt links
 
-        display = [t.upper() for t in kwargs['display']]
 
-        if 'HK' in display:
-            if ('HK' in self.typ.upper()) or ('FULL' in self.typ.upper()):
+        """
+
+        defaults = { 'display':['FULL'],
+                     'figsize':(8,8),
+                     't0':0,
+                     't1':-1,
+                     'colorab':'g',
+                     'colorba':'b'
+                    }
+        
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        display = kwargs.pop('display')
+        
+        if not isinstance(display,list):
+            display=[display]
+
+        display = [t.upper() for t in display]
+
+        if 'FULL' in display:
+            ld = 3
+        elif 'TCR' in display or 'HKB' in display:
+            ld = 2
+
+        
+        fig,axs = plt.subplots(nrows=ld,ncols=1,figsize=kwargs['figsize'],sharex=True)
+
+        cptax= 0
+        if 'HKB' in display or 'FULL' in display:
+            if ('HKB' in self.typ.upper()) or ('FULL' in self.typ.upper()):
                 if isinstance(a,str):
-                    ia = self.dHKB[a]
-                else:
-                    ia = a
-                    a = self.idHKB[a]
-                
+                    iahk = self.dHKB[a]
+                else :
+                    raise AttributeError('in self.pltlk, nodes id must be a string')
                 if isinstance(b,str):
-                    ib = self.dHKB[b]
-                else:
-                    ib = b
-                    b = self.idHKB[b]
+                    ibhk = self.dHKB[b]
+                else :
+                    raise AttributeError('in self.pltlk, nodes id must be a string')
+
             else :
                 raise AttributeError('HK not available for the given scenario')
 
-        if 'TCR' in display:
+            kwargs['fig']=fig
+            kwargs['ax']=axs[cptax]
+            fig,axs[cptax]=self.plthkb(a,b,reciprocal=False,**kwargs)
+
+
+            cptax+=1
+        if 'TCR' in display or 'FULL' in display:
             if ('TCR' in self.typ.upper()) or ('FULL' in self.typ.upper()):
                 if isinstance(a,str):
-                    ia = self.dTCR[a]
-                else:
-                    ia = a
-                    a = self.idTCR[a]
-                
+                    iatcr = self.dTCR[a]
+                else :
+                    raise AttributeError('in self.pltlk, nodes id must be a string')
                 if isinstance(b,str):
-                    ib = self.dTCR[b]
-                else:
-                    ib = b
-                    b = self.idTCR[b]
+                    ibtcr = self.dTCR[b]
+                else :
+                    raise AttributeError('in self.pltlk, nodes id must be a string')
             else :
                 raise AttributeError('TCR not available for the given scenario')
 
+            kwargs['fig']=fig
+            kwargs['ax']=axs[cptax]
+            fig,axs[cptax]=self.plttcr(a,b,**kwargs)
+
+            cptax+=1
+
+        if 'HKB' in display or 'FULL' in display:
+            dhk = self.accessdm(iahk,ibhk,'HKB')
+            axs[cptax].plot(self.B.time,self.dist[:,dhk[0],dhk[1]])
+        if 'TCR' in display or 'FULL' in display:
+            dtcr = self.accessdm(iatcr,ibtcr,'TCR')
+            axs[cptax].plot(self.B.time,self.dist[:,dtcr[0],dtcr[1]])
+
+        axs[cptax].set_title('Ground Truth distance (m)')
 
 #s32 = Hikob(32)
 #f,a = s32.imshow(40)
