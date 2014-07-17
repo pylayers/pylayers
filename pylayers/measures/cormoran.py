@@ -57,7 +57,7 @@ class CorSer(PyLayers):
         if serie in sbs:
             self.loadBS(serie=serie,day=day)
 
-        self._filename = 'Sc' + self.scenario + '_S' + str(self.serie) + '_R' + str(self.run) + '_' + self.typ
+        self._filename = 'Sc' + self.scenario + '_S' + str(self.serie) + '_R' + str(self.run) + '_' + self.typ.capitalize()
 
 
         # BODY
@@ -70,7 +70,7 @@ class CorSer(PyLayers):
         self.L= Layout('MOCAP.ini')
 
         self.loadinfranodes()
-        
+        self._distancematrix()
 
 
     def __repr__(self):
@@ -87,7 +87,7 @@ class CorSer(PyLayers):
             st = st + k + ' '
         st = st + '\n\n'
 
-        st = st+'Body available: ' + str('body' in dir(self)) + '\n\n'
+        st = st+'Body available: ' + str('B' in dir(self)) + '\n\n'
         
         try :
             st = st+'BeSPoon : '+self._fileBS+'\n'
@@ -106,17 +106,55 @@ class CorSer(PyLayers):
 
     def loadinfranodes(self):
         """ load infrastrucutre nodes
+
+
+
+                        A4 
+                    mpts[6,7,8]
+                        X 
+
+            A3                     A3 
+        mpts[9,10,11]        mpts[3,4,5]
+            X                      X
+
+                        A2 
+                    mpts[0,1,2]
+                        X 
+
+
+        TCR = mpts[0,3,6,9]
+        HKB = mpts[1,2,
+                   4,5,
+                   7,8,
+                   10,11]
+
+
         """
         a,self.infraname,pts,i = c3d.ReadC3d('scene.c3d')
 
         pts=pts/1000.
         mpts = np.mean(pts,axis=0)
+        self.din={}
+        if ('HK'  in self.typ) or ('FULL' in self.typ):
+            uhkb=np.array([[1,2],[4,5],[7,8],[10,11]])
+            mphkb = np.mean(mpts[uhkb],axis=1)
+
+            self.din.update({'HKB:1':mphkb[1],
+                 'HKB:2':mphkb[0],
+                 'HKB:3':mphkb[3],
+                 'HKB:4':mphkb[2]})
+        if ('TCR' in self.typ) or ('FULL' in self.typ):
+            self.din.update({'TCR:32':mpts[3],
+                 'TCR:24':mpts[0],
+                 'TCR:27':mpts[9],
+                 'TCR:28':mpts[6]})
+        
         # self.pts= np.empty((12,3))
         # self.pts[:,0]= -mpts[:,1]
         # self.pts[:,1]= mpts[:,0]
         # self.pts[:,2]= mpts[:,2]
-        self.pts=mpts
-        self.dist = np.sqrt(np.sum((mpts[:,np.newaxis,:]-mpts[np.newaxis,:])**2,axis=2))
+        # return mpts
+        # self.dist = np.sqrt(np.sum((mpts[:,np.newaxis,:]-mpts[np.newaxis,:])**2,axis=2))
 
 
     def loadlog(self):
@@ -142,7 +180,6 @@ class CorSer(PyLayers):
             baw = self.rootdir + '/POST-TREATED/' + str(self.day)+'-06-2014/BodyandWear/'
             filebody = baw + subject + '.ini'
             filewear = baw + subject + '_'  +str(self.day)+'-06-2014_' + self.typ + '.ini'
-
             self.B.append(Body(_filebody=filebody,
                              _filemocap=filemocap,unit = 'mm',
                              _filewear=filewear))
@@ -180,7 +217,7 @@ class CorSer(PyLayers):
         21:49}
 
         if day==11:
-            self.TCR ={'Unused':49,
+            self.dTCR ={'Unused':49,
                   'COORD':31,
                   'AP1':32,
                   'AP2':24,
@@ -201,7 +238,7 @@ class CorSer(PyLayers):
 
         if day==12:
             dirname = self.rootdir+'/POST-TREATED/12-06-2014/TCR'
-            self.TCR ={ 'COORD':31,
+            self.dTCR ={ 'COORD':31,
                         'AP1':32,
                         'AP2':24,
                         'AP3':27,
@@ -223,13 +260,13 @@ class CorSer(PyLayers):
         # iTCR : (MAC , Name)
         # dTCR : (NodeId, Name)
         #
-        self.iTCR={}
-        for k in self.TCR:
-            self.iTCR[self.TCR[k]]=k
+        self.idTCR={}
+        for k in self.dTCR:
+            self.idTCR[self.dTCR[k]]=k
 
-        self.dTCR={}
+        dTCRni={}
         for k in self.TNET.keys():
-            self.dTCR[k]=self.iTCR[self.TNET[k]]
+            dTCRni[k]=self.idTCR[self.TNET[k]]
 
 
         files = os.listdir(dirname)
@@ -252,8 +289,8 @@ class CorSer(PyLayers):
         filename = dirname + '/'+ self._fileTCR
         dtTCR = pd.read_csv(filename)
         tcr={}
-        for k in self.dTCR:
-            for l in self.dTCR:
+        for k in dTCRni:
+            for l in dTCRni:
                 if k!=l:
                     d = dtTCR[((dtTCR['ida']==k) & (dtTCR['idb']==l))]
                     d.drop_duplicates('time',inplace=True)
@@ -265,7 +302,8 @@ class CorSer(PyLayers):
                     del d['time']
                     if len(d)!=0:
                         sr = pd.Series(d['dist']/1000,index=d.index)
-                        tcr[self.dTCR[k]+'_'+self.dTCR[l]]= sr
+                        tcr[dTCRni[k]+'-'+dTCRni[l]]= sr
+
 
         self.tcr = pd.DataFrame(tcr)
         self.tcr = self.tcr.fillna(0)
@@ -278,7 +316,7 @@ class CorSer(PyLayers):
         """ load BeSpoon data
 
         """
-        self.dBS = {157:'LeftWrist?',74:'RightAnckle?'}
+        self.dBS = {'LeftWrist?':157,'RightAnckle?':74}
         if day==11:
             dirname = self.rootdir+'/POST-TREATED/11-06-2014/BeSpoon'
         if day==12:
@@ -305,14 +343,14 @@ class CorSer(PyLayers):
     def loadhkb(self,day=11,serie='',scenario='20',run=1,source='UR1'):
 
         if day==11:
-            self.hkb ={'AP1':1,'AP2':2,'AP3':3,'AP4':4,
+            self.dHKB ={'AP1':1,'AP2':2,'AP3':3,'AP4':4,
                        'HeadRight':5,'TorsoTopRight':6,'TorsoTopLeft':7,'BackCenter':8,'ElbowRight':9,'ElbowLeft':10,'HipRight':11,'WristRight':12,'WristLeft':13,'KneeLeft':14,'AnckleRight':16,'AnckleLeft':15}
             if source=='UR1':
                 dirname = self.rootdir+'/POST-TREATED/11-06-2014/HIKOB'
             elif source=='CITI':
                 dirname = self.rootdir+'/POST-TREATED/11-06-2014/HIKOB/CITI'
         if day==12:
-            self.hkb= {'AP1':1,'AP2':2,'AP3':3,'AP4':4,'Jihad:TorsoTopRight':10,'Jihad:TorsoTopLeft':9,'Jihad:BackCenter':11,'JihadShoulderLeft':12,
+            self.dHKB= {'AP1':1,'AP2':2,'AP3':3,'AP4':4,'Jihad:TorsoTopRight':10,'Jihad:TorsoTopLeft':9,'Jihad:BackCenter':11,'JihadShoulderLeft':12,
              'Nicolas:TorsoTopRight':6,'Nicolas:TorsoTopLeft':5,'Nicolas:BackCenter':7,'Nicolas:ShoulderLeft':8,
              'Eric:TorsoTopRight':15,'Eric:TorsoTopLeft':13,'Eric:BackCenter':16,'Eric:ShoulderLeft':14}
             if source=='UR1':
@@ -322,9 +360,9 @@ class CorSer(PyLayers):
 
         files = os.listdir(dirname)
 
-        self.ihkb={}
-        for k in self.hkb:
-            self.ihkb[self.hkb[k]]=k
+        self.idHKB={}
+        for k in self.dHKB:
+            self.idHKB[self.dHKB[k]]=k
 
         if serie != '':
             self._filehkb = filter(lambda x : 'S'+str(serie) in x ,files)[0]
@@ -350,7 +388,99 @@ class CorSer(PyLayers):
             self.t = np.arange(np.shape(self.rssi)[2])*25.832e-3
 
         self.topandas()
-        self.df = self.df[self.df!=0]
+        self.hkb = self.hkb[self.hkb!=0]
+
+
+    def _distancematrix(self):
+
+
+        tdev = []
+        for k in self.B.dev:
+            tdev.append(self.B.dev[k]['uc3d'][0])
+        tdev = np.array(tdev)
+
+        # pnb : nframe x ndevices x 3
+        pnb = self.B._f[:,tdev,:]
+        ln = []
+        uin = []
+        if ('HK' in self.typ) or ('FULL' in self.typ):
+            uin.extend(['HKB:1','HKB:2','HKB:3','HKB:4'])
+        if ('TCR' in self.typ) or ('FULL' in self.typ):
+            uin.extend(['TCR:32','TCR:24','TCR:27','TCR:28'])
+        ln = uin + self.B.dev.keys()
+        pin = np.array([self.din[d] for d in uin])
+        pin2=np.empty((pnb.shape[0],pin.shape[0],pin.shape[1]))
+        pin2[:,:,:]=pin
+        p = np.concatenate((pin2,pnb),axis=1)
+        self.dist = np.sqrt(np.sum((p[:,:,np.newaxis,:]-p[:,np.newaxis,:,:])**2,axis=3))
+        self._lnd = ln
+
+
+    def accessdm(self,a,b,techno):
+        """ Access o the distance matrix
+
+            give name|id of node a and b and a given techno. retrun Groung truth
+            distance between the 2 nodes
+        """
+
+        if 'HKB' in techno :
+            if isinstance(a,str):
+                ia = self.dHKB[a]
+            else:
+                ia = a
+                a = self.idHKB[a]
+            
+            if isinstance(b,str):
+                ib = self.dHKB[b]
+            else:
+                ib = b
+                b = self.idHKB[b]
+
+        elif 'TCR' in techno :
+            if isinstance(a,str):
+                ia = self.dTCR[a]
+            else:
+                ia = a
+                a = self.idTCR[a]
+            
+            if isinstance(b,str):
+                ib = self.dTCR[b]
+            else:
+                ib = b
+                b = self.idTCR[b]
+
+        else :
+            raise AttributeError('please give only 1 techno or radio node')
+
+        ka = techno+':'+str(ia)
+        kb = techno+':'+str(ib)
+
+        ua = self._lnd.index(ka)
+        ub = self._lnd.index(kb)
+
+        return(ua,ub)
+
+        
+
+
+
+        # c3ds = self.B._f.shape
+        # if 'Full' in self.typ:
+        #     pdev= np.empty((c3ds[0],len(self.dHKB)+len(self.tcr)+len(bs),3))
+        # elif 'HK' in self.typ:
+        #     pdev= np.empty((c3ds[0],len(self.dHKB)+len(bs),3))
+        # elif 'TCR' in self.typ:
+        #     pdev= np.empty((c3ds[0],len(self.tcr),3))
+        # else:
+        #     raise AttributeError('invalid self.typ')
+
+        # self.B.network()
+        # DB = self.B.D2
+
+        # ludev = np.array([[i,self.B.dev[i]['uc3d'][0]] for i in self.B.dev])
+        # for i in ludev:
+        #     pdev[:,eval(i[0])-1,:] = self.B._f[:,i[1],:]
+        # # self.dist = np.sqrt(np.sum((mpts[:,np.newaxis,:]-mpts[np.newaxis,:])**2,axis=2))
 
 
     def vlc(self):
@@ -367,7 +497,7 @@ class CorSer(PyLayers):
 
 
     def snapshot(self,t0=0,offset=15.5,save=False):
-        """
+        """ single snapshot plot 
         """
         videofile = self.rootdir+'/POST-TREATED/' +str(self.day) + '-06-2014/Videos/'
         ldir = os.listdir(videofile)
@@ -407,17 +537,16 @@ class CorSer(PyLayers):
         plt.imshow(F1)
         plt.title('t = '+str(t1)+'s')
 
-    def show(self):
-
-        fig,ax = self.L.showG('s')
-        ax.plot(self.pts[:,0],self.pts[:,1],'o')
 
     def _show3(self):
         self.L._show3(opacity=0.5)
-        mlab.points3d(self.pts[:,0],self.pts[:,1], self.pts[:,2],scale_factor=0.05)
-        #[mlab.text3d(self.pts[i,0],self.pts[i,1], self.pts[i,2],self.infraname[i],scale=0.5)
-        #for i in range(len(self.pts))]
-        for i in range(0,100,5):
+        v = self.din.items()
+        X= np.array([v[i][1] for i in range(len(v))])
+
+        mlab.points3d(X[:,0],X[:,1], X[:,2],scale_factor=0.1)
+        [mlab.text3d(v[i][1][0],v[i][1][1],v[i][1][2],v[i][0],scale=0.5)
+        for i in range(len(v))]
+        for i in range(0,100,7):
             self.B.settopos(t=i,cs=True)
             self.B._show3(dev=True)
         mlab.view(54.989781407516112,
@@ -429,15 +558,15 @@ class CorSer(PyLayers):
 
     def topandas(self):
         try:
-            self.df = pd.DataFrame(index=self.t[0])
+            self.hkb = pd.DataFrame(index=self.t[0])
         except:
-            self.df = pd.DataFrame(index=self.t)
-        for k in self.ihkb:
-            for l in self.ihkb:
+            self.hkb = pd.DataFrame(index=self.t)
+        for k in self.idHKB:
+            for l in self.idHKB:
                 if k!=l:
-                    column = self.ihkb[k]+'-'+self.ihkb[l]
+                    column = self.idHKB[k]+'-'+self.idHKB[l]
                     rssi  = self.rssi[k-1,l-1,:]
-                    self.df[column] = rssi
+                    self.hkb[column] = rssi
 
 
     def imshow(self,time=100,kind='time'):
@@ -471,7 +600,7 @@ class CorSer(PyLayers):
         ax1 = fig.add_subplot(121)
         #img1 = ax1.imshow(self.rssi[:,:,timeindex],interpolation='nearest',origin='lower')
         img1 = ax1.imshow(dt1,interpolation='nearest')
-        labels = map(lambda x : self.ihkb[x],range(1,17))
+        labels = map(lambda x : self.idHKB[x],range(1,17))
         plt.xticks(range(16),labels,rotation=80,fontsize=14)
         plt.yticks(range(16),labels,fontsize=14)
         if kind=='time':
@@ -502,56 +631,239 @@ class CorSer(PyLayers):
         #        cpt = cpt + 1
         return fig,(ax1,ax2)
 
-    def pltlk(self,a,b,t0=0,t1=10,fig=[],ax=[],figsize=(8,8),reciprocal=True,data=True):
+    def plthkb(self,a,b,**kwargs):
         """
         Parameters
         ----------
 
         a : node name | number
-        b : node name |number
+        b : node name | number
         t0 : start time
         t1 : stop time
 
         """
+
+        defaults = { 't0':0,
+                     't1':-1,
+                     'fig':[],
+                     'ax':[],
+                     'figsize':(8,8),
+                     'reciprocal':True,
+                     'data':True,
+                     'colorab':'g',
+                     'colorba':'b'
+                    }
+        
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+        
+        
+        t0 =kwargs['t0']
+        t1 =kwargs['t1']
+        if t1 ==-1:
+            t1=self.t[0][-1]
+
         if isinstance(a,str):
-            ia = self.hkb[a]-1
+            ia = self.dHKB[a]
         else:
             ia = a
-            a = self.ihkb[a]
+            a = self.idHKB[a]
         
         if isinstance(b,str):
-            ib = self.hkb[b]-1
+            ib = self.dHKB[b]
         else:
             ib = b
-            b = self.ihkb[b]
-            
+            b = self.idHKB[b]
 
-        if fig==[]:
-            fig = plt.figure(figsize=figsize)
-        if ax ==[]:
-            ax = fig.add_subplot(111)
 
-        if data==True:
+        if kwargs['fig']==[]:
+            fig = plt.figure(figsize=kwargs['figsize'])
+        else :
+            fig=kwargs['fig']
+
+        if kwargs['ax'] ==[]:
+            if kwargs['reciprocal']==True:
+                ax = fig.add_subplot(211)
+                ax2 = fig.add_subplot(212)
+            else :
+                ax = fig.add_subplot(111)
+        else :
+            ax = kwargs['ax']
+
+        if kwargs['data']==True:
             #ax.plot(self.t[0],self.rssi[ia,ib,:])
             #ax.plot(self.t[0],self.rssi[ib,ia,:])
-            if reciprocal==True:
-                plt.subplot(211)
-            sab = self.df[a+'-'+b]
-            sba = self.df[b+'-'+a]
-            sab[t0:t1].plot()
-            sba[t0:t1].plot()
-            plt.title(a+'-'+b)
-        if reciprocal==True:
-            if data==True:
-                plt.subplot(212)
-            r = self.df[a+'-'+b][self.df[a+'-'+b]!=0]- self.df[b+'-'+a][self.df[b+'-'+a]!=0]
-            r[t0:t1].plot()
-            plt.title('Reciprocity offset')
+            sab = self.hkb[a+'-'+b]
+            sba = self.hkb[b+'-'+a]
+            sab[t0:t1].plot(ax=ax,color=kwargs['colorab'])
+            sba[t0:t1].plot(ax=ax,color=kwargs['colorba'])
+            ax.set_title(a+'-'+b)
+        if kwargs['reciprocal']==True:
+            # if kwargs['data']==True:
+            #     ax2=fig.add_subplot(212)
+            r = self.hkb[a+'-'+b][self.hkb[a+'-'+b]!=0]- self.hkb[b+'-'+a][self.hkb[b+'-'+a]!=0]
+            r[t0:t1].plot(ax=ax2)
+            ax2.set_title('Reciprocity offset')
 
         return fig,ax
 
+    def plttcr(self,a,b,**kwargs):
+        """
+        Parameters
+        ----------
+
+        a : node name | number
+        b : node name | number
+        t0 : start time
+        t1 : stop time
+
+        """
+
+        defaults = { 't0':0,
+                     't1':-1,
+                     'fig':[],
+                     'ax':[],
+                     'figsize':(8,8),
+                     'data':True,
+                     'colorab':'g',
+                     'colorba':'b'
+                    }
+        
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+        
+        
+        t0 =kwargs['t0']
+        t1 =kwargs['t1']
+        if t1 ==-1:
+            t1=self.t[0][-1]
+
+        if isinstance(a,str):
+            ia = self.dTCR[a]
+        else:
+            ia = a
+            a = self.idTCR[a]
+        
+        if isinstance(b,str):
+            ib = self.dTCR[b]
+        else:
+            ib = b
+            b = self.idTCR[b]
 
 
+        if kwargs['fig']==[]:
+            fig = plt.figure(figsize=kwargs['figsize'])
+        else:
+            fig = kwargs['fig']
+
+        if kwargs['ax'] ==[]:
+            ax = fig.add_subplot(111)
+        else :
+            ax=kwargs['ax']
+
+        if kwargs['data']==True:
+            #ax.plot(self.t[0],self.rssi[ia,ib,:])
+            #ax.plot(self.t[0],self.rssi[ib,ia,:])
+            sab = self.tcr[a+'-'+b]
+            sba = self.tcr[b+'-'+a]
+            sab[t0:t1].plot(ax=ax,color=kwargs['colorab'])
+            sba[t0:t1].plot(ax=ax,color=kwargs['colorba'])
+            ax.set_title(a+'-'+b)
+
+        return fig,ax
+
+    def pltlk(self,a,b,**kwargs):
+        """ plt links
+
+
+        """
+
+        defaults = { 'display':[],
+                     'figsize':(8,8),
+                     't0':0,
+                     't1':-1,
+                     'colorab':'g',
+                     'colorba':'b'
+                    }
+        
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        display = kwargs.pop('display')
+        
+        if not isinstance(display,list):
+            display=[display]
+            S
+
+        if display == []:
+            if ('tcr' in dir(self)) and ('hkb' in dir(self)):
+                display.append('FULL')
+            elif 'tcr' in dir(self):
+                display.append('TCR')
+            elif 'hkb' in dir(self):
+                display.append('HKB')
+
+        display = [t.upper() for t in display]
+
+        if 'FULL' in display:
+            ld = 3
+        elif 'TCR' in display or 'HKB' in display:
+            ld = 2
+
+        
+        fig,axs = plt.subplots(nrows=ld,ncols=1,figsize=kwargs['figsize'],sharex=True)
+
+        cptax= 0
+        if 'HKB' in display or 'FULL' in display:
+            if ('HKB' in self.typ.upper()) or ('FULL' in self.typ.upper()):
+                if isinstance(a,str):
+                    iahk = self.dHKB[a]
+                else :
+                    raise AttributeError('in self.pltlk, nodes id must be a string')
+                if isinstance(b,str):
+                    ibhk = self.dHKB[b]
+                else :
+                    raise AttributeError('in self.pltlk, nodes id must be a string')
+
+            else :
+                raise AttributeError('HK not available for the given scenario')
+
+            kwargs['fig']=fig
+            kwargs['ax']=axs[cptax]
+            fig,axs[cptax]=self.plthkb(a,b,reciprocal=False,**kwargs)
+
+
+            cptax+=1
+        if 'TCR' in display or 'FULL' in display:
+            if ('TCR' in self.typ.upper()) or ('FULL' in self.typ.upper()):
+                if isinstance(a,str):
+                    iatcr = self.dTCR[a]
+                else :
+                    raise AttributeError('in self.pltlk, nodes id must be a string')
+                if isinstance(b,str):
+                    ibtcr = self.dTCR[b]
+                else :
+                    raise AttributeError('in self.pltlk, nodes id must be a string')
+            else :
+                raise AttributeError('TCR not available for the given scenario')
+
+            kwargs['fig']=fig
+            kwargs['ax']=axs[cptax]
+            fig,axs[cptax]=self.plttcr(a,b,**kwargs)
+
+            cptax+=1
+
+        if 'HKB' in display or 'FULL' in display:
+            dhk = self.accessdm(iahk,ibhk,'HKB')
+            axs[cptax].plot(self.B.time,self.dist[:,dhk[0],dhk[1]])
+        if 'TCR' in display or 'FULL' in display:
+            dtcr = self.accessdm(iatcr,ibtcr,'TCR')
+            axs[cptax].plot(self.B.time,self.dist[:,dtcr[0],dtcr[1]])
+
+        axs[cptax].set_title('Ground Truth distance (m)')
 
 #s32 = Hikob(32)
 #f,a = s32.imshow(40)

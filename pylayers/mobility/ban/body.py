@@ -283,7 +283,6 @@ class Body(PyLayers):
             pass
         self.dev={}
 
-
         # read default in ini file
         if _filewear == []:
             devfilename = pyu.getlong(di['wearable']['file'],pstruc['DIRWEAR'])
@@ -325,9 +324,20 @@ class Body(PyLayers):
         # filter real device and get devices 
         #
         rd = dict(filter(lambda x: x[1]['status']== 'real',self.dev.items()))
-        a=[]
+        
+        # 1 remove prefix
+        prefix = ['Bernard:','Bernard_','NicolasCormoran:']
+        nodes = self._p
+        for p in prefix:
+            tmpnode=[]
+            for n in nodes:
+                tmpnode.append(n.replace(p,''))
+                nodes = tmpnode
+
+        # 2 remove multiple entries due to orientation marker
+        nodes = [n.split(':')[0] for n in nodes]
         for d in rd :
-            bd = [self.dev[d]['radiomarkname'] in p for p in self._p]
+            bd = [self.dev[d]['radiomarkname'] in n for n in nodes]
             self.dev[d]['uc3d'] = np.where(bd)[0]
 
         return(di)
@@ -660,7 +670,7 @@ class Body(PyLayers):
 
         return(kf,kt,vsn,wsn,vtn,wtn)
 
-    def settopos(self,traj=[],t=0,cs=False,treadmill=False,p0=np.array(([0.,0.,0.]))):
+    def settopos(self,traj=[],t=0,cs=True,treadmill=False,p0=np.array(([0.,0.,0.]))):
         """ translate the body on a time stamped trajectory
 
         Parameters
@@ -767,14 +777,34 @@ class Body(PyLayers):
         self._phe = np.array([self.topos[0, khe], self.topos[1, khe], self.topos[2, khe]])
         # if asked for calculation of coordinates systems
         if cs:
-            # calculate cylinder coordinate system 
-            self.setccs(topos=True)
-            # calculate device coordinate system 
-            self.setdcs(topos=True)
-            # calculate antenna coordinate system 
-            self.setacs()
+            self.setcs(topos=True)
 
 
+    def setcs(self, topos = True, frameId =0):
+        """ set coordinates systems from a topos or a frame id
+
+        Parameters
+        ----------
+
+        topos : boolean
+                default : True
+        frameId : int
+                default 0
+
+        See Also
+        --------
+
+        pylayers.mobility.ban.body.setccs()
+        pylayers.mobility.ban.body.setdcs()
+        pylayers.mobility.ban.body.setacs()
+
+        """
+        # calculate cylinder coordinate system 
+        self.setccs(topos=topos,frameId=frameId)
+        # calculate device coordinate system 
+        self.setdcs(topos=topos,frameId=frameId)
+        # calculate antenna coordinate system 
+        self.setacs()
 
 
     def setdcs(self, topos = True, frameId =0):
@@ -881,6 +911,8 @@ class Body(PyLayers):
                     vm = vm[:3]
                     mvm = np.sqrt(np.sum((vm*vm),axis=0))
                     T = vm/mvm
+                    import ipdb
+                    ipdb.set_trace()
                     T[:,2]=np.cross(T[:,0],T[:,1])
                     T[:,1]=np.cross(T[:,0],T[:,2])
                     Tn = T/np.sqrt(np.sum(T*T,axis=0))
@@ -1055,15 +1087,28 @@ class Body(PyLayers):
 
         id : str | list
             device id. 
-
+        frameId : int
+            frameid
+        t : float
+            time
 
         Returns
         -------
 
         device position
         """
+    
+        # if frameId != []:
+        #     self.setcs(topos=False,frameId=frameId)
+        # elif t !=[]:
+        #     fId,kt,vsn,wsn,vtn,wtn = self.posvel(self.traj,t)
+        #     print fId
+        #     self.setcs(topos=False,frameId=fId)
+        # else:
         if not 'dcs' in dir(self):
-            raise AttributeError('Body\'s topos not yet set')
+            raise AttributeError('Body\'s dcs not yet set.\
+                                  Use settopos() or precise a frameId or time')
+
         if id == -1:
             return np.array([self.dcs[i][:,0] for i in self.dcs.keys()])
         if isinstance(id,list):
@@ -1071,23 +1116,44 @@ class Body(PyLayers):
         else :
             return self.dcs[id][:,0]
 
-    def getdevT(self,id=-1):
+
+    def _rdposition(self):
+        """ real devices positions
+        """
+
+        dp = {}
+        dev = self.dev.keys()
+        udev = np.array([self.dev[i]['uc3d'][0] for i in dev])
+        p = self._f[:,udev,:]
+        dist = np.sqrt(np.sum((p[:,:,np.newaxis,:]-p[:,np.newaxis,:,:])**2,axis=3))
+        
+        for ud,d in enumerate(dev) :
+            dp[d]=p[:,ud,:]
+        return dist,dp
+
+
+    def getdevT(self,id=-1,t=[],frameId=[]):
         """ get device orientation
 
         Parameters
         ----------
 
-        id : str
-            device id
 
+        id : str | list
+            device id. 
+        frameId : int
+            frameid
+        t : float
+            time
 
         Returns
         -------
 
         device orientation
         """
-        if not 'topos' in dir(self):
-            raise AttributeError('Body\'s topos not yet set')
+        if not 'dcs' in dir(self):
+            raise AttributeError('Body\'s dcs not yet set.\
+                            Use settopos() or precise a frameId or time')
 
         if id == -1:
             return np.array([self.dcs[i][:,1:] for i in self.dcs.keys()])
@@ -1490,6 +1556,8 @@ class Body(PyLayers):
                     'ccs':False,
                     'dcs':False,
                     'devcolor':'green',
+                    'devid':False,
+                    'devopacity':1,
                     'color':'white',
                     'k':0,
                     'save':False}
@@ -1561,12 +1629,18 @@ class Body(PyLayers):
                 udev = [self.dev[i]['uc3d'][0] for i in self.dev]
                 center = self.pg[:,fId]
                 X=self._f[fId,udev,:].T-center[:,np.newaxis]
-
-
+                
             mlab.points3d(X[0,:],X[1,:], X[2,:], 
                           scale_factor=0.1, 
                           resolution=10, 
-                          color = dev_color)
+                          color = dev_color,
+                          opacity=kwargs['devopacity'])
+            nodename = self.dev.keys()
+            if kwargs['devid']:
+                [mlab.text3d(X[0,i],X[1,i], X[2,i],nodename[i],
+                                    scale=0.05,
+                                    color=(1,0,0)) for i in range(len(nodename))]
+
 
         if kwargs['ccs']:
             # to be improved
