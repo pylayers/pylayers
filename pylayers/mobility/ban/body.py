@@ -1556,7 +1556,7 @@ class Body(PyLayers):
                     'ccs':False,
                     'dcs':False,
                     'devcolor':'green',
-                    'devid':True,
+                    'devid':False,
                     'devopacity':1,
                     'color':'white',
                     'k':0,

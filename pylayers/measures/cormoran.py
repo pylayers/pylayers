@@ -537,10 +537,6 @@ class CorSer(PyLayers):
         plt.imshow(F1)
         plt.title('t = '+str(t1)+'s')
 
-    def show(self):
-
-        fig,ax = self.L.showG('s')
-        ax.plot(self.pts[:,0],self.pts[:,1],'o')
 
     def _show3(self):
         self.L._show3(opacity=0.5)
@@ -550,7 +546,7 @@ class CorSer(PyLayers):
         mlab.points3d(X[:,0],X[:,1], X[:,2],scale_factor=0.1)
         [mlab.text3d(v[i][1][0],v[i][1][1],v[i][1][2],v[i][0],scale=0.5)
         for i in range(len(v))]
-        for i in range(0,100,5):
+        for i in range(0,100,7):
             self.B.settopos(t=i,cs=True)
             self.B._show3(dev=True)
         mlab.view(54.989781407516112,
@@ -784,7 +780,7 @@ class CorSer(PyLayers):
 
         """
 
-        defaults = { 'display':['FULL'],
+        defaults = { 'display':[],
                      'figsize':(8,8),
                      't0':0,
                      't1':-1,
@@ -800,6 +796,15 @@ class CorSer(PyLayers):
         
         if not isinstance(display,list):
             display=[display]
+            S
+
+        if display == []:
+            if ('tcr' in dir(self)) and ('hkb' in dir(self)):
+                display.append('FULL')
+            elif 'tcr' in dir(self):
+                display.append('TCR')
+            elif 'hkb' in dir(self):
+                display.append('HKB')
 
         display = [t.upper() for t in display]
 
