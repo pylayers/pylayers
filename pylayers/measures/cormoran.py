@@ -88,7 +88,7 @@ class CorSer(PyLayers):
         st = st + '\n\n'
 
         st = st+'Body available: ' + str('B' in dir(self)) + '\n\n'
-        
+
         try :
             st = st+'BeSPoon : '+self._fileBS+'\n'
         except:
@@ -132,7 +132,7 @@ class CorSer(PyLayers):
         """
         a,self.infraname,pts,i = c3d.ReadC3d('scene.c3d')
 
-        pts=pts/1000.
+        pts=pts/4000.
         mpts = np.mean(pts,axis=0)
         self.din={}
         if ('HK'  in self.typ) or ('FULL' in self.typ):
@@ -148,7 +148,7 @@ class CorSer(PyLayers):
                  'TCR:24':mpts[0],
                  'TCR:27':mpts[9],
                  'TCR:28':mpts[6]})
-        
+
         # self.pts= np.empty((12,3))
         # self.pts[:,0]= -mpts[:,1]
         # self.pts[:,1]= mpts[:,0]
@@ -158,8 +158,8 @@ class CorSer(PyLayers):
 
 
     def loadlog(self):
-        """ load in self.log the log of current serie 
-            from MeasurementLog.csv 
+        """ load in self.log the log of current serie
+            from MeasurementLog.csv
         """
 
         filelog = self.rootdir + '/RAW/Doc/MeasurementLog.csv'
@@ -173,7 +173,7 @@ class CorSer(PyLayers):
         """
         self.B=[]
         for subject in self.subject:
-            
+
             seriestr = str(self.serie).zfill(3)
             filemocap = self.rootdir + '/RAW/' + \
                         str(self.day)+'-06-2014/MOCAP/serie_' + seriestr + '.c3d'
@@ -187,8 +187,6 @@ class CorSer(PyLayers):
         if len(self.subject) == 1:
             self.B = self.B[0]
 
-
-        
 
     def loadTCR(self,day=11,serie='',scenario='20',run=1):
         """ load TCR data
@@ -429,7 +427,7 @@ class CorSer(PyLayers):
             else:
                 ia = a
                 a = self.idHKB[a]
-            
+
             if isinstance(b,str):
                 ib = self.dHKB[b]
             else:
@@ -442,7 +440,7 @@ class CorSer(PyLayers):
             else:
                 ia = a
                 a = self.idTCR[a]
-            
+
             if isinstance(b,str):
                 ib = self.dTCR[b]
             else:
@@ -460,7 +458,7 @@ class CorSer(PyLayers):
 
         return(ua,ub)
 
-        
+
 
 
 
@@ -653,12 +651,12 @@ class CorSer(PyLayers):
                      'colorab':'g',
                      'colorba':'b'
                     }
-        
+
         for k in defaults:
             if k not in kwargs:
                 kwargs[k] = defaults[k]
-        
-        
+
+
         t0 =kwargs['t0']
         t1 =kwargs['t1']
         if t1 ==-1:
@@ -669,7 +667,7 @@ class CorSer(PyLayers):
         else:
             ia = a
             a = self.idHKB[a]
-        
+
         if isinstance(b,str):
             ib = self.dHKB[b]
         else:
@@ -727,14 +725,16 @@ class CorSer(PyLayers):
                      'figsize':(8,8),
                      'data':True,
                      'colorab':'g',
-                     'colorba':'b'
+                     'colorba':'b',
+                     'linestyle':'default',
+                     'inverse':False
                     }
-        
+
         for k in defaults:
             if k not in kwargs:
                 kwargs[k] = defaults[k]
-        
-        
+
+
         t0 =kwargs['t0']
         t1 =kwargs['t1']
         if t1 ==-1:
@@ -745,7 +745,7 @@ class CorSer(PyLayers):
         else:
             ia = a
             a = self.idTCR[a]
-        
+
         if isinstance(b,str):
             ib = self.dTCR[b]
         else:
@@ -766,10 +766,14 @@ class CorSer(PyLayers):
         if kwargs['data']==True:
             #ax.plot(self.t[0],self.rssi[ia,ib,:])
             #ax.plot(self.t[0],self.rssi[ib,ia,:])
-            sab = self.tcr[a+'-'+b]
-            sba = self.tcr[b+'-'+a]
-            sab[t0:t1].plot(ax=ax,color=kwargs['colorab'])
-            sba[t0:t1].plot(ax=ax,color=kwargs['colorba'])
+            if kwargs['inverse']:
+                sab = 1./(self.tcr[a+'-'+b])**2
+                sba = 1./(self.tcr[b+'-'+a])**2
+            else:
+                sab = self.tcr[a+'-'+b]
+                sba = self.tcr[b+'-'+a]
+            sab[t0:t1].plot(ax=ax,color=kwargs['colorab'],marker='o',linestyle=kwargs['linestyle'])
+            sba[t0:t1].plot(ax=ax,color=kwargs['colorba'],marker='o',linestyle=kwargs['linestyle'])
             ax.set_title(a+'-'+b)
 
         return fig,ax
@@ -785,15 +789,16 @@ class CorSer(PyLayers):
                      't0':0,
                      't1':-1,
                      'colorab':'g',
-                     'colorba':'b'
+                     'colorba':'b',
+                     'inverse':True
                     }
-        
+
         for k in defaults:
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
         display = kwargs.pop('display')
-        
+
         if not isinstance(display,list):
             display=[display]
             S
@@ -809,11 +814,11 @@ class CorSer(PyLayers):
         display = [t.upper() for t in display]
 
         if 'FULL' in display:
-            ld = 3
+            ld = 2
         elif 'TCR' in display or 'HKB' in display:
             ld = 2
 
-        
+
         fig,axs = plt.subplots(nrows=ld,ncols=1,figsize=kwargs['figsize'],sharex=True)
 
         cptax= 0
@@ -852,16 +857,30 @@ class CorSer(PyLayers):
 
             kwargs['fig']=fig
             kwargs['ax']=axs[cptax]
-            fig,axs[cptax]=self.plttcr(a,b,**kwargs)
+            kwargs['colorab']='red'
+            kwargs['colorba']='orange'
+            kwargs['linestyle']='step'
+            tcrlink = a+'-'+b
+            # plot only if link exist
+            if tcrlink in self.tcr:
+                fig,axs[cptax]=self.plttcr(a,b,**kwargs)
 
-            cptax+=1
+            #cptax+=1
 
         if 'HKB' in display or 'FULL' in display:
             dhk = self.accessdm(iahk,ibhk,'HKB')
-            axs[cptax].plot(self.B.time,self.dist[:,dhk[0],dhk[1]])
+            if kwargs['inverse']:
+                var = 1./(self.dist[:,dhk[0],dhk[1]])**2
+            else:
+                var = self.dist[:,dhk[0],dhk[1]]
+            axs[cptax].plot(self.B.time,var)
         if 'TCR' in display or 'FULL' in display:
             dtcr = self.accessdm(iatcr,ibtcr,'TCR')
-            axs[cptax].plot(self.B.time,self.dist[:,dtcr[0],dtcr[1]])
+            if kwargs['inverse']:
+                var = 1./(self.dist[:,dtcr[0],dtcr[1]])**2
+            else:
+                var = self.dist[:,dtcr[0],dtcr[1]]
+            axs[cptax].plot(self.B.time,var)
 
         axs[cptax].set_title('Ground Truth distance (m)')
 
