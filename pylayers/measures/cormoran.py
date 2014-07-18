@@ -567,9 +567,9 @@ class CorSer(PyLayers):
 
     def topandas(self):
         try:
-            self.hkb = pd.DataFrame(index=self.t[0])
+            self.hkb = pd.DataFrame(index=self.thkb[0])
         except:
-            self.hkb = pd.DataFrame(index=self.t)
+            self.hkb = pd.DataFrame(index=self.thkb)
         for k in self.idHKB:
             for l in self.idHKB:
                 if k!=l:
