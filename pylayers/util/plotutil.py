@@ -622,6 +622,7 @@ def polycol(lpoly,var=[],**kwargs):
                 'cmap':cm.jet,
                 'closed':False,
                 'colorbar':True,
+                'dB':False,
                 'm':[]}
     for k in defaults:
         if k not in kwargs:
@@ -632,7 +633,12 @@ def polycol(lpoly,var=[],**kwargs):
     else:
         fig = kwargs['fig']
 
+
     if len(var)>0:
+        if kwargs['dB']:
+            var = np.log10(var)
+        else:
+            pass
         polc = PolyCollection(lpoly,array=var,cmap=kwargs['cmap'],
                        closed=kwargs['closed'],edgecolor=kwargs['edgecolor'])
     else:
