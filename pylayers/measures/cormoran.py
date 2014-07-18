@@ -104,6 +104,7 @@ class CorSer(PyLayers):
         return(st)
 
 
+
     def loadinfranodes(self):
         """ load infrastrucutre nodes
 
@@ -130,7 +131,9 @@ class CorSer(PyLayers):
 
 
         """
-        a,self.infraname,pts,i = c3d.ReadC3d('scene.c3d')
+
+        filename = self.rootdir + '/RAW/11-06-2014/MOCAP/scene.c3d'
+        a,self.infraname,pts,i = c3d.ReadC3d(filename)
 
         pts=pts/4000.
         mpts = np.mean(pts,axis=0)
@@ -629,6 +632,41 @@ class CorSer(PyLayers):
         #        cpt = cpt + 1
         return fig,(ax1,ax2)
 
+
+
+    # def offset_setter(self,a,b,**kwargs):
+    #     """ offset setter
+    #     """
+        
+    #     fig, ax = plt.subplots()
+    #     fig.subplots_adjust(bottom=0.2, left=0.3)
+
+
+    #     # init boolean value for visible in checkbutton
+    #     blabels = [True]*len(labels)
+
+
+    #     ########
+    #     # slider
+    #     ########
+    #     slider_ax = plt.axes([0.1, 0.1, 0.8, 0.02])
+    #     slider = Slider(slider_ax, "time", self.t[0][0], self.t[0][1],
+    #                     valinit=valinit, color='#AAAAAA')
+
+    #     def update(val):
+
+    #         if val >= 1:
+    #             pval=np.where(val>t)[0]
+    #             ax.set_title(str(self[0].index[pval[-1]].time())[:11].ljust(12),
+    #                          loc='left')
+    #             for iT, T in enumerate(self):
+    #                 if T.typ == 'ag':
+    #                     lines[iT].set_xdata(T['x'][pval])
+    #                     lines[iT].set_ydata(T['y'][pval])
+    #             fig.canvas.draw()
+    #     slider.on_changed(update)
+
+
     def plthkb(self,a,b,**kwargs):
         """
         Parameters
@@ -649,7 +687,7 @@ class CorSer(PyLayers):
                      'reciprocal':True,
                      'data':True,
                      'colorab':'g',
-                     'colorba':'b'
+                     'colorba':'b',
                     }
 
         for k in defaults:

@@ -1558,6 +1558,7 @@ class Body(PyLayers):
                     'devcolor':'green',
                     'devid':False,
                     'devopacity':1,
+                    'devtyp':[],
                     'color':'white',
                     'k':0,
                     'save':False}
@@ -1631,15 +1632,29 @@ class Body(PyLayers):
                 X=self._f[fId,udev,:].T-center[:,np.newaxis]
                 
             mlab.points3d(X[0,:],X[1,:], X[2,:], 
-                          scale_factor=0.1, 
+                          scale_factor=5e1*self._unit, 
                           resolution=10, 
                           color = dev_color,
                           opacity=kwargs['devopacity'])
             nodename = self.dev.keys()
+
             if kwargs['devid']:
-                [mlab.text3d(X[0,i],X[1,i], X[2,i],nodename[i],
-                                    scale=0.05,
-                                    color=(1,0,0)) for i in range(len(nodename))]
+
+                if kwargs['devtyp']== []:
+                    udt = np.arange(len(nodename))
+                else:
+                    devtyp = np.unique([self.dev[x]['name'] for x in self.dev])
+                    ln =[filter(lambda x: d in x,nodename) for d in devtyp]
+                    udev = [[nodename.index(n) for n in ln[i]] for i in range(len(ln))]
+                    
+                for dt in kwargs['devtyp']:
+                    udt = np.where(devtyp == dt)[0]
+                    
+                    [mlab.text3d(X[0,i],
+                                 X[1,i],
+                                 X[2,i],nodename[i],
+                                        scale=0.05,
+                                        color=(1,0,0)) for i in range(len(nodename)) if i in udev[udt]]
 
 
         if kwargs['ccs']:
