@@ -135,7 +135,7 @@ class CorSer(PyLayers):
         filename = self.rootdir + '/RAW/11-06-2014/MOCAP/scene.c3d'
         a,self.infraname,pts,i = c3d.ReadC3d(filename)
 
-        pts=pts/4000.
+        pts=pts/1000.
         mpts = np.mean(pts,axis=0)
         self.din={}
         if ('HK'  in self.typ) or ('FULL' in self.typ):
@@ -312,6 +312,7 @@ class CorSer(PyLayers):
         t = np.array(self.tcr.index)*ts
         t = t-t[0]
         self.tcr.index = t
+        self.ttcr=self.tcr.index
 
     def loadBS(self,day=11,serie='',scenario='20',run=1):
         """ load BeSpoon data
@@ -583,9 +584,9 @@ class CorSer(PyLayers):
         self.D = self.rssi-self.rssi.swapaxes(0,1)
 
         try:
-            timeindex = np.where(self.t[0]-time>0)[0][0]
+            timeindex = np.where(self.thkb[0]-time>0)[0][0]
         except:
-            timeindex = np.where(self.t-time>0)[0][0]
+            timeindex = np.where(self.thkb-time>0)[0][0]
         if kind=='time':
             dt1 = self.rssi[:,:,timeindex]
             dt2 = self.D[:,:,timeindex]
@@ -650,7 +651,7 @@ class CorSer(PyLayers):
     #     # slider
     #     ########
     #     slider_ax = plt.axes([0.1, 0.1, 0.8, 0.02])
-    #     slider = Slider(slider_ax, "time", self.t[0][0], self.t[0][1],
+    #     slider = Slider(slider_ax, "time", self.thkb[0][0], self.thkb[0][1],
     #                     valinit=valinit, color='#AAAAAA')
 
     #     def update(val):
@@ -684,10 +685,13 @@ class CorSer(PyLayers):
                      'fig':[],
                      'ax':[],
                      'figsize':(8,8),
+                     'xoffset':0,
+                     'yoffset': 1e6,
                      'reciprocal':True,
                      'data':True,
                      'colorab':'g',
                      'colorba':'b',
+                     'distance':True
                     }
 
         for k in defaults:
@@ -698,7 +702,7 @@ class CorSer(PyLayers):
         t0 =kwargs['t0']
         t1 =kwargs['t1']
         if t1 ==-1:
-            t1=self.t[0][-1]
+            t1=self.thkb[0][-1]
 
         if isinstance(a,str):
             ia = self.dHKB[a]
@@ -719,7 +723,7 @@ class CorSer(PyLayers):
             fig=kwargs['fig']
 
         if kwargs['ax'] ==[]:
-            if kwargs['reciprocal']==True:
+            if kwargs['reciprocal']:
                 ax = fig.add_subplot(211)
                 ax2 = fig.add_subplot(212)
             else :
@@ -728,12 +732,20 @@ class CorSer(PyLayers):
             ax = kwargs['ax']
 
         if kwargs['data']==True:
-            #ax.plot(self.t[0],self.rssi[ia,ib,:])
-            #ax.plot(self.t[0],self.rssi[ib,ia,:])
+            #ax.plot(self.thkb[0],self.rssi[ia,ib,:])
+            #ax.plot(self.thkb[0],self.rssi[ib,ia,:])
             sab = self.hkb[a+'-'+b]
-            sba = self.hkb[b+'-'+a]
+            
+            if kwargs['distance']:
+                sab = 10**(sab/10) * kwargs['yoffset']
+                sab = np.sqrt(1/sab)
+                if kwargs['reciprocal']:
+                    sba = 10**(sba/10 ) * kwargs['yoffset']
+                    sba = np.sqrt(1/sba)
+
             sab[t0:t1].plot(ax=ax,color=kwargs['colorab'])
-            sba[t0:t1].plot(ax=ax,color=kwargs['colorba'])
+            if kwargs['reciprocal']:
+                sba[t0:t1].plot(ax=ax,color=kwargs['colorba'])
             ax.set_title(a+'-'+b)
         if kwargs['reciprocal']==True:
             # if kwargs['data']==True:
@@ -776,7 +788,7 @@ class CorSer(PyLayers):
         t0 =kwargs['t0']
         t1 =kwargs['t1']
         if t1 ==-1:
-            t1=self.t[0][-1]
+            t1=self.thkb[0][-1]
 
         if isinstance(a,str):
             ia = self.dTCR[a]
@@ -802,8 +814,8 @@ class CorSer(PyLayers):
             ax=kwargs['ax']
 
         if kwargs['data']==True:
-            #ax.plot(self.t[0],self.rssi[ia,ib,:])
-            #ax.plot(self.t[0],self.rssi[ib,ia,:])
+            #ax.plot(self.thkb[0],self.rssi[ia,ib,:])
+            #ax.plot(self.thkb[0],self.rssi[ib,ia,:])
             if kwargs['inverse']:
                 sab = 1./(self.tcr[a+'-'+b])**2
                 sba = 1./(self.tcr[b+'-'+a])**2
@@ -922,5 +934,23 @@ class CorSer(PyLayers):
 
         axs[cptax].set_title('Ground Truth distance (m)')
 
-#s32 = Hikob(32)
-#f,a = s32.imshow(40)
+
+    def get_data(self,a,b,**kwargs):
+
+        T=self.tcr[a+'-'+b]
+        T.name=T.name+'-tcr'
+        H=self.hkb[a+'-'+b]
+        H.name=H.name+'-hkb'
+        udhk = self.accessdm(a,b,'HKB')
+        udtcr = self.accessdm(a,b,'HKB')
+        dist_tcr=self.dist[:,udtcr[0],udtcr[1]]
+        dist_hkb=self.dist[:,udhk[0],udhk[1]]
+        tdist=np.linspace(0,self.dist.shape[0]/100.,self.dist.shape[0])
+        D_tcr=pd.Series(dist_tcr,index=tdist)
+        D_tcr.name = 'dist-tcr'
+        D_hkb=pd.Series(dist_hkb,index=tdist)
+        D_hkb.name = 'dist-hkb'
+
+        return T,H,D_tcr,D_hkb
+
+
