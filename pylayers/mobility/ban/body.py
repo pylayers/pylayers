@@ -2130,6 +2130,7 @@ class Body(PyLayers):
         topos : boolean
         frameId : 0
         cyl : list
+            exclusion list
 
         Returns
         -------

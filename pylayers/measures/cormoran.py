@@ -389,10 +389,10 @@ class CorSer(PyLayers):
         data = io.loadmat(dirname+'/'+self._filehkb)
         if source=='UR1':
             self.rssi = data['rssi']
-            self.t = data['t']
+            self.thkb = data['t']
         else:
             self.rssi = data['val']
-            self.t = np.arange(np.shape(self.rssi)[2])*25.832e-3
+            self.thkb = np.arange(np.shape(self.rssi)[2])*25.832e-3
 
         self.topandas()
         self.hkb = self.hkb[self.hkb!=0]
@@ -502,7 +502,7 @@ class CorSer(PyLayers):
             filename = videofile+_filename
             os.system('vlc '+filename +'&' )
         except:
-            raise AttributeError('no file '+ self._filename + 'found')
+            raise AttributeError('file '+ self._filename + ' not found')
 
 
     def snapshot(self,t0=0,offset=15.5,save=False):
@@ -742,7 +742,7 @@ class CorSer(PyLayers):
             #ax.plot(self.thkb[0],self.rssi[ia,ib,:])
             #ax.plot(self.thkb[0],self.rssi[ib,ia,:])
             sab = self.hkb[a+'-'+b]
-            
+
             if kwargs['distance']:
                 sab = 10**(sab/10) * kwargs['yoffset']
                 sab = np.sqrt(1/sab)
