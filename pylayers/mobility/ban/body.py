@@ -324,7 +324,7 @@ class Body(PyLayers):
         # filter real device and get devices 
         #
         rd = dict(filter(lambda x: x[1]['status']== 'real',self.dev.items()))
-        
+
         # 1 remove prefix
         prefix = ['Bernard:','Bernard_','NicolasCormoran:']
         nodes = self._p
@@ -440,10 +440,6 @@ class Body(PyLayers):
             for d in self.dev.keys()}
 
 
-
-
-
-
         dp=[]
         for it,t in enumerate(traj.time()):
             self.settopos(traj = traj,t=t,cs=True)
@@ -452,8 +448,8 @@ class Body(PyLayers):
         for ud,d in enumerate(df.keys()):
             df[d]['dev_id']=d
             df[d].ix[:,['dev_x','dev_y','dev_z']]=dp[:,ud,:]
-            
-        
+
+
 
             # for ud,d in enumerate(df.keys()):
             #     df[d].ix[it,['dev_id']]=d
@@ -473,7 +469,7 @@ class Body(PyLayers):
         ddf['timestamp']= map(lambda x: str(x.hour).zfill(2) + ':' + str(x.minute).zfill(2) +  ':' + str(x.second).zfill(2) + '.' + str(x.microsecond).zfill(2)[:3],ddf.index)
         if tunit == 'ns':
             ddf['timestamp']= map(lambda x: x.microsecond*1e3+x.second*1e9+60*1e9*x.minute+3600*1e9*x.hour,ddf.index)
-            
+
         if poffset:
             mx = min(min(ddf['x']),min(ddf['dev_x']))
             ddf['x']=ddf['x']-mx
@@ -1086,7 +1082,7 @@ class Body(PyLayers):
         ----------
 
         id : str | list
-            device id. 
+            device id.
         frameId : int
             frameid
         t : float
@@ -1097,7 +1093,7 @@ class Body(PyLayers):
 
         device position
         """
-    
+
         # if frameId != []:
         #     self.setcs(topos=False,frameId=frameId)
         # elif t !=[]:
@@ -1126,7 +1122,7 @@ class Body(PyLayers):
         udev = np.array([self.dev[i]['uc3d'][0] for i in dev])
         p = self._f[:,udev,:]
         dist = np.sqrt(np.sum((p[:,:,np.newaxis,:]-p[:,np.newaxis,:,:])**2,axis=3))
-        
+
         for ud,d in enumerate(dev) :
             dp[d]=p[:,ud,:]
         return dist,dp
@@ -1630,7 +1626,7 @@ class Body(PyLayers):
                 udev = [self.dev[i]['uc3d'][0] for i in self.dev]
                 center = self.pg[:,fId]
                 X=self._f[fId,udev,:].T-center[:,np.newaxis]
-                
+
             mlab.points3d(X[0,:],X[1,:], X[2,:], 
                           scale_factor=5e1*self._unit, 
                           resolution=10, 
@@ -1646,10 +1642,10 @@ class Body(PyLayers):
                     devtyp = np.unique([self.dev[x]['name'] for x in self.dev])
                     ln =[filter(lambda x: d in x,nodename) for d in devtyp]
                     udev = [[nodename.index(n) for n in ln[i]] for i in range(len(ln))]
-                    
+
                 for dt in kwargs['devtyp']:
                     udt = np.where(devtyp == dt)[0]
-                    
+
                     [mlab.text3d(X[0,i],
                                  X[1,i],
                                  X[2,i],nodename[i],
@@ -1659,7 +1655,7 @@ class Body(PyLayers):
 
         if kwargs['ccs']:
             # to be improved
-            
+
             for k,key in enumerate(self.ccs):
                 pt = self.topos[:,k]+cylrad[k]*kwargs['widthfactor']*self.ccs[k, :, 0]
                 pte = np.repeat(pt[:,np.newaxis],3,axis=1)
@@ -2129,11 +2125,11 @@ class Body(PyLayers):
         Parameters
         ----------
 
-        A
-        B
-        topos
-        frameId
-        cyl
+        A : np.array (3,)
+        B : np.array (3,)
+        topos : boolean
+        frameId : 0
+        cyl : list
 
         Returns
         -------
@@ -2177,8 +2173,8 @@ class Body(PyLayers):
 
 
                 if 0 < alpha < 1 and 0 < beta < 1 :
-                    #print 'dmin = ', dmin  
-                    #print 'r = ', self.sl[k,2]  
+                    #print 'dmin = ', dmin
+                    #print 'r = ', self.sl[k,2]
                     dAB = np.sqrt(sum((A-B)**2))
                     if alpha <> 0:
                         mu[k] =(dmin-self.sl[k,2])*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))

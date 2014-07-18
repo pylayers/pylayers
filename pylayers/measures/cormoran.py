@@ -135,7 +135,7 @@ class CorSer(PyLayers):
         filename = self.rootdir + '/RAW/11-06-2014/MOCAP/scene.c3d'
         a,self.infraname,pts,i = c3d.ReadC3d(filename)
 
-        pts=pts/4000.
+        pts=pts/1000.
         mpts = np.mean(pts,axis=0)
         self.din={}
         if ('HK'  in self.typ) or ('FULL' in self.typ):
@@ -418,7 +418,7 @@ class CorSer(PyLayers):
 
 
     def accessdm(self,a,b,techno):
-        """ Access o the distance matrix
+        """ access to the distance matrix
 
             give name|id of node a and b and a given techno. retrun Groung truth
             distance between the 2 nodes
@@ -490,11 +490,13 @@ class CorSer(PyLayers):
         videofile = self.rootdir+'/POST-TREATED/' +str(self.day) + '-06-2014/Videos/'
         ldir = os.listdir(videofile)
         luldir = map(lambda x : self._filename in x,ldir)
-        uldir = luldir.index(True)
-        _filename = ldir[uldir]
-        filename = videofile+_filename
-        os.system('vlc '+filename +'&' )
-
+        try:
+            uldir = luldir.index(True)
+            _filename = ldir[uldir]
+            filename = videofile+_filename
+            os.system('vlc '+filename +'&' )
+        except:
+            raise AttributeError('no file '+ self._filename + 'found')
 
 
     def snapshot(self,t0=0,offset=15.5,save=False):
@@ -920,7 +922,10 @@ class CorSer(PyLayers):
                 var = self.dist[:,dtcr[0],dtcr[1]]
             axs[cptax].plot(self.B.time,var)
 
-        axs[cptax].set_title('Ground Truth distance (m)')
+        if kwargs['inverse']:
+            axs[cptax].set_title(u'Ground Truth $\\frac{1}{d_{ij}}^2$')
+        else:
+            axs[cptax].set_title('Ground Truth distance (m)')
 
 #s32 = Hikob(32)
 #f,a = s32.imshow(40)
