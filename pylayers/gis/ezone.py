@@ -21,6 +21,7 @@ import h5py
 import numpy as np
 import pandas as pd
 import struct
+import zipfile
 import os
 import pdb
 import matplotlib.pyplot as plt
@@ -283,6 +284,21 @@ class DEM(PyLayers):
             fileaster = pyu.getlong(_fileaster,'gis/aster')
         else:
             _fieleaster = pyu.getshort(fileaster)
+
+        # zip extraction
+        ext = _fileaster.split('.')
+        if ext[1]=='zip':
+            with zipfile.Zipfile(fileaster) as zf:
+                for member in zf.infolist():
+                    words = member.filename.split('/')
+                    path = dest_dir
+                    for word in words[:-1]:
+                        drive, word = os.path.splitdrive(word)
+                        head, word = os.path.split(word)
+                        if word in (os.curdir, os.pardir, ''):
+                            continue
+                        path = os.path.join(path, word)
+                    zf.extract(member, path)
 
         prefix =_fileaster.replace('ASTGTM2_','')
         prefix = prefix.replace('_dem.tif ','.HGT')
