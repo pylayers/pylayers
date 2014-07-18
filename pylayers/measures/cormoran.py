@@ -77,6 +77,8 @@ class CorSer(PyLayers):
             self.loadbody(serie=serie,day=day)
             self._distancematrix()
 
+        self.title1 = 'Scenario:'+str(self.scenario)+' Serie:'+str(self.serie)+' Run:'+str(self.run)
+        self.title2 = 'Type:'+str(self.typ)+ ' Subject:'+str(self.subject[0])
 
     def __repr__(self):
         st = ''
@@ -699,7 +701,8 @@ class CorSer(PyLayers):
                      'data':True,
                      'colorab':'g',
                      'colorba':'b',
-                     'distance':False
+                     'distance':False,
+                    'fontsize':18
                     }
 
         for k in defaults:
@@ -754,13 +757,16 @@ class CorSer(PyLayers):
             sab[t0:t1].plot(ax=ax,color=kwargs['colorab'])
             if kwargs['reciprocal']:
                 sba[t0:t1].plot(ax=ax,color=kwargs['colorba'])
-            ax.set_title(a+'-'+b)
+
+            title = self.title1+' Link : '+a+'-'+b
+            ax.set_title(label=title,fontsize=kwargs['fontsize'])
+
         if kwargs['reciprocal']==True:
             # if kwargs['data']==True:
             #     ax2=fig.add_subplot(212)
             r = self.hkb[a+'-'+b][self.hkb[a+'-'+b]!=0]- self.hkb[b+'-'+a][self.hkb[b+'-'+a]!=0]
             r[t0:t1].plot(ax=ax2)
-            ax2.set_title('Reciprocity offset')
+            ax2.set_title('Reciprocity offset',fontsize=kwargs['fontsize'])
 
         return fig,ax
 
@@ -937,8 +943,10 @@ class CorSer(PyLayers):
             dhk = self.accessdm(iahk,ibhk,'HKB')
             if kwargs['inverse']:
                 var = 1./(self.dist[:,dhk[0],dhk[1]])**2
+                axs[cptax].set_ylabel(u'm^{-2}',fontsize=kwargs['fontsize'])
             else:
                 var = self.dist[:,dhk[0],dhk[1]]
+                axs[cptax].set_ylabel(u'meters',fontsize=kwargs['fontsize'])
             axs[cptax].plot(self.B.time,var)
         #
         # TCR | Full
@@ -991,6 +999,8 @@ class CorSer(PyLayers):
             axs[cptax].set_title(u'Ground Truth $\\frac{1}{d_{ij}}^2$',fontsize=kwargs['fontsize']+1)
         else:
             axs[cptax].set_title('Ground Truth distance (m)',fontsize=kwargs['fontsize']+1)
+
+        axs[cptax].set_xlabel('Time (s)',fontsize=kwargs['fontsize'])
         plt.tight_layout()
 
 

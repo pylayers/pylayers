@@ -1230,7 +1230,7 @@ class Body(PyLayers):
             else :
                 ax.set_ylim(-2,2)
             tl = ax.get_xticklabels()
-            labrange = np.linspace(fargs['tstart']-fargs['tstep'],fargs['tend']+fargs['tstep'],len(tl))
+            labrange = np.round(10*np.linspace(fargs['tstart']-fargs['tstep'],fargs['tend']+fargs['tstep'],len(tl)))/10.
             ax.set_xticklabels(labrange)
 
         plt.tight_layout()
