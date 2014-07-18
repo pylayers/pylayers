@@ -506,7 +506,7 @@ class CorSer(PyLayers):
 
 
     def snapshot(self,t0=0,offset=15.5,save=False):
-        """ single snapshot plot 
+        """ single snapshot plot
         """
         videofile = self.rootdir+'/POST-TREATED/' +str(self.day) + '-06-2014/Videos/'
         ldir = os.listdir(videofile)
@@ -580,10 +580,11 @@ class CorSer(PyLayers):
 
     def imshow(self,time=100,kind='time'):
         """
+
         Parameters
         ----------
 
-        kind : string 
+        kind : string
 
             'mean','std'
         """
@@ -698,7 +699,7 @@ class CorSer(PyLayers):
                      'data':True,
                      'colorab':'g',
                      'colorba':'b',
-                     'distance':True
+                     'distance':False
                     }
 
         for k in defaults:
@@ -847,7 +848,9 @@ class CorSer(PyLayers):
                      't1':-1,
                      'colorab':'g',
                      'colorba':'b',
-                     'inverse':True
+                     'inverse':True,
+                    'fontsize':14,
+                    'visi':True
                     }
 
         for k in defaults:
@@ -924,6 +927,12 @@ class CorSer(PyLayers):
 
             #cptax+=1
 
+        #
+        # Ground Truth
+        #
+        #
+        # HKB | Full
+        #
         if 'HKB' in display or 'FULL' in display:
             dhk = self.accessdm(iahk,ibhk,'HKB')
             if kwargs['inverse']:
@@ -931,6 +940,9 @@ class CorSer(PyLayers):
             else:
                 var = self.dist[:,dhk[0],dhk[1]]
             axs[cptax].plot(self.B.time,var)
+        #
+        # TCR | Full
+        #
         if 'TCR' in display or 'FULL' in display:
             dtcr = self.accessdm(iatcr,ibtcr,'TCR')
             if kwargs['inverse']:
@@ -939,10 +951,70 @@ class CorSer(PyLayers):
                 var = self.dist[:,dtcr[0],dtcr[1]]
             axs[cptax].plot(self.B.time,var)
 
-        if kwargs['inverse']:
-            axs[cptax].set_title(u'Ground Truth $\\frac{1}{d_{ij}}^2$')
+        aa = axs[cptax].axis()
+        #
+        # calculates visibility
+        #
+        if kwargs['visi']:
+            visi = self.visidev(a,b)
+
+        tv = visi.index.values
+        vv = visi.values.astype(int)
+        df = vv[1:]-vv[0:-1]
+
+        um = np.where(df==1)[0]
+        ud = np.where(df==-1)[0]
+        lum = len(um)
+        lud = len(ud)
+        #
+        # impose same size
+        #
+        if lum<lud:
+            um = np.hstack((np.array([0]),um))
+        if lud<lum:
+            ud = np.hstack((np.array([0]),ud))
+
+        if um[0]<ud[0]:
+            tseg = np.array(zip(um,ud))
         else:
-            axs[cptax].set_title('Ground Truth distance (m)')
+            tseg = np.array(zip(ud,um))
+
+        for t in tseg:
+             vertc = [(tv[t[0]],aa[2]),(tv[t[1]],aa[2]),(tv[t[1]],aa[3]),(tv[t[0]],aa[3])]
+             poly = plt.Polygon(vertc,facecolor='y',alpha=0.3,linewidth=0)
+             axs[cptax].add_patch(poly)
+
+        #axs[cptax].plot(visi.index.values,visi.values,'r')
+
+
+        if kwargs['inverse']:
+            axs[cptax].set_title(u'Ground Truth $\\frac{1}{d_{ij}}^2$',fontsize=kwargs['fontsize']+1)
+        else:
+            axs[cptax].set_title('Ground Truth distance (m)',fontsize=kwargs['fontsize']+1)
+        plt.tight_layout()
+
+
+    def visidev(self,a,b,technoa='HKB',technob='HKB',Npts=1000):
+        """ get link visibility status
+
+        Returns
+        -------
+
+        visi : pandas Series
+            0  : LOS
+            1  : NLOS
+
+        """
+        A,B = self.getdevp(a,b,technoa,technob)
+        Nframe = A.shape[0]
+        iframe = np.linspace(0,Nframe-1,Npts)
+        tvisi = []
+        for k in iframe:
+            its = self.B.intersectBody(A[k,:],B[k,:],topos=False,frameId=k)
+            tvisi.append(its.any())
+        visi = pd.Series(tvisi,index=iframe/100.)
+        return(visi)
+
 
 
     def getdevp(self,a,b,technoa='HKB',technob='HKB'):
@@ -967,7 +1039,8 @@ class CorSer(PyLayers):
                 >>> a,b=S.getdevp('AP1','WristLeft')
 
         """
-    
+
+
         if isinstance(a,str):
             if technoa == 'TCR':
                 ia = self.dTCR[a]
@@ -1003,7 +1076,6 @@ class CorSer(PyLayers):
                 ib = b
                 b = self.idHKB[b]
                 nnb='HKB:'+str(ib)
-
         # node a
         # body node
         if nna in self.B.dev.keys():
