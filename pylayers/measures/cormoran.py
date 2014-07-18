@@ -1020,7 +1020,8 @@ class CorSer(PyLayers):
 
         return pa,pb
 
-    def get_data(self,a,b,**kwargs):
+    def get_data(self,a,b):
+
 
         T=self.tcr[a+'-'+b]
         T.name=T.name+'-tcr'
@@ -1039,3 +1040,17 @@ class CorSer(PyLayers):
         return T,H,D_tcr,D_hkb
 
 
+    def get_dataframes(self,a,b):
+
+        T,H,DT,DH = self.get_data(a,b)
+        NH=(np.sqrt(1/(10**(H/10)))/4e4)
+        NHc=NH-NH.mean()
+        DHc=DH-DH.mean()
+        inh = NHc.index
+        idh = DHc.index
+        NHc.index = pd.to_datetime(inh,unit='m')
+        DHc.index = pd.to_datetime(idh,unit='m')
+        sD = (DHc.index[1]-DHc.index[0])
+        sf= str(int(sD.microseconds*1e-3)) + 'ms'
+        NHcr = NHc.resample(sf,fill_method='ffill')
+        return NHcr,DHc
