@@ -57,20 +57,25 @@ class CorSer(PyLayers):
         if serie in sbs:
             self.loadBS(serie=serie,day=day)
 
-        self._filename = 'Sc' + self.scenario + '_S' + str(self.serie) + '_R' + str(self.run) + '_' + self.typ.capitalize()
+        if self.typ=='FULL':
+            self._filename = 'Sc' + self.scenario + '_S' + str(self.serie) + '_R' + str(self.run) + '_' + self.typ.capitalize()
+        else:
+            self._filename = 'Sc' + self.scenario + '_S' + str(self.serie) + '_R' + str(self.run) + '_' + self.typ
 
 
-        # BODY
-        self.subject = [str(self.log['Subject'].values[0])]
-        if serie in mocap :
-            self.loadbody(serie=serie,day=day)
 
 
         # Layout
         self.L= Layout('MOCAP.ini')
 
+        # Infrastructure Nodes
         self.loadinfranodes()
-        self._distancematrix()
+
+        # BODY
+        self.subject = [str(self.log['Subject'].values[0])]
+        if serie in mocap :
+            self.loadbody(serie=serie,day=day)
+            self._distancematrix()
 
 
     def __repr__(self):
