@@ -940,6 +940,86 @@ class CorSer(PyLayers):
             axs[cptax].set_title('Ground Truth distance (m)')
 
 
+    def getdevp(self,a,b,technoa='HKB',technob='HKB'):
+        """    get device position
+
+            Parameters
+            ----------
+                a : str | int
+                    name | id
+                b : str | int
+                    name | id
+                technoa : str
+                    radio techno
+                technob : str
+                    radio techno
+
+            Example
+            -------
+
+                >>> from pylayers.measures.cormoran import *
+                >>> S=CorSer(serie=34)
+                >>> a,b=S.getdevp('AP1','WristLeft')
+
+        """
+    
+        if isinstance(a,str):
+            if technoa == 'TCR':
+                ia = self.dTCR[a]
+                nna='TCR:'+str(ia)
+            elif technoa == 'HKB':
+                ia = self.dHKB[a]
+                nna='HKB:'+str(ia)
+
+        else:
+            if technoa == 'TCR':
+                ia = a
+                a = self.idTCR[a]
+                nna='TCR:'+str(ia)
+            elif technoa == 'HKB':
+                ia = a
+                a = self.idHKB[a]
+                nna='HKB:'+str(ia)
+
+
+        if isinstance(b,str):
+            if technob == 'TCR':
+                ib = self.dTCR[b]
+                nnb='TCR:'+str(ib)
+            elif technob == 'HKB':
+                ib = self.dHKB[b]
+                nnb='HKB:'+str(ib)
+        else:
+            if technob == 'TCR':
+                ib = b
+                b = self.idTCR[b]
+                nnb='TCR:'+str(ib)
+            elif technob == 'HKB':
+                ib = b
+                b = self.idHKB[b]
+                nnb='HKB:'+str(ib)
+
+        # node a
+        # body node
+        if nna in self.B.dev.keys():
+            unna = self.B.dev[nna]['uc3d'][0]
+            pa = self.B._f[:,unna,:]
+        # infra node
+        else :
+            pa = self.din[nna]
+
+
+        # node b
+        # body node
+        if nnb in self.B.dev.keys():
+            unnb = self.B.dev[nnb]['uc3d'][0]
+            pb = self.B._f[:,unnb,:]
+        # infra node
+        else :
+            pb = self.din[nnb]
+
+        return pa,pb
+
     def get_data(self,a,b,**kwargs):
 
         T=self.tcr[a+'-'+b]
