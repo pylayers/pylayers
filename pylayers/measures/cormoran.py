@@ -64,7 +64,7 @@ class CorSer(PyLayers):
 
 
         # Layout
-        self.L= Layout(self.rootdir+'/POST-TREATED/MOCAP.ini')
+        self.L= Layout('MOCAP.ini')
 
         # Infrastructure Nodes
         self.loadinfranodes()
