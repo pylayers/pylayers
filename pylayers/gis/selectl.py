@@ -602,7 +602,7 @@ class SelectL(object):
         #
         # 'Del' delete points in the current axis region
         #
-        if self.evt == 'delete':
+        if self.evt == 'D':
             if self.state=='Init':
                 # get boundary of the region 
                 x1 = ax.get_xbound()
