@@ -1092,7 +1092,7 @@ beranrd
             if vv.any():
                 for t in tseg:
 
-                    vertc = [(tv[t[0]],aa[2]),(tv[t[1]],aa[2]),(tv[t[1]],aa[3]*-1),(tv[t[0]],aa[3]*-1)]
+                    vertc = [(tv[t[0]],aa[2]-500),(tv[t[1]],aa[2]-500),(tv[t[1]],aa[3]+500),(tv[t[0]],aa[3]+500)]
                     poly = plt.Polygon(vertc,facecolor='y',alpha=0.3,linewidth=0)
                     ax.add_patch(poly)
 
@@ -1112,7 +1112,7 @@ beranrd
 
     def pltlk(self,a,b,**kwargs):
         """ plt links
-        
+
         display: list
             techno to be displayed
         figsize
