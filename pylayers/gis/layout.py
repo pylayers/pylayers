@@ -8163,7 +8163,6 @@ class Layout(PyLayers):
         # k : ss_name v: seg number
         cpt = 0
         subseg = {}
-        #pdb.set_trace()
         for k in d.keys():
             for l in d[k]:
                 ids = l[0]
