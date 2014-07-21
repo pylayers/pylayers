@@ -104,7 +104,7 @@ class Body(PyLayers):
     """
 
     def __init__(self,_filebody='John.ini',_filemocap=[],_filewear = [],
-                traj=[],unit=[]):
+                traj=[],unit=[],centered=True):
         """ object constructor
 
         Parameters
@@ -131,11 +131,19 @@ class Body(PyLayers):
         #     if unit==[]:
         #         raise AttributeError('Please set the unit of the mocap file mm|cm|m')
         #     self.loadC3D(filename=_filemocap,unit=unit)
-        self.cylfromc3d(centered=True)
+        #
+        #  When the motion capture is on the correct glabal coordinate system
+        #  as for example for data coming from the CORMORAN measurement
+        #  campaign it is not required to center the body.
+        #  centering makes sense only when using the topos projection
+        #
+        #
+
+        self.cylfromc3d(centered=centered)
         if isinstance(traj,tr.Trajectory):
             self.traj=traj
         # otherwise self.traj use values from c3d file
-        # obtain in self.loadC3D
+        # obtain in self.loadC3D
 
     def __repr__(self):
         st = ''
@@ -208,7 +216,7 @@ class Body(PyLayers):
         + section [mocap]
 
         """
-         # check if local or global path
+         # check if local or global path
         if ('/' or '\\') in _filebody:
             filebody = _filebody
             ne = os.path.basename(_filebody)
@@ -234,7 +242,7 @@ class Body(PyLayers):
 
         keys = map(lambda x : eval(x),di['nodes'].keys())
         nodes_Id = {k:v for (k,v) in zip(keys,di['nodes'].values())}
-        # identifier are always 4 character. otherwise its a list
+        # identifier are always 4 character. otherwise its a list
         fnid = filter(lambda x: len(x[1])>4 , nodes_Id.items())
         for k,v in fnid:
             # clean bracket and coma
@@ -264,7 +272,7 @@ class Body(PyLayers):
         self.idcyl={}
         [self.idcyl.update({v:k}) for k,v in self.dcyl.items()]
 
-        # if a mocap file is given in the config file
+        # if a mocap file is given in the config file
         if _filemocap == []:
             unit = di['mocap']['unit']
             nframes = di['mocap']['nframes']
@@ -287,8 +295,8 @@ class Body(PyLayers):
         if _filewear == []:
             devfilename = pyu.getlong(di['wearable']['file'],pstruc['DIRWEAR'])
             self.filewear = di['wearable']['file']
-        else : 
-            # check if local or global path
+        else :
+            # check if local or global path
             if ('/' or '\\') in _filewear:
                 devfilename = _filewear
             else :
@@ -298,9 +306,6 @@ class Body(PyLayers):
         if not os.path.exists(devfilename):
             raise AttributeError('the wareable file '+di['wearable']['file']+
                              ' cannot be found in $BASENAME/'+pstruc['DIRWEAR'])
-
-        
-
 
         devconf = ConfigParser.ConfigParser()
         devconf.read(devfilename)
@@ -321,11 +326,11 @@ class Body(PyLayers):
 
 
         #
-        # filter real device and get devices 
+        # filter real device and get devices
         #
         rd = dict(filter(lambda x: x[1]['status']== 'real',self.dev.items()))
 
-        # 1 remove prefix
+        # 1 remove prefix
         prefix = ['Bernard:','Bernard_','NicolasCormoran:']
         nodes = self._p
         for p in prefix:
@@ -462,7 +467,7 @@ class Body(PyLayers):
             addf = pd.concat([addf,df[d]])
 
 
-        # join device dataframe with mobility data frame
+        # join device dataframe with mobility data frame
         ddf = traj.join(addf)
         ddf['name'] = self.name
         # complete dataframe
@@ -907,17 +912,17 @@ class Body(PyLayers):
                     vm = vm[:3]
                     mvm = np.sqrt(np.sum((vm*vm),axis=0))
                     T = vm/mvm
-                    import ipdb
-                    ipdb.set_trace()
+                    #import ipdb
+                    #ipdb.set_trace()
                     T[:,2]=np.cross(T[:,0],T[:,1])
                     T[:,1]=np.cross(T[:,0],T[:,2])
                     Tn = T/np.sqrt(np.sum(T*T,axis=0))
                     mp0 = mp[0]
                     # self.dcs[dev] = np.hstack((mp0[:,np.newaxis],T))
                 else:
-                    # associated cylinder
+                    # associated cylinder
                     if not self.dev[dev].has_key('asscyl'):
-                        # find the closest cylinder to the device
+                        # find the closest cylinder to the device
                         c0=self.sl[:,0].astype(int)
                         c1=self.sl[:,1].astype(int)
                         pta = self.d[:,c0,0]
@@ -933,7 +938,7 @@ class Body(PyLayers):
                         do = [np.dot(th[:,i],td[:,i]) for i in range(th.shape[1])]
                         # distance matrix
                         d = abs(tdl*np.sin(do/(tdl*thl)))
-                        # closest cylinder
+                        # closest cylinder
                         md = np.where(min(d)==d)[0]
                         self.dev[dev]['asscyl']= md[0]
 
@@ -1015,7 +1020,12 @@ class Body(PyLayers):
 
 
     def cylfromc3d(self,centered = False):
-        """ Create cylinders from C3D file 
+        """ Create cylinders from C3D file
+
+        Parameters
+        ----------
+
+        centered : boolean
         """
         #
         # motion capture data
@@ -1023,7 +1033,7 @@ class Body(PyLayers):
         # self.d : 3 x npoints x nframes
         #
 
-        # number of point is determine by the ini file
+        # number of points is determine by the ini file
         self.npoints = len(self.nodes_Id)
 
         # self.d = np.ndarray(shape=(3, self.npoints, self.nframes))
@@ -1032,11 +1042,11 @@ class Body(PyLayers):
         # extract only known nodes in nodes_Id
         self.d = np.zeros((3, self.npoints, self.nframes))
         for i in self.nodes_Id:
-            # node name = 4 characters
+            # node name = 4 characters
             if not isinstance(self.nodes_Id[i],list) :
                 idx = self._p.index(self._s[0] + self.nodes_Id[i])
                 self.d[:,i,:] = self._f[0:self.nframes, idx, :].T
-            # perform center of mass of the nodes
+            # perform center of mass of the nodes
 
             else :
 
@@ -1136,7 +1146,7 @@ class Body(PyLayers):
 
 
         id : str | list
-            device id. 
+            device id.
         frameId : int
             frameid
         t : float
@@ -1212,7 +1222,10 @@ class Body(PyLayers):
 
         vstep=np.arange(0,len(frange))*fargs['sstep']
 
-        fig,axs = plt.subplots(nrows =len(fargs['planes']),ncols=1,sharex=fargs['sharex'],figsize=fargs['figsize'])
+        fig,axs = plt.subplots(nrows =len(fargs['planes']),
+                               ncols=1,sharex=fargs['sharex'],
+                               figsize=fargs['figsize'])
+
         if not isinstance(axs,np.ndarray):
             axs=np.array([axs])
         for p,ax in enumerate(axs):
@@ -1315,7 +1328,7 @@ class Body(PyLayers):
         khe = self.sl[:,1].astype(int)
         t=self.traj.time()
 
-        # init antennas
+        # init antennas
         if 'topos' in dir(self):
             Ant = {}
             for key in self.dcs.keys():
@@ -1488,25 +1501,26 @@ class Body(PyLayers):
         if not topos:
             ax.scatter(self.d[0, :, iframe],
                        self.d[1, :, iframe],
-                       self.d[2, :, iframe],color=col)
+                       self.d[2, :, iframe], color=col)
         else:
-            ax.scatter(self.topos[0, :], self.topos[1, :], self.topos[2, :],color=col)
+            ax.scatter(self.topos[0, :], self.topos[1, :],
+                       self.topos[2, :], color=col)
 
         for k in range(self.sl.shape[0]):
             # e0 : tail node of cylinder segment
-            e0 = self.sl[k,0]
+            e0 = self.sl[k, 0]
             # e1 : head node of cylinder segment
-            e1 = self.sl[k,1]
+            e1 = self.sl[k, 1]
             if not topos:
-                pA = self.d[:,e0,iframe].reshape(3,1)
-                pB = self.d[:,e1,iframe].reshape(3,1)
+                pA = self.d[:, e0, iframe].reshape(3,1)
+                pB = self.d[:, e1, iframe].reshape(3,1)
             else:
-                pA = self.topos[:,e0].reshape(3,1)
-                pB = self.topos[:,e1].reshape(3,1)
+                pA = self.topos[:, e0].reshape(3,1)
+                pB = self.topos[:, e1].reshape(3,1)
 
             ax.plot(np.array([pA[0][0],pB[0][0]]),
                     np.array([pA[1][0],pB[1][0]]),
-                    np.array([pA[2][0],pB[2][0]]),zdir='z',c=col)
+                    np.array([pA[2][0],pB[2][0]]), zdir='z',c=col)
 
         #ax.auto_scale_xyz([-2,2], [-2, 1], [-2, 2])
         ax.autoscale(enable=True)
@@ -1528,6 +1542,7 @@ class Body(PyLayers):
             show ccs if True
         k : frequency index
             select frequency index for displaying antenna pattern
+        devid : boolean
 
         Examples
         --------
@@ -1780,25 +1795,29 @@ class Body(PyLayers):
                 phe =  np.array([self.d[ax1, khe, fId], self.d[ax2, khe, fId]])[:,np.newaxis]
 
             fig,ax = plu.displot(pta+offset,phe+offset,linewidth = cylrad*kwargs['widthfactor'],**args)
+
+        # display devices
         if kwargs['dev']:
             if 'dcs' in dir(self):
-                pdev=np.array(self.getdevp(self.dev.keys()))
+                pdev = np.array(self.getdevp(self.dev.keys()))
                 ax.plot(pdev[:,ax1]+offset[0],pdev[:,ax2]+offset[1],'og')
             else :
                 iudev = [(i,self.dev[i]['uc3d'][0]) for i in self.dev]
                 udev = [i[1] for i in iudev]
                 center = self.pg[:,fId]
-               
-                ax.plot(self._f[fId,udev,ax1]+offset[0]-center[ax1],self._f[fId,udev,ax2]+offset[1]-center[ax2],'or')
+
+                ax.plot(self._f[fId,udev,ax1]+offset[0]-center[ax1],
+                        self._f[fId,udev,ax2]+offset[1]-center[ax2],'or')
                 if kwargs['devid']:
                     for u in iudev:
-                        ax.text(self._f[fId,u[1],ax1]+offset[0]-center[ax1],self._f[fId,u[1],ax2]+offset[1]-center[ax2],u[0])
+                        ax.text(self._f[fId,u[1],ax1]+offset[0]-center[ax1],
+                                self._f[fId,u[1],ax2]+offset[1]-center[ax2],u[0])
 
 
 
                 # print center
                 #ax.plot(self._f[fId,udev,1]+offset[0]-center[1],self._f[fId,udev,2]+offset[1]-center[0],'or')
-                
+
         plt.axis('scaled')
         return(fig,ax)
 
@@ -2146,7 +2165,6 @@ class Body(PyLayers):
         lmd = 0.075
         for k in range (self.ncyl):
             if k not in cyl:
-
                 if topos  == True:
                     kta  = self.sl[k,0]
                     khe  = self.sl[k,1]

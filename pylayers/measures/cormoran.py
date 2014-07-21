@@ -38,31 +38,29 @@ class CorSer(PyLayers):
         # Measures
 
         if day==11:
-            stcr = [1,2,3,4,10,11,12,32,33,34,35,9,17,18,19,20,25,26]
-            shkb = [5,6,13,14,15,16,21,22,23,24,27,28,29,30,31,32,33,34,35]
-            sbs  = [5,6,7,8,13,14,15,16,21,22,23,24,27,28,29,30,31,32,33,34,35]
-            mocap = [5,6,7,8,17,21,22,23,24,34]
+            self.stcr = [1,2,3,4,10,11,12,32,33,34,35,9,17,18,19,20,25,26]
+            self.shkb = [5,6,13,14,15,16,21,22,23,24,27,28,29,30,31,32,33,34,35]
+            self.sbs  = [5,6,7,8,13,14,15,16,21,22,23,24,27,28,29,30,31,32,33,34,35]
+            self.mocap = [5,6,7,8,17,21,22,23,24,34]
 
         if day==12:
             stcr = []
             shkb = []
             sbs  = []
 
-        if serie in shkb:
+        if serie in self.shkb:
             self.loadhkb(serie=serie,day=day,source=source)
 
-        if serie in stcr:
+        if serie in self.stcr:
             self.loadTCR(serie=serie,day=day)
 
-        if serie in sbs:
+        if serie in self.sbs:
             self.loadBS(serie=serie,day=day)
 
         if self.typ=='FULL':
             self._filename = 'Sc' + self.scenario + '_S' + str(self.serie) + '_R' + str(self.run) + '_' + self.typ.capitalize()
         else:
             self._filename = 'Sc' + self.scenario + '_S' + str(self.serie) + '_R' + str(self.run) + '_' + self.typ
-
-
 
 
         # Layout
@@ -73,7 +71,7 @@ class CorSer(PyLayers):
 
         # BODY
         self.subject = [str(self.log['Subject'].values[0])]
-        if serie in mocap :
+        if serie in self.mocap :
             self.loadbody(serie=serie,day=day)
             self._distancematrix()
 
@@ -117,17 +115,19 @@ class CorSer(PyLayers):
 
 
 
-                        A4 
-                    mpts[6,7,8]
-                        X 
 
-            A3                     A3 
-        mpts[9,10,11]        mpts[3,4,5]
+
+                        A3
+                    mpts[3,4,5]
+                        X
+
+            A2                     A4
+        mpts[6,7,8]        mpts[0,1,2]
             X                      X
 
-                        A2 
-                    mpts[0,1,2]
-                        X 
+                        A1
+                    mpts[9,10,11]
+                        X
 
 
         TCR = mpts[0,3,6,9]
@@ -142,22 +142,23 @@ class CorSer(PyLayers):
         filename = self.rootdir + '/RAW/11-06-2014/MOCAP/scene.c3d'
         a,self.infraname,pts,i = c3d.ReadC3d(filename)
 
-        pts=pts/1000.
+        pts = pts/1000.
         mpts = np.mean(pts,axis=0)
         self.din={}
         if ('HK'  in self.typ) or ('FULL' in self.typ):
-            uhkb=np.array([[1,2],[4,5],[7,8],[10,11]])
+            uhkb = np.array([[1,2],[4,5],[7,8],[10,11]])
             mphkb = np.mean(mpts[uhkb],axis=1)
 
-            self.din.update({'HKB:1':mphkb[1],
-                 'HKB:2':mphkb[0],
-                 'HKB:3':mphkb[3],
-                 'HKB:4':mphkb[2]})
+            self.din.update({'HKB:1':mphkb[3],
+                 'HKB:2':mphkb[2],
+                 'HKB:3':mphkb[1],
+                 'HKB:4':mphkb[0]})
+
         if ('TCR' in self.typ) or ('FULL' in self.typ):
-            self.din.update({'TCR:32':mpts[3],
-                 'TCR:24':mpts[0],
-                 'TCR:27':mpts[9],
-                 'TCR:28':mpts[6]})
+            self.din.update({'TCR:32':mpts[9],
+                 'TCR:24':mpts[6],
+                 'TCR:27':mpts[3],
+                 'TCR:28':mpts[0]})
 
         # self.pts= np.empty((12,3))
         # self.pts[:,0]= -mpts[:,1]
@@ -575,9 +576,11 @@ class CorSer(PyLayers):
         for k in self.idHKB:
             for l in self.idHKB:
                 if k!=l:
-                    column = self.idHKB[k]+'-'+self.idHKB[l]
-                    rssi  = self.rssi[k-1,l-1,:]
-                    self.hkb[column] = rssi
+                    col  = self.idHKB[k]+'-'+self.idHKB[l]
+                    rcol = self.idHKB[l]+'-'+self.idHKB[k]
+                    if rcol not in self.hkb.columns:
+                        rssi  = self.rssi[k-1,l-1,:]
+                        self.hkb[col] = rssi
 
 
     def imshow(self,time=100,kind='time'):
@@ -648,7 +651,7 @@ class CorSer(PyLayers):
     # def offset_setter(self,a,b,**kwargs):
     #     """ offset setter
     #     """
-        
+
     #     fig, ax = plt.subplots()
     #     fig.subplots_adjust(bottom=0.2, left=0.3)
 
@@ -697,7 +700,8 @@ class CorSer(PyLayers):
                      'figsize':(8,8),
                      'xoffset':0,
                      'yoffset': 1e6,
-                     'reciprocal':True,
+                     'reciprocal':False,
+                     'dB':True,
                      'data':True,
                      'colorab':'g',
                      'colorba':'b',
@@ -747,9 +751,10 @@ class CorSer(PyLayers):
             #ax.plot(self.thkb[0],self.rssi[ib,ia,:])
             sab = self.hkb[a+'-'+b]
 
-            if kwargs['distance']:
+            if not(kwargs['dB']):
                 sab = 10**(sab/10) * kwargs['yoffset']
-                sab = np.sqrt(1/sab)
+                if kwargs['distance']:
+                    sab = np.sqrt(1/sab)
                 if kwargs['reciprocal']:
                     sba = 10**(sba/10 ) * kwargs['yoffset']
                     sba = np.sqrt(1/sba)
@@ -758,8 +763,21 @@ class CorSer(PyLayers):
             if kwargs['reciprocal']:
                 sba[t0:t1].plot(ax=ax,color=kwargs['colorba'])
 
-            title = self.title1+' Link : '+a+'-'+b
+            title = self.title1+'Received Power for Link : '+a+'-'+b
             ax.set_title(label=title,fontsize=kwargs['fontsize'])
+            if not kwargs['distance']:
+                if kwargs['dB']:
+                    ax.set_ylabel('dBm')
+                else:
+                    if kwargs['yoffset']==1:
+                        ax.set_ylabel('mW')
+                    if kwargs['yoffset']==1e3:
+                        ax.set_ylabel(u'$\micro$W')
+                    if kwargs['yoffset']==1e6:
+                        ax.set_ylabel(u'nW')
+
+            else:
+                ax.set_ylabel(u'$\prop (mW)^{-1/2} linear scale$')
 
         if kwargs['reciprocal']==True:
             # if kwargs['data']==True:
@@ -855,8 +873,8 @@ class CorSer(PyLayers):
                      'colorab':'g',
                      'colorba':'b',
                      'inverse':True,
-                    'fontsize':14,
-                    'visi':True
+                     'fontsize':14,
+                     'visi':True
                     }
 
         for k in defaults:
@@ -943,7 +961,7 @@ class CorSer(PyLayers):
             dhk = self.accessdm(iahk,ibhk,'HKB')
             if kwargs['inverse']:
                 var = 1./(self.dist[:,dhk[0],dhk[1]])**2
-                axs[cptax].set_ylabel(u'm^{-2}',fontsize=kwargs['fontsize'])
+                axs[cptax].set_ylabel(u'$m^{-2}$',fontsize=kwargs['fontsize'])
             else:
                 var = self.dist[:,dhk[0],dhk[1]]
                 axs[cptax].set_ylabel(u'meters',fontsize=kwargs['fontsize'])
@@ -961,50 +979,109 @@ class CorSer(PyLayers):
 
         aa = axs[cptax].axis()
         #
-        # calculates visibility
+        # calculates visibility and display NLOS region
+        # as a yellow patch over the shadowed region
         #
         if kwargs['visi']:
             visi = self.visidev(a,b)
 
         tv = visi.index.values
         vv = visi.values.astype(int)
-        df = vv[1:]-vv[0:-1]
+        if (not(vv.all()) and vv.any()):
+            df = vv[1:]-vv[0:-1]
 
-        um = np.where(df==1)[0]
-        ud = np.where(df==-1)[0]
-        lum = len(um)
-        lud = len(ud)
-        #
-        # impose same size
-        #
-        if lum<lud:
-            um = np.hstack((np.array([0]),um))
-        if lud<lum:
-            ud = np.hstack((np.array([0]),ud))
+            um = np.where(df==1)[0]
+            ud = np.where(df==-1)[0]
+            lum = len(um)
+            lud = len(ud)
 
-        if um[0]<ud[0]:
+            #
+            # impose same size and starting
+            # on leading edge um and endinf on
+            # falling edge ud
+            #
+            if lum==lud:
+                if ud[0]<um[0]:
+                    um = np.hstack((np.array([0]),um))
+                    ud = np.hstack((ud,np.array([len(vv)-1])))
+            else:
+                if ((lum<lud) & (vv[0]==1)):
+                    um = np.hstack((np.array([0]),um))
+
+                if ((lud<lum) & (vv[len(vv)-1]==1)):
+                    ud = np.hstack((ud,np.array([len(vv)-1])))
+
+
             tseg = np.array(zip(um,ud))
+            #else:
+            #    tseg = np.array(zip(ud,um))
         else:
-            tseg = np.array(zip(ud,um))
+            if vv.all():
+                tseg = np.array(zip(np.array([0]),np.array([len(vv)-1])))
 
-        for t in tseg:
-             vertc = [(tv[t[0]],aa[2]),(tv[t[1]],aa[2]),(tv[t[1]],aa[3]),(tv[t[0]],aa[3])]
-             poly = plt.Polygon(vertc,facecolor='y',alpha=0.3,linewidth=0)
-             axs[cptax].add_patch(poly)
+        # vv.any : it exist NLOS regions
+        if vv.any():
+            for t in tseg:
+                 vertc = [(tv[t[0]],aa[2]),(tv[t[1]],aa[2]),(tv[t[1]],aa[3]),(tv[t[0]],aa[3])]
+                 poly = plt.Polygon(vertc,facecolor='y',alpha=0.3,linewidth=0)
+                 axs[cptax].add_patch(poly)
 
         #axs[cptax].plot(visi.index.values,visi.values,'r')
 
 
         if kwargs['inverse']:
-            axs[cptax].set_title(u'Ground Truth $\\frac{1}{d_{ij}}^2$',fontsize=kwargs['fontsize']+1)
+            axs[cptax].set_title(u'Ground Truth : inverse of squared distance',fontsize=kwargs['fontsize']+1)
         else:
             axs[cptax].set_title('Ground Truth distance (m)',fontsize=kwargs['fontsize']+1)
 
         axs[cptax].set_xlabel('Time (s)',fontsize=kwargs['fontsize'])
         plt.tight_layout()
 
+    def showlink(self,a,b,technoa='HKB',technob='HKB',iframe=0):
+        """ show link configuation for a given frame
+        """
+        # display nodes
+        A,B = self.getdevp(a,b,technoa=technoa,technob=technob)
+        if A.ndim==2:
+            plt.plot(A[iframe,0],A[iframe,1],'or')
+            plt.text(A[iframe,0],A[iframe,1],a)
+        else:
+            plt.plot(A[0],A[1],'or')
+            plt.text(A[0],A[1],a)
 
-    def visidev(self,a,b,technoa='HKB',technob='HKB',Npts=1000):
+        if B.ndim==2:
+            plt.plot(B[iframe,0],B[iframe,1],'ob')
+            plt.text(B[iframe,0],B[iframe,1],b)
+        else:
+            plt.plot(B[0],B[1],'ob')
+            plt.text(B[0],B[1],b)
+        plt.xlim(-6,6)
+        plt.ylim(-5,5)
+        # display body
+
+        #pc = self.B.d[:,2,iframe] + self.B.pg[:,iframe].T
+        pc0 = self.B.d[:,0,iframe] + self.B.pg[:,iframe].T
+        pc1 = self.B.d[:,1,iframe] + self.B.pg[:,iframe].T
+        pc15 = self.B.d[:,15,iframe] + self.B.pg[:,iframe].T
+        plt.plot(pc0[0],pc0[1],'og')
+        plt.text(pc0[0]+0.1,pc0[1],str(iframe))
+        plt.plot(pc1[0],pc1[1],'og')
+        plt.plot(pc15[0],pc15[1],'og')
+        ci00   = plt.Circle((pc0[0],pc0[1]),self.B.sl[0,2],color='green',alpha=0.1)
+        ci01   = plt.Circle((pc1[0],pc1[1]),self.B.sl[0,2],color='green',alpha=0.1)
+        ci100 = plt.Circle((pc0[0],pc0[1]),self.B.sl[10,2],color='red',alpha=0.1)
+        ci1015 = plt.Circle((pc15[0],pc15[1]),self.B.sl[10,2],color='red',alpha=0.1)
+        plt.axis('equal')
+        ax = plt.gca()
+        ax.add_patch(ci00)
+        ax.add_patch(ci01)
+        ax.add_patch(ci100)
+        ax.add_patch(ci1015)
+        #its = self.B.intersectBody(A[iframe,:],B[iframe,:],topos=False,frameId=iframe)
+        #x.set_title('frameId :'+str(iframe)+' '+str(its.T))
+
+
+    def visidev(self,a,b,technoa='HKB',technob='HKB',dsf=10):
         """ get link visibility status
 
         Returns
@@ -1015,38 +1092,57 @@ class CorSer(PyLayers):
             1  : NLOS
 
         """
+
         A,B = self.getdevp(a,b,technoa,technob)
-        Nframe = A.shape[0]
-        iframe = np.linspace(0,Nframe-1,Npts)
+        if 'AP' not in a:
+            Nframe = A.shape[0]
+        if 'AP' not in b:
+            Nframe = B.shape[0]
+        iframe = np.arange(0,Nframe-1,dsf)
         tvisi = []
+        #
+        # A : Nframe x 3
+        # B : Nframe x 3
+        # B.pg : 3 x Nframe
+        #
+        if self.B.centered:
+            A = A-self.B.pg.T
+            B = B-self.B.pg.T
+
         for k in iframe:
             its = self.B.intersectBody(A[k,:],B[k,:],topos=False,frameId=k)
             tvisi.append(its.any())
         visi = pd.Series(tvisi,index=iframe/100.)
+        #return(visi,iframe)
         return(visi)
-
 
 
     def getdevp(self,a,b,technoa='HKB',technob='HKB'):
         """    get device position
 
-            Parameters
-            ----------
-                a : str | int
-                    name | id
-                b : str | int
-                    name | id
-                technoa : str
-                    radio techno
-                technob : str
-                    radio techno
+        Parameters
+        ----------
 
-            Example
-            -------
+        a : str | int
+            name | id
+        b : str | int
+            name | id
+        technoa : str
+            radio techno
+        technob : str
+            radio techno
 
-                >>> from pylayers.measures.cormoran import *
-                >>> S=CorSer(serie=34)
-                >>> a,b=S.getdevp('AP1','WristLeft')
+        Returns
+        -------
+
+        pa,pb : np.array()
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> S=CorSer(serie=34)
+        >>> a,b=S.getdevp('AP1','WristLeft')
 
         """
 
@@ -1128,6 +1224,8 @@ class CorSer(PyLayers):
 
 
     def get_dataframes(self,a,b):
+        """ assemble all series in a DataFrame
+        """
 
         T,H,DT,DH = self.get_data(a,b)
         NH=(np.sqrt(1/(10**(H/10)))/4e4)
