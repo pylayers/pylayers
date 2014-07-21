@@ -46,7 +46,7 @@ def extract(D):
             trssi[k]=rssi[u[k]:]
     return(trssi)
 
-CORMORAN='/home/uguen/svn2/measures/CORMORAN'
+CORMORAN=os.environ['CORMORAN']#'/home/uguen/svn2/measures/CORMORAN'
 os.chdir(CORMORAN+'/RAW/11-06-2014/HIKOB')
 files = os.listdir('.')
 rawfiles = filter(lambda x: 'RAW' in x ,files)

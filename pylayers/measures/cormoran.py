@@ -119,7 +119,7 @@ class CorSer(PyLayers):
                     mpts[6,7,8]
                         X 
 
-            A3                     A3 
+            A3                     A1
         mpts[9,10,11]        mpts[3,4,5]
             X                      X
 
@@ -359,7 +359,7 @@ class CorSer(PyLayers):
         if day==12:
             self.dHKB= {'AP1':1,'AP2':2,'AP3':3,'AP4':4,'Jihad:TorsoTopRight':10,'Jihad:TorsoTopLeft':9,'Jihad:BackCenter':11,'JihadShoulderLeft':12,
              'Nicolas:TorsoTopRight':6,'Nicolas:TorsoTopLeft':5,'Nicolas:BackCenter':7,'Nicolas:ShoulderLeft':8,
-             'Eric:TorsoTopRight':15,'Eric:TorsoTopLeft':13,'Eric:BackCenter':16,'Eric:ShoulderLeft':14}
+             'Eric:TooTopRight':15,'Eric:TorsoTopLeft':13,'Eric:BackCenter':16,'Eric:ShoulderLeft':14}
             if source=='UR1':
                 dirname = self.rootdir+'/POST-TREATED/12-06-2014/HIKOB'
             elif source=='CITI':
@@ -370,14 +370,23 @@ class CorSer(PyLayers):
         self.idHKB={}
         for k in self.dHKB:
             self.idHKB[self.dHKB[k]]=k
-
+        
         if serie != '':
             self._filehkb = filter(lambda x : 'S'+str(serie) in x ,files)[0]
             tt = self._filehkb.split('_')
-            self.scenario=tt[0].replace('Sc','')
-            self.run = tt[2].replace('R','')
-            self.typ = tt[3]
-            self.video = tt[4].replace('.mat','')
+            if source == 'UR1':
+                self.scenario=tt[0].replace('Sc','')
+                self.run = tt[2].replace('R','')
+                self.typ = tt[3]
+                self.video = tt[4].replace('.mat','')
+            elif source == 'CITI':
+                self.scenario=tt[0].replace('Sc','')
+                self.run = tt[3].replace('r','')
+                self.typ = tt[4]
+                if self.typ == 'HKB':
+                    self.typ = 'HKBS'
+                self.video = tt[5].replace('.mat','')
+
         else:
             filesc = filter(lambda x : 'Sc'+scenario in x ,files)
             if source=='UR1':
@@ -551,7 +560,6 @@ class CorSer(PyLayers):
         self.L._show3(opacity=0.5)
         v = self.din.items()
         X= np.array([v[i][1] for i in range(len(v))])
-
         mlab.points3d(X[:,0],X[:,1], X[:,2],scale_factor=0.1)
         [mlab.text3d(v[i][1][0],v[i][1][1],v[i][1][2],v[i][0],scale=0.5)
         for i in range(len(v))]
@@ -710,7 +718,10 @@ class CorSer(PyLayers):
         t0 =kwargs['t0']
         t1 =kwargs['t1']
         if t1 ==-1:
-            t1=self.thkb[0][-1]
+            try:
+                t1=self.thkb[0][-1]
+            except: 
+                t1=self.thkb[-1]
 
         if isinstance(a,str):
             ia = self.dHKB[a]
@@ -861,7 +872,7 @@ class CorSer(PyLayers):
 
         if not isinstance(display,list):
             display=[display]
-            S
+
 
         if display == []:
             if ('tcr' in dir(self)) and ('hkb' in dir(self)):
