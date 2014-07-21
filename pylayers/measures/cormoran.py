@@ -64,7 +64,7 @@ class CorSer(PyLayers):
 
 
         # Layout
-        self.L= Layout('MOCAP.ini')
+        self.L= Layout(self.rootdir+'/POST-TREATED/MOCAP.ini')
 
         # Infrastructure Nodes
         self.loadinfranodes()
@@ -591,12 +591,10 @@ beranrd
         for i in range(0,100,7):
             self.B.settopos(t=i,cs=True)
             self.B._show3(dev=True)
-        mlab.view(54.989781407516112,
-         64.187477298584483,
-         20.433867676075128,
-         np.array([-0.81123488, -1.65632874, -1.49091462]))
-
-
+        mlab.view(-128.66519195313163,
+                   50.708933839573511,
+                   24.492297713984247,
+                   np.array([-0.07235499,  0.04868631, -0.00314969]))
 
     def topandas(self):
         try:
