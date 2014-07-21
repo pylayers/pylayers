@@ -291,21 +291,25 @@ class Body(PyLayers):
             pass
         self.dev={}
 
+
         # read default in ini file
         if _filewear == []:
             devfilename = pyu.getlong(di['wearable']['file'],pstruc['DIRWEAR'])
             self.filewear = di['wearable']['file']
-        else :
-            # check if local or global path
+            if not os.path.exists(devfilename):
+                raise AttributeError('the wareable file '+di['wearable']['file']+
+                                 ' cannot be found in $BASENAME/'+pstruc['DIRWEAR'])
+        else : 
+            # check if local or global path
             if ('/' or '\\') in _filewear:
                 devfilename = _filewear
             else :
                 devfilename = pyu.getlong(_filewear,pstruc['DIRWEAR'])
             self.filewear = devfilename
 
-        if not os.path.exists(devfilename):
-            raise AttributeError('the wareable file '+di['wearable']['file']+
-                             ' cannot be found in $BASENAME/'+pstruc['DIRWEAR'])
+            if not os.path.exists(devfilename):
+                raise AttributeError('the wareable file '+ devfilename +
+                                 ' cannot be found')
 
         devconf = ConfigParser.ConfigParser()
         devconf.read(devfilename)

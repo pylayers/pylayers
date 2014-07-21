@@ -10,6 +10,7 @@ import scipy.io as io
 from pylayers.util.project import *
 from pylayers.mobility.ban.body import *
 from pylayers.gis.layout import *
+from matplotlib.widgets import Slider, CheckButtons
 
 from moviepy.editor import *
 from skimage import img_as_ubyte
@@ -115,6 +116,28 @@ class CorSer(PyLayers):
 
 
 
+nico
+
+                        A4 
+                    mpts[6,7,8]
+                        X 
+
+            A3                     A1
+        mpts[9,10,11]        mpts[3,4,5]
+            X                      X
+
+                        A2 
+                    mpts[0,1,2]
+                        X 
+
+
+        TCR = mpts[0,3,6,9]
+        HKB = mpts[1,2,
+                   4,5,
+                   7,8,
+                   10,11]
+
+beranrd
 
 
                         A3
@@ -362,7 +385,7 @@ class CorSer(PyLayers):
         if day==12:
             self.dHKB= {'AP1':1,'AP2':2,'AP3':3,'AP4':4,'Jihad:TorsoTopRight':10,'Jihad:TorsoTopLeft':9,'Jihad:BackCenter':11,'JihadShoulderLeft':12,
              'Nicolas:TorsoTopRight':6,'Nicolas:TorsoTopLeft':5,'Nicolas:BackCenter':7,'Nicolas:ShoulderLeft':8,
-             'Eric:TorsoTopRight':15,'Eric:TorsoTopLeft':13,'Eric:BackCenter':16,'Eric:ShoulderLeft':14}
+             'Eric:TooTopRight':15,'Eric:TorsoTopLeft':13,'Eric:BackCenter':16,'Eric:ShoulderLeft':14}
             if source=='UR1':
                 dirname = self.rootdir+'/POST-TREATED/12-06-2014/HIKOB'
             elif source=='CITI':
@@ -373,14 +396,23 @@ class CorSer(PyLayers):
         self.idHKB={}
         for k in self.dHKB:
             self.idHKB[self.dHKB[k]]=k
-
+        
         if serie != '':
             self._filehkb = filter(lambda x : 'S'+str(serie) in x ,files)[0]
             tt = self._filehkb.split('_')
-            self.scenario=tt[0].replace('Sc','')
-            self.run = tt[2].replace('R','')
-            self.typ = tt[3]
-            self.video = tt[4].replace('.mat','')
+            if source == 'UR1':
+                self.scenario=tt[0].replace('Sc','')
+                self.run = tt[2].replace('R','')
+                self.typ = tt[3]
+                self.video = tt[4].replace('.mat','')
+            elif source == 'CITI':
+                self.scenario=tt[0].replace('Sc','')
+                self.run = tt[3].replace('r','')
+                self.typ = tt[4]
+                if self.typ == 'HKB':
+                    self.typ = 'HKBS'
+                self.video = tt[5].replace('.mat','')
+
         else:
             filesc = filter(lambda x : 'Sc'+scenario in x ,files)
             if source=='UR1':
@@ -554,19 +586,16 @@ class CorSer(PyLayers):
         self.L._show3(opacity=0.5)
         v = self.din.items()
         X= np.array([v[i][1] for i in range(len(v))])
-
         mlab.points3d(X[:,0],X[:,1], X[:,2],scale_factor=0.1)
         [mlab.text3d(v[i][1][0],v[i][1][1],v[i][1][2],v[i][0],scale=0.5)
         for i in range(len(v))]
         for i in range(0,100,7):
             self.B.settopos(t=i,cs=True)
             self.B._show3(dev=True)
-        mlab.view(54.989781407516112,
-         64.187477298584483,
-         20.433867676075128,
-         np.array([-0.81123488, -1.65632874, -1.49091462]))
-
-
+        mlab.view(-128.66519195313163,
+                   50.708933839573511,
+                   24.492297713984247,
+                   np.array([-0.07235499,  0.04868631, -0.00314969]))
 
     def topandas(self):
         try:
@@ -648,37 +677,86 @@ class CorSer(PyLayers):
 
 
 
-    # def offset_setter(self,a,b,**kwargs):
-    #     """ offset setter
-    #     """
-
-    #     fig, ax = plt.subplots()
-    #     fig.subplots_adjust(bottom=0.2, left=0.3)
-
-
-    #     # init boolean value for visible in checkbutton
-    #     blabels = [True]*len(labels)
+    def offset_setter_hkb(self,a,b,**kwargs):
+        """ offset setter
+        """
+        defaults = { 'inverse':True
+                    }
 
 
-    #     ########
-    #     # slider
-    #     ########
-    #     slider_ax = plt.axes([0.1, 0.1, 0.8, 0.02])
-    #     slider = Slider(slider_ax, "time", self.thkb[0][0], self.thkb[0][1],
-    #                     valinit=valinit, color='#AAAAAA')
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
 
-    #     def update(val):
 
-    #         if val >= 1:
-    #             pval=np.where(val>t)[0]
-    #             ax.set_title(str(self[0].index[pval[-1]].time())[:11].ljust(12),
-    #                          loc='left')
-    #             for iT, T in enumerate(self):
-    #                 if T.typ == 'ag':
-    #                     lines[iT].set_xdata(T['x'][pval])
-    #                     lines[iT].set_ydata(T['y'][pval])
-    #             fig.canvas.draw()
-    #     slider.on_changed(update)
+        fig, ax = plt.subplots()
+        fig.subplots_adjust(bottom=0.2, left=0.3)
+
+        if isinstance(a,str):
+            ia = self.dHKB[a]
+        else:
+            ia = a
+            a = self.idHKB[a]
+
+        if isinstance(b,str):
+            ib = self.dHKB[b]
+        else:
+            ib = b
+            b = self.idHKB[b]
+
+
+        time = self.thkb[0]
+        if len(time) == 1:
+            time=time[0]
+
+
+        dhk = self.accessdm(ia,ib,'HKB')
+        if kwargs['inverse']:
+            var = 10*np.log10(1./(self.dist[:,dhk[0],dhk[1]])**2)
+        else :
+            var = self.dist[:,dhk[0],dhk[1]]
+        gt = ax.plot(self.B.time,var)
+
+        sab = self.hkb[a+'-'+b].values
+        sabt = self.hkb[a+'-'+b].index
+        hkb = ax.plot(sabt,sab)
+
+
+        ########
+        # slider
+        ########
+        slide_xoffset_ax = plt.axes([0.1, 0.15, 0.8, 0.02])
+        sliderx = Slider(slide_xoffset_ax, "hkb offset", -(len(sabt)/16), (len(sabt)/16),
+                        valinit=time[0], color='#AAAAAA')
+
+        slide_yoffset_ax = plt.axes([0.1, 0.10, 0.8, 0.02])
+        slidery = Slider(slide_yoffset_ax, "gt_yoff", -100, 0,
+                        valinit=0, color='#AAAAAA')
+
+        slide_alpha_ax = plt.axes([0.1, 0.05, 0.8, 0.02])
+        slideralpha = Slider(slide_alpha_ax, "gt_alpha", 0, 10,
+                        valinit=0, color='#AAAAAA')
+
+        def update_x(val):
+            value = int(sliderx.val)
+            rhkb = np.roll(sab,value)
+            sliderx.valtext.set_text('{}'.format(value))
+            hkb[0].set_xdata(sabt)
+            hkb[0].set_ydata(rhkb)
+            fig.canvas.draw_idle()
+        sliderx.on_changed(update_x)
+        sliderx.drawon = False
+
+
+        def update_y(val):
+            yoff = slidery.val
+            alpha = slideralpha.val
+            gt[0].set_ydata(alpha*var + yoff)
+            fig.canvas.draw_idle()
+        slidery.on_changed(update_y)
+        slideralpha.on_changed(update_y)
+
+        plt.show()
 
 
     def plthkb(self,a,b,**kwargs):
@@ -717,7 +795,10 @@ class CorSer(PyLayers):
         t0 =kwargs['t0']
         t1 =kwargs['t1']
         if t1 ==-1:
-            t1=self.thkb[0][-1]
+            try:
+                t1=self.thkb[0][-1]
+            except: 
+                t1=self.thkb[-1]
 
         if isinstance(a,str):
             ia = self.dHKB[a]
@@ -860,9 +941,212 @@ class CorSer(PyLayers):
 
         return fig,ax
 
+
+    def pltgt(self,a,b,**kwargs):
+        """ plt groundtruth
+        """
+
+        defaults = { 't0':0,
+                     't1':-1,
+                     'fig':[],
+                     'ax':[],
+                     'figsize':(8,8),
+                     'linestyle':'default',
+                     'inverse':False,
+                     'log':True,
+                     'gamma':1.,
+                     'mode':'HKB'
+                    }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        t0 =kwargs.pop('t0')
+        t1 =kwargs.pop('t1')
+        if t1 ==-1:
+            t1=self.thkb[0][-1]
+
+
+        mode = kwargs.pop('mode')
+        inverse = kwargs.pop('inverse')
+        log = kwargs.pop('log')
+        gamma = kwargs.pop('gamma')
+        visibility = kwargs.pop('visi')
+        fontsize = kwargs.pop('fontsize')
+
+
+        if kwargs['fig']==[]:
+            figsize = kwargs.pop('figsize')
+            fig = plt.figure(figsize=figsize)
+        else:
+            kwargs.pop('figsize')
+            fig = kwargs.pop('fig')
+        if kwargs['ax'] ==[]:
+            ax = fig.add_subplot(111)
+        else :
+            ax=kwargs.pop('ax')
+
+
+
+
+        if mode == 'HKB' or mode == 'FULL':
+
+            if isinstance(a,str):
+                iahk = self.dHKB[a]
+            else:
+                iahk = a
+                a = self.idHKB[a]
+
+            if isinstance(b,str):
+                ibhk = self.dHKB[b]
+            else:
+                ibhk = b
+                b = self.idHKB[b]
+
+            dhk = self.accessdm(iahk,ibhk,'HKB')
+
+            if inverse:
+                var = 1./(self.dist[:,dhk[0],dhk[1]])**2
+                ax.set_ylabel(u'$m^{-2}$',fontsize=fontsize)
+                if log :
+                    var = gamma*10*np.log10(var)
+                    ax.set_ylabel(u'$10log_{10}m^{-2}$',fontsize=fontsize)
+            else:
+                var = self.dist[:,dhk[0],dhk[1]]
+                ax.set_ylabel(u'meters',fontsize=fontsize)
+                if log :
+                    var = gamma*10*np.log10(var)
+                    ax.set_ylabel(u'$10log_{10}m^{-2}$',fontsize=fontsize)
+
+
+            ax.plot(self.B.time,var,**kwargs)
+        #
+        # TCR | Full
+        #
+        if mode == 'TCR' or mode == 'FULL': 
+
+            if isinstance(a,str):
+                iatcr = self.dTCR[a]
+            else:
+                iatcr = a
+                a = self.idTCR[a]
+
+            if isinstance(b,str):
+                ibtcr = self.dTCR[b]
+            else:
+                ibtcr = b
+                b = self.idTCR[b]
+
+            dtcr = self.accessdm(iatcr,ibtcr,'TCR')
+            if inverse:
+                var = 1./(self.dist[:,dtcr[0],dtcr[1]])**2
+                if log :
+                    var = gamma*10*np.log10(var)
+            else:
+                var = self.dist[:,dtcr[0],dtcr[1]]
+                if log :
+                    var = gamma*10*np.log10(var)
+            ax.plot(self.B.time,var,**kwargs)
+
+
+        if visibility:
+            aa= ax.axis()
+            visi = self.visidev(a,b)
+
+            tv = visi.index.values
+            vv = visi.values.astype(int)
+            if (not(vv.all()) and vv.any()):
+                df = vv[1:]-vv[0:-1]
+
+                um = np.where(df==1)[0]
+                ud = np.where(df==-1)[0]
+                lum = len(um)
+                lud = len(ud)
+
+                #
+                # impose same size and starting
+                # on leading edge um and endinf on
+                # falling edge ud
+                #
+                if lum==lud:
+                    if ud[0]<um[0]:
+                        um = np.hstack((np.array([0]),um))
+                        ud = np.hstack((ud,np.array([len(vv)-1])))
+                else:
+                    if ((lum<lud) & (vv[0]==1)):
+                        um = np.hstack((np.array([0]),um))
+
+                    if ((lud<lum) & (vv[len(vv)-1]==1)):
+                        ud = np.hstack((ud,np.array([len(vv)-1])))
+
+
+                tseg = np.array(zip(um,ud))
+                #else:
+                #    tseg = np.array(zip(ud,um))
+            else:
+                if vv.all():
+                    tseg = np.array(zip(np.array([0]),np.array([len(vv)-1])))
+
+            # vv.any : it exist NLOS regions
+            if vv.any():
+                for t in tseg:
+
+                    vertc = [(tv[t[0]],aa[2]-500),(tv[t[1]],aa[2]-500),(tv[t[1]],aa[3]+500),(tv[t[0]],aa[3]+500)]
+                    poly = plt.Polygon(vertc,facecolor='y',alpha=0.3,linewidth=0)
+                    ax.add_patch(poly)
+
+        #axs[cptax].plot(visi.index.values,visi.values,'r')
+
+
+        if inverse:
+            ax.set_title(u'Ground Truth : inverse of squared distance',fontsize=fontsize+1)
+        else:
+            ax.set_title('Ground Truth distance (m)',fontsize=fontsize+1)
+
+        ax.set_xlabel('Time (s)',fontsize=fontsize)
+        plt.tight_layout()
+
+        return fig, ax
+
+
     def pltlk(self,a,b,**kwargs):
         """ plt links
 
+        display: list
+            techno to be displayed
+        figsize
+        t0: float
+            time start
+        t1 : float
+            time stop
+        colhk: plt.color
+            color of hk curve
+        colhk2:plt.color
+            color of hk curve2 ( if recirpocal)
+        linestylehk:
+            linestyle hk
+
+        coltcr:
+            color tcr curve
+        coltcr2:
+            color of tcr curve2 ( if recirpocal)
+        linestyletcr:
+            linestyle tcr
+        colgt: 
+            color ground truth
+        inversegt:
+            invert ground truth
+        loggt: bool
+            apply a log10 factor to ground truth
+        gammagt:
+            applly a gamma factor to ground truth (if loggt ! )
+        fontsize:
+            font size of legend
+        visi:
+            display visibility indicator
+        axs :
+            list of matplotlib axes
 
         """
 
@@ -870,11 +1154,19 @@ class CorSer(PyLayers):
                      'figsize':(8,8),
                      't0':0,
                      't1':-1,
-                     'colorab':'g',
-                     'colorba':'b',
-                     'inverse':True,
+                     'colhk':'g',
+                     'colhk2':'b',
+                     'linestylehk':'default',
+                     'coltcr':'g',
+                     'coltcr2':'b',
+                     'linestyletcr':'step',
+                     'colgt': 'k',
+                     'inversegt':True,
+                     'loggt':True,
+                     'gammagt':1,
                      'fontsize':14,
-                     'visi':True
+                     'visi':True,
+                     'axs' :[],
                     }
 
         for k in defaults:
@@ -885,7 +1177,7 @@ class CorSer(PyLayers):
 
         if not isinstance(display,list):
             display=[display]
-            S
+
 
         if display == []:
             if ('tcr' in dir(self)) and ('hkb' in dir(self)):
@@ -902,10 +1194,19 @@ class CorSer(PyLayers):
         elif 'TCR' in display or 'HKB' in display:
             ld = 2
 
+        # Axes management
+        if kwargs['axs'] == []:
+            kwargs.pop('axs')
+            fig,axs = plt.subplots(nrows=ld,ncols=1,figsize=kwargs['figsize'],sharex=True)
+        else : 
+            fig =plt.gcf()
+            axs = kwargs.pop('axs')
 
-        fig,axs = plt.subplots(nrows=ld,ncols=1,figsize=kwargs['figsize'],sharex=True)
 
         cptax= 0
+
+
+        # HKB plot
         if 'HKB' in display or 'FULL' in display:
             if ('HKB' in self.typ.upper()) or ('FULL' in self.typ.upper()):
                 if isinstance(a,str):
@@ -920,12 +1221,28 @@ class CorSer(PyLayers):
             else :
                 raise AttributeError('HK not available for the given scenario')
 
+
+
+
+
+
             kwargs['fig']=fig
             kwargs['ax']=axs[cptax]
+            kwargs['colorab']=kwargs.pop('colhk')
+            kwargs['colorba']=kwargs.pop('colhk2')
+            kwargs['linestyle']=kwargs.pop('linestylehk')
+
             fig,axs[cptax]=self.plthkb(a,b,reciprocal=False,**kwargs)
 
 
             cptax+=1
+        else :
+            kwargs.pop('colhk')
+            kwargs.pop('colhk2')
+            kwargs.pop('linestylehk')
+
+
+        # TCR plot
         if 'TCR' in display or 'FULL' in display:
             if ('TCR' in self.typ.upper()) or ('FULL' in self.typ.upper()):
                 if isinstance(a,str):
@@ -941,14 +1258,17 @@ class CorSer(PyLayers):
 
             kwargs['fig']=fig
             kwargs['ax']=axs[cptax]
-            kwargs['colorab']='red'
-            kwargs['colorba']='orange'
-            kwargs['linestyle']='step'
+            kwargs['colorab']=kwargs.pop('coltcr')
+            kwargs['colorba']=kwargs.pop('coltcr2')
+            kwargs['linestyle']=kwargs.pop('linestyletcr')
             tcrlink = a+'-'+b
             # plot only if link exist
             if tcrlink in self.tcr:
                 fig,axs[cptax]=self.plttcr(a,b,**kwargs)
-
+        else :
+            kwargs.pop('coltcr')
+            kwargs.pop('coltcr2')
+            kwargs.pop('linestyletcr')
             #cptax+=1
 
         #
@@ -957,85 +1277,28 @@ class CorSer(PyLayers):
         #
         # HKB | Full
         #
-        if 'HKB' in display or 'FULL' in display:
-            dhk = self.accessdm(iahk,ibhk,'HKB')
-            if kwargs['inverse']:
-                var = 1./(self.dist[:,dhk[0],dhk[1]])**2
-                axs[cptax].set_ylabel(u'$m^{-2}$',fontsize=kwargs['fontsize'])
-            else:
-                var = self.dist[:,dhk[0],dhk[1]]
-                axs[cptax].set_ylabel(u'meters',fontsize=kwargs['fontsize'])
-            axs[cptax].plot(self.B.time,var)
-        #
-        # TCR | Full
-        #
-        if 'TCR' in display or 'FULL' in display:
-            dtcr = self.accessdm(iatcr,ibtcr,'TCR')
-            if kwargs['inverse']:
-                var = 1./(self.dist[:,dtcr[0],dtcr[1]])**2
-            else:
-                var = self.dist[:,dtcr[0],dtcr[1]]
-            axs[cptax].plot(self.B.time,var)
+        kwargs['color'] = kwargs.pop('colgt')
+        kwargs.pop('colorab')
+        kwargs.pop('colorba')
+        kwargs['ax']=axs[cptax]
+        kwargs['inverse']=kwargs.pop('inversegt')
+        kwargs['log']=kwargs.pop('loggt')
+        kwargs['gamma']=kwargs.pop('gammagt')
 
-        aa = axs[cptax].axis()
+        if 'HKB' in display or 'FULL' in display:
+            kwargs['mode']= 'HKB'
+            fig,axs[cptax] = self.pltgt(a,b,**kwargs)
+        elif 'TCR' in display or 'FULL' in display:
+            kwargs['mode']= 'TCR'
+            fig,axs[cptax] = self.pltgt(a,b,**kwargs)
+
+        return fig,axs
+        # aa = axs[cptax].axis()
         #
         # calculates visibility and display NLOS region
         # as a yellow patch over the shadowed region
         #
-        if kwargs['visi']:
-            visi = self.visidev(a,b)
-
-        tv = visi.index.values
-        vv = visi.values.astype(int)
-        if (not(vv.all()) and vv.any()):
-            df = vv[1:]-vv[0:-1]
-
-            um = np.where(df==1)[0]
-            ud = np.where(df==-1)[0]
-            lum = len(um)
-            lud = len(ud)
-
-            #
-            # impose same size and starting
-            # on leading edge um and endinf on
-            # falling edge ud
-            #
-            if lum==lud:
-                if ud[0]<um[0]:
-                    um = np.hstack((np.array([0]),um))
-                    ud = np.hstack((ud,np.array([len(vv)-1])))
-            else:
-                if ((lum<lud) & (vv[0]==1)):
-                    um = np.hstack((np.array([0]),um))
-
-                if ((lud<lum) & (vv[len(vv)-1]==1)):
-                    ud = np.hstack((ud,np.array([len(vv)-1])))
-
-
-            tseg = np.array(zip(um,ud))
-            #else:
-            #    tseg = np.array(zip(ud,um))
-        else:
-            if vv.all():
-                tseg = np.array(zip(np.array([0]),np.array([len(vv)-1])))
-
-        # vv.any : it exist NLOS regions
-        if vv.any():
-            for t in tseg:
-                 vertc = [(tv[t[0]],aa[2]),(tv[t[1]],aa[2]),(tv[t[1]],aa[3]),(tv[t[0]],aa[3])]
-                 poly = plt.Polygon(vertc,facecolor='y',alpha=0.3,linewidth=0)
-                 axs[cptax].add_patch(poly)
-
-        #axs[cptax].plot(visi.index.values,visi.values,'r')
-
-
-        if kwargs['inverse']:
-            axs[cptax].set_title(u'Ground Truth : inverse of squared distance',fontsize=kwargs['fontsize']+1)
-        else:
-            axs[cptax].set_title('Ground Truth distance (m)',fontsize=kwargs['fontsize']+1)
-
-        axs[cptax].set_xlabel('Time (s)',fontsize=kwargs['fontsize'])
-        plt.tight_layout()
+        
 
     def showlink(self,a,b,technoa='HKB',technob='HKB',iframe=0):
         """ show link configuation for a given frame
