@@ -10,6 +10,7 @@ import scipy.io as io
 from pylayers.util.project import *
 from pylayers.mobility.ban.body import *
 from pylayers.gis.layout import *
+from matplotlib.widgets import Slider, CheckButtons
 
 from moviepy.editor import *
 from skimage import img_as_ubyte
@@ -676,37 +677,86 @@ beranrd
 
 
 
-    # def offset_setter(self,a,b,**kwargs):
-    #     """ offset setter
-    #     """
-
-    #     fig, ax = plt.subplots()
-    #     fig.subplots_adjust(bottom=0.2, left=0.3)
-
-
-    #     # init boolean value for visible in checkbutton
-    #     blabels = [True]*len(labels)
+    def offset_setter_hkb(self,a,b,**kwargs):
+        """ offset setter
+        """
+        defaults = { 'inverse':True
+                    }
 
 
-    #     ########
-    #     # slider
-    #     ########
-    #     slider_ax = plt.axes([0.1, 0.1, 0.8, 0.02])
-    #     slider = Slider(slider_ax, "time", self.thkb[0][0], self.thkb[0][1],
-    #                     valinit=valinit, color='#AAAAAA')
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
 
-    #     def update(val):
 
-    #         if val >= 1:
-    #             pval=np.where(val>t)[0]
-    #             ax.set_title(str(self[0].index[pval[-1]].time())[:11].ljust(12),
-    #                          loc='left')
-    #             for iT, T in enumerate(self):
-    #                 if T.typ == 'ag':
-    #                     lines[iT].set_xdata(T['x'][pval])
-    #                     lines[iT].set_ydata(T['y'][pval])
-    #             fig.canvas.draw()
-    #     slider.on_changed(update)
+        fig, ax = plt.subplots()
+        fig.subplots_adjust(bottom=0.2, left=0.3)
+
+        if isinstance(a,str):
+            ia = self.dHKB[a]
+        else:
+            ia = a
+            a = self.idHKB[a]
+
+        if isinstance(b,str):
+            ib = self.dHKB[b]
+        else:
+            ib = b
+            b = self.idHKB[b]
+
+
+        time = self.thkb[0]
+        if len(time) == 1:
+            time=time[0]
+
+
+        dhk = self.accessdm(ia,ib,'HKB')
+        if kwargs['inverse']:
+            var = 10*np.log10(1./(self.dist[:,dhk[0],dhk[1]])**2)
+        else :
+            var = self.dist[:,dhk[0],dhk[1]]
+        gt = ax.plot(self.B.time,var)
+
+        sab = self.hkb[a+'-'+b].values
+        sabt = self.hkb[a+'-'+b].index
+        hkb = ax.plot(sabt,sab)
+
+
+        ########
+        # slider
+        ########
+        slide_xoffset_ax = plt.axes([0.1, 0.15, 0.8, 0.02])
+        sliderx = Slider(slide_xoffset_ax, "hkb offset", -(len(sabt)/16), (len(sabt)/16),
+                        valinit=time[0], color='#AAAAAA')
+
+        slide_yoffset_ax = plt.axes([0.1, 0.10, 0.8, 0.02])
+        slidery = Slider(slide_yoffset_ax, "gt_yoff", -100, 0,
+                        valinit=0, color='#AAAAAA')
+
+        slide_alpha_ax = plt.axes([0.1, 0.05, 0.8, 0.02])
+        slideralpha = Slider(slide_alpha_ax, "gt_alpha", 0, 10,
+                        valinit=0, color='#AAAAAA')
+
+        def update_x(val):
+            value = int(sliderx.val)
+            rhkb = np.roll(sab,value)
+            sliderx.valtext.set_text('{}'.format(value))
+            hkb[0].set_xdata(sabt)
+            hkb[0].set_ydata(rhkb)
+            fig.canvas.draw_idle()
+        sliderx.on_changed(update_x)
+        sliderx.drawon = False
+
+
+        def update_y(val):
+            yoff = slidery.val
+            alpha = slideralpha.val
+            gt[0].set_ydata(alpha*var + yoff)
+            fig.canvas.draw_idle()
+        slidery.on_changed(update_y)
+        slideralpha.on_changed(update_y)
+
+        plt.show()
 
 
     def plthkb(self,a,b,**kwargs):
