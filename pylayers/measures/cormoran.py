@@ -1300,7 +1300,7 @@ beranrd
         #
         
 
-    def showlink(self,a,b,technoa='HKB',technob='HKB',iframe=0):
+    def showlink(self,a,b,technoa='HKB',technob='HKB',iframe=0,sif=False):
         """ show link configuation for a given frame
         """
         # display nodes
@@ -1327,7 +1327,8 @@ beranrd
         pc1 = self.B.d[:,1,iframe] + self.B.pg[:,iframe].T
         pc15 = self.B.d[:,15,iframe] + self.B.pg[:,iframe].T
         plt.plot(pc0[0],pc0[1],'og')
-        plt.text(pc0[0]+0.1,pc0[1],str(iframe))
+        if sif:
+            plt.text(pc0[0]+0.1,pc0[1],str(iframe))
         plt.plot(pc1[0],pc1[1],'og')
         plt.plot(pc15[0],pc15[1],'og')
         ci00   = plt.Circle((pc0[0],pc0[1]),self.B.sl[0,2],color='green',alpha=0.1)
