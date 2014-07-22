@@ -26,7 +26,7 @@ class CorSer(PyLayers):
     def __init__(self,serie=6,day=11,source='UR1'):
 
         try:
-            self.rootdir =os.environ['CORMORAN']
+            self.rootdir = os.environ['CORMORAN']
         except:
             raise NameError('Please add a CORMORAN environement variable \
                             pointing to the data')

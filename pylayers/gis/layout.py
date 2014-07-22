@@ -2440,7 +2440,9 @@ class Layout(PyLayers):
             (degrees)
 
         """
+
         a = angle*np.pi/180
+
         for k in self.Gs.pos:
             pt  = self.Gs.pos[k]
             ptr = np.dot(array([[np.cos(a), -np.sin(a)],[np.sin(a),np.cos(a)]]),array(pt))
