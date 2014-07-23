@@ -8,6 +8,7 @@ import numpy as np
 import numpy.ma as ma
 import scipy.io as io
 from pylayers.util.project import *
+from pylayers.util.pyutil import *
 from pylayers.mobility.ban.body import *
 from pylayers.gis.layout import *
 from matplotlib.widgets import Slider, CheckButtons
@@ -65,10 +66,11 @@ class CorSer(PyLayers):
 
 
         # Layout
-        self.L= Layout('MOCAP.ini')
+        self.L= Layout('MOCAP-small.ini')
 
         # Infrastructure Nodes
         self.loadinfranodes()
+        self.loadcam()
 
         # BODY
         self.subject = [str(self.log['Subject'].values[0])]
@@ -109,6 +111,26 @@ class CorSer(PyLayers):
             pass
         return(st)
 
+
+    def loadcam(self):
+
+        self.cam = np.array([
+[-6502.16643961174,5440.97951452912,2296.44437108561],
+[-7782.34866625776,4998.47624994092,2417.5861326688],
+[8308.82897665828,3618.50516290547,2698.07710953287],
+[5606.68337709102,-6354.17891528277,2500.27779697402],
+[-8237.91886515041,-2332.98639475305,4765.31798299242],
+[5496.0942989988,6216.91946236788,2433.30012872688],
+[-8296.19706598514,2430.07325486109,4794.01607841197],
+[7718.37527064615,-4644.26760522485,2584.75330667172],
+[8471.27154730777,-3043.74550832061,2683.45089703377],
+[-8213.04824602894,-4034.57371591121,2368.54548665579],
+[-7184.66711497403,-4950.49444503781,2317.68563412347],
+[7531.66103727189,5279.02353243886,2479.36291603544],
+[-6303.08628709464,-7057.06193926342,2288.84938553817],
+[-5441.17834354692,6637.93014323586,2315.15657646861],
+[8287.79937470615,59.1614281340528,4809.14535447027]
+])*1e-3
 
 
     def loadinfranodes(self):
@@ -582,20 +604,131 @@ beranrd
         plt.title('t = '+str(t1)+'s')
 
 
-    def _show3(self):
-        self.L._show3(opacity=0.5)
-        v = self.din.items()
-        X= np.array([v[i][1] for i in range(len(v))])
-        mlab.points3d(X[:,0],X[:,1], X[:,2],scale_factor=0.1)
-        [mlab.text3d(v[i][1][0],v[i][1][1],v[i][1][2],v[i][0],scale=0.5)
-        for i in range(len(v))]
-        for i in range(0,100,7):
-            self.B.settopos(t=i,cs=True)
-            self.B._show3(dev=True)
-        mlab.view(-128.66519195313163,
-                   50.708933839573511,
-                   24.492297713984247,
-                   np.array([-0.07235499,  0.04868631, -0.00314969]))
+    def _show3(self,**kwargs):
+        """ mayavi 3d show of scenario
+
+        Parameters
+        ----------
+
+        L : boolean
+            display layout (True)
+
+        body :boolean
+            display bodytime(True)
+        devsize : float
+            device on body size (100)
+        bodytime: list
+            list of time instant where body topos has to be shown
+
+        trajectory : boolean
+            display trajectory  (True)
+        tagtraj : boolean
+            tag on trajectory at the 'bodytime' instants (True)
+        tagname : list
+            name of the tagtrajs 
+        tagpoffset : ndarray
+            offset of the tag positions (nb_of_tags x 3)
+        fontsizetag : float
+            size of the tag names
+
+
+        inodes : boolean
+            display infrastructure nodes
+        inname : boolean
+            display infra strucutre node name
+        incolor: str
+            color of infrastructure nodes ('r')
+        insize 
+            size of infrastrucutre nodes (0.1)
+
+
+        camera : boolean
+            display Vicon camera position (True)
+        cameracolor : str
+            color of camera nodes ('b')
+        camerasize  : float
+            size of camera nodes (0.1)
+
+
+
+
+        """
+        defaults = { 'L':True,
+                     'body':True,
+                     'trajectory' :True,
+                     'devsize':100,
+                     'inodes' : True,
+                     'inname' : True,
+                     'incolor' : 'r',
+                     'insize' : 0.1,
+                     'camera':True,
+                     'cameracolor' :'k',
+                     'camerasize' :0.1,
+                     'bodytime':[],
+                     'tagtraj':True,
+                     'tagname':[],
+                     'tagpoffset':[],
+                     'fontsizetag':0.5
+
+                    }
+        
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+        
+        
+        
+            
+
+        cold = pyu.coldict()
+        camhex = cold[kwargs['cameracolor']]
+        cam_color = tuple(pyu.rgb(camhex)/255.)
+        inhex = cold[kwargs['incolor']]
+        in_color = tuple(pyu.rgb(inhex)/255.)
+
+        if kwargs['L']:
+            self.L._show3(opacity=0.5)
+        if kwargs['inodes']:
+            v = self.din.items()
+            X= np.array([v[i][1] for i in range(len(v))])
+            mlab.points3d(X[:,0],X[:,1], X[:,2],scale_factor=kwargs['insize'],color=in_color)
+        if kwargs['inname']:
+            [mlab.text3d(v[i][1][0],v[i][1][1],v[i][1][2],v[i][0],scale=0.5)
+            for i in range(len(v))]
+        if kwargs['body']:
+            if kwargs['bodytime']==[]:
+                time=range(10,100,20)
+            else :
+                time=kwargs['bodytime']
+            for ki, i in enumerate(time):
+                self.B.settopos(t=i,cs=True)
+                self.B._show3(dev=True,devsize=kwargs['devsize'])
+                if kwargs['tagtraj']:
+                    X=self.B.traj[['x','y','z']].values[self.B.toposFrameId]
+                    if kwargs['tagpoffset']==[]:
+                        X[2]=X[2]+0.2
+                    else : 
+                        X=X+kwargs['tagpoffset'][ki]
+                    if kwargs['tagname']==[]:
+                        name = 't='+str(i)+'s'
+                    else :
+                        name = str(kwargs['tagname'][ki])
+                    mlab.text3d(X[0],X[1],X[2],name,scale=kwargs['fontsizetag'])
+
+
+
+        if kwargs['trajectory']:
+            self.B.traj._show3()
+        if kwargs['camera'] : 
+            mlab.points3d(self.cam[:,0],self.cam[:,1], self.cam[:,2],scale_factor=kwargs['camerasize'],color=cam_color)
+        mlab.view(-111.44127634143871,
+                    60.40674368088245,
+                    24.492297713984197,
+                    array([-0.07235499,  0.04868631, -0.00314969]))
+        # mlab.view(-128.66519195313163,
+        #            50.708933839573511,
+        #            24.492297713984247,
+        #            np.array([-0.07235499,  0.04868631, -0.00314969]))
 
     def topandas(self):
         try:

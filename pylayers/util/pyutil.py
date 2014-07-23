@@ -491,7 +491,7 @@ def coldict():
     """
     cold={}
     cold['black']=  '#000000'
-    cold['b']=  '#000000'
+    cold['k']=  '#000000'
     cold['grey']=  '#BEBEBE'
     cold['DimGrey']=  '#696969'
     cold['LightGray']=  '#D3D3D3'
@@ -1049,7 +1049,6 @@ def coldict():
 #    cold['red']=array([1,0,0])
 #    cold['blue']=array([0,0,1])
 #    cold['green']=array([0,1,0])
-#    cold['black']=array([0,0,0])
 #    cold['white']=array([0,0,0])
 #    cold['maroon']=array([0.5,0,0])
 #    cold['fuchsia']=array([1,0,1])
