@@ -652,6 +652,54 @@ def polycol(lpoly,var=[],**kwargs):
 
     return(fig,ax)
 
+def shadow(data,ax):
+    """
+    data : np.array
+        0 or 1
+    ax : matplotlib.axes
 
-if (__name__ == "__main__"):
-    doctest.testmod()
+    """
+
+    if (not(data.all()) and data.any()):
+
+       df = data[1:] - data[0:-1]
+
+       um = np.where(df==1)[0]
+       ud = np.where(df==-1)[0]
+       lum = len(um)
+       lud = len(ud)
+
+       #
+       # impose same size and starting
+       # on leading edge um and endinf on
+       # falling edge ud
+       #
+       if lum==lud:
+           if ud[0]<um[0]:
+               um = np.hstack((np.array([0]),um))
+               ud = np.hstack((ud,np.array([len(data)-1])))
+       else:
+           if ((lum<lud) & (data[0]==1)):
+               um = np.hstack((np.array([0]),um))
+
+           if ((lud<lum) & (data[len(data)-1]==1)):
+               ud = np.hstack((ud,np.array([len(data)-1])))
+
+
+       tseg = np.array(zip(um,ud))
+       #else:
+       #    tseg = np.array(zip(ud,um))
+    else:
+       if data.all():
+           tseg = np.array(zip(np.array([0]),np.array([len(data)-1])))
+
+    # data.any
+    if data.any():
+        for t in tseg:
+           vertc = [(tv[t[0]],aa[2]-500),
+                    (tv[t[1]],aa[2]-500),
+                    (tv[t[1]],aa[3]+500),
+                    (tv[t[0]],aa[3]+500)]
+           poly = plt.Polygon(vertc,facecolor=kwargs['color'],alpha=0.2,linewidth=0)
+           ax.add_patch(poly)
+    return(ax)

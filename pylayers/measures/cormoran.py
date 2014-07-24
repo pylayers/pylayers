@@ -65,7 +65,9 @@ class CorSer(PyLayers):
 
 
         # Layout
-        self.L= Layout('MOCAP.ini')
+        self.L= Layout('MOCAP-small.ini')
+        #self.L= Layout('MOCAP.ini')
+        #self.L= Layout('MOCAPext.ini')
 
         # Infrastructure Nodes
         self.loadinfranodes()
@@ -137,7 +139,7 @@ nico
                    7,8,
                    10,11]
 
-beranrd
+bernard
 
 
                         A3
@@ -396,7 +398,7 @@ beranrd
         self.idHKB={}
         for k in self.dHKB:
             self.idHKB[self.dHKB[k]]=k
-        
+
         if serie != '':
             self._filehkb = filter(lambda x : 'S'+str(serie) in x ,files)[0]
             tt = self._filehkb.split('_')
@@ -797,7 +799,7 @@ beranrd
         if t1 ==-1:
             try:
                 t1=self.thkb[0][-1]
-            except: 
+            except:
                 t1=self.thkb[-1]
 
         if isinstance(a,str):
@@ -812,7 +814,7 @@ beranrd
             ib = b
             b = self.idHKB[b]
 
-
+        label = a+'-'+b
         if kwargs['fig']==[]:
             fig = plt.figure(figsize=kwargs['figsize'])
         else :
@@ -840,15 +842,16 @@ beranrd
                     sba = 10**(sba/10 ) * kwargs['yoffset']
                     sba = np.sqrt(1/sba)
 
-            sab[t0:t1].plot(ax=ax,color=kwargs['colorab'])
+            sab[t0:t1].plot(ax=ax,color=kwargs['colorab'],label=label)
             if kwargs['reciprocal']:
-                sba[t0:t1].plot(ax=ax,color=kwargs['colorba'])
+                sba[t0:t1].plot(ax=ax,color=kwargs['colorba'],label=label)
 
-            title = self.title1+'Received Power for Link : '+a+'-'+b
+            #title = 'Received Power   ' + self.title1
+            title = self.title1
             ax.set_title(label=title,fontsize=kwargs['fontsize'])
             if not kwargs['distance']:
                 if kwargs['dB']:
-                    ax.set_ylabel('dBm')
+                    ax.set_ylabel('Received Power dBm')
                 else:
                     if kwargs['yoffset']==1:
                         ax.set_ylabel('mW')
@@ -943,7 +946,22 @@ beranrd
 
 
     def pltgt(self,a,b,**kwargs):
-        """ plt groundtruth
+        """ plt ground truth
+
+        Parameters
+        ----------
+
+        t0
+        t1
+        fig
+        ax
+        figsize: tuple
+        linestyle'
+        inverse :False,
+        log : boolean
+        gammma':1.,
+        mode : string
+            'HKB' | 'TCR' | 'FULL'
         """
 
         defaults = { 't0':0,
@@ -954,7 +972,7 @@ beranrd
                      'linestyle':'default',
                      'inverse':False,
                      'log':True,
-                     'gamma':1.,
+                     'gamma':-40,
                      'mode':'HKB'
                     }
 
@@ -967,6 +985,8 @@ beranrd
         if t1 ==-1:
             t1=self.thkb[0][-1]
 
+
+        label = a+'-'+b
 
         mode = kwargs.pop('mode')
         inverse = kwargs.pop('inverse')
@@ -1007,24 +1027,26 @@ beranrd
             dhk = self.accessdm(iahk,ibhk,'HKB')
 
             if inverse:
-                var = 1./(self.dist[:,dhk[0],dhk[1]])**2
+                var = 1./(self.dist[:,dhk[0],dhk[1]])
                 ax.set_ylabel(u'$m^{-2}$',fontsize=fontsize)
                 if log :
-                    var = gamma*10*np.log10(var)
-                    ax.set_ylabel(u'$10log_{10}m^{-2}$',fontsize=fontsize)
+                    #var = gamma*10*np.log10(var)
+                    var = 20*np.log10(var)+gamma
+                    ax.set_ylabel(u'$- 20 \log_{10}(d)'+str(gamma)+'$  (dB)',fontsize=fontsize)
+                    plt.ylim(-65,-40)
             else:
                 var = self.dist[:,dhk[0],dhk[1]]
                 ax.set_ylabel(u'meters',fontsize=fontsize)
                 if log :
-                    var = gamma*10*np.log10(var)
+                    var = gamma*10*np.log10(var)+gamma
                     ax.set_ylabel(u'$10log_{10}m^{-2}$',fontsize=fontsize)
 
 
-            ax.plot(self.B.time,var,**kwargs)
+            ax.plot(self.B.time,var,label=label,**kwargs)
         #
         # TCR | Full
         #
-        if mode == 'TCR' or mode == 'FULL': 
+        if mode == 'TCR' or mode == 'FULL':
 
             if isinstance(a,str):
                 iatcr = self.dTCR[a]
@@ -1093,16 +1115,16 @@ beranrd
                 for t in tseg:
 
                     vertc = [(tv[t[0]],aa[2]-500),(tv[t[1]],aa[2]-500),(tv[t[1]],aa[3]+500),(tv[t[0]],aa[3]+500)]
-                    poly = plt.Polygon(vertc,facecolor='y',alpha=0.3,linewidth=0)
+                    poly = plt.Polygon(vertc,facecolor=kwargs['color'],alpha=0.2,linewidth=0)
                     ax.add_patch(poly)
 
         #axs[cptax].plot(visi.index.values,visi.values,'r')
 
 
-        if inverse:
-            ax.set_title(u'Ground Truth : inverse of squared distance',fontsize=fontsize+1)
-        else:
-            ax.set_title('Ground Truth distance (m)',fontsize=fontsize+1)
+        #if inverse:
+        #    ax.set_title(u'Motion Capture Ground Truth :  inverse of squared distance',fontsize=fontsize+1)
+        #else:
+        #    ax.set_title('Motion Capture Ground Truth : evolution of distance (m)',fontsize=fontsize+1)
 
         ax.set_xlabel('Time (s)',fontsize=fontsize)
         plt.tight_layout()
@@ -1133,7 +1155,7 @@ beranrd
             color of tcr curve2 ( if recirpocal)
         linestyletcr:
             linestyle tcr
-        colgt: 
+        colgt:
             color ground truth
         inversegt:
             invert ground truth
@@ -1163,7 +1185,7 @@ beranrd
                      'colgt': 'k',
                      'inversegt':True,
                      'loggt':True,
-                     'gammagt':1,
+                     'gammagt':-40,
                      'fontsize':14,
                      'visi':True,
                      'axs' :[],
@@ -1198,7 +1220,7 @@ beranrd
         if kwargs['axs'] == []:
             kwargs.pop('axs')
             fig,axs = plt.subplots(nrows=ld,ncols=1,figsize=kwargs['figsize'],sharex=True)
-        else : 
+        else :
             fig =plt.gcf()
             axs = kwargs.pop('axs')
 
@@ -1298,23 +1320,23 @@ beranrd
         # calculates visibility and display NLOS region
         # as a yellow patch over the shadowed region
         #
-        
 
-    def showlink(self,a,b,technoa='HKB',technob='HKB',iframe=0):
+
+    def showlink(self,a,b,technoa='HKB',technob='HKB',iframe=0,style='*b'):
         """ show link configuation for a given frame
         """
         # display nodes
         A,B = self.getdevp(a,b,technoa=technoa,technob=technob)
         if A.ndim==2:
-            plt.plot(A[iframe,0],A[iframe,1],'or')
+            plt.plot(A[iframe,0],A[iframe,1],'ob')
             plt.text(A[iframe,0],A[iframe,1],a)
         else:
             plt.plot(A[0],A[1],'or')
-            plt.text(A[0],A[1],a)
+            #plt.text(A[0],A[1],a)
 
         if B.ndim==2:
-            plt.plot(B[iframe,0],B[iframe,1],'ob')
-            plt.text(B[iframe,0],B[iframe,1],b)
+            plt.plot(B[iframe,0],B[iframe,1],style)
+            plt.text(B[iframe,0]+0.1,B[iframe,1]+0.1,b)
         else:
             plt.plot(B[0],B[1],'ob')
             plt.text(B[0],B[1],b)
@@ -1326,20 +1348,20 @@ beranrd
         pc0 = self.B.d[:,0,iframe] + self.B.pg[:,iframe].T
         pc1 = self.B.d[:,1,iframe] + self.B.pg[:,iframe].T
         pc15 = self.B.d[:,15,iframe] + self.B.pg[:,iframe].T
-        plt.plot(pc0[0],pc0[1],'og')
-        plt.text(pc0[0]+0.1,pc0[1],str(iframe))
-        plt.plot(pc1[0],pc1[1],'og')
-        plt.plot(pc15[0],pc15[1],'og')
-        ci00   = plt.Circle((pc0[0],pc0[1]),self.B.sl[0,2],color='green',alpha=0.1)
-        ci01   = plt.Circle((pc1[0],pc1[1]),self.B.sl[0,2],color='green',alpha=0.1)
-        ci100 = plt.Circle((pc0[0],pc0[1]),self.B.sl[10,2],color='red',alpha=0.1)
-        ci1015 = plt.Circle((pc15[0],pc15[1]),self.B.sl[10,2],color='red',alpha=0.1)
+        #plt.plot(pc0[0],pc0[1],'og')
+        #plt.text(pc0[0]+0.1,pc0[1],str(iframe))
+        #plt.plot(pc1[0],pc1[1],'og')
+        #plt.plot(pc15[0],pc15[1],'og')
+        #ci00   = plt.Circle((pc0[0],pc0[1]),self.B.sl[0,2],color='green',alpha=0.6)
+        #ci01   = plt.Circle((pc1[0],pc1[1]),self.B.sl[0,2],color='green',alpha=0.1)
+        #ci100 = plt.Circle((pc0[0],pc0[1]),self.B.sl[10,2],color='red',alpha=0.1)
+        ci1015 = plt.Circle((pc15[0],pc15[1]),self.B.sl[10,2],color='green',alpha=0.5)
         plt.axis('equal')
         ax = plt.gca()
-        ax.add_patch(ci00)
-        ax.add_patch(ci01)
-        ax.add_patch(ci100)
         ax.add_patch(ci1015)
+        #ax.add_patch(ci01)
+        #ax.add_patch(ci100)
+        #ax.add_patch(ci1015)
         #its = self.B.intersectBody(A[iframe,:],B[iframe,:],topos=False,frameId=iframe)
         #x.set_title('frameId :'+str(iframe)+' '+str(its.T))
 
