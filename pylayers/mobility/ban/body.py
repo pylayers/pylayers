@@ -1566,6 +1566,7 @@ class Body(PyLayers):
         defaults = {'iframe' : 0,
                     'widthfactor' : 1.,
                     'tube_sides' : 6,
+                    'opacity':1,
                     'pattern':False,
                     'dev':False,
                     'ccs':False,
@@ -1573,6 +1574,7 @@ class Body(PyLayers):
                     'devcolor':'green',
                     'devid':False,
                     'devopacity':1,
+                    'devsize':5e1,
                     'devtyp':[],
                     'color':'white',
                     'k':0,
@@ -1619,7 +1621,7 @@ class Body(PyLayers):
         tube = mlab.pipeline.tube(self._mayapts, tube_radius=0.05,tube_sides=kwargs['tube_sides'])
         tube.filter.radius_factor = 1.
         tube.filter.vary_radius = 'vary_radius_by_absolute_scalar'
-        mlab.pipeline.surface(tube, color=body_color)
+        mlab.pipeline.surface(tube, color=body_color,opacity=kwargs['opacity'])
         f.children[-1].__setattr__('name',self.name )
                 
         # ax = phe-pta
@@ -1647,12 +1649,12 @@ class Body(PyLayers):
                 X=self._f[fId,udev,:].T-center[:,np.newaxis]
 
             mlab.points3d(X[0,:],X[1,:], X[2,:], 
-                          scale_factor=5e1*self._unit, 
+                          scale_factor=kwargs['devsize']*self._unit, 
                           resolution=10, 
                           color = dev_color,
                           opacity=kwargs['devopacity'])
             nodename = self.dev.keys()
-
+            
             if kwargs['devid']:
 
                 if kwargs['devtyp']== []:
