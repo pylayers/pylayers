@@ -11,7 +11,7 @@ from pylayers.util.project import *
 from pylayers.util.pyutil import *
 from pylayers.mobility.ban.body import *
 from pylayers.gis.layout import *
-from matplotlib.widgets import Slider, CheckButtons
+from matplotlib.widgets import Slider, CheckButtons, Button
 from pylayers.signal.DF import *
 
 from moviepy.editor import *
@@ -89,6 +89,12 @@ class CorSer(PyLayers):
 
         self.title1 = 'Scenario:'+str(self.scenario)+' Serie:'+str(self.serie)+' Run:'+str(self.run)
         self.title2 = 'Type:'+str(self.typ)+ ' Subject:'+str(self.subject[0])
+
+        self.offset={'video':[],
+                     'hkb':[],
+                     'tcr':[],
+                     'bs':[]
+                     }
 
     def __repr__(self):
         st = ''
@@ -571,9 +577,15 @@ bernard
             raise AttributeError('file '+ self._filename + ' not found')
 
 
-    def snapshot(self,t0=0,offset=15.5,save=False):
+    def snapshot(self,t0=0,offset=15.5,title=True,save=False,fig=[],ax=[],figsize=(10,10)):
         """ single snapshot plot
         """
+
+        if fig ==[]:
+            fig=plt.figure(figsize=figsize)
+        if ax == []:
+            ax = fig.add_subplot(111)
+
         videofile = self.rootdir+'/POST-TREATED/' +str(self.day) + '-06-2014/Videos/'
         ldir = os.listdir(videofile)
         luldir = map(lambda x : self._filename in x,ldir)
@@ -583,12 +595,13 @@ bernard
         vc = VideoFileClip(filename)
         F0 = vc.get_frame(t0+offset)
         I0 = img_as_ubyte(F0)
-        plt.subplot(111)
-        plt.imshow(F0)
-        plt.title('t = '+str(t0)+'s')
+        ax.imshow(F0)
+        if title:
+            ax.set_title('t = '+str(t0)+'s')
         if save :
             plt.savefig(self._filename +'_'+str(t0) + '_snap.png',format='png')
 
+        return fig,ax
 
 
     def snapshots(self,t0=0,t1=10,offset=15.5):
@@ -816,6 +829,123 @@ bernard
         #        self.dHKB[(k,l)]=iHKB[k]+' - '+iHKB[l]
         #        cpt = cpt + 1
         return fig,(ax1,ax2)
+
+
+
+    def offset_setter_video(self,a='AP1',b='WristRight',**kwargs):
+        """ video offset setter
+        """
+        defaults = { 'inverse':True
+                    }
+
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+
+        fig, axs = plt.subplots(nrows=2,ncols=1)
+        fig.subplots_adjust(bottom=0.3)
+
+        if isinstance(a,str):
+            ia = self.dHKB[a]
+        else:
+            ia = a
+            a = self.idHKB[a]
+
+        if isinstance(b,str):
+            ib = self.dHKB[b]
+        else:
+            ib = b
+            b = self.idHKB[b]
+
+
+        time = self.thkb[0]
+        if len(time) == 1:
+            time=time[0]
+
+
+        
+        sab = self.hkb[a+'-'+b].values
+        sabt = self.hkb[a+'-'+b].index
+        hkb = axs[1].plot(sabt,sab)
+
+
+
+        videofile = self.rootdir+'/POST-TREATED/' +str(self.day) + '-06-2014/Videos/'
+        ldir = os.listdir(videofile)
+        luldir = map(lambda x : self._filename in x,ldir)
+        uldir = luldir.index(True)
+        _filename = ldir[uldir]
+        filename = videofile+_filename
+        vc = VideoFileClip(filename)
+        F0 = vc.get_frame(0)
+        I0 = img_as_ubyte(F0)
+        axs[0].imshow(F0)
+        
+
+        ########
+        # slider
+        ########
+        slide_xoffset_ax = plt.axes([0.1, 0.15, 0.8, 0.05])
+        sliderx = Slider(slide_xoffset_ax, "video offset", 0, self.hkb.index[-1],
+                        valinit=time[0], color='#AAAAAA')
+
+
+        # vertc = [(0,-10),(0,-10),(0,10),(0,-10)]
+        # poly = plt.Polygon(vertc)
+        # pp = axs[1].add_patch(poly)  
+
+
+        def update_x(val):
+            F0 = vc.get_frame(val)
+            I0 = img_as_ubyte(F0)
+            axs[0].imshow(F0)
+            fig.canvas.draw_idle()
+        sliderx.on_changed(update_x)
+
+        # def cursor(val):
+        #     try :
+        #         pp.remove()
+        #     except:
+        #         pass
+        #     vertc = [(sabt[0]+val,min(sab)-10),(sabt[0]+val,min(sab)-10),(sabt[0]+val,max(sab)+10),(sabt[0]+val,max(sab)-10)]
+        #     poly = plt.Polygon(vertc)
+        #     pp = axs[1].add_patch(poly)  
+        # sliderx.on_changed(cursor)
+
+        def plus(event):
+            sliderx.set_val(sliderx.val +0.2)
+            fig.canvas.draw_idle()
+        sliderx.on_changed(update_x)
+
+
+        def minus(event):
+            sliderx.set_val(sliderx.val -0.2)
+            fig.canvas.draw_idle()
+        sliderx.on_changed(update_x)
+
+
+        def setter(event):
+            self.offset['video']=sliderx.val
+
+        axp = plt.axes([0.3, 0.05, 0.1, 0.075])
+        axset = plt.axes([0.5, 0.05, 0.1, 0.075])
+        axm = plt.axes([0.7, 0.05, 0.1, 0.075])
+
+        bp = Button(axp, '<-')
+        bp.on_clicked(minus)
+
+        bs = Button(axset, 'SET offs.')
+        bs.on_clicked(setter)
+
+        bm = Button(axm, '->')
+        bm.on_clicked(plus)
+
+        plt.show()
+
+
+
 
 
 
