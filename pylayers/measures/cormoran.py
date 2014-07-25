@@ -1051,9 +1051,10 @@ bernard
                     'figsize':(10,10),
                      'ax':[],
                      'showvel':False,
-                     'velth':0.7,
+                     'velth':0.07,
                      'fo':5,
-                     'fw':0.02
+                     'fw':0.02,
+                     'ylim':(-200,0)
                     }
 
         for k in defaults:
@@ -1095,7 +1096,7 @@ bernard
             unu=np.insert(unu,-1,len(null)-1)
             sunu = unu.shape
         nullr=null[unu].reshape(sunu[0]/2,2)
-        fig , ax =plu.rectplot(self.B.time,nullr,ylim=(-110,-50),color='k',fig=f,ax=ax)
+        fig , ax =plu.rectplot(self.B.time,nullr,ylim=kwargs['ylim'],color='k',fig=f,ax=ax)
 
         return fig,ax
 
@@ -1124,7 +1125,9 @@ bernard
                      'colorab':'g',
                      'colorba':'b',
                      'distance':False,
-                    'fontsize':18
+                    'fontsize':18,
+                    'dis_title':True,
+                    'xlim':()
                     }
 
         for k in defaults:
@@ -1180,14 +1183,14 @@ bernard
                 if kwargs['reciprocal']:
                     sba = 10**(sba/10 ) * kwargs['yoffset']
                     sba = np.sqrt(1/sba)
-
-            sab[t0:t1].plot(ax=ax,color=kwargs['colorab'],label=label)
+            sab[t0:t1].plot(ax=ax,color=kwargs['colorab'],label=label,xlim=(t0,t1))
             if kwargs['reciprocal']:
                 sba[t0:t1].plot(ax=ax,color=kwargs['colorba'],label=label)
 
             #title = 'Received Power   ' + self.title1
-            title = self.title1
-            ax.set_title(label=title,fontsize=kwargs['fontsize'])
+            if kwargs['dis_title']:
+                title = self.title1
+                ax.set_title(label=title,fontsize=kwargs['fontsize'])
             if not kwargs['distance']:
                 if kwargs['dB']:
                     ax.set_ylabel('Received Power dBm')
