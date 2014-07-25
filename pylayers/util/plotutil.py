@@ -395,6 +395,55 @@ def mulcplot(x,y,**kwargs):
     return(fig,ax)
 
 
+def rectplot(x,xpos,ylim=[],**kwargs):
+    """ plot rectangles on an axis
+
+    Parameters
+    ----------
+
+    x : ndarray
+        range of x
+    xpos : ndarray (nbrect,2)
+        [[start indice in x rectangle 1, end indice in x rectangle 1],
+        [start indice in x rectangle 2, end indice in x rectangle 2],
+        [start indice in x rectangle n, end indice in x rectangle n]]
+    ylimits : tuple
+        (ymin,ymax) of rectangles
+
+
+    """
+    defaults = { 'fig':[],
+                 'ax':[],
+                 'figsize':(8,8),
+                 'color':'y',
+                 'alpha':0.3,
+                 'linewidth':0
+                }
+
+    for k in defaults:
+                if k not in kwargs:
+                    kwargs[k] = defaults[k]
+
+
+    if kwargs['fig']==[]:
+        fig = plt.figure(figsize=kwargs['figsize'])
+    else : 
+        fig = kwargs['fig']
+    if kwargs['ax'] ==[]:
+        ax = fig.add_subplot(111)
+    else :
+        ax = kwargs.pop('ax')
+
+    if ylim==[]:
+        ylim=ax.axis()[2:]
+    for ux in xpos:
+
+        vertc = [(x[ux[0]],ylim[0]),(x[ux[1]],ylim[0]),(x[ux[1]],ylim[1]),(x[ux[0]],ylim[1])]
+        poly = plt.Polygon(vertc,facecolor=kwargs['color'],alpha=kwargs['alpha'],linewidth=kwargs['linewidth'])
+        ax.add_patch(poly)  
+
+    return fig,ax
+
 def displot(pt, ph, arrow=False, **kwargs ):
     """ discontinuous plot
 

@@ -960,6 +960,7 @@ beranrd
         else :
             ax = kwargs['ax']
 
+
         if kwargs['data']==True:
             #ax.plot(self.thkb[0],self.rssi[ia,ib,:])
             #ax.plot(self.thkb[0],self.rssi[ib,ia,:])
@@ -1088,7 +1089,11 @@ beranrd
                      'inverse':False,
                      'log':True,
                      'gamma':1.,
-                     'mode':'HKB'
+                     'mode':'HKB',
+                     'visi': True,
+                     'fontsize': 14,
+                     'color':'k'
+
                     }
 
         for k in defaults:
@@ -1109,17 +1114,19 @@ beranrd
         fontsize = kwargs.pop('fontsize')
 
 
+
         if kwargs['fig']==[]:
             figsize = kwargs.pop('figsize')
+            kwargs.pop('fig')
             fig = plt.figure(figsize=figsize)
         else:
             kwargs.pop('figsize')
             fig = kwargs.pop('fig')
         if kwargs['ax'] ==[]:
+            kwargs.pop('ax')
             ax = fig.add_subplot(111)
         else :
             ax=kwargs.pop('ax')
-
 
 
 
@@ -1185,49 +1192,15 @@ beranrd
 
         if visibility:
             aa= ax.axis()
-            visi = self.visidev(a,b)
-
-            tv = visi.index.values
-            vv = visi.values.astype(int)
-            if (not(vv.all()) and vv.any()):
-                df = vv[1:]-vv[0:-1]
-
-                um = np.where(df==1)[0]
-                ud = np.where(df==-1)[0]
-                lum = len(um)
-                lud = len(ud)
-
-                #
-                # impose same size and starting
-                # on leading edge um and endinf on
-                # falling edge ud
-                #
-                if lum==lud:
-                    if ud[0]<um[0]:
-                        um = np.hstack((np.array([0]),um))
-                        ud = np.hstack((ud,np.array([len(vv)-1])))
-                else:
-                    if ((lum<lud) & (vv[0]==1)):
-                        um = np.hstack((np.array([0]),um))
-
-                    if ((lud<lum) & (vv[len(vv)-1]==1)):
-                        ud = np.hstack((ud,np.array([len(vv)-1])))
-
-
-                tseg = np.array(zip(um,ud))
-                #else:
-                #    tseg = np.array(zip(ud,um))
-            else:
-                if vv.all():
-                    tseg = np.array(zip(np.array([0]),np.array([len(vv)-1])))
-
+            vv,tv,tseg = self.visiarray(a,b)
             # vv.any : it exist NLOS regions
             if vv.any():
-                for t in tseg:
+                fig,ax=plu.rectplot(tv,tseg,ylim=aa[2:],color=kwargs['color'],fig=fig,ax=ax)
+                # for t in tseg:
 
-                    vertc = [(tv[t[0]],aa[2]-500),(tv[t[1]],aa[2]-500),(tv[t[1]],aa[3]+500),(tv[t[0]],aa[3]+500)]
-                    poly = plt.Polygon(vertc,facecolor='y',alpha=0.3,linewidth=0)
-                    ax.add_patch(poly)
+                #     vertc = [(tv[t[0]],aa[2]-500),(tv[t[1]],aa[2]-500),(tv[t[1]],aa[3]+500),(tv[t[0]],aa[3]+500)]
+                #     poly = plt.Polygon(vertc,facecolor='y',alpha=0.3,linewidth=0)
+                #     ax.add_patch(poly)
 
         #axs[cptax].plot(visi.index.values,visi.values,'r')
 
@@ -1513,6 +1486,47 @@ beranrd
         #return(visi,iframe)
         return(visi)
 
+
+    def visiarray(self,a,b,technoa='HKB',technob='HKB'):
+        """ create entries for plu.rectplot
+        """
+
+        visi = self.visidev(a,b)
+        tv = visi.index.values
+        vv = visi.values.astype(int)
+        if (not(vv.all()) and vv.any()):
+            df = vv[1:]-vv[0:-1]
+
+            um = np.where(df==1)[0]
+            ud = np.where(df==-1)[0]
+            lum = len(um)
+            lud = len(ud)
+
+            #
+            # impose same size and starting
+            # on leading edge um and endinf on
+            # falling edge ud
+            #
+            if lum==lud:
+                if ud[0]<um[0]:
+                    um = np.hstack((np.array([0]),um))
+                    ud = np.hstack((ud,np.array([len(vv)-1])))
+            else:
+                if ((lum<lud) & (vv[0]==1)):
+                    um = np.hstack((np.array([0]),um))
+
+                if ((lud<lum) & (vv[len(vv)-1]==1)):
+                    ud = np.hstack((ud,np.array([len(vv)-1])))
+
+
+            tseg = np.array(zip(um,ud))
+            #else:
+            #    tseg = np.array(zip(ud,um))
+        else:
+            if vv.all():
+                tseg = np.array(zip(np.array([0]),np.array([len(vv)-1])))
+
+        return vv,tv,tseg
 
     def getdevp(self,a,b,technoa='HKB',technob='HKB'):
         """    get device position
