@@ -1054,7 +1054,8 @@ bernard
                      'velth':0.07,
                      'fo':5,
                      'fw':0.02,
-                     'ylim':(-200,0)
+                     'ylim':(-200,0),
+                     'offset':0
                     }
 
         for k in defaults:
@@ -1078,17 +1079,21 @@ bernard
         f.butter(kwargs['fo'],kwargs['fw'],'lowpass')
         Vif=f.filter(Vi)
 
+        zmo = np.zeros(kwargs['offset'])
+        tmp = np.insert(Vif,zmo,0)
+        Vif = tmp[:len(Vif)]
+
         if kwargs['showvel']:
             fig2 = plt.figure()
             ax2=fig2.add_subplot(111)
-            ax2.plot(S.B.time[:-2],Vif)
+            ax2.plot(self.B.time[:-2],Vif)
             ax2.plot(Vif)
             cursor2 = Cursor(ax2, useblit=True, color='gray', linewidth=1)
 
         null = np.where(Vif<kwargs['velth'])[0]
         unu1 = np.where(np.diff(null)!=1)[0]
         unu2 = np.where(np.diff(null[::-1])!=-1)[0]
-
+        unu2 = len(null)-unu2
         unu = np.concatenate((unu1,unu2))
         unu = np.sort(unu)
         sunu = unu.shape
@@ -1126,6 +1131,7 @@ bernard
                      'colorba':'b',
                      'distance':False,
                     'fontsize':18,
+                    'shortlabel':True,
                     'dis_title':True,
                     'xlim':()
                     }
@@ -1155,7 +1161,21 @@ bernard
             ib = b
             b = self.idHKB[b]
 
-        label = a+'-'+b
+        if kwargs['shortlabel']:
+
+            #find uppercase position
+            uu =  np.nonzero([l.isupper() or l.isdigit() for l in a])[0]
+            # cretae string from list
+            labela = ''.join([a[i] for i in uu])
+
+            uu =  np.nonzero([l.isupper() or l.isdigit() for l in b])[0]
+            # cretae string from list
+            labelb = ''.join([b[i] for i in uu])
+
+            label = labela +'-'+labelb 
+        else:
+            label = a+'-'+b
+
         if kwargs['fig']==[]:
             fig = plt.figure(figsize=kwargs['figsize'])
         else :
