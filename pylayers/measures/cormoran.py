@@ -1080,9 +1080,15 @@ bernard
         f.butter(kwargs['fo'],kwargs['fw'],'lowpass')
         Vif=f.filter(Vi)
 
-        zmo = np.zeros(kwargs['offset'])
-        tmp = np.insert(Vif,zmo,0)
-        Vif = tmp[:len(Vif)]
+        if kwargs['offset']>=0:
+            zmo = np.zeros(kwargs['offset'])
+            tmp = np.insert(Vif,zmo,0)
+            Vif = tmp[:len(Vif)]
+        else:
+            zmo = np.zeros(-kwargs['offset'])
+            tmp = np.concatenate((Vif,zmo))
+            Vif = tmp[-kwargs['offset']:len(Vif)-kwargs['offset']]
+
 
         if kwargs['showvel']:
             fig2 = plt.figure()
