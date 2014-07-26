@@ -1037,7 +1037,7 @@ bernard
         Parameters
         ----------
 
-         showvel :  boolean
+        showvel :  boolean
             display filtered velocity 
         velth: float (0.7)
             velocity threshold
@@ -1045,7 +1045,8 @@ bernard
             filter order 
         fw: float (0.02)
             0 < fw < 1  (fN <=> 1)
-
+        offset : int
+            add offset to start later
         """
         defaults = { 'fig':[],
                     'figsize':(10,10),
