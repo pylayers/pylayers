@@ -417,7 +417,8 @@ def rectplot(x,xpos,ylim=[],**kwargs):
                  'figsize':(8,8),
                  'color':'y',
                  'alpha':0.3,
-                 'linewidth':0
+                 'linewidth':0,
+                 'hatch':''
                 }
 
     for k in defaults:
@@ -427,7 +428,7 @@ def rectplot(x,xpos,ylim=[],**kwargs):
 
     if kwargs['fig']==[]:
         fig = plt.figure(figsize=kwargs['figsize'])
-    else : 
+    else :
         fig = kwargs['fig']
     if kwargs['ax'] ==[]:
         ax = fig.add_subplot(111)
@@ -439,8 +440,8 @@ def rectplot(x,xpos,ylim=[],**kwargs):
     for ux in xpos:
 
         vertc = [(x[ux[0]],ylim[0]),(x[ux[1]],ylim[0]),(x[ux[1]],ylim[1]),(x[ux[0]],ylim[1])]
-        poly = plt.Polygon(vertc,facecolor=kwargs['color'],alpha=kwargs['alpha'],linewidth=kwargs['linewidth'])
-        ax.add_patch(poly)  
+        poly = plt.Polygon(vertc,facecolor=kwargs['color'],alpha=kwargs['alpha'],linewidth=kwargs['linewidth'],hatch=kwargs['hatch'])
+        ax.add_patch(poly) 
 
     return fig,ax
 

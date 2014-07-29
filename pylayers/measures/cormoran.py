@@ -24,7 +24,7 @@ def cor_ls():
     filelog = os.environ['CORMORAN'] + '/RAW/Doc/MeasurementLog.csv'
     log = pd.read_csv(filelog)
     return log
-    
+
 
 class CorSer(PyLayers):
     """ Hikob data handling from CORMORAN measurement campaign 11/06/2014
@@ -130,22 +130,22 @@ class CorSer(PyLayers):
     def loadcam(self):
 
         self.cam = np.array([
-[-6502.16643961174,5440.97951452912,2296.44437108561],
-[-7782.34866625776,4998.47624994092,2417.5861326688],
-[8308.82897665828,3618.50516290547,2698.07710953287],
-[5606.68337709102,-6354.17891528277,2500.27779697402],
-[-8237.91886515041,-2332.98639475305,4765.31798299242],
-[5496.0942989988,6216.91946236788,2433.30012872688],
-[-8296.19706598514,2430.07325486109,4794.01607841197],
-[7718.37527064615,-4644.26760522485,2584.75330667172],
-[8471.27154730777,-3043.74550832061,2683.45089703377],
-[-8213.04824602894,-4034.57371591121,2368.54548665579],
-[-7184.66711497403,-4950.49444503781,2317.68563412347],
-[7531.66103727189,5279.02353243886,2479.36291603544],
-[-6303.08628709464,-7057.06193926342,2288.84938553817],
-[-5441.17834354692,6637.93014323586,2315.15657646861],
-[8287.79937470615,59.1614281340528,4809.14535447027]
-])*1e-3
+            [-6502.16643961174,5440.97951452912,2296.44437108561],
+            [-7782.34866625776,4998.47624994092,2417.5861326688],
+            [8308.82897665828,3618.50516290547,2698.07710953287],
+            [5606.68337709102,-6354.17891528277,2500.27779697402],
+            [-8237.91886515041,-2332.98639475305,4765.31798299242],
+            [5496.0942989988,6216.91946236788,2433.30012872688],
+            [-8296.19706598514,2430.07325486109,4794.01607841197],
+            [7718.37527064615,-4644.26760522485,2584.75330667172],
+            [8471.27154730777,-3043.74550832061,2683.45089703377],
+            [-8213.04824602894,-4034.57371591121,2368.54548665579],
+            [-7184.66711497403,-4950.49444503781,2317.68563412347],
+            [7531.66103727189,5279.02353243886,2479.36291603544],
+            [-6303.08628709464,-7057.06193926342,2288.84938553817],
+            [-5441.17834354692,6637.93014323586,2315.15657646861],
+            [8287.79937470615,59.1614281340528,4809.14535447027]
+            ])*1e-3
 
 
     def loadinfranodes(self):
@@ -155,17 +155,17 @@ class CorSer(PyLayers):
 
 nico
 
-                        A4 
+                        A4
                     mpts[6,7,8]
-                        X 
+                        X
 
             A3                     A1
         mpts[9,10,11]        mpts[3,4,5]
             X                      X
 
-                        A2 
+                        A2
                     mpts[0,1,2]
-                        X 
+                        X
 
 
         TCR = mpts[0,3,6,9]
@@ -693,14 +693,11 @@ bernard
                      'fontsizetag':0.5
 
                     }
-        
+
         for k in defaults:
             if k not in kwargs:
                 kwargs[k] = defaults[k]
-        
-        
-        
-            
+
 
         cold = pyu.coldict()
         camhex = cold[kwargs['cameracolor']]
@@ -1061,7 +1058,7 @@ bernard
 
         for k in defaults:
             if k not in kwargs:
-                kwargs[k] = defaults[k]                    
+                kwargs[k] = defaults[k]
 
         if kwargs['fig']==[]:
             fig = plt.figure(figsize=kwargs['figsize'])
@@ -1140,7 +1137,8 @@ bernard
                     'fontsize':18,
                     'shortlabel':True,
                     'dis_title':True,
-                    'xlim':()
+                    'xlim':(),
+                    'tit':''
                     }
 
         for k in defaults:
@@ -1179,7 +1177,7 @@ bernard
             # cretae string from list
             labelb = ''.join([b[i] for i in uu])
 
-            label = labela +'-'+labelb 
+            label = labela +'-'+labelb
         else:
             label = a+'-'+b
 
@@ -1216,11 +1214,12 @@ bernard
 
             #title = 'Received Power   ' + self.title1
             if kwargs['dis_title']:
-                title = self.title1
+                #title = self.title1+kwargs['tit']
+                title = kwargs['tit']
                 ax.set_title(label=title,fontsize=kwargs['fontsize'])
             if not kwargs['distance']:
                 if kwargs['dB']:
-                    ax.set_ylabel('Received Power dBm')
+                    ax.set_ylabel(u'$P_r$ (dBm)',fontsize=18)
                 else:
                     if kwargs['yoffset']==1:
                         ax.set_ylabel('mW')
@@ -1345,7 +1344,8 @@ bernard
                      'mode':'HKB',
                      'visi': True,
                      'fontsize': 14,
-                     'color':'k'
+                     'color':'k',
+                    'hatch':''
                     }
 
         for k in defaults:
@@ -1366,6 +1366,7 @@ bernard
         gamma = kwargs.pop('gamma')
         visibility = kwargs.pop('visi')
         fontsize = kwargs.pop('fontsize')
+        hatch = kwargs.pop('hatch')
 
 
 
@@ -1451,7 +1452,7 @@ bernard
             vv,tv,tseg = self.visiarray(a,b)
             # vv.any : it exist NLOS regions
             if vv.any():
-                fig,ax=plu.rectplot(tv,tseg,ylim=aa[2:],color=kwargs['color'],fig=fig,ax=ax)
+                fig,ax=plu.rectplot(tv,tseg,ylim=aa[2:],color=kwargs['color'],hatch=hatch,fig=fig,ax=ax)
                 # for t in tseg:
 
 
@@ -1526,6 +1527,8 @@ bernard
                      'fontsize':14,
                      'visi':True,
                      'axs' :[],
+                     'gt':True,
+                     'tit':''
                     }
 
         for k in defaults:
@@ -1590,6 +1593,7 @@ bernard
             kwargs['colorab']=kwargs.pop('colhk')
             kwargs['colorba']=kwargs.pop('colhk2')
             kwargs['linestyle']=kwargs.pop('linestylehk')
+            kwargs['tit']=kwargs.pop('tit')
 
             fig,axs[cptax]=self.plthkb(a,b,reciprocal=False,**kwargs)
 
@@ -1636,20 +1640,22 @@ bernard
         #
         # HKB | Full
         #
-        kwargs['color'] = kwargs.pop('colgt')
-        kwargs.pop('colorab')
-        kwargs.pop('colorba')
-        kwargs['ax']=axs[cptax]
-        kwargs['inverse']=kwargs.pop('inversegt')
-        kwargs['log']=kwargs.pop('loggt')
-        kwargs['gamma']=kwargs.pop('gammagt')
+        if kwargs.pop('gt'):
+            kwargs['color'] = kwargs.pop('colgt')
+            kwargs.pop('colorab')
+            kwargs.pop('colorba')
+            kwargs['ax']=axs[cptax]
+            kwargs['inverse']=kwargs.pop('inversegt')
+            kwargs['log']=kwargs.pop('loggt')
+            kwargs['gamma']=kwargs.pop('gammagt')
+            kwargs.pop('tit')
 
-        if 'HKB' in display or 'FULL' in display:
-            kwargs['mode']= 'HKB'
-            fig,axs[cptax] = self.pltgt(a,b,**kwargs)
-        elif 'TCR' in display or 'FULL' in display:
-            kwargs['mode']= 'TCR'
-            fig,axs[cptax] = self.pltgt(a,b,**kwargs)
+            if 'HKB' in display or 'FULL' in display:
+                kwargs['mode']= 'HKB'
+                fig,axs[cptax] = self.pltgt(a,b,**kwargs)
+            elif 'TCR' in display or 'FULL' in display:
+                kwargs['mode']= 'TCR'
+                fig,axs[cptax] = self.pltgt(a,b,**kwargs)
 
         return fig,axs
         # aa = axs[cptax].axis()
