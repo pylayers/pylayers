@@ -125,8 +125,10 @@ pstruc['DIRH'] = 'output/H'
 pstruc['DIRLNK'] = 'output'
 pstruc['DIRBODY'] = 'body'
 pstruc['DIRC3D'] = 'body/c3d'
+pstruc['DIROOSM'] = 'gis/osm'
 pstruc['DIRWEAR'] = 'body/wear'
-# if basename directory does not exit it is created 
+
+# if basename directory does not exit it is created
 try:
     os.chdir(basename)
 except:
@@ -140,10 +142,10 @@ fd = open(basename+'/project.conf','w')
 fd.close()
 #for nm in pstruc.keys():
 for nm,nv in pstruc.items():
-    dirname =  basename + '/'+pstruc[nm] 
-    spl = nv.split('/') # never again a variable called sp 
+    dirname =  basename + '/'+pstruc[nm]
+    spl = nv.split('/') # never again a variable called sp
     if len(spl)>1:
-        if not os.path.isdir(basename + '/'+spl[0]):     
+        if not os.path.isdir(basename + '/'+spl[0]):
             os.mkdir(basename + '/'+spl[0])
             os.mkdir(basename + '/'+nv)
             print "create ",basename + '/'+nv
@@ -155,7 +157,7 @@ for nm,nv in pstruc.items():
         if not os.path.isdir(dirname):
             os.mkdir(dirname)
             print "create ",dirname
-        
+
 
 
 #    try:
@@ -163,7 +165,7 @@ for nm,nv in pstruc.items():
 #        os.chdir('..')
 #    except:
 #        pdb.set_trace()
-#        sp = nv.split('/')  
+#        sp = nv.split('/')
 #        if len(sp)>1:
 #            try:
 #                os.chdir(basename + '/'+sp[0])
@@ -180,7 +182,7 @@ for nm,nv in pstruc.items():
 
 
     if nm == 'DIRANT':
-        antdir = dirname 
+        antdir = dirname
     if nm == 'DIRSTRUC':
         strdir = dirname
     if nm == 'DIRFUR':
@@ -197,6 +199,8 @@ for nm,nv in pstruc.items():
         matdir = dirname
     if nm == 'DIRTRA':
         tradir = dirname
+    if nm == 'DIROOSM':
+        osmdir = dirname
 
 
     fd = open(basename+'/project.conf','a')
@@ -204,7 +208,7 @@ for nm,nv in pstruc.items():
     fd.close()
 
 #
-# copy files from /data/ini in project directory 
+# copy files from /data/ini in project directory
 #
 
 if basename != pylayersdir+'/data':
@@ -222,6 +226,6 @@ if basename != pylayersdir+'/data':
                     pass
                 else:
                     shutil.copy(pylayersdir+'/data/' + dl + '/'+fi,basename+'/' + dl +'/'+fi)
-            
+
 
 os.chdir(currentdir)

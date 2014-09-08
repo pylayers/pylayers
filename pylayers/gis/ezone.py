@@ -5,6 +5,10 @@
 
 This class handles the description of an earth zone
 
+An earth zone gathers raster and vector data
+raster data comes either from srtm or aster data
+vector data comes from openstreetmap
+
 .. autosummary::
     :toctree: generated
 
@@ -17,6 +21,8 @@ import h5py
 import numpy as np
 import pandas as pd
 import struct
+import zipfile
+import pickle
 import os
 import pdb
 import matplotlib.pyplot as plt
@@ -28,6 +34,9 @@ from scipy.interpolate import interp2d
 #from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 from pylayers.util.project import *
+from shapely.geometry import Polygon
+from pylayers.gis.gisutil import *
+import pylayers.gis.srtm as srtm
 from mpl_toolkits.basemap import Basemap
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
@@ -52,6 +61,60 @@ def maxloc(f,threshold=-0.7):
     #
     g[ind] = f[ind]
     return(g)
+
+def encsrtm(lon,lat):
+    """ encode srtm file
+
+    Parameters
+    ----------
+
+    lon : float
+        longitude (degrees)
+    lat : float
+        latitude (degrees)
+
+    Returns
+    -------
+
+    prefix : string
+        srtm prefix filename
+
+    Examples
+    --------
+
+        >>> from pylayers.gis.ezone import *
+        >>> assert encsrtm(-1.5,48.5)=='N48W002'
+        >>> assert encsrtm(0.5,48.5)=='N48E000'
+
+    """
+    if lon>0:
+        slon='E'
+    else:
+        slon='W'
+
+    if lat>0:
+        slat='N'
+    else:
+        slat='S'
+    # rounding and integer to string  conversion 
+    if lat>0:
+        clat = str(np.floor(abs(lat)).astype('int'))
+    else:
+        clat = str(np.ceil(abs(lat)).astype('int'))
+    if lon>0:
+        clon = str(np.floor(abs(lon)).astype('int'))
+    else:
+        clon = str(np.ceil(abs(lon)).astype('int'))
+    # 2 char formating
+    if len(clon)<2:
+        clon ='00'+clon
+    else:
+        clon='0'+clon
+    if len(clat)<2:
+        clat ='0'+clat
+
+    prefix = slat+clat+slon+clon
+    return prefix
 
 def decsrtm(_filehgt='N48W002.HGT'):
     """ decode srtm file
@@ -88,9 +151,11 @@ def expand(A):
     return(w.reshape(M,N,N).swapaxes(1,2))
 
 def conv(extent,m,mode='tocart'):
-    """ convet zone to cartesian or lon lat
+    """ convert zone to cartesian or lon lat
+
     Parameters
     ----------
+
     extent
     m
     mode : string
@@ -100,7 +165,7 @@ def conv(extent,m,mode='tocart'):
     -------
     out : np.array
         [xmin,xmax,ymin,ymax] if mode == 'tocart'
-        [lonin,lonmax,latmin,latmax] if mode == 'toll'
+        [lonmin,lonmax,latmin,latmax] if mode == 'toll'
 
     """
     if mode=='tocart':
@@ -135,21 +200,48 @@ def zone(pt,rm=1000):
     latmax = latc + dphi_rad*180/np.pi
     return (lonmin,latmin,lonmax,latmax)
 
-
-
+class DEM(PyLayers):
     """ Class Digital Elevation Model
     """
     def __init__(self):
         pass
 
-    def loadsrtm(self,_filehgt='N48W002.HGT'):
+    def dwlsrtm(self,lon,lat):
+        """ download srtm tile
+
+        Parameters
+        ----------
+        lat  :
+        lon  :
         """
-            load hgt and lcv files from srtm directory
+        downloader=srtm.SRTMDownloader()
+        downloader.loadFileList()
+        ilat = int(np.floor(lat).astype('int'))
+        ilon = int(np.floor(lon).astype('int'))
+        tile = downloader.getTile(ilat,ilon)
+        self.hgts = np.array(tile.data).reshape(1201,1201)
+        self.hgts[self.hgts<0]=0
+
+    def loadsrtm(self,_filehgt='N48W002.HGT',filehgt=[]):
+        """ load hgt and lcv files fro_m srtm directory
+
+        _filehgt : string
+            short name
+
+        filehgt : string
+            long name
+
+
+        Notes
+        -----
+
+            If a long name is given it has the priority
 
         """
 
         (lom,loM,lam,laM) = decsrtm(_filehgt)
 
+        self.extent = (lom,loM,lam,laM)
         self.lonmin = lom
         self.lonmax = loM
         self.latmin = lam
@@ -157,10 +249,13 @@ def zone(pt,rm=1000):
         self.lon_0  = (lom+loM)/2.
         self.lat_0  = (lam+laM)/2.
 
-        _filelcv = _filehgt.replace('.HGT','.lcv')
+        if filehgt==[]:
+            _filelcv = _filehgt.replace('.HGT','.lcv')
+            filehgt = pyu.getlong(_filehgt,'gis/srtm')
+            filelcv = pyu.getlong(_filelcv,'gis/srtm')
+        else:
+            filelcv = filehgt.replace('.HGT','.lcv')
 
-        filehgt = pyu.getlong(_filehgt,'gis/hgt')
-        filelcv = pyu.getlong(_filelcv,'gis/hgt')
 
         data = np.fromfile(filehgt,dtype='>i2')
         self.hgt = data.reshape(1201,1201)
@@ -176,21 +271,59 @@ def zone(pt,rm=1000):
                          lon_0 = self.lon_0,
                          lat_0 = self.lat_0)
 
-    def loadaster(self,_fileaster='ASTGTM2_N48W002_dem.tif'):
+    def loadaster(self,_fileaster='ASTGTM2_N48W002_dem.tif',fileaster=[]):
         """ Load Aster files
 
         Parameters
         ----------
 
-        """
-        fileaster = pyu.getlong(_fileaster,'gis/aster')
-        f = gdal.Open(fileaster)
-        self.hgt = f.ReadAsArray()
-        self.lonmin = -2
-        self.lonmax = -1
-        self.latmin = 48
-        self.latmax = 49
+        _fileaster : string
+            short name
+        fileaster : string
+            long name
 
+        """
+        if fileaster==[]:
+            fileaster = pyu.getlong(_fileaster,'gis/aster')
+        else:
+            _fieleaster = pyu.getshort(fileaster)
+
+        # zip extraction
+        ext = _fileaster.split('.')
+        if ext[1]=='zip':
+            with zipfile.Zipfile(fileaster) as zf:
+                for member in zf.infolist():
+                    words = member.filename.split('/')
+                    path = dest_dir
+                    for word in words[:-1]:
+                        drive, word = os.path.splitdrive(word)
+                        head, word = os.path.split(word)
+                        if word in (os.curdir, os.pardir, ''):
+                            continue
+                        path = os.path.join(path, word)
+                    zf.extract(member, path)
+
+        prefix =_fileaster.replace('ASTGTM2_','')
+        prefix = prefix.replace('_dem.tif ','.HGT')
+        (lom,loM,lam,laM) = decsrtm(prefix)
+        self.extent = (lom,loM,lam,laM)
+        self.lonmin = lom
+        self.lonmax = loM
+        self.latmin = lam
+        self.latmax = laM
+        self.lon_0  = (lom+loM)/2.
+        self.lat_0  = (lam+laM)/2.
+
+        f = gdal.Open(fileaster)
+        self.hgta = f.ReadAsArray()
+
+        self.m = Basemap(llcrnrlon = self.lonmin,
+                         llcrnrlat = self.latmin,
+                         urcrnrlon = self.lonmax,
+                         urcrnrlat = self.latmax,
+                         resolution = 'i',projection='cass',
+                         lon_0 = self.lon_0,
+                         lat_0 = self.lat_0)
 
 
     def show(self,**kwargs):
@@ -202,7 +335,8 @@ def zone(pt,rm=1000):
         cmap : colormap
 
         """
-        defaults ={'cmap': plt.cm.jet}
+        defaults ={'cmap': plt.cm.jet,
+                   'source':'srtm'}
 
         for k in defaults:
             if k not in kwargs:
@@ -219,7 +353,10 @@ def zone(pt,rm=1000):
             ax =  fig.add_subplot(111)
 
         #im = ax.imshow(dem[ilat[0]:(ilat[-1]+1),ilon[0]:(ilon[-1]+1)],extent=(lonmin,lonmax,latmin,latmax))
-        im = ax.imshow(self.hgt,extent=(self.lonmin,self.lonmax,self.latmin,self.latmax))
+        if kwargs['source']=='srtm':
+            im = ax.imshow(self.hgts,extent=(self.lonmin,self.lonmax,self.latmin,self.latmax))
+        if kwargs['source']=='aster':
+            im = ax.imshow(self.hgta,extent=(self.lonmin,self.lonmax,self.latmin,self.latmax))
 
         # handling colorbar
         divider = make_axes_locatable(ax)
@@ -238,7 +375,6 @@ class Ezone(PyLayers):
         ----------
 
         extent : tuple (lonmin,lonmax,latmin,latmax)
-        dcity  : dict
             dictionnary of cities
         pll    : point lower left
         pur    : point upper right
@@ -249,10 +385,11 @@ class Ezone(PyLayers):
     def __init__(self):
         """
         """
+        self.dbldg={}
         pass
 
     def __repr__(self):
-        st = self.fileh5+'\n'
+        st = self._fileh5+'\n'
         ncar = len(st)
         for c in range(ncar):
             st = st+'-'
@@ -260,19 +397,92 @@ class Ezone(PyLayers):
         st = st+str(self.extent)+'\n'
         st = st+'[ '+("%2.3f" % self.pll[0])+' '+("%2.3f" % self.pur[0])+' '
         st = st+("%2.3f" % self.pll[1])+' '+("%2.3f" % self.pur[1])+' ]\n'
-        #st = st+str(self.pur)+'\n'
-        for city in self.dcity:
-            st = st+city+'\n'
-            st = st+'  '+str(self.dcity[city]['extent'])+'\n'
-            xll,yll = self.m(self.dcity[city]['extent'][0],self.dcity[city]['extent'][2])
-            xru,yru = self.m(self.dcity[city]['extent'][1],self.dcity[city]['extent'][3])
-            st = st+'  [ '+("%2.3f" % xll)+' '+("%2.3f" % yll)+' '
-            st = st+("%2.3f" % xru)+' '+("%2.3f" % yru)+' ]\n'
-
 
         return(st)
 
-    def load(self,_fileh5):
+    def building(self,ltile):
+        """
+        Parameters
+        ----------
+
+        ltile : list of string
+
+        """
+        ltile = filter(lambda x : x in self.dbldg,ltile)
+        self.lpoly = []
+        for it in ltile:
+            h,p=self.dbldg[it]
+            for pt in p:
+                try:
+                    poly = np.vstack((poly,np.array(pt)))
+                except:
+                    poly = np.array(pt)
+                if (sum(pt)==0):
+                    self.lpoly.append(poly[0:-1,:])
+                    del poly
+            try:
+                th = np.hstack((th,h[:,3]))
+            except:
+                th = h[:,3]
+
+
+        self.height = th
+
+    def ls(self):
+        files = os.listdir(basename+'/gis/h5')
+        for f in files:
+            print f
+
+    def fromlonlat(self,lon,lat):
+        """ get an ezone from a point
+
+        Parameters
+        ----------
+
+        lon : float
+        lat : float
+
+        """
+        # Determine the srtm and aster file name
+        self.prefix = encsrtm(lon,lat)
+        dirsrtm  = os.environ['DIRSRTM']
+        diraster = os.environ['DIRASTER']
+
+        _filehgt = self.prefix+'.HGT'
+        _filelcv  = self.prefix+'.lcv'
+        _fileaster  = 'ASTGTM2_'+self.prefix+'_dem.tif'
+
+        filehgt = dirsrtm+'/'+_filehgt
+        filelcv = dirsrtm+'/'+_filelcv
+        fileaster = diraster+'/'+_fileaster
+
+        if (os.path.isfile(filehgt) & os.path.isfile(filelcv)):
+            print "Load srtm file"
+            D = DEM()
+            D.loadsrtm(filehgt=filehgt)
+            self.hgts = D.hgt
+            self.lcv  = D.lcv
+            self.m    = D.m
+            self.extent = D.extent
+            self.pll = self.m(self.extent[0],self.extent[2])
+            self.pur = self.m(self.extent[1],self.extent[3])
+            self.rebase(source='srtm')
+        else:
+            print "Download srtm file"
+            D = DEM()
+            D.dwlsrtm(lon,lat)
+            self.hgts = D.hgts
+        if os.path.isfile(fileaster):
+            print "Load aster file"
+            D = DEM()
+            D.loadaster(fileaster=fileaster)
+            self.hgta = D.hgta
+        else:
+            print "no aster file for this point"
+
+
+
+    def loadh5old(self,_fileh5):
         """ load an Ezone from hdf5 file
 
         Parameters
@@ -287,7 +497,7 @@ class Ezone(PyLayers):
         """
 
         self.fileh5 = pyu.getlong(_fileh5,'gis/h5')
-        f = h5py.File(self.fileh5,'r')
+        f = h5py.File(self.fileh5,'a')
         self.extent = f['extent'].value
 
         self.lon0 = (self.extent[0]+self.extent[1])/2.
@@ -304,13 +514,13 @@ class Ezone(PyLayers):
         self.pll = self.m(self.extent[0],self.extent[2])
         self.pur = self.m(self.extent[1],self.extent[3])
 
-        lcity = f['osm'].keys()
-        self.dcity= {}
-        for city in lcity:
-            self.dcity[city] = {}
-            self.dcity[city]['bdpt'] = f['osm'][city]['bdpt'].value
-            self.dcity[city]['bdma'] = f['osm'][city]['bdma'].value
-            self.dcity[city]['extent'] = f['osm'][city]['extent'].value
+        #lcity = f['osm']
+        #self.dcity= {}
+        #for city in lcity:
+        #    self.dcity[city] = {}
+        #    self.dcity[city]['bdpt']   = f['osm'][city]['bdpt'].value
+        #   self.dcity[city]['bdma']  = f['osm'][city]['bdma'].value
+        #    self.dcity[city]['extent'] = f['osm'][city]['extent'].value
 
         #    lonm =  self.dcity[city]['bdpt'][:,0].min()
         #    lonM =  self.dcity[city]['bdpt'][:,0].max()
@@ -318,8 +528,8 @@ class Ezone(PyLayers):
         #    latM =  self.dcity[city]['bdpt'][:,1].max()
         #    self.dcity[city]['extent'] = (lonm,lonM,latm,latM)
 
-        self.hgt = f['hgt'].value
-        self.lcv = f['lcv'].value
+        self.hgts = f['hgt'].value
+        self.lcvs = f['lcv'].value
         f.close()
 
         self.rebase()
@@ -330,18 +540,22 @@ class Ezone(PyLayers):
         #self.latstep = (self.extent[3]-self.extent[2])/(Nlat-1)
         #self.tocart(Nx=Nlon,Ny=Nlat)
 
-    def rebase(self):
+    def rebase(self,source='srtm'):
         """ reevaluate base
 
         """
-        Nlat,Nlon = self.hgt.shape
+        if source=='srtm':
+            Nlat,Nlon = self.hgts.shape
+        else:
+            Nlat,Nlon = self.hgta.shape
+
         self.lon = np.linspace(self.extent[0],self.extent[1],Nlon)
         self.lat = np.linspace(self.extent[3],self.extent[2],Nlat)
-        self.lonstep = (self.extent[1]-self.extent[0])/(Nlon-1)
-        self.latstep = (self.extent[3]-self.extent[2])/(Nlat-1)
+        self.lonstep = (self.extent[1]-self.extent[0])/(Nlon-1.)
+        self.latstep = (self.extent[3]-self.extent[2])/(Nlat-1.)
         self.tocart(Nx=Nlon,Ny=Nlat)
 
-    def tocart(self,Nx=1201,Ny=1201):
+    def tocart(self,Nx=1201,Ny=1201,source='srtm'):
         """ convert to cartesian coordinates
 
         Parameters
@@ -373,11 +587,16 @@ class Ezone(PyLayers):
         ry = np.round((lat - self.extent[2]) / self.latstep).astype(int)
 
         #
-        self.hgt_cart = self.hgt[ry,rx]
+        if source=='srtm':
+            self.hgts_cart = self.hgts[ry,rx]
+        else:
+            self.hgta_cart = self.hgta[ry,rx]
         #self.lcv_cart = self.lcv[ry,rx]
 
         self.x = x
+        # axis inversion
         self.y = y[::-1]
+        self.extent_c = (self.x.min(),self.x.max(),self.y.min(),self.y.max())
 
     def profile(self,pa,pb,**kwargs):
         """ profile extraction between 2 points
@@ -534,7 +753,6 @@ class Ezone(PyLayers):
         # display coverage region
         #plt.tripcolor(triang, cov.flatten(), shading='gouraud', cmap=plt.cm.jet)
         #plt.figure(figsize=(10,10))
-        print extent_c
         f,a = self.show(contour=False,bldg=True,height=False,coord='cartesian',extent=extent_c)
         plt.tripcolor(triang, Ltot.flatten(), shading='gouraud',
                       cmap=plt.cm.jet,vmax=-50,vmin=-130)
@@ -545,8 +763,43 @@ class Ezone(PyLayers):
         return x,y,r,cov,LOS,hearth,diff,fac,num,LFS
 
 
+    def rennes(self):
+        """
+        """
+        self.prefix='N48W002'
+        Rennes = pd.read_hdf("RennesBis.h5","Building")
+        fd = open('dpoly.pickle','rb')
+        dpoly = pickle.load(fd)
+        fd.close()
+        keys  = np.array(dpoly.keys())
+        lpoly = dpoly.values()
+        #u = np.argsort(np.array(keys))
+
+        var = Rennes['ALT_FAITAG'].values-Rennes['ALT_SOL'].values
+        pg = np.array(map(lambda x : np.array(Polygon(x).centroid.xy).T[0],lpoly)).T
+        lL0=np.array([-2,48])
+        ibd = np.array(ent(pg,lL0))
+        lbdg = np.unique(ibd)
+        for kbld in lbdg:
+            idx = np.where(ibd==kbld)[0]
+            k0 = keys[idx]
+            df0 = Rennes.ix[k0]
+            self.dbldg[kbld] = [df0]
+            #store = pd.HDFStore('Rennesb.h5',mode="a")
+            #group = 'i'+str(k)
+            #store[group+'/df']=df0
+            #store.close()
+            lp0 = [dpoly[k] for k in k0]
+            #f = h5py.File("Rennesb.h5",'a')
+            z2 = np.zeros((2,))[None,:]
+            lp0z = map(lambda x:np.vstack((x,z2)),lp0)
+            alp0 = reduce(lambda x,y:np.vstack((x,y)),lp0z)
+            self.dbldg[kbld].append(alp0)
+            #f[group+'/poly']=alp0
+            #f.close()
+
     def show(self,**kwargs):
-        """ Ezone vizualization 
+        """ Ezone visualization
 
         Parameters
         ----------
@@ -560,9 +813,11 @@ class Ezone(PyLayers):
             display building if True
         coord : string
             'lonlat'| 'cartesian'
+        source: string
+            'srtm' | 'aster'
 
         """
-        defaults = {'title':'title',
+        defaults = {'title':'',
                     'xlabel':'Longitude',
                     'ylabel':'Latitude',
                     'height':True,
@@ -570,6 +825,7 @@ class Ezone(PyLayers):
                     'coord':'lonlat',
                     'extent':[],
                     'contour':False,
+                    'source':'srtm'
                    }
 
         for k in defaults:
@@ -583,7 +839,7 @@ class Ezone(PyLayers):
             if kwargs['coord']=='lonlat':
                 extent = self.extent
             if kwargs['coord']=='cartesian':
-                extent_c = (self.x.min(),self.x.max(),self.y.min(),self.y.max())
+                extent_c = self.extent_c
         else:
             if kwargs['coord']=='cartesian':
                 extent_c = kwargs['extent']
@@ -595,57 +851,77 @@ class Ezone(PyLayers):
         fig = plt.figure(figsize=(10,10))
         ax  = fig.add_subplot(111)
 
-        if kwargs['bldg']:
-            for city in self.dcity.keys():
-                bdpt = self.dcity[city]['bdpt']
-                bdma = self.dcity[city]['bdma'].astype('bool')
+        #
+        # ploting city buildings
+        #
+        #if kwargs['bldg']:
+        #    for city in self.dcity.keys():
+        #        bdpt = self.dcity[city]['bdpt']
+        #        bdma = self.dcity[city]['bdma'].astype('bool')
 
                 # include masked point in the middle of the extent zone
-                bdpt[bdma[:,0],0] = (extent[0]+extent[1])/2.
-                bdpt[bdma[:,0],1] = (extent[2]+extent[3])/2.
+        #        bdpt[bdma[:,0],0] = (extent[0]+extent[1])/2.
+        #        bdpt[bdma[:,0],1] = (extent[2]+extent[3])/2.
 
-                u = np.where((bdpt[:,0]>=extent[0]) &
-                             (bdpt[:,0]<=extent[1]) &
-                             (bdpt[:,1]>=extent[2]) &
-                             (bdpt[:,1]<=extent[3]) )[0]
-                vtx = np.ma.masked_array(bdpt[u,:],bdma[u,:])
+        #        u = np.where((bdpt[:,0]>=extent[0]) &
+        #                     (bdpt[:,0]<=extent[1]) &
+        #                     (bdpt[:,1]>=extent[2]) &
+        #                     (bdpt[:,1]<=extent[3]) )[0]
+        #        vtx = np.ma.masked_array(bdpt[u,:],bdma[u,:])
                 # if cartesian mode do the basemap conversion
-                if kwargs['coord']=='cartesian':
+        #        if kwargs['coord']=='cartesian':
                     # select zone
                     # convert into cartesian
-                    vx,vy  = self.m(bdpt[u,0],bdpt[u,1])
-                    bdmau  = bdma[u,:]
-                    bdpt_c = np.hstack((vx[:,np.newaxis],vy[:,np.newaxis]))
-                    vtx = np.ma.masked_array(bdpt_c,bdmau)
+        #            vx,vy  = self.m(bdpt[u,0],bdpt[u,1])
+        #            bdmau  = bdma[u,:]
+        #            bdpt_c = np.hstack((vx[:,np.newaxis],vy[:,np.newaxis]))
+        #            vtx = np.ma.masked_array(bdpt_c,bdmau)
 
 
-                ax.plot(vtx[:,0],vtx[:,1],linewidth=0.5,color='k')
+        #        ax.plot(vtx[:,0],vtx[:,1],linewidth=0.5,color='k')
 
         if kwargs['coord'] == 'cartesian':
             kwargs['xlabel'] = 'W-E Distance (meters)'
             kwargs['ylabel'] = 'N-S Distance (meters)'
 
+        if kwargs['title']=='':
+            kwargs['title'] = self.prefix
         ax.set_title(kwargs['title'])
         ax.set_xlabel(kwargs['xlabel'])
         ax.set_ylabel(kwargs['ylabel'])
 
         if (kwargs['height'] | kwargs['contour']):
-            shaphgt = self.hgt.shape
+            if kwargs['source']=='srtm':
+                shaphgt = self.hgts.shape
+            else:
+                shaphgt = self.hgta.shape
             # full original x and y
+            #
             if kwargs['coord']=='lonlat':
-                x = self.lon
-                y = self.lat
-                hgt = self.hgt
+                if kwargs['source']=='srtm':
+                    x = np.linspace(self.extent[0],self.extent[1],1201)
+                    # warning the y axis is inversed
+                    y = np.linspace(self.extent[3],self.extent[2],1201)
+                    hgt = self.hgts
+                else:
+                    x = np.linspace(self.extent[0],self.extent[1],3601)
+                    y = np.linspace(self.extent[3],self.extent[2],3601)
+                    hgt = self.hgta
+
             if kwargs['coord']=='cartesian':
-                x = self.x
-                y = self.y
-                hgt = self.hgt_cart
+                if kwargs['source']=='srtm':
+                    x = np.linspace(self.extent_c[0],self.extent_c[1],1201)
+                    y = np.linspace(self.extent_c[3],self.extent_c[2],1201)
+                    hgt = self.hgts_cart
+                else:
+                    x = np.linspace(self.extent_c[0],extent_c[1],3601)
+                    y = np.linspace(self.extent_c[3],extent_c[2],3601)
+                    hgt = self.hgta_cart
                 extent = extent_c
 
             # index corresponding to the selected zone
             ix = np.where((x>=extent[0]) & (x<=extent[1]))[0]
             iy = np.where((y>=extent[2]) & (y<=extent[3]))[0]
-
             if kwargs['height']:
                 im = ax.imshow(hgt[iy[0]:(iy[-1]+1),ix[0]:(ix[-1]+1)],extent=extent)
                 divider = make_axes_locatable(ax)
@@ -684,7 +960,34 @@ class Ezone(PyLayers):
         self.lcv = D.lcv
         #vertices = np.ma.masked_array(pt, ma)
 
-    def saveh5(self,_fileh5='N48W002.h5'):
+    def loadh5(self,prefix):
+        """ load Ezone from an hdf5 file
+
+        Parameters
+        ----------
+
+        prefix : string
+
+        """
+        self.prefix = prefix
+        _fileh5 = self.prefix+'.h5'
+        fileh5 = pyu.getlong(_fileh5,'gis/h5')
+        with h5py.File(fileh5) as fh:
+            if 'extent' in fh:
+                self.extent = fh['extent'][:]
+            if 'dem' in fh:
+                if 'srtm' in fh['dem']:
+                    self.hgts = fh['dem']['srtm']['hgts'][:]
+                if 'aster' in fh['dem']:
+                    self.hgta = fh['dem']['aster']['hgta'][:]
+            if 'bldg' in fh:
+                for k in fh['bldg']:
+                    if 'info' in fh['bldg'][k]:
+                        a = fh['bldg'][k]['info'][:]
+                        b = fh['bldg'][k]['poly'][:]
+                        self.dbldg[k] = [a,b]
+
+    def saveh5(self):
         """ save Ezone in hdf5 format
 
         Parameters
@@ -693,29 +996,57 @@ class Ezone(PyLayers):
         _fileh5
 
         """
+        _fileh5 = self.prefix+'.h5'
         fileh5 = pyu.getlong(_fileh5,'gis/h5')
-        #try:
-        f = h5py.File(fileh5,'w')
-        f.create_group('osm')
-        f['extent'] = self.extent
-        for city in self.dcity:
-            dt = self.dcity[city]
-            f['osm'].create_group(city)
-            f['osm'][city].create_dataset('bdpt',shape=dt['bdpt'].shape,data=dt['bdpt'])
-            f['osm'][city].create_dataset('bdma',shape=dt['bdma'].shape,data=dt['bdma'])
-            f['osm'][city].create_dataset('extent',data=dt['extent'])
-        #f['osm'].create_group('Rennes')
-        #f['osm']['Rennes'].create_dataset('bdpt',shape=self.bdpt.shape,data=self.bdpt)
-        #f['osm']['Rennes'].create_dataset('bdma',shape=self.bdma.shape,data=self.bdma)
-        #f['osm']['Rennes'].create_dataset('extent',data=self.extentc)
+        # if file exists open it in append mode
+        f = h5py.File(fileh5,'a')
 
-        f.create_dataset('hgt',shape=self.hgt.shape,data=self.hgt)
-        f.create_dataset('lcv',shape=self.lcv.shape,data=self.lcv)
+        # create missing groups
+        # extent
+        # dem
+        if u'dem' not in f.keys():
+            dem = f.create_group(u'dem')
+        else:
+            dem = f[u'dem']
+
+        if hasattr(self,'extent'):
+            if 'extent' not in f:
+                f['extent'] = self.extent
+        if u'bldg' not in f.keys():
+            bldg = f.create_group(u'bldg')
+        else:
+            bldg=f[u'bldg']
+
+        if hasattr(self,'hgts'):
+            if u'srtm' not in dem:
+                srtm  = dem.create_group(u'srtm')
+            else:
+                srtm = dem[u'srtm']
+
+            if u'hgts' not in srtm:
+                srtm.create_dataset('hgts',shape=self.hgts.shape,data=self.hgts)
+
+        if hasattr(self,'lcvs'):
+            if 'lcvs' not in srtm:
+                srtm.create_dataset('lcvs',shape=self.lcvs.shape,data=self.lcvs)
+
+        if hasattr(self,'hgta'):
+            if u'aster' not in dem:
+                aster = dem.create_group(u'aster')
+            else:
+                aster = dem[u'aster']
+
+            if 'hgta' not in aster:
+                aster.create_dataset('hgta',shape=self.hgta.shape,data=self.hgta)
+
+        if hasattr(self,'dbldg'):
+            for k in self.dbldg:
+                if k not in bldg:
+                    bldg.create_group(k)
+                    bldg[k]['info'] = np.array(self.dbldg[k][0])
+                    bldg[k]['poly'] = self.dbldg[k][1]
+
         f.close()
-        #except:
-        #    f.close()
-        #    raise NameError('error opening file')
-
 
     def build(self,_fileosm,_filehgt,_filelcv):
         """ build an Ezone from heterogeneous files
@@ -723,7 +1054,8 @@ class Ezone(PyLayers):
         pass
 
 if __name__== "__main__":
-    ez = Ezone()
-    ez.load('N48W002.h5')
-    extent1 = (-1.7,-1.6,48.05,48.15)
-    extent1_cart = conv(extent1,ez.m,mode='tocart')
+    pass
+    #ez = Ezone()
+    #ez.loadh5old('N48W002.h5')
+    #extent1 = (-1.7,-1.6,48.05,48.15)
+    #extent1_cart = conv(extent1,ez.m,mode='tocart')

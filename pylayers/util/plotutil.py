@@ -21,6 +21,7 @@ import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import axes3d
+from matplotlib.collections import PolyCollection
 from matplotlib import cm
 import doctest
 import pdb
@@ -394,6 +395,56 @@ def mulcplot(x,y,**kwargs):
     return(fig,ax)
 
 
+def rectplot(x,xpos,ylim=[],**kwargs):
+    """ plot rectangles on an axis
+
+    Parameters
+    ----------
+
+    x : ndarray
+        range of x
+    xpos : ndarray (nbrect,2)
+        [[start indice in x rectangle 1, end indice in x rectangle 1],
+        [start indice in x rectangle 2, end indice in x rectangle 2],
+        [start indice in x rectangle n, end indice in x rectangle n]]
+    ylimits : tuple
+        (ymin,ymax) of rectangles
+
+
+    """
+    defaults = { 'fig':[],
+                 'ax':[],
+                 'figsize':(8,8),
+                 'color':'y',
+                 'alpha':0.3,
+                 'linewidth':0,
+                 'hatch':''
+                }
+
+    for k in defaults:
+                if k not in kwargs:
+                    kwargs[k] = defaults[k]
+
+
+    if kwargs['fig']==[]:
+        fig = plt.figure(figsize=kwargs['figsize'])
+    else :
+        fig = kwargs['fig']
+    if kwargs['ax'] ==[]:
+        ax = fig.add_subplot(111)
+    else :
+        ax = kwargs.pop('ax')
+
+    if ylim==[]:
+        ylim=ax.axis()[2:]
+    for ux in xpos:
+
+        vertc = [(x[ux[0]],ylim[0]),(x[ux[1]],ylim[0]),(x[ux[1]],ylim[1]),(x[ux[0]],ylim[1])]
+        poly = plt.Polygon(vertc,facecolor=kwargs['color'],alpha=kwargs['alpha'],linewidth=kwargs['linewidth'],hatch=kwargs['hatch'])
+        ax.add_patch(poly) 
+
+    return fig,ax
+
 def displot(pt, ph, arrow=False, **kwargs ):
     """ discontinuous plot
 
@@ -600,6 +651,105 @@ def cylinder(fig,pa,pb,R):
     p = pa[:,:,np.newaxis]+t[np.newaxis,np.newaxis,:]*(pb[:,:,np.newaxis]-pa[:,:,np.newaxis])
     ax.plot(p[0,0,:], p[1,0,:], p[2,0,:], label='parametric curve',color='b')
 
+def polycol(lpoly,var=[],**kwargs):
+    """ plot a collection of polygon
 
-if (__name__ == "__main__"):
-    doctest.testmod()
+    lpoly : list of polygons
+
+    Examples
+    --------
+
+        >>> from pylayers.util.plotutil import *
+        >>> npoly, nverts = 100, 4
+        >>> centers = 100 * (np.random.random((npoly,2)) - 0.5)
+        >>> offsets = 10 * (np.random.random((nverts,npoly,2)) - 0.5)
+        >>> verts = centers + offsets
+        >>> verts = np.swapaxes(verts, 0, 1)
+        >>> var = np.random.random(npoly)*200
+        >>> f,a = polycol(verts,var)
+    """
+    defaults = {'edgecolor':'none',
+                'cmap':cm.jet,
+                'closed':False,
+                'colorbar':True,
+                'dB':False,
+                'm':[]}
+    for k in defaults:
+        if k not in kwargs:
+            kwargs[k]=defaults[k]
+
+    if 'fig' not in kwargs:
+        fig,ax = plt.subplots(1,1)
+    else:
+        fig = kwargs['fig']
+
+
+    if len(var)>0:
+        if kwargs['dB']:
+            var = np.log10(var)
+        else:
+            pass
+        polc = PolyCollection(lpoly,array=var,cmap=kwargs['cmap'],
+                       closed=kwargs['closed'],edgecolor=kwargs['edgecolor'])
+    else:
+        kwargs['colorbar']=False
+        polc = PolyCollection(lpoly,closed=kwargs['closed'],edgecolor=kwargs['edgecolor'])
+    ax.add_collection(polc)
+    ax.autoscale_view()
+
+    if kwargs['colorbar']:
+        fig.colorbar(polc,ax=ax)
+
+    return(fig,ax)
+
+def shadow(data,ax):
+    """
+    data : np.array
+        0 or 1
+    ax : matplotlib.axes
+
+    """
+
+    if (not(data.all()) and data.any()):
+
+       df = data[1:] - data[0:-1]
+
+       um = np.where(df==1)[0]
+       ud = np.where(df==-1)[0]
+       lum = len(um)
+       lud = len(ud)
+
+       #
+       # impose same size and starting
+       # on leading edge um and endinf on
+       # falling edge ud
+       #
+       if lum==lud:
+           if ud[0]<um[0]:
+               um = np.hstack((np.array([0]),um))
+               ud = np.hstack((ud,np.array([len(data)-1])))
+       else:
+           if ((lum<lud) & (data[0]==1)):
+               um = np.hstack((np.array([0]),um))
+
+           if ((lud<lum) & (data[len(data)-1]==1)):
+               ud = np.hstack((ud,np.array([len(data)-1])))
+
+
+       tseg = np.array(zip(um,ud))
+       #else:
+       #    tseg = np.array(zip(ud,um))
+    else:
+       if data.all():
+           tseg = np.array(zip(np.array([0]),np.array([len(data)-1])))
+
+    # data.any
+    if data.any():
+        for t in tseg:
+           vertc = [(tv[t[0]],aa[2]-500),
+                    (tv[t[1]],aa[2]-500),
+                    (tv[t[1]],aa[3]+500),
+                    (tv[t[0]],aa[3]+500)]
+           poly = plt.Polygon(vertc,facecolor=kwargs['color'],alpha=0.2,linewidth=0)
+           ax.add_patch(poly)
+    return(ax)

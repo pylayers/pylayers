@@ -51,7 +51,12 @@ import time
 import doctest
 from matplotlib.widgets import Slider, CheckButtons
 import matplotlib.animation as animation
+try:
+    from mayavi import mlab
+    from tvtk.tools import visual
 
+except:
+    print 'mayavi not installed'
 
 
 class Trajectories(PyLayers,list):
@@ -315,6 +320,10 @@ class Trajectories(PyLayers,list):
         plt.show()
 
 
+
+    def _show3(self):
+
+        [t._show3() for t in self]
 
     def ishow(self):
         """
@@ -752,6 +761,13 @@ class Trajectory(PyLayers,pd.DataFrame):
                  lt.minute*60+
                  lt.hour*3600)*10**(unit)
         return  self.t
+
+
+    def _show3(self):
+
+        X=self[['x','y','z']].values
+        mlab.plot3d(X[:,0],X[:,1],X[:,2],color=(0,0,0))
+
 
     def plot(self, fig=[], ax=[], Nlabels=5, typ='plot', L=[]):
         """ plot trajectory
