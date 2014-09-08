@@ -172,11 +172,11 @@ class CorSer(PyLayers):
         files = os.listdir(dirname)
         if serie != '':
             try:
-                self._fileTCR = filter(lambda x : 'S'+str(serie) in x ,files)[0]
+                self._fileTCR = filter(lambda x : '_S'+str(serie)+'_'in x ,files)[0]
             except:
-                self._fileTCR = filter(lambda x : 's'+str(serie) in x ,files)[0]
+                self._fileTCR = filter(lambda x : '_s'+str(serie)+'_' in x ,files)[0]
             tt = self._fileTCR.split('_')
-            self.scenario=tt[0].replace('Sc','')
+            self.scenario=tt[0].replace('qSc','')
             self.run = tt[2].replace('R','')
             self.typ = tt[3].replace('.csv','').upper()
             self.video = 'NA'
@@ -189,6 +189,7 @@ class CorSer(PyLayers):
         filename = dirname + '/'+ self._fileTCR
         dtTCR = pd.read_csv(filename)
         tcr={}
+        
         for k in self.dTCR:
             for l in self.dTCR:
                 if k!=l:
@@ -200,6 +201,7 @@ class CorSer(PyLayers):
                     d = d[d['time']!=-1]
                     d.index = d['time']
                     del d['time']
+
                     if len(d)!=0:
                         sr = pd.Series(d['dist']/1000,index=d.index)
                         tcr[self.dTCR[k]+'_'+self.dTCR[l]]= sr
@@ -207,7 +209,8 @@ class CorSer(PyLayers):
         self.tcr = pd.DataFrame(tcr)
         self.tcr = self.tcr.fillna(0)
         ts = 75366400./1e9
-        t = np.array(self.tcr.index)*ts
+        t = np.array(self.tcr.index)*ts   
+            
         t = t-t[0]
         self.tcr.index = t
 

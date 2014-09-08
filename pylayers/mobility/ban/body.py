@@ -201,6 +201,7 @@ class Body(PyLayers):
 
         """
         filebody = pyu.getlong(_filebody,pstruc['DIRBODY'])
+        print pstruc['DIRBODY']
         if not os.path.isfile(filebody):
             raise NameError(_filebody + ' cannot be found in'
                              + pyu.getlong('',pstruc['DIRBODY']))
@@ -250,7 +251,6 @@ class Body(PyLayers):
 
         self.idcyl={}
         [self.idcyl.update({v:k}) for k,v in self.dcyl.items()]
-
         # if a mocap file is given in the config file
         if _filemocap == []:
             unit = di['mocap']['unit']
@@ -702,7 +702,7 @@ class Body(PyLayers):
         if not isinstance(traj,tr.Trajectory):
             traj = self.traj
 
-        kf,kt,vsn,wsn,vtn,wtn = self.posvel(traj,t)
+        kf,kt,vsn,wsn,vtn,wtn,alpha = self.posvel(traj,t)
 
 
         psa = np.array([0,0])
@@ -755,7 +755,7 @@ class Body(PyLayers):
 
 
 
-    def setdcs(self, topos = True, frameId =0):
+    def setdcs(self, topos = False, frameId =0):
         """ set device coordinate system (dcs) from a topos
 
         This method evaluates the set of all dcs.
@@ -1647,6 +1647,7 @@ class Body(PyLayers):
             if 'topos' in dir(self):
                 pdev=np.array(self.getdevp(self.dev.keys()))
                 ax.plot(pdev[:,ax1]+offset[0],pdev[:,ax2]+offset[1],'og')
+                
         # plt.axis('scaled')
         return(fig,ax)
 

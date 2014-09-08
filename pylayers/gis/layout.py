@@ -2440,7 +2440,9 @@ class Layout(PyLayers):
             (degrees)
 
         """
+
         a = angle*np.pi/180
+
         for k in self.Gs.pos:
             pt  = self.Gs.pos[k]
             ptr = np.dot(array([[np.cos(a), -np.sin(a)],[np.sin(a),np.cos(a)]]),array(pt))
@@ -2641,7 +2643,7 @@ class Layout(PyLayers):
         pt = self.Gs.pos[np]
         data = multenterbox(message, title, (('x','y')),
                             ((str(pt[0]),str(pt[1]))))
-        self.Gs.pos[np]= tuple((eval(data[0]),eval(data[1])))
+        self.Gs.pos[np]=tuple(eval(data[0]),eval(data[1]))
 
 
     def chgmss(self,ns,ss_name=[],ss_z=[]):
@@ -4669,7 +4671,7 @@ class Layout(PyLayers):
             if convex:
                 #Make the layout convex in regard of the outddor
                 self._convex_hull()
-                # # Ensure convexity of all cycles
+                # # Ensure convexity of all cycles
                 self._convexify()
                 # re-attach new cycles 
                 self.buildGt()
@@ -5182,7 +5184,7 @@ class Layout(PyLayers):
 
         """
 
-        # 1 - Find differences between the convex hull and the Layout contour
+        # 1 - Find differences between the convex hull and the Layout contour
         #     The result of the difference are polygons 
         ch = self.ma.convex_hull
         P = ch.difference(self.ma)
@@ -5200,7 +5202,7 @@ class Layout(PyLayers):
             # p.coorddeter()
             uaw = np.where(p.vnodes == 0)
             for aw in uaw :
-                # 2 - non existing segments are created as airwalls
+                # 2 - non existing segments are created as airwalls
                 awid = self.add_segment(p.vnodes[aw-1][0], p.vnodes[aw+1][0], name='AIR')
                 p.vnodes[aw] = awid
                 G = nx.subgraph(self.Gs,p.vnodes)
@@ -5211,11 +5213,11 @@ class Layout(PyLayers):
                 self.Gt.pos[ncy] = tuple(cy.g)
                 # WARNING
                 # recreate polygon is mandatory otherwise cycle.cycle and polygon.vnodes
-                # are shifted.
+                # are shifted.
                 self.Gt.node[ncy]['polyg'] = p#geu.Polygon(p.xy,cy.cycle)
                 self.Gt.node[ncy]['isopen'] = True
                 self.Gt.node[ncy]['indoor'] = False
-                # 3 - add link between created cycle and outdoor
+                # 3 - add link between created cycle and outdoor
                 self.Gt.add_edge(ncy, 0)
                 # 4 - search and add link between the created cycle and indoor cycles
                 for k in self.Gt.nodes():
@@ -5230,21 +5232,21 @@ class Layout(PyLayers):
 
                             self.Gt.add_edge(ncy, k,segment= segment)
 
-                # 5 - Update Gs
+                # 5 - Update Gs
                 for v in filter(lambda x: x>0,p.vnodes):
                     # add new ncycle to Gs for the new airwall
-                    # that new airwall always separate the new created cycle
-                    # and the outdoor cycle
+                    # that new airwall always separate the new created cycle
+                    # and the outdoor cycle
                     if v == awid :
                         self.Gs.node[awid]['ncycles']=[ncy,0]
                     # other wise update the cycles seen by segments
                     else :
                         cy = self.Gs.node[v]['ncycles'].pop()
-                        # if the pop cycle is the outdoor cycle, 
+                        # if the pop cycle is the outdoor cycle, 
                         # replace it with the new cycle
                         if cy == 0:
                             self.Gs.node[v]['ncycles'].append(ncy)
-                        # else replace old value with [pos cycle , new cycle]
+                        # else replace old value with [pos cycle , new cycle]
                         else:
                             self.Gs.node[v]['ncycles']=[cy,ncy]
                 lncy.append(ncy)
@@ -5280,7 +5282,7 @@ class Layout(PyLayers):
         sp.spatial.Delaunay
 
         """
-        # function for debug purpose
+        # function for debug purpose
         def polyplot(poly):
             fig,ax=self.showG('s')
             color=['r','b','g']*10
@@ -5289,7 +5291,7 @@ class Layout(PyLayers):
         # lacy : list of added cycles
         lacy =[]
         for n in self.Gt.nodes():
-            # if indoor cycle
+            # if indoor cycle
             if n > 0:
                 
                 ncy=max(self.Gt.nodes())
@@ -5303,7 +5305,7 @@ class Layout(PyLayers):
                     tcc, nn = self.Gt.node[n]['polyg'].ptconvex()
                     # diffracting points 
                     utconvex = np.nonzero(tcc == 1)[0]
-                    # all possible diffracting point (in and out of cycle)
+                    # all possible diffracting point (in and out of cycle)
                     utsconvex = np.nonzero(abs(tcc) == 1)[0]
                     if len(utconvex) != 0:
                         # get points ID in the cycle
@@ -5325,7 +5327,7 @@ class Layout(PyLayers):
                             for t in tri:
                                 ts = geu.Polygon(pucs[t])
                                 # check if the new polygon is contained into 
-                                # the original polygon (non guaratee by Delaunay)
+                                # the original polygon (non guaratee by Delaunay)
                                 #U = self.Gt.node[n]['polyg'].contains(ts)
                                 U = self.Gt.node[n]['polyg'].intersection(ts)
                                 if not isinstance(U,sh.MultiPolygon):
@@ -5337,8 +5339,8 @@ class Layout(PyLayers):
                                         uaw = np.where(cp.vnodes == 0)[0]
                                         lvn = len(cp.vnodes)
                                         for i in uaw:
-                                            # keep trace of created airwalls, because some 
-                                            # of them will be destroyed in step 3.
+                                            # keep trace of created airwalls, because some 
+                                            # of them will be destroyed in step 3.
                                             naw.append(self.add_segment(
                                                        cp.vnodes[np.mod(i-1,lvn)],
                                                        cp.vnodes[np.mod(i+1,lvn)]
@@ -5356,7 +5358,7 @@ class Layout(PyLayers):
                             for ip2,p2 in enumerate(polys):
                                 conv=False
                                 inter = p.intersection(p2)
-                                # if 2 triangles have a common segment
+                                # if 2 triangles have a common segment
                                 pold = p
                                 if isinstance(inter,sh.LineString):
                                     p = p + p2
@@ -5398,12 +5400,12 @@ class Layout(PyLayers):
                             ptmp.setvnodes(self)
                             ncpol.append(ptmp)
                             vnodes.extend(ptmp.vnodes)
-                        # air walls to be deleted (because origin Delaunay triangle
+                        # air walls to be deleted (because origin Delaunay triangle
                         # has been merged )
                         daw = filter(lambda x: x not in vnodes,naw)
                         [self.del_segment(d,verbose=False) for d in daw]
                         nbpolys=len(ncpol)
-                        # remove old cycle
+                        # remove old cycle
                         self.Gt.remove_node(n)
                         # lcyid: (new) list of cycle id 
                         lcyid = [n] + range(ncy+1,ncy+(nbpolys))
@@ -5448,11 +5450,11 @@ class Layout(PyLayers):
                                
                                 
 
-        # # update self.Gs.node[x]['ncycles']
+        # # update self.Gs.node[x]['ncycles']
         # self._updGsncy()
-        # # add outside cycle to Gs.node[x]['ncycles']
+        # # add outside cycle to Gs.node[x]['ncycles']
         # self._addoutcy()
-        # # update interaction list into Gt.nodes (cycles)
+        # # update interaction list into Gt.nodes (cycles)
         # self._interlist(nodelist=lacy)
 
     def buildGw(self):
@@ -8163,7 +8165,6 @@ class Layout(PyLayers):
         # k : ss_name v: seg number
         cpt = 0
         subseg = {}
-        #pdb.set_trace()
         for k in d.keys():
             for l in d[k]:
                 ids = l[0]
@@ -8262,7 +8263,7 @@ class Layout(PyLayers):
 
         # manage floor
         
-        # if Gt doesn't exists
+        # if Gt doesn't exists
         try:
             self.ma.coorddeter()
             z=np.ones(self.ma.xy.shape[1])
