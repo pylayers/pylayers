@@ -1755,6 +1755,44 @@ bernard
         #return(visi,iframe)
         return(visi)
 
+    def visidev2(self,a,b,technoa='HKB',technob='HKB',trange=[]):
+        """ get link visibility status 
+
+        Returns
+        -------
+        trange : nd array
+            time range
+        visi : pandas Series
+            0  : LOS
+            1  : NLOS
+
+        """
+
+        A,B = self.getdevp(a,b,technoa,technob)
+        if 'AP' not in a:
+            Nframe = A.shape[0]
+        if 'AP' not in b:
+            Nframe = B.shape[0]
+        # iframe = np.arange(0,Nframe-1,dsf)
+        tvisi = []
+        #
+        # A : Nframe x 3
+        # B : Nframe x 3
+        # B.pg : 3 x Nframe
+        #
+        if self.B.centered:
+            A = A-self.B.pg.T
+            B = B-self.B.pg.T
+
+        for t in trange:
+            fid = self.B.posvel(self.B.traj,t)[0]
+            its = self.B.intersectBody(A[fid,:],B[fid,:],topos=False,frameId=fid)
+            tvisi.append(its.any())
+        visi = pd.Series(tvisi,index=trange)
+        #return(visi,iframe)
+        return(visi)
+
+
 
     def visiarray(self,a,b,technoa='HKB',technob='HKB'):
         """ create entries for plu.rectplot
