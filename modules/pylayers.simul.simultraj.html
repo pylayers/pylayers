@@ -25,8 +25,8 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.simul.simultraj.Simul.__init__" href="generated/pylayers.simul.simultraj.Simul.__init__.html" />
-    <link rel="prev" title="pylayers.simul.simulnet.Simul.runsimul" href="generated/pylayers.simul.simulnet.Simul.runsimul.html" /> 
+    <link rel="next" title="pylayers.util.CDF" href="pylayers.util.CDF.html" />
+    <link rel="prev" title="pylayers.simul.simulnet" href="pylayers.simul.simulnet.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -47,10 +47,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="generated/pylayers.simul.simultraj.Simul.__init__.html" title="pylayers.simul.simultraj.Simul.__init__"
+          <a href="pylayers.util.CDF.html" title="pylayers.util.CDF"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="generated/pylayers.simul.simulnet.Simul.runsimul.html" title="pylayers.simul.simulnet.Simul.runsimul"
+          <a href="pylayers.simul.simulnet.html" title="pylayers.simul.simulnet"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
@@ -63,24 +63,12 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">pylayers.simul.simultraj</a><ul>
-<li><a class="reference internal" href="#simul-class">Simul class</a><ul>
-<li><a class="reference internal" href="#run-simulation-and-data-exploitation">Run simulation and data exploitation</a></li>
-<li><a class="reference internal" href="#internal-configuration">Internal configuration</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
   <h4>Previous topic</h4>
-  <p class="topless"><a href="generated/pylayers.simul.simulnet.Simul.runsimul.html"
-                        title="previous chapter">pylayers.simul.simulnet.Simul.runsimul</a></p>
+  <p class="topless"><a href="pylayers.simul.simulnet.html"
+                        title="previous chapter">pylayers.simul.simulnet</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="generated/pylayers.simul.simultraj.Simul.__init__.html"
-                        title="next chapter">pylayers.simul.simultraj.Simul.__init__</a></p>
+  <p class="topless"><a href="pylayers.util.CDF.html"
+                        title="next chapter">pylayers.util.CDF</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/modules/pylayers.simul.simultraj.txt"
@@ -109,63 +97,6 @@
             
   <div class="section" id="pylayers-simul-simultraj">
 <h1>pylayers.simul.simultraj<a class="headerlink" href="#pylayers-simul-simultraj" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="simul-class">
-<h2>Simul class<a class="headerlink" href="#simul-class" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-</tbody>
-</table>
-<div class="section" id="run-simulation-and-data-exploitation">
-<h3>Run simulation and data exploitation<a class="headerlink" href="#run-simulation-and-data-exploitation" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.__init__.html#pylayers.simul.simultraj.Simul.__init__" title="pylayers.simul.simultraj.Simul.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Simul.__init__</span></tt></a>([_filetraj,&nbsp;verbose])</td>
-<td>object constructor</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.run.html#pylayers.simul.simultraj.Simul.run" title="pylayers.simul.simultraj.Simul.run"><tt class="xref py py-obj docutils literal"><span class="pre">Simul.run</span></tt></a>(**kwargs)</td>
-<td>run the link evaluation along a trajectory</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.gen_net.html#pylayers.simul.simultraj.Simul.gen_net" title="pylayers.simul.simultraj.Simul.gen_net"><tt class="xref py py-obj docutils literal"><span class="pre">Simul.gen_net</span></tt></a>()</td>
-<td>generate Network and associated links</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.evaldeter.html#pylayers.simul.simultraj.Simul.evaldeter" title="pylayers.simul.simultraj.Simul.evaldeter"><tt class="xref py py-obj docutils literal"><span class="pre">Simul.evaldeter</span></tt></a>(na,&nbsp;nb,&nbsp;wstd[,&nbsp;fmode,&nbsp;nf])</td>
-<td>deterministic evaluation of a link</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.evalstat.html#pylayers.simul.simultraj.Simul.evalstat" title="pylayers.simul.simultraj.Simul.evalstat"><tt class="xref py py-obj docutils literal"><span class="pre">Simul.evalstat</span></tt></a>(na,&nbsp;nb)</td>
-<td>statistical evaluation of a link</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.show.html#pylayers.simul.simultraj.Simul.show" title="pylayers.simul.simultraj.Simul.show"><tt class="xref py py-obj docutils literal"><span class="pre">Simul.show</span></tt></a>()</td>
-<td>show actual simlulation configuration</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="internal-configuration">
-<h3>Internal configuration<a class="headerlink" href="#internal-configuration" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul._saveh5.html#pylayers.simul.simultraj.Simul._saveh5" title="pylayers.simul.simultraj.Simul._saveh5"><tt class="xref py py-obj docutils literal"><span class="pre">Simul._saveh5</span></tt></a>(ut,&nbsp;ida,&nbsp;idb,&nbsp;wstd)</td>
-<td>Save in h5py format</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul._loadh5.html#pylayers.simul.simultraj.Simul._loadh5" title="pylayers.simul.simultraj.Simul._loadh5"><tt class="xref py py-obj docutils literal"><span class="pre">Simul._loadh5</span></tt></a>(grpname)</td>
-<td>Load in h5py format</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
 </div>
 
 
@@ -184,10 +115,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="generated/pylayers.simul.simultraj.Simul.__init__.html" title="pylayers.simul.simultraj.Simul.__init__"
+          <a href="pylayers.util.CDF.html" title="pylayers.util.CDF"
              >next</a> |</li>
         <li class="right" >
-          <a href="generated/pylayers.simul.simulnet.Simul.runsimul.html" title="pylayers.simul.simulnet.Simul.runsimul"
+          <a href="pylayers.simul.simulnet.html" title="pylayers.simul.simulnet"
              >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
@@ -200,7 +131,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on juin 09, 2014.
+      Last updated on sept. 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

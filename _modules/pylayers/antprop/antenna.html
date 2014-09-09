@@ -181,6 +181,13 @@
 
 
 <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="c">#from mayavi import mlab</span>
+    <span class="kn">import</span> <span class="nn">mayavi.mlab</span> <span class="kn">as</span> <span class="nn">mlab</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&#39;mayavi not installed&#39;</span>
+
 <span class="kn">import</span> <span class="nn">doctest</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">glob</span>
@@ -193,7 +200,6 @@
 <span class="kn">import</span> <span class="nn">scipy.linalg</span> <span class="kn">as</span> <span class="nn">la</span>
 <span class="kn">import</span> <span class="nn">scipy.special</span> <span class="kn">as</span> <span class="nn">special</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">io</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">as</span> <span class="nn">geu</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
@@ -205,11 +211,8 @@
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">cm</span> <span class="c"># colormaps</span>
 <span class="kn">from</span> <span class="nn">pylayers.antprop.antssh</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
-<span class="k">except</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">&#39;mayavi not installed&#39;</span>
 
+<span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="k">class</span> <span class="nc">Antenna</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Antenna</span>
 
@@ -1373,8 +1376,8 @@
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;legend&#39;</span><span class="p">]:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
         <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
-</div>
-    <span class="nd">@mlab.show</span>
+
+    <span class="c">#@mlab.show</span></div>
 <div class="viewcode-block" id="Antenna._show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna._show3.html#pylayers.antprop.antenna.Antenna._show3">[docs]</a>    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">newfig</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span><span class="n">colorbar</span> <span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                     <span class="n">name</span><span class="o">=</span><span class="p">[],</span><span class="n">title</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span> <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show3 mayavi</span>
@@ -1387,13 +1390,13 @@
 <span class="sd">            display colorbar</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        
+
 
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
-        
+
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_computemesh</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">newfig</span><span class="p">:</span>
@@ -3428,7 +3431,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on juin 09, 2014.
+      Last updated on sept. 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

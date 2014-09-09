@@ -100,11 +100,13 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">io</span>
+<span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">pylayers.signal.bsignal</span>  <span class="kn">as</span> <span class="nn">bs</span>
 <span class="kn">import</span> <span class="nn">scipy.signal</span> <span class="kn">as</span> <span class="nn">si</span>
+<span class="kn">import</span> <span class="nn">numpy.fft</span> <span class="kn">as</span> <span class="nn">fft</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="c">#from EnergyDetector import *</span>
 
-<span class="k">class</span> <span class="nc">DF</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">DF</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Digital Filter Class</span>
 
 <span class="sd">    Methods</span>
@@ -266,26 +268,91 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span>
 </div>
-<div class="viewcode-block" id="DF.freqz"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.freqz.html#pylayers.signal.DF.DF.freqz">[docs]</a>    <span class="k">def</span> <span class="nf">freqz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; freqz : display filter transfer function</span>
+    <span class="k">def</span> <span class="nf">wnxcorr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; filtered noise output autocorrelation</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ---------</span>
+
+<span class="sd">        var : float</span>
+<span class="sd">            input noise variance</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;var&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">defaults</span><span class="p">[</span><span class="s">&#39;var&#39;</span><span class="p">]</span>
+
+        <span class="n">HH</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">symH</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">H2</span> <span class="o">=</span> <span class="n">HH</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">HH</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">N</span>  <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">H2</span><span class="p">)</span>
+        <span class="n">tap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">Rn</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">Usignal</span><span class="p">(</span><span class="n">tap</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">H2</span><span class="p">)))</span><span class="o">*</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;var&#39;</span><span class="p">]</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">Rn</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="DF.freqz"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.freqz.html#pylayers.signal.DF.DF.freqz">[docs]</a>    <span class="k">def</span> <span class="nf">freqz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; freqz :  evaluation of filter transfer function</span>
+
+<span class="sd">        The function evaluates an FUsignal</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        display : boolean </span>
+<span class="sd">            True</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;display&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
         <span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">h</span><span class="p">)</span>    <span class="o">=</span> <span class="n">si</span><span class="o">.</span><span class="n">freqz</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w</span>   <span class="o">=</span> <span class="n">w</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">h</span>   <span class="o">=</span> <span class="n">h</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">h</span><span class="p">)</span><span class="o">+</span><span class="mf">1e-15</span><span class="p">))</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;dB&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Modulus&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">h</span><span class="p">)</span><span class="o">*</span><span class="mf">180.</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;deg&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Relative frequency&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Phase&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-        <span class="c">#show()</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">H</span>   <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">w</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">h</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s">&#39;fig&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;display&#39;</span><span class="p">]:</span>
+            <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;l20&#39;</span><span class="p">],</span><span class="n">xlabels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;relative frequency&#39;</span><span class="p">],</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+            <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;d&#39;</span><span class="p">],</span><span class="n">xlabels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;relative frequency&#39;</span><span class="p">],</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+        <span class="c">#show()</span></div>
+    <span class="k">def</span> <span class="nf">butter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">w</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;low&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Butterwoth digital filter design</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        order : int</span>
+<span class="sd">            filter order</span>
+<span class="sd">        w : array_like</span>
+<span class="sd">            a scalar or length-2 sequnce (relative frequency 0&lt;1  fN &lt;=&gt; 1)</span>
+<span class="sd">        typ : string</span>
+<span class="sd">            &#39;lowpass&#39; | &#39;highpass&#39; | &#39;bandpass&#39; | &#39;bandstop&#39;</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">         &gt;&gt;&gt; from pylayers.signal.bsignal import *</span>
+<span class="sd">         &gt;&gt;&gt; flt = DF()</span>
+<span class="sd">         &gt;&gt;&gt; flt.butter()</span>
+<span class="sd">         &gt;&gt;&gt; flt.freqz()</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="n">order</span>
+        <span class="n">b</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">si</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span><span class="n">order</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">typ</span><span class="p">,</span><span class="n">analog</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span>  <span class="o">=</span> <span class="n">b</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span>  <span class="o">=</span> <span class="n">a</span>
+
 <div class="viewcode-block" id="DF.ellip_bp"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.ellip_bp.html#pylayers.signal.DF.DF.ellip_bp">[docs]</a>    <span class="k">def</span> <span class="nf">ellip_bp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">wp</span><span class="p">,</span><span class="n">ws</span><span class="p">,</span><span class="n">gpass</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">gstop</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Elliptic Bandpath filter</span>
 
@@ -421,7 +488,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on juin 09, 2014.
+      Last updated on sept. 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

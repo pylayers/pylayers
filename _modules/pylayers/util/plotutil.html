@@ -100,6 +100,7 @@
 <span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">axes3d</span>
+<span class="kn">from</span> <span class="nn">matplotlib.collections</span> <span class="kn">import</span> <span class="n">PolyCollection</span>
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">cm</span>
 <span class="kn">import</span> <span class="nn">doctest</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
@@ -473,6 +474,56 @@
     <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
 
 </div>
+<span class="k">def</span> <span class="nf">rectplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">xpos</span><span class="p">,</span><span class="n">ylim</span><span class="o">=</span><span class="p">[],</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; plot rectangles on an axis</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    x : ndarray</span>
+<span class="sd">        range of x</span>
+<span class="sd">    xpos : ndarray (nbrect,2)</span>
+<span class="sd">        [[start indice in x rectangle 1, end indice in x rectangle 1],</span>
+<span class="sd">        [start indice in x rectangle 2, end indice in x rectangle 2],</span>
+<span class="sd">        [start indice in x rectangle n, end indice in x rectangle n]]</span>
+<span class="sd">    ylimits : tuple</span>
+<span class="sd">        (ymin,ymax) of rectangles</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#39;fig&#39;</span><span class="p">:[],</span>
+                 <span class="s">&#39;ax&#39;</span><span class="p">:[],</span>
+                 <span class="s">&#39;figsize&#39;</span><span class="p">:(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">),</span>
+                 <span class="s">&#39;color&#39;</span><span class="p">:</span><span class="s">&#39;y&#39;</span><span class="p">,</span>
+                 <span class="s">&#39;alpha&#39;</span><span class="p">:</span><span class="mf">0.3</span><span class="p">,</span>
+                 <span class="s">&#39;linewidth&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="s">&#39;hatch&#39;</span><span class="p">:</span><span class="s">&#39;&#39;</span>
+                <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                    <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+
+    <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span><span class="o">==</span><span class="p">[]:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;figsize&#39;</span><span class="p">])</span>
+    <span class="k">else</span> <span class="p">:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">]</span> <span class="o">==</span><span class="p">[]:</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+    <span class="k">else</span> <span class="p">:</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;ax&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">ylim</span><span class="o">==</span><span class="p">[]:</span>
+        <span class="n">ylim</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">()[</span><span class="mi">2</span><span class="p">:]</span>
+    <span class="k">for</span> <span class="n">ux</span> <span class="ow">in</span> <span class="n">xpos</span><span class="p">:</span>
+
+        <span class="n">vertc</span> <span class="o">=</span> <span class="p">[(</span><span class="n">x</span><span class="p">[</span><span class="n">ux</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="n">ylim</span><span class="p">[</span><span class="mi">0</span><span class="p">]),(</span><span class="n">x</span><span class="p">[</span><span class="n">ux</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="n">ylim</span><span class="p">[</span><span class="mi">0</span><span class="p">]),(</span><span class="n">x</span><span class="p">[</span><span class="n">ux</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="n">ylim</span><span class="p">[</span><span class="mi">1</span><span class="p">]),(</span><span class="n">x</span><span class="p">[</span><span class="n">ux</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="n">ylim</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+        <span class="n">poly</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">vertc</span><span class="p">,</span><span class="n">facecolor</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;color&#39;</span><span class="p">],</span><span class="n">alpha</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alpha&#39;</span><span class="p">],</span><span class="n">linewidth</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;linewidth&#39;</span><span class="p">],</span><span class="n">hatch</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;hatch&#39;</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span> 
+
+    <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
+
 <div class="viewcode-block" id="displot"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.plotutil.displot.html#pylayers.util.plotutil.displot">[docs]</a><span class="k">def</span> <span class="nf">displot</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">ph</span><span class="p">,</span> <span class="n">arrow</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span> <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; discontinuous plot</span>
 
@@ -678,10 +729,109 @@
     <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.05</span><span class="p">)</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">pa</span><span class="p">[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">+</span><span class="n">t</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span><span class="o">*</span><span class="p">(</span><span class="n">pb</span><span class="p">[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">-</span><span class="n">pa</span><span class="p">[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:],</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,:],</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,:],</span> <span class="n">label</span><span class="o">=</span><span class="s">&#39;parametric curve&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
-
 </div>
-<span class="k">if</span> <span class="p">(</span><span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">):</span>
-    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">polycol</span><span class="p">(</span><span class="n">lpoly</span><span class="p">,</span><span class="n">var</span><span class="o">=</span><span class="p">[],</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; plot a collection of polygon</span>
+
+<span class="sd">    lpoly : list of polygons</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">        &gt;&gt;&gt; from pylayers.util.plotutil import *</span>
+<span class="sd">        &gt;&gt;&gt; npoly, nverts = 100, 4</span>
+<span class="sd">        &gt;&gt;&gt; centers = 100 * (np.random.random((npoly,2)) - 0.5)</span>
+<span class="sd">        &gt;&gt;&gt; offsets = 10 * (np.random.random((nverts,npoly,2)) - 0.5)</span>
+<span class="sd">        &gt;&gt;&gt; verts = centers + offsets</span>
+<span class="sd">        &gt;&gt;&gt; verts = np.swapaxes(verts, 0, 1)</span>
+<span class="sd">        &gt;&gt;&gt; var = np.random.random(npoly)*200</span>
+<span class="sd">        &gt;&gt;&gt; f,a = polycol(verts,var)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;edgecolor&#39;</span><span class="p">:</span><span class="s">&#39;none&#39;</span><span class="p">,</span>
+                <span class="s">&#39;cmap&#39;</span><span class="p">:</span><span class="n">cm</span><span class="o">.</span><span class="n">jet</span><span class="p">,</span>
+                <span class="s">&#39;closed&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
+                <span class="s">&#39;colorbar&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                <span class="s">&#39;dB&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
+                <span class="s">&#39;m&#39;</span><span class="p">:[]}</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="s">&#39;fig&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span>
+
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">var</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;dB&#39;</span><span class="p">]:</span>
+            <span class="n">var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="n">polc</span> <span class="o">=</span> <span class="n">PolyCollection</span><span class="p">(</span><span class="n">lpoly</span><span class="p">,</span><span class="n">array</span><span class="o">=</span><span class="n">var</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cmap&#39;</span><span class="p">],</span>
+                       <span class="n">closed</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;closed&#39;</span><span class="p">],</span><span class="n">edgecolor</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edgecolor&#39;</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;colorbar&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+        <span class="n">polc</span> <span class="o">=</span> <span class="n">PolyCollection</span><span class="p">(</span><span class="n">lpoly</span><span class="p">,</span><span class="n">closed</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;closed&#39;</span><span class="p">],</span><span class="n">edgecolor</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edgecolor&#39;</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">polc</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">autoscale_view</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;colorbar&#39;</span><span class="p">]:</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">polc</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">shadow</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">ax</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    data : np.array</span>
+<span class="sd">        0 or 1</span>
+<span class="sd">    ax : matplotlib.axes</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">all</span><span class="p">())</span> <span class="ow">and</span> <span class="n">data</span><span class="o">.</span><span class="n">any</span><span class="p">()):</span>
+
+       <span class="n">df</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+       <span class="n">um</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">df</span><span class="o">==</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+       <span class="n">ud</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">df</span><span class="o">==-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+       <span class="n">lum</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">um</span><span class="p">)</span>
+       <span class="n">lud</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ud</span><span class="p">)</span>
+
+       <span class="c">#</span>
+       <span class="c"># impose same size and starting</span>
+       <span class="c"># on leading edge um and endinf on</span>
+       <span class="c"># falling edge ud</span>
+       <span class="c">#</span>
+       <span class="k">if</span> <span class="n">lum</span><span class="o">==</span><span class="n">lud</span><span class="p">:</span>
+           <span class="k">if</span> <span class="n">ud</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;</span><span class="n">um</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+               <span class="n">um</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">]),</span><span class="n">um</span><span class="p">))</span>
+               <span class="n">ud</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">ud</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
+       <span class="k">else</span><span class="p">:</span>
+           <span class="k">if</span> <span class="p">((</span><span class="n">lum</span><span class="o">&lt;</span><span class="n">lud</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)):</span>
+               <span class="n">um</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">]),</span><span class="n">um</span><span class="p">))</span>
+
+           <span class="k">if</span> <span class="p">((</span><span class="n">lud</span><span class="o">&lt;</span><span class="n">lum</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)):</span>
+               <span class="n">ud</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">ud</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
+
+
+       <span class="n">tseg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">um</span><span class="p">,</span><span class="n">ud</span><span class="p">))</span>
+       <span class="c">#else:</span>
+       <span class="c">#    tseg = np.array(zip(ud,um))</span>
+    <span class="k">else</span><span class="p">:</span>
+       <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+           <span class="n">tseg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">]),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
+
+    <span class="c"># data.any</span>
+    <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tseg</span><span class="p">:</span>
+           <span class="n">vertc</span> <span class="o">=</span> <span class="p">[(</span><span class="n">tv</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="n">aa</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="mi">500</span><span class="p">),</span>
+                    <span class="p">(</span><span class="n">tv</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="n">aa</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="mi">500</span><span class="p">),</span>
+                    <span class="p">(</span><span class="n">tv</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="n">aa</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="mi">500</span><span class="p">),</span>
+                    <span class="p">(</span><span class="n">tv</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="n">aa</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="mi">500</span><span class="p">)]</span>
+           <span class="n">poly</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">vertc</span><span class="p">,</span><span class="n">facecolor</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;color&#39;</span><span class="p">],</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+           <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 
           </div>
@@ -709,7 +859,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on juin 09, 2014.
+      Last updated on sept. 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

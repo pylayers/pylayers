@@ -1089,7 +1089,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;typ&#39;</span><span class="p">:</span> <span class="s">&#39;m&#39;</span><span class="p">,</span>
-                   <span class="s">&#39;cmap&#39;</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">hot</span><span class="p">,</span>
+                    <span class="s">&#39;cmap&#39;</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">hot</span><span class="p">,</span>
                     <span class="s">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">14</span><span class="p">}</span>
 
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -1150,6 +1150,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        mode : string</span>
 <span class="sd">            &#39;mean&#39;</span>
 <span class="sd">        Friis: boolean</span>
@@ -1175,6 +1176,10 @@
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 
+<span class="sd">        r x f</span>
+<span class="sd">          axis 0 : ray</span>
+<span class="sd">          axis 1 : frequency</span>
+
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1183,10 +1188,12 @@
         <span class="c">#  axis 0 : ray</span>
         <span class="c">#  axis 1 : frequency</span>
         <span class="c">#</span>
+
         <span class="n">ECtt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="n">Friis</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
         <span class="n">ECtp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="n">Friis</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
         <span class="n">ECpt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="n">Friis</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
         <span class="n">ECpp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="n">Friis</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">sumray</span><span class="p">:</span>
             <span class="n">ECtt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ECtt</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">ECtp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ECtp</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -1356,8 +1363,8 @@
         <span class="k">if</span> <span class="n">Friis</span><span class="p">:</span>
             <span class="n">H</span><span class="o">.</span><span class="n">applyFriis</span><span class="p">()</span>
 
-        <span class="n">H</span><span class="o">.</span><span class="n">ak</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
-                                                             <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+        <span class="c">#average w.r.t frequency</span>
+        <span class="n">H</span><span class="o">.</span><span class="n">ak</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">nfreq</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)))</span>
         <span class="n">H</span><span class="o">.</span><span class="n">tk</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">taud</span>
         <span class="k">return</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
 </div>
@@ -1503,6 +1510,8 @@
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;shape  :&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">))</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;tau :&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">taud</span><span class="p">))</span><span class="o">+</span><span class="s">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">taud</span><span class="p">))</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;dist :&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="mf">0.3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">taud</span><span class="p">))</span><span class="o">+</span><span class="s">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mf">0.3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">taud</span><span class="p">))</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isFriis</span><span class="p">:</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;Friis factor -j c/(4 pi f) has been applied&#39;</span>
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
 
 </div>
@@ -1557,16 +1566,16 @@
 <span class="sd">            Layout filename</span>
 <span class="sd">        idx : int</span>
 <span class="sd">            file identifier number</span>
-<span class="sd">        output : bool </span>
+<span class="sd">        output : bool</span>
 <span class="sd">            return an output precised in return</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 
 <span class="sd">        if output:</span>
-<span class="sd">        (a,b,Ta,Tb) </span>
+<span class="sd">        (a,b,Ta,Tb)</span>
 
-<span class="sd">        with </span>
+<span class="sd">        with</span>
 <span class="sd">            a = np.ndarray</span>
 <span class="sd">                postion of point a (transmitter)</span>
 <span class="sd">            b = np.ndarray</span>
@@ -1621,11 +1630,11 @@
 
         <span class="n">filename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLNK&#39;</span><span class="p">])</span>
 
-        <span class="c"># try/except to avoid loosing the h5 file if </span>
+        <span class="c"># try/except to avoid loosing the h5 file if</span>
         <span class="c"># read/write error</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">fh5</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">grpname</span> <span class="ow">in</span> <span class="n">fh5</span><span class="p">[</span><span class="s">&#39;H&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span> 
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">grpname</span> <span class="ow">in</span> <span class="n">fh5</span><span class="p">[</span><span class="s">&#39;H&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">fh5</span><span class="p">[</span><span class="s">&#39;H&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="n">grpname</span><span class="p">)</span>
             <span class="k">else</span> <span class="p">:</span>
                 <span class="k">print</span> <span class="s">&#39;Warning : H/&#39;</span><span class="o">+</span><span class="n">grpname</span> <span class="o">+</span><span class="s">&#39;already exists in &#39;</span><span class="o">+</span><span class="n">filenameh5</span>
@@ -1954,7 +1963,7 @@
                 <span class="n">b</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;dB&#39;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">b</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;Path Loss (dB)&#39;</span><span class="p">)</span>
-            
+
             <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">b</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">get_yticklabels</span><span class="p">():</span>
                 <span class="n">t</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="n">fontsize</span><span class="p">)</span>
 
@@ -1967,13 +1976,13 @@
 <span class="sd">         Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        d: &#39;doa&#39; | &#39;dod&#39;        </span>
+<span class="sd">        d: &#39;doa&#39; | &#39;dod&#39;</span>
 <span class="sd">            display direction of departure | arrival</span>
 <span class="sd">        typ : &#39;ns&#39; | &#39;m&#39;</span>
 <span class="sd">            display delays in nano seconds ( ns) or meter (m)</span>
 <span class="sd">        fig : plt.figure</span>
-<span class="sd">        ax : plt.axis    </span>
-<span class="sd">        a : str </span>
+<span class="sd">        ax : plt.axis</span>
+<span class="sd">        a : str</span>
 <span class="sd">            angle &#39;theta&#39; | &#39;phi&#39;</span>
 <span class="sd">        normalize: bool</span>
 <span class="sd">            energy normalized</span>
@@ -1991,10 +2000,9 @@
 <span class="sd">        colorbar: bool</span>
 <span class="sd">        titel : bool</span>
 <span class="sd">        &#39;clipval&#39;: float</span>
-<span class="sd">            remove values below clipval in dB </span>
+<span class="sd">            remove values below clipval in dB</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span>
-                    <span class="s">&#39;fig&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#39;fig&#39;</span><span class="p">:</span> <span class="p">[],</span>
                     <span class="s">&#39;ax&#39;</span><span class="p">:</span> <span class="p">[],</span>
                     <span class="s">&#39;normalize&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
                     <span class="s">&#39;cmap&#39;</span><span class="p">:</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">hot_r</span><span class="p">,</span>
@@ -2015,9 +2023,6 @@
             <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-
-
-        
 
         <span class="c"># remove non plt.scatter kwargs</span>
 
@@ -2054,7 +2059,7 @@
         <span class="k">if</span> <span class="n">dmax</span> <span class="o">==</span> <span class="p">[]:</span>
             <span class="n">dmax</span><span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
 
-        
+
 
 
         <span class="n">Etot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-15</span>
@@ -2100,7 +2105,7 @@
             <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;m&#39;</span> <span class="p">:</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&quot;distance (m)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
             <span class="k">else</span> <span class="p">:</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">r&quot;$\phi(^{\circ})$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>        
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">r&quot;$\phi(^{\circ})$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">title</span> <span class="p">:</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">&#39;DoA vs delay (ns)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">colorbar</span><span class="p">:</span>
@@ -2471,7 +2476,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on juin 09, 2014.
+      Last updated on sept. 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

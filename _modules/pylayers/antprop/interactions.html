@@ -205,7 +205,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Inter.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.Inter.__init__.html#pylayers.antprop.interactions.Inter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span> <span class="n">idx</span><span class="o">=</span><span class="p">[],</span> <span class="n">_filemat</span><span class="o">=</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="n">_fileslab</span><span class="o">=</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; object constructor</span>
+        <span class="sd">&quot;&quot;&quot; Inter object constructor</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -246,7 +246,6 @@
 <span class="sd">            ordered as in self.idx/self.data</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dusl</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dusl</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">a</span><span class="o">==</span><span class="n">s</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
@@ -258,7 +257,7 @@
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 
-<span class="sd">        if typ</span>
+<span class="sd">        typ</span>
 
 <span class="sd">            1 : Diffraction</span>
 <span class="sd">            2 : Reflection</span>
@@ -267,9 +266,9 @@
 <span class="sd">            si : self.data[:,1]</span>
 <span class="sd">            so : self.data[:,2]</span>
 
-<span class="sd">        if typ = 0</span>
+<span class="sd">        typ = 0</span>
 
-<span class="sd">        if typ = -1</span>
+<span class="sd">        typ = -1</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -333,7 +332,7 @@
 
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span><span class="n">data</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span><span class="n">data</span><span class="p">))</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">=</span><span class="n">data</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
@@ -388,7 +387,8 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        li :</span>
+
+<span class="sd">        li : list</span>
 <span class="sd">            list of interactions</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -450,11 +450,11 @@
 <span class="sd">            with self.nf :  number of frequences</span>
 <span class="sd">            self.nimax : the total number of interactions ( of all rays)</span>
 <span class="sd">        self.sout :</span>
-<span class="sd">            distance from interaction to the next one</span>
+<span class="sd">            distance from one interaction to the next one</span>
 <span class="sd">        self.si0 :</span>
-<span class="sd">            distance from the previous interaction to the the considered one</span>
+<span class="sd">            distance from the previous interaction to the one</span>
 <span class="sd">        self.alpha :</span>
-<span class="sd">            alpha as described into Legendre Thesis</span>
+<span class="sd">            alpha as described in JFL Thesis</span>
 <span class="sd">        self.gamma :</span>
 <span class="sd">            !! gamma**2 !!! (squared included) as described</span>
 
@@ -465,8 +465,8 @@
 
         <span class="c"># f x i x 2 x 2</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nf</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">fGHz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nimax</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sout</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nimax</span><span class="p">))</span>
@@ -512,7 +512,6 @@
 
         <span class="k">except</span><span class="p">:</span>
             <span class="k">pass</span>
-        <span class="c"># .. todo</span>
         <span class="c"># evaluate D and fill I</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">I</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span><span class="p">)</span>
@@ -678,6 +677,7 @@
 <span class="k">class</span> <span class="nc">IntR</span><span class="p">(</span><span class="n">Inter</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Reflexion interaction class</span>
 
+
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="IntR.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.IntR.__init__.html#pylayers.antprop.interactions.IntR.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span> <span class="n">idx</span><span class="o">=</span><span class="p">[]):</span>
 <span class="c">#        self.theta = data[0]</span>
@@ -690,8 +690,7 @@
         <span class="c"># WARNING The index of this dictionnary referes to the idex of self.idx</span>
         <span class="c"># not to the global indx</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dusl</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="c">#        self.dusl=dict.fromkeys(self.slab,np.array((),dtype=int))</span>
-
+<span class="c">#       self.dusl=dict.fromkeys(self.slab,np.array((),dtype=int))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 </div>
@@ -909,7 +908,7 @@
                     <span class="k">except</span><span class="p">:</span>
                         <span class="n">T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">slab</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
                         <span class="n">mapp</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dusl</span><span class="p">[</span><span class="n">m</span><span class="p">])</span>
-            <span class="c"># replace in correct order the Transmission coeff</span>
+            <span class="c"># replace in proper order the Transmission coeff</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">mapp</span><span class="p">)),</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">T</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">mapp</span><span class="p">))]</span> <span class="o">=</span> <span class="n">alpha</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">mapp</span><span class="p">))]</span> <span class="o">=</span> <span class="n">gamma</span>
@@ -996,7 +995,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on juin 09, 2014.
+      Last updated on sept. 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

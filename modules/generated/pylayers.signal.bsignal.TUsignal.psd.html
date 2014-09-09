@@ -100,20 +100,27 @@
 <h1>pylayers.signal.bsignal.TUsignal.psd<a class="headerlink" href="#pylayers-signal-bsignal-tusignal-psd" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.signal.bsignal.TUsignal.psd">
-<tt class="descclassname">TUsignal.</tt><tt class="descname">psd</tt><big>(</big><em>Tpns=100</em>, <em>R=50</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#TUsignal.psd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.TUsignal.psd" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">TUsignal.</tt><tt class="descname">psd</tt><big>(</big><em>Tpns=100</em>, <em>R=50</em>, <em>periodic=True</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#TUsignal.psd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.TUsignal.psd" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculate power spectral density</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>R</strong> : Resistance (default 50 Ohms)</p>
+<blockquote>
+<div><p>Ohms</p>
+</div></blockquote>
 <p><strong>Tpns</strong> : real</p>
 <blockquote>
-<div><p>PRP (default 100 ns)</p>
+<div><p>Signal period PRP (default 100 ns)</p>
 </div></blockquote>
 <p><strong>.. note::</strong> :</p>
 <blockquote class="last">
-<div><p>If time is in ns the resulting PSD is expressed in dBm/MHz (~10-9)</p>
+<div><p>Notice this interesting property that if time is represented in ns
+the resulting PSD is expressed in dBm/MHz because there is the
+same scale factor 1e-9 between second and nanosecond as between
+dBW/Hz and dBm/MHz</p>
+<p>If periodic is False the signal duration is taken as period.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -156,7 +163,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on juin 09, 2014.
+      Last updated on juil. 26, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

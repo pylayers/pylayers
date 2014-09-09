@@ -328,7 +328,7 @@
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.ftshift.html#pylayers.signal.bsignal.TUsignal.ftshift" title="pylayers.signal.bsignal.TUsignal.ftshift"><tt class="xref py py-obj docutils literal"><span class="pre">TUsignal.ftshift</span></tt></a>()</td>
 <td>return the associated FUsignal</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.psd.html#pylayers.signal.bsignal.TUsignal.psd" title="pylayers.signal.bsignal.TUsignal.psd"><tt class="xref py py-obj docutils literal"><span class="pre">TUsignal.psd</span></tt></a>([Tpns,&nbsp;R])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.psd.html#pylayers.signal.bsignal.TUsignal.psd" title="pylayers.signal.bsignal.TUsignal.psd"><tt class="xref py py-obj docutils literal"><span class="pre">TUsignal.psd</span></tt></a>([Tpns,&nbsp;R,&nbsp;periodic])</td>
 <td>calculate power spectral density</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.Yadd_zeros2l.html#pylayers.signal.bsignal.TUsignal.Yadd_zeros2l" title="pylayers.signal.bsignal.TUsignal.Yadd_zeros2l"><tt class="xref py py-obj docutils literal"><span class="pre">TUsignal.Yadd_zeros2l</span></tt></a>(N)</td>
@@ -752,14 +752,14 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Noise.__init__.html#pylayers.signal.bsignal.Noise.__init__" title="pylayers.signal.bsignal.Noise.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Noise.__init__</span></tt></a>([Tobs,&nbsp;fe,&nbsp;DSPdBmpHz,&nbsp;NF,&nbsp;R,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Noise.__init__.html#pylayers.signal.bsignal.Noise.__init__" title="pylayers.signal.bsignal.Noise.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Noise.__init__</span></tt></a>([ti,&nbsp;tf,&nbsp;fsGHz,&nbsp;PSDdBmpHz,&nbsp;...])</td>
 <td>object constructor</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Noise.amplify.html#pylayers.signal.bsignal.Noise.amplify" title="pylayers.signal.bsignal.Noise.amplify"><tt class="xref py py-obj docutils literal"><span class="pre">Noise.amplify</span></tt></a>(GdB,&nbsp;NF)</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Noise.gating.html#pylayers.signal.bsignal.Noise.gating" title="pylayers.signal.bsignal.Noise.gating"><tt class="xref py py-obj docutils literal"><span class="pre">Noise.gating</span></tt></a>(fcGHz,&nbsp;BGHz[,&nbsp;window])</td>
-<td>apply a gating</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Noise.gating.html#pylayers.signal.bsignal.Noise.gating" title="pylayers.signal.bsignal.Noise.gating"><tt class="xref py py-obj docutils literal"><span class="pre">Noise.gating</span></tt></a>(xmin,&nbsp;xmax)</td>
+<td>gating between xmin and xmax</td>
 </tr>
 </tbody>
 </table>
@@ -832,7 +832,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on juin 09, 2014.
+      Last updated on juil. 26, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

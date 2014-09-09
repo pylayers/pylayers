@@ -100,13 +100,19 @@
 <h1>pylayers.gis.layout.Layout.buildGr<a class="headerlink" href="#pylayers-gis-layout-layout-buildgr" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.buildGr">
-<tt class="descclassname">Layout.</tt><tt class="descname">buildGr</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/pylayers/gis/layout.html#Layout.buildGr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.buildGr" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Layout.</tt><tt class="descname">buildGr</tt><big>(</big><em>aw=True</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/gis/layout.html#Layout.buildGr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.buildGr" title="Permalink to this definition">¶</a></dt>
 <dd><p>build the graph of rooms Gr</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>Ga</strong> : graph of adjascent rooms</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>aw</strong> : boolean</p>
+<p><strong>Consider airwalls separation as a new room</strong> :</p>
+<p><strong>(a.k.a use Gt instead of Gc)</strong> :</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Ga</strong> : graph of adjascent rooms</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -152,7 +158,7 @@ segments</p>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on juin 09, 2014.
+      Last updated on juil. 26, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

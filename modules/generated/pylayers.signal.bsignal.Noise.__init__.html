@@ -100,18 +100,33 @@
 <h1>pylayers.signal.bsignal.Noise.__init__<a class="headerlink" href="#pylayers-signal-bsignal-noise-init" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.signal.bsignal.Noise.__init__">
-<tt class="descclassname">Noise.</tt><tt class="descname">__init__</tt><big>(</big><em>Tobs=100</em>, <em>fe=50</em>, <em>DSPdBmpHz=-174</em>, <em>NF=0</em>, <em>R=50</em>, <em>seed=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#Noise.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Noise.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Noise.</tt><tt class="descname">__init__</tt><big>(</big><em>ti=0</em>, <em>tf=100</em>, <em>fsGHz=50</em>, <em>PSDdBmpHz=-174</em>, <em>NF=0</em>, <em>R=50</em>, <em>seed=1</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#Noise.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Noise.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>object constructor</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Tobs</strong> : Time duration</p>
-<p><strong>fe</strong> : sampling frequency</p>
-<p><strong>DSPdBmpHz</strong> : Power Spectral Density Noise (dBm/Hz)</p>
-<p><strong>R</strong> : 50 Ohms</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ti</strong> : float</p>
+<blockquote>
+<div><p>time start (ns)</p>
+</div></blockquote>
+<p><strong>tf</strong> : float</p>
+<blockquote>
+<div><p>time stop (ns)</p>
+</div></blockquote>
+<p><strong>fsGHZ</strong> : float</p>
+<blockquote>
+<div><p>sampling frequency</p>
+</div></blockquote>
+<p><strong>PSDdBmpHz</strong> : float</p>
+<blockquote>
+<div><p>Power Spectral Density Noise (dBm/Hz)</p>
+</div></blockquote>
+<p><strong>R</strong> : float</p>
+<blockquote>
+<div><p>50 Ohms</p>
+</div></blockquote>
 <p><strong>NF</strong> : 0</p>
-<p><strong>R</strong> : 50</p>
 <p class="last"><strong>seed</strong> : []</p>
 </td>
 </tr>
@@ -154,7 +169,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on juin 09, 2014.
+      Last updated on juil. 26, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

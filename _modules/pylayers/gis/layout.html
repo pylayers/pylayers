@@ -2495,6 +2495,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
+
 <div class="viewcode-block" id="Layout.translate"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.translate.html#pylayers.gis.layout.Layout.translate">[docs]</a>    <span class="k">def</span> <span class="nf">translate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">vec</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; translate layout</span>
 
@@ -2509,7 +2510,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">vec</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 </div>
 <div class="viewcode-block" id="Layout.rotate"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.rotate.html#pylayers.gis.layout.Layout.rotate">[docs]</a>    <span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">angle</span><span class="o">=</span><span class="mi">90</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; rotate layout</span>
+        <span class="sd">&quot;&quot;&quot; rotate the layout</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2518,9 +2519,11 @@
 <span class="sd">            (degrees)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">a</span> <span class="o">=</span> <span class="n">angle</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span>
+
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">:</span>
-            <span class="n">pt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">pt</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
             <span class="n">ptr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">array</span><span class="p">([[</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)],[</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">)]]),</span><span class="n">array</span><span class="p">(</span><span class="n">pt</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">ptr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">ptr</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
@@ -5571,7 +5574,7 @@
 
             <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">Id</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
 
-            <span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="s">&#39;AIR&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">True</span><span class="p">:</span><span class="c">#name != &#39;AIR&#39;:</span>
                 <span class="n">pn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">Id</span><span class="p">][</span><span class="s">&#39;norm&#39;</span><span class="p">]</span>
                 <span class="n">sl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
                 <span class="n">thick</span> <span class="o">=</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;lthick&#39;</span><span class="p">])</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span><span class="o">+</span><span class="mf">0.2</span>
@@ -5621,6 +5624,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="n">upd0</span><span class="p">,</span><span class="n">upd1</span><span class="p">)])</span>
             <span class="c"># Airwalls case</span>
             <span class="k">else</span> <span class="p">:</span>
+
                 <span class="n">pdoor</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">up0</span><span class="p">)</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">up1</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span>  
                 <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">d_id_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">pdoor</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">d_id_index</span><span class="p">),(</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">d_id_index</span><span class="p">)])</span>
@@ -7339,8 +7343,16 @@
             <span class="n">ldif</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">lpnt</span><span class="p">[</span><span class="n">x</span><span class="p">],</span><span class="n">ucvx</span><span class="p">)</span>
             <span class="n">tldif</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ldif</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Layout.buildGr"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.buildGr.html#pylayers.gis.layout.Layout.buildGr">[docs]</a>    <span class="k">def</span> <span class="nf">buildGr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Layout.buildGr"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.buildGr.html#pylayers.gis.layout.Layout.buildGr">[docs]</a>    <span class="k">def</span> <span class="nf">buildGr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">aw</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; build the graph of rooms Gr</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        aw : boolean</span>
+
+<span class="sd">        Consider airwalls separation as a new room</span>
+<span class="sd">        (a.k.a use Gt instead of Gc)</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -7357,7 +7369,11 @@
 <span class="sd">        segments</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gc</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">aw</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gc</span><span class="p">)</span>
+
         <span class="k">try</span><span class="p">:</span>
             <span class="k">del</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">except</span><span class="p">:</span>
@@ -8134,7 +8150,7 @@
         <span class="k">return</span> <span class="n">pg</span>
 </div>
     <span class="nd">@mlab.show</span>
-    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">opacity</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+<div class="viewcode-block" id="Layout._show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout._show3.html#pylayers.gis.layout.Layout._show3">[docs]</a>    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">opacity</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create a .off geomview file</span>
 
 <span class="sd">        Parameters</span>
@@ -8228,7 +8244,6 @@
         <span class="c"># k : ss_name v: seg number</span>
         <span class="n">cpt</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">subseg</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="c">#pdb.set_trace()</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]:</span>
                 <span class="n">ids</span> <span class="o">=</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -8375,7 +8390,7 @@
                                     <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">)</span>
         <span class="n">f</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Layout &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span>
 
-
+</div>
 <div class="viewcode-block" id="Layout.show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.show3.html#pylayers.gis.layout.Layout.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bdis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; geomview display of the indoor structure</span>
 
@@ -8788,7 +8803,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on juin 09, 2014.
+      Last updated on sept. 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

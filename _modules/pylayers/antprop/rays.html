@@ -139,7 +139,7 @@
     <span class="k">print</span> <span class="s">&#39;Layout:Mayavi is not installed&#39;</span>
 
 <span class="k">class</span> <span class="nc">Rays</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">,</span><span class="nb">dict</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; A set af rays</span>
+    <span class="sd">&quot;&quot;&quot; A set of rays</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -178,12 +178,12 @@
 <span class="sd">    It is a container for a set of rays between a source</span>
 <span class="sd">    and a target point defining a radio link.</span>
 
-<span class="sd">    Once a Rays object has been obtained in 2D, it is transform</span>
+<span class="sd">    Once a Rays object has been obtained in 2D, it is transformed</span>
 <span class="sd">    in 3D via the **to3D** method. This method has two parameters :</span>
 <span class="sd">    the height from floor to ceil, and the number N of</span>
-<span class="sd">    multiple reflections to take into account.</span>
+<span class="sd">    multiple reflections to account for.</span>
 
-<span class="sd">    Once the 3d rays have been calculated, the</span>
+<span class="sd">    Once the 3d rays have been calculated,</span>
 <span class="sd">    the local basis are evaluated along those rays. This is</span>
 <span class="sd">    done through the **locbas** method</span>
 
@@ -195,6 +195,16 @@
 <span class="sd">    be evaluated via the **eval** method</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Rays.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.__init__.html#pylayers.antprop.rays.Rays.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pTx</span><span class="p">,</span> <span class="n">pRx</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; object constructor</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        pTx : np.array</span>
+<span class="sd">        pRx : np.array</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">pTx</span> <span class="o">=</span> <span class="n">pTx</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pRx</span> <span class="o">=</span> <span class="n">pRx</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nray</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1607,7 +1617,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c"># reinitilized ray pointer if not in append mode</span>
+        <span class="c"># reinitialized ray pointer if not in append mode</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">append</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">raypt</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -1624,7 +1634,7 @@
         <span class="c"># Reflexion</span>
         <span class="n">R</span> <span class="o">=</span> <span class="n">IntR</span><span class="p">()</span>
 
-        <span class="c"># transmission</span>
+        <span class="c"># Transmission</span>
         <span class="n">T</span> <span class="o">=</span> <span class="n">IntT</span><span class="p">()</span>
 
         <span class="c"># Diffraction</span>
@@ -1768,9 +1778,9 @@
                 <span class="c"># seek for interactions position</span>
                 <span class="c">################################</span>
 
-                <span class="n">uD</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">itypf</span> <span class="o">==</span> <span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">uR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">itypf</span> <span class="o">==</span> <span class="mi">2</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">uT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">itypf</span> <span class="o">==</span> <span class="mi">3</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">uD</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">itypf</span> <span class="o">==</span> <span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">uR</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">itypf</span> <span class="o">==</span> <span class="mi">2</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">uT</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">itypf</span> <span class="o">==</span> <span class="mi">3</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">uRf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">itypf</span> <span class="o">==</span> <span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">uRc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">itypf</span> <span class="o">==</span> <span class="mi">5</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
 
@@ -1787,6 +1797,7 @@
 
                 <span class="c"># Fill the used slab</span>
                 <span class="c">#####################</span>
+
 
                 <span class="n">tsl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">tsl</span><span class="p">,</span> <span class="n">sl</span><span class="p">[</span><span class="n">uT</span><span class="p">]))</span>
                 <span class="n">rsl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">rsl</span><span class="p">,</span> <span class="n">sl</span><span class="p">[</span><span class="n">uR</span><span class="p">],</span> <span class="n">sl</span><span class="p">[</span><span class="n">uRf</span><span class="p">],</span> <span class="n">sl</span><span class="p">[</span><span class="n">uRc</span><span class="p">]))</span>
@@ -1836,6 +1847,11 @@
                 <span class="c"># Transmision</span>
                 <span class="c">############</span>
                 <span class="n">T</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">thetaf</span><span class="p">[</span><span class="n">uT</span><span class="p">],</span> <span class="n">sif</span><span class="p">[</span><span class="n">uT</span><span class="p">],</span> <span class="n">sif</span><span class="p">[</span><span class="n">uT</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="n">idxf</span><span class="p">[</span><span class="n">uT</span><span class="p">])</span>
+
+                <span class="c">###</span>
+                <span class="c"># Diffraction </span>
+                <span class="c">#</span>
+                <span class="c"># D.stack(data=np.array(()))</span>
 
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">los</span><span class="p">:</span>
                 <span class="n">ze</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
@@ -2534,7 +2550,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on juin 09, 2014.
+      Last updated on sept. 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

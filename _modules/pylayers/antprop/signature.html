@@ -167,6 +167,7 @@
 <span class="kn">import</span> <span class="nn">pylayers.util.plotutil</span> <span class="kn">as</span> <span class="nn">plu</span>
 <span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="n">Rays</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">heapq</span>
 <span class="c">#from numba import autojit</span>
 
 <div class="viewcode-block" id="showsig"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.showsig.html#pylayers.antprop.signature.showsig">[docs]</a><span class="k">def</span> <span class="nf">showsig</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">tx</span><span class="o">=</span><span class="p">[],</span><span class="n">rx</span><span class="o">=</span><span class="p">[]):</span>
@@ -866,7 +867,70 @@
                     <span class="k">yield</span> <span class="n">visited</span> <span class="o">+</span> <span class="p">[</span><span class="n">target</span><span class="p">]</span>
                 <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
                 <span class="n">visited</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
 </div>
+    <span class="k">def</span> <span class="nf">short_propath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">G</span><span class="p">,</span><span class="n">source</span><span class="p">,</span><span class="n">target</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">dout</span><span class="o">=</span><span class="p">{},</span><span class="n">cutoff</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">weight</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; updated dijkstra</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">source</span><span class="o">==</span><span class="n">target</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">({</span><span class="n">source</span><span class="p">:</span><span class="mi">0</span><span class="p">},</span> <span class="p">{</span><span class="n">source</span><span class="p">:[</span><span class="n">source</span><span class="p">]})</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c"># dictionary of final distances</span>
+        <span class="n">paths</span> <span class="o">=</span> <span class="p">{</span><span class="n">source</span><span class="p">:[</span><span class="n">source</span><span class="p">]}</span>  <span class="c"># dictionary of paths</span>
+        <span class="n">seen</span> <span class="o">=</span> <span class="p">{</span><span class="n">source</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span>
+        <span class="n">fringe</span><span class="o">=</span><span class="p">[]</span> <span class="c"># use heapq with (distance,label) tuples</span>
+        <span class="n">heapq</span><span class="o">.</span><span class="n">heappush</span><span class="p">(</span><span class="n">fringe</span><span class="p">,(</span><span class="mi">0</span><span class="p">,</span><span class="n">source</span><span class="p">))</span>
+        <span class="n">firstloop</span><span class="o">=</span><span class="bp">True</span>
+        <span class="k">while</span> <span class="n">fringe</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">firstloop</span><span class="p">:</span>
+                <span class="n">oldv</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">v</span><span class="p">)</span><span class="o">=</span><span class="n">heapq</span><span class="o">.</span><span class="n">heappop</span><span class="p">(</span><span class="n">fringe</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dist</span><span class="p">:</span>
+                <span class="k">continue</span> <span class="c"># already searched this node.</span>
+            <span class="n">dist</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="c">#for ignore,w,edgedata in G.edges_iter(v,data=True):</span>
+            <span class="c">#is about 30% slower than the following</span>
+            <span class="k">if</span> <span class="n">firstloop</span><span class="p">:</span>
+                <span class="n">edata</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">G</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">edata</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">G</span><span class="p">[</span><span class="n">oldv</span><span class="p">][</span><span class="n">v</span><span class="p">][</span><span class="s">&#39;output&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">break</span>
+            <span class="k">for</span> <span class="n">w</span><span class="p">,</span><span class="n">edgedata</span> <span class="ow">in</span> <span class="n">edata</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">weight</span> <span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">firstloop</span><span class="p">:</span>
+                        <span class="n">vw_dist</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">+</span> <span class="n">edgedata</span> 
+                    <span class="k">else</span> <span class="p">:</span>
+                        <span class="n">vw_dist</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="c">#+ edgedata.get(weight,1) #&lt;= proba should be add here</span>
+                <span class="k">else</span> <span class="p">:</span>
+                    <span class="n">vw_dist</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">cutoff</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">vw_dist</span><span class="o">&gt;</span><span class="n">cutoff</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">dist</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">vw_dist</span> <span class="o">&lt;</span> <span class="n">dist</span><span class="p">[</span><span class="n">w</span><span class="p">]:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Contradictory paths found:&#39;</span><span class="p">,</span>
+                                         <span class="s">&#39;negative weights?&#39;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">w</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen</span> <span class="ow">or</span> <span class="n">vw_dist</span> <span class="o">&lt;</span> <span class="n">seen</span><span class="p">[</span><span class="n">w</span><span class="p">]:</span>
+                    <span class="n">seen</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="n">vw_dist</span>
+                    <span class="n">heapq</span><span class="o">.</span><span class="n">heappush</span><span class="p">(</span><span class="n">fringe</span><span class="p">,(</span><span class="n">vw_dist</span><span class="p">,</span><span class="n">w</span><span class="p">))</span>
+                    <span class="n">paths</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="n">paths</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">+</span><span class="p">[</span><span class="n">w</span><span class="p">]</span>
+            <span class="n">firstloop</span><span class="o">=</span><span class="bp">False</span>
+
+
+        <span class="k">if</span> <span class="n">paths</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">dout</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">paths</span><span class="p">[</span><span class="n">target</span><span class="p">])):</span>
+                <span class="n">dout</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">paths</span><span class="p">[</span><span class="n">target</span><span class="p">])]</span><span class="o">.</span><span class="n">append</span><span class="p">([[</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">[</span><span class="n">target</span><span class="p">]])</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="n">dout</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">paths</span><span class="p">[</span><span class="n">target</span><span class="p">])]</span><span class="o">=</span><span class="p">[]</span>
+                <span class="n">dout</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">paths</span><span class="p">[</span><span class="n">target</span><span class="p">])]</span><span class="o">.</span><span class="n">append</span><span class="p">([[</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">[</span><span class="n">target</span><span class="p">]])</span>
+
+        <span class="k">return</span> <span class="n">dout</span>
+
+
 <div class="viewcode-block" id="Signatures.propaths"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.propaths.html#pylayers.antprop.signature.Signatures.propaths">[docs]</a>    <span class="k">def</span> <span class="nf">propaths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">G</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">bt</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; seek all simple_path from source to target</span>
 
@@ -1833,6 +1897,8 @@
         <span class="n">pe</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="n">tic0</span> <span class="o">=</span> <span class="n">tic</span>
+        <span class="c"># lis=lis+lit</span>
+        <span class="c"># lit=lis+lit</span>
         <span class="c">#for interaction source  in list of source interactions</span>
         <span class="k">for</span> <span class="n">us</span><span class="p">,</span><span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lis</span><span class="p">):</span>
             <span class="c">#for target interaction in list of target interactions</span>
@@ -1858,8 +1924,11 @@
                 <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">!=</span> <span class="n">t</span><span class="p">):</span>
                     <span class="k">if</span> <span class="n">algo</span><span class="o">==</span><span class="s">&#39;new&#39;</span><span class="p">:</span>
                         <span class="n">dout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">procone2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">Gi</span><span class="p">,</span><span class="n">dout</span><span class="o">=</span><span class="n">dout</span><span class="p">,</span><span class="n">source</span><span class="o">=</span><span class="n">s</span><span class="p">,</span><span class="n">target</span><span class="o">=</span><span class="n">t</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="n">cutoff</span><span class="p">)</span>
-                    <span class="k">else</span> <span class="p">:</span>
+                    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s">&#39;old&#39;</span> <span class="p">:</span>
                         <span class="n">dout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">propaths2</span><span class="p">(</span><span class="n">Gi</span><span class="p">,</span><span class="n">source</span><span class="o">=</span><span class="n">s</span><span class="p">,</span><span class="n">target</span><span class="o">=</span><span class="n">t</span><span class="p">,</span><span class="n">dout</span><span class="o">=</span><span class="n">dout</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="n">cutoff</span><span class="p">,</span><span class="n">bt</span><span class="o">=</span><span class="n">bt</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s">&#39;dij&#39;</span><span class="p">:</span>
+                        <span class="n">dout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">short_propath</span><span class="p">(</span><span class="n">Gi</span><span class="p">,</span><span class="n">source</span><span class="o">=</span><span class="n">s</span><span class="p">,</span><span class="n">target</span><span class="o">=</span><span class="n">t</span><span class="p">,</span><span class="n">dout</span><span class="o">=</span><span class="n">dout</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="n">cutoff</span><span class="p">)</span>
+                        <span class="c"># dout = self.short_propath(Gi,source=t,target=s,dout=dout,cutoff=cutoff)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">try</span><span class="p">:</span>
                         <span class="k">if</span> <span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dout</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
@@ -4077,7 +4146,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on juin 09, 2014.
+      Last updated on sept. 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

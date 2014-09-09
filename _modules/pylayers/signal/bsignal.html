@@ -982,8 +982,6 @@
         <span class="sd">r&quot;&quot;&quot; returm length of x axis</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">))</span>
-
-
 </div>
 <span class="k">class</span> <span class="nc">Usignal</span><span class="p">(</span><span class="n">Bsignal</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot; Signal with an embedded uniform Base</span>
@@ -1018,6 +1016,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Usignal.__sub__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Usignal.__sub__.html#pylayers.signal.bsignal.Usignal.__sub__">[docs]</a>    <span class="k">def</span> <span class="nf">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
+
         <span class="n">t</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span>
         <span class="k">if</span> <span class="p">((</span><span class="n">t</span> <span class="o">==</span> <span class="s">&#39;int&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="s">&#39;float&#39;</span><span class="p">)):</span>
             <span class="n">U</span> <span class="o">=</span> <span class="n">Usignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">u</span><span class="p">)</span>
@@ -1035,7 +1034,7 @@
 </div>
 <div class="viewcode-block" id="Usignal.__mul__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Usignal.__mul__.html#pylayers.signal.bsignal.Usignal.__mul__">[docs]</a>    <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
         <span class="n">t</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span>
-        <span class="k">if</span> <span class="p">((</span><span class="n">t</span> <span class="o">==</span> <span class="s">&#39;int&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="s">&#39;float&#39;</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">t</span> <span class="o">==</span> <span class="s">&#39;int&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="s">&#39;float&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">t</span><span class="o">==</span> <span class="s">&#39;float64&#39;</span><span class="p">)</span> <span class="p">):</span>
             <span class="n">U</span> <span class="o">=</span> <span class="n">Usignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">u</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">assert</span>  <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
@@ -1267,7 +1266,7 @@
 
         <span class="k">if</span> <span class="p">(</span><span class="nb">bool</span><span class="p">):</span>
         <span class="c"># same x support</span>
-            <span class="n">L</span> <span class="o">=</span> <span class="n">Usignal</span><span class="p">(</span><span class="n">u1</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">u1</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">u2</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+            <span class="n">L</span> <span class="o">=</span> <span class="n">Usignal</span><span class="p">(</span><span class="n">u1</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">u1</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">u2</span><span class="o">.</span><span class="n">y</span><span class="p">)))</span>
         <span class="k">else</span><span class="p">:</span>
         <span class="c"># different x support</span>
             <span class="n">xstart</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">u1_start</span><span class="p">,</span> <span class="n">u2_start</span><span class="p">)</span>
@@ -1348,13 +1347,43 @@
         <span class="k">return</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Usignal.eprfl"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Usignal.eprfl.html#pylayers.signal.bsignal.Usignal.eprfl">[docs]</a>    <span class="k">def</span> <span class="nf">eprfl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Energy profile</span>
+        <span class="sd">r&quot;&quot;&quot; Energy profile</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        axis : int</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+
+<span class="sd">        if axis==0</span>
+
+<span class="sd">        $$\delta_x \sum_l |y(l,k)|^2$$</span>
+
+<span class="sd">        if axis==1</span>
+
+<span class="sd">        $$\delta_x \sum_k |y(l,k)|^2$$</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        cut</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">eprfl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">))</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">eprfl</span>
 </div>
 <div class="viewcode-block" id="Usignal.energy"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Usignal.energy.html#pylayers.signal.bsignal.Usignal.energy">[docs]</a>    <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate the energy of an Usignal</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        axis : int</span>
+<span class="sd">            (default : 0)</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1362,7 +1391,7 @@
 <span class="sd">        energy : float</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">energy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+        <span class="n">energy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">energy</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Usignal.fftshift"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Usignal.fftshift.html#pylayers.signal.bsignal.Usignal.fftshift">[docs]</a>    <span class="k">def</span> <span class="nf">fftshift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1452,7 +1481,6 @@
             <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">xmax</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-
 </div>
 <span class="k">class</span> <span class="nc">TBsignal</span><span class="p">(</span><span class="n">Bsignal</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  Based signal in Time domain</span>
@@ -1682,7 +1710,56 @@
         <span class="k">print</span> <span class="s">&#39;xmax :&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="k">print</span> <span class="s">&#39;ymin :&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
         <span class="k">print</span> <span class="s">&#39;ymax :&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
 </div>
+    <span class="k">def</span> <span class="nf">awgn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">PSDdBmpHz</span><span class="o">=-</span><span class="mi">174</span><span class="p">,</span><span class="n">snr</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;psd&#39;</span><span class="p">,</span><span class="n">R</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; add a white Gaussian noise</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        PSDdBmpHz : float</span>
+<span class="sd">        seed : float</span>
+<span class="sd">        typ : string</span>
+<span class="sd">            &#39;psd&#39; | &#39;snr&#39;</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        n</span>
+<span class="sd">        sn</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        bsignal.Noise</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ti</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">tf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">tsns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">fsGHz</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">tsns</span>
+
+        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;snr&#39;</span><span class="p">:</span>
+            <span class="n">Ps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span><span class="o">/</span><span class="p">(</span><span class="n">R</span><span class="o">*</span><span class="p">(</span><span class="n">tf</span><span class="o">-</span><span class="n">ti</span><span class="p">))</span>
+            <span class="n">PW</span> <span class="o">=</span> <span class="n">Ps</span><span class="o">/</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">snr</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span>
+            <span class="n">pWpHz</span> <span class="o">=</span> <span class="n">PW</span><span class="o">/</span><span class="p">(</span><span class="n">fsGHz</span><span class="o">*</span><span class="mf">1e9</span><span class="p">)</span>
+            <span class="n">pmWpHz</span> <span class="o">=</span> <span class="n">pWpHz</span><span class="o">*</span><span class="mf">1e3</span>
+            <span class="n">PSDdBmpHz</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pmWpHz</span><span class="p">)</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="n">Noise</span><span class="p">(</span><span class="n">ti</span> <span class="o">=</span> <span class="n">ti</span><span class="p">,</span>
+                   <span class="n">tf</span> <span class="o">=</span> <span class="n">tf</span><span class="o">+</span><span class="n">tsns</span><span class="p">,</span>
+                   <span class="n">fsGHz</span> <span class="o">=</span> <span class="n">fsGHz</span><span class="p">,</span>
+                   <span class="n">PSDdBmpHz</span> <span class="o">=</span> <span class="n">PSDdBmpHz</span><span class="p">,</span>
+                   <span class="n">R</span> <span class="o">=</span> <span class="n">R</span><span class="p">,</span>
+                   <span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span><span class="p">)</span>
+
+
+        <span class="n">sn</span> <span class="o">=</span> <span class="n">TUsignal</span><span class="p">()</span>
+        <span class="n">sn</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">n</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">sn</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+
+        <span class="k">return</span> <span class="n">sn</span>
+
 <div class="viewcode-block" id="TUsignal.fft"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.TUsignal.fft.html#pylayers.signal.bsignal.TUsignal.fft">[docs]</a>    <span class="k">def</span> <span class="nf">fft</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  forward fast Fourier transform</span>
 
@@ -1796,23 +1873,32 @@
         <span class="n">AU</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">unrex</span><span class="p">()</span>
         <span class="k">return</span><span class="p">(</span><span class="n">AU</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="TUsignal.psd"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.TUsignal.psd.html#pylayers.signal.bsignal.TUsignal.psd">[docs]</a>    <span class="k">def</span> <span class="nf">psd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tpns</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+<div class="viewcode-block" id="TUsignal.psd"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.TUsignal.psd.html#pylayers.signal.bsignal.TUsignal.psd">[docs]</a>    <span class="k">def</span> <span class="nf">psd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tpns</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span><span class="n">periodic</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate power spectral density</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
 <span class="sd">        R    : Resistance (default 50 Ohms)</span>
+<span class="sd">            Ohms</span>
 <span class="sd">        Tpns : real</span>
-<span class="sd">            PRP (default 100 ns)</span>
+<span class="sd">            Signal period PRP (default 100 ns)</span>
 
 <span class="sd">        .. note::</span>
 
-<span class="sd">            If time is in ns the resulting PSD is expressed in dBm/MHz (~10-9)</span>
+<span class="sd">            Notice this interesting property that if time is represented in ns</span>
+<span class="sd">            the resulting PSD is expressed in dBm/MHz because there is the</span>
+<span class="sd">            same scale factor 1e-9 between second and nanosecond as between</span>
+<span class="sd">            dBW/Hz and dBm/MHz</span>
+
+<span class="sd">            If periodic is False the signal duration is taken as period.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">esd</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;unilateral&#39;</span><span class="p">)</span>
-        <span class="n">P</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">y</span> <span class="o">/</span> <span class="p">(</span><span class="n">R</span> <span class="o">*</span> <span class="n">Tpns</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">periodic</span><span class="p">:</span>
+            <span class="n">P</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">y</span> <span class="o">/</span> <span class="p">(</span><span class="n">R</span> <span class="o">*</span> <span class="n">Tpns</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">P</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">y</span><span class="o">/</span> <span class="p">(</span><span class="n">R</span><span class="o">*</span> <span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">P</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
         <span class="k">return</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="TUsignal.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.TUsignal.show.html#pylayers.signal.bsignal.TUsignal.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[],</span><span class="n">display</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">PRPns</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
@@ -2895,6 +2981,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        alpha : float</span>
 <span class="sd">        tau0 : float</span>
 
@@ -3149,7 +3236,11 @@
 <span class="sd">        dB : boolean</span>
 <span class="sd">            default True</span>
 <span class="sd">        iy : index of y value to be displayed</span>
-<span class="sd">            default [0]  only first the line is displayed</span>
+<span class="sd">            default [0]  only the first is displayed</span>
+<span class="sd">        typ : string</span>
+<span class="sd">            [&#39;l10&#39;,&#39;l20&#39;,&#39;d&#39;,&#39;r&#39;,&#39;du&#39;,&#39;ru&#39;] </span>
+<span class="sd">        xlabels    </span>
+<span class="sd">        ylabels    </span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -3231,7 +3322,7 @@
             <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;PSD (dBm/MHz)&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">phase</span><span class="p">:</span>
                 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.0e-15</span><span class="p">))</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.0e-15</span><span class="p">),</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">phase</span><span class="p">:</span>
                 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
                 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)))</span>
@@ -3455,30 +3546,47 @@
         <span class="k">print</span> <span class="s">&#39;Duration (ns) :&#39;</span><span class="p">,</span> <span class="n">T</span>
         <span class="k">print</span> <span class="s">&#39;Frequency sampling step : &#39;</span><span class="p">,</span> <span class="n">df</span>
 </div>
-<div class="viewcode-block" id="FUsignal.energy"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.energy.html#pylayers.signal.bsignal.FUsignal.energy">[docs]</a>    <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;mean&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; calculate energy along given axis</span>
+<div class="viewcode-block" id="FUsignal.energy"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.energy.html#pylayers.signal.bsignal.FUsignal.energy">[docs]</a>    <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;mean&#39;</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot; calculate energy along given axis</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
 <span class="sd">        axis : (default 0)</span>
-<span class="sd">        Friis :  c/(4 pi fGHz)</span>
+<span class="sd">        Friis :  -j*c/(4 pi fGHz)</span>
 <span class="sd">        mode : string</span>
-<span class="sd">            mean | center | integ</span>
+<span class="sd">            mean | center | integ | first | last</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 
-<span class="sd">        &gt;&gt;&gt; e   = EnImpulse()</span>
+<span class="sd">        &gt;&gt;&gt; S = FUsignal()</span>
 <span class="sd">        &gt;&gt;&gt; En1 = e.energy()</span>
 <span class="sd">        &gt;&gt;&gt; assert((En1&gt;0.99) &amp; (En1&lt;1.01))</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        axis = 0 is ray axis</span>
+
+<span class="sd">        if mode == &#39;mean&#39;</span>
+
+<span class="sd">        $$E=\frac{1}{K} \sum_k |y_k|^2$$</span>
+
+<span class="sd">        if mode == &#39;integ&#39;</span>
+
+<span class="sd">        $$E=\delta_x \sum_k |y_k|^2$$</span>
+
+<span class="sd">        if mode == &#39;center&#39;</span>
+
+<span class="sd">        $$E= |y_{K/2}|^2$$</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
 
         <span class="k">if</span> <span class="n">Friis</span><span class="p">:</span>
-            <span class="n">factor</span> <span class="o">=</span> <span class="mf">0.3</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">factor</span> <span class="o">=</span> <span class="o">-</span><span class="n">j</span><span class="o">*</span><span class="mf">0.3</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
             <span class="n">H</span> <span class="o">=</span> <span class="n">H</span><span class="o">*</span><span class="n">factor</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
 
         <span class="n">MH2</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">H</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">H</span><span class="p">))</span>
@@ -3491,6 +3599,12 @@
 
         <span class="k">if</span> <span class="n">mode</span><span class="o">==</span><span class="s">&#39;center&#39;</span><span class="p">:</span>
             <span class="n">EMH2</span>  <span class="o">=</span> <span class="n">MH2</span><span class="p">[:,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">mode</span><span class="o">==</span><span class="s">&#39;first&#39;</span><span class="p">:</span>
+            <span class="n">EMH2</span>  <span class="o">=</span> <span class="n">MH2</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">mode</span><span class="o">==</span><span class="s">&#39;last&#39;</span><span class="p">:</span>
+            <span class="n">EMH2</span>  <span class="o">=</span> <span class="n">MH2</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">EMH2</span><span class="p">)</span>
 
@@ -4817,47 +4931,169 @@
 <span class="k">class</span> <span class="nc">Noise</span><span class="p">(</span><span class="n">TUsignal</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Create noise</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Noise.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Noise.__init__.html#pylayers.signal.bsignal.Noise.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tobs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">fe</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">DSPdBmpHz</span><span class="o">=-</span><span class="mi">174</span><span class="p">,</span> <span class="n">NF</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="Noise.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Noise.__init__.html#pylayers.signal.bsignal.Noise.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ti</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">tf</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">fsGHz</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="n">PSDdBmpHz</span><span class="o">=-</span><span class="mi">174</span><span class="p">,</span> <span class="n">NF</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; object constructor</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        Tobs      : Time duration</span>
-<span class="sd">        fe        : sampling frequency</span>
-<span class="sd">        DSPdBmpHz : Power Spectral Density Noise (dBm/Hz)</span>
-<span class="sd">        R         : 50 Ohms</span>
+<span class="sd">        ti        : float</span>
+<span class="sd">            time start (ns)</span>
+<span class="sd">        tf        : float</span>
+<span class="sd">            time stop (ns)</span>
+<span class="sd">        fsGHZ     : float</span>
+<span class="sd">            sampling frequency</span>
+<span class="sd">        PSDdBmpHz : float</span>
+<span class="sd">            Power Spectral Density Noise (dBm/Hz)</span>
+<span class="sd">        R         : float</span>
+<span class="sd">            50 Ohms</span>
 <span class="sd">        NF        : 0</span>
-<span class="sd">        R         : 50</span>
 <span class="sd">        seed      : []</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">TUsignal</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="n">P</span> <span class="o">=</span> <span class="n">DSPdBmpHz</span> <span class="o">+</span> <span class="n">NF</span>
-        <span class="n">pmW</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="n">P</span> <span class="o">/</span> <span class="mf">10.</span><span class="p">)</span>  <span class="c"># mW/Hz</span>
-        <span class="n">pW</span> <span class="o">=</span> <span class="n">pmW</span> <span class="o">/</span> <span class="mf">1e3</span>  <span class="c"># W/Hz</span>
-        <span class="c">#PW    = pW*2*(fe*1e9)        #   W</span>
-        <span class="n">PW</span> <span class="o">=</span> <span class="n">pW</span> <span class="o">*</span> <span class="p">(</span><span class="n">fe</span> <span class="o">*</span> <span class="mf">1e9</span><span class="p">)</span>  <span class="c"># W</span>
-        <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">R</span> <span class="o">*</span> <span class="n">PW</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">seed</span> <span class="o">!=</span> <span class="p">[]:</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Tobs</span><span class="p">,</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">fe</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tsns</span>  <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">fsGHz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ti</span> <span class="o">=</span> <span class="n">ti</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tf</span> <span class="o">=</span> <span class="n">tf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fsGHz</span> <span class="o">=</span> <span class="n">fsGHz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_PSDdBmpHz</span> <span class="o">=</span> <span class="n">PSDdBmpHz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_NF</span> <span class="o">=</span> <span class="n">NF</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_R</span> <span class="o">=</span> <span class="n">R</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_seed</span><span class="o">=</span><span class="n">seed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+</div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">ti</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ti</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">tf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tf</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">tsns</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tsns</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">R</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_R</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">seed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_seed</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">NF</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_NF</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">PSDdBmpHz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_PSDdBmpHz</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">fsGHz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fsGHz</span><span class="p">)</span>
+
+    <span class="c">#-------</span>
+
+    <span class="nd">@ti.setter</span>
+    <span class="k">def</span> <span class="nf">ti</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ti</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ti</span> <span class="o">=</span> <span class="n">ti</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+    <span class="nd">@tf.setter</span>
+    <span class="k">def</span> <span class="nf">tf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tf</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tf</span> <span class="o">=</span> <span class="n">tf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+    <span class="nd">@tsns.setter</span>
+    <span class="k">def</span> <span class="nf">tsns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tsns</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tsns</span> <span class="o">=</span> <span class="n">tsns</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fsGHz</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">tsns</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+    <span class="nd">@R.setter</span>
+    <span class="k">def</span> <span class="nf">R</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">R</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_R</span> <span class="o">=</span> <span class="n">R</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+    <span class="nd">@fsGHz.setter</span>
+    <span class="k">def</span> <span class="nf">fsGHz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fsGHz</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fsGHz</span><span class="o">=</span><span class="n">fsGHz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tsns</span><span class="o">=</span><span class="mf">1.</span><span class="o">/</span><span class="n">fsGHz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+    <span class="nd">@NF.setter</span>
+    <span class="k">def</span> <span class="nf">NF</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">NF</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_NF</span> <span class="o">=</span> <span class="n">NF</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+    <span class="nd">@seed.setter</span>
+    <span class="k">def</span> <span class="nf">seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">seed</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_seed</span> <span class="o">=</span> <span class="n">seed</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+    <span class="nd">@PSDdBmpHz.setter</span>
+    <span class="k">def</span> <span class="nf">PSDdBmpHz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">PSDdBmpHz</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_PSDdBmpHz</span> <span class="o">=</span> <span class="n">PSDdBmpHz</span>
+        <span class="c">#self.eval()</span>
+
+
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; noise evaluation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_PSDdBmpHz</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_NF</span>
+        <span class="n">pmW</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="mf">10.</span><span class="p">)</span>  <span class="c"># DSP : dBm/Hz -&gt; mW/Hz</span>
+        <span class="n">pW</span> <span class="o">=</span> <span class="n">pmW</span> <span class="o">/</span> <span class="mf">1e3</span>         <span class="c"># DSP : mw/Hz  -&gt; W/Hz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">PW</span> <span class="o">=</span> <span class="n">pW</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fsGHz</span> <span class="o">*</span> <span class="mf">1e9</span><span class="p">)</span>   <span class="c"># Power : p * Bandwith Hz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vrms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_R</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">PW</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ti</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsns</span><span class="p">)</span>
         <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="n">std</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">n</span>
-</div>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vrms</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span>   <span class="o">=</span> <span class="n">n</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Pr</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">var</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_R</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;Sampling frequency : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fsGHz</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; GHz</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;ti  : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ti</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;ns </span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;tf  : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tf</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;ns </span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;ts  : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tsns</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;ns </span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;-------------</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;DSP : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PSDdBmpHz</span><span class="p">)</span><span class="o">+</span> <span class="s">&#39; dBm/Hz</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;NF : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NF</span><span class="p">)</span><span class="o">+</span> <span class="s">&#39; dB</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;Vrms : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vrms</span><span class="p">)</span><span class="o">+</span> <span class="s">&#39; Volts</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;Variance : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">var</span><span class="p">)</span><span class="o">+</span> <span class="s">&#39; V^2</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;Power /&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; Ohms : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PW</span><span class="p">)</span><span class="o">-</span><span class="mi">60</span><span class="p">)</span><span class="o">+</span> <span class="s">&#39; dBm</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;Power realized /&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; Ohms : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Pr</span><span class="p">)</span><span class="o">-</span><span class="mi">60</span><span class="p">)</span><span class="o">+</span> <span class="s">&#39; dBm</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">psd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mask</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        mask : boolean</span>
+<span class="sd">            True</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">w2</span> <span class="o">=</span> <span class="n">TUsignal</span><span class="o">.</span><span class="n">psd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">periodic</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">w2</span><span class="o">.</span><span class="n">plotdB</span><span class="p">(</span><span class="n">mask</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
 <div class="viewcode-block" id="Noise.amplify"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Noise.amplify.html#pylayers.signal.bsignal.Noise.amplify">[docs]</a>    <span class="k">def</span> <span class="nf">amplify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">GdB</span><span class="p">,</span> <span class="n">NF</span><span class="p">):</span>
-        <span class="k">pass</span>
+        <span class="n">sel</span>
 </div>
-<div class="viewcode-block" id="Noise.gating"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Noise.gating.html#pylayers.signal.bsignal.Noise.gating">[docs]</a>    <span class="k">def</span> <span class="nf">gating</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fcGHz</span><span class="p">,</span> <span class="n">BGHz</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="s">&#39;rect&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; apply a gating</span>
+    <span class="k">def</span> <span class="nf">fgating</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fcGHz</span><span class="p">,</span> <span class="n">BGHz</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="s">&#39;rect&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; apply a frequency gating</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        fcGHz</span>
-<span class="sd">        BGHz</span>
-<span class="sd">        window</span>
+<span class="sd">        fcGHz : float</span>
+<span class="sd">        BGHz  : float</span>
+<span class="sd">        window : string</span>
+<span class="sd">            &#39;rect&#39;</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fft</span><span class="p">()</span>
@@ -4871,7 +5107,9 @@
         <span class="n">f2</span> <span class="o">=</span> <span class="n">fcGHz</span> <span class="o">+</span> <span class="n">BGHz</span> <span class="o">/</span> <span class="mf">2.</span>
         <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">((</span><span class="n">f</span> <span class="o">&gt;</span> <span class="n">f1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">f</span> <span class="o">&lt;</span> <span class="n">f2</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">gate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
-        <span class="n">gate</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">window</span><span class="o">==</span><span class="s">&#39;rect&#39;</span><span class="p">:</span>
+            <span class="n">gate</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
+
         <span class="n">G</span> <span class="o">=</span> <span class="n">FUsignal</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">gate</span><span class="p">)</span>
         <span class="n">V</span> <span class="o">=</span> <span class="n">G</span> <span class="o">*</span> <span class="n">U</span>
         <span class="n">NF</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">symH</span><span class="p">(</span><span class="n">parity</span><span class="p">)</span>
@@ -4888,7 +5126,7 @@
     <span class="c">#    self.x = o.x</span>
     <span class="c">#    self.y = o.y</span>
 
-</div>
+
 <span class="k">class</span> <span class="nc">EnImpulse</span><span class="p">(</span><span class="n">TUsignal</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create an Energy normalized Gaussian impulse (Usignal)</span>
@@ -5160,7 +5398,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on juin 09, 2014.
+      Last updated on sept. 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">
