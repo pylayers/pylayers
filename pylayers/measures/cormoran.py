@@ -86,6 +86,7 @@ class CorSer(PyLayers):
         if serie in self.mocap :
             self.loadbody(serie=serie,day=day)
             self._distancematrix()
+            self.B.traj.Lfilename=copy.copy(self.L.filename)
 
         self.title1 = 'Scenario:'+str(self.scenario)+' Serie:'+str(self.serie)+' Run:'+str(self.run)
         self.title2 = 'Type:'+str(self.typ)+ ' Subject:'+str(self.subject[0])

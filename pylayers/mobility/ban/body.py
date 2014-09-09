@@ -173,7 +173,7 @@ class Body(PyLayers):
         if 'topos' not in dir(self):
             st = st+ '\nI am nowhere yet\n\n'
         else :
-            st = st + '\nMy centroid position at t=' +str(self.time[self.toposFrameId]) +' (frameID='+ str(self.toposFrameId) +') is \n'+ str(self.centroid)+"\n\n"
+            st = st + '\n@ t=' +str(self.time[self.toposFrameId]) +' (frameID='+ str(self.toposFrameId) +'),\n'+'My centroid position is ' +str(self.centroid)+"\n\n"
         if 'filewear' in dir(self):
             st = st +'filewear : '+ self.filewear +'\n'
         if 'filename' in dir(self):

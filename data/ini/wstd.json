@@ -15,7 +15,7 @@
             }
         },
         "crate": "[0.5,0.666,0.75]",
-        "modulation": "[psk4,psk8]"
+        "modulation": "['psk4','psk8']"
     },
     "bluetooth-class2": {
         "channels": {
@@ -37,7 +37,7 @@
             0.666,
             0.75
         ],
-        "modulation": "[psk4,psk8]"
+        "modulation": "['psk4','psk8']"
     },
     "bluetooth-class3": {
         "channels": {
@@ -59,7 +59,7 @@
             0.666,
             0.75
         ],
-        "modulation": "[psk4,psk8]"
+        "modulation": "['psk4','psk8']"
     },
     "ieee80211a": {
         "channels": {
@@ -132,7 +132,7 @@
             0.666,
             0.75
         ],
-        "modulation": "ofdm"
+        "modulation": "['ofdm']"
     },
     "ieee80211b": {
         "channels": {
@@ -152,7 +152,7 @@
             0.666,
             0.75
         ],
-        "modulation": "dsss"
+        "modulation": "['dsss']"
     },
     "ieee80211g": {
         "channels": {
@@ -186,5 +186,25 @@
             "tplcp": 16,
             "tshort": 8
         }
+    },
+    "ieee802154": {
+        "channels": {
+            "ism24": {
+                "bmhz": 2.8,
+                "fstart": 2.405,
+                "fstep": 5,
+                "fstop": 2.480,
+                "pmaxmw": 2,
+                "smhz": 5,
+                "gmhz": 2,
+                "zone": "Europe"
+            }
+        },
+        "modulation": "['dss o-qpsk']",
+        "crate": [
+            0.02,
+            0.04,
+            0.25
+        ]
     }
 }
