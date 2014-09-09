@@ -171,10 +171,9 @@ class Body(PyLayers):
 
 
         if 'topos' not in dir(self):
-            st = st+ 'I am nowhere yet\n\n'
+            st = st+ '\nI am nowhere yet\n\n'
         else :
-            st = st + 'My centroid position is \n'+ str(self.centroid)+"\n"
-
+            st = st + '\n@ t=' +str(self.time[self.toposFrameId]) +' (frameID='+ str(self.toposFrameId) +'),\n'+'My centroid position is ' +str(self.centroid)+"\n\n"
         if 'filewear' in dir(self):
             st = st +'filewear : '+ self.filewear +'\n'
         if 'filename' in dir(self):
@@ -2195,14 +2194,14 @@ class Body(PyLayers):
 
                 if dmin  < self.sl[k,2]:
                     intersect[k]=1
+                    break
 
-
-                if 0 < alpha < 1 and 0 < beta < 1 :
-                    #print 'dmin = ', dmin
-                    #print 'r = ', self.sl[k,2]
-                    dAB = np.sqrt(sum((A-B)**2))
-                    if alpha <> 0:
-                        mu[k] =(dmin-self.sl[k,2])*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))
+                # if 0 < alpha < 1 and 0 < beta < 1 :
+                #     #print 'dmin = ', dmin
+                #     #print 'r = ', self.sl[k,2]
+                #     dAB = np.sqrt(sum((A-B)**2))
+                #     if alpha <> 0:
+                #         mu[k] =(dmin-self.sl[k,2])*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))
 
         return intersect
 

@@ -33,7 +33,7 @@ import pylayers.util.project
 import pylayers.antprop.slab
 
 from pylayers.gis.layout import Layout
-import pylayers.antprop.multiwall as mw
+import pylayers.antprop.loss as loss
 from pylayers.util.project import *
 from pylayers.network.model import PLSmodel
 
@@ -230,11 +230,11 @@ class EMSolver(object):
                         #   Lo Lp Edo Edp
                         #
                         #
-                        MW = mw.Losst(self.L,model.f,pa[i+1:lpa,:dim].T,pa[i,:dim])
-                        # MW = mw.Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])
+                        MW = loss.Losst(self.L,model.f,pa[i+1:lpa,:dim].T,pa[i,:dim])
+                        # MW = loss.Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])
                         # loss free space
 
-                        frees=np.hstack((frees,mw.PL(np.array([model.f]),pa[i+1:lpa,:dim].T,pa[i,:dim].reshape(2,1),model.rssnp)[0] ))
+                        frees=np.hstack((frees,loss.PL(np.array([model.f]),pa[i+1:lpa,:dim].T,pa[i,:dim].reshape(2,1),model.rssnp)[0] ))
                         # Pr.extend(lepwr - MW[0] - frees)
                         # WARNING : only one polarization is taken into
                         # account here
@@ -276,7 +276,7 @@ class EMSolver(object):
 #                    frees=[]
 #                    lepwr=[]
 #                    for i in range(lpa-1):
-#                        MW.append(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i]))
+#                        loss.append(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i]))
 #                        Lwo.extend(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])[0])
 #                        frees.extend(PL(pa[i+1:lpa],model.f,pa[i],model.rssnp))
 #                        lepwr.extend(epwr[i+1:lpa])
