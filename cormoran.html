@@ -1,185 +1,142 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>CORMORAN Project</title>
-	<meta name="author" content="Alvaro Trigo Lopez" />
-	<meta name="description" content="fullPage full-screen backgrounds." />
-	<meta name="keywords"  content="fullpage,jquery,demo,screen,fullscreen,backgrounds,full-screen" />
-	<meta name="Resource-type" content="Document" />
-
-
-	<link rel="stylesheet" type="text/css" href="jquery.fullPage.css" />
-	<link rel="stylesheet" type="text/css" href="examples.css" />
-	<style>
-
-	/* Style for our header texts
-	* --------------------------------------- */
-	h1{
-		font-size: 5em;
-		font-family: arial,helvetica;
-		color: #000;
-		margin:0;
-		padding:0;
-	}
-	h2{
-		font-size: 3em;
-		font-family: arial,helvetica;
-		color: #43F
-		margin:0;
-		padding:0;
-	}
-
-	/* Centered texts in each section
-	* --------------------------------------- */
-	.section{
-		text-align:center;
-	}
-
-
-	/* Backgrounds will cover all the section
-	* --------------------------------------- */
-	#section0,
-	#section1,
-	#section2,
-	#section3{
-		background-size: cover;
-	}
-
-	/* Defining each section background and styles
-	* --------------------------------------- */
-	#section0{
-		background-image: url(imgs/bgcmr.jpg);
-		padding: 30% 0 0 0;
-	}
-	#section2{
-		background-image: url(imgs/bgcmr.jpg);
-		padding: 6% 0 0 0;
-	}
-	#section3{
-		background-image: url(imgs/bgcmr.jpg);
-		padding: 6% 0 0 0;
-	}
-	#section3 h1{
-		color: #000;
-	}
-
-
- 	/*Adding background for the slides
-	* --------------------------------------- */
-	#slide1{
-		background-image: url(imgs/bgcmr.jpg);
-		padding: 6% 0 0 0;
-	}
-	#slide2{
-		background-image: url(imgs/bgcmr.jpg);
-		padding: 6% 0 0 0;
-	}
-
-
-	/* Bottom menu
-	* --------------------------------------- */
-	#infoMenu li a {
-		color: #fff;
-	}
-	</style>
-
-	<!--[if IE]>
-		<script type="text/javascript">
-			 var console = { log: function() {} };
-		</script>
-	<![endif]-->
-
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
-
-	<script type="text/javascript" src="jquery.fullPage.js"></script>
-	<script type="text/javascript" src="examples.js"></script>
-
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$('#fullpage').fullpage({
-				verticalCentered: false
-
-			});
-		});
-	</script>
-
-</head>
-<body>
-
-
-<a href="https://twitter.com/share" class="twitter-share-button"
-    data-url="http://pylayers.github.io/pylayers.cormoran.html" data-text="CORMORAN project :
-Exploring ways to improve Cooperation in and between Wireless Area network">Tweet</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-
-
-<div id="fullpage">
-	<div class="section " id="section0">
-        <h1>
-               CORMORAN Project 
-        </h1>
-        <br>
-        <br>
-        <h2>
-            Exploring Ways to Improve Cooperation <br> In and Between <br> Wireless Body Area Networks 
-        </h2>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="google-site-verification" content="rT0A6_-it7hp5yyvhFef_auUEXRhSBi5bRefEgQrG_M" />
+        <meta name="keywords" content="Radio Planning Tool,UWB,Radio Propagation,Indoor
+        Localization,Wireless Body Area Network,IEEE 802.15.6,IEEE
+        802.154a,IEEE 802.11.ac, IEEE 802.11.ah, GIS, Open Street Map, Indoor
+            Open Street Map, OSM ,FemtoCells, SmallCells, IoT , Smart Grid , 
+            CORMORAN,ANR,IETR,Antennas, Spherical Haronics, OFDM , Wireless
+            Sensor Networks, Github">
+        <title>ANR CORMORAN Project </title>
     
-        </div>
-	<div class="section" id="section1">
-	    <div class="slide" id="slide1">
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <h2>     The <font color=#F00> CORMORAN project </font>, a multi-partner research
-                    initiative funded in part by the French National Research
-                    Agency (ANR11-INFR010), has been focusing on new forms of
-                    cooperation in and between wireless body area networks.
-                    Targeted applications include <font color=#00F>coordinated navigation of
-                        groups in buildings</font> or <font
-                        color=#00F>large-scale motion capture</font> for
-                    <font color=#1F1>gaming, sports and healthcare.</font></h2>
-            </div>
-	    <div class="slide" id="slide2">
-                <h1>
-                    <RMR>
-               </h1></div>
-	</div>
+    <link rel="stylesheet" href="./_static/sphinxdoc.css" type="text/css">
+    <link rel="stylesheet" href="./_static/pygments.css" type="text/css">
+    <link rel="stylesheet" href="./_static/force.css" type="text/css">
+    <link href="./_static/bootstrap_2_1.min.css" rel="stylesheet" type="text/css">
+    
+    <script type="text/javascript" async="" src="./_static/ga.js"></script><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" > $(function() { $('.carousel').carousel();}); </script> 
+    <script type='text/javascript' src="http://imsky.github.io/holder/holder.js"></script>
+    <script type="text/javascript" src="./_static/jquery.js"></script>
+    <script type="text/javascript" src="./_static/underscore.js"></script>
+    <script type="text/javascript" src="./_static/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./_static/doctools.js"></script>
+    <script type="text/javascript" src="./_static/d3.min.js"></script>
+    <script type="text/javascript" src="./_static/d3.geom.min.js"></script>
+    <script type="text/javascript" src="./_static/d3.layout.min.js"></script>
+    <link rel="top" title="PyLayers" href="http://pylayers.github.io/pylayers/index.html#"> 
+    <script>window["_GOOG_TRANS_EXT_VER"] = "1";</script>
+</head>
 
-	<div class="section" id="section2">
-                <br>
-                <br>
-                <br>
-                <br>
-            <h2>
+<body>
+<div style="color: black;background-color: white; font-size: 1.2em; text-align: left; padding: 15px 10px 10px 15px">
+    CORMORAN ANR Project <br>
+    Exploring ways to Improve Cooperation <br> In and Between <br>Wireless Body Area
+    Networks
 
-            Wireless body area networks (WBANs), consisting of wearable
-            sensors or devices, are already being commercialized in emerging
-            markets as diverse as 
-            <font color=#1F1> security, rescue,  health,  gaming  and
-                intelligent clothing </font>. 
-            </h2>
-        </div>
-
-    <div class="section" id="section3">
-            <h2>
-                If (When)  deployed in very large segments of the population,
-                they might eventually become a key component of the <font color=#11F>Internet of Things (IoT)</font> 
-                and form the skeleton of future <font color=#00F> distributed
-                cooperative communication networks for mobile-device
-                users</font>.
-                <br/>
-            </h2>
-        </div>
-
-
-
-        <div class="section" id="section10"><h1>Deliverables</h1></div>
 </div>
+<!--
+<a href="#"><img src="_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
 
-</body>
-</html>
+<div class="related">
+
+
+    <p>
+    The CORMORAN project, a multi-partner research initiative funded in part
+    by the French National Research Agency (ANR11-INFR010), has been focusing
+    on new forms of cooperation in and between wireless body area networks.
+    Targeted applications include coordinated navigation of groups in
+    buildings or large-scale motion capture for gaming, sports and healthcare.
+    </p>
+
+     
+    <p>
+    Wireless body area networks (WBANs), consisting of wearable sensors or
+    devices, are already being commercialized in emerging markets as diverse
+    as security, rescue, health, gaming or intelligent clothing. If deployed
+    in very large segments of the population, they might eventually become a
+    key component of the Internet of Things (IoT) and form the skeleton of
+    future distributed cooperative communication networks for mobile-device
+    users.
+    </p>
+
+     
+
+    <p>
+    Protocols for communication and localization, adapted to individual and/or
+    collective behavior of humans in movement (i.e. including biomechanical
+    and social mobility aspects) can therefore utilize new forms of
+    cooperation within and between these body sensor networks. The CORMORAN
+    project, funded by the French National Research Agency, has been
+    specifically investigating new mechanisms that allow WBANs to work more
+    efficiently at the body scale, while also interacting and cooperating with
+    other similar networks in the close vicinity. The coexistence of groups of
+    equipped users can cause radio interference, but it is also a beneficial
+    source of information redundancy and/or diversity through cooperation. The
+    latter enables optimal data relaying or routing, and mitigation of
+    packets’ losses or body obstructions, and supplies sufficiently large
+    series of independent radiolocation measurements.
+    </p>
+
+     
+
+    <p>
+    Determining the proper level and modalities of such cooperation thus helps
+    to optimize the quality of communications in and between WBANs, as well as
+    to opportunistically locate radio devices relative to the body or even
+    users carrying them in a building, for example. In addition to overcoming
+    severe requirements on power consumption, the partners have also
+    integrated in their investigations WBAN-specific constraints such as short
+    transmission ranges, finite network topologies or periodic radio
+    obstructions due to body shadowing or human movement patterns.
+    </p>
+
+     
+
+    <p>
+    To permit multi-standard WBAN deployment (i.e. involving simultaneous
+    on-body, off-body and body-to-body links), project partners have been
+    investigating both low-data rate and low-power wireless technologies,
+    including impulse radio ultra-wideband (IR-UWB) or narrow-band radio
+    systems centered on 2.4GHz (e.g. ZigBee, Bluetooth - low energy etc.).
+    Based on a detailed modeling of these heterogeneous wireless resources,
+    the CORMORAN project aims at identifying the different layers of a
+    communication protocol suitable for the new cooperative functionalities,
+    including synchronization issues, radio channel access and networking, and
+    management of coexistence, or radiolocation, algorithms. With its
+    multidisciplinary approach, CORMORAN addresses theoretical aspects, such
+    as the modeling of radio metrics and physical mobility, the design of
+    algorithms and protocols. More practical aspects also include the
+    characterization of the propagation channel and on-body antennas, the
+    development of adapted cross-layer simulation tools and field experiments
+    based on real radio platforms.
+    </p>
+
+     
+    <p>
+    The CORMORAN consortium includes four research laboratories with
+    complementary strengths in the areas of wireless sensor networks and
+    radiolocation: CEA-Leti (coordinator), INSA de Lyon-CITI, ISIC Telecom
+    ParisTech–LINCS, and University of Rennes 1-IETR. 
+    </p>
+</div>
+<div class="related">
+<h2>List of Deliverables</h2>
+<ul>
+<li> D1.1 </li>
+<li> D1.2 </li>
+</ul>
+</div>
+</body></html>
