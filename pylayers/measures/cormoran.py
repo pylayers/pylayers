@@ -1058,7 +1058,7 @@ bernard
 
         for k in defaults:
             if k not in kwargs:
-                kwargs[k] = defaults[k]
+                kwargs[k] = defaults[k]                    
 
         if kwargs['fig']==[]:
             fig = plt.figure(figsize=kwargs['figsize'])
@@ -1219,7 +1219,7 @@ bernard
                 ax.set_title(label=title,fontsize=kwargs['fontsize'])
             if not kwargs['distance']:
                 if kwargs['dB']:
-                    ax.set_ylabel(u'$P_r$ (dBm)',fontsize=18)
+                    ax.set_ylabel('Received Power dBm')
                 else:
                     if kwargs['yoffset']==1:
                         ax.set_ylabel('mW')
