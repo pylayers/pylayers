@@ -139,9 +139,11 @@ class Body(PyLayers):
         #
         #
 
+        
         self.cylfromc3d(centered=centered)
         if isinstance(traj,tr.Trajectory):
             self.traj=traj
+        self.cenetered=centered
         # otherwise self.traj use values from c3d file
         # obtain in self.loadC3D
 
@@ -526,6 +528,22 @@ class Body(PyLayers):
 
         return ldf
 
+    def init_traj(self):
+        """ create trajectory object from given trajectory or mocap 
+        """
+
+        # speed vector of the gravity centernp.
+        self.vg = self.pg[:,1:]-self.pg[:,0:-1]
+        # duplicate last spped vector for size homogeneity
+        self.vg = np.hstack((self.vg,self.vg[:,-1][:,np.newaxis]))
+        # length of trajectory
+        d = self.pg[0:-1,1:]-self.pg[0:-1,0:-1]
+        # creates a trajectory associated to mocap file
+        self.traj = tr.Trajectory()
+        self.traj.generate(t=self.time,pt=self.pg.T,name=self.filename)
+        self.smocap = np.cumsum(np.sqrt(np.sum(d*d,axis=0)))
+        self.vmocap = self.smocap[-1]/self.Tmocap
+
     def center(self,force=False):
         """ centering the body
 
@@ -552,22 +570,11 @@ class Body(PyLayers):
         """
         # self.d : 3 x 16 x Nf
         # self.pg : 3 x Nf
+
         if not self.centered or force:
-            self.pg = np.sum(self.d,axis=1)/self.npoints
-            self.pg[2,:] = 0
             self.d = self.d - self.pg[:,np.newaxis,:]
-            # speed vector of the gravity centernp.
-            self.vg = self.pg[:,1:]-self.pg[:,0:-1]
-            # duplicate last spped vector for size homogeneity
-            self.vg = np.hstack((self.vg,self.vg[:,-1][:,np.newaxis]))
-            # length of trajectory
-            d = self.pg[0:-1,1:]-self.pg[0:-1,0:-1]
-            # creates a trajectory associated to mocap file
-            self.traj = tr.Trajectory()
-            self.traj.generate(t=self.time,pt=self.pg.T,name=self.filename)
-            self.smocap = np.cumsum(np.sqrt(np.sum(d*d,axis=0)))
-            self.vmocap = self.smocap[-1]/self.Tmocap
             self.centered = True
+
 
     def posvel(self,traj,t):
         """ calculate position and velocity
@@ -1074,11 +1081,14 @@ class Body(PyLayers):
 
 
         self.d = self.d
-
+        self.pg = np.sum(self.d,axis=1)/self.npoints
+        self.pg[2,:] = 0
         #self.nodes_Id[15]='bottom'
         if centered:
             self.centered = False
             self.center()
+
+        self.init_traj()
 
 
     def c3d2traj(self):
@@ -1331,6 +1341,7 @@ class Body(PyLayers):
         khe = self.sl[:,1].astype(int)
         t=self.traj.time()
 
+        anim = range (5000,self.nframes)
         # init antennas
         if 'topos' in dir(self):
             Ant = {}
@@ -1366,7 +1377,7 @@ class Body(PyLayers):
                         Ant[key]._mayamesh.mlab_source.set(x=x, y=y, z=z)
                     yield
             else:
-                for k in range(self.nframes):
+                for k in anim:
                     pta =  np.array([self.d[0, kta, k], self.d[1, kta, k], self.d[2, kta, k]])
                     phe =  np.array([self.d[0, khe, k], self.d[1, khe, k], self.d[2, khe, k]])
                     # connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))

@@ -86,6 +86,7 @@ class CorSer(PyLayers):
         if serie in self.mocap :
             self.loadbody(serie=serie,day=day)
             self._distancematrix()
+            self.computedevpdf()
             self.B.traj.Lfilename=copy.copy(self.L.filename)
 
         self.title1 = 'Scenario:'+str(self.scenario)+' Serie:'+str(self.serie)+' Run:'+str(self.run)
@@ -254,7 +255,9 @@ bernard
             filewear = baw + subject + '_'  +str(self.day)+'-06-2014_' + self.typ + '.ini'
             self.B.append(Body(_filebody=filebody,
                              _filemocap=filemocap,unit = 'mm',
-                             _filewear=filewear))
+                             _filewear=filewear,
+                             centered=False))
+
 
         if len(self.subject) == 1:
             self.B = self.B[0]
@@ -1835,6 +1838,55 @@ bernard
                 tseg = np.array(zip(np.array([0]),np.array([len(vv)-1])))
 
         return vv,tv,tseg
+
+
+    # def computedevpdf(self):
+    #     """ create a timestamped data frame 
+    #         with all positions of devices
+    #     """
+    #     t=self.B.traj.time()
+    #     pos = np.empty((len(t),12,3))
+    #     for ik,k in enumerate(t):
+    #         self.B.settopos(t=k)
+    #         pos[ik,:,:]=self.B.getdevp()
+    #     df=[]
+    #     for d in range(pos.shape[1]):
+    #         df_tmp=pd.DataFrame(pos[:,d,:],columns=['x','y','z'],index=t)
+    #         df_tmp['id']=self.B.dev.keys()[d]
+    #         try :
+    #             df = pd.concat([df,df_tmp])
+    #         except:
+    #             df = df_tmp
+    #     df = df.sort_index()
+    #     cols=['id','x','y','z']
+    #     self.devdf=df[cols]
+
+    def computedevpdf(self):
+        """ create a timestamped data frame 
+            with positions of all devices
+
+
+        """
+        dev = self.B.dev.keys()
+        udev=[self.B.dev[d]['uc3d'][0] for d in dev]
+        pos = self.B._f[:,udev,:]
+        t = self.B.time
+        for d in range(len(dev)):
+            df_tmp=pd.DataFrame(pos[:,d,:],columns=['x','y','z'],index=t)
+            df_tmp[['vx','vy','vz']]=df_tmp.diff()/(t[1]-t[0])
+            df_tmp[['ax','ay','az']]=df_tmp[['vx','vy','vz']].diff()/(t[1]-t[0])
+            df_tmp['id']=self.B.dev.keys()[d]
+            try :
+                df = pd.concat([df,df_tmp])
+            except:
+                df = df_tmp
+
+        import ipdb
+        ipdb.set_trace()
+        df = df.sort_index()
+        cols=['id','x','y','z','vx','vy','vz','ax','ay','az']
+        self.devdf=df[cols]
+        
 
     def getdevp(self,a,b,technoa='HKB',technob='HKB'):
         """    get device position
