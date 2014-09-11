@@ -1881,8 +1881,7 @@ bernard
             except:
                 df = df_tmp
 
-        import ipdb
-        ipdb.set_trace()
+
         df = df.sort_index()
         cols=['id','x','y','z','vx','vy','vz','ax','ay','az']
         self.devdf=df[cols]
