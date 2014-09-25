@@ -1214,12 +1214,14 @@ class Antenna(PyLayers):
         col = ['k', 'r', 'g', 'b', 'm', 'c', 'y']
         cpt = 0
 
-        fstep = self.fa[1]-self.fa[0]
+        if len(self.fa) > 1 :
+            fstep = self.fa[1]-self.fa[0]
+        else : 
+            fstep = np.array((abs(self.fa-kwargs['fGHz'][0])+1))
         #dtheta = self.theta[1,0]-self.theta[0,0]
         #dphi = self.phi[0,1]-self.phi[0,0]
         dtheta = self.theta[1]-self.theta[0]
         dphi = self.phi[1]-self.phi[0]
-
         for f in kwargs['fGHz']:
             ik = np.where(abs(self.fa-f)<fstep)[0][0]
             chaine = 'f = %3.2f GHz' %(self.fa[ik])

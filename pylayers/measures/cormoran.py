@@ -256,7 +256,7 @@ bernard
             self.B.append(Body(_filebody=filebody,
                              _filemocap=filemocap,unit = 'mm',
                              _filewear=filewear,
-                             centered=False))
+                             centered=True))
 
 
         if len(self.subject) == 1:
@@ -1874,7 +1874,9 @@ bernard
         for d in range(len(dev)):
             df_tmp=pd.DataFrame(pos[:,d,:],columns=['x','y','z'],index=t)
             df_tmp[['vx','vy','vz']]=df_tmp.diff()/(t[1]-t[0])
+            df_tmp['v']=np.sqrt(np.sum(df_tmp[['vx','vy','vz']]**2,axis=1))
             df_tmp[['ax','ay','az']]=df_tmp[['vx','vy','vz']].diff()/(t[1]-t[0])
+            df_tmp['a']=np.sqrt(np.sum(df_tmp[['ax','ay','az']]**2,axis=1))
             df_tmp['id']=self.B.dev.keys()[d]
             try :
                 df = pd.concat([df,df_tmp])
@@ -1883,7 +1885,7 @@ bernard
 
 
         df = df.sort_index()
-        cols=['id','x','y','z','vx','vy','vz','ax','ay','az']
+        cols=['id','x','y','z','v','vx','vy','vz','a','ax','ay','az']
         self.devdf=df[cols]
         
 
@@ -1972,6 +1974,35 @@ bernard
             pb = self.din[nnb]
 
         return pa,pb
+
+
+    def align(self,devdf,hkbdf):
+
+        """ align time for device and hkb data frame 
+
+        devdf : device dataframe
+        hkbdf : hkbdataframe
+
+        Example
+        -------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> S=CorSer(6)
+        >>> devdf = S.devdf[S.devdf['id']=='HKB:15']
+        >>> hkbdf = S.hkb['AP1-AnckleLeft']
+        >>> devdf2,hkbdf2 = S.align(devdf,hkbdf)
+
+
+        """
+
+
+        idev = devdf.index
+        ihkb = hkbdf.index
+        devdf.index = pd.to_datetime(idev,unit='s')
+        hkbdf.index = pd.to_datetime(ihkb,unit='s')
+        sf = (hkbdf.index[2]-hkbdf.index[1]).microseconds
+        devdf= devdf.resample(str(sf)+'U')
+        return devdf,hkbdf
 
     def get_data(self,a,b):
 

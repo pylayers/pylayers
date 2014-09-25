@@ -3507,7 +3507,7 @@ class FUsignal(FBsignal, Usignal):
         H = self.y
 
         if Friis:
-            factor = -j*0.3/(4*np.pi*self.x)
+            factor = -1.j*0.3/(4*np.pi*self.x)
             H = H*factor[np.newaxis,:]
 
         MH2 = abs(H * np.conjugate(H))

@@ -889,6 +889,7 @@ class Layout(PyLayers):
         of 1e7=10000000. The convention is set back when loading the osm file.
 
         """
+
         self.filename = _fileosm
         fileosm = pyu.getlong(_fileosm,'struc/osm')
         coords,nodes,ways,relations,m = osm.osmparse(fileosm,typ='floorplan')
@@ -1116,6 +1117,16 @@ class Layout(PyLayers):
         self.Gs.pos = {}
         self.labels = {}
 
+        # manage ini file with latlon coordinates
+        if di['info'].has_key('format'):
+            if di['info']['format']=='latlon':
+                or_coord_format = 'latlon'
+                coords = osm.Coords()
+                coords.clean()
+                coords.latlon={i:np.array(eval(di['points'][i])) for i in di['points']}
+                coords.boundary=np.hstack((np.min(np.array(coords.latlon.values()),axis=0),
+                                           np.max(np.array(coords.latlon.values()),axis=0)))
+                coords.cartesian(cart=True)
         #
         # update display section
         #
@@ -1129,7 +1140,13 @@ class Layout(PyLayers):
         # update points section
         for nn in di['points']:
             nodeindex = eval(nn)
-            x,y       = eval(di['points'][nn])
+            if or_coord_format=='latlon':
+                x,y =coords.xy[nn]  
+            else :
+                x,y       = eval(di['points'][nn])
+            
+                    
+            
             #
             # limitation of point precision is important for avoiding
             # topological problems in shapely.

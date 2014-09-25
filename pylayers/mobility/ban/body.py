@@ -143,7 +143,7 @@ class Body(PyLayers):
         self.cylfromc3d(centered=centered)
         if isinstance(traj,tr.Trajectory):
             self.traj=traj
-        self.cenetered=centered
+        self.centered=centered
         # otherwise self.traj use values from c3d file
         # obtain in self.loadC3D
 
@@ -1620,7 +1620,6 @@ class Body(PyLayers):
             pta =  np.array([self.d[0, kta, fId], self.d[1, kta, fId], self.d[2, kta, fId]])
             phe =  np.array([self.d[0, khe, fId], self.d[1, khe, fId], self.d[2, khe, fId]])
             X=np.hstack((pta,phe))
-
         connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
         s = np.hstack((cylrad*kwargs['widthfactor'],cylrad*kwargs['widthfactor']))
         #pts = mlab.points3d(X[0,:],X[1,:], X[2,:], 5*s ,

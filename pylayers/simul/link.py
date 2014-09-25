@@ -1100,7 +1100,7 @@ class DLink(Link):
                    'diffraction':False,
                    'ra_ceil_height_meter':3,
                    'ra_number_mirror_cf':1,
-                   'force':False,
+                   'force':['sig','ray','Ct','H'],
                    'alg':7,
                    'threshold':0.1,
                    }
@@ -1112,14 +1112,19 @@ class DLink(Link):
 
         if 'cutoff' not in kwargs:
             kwargs['cutoff']=self.cutoff
-
+        if 'force' not in kwargs:
+            if not isinstance(kwargs['force'],list):
+                if kwargs['force'] == True :
+                    kwargs['force'] = ['sig','ray','Ct','H']
+                else :
+                    kwargs['force'] = []
 
         ############
         # Signatures
         ############
         Si = Signatures(self.L,self.ca,self.cb,cutoff=kwargs['cutoff'])
 
-        if self.dexist['sig']['exist'] and not kwargs['force']:
+        if self.dexist['sig']['exist'] and not ('sig' in kwargs['force']):
             self.load(Si,self.dexist['sig']['grpname'])
 
         else :
@@ -1144,7 +1149,7 @@ class DLink(Link):
         ############
         R = Rays(self.a,self.b)
 
-        if self.dexist['ray']['exist'] and not kwargs['force']:
+        if self.dexist['ray']['exist'] and not ('ray' in kwargs['force']):
             self.load(R,self.dexist['ray']['grpname'])
 
         else :
@@ -1167,7 +1172,7 @@ class DLink(Link):
         ############
         C=Ctilde()
 
-        if self.dexist['Ct']['exist'] and not kwargs['force']:
+        if self.dexist['Ct']['exist'] and not ('Ct' in kwargs['force']):
             self.load(C,self.dexist['Ct']['grpname'])
 
         else :
@@ -1184,7 +1189,7 @@ class DLink(Link):
         ############
         H=Tchannel()
 
-        if self.dexist['H']['exist'] and not kwargs['force']:
+        if self.dexist['H']['exist'] and not ('H' in kwargs['force']):
             self.load(H,self.dexist['H']['grpname'])
 
 
