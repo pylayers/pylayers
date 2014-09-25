@@ -1127,6 +1127,8 @@ class Layout(PyLayers):
                 coords.boundary=np.hstack((np.min(np.array(coords.latlon.values()),axis=0),
                                            np.max(np.array(coords.latlon.values()),axis=0)))
                 coords.cartesian(cart=True)
+        else : 
+            or_coord_format = 'cart'
         #
         # update display section
         #
