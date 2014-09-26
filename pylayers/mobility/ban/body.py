@@ -104,7 +104,7 @@ class Body(PyLayers):
     """
 
     def __init__(self,_filebody='John.ini',_filemocap=[],_filewear = [],
-                traj=[],unit=[],centered=True):
+                traj=[],unit=[],loop=True,centered=True):
         """ object constructor
 
         Parameters
@@ -116,8 +116,9 @@ class Body(PyLayers):
             unit of the mocap file m|cm|mm
         _filewear : string
         traj : tr.Trajectory
-
-
+        loop : bool
+            True : indicate if the mocap file is used as a loop to be put on a trajectory (default)
+            False: the mocap is self sufficent and describe the complete body movement
         See Also
         --------
 
@@ -144,6 +145,7 @@ class Body(PyLayers):
         if isinstance(traj,tr.Trajectory):
             self.traj=traj
         self.centered=centered
+        self.mocap_loop=loop
         # otherwise self.traj use values from c3d file
         # obtain in self.loadC3D
 
@@ -681,7 +683,7 @@ class Body(PyLayers):
 
         return(kf,kt,vsn,wsn,vtn,wtn)
 
-    def settopos(self,traj=[],t=0,cs=True,treadmill=False,p0=np.array(([0.,0.,0.]))):
+    def settopos(self,traj=[],t=0,cs=True,treadmill=False,p0=np.array(([0.,0.]))):
         """ translate the body on a time stamped trajectory
 
         Parameters
@@ -746,40 +748,47 @@ class Body(PyLayers):
         # kt : trajectory integer index
         # kf : frame integer index
 
+
         if not isinstance(traj,tr.Trajectory):
             traj = self.traj
 
+
         kf,kt,vsn,wsn,vtn,wtn = self.posvel(traj,t)
+        if self.mocap_loop:
 
-        psa = np.array([0,0])
-        psb = psa + vsn
-        psc = psa + wsn
-        if treadmill:
-            pta=p0
-        else:
-            pta = np.hstack((traj['x'].values[kt],traj['y'].values[kt]))
-        ptb = pta + vtn
-        ptc = pta + wtn
+            psa = np.array([0,0])
+            psb = psa + vsn
+            psc = psa + wsn
+            if treadmill:
+                pta=p0
+            else:
+                pta = np.hstack((traj['x'].values[kt],traj['y'].values[kt]))
+            ptb = pta + vtn
+            ptc = pta + wtn
 
-        self.centroid = pta
+            self.centroid = pta
 
-        X = np.array([[0,0],[psb[0],psb[1]],[psc[0],psc[1]]]).T
-        Y = np.array([[pta[0],pta[1]],[ptb[0],ptb[1]],[ptc[0],ptc[1]]]).T
+            X = np.array([[0,0],[psb[0],psb[1]],[psc[0],psc[1]]]).T
+            Y = np.array([[pta[0],pta[1]],[ptb[0],ptb[1]],[ptc[0],ptc[1]]]).T
 
-        a,b = geu.affine(X,Y)
+            a,b = geu.affine(X,Y)
 
-        A = np.eye(3)
-        B = np.zeros((3,1))
-        A[0:-1,0:-1] = a
-        B[0:-1,:] = b
+            A = np.eye(3)
+            B = np.zeros((3,1))
+            A[0:-1,0:-1] = a
+            B[0:-1,:] = b
 
-        self.toposFrameId = kf
-        #
-        # TOPOS = A d + B     d == BODY at kf frame
-        #
-        self.topos = (np.dot(A,self.d[:,:,kf])+B)
+            #
+            # TOPOS = A d + B     d == BODY at kf frame
+            #
+            self.topos = (np.dot(A,self.d[:,:,kf])+B)
+        else :
+
+            self.topos = self.d[:,:,kf]
 
         self.vtopos = np.hstack((vtn,np.array([0])))[:,np.newaxis]
+        self.toposFrameId = kf
+
         # self.traj=traj
 
         kta = self.sl[:,0].astype(int)
@@ -787,6 +796,8 @@ class Body(PyLayers):
         self._pta = np.array([self.topos[0, kta], self.topos[1, kta], self.topos[2, kta]])
         self._phe = np.array([self.topos[0, khe], self.topos[1, khe], self.topos[2, khe]])
         # if asked for calculation of coordinates systems
+
+
         if cs:
             self.setcs(topos=True)
 
@@ -1343,38 +1354,38 @@ class Body(PyLayers):
 
         anim = range (5000,self.nframes)
         # init antennas
-        if 'topos' in dir(self):
-            Ant = {}
-            for key in self.dcs.keys():
-                Ant[key]=ant.Antenna(self.dev[key]['file'])
-                if not hasattr(Ant[key],'SqG'):
-                    Ant[key].Fsynth()
-                Ant[key]._show3(po=self.dcs[key][:,0],
-                               T=self.acs[key],
-                               ilog=False,
-                               minr=0.01,
-                               maxr=0.2,
-                               newfig=False,
-                               title=False,
-                               colorbar=False)
+        # if 'topos' in dir(self):
+        #     Ant = {}
+        #     for key in self.dcs.keys():
+        #         Ant[key]=ant.Antenna(self.dev[key]['file'])
+        #         if not hasattr(Ant[key],'SqG'):
+        #             Ant[key].Fsynth()
+        #         Ant[key]._show3(po=self.dcs[key][:,0],
+        #                        T=self.acs[key],
+        #                        ilog=False,
+        #                        minr=0.01,
+        #                        maxr=0.2,
+        #                        newfig=False,
+        #                        title=False,
+        #                        colorbar=False)
         while True:
             if 'topos' in dir(self):
-                for k in range(len(t)):
-                    self.settopos(self.traj,t=t[k],cs=True)
+                for k in anim:#range(len(t)):
+                    self.settopos(t=t[k],cs=True)
                     # connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
                     X=np.hstack((self._pta,self._phe))
                     # s = np.hstack((cylrad,cylrad))
                     self._mayapts.mlab_source.set(x=X[0,:], y=X[1,:], z=X[2,:])
-                    for key in self.dcs.keys():
-                        x, y, z ,k = Ant[key]._computemesh(po=self.dcs[key][:,0],
-                                                   T=self.acs[key],
-                                                   ilog=False,
-                                                   minr=0.01,
-                                                   maxr=0.2,
-                                                   newfig=False,
-                                                   title=False,
-                                                   colorbar=False)
-                        Ant[key]._mayamesh.mlab_source.set(x=x, y=y, z=z)
+                    # for key in self.dcs.keys():
+                    #     x, y, z ,k = Ant[key]._computemesh(po=self.dcs[key][:,0],
+                    #                                T=self.acs[key],
+                    #                                ilog=False,
+                    #                                minr=0.01,
+                    #                                maxr=0.2,
+                    #                                newfig=False,
+                    #                                title=False,
+                    #                                colorbar=False)
+                    #     Ant[key]._mayamesh.mlab_source.set(x=x, y=y, z=z)
                     yield
             else:
                 for k in anim:

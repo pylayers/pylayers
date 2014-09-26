@@ -254,9 +254,9 @@ bernard
             filebody = baw + subject + '.ini'
             filewear = baw + subject + '_'  +str(self.day)+'-06-2014_' + self.typ + '.ini'
             self.B.append(Body(_filebody=filebody,
-                             _filemocap=filemocap,unit = 'mm',
+                             _filemocap=filemocap,unit = 'mm', loop=False,
                              _filewear=filewear,
-                             centered=True))
+                             centered=False))
 
 
         if len(self.subject) == 1:
