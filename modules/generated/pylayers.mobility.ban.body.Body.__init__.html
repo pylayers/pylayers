@@ -83,7 +83,7 @@
 <h1>pylayers.mobility.ban.body.Body.__init__<a class="headerlink" href="#pylayers-mobility-ban-body-body-init" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.mobility.ban.body.Body.__init__">
-<tt class="descclassname">Body.</tt><tt class="descname">__init__</tt><big>(</big><em>_filebody='John.ini'</em>, <em>_filemocap=</em>, <span class="optional">[</span><span class="optional">]</span><em>_filewear=</em>, <span class="optional">[</span><span class="optional">]</span><em>traj=</em>, <span class="optional">[</span><span class="optional">]</span><em>unit=</em>, <span class="optional">[</span><span class="optional">]</span><em>centered=True</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/mobility/ban/body.html#Body.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Body.</tt><tt class="descname">__init__</tt><big>(</big><em>_filebody='John.ini'</em>, <em>_filemocap=</em>, <span class="optional">[</span><span class="optional">]</span><em>_filewear=</em>, <span class="optional">[</span><span class="optional">]</span><em>traj=</em>, <span class="optional">[</span><span class="optional">]</span><em>unit=</em>, <span class="optional">[</span><span class="optional">]</span><em>loop=True</em>, <em>centered=True</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/mobility/ban/body.html#Body.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>object constructor</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -96,15 +96,19 @@
 <div><p>unit of the mocap file m|cm|mm</p>
 </div></blockquote>
 <p><strong>_filewear</strong> : string</p>
-<p class="last"><strong>traj</strong> : tr.Trajectory</p>
+<p><strong>traj</strong> : tr.Trajectory</p>
+<p><strong>loop</strong> : bool</p>
+<blockquote>
+<div><p>True : indicate if the mocap file is used as a loop to be put on a trajectory (default)
+False: the mocap is self sufficent and describe the complete body movement</p>
+</div></blockquote>
+<p><strong>See Also</strong> :</p>
+<p><strong>&#8212;&#8212;&#8211;</strong> :</p>
+<p class="last"><strong>pylayers.mobility.trajectory</strong> :</p>
 </td>
 </tr>
 </tbody>
 </table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="../pylayers.mobility.trajectory.html#module-pylayers.mobility.trajectory" title="pylayers.mobility.trajectory"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.mobility.trajectory</span></tt></a></p>
-</div>
 </dd></dl>
 
 </div>
@@ -134,7 +138,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on sept. 09, 2014.
+      Last updated on sept. 26, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

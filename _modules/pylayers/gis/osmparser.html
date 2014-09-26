@@ -713,7 +713,11 @@
 <span class="sd">    relations :</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">filename</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span><span class="s">&#39;gis/osm&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s">&#39;/&#39;</span> <span class="ow">or</span> <span class="s">&#39;</span><span class="se">\\</span><span class="s">&#39;</span> <span class="ow">in</span> <span class="n">_filename</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">_filename</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span><span class="s">&#39;gis/osm&#39;</span><span class="p">)</span>
     <span class="c">#</span>
     <span class="c"># Read coords and create basemap converter</span>
     <span class="c">#</span>
@@ -907,7 +911,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on sept. 09, 2014.
+      Last updated on sept. 26, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

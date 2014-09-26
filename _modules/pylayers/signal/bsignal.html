@@ -3586,7 +3586,7 @@
         <span class="n">H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
 
         <span class="k">if</span> <span class="n">Friis</span><span class="p">:</span>
-            <span class="n">factor</span> <span class="o">=</span> <span class="o">-</span><span class="n">j</span><span class="o">*</span><span class="mf">0.3</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">factor</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.j</span><span class="o">*</span><span class="mf">0.3</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
             <span class="n">H</span> <span class="o">=</span> <span class="n">H</span><span class="o">*</span><span class="n">factor</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
 
         <span class="n">MH2</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">H</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">H</span><span class="p">))</span>
@@ -5398,7 +5398,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on sept. 09, 2014.
+      Last updated on sept. 26, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

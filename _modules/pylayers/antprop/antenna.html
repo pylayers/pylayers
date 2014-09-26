@@ -1293,12 +1293,14 @@
         <span class="n">col</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;k&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="s">&#39;g&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;m&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">]</span>
         <span class="n">cpt</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="n">fstep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="p">:</span>
+            <span class="n">fstep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span> <span class="p">:</span> 
+            <span class="n">fstep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="o">-</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fGHz&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
         <span class="c">#dtheta = self.theta[1,0]-self.theta[0,0]</span>
         <span class="c">#dphi = self.phi[0,1]-self.phi[0,0]</span>
         <span class="n">dtheta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">dphi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fGHz&#39;</span><span class="p">]:</span>
             <span class="n">ik</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="o">-</span><span class="n">f</span><span class="p">)</span><span class="o">&lt;</span><span class="n">fstep</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">chaine</span> <span class="o">=</span> <span class="s">&#39;f = </span><span class="si">%3.2f</span><span class="s"> GHz&#39;</span> <span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="n">ik</span><span class="p">])</span>
@@ -3431,7 +3433,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on sept. 09, 2014.
+      Last updated on sept. 26, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.simul.simultraj" href="../pylayers.simul.simultraj.html" />
+    <link rel="next" title="pylayers.simul.simultraj.Simul._loadh5" href="pylayers.simul.simultraj.Simul._loadh5.html" />
+    <link rel="prev" title="pylayers.simul.simultraj.Simul.show" href="pylayers.simul.simultraj.Simul.show.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,16 +46,30 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.simul.simultraj.Simul._loadh5.html" title="pylayers.simul.simultraj.Simul._loadh5"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.simul.simultraj.Simul.show.html" title="pylayers.simul.simultraj.Simul.show"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.simul.simultraj.html" accesskey="U">pylayers.simul.simultraj</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.simul.simultraj.Simul.show.html"
+                        title="previous chapter">pylayers.simul.simultraj.Simul.show</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.simul.simultraj.Simul._loadh5.html"
+                        title="next chapter">pylayers.simul.simultraj.Simul._loadh5</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.simul.simultraj.Simul._saveh5.txt"
@@ -81,6 +98,69 @@
             
   <div class="section" id="pylayers-simul-simultraj-simul-saveh5">
 <h1>pylayers.simul.simultraj.Simul._saveh5<a class="headerlink" href="#pylayers-simul-simultraj-simul-saveh5" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.simul.simultraj.Simul._saveh5">
+<tt class="descclassname">Simul.</tt><tt class="descname">_saveh5</tt><big>(</big><em>ut</em>, <em>ida</em>, <em>idb</em>, <em>wstd</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/simul/simultraj.html#Simul._saveh5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.simultraj.Simul._saveh5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save in h5py format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ut</strong> : int</p>
+<blockquote>
+<div><p>time index in self.time</p>
+</div></blockquote>
+<p><strong>ida</strong> : string</p>
+<blockquote>
+<div><p>node a index</p>
+</div></blockquote>
+<p><strong>idb</strong> : string</p>
+<blockquote>
+<div><p>node b index</p>
+</div></blockquote>
+<p><strong>wstd</strong> : string</p>
+<blockquote class="last">
+<div><p>wireless standard of used link</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.simul.links</span></tt></p>
+</div>
+<p class="rubric">Notes</p>
+<p>Dataset organisation:</p>
+<dl class="docutils">
+<dt>simultraj_&lt;trajectory_filename.h5&gt;.h5</dt>
+<dd><div class="first line-block">
+<div class="line"><br /></div>
+</div>
+<p class="last"><a href="#id1"><span class="problematic" id="id2">|</span></a>time
+|    ...
+|
+<a href="#id3"><span class="problematic" id="id4">|</span></a>/&lt;tidx_ida_idb_wstd&gt;/ <a href="#id5"><span class="problematic" id="id6">|</span></a>attrs
+|                      <a href="#id7"><span class="problematic" id="id8">|</span></a>a_k
+|                      <a href="#id9"><span class="problematic" id="id10">|</span></a>t_k</p>
+</dd>
+</dl>
+<p>Root dataset :
+time : array</p>
+<blockquote>
+<div>range of simulation time</div></blockquote>
+<dl class="docutils">
+<dt>Group identifier :</dt>
+<dd>tidx : index in time dataset
+ida : node a index in Network
+idb : node b index in Network
+wstd : wireless standar of link interest</dd>
+<dt>Inside group:</dt>
+<dd>a_k : alpha_k values
+t_k : tau_k values</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
@@ -98,17 +178,25 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.simul.simultraj.Simul._loadh5.html" title="pylayers.simul.simultraj.Simul._loadh5"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.simul.simultraj.Simul.show.html" title="pylayers.simul.simultraj.Simul.show"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.simul.simultraj.html" >pylayers.simul.simultraj</a> &raquo;</li> 
       </ul>
     </div>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on sept. 09, 2014.
+      Last updated on sept. 26, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

@@ -111,6 +111,13 @@
 <span class="kn">import</span> <span class="nn">pdb</span>
 <span class="kn">import</span> <span class="nn">doctest</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
+    <span class="kn">from</span> <span class="nn">tvtk.tools</span> <span class="kn">import</span> <span class="n">visual</span>
+
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&#39;mayavi not installed&#39;</span>
+
 
 <span class="k">class</span> <span class="nc">Coverage</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Handle Layout Coverage</span>
@@ -1041,7 +1048,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on sept. 09, 2014.
+      Last updated on sept. 26, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">
