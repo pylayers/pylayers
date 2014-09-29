@@ -5000,7 +5000,7 @@ class Noise(TUsignal):
             True
         """
         w2 = TUsignal.psd(self,periodic=False)
-        w2.plotdB(mask=True)
+        w2.plotdB(mask=mask)
 
     def amplify(self, GdB, NF):
         sel

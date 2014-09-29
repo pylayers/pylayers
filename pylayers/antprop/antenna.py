@@ -4,13 +4,8 @@
 .. currentmodule:: pylayers.antprop.antenna
 
 This module handles antennas
-The antenna can be loaded from various specific file formats
-
-.vsh2
-.vsh3
-.sh2
-.sh3
-.mat
+An antenna can be loaded from various specific file formats among 
+them ( .vsh2 .vsh3 .sh2 .sh3 .mat)
 
 
 Antenna Class
@@ -2101,6 +2096,11 @@ class Antenna(PyLayers):
         else:
             Fth   : ndarray (1 x Ndir)
             Fph   : ndarray (1 x Ndir)
+
+        See Also
+        --------
+
+        pylayers.antprop.channel._vec2scalA
 
         Examples
         --------
