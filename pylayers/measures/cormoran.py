@@ -50,7 +50,8 @@ class CorSer(PyLayers):
             self.stcr = [1,2,3,4,10,11,12,32,33,34,35,9,17,18,19,20,25,26]
             self.shkb = [5,6,13,14,15,16,21,22,23,24,27,28,29,30,31,32,33,34,35]
             self.sbs  = [5,6,7,8,13,14,15,16,21,22,23,24,27,28,29,30,31,32,33,34,35]
-            self.mocap = [5,6,7,8,17,21,22,23,24,34]
+            self.mocap = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,
+                            25,26,27,28,29,30,31,32,33,34,35]
 
         if day==12:
             stcr = []
@@ -1113,6 +1114,42 @@ bernard
 
         return fig,ax
 
+    def animhkb(self,a,b,interval=10,save=False):
+        """
+        Parameters
+        ----------
+
+        a : node name | number
+        b : node name | number
+        save : bool
+        """
+
+        import matplotlib.animation as animation
+
+        x = self.hkb.index
+        link = a+'-'+b
+        y = self.hkb[link].values
+
+        fig, ax = plt.subplots()
+        plt.xlim(0,x[-1])
+        line = [ax.plot(x, y, animated=True)[0]]
+
+        def animate(i):
+            line[0].set_ydata(y[:i])
+            line[0].set_xdata(x[:i])
+            return line
+
+        ani = animation.FuncAnimation(fig, animate, xrange(1, len(x)), 
+                                      interval=interval, blit=True)
+        if save:
+            ani.save(link+'.mp4')
+        plt.title(link)
+        plt.xlabel('time (s)')
+        plt.ylabel('RSS (dBm)')
+        plt.show()
+
+
+        import matplotlib.animation as animation
     def plthkb(self,a,b,**kwargs):
         """
         Parameters

@@ -140,7 +140,7 @@ class Body(PyLayers):
         #
         #
 
-        
+
         self.cylfromc3d(centered=centered)
         if isinstance(traj,tr.Trajectory):
             self.traj=traj
@@ -337,6 +337,23 @@ class Body(PyLayers):
         #
         rd = dict(filter(lambda x: x[1]['status']== 'real',self.dev.items()))
 
+
+        # rules in mocap file:
+        #
+        # the mocap nodes (for mobility):
+        # always start with a prefix : ['Bernard:','Bernard_','NicolasCormoran:']
+        #
+        # the radio nodes :
+        # HKB : mocap_prefix + <radiomarkername>
+        # TCR : 
+
+
+
+        # mocapprefix : retrieve where the prefix is the body name
+        ump = [self.name.lower() in p.lower() for p in self._s]
+        self._mocap_prefix = self._s[ump.index(True)]
+
+
         # 1 remove prefix
         prefix = ['Bernard:','Bernard_','NicolasCormoran:']
         nodes = self._p
@@ -346,13 +363,140 @@ class Body(PyLayers):
                 tmpnode.append(n.replace(p,''))
                 nodes = tmpnode
 
+
         # 2 remove multiple entries due to orientation marker
         nodes = [n.split(':')[0] for n in nodes]
+
         for d in rd :
-            bd = [self.dev[d]['radiomarkname'] in n for n in nodes]
-            self.dev[d]['uc3d'] = np.where(bd)[0]
+            if self.dev[d]['name'] == 'hikob':
+                bd = [self.dev[d]['radiomarkname'] in n for n in nodes if not 'TCR' in n]
+                self.dev[d]['uc3d'] = np.where(bd)[0]
+            else :
+                bd = [self.dev[d]['radiomarkname'] in n for n in nodes]
+                self.dev[d]['uc3d'] = np.where(bd)[0]
+
 
         return(di)
+
+
+    def loadC3D(self, filename='07_01.c3d', nframes=-1 ,unit='cm'):
+        """ load nframes of motion capture C3D file
+
+        Parameters
+        ----------
+
+        filename : string
+            file name
+        nframes : int
+            number of frames
+        unit : str (mm|cm|mm
+            unit of c3d file
+        rot : list ['x','y','z']
+            swap axes of the c3d file
+        """
+
+
+        #if 'pg' in dir(self):
+        # del self.pg
+        # s, p, f, info = c3d.read_c3d(filename)
+        self._s, self._p, self._f, info = c3d.ReadC3d(filename)
+
+        self.mocapinfo = info
+
+        self.filename = filename
+        if nframes<>-1:
+            self.nframes = nframes
+        else:
+            self.nframes = np.shape(self._f)[0]
+        #
+        # s : prefix
+        # p : list of points name
+        # f : nframe x npoints x 3
+        #
+
+
+        self.unit = unit
+        if unit == 'cm':
+            self._unit = 1e-2
+        elif unit == 'mm':
+            self._unit = 1e-3
+        else :
+            raise AttributeError('unit'+unit + 'not recognized')
+        # duration of the motion capture snapshot
+
+
+        self._f=self._f*self._unit
+
+        self.Tmocap = self.nframes / info['VideoFrameRate']
+
+        # time base of the motion capture file (sec)
+        self.time = np.linspace(0,self.Tmocap,self.nframes)
+
+
+
+    def cylfromc3d(self,centered = False):
+        """ Create cylinders from C3D file
+
+        Parameters
+        ----------
+
+        centered : boolean
+        """
+        #
+        # motion capture data
+        #
+        # self.d : 3 x npoints x nframes
+        #
+
+        # number of points is determine by the ini file
+        self.npoints = len(self.nodes_Id)
+
+        # self.d = np.ndarray(shape=(3, self.npoints, self.nframes))
+
+        #if self.d[2,:,:].max()>50:
+        # extract only known nodes in nodes_Id
+        self.d = np.zeros((3, self.npoints, self.nframes))
+        for i in self.nodes_Id:
+            # node name = 4 characters
+            if not isinstance(self.nodes_Id[i],list) :
+                idx = self._p.index(self._mocap_prefix + self.nodes_Id[i])
+                self.d[:,i,:] = self._f[0:self.nframes, idx, :].T
+            # perform center of mass of the nodes
+
+            else :
+
+                lnid = len(self.nodes_Id[i])
+                for k in range(lnid):
+
+                    nodename = self.nodes_Id[i][k].replace(' ','')
+
+                    idx = self._p.index(self._mocap_prefix + nodename)
+                    try:
+                        tmp = tmp +self._f[0:self.nframes, idx, :].T
+                    except:
+                        tmp = self._f[0:self.nframes, idx, :].T
+                self.d[:,i,:] = tmp / (1.*lnid)
+                del tmp
+
+
+        # f.T : 3 x npoints x nframe
+        #
+        # cm to meter conversion if required
+        #
+
+
+        self.d = self.d
+        self.pg = np.sum(self.d,axis=1)/self.npoints
+        self.pg[2,:] = 0
+        #self.nodes_Id[15]='bottom'
+        if centered:
+            self.centered = False
+            self.center()
+
+        self.init_traj()
+
+
+
 
     def network(self):
         """ evaluate network topology and dynamics
@@ -761,7 +905,7 @@ class Body(PyLayers):
             psc = psa + wsn
             if treadmill:
                 pta=p0
-            else:
+            else: 
                 pta = np.hstack((traj['x'].values[kt],traj['y'].values[kt]))
             ptb = pta + vtn
             ptc = pta + wtn
@@ -985,121 +1129,6 @@ class Body(PyLayers):
             else :
                 self.acs[dev]  = self.dev[dev]['T']
 
-    def loadC3D(self, filename='07_01.c3d', nframes=-1 ,unit='cm'):
-        """ load nframes of motion capture C3D file
-
-        Parameters
-        ----------
-
-        filename : string
-            file name
-        nframes : int
-            number of frames
-        unit : str (mm|cm|mm
-            unit of c3d file
-        rot : list ['x','y','z']
-            swap axes of the c3d file
-        """
-
-
-        #if 'pg' in dir(self):
-        # del self.pg
-        # s, p, f, info = c3d.read_c3d(filename)
-        self._s, self._p, self._f, info = c3d.ReadC3d(filename)
-
-        self.mocapinfo = info
-
-        self.filename = filename
-        if nframes<>-1:
-            self.nframes = nframes
-        else:
-            self.nframes = np.shape(self._f)[0]
-        #
-        # s : prefix
-        # p : list of points name
-        # f : nframe x npoints x 3
-        #
-
-
-        self.unit = unit
-        if unit == 'cm':
-            self._unit = 1e-2
-        elif unit == 'mm':
-            self._unit = 1e-3
-        else :
-            raise AttributeError('unit'+unit + 'not recognized')
-        # duration of the motion capture snapshot
-
-
-        self._f=self._f*self._unit
-
-        self.Tmocap = self.nframes / info['VideoFrameRate']
-
-        # time base of the motion capture file (sec)
-        self.time = np.linspace(0,self.Tmocap,self.nframes)
-
-
-
-    def cylfromc3d(self,centered = False):
-        """ Create cylinders from C3D file
-
-        Parameters
-        ----------
-
-        centered : boolean
-        """
-        #
-        # motion capture data
-        #
-        # self.d : 3 x npoints x nframes
-        #
-
-        # number of points is determine by the ini file
-        self.npoints = len(self.nodes_Id)
-
-        # self.d = np.ndarray(shape=(3, self.npoints, self.nframes))
-
-        #if self.d[2,:,:].max()>50:
-        # extract only known nodes in nodes_Id
-        self.d = np.zeros((3, self.npoints, self.nframes))
-        for i in self.nodes_Id:
-            # node name = 4 characters
-            if not isinstance(self.nodes_Id[i],list) :
-                idx = self._p.index(self._s[0] + self.nodes_Id[i])
-                self.d[:,i,:] = self._f[0:self.nframes, idx, :].T
-            # perform center of mass of the nodes
-
-            else :
-
-                lnid = len(self.nodes_Id[i])
-                for k in range(lnid):
-
-                    nodename = self.nodes_Id[i][k].replace(' ','')
-
-                    idx = self._p.index(self._s[0] + nodename)
-                    try:
-                        tmp = tmp +self._f[0:self.nframes, idx, :].T
-                    except:
-                        tmp = self._f[0:self.nframes, idx, :].T
-                self.d[:,i,:] = tmp / (1.*lnid)
-                del tmp
-
-
-        # f.T : 3 x npoints x nframe
-        #
-        # cm to meter conversion if required
-        #
-
-
-        self.d = self.d
-        self.pg = np.sum(self.d,axis=1)/self.npoints
-        self.pg[2,:] = 0
-        #self.nodes_Id[15]='bottom'
-        if centered:
-            self.centered = False
-            self.center()
-
-        self.init_traj()
 
 
     def c3d2traj(self):
