@@ -721,7 +721,8 @@ bernard
             for i in range(len(v))]
         if kwargs['body']:
             if kwargs['bodytime']==[]:
-                time=range(10,100,20)
+                time =np.linspace(0,self.B.time[-1],5).astype(int)
+                # time=range(10,100,20)
             else :
                 time=kwargs['bodytime']
             for ki, i in enumerate(time):
