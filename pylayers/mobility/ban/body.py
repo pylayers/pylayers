@@ -1070,15 +1070,14 @@ class Body(PyLayers):
                     fId = self.toposFrameId
                 else :
                     fId = frameId
-                if len(self.dev[dev]['uc3d']) > 1:
+                if len(self.dev[dev]['uc3d']) > 2:
                     # mp : marker pos
                     mp = self._f[fId,self.dev[dev]['uc3d'],:]
                     vm = np.diff(mp,axis=0)
                     vm = vm[:3]
                     mvm = np.sqrt(np.sum((vm*vm),axis=0))
                     T = vm/mvm
-                    #import ipdb
-                    #ipdb.set_trace()
+
                     T[:,2]=np.cross(T[:,0],T[:,1])
                     T[:,1]=np.cross(T[:,0],T[:,2])
                     Tn = T/np.sqrt(np.sum(T*T,axis=0))
@@ -1357,7 +1356,7 @@ class Body(PyLayers):
                 kwargs['tag']=stk
                 self.geomfile(**kwargs)
 
-    @mlab.animate(delay=10)
+    @mlab.animate(delay=100)
     def anim(self):
         """ animate body
 
@@ -1381,7 +1380,8 @@ class Body(PyLayers):
         khe = self.sl[:,1].astype(int)
         t=self.traj.time()
 
-        anim = range (5000,self.nframes)
+        anim = range(5000,self.nframes,10)
+
         # init antennas
         # if 'topos' in dir(self):
         #     Ant = {}

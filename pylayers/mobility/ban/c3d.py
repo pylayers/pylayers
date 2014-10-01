@@ -778,16 +778,20 @@ def ReadC3d(_filename='07_01.c3d', verbose=False):
     proctype, content = getNumber(content, 1)
     proctype = proctype - 83                      # proctype: 1(INTEL-PC); 2(DEC-VAX); 3(MIPS-SUN/SGI)
 
+    dinfo = {}
     print "*************************"
     print "**** Processor coding ***"
     print "*************************"
 
     if proctype == 1:
         print "Intel-PC"
+        dinfo['Encoding']="Intel-PC"
     elif proctype == 2:
         print "DEC-VAX"
+        dinfo['Encoding']="DEC-VAX"
     elif proctype == 3:
         print "MIPS-SUN/SGI"
+        dinfo['Encoding']="MIPS-SUN/SGI"
     else:
         print "unknown processor type"
 
@@ -812,7 +816,6 @@ def ReadC3d(_filename='07_01.c3d', verbose=False):
 
     AnalogFrameRate = VideoFrameRate * NanalogFramesPerVideoFrame
 
-    dinfo = {}
     dinfo['NanalogFramesPerVideoFRame']=NanalogFramesPerVideoFrame
     dinfo['AnalogFrameRate']= AnalogFrameRate
     dinfo['VideoFrameRate']= VideoFrameRate

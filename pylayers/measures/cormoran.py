@@ -695,8 +695,8 @@ bernard
                      'tagtraj':True,
                      'tagname':[],
                      'tagpoffset':[],
-                     'fontsizetag':0.5
-
+                     'fontsizetag':0.5,
+                     'trajectory_color_range':True
                     }
 
         for k in defaults:
@@ -712,8 +712,8 @@ bernard
 
         if kwargs['L']:
             self.L._show3(opacity=0.5)
+        v = self.din.items()
         if kwargs['inodes']:
-            v = self.din.items()
             X= np.array([v[i][1] for i in range(len(v))])
             mlab.points3d(X[:,0],X[:,1], X[:,2],scale_factor=kwargs['insize'],color=in_color)
         if kwargs['inname']:
@@ -742,7 +742,7 @@ bernard
 
 
         if kwargs['trajectory']:
-            self.B.traj._show3()
+            self.B.traj._show3(kwargs['trajectory_color_range'])
         if kwargs['camera'] : 
             mlab.points3d(self.cam[:,0],self.cam[:,1], self.cam[:,2],scale_factor=kwargs['camerasize'],color=cam_color)
         mlab.view(-111.44127634143871,
