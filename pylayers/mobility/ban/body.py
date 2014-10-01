@@ -1119,7 +1119,7 @@ class Body(PyLayers):
 
         self.acs = {}
         for dev in self.dev.keys():
-            if self.dev[dev]['status'] == 'simulated':
+            if True:#self.dev[dev]['status'] == 'simulated':
                 Rab = self.dev[dev]['T']
                 U = self.dcs[dev]
                 # extract only orthonormal basis
@@ -1380,9 +1380,9 @@ class Body(PyLayers):
         khe = self.sl[:,1].astype(int)
         t=self.traj.time()
 
-        anim = range(5000,self.nframes,10)
+        anim = range(0,self.nframes,10)
 
-        # init antennas
+        ###init antennas
         # if 'topos' in dir(self):
         #     Ant = {}
         #     for key in self.dcs.keys():

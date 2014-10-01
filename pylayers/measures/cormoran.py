@@ -755,6 +755,12 @@ bernard
         #            24.492297713984247,
         #            np.array([-0.07235499,  0.04868631, -0.00314969]))
 
+
+    def anim(self):
+
+        self._show3(body=False,inname=False)
+        self.B.anim()
+
     def topandas(self):
         try:
             self.hkb = pd.DataFrame(index=self.thkb[0])
