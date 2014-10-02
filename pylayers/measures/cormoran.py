@@ -11,7 +11,7 @@ from pylayers.util.project import *
 from pylayers.util.pyutil import *
 from pylayers.mobility.ban.body import *
 from pylayers.gis.layout import *
-from matplotlib.widgets import Slider, CheckButtons, Button
+from matplotlib.widgets import Slider, CheckButtons, Button, Cursor
 from pylayers.signal.DF import *
 
 from moviepy.editor import *
@@ -476,7 +476,11 @@ bernard
 
 
     def _distancematrix(self):
+        """Compute the ditance matrix between the nodes 
 
+            self.dist : (nb frame x nb_node x nb_node)
+            self.dist_nodes : list of used nodes (useful to make the association ;) )
+        """
 
         tdev = []
         for k in self.B.dev:
@@ -497,7 +501,7 @@ bernard
         pin2[:,:,:]=pin
         p = np.concatenate((pin2,pnb),axis=1)
         self.dist = np.sqrt(np.sum((p[:,:,np.newaxis,:]-p[:,np.newaxis,:,:])**2,axis=3))
-        self._lnd = ln
+        self.dist_nodes = ln
 
 
     def accessdm(self,a,b,techno):
@@ -539,8 +543,8 @@ bernard
         ka = techno+':'+str(ia)
         kb = techno+':'+str(ib)
 
-        ua = self._lnd.index(ka)
-        ub = self._lnd.index(kb)
+        ua = self.dist_nodes.index(ka)
+        ub = self.dist_nodes.index(kb)
 
         return(ua,ub)
 
@@ -750,16 +754,20 @@ bernard
                     60.40674368088245,
                     24.492297713984197,
                     array([-0.07235499,  0.04868631, -0.00314969]))
-        # mlab.view(-128.66519195313163,
-        #            50.708933839573511,
-        #            24.492297713984247,
-        #            np.array([-0.07235499,  0.04868631, -0.00314969]))
+        mlab.view(-128.66519195313163,
+                   50.708933839573511,
+                   24.492297713984247,
+                   np.array([-0.07235499,  0.04868631, -0.00314969]))
 
 
     def anim(self):
 
         self._show3(body=False,inname=False)
         self.B.anim()
+        mlab.view(-43.413544538477254,
+                    74.048193730704611,
+                    11.425837641867618,
+                    array([ 0.48298163,  0.67806043,  0.0987967 ]))
 
     def topandas(self):
         try:
@@ -1040,6 +1048,63 @@ bernard
         plt.show()
 
 
+    def pltvisi(self,a,b,**kwargs):
+        """ plot visibility between link a and b
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> S = CorSer(6)
+        >>> f,ax = S.plthkb('AP1','TorsoTopLeft')
+        >>> f,ax = S.pltvisi('AP1','TorsoTopLeft',fig=f,ax=ax)
+        >>> f,ax = S.pltmob(showvel=False,ylim=([-100,-40]),fig=f,ax=ax)
+        >>> plt.title('hatch = visibility / gray= mobility')
+        >>> plt.show()
+        """
+
+
+        defaults = { 'fig':[],
+                     'figsize':(10,10),
+                     'ax':[],
+                     'color':'',
+                     'hatch':'//'
+                    }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]                    
+
+        if kwargs['fig']==[]:
+            fig = plt.figure(figsize=kwargs['figsize'])
+        else :
+            fig=kwargs['fig']
+
+        if kwargs['ax'] ==[]:
+            ax = fig.add_subplot(111)
+        else :
+            ax = kwargs['ax']
+
+
+
+        aa= ax.axis()
+        vv,tv,tseg = self.visiarray(a,b)
+        # vv.any : it exist NLOS regions
+        if vv.any():
+            if kwargs['color']=='':
+                fig,ax=plu.rectplot(tv,tseg,ylim=aa[2:],
+                                    fill=False,
+                                    hatch=kwargs['hatch'],
+                                    fig=fig,ax=ax)
+
+            else :
+                fig,ax=plu.rectplot(tv,tseg,ylim=aa[2:],
+                                    color=kwargs['color'],
+                                    hatch=kwargs['hatch'],
+                                    fig=fig,ax=ax)
+
+        return fig,ax
+
     def pltmob(self,**kwargs):
         """ plot mobility
 
@@ -1054,8 +1119,19 @@ bernard
             filter order 
         fw: float (0.02)
             0 < fw < 1  (fN <=> 1)
-        offset : int
-            add offset to start later
+        time_offset : int
+            add time_offset to start later
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> S = CorSer(6)
+        >>> f,ax = S.plthkb('AP1','TorsoTopLeft')
+        >>> f,ax = S.pltvisi('AP1','TorsoTopLeft',fig=f,ax=ax)
+        >>> f,ax = S.pltmob(showvel=False,ylim=([-100,-40]),fig=f,ax=ax)
+        >>> plt.title('hatch = visibility / gray= mobility')
+        >>> plt.show()
         """
         defaults = { 'fig':[],
                     'figsize':(10,10),
@@ -1065,7 +1141,9 @@ bernard
                      'fo':5,
                      'fw':0.02,
                      'ylim':(-200,0),
-                     'offset':0
+                     'time_offset':0,
+                     'color':'gray',
+                     'hatch':''
                     }
 
         for k in defaults:
@@ -1089,14 +1167,14 @@ bernard
         f.butter(kwargs['fo'],kwargs['fw'],'lowpass')
         Vif=f.filter(Vi)
 
-        if kwargs['offset']>=0:
-            zmo = np.zeros(kwargs['offset'])
+        if kwargs['time_offset']>=0:
+            zmo = np.zeros(kwargs['time_offset'])
             tmp = np.insert(Vif,zmo,0)
             Vif = tmp[:len(Vif)]
         else:
-            zmo = np.zeros(-kwargs['offset'])
+            zmo = np.zeros(-kwargs['time_offset'])
             tmp = np.concatenate((Vif,zmo))
-            Vif = tmp[-kwargs['offset']:len(Vif)-kwargs['offset']]
+            Vif = tmp[-kwargs['time_offset']:len(Vif)-kwargs['time_offset']]
 
 
         if kwargs['showvel']:
@@ -1117,7 +1195,11 @@ bernard
             unu=np.insert(unu,-1,len(null)-1)
             sunu = unu.shape
         nullr=null[unu].reshape(sunu[0]/2,2)
-        fig , ax =plu.rectplot(self.B.time,nullr,ylim=kwargs['ylim'],color='k',fig=f,ax=ax)
+
+        fig , ax =plu.rectplot(self.B.time,nullr,ylim=kwargs['ylim'],
+                                color=kwargs['color'],
+                                hatch=kwargs['hatch'],
+                                fig=fig,ax=ax)
 
         return fig,ax
 
@@ -1156,7 +1238,6 @@ bernard
         plt.show()
 
 
-        import matplotlib.animation as animation
     def plthkb(self,a,b,**kwargs):
         """
         Parameters
@@ -1166,6 +1247,17 @@ bernard
         b : node name | number
         t0 : start time
         t1 : stop time
+
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> S = CorSer(6)
+        >>> f,ax = S.plthkb('AP1','TorsoTopLeft')
+        >>> f,ax = S.pltvisi('AP1','TorsoTopLeft',fig=f,ax=ax)
+        >>> f,ax = S.pltmob(showvel=False,ylim=([-100,-40]),fig=f,ax=ax)
+        >>> plt.show()
 
         """
 
@@ -1797,6 +1889,11 @@ bernard
             B = B-self.B.pg.T
 
         for k in iframe:
+            if len(np.shape(A))<2:
+                A=A[np.newaxis,:]*np.ones((len(B),3)) 
+            if len(np.shape(B))<2:
+                B=B[np.newaxis,:]*np.ones((len(A),3)) 
+
             its = self.B.intersectBody(A[k,:],B[k,:],topos=False,frameId=k)
             tvisi.append(its.any())
         visi = pd.Series(tvisi,index=iframe/100.)
@@ -2027,8 +2124,8 @@ bernard
         devdf : device dataframe
         hkbdf : hkbdataframe
 
-        Example
-        -------
+        Examples
+        --------
 
         >>> from pylayers.measures.cormoran import *
         >>> S=CorSer(6)

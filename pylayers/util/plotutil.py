@@ -416,6 +416,7 @@ def rectplot(x,xpos,ylim=[],**kwargs):
                  'ax':[],
                  'figsize':(8,8),
                  'color':'y',
+                 'fill':True,
                  'alpha':0.3,
                  'linewidth':0,
                  'hatch':''
@@ -438,9 +439,12 @@ def rectplot(x,xpos,ylim=[],**kwargs):
     if ylim==[]:
         ylim=ax.axis()[2:]
     for ux in xpos:
-
         vertc = [(x[ux[0]],ylim[0]),(x[ux[1]],ylim[0]),(x[ux[1]],ylim[1]),(x[ux[0]],ylim[1])]
-        poly = plt.Polygon(vertc,facecolor=kwargs['color'],alpha=kwargs['alpha'],linewidth=kwargs['linewidth'],hatch=kwargs['hatch'])
+        poly = plt.Polygon(vertc,facecolor=kwargs['color'],
+                            fill=kwargs['fill'],
+                            alpha=kwargs['alpha'],
+                            linewidth=kwargs['linewidth'],
+                            hatch=kwargs['hatch'])
         ax.add_patch(poly) 
 
     return fig,ax

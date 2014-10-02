@@ -177,7 +177,7 @@ class Body(PyLayers):
         if 'topos' not in dir(self):
             st = st+ '\nI am nowhere yet\n\n'
         else :
-            st = st + '\n@ t=' +str(self.time[self.toposFrameId]) +' (frameID='+ str(self.toposFrameId) +'),\n'+'My centroid position is ' +str(self.centroid)+"\n\n"
+            st = st + '\n@ t=' +str(self.time[self.toposFrameId]) +' (frameID='+ str(self.toposFrameId) +'),\n'+'My centroid position is ' +str(self.pg[:2,self.toposFrameId])+"\n\n"
         if 'filewear' in dir(self):
             st = st +'filewear : '+ self.filewear +'\n'
         if 'filename' in dir(self):
@@ -1119,7 +1119,7 @@ class Body(PyLayers):
 
         self.acs = {}
         for dev in self.dev.keys():
-            if True:#self.dev[dev]['status'] == 'simulated':
+            if self.dev[dev]['status'] == 'simulated':
                 Rab = self.dev[dev]['T']
                 U = self.dcs[dev]
                 # extract only orthonormal basis
@@ -1380,23 +1380,23 @@ class Body(PyLayers):
         khe = self.sl[:,1].astype(int)
         t=self.traj.time()
 
-        anim = range(0,self.nframes,10)
+        anim = range(5000,self.nframes,10)
 
-        ###init antennas
-        # if 'topos' in dir(self):
-        #     Ant = {}
-        #     for key in self.dcs.keys():
-        #         Ant[key]=ant.Antenna(self.dev[key]['file'])
-        #         if not hasattr(Ant[key],'SqG'):
-        #             Ant[key].Fsynth()
-        #         Ant[key]._show3(po=self.dcs[key][:,0],
-        #                        T=self.acs[key],
-        #                        ilog=False,
-        #                        minr=0.01,
-        #                        maxr=0.2,
-        #                        newfig=False,
-        #                        title=False,
-        #                        colorbar=False)
+        ##init antennas
+        if 'topos' in dir(self):
+            Ant = {}
+            for key in self.dcs.keys():
+                Ant[key]=ant.Antenna(self.dev[key]['file'])
+                if not hasattr(Ant[key],'SqG'):
+                    Ant[key].Fsynth()
+                Ant[key]._show3(po=self.dcs[key][:,0],
+                               T=self.acs[key],
+                               ilog=False,
+                               minr=0.01,
+                               maxr=0.2,
+                               newfig=False,
+                               title=False,
+                               colorbar=False)
         while True:
             if 'topos' in dir(self):
                 for k in anim:#range(len(t)):
@@ -1405,16 +1405,16 @@ class Body(PyLayers):
                     X=np.hstack((self._pta,self._phe))
                     # s = np.hstack((cylrad,cylrad))
                     self._mayapts.mlab_source.set(x=X[0,:], y=X[1,:], z=X[2,:])
-                    # for key in self.dcs.keys():
-                    #     x, y, z ,k = Ant[key]._computemesh(po=self.dcs[key][:,0],
-                    #                                T=self.acs[key],
-                    #                                ilog=False,
-                    #                                minr=0.01,
-                    #                                maxr=0.2,
-                    #                                newfig=False,
-                    #                                title=False,
-                    #                                colorbar=False)
-                    #     Ant[key]._mayamesh.mlab_source.set(x=x, y=y, z=z)
+                    for key in self.dcs.keys():
+                        x, y, z ,k = Ant[key]._computemesh(po=self.dcs[key][:,0],
+                                                   T=self.acs[key],
+                                                   ilog=False,
+                                                   minr=0.01,
+                                                   maxr=0.2,
+                                                   newfig=False,
+                                                   title=False,
+                                                   colorbar=False)
+                        Ant[key]._mayamesh.mlab_source.set(x=x, y=y, z=z)
                     yield
             else:
                 for k in anim:
