@@ -2161,61 +2161,61 @@ class Body(PyLayers):
             else:
                 self.ccs=self._ccs[:,self.toposFrameId,:,:]
         else :
-        nc = self.ncyl
-        #
-        # ccs : nc x 3 x 3
-        #
-        self.ccs = np.empty((nc,3,3))
-        for k in range(self.sl.shape[0]):
-            # e0 : tail node of cylinder segment
-            e0 = int(self.sl[k,0])
-            # e1 : head node of cylinder segment
-            e1 = int(self.sl[k,1])
+            nc = self.ncyl
+            #
+            # ccs : nc x 3 x 3
+            #
+            self.ccs = np.empty((nc,3,3))
+            for k in range(self.sl.shape[0]):
+                # e0 : tail node of cylinder segment
+                e0 = int(self.sl[k,0])
+                # e1 : head node of cylinder segment
+                e1 = int(self.sl[k,1])
 
-            if not topos:
-                # pA : tail point
-                pA = self.d[:,e0,frameId].reshape(3,1)
-                # pB : head point
-                pB = self.d[:,e1,frameId].reshape(3,1)
-                vg = self.vg[:,frameId][:,np.newaxis]
-            else:
-                # pA : tail point
-                pA = self.topos[:,e0].reshape(3,1)
-                # pB : head point
-                pB = self.topos[:,e1].reshape(3,1)
-                # vtopos : mean topos velociy
-                vg = self.vtopos
-            pM = (pA+pB)/2.
-            # create an orthonormal basis
-            # 1 st vector : vg normalized (blue)
-            # 2 nd vector : 3 x 1
-            # 3 rd vector : PB-PA normalized
-            T = geu.onb(pA,pB,vg)
-            self.ccs[k,:,:] = T
-            #~ # e0 : tail node of cylinder segment
-            #~ e0 = e[0]
-            #~ # e1 : head node of cylinder segment
-            #~ e1 = e[1]
-            #~ if not topos:
-                #~ # pA : tail point
-                #~ pA = self.d[:,e0,frameId].reshape(3,1)
-                #~ # pB : head point
-                #~ pB = self.d[:,e1,frameId].reshape(3,1)
-                #~ vg = self.vg[:,frameId][:,np.newaxis]
-            #~ else:
-                #~ # pA : tail point
-                #~ pA = self.topos[:,e0].reshape(3,1)
-                #~ # pB : head point
-                #~ pB = self.topos[:,e1].reshape(3,1)
-                #~ # vtopos : mean topos velociy
-                #~ vg = self.vtopos
-            #~ pM = (pA+pB)/2.
-            #~ # create an orthonormal basis
-            #~ # 1 st vector : vg normalized (blue)
-            #~ # 2 nd vector : 3 x 1
-            #~ # 3 rd vector : PA-PB normalized
-            #~ T = geu.onb(pA,pB,vg)
-            #~ self.ccs[k,:,:] = T
+                if not topos:
+                    # pA : tail point
+                    pA = self.d[:,e0,frameId].reshape(3,1)
+                    # pB : head point
+                    pB = self.d[:,e1,frameId].reshape(3,1)
+                    vg = self.vg[:,frameId][:,np.newaxis]
+                else:
+                    # pA : tail point
+                    pA = self.topos[:,e0].reshape(3,1)
+                    # pB : head point
+                    pB = self.topos[:,e1].reshape(3,1)
+                    # vtopos : mean topos velociy
+                    vg = self.vtopos
+                pM = (pA+pB)/2.
+                # create an orthonormal basis
+                # 1 st vector : vg normalized (blue)
+                # 2 nd vector : 3 x 1
+                # 3 rd vector : PB-PA normalized
+                T = geu.onb(pA,pB,vg)
+                self.ccs[k,:,:] = T
+                #~ # e0 : tail node of cylinder segment
+                #~ e0 = e[0]
+                #~ # e1 : head node of cylinder segment
+                #~ e1 = e[1]
+                #~ if not topos:
+                    #~ # pA : tail point
+                    #~ pA = self.d[:,e0,frameId].reshape(3,1)
+                    #~ # pB : head point
+                    #~ pB = self.d[:,e1,frameId].reshape(3,1)
+                    #~ vg = self.vg[:,frameId][:,np.newaxis]
+                #~ else:
+                    #~ # pA : tail point
+                    #~ pA = self.topos[:,e0].reshape(3,1)
+                    #~ # pB : head point
+                    #~ pB = self.topos[:,e1].reshape(3,1)
+                    #~ # vtopos : mean topos velociy
+                    #~ vg = self.vtopos
+                #~ pM = (pA+pB)/2.
+                #~ # create an orthonormal basis
+                #~ # 1 st vector : vg normalized (blue)
+                #~ # 2 nd vector : 3 x 1
+                #~ # 3 rd vector : PA-PB normalized
+                #~ T = geu.onb(pA,pB,vg)
+                #~ self.ccs[k,:,:] = T
 
 
     def intersectBody(self,A,B, topos = True, frameId = 0, cyl =[]):
