@@ -139,7 +139,11 @@ class Body(PyLayers):
         #  centering makes sense only when using the topos projection
         #
         #
-
+        try :
+            self.ccsfromc3d(di)
+            self.mocapccs=True
+        except:
+            self.mocapccs=False
 
         self.cylfromc3d(centered=centered)
         if isinstance(traj,tr.Trajectory):
@@ -251,6 +255,7 @@ class Body(PyLayers):
             # clean bracket and coma
             vc = v.split('[')[1].split(']')[0].split(',')
             nodes_Id.update({k:vc})
+
         self.nodes_Id=nodes_Id
 
         self.sl = np.ndarray(shape=(len(di['cylinder'].keys()),3))
@@ -270,10 +275,10 @@ class Body(PyLayers):
 
         self.ncyl = len(di['cylinder'].values())
 
-
-
         self.idcyl={}
         [self.idcyl.update({v:k}) for k,v in self.dcyl.items()]
+
+
 
         # if a mocap file is given in the config file
         if _filemocap == []:
@@ -332,22 +337,6 @@ class Body(PyLayers):
                     self.dev[section][option]=devconf.get(section,option)
 
 
-        #
-        # filter real device and get devices
-        #
-        rd = dict(filter(lambda x: x[1]['status']== 'real',self.dev.items()))
-
-
-        # rules in mocap file:
-        #
-        # the mocap nodes (for mobility):
-        # always start with a prefix : ['Bernard:','Bernard_','NicolasCormoran:']
-        #
-        # the radio nodes :
-        # HKB : mocap_prefix + <radiomarkername>
-        # TCR : 
-
-
         try:
             # mocapprefix : retrieve where the prefix is the body name
             ump = [self.name.lower() in p.lower() for p in self._s]
@@ -356,26 +345,33 @@ class Body(PyLayers):
             self._mocap_prefix = self._p[-1].split(':')[0]+':'
 
 
-        # 1 remove prefix
+        #
+        # filter real device and get devices
+        #
+        rd = dict(filter(lambda x: x[1]['status']== 'real',self.dev.items()))
+
+
         prefix = ['Bernard:','Bernard_','NicolasCormoran:']
-        nodes = self._p
+
+        self._mocanodes = self._p
         for p in prefix:
             tmpnode=[]
-            for n in nodes:
+            for n in self._mocanodes:
                 tmpnode.append(n.replace(p,''))
-                nodes = tmpnode
+                self._mocanodes = tmpnode
 
 
         # 2 remove multiple entries due to orientation marker
-        nodes = [n.split(':')[0] for n in nodes]
+        self._mocanodes = [n.split(':')[0] for n in self._mocanodes]
 
         for d in rd :
             if self.dev[d]['name'] == 'hikob':
-                bd = [self.dev[d]['radiomarkname'] in n for n in nodes if not 'TCR' in n]
+                bd = [self.dev[d]['radiomarkname'] in n for n in self._mocanodes if not 'TCR' in n]
                 self.dev[d]['uc3d'] = np.where(bd)[0]
             else :
-                bd = [self.dev[d]['radiomarkname'] in n for n in nodes]
+                bd = [self.dev[d]['radiomarkname'] in n for n in self._mocanodes]
                 self.dev[d]['uc3d'] = np.where(bd)[0]
+
 
 
         return(di)
@@ -434,7 +430,29 @@ class Body(PyLayers):
         # time base of the motion capture file (sec)
         self.time = np.linspace(0,self.Tmocap,self.nframes)
 
+    def ccsfromc3d(self,config):
+        """ Create ccs from C3D file
+        """
 
+        
+        # dmn = dictionnary of mocap nodes position in self._p
+        # for further ccs from marker creation
+        self._dmn={n:un for un,n in enumerate(self._mocanodes)}
+        self._ccs=np.empty((11,self.nframes,3,3))
+        for k,v in config['ccs'].items():
+            # clean bracket and coma
+            vc = v.split('[')[1].split(']')[0].split(',')
+            # get position in uc3d of marker
+            uccs=map(lambda x: self._dmn[x],vc)
+            # determine their positions 
+            # pccs = position of cylinder coordinates system (Nframe x 4 x 3)
+            pccs = self._f[:,uccs,:]
+            # determine associated vetors
+            # vccs = vectors of cylinder coordinates system (Nframe x 3 x 3)
+            vccs = pccs[:,0,np.newaxis,:]-pccs[:,1:,:]
+            self._ccs[self.dcyl[k],:,:,:]=geu.qrdecomp(vccs)
+
+            
 
     def cylfromc3d(self,centered = False):
         """ Create cylinders from C3D file
@@ -1121,7 +1139,7 @@ class Body(PyLayers):
 
         self.acs = {}
         for dev in self.dev.keys():
-            if self.dev[dev]['status'] == 'simulated':
+            if True:#self.dev[dev]['status'] == 'simulated':
                 Rab = self.dev[dev]['T']
                 U = self.dcs[dev]
                 # extract only orthonormal basis
@@ -1530,7 +1548,7 @@ class Body(PyLayers):
                 fig.children[-1].__setattr__('name',self.name )
             if kwargs['text']:
                 self._mayaptstxt=[mlab.text3d(X[0,i],X[1,i], X[2,i],self.idcyl[i],
-                                scale=0.05,
+                                scale=(0.1,0.1,0.1),
                                 color=(0,0,0)) for i in range(self.ncyl)]
 
     def plot3d(self,iframe=0,topos=False,fig=[],ax=[],col='b'):
@@ -2137,7 +2155,12 @@ class Body(PyLayers):
         2nd
         """
 
-
+        if self.mocapccs :
+            if not topos:
+                self.ccs=self._ccs[:,frameId,:,:]
+            else:
+                self.ccs=self._ccs[:,self.toposFrameId,:,:]
+        else :
         nc = self.ncyl
         #
         # ccs : nc x 3 x 3

@@ -4149,13 +4149,37 @@ def dmin3d(a,b,c,d):
 
     return(alpha,beta,dmin)
 
-def gram_schmid(V): 
+# def gram_schmid(V): 
+#     """ 
+#     Gram-Schmid orthonormalization of a set of `M` vectors, in-place. 
+
+#     Parameters 
+#     ---------- 
+#     V : array, shape (N, M) 
+
+#     Notes
+#     -----
+
+#     from http://numpy-discussion.10968.n7.nabble.com/Efficient-orthogonalisation-with-scipy-numpy-td23635.html
+
+#     """ 
+#     # XXX: speed can be improved by using routines from scipy.lib.blas 
+#     # XXX: maybe there's an orthonormalization routine in LAPACK, too, 
+#     #      apart from QR. too lazy to check... 
+#     n = V.shape[1] 
+#     for k in xrange(n): 
+#         V[:,k] /= np.linalg.norm(V[:,k]) 
+#         for j in xrange(k+1, n): 
+#             V[:,j] -= np.vdot(V[:,j], V[:,k]) * V[:,k] 
+#     return V 
+
+def qrdecomp(V): 
     """ 
     Gram-Schmid orthonormalization of a set of `M` vectors, in-place. 
-
+    using qr decomp
     Parameters 
     ---------- 
-    V : array, shape (N, M) 
+    V : array, shape (N,nf, M) 
 
     Notes
     -----
@@ -4166,13 +4190,14 @@ def gram_schmid(V):
     # XXX: speed can be improved by using routines from scipy.lib.blas 
     # XXX: maybe there's an orthonormalization routine in LAPACK, too, 
     #      apart from QR. too lazy to check... 
-    n = V.shape[1] 
-    for k in xrange(n): 
-        V[:,k] /= np.linalg.norm(V[:,k]) 
-        for j in xrange(k+1, n): 
-            V[:,j] -= np.vdot(V[:,j], V[:,k]) * V[:,k] 
-    return V 
 
+    nn = np.linalg.norm(V,axis=(2))
+    for i in range(3):
+        V[:,:,i]=V[:,:,i]/nn 
+    lv = len(V)
+    for k in xrange(lv): 
+        V[k,:,:],r = np.linalg.qr(V[k,:,:])
+    return V 
 
 
 if __name__ == "__main__":
