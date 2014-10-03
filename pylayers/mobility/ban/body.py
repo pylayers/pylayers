@@ -348,10 +348,12 @@ class Body(PyLayers):
         # TCR : 
 
 
-
-        # mocapprefix : retrieve where the prefix is the body name
-        ump = [self.name.lower() in p.lower() for p in self._s]
-        self._mocap_prefix = self._s[ump.index(True)]
+        try:
+            # mocapprefix : retrieve where the prefix is the body name
+            ump = [self.name.lower() in p.lower() for p in self._s]
+            self._mocap_prefix = self._s[ump.index(True)]
+        except:
+            self._mocap_prefix = self._p[-1].split(':')[0]+':'
 
 
         # 1 remove prefix
