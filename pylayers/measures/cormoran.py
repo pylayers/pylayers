@@ -1051,6 +1051,23 @@ bernard
     def pltvisi(self,a,b,**kwargs):
         """ plot visibility between link a and b
 
+
+        Attributes
+        ----------
+        color: 
+            fill color 
+        hatch: 
+            hatch type
+        label_pos: ('top'|'bottom'|'')
+            postion of the label 
+        label_pos_off: float
+            offset of postion of the label 
+        label_mob: str
+            prefix of label in mobility
+        label_stat: str
+            prefix of label static
+
+
         Examples
         --------
 
@@ -1058,7 +1075,7 @@ bernard
         >>> S = CorSer(6)
         >>> f,ax = S.plthkb('AP1','TorsoTopLeft')
         >>> f,ax = S.pltvisi('AP1','TorsoTopLeft',fig=f,ax=ax)
-        >>> f,ax = S.pltmob(showvel=False,ylim=([-100,-40]),fig=f,ax=ax)
+        >>> #f,ax = S.pltmob(showvel=False,ylim=([-100,-40]),fig=f,ax=ax)
         >>> plt.title('hatch = visibility / gray= mobility')
         >>> plt.show()
         """
@@ -1068,7 +1085,11 @@ bernard
                      'figsize':(10,10),
                      'ax':[],
                      'color':'',
-                     'hatch':'//'
+                     'hatch':'//',
+                     'label_pos':'',
+                     'label_pos_off':5,
+                     'label_vis':'V',
+                     'label_hide':'H'
                     }
 
         for k in defaults:
@@ -1088,7 +1109,7 @@ bernard
 
 
         aa= ax.axis()
-        vv,tv,tseg = self.visiarray(a,b)
+        vv,tv,tseg,itseg = self.visiarray(a,b)
         # vv.any : it exist NLOS regions
         if vv.any():
             if kwargs['color']=='':
@@ -1102,6 +1123,19 @@ bernard
                                     color=kwargs['color'],
                                     hatch=kwargs['hatch'],
                                     fig=fig,ax=ax)
+
+            if kwargs['label_pos']!='':
+                if kwargs['label_pos'] == 'top':
+                    yposV = aa[3]-kwargs['label_pos_off']+0.5
+                    yposH = aa[3]-kwargs['label_pos_off']-0.5
+
+                elif kwargs['label_pos'] == 'bottom':
+                    yposV = aa[2]+kwargs['label_pos_off']+0.5
+                    yposH = aa[2]+kwargs['label_pos_off']+0.5
+                xposV= tv[tseg.mean(axis=1).astype(int)]
+                xposH= tv[itseg.mean(axis=1).astype(int)]
+                [ax.text(x,yposV,kwargs['label_vis']+str(ix+1)) for ix,x in enumerate(xposV)]
+                [ax.text(x,yposH,kwargs['label_hide']+str(ix+1)) for ix,x in enumerate(xposH)]
 
         return fig,ax
 
@@ -1128,7 +1162,7 @@ bernard
         >>> from pylayers.measures.cormoran import *
         >>> S = CorSer(6)
         >>> f,ax = S.plthkb('AP1','TorsoTopLeft')
-        >>> f,ax = S.pltvisi('AP1','TorsoTopLeft',fig=f,ax=ax)
+        >>> #f,ax = S.pltvisi('AP1','TorsoTopLeft',fig=f,ax=ax)
         >>> f,ax = S.pltmob(showvel=False,ylim=([-100,-40]),fig=f,ax=ax)
         >>> plt.title('hatch = visibility / gray= mobility')
         >>> plt.show()
@@ -1143,7 +1177,11 @@ bernard
                      'ylim':(-200,0),
                      'time_offset':0,
                      'color':'gray',
-                     'hatch':''
+                     'hatch':'',
+                     'label_pos':'top',
+                     'label_pos_off':5,
+                     'label_mob':'M',
+                     'label_stat':'S'
                     }
 
         for k in defaults:
@@ -1201,6 +1239,33 @@ bernard
                                 hatch=kwargs['hatch'],
                                 fig=fig,ax=ax)
 
+
+        inullr = copy.copy(nullr)
+        bb = np.insert(inullr[:,1],0,0)
+        ee = np.hstack((inullr[:,0],null[-1]))
+        inullr = np.array((bb,ee)).T
+        # remove last 
+        inullr = inullr[:-1,:]
+        
+        if kwargs['label_pos']!='':
+            if kwargs['label_pos'] == 'top':
+                yposM = kwargs['ylim'][1]-kwargs['label_pos_off']+0.5
+                yposS = kwargs['ylim'][1]-kwargs['label_pos_off']-0.5
+
+            elif kwargs['label_pos'] == 'bottom':
+                yposM = kwargs['ylim'][0]+kwargs['label_pos_off']+0.5
+                yposS = kwargs['ylim'][0]+kwargs['label_pos_off']+0.5
+            xposM= self.B.time[nullr.mean(axis=1).astype(int)]
+            xposS= self.B.time[inullr.mean(axis=1).astype(int)]
+            [ax.text(x,yposM,kwargs['label_mob']+str(ix+1),
+                        horizontalalignment='center',
+                        verticalalignment='center')
+                        for ix,x in enumerate(xposM)]
+            [ax.text(x,yposS,kwargs['label_stat']+str(ix+1),
+                        horizontalalignment='center',
+                        verticalalignment='center')
+                        for ix,x in enumerate(xposS)]
+
         return fig,ax
 
     def animhkb(self,a,b,interval=10,save=False):
@@ -1257,6 +1322,7 @@ bernard
         >>> f,ax = S.plthkb('AP1','TorsoTopLeft')
         >>> f,ax = S.pltvisi('AP1','TorsoTopLeft',fig=f,ax=ax)
         >>> f,ax = S.pltmob(showvel=False,ylim=([-100,-40]),fig=f,ax=ax)
+        >>> plt.title('hatch = visibility / gray= mobility')
         >>> plt.show()
 
         """
@@ -1589,7 +1655,7 @@ bernard
 
         if visibility:
             aa= ax.axis()
-            vv,tv,tseg = self.visiarray(a,b)
+            vv,tv,tseg,itseg = self.visiarray(a,b)
             # vv.any : it exist NLOS regions
             if vv.any():
                 fig,ax=plu.rectplot(tv,tseg,ylim=aa[2:],color=kwargs['color'],hatch=hatch,fig=fig,ax=ax)
@@ -1978,7 +2044,13 @@ bernard
             if vv.all():
                 tseg = np.array(zip(np.array([0]),np.array([len(vv)-1])))
 
-        return vv,tv,tseg
+        itseg = copy.copy(tseg)
+        bb = np.insert(itseg[:,1],0,0)
+        ee = np.hstack((itseg[:,0],len(vv)))
+        itseg = np.array((bb,ee)).T
+        # bb = np.hstack((bb,len(vv)))
+
+        return vv,tv,tseg,itseg
 
 
     # def computedevpdf(self):
