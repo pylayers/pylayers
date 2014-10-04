@@ -3647,7 +3647,7 @@
 <span class="sd">        ----------</span>
 
 <span class="sd">        axis : (default 0)</span>
-<span class="sd">        Friis :  -j*c/(4 pi fGHz)</span>
+<span class="sd">        Friis : boolean</span>
 <span class="sd">        mode : string</span>
 <span class="sd">            mean | center | integ | first | last</span>
 
@@ -3661,19 +3661,23 @@
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 
+<span class="sd">        If Friis is true energy is multiplied by</span>
+
+<span class="sd">        :math:`\frac{-j*c}{4 pi fGHz}`</span>
+
 <span class="sd">        axis = 0 is ray axis</span>
 
 <span class="sd">        if mode == &#39;mean&#39;</span>
 
-<span class="sd">        $$E=\frac{1}{K} \sum_k |y_k|^2$$</span>
+<span class="sd">        :math:`E=\frac{1}{K} \sum_k |y_k|^2`</span>
 
 <span class="sd">        if mode == &#39;integ&#39;</span>
 
-<span class="sd">        $$E=\delta_x \sum_k |y_k|^2$$</span>
+<span class="sd">        :math:`E=\delta_x \sum_k |y_k|^2`</span>
 
 <span class="sd">        if mode == &#39;center&#39;</span>
 
-<span class="sd">        $$E= |y_{K/2}|^2$$</span>
+<span class="sd">        :math:`E= |y_{K/2}|^2`</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 

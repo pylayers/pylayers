@@ -107,7 +107,7 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>axis</strong> : (default 0)</p>
-<p><strong>Friis</strong> :  -j*c/(4 pi fGHz)</p>
+<p><strong>Friis</strong> : boolean</p>
 <p><strong>mode</strong> : string</p>
 <blockquote class="last">
 <div><p>mean | center | integ | first | last</p>
@@ -117,13 +117,15 @@
 </tbody>
 </table>
 <p class="rubric">Notes</p>
+<p>If Friis is true energy is multiplied by</p>
+<p><img class="math" src="../../_images/math/e615be2837a893d713299a4d3bf91286182a5ed6.png" alt="\frac{-j*c}{4 pi fGHz}"/></p>
 <p>axis = 0 is ray axis</p>
 <p>if mode == &#8216;mean&#8217;</p>
-<p>$$E=frac{1}{K} sum_k <a href="#id1"><span class="problematic" id="id2">|</span></a>y_k|^2$$</p>
+<p><img class="math" src="../../_images/math/6dc72c152198acb4daac3db2e9e8ce538359d730.png" alt="E=\frac{1}{K} \sum_k |y_k|^2"/></p>
 <p>if mode == &#8216;integ&#8217;</p>
-<p>$$E=delta_x sum_k <a href="#id3"><span class="problematic" id="id4">|</span></a>y_k|^2$$</p>
+<p><img class="math" src="../../_images/math/b77dea919c1b96ecbdca87939e267cfad792f75d.png" alt="E=\delta_x \sum_k |y_k|^2"/></p>
 <p>if mode == &#8216;center&#8217;</p>
-<p>$$E= <a href="#id5"><span class="problematic" id="id6">|</span></a>y_{K/2}|^2$$</p>
+<p><img class="math" src="../../_images/math/fc3fd2c21a6528ad629236a57f606ac6ce3824cc.png" alt="E= |y_{K/2}|^2"/></p>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">FUsignal</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">En1</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
