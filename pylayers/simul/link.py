@@ -106,7 +106,7 @@ class Link(object):
     def __add__(self,l):
         """ merge ak tauk of 2 Links
         """
-        L=Link()
+        L  = Link()
         tk = np.hstack((self.H.tk,l.H.tk))
         ak = np.hstack((self.H.ak,l.H.ak))
         us = np.argsort(tk)
@@ -178,7 +178,7 @@ class SLink(Link):
 
 
 class DLink(Link):
-
+ 
     def __init__(self, **kwargs):
         """ deterministic link evaluation
 

@@ -383,14 +383,17 @@ class Bsignal(PyLayers):
         Examples
         --------
 
-        >>> from pylayers.signal.bsignal import *
-        >>> import numpy as np
-        >>> x = np.arange(0,1,0.01)
-        >>> y = np.sin(2*np.pi*x)
-        >>> s = Bsignal(x,y)
-        >>> su = s.extract(np.arange(4,20))
-        >>> s.plot()
-        >>> su.plot()
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.signal.bsignal import *
+            >>> import numpy as np
+            >>> x = np.arange(0,1,0.01)
+            >>> y = np.sin(2*np.pi*x)
+            >>> s = Bsignal(x,y)
+            >>> su = s.extract(np.arange(4,20))
+            >>> f,a = s.plot()
+            >>> f,a = su.plot()
 
         """
         O = copy(self)
@@ -489,7 +492,7 @@ class Bsignal(PyLayers):
         fun : function
 
         """
-        self.y = function(self.x)
+        self.y = fun(self.x)
 
     def stem(self, **kwargs):
         r""" stem display
@@ -559,78 +562,143 @@ class Bsignal(PyLayers):
         Parameters
         ----------
 
-        uy : ndarray()
-            select rows of y
+        ax : list
+            selected output axis from y default [0,1]
+        typ : string
+            ['l10','l20','d','r','du','ru','m','re','im']
+        sel  : list of ndarray()
+            data selection along selected axis, all the axis void 
+            default [[],[]]
+        ik : fixed axis value default (0)
 
         Returns
         -------
 
-        xn
-        yn
-        ylabels
+        a0 : first data axis
+            this axis can be self.x or not
+        a1 : second data axis
+        dt : data
+
+        ylabels : string
+            label for the selected complex data format
+
+        Notes
+        -----
+
+        This function returns 2 arrays x and y and the corresponding labels
+        Convention : the last axis of y has same dimension as x
+        y can have an arbitrary number of axis i.e a MIMO channel matrix 
+        could be x :  f and y : t x r x f
+
+        Examples
+        --------
+
+        >>> S = Bsignal()
+
+
 
         """
-        defaults = {'typ':'l20'}
+        defaults = {'ax' : [0,1],
+                    'typ':'l20',
+                    'sel' : [[],[]],
+                    'ik' : 0
+                   }
 
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
 
-        if 'uy' not in kwargs:
-            u = np.arange(np.shape(self.y)[0])
+        # shape of y and number of dimensions
+
+        shy = self.y.shape
+        naxy = len(shy)
+
+        # 2 axis selection
+        ax = kwargs['ax']
+        assert(len(ax)==2)
+
+        # selected range on axis
+        sel = kwargs['sel']
+        ik  = kwargs['ik']
+
+        # data selection on first axis
+        if sel[0]==[]:
+            # whole range
+            u = np.arange(shy[ax[0]])
         else:
-            u = kwargs['uy']
+            # subset of values
+            u = sel[0]
+
+        # data selection on second axis
+        if sel[1]==[]:
+            # whole range
+            v = np.arange(shy[ax[1]])
+        else:
+            # subset of values
+            v = sel[1]
+        # data selection on second axis
+
+
 
         # radians to degree coefficient
         rtd = 180./np.pi
 
         t = kwargs['typ']
 
-        xn = self.x
+        if naxy ==1:
+            dt = self.y[u]
+        elif naxy==2:
+            dt = self.y[u,v]
+        elif naxy==3:
+            if ((ax[0]==0) & (ax[1]==1)):
+                dt = self.y[u,v,ik]
+            if ((ax[0]==0) & (ax[1]==2)):
+                dt = self.y[u,ik,v]
+            if ((ax[0]==1) & (ax[1]==2)):
+                dt = self.y[ik,u,v]
+
         if t=='m':
             ylabels='Magnitude'
-            yn = np.abs(self.y[u,:])
+            yn = np.abs(dt)
         if t=='v':
             ylabels='Amplitude'
-            yn = self.y[u,:]
+            yn = a1
         if t=='l10':
             ylabels='Magnitude (dB)'
-            yn = 10*np.log10(np.abs(self.y[u,:])+1e-12)
+            yn = 10*np.log10(np.abs(dt)+1e-12)
         if t=='l20':
             ylabels='Magnitude (dB)'
-            yn = 20*np.log10(np.abs(self.y[u,:])+1e-12)
+            yn = 20*np.log10(np.abs(dt)+1e-12)
         if t=='d':
             ylabels='Phase (deg)'
-            yn = np.angle(self.y[u,:])*rtd
+            yn = np.angle(dt)*rtd
         if t=='r':
             ylabels='Phase (rad)'
-            yn = np.angle(self.y[u,:])
+            yn = np.angle(dt)
         if t=='du':
             ylabels='Unwrapped Phase (deg)'
-            yn = np.unwrap(np.angle(self.y[u,:]))*rtd
+            yn = np.unwrap(np.angle(dt))*rtd
         if t=='ru':
             ylabels='Unwrapped Phase (rad)'
-            yn = np.unwrap(np.angle(self.y[u,:]))
+            yn = np.unwrap(np.angle(dt))
         if t=='re':
             ylabels='Real part'
-            yn = np.real(self.y[u,:])
+            yn = np.real(dt)
         if t=='im':
             ylabels='Imaginary part'
-            yn = np.imag(self.y[u,:])
+            yn = np.imag(dt)
         if t=='gdn':
             ylabels='Group delay (ns)'
             df  = self.x[1]-self.x[0]
-            xn  = self.x[0:-1]
-            yn  = -np.diff(np.unwrap(np.angle(self.y[l,c,:])))/(2*np.pi*df)
+            yn  = -np.diff(np.unwrap(np.angle(dt)))/(2*np.pi*df)
         if t=='gdm':
             ylabels='Group distance (m)'
             df  = self.x[1]-self.x[0]
-            xn  = self.x[0:-1]
-            yn = -0.3*np.diff(np.unwrap(np.angle(self.y[l,c,:])))/(2*np.pi*df)
+            yn = -0.3*np.diff(np.unwrap(np.angle(dt)))/(2*np.pi*df)
         if 'ylabels'  in kwargs:
             ylabels = kwargs['ylabels']
 
-        return(xn,yn,ylabels)
+        return(dt,ylabels)
 
     def imshow(self,**kwargs):
         r""" imshow of y matrix
@@ -644,8 +712,6 @@ class Bsignal(PyLayers):
             plt.cm.BrBG
         aspect : string
             'auto' (default) ,'equal','scalar'
-        dB : boolean
-            False
         function : string
             {'imshow'|'pcolormesh'}
 
@@ -701,7 +767,7 @@ class Bsignal(PyLayers):
                            aspect = kwargs['aspect'],
                            extent = (xn[0],xn[-1],0,yn.shape[0]),
                            interpolation=kwargs['interpolation'],
-                           cmap=kwargs['cmap'],
+                           cmap = kwargs['cmap'],
                            )
             ll = ax.get_xticklabels()+ax.get_yticklabels()
             for l in ll:
@@ -4478,7 +4544,7 @@ class FUDsignal(FUsignal):
         return U
 
 class FUDAsignal(FUDsignal):
-    """ UDAsignal : Uniform signal with Delays and Angles
+    """ FUDAsignal : Uniform signal with Delays and Angles
 
 
     Attributes
