@@ -100,7 +100,7 @@
 <h1>pylayers.signal.bsignal.Bsignal.__init__<a class="headerlink" href="#pylayers-signal-bsignal-bsignal-init" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.signal.bsignal.Bsignal.__init__">
-<tt class="descclassname">Bsignal.</tt><tt class="descname">__init__</tt><big>(</big><em>x=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>y=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#Bsignal.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Bsignal.</tt><tt class="descname">__init__</tt><big>(</big><em>x=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>y=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>label=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#Bsignal.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>object constructor</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -108,11 +108,13 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray (,Nx)</p>
 <blockquote>
-<div><p>time or frequency axis</p>
+<div><p>primary axis (time or frequency)</p>
 </div></blockquote>
 <p><strong>y</strong> : ndarray</p>
 <blockquote class="last">
-<div><p>values  (Nx,Ny)</p>
+<div><p>values  (...,Nx)
+the number of dimensions of y is arbitrary.
+the last dimension of y must be the primary axis</p>
 </div></blockquote>
 </td>
 </tr>
@@ -155,7 +157,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on sept. 26, 2014.
+      Last updated on oct. 04, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">
