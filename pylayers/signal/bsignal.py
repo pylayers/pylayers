@@ -3092,11 +3092,6 @@ class TUsignal(TBsignal, Usignal):
             >>> ax2=plt.axis([20,120,-80,-50])
             >>> plt.show()
             >>> tau_moy = ch4.tau_moy()
-            >>> print "tau_moy: %2.2f ns" % tau_moy
-            tau_moy: 38.09 ns
-            >>> tau_rms = ch4.tau_rms()
-            >>> print "tau_rms: %2.2f ns" % tau_rms
-            tau_rms: 13.79 ns
 
 
 
@@ -3577,7 +3572,7 @@ class FUsignal(FBsignal, Usignal):
         Examples
         --------
 
-        >>> S = FUsignal()
+        >>> S = EnImpulse()
         >>> En1 = S.energy()
         >>> assert((En1>0.99) & (En1<1.01))
 
@@ -3876,8 +3871,7 @@ class FUsignal(FBsignal, Usignal):
         >>> y2[0] = 0
         >>> y     = np.vstack((y1,y2))
         >>> S     = FUsignal(x,y)
-        >>> S.symHz(10)
-        FHsignal :  (47,)  (2, 47)
+        >>> FH =  S.symHz(10)
 
         """
         f = self.x
@@ -4849,8 +4843,8 @@ class FHsignal(FUsignal):
     unrex : unredundant extraction    --> FUsignal
 
     """
-    def __init__(self, x=np.array([]), y=np.array([])):
-        FUsignal.__init__(self, x, y)
+    def __init__(self, x=np.array([]), y=np.array([]),label=[]):
+        FUsignal.__init__(self, x, y,label)
 
     def __repr__(self):
         s = FUsignal.__repr__(self)
