@@ -139,13 +139,12 @@ class Body(PyLayers):
         #  centering makes sense only when using the topos projection
         #
         #
-        try :
-            self.ccsfromc3d(di)
-            self.mocapccs=True
-        except:
-            self.mocapccs=False
-
         self.cylfromc3d(centered=centered)
+
+
+        self.ccsfromc3d(di)
+        self.mocapccs=True
+
         if isinstance(traj,tr.Trajectory):
             self.traj=traj
         self.centered=centered
@@ -438,20 +437,36 @@ class Body(PyLayers):
         # dmn = dictionnary of mocap nodes position in self._p
         # for further ccs from marker creation
         self._dmn={n:un for un,n in enumerate(self._mocanodes)}
-        self._ccs=np.empty((11,self.nframes,3,3))
+        self._ccs=np.empty((11,3,3,self.nframes))
+
         for k,v in config['ccs'].items():
+
             # clean bracket and coma
             vc = v.split('[')[1].split(']')[0].split(',')
             # get position in uc3d of marker
             uccs=map(lambda x: self._dmn[x],vc)
-            # determine their positions 
-            # pccs = position of cylinder coordinates system (Nframe x 4 x 3)
-            pccs = self._f[:,uccs,:]
-            # determine associated vetors
-            # vccs = vectors of cylinder coordinates system (Nframe x 3 x 3)
-            vccs = pccs[:,0,np.newaxis,:]-pccs[:,1:,:]
-            self._ccs[self.dcyl[k],:,:,:]=geu.qrdecomp(vccs)
 
+
+            # 1 vector carried by cylinder axis
+            # 1.1 get cylinder number related to body part k
+            upart = config['cylinder'][k]['i']
+            # 1.2 get tail and head position in self.d
+            kta = self.sl[upart,0].astype(int)
+            khe = self.sl[upart,1].astype(int)
+            # 1.3 create cylinder axis vector 
+            ca = self.d[:,kta,:]-self.d[:,khe,:]
+            # 2 . create 2 extra vectors 
+            # 2.1determine their positions 
+            # pccs = position of cylinder coordinates system (Nframe x Npts x 3)
+            # determine associated vetors
+            pccs = self._f[:,uccs,:]
+            
+            # vccs = vectors of cylinder coordinates system (Nframe x 3 x 3)
+            vccs = self.d[:,kta,np.newaxis,:] - pccs[:,np.newaxis:,:].T 
+
+            # vccs = pccs[:,0,np.newaxis,:]-pccs[:,1:,:]
+            vccs=np.concatenate((ca[:,np.newaxis,:],vccs),axis=1)
+            self._ccs[self.dcyl[k],:,:,:]=geu.qrdecomp(vccs)
             
 
     def cylfromc3d(self,centered = False):
@@ -1634,6 +1649,7 @@ class Body(PyLayers):
 
         """
         defaults = {'iframe' : 0,
+                    'cylinder':True,
                     'widthfactor' : 1.,
                     'tube_sides' : 6,
                     'opacity':1,
@@ -1680,18 +1696,20 @@ class Body(PyLayers):
             pta =  np.array([self.d[0, kta, fId], self.d[1, kta, fId], self.d[2, kta, fId]])
             phe =  np.array([self.d[0, khe, fId], self.d[1, khe, fId], self.d[2, khe, fId]])
             X=np.hstack((pta,phe))
-        connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
-        s = np.hstack((cylrad*kwargs['widthfactor'],cylrad*kwargs['widthfactor']))
-        #pts = mlab.points3d(X[0,:],X[1,:], X[2,:], 5*s ,
-                                             # scale_factor=0.1, resolution=10)
-        self._mayapts = mlab.pipeline.line_source(X[0,:],X[1,:], X[2,:], s ,
-                                             scale_factor=0.001, resolution=10)
-        self._mayapts.mlab_source.dataset.lines = np.array(connections)
-        tube = mlab.pipeline.tube(self._mayapts, tube_radius=0.05,tube_sides=kwargs['tube_sides'])
-        tube.filter.radius_factor = 1.
-        tube.filter.vary_radius = 'vary_radius_by_absolute_scalar'
-        mlab.pipeline.surface(tube, color=body_color,opacity=kwargs['opacity'])
-        f.children[-1].__setattr__('name',self.name )
+
+        if kwargs['cylinder']:
+            connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
+            s = np.hstack((cylrad*kwargs['widthfactor'],cylrad*kwargs['widthfactor']))
+            #pts = mlab.points3d(X[0,:],X[1,:], X[2,:], 5*s ,
+                                                 # scale_factor=0.1, resolution=10)
+            self._mayapts = mlab.pipeline.line_source(X[0,:],X[1,:], X[2,:], s ,
+                                                 scale_factor=0.001, resolution=10)
+            self._mayapts.mlab_source.dataset.lines = np.array(connections)
+            tube = mlab.pipeline.tube(self._mayapts, tube_radius=0.05,tube_sides=kwargs['tube_sides'])
+            tube.filter.radius_factor = 1.
+            tube.filter.vary_radius = 'vary_radius_by_absolute_scalar'
+            mlab.pipeline.surface(tube, color=body_color,opacity=kwargs['opacity'])
+            f.children[-1].__setattr__('name',self.name )
                 
         # ax = phe-pta
         # l = np.sqrt(np.sum((ax**2), axis=0))
@@ -1745,13 +1763,20 @@ class Body(PyLayers):
 
         if kwargs['ccs']:
             # to be improved
+            
+            col=np.linspace(0,1,11)[:,np.newaxis]*np.ones((11,3))
+            col[:,0]=0
 
-            for k,key in enumerate(self.ccs):
-                pt = self.topos[:,k]+cylrad[k]*kwargs['widthfactor']*self.ccs[k, :, 0]
+            for k in range(len(self.ccs)):
+                usl = self.sl[k]
+                pt = (self.topos[:,usl[0].astype(int)]+self.topos[:,usl[1].astype(int)])/2.
+                pt = pt+cylrad[k]*kwargs['widthfactor']*self.ccs[k, :, 0]
                 pte = np.repeat(pt[:,np.newaxis],3,axis=1)
                 ccs = mlab.quiver3d(pte[0], pte[1], pte[2],
                               self.ccs[k, 0], self.ccs[k, 1], self.ccs[k, 2],
-                              scale_factor=2e2*self._unit)
+                              scale_factor=2e2*self._unit,color=tuple(col[k]))
+
+
 
         # for k in range(self.ncyl):
 
@@ -2157,9 +2182,9 @@ class Body(PyLayers):
 
         if self.mocapccs :
             if not topos:
-                self.ccs=self._ccs[:,frameId,:,:]
+                self.ccs=self._ccs[:,:,:,frameId]
             else:
-                self.ccs=self._ccs[:,self.toposFrameId,:,:]
+                self.ccs=self._ccs[:,:,:,self.toposFrameId]
         else :
             nc = self.ncyl
             #

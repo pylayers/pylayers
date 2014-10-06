@@ -4175,11 +4175,11 @@ def dmin3d(a,b,c,d):
 
 def qrdecomp(V): 
     """ 
-    Gram-Schmid orthonormalization of a set of `M` vectors, in-place. 
+    Gram-Schmid orthonormalization of a set of `Nv` vectors, in-place. 
     using qr decomp
     Parameters 
     ---------- 
-    V : array, shape (N,nf, M) 
+    V : array, shape (3,Nv,nf) 
 
     Notes
     -----
@@ -4191,13 +4191,14 @@ def qrdecomp(V):
     # XXX: maybe there's an orthonormalization routine in LAPACK, too, 
     #      apart from QR. too lazy to check... 
 
-    nn = np.linalg.norm(V,axis=(2))
+    nn = np.linalg.norm(V,axis=(1))
     for i in range(3):
-        V[:,:,i]=V[:,:,i]/nn 
-    lv = len(V)
+        V[i,:,:]=V[i,:,:]/nn 
+    lv = np.shape(V)[2]
     for k in xrange(lv): 
-        V[k,:,:],r = np.linalg.qr(V[k,:,:])
+        V[:,:,k],r = np.linalg.qr(V[:,:,k])
     return V 
+
 
 
 if __name__ == "__main__":
