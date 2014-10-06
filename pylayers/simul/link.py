@@ -754,7 +754,7 @@ class DLink(Link):
 
         try:
             del f[key][grpname]
-            print 'delete ',key , ' in ', grpname
+            # print 'delete ',key , ' in ', grpname
             f.close()
         except:
             f.close()

@@ -329,23 +329,32 @@ class Bsignal(PyLayers):
 
     """
 
-    def __init__(self, x=np.array([]), y=np.array([])):
+    def __init__(self, x=np.array([]), y=np.array([]),label=[]):
         r""" object constructor
 
         Parameters
         ----------
 
         x : ndarray (,Nx)
-            time or frequency axis
+            primary axis (time or frequency)
 
         y : ndarray
-            values  (Nx,Ny)
+            values  (...,Nx)
+            the number of dimensions of y is arbitrary.
+            the last dimension of y must be the primary axis
 
 
         """
         self.x = x
         self.y = y
         ndim = self.y.ndim
+        # default naming of the axix
+        if label==[]:
+            self.label=[]
+            for k in range(ndim):
+                self.label.append('ax'+str(k))
+        else:
+            self.label=label
         if ndim > 1:
             shy = np.shape(self.y)
             shx = np.shape(self.x)
@@ -360,11 +369,15 @@ class Bsignal(PyLayers):
 
 
     def __repr__(self):
-        return '%s :  %s  %s' % (
+        st = '%s :  %s  %s ' % (
                             self.__class__.__name__,
                             str(np.shape(self.x)),
                             str(np.shape(self.y)))
 
+        for k in range(self.y.ndim):
+            st = st + '\n' +self.label[k]+ ' : ' + str(self.y.shape[k])
+
+        return(st)
 
 
     def extract(self,u):
@@ -422,13 +435,13 @@ class Bsignal(PyLayers):
             >>> import matplotlib.pyplot as plt
             >>> e = EnImpulse(fe=100)
             >>> fig,ax = e.plot(typ=['v'])
-            >>> plt.title('original waveform')
+            >>> tit1 = plt.title('original waveform')
             >>> e.save('impulse.mat')
             >>> del e
             >>> h = TUsignal()
             >>> h.load('impulse.mat')
             >>> fig,ax = h.plot(typ=['v'])
-            >>> plt.title('retrieved waveform')
+            >>> tit2 = plt.title('retrieved waveform')
 
         See Also
         --------
@@ -562,7 +575,7 @@ class Bsignal(PyLayers):
         Parameters
         ----------
 
-        ax : list
+        sax : list
             selected output axis from y default [0,1]
         typ : string
             ['l10','l20','d','r','du','ru','m','re','im']
@@ -587,18 +600,26 @@ class Bsignal(PyLayers):
 
         This function returns 2 arrays x and y and the corresponding labels
         Convention : the last axis of y has same dimension as x
-        y can have an arbitrary number of axis i.e a MIMO channel matrix 
+        y can have an arbitrary number of axis i.e a MIMO channel matrix
         could be x :  f and y : t x r x f
 
         Examples
         --------
 
+        >>> import numpy as np
         >>> S = Bsignal()
+        >>> x = np.arange(100)
+        >>> y = np.arange(400).reshape(2,2,100)+1j*np.arange(400).reshape(2,2,100)
+        >>> S.x = x
+        >>> S.y = y
+        >>> S.cformat()
+        (array([[-240.        ,   43.01029996],
+               [  49.03089987,   52.55272505]]), 'Magnitude (dB)')
 
 
 
         """
-        defaults = {'ax' : [0,1],
+        defaults = {'sax' : [0,1],
                     'typ':'l20',
                     'sel' : [[],[]],
                     'ik' : 0
@@ -614,7 +635,7 @@ class Bsignal(PyLayers):
         naxy = len(shy)
 
         # 2 axis selection
-        ax = kwargs['ax']
+        ax = kwargs['sax']
         assert(len(ax)==2)
 
         # selected range on axis
@@ -624,77 +645,79 @@ class Bsignal(PyLayers):
         # data selection on first axis
         if sel[0]==[]:
             # whole range
-            u = np.arange(shy[ax[0]])
+            us = 0
+            uf = shy[ax[0]]
         else:
             # subset of values
-            u = sel[0]
+            us = sel[0][0]
+            uf = sel[0][-1]
 
         # data selection on second axis
         if sel[1]==[]:
             # whole range
-            v = np.arange(shy[ax[1]])
+            vs = 0
+            vf = shy[ax[1]]
         else:
             # subset of values
-            v = sel[1]
-        # data selection on second axis
+            vs = sel[1][0]
+            vf = sel[1][-1]
 
 
-
-        # radians to degree coefficient
+        # radians to degree conversion
         rtd = 180./np.pi
 
         t = kwargs['typ']
 
         if naxy ==1:
-            dt = self.y[u]
+            dt = self.y[us:uf]
         elif naxy==2:
-            dt = self.y[u,v]
+            dt = self.y[us:uf,vs:vf]
         elif naxy==3:
             if ((ax[0]==0) & (ax[1]==1)):
-                dt = self.y[u,v,ik]
+                dt = self.y[us:uf,vs:vf,ik]
             if ((ax[0]==0) & (ax[1]==2)):
-                dt = self.y[u,ik,v]
+                dt = self.y[us:uf,ik,vs:vf]
             if ((ax[0]==1) & (ax[1]==2)):
-                dt = self.y[ik,u,v]
+                dt = self.y[ik,us:uf,vs:vf]
 
         if t=='m':
             ylabels='Magnitude'
-            yn = np.abs(dt)
+            dt = np.abs(dt)
         if t=='v':
             ylabels='Amplitude'
-            yn = a1
+            dt = dt
         if t=='l10':
             ylabels='Magnitude (dB)'
-            yn = 10*np.log10(np.abs(dt)+1e-12)
+            dt = 10*np.log10(np.abs(dt)+1e-12)
         if t=='l20':
             ylabels='Magnitude (dB)'
-            yn = 20*np.log10(np.abs(dt)+1e-12)
+            dt = 20*np.log10(np.abs(dt)+1e-12)
         if t=='d':
             ylabels='Phase (deg)'
-            yn = np.angle(dt)*rtd
+            dt = np.angle(dt)*rtd
         if t=='r':
             ylabels='Phase (rad)'
-            yn = np.angle(dt)
+            dt = np.angle(dt)
         if t=='du':
             ylabels='Unwrapped Phase (deg)'
-            yn = np.unwrap(np.angle(dt))*rtd
+            dt = np.unwrap(np.angle(dt))*rtd
         if t=='ru':
             ylabels='Unwrapped Phase (rad)'
-            yn = np.unwrap(np.angle(dt))
+            dt = np.unwrap(np.angle(dt))
         if t=='re':
             ylabels='Real part'
-            yn = np.real(dt)
+            dt = np.real(dt)
         if t=='im':
             ylabels='Imaginary part'
-            yn = np.imag(dt)
+            dt = np.imag(dt)
         if t=='gdn':
             ylabels='Group delay (ns)'
             df  = self.x[1]-self.x[0]
-            yn  = -np.diff(np.unwrap(np.angle(dt)))/(2*np.pi*df)
+            dt  = -np.diff(np.unwrap(np.angle(dt)))/(2*np.pi*df)
         if t=='gdm':
             ylabels='Group distance (m)'
             df  = self.x[1]-self.x[0]
-            yn = -0.3*np.diff(np.unwrap(np.angle(dt)))/(2*np.pi*df)
+            dt = -0.3*np.diff(np.unwrap(np.angle(dt)))/(2*np.pi*df)
         if 'ylabels'  in kwargs:
             ylabels = kwargs['ylabels']
 
@@ -730,7 +753,8 @@ class Bsignal(PyLayers):
                     'aspect':'auto',
                     'fontsize':20,
                     'typ':'l20',
-                    'function':'imshow'}
+                    'function':'imshow',
+                    'sax':[0,1]}
 
         for k in defaults.keys():
             if not kwargs.has_key(k):
@@ -746,36 +770,40 @@ class Bsignal(PyLayers):
         else:
             ax = kwargs['ax']
 
+        # axis selection
+        sax = kwargs['sax']
+
         if self.y.ndim>1:
-            xn,yn,ylabels = self.cformat(**kwargs)
+            dt,ylabels = self.cformat(**kwargs)
 
             if 'vmin' not in kwargs:
-                vmin = yn.min()
+                vmin = dt.min()
             else:
                 vmin = kwargs['vmin']
 
             if 'vmax' not in kwargs:
-                vmax = yn.max()
+                vmax = dt.max()
             else:
                 vmax = kwargs['vmax']
 
             if kwargs['function']=='imshow':
-                im = ax.imshow(yn,
+                im = ax.imshow(dt,
                            origin = 'lower',
                            vmin = vmin,
                            vmax = vmax,
                            aspect = kwargs['aspect'],
-                           extent = (xn[0],xn[-1],0,yn.shape[0]),
+                           #extent = (0,dt.shape[sax[0]],0,dt.shape[sax[1]]),
                            interpolation=kwargs['interpolation'],
                            cmap = kwargs['cmap'],
                            )
+
             ll = ax.get_xticklabels()+ax.get_yticklabels()
             for l in ll:
                 l.set_fontsize(kwargs['fontsize'])
 
 
             if kwargs['function'] =='pcolormesh':
-                im = ax.pcolormesh(xn,np.arange(yn.shape[0]),yn)
+                im = ax.pcolormesh(xn,np.arange(dt.shape[0]),dt)
 
             cb = fig.colorbar(im)
             cb.set_label(ylabels,size=kwargs['fontsize'])
@@ -978,8 +1006,8 @@ class Usignal(Bsignal):
 
     """
 
-    def __init__(self, x=np.array([]), y=np.array([])):
-        super(Usignal,self).__init__(x,y)
+    def __init__(self, x=np.array([]), y=np.array([]),label=[]):
+        super(Usignal,self).__init__(x,y,label)
         #Bsignal.__init__(self, x, y)
 
     def __repr__(self):
@@ -1474,9 +1502,10 @@ class TBsignal(Bsignal):
 
 
     """
-    def __init__(self, x=np.array([]), y=np.array([])):
-        super(TBsignal,self).__init__(x,y)
+    def __init__(self, x=np.array([]), y=np.array([]),label=[]):
+        super(TBsignal,self).__init__(x,y,label)
         #Bsignal.__init__(self, x, y)
+        self.label[-1] = 'time (ns)'
 
     def __repr__(self):
         s = Bsignal.__repr__(self)
@@ -1640,8 +1669,8 @@ class TUsignal(TBsignal, Usignal):
     This class inheritates from TBsignal and Usignal
 
     """
-    def __init__(self, x=np.array([]), y=np.array([])):
-        super(TUsignal,self).__init__(x,y)
+    def __init__(self, x=np.array([]), y=np.array([]),label=[]):
+        super(TUsignal,self).__init__(x,y,label)
         #Usignal.__init__(self, x, y)
 
     def __repr__(self):
@@ -3161,9 +3190,10 @@ class FBsignal(Bsignal):
     plotri   : plot real part and imaginary part
     plotdB   : plot modulus in dB
     """
-    def __init__(self, x=np.array([]), y=np.array([])):
-        super(FBsignal,self).__init__(x,y)
+    def __init__(self, x=np.array([]), y=np.array([]),label=[]):
+        super(FBsignal,self).__init__(x,y,label)
         #Bsignal.__init__(self, x, y)
+        self.label[-1]='Frequency (GHz)'
 
     def __repr__(self):
         s = Bsignal.__repr__(self)
@@ -3225,9 +3255,9 @@ class FBsignal(Bsignal):
         iy : index of y value to be displayed
             default [0]  only the first is displayed
         typ : string
-            ['l10','l20','d','r','du','ru'] 
-        xlabels    
-        ylabels    
+            ['l10','l20','d','r','du','ru']
+        xlabels
+        ylabels
 
         Examples
         --------
@@ -3379,8 +3409,8 @@ class FUsignal(FBsignal, Usignal):
     tap      : calculates channel taps
 
     """
-    def __init__(self, x=np.array([]), y=np.array([])):
-        super(FUsignal,self).__init__(x,y)
+    def __init__(self, x=np.array([]), y=np.array([]),label=[]):
+        super(FUsignal,self).__init__(x,y,label)
         self.isFriis = False
         #FBsignal.__init__(self, x, y)
 
@@ -3540,7 +3570,7 @@ class FUsignal(FBsignal, Usignal):
         ----------
 
         axis : (default 0)
-        Friis :  -j*c/(4 pi fGHz)
+        Friis : boolean
         mode : string
             mean | center | integ | first | last
 
@@ -3548,25 +3578,29 @@ class FUsignal(FBsignal, Usignal):
         --------
 
         >>> S = FUsignal()
-        >>> En1 = e.energy()
+        >>> En1 = S.energy()
         >>> assert((En1>0.99) & (En1<1.01))
 
         Notes
         -----
 
+        If Friis is true energy is multiplied by
+
+        :math:`\frac{-j*c}{4 pi fGHz}`
+
         axis = 0 is ray axis
 
         if mode == 'mean'
 
-        $$E=\frac{1}{K} \sum_k |y_k|^2$$
+        :math:`E=\frac{1}{K} \sum_k |y_k|^2`
 
         if mode == 'integ'
 
-        $$E=\delta_x \sum_k |y_k|^2$$
+        :math:`E=\delta_x \sum_k |y_k|^2`
 
         if mode == 'center'
 
-        $$E= |y_{K/2}|^2$$
+        :math:`E= |y_{K/2}|^2`
 
         """
 
@@ -3843,7 +3877,7 @@ class FUsignal(FBsignal, Usignal):
         >>> y     = np.vstack((y1,y2))
         >>> S     = FUsignal(x,y)
         >>> S.symHz(10)
-        FHsignal :  (48,)  (2, 48)
+        FHsignal :  (47,)  (2, 47)
 
         """
         f = self.x
@@ -4201,7 +4235,7 @@ class FUDsignal(FUsignal):
     ft2     :
 
     """
-    def __init__(self, x=np.array([]), y=np.array([]), taud=np.array([])):
+    def __init__(self, x=np.array([]), y=np.array([]), taud=np.array([]),label=[]):
         """ object constructor
 
         Parameters
@@ -4212,7 +4246,7 @@ class FUDsignal(FUsignal):
         taud : np.array(
 
         """
-        super(FUDsignal,self).__init__(x,y)
+        super(FUDsignal,self).__init__(x,y,label)
         self.taud = taud
         self.taue = np.zeros(len(taud))
 
@@ -4570,9 +4604,10 @@ class FUDAsignal(FUDsignal):
                  y = np.array([]),
                  taud = np.array([]),
                  dod = np.array([]),
-                 doa = np.array([])
+                 doa = np.array([]),
+                 label = []
                  ):
-        super(FUDAsignal,self).__init__(x, y, taud)
+        super(FUDAsignal,self).__init__(x, y,taud,label)
         # FUDsignal.__init__(self, x, y,taud)
         self.dod  = dod
         self.doa  = doa
