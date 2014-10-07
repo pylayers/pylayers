@@ -4190,13 +4190,17 @@ def qrdecomp(V):
     # XXX: speed can be improved by using routines from scipy.lib.blas 
     # XXX: maybe there's an orthonormalization routine in LAPACK, too, 
     #      apart from QR. too lazy to check... 
-
+    import copy
     nn = np.linalg.norm(V,axis=(1))
     for i in range(3):
         V[i,:,:]=V[i,:,:]/nn 
     lv = np.shape(V)[2]
+    V2=copy.deepcopy(V)
+    roty = np.array(([[-1.,0.,0],[0.,1.,0.],[0.,0.,1.]]))
     for k in xrange(lv): 
         V[:,:,k],r = np.linalg.qr(V[:,:,k])
+        if V[2,0,k] >0:
+            V[:,:,k]=np.dot(V[:,:,k],roty)
     return V 
 
 

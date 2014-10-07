@@ -455,6 +455,7 @@ class Body(PyLayers):
             khe = self.sl[upart,1].astype(int)
             # 1.3 create cylinder axis vector 
             ca = self.d[:,kta,:]-self.d[:,khe,:]
+
             # 2 . create 2 extra vectors 
             # 2.1determine their positions 
             # pccs = position of cylinder coordinates system (Nframe x Npts x 3)
@@ -1120,26 +1121,48 @@ class Body(PyLayers):
                     # self.dcs[dev] = np.hstack((mp0[:,np.newaxis],T))
                 else:
                     # associated cylinder
+                    # if not self.dev[dev].has_key('asscyl'):
+                    #     # find the closest cylinder to the device
+                    #     c0=self.sl[:,0].astype(int)
+                    #     c1=self.sl[:,1].astype(int)
+                    #     pta = self.d[:,c0,0]
+                    #     phe = self.d[:,c1,0]
+                    #     import ipdb
+                    #     ipdb.set_trace()
+                    #     # vector tail head
+                    #     th = phe - pta
+                    #     thl =  np.sqrt(np.sum(th**2,axis=0))
+                    #     # vector tail device
+                    #     de = self._f[0,self.dev[dev]['uc3d'],:]
+                    #     td = pta - de[0,:,np.newaxis]
+                    #     tdl = np.sqrt(np.sum(td**2,axis=0))
+
+                    #     do = [np.dot(th[:,i],td[:,i]) for i in range(th.shape[1])]
+                    #     # distance matrix
+                    #     d = abs(tdl*np.sin(do/(tdl*thl)))
+                    #     # closest cylinder
+                    #     md = np.where(min(d)==d)[0]
+                    #     self.dev[dev]['asscyl']= md[0]
+
                     if not self.dev[dev].has_key('asscyl'):
                         # find the closest cylinder to the device
                         c0=self.sl[:,0].astype(int)
                         c1=self.sl[:,1].astype(int)
                         pta = self.d[:,c0,0]
                         phe = self.d[:,c1,0]
-                        # vector tail head
-                        th = phe - pta
-                        thl =  np.sqrt(np.sum(th**2,axis=0))
-                        # vector tail device
+                        
                         de = self._f[0,self.dev[dev]['uc3d'],:]
-                        td = pta - de[0,:,np.newaxis]
-                        tdl = np.sqrt(np.sum(td**2,axis=0))
+                        dtad = np.sqrt(np.sum((pta-de.T)**2,axis=0))
+                        dhed = np.sqrt(np.sum((phe-de.T)**2,axis=0))
+                        mta = np.min(dtad)
+                        mhe = np.min(dhed)
+                        # select the smallest distance as best candidate
+                        if mta < mhe : 
+                            um = np.where(dtad==mta)[0]
+                        else :
+                            um = np.where(dhed==mhe)[0]
+                        self.dev[dev]['asscyl']= um[0]
 
-                        do = [np.dot(th[:,i],td[:,i]) for i in range(th.shape[1])]
-                        # distance matrix
-                        d = abs(tdl*np.sin(do/(tdl*thl)))
-                        # closest cylinder
-                        md = np.where(min(d)==d)[0]
-                        self.dev[dev]['asscyl']= md[0]
 
                     mp0 = self._f[fId,self.dev[dev]['uc3d'][0],:]
                     Tn = self.ccs[self.dev[dev]['asscyl'],:,:]
@@ -1161,7 +1184,7 @@ class Body(PyLayers):
                 Rbg = U[:,1:]
                 self.acs[dev]  = np.dot(Rbg,Rab)
             else :
-                self.acs[dev]  = self.dev[dev]['T']
+                self.acs[dev]  = self.dev[dev]['TTT']
 
 
 
