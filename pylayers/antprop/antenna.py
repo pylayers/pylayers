@@ -1322,7 +1322,7 @@ class Antenna(PyLayers):
             f=mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
         else :
             f=mlab.gcf()
-        self._mayamesh = mlab.mesh(x, y, z)
+        self._mayamesh = mlab.mesh(x, y, z,resolution = 1)
 
         if name == []:
             f.children[-1].name = 'Antenna ' + self._filename

@@ -4196,11 +4196,13 @@ def qrdecomp(V):
         V[i,:,:]=V[i,:,:]/nn 
     lv = np.shape(V)[2]
     V2=copy.deepcopy(V)
-    roty = np.array(([[-1.,0.,0],[0.,1.,0.],[0.,0.,1.]]))
     for k in xrange(lv): 
-        V[:,:,k],r = np.linalg.qr(V[:,:,k])
-        if V[2,0,k] >0:
-            V[:,:,k]=np.dot(V[:,:,k],roty)
+        V[:,:,k],R = np.linalg.qr(V[:,:,k])
+    # check where the vector along cylinder axis is colinear with the 1st basis axis
+    col = np.einsum('ij,ij->j',V[:,0,:],V2[:,0,:])
+    ucol = np.where(col < 0)
+    V[:,:,ucol]=-V[:,:,ucol]
+
     return V 
 
 
