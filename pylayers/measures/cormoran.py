@@ -1303,6 +1303,75 @@ bernard
         plt.show()
 
 
+    def animhkbAP(self,a,AP_list,interval=1,save=False,**kwargs):
+        """
+        Parameters
+        ----------
+
+        a : node name 
+        AP_nb=[]
+        save : bool
+
+        Example
+        -------
+            >>> from pylayers.measures.cormoran import *
+            >>> S = CorSer(6)
+            >>> S.animhkbAP('TorsoTopLeft',['AP1','AP2','AP3','AP4'],interval=100,xstart=58,figsize=(20,2))  
+
+        """
+        import matplotlib.animation as animation
+
+        defaults = {   'fig':[],
+                       'figsize':(10,10),
+                        'ax':[],
+                        'label':'',
+                        'xstart':0
+        }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]                    
+
+        if kwargs['fig']==[]:
+            fig = plt.figure(figsize=kwargs['figsize'])
+        else :
+            fig=kwargs['fig']
+
+        if kwargs['ax'] ==[]:
+            ax = fig.add_subplot(111)
+        else :
+            ax = kwargs['ax']
+
+
+        ust = np.where(self.hkb.index>=kwargs['xstart'])[0][0]
+
+        x = self.hkb.index[ust:]
+        links = [l+'-'+a for l in AP_list]
+        ly = [self.hkb[l].values[ust:] for l in links]
+
+        color=['k','b','g','r']
+        plt.xlim(kwargs['xstart'],x[-1]+3)
+        line = [ax.plot(x, y, animated=True,
+                        color=color[iy],
+                        label=AP_list[iy]+'-'+kwargs['label'])[0] for iy,y in enumerate(ly)]
+
+        def animate(i):
+            for iy,y in enumerate(ly):
+                line[iy].set_ydata(y[:i])
+                line[iy].set_xdata(x[:i])
+
+            return line
+        plt.legend()
+        plt.xlabel('time (s)')
+        plt.ylabel('RSS (dBm)')
+        ani = animation.FuncAnimation(fig, animate, xrange(0, len(x)), 
+                                      interval=interval, blit=True)
+        if save:
+            ani.save(a+'.mp4')
+        #plt.title(links)
+        plt.show()
+
+
     def plthkb(self,a,b,**kwargs):
         """
         Parameters
