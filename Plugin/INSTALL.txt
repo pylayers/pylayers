@@ -1,0 +1,9 @@
+*************************************
+* PyLayers jOSM Plugin installation *
+*************************************
+
+1) copy "PyLayers.jar" into ~/.josm/plugins ( create the plugins directory if don't exists yet)
+2) open jOSM
+3) go to Edit => Preferences and select the Plugin tab (the one with the electrical socket image)
+4) search for "Pylyaers" and check the box
+5) Press OK and restart jOSM
