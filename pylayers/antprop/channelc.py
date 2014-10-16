@@ -329,7 +329,7 @@ class VectChannel(Ctilde):
         chaine = "geomview -nopanel -b 1 1 1 " + filename + " 2>/dev/null &"
         os.system(chaine)
 
-    
+
 class ScalChannel(object):
     """
     DEPRECATED

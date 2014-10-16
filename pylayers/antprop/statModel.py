@@ -27,7 +27,7 @@ def getchannel(emplacement = 'trunku',intersection = 1):
     condition = 'nlos'
     if intersection == 1:
         condition = 'los'
-        
+
     if emplacement == 'trunku':
                 condition = 'los'
 

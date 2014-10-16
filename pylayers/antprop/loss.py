@@ -263,6 +263,18 @@ def cost231(pBS,pMS,hroof,phir,wr,fMHz,wb=20,dB=True,city='medium'):
 
 def cost259(pMS,pBS,fMHz):
     """
+    Parameters
+    ----------
+    pMS : np.array (position of Mobile Station)
+    pBS : np.array (position of Base station)
+    fMHz : float
+
+
+    Notes
+    -----
+
+    http://
+
     """
     hBS = pBS[3,:]
     hMS = pMS[3,:]
