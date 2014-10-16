@@ -1124,7 +1124,7 @@ class DLink(Link):
         ############
         Si = Signatures(self.L,self.ca,self.cb,cutoff=kwargs['cutoff'])
 
-        if self.dexist['sig']['exist'] and not ('sig' in kwargs['force']):
+        if (self.dexist['sig']['exist'] and not ('sig' in kwargs['force'])):
             self.load(Si,self.dexist['sig']['grpname'])
 
         else :
