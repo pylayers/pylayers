@@ -301,6 +301,8 @@ class Antenna(PyLayers):
 
         rtd = 180./np.pi
         st = ''
+        import ipdb
+        ipdb.set_trace()
         if self.fromfile:
             if isinstance(self._filename,str):
                 st = st + 'FileName : ' + self._filename+'\n'
@@ -1315,14 +1317,16 @@ class Antenna(PyLayers):
             self.Fsynth(pattern=True)
 
 
-        x, y, z, k = self._computemesh(**kwargs)
+        x, y, z, k, scalar  = self._computemesh(**kwargs)
 
         if newfig:
             mlab.clf()
             f=mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
         else :
             f=mlab.gcf()
-        self._mayamesh = mlab.mesh(x, y, z,resolution = 1)
+
+
+        self._mayamesh = mlab.mesh(x, y, z,scalars= scalar,resolution = 1)
 
         if name == []:
             f.children[-1].name = 'Antenna ' + self._filename
@@ -1399,6 +1403,8 @@ class Antenna(PyLayers):
         #
         # translation
         #
+        scalar=(q[...,0]**2+q[...,1]**2+q[...,2]**2)
+        
         q[...,0]=q[...,0]+po[0]
         q[...,1]=q[...,1]+po[1]
         q[...,2]=q[...,2]+po[2]
@@ -1407,7 +1413,9 @@ class Antenna(PyLayers):
         y = q[...,1]
         z = q[...,2]
 
-        return x, y, z, k
+
+
+        return x, y, z, k, scalar
 
     def show3(self, k=0,po=[],T=[],typ='Gain', mode='linear', silent=False):
         """ show3 geomview

@@ -1464,7 +1464,7 @@ class Body(PyLayers):
                     # s = np.hstack((cylrad,cylrad))
                     self._mayapts.mlab_source.set(x=X[0,:], y=X[1,:], z=X[2,:])
                     for key in self.dcs.keys():
-                        x, y, z ,k = Ant[key]._computemesh(po=self.dcs[key][:,0],
+                        x, y, z ,k,scalar = Ant[key]._computemesh(po=self.dcs[key][:,0],
                                                    T=self.acs[key],
                                                    ilog=False,
                                                    minr=0.01,
@@ -1472,7 +1472,7 @@ class Body(PyLayers):
                                                    newfig=False,
                                                    title=False,
                                                    colorbar=False)
-                        Ant[key]._mayamesh.mlab_source.set(x=x, y=y, z=z)
+                        Ant[key]._mayamesh.mlab_source.set(x=x, y=y, z=z,scalar=scalar)
                     yield
             else:
                 for k in anim:

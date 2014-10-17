@@ -8283,9 +8283,11 @@ class Layout(PyLayers):
         # manage floor
         
         # if Gt doesn't exists
+
         try:
             self.ma.coorddeter()
-            z=np.ones(self.ma.xy.shape[1])
+            # z=np.ones(self.ma.xy.shape[1])
+            z=np.zeros(self.ma.xy.shape[1])
             F=np.vstack((self.ma.xy,z))
             tri = np.arange(len(z))
             meshf = tvtk.PolyData(points=F.T, polys=np.array([tri]))
