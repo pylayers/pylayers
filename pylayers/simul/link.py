@@ -1047,8 +1047,8 @@ class DLink(Link):
         Parameters
         ----------
 
-        force : boolean
-            Force the computation (even if obj already exists) AND save (replace previous computations)
+        force : list
+            Force the computation (['sig','ray','Ct','H']) AND save (replace previous computations)
         si_algo : str ('old'|'new')
             signature.run algo type
         ra_ceil_height_meter : int
@@ -1100,7 +1100,7 @@ class DLink(Link):
                    'diffraction':False,
                    'ra_ceil_height_meter':3,
                    'ra_number_mirror_cf':1,
-                   'force':['sig','ray','Ct','H'],
+                   'force':[],
                    'alg':7,
                    'threshold':0.1,
                    }

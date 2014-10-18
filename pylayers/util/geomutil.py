@@ -4149,6 +4149,66 @@ def dmin3d(a,b,c,d):
 
     return(alpha,beta,dmin)
 
+# def gram_schmid(V): 
+#     """ 
+#     Gram-Schmid orthonormalization of a set of `M` vectors, in-place. 
+
+#     Parameters 
+#     ---------- 
+#     V : array, shape (N, M) 
+
+#     Notes
+#     -----
+
+#     from http://numpy-discussion.10968.n7.nabble.com/Efficient-orthogonalisation-with-scipy-numpy-td23635.html
+
+#     """ 
+#     # XXX: speed can be improved by using routines from scipy.lib.blas 
+#     # XXX: maybe there's an orthonormalization routine in LAPACK, too, 
+#     #      apart from QR. too lazy to check... 
+#     n = V.shape[1] 
+#     for k in xrange(n): 
+#         V[:,k] /= np.linalg.norm(V[:,k]) 
+#         for j in xrange(k+1, n): 
+#             V[:,j] -= np.vdot(V[:,j], V[:,k]) * V[:,k] 
+#     return V 
+
+def qrdecomp(V): 
+    """ 
+    Gram-Schmid orthonormalization of a set of `Nv` vectors, in-place. 
+    using qr decomp
+    Parameters 
+    ---------- 
+    V : array, shape (3,Nv,nf) 
+
+    Notes
+    -----
+
+    from http://numpy-discussion.10968.n7.nabble.com/Efficient-orthogonalisation-with-scipy-numpy-td23635.html
+
+    """ 
+    # XXX: speed can be improved by using routines from scipy.lib.blas 
+    # XXX: maybe there's an orthonormalization routine in LAPACK, too, 
+    #      apart from QR. too lazy to check... 
+    import copy
+    nn = np.linalg.norm(V,axis=(1))
+    for i in range(3):
+        V[i,:,:]=V[i,:,:]/nn 
+    lv = np.shape(V)[2]
+    V2=copy.deepcopy(V)
+    for k in xrange(lv): 
+        V[:,:,k],R = np.linalg.qr(V[:,:,k])
+    # check where the vector along cylinder axis is colinear with the 1st basis axis
+    col = np.einsum('ij,ij->j',V[:,0,:],V2[:,0,:])
+    ucol = np.where(col < 0)
+    V[:,:,ucol]=-V[:,:,ucol]
+
+    return V 
+
+
+
 if __name__ == "__main__":
     plt.ion()
     doctest.testmod()
+
+
