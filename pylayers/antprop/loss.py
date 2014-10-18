@@ -285,8 +285,19 @@ def cost259(pMS,pBS,fMHz):
         pl = 10**(-pl/20.);
     return(pl)
 
-def cost2100(pMS,pBS,fGHz,nfloor=1,dB=True):
+def hata(pMS,pBS,fGHz,hMS,hBS,typ):
+    """ Hata Path loss model
+
+    pMS : np.array
+        Mobile position
+    pBS : np.array
+    fGHz : np.array
+
     """
+    dm  = np.sqrt((pBS-pMS)*(pBS-pMS))
+
+def cost2100(pMS,pBS,fGHz,nfloor=1,dB=True):
+     """
     """
     dm  = np.sqrt((pBS-pMS)*(pBS-pMS))
     pl0 = 32.4+20*log10(dm)+20*np.log10(fGHz)
