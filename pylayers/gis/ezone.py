@@ -142,6 +142,10 @@ def dectile(prefix='N48W002'):
         lonmin = -eval(prefix[5:7])
         lonmax = lonmin+1
 
+    if prefix[3]=='E':
+        lonmin = eval(prefix[5:7])
+        lonmax = lonmin+1
+
     return (lonmin,lonmax,latmin,latmax)
 
 def expand(A):
@@ -218,7 +222,7 @@ class DEM(PyLayers):
 
         self.lL0 = np.array([lom,lam])
 
-        self.m = Basemap(llcrnrlon = lon,
+        self.m = Basemap(llcrnrlon = lom,
                          llcrnrlat = lam,
                          urcrnrlon = loM,
                          urcrnrlat = laM,
@@ -226,7 +230,7 @@ class DEM(PyLayers):
                          lon_0 = self.lon_0,
                          lat_0 = self.lat_0)
 
-    def dwlsrtm(self,lon,lat):
+    def dwlsrtm(self):
         """ download srtm tile
 
         Parameters
@@ -238,9 +242,10 @@ class DEM(PyLayers):
         """
         downloader = srtm.SRTMDownloader()
         downloader.loadFileList()
-        ilat = int(np.floor(lat).astype('int'))
-        ilon = int(np.floor(lon).astype('int'))
-        tile = downloader.getTile(ilat,ilon)
+        #ilat = int(np.floor(lat).astype('int'))
+        #ilon = int(np.floor(lon).astype('int'))
+        # latitude, longitude
+        tile = downloader.getTile(self.lL0[1],self.lL0[0])
         self.hgts = np.array(tile.data).reshape(1201,1201)
         self.hgts[self.hgts<0]=0
 
@@ -353,7 +358,6 @@ class Ezone(PyLayers):
         """
         """
         self.prefix = prefix
-        self.dbldg={}
 
         (lom,loM,lam,laM) = dectile(self.prefix)
 
@@ -430,8 +434,8 @@ class Ezone(PyLayers):
         for f in files:
             print f
 
-    def fromlonlat(self,lon,lat):
-        """ get an ezone from a point
+    def getdem(self):
+        """ get a digital elevation model
 
         Parameters
         ----------
@@ -440,8 +444,9 @@ class Ezone(PyLayers):
         lat : float
 
         """
+        lon = self.lL0[0]
+        lat = self.lL0[1]
         # Determine the srtm and aster file name
-        self.prefix = enctile(lon,lat)
         dirsrtm  = os.environ['DIRSRTM']
         diraster = os.environ['DIRASTER']
 
@@ -455,8 +460,8 @@ class Ezone(PyLayers):
 
         if (os.path.isfile(filehgt) & os.path.isfile(filelcv)):
             print "Load srtm file"
-            D = DEM()
-            D.loadsrtm(filehgt=filehgt)
+            D = DEM(self.prefix)
+            D.loadsrtm()
             self.hgts = D.hgt
             self.lcv  = D.lcv
             self.m    = D.m
@@ -466,8 +471,8 @@ class Ezone(PyLayers):
             self.rebase(source='srtm')
         else:
             print "Download srtm file"
-            D = DEM()
-            D.dwlsrtm(lon,lat)
+            D = DEM(self.prefix)
+            D.dwlsrtm()
             self.hgts = D.hgts
         if os.path.isfile(fileaster):
             print "Load aster file"
@@ -1029,6 +1034,7 @@ class Ezone(PyLayers):
                 if 'aster' in fh['dem']:
                     self.hgta = fh['dem']['aster']['hgta'][:]
             if 'bldg' in fh:
+                self.dbldg={}
                 for k in fh['bldg']:
                     if (('info' in fh['bldg'][k]) and
                         ('poly' in fh['bldg'][k])):

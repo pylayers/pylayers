@@ -301,8 +301,6 @@ class Antenna(PyLayers):
 
         rtd = 180./np.pi
         st = ''
-        import ipdb
-        ipdb.set_trace()
         if self.fromfile:
             if isinstance(self._filename,str):
                 st = st + 'FileName : ' + self._filename+'\n'
