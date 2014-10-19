@@ -1,6 +1,9 @@
 #-*- coding:Utf-8 -*-
 """
 
+module ezone
+============
+
 .. currentmodule:: pylayers.gis.ezone
 
 This class handles the description of an earth zone
@@ -12,8 +15,6 @@ vector data comes from openstreetmap
 .. autosummary::
     :toctree: generated
 
-Class Ezone
-===========
 
 
 """
@@ -62,8 +63,8 @@ def maxloc(f,threshold=-0.7):
     g[ind] = f[ind]
     return(g)
 
-def encsrtm(lon,lat):
-    """ encode srtm file
+def enctile(lon,lat):
+    """ encode tile prefix from (lon,lat)
 
     Parameters
     ----------
@@ -83,8 +84,8 @@ def encsrtm(lon,lat):
     --------
 
         >>> from pylayers.gis.ezone import *
-        >>> assert encsrtm(-1.5,48.5)=='N48W002'
-        >>> assert encsrtm(0.5,48.5)=='N48E000'
+        >>> assert enctile(-1.5,48.5)=='N48W002'
+        >>> assert enctile(0.5,48.5)=='N48E000'
 
     """
     if lon>0:
@@ -116,8 +117,8 @@ def encsrtm(lon,lat):
     prefix = slat+clat+slon+clon
     return prefix
 
-def decsrtm(_filehgt='N48W002.HGT'):
-    """ decode srtm file
+def dectile(prefix='N48W002'):
+    """ decode tile name
 
     Parameters
     ----------
@@ -128,16 +129,16 @@ def decsrtm(_filehgt='N48W002.HGT'):
     --------
 
     >>> import ezone
-    >>> ezone.dechgt('N48W002.HGT')
+    >>> ezone.dectile('N48W002')
     (-2.0, -1.0, 48,49)
 
     """
-    if _filehgt[0]=='N':
-        latmin = eval(_filehgt[1:3])
+    if prefix[0]=='N':
+        latmin = eval(prefix[1:3])
         latmax = latmin+1
 
-    if _filehgt[3]=='W':
-        lonmin = -eval(_filehgt[5:7])
+    if prefix[3]=='W':
+        lonmin = -eval(prefix[5:7])
         lonmax = lonmin+1
 
     return (lonmin,lonmax,latmin,latmax)
@@ -156,13 +157,14 @@ def conv(extent,m,mode='tocart'):
     Parameters
     ----------
 
-    extent
-    m
+    extent : (lonmin,lonmax,latmin,latmax)
+    m  : matplotlib mapping
     mode : string
         'tocart' | 'toll'
 
     Returns
     -------
+
     out : np.array
         [xmin,xmax,ymin,ymax] if mode == 'tocart'
         [lonmin,lonmax,latmin,latmax] if mode == 'toll'
@@ -203,18 +205,34 @@ def zone(pt,rm=1000):
 class DEM(PyLayers):
     """ Class Digital Elevation Model
     """
-    def __init__(self):
-        pass
+    def __init__(self,prefix):
+
+        self.prefix = prefix
+
+        (lom,loM,lam,laM) = dectile(self.prefix)
+        self.extent = (lom,loM,lam,laM)
+        self.lon_0  = (lom+loM)/2.
+        self.lat_0  = (lam+laM)/2.
+
+        self.m = Basemap(llcrnrlon = lon,
+                         llcrnrlat = lam,
+                         urcrnrlon = loM,
+                         urcrnrlat = laM,
+                         resolution = 'i',projection='cass',
+                         lon_0 = self.lon_0,
+                         lat_0 = self.lat_0)
 
     def dwlsrtm(self,lon,lat):
         """ download srtm tile
 
         Parameters
         ----------
-        lat  :
-        lon  :
+
+        lat  : float
+        lon  : float
+
         """
-        downloader=srtm.SRTMDownloader()
+        downloader = srtm.SRTMDownloader()
         downloader.loadFileList()
         ilat = int(np.floor(lat).astype('int'))
         ilon = int(np.floor(lon).astype('int'))
@@ -222,39 +240,15 @@ class DEM(PyLayers):
         self.hgts = np.array(tile.data).reshape(1201,1201)
         self.hgts[self.hgts<0]=0
 
-    def loadsrtm(self,_filehgt='N48W002.HGT',filehgt=[]):
+    def loadsrtm(self):
         """ load hgt and lcv files fro_m srtm directory
-
-        _filehgt : string
-            short name
-
-        filehgt : string
-            long name
-
-
-        Notes
-        -----
-
-            If a long name is given it has the priority
 
         """
 
-        (lom,loM,lam,laM) = decsrtm(_filehgt)
-
-        self.extent = (lom,loM,lam,laM)
-        self.lonmin = lom
-        self.lonmax = loM
-        self.latmin = lam
-        self.latmax = laM
-        self.lon_0  = (lom+loM)/2.
-        self.lat_0  = (lam+laM)/2.
-
-        if filehgt==[]:
-            _filelcv = _filehgt.replace('.HGT','.lcv')
-            filehgt = pyu.getlong(_filehgt,'gis/srtm')
-            filelcv = pyu.getlong(_filelcv,'gis/srtm')
-        else:
-            filelcv = filehgt.replace('.HGT','.lcv')
+        _filehgt = self.prefix+'.HGT'
+        _filelcv = self.prefix+'.lcv'
+        filehgt = pyu.getlong(_filehgt,'gis/srtm')
+        filelcv = pyu.getlong(_filelcv,'gis/srtm')
 
 
         data = np.fromfile(filehgt,dtype='>i2')
@@ -263,26 +257,15 @@ class DEM(PyLayers):
         data = np.fromfile(filelcv,dtype='>i1')
         self.lcv = data.reshape(1201,1201)
 
-        self.m = Basemap(llcrnrlon = self.lonmin,
-                         llcrnrlat = self.latmin,
-                         urcrnrlon = self.lonmax,
-                         urcrnrlat = self.latmax,
-                         resolution = 'i',projection='cass',
-                         lon_0 = self.lon_0,
-                         lat_0 = self.lat_0)
-
-    def loadaster(self,_fileaster='ASTGTM2_N48W002_dem.tif',fileaster=[]):
-        """ Load Aster files
-
-        Parameters
-        ----------
-
-        _fileaster : string
-            short name
-        fileaster : string
-            long name
+    def loadaster(self):
+        """ load Aster files
 
         """
+
+
+        # construct filename from prefix
+        _fileaster = 'ASTGTM2_'+self.prefix+'_dem.tif'
+
         if fileaster==[]:
             fileaster = pyu.getlong(_fileaster,'gis/aster')
         else:
@@ -303,28 +286,8 @@ class DEM(PyLayers):
                         path = os.path.join(path, word)
                     zf.extract(member, path)
 
-        prefix =_fileaster.replace('ASTGTM2_','')
-        prefix = prefix.replace('_dem.tif ','.HGT')
-        (lom,loM,lam,laM) = decsrtm(prefix)
-        self.extent = (lom,loM,lam,laM)
-        self.lonmin = lom
-        self.lonmax = loM
-        self.latmin = lam
-        self.latmax = laM
-        self.lon_0  = (lom+loM)/2.
-        self.lat_0  = (lam+laM)/2.
-
         f = gdal.Open(fileaster)
         self.hgta = f.ReadAsArray()
-
-        self.m = Basemap(llcrnrlon = self.lonmin,
-                         llcrnrlat = self.latmin,
-                         urcrnrlon = self.lonmax,
-                         urcrnrlat = self.latmax,
-                         resolution = 'i',projection='cass',
-                         lon_0 = self.lon_0,
-                         lat_0 = self.lat_0)
-
 
     def show(self,**kwargs):
         """ Ezone vizualisation
@@ -378,18 +341,35 @@ class Ezone(PyLayers):
             dictionnary of cities
         pll    : point lower left
         pur    : point upper right
-        m      : basemap coordinates change
+        m      : Basemap coordinates converter 
 
 
     """
-    def __init__(self):
+    def __init__(self,prefix):
         """
         """
+        self.prefix = prefix
         self.dbldg={}
-        pass
+
+        (lom,loM,lam,laM) = dectile(self.prefix)
+
+        self.extent = (lom,loM,lam,laM)
+        self.lon_0  = (lom+loM)/2.
+        self.lat_0  = (lam+laM)/2.
+
+        self.m = Basemap(llcrnrlon = lom,
+                         llcrnrlat = lam,
+                         urcrnrlon = loM,
+                         urcrnrlat = laM,
+                         resolution = 'i',projection='cass',
+                         lon_0 = self.lon_0,
+                         lat_0 = self.lat_0)
+        self.pll = self.m(self.extent[0],self.extent[2])
+        self.pur = self.m(self.extent[1],self.extent[3])
+        self.extent_c = (self.pll[0],self.pur[0],self.pll[1],self.pur[1])
 
     def __repr__(self):
-        st = self._fileh5+'\n'
+        st = self.prefix+'\n'
         ncar = len(st)
         for c in range(ncar):
             st = st+'-'
@@ -398,10 +378,21 @@ class Ezone(PyLayers):
         st = st+'[ '+("%2.3f" % self.pll[0])+' '+("%2.3f" % self.pur[0])+' '
         st = st+("%2.3f" % self.pll[1])+' '+("%2.3f" % self.pur[1])+' ]\n'
 
+        if 'dbldg' in self.__dict__:
+            st = st + '\n'
+            st = st + 'Buildings \n'
+            st = st + '--------- \n'
+            st = st + "i-longitude : "+str(self.blom)+\
+            ' '+str(self.bloM)+'\n'
+            st = st + "i-latitude  : "+str(self.blam)+\
+            ' '+str(self.blaM)+'\n'
+
+
         return(st)
 
     def building(self,ltile):
-        """
+        """ get building in arrays from a list of subtiles
+
         Parameters
         ----------
 
@@ -444,11 +435,11 @@ class Ezone(PyLayers):
 
         """
         # Determine the srtm and aster file name
-        self.prefix = encsrtm(lon,lat)
+        self.prefix = enctile(lon,lat)
         dirsrtm  = os.environ['DIRSRTM']
         diraster = os.environ['DIRASTER']
 
-        _filehgt = self.prefix+'.HGT'
+        _filehgt  = self.prefix+'.HGT'
         _filelcv  = self.prefix+'.lcv'
         _fileaster  = 'ASTGTM2_'+self.prefix+'_dem.tif'
 
@@ -618,6 +609,8 @@ class Ezone(PyLayers):
             K factor
         fGHz : float
             frequency in GHz
+        source : string
+            'aster' | 'srtm'
 
         """
 
@@ -656,7 +649,11 @@ class Ezone(PyLayers):
         ry = np.round((self.extent[3]-lat) / self.latstep).astype(int)
 
         # add earth sphericity deviation to hgt (depends on K factor)
-        height = self.hgt[ry,rx] + dh
+        if kwargs['source']=='srtm':
+            height = self.hgts[ry,rx] + dh
+
+        if kwargs['source']=='srta':
+            height = self.hgta[ry,rx] + dh
 
         # seek for local maxima along link profile
         m = maxloc(height[np.newaxis,:])
@@ -765,21 +762,29 @@ class Ezone(PyLayers):
 
     def rennes(self):
         """
+        Building are stored in quadTree.
+        The centroid of the building is converted into an integer which
+        denotes the corresponding quadtree.
+        lbdg is the list of the quadtrees
+
         """
-        self.prefix='N48W002'
         Rennes = pd.read_hdf("RennesBis.h5","Building")
+        # read a dictionnary of polygons
         fd = open('dpoly.pickle','rb')
         dpoly = pickle.load(fd)
         fd.close()
+
         keys  = np.array(dpoly.keys())
         lpoly = dpoly.values()
         #u = np.argsort(np.array(keys))
 
-        var = Rennes['ALT_FAITAG'].values-Rennes['ALT_SOL'].values
-        pg = np.array(map(lambda x : np.array(Polygon(x).centroid.xy).T[0],lpoly)).T
-        lL0=np.array([-2,48])
-        ibd = np.array(ent(pg,lL0))
+        var  = Rennes['ALT_FAITAG'].values-Rennes['ALT_SOL'].values
+        pg   = np.array(map(lambda x : np.array(Polygon(x).centroid.xy).T[0],lpoly)).T
+        lL0  = np.array([-2,48])
+        # ent : encode in integer
+        ibd  = np.array(ent(pg,lL0))
         lbdg = np.unique(ibd)
+
         for kbld in lbdg:
             idx = np.where(ibd==kbld)[0]
             k0 = keys[idx]
@@ -791,10 +796,12 @@ class Ezone(PyLayers):
             #store.close()
             lp0 = [dpoly[k] for k in k0]
             #f = h5py.File("Rennesb.h5",'a')
-            z2 = np.zeros((2,))[None,:]
+            z2   = np.zeros((2,))[None,:]
+            # add zeros as a delimiter between polygons
             lp0z = map(lambda x:np.vstack((x,z2)),lp0)
             alp0 = reduce(lambda x,y:np.vstack((x,y)),lp0z)
-            self.dbldg[kbld].append(alp0)
+            #self.dbldg[kbld].append(alp0)
+            self.dbldg[kbld].append(lp0)
             #f[group+'/poly']=alp0
             #f.close()
 
@@ -815,6 +822,7 @@ class Ezone(PyLayers):
             'lonlat'| 'cartesian'
         source: string
             'srtm' | 'aster'
+        extent : [lonmin,lomax,latmin,latmax]
 
         """
         defaults = {'title':'',
@@ -852,9 +860,10 @@ class Ezone(PyLayers):
         ax  = fig.add_subplot(111)
 
         #
-        # ploting city buildings
+        # ploting buildings with collection of polygons
         #
-        #if kwargs['bldg']:
+        if kwargs['bldg']:
+            pass
         #    for city in self.dcity.keys():
         #        bdpt = self.dcity[city]['bdpt']
         #        bdma = self.dcity[city]['bdma'].astype('bool')
@@ -909,6 +918,7 @@ class Ezone(PyLayers):
                     hgt = self.hgta
 
             if kwargs['coord']=='cartesian':
+                self.tocart(source=kwargs['coord'])
                 if kwargs['source']=='srtm':
                     x = np.linspace(self.extent_c[0],self.extent_c[1],1201)
                     y = np.linspace(self.extent_c[3],self.extent_c[2],1201)
@@ -919,15 +929,18 @@ class Ezone(PyLayers):
                     hgt = self.hgta_cart
                 extent = extent_c
 
-            # index corresponding to the selected zone
+            # get index corresponding to the selected zone
+
             ix = np.where((x>=extent[0]) & (x<=extent[1]))[0]
             iy = np.where((y>=extent[2]) & (y<=extent[3]))[0]
+
             if kwargs['height']:
                 im = ax.imshow(hgt[iy[0]:(iy[-1]+1),ix[0]:(ix[-1]+1)],extent=extent)
                 divider = make_axes_locatable(ax)
                 cax = divider.append_axes("right", size="5%", pad=0.05)
                 cb = fig.colorbar(im,cax)
                 cb.set_label('Height (meters)')
+
             if kwargs['contour']:
                 cnt = ax.contour(hgt[iy[0]:(iy[-1]+1),ix[0]:(ix[-1]+1)],N=10,extent=extent,origin='upper')
 
@@ -960,7 +973,7 @@ class Ezone(PyLayers):
         self.lcv = D.lcv
         #vertices = np.ma.masked_array(pt, ma)
 
-    def loadh5(self,prefix):
+    def loadh5(self):
         """ load Ezone from an hdf5 file
 
         Parameters
@@ -968,8 +981,21 @@ class Ezone(PyLayers):
 
         prefix : string
 
+        Notes
+        -----
+
+        Structure of the hdf5. The file has the following groups
+
+        extent
+        dem
+            srtm
+            aster
+        bldg
+            u'ia-b'
+                info
+                poly
+
         """
-        self.prefix = prefix
         _fileh5 = self.prefix+'.h5'
         fileh5 = pyu.getlong(_fileh5,'gis/h5')
         with h5py.File(fileh5) as fh:
@@ -986,6 +1012,16 @@ class Ezone(PyLayers):
                         a = fh['bldg'][k]['info'][:]
                         b = fh['bldg'][k]['poly'][:]
                         self.dbldg[k] = [a,b]
+
+                l1 = map(lambda x : x.replace('i',''),self.dbldg.keys())
+                llon = map(lambda x: eval(x.split('-')[0]),l1)
+                llat = map(lambda x: eval(x.split('-')[1]),l1)
+
+                self.blom = min(llon)
+                self.bloM = max(llon)
+                self.blam = min(llat)
+                self.blaM = max(llat)
+
 
     def saveh5(self):
         """ save Ezone in hdf5 format

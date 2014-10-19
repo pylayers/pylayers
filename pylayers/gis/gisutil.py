@@ -2,15 +2,27 @@ import numpy as np
 import pdb
 
 def ent(lL,lL0):
-    """ encode lon Lat in natural integer
+    u""" encode lon Lat in natural integer
 
     Parameters
     ----------
 
     lL : nd.array (2xN)
-        longitude Latitude
+        longitude latitude array
     lL0 : nd.array (,2)
-        lower left corner of the 1degree tile
+        lower left corner of the 1 degree tile
+
+
+    Returns
+    -------
+
+    'iA-B' : array of string (2xN)
+
+    Longitude and latitude offset (a,b) with a<1 and b<1
+    are multiplied by 256 and converted in unsigned int8.
+    This means that the 1 degree  tile is subdivided into 256*256 subtiles.
+    'i0-0' is the lower corner subtile
+    'i255-255' is the upper corner subtile
 
     """
     N = lL.shape[1]
