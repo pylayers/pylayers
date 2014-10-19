@@ -836,16 +836,25 @@ class Ezone(PyLayers):
 
         fig,ax
 
+        Notes
+        -----
+
+        If height is False the DEM is not displayed.
+        If extent is a void list all the tile is displayed
+
         """
         defaults = {'title':'',
                     'xlabel':'Longitude',
                     'ylabel':'Latitude',
+                    'figsize':(10,10),
                     'height':True,
-                    'bldg':True,
+                    'bldg':False,
+                    'clim':(0,40),
                     'coord':'lonlat',
                     'extent':[],
                     'contour':False,
-                    'source':'srtm'
+                    'source':'srtm',
+                    'facecolor':'black'
                    }
 
         for k in defaults:
@@ -868,7 +877,7 @@ class Ezone(PyLayers):
                 extent = kwargs['extent']
 
 
-        fig = plt.figure(figsize=(10,10))
+        fig = plt.figure(figsize=kwargs['figsize'])
         ax  = fig.add_subplot(111)
 
         #
@@ -921,7 +930,8 @@ class Ezone(PyLayers):
             iy = np.where((y>=extent[2]) & (y<=extent[3]))[0]
 
             if kwargs['height']:
-                im = ax.imshow(hgt[iy[0]:(iy[-1]+1),ix[0]:(ix[-1]+1)],extent=extent)
+                im = ax.imshow(hgt[iy[0]:(iy[-1]+1),ix[0]:(ix[-1]+1)],
+                               extent=extent,clim=kwargs['clim'])
                 divider = make_axes_locatable(ax)
                 cax = divider.append_axes("right", size="5%", pad=0.05)
                 cb = fig.colorbar(im,cax)
@@ -933,13 +943,28 @@ class Ezone(PyLayers):
         # display buildings
         if kwargs['bldg']:
             # get subtiles corresponding to extent
+            if kwargs['coord']=='cartesian':
+                extent = conv(extent_c,self.m,mode='toll')
             ltiles = ext2qt(extent,self.lL0)
             # iterating over subtiles
             for ti in ltiles:
                 if ti in self.dbldg.keys():
                    info = self.dbldg[ti][0]
                    poly = self.dbldg[ti][1]
-                   fig,ax = plu.polycol(poly,info[:,3],fig=fig,ax=ax)
+                   if kwargs['coord']=='cartesian':
+                       tu   = map(lambda x : self.m(x[:,0],x[:,1]),poly)
+                       poly = map(lambda x : np.vstack((x[0],x[1])).T,tu)
+
+                   if kwargs['height']:
+                       fig,ax = plu.polycol(poly,
+                            clim = kwargs['clim'],
+                            facecolor=kwargs['facecolor'],
+                            fig=fig,ax=ax)
+                   else:
+                       fig,ax = plu.polycol(poly,info[:,3],
+                            clim = kwargs['clim'],
+                            fig=fig,
+                            ax=ax)
 
 
         return(fig,ax)

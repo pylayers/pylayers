@@ -24,12 +24,19 @@ def ent(lL,lL0):
     'i0-0' is the lower corner subtile
     'i255-255' is the upper corner subtile
 
+    Examples
+    --------
+
+    >>> from pylayers.gis.gisutil import *
+    >>> lL= np.array([[-2,48],[-1,49]])
+    >>> lL0 = np.array([-2,48])
+    >>> ent(lL,lL0)
+
     """
-    N = lL.shape[1]
     # offset from the lower left corner
-    d = lL-lL0[:,None]
-    dui8 = np.floor(d*256).astype('uint8')
-    lab = map(lambda x:'i'+str(x[0])+'-'+str(x[1]),dui8.T)
+    d = lL-lL0
+    dui8 = np.floor(d*255).astype('uint8')
+    lab = map(lambda x:'i'+str(x[0])+'-'+str(x[1]),dui8)
     return(lab)
 
 
@@ -121,7 +128,7 @@ def ext2qt(extent=np.array([-1.8,-1.7,48.4,48.5]),lL0=np.array([-2,48])):
     Lm = extent[2]
     LM = extent[3]
 
-    lL = np.array([[lm,Lm],[lM,LM]]).T
+    lL = np.array([[lm,Lm],[lM,LM]])
     uf8 = ent(lL,lL0)
     ill = uf8[0].replace('i','').split('-')
     iur = uf8[1].replace('i','').split('-')
@@ -133,7 +140,6 @@ def ext2qt(extent=np.array([-1.8,-1.7,48.4,48.5]),lL0=np.array([-2,48])):
             ltile.append('i'+str(l)+'-'+str(L))
 
     return(ltile)
-
 
 
 def arr2lp(arr):
