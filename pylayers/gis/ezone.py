@@ -34,6 +34,7 @@ from scipy.interpolate import interp2d
 #from geomutil import *
 #from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
+import pylayers.util.plotutil as plu
 from pylayers.util.project import *
 from shapely.geometry import Polygon
 from pylayers.gis.gisutil import *
@@ -214,6 +215,9 @@ class DEM(PyLayers):
         self.lon_0  = (lom+loM)/2.
         self.lat_0  = (lam+laM)/2.
 
+
+        self.lL0 = np.array([lom,lam])
+
         self.m = Basemap(llcrnrlon = lon,
                          llcrnrlat = lam,
                          urcrnrlon = loM,
@@ -290,7 +294,7 @@ class DEM(PyLayers):
         self.hgta = f.ReadAsArray()
 
     def show(self,**kwargs):
-        """ Ezone vizualisation
+        """ DEM vizualisation
 
         Parameters
         ----------
@@ -357,6 +361,8 @@ class Ezone(PyLayers):
         self.lon_0  = (lom+loM)/2.
         self.lat_0  = (lam+laM)/2.
 
+        self.lL0 = np.array([lom,lam])
+
         self.m = Basemap(llcrnrlon = lom,
                          llcrnrlat = lam,
                          urcrnrlon = loM,
@@ -375,8 +381,8 @@ class Ezone(PyLayers):
             st = st+'-'
         st = st+'\n'
         st = st+str(self.extent)+'\n'
-        st = st+'[ '+("%2.3f" % self.pll[0])+' '+("%2.3f" % self.pur[0])+' '
-        st = st+("%2.3f" % self.pll[1])+' '+("%2.3f" % self.pur[1])+' ]\n'
+        st = st+'latlon : [ '+("%2.3f" % self.pll[0])+' '+("%2.3f" % self.pur[0])+' '
+        st = st+'cartesian :'+ ("%2.3f" % self.pll[1])+' '+("%2.3f" % self.pur[1])+' ]\n'
 
         if 'dbldg' in self.__dict__:
             st = st + '\n'
@@ -806,7 +812,7 @@ class Ezone(PyLayers):
             #f.close()
 
     def show(self,**kwargs):
-        """ Ezone visualization
+        """ show Ezone
 
         Parameters
         ----------
@@ -823,6 +829,12 @@ class Ezone(PyLayers):
         source: string
             'srtm' | 'aster'
         extent : [lonmin,lomax,latmin,latmax]
+
+
+        Returns
+        -------
+
+        fig,ax
 
         """
         defaults = {'title':'',
@@ -862,32 +874,6 @@ class Ezone(PyLayers):
         #
         # ploting buildings with collection of polygons
         #
-        if kwargs['bldg']:
-            pass
-        #    for city in self.dcity.keys():
-        #        bdpt = self.dcity[city]['bdpt']
-        #        bdma = self.dcity[city]['bdma'].astype('bool')
-
-                # include masked point in the middle of the extent zone
-        #        bdpt[bdma[:,0],0] = (extent[0]+extent[1])/2.
-        #        bdpt[bdma[:,0],1] = (extent[2]+extent[3])/2.
-
-        #        u = np.where((bdpt[:,0]>=extent[0]) &
-        #                     (bdpt[:,0]<=extent[1]) &
-        #                     (bdpt[:,1]>=extent[2]) &
-        #                     (bdpt[:,1]<=extent[3]) )[0]
-        #        vtx = np.ma.masked_array(bdpt[u,:],bdma[u,:])
-                # if cartesian mode do the basemap conversion
-        #        if kwargs['coord']=='cartesian':
-                    # select zone
-                    # convert into cartesian
-        #            vx,vy  = self.m(bdpt[u,0],bdpt[u,1])
-        #            bdmau  = bdma[u,:]
-        #            bdpt_c = np.hstack((vx[:,np.newaxis],vy[:,np.newaxis]))
-        #            vtx = np.ma.masked_array(bdpt_c,bdmau)
-
-
-        #        ax.plot(vtx[:,0],vtx[:,1],linewidth=0.5,color='k')
 
         if kwargs['coord'] == 'cartesian':
             kwargs['xlabel'] = 'W-E Distance (meters)'
@@ -943,6 +929,17 @@ class Ezone(PyLayers):
 
             if kwargs['contour']:
                 cnt = ax.contour(hgt[iy[0]:(iy[-1]+1),ix[0]:(ix[-1]+1)],N=10,extent=extent,origin='upper')
+
+        # display buildings
+        if kwargs['bldg']:
+            # get subtiles corresponding to extent
+            ltiles = ext2qt(extent,self.lL0)
+            # iterating over subtiles
+            for ti in ltiles:
+                if ti in self.dbldg.keys():
+                   info = self.dbldg[ti][0]
+                   poly = self.dbldg[ti][1]
+                   fig,ax = plu.polycol(poly,info[:,3],fig=fig,ax=ax)
 
 
         return(fig,ax)
@@ -1008,10 +1005,14 @@ class Ezone(PyLayers):
                     self.hgta = fh['dem']['aster']['hgta'][:]
             if 'bldg' in fh:
                 for k in fh['bldg']:
-                    if 'info' in fh['bldg'][k]:
+                    if (('info' in fh['bldg'][k]) and
+                        ('poly' in fh['bldg'][k])):
                         a = fh['bldg'][k]['info'][:]
                         b = fh['bldg'][k]['poly'][:]
-                        self.dbldg[k] = [a,b]
+                        # convert zeros separated array
+                        # to a list of arrays
+                        lpol = arr2lp(b)
+                        self.dbldg[k] = [a,lpol]
 
                 l1 = map(lambda x : x.replace('i',''),self.dbldg.keys())
                 llon = map(lambda x: eval(x.split('-')[0]),l1)
@@ -1076,11 +1077,13 @@ class Ezone(PyLayers):
                 aster.create_dataset('hgta',shape=self.hgta.shape,data=self.hgta)
 
         if hasattr(self,'dbldg'):
+            # iterating on subtiles
             for k in self.dbldg:
+                # if subtile does not exist create it
                 if k not in bldg:
                     bldg.create_group(k)
-                    bldg[k]['info'] = np.array(self.dbldg[k][0])
-                    bldg[k]['poly'] = self.dbldg[k][1]
+                bldg[k]['info'] = np.array(self.dbldg[k][0])
+                bldg[k]['poly'] = self.dbldg[k][1]
 
         f.close()
 

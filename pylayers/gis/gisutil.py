@@ -2,7 +2,7 @@ import numpy as np
 import pdb
 
 def ent(lL,lL0):
-    u""" encode lon Lat in natural integer
+    """ encode lon Lat in natural integer
 
     Parameters
     ----------
@@ -32,6 +32,7 @@ def ent(lL,lL0):
     lab = map(lambda x:'i'+str(x[0])+'-'+str(x[1]),dui8.T)
     return(lab)
 
+
 def eqt(lL,lL0):
     """ encode lon Lat in quad tree integer
 
@@ -56,6 +57,7 @@ def eqt(lL,lL0):
     ud16 = (ud8[:,0]*256+ud8[:,1]).astype('uint16')
     return(ud16 )
 
+
 def dqt(ud16,lL0):
     """ decode quad tree integer to lon Lat
 
@@ -68,6 +70,7 @@ def dqt(ud16,lL0):
         lower left corner of the 1degree tile
 
     """
+
     N = len(ud16)
     # offset from the lower left corner
     #d = lL-lL0[:,None]
@@ -84,13 +87,40 @@ def dqt(ud16,lL0):
 
     return(lL)
 
+
 def ext2qt(extent=np.array([-1.8,-1.7,48.4,48.5]),lL0=np.array([-2,48])):
     """ convert an extent region into a list of qt regions
+
+
+    Parameters
+    ----------
+
+    extent : np.array
+        (lonmin,lonmax,latmin,latmax)
+    lL0 : np.array
+        tile origin (lon,lat) of lower left corner
+
+    Returns
+    -------
+
+    ltiles : list of sub tiles
+
+    Examples
+    --------
+
+    >>> import numpy as np
+    >>> from pylayers.gis.gisutil import *
+    >>> lL0 = np.array([-2,48])
+    >>> extent = np.array([-1.8,-1.7,48.4,48.5])
+    >>> ltile = ext2qt(extent,lL0)
+
     """
+
     lm = extent[0]
     lM = extent[1]
     Lm = extent[2]
     LM = extent[3]
+
     lL = np.array([[lm,Lm],[lM,LM]]).T
     uf8 = ent(lL,lL0)
     ill = uf8[0].replace('i','').split('-')
@@ -104,10 +134,29 @@ def ext2qt(extent=np.array([-1.8,-1.7,48.4,48.5]),lL0=np.array([-2,48])):
 
     return(ltile)
 
+
+
+def arr2lp(arr):
+    """ convert zeros separated array to list of array
+
+    """
+    lp=[]
+    ustart = 0
+    sarr = np.sum(arr,axis=1)
+    uz = np.where(sarr==0)[0]
+
+    for k in range(len(uz)):
+        p = arr[ustart:uz[k]]
+        lp.append(p)
+        ustart = uz[k]+1
+    return(lp)
+
+
 def ctrad2qt(extent):
     """ convert center,radius into a list of qt regions
     """
     pass
+
 
 if __name__=='__main__':
     lL0 = np.array([-2,48])

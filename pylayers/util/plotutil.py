@@ -659,6 +659,7 @@ def polycol(lpoly,var=[],**kwargs):
     """ plot a collection of polygon
 
     lpoly : list of polygons
+    var   : np.array
 
     Examples
     --------
@@ -675,7 +676,7 @@ def polycol(lpoly,var=[],**kwargs):
     defaults = {'edgecolor':'none',
                 'cmap':cm.jet,
                 'closed':False,
-                'colorbar':True,
+                'colorbar':False,
                 'dB':False,
                 'm':[]}
     for k in defaults:
@@ -686,6 +687,7 @@ def polycol(lpoly,var=[],**kwargs):
         fig,ax = plt.subplots(1,1)
     else:
         fig = kwargs['fig']
+        ax  = kwargs['ax']
 
 
     if len(var)>0:
