@@ -1,3 +1,5 @@
+# -*- coding:Utf-8 -*-
+
 import numpy as np
 from traits.api import HasTraits, Instance, Array, \
     on_trait_change
@@ -191,7 +193,7 @@ class VolumeSlicer(HasTraits):
                 )
 
 
-def savefig(name,mlabview=[],magnification = 3):
+def savefig(filename,mlabview=[],magnification = 3,doc=False):
     """
     Save mayavi figure
 
@@ -204,17 +206,70 @@ def savefig(name,mlabview=[],magnification = 3):
         specifyy angle of camera view ( see mayavi.view )
     magnification : int
         resolution of the generated image ( see mayavi.savefig)
-
+    doc : bool
+    if doc, image is supposed to be generated for documentation
 
     """
+    import os
+
+    if doc:
+        path = '../maya_images/'
+    else :
+        path = './maya_images/'
 
 
     if not mlabview == []:
         mlab.view(mlabview)
-    if os.path.exists('./maya_images'):
-        mlab.savefig('./maya_images/'+name+'.png',magnification=magnification )
+    if os.path.exists(path):
+        mlab.savefig(path+filename+'.png',magnification=magnification )
     else:
-        os.mkdir('./maya_images')
-        mlab.savefig('./maya_images/'+name+'.png',magnification=magnification )
+        os.mkdir(path)
+        mlab.savefig(path+filename+'.png',magnification=magnification )
     mlab.close()
 
+
+
+def inotshow(filename,**kwargs):
+    """ IPython notebook show saved mayavi file
+
+    Parameters
+    -----------
+
+    doc : bool
+        if doc, image is supposed to be generated for documentation
+
+    See IPython.display.Image
+    """
+
+
+    defaults = {'mlabview':[],
+                'magnification':3,
+                'width':500,
+                'height':500,
+                'doc':False
+
+                }
+
+    for key, value in defaults.items():
+        if key not in kwargs:
+            kwargs[key] = value
+
+
+
+    mlabview=kwargs.pop('mlabview')
+    magnification=kwargs.pop('magnification')
+    doc=kwargs.pop('doc')
+
+    if doc:
+        path = '../maya_images/'
+    else :
+        path = './maya_images/'
+
+    savefig(filename,mlabview,magnification,doc)
+
+    try :
+        inb = Image(filename=path+filename+'.png',**kwargs)
+    except:
+        from IPython.display import Image,display
+        inb = Image(filename=path+filename+'.png',**kwargs)
+    display(inb)
