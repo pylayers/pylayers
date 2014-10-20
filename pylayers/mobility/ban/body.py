@@ -148,10 +148,12 @@ class Body(PyLayers):
         #
         #
         self.cylfromc3d(centered=centered)
-        pdb.set_trace()
 
-        self.ccsfromc3d(di)
-        self.mocapccs = True
+        try:
+            self.ccsfromc3d(di)
+            self.mocapccs=True
+        except:
+            self.mocapccs=False
 
         if isinstance(traj,tr.Trajectory):
             self.traj=traj
@@ -450,6 +452,7 @@ class Body(PyLayers):
 
         # dmn = dictionnary of mocap nodes position in self._p
         # for further ccs from marker creation
+
         self._dmn={n:un for un,n in enumerate(self._mocanodes)}
         self._ccs=np.empty((11,3,3,self.nframes))
 
