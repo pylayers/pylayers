@@ -108,7 +108,7 @@ class Body(PyLayers):
                  _filemocap=[],
                  _filewear = [],
                   traj=[],
-                  unit='m',
+                  unit='cm',
                   loop=True,
                  centered=True):
         """ object constructor
