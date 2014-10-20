@@ -103,8 +103,14 @@ class Body(PyLayers):
 
     """
 
-    def __init__(self,_filebody='John.ini',_filemocap=[],_filewear = [],
-                traj=[],unit=[],loop=True,centered=True):
+    def __init__(self,
+                 _filebody='John.ini',
+                 _filemocap=[],
+                 _filewear = [],
+                  traj=[],
+                  unit='m',
+                  loop=True,
+                 centered=True):
         """ object constructor
 
         Parameters
@@ -112,13 +118,14 @@ class Body(PyLayers):
 
         _filebody : string
         _filemocap : string
-        unit : str 
-            unit of the mocap file m|cm|mm
+        unit : str
+            unit of the mocap file 'm'|'cm'|'mm'
         _filewear : string
         traj : tr.Trajectory
         loop : bool
-            True : indicate if the mocap file is used as a loop to be put on a trajectory (default)
-            False: the mocap is self sufficent and describe the complete body movement
+            True : indicate if the mocap file is used as a sequence to be looped on a trajectory (default)
+            False: the mocap is self sufficient and describes the complete body movement
+
         See Also
         --------
 
@@ -126,6 +133,7 @@ class Body(PyLayers):
 
         """
 
+        # extract name from _filebody
         self.name = _filebody.replace('.ini','')
         di = self.load(_filebody,_filemocap,unit,_filewear)
         # if _filemocap != []:
@@ -140,10 +148,10 @@ class Body(PyLayers):
         #
         #
         self.cylfromc3d(centered=centered)
-
+        pdb.set_trace()
 
         self.ccsfromc3d(di)
-        self.mocapccs=True
+        self.mocapccs = True
 
         if isinstance(traj,tr.Trajectory):
             self.traj=traj
@@ -431,9 +439,15 @@ class Body(PyLayers):
 
     def ccsfromc3d(self,config):
         """ Create ccs from C3D file
+
+        Parameters
+        ----------
+
+        config : dictionnary
+
         """
 
-        
+
         # dmn = dictionnary of mocap nodes position in self._p
         # for further ccs from marker creation
         self._dmn={n:un for un,n in enumerate(self._mocanodes)}
@@ -453,22 +467,22 @@ class Body(PyLayers):
             # 1.2 get tail and head position in self.d
             kta = self.sl[upart,0].astype(int)
             khe = self.sl[upart,1].astype(int)
-            # 1.3 create cylinder axis vector 
+            # 1.3 create cylinder axis vector
             ca = self.d[:,kta,:]-self.d[:,khe,:]
 
-            # 2 . create 2 extra vectors 
-            # 2.1determine their positions 
+            # 2 . create 2 extra vectors
+            # 2.1 determine their positions
             # pccs = position of cylinder coordinates system (Nframe x Npts x 3)
             # determine associated vetors
             pccs = self._f[:,uccs,:]
-            
+
             # vccs = vectors of cylinder coordinates system (Nframe x 3 x 3)
-            vccs = self.d[:,kta,np.newaxis,:] - pccs[:,np.newaxis:,:].T 
+            vccs = self.d[:,kta,np.newaxis,:] - pccs[:,np.newaxis:,:].T
 
             # vccs = pccs[:,0,np.newaxis,:]-pccs[:,1:,:]
             vccs=np.concatenate((ca[:,np.newaxis,:],vccs),axis=1)
             self._ccs[self.dcyl[k],:,:,:]=geu.qrdecomp(vccs)
-            
+
 
     def cylfromc3d(self,centered = False):
         """ Create cylinders from C3D file
