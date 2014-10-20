@@ -1119,7 +1119,7 @@ class DLink(Link):
         # Signatures
         ############
         Si = Signatures(self.L,self.ca,self.cb,cutoff=kwargs['cutoff'])
-
+        
         if self.dexist['sig']['exist'] and not kwargs['force']:
             self.load(Si,self.dexist['sig']['grpname'])
 

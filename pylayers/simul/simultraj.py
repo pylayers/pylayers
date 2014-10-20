@@ -71,7 +71,7 @@ class Simul(PyLayers):
 
     """
 
-    def __init__(self, _filetraj='simulnet_TA-Office.h5',verbose=False):
+    def __init__(self, _filetraj='simulnet_TA-Office.h5',verbose=False,mocap=False,serie=5,day=11):
         """ object constructor
 
         Parameters
@@ -93,7 +93,10 @@ class Simul(PyLayers):
         self.dap = {}
         self.Nag = 0
         self.Nap = 0
-        self.load_config(_filetraj)
+        if not mocap:
+            self.load_config(_filetraj)
+        else:
+            self.load_corser(serie=serie,day=day)
         self.gen_net()
         self.SL = SLink()
         self.DL = DLink(L=self.L,verbose=self.verbose)
@@ -204,6 +207,7 @@ class Simul(PyLayers):
         for p in self.dpersons:
             D = []
             for dev in self.dpersons[p].dev:
+             
                 D.append(
                     Device(self.dpersons[p].dev[dev]['name'], ID=dev + '_' + p))
             N.add_devices(D, grp=p)
@@ -266,7 +270,7 @@ class Simul(PyLayers):
             minb = self.N.node[na]['wstd'][wstd]['fbminghz']
             maxb = self.N.node[na]['wstd'][wstd]['fbmaxghz']
             self.DL.fGHz = np.linspace(minb, maxb, nf)
-        a, t = self.DL.eval()
+        a, t = self.DL.eval(alg =5,cutoff=2)
         if trunk == True:
         
             intersecta =1
@@ -562,7 +566,8 @@ class Simul(PyLayers):
             orient = []
             for up, person in enumerate(self.dpersons.values()):   
                 #person.settopos(self._traj[up], t=t, cs=True)
-                person.settopos(self._traj[up], t=t, cs=True,treadmill = True, p0 = np.array([1.5,2.0]))
+                #person.settopos(self._traj[up], t=t, cs=True,treadmill = True, p0 = np.array([1.5,2.0]))
+                person.settopos2(self._traj[up], t=t, cs=True)
                 name = person.name
                 dev = person.dev.keys()
                 nodeid.extend([n + '_' + name for n in dev])

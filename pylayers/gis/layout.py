@@ -265,7 +265,7 @@ from pylayers.util import cone
 
 # Handle furnitures
 import pylayers.gis.furniture as fur
-import pylayers.gis.osmparser as osm
+#import pylayers.gis.osmparser as osm
 #from pylayers.gis import cycles as Cycls
 from pylayers.gis import cycles as cycl # new version of cycles
 from pylayers.gis.selectl import SelectL

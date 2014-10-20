@@ -795,6 +795,36 @@ class Body(PyLayers):
         # if asked for calculation of coordinates systems
         if cs:
             self.setcs(topos=True)
+                
+    def settopos2(self,traj=[],t=0,cs=True):
+        
+        if not isinstance(traj,tr.Trajectory):
+                traj = self.traj
+
+        # t should be in the trajectory time range
+        assert ((t>=traj.tmin) & (t<=traj.tmax)),'posvel: t not in trajectory time range'          
+        kt  = int(np.floor((t-traj.tmin)/traj.ts))
+        kf = kt
+        
+
+        self.toposFrameId = kf
+       
+        self.topos = self.d[:,:,kf]
+        
+        vt = np.array([traj['vx'][kt],traj['vy'][kt]])
+        nvt = np.sqrt(np.dot(vt,vt))
+        if nvt != 0:
+            vtn = vt/nvt
+        else :
+            vtn=vt
+        self.vtopos = np.hstack((vtn,np.array([0])))[:,np.newaxis]
+        kta = self.sl[:,0].astype(int)
+        khe = self.sl[:,1].astype(int)
+        self._pta = np.array([self.topos[0, kta], self.topos[1, kta], self.topos[2, kta]])
+        self._phe = np.array([self.topos[0, khe], self.topos[1, khe], self.topos[2, khe]])
+        # if asked for calculation of coordinates systems
+        if cs:
+            self.setcs(topos=True)
 
 
     def setcs(self, topos = True, frameId =0):
