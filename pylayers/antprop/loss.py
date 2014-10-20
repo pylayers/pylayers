@@ -297,7 +297,7 @@ def hata(pMS,pBS,fGHz,hMS,hBS,typ):
     dm  = np.sqrt((pBS-pMS)*(pBS-pMS))
 
 def cost2100(pMS,pBS,fGHz,nfloor=1,dB=True):
-     """
+    """
     """
     dm  = np.sqrt((pBS-pMS)*(pBS-pMS))
     pl0 = 32.4+20*log10(dm)+20*np.log10(fGHz)

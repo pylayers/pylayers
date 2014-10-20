@@ -377,9 +377,9 @@ class Simul(SimulationRT): # Sympy 2
             self.the_world._boids={}
 
 
-            if str2bool(self.save_opt['savep']):
-                print 'Processing save results, please wait'
-                self.save.mat_export()
+            # if str2bool(self.save_opt['savep']):
+            #     print 'Processing save results, please wait'
+            #     self.save.mat_export()
 
 
             if str2bool(self.save_opt['savepd']):
