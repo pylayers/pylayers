@@ -4,15 +4,18 @@ r"""
 Class Cone
 ==========
 
-The following conventions have been introduced.
+The following conventions are adopted
 
-+ A Cone has an apex which is a point in the plane.
-+ A cone has two vectors which define the cone aperture. Those two vectors can always been distinguished as a right vector (u) and a left vector (v).
-The cone region is defined by the convex angular sector from right vector (u) to left vector (v)
-rotating folllowing the trigonometric convention.
-The modulus of the cross product between u and v is positive.
++ A Cone has an **apex** which is a point in the plane.
++ A cone has two vectors which define the cone aperture. Those two vectors can
+always been distinguished as a starting vector (u) and a ending vector (v).
 
-:math:`u \times v = \alpha z with \alpha > 0`
+The cone region is defined by the convex angular sector going from starting
+vector  :math:`\mathbf{u}` to ending vector :math:`\mathbf{v}`
+rotating in the plane in folllowing the trigonometric convention.
+The modulus of the cross product between :math:`\mathbf{u}` and :math:`\mathbf{v}` is positive.
+
+:math:`\mathbf{u} \times \mathbf{v} = \alpha \mathbf{z} \;\; \textrm{with} \;\;\alpha > 0`
 
 .. autosummary::
     :toctree:

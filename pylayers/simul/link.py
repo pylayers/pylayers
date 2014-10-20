@@ -106,7 +106,7 @@ class Link(object):
     def __add__(self,l):
         """ merge ak tauk of 2 Links
         """
-        L=Link()
+        L  = Link()
         tk = np.hstack((self.H.tk,l.H.tk))
         ak = np.hstack((self.H.ak,l.H.ak))
         us = np.argsort(tk)
@@ -178,7 +178,7 @@ class SLink(Link):
 
 
 class DLink(Link):
-
+ 
     def __init__(self, **kwargs):
         """ deterministic link evaluation
 
@@ -754,7 +754,7 @@ class DLink(Link):
 
         try:
             del f[key][grpname]
-            print 'delete ',key , ' in ', grpname
+            # print 'delete ',key , ' in ', grpname
             f.close()
         except:
             f.close()
@@ -1124,7 +1124,7 @@ class DLink(Link):
         ############
         Si = Signatures(self.L,self.ca,self.cb,cutoff=kwargs['cutoff'])
 
-        if self.dexist['sig']['exist'] and not ('sig' in kwargs['force']):
+        if (self.dexist['sig']['exist'] and not ('sig' in kwargs['force'])):
             self.load(Si,self.dexist['sig']['grpname'])
 
         else :
