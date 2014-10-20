@@ -32,6 +32,13 @@ import ConfigParser
 import pdb
 import doctest
 from itertools import product
+try:
+    from mayavi import mlab
+    from tvtk.tools import visual
+
+except:
+    print 'mayavi not installed'
+
 
 class Coverage(PyLayers):
     """ Handle Layout Coverage

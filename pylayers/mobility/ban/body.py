@@ -104,7 +104,7 @@ class Body(PyLayers):
     """
 
     def __init__(self,_filebody='John.ini',_filemocap=[],_filewear = [],
-                traj=[],unit=[],centered=True):
+                traj=[],unit=[],loop=True,centered=True):
         """ object constructor
 
         Parameters
@@ -116,8 +116,9 @@ class Body(PyLayers):
             unit of the mocap file m|cm|mm
         _filewear : string
         traj : tr.Trajectory
-
-
+        loop : bool
+            True : indicate if the mocap file is used as a loop to be put on a trajectory (default)
+            False: the mocap is self sufficent and describe the complete body movement
         See Also
         --------
 
@@ -138,10 +139,18 @@ class Body(PyLayers):
         #  centering makes sense only when using the topos projection
         #
         #
-
         self.cylfromc3d(centered=centered)
+
+        try:
+            self.ccsfromc3d(di)
+            self.mocapccs=True
+        except:
+            self.mocapccs=False
+
         if isinstance(traj,tr.Trajectory):
             self.traj=traj
+        self.centered=centered
+        self.mocap_loop=loop
         # otherwise self.traj use values from c3d file
         # obtain in self.loadC3D
 
@@ -173,7 +182,7 @@ class Body(PyLayers):
         if 'topos' not in dir(self):
             st = st+ '\nI am nowhere yet\n\n'
         else :
-            st = st + '\nMy centroid position at t=' +str(self.time[self.toposFrameId]) +' (frameID='+ str(self.toposFrameId) +') is \n'+ str(self.centroid)+"\n\n"
+            st = st + '\n@ t=' +str(self.time[self.toposFrameId]) +' (frameID='+ str(self.toposFrameId) +'),\n'+'My centroid position is ' +str(self.pg[:2,self.toposFrameId])+"\n\n"
         if 'filewear' in dir(self):
             st = st +'filewear : '+ self.filewear +'\n'
         if 'filename' in dir(self):
@@ -249,6 +258,7 @@ class Body(PyLayers):
             # clean bracket and coma
             vc = v.split('[')[1].split(']')[0].split(',')
             nodes_Id.update({k:vc})
+
         self.nodes_Id=nodes_Id
 
         self.sl = np.ndarray(shape=(len(di['cylinder'].keys()),3))
@@ -269,11 +279,8 @@ class Body(PyLayers):
         self.ncyl = len(di['cylinder'].values())
 
 
-
-
         self.idcyl={}
         [self.idcyl.update({v:k}) for k,v in self.dcyl.items()]
-
 
         # if a mocap file is given in the config file
 
@@ -335,27 +342,204 @@ class Body(PyLayers):
                     self.dev[section][option]=devconf.get(section,option)
 
 
+        try:
+            # mocapprefix : retrieve where the prefix is the body name
+            ump = [self.name.lower() in p.lower() for p in self._s]
+            self._mocap_prefix = self._s[ump.index(True)]
+        except:
+            self._mocap_prefix = self._p[-1].split(':')[0]+':'
+
+
         #
         # filter real device and get devices
         #
         rd = dict(filter(lambda x: x[1]['status']== 'real',self.dev.items()))
 
-        # 1 remove prefix
+
         prefix = ['Bernard:','Bernard_','NicolasCormoran:']
-        nodes = self._p
+
+        self._mocanodes = self._p
         for p in prefix:
             tmpnode=[]
-            for n in nodes:
+            for n in self._mocanodes:
                 tmpnode.append(n.replace(p,''))
-                nodes = tmpnode
+                self._mocanodes = tmpnode
+
 
         # 2 remove multiple entries due to orientation marker
-        nodes = [n.split(':')[0] for n in nodes]
+        self._mocanodes = [n.split(':')[0] for n in self._mocanodes]
+
         for d in rd :
-            bd = [self.dev[d]['radiomarkname'] in n for n in nodes]
-            self.dev[d]['uc3d'] = np.where(bd)[0]
+            if self.dev[d]['name'] == 'hikob':
+                bd = [self.dev[d]['radiomarkname'] in n for n in self._mocanodes if not 'TCR' in n]
+                self.dev[d]['uc3d'] = np.where(bd)[0]
+            else :
+                bd = [self.dev[d]['radiomarkname'] in n for n in self._mocanodes]
+                self.dev[d]['uc3d'] = np.where(bd)[0]
+
+
 
         return(di)
+
+
+    def loadC3D(self, filename='07_01.c3d', nframes=-1 ,unit='cm'):
+        """ load nframes of motion capture C3D file
+
+        Parameters
+        ----------
+
+        filename : string
+            file name
+        nframes : int
+            number of frames
+        unit : str (mm|cm|mm
+            unit of c3d file
+        rot : list ['x','y','z']
+            swap axes of the c3d file
+        """
+
+
+        #if 'pg' in dir(self):
+        # del self.pg
+        # s, p, f, info = c3d.read_c3d(filename)
+        self._s, self._p, self._f, info = c3d.ReadC3d(filename)
+
+        self.mocapinfo = info
+
+        self.filename = filename
+        if nframes<>-1:
+            self.nframes = nframes
+        else:
+            self.nframes = np.shape(self._f)[0]
+        #
+        # s : prefix
+        # p : list of points name
+        # f : nframe x npoints x 3
+        #
+
+
+        self.unit = unit
+        if unit == 'cm':
+            self._unit = 1e-2
+        elif unit == 'mm':
+            self._unit = 1e-3
+        else :
+            raise AttributeError('unit'+unit + 'not recognized')
+        # duration of the motion capture snapshot
+
+
+        self._f=self._f*self._unit
+
+        self.Tmocap = self.nframes / info['VideoFrameRate']
+
+        # time base of the motion capture file (sec)
+        self.time = np.linspace(0,self.Tmocap,self.nframes)
+
+    def ccsfromc3d(self,config):
+        """ Create ccs from C3D file
+        """
+
+        
+        # dmn = dictionnary of mocap nodes position in self._p
+        # for further ccs from marker creation
+
+        self._dmn={n:un for un,n in enumerate(self._mocanodes)}
+        self._ccs=np.empty((11,3,3,self.nframes))
+
+        for k,v in config['ccs'].items():
+
+            # clean bracket and coma
+            vc = v.split('[')[1].split(']')[0].split(',')
+            # get position in uc3d of marker
+            uccs=map(lambda x: self._dmn[x],vc)
+
+
+            # 1 vector carried by cylinder axis
+            # 1.1 get cylinder number related to body part k
+            upart = config['cylinder'][k]['i']
+            # 1.2 get tail and head position in self.d
+            kta = self.sl[upart,0].astype(int)
+            khe = self.sl[upart,1].astype(int)
+            # 1.3 create cylinder axis vector 
+            ca = self.d[:,kta,:]-self.d[:,khe,:]
+
+            # 2 . create 2 extra vectors 
+            # 2.1determine their positions 
+            # pccs = position of cylinder coordinates system (Nframe x Npts x 3)
+            # determine associated vetors
+            pccs = self._f[:,uccs,:]
+            
+            # vccs = vectors of cylinder coordinates system (Nframe x 3 x 3)
+            vccs = self.d[:,kta,np.newaxis,:] - pccs[:,np.newaxis:,:].T 
+
+            # vccs = pccs[:,0,np.newaxis,:]-pccs[:,1:,:]
+            vccs=np.concatenate((ca[:,np.newaxis,:],vccs),axis=1)
+            self._ccs[self.dcyl[k],:,:,:]=geu.qrdecomp(vccs)
+            
+
+    def cylfromc3d(self,centered = False):
+        """ Create cylinders from C3D file
+
+        Parameters
+        ----------
+
+        centered : boolean
+        """
+        #
+        # motion capture data
+        #
+        # self.d : 3 x npoints x nframes
+        #
+
+        # number of points is determine by the ini file
+        self.npoints = len(self.nodes_Id)
+
+        # self.d = np.ndarray(shape=(3, self.npoints, self.nframes))
+
+        #if self.d[2,:,:].max()>50:
+        # extract only known nodes in nodes_Id
+        self.d = np.zeros((3, self.npoints, self.nframes))
+        for i in self.nodes_Id:
+            # node name = 4 characters
+            if not isinstance(self.nodes_Id[i],list) :
+                idx = self._p.index(self._mocap_prefix + self.nodes_Id[i])
+                self.d[:,i,:] = self._f[0:self.nframes, idx, :].T
+            # perform center of mass of the nodes
+
+            else :
+
+                lnid = len(self.nodes_Id[i])
+                for k in range(lnid):
+
+                    nodename = self.nodes_Id[i][k].replace(' ','')
+
+                    idx = self._p.index(self._mocap_prefix + nodename)
+                    try:
+                        tmp = tmp +self._f[0:self.nframes, idx, :].T
+                    except:
+                        tmp = self._f[0:self.nframes, idx, :].T
+                self.d[:,i,:] = tmp / (1.*lnid)
+                del tmp
+
+
+        # f.T : 3 x npoints x nframe
+        #
+        # cm to meter conversion if required
+        #
+
+
+        self.d = self.d
+        self.pg = np.sum(self.d,axis=1)/self.npoints
+        self.pg[2,:] = 0
+        #self.nodes_Id[15]='bottom'
+        if centered:
+            self.centered = False
+            self.center()
+
+        self.init_traj()
+
+
+
 
     def network(self):
         """ evaluate network topology and dynamics
@@ -533,6 +717,22 @@ class Body(PyLayers):
 
         return ldf
 
+    def init_traj(self):
+        """ create trajectory object from given trajectory or mocap 
+        """
+
+        # speed vector of the gravity centernp.
+        self.vg = self.pg[:,1:]-self.pg[:,0:-1]
+        # duplicate last spped vector for size homogeneity
+        self.vg = np.hstack((self.vg,self.vg[:,-1][:,np.newaxis]))
+        # length of trajectory
+        d = self.pg[0:-1,1:]-self.pg[0:-1,0:-1]
+        # creates a trajectory associated to mocap file
+        self.traj = tr.Trajectory()
+        self.traj.generate(t=self.time,pt=self.pg.T,name=self.filename)
+        self.smocap = np.cumsum(np.sqrt(np.sum(d*d,axis=0)))
+        self.vmocap = self.smocap[-1]/self.Tmocap
+
     def center(self,force=False):
         """ centering the body
 
@@ -559,22 +759,11 @@ class Body(PyLayers):
         """
         # self.d : 3 x 16 x Nf
         # self.pg : 3 x Nf
+
         if not self.centered or force:
-            self.pg = np.sum(self.d,axis=1)/self.npoints
-            self.pg[2,:] = 0
             self.d = self.d - self.pg[:,np.newaxis,:]
-            # speed vector of the gravity centernp.
-            self.vg = self.pg[:,1:]-self.pg[:,0:-1]
-            # duplicate last spped vector for size homogeneity
-            self.vg = np.hstack((self.vg,self.vg[:,-1][:,np.newaxis]))
-            # length of trajectory
-            d = self.pg[0:-1,1:]-self.pg[0:-1,0:-1]
-            # creates a trajectory associated to mocap file
-            self.traj = tr.Trajectory()
-            self.traj.generate(t=self.time,pt=self.pg.T,name=self.filename)
-            self.smocap = np.cumsum(np.sqrt(np.sum(d*d,axis=0)))
-            self.vmocap = self.smocap[-1]/self.Tmocap
             self.centered = True
+
 
     def posvel(self,traj,t):
         """ calculate position and velocity
@@ -593,6 +782,7 @@ class Body(PyLayers):
         wsn : planar vector orthogonal to vsn
         vtn : normalized speed vector along motion trajectory (target)
         wtn : planar vector orthogonal to wtn
+        alpha : parameter >= 0 df = smax <=1 df=0
 
         Notes
         -----
@@ -683,7 +873,9 @@ class Body(PyLayers):
 
 
 
+
     def settopos(self,traj=[],t=0,cs=True,treadmill=False,p0=np.array(([0.,0.,0.]))):
+
 
         """ translate the body on a time stamped trajectory
 
@@ -748,35 +940,37 @@ class Body(PyLayers):
         #
 
 
+
         if not isinstance(traj,tr.Trajectory):
             traj = self.traj
 
-        kf,kt,vsn,wsn,vtn,wtn,alpha = self.posvel(traj,t)
+
+        kf,kt,vsn,wsn,vtn,wtn,alpha= self.posvel(traj,t)
+        if self.mocap_loop:
+
+            psa = np.array([0,0])
+            psb = psa + vsn
+            psc = psa + wsn
+            if treadmill:
+                pta=p0
+            else: 
+                pta = np.hstack((traj['x'].values[kt],traj['y'].values[kt]))
+            ptb = pta + vtn
+            ptc = pta + wtn
 
 
-        psa = np.array([0,0])
-        psb = psa + vsn
-        psc = psa + wsn
-        if treadmill:
+            self.centroid = pta
 
-            pta = p0
+            X = np.array([[0,0],[psb[0],psb[1]],[psc[0],psc[1]]]).T
+            Y = np.array([[pta[0],pta[1]],[ptb[0],ptb[1]],[ptc[0],ptc[1]]]).T
 
-        else:
-            pta = np.hstack((traj['x'].values[kt],traj['y'].values[kt]))
-        ptb = pta + vtn
-        ptc = pta + wtn
+            a,b = geu.affine(X,Y)
 
-        self.centroid = pta
+            A = np.eye(3)
+            B = np.zeros((3,1))
+            A[0:-1,0:-1] = a
+            B[0:-1,:] = b
 
-        X = np.array([[0,0],[psb[0],psb[1]],[psc[0],psc[1]]]).T
-        Y = np.array([[pta[0],pta[1]],[ptb[0],ptb[1]],[ptc[0],ptc[1]]]).T
-
-        a,b = geu.affine(X,Y)
-
-        A = np.eye(3)
-        B = np.zeros((3,1))
-        A[0:-1,0:-1] = a
-        B[0:-1,:] = b
 
         self.toposFrameId = kf
         #
@@ -785,7 +979,17 @@ class Body(PyLayers):
         #self.topos = (np.dot(A,self.d[:,:,kf])+B)
         self.topos = (np.dot(A,alpha*self.d[:,:,kf]+(1-alpha)*self.d[:,:,kf])+B)
 
+            #
+            # TOPOS = A d + B     d == BODY at kf frame
+            #
+            #self.topos = (np.dot(A,self.d[:,:,kf])+B)
+        else :
+
+            self.topos = self.d[:,:,kf]
+
         self.vtopos = np.hstack((vtn,np.array([0])))[:,np.newaxis]
+        self.toposFrameId = kf
+
         # self.traj=traj
 
         kta = self.sl[:,0].astype(int)
@@ -793,6 +997,8 @@ class Body(PyLayers):
         self._pta = np.array([self.topos[0, kta], self.topos[1, kta], self.topos[2, kta]])
         self._phe = np.array([self.topos[0, khe], self.topos[1, khe], self.topos[2, khe]])
         # if asked for calculation of coordinates systems
+
+
         if cs:
             self.setcs(topos=True)
                 
@@ -951,15 +1157,14 @@ class Body(PyLayers):
                     fId = self.toposFrameId
                 else :
                     fId = frameId
-                if len(self.dev[dev]['uc3d']) > 1:
+                if len(self.dev[dev]['uc3d']) > 2:
                     # mp : marker pos
                     mp = self._f[fId,self.dev[dev]['uc3d'],:]
                     vm = np.diff(mp,axis=0)
                     vm = vm[:3]
                     mvm = np.sqrt(np.sum((vm*vm),axis=0))
                     T = vm/mvm
-                    #import ipdb
-                    #ipdb.set_trace()
+
                     T[:,2]=np.cross(T[:,0],T[:,1])
                     T[:,1]=np.cross(T[:,0],T[:,2])
                     Tn = T/np.sqrt(np.sum(T*T,axis=0))
@@ -967,26 +1172,48 @@ class Body(PyLayers):
                     # self.dcs[dev] = np.hstack((mp0[:,np.newaxis],T))
                 else:
                     # associated cylinder
+                    # if not self.dev[dev].has_key('asscyl'):
+                    #     # find the closest cylinder to the device
+                    #     c0=self.sl[:,0].astype(int)
+                    #     c1=self.sl[:,1].astype(int)
+                    #     pta = self.d[:,c0,0]
+                    #     phe = self.d[:,c1,0]
+                    #     import ipdb
+                    #     ipdb.set_trace()
+                    #     # vector tail head
+                    #     th = phe - pta
+                    #     thl =  np.sqrt(np.sum(th**2,axis=0))
+                    #     # vector tail device
+                    #     de = self._f[0,self.dev[dev]['uc3d'],:]
+                    #     td = pta - de[0,:,np.newaxis]
+                    #     tdl = np.sqrt(np.sum(td**2,axis=0))
+
+                    #     do = [np.dot(th[:,i],td[:,i]) for i in range(th.shape[1])]
+                    #     # distance matrix
+                    #     d = abs(tdl*np.sin(do/(tdl*thl)))
+                    #     # closest cylinder
+                    #     md = np.where(min(d)==d)[0]
+                    #     self.dev[dev]['asscyl']= md[0]
+
                     if not self.dev[dev].has_key('asscyl'):
                         # find the closest cylinder to the device
                         c0=self.sl[:,0].astype(int)
                         c1=self.sl[:,1].astype(int)
                         pta = self.d[:,c0,0]
                         phe = self.d[:,c1,0]
-                        # vector tail head
-                        th = phe - pta
-                        thl =  np.sqrt(np.sum(th**2,axis=0))
-                        # vector tail device
+                        
                         de = self._f[0,self.dev[dev]['uc3d'],:]
-                        td = pta - de[0,:,np.newaxis]
-                        tdl = np.sqrt(np.sum(td**2,axis=0))
+                        dtad = np.sqrt(np.sum((pta-de.T)**2,axis=0))
+                        dhed = np.sqrt(np.sum((phe-de.T)**2,axis=0))
+                        mta = np.min(dtad)
+                        mhe = np.min(dhed)
+                        # select the smallest distance as best candidate
+                        if mta < mhe : 
+                            um = np.where(dtad==mta)[0]
+                        else :
+                            um = np.where(dhed==mhe)[0]
+                        self.dev[dev]['asscyl']= um[0]
 
-                        do = [np.dot(th[:,i],td[:,i]) for i in range(th.shape[1])]
-                        # distance matrix
-                        d = abs(tdl*np.sin(do/(tdl*thl)))
-                        # closest cylinder
-                        md = np.where(min(d)==d)[0]
-                        self.dev[dev]['asscyl']= md[0]
 
                     mp0 = self._f[fId,self.dev[dev]['uc3d'][0],:]
                     Tn = self.ccs[self.dev[dev]['asscyl'],:,:]
@@ -1001,127 +1228,15 @@ class Body(PyLayers):
 
         self.acs = {}
         for dev in self.dev.keys():
-            if self.dev[dev]['status'] == 'simulated':
+            if True:#self.dev[dev]['status'] == 'simulated':
                 Rab = self.dev[dev]['T']
                 U = self.dcs[dev]
                 # extract only orthonormal basis
                 Rbg = U[:,1:]
                 self.acs[dev]  = np.dot(Rbg,Rab)
             else :
-                self.acs[dev]  = self.dev[dev]['T']
+                self.acs[dev]  = self.dev[dev]['TTT']
 
-    def loadC3D(self, filename='07_01.c3d', nframes=-1 ,unit='cm'):
-        """ load nframes of motion capture C3D file
-
-        Parameters
-        ----------
-
-        filename : string
-            file name
-        nframes : int
-            number of frames
-        unit : str (mm|cm|mm
-            unit of c3d file
-        rot : list ['x','y','z']
-            swap axes of the c3d file
-        """
-
-
-        #if 'pg' in dir(self):
-        # del self.pg
-        # s, p, f, info = c3d.read_c3d(filename)
-        self._s, self._p, self._f, info = c3d.ReadC3d(filename)
-
-        self.mocapinfo = info
-
-        self.filename = filename
-        if nframes<>-1:
-            self.nframes = nframes
-        else:
-            self.nframes = np.shape(self._f)[0]
-        #
-        # s : prefix
-        # p : list of points name
-        # f : nframe x npoints x 3
-        #
-
-
-        self.unit = unit
-        if unit == 'cm':
-            self._unit = 1e-2
-        elif unit == 'mm':
-            self._unit = 1e-3
-        else :
-            raise AttributeError('unit'+unit + 'not recognized')
-        # duration of the motion capture snapshot
-
-
-        self._f=self._f*self._unit
-
-        self.Tmocap = self.nframes / info['VideoFrameRate']
-
-        # time base of the motion capture file (sec)
-        self.time = np.linspace(0,self.Tmocap,self.nframes)
-
-
-
-    def cylfromc3d(self,centered = False):
-        """ Create cylinders from C3D file
-
-        Parameters
-        ----------
-
-        centered : boolean
-        """
-        #
-        # motion capture data
-        #
-        # self.d : 3 x npoints x nframes
-        #
-
-        # number of points is determine by the ini file
-        self.npoints = len(self.nodes_Id)
-
-        # self.d = np.ndarray(shape=(3, self.npoints, self.nframes))
-
-        #if self.d[2,:,:].max()>50:
-        # extract only known nodes in nodes_Id
-        self.d = np.zeros((3, self.npoints, self.nframes))
-        for i in self.nodes_Id:
-            # node name = 4 characters
-            if not isinstance(self.nodes_Id[i],list) :
-                idx = self._p.index(self._s[0] + self.nodes_Id[i])
-                self.d[:,i,:] = self._f[0:self.nframes, idx, :].T
-            # perform center of mass of the nodes
-
-            else :
-
-                lnid = len(self.nodes_Id[i])
-                for k in range(lnid):
-
-                    nodename = self.nodes_Id[i][k].replace(' ','')
-
-                    idx = self._p.index(self._s[0] + nodename)
-                    try:
-                        tmp = tmp +self._f[0:self.nframes, idx, :].T
-                    except:
-                        tmp = self._f[0:self.nframes, idx, :].T
-                self.d[:,i,:] = tmp / (1.*lnid)
-                del tmp
-
-
-        # f.T : 3 x npoints x nframe
-        #
-        # cm to meter conversion if required
-        #
-
-
-        self.d = self.d
-
-        #self.nodes_Id[15]='bottom'
-        if centered:
-            self.centered = False
-            self.center()
 
 
 
@@ -1352,7 +1467,7 @@ class Body(PyLayers):
                 kwargs['tag']=stk
                 self.geomfile(**kwargs)
 
-    @mlab.animate(delay=10)
+    @mlab.animate(delay=100)
     def anim(self):
         """ animate body
 
@@ -1376,7 +1491,9 @@ class Body(PyLayers):
         khe = self.sl[:,1].astype(int)
         t=self.traj.time()
 
-        # init antennas
+        anim = range(5000,self.nframes,10)
+
+        ##init antennas
         if 'topos' in dir(self):
             Ant = {}
             for key in self.dcs.keys():
@@ -1393,14 +1510,14 @@ class Body(PyLayers):
                                colorbar=False)
         while True:
             if 'topos' in dir(self):
-                for k in range(len(t)):
-                    self.settopos(self.traj,t=t[k],cs=True)
+                for k in anim:#range(len(t)):
+                    self.settopos(t=t[k],cs=True)
                     # connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
                     X=np.hstack((self._pta,self._phe))
                     # s = np.hstack((cylrad,cylrad))
                     self._mayapts.mlab_source.set(x=X[0,:], y=X[1,:], z=X[2,:])
                     for key in self.dcs.keys():
-                        x, y, z ,k = Ant[key]._computemesh(po=self.dcs[key][:,0],
+                        x, y, z ,k,scalar = Ant[key]._computemesh(po=self.dcs[key][:,0],
                                                    T=self.acs[key],
                                                    ilog=False,
                                                    minr=0.01,
@@ -1408,10 +1525,10 @@ class Body(PyLayers):
                                                    newfig=False,
                                                    title=False,
                                                    colorbar=False)
-                        Ant[key]._mayamesh.mlab_source.set(x=x, y=y, z=z)
+                        Ant[key]._mayamesh.mlab_source.set(x=x, y=y, z=z,scalar=scalar)
                     yield
             else:
-                for k in range(self.nframes):
+                for k in anim:
                     pta =  np.array([self.d[0, kta, k], self.d[1, kta, k], self.d[2, kta, k]])
                     phe =  np.array([self.d[0, khe, k], self.d[1, khe, k], self.d[2, khe, k]])
                     # connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
@@ -1522,7 +1639,7 @@ class Body(PyLayers):
                 fig.children[-1].__setattr__('name',self.name )
             if kwargs['text']:
                 self._mayaptstxt=[mlab.text3d(X[0,i],X[1,i], X[2,i],self.idcyl[i],
-                                scale=0.05,
+                                scale=(0.1,0.1,0.1),
                                 color=(0,0,0)) for i in range(self.ncyl)]
 
     def plot3d(self,iframe=0,topos=False,fig=[],ax=[],col='b'):
@@ -1611,6 +1728,7 @@ class Body(PyLayers):
 
         """
         defaults = {'iframe' : 0,
+                    'cylinder':True,
                     'widthfactor' : 1.,
                     'tube_sides' : 6,
                     'opacity':1,
@@ -1663,18 +1781,19 @@ class Body(PyLayers):
             phe =  np.array([self.d[0, khe, fId], self.d[1, khe, fId], self.d[2, khe, fId]])
             X=np.hstack((pta,phe))
 
-        connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
-        s = np.hstack((cylrad*kwargs['widthfactor'],cylrad*kwargs['widthfactor']))
-        #pts = mlab.points3d(X[0,:],X[1,:], X[2,:], 5*s ,
-                                             # scale_factor=0.1, resolution=10)
-        self._mayapts = mlab.pipeline.line_source(X[0,:],X[1,:], X[2,:], s ,
-                                             scale_factor=0.001, resolution=10)
-        self._mayapts.mlab_source.dataset.lines = np.array(connections)
-        tube = mlab.pipeline.tube(self._mayapts, tube_radius=0.05,tube_sides=kwargs['tube_sides'])
-        tube.filter.radius_factor = 1.
-        tube.filter.vary_radius = 'vary_radius_by_absolute_scalar'
-        mlab.pipeline.surface(tube, color=body_color,opacity=kwargs['opacity'])
-        f.children[-1].__setattr__('name',self.name )
+        if kwargs['cylinder']:
+            connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
+            s = np.hstack((cylrad*kwargs['widthfactor'],cylrad*kwargs['widthfactor']))
+            #pts = mlab.points3d(X[0,:],X[1,:], X[2,:], 5*s ,
+                                                 # scale_factor=0.1, resolution=10)
+            self._mayapts = mlab.pipeline.line_source(X[0,:],X[1,:], X[2,:], s ,
+                                                 scale_factor=0.001, resolution=10)
+            self._mayapts.mlab_source.dataset.lines = np.array(connections)
+            tube = mlab.pipeline.tube(self._mayapts, tube_radius=0.05,tube_sides=kwargs['tube_sides'])
+            tube.filter.radius_factor = 1.
+            tube.filter.vary_radius = 'vary_radius_by_absolute_scalar'
+            mlab.pipeline.surface(tube, color=body_color,opacity=kwargs['opacity'])
+            f.children[-1].__setattr__('name',self.name )
                 
         # ax = phe-pta
         # l = np.sqrt(np.sum((ax**2), axis=0))
@@ -1728,13 +1847,20 @@ class Body(PyLayers):
 
         if kwargs['ccs']:
             # to be improved
+            
+            col=np.linspace(0,1,11)[:,np.newaxis]*np.ones((11,3))
+            col[:,0]=0
 
-            for k,key in enumerate(self.ccs):
-                pt = self.topos[:,k]+cylrad[k]*kwargs['widthfactor']*self.ccs[k, :, 0]
+            for k in range(len(self.ccs)):
+                usl = self.sl[k]
+                pt = (self.topos[:,usl[0].astype(int)]+self.topos[:,usl[1].astype(int)])/2.
+                pt = pt+cylrad[k]*kwargs['widthfactor']*self.ccs[k, :, 0]
                 pte = np.repeat(pt[:,np.newaxis],3,axis=1)
                 ccs = mlab.quiver3d(pte[0], pte[1], pte[2],
                               self.ccs[k, 0], self.ccs[k, 1], self.ccs[k, 2],
-                              scale_factor=2e2*self._unit)
+                              scale_factor=2e2*self._unit,color=tuple(col[k]))
+
+
 
 
 
@@ -2140,62 +2266,67 @@ class Body(PyLayers):
         2nd
         """
 
-
-        nc = self.ncyl
-        #
-        # ccs : nc x 3 x 3
-        #
-        self.ccs = np.empty((nc,3,3))
-        for k in range(self.sl.shape[0]):
-            # e0 : tail node of cylinder segment
-            e0 = int(self.sl[k,0])
-            # e1 : head node of cylinder segment
-            e1 = int(self.sl[k,1])
-
+        if self.mocapccs :
             if not topos:
-                # pA : tail point
-                pA = self.d[:,e0,frameId].reshape(3,1)
-                # pB : head point
-                pB = self.d[:,e1,frameId].reshape(3,1)
-                vg = self.vg[:,frameId][:,np.newaxis]
+                self.ccs=self._ccs[:,:,:,frameId]
             else:
-                # pA : tail point
-                pA = self.topos[:,e0].reshape(3,1)
-                # pB : head point
-                pB = self.topos[:,e1].reshape(3,1)
-                # vtopos : mean topos velociy
-                vg = self.vtopos
-            pM = (pA+pB)/2.
-            # create an orthonormal basis
-            # 1 st vector : vg normalized (blue)
-            # 2 nd vector : 3 x 1
-            # 3 rd vector : PB-PA normalized
-            T = geu.onb(pA,pB,vg)
-            self.ccs[k,:,:] = T
-            #~ # e0 : tail node of cylinder segment
-            #~ e0 = e[0]
-            #~ # e1 : head node of cylinder segment
-            #~ e1 = e[1]
-            #~ if not topos:
-                #~ # pA : tail point
-                #~ pA = self.d[:,e0,frameId].reshape(3,1)
-                #~ # pB : head point
-                #~ pB = self.d[:,e1,frameId].reshape(3,1)
-                #~ vg = self.vg[:,frameId][:,np.newaxis]
-            #~ else:
-                #~ # pA : tail point
-                #~ pA = self.topos[:,e0].reshape(3,1)
-                #~ # pB : head point
-                #~ pB = self.topos[:,e1].reshape(3,1)
-                #~ # vtopos : mean topos velociy
-                #~ vg = self.vtopos
-            #~ pM = (pA+pB)/2.
-            #~ # create an orthonormal basis
-            #~ # 1 st vector : vg normalized (blue)
-            #~ # 2 nd vector : 3 x 1
-            #~ # 3 rd vector : PA-PB normalized
-            #~ T = geu.onb(pA,pB,vg)
-            #~ self.ccs[k,:,:] = T
+                self.ccs=self._ccs[:,:,:,self.toposFrameId]
+        else :
+            nc = self.ncyl
+            #
+            # ccs : nc x 3 x 3
+            #
+            self.ccs = np.empty((nc,3,3))
+            for k in range(self.sl.shape[0]):
+                # e0 : tail node of cylinder segment
+                e0 = int(self.sl[k,0])
+                # e1 : head node of cylinder segment
+                e1 = int(self.sl[k,1])
+
+                if not topos:
+                    # pA : tail point
+                    pA = self.d[:,e0,frameId].reshape(3,1)
+                    # pB : head point
+                    pB = self.d[:,e1,frameId].reshape(3,1)
+                    vg = self.vg[:,frameId][:,np.newaxis]
+                else:
+                    # pA : tail point
+                    pA = self.topos[:,e0].reshape(3,1)
+                    # pB : head point
+                    pB = self.topos[:,e1].reshape(3,1)
+                    # vtopos : mean topos velociy
+                    vg = self.vtopos
+                pM = (pA+pB)/2.
+                # create an orthonormal basis
+                # 1 st vector : vg normalized (blue)
+                # 2 nd vector : 3 x 1
+                # 3 rd vector : PB-PA normalized
+                T = geu.onb(pA,pB,vg)
+                self.ccs[k,:,:] = T
+                #~ # e0 : tail node of cylinder segment
+                #~ e0 = e[0]
+                #~ # e1 : head node of cylinder segment
+                #~ e1 = e[1]
+                #~ if not topos:
+                    #~ # pA : tail point
+                    #~ pA = self.d[:,e0,frameId].reshape(3,1)
+                    #~ # pB : head point
+                    #~ pB = self.d[:,e1,frameId].reshape(3,1)
+                    #~ vg = self.vg[:,frameId][:,np.newaxis]
+                #~ else:
+                    #~ # pA : tail point
+                    #~ pA = self.topos[:,e0].reshape(3,1)
+                    #~ # pB : head point
+                    #~ pB = self.topos[:,e1].reshape(3,1)
+                    #~ # vtopos : mean topos velociy
+                    #~ vg = self.vtopos
+                #~ pM = (pA+pB)/2.
+                #~ # create an orthonormal basis
+                #~ # 1 st vector : vg normalized (blue)
+                #~ # 2 nd vector : 3 x 1
+                #~ # 3 rd vector : PA-PB normalized
+                #~ T = geu.onb(pA,pB,vg)
+                #~ self.ccs[k,:,:] = T
 
 
     def intersectBody(self,A,B, topos = True, frameId = 0, cyl =[]):

@@ -4,13 +4,8 @@
 .. currentmodule:: pylayers.antprop.antenna
 
 This module handles antennas
-The antenna can be loaded from various specific file formats
-
-.vsh2
-.vsh3
-.sh2
-.sh3
-.mat
+An antenna can be loaded from various specific file formats among 
+them ( .vsh2 .vsh3 .sh2 .sh3 .mat)
 
 
 Antenna Class
@@ -1213,12 +1208,14 @@ class Antenna(PyLayers):
         cpt = 0
        
 
-        fstep = self.fa[1]-self.fa[0]
+        if len(self.fa) > 1 :
+            fstep = self.fa[1]-self.fa[0]
+        else : 
+            fstep = np.array((abs(self.fa-kwargs['fGHz'][0])+1))
         #dtheta = self.theta[1,0]-self.theta[0,0]
         #dphi = self.phi[0,1]-self.phi[0,0]
         dtheta = self.theta[1]-self.theta[0]
         dphi = self.phi[1]-self.phi[0]
-
         for f in kwargs['fGHz']:
             if 'col' in kwargs:
                 colr  = kwargs['col']
@@ -1325,14 +1322,16 @@ class Antenna(PyLayers):
             self.Fsynth(pattern=True)
 
 
-        x, y, z, k = self._computemesh(**kwargs)
+        x, y, z, k, scalar  = self._computemesh(**kwargs)
 
         if newfig:
             mlab.clf()
             f=mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
         else :
             f=mlab.gcf()
-        self._mayamesh = mlab.mesh(x, y, z)
+
+
+        self._mayamesh = mlab.mesh(x, y, z,scalars= scalar,resolution = 1)
 
         if name == []:
             f.children[-1].name = 'Antenna ' + self._filename
@@ -1412,6 +1411,8 @@ class Antenna(PyLayers):
         #
         # translation
         #
+        scalar=(q[...,0]**2+q[...,1]**2+q[...,2]**2)
+        
         q[...,0]=q[...,0]+po[0]
         q[...,1]=q[...,1]+po[1]
         q[...,2]=q[...,2]+po[2]
@@ -1420,7 +1421,9 @@ class Antenna(PyLayers):
         y = q[...,1]
         z = q[...,2]
 
-        return x, y, z, k
+
+
+        return x, y, z, k, scalar
 
     def show3(self, k=0,po=[],T=[],typ='Gain', mode='linear', silent=False):
         """ show3 geomview
@@ -2110,6 +2113,11 @@ class Antenna(PyLayers):
         else:
             Fth   : ndarray (1 x Ndir)
             Fph   : ndarray (1 x Ndir)
+
+        See Also
+        --------
+
+        pylayers.antprop.channel._vec2scalA
 
         Examples
         --------

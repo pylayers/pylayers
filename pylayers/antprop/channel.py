@@ -1281,7 +1281,6 @@ class Ctilde(PyLayers):
 
 
         H = Tchannel(alpha.x, alpha.y, self.tauk, self.tang, self.rang)
-
         if Friis:
             H.applyFriis()
 
@@ -1943,7 +1942,8 @@ class Tchannel(bs.FUDAsignal):
                     'taumax':[],
                     'typ':'m',
                     'title':False,
-                    'clipval': -2500
+                    'clipval': -2500,
+                    'd':'doa'
                     }
 
         for key, value in defaults.items():
@@ -1965,12 +1965,14 @@ class Tchannel(bs.FUDAsignal):
         title = kwargs.pop('title')
         typ = kwargs.pop('typ')
         clipval = kwargs.pop('clipval')
-
+        do = kwargs.pop('d')
         if fig == []:
             fig = plt.figure()
 
-
-        di = self.doa
+        if do=='doa':
+            di = self.doa
+        elif do=='dod':
+            di = self.dod
 
         if a == 'theta':
             ang = np.array((0,180))
@@ -1982,14 +1984,16 @@ class Tchannel(bs.FUDAsignal):
             delay = delay*0.3
 
         if dmin == []:
-            dmin = min(delay)
+            dmin = 0.#min(delay)
         if dmax == []:
             dmax= max(delay)
 
 
 
-
-        Etot = self.energy(mode=mode) + 1e-15
+        if self.isFriis :
+            Etot = self.energy(mode=mode,Friis=False) + 1e-15
+        else :
+            Etot = self.energy(mode=mode,Friis=True) + 1e-15
 
 
         if normalize:
@@ -2020,6 +2024,7 @@ class Tchannel(bs.FUDAsignal):
         if a == 'phi':
             scat = ax.scatter(di[cv, 1] * al, delay[cv], **kwargs)
             ax.axis((ang[0], ang[1], dmin, dmax))
+
             ax.set_xlabel(r"$\phi(^{\circ})$", fontsize=fontsize)
             if typ == 'm' :
                 ax.set_ylabel("distance (m)", fontsize=fontsize-2)

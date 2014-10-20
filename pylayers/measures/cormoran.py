@@ -11,7 +11,7 @@ from pylayers.util.project import *
 from pylayers.util.pyutil import *
 from pylayers.mobility.ban.body import *
 from pylayers.gis.layout import *
-from matplotlib.widgets import Slider, CheckButtons, Button
+from matplotlib.widgets import Slider, CheckButtons, Button, Cursor
 from pylayers.signal.DF import *
 
 from moviepy.editor import *
@@ -52,7 +52,7 @@ class CorSer(PyLayers):
             self.stcr = [1,2,3,4,10,11,12,32,33,34,35,9,17,18,19,20,25,26]
             self.shkb = [5,6,13,14,15,16,21,22,23,24,27,28,29,30,31,32,33,34,35]
             self.sbs  = [5,6,7,8,13,14,15,16,21,22,23,24,27,28,29,30,31,32,33,34,35]
-            self.mocap = [5,6,7,8,17,21,22,23,24,34]
+            self.mocap = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35]
 
         if day==12:
             stcr = []
@@ -88,6 +88,8 @@ class CorSer(PyLayers):
         if serie in self.mocap :
             self.loadbody(serie=serie,day=day)
             self._distancematrix()
+            self.computedevpdf()
+            self.B.traj.Lfilename=copy.copy(self.L.filename)
 
         self.title1 = 'Scenario:'+str(self.scenario)+' Serie:'+str(self.serie)+' Run:'+str(self.run)
         self.title2 = 'Type:'+str(self.typ)+ ' Subject:'+str(self.subject[0])
@@ -254,8 +256,10 @@ bernard
             filebody = baw + subject + '.ini'
             filewear = baw + subject + '_'  +str(self.day)+'-06-2014_' + self.typ + '.ini'
             self.B.append(Body(_filebody=filebody,
-                             _filemocap=filemocap,unit = 'mm',
-                             _filewear=filewear))
+                             _filemocap=filemocap,unit = 'mm', loop=False,
+                             _filewear=filewear,
+                             centered=False))
+
 
         if len(self.subject) == 1:
             self.B = self.B[0]
@@ -479,7 +483,11 @@ bernard
 
 
     def _distancematrix(self):
+        """Compute the ditance matrix between the nodes 
 
+            self.dist : (nb frame x nb_node x nb_node)
+            self.dist_nodes : list of used nodes (useful to make the association ;) )
+        """
 
         tdev = []
         for k in self.B.dev:
@@ -500,7 +508,7 @@ bernard
         pin2[:,:,:]=pin
         p = np.concatenate((pin2,pnb),axis=1)
         self.dist = np.sqrt(np.sum((p[:,:,np.newaxis,:]-p[:,np.newaxis,:,:])**2,axis=3))
-        self._lnd = ln
+        self.dist_nodes = ln
 
 
     def accessdm(self,a,b,techno):
@@ -542,8 +550,8 @@ bernard
         ka = techno+':'+str(ia)
         kb = techno+':'+str(ib)
 
-        ua = self._lnd.index(ka)
-        ub = self._lnd.index(kb)
+        ua = self.dist_nodes.index(ka)
+        ub = self.dist_nodes.index(kb)
 
         return(ua,ub)
 
@@ -698,8 +706,8 @@ bernard
                      'tagtraj':True,
                      'tagname':[],
                      'tagpoffset':[],
-                     'fontsizetag':0.5
-
+                     'fontsizetag':0.5,
+                     'trajectory_color_range':True
                     }
 
         for k in defaults:
@@ -715,8 +723,8 @@ bernard
 
         if kwargs['L']:
             self.L._show3(opacity=0.5)
+        v = self.din.items()
         if kwargs['inodes']:
-            v = self.din.items()
             X= np.array([v[i][1] for i in range(len(v))])
             mlab.points3d(X[:,0],X[:,1], X[:,2],scale_factor=kwargs['insize'],color=in_color)
         if kwargs['inname']:
@@ -724,7 +732,8 @@ bernard
             for i in range(len(v))]
         if kwargs['body']:
             if kwargs['bodytime']==[]:
-                time=range(10,100,20)
+                time =np.linspace(0,self.B.time[-1],5).astype(int)
+                # time=range(10,100,20)
             else :
                 time=kwargs['bodytime']
             for ki, i in enumerate(time):
@@ -745,17 +754,27 @@ bernard
 
 
         if kwargs['trajectory']:
-            self.B.traj._show3()
+            self.B.traj._show3(kwargs['trajectory_color_range'])
         if kwargs['camera'] : 
             mlab.points3d(self.cam[:,0],self.cam[:,1], self.cam[:,2],scale_factor=kwargs['camerasize'],color=cam_color)
         mlab.view(-111.44127634143871,
                     60.40674368088245,
                     24.492297713984197,
                     array([-0.07235499,  0.04868631, -0.00314969]))
-        # mlab.view(-128.66519195313163,
-        #            50.708933839573511,
-        #            24.492297713984247,
-        #            np.array([-0.07235499,  0.04868631, -0.00314969]))
+        mlab.view(-128.66519195313163,
+                   50.708933839573511,
+                   24.492297713984247,
+                   np.array([-0.07235499,  0.04868631, -0.00314969]))
+
+
+    def anim(self):
+
+        self._show3(body=False,inname=False)
+        self.B.anim()
+        mlab.view(-43.413544538477254,
+                    74.048193730704611,
+                    11.425837641867618,
+                    array([ 0.48298163,  0.67806043,  0.0987967 ]))
 
     def topandas(self):
         try:
@@ -1036,6 +1055,97 @@ bernard
         plt.show()
 
 
+    def pltvisi(self,a,b,**kwargs):
+        """ plot visibility between link a and b
+
+
+        Attributes
+        ----------
+        color: 
+            fill color 
+        hatch: 
+            hatch type
+        label_pos: ('top'|'bottom'|'')
+            postion of the label 
+        label_pos_off: float
+            offset of postion of the label 
+        label_mob: str
+            prefix of label in mobility
+        label_stat: str
+            prefix of label static
+
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> S = CorSer(6)
+        >>> f,ax = S.plthkb('AP1','TorsoTopLeft')
+        >>> f,ax = S.pltvisi('AP1','TorsoTopLeft',fig=f,ax=ax)
+        >>> #f,ax = S.pltmob(showvel=False,ylim=([-100,-40]),fig=f,ax=ax)
+        >>> plt.title('hatch = visibility / gray= mobility')
+        >>> plt.show()
+        """
+
+
+        defaults = { 'fig':[],
+                     'figsize':(10,10),
+                     'ax':[],
+                     'color':'',
+                     'hatch':'//',
+                     'label_pos':'',
+                     'label_pos_off':5,
+                     'label_vis':'V',
+                     'label_hide':'H'
+                    }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]                    
+
+        if kwargs['fig']==[]:
+            fig = plt.figure(figsize=kwargs['figsize'])
+        else :
+            fig=kwargs['fig']
+
+        if kwargs['ax'] ==[]:
+            ax = fig.add_subplot(111)
+        else :
+            ax = kwargs['ax']
+
+
+
+        aa= ax.axis()
+        vv,tv,tseg,itseg = self.visiarray(a,b)
+        # vv.any : it exist NLOS regions
+        if vv.any():
+            if kwargs['color']=='':
+                fig,ax=plu.rectplot(tv,tseg,ylim=aa[2:],
+                                    fill=False,
+                                    hatch=kwargs['hatch'],
+                                    fig=fig,ax=ax)
+
+            else :
+                fig,ax=plu.rectplot(tv,tseg,ylim=aa[2:],
+                                    color=kwargs['color'],
+                                    hatch=kwargs['hatch'],
+                                    fig=fig,ax=ax)
+
+            if kwargs['label_pos']!='':
+                if kwargs['label_pos'] == 'top':
+                    yposV = aa[3]-kwargs['label_pos_off']+0.5
+                    yposH = aa[3]-kwargs['label_pos_off']-0.5
+
+                elif kwargs['label_pos'] == 'bottom':
+                    yposV = aa[2]+kwargs['label_pos_off']+0.5
+                    yposH = aa[2]+kwargs['label_pos_off']+0.5
+                xposV= tv[tseg.mean(axis=1).astype(int)]
+                xposH= tv[itseg.mean(axis=1).astype(int)]
+                [ax.text(x,yposV,kwargs['label_vis']+str(ix+1)) for ix,x in enumerate(xposV)]
+                [ax.text(x,yposH,kwargs['label_hide']+str(ix+1)) for ix,x in enumerate(xposH)]
+
+        return fig,ax
+
     def pltmob(self,**kwargs):
         """ plot mobility
 
@@ -1050,8 +1160,19 @@ bernard
             filter order 
         fw: float (0.02)
             0 < fw < 1  (fN <=> 1)
-        offset : int
-            add offset to start later
+        time_offset : int
+            add time_offset to start later
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> S = CorSer(6)
+        >>> f,ax = S.plthkb('AP1','TorsoTopLeft')
+        >>> #f,ax = S.pltvisi('AP1','TorsoTopLeft',fig=f,ax=ax)
+        >>> f,ax = S.pltmob(showvel=False,ylim=([-100,-40]),fig=f,ax=ax)
+        >>> plt.title('hatch = visibility / gray= mobility')
+        >>> plt.show()
         """
         defaults = { 'fig':[],
                     'figsize':(10,10),
@@ -1061,12 +1182,18 @@ bernard
                      'fo':5,
                      'fw':0.02,
                      'ylim':(-200,0),
-                     'offset':0
+                     'time_offset':0,
+                     'color':'gray',
+                     'hatch':'',
+                     'label_pos':'top',
+                     'label_pos_off':5,
+                     'label_mob':'M',
+                     'label_stat':'S'
                     }
 
         for k in defaults:
             if k not in kwargs:
-                kwargs[k] = defaults[k]
+                kwargs[k] = defaults[k]                    
 
         if kwargs['fig']==[]:
             fig = plt.figure(figsize=kwargs['figsize'])
@@ -1085,14 +1212,14 @@ bernard
         f.butter(kwargs['fo'],kwargs['fw'],'lowpass')
         Vif=f.filter(Vi)
 
-        if kwargs['offset']>=0:
-            zmo = np.zeros(kwargs['offset'])
+        if kwargs['time_offset']>=0:
+            zmo = np.zeros(kwargs['time_offset'])
             tmp = np.insert(Vif,zmo,0)
             Vif = tmp[:len(Vif)]
         else:
-            zmo = np.zeros(-kwargs['offset'])
+            zmo = np.zeros(-kwargs['time_offset'])
             tmp = np.concatenate((Vif,zmo))
-            Vif = tmp[-kwargs['offset']:len(Vif)-kwargs['offset']]
+            Vif = tmp[-kwargs['time_offset']:len(Vif)-kwargs['time_offset']]
 
 
         if kwargs['showvel']:
@@ -1113,9 +1240,144 @@ bernard
             unu=np.insert(unu,-1,len(null)-1)
             sunu = unu.shape
         nullr=null[unu].reshape(sunu[0]/2,2)
-        fig , ax =plu.rectplot(self.B.time,nullr,ylim=kwargs['ylim'],color='k',fig=f,ax=ax)
+
+        fig , ax =plu.rectplot(self.B.time,nullr,ylim=kwargs['ylim'],
+                                color=kwargs['color'],
+                                hatch=kwargs['hatch'],
+                                fig=fig,ax=ax)
+
+
+        inullr = copy.copy(nullr)
+        bb = np.insert(inullr[:,1],0,0)
+        ee = np.hstack((inullr[:,0],null[-1]))
+        inullr = np.array((bb,ee)).T
+        # remove last 
+        inullr = inullr[:-1,:]
+        
+        if kwargs['label_pos']!='':
+            if kwargs['label_pos'] == 'top':
+                yposM = kwargs['ylim'][1]-kwargs['label_pos_off']+0.5
+                yposS = kwargs['ylim'][1]-kwargs['label_pos_off']-0.5
+
+            elif kwargs['label_pos'] == 'bottom':
+                yposM = kwargs['ylim'][0]+kwargs['label_pos_off']+0.5
+                yposS = kwargs['ylim'][0]+kwargs['label_pos_off']+0.5
+            xposM= self.B.time[nullr.mean(axis=1).astype(int)]
+            xposS= self.B.time[inullr.mean(axis=1).astype(int)]
+            [ax.text(x,yposM,kwargs['label_mob']+str(ix+1),
+                        horizontalalignment='center',
+                        verticalalignment='center')
+                        for ix,x in enumerate(xposM)]
+            [ax.text(x,yposS,kwargs['label_stat']+str(ix+1),
+                        horizontalalignment='center',
+                        verticalalignment='center')
+                        for ix,x in enumerate(xposS)]
 
         return fig,ax
+
+    def animhkb(self,a,b,interval=10,save=False):
+        """
+        Parameters
+        ----------
+
+        a : node name | number
+        b : node name | number
+        save : bool
+        """
+
+        import matplotlib.animation as animation
+
+        x = self.hkb.index
+        link = a+'-'+b
+        y = self.hkb[link].values
+
+        fig, ax = plt.subplots()
+        plt.xlim(0,x[-1])
+        line = [ax.plot(x, y, animated=True)[0]]
+
+        def animate(i):
+            line[0].set_ydata(y[:i])
+            line[0].set_xdata(x[:i])
+            return line
+
+        ani = animation.FuncAnimation(fig, animate, xrange(1, len(x)), 
+                                      interval=interval, blit=True)
+        if save:
+            ani.save(link+'.mp4')
+        plt.title(link)
+        plt.xlabel('time (s)')
+        plt.ylabel('RSS (dBm)')
+        plt.show()
+
+
+    def animhkbAP(self,a,AP_list,interval=1,save=False,**kwargs):
+        """
+        Parameters
+        ----------
+
+        a : node name 
+        AP_nb=[]
+        save : bool
+
+        Example
+        -------
+            >>> from pylayers.measures.cormoran import *
+            >>> S = CorSer(6)
+            >>> S.animhkbAP('TorsoTopLeft',['AP1','AP2','AP3','AP4'],interval=100,xstart=58,figsize=(20,2))  
+
+        """
+        import matplotlib.animation as animation
+
+        defaults = {   'fig':[],
+                       'figsize':(10,10),
+                        'ax':[],
+                        'label':'',
+                        'xstart':0
+        }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]                    
+
+        if kwargs['fig']==[]:
+            fig = plt.figure(figsize=kwargs['figsize'])
+        else :
+            fig=kwargs['fig']
+
+        if kwargs['ax'] ==[]:
+            ax = fig.add_subplot(111)
+        else :
+            ax = kwargs['ax']
+
+
+        ust = np.where(self.hkb.index>=kwargs['xstart'])[0][0]
+
+        x = self.hkb.index[ust:]
+        links = [l+'-'+a for l in AP_list]
+        ly = [self.hkb[l].values[ust:] for l in links]
+
+        color=['k','b','g','r']
+        plt.xlim(kwargs['xstart'],x[-1]+3)
+        line = [ax.plot(x, y, animated=True,
+                        color=color[iy],
+                        label=AP_list[iy]+'-'+kwargs['label'])[0] for iy,y in enumerate(ly)]
+
+        def animate(i):
+            for iy,y in enumerate(ly):
+                line[iy].set_ydata(y[:i])
+                line[iy].set_xdata(x[:i])
+
+            return line
+        plt.legend()
+        plt.xlabel('time (s)')
+        plt.ylabel('RSS (dBm)')
+        ani = animation.FuncAnimation(fig, animate, xrange(0, len(x)), 
+                                      interval=interval, blit=True)
+        if save:
+            ani.save(a+'.mp4')
+        #plt.title(links)
+        plt.show()
+
 
     def plthkb(self,a,b,**kwargs):
         """
@@ -1126,6 +1388,18 @@ bernard
         b : node name | number
         t0 : start time
         t1 : stop time
+
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> S = CorSer(6)
+        >>> f,ax = S.plthkb('AP1','TorsoTopLeft')
+        >>> f,ax = S.pltvisi('AP1','TorsoTopLeft',fig=f,ax=ax)
+        >>> f,ax = S.pltmob(showvel=False,ylim=([-100,-40]),fig=f,ax=ax)
+        >>> plt.title('hatch = visibility / gray= mobility')
+        >>> plt.show()
 
         """
 
@@ -1227,7 +1501,7 @@ bernard
                 ax.set_title(label=title,fontsize=kwargs['fontsize'])
             if not kwargs['distance']:
                 if kwargs['dB']:
-                    ax.set_ylabel(u'$P_r$ (dBm)',fontsize=18)
+                    ax.set_ylabel('Received Power dBm')
                 else:
                     if kwargs['yoffset']==1:
                         ax.set_ylabel('mW')
@@ -1457,7 +1731,7 @@ bernard
 
         if visibility:
             aa= ax.axis()
-            vv,tv,tseg = self.visiarray(a,b)
+            vv,tv,tseg,itseg = self.visiarray(a,b)
             # vv.any : it exist NLOS regions
             if vv.any():
                 fig,ax=plu.rectplot(tv,tseg,ylim=aa[2:],color=kwargs['color'],hatch=hatch,fig=fig,ax=ax)
@@ -1757,6 +2031,11 @@ bernard
             B = B-self.B.pg.T
 
         for k in iframe:
+            if len(np.shape(A))<2:
+                A=A[np.newaxis,:]*np.ones((len(B),3)) 
+            if len(np.shape(B))<2:
+                B=B[np.newaxis,:]*np.ones((len(A),3)) 
+
             its = self.B.intersectBody(A[k,:],B[k,:],topos=False,frameId=k)
             tvisi.append(its.any())
         visi = pd.Series(tvisi,index=iframe/100.)
@@ -1841,7 +2120,63 @@ bernard
             if vv.all():
                 tseg = np.array(zip(np.array([0]),np.array([len(vv)-1])))
 
-        return vv,tv,tseg
+        itseg = copy.copy(tseg)
+        bb = np.insert(itseg[:,1],0,0)
+        ee = np.hstack((itseg[:,0],len(vv)))
+        itseg = np.array((bb,ee)).T
+        # bb = np.hstack((bb,len(vv)))
+
+        return vv,tv,tseg,itseg
+
+
+    # def computedevpdf(self):
+    #     """ create a timestamped data frame 
+    #         with all positions of devices
+    #     """
+    #     t=self.B.traj.time()
+    #     pos = np.empty((len(t),12,3))
+    #     for ik,k in enumerate(t):
+    #         self.B.settopos(t=k)
+    #         pos[ik,:,:]=self.B.getdevp()
+    #     df=[]
+    #     for d in range(pos.shape[1]):
+    #         df_tmp=pd.DataFrame(pos[:,d,:],columns=['x','y','z'],index=t)
+    #         df_tmp['id']=self.B.dev.keys()[d]
+    #         try :
+    #             df = pd.concat([df,df_tmp])
+    #         except:
+    #             df = df_tmp
+    #     df = df.sort_index()
+    #     cols=['id','x','y','z']
+    #     self.devdf=df[cols]
+
+    def computedevpdf(self):
+        """ create a timestamped data frame 
+            with positions of all devices
+
+
+        """
+        dev = self.B.dev.keys()
+        udev=[self.B.dev[d]['uc3d'][0] for d in dev]
+        pos = self.B._f[:,udev,:]
+        t = self.B.time
+        for d in range(len(dev)):
+            df_tmp=pd.DataFrame(pos[:,d,:],columns=['x','y','z'],index=t)
+            df_tmp[['vx','vy','vz']]=df_tmp.diff()/(t[1]-t[0])
+            df_tmp['v']=np.sqrt(np.sum(df_tmp[['vx','vy','vz']]**2,axis=1))
+            df_tmp[['ax','ay','az']]=df_tmp[['vx','vy','vz']].diff()/(t[1]-t[0])
+            df_tmp['a']=np.sqrt(np.sum(df_tmp[['ax','ay','az']]**2,axis=1))
+            df_tmp['id']=self.B.dev.keys()[d]
+            try :
+                df = pd.concat([df,df_tmp])
+            except:
+                df = df_tmp
+
+
+        df = df.sort_index()
+        cols=['id','x','y','z','v','vx','vy','vz','a','ax','ay','az']
+        self.devdf=df[cols]
+        
 
     def getdevp(self,a,b,technoa='HKB',technob='HKB'):
         """    get device position
@@ -1928,6 +2263,35 @@ bernard
             pb = self.din[nnb]
 
         return pa,pb
+
+
+    def align(self,devdf,hkbdf):
+
+        """ align time for device and hkb data frame 
+
+        devdf : device dataframe
+        hkbdf : hkbdataframe
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> S=CorSer(6)
+        >>> devdf = S.devdf[S.devdf['id']=='HKB:15']
+        >>> hkbdf = S.hkb['AP1-AnckleLeft']
+        >>> devdf2,hkbdf2 = S.align(devdf,hkbdf)
+
+
+        """
+
+
+        idev = devdf.index
+        ihkb = hkbdf.index
+        devdf.index = pd.to_datetime(idev,unit='s')
+        hkbdf.index = pd.to_datetime(ihkb,unit='s')
+        sf = (hkbdf.index[2]-hkbdf.index[1]).microseconds
+        devdf= devdf.resample(str(sf)+'U')
+        return devdf,hkbdf
 
     def get_data(self,a,b):
 

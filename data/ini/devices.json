@@ -154,11 +154,11 @@
             }
         }
     },
-    "generic": {
+    "hikob": {
         "antennas": {
             "A1": {
                 "T": "[1.,0.,0.],[0.,1.,0.],[0.,0.,1.]",
-                "name": "S17R2m.sh3",
+                "name": "S2R2.sh3",
                 "p": [
                     0.5,
                     0.5,
@@ -167,16 +167,17 @@
             }
         },
         "dimensions": {
-            "depth": 11.1,
-            "height": 36.8,
-            "width": 56.6
+            "depth": 4.5,
+            "height": 7.7,
+            "width": 3.6
         },
         "standards": {
-            "bluetooth-class2": {
+            "ieee802154": {
                 "antenna": [
                     "A1"
                 ]
             }
         }
     }
+
 }

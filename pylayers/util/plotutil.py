@@ -416,6 +416,7 @@ def rectplot(x,xpos,ylim=[],**kwargs):
                  'ax':[],
                  'figsize':(8,8),
                  'color':'y',
+                 'fill':True,
                  'alpha':0.3,
                  'linewidth':0,
                  'hatch':''
@@ -438,9 +439,12 @@ def rectplot(x,xpos,ylim=[],**kwargs):
     if ylim==[]:
         ylim=ax.axis()[2:]
     for ux in xpos:
-
         vertc = [(x[ux[0]],ylim[0]),(x[ux[1]],ylim[0]),(x[ux[1]],ylim[1]),(x[ux[0]],ylim[1])]
-        poly = plt.Polygon(vertc,facecolor=kwargs['color'],alpha=kwargs['alpha'],linewidth=kwargs['linewidth'],hatch=kwargs['hatch'])
+        poly = plt.Polygon(vertc,facecolor=kwargs['color'],
+                            fill=kwargs['fill'],
+                            alpha=kwargs['alpha'],
+                            linewidth=kwargs['linewidth'],
+                            hatch=kwargs['hatch'])
         ax.add_patch(poly) 
 
     return fig,ax
@@ -654,7 +658,9 @@ def cylinder(fig,pa,pb,R):
 def polycol(lpoly,var=[],**kwargs):
     """ plot a collection of polygon
 
-    lpoly : list of polygons
+    lpoly : list of polygons (,npol)
+    var   : np.array (,npol)
+         variable associated to polygon
 
     Examples
     --------
@@ -669,9 +675,11 @@ def polycol(lpoly,var=[],**kwargs):
         >>> f,a = polycol(verts,var)
     """
     defaults = {'edgecolor':'none',
+                'facecolor':'black',
                 'cmap':cm.jet,
                 'closed':False,
-                'colorbar':True,
+                'colorbar':False,
+                'clim':(0,140),
                 'dB':False,
                 'm':[]}
     for k in defaults:
@@ -682,6 +690,7 @@ def polycol(lpoly,var=[],**kwargs):
         fig,ax = plt.subplots(1,1)
     else:
         fig = kwargs['fig']
+        ax  = kwargs['ax']
 
 
     if len(var)>0:
@@ -689,11 +698,18 @@ def polycol(lpoly,var=[],**kwargs):
             var = np.log10(var)
         else:
             pass
-        polc = PolyCollection(lpoly,array=var,cmap=kwargs['cmap'],
-                       closed=kwargs['closed'],edgecolor=kwargs['edgecolor'])
+        polc = PolyCollection(lpoly,array=var,
+                       cmap=kwargs['cmap'],
+                       clim=kwargs['clim'],
+                       closed=kwargs['closed'],
+                       edgecolor=kwargs['edgecolor'])
     else:
         kwargs['colorbar']=False
-        polc = PolyCollection(lpoly,closed=kwargs['closed'],edgecolor=kwargs['edgecolor'])
+        polc = PolyCollection(lpoly,
+                              closed = kwargs['closed'],
+                              edgecolor = kwargs['edgecolor'],
+                              facecolor=kwargs['facecolor'])
+
     ax.add_collection(polc)
     ax.autoscale_view()
 

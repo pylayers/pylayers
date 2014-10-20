@@ -1096,7 +1096,7 @@ class Signatures(PyLayers,dict):
         return dout
 
 
-    def procone2(self,G, source, target,dout={}, cutoff=1):
+    def procone2(self,L,G, source, target,dout={}, cutoff=1):
         """ seek all simple_path from source to target looking backward
 
         Parameters
