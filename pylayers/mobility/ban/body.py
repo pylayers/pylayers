@@ -427,6 +427,8 @@ class Body(PyLayers):
             self._unit = 1e-2
         elif unit == 'mm':
             self._unit = 1e-3
+        elif unit == 'm':
+            self._unit = 1.
         else :
             raise AttributeError('unit'+unit + 'not recognized')
         # duration of the motion capture snapshot

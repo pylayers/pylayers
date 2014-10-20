@@ -86,6 +86,7 @@ class Simul(SimulationRT): # Sympy 2
 
     Attributes
     ----------
+
     config  : config parser instance
     sim_opt : dictionary of configuration option for simulation
     ag_opt : dictionary of configuration option for agent
@@ -141,13 +142,13 @@ class Simul(SimulationRT): # Sympy 2
 
         s = 'Simulation information' + '\n----------------------'
         s = s + '\nLayout: ' + self.lay_opt['filename']
-        s = s + '\nSimulation duration: ' + self.sim_opt['duration']
-        s = s + '\nRandom seed: ' + self.sim_opt['seed']
+        s = s + '\nSimulation duration: ' + str(self.sim_opt['duration'])
+        s = s + '\nRandom seed: ' + str(self.sim_opt['seed'])
         s = s + '\nSave simulation: ' + self.save_opt['savep']
 
         s = s + '\n\nUpdate times' + '\n-------------'
-        s = s + '\nMechanical update: ' + self.meca_opt['mecanic_update_time']
-        s = s + '\nNetwork update: ' + self.net_opt['network_update_time']
+        s = s + '\nMechanical update: ' + str(self.meca_opt['mecanic_update_time'])
+        s = s + '\nNetwork update: ' + str(self.net_opt['network_update_time'])
         s = s + '\nLocalization update: ' + self.net_opt['communication_mode']
 
         s = s + '\n\nAgents => self.lAg[i]' + '\n------'
@@ -159,7 +160,7 @@ class Simul(SimulationRT): # Sympy 2
         s = s + '\n\nNetwork' + '\n-------'
         s = s + '\nNodes per wstd: ' + str(self.net.wstd)
 
-        s = s + '\n\nLocalization'  + '------------'
+        s = s + '\n\nLocalization'  + '\n------------'
         s = s + '\nLocalization enable: ' + self.loc_opt['localization']
         s = s + '\nPostion estimation methods: ' + self.loc_opt['method']
 
@@ -295,7 +296,7 @@ class Simul(SimulationRT): # Sympy 2
                 os.popen('mysql -u ' + self.sql_opt['user'] + ' -p ' + self.sql_opt['dbname'] +\
                 '< /private/staff/t/ot/niamiot/svn2/devel/simulator/pyray/SimWHERE2.sql' )
 
-        ## TODO supprimer la ref en dur 
+        ## TODO remove the hard reference
         if 'txt' in self.save_opt['save']:
             pyu.writeDetails(self)
             if os.path.isfile(basename+'/output/Nodes.txt'):
@@ -310,9 +311,11 @@ class Simul(SimulationRT): # Sympy 2
                         except:
                             pass
 
+
         self.create_layout()
         self.create_EMS()
         self.create_network()
+
         if str2bool(self.sim_opt['showtk']):
             self.create_visual()
         self.create_show()

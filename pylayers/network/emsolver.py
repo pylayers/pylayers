@@ -33,7 +33,7 @@ import pylayers.util.project
 import pylayers.antprop.slab
 
 from pylayers.gis.layout import Layout
-import pylayers.antprop.loss as loss
+import pylayers.antprop.loss as lo
 from pylayers.util.project import *
 from pylayers.network.model import PLSmodel
 
@@ -52,16 +52,17 @@ class EMSolver(object):
     ems_opt
     toa_opt
     EMS_method
-       
+
     sigmaTOA
 
     Notes
     -----
 
-    During dynamic simulation, on a regular basis nodes needs radio information
-    about their neighbors. This radio information can be obtained with
-    different technique from statistical model to site specific simulation
-    using ray tracing.
+    During dynamic simulation, on a regular basis nodes need radio information
+    about their neighbors. This radio information can be obtained from
+    different techniques :
+        + statistical model
+        + site specific simulation using ray tracing.
 
     EMS_method = { 'multiwall','raytracing'}
 
@@ -70,9 +71,11 @@ class EMSolver(object):
     """
 
     def __init__(self,L=Layout()):
+
         self.config  = ConfigParser.ConfigParser()
         self.fileini ='EMSolver.ini'
         self.config.read(pyu.getlong(self.fileini,pstruc['DIRSIMUL']))
+
         self.ems_opt = dict(self.config.items('EMS_config'))
         self.toa_opt = dict(self.config.items('TOA'))
 
@@ -94,8 +97,8 @@ class EMSolver(object):
             RAT name
         model : dictionnary
             parameters of the PL model
-           
-           
+
+
         """
 
         fileini = pyu.getlong(self.fileini, pstruc['DIRSIMUL'])
@@ -125,7 +128,7 @@ class EMSolver(object):
         """
 
         ratopt = dict(self.config.items(RAT+'_PLM'))
-       
+
         # Path Loss Shadowing model
         self.model[RAT] = PLSmodel(f = eval(ratopt['f']),
                                    rssnp = eval(ratopt['rssnp']),
@@ -139,7 +142,7 @@ class EMSolver(object):
 
         Parameters
         ----------
-       
+
         p : np.array
         e : np.array
         LDP : string
@@ -148,10 +151,10 @@ class EMSolver(object):
            nodes emmited power
         sens : list
             nodes sensitivity
-               
+
         Returns
         -------
-       
+
         value : float
             A LDP value :     * A time in ns for LDP ='TOA'
                     * A received power in dBm for LDP ='Pr'
@@ -187,8 +190,8 @@ class EMSolver(object):
 #                    std = self.model.sigrss*sp.randn(len(d))
 #                    r=model.getPL(d,model.sigrss)
 #                    return ([[- r[i]-model.PL0,model.sigrss] for i in range(len(d))],d)
-#               
-#           
+#
+#
 
 
 
@@ -230,11 +233,16 @@ class EMSolver(object):
                         #   Lo Lp Edo Edp
                         #
                         #
-                        MW = loss.Losst(self.L,model.f,pa[i+1:lpa,:dim].T,pa[i,:dim])
-                        # MW = loss.Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])
+                        MW = lo.Losst(self.L,model.f,pa[i+1:lpa,:dim].T,pa[i,:dim])
+                        # MW = lo.Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])
                         # loss free space
 
-                        frees=np.hstack((frees,loss.PL(np.array([model.f]),pa[i+1:lpa,:dim].T,pa[i,:dim].reshape(2,1),model.rssnp)[0] ))
+                        frees=np.hstack((frees,
+                                         lo.PL(np.array([model.f]),
+                                         pa[i+1:lpa,:dim].T,
+                                         pa[i,:dim].reshape(2,1),
+                                         model.rssnp)[0] ))
+
                         # Pr.extend(lepwr - MW[0] - frees)
                         # WARNING : only one polarization is taken into
                         # account here
@@ -276,7 +284,7 @@ class EMSolver(object):
 #                    frees=[]
 #                    lepwr=[]
 #                    for i in range(lpa-1):
-#                        loss.append(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i]))
+#                        lo.append(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i]))
 #                        Lwo.extend(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])[0])
 #                        frees.extend(PL(pa[i+1:lpa],model.f,pa[i],model.rssnp))
 #                        lepwr.extend(epwr[i+1:lpa])
