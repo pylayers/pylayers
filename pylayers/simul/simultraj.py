@@ -465,6 +465,7 @@ class Simul(PyLayers):
                                               'fbminghz', 'fbmaxghz', 'fstep', 'aktk_id',
                                               'sig_id', 'ray_id', 'Ct_id', 'H_id'
                                               ],index=[self._time[ut]])
+
                         if not self.check_exist(df):
                             self.data = self.data.append(df)
                             # self._index = self._index + 1
@@ -493,16 +494,16 @@ class Simul(PyLayers):
             False otherwise
 
         """
+        # check init case 
+        if not len(self.data.index) == 0:
+            ud = self.data[(self.data.index == df.index) & (self.data['id_a'] == df['id_a'].values[0]) & (self.data['id_b'] == df['id_b'].values[0]) & (self.data['wstd'] == df['wstd'].values[0])]
 
-        ud = self.data[(self.data.index == df.index)
-                        & (self.data['id_a'] == df['id_a'].values[0])
-                        & (self.data['id_b'] == df['id_b'].values[0])
-                        & (self.data['wstd'] == df['wstd'].values[0])
-                        ]
-        if len(ud) == 0:
-            return False
+            if len(ud) == 0:
+                return False
+            else :
+                return True
         else :
-            return True
+            return False
 
 
     def savepd(self):
@@ -589,13 +590,14 @@ class Simul(PyLayers):
 
         link = kwargs['link']
 
-        df = self.data[self.data['t'] == kwargs['t']]
+        df = self.data[self.data.index == pd.to_datetime(kwargs['t'])]
         if len(df) == 0:
             raise AttributeError('invalid time')
 
+
         # default
         if link ==[]:
-            line = df[df.index==1]
+            line = df[df.index<=pd.to_datetime(0)]
             link = [line['id_a'].values[0],line['id_b'].values[0]]
         else :
             # get info of the corresponding timestamp
