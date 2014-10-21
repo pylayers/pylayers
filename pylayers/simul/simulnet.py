@@ -81,7 +81,6 @@ import pdb
 import os
 
 class Simul(SimulationRT): # Sympy 2
-#class Simul(sympy.RealtimeEnvironment):
     """
 
     Attributes
@@ -114,11 +113,15 @@ class Simul(SimulationRT): # Sympy 2
 
     """
     def __init__(self):
+
         SimulationRT.__init__(self) #Sympy 2
         #sympy.RealtimeEnvironment.__init__(self)  #simpy 3
         self.initialize()
+
+
         self.config = ConfigParser.ConfigParser()
         filename = pyu.getlong('simulnet.ini',pstruc['DIRSIMUL'])
+
         self.config.read(filename)
         self.sim_opt = dict(self.config.items('Simulation'))
         self.lay_opt = dict(self.config.items('Layout'))
@@ -128,6 +131,7 @@ class Simul(SimulationRT): # Sympy 2
         self.save_opt = dict(self.config.items('Save'))
         self.sql_opt = dict(self.config.items('Mysql'))
         self.seed = eval(self.sim_opt['seed'])
+
         self.traj=Trajectories()
 
         self.verbose = str2bool(self.sim_opt['verbose'])
@@ -181,13 +185,13 @@ class Simul(SimulationRT): # Sympy 2
 
         try:
             self.L.dumpr()
-            print 'Layout graphs are loaded from ',basename,'/struc/ini'
+            print 'Layout graphs are loaded from '+basename+'/struc/ini'
         except:
         #self.L.sl = sl
         #self.L.loadGr(G1)
             print 'This is the first time the layout file is used\
             Layout graphs are curently being built, it may take few minutes.'
-            self.L.build()     
+            self.L.build()
             self.L.dumpw()
 
         #
@@ -289,8 +293,7 @@ class Simul(SimulationRT): # Sympy 2
             This method is called at the end of __init__
 
         """
-
-        # this is just to redump the database at each simulation
+        # this is to redump the database at each simulation
         if 'mysql' in self.save_opt['save']:
             if str2bool(self.sql_opt['dumpdb']):
                 os.popen('mysql -u ' + self.sql_opt['user'] + ' -p ' + self.sql_opt['dbname'] +\
@@ -312,8 +315,11 @@ class Simul(SimulationRT): # Sympy 2
                             pass
 
 
+        # Layout
         self.create_layout()
+        # Electro Magnetic Simulator
         self.create_EMS()
+        # Network
         self.create_network()
 
         if str2bool(self.sim_opt['showtk']):
@@ -372,17 +378,21 @@ class Simul(SimulationRT): # Sympy 2
     def runsimul(self):
         """ run simulation
         """
+
         if not self.finish :
+            # random number seed
             seed(self.seed)
             self.simulate(until=float(self.sim_opt['duration']),
                           real_time=True,
                           rel_speed=float(self.sim_opt['speedratio']))
+
             self.the_world._boids={}
 
 
             if str2bool(self.save_opt['savep']):
-                print 'Processing save results, please wait'
-                self.save.mat_export()
+                pass
+                #print 'Processing save results, please wait'
+                #self.save.mat_export()
 
 
             if str2bool(self.save_opt['savepd']):
