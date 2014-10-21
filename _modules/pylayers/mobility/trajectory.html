@@ -789,11 +789,15 @@
         <span class="k">return</span>  <span class="bp">self</span><span class="o">.</span><span class="n">t</span>
 
 </div>
-    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">color_range</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
 
         <span class="n">X</span><span class="o">=</span><span class="bp">self</span><span class="p">[[</span><span class="s">&#39;x&#39;</span><span class="p">,</span><span class="s">&#39;y&#39;</span><span class="p">,</span><span class="s">&#39;z&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
-        <span class="n">mlab</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">X</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="n">X</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
-
+        
+        <span class="k">if</span> <span class="n">color_range</span><span class="p">:</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+            <span class="n">mlab</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">X</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="n">X</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span><span class="o">-</span><span class="n">t</span><span class="p">,</span><span class="n">colormap</span><span class="o">=</span><span class="s">&#39;gist_gray&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mlab</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">X</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="n">X</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
 
 <div class="viewcode-block" id="Trajectory.plot"><a class="viewcode-back" href="../../../modules/generated/pylayers.mobility.trajectory.Trajectory.plot.html#pylayers.mobility.trajectory.Trajectory.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="p">[],</span> <span class="n">ax</span><span class="o">=</span><span class="p">[],</span> <span class="n">Nlabels</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;plot&#39;</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; plot trajectory</span>
@@ -1029,7 +1033,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on oct. 04, 2014.
+      Last updated on oct. 20, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

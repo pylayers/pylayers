@@ -1359,7 +1359,6 @@
         <span class="n">alpha</span> <span class="o">=</span> <span class="n">t1</span> <span class="o">*</span> <span class="n">Fbt</span> <span class="o">+</span> <span class="n">t2</span> <span class="o">*</span> <span class="n">Fbp</span>
 
         <span class="n">H</span> <span class="o">=</span> <span class="n">Tchannel</span><span class="p">(</span><span class="n">alpha</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tauk</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tang</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">)</span>
-
         <span class="k">if</span> <span class="n">Friis</span><span class="p">:</span>
             <span class="n">H</span><span class="o">.</span><span class="n">applyFriis</span><span class="p">()</span>
 
@@ -2016,7 +2015,8 @@
                     <span class="s">&#39;taumax&#39;</span><span class="p">:[],</span>
                     <span class="s">&#39;typ&#39;</span><span class="p">:</span><span class="s">&#39;m&#39;</span><span class="p">,</span>
                     <span class="s">&#39;title&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
-                    <span class="s">&#39;clipval&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">2500</span>
+                    <span class="s">&#39;clipval&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">2500</span><span class="p">,</span>
+                    <span class="s">&#39;d&#39;</span><span class="p">:</span><span class="s">&#39;doa&#39;</span>
                     <span class="p">}</span>
 
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -2038,12 +2038,14 @@
         <span class="n">title</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;title&#39;</span><span class="p">)</span>
         <span class="n">typ</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;typ&#39;</span><span class="p">)</span>
         <span class="n">clipval</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;clipval&#39;</span><span class="p">)</span>
-
+        <span class="n">do</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;d&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">fig</span> <span class="o">==</span> <span class="p">[]:</span>
             <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 
-
-        <span class="n">di</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">doa</span>
+        <span class="k">if</span> <span class="n">do</span><span class="o">==</span><span class="s">&#39;doa&#39;</span><span class="p">:</span>
+            <span class="n">di</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">doa</span>
+        <span class="k">elif</span> <span class="n">do</span><span class="o">==</span><span class="s">&#39;dod&#39;</span><span class="p">:</span>
+            <span class="n">di</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dod</span>
 
         <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="s">&#39;theta&#39;</span><span class="p">:</span>
             <span class="n">ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">180</span><span class="p">))</span>
@@ -2055,14 +2057,16 @@
             <span class="n">delay</span> <span class="o">=</span> <span class="n">delay</span><span class="o">*</span><span class="mf">0.3</span>
 
         <span class="k">if</span> <span class="n">dmin</span> <span class="o">==</span> <span class="p">[]:</span>
-            <span class="n">dmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+            <span class="n">dmin</span> <span class="o">=</span> <span class="mf">0.</span><span class="c">#min(delay)</span>
         <span class="k">if</span> <span class="n">dmax</span> <span class="o">==</span> <span class="p">[]:</span>
             <span class="n">dmax</span><span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
 
 
 
-
-        <span class="n">Etot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-15</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isFriis</span> <span class="p">:</span>
+            <span class="n">Etot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-15</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">Etot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-15</span>
 
 
         <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
@@ -2093,6 +2097,7 @@
         <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="s">&#39;phi&#39;</span><span class="p">:</span>
             <span class="n">scat</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">di</span><span class="p">[</span><span class="n">cv</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">al</span><span class="p">,</span> <span class="n">delay</span><span class="p">[</span><span class="n">cv</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">((</span><span class="n">ang</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ang</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">dmin</span><span class="p">,</span> <span class="n">dmax</span><span class="p">))</span>
+
             <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">r&quot;$\phi(^{\circ})$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;m&#39;</span> <span class="p">:</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&quot;distance (m)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
@@ -2476,7 +2481,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on oct. 04, 2014.
+      Last updated on oct. 20, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

@@ -1394,14 +1394,16 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 
-        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_computemesh</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">scalar</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_computemesh</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">newfig</span><span class="p">:</span>
             <span class="n">mlab</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
             <span class="n">f</span><span class="o">=</span><span class="n">mlab</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">bgcolor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">fgcolor</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
         <span class="k">else</span> <span class="p">:</span>
             <span class="n">f</span><span class="o">=</span><span class="n">mlab</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_mayamesh</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">mesh</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mayamesh</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">mesh</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span><span class="n">scalars</span><span class="o">=</span> <span class="n">scalar</span><span class="p">,</span><span class="n">resolution</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="p">[]:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;Antenna &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span>
@@ -1478,6 +1480,8 @@
         <span class="c">#</span>
         <span class="c"># translation</span>
         <span class="c">#</span>
+        <span class="n">scalar</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        
         <span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">po</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">po</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">po</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
@@ -1486,7 +1490,9 @@
         <span class="n">y</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">z</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">k</span>
+
+
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">scalar</span>
 
 <div class="viewcode-block" id="Antenna.show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.show3.html#pylayers.antprop.antenna.Antenna.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">po</span><span class="o">=</span><span class="p">[],</span><span class="n">T</span><span class="o">=</span><span class="p">[],</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;Gain&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;linear&#39;</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show3 geomview</span>
@@ -3433,7 +3439,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on oct. 04, 2014.
+      Last updated on oct. 20, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

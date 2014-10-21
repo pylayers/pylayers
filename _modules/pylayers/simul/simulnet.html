@@ -160,11 +160,11 @@
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="k">class</span> <span class="nc">Simul</span><span class="p">(</span><span class="n">SimulationRT</span><span class="p">):</span> <span class="c"># Sympy 2</span>
-<span class="c">#class Simul(sympy.RealtimeEnvironment):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
+
 <span class="sd">    config  : config parser instance</span>
 <span class="sd">    sim_opt : dictionary of configuration option for simulation</span>
 <span class="sd">    ag_opt : dictionary of configuration option for agent</span>
@@ -192,11 +192,15 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Simul.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simulnet.Simul.__init__.html#pylayers.simul.simulnet.Simul.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
         <span class="n">SimulationRT</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="c">#Sympy 2</span>
         <span class="c">#sympy.RealtimeEnvironment.__init__(self)  #simpy 3</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+
+
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
         <span class="n">filename</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;simulnet.ini&#39;</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRSIMUL&#39;</span><span class="p">])</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Simulation&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lay_opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Layout&#39;</span><span class="p">))</span>
@@ -206,6 +210,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Save&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sql_opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Mysql&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;seed&#39;</span><span class="p">])</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">traj</span><span class="o">=</span><span class="n">Trajectories</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;verbose&#39;</span><span class="p">])</span>
@@ -220,13 +225,13 @@
 
         <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;Simulation information&#39;</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">----------------------&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Layout: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">lay_opt</span><span class="p">[</span><span class="s">&#39;filename&#39;</span><span class="p">]</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Simulation duration: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;duration&#39;</span><span class="p">]</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Random seed: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;seed&#39;</span><span class="p">]</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Simulation duration: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;duration&#39;</span><span class="p">])</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Random seed: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;seed&#39;</span><span class="p">])</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Save simulation: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">[</span><span class="s">&#39;savep&#39;</span><span class="p">]</span>
 
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">Update times&#39;</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">-------------&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Mechanical update: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">meca_opt</span><span class="p">[</span><span class="s">&#39;mecanic_update_time&#39;</span><span class="p">]</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Network update: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s">&#39;network_update_time&#39;</span><span class="p">]</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Mechanical update: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meca_opt</span><span class="p">[</span><span class="s">&#39;mecanic_update_time&#39;</span><span class="p">])</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Network update: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s">&#39;network_update_time&#39;</span><span class="p">])</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Localization update: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s">&#39;communication_mode&#39;</span><span class="p">]</span>
 
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">Agents =&gt; self.lAg[i]&#39;</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">------&#39;</span>
@@ -238,7 +243,7 @@
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">Network&#39;</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">-------&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Nodes per wstd: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">wstd</span><span class="p">)</span>
 
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">Localization&#39;</span>  <span class="o">+</span> <span class="s">&#39;------------&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">Localization&#39;</span>  <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">------------&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Localization enable: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc_opt</span><span class="p">[</span><span class="s">&#39;localization&#39;</span><span class="p">]</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Postion estimation methods: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc_opt</span><span class="p">[</span><span class="s">&#39;method&#39;</span><span class="p">]</span>
 
@@ -259,13 +264,13 @@
 
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
-            <span class="k">print</span> <span class="s">&#39;Layout graphs are loaded from &#39;</span><span class="p">,</span><span class="n">basename</span><span class="p">,</span><span class="s">&#39;/struc/ini&#39;</span>
+            <span class="k">print</span> <span class="s">&#39;Layout graphs are loaded from &#39;</span><span class="o">+</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/struc/ini&#39;</span>
         <span class="k">except</span><span class="p">:</span>
         <span class="c">#self.L.sl = sl</span>
         <span class="c">#self.L.loadGr(G1)</span>
             <span class="k">print</span> <span class="s">&#39;This is the first time the layout file is used</span><span class="se">\</span>
 <span class="s">            Layout graphs are curently being built, it may take few minutes.&#39;</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>     
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
 
         <span class="c">#</span>
@@ -367,14 +372,13 @@
 <span class="sd">            This method is called at the end of __init__</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c"># this is just to redump the database at each simulation</span>
+        <span class="c"># this is to redump the database at each simulation</span>
         <span class="k">if</span> <span class="s">&#39;mysql&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">[</span><span class="s">&#39;save&#39;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sql_opt</span><span class="p">[</span><span class="s">&#39;dumpdb&#39;</span><span class="p">]):</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="s">&#39;mysql -u &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sql_opt</span><span class="p">[</span><span class="s">&#39;user&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39; -p &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sql_opt</span><span class="p">[</span><span class="s">&#39;dbname&#39;</span><span class="p">]</span> <span class="o">+</span>\
                 <span class="s">&#39;&lt; /private/staff/t/ot/niamiot/svn2/devel/simulator/pyray/SimWHERE2.sql&#39;</span> <span class="p">)</span>
 
-        <span class="c">## TODO supprimer la ref en dur </span>
+        <span class="c">## TODO remove the hard reference</span>
         <span class="k">if</span> <span class="s">&#39;txt&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">[</span><span class="s">&#39;save&#39;</span><span class="p">]:</span>
             <span class="n">pyu</span><span class="o">.</span><span class="n">writeDetails</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/output/Nodes.txt&#39;</span><span class="p">):</span>
@@ -389,9 +393,14 @@
                         <span class="k">except</span><span class="p">:</span>
                             <span class="k">pass</span>
 
+
+        <span class="c"># Layout</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">create_layout</span><span class="p">()</span>
+        <span class="c"># Electro Magnetic Simulator</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">create_EMS</span><span class="p">()</span>
+        <span class="c"># Network</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">create_network</span><span class="p">()</span>
+
         <span class="k">if</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;showtk&#39;</span><span class="p">]):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">create_visual</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">create_show</span><span class="p">()</span>
@@ -448,17 +457,21 @@
 <div class="viewcode-block" id="Simul.runsimul"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simulnet.Simul.runsimul.html#pylayers.simul.simulnet.Simul.runsimul">[docs]</a>    <span class="k">def</span> <span class="nf">runsimul</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; run simulation</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">finish</span> <span class="p">:</span>
+            <span class="c"># random number seed</span>
             <span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">until</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;duration&#39;</span><span class="p">]),</span>
                           <span class="n">real_time</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                           <span class="n">rel_speed</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;speedratio&#39;</span><span class="p">]))</span>
+
             <span class="bp">self</span><span class="o">.</span><span class="n">the_world</span><span class="o">.</span><span class="n">_boids</span><span class="o">=</span><span class="p">{}</span>
 
 
             <span class="k">if</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">[</span><span class="s">&#39;savep&#39;</span><span class="p">]):</span>
-                <span class="k">print</span> <span class="s">&#39;Processing save results, please wait&#39;</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">mat_export</span><span class="p">()</span>
+                <span class="k">pass</span>
+                <span class="c">#print &#39;Processing save results, please wait&#39;</span>
+                <span class="c">#self.save.mat_export()</span>
 
 
             <span class="k">if</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">[</span><span class="s">&#39;savepd&#39;</span><span class="p">]):</span>
@@ -498,7 +511,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on oct. 04, 2014.
+      Last updated on oct. 20, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

@@ -4227,7 +4227,65 @@
     <span class="n">dmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u0</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">alpha</span><span class="o">*</span><span class="n">u1</span><span class="o">+</span><span class="n">beta</span><span class="o">*</span><span class="n">u2</span><span class="o">+</span><span class="n">alpha</span><span class="o">*</span><span class="n">beta</span><span class="o">*</span><span class="n">u3</span><span class="p">)</span><span class="o">+</span><span class="n">alpha</span><span class="o">*</span><span class="n">alpha</span><span class="o">*</span><span class="n">u4</span><span class="o">+</span> <span class="n">beta</span><span class="o">*</span><span class="n">beta</span><span class="o">*</span><span class="n">u5</span><span class="p">)</span>
 
     <span class="k">return</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span><span class="n">beta</span><span class="p">,</span><span class="n">dmin</span><span class="p">)</span>
+
+<span class="c"># def gram_schmid(V): </span>
+<span class="c">#     &quot;&quot;&quot; </span>
+<span class="c">#     Gram-Schmid orthonormalization of a set of `M` vectors, in-place. </span>
+
+<span class="c">#     Parameters </span>
+<span class="c">#     ---------- </span>
+<span class="c">#     V : array, shape (N, M) </span>
+
+<span class="c">#     Notes</span>
+<span class="c">#     -----</span>
+
+<span class="c">#     from http://numpy-discussion.10968.n7.nabble.com/Efficient-orthogonalisation-with-scipy-numpy-td23635.html</span>
+
+<span class="c">#     &quot;&quot;&quot; </span>
+<span class="c">#     # XXX: speed can be improved by using routines from scipy.lib.blas </span>
+<span class="c">#     # XXX: maybe there&#39;s an orthonormalization routine in LAPACK, too, </span>
+<span class="c">#     #      apart from QR. too lazy to check... </span>
+<span class="c">#     n = V.shape[1] </span>
+<span class="c">#     for k in xrange(n): </span>
+<span class="c">#         V[:,k] /= np.linalg.norm(V[:,k]) </span>
+<span class="c">#         for j in xrange(k+1, n): </span>
+<span class="c">#             V[:,j] -= np.vdot(V[:,j], V[:,k]) * V[:,k] </span>
+<span class="c">#     return V </span>
 </div>
+<span class="k">def</span> <span class="nf">qrdecomp</span><span class="p">(</span><span class="n">V</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Gram-Schmid orthonormalization of a set of `Nv` vectors, in-place. </span>
+<span class="sd">    using qr decomp</span>
+<span class="sd">    Parameters </span>
+<span class="sd">    ---------- </span>
+<span class="sd">    V : array, shape (3,Nv,nf) </span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+
+<span class="sd">    from http://numpy-discussion.10968.n7.nabble.com/Efficient-orthogonalisation-with-scipy-numpy-td23635.html</span>
+
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="c"># XXX: speed can be improved by using routines from scipy.lib.blas </span>
+    <span class="c"># XXX: maybe there&#39;s an orthonormalization routine in LAPACK, too, </span>
+    <span class="c">#      apart from QR. too lazy to check... </span>
+    <span class="kn">import</span> <span class="nn">copy</span>
+    <span class="n">nn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">V</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">V</span><span class="p">[</span><span class="n">i</span><span class="p">,:,:]</span><span class="o">=</span><span class="n">V</span><span class="p">[</span><span class="n">i</span><span class="p">,:,:]</span><span class="o">/</span><span class="n">nn</span> 
+    <span class="n">lv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">V</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">V2</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">lv</span><span class="p">):</span> 
+        <span class="n">V</span><span class="p">[:,:,</span><span class="n">k</span><span class="p">],</span><span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">qr</span><span class="p">(</span><span class="n">V</span><span class="p">[:,:,</span><span class="n">k</span><span class="p">])</span>
+    <span class="c"># check where the vector along cylinder axis is colinear with the 1st basis axis</span>
+    <span class="n">col</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">&#39;ij,ij-&gt;j&#39;</span><span class="p">,</span><span class="n">V</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,:],</span><span class="n">V2</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,:])</span>
+    <span class="n">ucol</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">col</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">V</span><span class="p">[:,:,</span><span class="n">ucol</span><span class="p">]</span><span class="o">=-</span><span class="n">V</span><span class="p">[:,:,</span><span class="n">ucol</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">V</span> 
+
+
+
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
@@ -4258,7 +4316,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on oct. 04, 2014.
+      Last updated on oct. 20, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">
