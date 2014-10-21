@@ -209,6 +209,7 @@ class Save(Process):
             rl={}
             for wstd in self.lwstd:
                 for ldp in self.lldp:
+
                     rl[wstd+ldp]=nx.get_edge_attributes(self.net.SubNet[wstd],ldp)
 
             for n in self.net.nodes():
@@ -223,10 +224,13 @@ class Save(Process):
                 for wstd in self.lwstd:
                     for ldp in self.lldp:
                         try:
-                            self.save[e[0]][e[1]][wstd][ldp][self.idx]=rl[wstd+ldp][e]
-                            self.save[e[1]][e[0]][wstd][ldp][self.idx]=rl[wstd+ldp][e]
+                            le=tuple([e[0],e[1],wstd])
+                            self.save[e[0]][e[1]][wstd][ldp][self.idx]=rl[wstd+ldp][le] 
+                            self.save[e[1]][e[0]][wstd][ldp][self.idx]=rl[wstd+ldp][le]
+
                         except:
                             pass
+
             self.file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename,'a')
             pickle.dump(self.save, self.file)
             self.file.close()

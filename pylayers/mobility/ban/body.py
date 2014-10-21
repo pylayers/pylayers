@@ -1450,7 +1450,7 @@ class Body(PyLayers):
         >>> B.settopos(T[0],t=0,cs=True) 
         >>> L._show3()
         >>> B.anim(B)
-
+lettre motivation latex
         """
         self._show3()
         kta = self.sl[:,0].astype(int)
