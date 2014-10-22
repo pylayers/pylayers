@@ -211,16 +211,39 @@ bernard
             uhkb = np.array([[1,2],[4,5],[7,8],[10,11]])
             mphkb = np.mean(mpts[uhkb],axis=1)
 
-            self.din.update({'HKB:1':mphkb[3],
-                 'HKB:2':mphkb[2],
-                 'HKB:3':mphkb[1],
-                 'HKB:4':mphkb[0]})
+            self.din.update(
+                {'HKB:1':{'p':mphkb[3],
+                          'T':np.eye(3)},
+                 'HKB:2':{'p':mphkb[2],
+                          'T': np.array([[-0.44807362,  0.89399666,  0.],
+                                         [-0.89399666, -0.44807362,  0.],
+                                         [ 0.,0.,1.        ]])}      ,
+                 'HKB:3':{'p':mphkb[1],
+                          'T':array([[-0.59846007, -0.80115264,  0.],
+                                     [ 0.80115264, -0.59846007,  0.],
+                                     [ 0.,0.,  1.]])},
+                 'HKB:4':{'p':mphkb[0],
+                          'T':array([[-0.44807362, -0.89399666,  0.],
+                                     [ 0.89399666, -0.44807362,  0.],
+                                     [ 0.,0.,  1.]])}
+                 })
 
         if ('TCR' in self.typ) or ('FULL' in self.typ):
-            self.din.update({'TCR:32':mpts[9],
-                 'TCR:24':mpts[6],
-                 'TCR:27':mpts[3],
-                 'TCR:28':mpts[0]})
+            self.din.update({'TCR:32':{'p':mpts[9],
+                                       'T':np.eye(3)},
+                 'TCR:24':{'p':mpts[6],
+                           'T': np.array([[-0.44807362,  0.89399666,  0.],
+                                         [-0.89399666, -0.44807362,  0.],
+                                         [ 0.,0.,1.        ]])},
+                 'TCR:27':{'p':mpts[3],
+                           'T':array([[-0.59846007, -0.80115264,  0.],
+                                     [ 0.80115264, -0.59846007,  0.],
+                                     [ 0.,0.,  1.]])},
+                 'TCR:28':{'p':mpts[0],
+                           'T':array([[-0.44807362, -0.89399666,  0.],
+                                     [ 0.89399666, -0.44807362,  0.],
+                                     [ 0.,0.,  1.]])}
+                 })
 
         # self.pts= np.empty((12,3))
         # self.pts[:,0]= -mpts[:,1]
@@ -495,7 +518,7 @@ bernard
         if ('TCR' in self.typ) or ('FULL' in self.typ):
             uin.extend(['TCR:32','TCR:24','TCR:27','TCR:28'])
         ln = uin + self.B.dev.keys()
-        pin = np.array([self.din[d] for d in uin])
+        pin = np.array([self.din[d]['p'] for d in uin])
         pin2=np.empty((pnb.shape[0],pin.shape[0],pin.shape[1]))
         pin2[:,:,:]=pin
         p = np.concatenate((pin2,pnb),axis=1)
@@ -717,10 +740,10 @@ bernard
             self.L._show3(opacity=0.5)
         v = self.din.items()
         if kwargs['inodes']:
-            X= np.array([v[i][1] for i in range(len(v))])
+            X= np.array([v[i][1]['p'] for i in range(len(v))])
             mlab.points3d(X[:,0],X[:,1], X[:,2],scale_factor=kwargs['insize'],color=in_color)
         if kwargs['inname']:
-            [mlab.text3d(v[i][1][0],v[i][1][1],v[i][1][2],v[i][0],scale=0.5)
+            [mlab.text3d(v[i][1]['p'][0],v[i][1]['p'][1],v[i][1]['p'][2],v[i][0],scale=0.5)
             for i in range(len(v))]
         if kwargs['body']:
             if kwargs['bodytime']==[]:
@@ -2242,7 +2265,7 @@ bernard
             pa = self.B._f[:,unna,:]
         # infra node
         else :
-            pa = self.din[nna]
+            pa = self.din[nna]['p']
 
 
         # node b
@@ -2252,7 +2275,7 @@ bernard
             pb = self.B._f[:,unnb,:]
         # infra node
         else :
-            pb = self.din[nnb]
+            pb = self.din[nnb]['p']
 
         return pa,pb
 
