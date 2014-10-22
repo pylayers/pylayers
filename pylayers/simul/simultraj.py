@@ -50,6 +50,8 @@ from pylayers.gis.layout import Layout
 from pylayers.antprop import antenna
 from pylayers.network.network import Network
 from pylayers.simul.link import *
+from pylayers.measures.cormoran import *
+
 # Handle directory hierarchy
 from pylayers.util.project import *
 # Handle UWB measurements
@@ -71,19 +73,18 @@ class Simul(PyLayers):
 
     """
 
-    def __init__(self, _filetraj='simulnet_TA-Office.h5',verbose=False):
+    def __init__(self, source ='simulnet_TA-Office.h5',verbose=False,):
         """ object constructor
 
         Parameters
         ----------
 
-        _filetraj : string
+        source : string
             h5 trajectory
         verbose : boolean
 
         """
 
-        self.filetraj = _filetraj
 
         # self.progress = -1  # simulation not loaded
         self.verbose = verbose
@@ -93,7 +94,16 @@ class Simul(PyLayers):
         self.dap = {}
         self.Nag = 0
         self.Nap = 0
-        self.load_config(_filetraj)
+
+        if isinstance(source,str):
+            self.filetraj = source
+            self.load_simul(source)
+        elif isinstance(source,CorSer):
+            self.filetraj = source._filename
+            self.load_CorSer(source)
+
+
+        
         self.gen_net()
         self.SL = SLink()
         self.DL = DLink(L=self.L,verbose=self.verbose)
@@ -140,17 +150,17 @@ class Simul(PyLayers):
 
         return s
 
-    def load_config(self, _filetraj):
+    def load_simul(self, source):
         """  load a simultraj configuration file
 
         Parameters
         ----------
 
-        _filetraj : string
+        source : string
             name of simulation file to be loaded
 
         """
-        self.filetraj = _filetraj
+        self.filetraj = source
 
 
         # get the trajectory
@@ -180,6 +190,34 @@ class Simul(PyLayers):
         self.Nag = len(self.dpersons.keys())
         self.Nap = len(self.dap.keys())
         self.traj = traj
+
+    def load_CorSer(self,source):
+
+        if isinstance(source.B,Body):
+            B=[source.B]
+        elif isinstance(source.B,list):
+            B=source.B
+        else:
+            raise AttributeError('CorSer.B must be a list or a Body')
+
+        self.L=source.L
+        traj = tr.Trajectories()
+
+        for b in B:
+            self.dpersons.update({b.name: b})
+            self._tmin = b.time[0]
+            self._tmax = b.time[-1]
+            self.time = b.time
+            traj.append(b.traj)
+
+        for ap in source.din:
+            self.dap.update({ap: {'pos': ap['p'],
+                                  'ant': antenna.Antenna(),
+                                  'name': ap
+                                        }
+                                 })
+        import ipdb
+        ipdb.set_trace()
 
 
     def gen_net(self):
