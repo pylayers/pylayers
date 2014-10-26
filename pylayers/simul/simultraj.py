@@ -201,23 +201,28 @@ class Simul(PyLayers):
             raise AttributeError('CorSer.B must be a list or a Body')
 
         self.L=source.L
-        traj = tr.Trajectories()
+        self.traj = tr.Trajectories()
+        self.traj.Lfilename=self.L
 
         for b in B:
             self.dpersons.update({b.name: b})
             self._tmin = b.time[0]
             self._tmax = b.time[-1]
             self.time = b.time
-            traj.append(b.traj)
+            self.traj.append(b.traj)
 
         for ap in source.din:
-            self.dap.update({ap: {'pos': ap['p'],
+            techno,ID=ap.split(':')
+            if techno == 'HKB':
+                techno = 'hikob'
+            
+
+            self.dap.update({ID: {'pos': source.din[ap]['p'],
                                   'ant': antenna.Antenna(),
-                                  'name': ap
+                                  'name': techno
                                         }
                                  })
-        import ipdb
-        ipdb.set_trace()
+
 
 
     def gen_net(self):
