@@ -58,14 +58,13 @@ class PyLayers(object):
 
 currentdir = os.getcwd()
 
-
 try:
     pylayersdir = os.environ['PYLAYERS']
 except:
     pylayersdir = currentdir.split('pylayers')[0] + 'pylayers'
 
 
-if pylayersdir[-1] == '/' or '\\':
+if pylayersdir[-1] == '/' or pylayersdir[-1] == '\\':
     pylayersdir = pylayersdir[:-1]
 
 if len(pylayersdir) == 1:
