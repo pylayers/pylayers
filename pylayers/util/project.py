@@ -58,12 +58,14 @@ class PyLayers(object):
 
 currentdir = os.getcwd()
 
+
 try:
     pylayersdir = os.environ['PYLAYERS']
 except:
-    pylayersdir = currentdir.split('pylayers')[0] + 'pylayers/'
+    pylayersdir = currentdir.split('pylayers')[0] + 'pylayers'
 
-if pylayersdir[-1] == '/':
+
+if pylayersdir[-1] == '/' or '\\':
     pylayersdir = pylayersdir[:-1]
 
 if len(pylayersdir) == 1:
@@ -77,17 +79,17 @@ except:
 try:
     mesdir = os.environ['MESDIR']
 except:
-    mesdir = basename + '/meas'
+    mesdir = os.path.join(basename ,'meas')
 
 try:
     datadir = os.environ['DATADIR']
 except:
-    datadir = basename + '/meas'
+    datadir = os.path.join(basename, 'meas')
 
 try:
-    os.path.isdir(basename +'/figures')
+    os.path.isdir(os.path.join(basename ,'figures'))
 except:
-    os.mkdir(basename+'/figures')
+    os.mkdir(os.path.join(basename,'figures'))
 
 
 # Dictionnary which associate PULSRAY environment variable with sub direrories
@@ -95,14 +97,14 @@ except:
 #
 pstruc = {}
 pstruc['DIRSIMUL'] ='ini'
-pstruc['DIRSTRUC'] ='struc/str'
-pstruc['DIRWRL'] ='struc/wrl'
-pstruc['DIRINI'] ='struc/ini'
-pstruc['DIROSM'] ='struc/osm'
-pstruc['DIRSTRUC2'] = 'struc/str'
-pstruc['DIRFUR'] = 'struc/furnitures'
-pstruc['DIRIMAGE'] = 'struc/images'
-pstruc['DIRPICKLE'] = 'struc/gpickle'
+pstruc['DIRSTRUC'] =os.path.join('struc','str')
+pstruc['DIRWRL'] =os.path.join('struc','wrl')
+pstruc['DIRINI'] =os.path.join('struc','ini')
+pstruc['DIROSM'] =os.path.join('struc','osm')
+pstruc['DIRSTRUC2'] = os.path.join('struc','str')
+pstruc['DIRFUR'] = os.path.join('struc','furnitures')
+pstruc['DIRIMAGE'] = os.path.join('struc','images')
+pstruc['DIRPICKLE'] = os.path.join('struc','gpickle')
 pstruc['DIRSLAB'] = 'ini'
 pstruc['DIRSLAB2'] = 'ini'
 pstruc['DIRMAT'] = 'ini'
@@ -111,22 +113,22 @@ pstruc['DIRANT'] = 'ant'
 pstruc['DIRTRA'] = 'output'
 pstruc['DIRLCH'] = 'output'
 pstruc['DIRTUD'] = 'output'
-pstruc['DIRTx'] = 'output/Tx001'
+pstruc['DIRTx'] = os.path.join('output','Tx001')
 pstruc['DIRGEOM'] = 'geom'
 pstruc['DIRTRA'] = 'output'
 pstruc['DIRCIR'] = 'output'
 pstruc['DIRMES'] = 'meas'
 pstruc['DIRNETSAVE'] = 'netsave'
-pstruc['DIRSIG'] = 'output/sig'
-pstruc['DIRR2D'] = 'output/r2d'
-pstruc['DIRR3D'] = 'output/r3d'
-pstruc['DIRCT'] = 'output/Ct'
-pstruc['DIRH'] = 'output/H'
+pstruc['DIRSIG'] = os.path.join('output','sig')
+pstruc['DIRR2D'] = os.path.join('output','r2d')
+pstruc['DIRR3D'] = os.path.join('output','r3d')
+pstruc['DIRCT'] = os.path.join('output','Ct')
+pstruc['DIRH'] = os.path.join('output','H')
 pstruc['DIRLNK'] = 'output'
 pstruc['DIRBODY'] = 'body'
-pstruc['DIRC3D'] = 'body/c3d'
-pstruc['DIROOSM'] = 'gis/osm'
-pstruc['DIRWEAR'] = 'body/wear'
+pstruc['DIRC3D'] = os.path.join('body','c3d')
+pstruc['DIROOSM'] = os.path.join('gis','osm')
+pstruc['DIRWEAR'] = os.path.join('body','wear')
 
 # if basename directory does not exit it is created
 try:
@@ -138,21 +140,21 @@ except:
 #
 # write file project.conf
 #
-fd = open(basename+'/project.conf','w')
+fd = open(os.path.join(basename,'project.conf'),'w')
 fd.close()
 #for nm in pstruc.keys():
 for nm,nv in pstruc.items():
-    dirname =  basename + '/'+pstruc[nm]
+    dirname =  os.path.join(basename , pstruc[nm])
     spl = nv.split('/') # never again a variable called sp
     if len(spl)>1:
-        if not os.path.isdir(basename + '/'+spl[0]):
-            os.mkdir(basename + '/'+spl[0])
-            os.mkdir(basename + '/'+nv)
-            print "create ",basename + '/'+nv
+        if not os.path.isdir(os.path.join(basename ,spl[0])):
+            os.mkdir(os.path.join(basename ,spl[0]))
+            os.mkdir(os.path.join(basename,nv))
+            print "create ",os.path.join(basename ,nv)
         else:
-            if not os.path.isdir(basename + '/'+nv):
-                os.mkdir(basename + '/'+nv)
-                print "create ",basename + '/'+nv
+            if not os.path.isdir(os.path.join(basename ,nv)):
+                os.mkdir(os.path.join(basename ,nv))
+                print "create ",os.path.join(basename ,nv)
     else :
         if not os.path.isdir(dirname):
             os.mkdir(dirname)
@@ -203,7 +205,7 @@ for nm,nv in pstruc.items():
         osmdir = dirname
 
 
-    fd = open(basename+'/project.conf','a')
+    fd = open(os.path.join(basename,'project.conf'),'a')
     fd.write(nm+' '+dirname +'\n')
     fd.close()
 
@@ -211,21 +213,36 @@ for nm,nv in pstruc.items():
 # copy files from /data/ini in project directory
 #
 
-if basename != pylayersdir+'/data':
-    dirlist=['ini','struc','struc/furnitures'
-    ,'struc/osm','struc/str','struc/wrl'
-    ,'struc/images','struc/ini'
-    ,'ant','output/Tx001','output'
-    ,'geom','output/sig','output/r2d'
-    ,'output/r3d','body','body/c3d','body/wear']
+if basename != os.path.join(pylayersdir,'data'):
+    if not 'win' in sys.platform:
+        dirlist=['ini','struc','struc/furnitures'
+        ,'struc/osm','struc/str','struc/wrl'
+        ,'struc/images','struc/ini'
+        ,'ant','output/Tx001','output'
+        ,'geom','output/sig','output/r2d'
+        ,'output/r3d','body','body/c3d','body/wear']
+    else :
+        dirlist=['ini','struc',os.path.join('struc','furnitures')
+        ,os.path.join('struc','osm')
+        ,os.path.join('struc','str'),os.path.join('struc','wrl')
+        ,os.path.join('struc','images')
+        ,os.path.join('struc','ini')
+        ,'ant',os.path.join('output','Tx001'),'output'
+        ,'geom',os.path.join('output','sig')
+        ,os.path.join('output','r2d')
+        ,os.path.join('output','r3d'),'body'
+        ,os.path.join('body','c3d')
+        ,os.path.join('body','wear')]
     for dl in dirlist:
-        filelist = os.listdir(pylayersdir+'/data/' + dl)
+        filelist = os.listdir(os.path.join(pylayersdir,'data', dl))
         for fi in filelist:
-            if not os.path.isdir(basename+'/'+dl+'/'+fi):
-                if os.path.isfile(basename+'/' + dl +'/' +fi): # file already exists
+            if not os.path.isdir(os.path.join(basename,dl,fi)):
+                if os.path.isfile(os.path.join(basename,dl,fi)): # file already exists
                     pass
                 else:
-                    shutil.copy(pylayersdir+'/data/' + dl + '/'+fi,basename+'/' + dl +'/'+fi)
+                    shutil.copy(
+                        os.path.join(pylayersdir,'data',dl,fi),
+                        os.path.join(basename,dl,fi))
 
 
 os.chdir(currentdir)
