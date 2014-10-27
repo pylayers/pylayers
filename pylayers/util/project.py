@@ -125,6 +125,7 @@ pstruc['DIRCT'] = os.path.join('output','Ct')
 pstruc['DIRH'] = os.path.join('output','H')
 pstruc['DIRLNK'] = 'output'
 pstruc['DIRBODY'] = 'body'
+pstruc['DIRGIS'] = 'gis'
 pstruc['DIRC3D'] = os.path.join('body','c3d')
 pstruc['DIROOSM'] = os.path.join('gis','osm')
 pstruc['DIRWEAR'] = os.path.join('body','wear')
@@ -144,7 +145,10 @@ fd.close()
 #for nm in pstruc.keys():
 for nm,nv in pstruc.items():
     dirname =  os.path.join(basename , pstruc[nm])
-    spl = nv.split('/') # never again a variable called sp
+    if not 'win' in sys.platform:
+        spl = nv.split('/') # never again a variable called sp
+    else:
+        spl = nv.split('\\') # never again a variable called sp
     if len(spl)>1:
         if not os.path.isdir(os.path.join(basename ,spl[0])):
             os.mkdir(os.path.join(basename ,spl[0]))
@@ -155,6 +159,7 @@ for nm,nv in pstruc.items():
                 os.mkdir(os.path.join(basename ,nv))
                 print "create ",os.path.join(basename ,nv)
     else :
+
         if not os.path.isdir(dirname):
             os.mkdir(dirname)
             print "create ",dirname
