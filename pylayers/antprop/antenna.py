@@ -201,7 +201,7 @@ class Antenna(PyLayers):
         There are various supported data formats for storing antenna patterns
 
         'mat': Matlab File
-        'vsh2': un thresholdes vector spherical coefficients
+        'vsh2': unthresholded vector spherical coefficients
         'vsh3': thresholded vector spherical cpoefficients
         'trx' : Satimo NFC raw data
         'trx1' : Satimo NFC raw data  (deprecated)
@@ -269,7 +269,6 @@ class Antenna(PyLayers):
             self._filename = typ
             if typ == 'Gauss':
                 self.typ = typ
-
                 self.p0 = kwargs['p0']
                 self.t0 = kwargs['t0']#np.pi/2.
                 self.p3 = kwargs['p3']#np.pi/6. # 30 degrees
@@ -1133,10 +1132,10 @@ class Antenna(PyLayers):
         Parameters
         ----------
 
-        'fGHz' : frequzncy
-        phd : phi in degrees
-        thd : theta in degrees
-        'GmaxdB':  max gain to be displayed
+        fGHz : frequency
+        phd  : phi in degrees
+        thd  : theta in degrees
+        GmaxdB :  max gain to be displayed
 
         Returns
         -------
@@ -1203,15 +1202,12 @@ class Antenna(PyLayers):
         t1 = np.arange(5, DyndB + 5, 5)
         t2 = np.arange(GmindB + 5, kwargs['GmaxdB'] + 5, 5)
 
-
-
-
         col = ['k', 'r', 'g', 'b', 'm', 'c', 'y']
         cpt = 0
 
         if len(self.fa) > 1 :
             fstep = self.fa[1]-self.fa[0]
-        else : 
+        else :
             fstep = np.array((abs(self.fa-kwargs['fGHz'][0])+1))
         #dtheta = self.theta[1,0]-self.theta[0,0]
         #dphi = self.phi[0,1]-self.phi[0,0]

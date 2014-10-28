@@ -288,8 +288,8 @@ class VectorCoeff(PyLayers):
         """
 
         self.s1 = np.array([])
-        self.s4 = np.array([])
         self.s3 = np.array([])
+        self.s4 = np.array([])
 
         self.fmin = fmin
         self.fmax = fmax

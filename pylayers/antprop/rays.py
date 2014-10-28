@@ -1157,6 +1157,9 @@ class Rays(PyLayers,dict):
 
         L : Layout
 
+        Notes
+        -----
+
         """
 
         #
@@ -1178,7 +1181,7 @@ class Rays(PyLayers,dict):
         mapping[key] = np.arange(len(key), dtype=int)
 
         #
-        # Structutre number : nstr
+        # Structure number : nstr
         #   the structure number is < 0 for points
         #                           > 0 for segments
         # A segment can have several subsegments (until 100)

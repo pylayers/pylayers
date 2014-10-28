@@ -801,7 +801,7 @@ class Ctilde(PyLayers):
             self.Tt = Tt
             self.Tr = Tr
             self.islocal = True
-        # if a return to gloabl is requested
+        # if a return to global is requested
         elif b2g:
             if self.islocal :
                 if (hasattr(self,'Tt')) & (hasattr(self,'Tr')):
@@ -1203,8 +1203,10 @@ class Ctilde(PyLayers):
             0 : theta
             1 : phi
 
-        Ta : []
-        Tb : []
+        Ta : np.array(3x3)
+           unitary matrice for antenna orientation
+        Tb : np.array(3x3)
+           unitary matrice for antenna orientation
         Friis : boolean
             if True scale with :math:`-j\frac{\lambda}{f}`
 
@@ -1227,8 +1229,9 @@ class Ctilde(PyLayers):
                 Fap = np.zeros(nray*nfreq).reshape((nray, nfreq))
 
             if a == 'phi':
-                Fap = np.ones((nray, nfreq))
                 Fat = np.zeros(nray*nfreq).reshape((nray, nfreq))
+                Fap = np.ones((nray, nfreq))
+
             Fat = bs.FUsignal(self.fGHz, Fat)
             Fap = bs.FUsignal(self.fGHz, Fap)
 

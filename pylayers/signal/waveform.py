@@ -162,6 +162,25 @@ class Waveform(dict):
         W   = w.ftshift()
         return (w,W)
 
+    def ref156(self):
+        """ reference pulse of IEEE 802.15.6 UWB standard
+        """
+        Tw     = self['twns']
+        fc     = self['fcGHz']
+        band   = self['bandGHz']
+        thresh = self['threshdB']
+        fe     = self['feGHz']
+        te     = 1./fe
+        beta = 0.5
+        Tns  = 1./0.4992
+        x    =  np.linspace(-0.5*Tw+te/2,0.5*Tw+te/2,Np,endpoint=False)
+        z    = x/T
+        t1  = np.sin(np.pi*(1-beta)*z)
+        t2  = np.cos(np.pi*(1+beta)*z)
+        t3  = (np.pi*z)*(1-(4*beta*z)**2)
+        y   = (t1+4*beta*z*t2)/t3
+
+
     def fromfile(self):
         """
         get the measurement waveform from WHERE1 measurement campaign
