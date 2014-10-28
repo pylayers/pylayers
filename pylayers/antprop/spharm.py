@@ -348,7 +348,7 @@ class SSHCoeff(PyLayers):
         ----------
 
         threshold : float
-            default 1e-20
+            default 1e-5
 
         Notes
         -----
@@ -483,14 +483,15 @@ class SCoeff(PyLayers):
         ----------
 
         data : shape 2 data
+        ind  :
 
         """
 
         sh = np.shape(data)
         # first axis is frequency
         self.Nf = sh[0]
-        # second axis is the maximum number of coeff
 
+        # second axis is the maximum number of coeff
         self.s2 = data
 
         #self.ind2 = indexssh(lmax)
@@ -726,9 +727,9 @@ class SCoeff(PyLayers):
 
         typ :  string
             default ('s1')
-            's1'  shape 1  (Nf , N , M )
-            's2'  shape 2  (Nf , N*M   )
-            's3'  shape 3  (Nf , K )  T ( K x 2 )
+            's1'  shape 1  (Nf , L , M )
+            's2'  shape 2  (Nf , L*M )
+            's3'  shape 3  (Nf , K )  and  ( K x 2 )
 
         k  : integer
             frequency index default 0

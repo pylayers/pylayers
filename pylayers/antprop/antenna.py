@@ -126,6 +126,9 @@ from mpl_toolkits.mplot3d import axes3d
 from matplotlib import rc
 from matplotlib import cm # colormaps
 from pylayers.antprop.antssh import *
+from pylayers.antprop.coeffModel import *
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+from matplotlib.ticker import MaxNLocator
 import pandas as pd
 
 import matplotlib.pylab as plt
@@ -209,9 +212,7 @@ class Antenna(PyLayers):
          A = Antenna('my_antenna.mat')
 
         """
-
-
-        defaults = { 'directory': 'ant',
+        defaults = {'directory': 'ant',
                     'nf':104,
                     'source':'satimo',
                     'ntheta':90,
@@ -219,7 +220,10 @@ class Antenna(PyLayers):
                     'p0':0,
                     't0':np.pi/2.,
                     'p3':np.pi/6.,
-                    't3':np.pi/6.}
+                    't3':np.pi/6.,
+                    'L':90,
+                    'fmin':0.8,
+                    'fmax':5.95}
 
         for k in defaults:
             if k not in kwargs:
@@ -267,8 +271,8 @@ class Antenna(PyLayers):
 
         else :
             self._filename = typ
+            self.typ = typ
             if typ == 'Gauss':
-                self.typ = typ
                 self.p0 = kwargs['p0']
                 self.t0 = kwargs['t0']#np.pi/2.
                 self.p3 = kwargs['p3']#np.pi/6. # 30 degrees
@@ -278,7 +282,6 @@ class Antenna(PyLayers):
                 self.sqG = np.sqrt(self.G)
                 self.evaluated = False
             elif typ == 'WirePlate':
-                self.typ = typ
                 self.p0 = kwargs['p0']
                 kwargs['t0'] = 5*np.pi/6.
                 self.t0 =  kwargs['t0']#
@@ -287,11 +290,32 @@ class Antenna(PyLayers):
                 self.sqG = np.sqrt(self.G)
                 self.evaluated = False
             elif typ == 'Omni':
-                self.typ = typ
                 self.GdB  = 0. # gain
                 self.G  = pow(10.,self.GdB/10.) # gain
                 self.sqG = np.sqrt(self.G)
                 self.evaluated = False
+            elif typ == 'ssh':
+                pass
+            elif typ == 'vsh':
+                L = kwargs['L']
+                fmin = kwargs['fmin']
+                fmax = kwargs['fmax']
+                nf = kwargs['nf']
+                self.fa = np.linspace(fmin,fmax,nf)
+                # initialize a VSHCoeff with zeros
+
+                dBr = np.zeros((nf,L+1,L),dtype='complex128')
+                dBi = np.zeros((nf,L+1,L),dtype='complex128')
+                dCr = np.zeros((nf,L+1,L),dtype='complex128')
+                dCi = np.zeros((nf,L+1,L),dtype='complex128')
+
+                Br = VCoeff(typ='s1',fmin=fmin,fmax=fmax,data=dBr)
+                Bi = VCoeff(typ='s1',fmin=fmin,fmax=fmax,data=dBi)
+                Cr = VCoeff(typ='s1',fmin=fmin,fmax=fmax,data=dCr)
+                Ci = VCoeff(typ='s1',fmin=fmin,fmax=fmax,data=dCi)
+
+                self.C = VSHCoeff(Br,Bi,Cr,Ci)
+
             else:
                 raise NameError('antenna typ is not known')
 
@@ -714,6 +738,78 @@ class Antenna(PyLayers):
         #FPh = Fph.reshape(Nf, Nt, Np)
 
         return(FTh,FPh)
+
+    def coeffshow(self,typ='ssh',L=20,kf=46,vmin=-40,vmax=0,cmap=cm.hot):
+        """ Display antenna coefficient
+
+            ty : string
+                'ssh' | 'vsh'
+            L  : maximum level
+            kf : frequency index
+            vmin  : float
+            vmax  : float
+
+        """
+
+        # calculates mode energy
+        # linear and log scale
+        Aem  = []
+        for m in range(-L,L):
+            em = mode_energy2(self,m)
+            Aem.append(em)
+        Aem_dB = 10*log10(Aem)
+
+        # calculates level energy
+        Ael = []
+        for l in range(0,L):
+            Ael.append(level_energy(A,l))
+
+
+        fig, ax = plt.subplots()
+        fig.set_figwidth(15)
+        fig.set_figheight(10)
+
+        # lmreshape takes a s2 format and
+        modA = sqrt(abs(lmreshape(A.S.Cx.s2))**2+
+                    abs(lmreshape(A.S.Cy.s2))**2+
+                    abs(lmreshape(A.S.Cz.s2))**2)
+
+        im = ax.imshow(20*log10(modA[kf]),
+                       vmin = vi,
+                       vmax = va,
+                       extent =[-20,20,20,0],
+                       interpolation = 'nearest',
+                       cmap = cmap)
+
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes("right", size="5%", pad=0.05)
+        axHistx = divider.append_axes("top", 1., pad=0.5, sharex=ax)
+        axHisty = divider.append_axes("left", 1., pad=0.5, sharey=ax)
+        axHistx.bar(range(-L,L),Aem)
+        axHisty.barh(range(0,L),Ael )
+        axHistx.yaxis.set_ticks(array([0,0.2,0.4,0.6,0.8]))
+        axHisty.xaxis.set_ticks(array([0,0.1,0.2,0.3]))
+        cbar = plt.colorbar(im, cax=cax)
+        fig.tight_layout()
+
+        plt.text(-0.02,0.6 ,'levels',
+             horizontalalignment='right',
+             verticalalignment='top',
+             transform=ax.transAxes,
+             rotation =90, fontsize= 15)
+
+        plt.text(0.6,1.1 ,'free space',
+             horizontalalignment='right',
+             verticalalignment='top',
+             transform=ax.transAxes,
+             fontsize= 15)
+
+        plt.text(0.55,-0.1 ,'modes',
+             horizontalalignment='right'
+             ,verticalalignment='top', transform=ax.transAxes, fontsize= 15)
+
+        return fig,ax
+
 
     def errel(self,kf=-1, dsf=1, typ='s3'):
         """ calculates error between antenna pattern and reference pattern
@@ -1728,12 +1824,21 @@ class Antenna(PyLayers):
             raise Warning('antenna has not been evaluated')
 
 
-    def Fsynth(self, theta = [], phi=[], pattern=True):
+    def Fsynth(self, theta=[], phi=[], pattern=True):
         """ Perform Antenna synthesis
+
+        Parameters
+        ----------
+
+        theta : np.array
+        phi :   np.array
+        pattern : boolean
             call Antenna.Fpatt or Antenna.Fsynth3
+
+
         """
 
-        if self.fromfile:
+        if ((self.fromfile) or (self.typ=='vsh') or (self.typ=='ssh')):
             self.Fsynth3(theta,phi,pattern)
         else :
             self.Fpatt(theta,phi,pattern)
@@ -2073,7 +2178,7 @@ class Antenna(PyLayers):
         return Fth, Fph
 
 
-    def Fsynth3(self, theta = [], phi=[], pattern=True,typ='sh3'):
+    def Fsynth3(self, theta = [], phi=[], pattern=True):
         r""" synthesis of a complex antenna pattern from VSH coefficients (shape 3)
 
 
@@ -2087,7 +2192,7 @@ class Antenna(PyLayers):
 
         pattern : boolean
             if True theta and phi are reorganized for building the pattern
-        typ  : 'vsh3' | 'sh3' | 'hfss'
+        typ  : 'vsh' | 'ssh' | 'hfss'
 
         Returns
         -------
@@ -2126,13 +2231,15 @@ class Antenna(PyLayers):
 
         """
 
-        typ = self.typ#self._filename.split('.')[1]
-        if typ=='satimo':
-            coeff=1.
-        if typ=='cst':
-            coeff=1./sqrt(30)
+        typ = self.typ
+        #self._filename.split('.')[1]
+        #if typ=='satimo':
+        #    coeff=1.
+        #if typ=='cst':
+        #    coeff=1./sqrt(30)
 
-        assert typ in ['sh3','vsh3'], "Error wrong file type"
+
+        assert typ in ['ssh','vsh','hfss'], "Error wrong file type"
 
         Nf = len(self.fa)
         if theta==[]:
@@ -2155,7 +2262,7 @@ class Antenna(PyLayers):
             phi = np.kron(np.ones(Nt),phi)
 
 
-        if typ =='vsh3':
+        if typ =='vsh':
 
             nray = len(theta)
 
@@ -2191,7 +2298,7 @@ class Antenna(PyLayers):
                 Fph = Fph.reshape(Nf, Nt, Np)
 
 
-        if typ == 'sh3':
+        if typ == 'ssh':
             cx = self.S.Cx.s3
             cy = self.S.Cy.s3
             cz = self.S.Cz.s3
@@ -2492,7 +2599,7 @@ class Antenna(PyLayers):
                 fmin = coeff['fmin'][0][0]
                 fmax = coeff['fmax'][0][0]
             # .. Warning
-            # Warning modification take only one dimension for k
+            # Warning modification takes only one dimension for k
             # if the .vsh3 format evolve it may not work anymore
             #
             Br = VCoeff('s3', fmin, fmax, coeff['Br.s3'],
