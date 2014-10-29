@@ -56,33 +56,33 @@ class PyLayers(object):
                                     pass
 
 
-home = os.path.expanduser('~')
+# home = os.path.expanduser('~')
 currentdir = os.getcwd()
 
-if os.path.isfile(os.path.join(home,'.pylayers')):
-    with open(os.path.join(home,'.pylayers'),'r') as f:
-        lines = f.readlines()
-    # [:-1] to remove the '\n' character
-    pylayersdir = lines[1][:-1]
-    basename = lines[3]
+# if os.path.isfile(os.path.join(home,'.pylayers')):
+#     with open(os.path.join(home,'.pylayers'),'r') as f:
+#         lines = f.readlines()
+#     # [:-1] to remove the '\n' character
+#     pylayersdir = lines[1][:-1]
+#     basename = lines[3]
 
-else :
-    try:
-        pylayersdir = os.environ['PYLAYERS']
-    except:
-        pylayersdir = currentdir.split('pylayers')[0] + 'pylayers'
+# else :
+try:
+    pylayersdir = os.environ['PYLAYERS']
+except:
+    pylayersdir = currentdir.split('pylayers')[0] + 'pylayers'
 
 
-    if pylayersdir[-1] == '/' or pylayersdir[-1] == '\\':
-        pylayersdir = pylayersdir[:-1]
+if pylayersdir[-1] == '/' or pylayersdir[-1] == '\\':
+    pylayersdir = pylayersdir[:-1]
 
-    if len(pylayersdir) == 1:
-        raise EnvironmentError('Please verify that pylayers sources are into the "pylayers/" directory')
+if len(pylayersdir) == 1:
+    raise EnvironmentError('Please verify that pylayers sources are into the "pylayers/" directory')
 
-    try:
-        basename = os.environ['BASENAME']
-    except:
-        raise EnvironmentError('Please position an environement variable $BASENAME where your pylayers project will be hosted')
+try:
+    basename = os.environ['BASENAME']
+except:
+    raise EnvironmentError('Please position an environement variable $BASENAME where your pylayers project will be hosted')
 
 try:
     mesdir = os.environ['MESDIR']
