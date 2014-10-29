@@ -42,7 +42,7 @@ setup(name='pylayers' ,
 home = os.path.expanduser('~')
 # detect directory from which setup is launched
 source = os.getcwd()
-# project directory name
+# project directory name. If no BASENAME env is already set, it is created @home
 project = 'pylayers_project'
 
 # check fresh install of pylayers
