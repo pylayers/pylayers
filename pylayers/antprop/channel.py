@@ -115,8 +115,9 @@ class Ctilde(PyLayers):
         transpose == False   (r,f)
         transpose == True    (f,r)
 
-        A Ctilde object is the output of eval method
-        of a Rays object.
+        A Ctilde object can be :
+            + returned from eval method of a Rays object.
+            + generated from a statistical model of the propagation channel
 
         """
         self.fail = False

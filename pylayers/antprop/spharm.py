@@ -264,7 +264,11 @@ class VectorCoeff(PyLayers):
 
 
     """
-    def __init__(self, typ, fmin=0.6, fmax=6, data=np.array([]),
+    def __init__(self,
+                 typ,
+                 fmin=0.6,
+                 fmax=6,
+                 data=np.array([]),
                  ind=np.array([]) ):
         """  class constructor
 
@@ -357,11 +361,12 @@ class SSHCoeff(PyLayers):
 
         """
 
-        # integrates energy over freq axis = 0
+        # integrates energy over frequency axis = 0
         Ex = np.sum(np.abs(self.Cx.s2) ** 2, axis=0)
         Ey = np.sum(np.abs(self.Cy.s2) ** 2, axis=0)
         Ez = np.sum(np.abs(self.Cz.s2) ** 2, axis=0)
 
+        # calculates total Energy
         E = Ex + Ey + Ez
 
         ind = np.nonzero(E > (E.max() * threshold))[0]
@@ -483,7 +488,8 @@ class SCoeff(PyLayers):
         ----------
 
         data : shape 2 data
-        ind  :
+        ind  : np.array
+            index for shape 2
 
         """
 
@@ -664,7 +670,7 @@ class SCoeff(PyLayers):
 
         # fill s2 with s3 at proper coefficient location
         self.s2[:,self.k2] = self.s3
-        self.N2 = Lmax
+        self.L2 = Lmax
         self.M2 = Lmax
         self.ind2 = indexvsh(Lmax)
 
@@ -709,7 +715,7 @@ class SCoeff(PyLayers):
     def show(self,
              typ='s1',
              k = 0,
-             N = -1,
+             L = -1,
              M = -1,
              kmax = 1000,
              seuildb = 50,
@@ -741,8 +747,8 @@ class SCoeff(PyLayers):
 
         fa = np.linspace(self.fmin, self.fmax, self.Nf)
         if typ == 's1':
-            if N == -1:
-                N = self.N1
+            if L == -1:
+                L = self.L1
             if M == -1:
                 M = self.M1
             Mg, Ng = plt.meshgrid(np.arange(M), np.arange(N))
@@ -884,9 +890,9 @@ class VCoeff(object):
         sh3 = np.shape(self.s3)
 
         if sh1[0] != 0:
-            st =  "N1  : " + str(self.N1) + "\n"
+            st =  "L1  : " + str(self.L1) + "\n"
             st = st + "M1  : " + str(self.M1)+ "\n"
-            st = st + "Ncoeff s1 " + str(self.M1* self.N1)+ "\n"
+            st = st + "Ncoeff s1 " + str(self.M1* self.L1)+ "\n"
         if sh2[0] != 0:
             st = st + "NCoeff s2  : " + str(len(self.ind2))+ "\n"
         if sh3[0] != 0:
@@ -903,14 +909,14 @@ class VCoeff(object):
 
         """
         sh = np.shape(data)
-        N = sh[1] - 1
+        L = sh[1] - 1
         M = sh[2] - 1
-        if M > N:
+        if M > L:
             print('VCoeff : M>N ')
             exit()
         else:
             self.s1 = data
-            self.N1 = N
+            self.L1 = L
             self.M1 = M
         self.Nf = sh[0]
 
@@ -927,12 +933,12 @@ class VCoeff(object):
         kmax = sh[1]
         nmax = np.ceil((-1 + np.sqrt(1 + 8 * (kmax + 1))) / 2) - 1
         t = indexvsh(nmax)
-        N2 = t[:, 0].max() - 1
+        L2 = t[:, 0].max() - 1
         M2 = t[:, 1].max() - 1
         self.s2 = data
-        self.N2 = N2
+        self.L2 = L2
         self.M2 = M2
-        self.ind2 = index_vsh(N2, M2)
+        self.ind2 = index_vsh(L2, M2)
 
     def inits3(self, data, ind, k):
         """ initialize shape 3 format
@@ -950,21 +956,21 @@ class VCoeff(object):
         self.ind3 = ind
         self.k2 = k
 
-    def s1tos2(self, N2=-1):
+    def s1tos2(self, L2=-1):
         """ convert shape 1 --> shape 2
 
         shape 1   array [ Nf , (L+1) , (M+1) ]
         shape 2   array [ Nf , (L+1) * (M+1) ]
 
-        n = 0...N2
-        m = 0...N2
+        l = 0...L2
+        m = 0...M2
 
         Parameters
         ----------
 
-        N2 : int <= N1
+        L2 : int <= L1
             shape 1 has 3 axis - shape 2 has 2 axis
-            by default all s1 coefficients are kept N2=-1 means N2=min(N1,M1) because M2 must be equal to N2
+            by default all s1 coefficients are kept L2=-1 means L2=min(L1,M1) because M2 must be equal to L2
 
         See Also
         --------
@@ -973,16 +979,16 @@ class VCoeff(object):
 
         """
 
-        if N2 == -1:
-            N2 = min(self.N1, self.M1)
-        M2 = N2
-        if (N2 <= self.N1):
-            self.N2 = N2
+        if L2 == -1:
+            L2 = min(self.L1, self.M1)
+        M2 = L2
+        if (L2 <= self.L1):
+            self.L2 = L2
             self.M2 = M2
-            self.ind2 = index_vsh(N2, M2)
+            self.ind2 = index_vsh(L2, M2)
             self.s2 = self.s1[:, self.ind2[:, 0], self.ind2[:, 1]]
         else:
-            print('error VCoeff s1tos2: N2>N1')
+            print('error VCoeff s1tos2: L2>L1')
 
     def delete(self, ind, typ):
         """ delete coeff
@@ -1131,7 +1137,7 @@ class VCoeff(object):
 
         # fill s2 with s3 at proper coefficient location
         self.s2[:,self.k2] = self.s3
-        self.N2 = Lmax
+        self.L2 = Lmax
         self.M2 = Lmax
         self.ind2 = indexvsh(Lmax)
 
@@ -1164,7 +1170,7 @@ class VCoeff(object):
     def show(self,
              typ='s1',
              k = 0,
-             N = -1,
+             L = -1,
              M = -1,
              kmax = 1000,
              seuildb = 50,
@@ -1179,13 +1185,13 @@ class VCoeff(object):
 
         Parameters
         ----------
-        typ :  string 
+        typ :  string
             default ('s1')
             's1'  shape 1  (Nf , N , M )
             's2'  shape 2  (Nf , N*M   )
             's3'  shape 3  (Nf , K )  T ( K x 2 )
 
-        k  : integer 
+        k  : integer
             frequency index default 0
 
         N, M = maximal value for degree, mode respectively
@@ -1195,8 +1201,8 @@ class VCoeff(object):
 
         fa = np.linspace(self.fmin, self.fmax, self.Nf)
         if typ == 's1':
-            if N == -1:
-                N = self.N1
+            if L == -1:
+                L = self.L1
             if M == -1:
                 M = self.M1
             Mg, Ng = plt.meshgrid(np.arange(M), np.arange(N))
@@ -1435,7 +1441,7 @@ class VSHCoeff(object):
                 self.Ci.show(typ, titre = titre , xl=True, yl=False)
     #    show()
 
-    def s1tos2(self, N2=-1):
+    def s1tos2(self, L2=-1):
         """ convert shape 1 to shape 2
 
         shape 1   array [ Nf x (L+1) x (M+1) ]
@@ -1444,14 +1450,14 @@ class VSHCoeff(object):
         Parameters
         ----------
 
-        N2 : max level
+        L2 : max level
             default (-1 means all values)
 
         """
-        self.Bi.s1tos2(N2)
-        self.Br.s1tos2(N2)
-        self.Ci.s1tos2(N2)
-        self.Cr.s1tos2(N2)
+        self.Bi.s1tos2(L2)
+        self.Br.s1tos2(L2)
+        self.Ci.s1tos2(L2)
+        self.Cr.s1tos2(L2)
 
     def s2tos3_new(self, k):
         """ convert vector spherical coefficient from shape 2 to shape 3
@@ -1507,7 +1513,8 @@ class VSHCoeff(object):
 
         """
 
-        EBr = np.sum(np.abs(self.Br.s2) ** 2, axis=0) # integrates energy over freq axis = 0 
+        # integrates energy over frequency  axis = 0
+        EBr = np.sum(np.abs(self.Br.s2) ** 2, axis=0)
         EBi = np.sum(np.abs(self.Bi.s2) ** 2, axis=0)
         ECr = np.sum(np.abs(self.Cr.s2) ** 2, axis=0)
         ECi = np.sum(np.abs(self.Ci.s2) ** 2, axis=0)
@@ -1573,25 +1580,40 @@ class VSHCoeff(object):
 
         return ind, ind3
 
-    def ens3(self):
-        """ return sorted energy values from minimal to maximal value
+    def energy(self,typ='s1'):
+        """ returns aggregated energy over all coefficients
+
+        Parameters
+        ----------
+        typ : string
+            {'s1'|'s2'|'s3'}
 
         Returns
         -------
-        Es
-            sorted energy values
-        u
-            index
+        E  : np.array in the same shape as typ
+            s1 : (f,l,m)
+            s2 : (f,l*m)
+            s3 : (f,ncoeff<lm)
+
         """
-        EBr = np.sum(np.abs(self.Br.s3) ** 2, axis=0)
-        EBi = np.sum(np.abs(self.Bi.s3) ** 2, axis=0)
-        ECr = np.sum(np.abs(self.Cr.s3) ** 2, axis=0)
-        ECi = np.sum(np.abs(self.Ci.s3) ** 2, axis=0)
+
+        EBr= np.abs(getattr(self.Br,typ))**2
+        EBi= np.abs(getattr(self.Bi,typ))**2
+        ECr= np.abs(getattr(self.Cr,typ))**2
+        ECi= np.abs(getattr(self.Ci,typ))**2
 
         E = EBr + EBi + ECr + ECi
-        u = np.argsort(E)
-        Es = E[u]
-        return(Es,u)
+
+        #EBr = np.sum(np.abs(self.Br.s3) ** 2, axis=0)
+        #EBi = np.sum(np.abs(self.Bi.s3) ** 2, axis=0)
+        #ECr = np.sum(np.abs(self.Cr.s3) ** 2, axis=0)
+        #ECi = np.sum(np.abs(self.Ci.s3) ** 2, axis=0)
+
+        #E = EBr + EBi + ECr + ECi
+        #u = np.argsort(E)
+        #Es = E[u]
+
+        return(E)
 
     def drag3(self, Emin):
         """ thresholded coefficient conversion
@@ -1964,6 +1986,7 @@ def VW(l, m, theta ,phi):
 
     Parameters
     ----------
+
     l    : ndarray (1 x K)
         level
     m    : ndarray (1 x K)
@@ -1988,8 +2011,7 @@ def VW(l, m, theta ,phi):
 
     Examples
     --------
-   
-        >>> a = 1
+
 
     """
 
@@ -2000,7 +2022,7 @@ def VW(l, m, theta ,phi):
 
     L = np.max(l)
     M = np.max(m)
- 
+
     # dirty fix
     index = np.where(abs(theta-np.pi/2)<1e-5)[0]
     if len(index)>0:

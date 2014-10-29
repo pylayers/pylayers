@@ -1187,7 +1187,7 @@ class DLink(Link):
         ############
         # H
         ############
-        H=Tchannel()
+        H = Tchannel()
 
         if self.dexist['H']['exist'] and not ('H' in kwargs['force']):
             self.load(H,self.dexist['H']['grpname'])

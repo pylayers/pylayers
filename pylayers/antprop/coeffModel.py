@@ -231,7 +231,6 @@ def lmreshape(coeff,L= 20):
     sh = coeff.shape
 
     coeff_lm = zeros(shape = (sh[0],1+L, 1+2*L), dtype = complex )
-    pdb.set_trace()
 
     for m in range(0,1+L):
         im = m*(2*L+3-m)/2
