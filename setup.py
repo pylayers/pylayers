@@ -32,6 +32,7 @@ setup(name='pylayers' ,
       packages=find_packages()
 )
 
+
 # detect if project and source are already locate in .pylayers
 # if not create both
 # if so just update the source path
