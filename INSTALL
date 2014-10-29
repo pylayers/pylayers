@@ -36,7 +36,6 @@ By doing so, you're installing most of the required dependencies.
 ------------------------------------------------------------------------------
 
 conda install mayavi
-conda install pil
 conda install basemap
 conda install shapely
 conda install gdal
@@ -48,7 +47,7 @@ conda install gdal
 If you're using windows, use this shapely package :
 http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely
 
-because the Anaconda shapely distribution doesn't contains the libgeos depencies.
+because the Anaconda shapely distribution for Windows doesn't contains the libgeos depencies.
 
 
 2.4 Set environement variables 
