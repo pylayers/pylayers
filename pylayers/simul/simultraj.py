@@ -20,7 +20,7 @@ Run simulation and data exploitation
 
     Simul.__init__
     Simul.run
-    Simul.gen_net
+    Simul._gen_net
     Simul.evaldeter
     Simul.evalstat
     Simul.show
@@ -106,12 +106,15 @@ class Simul(PyLayers):
         elif isinstance(source,CorSer):
             self.filetraj = source._filename
             self.load_CorSer(source)
+            cutoff=2
 
 
         
-        self.gen_net()
+        self._gen_net()
         self.SL = SLink()
         self.DL = DLink(L=self.L,verbose=self.verbose)
+        self.DL.cutoff=cutoff
+
         self.filename = 'simultraj_' + self.filetraj
         self.data = pd.DataFrame(columns=['id_a', 'id_b',
                                           'x_a', 'y_a', 'z_a',
@@ -232,8 +235,7 @@ class Simul(PyLayers):
         self.Nag = len(B)
         self.Nap = len(source.din)
 
-
-    def gen_net(self):
+    def _gen_net(self):
         """ generate Network and associated links
 
         Notes
@@ -271,7 +273,7 @@ class Simul(PyLayers):
         fig, ax = self.N.show(fig=fig, ax=ax)
         return fig, ax
 
-    def evaldeter(self, na, nb, wstd, fmode='band', nf=10):
+    def evaldeter(self, na, nb, wstd, fmode='band', nf=10,**kwargs):
         """ deterministic evaluation of a link
 
         Parameters
@@ -314,7 +316,7 @@ class Simul(PyLayers):
             minb = self.N.node[na]['wstd'][wstd]['fbminghz']
             maxb = self.N.node[na]['wstd'][wstd]['fbmaxghz']
             self.DL.fGHz = np.linspace(minb, maxb, nf)
-        a, t = self.DL.eval()
+        a, t = self.DL.eval(**kwargs)
 
         return a, t
 
@@ -353,6 +355,15 @@ class Simul(PyLayers):
         ak, tk, eng = self.SL.onbody(self.dpersons[name], dida, didb, pa, pb)
 
         return ak, tk, eng
+
+
+    def settime(self,t):
+        """ set current time
+        """
+        self.ctime = t
+        self._traj=copy.copy(self.traj)
+        self.update_pos(t)
+
 
     def run(self, **kwargs):
         """ run the link evaluation along a trajectory

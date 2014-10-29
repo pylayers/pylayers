@@ -73,7 +73,7 @@ class CorSer(PyLayers):
 
 
         # Layout
-        self.L= Layout('MOCAP-small.ini')
+        self.L= Layout('MOCAP-small2.ini')
         #self.L= Layout('MOCAP.ini')
         #self.L= Layout('MOCAPext.ini')
 

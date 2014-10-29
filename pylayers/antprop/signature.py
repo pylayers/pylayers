@@ -1974,6 +1974,7 @@ class Signatures(PyLayers,dict):
                 
 
                 elif (len(visited) < (cutoff + sum(lawp))) and sum(lawp)<5  :# if visited list length is less than cutoff
+
                     if child == t:  # if child is the target point
                         #print visited + [target]
                         path = visited + [t]
@@ -2201,7 +2202,7 @@ class Signatures(PyLayers,dict):
 
                         
 
-                        elif (len(visited) < (cutoff + sum(lawp))) and sum(lawp)<5  :# if visited list length is less than cutoff
+                        elif (len(visited) < (cutoff + sum(lawp))) :# if visited list length is less than cutoff
                             if child == t:  # if child is the target point
                                 #print visited + [target]
                                 path = visited + [t]
@@ -2222,10 +2223,11 @@ class Signatures(PyLayers,dict):
                                 #pdb.set_trace()
                                 try:
                                     nexti  = Gi[visited[-1]][child]['output'].keys()
-                                    #prob  = Gi[visited[-1]][child]['output'].values()
-                                    #nexti = map(lambda x:x[0]
+                                    # keyprob  = Gi[visited[-1]][child]['output'].items()
+                                    # nexti = map(lambda x:x[0]
                                     #               ,filter(lambda x
-                                    #                       :x[1]>threshold,zip(out,prob)))
+                                    #                       :x[1]>threshold,keyprob))
+
                                 except:
                                     nexti = []
 
