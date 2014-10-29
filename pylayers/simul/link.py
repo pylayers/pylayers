@@ -1131,7 +1131,7 @@ class DLink(Link):
             if kwargs['alg']==5:
                 Si.run5(cutoff=kwargs['cutoff'],algo=kwargs['si_algo'],diffraction=kwargs['diffraction'])
             if kwargs['alg']==7:
-                Si.run7(cutoff=kwargs['cutoff'],
+                Si.run7mt(cutoff=kwargs['cutoff'],
                     algo=kwargs['si_algo'],
                     diffraction=kwargs['diffraction'],
                     threshold=kwargs['threshold'])

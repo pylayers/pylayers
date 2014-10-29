@@ -71,10 +71,14 @@ class Simul(PyLayers):
         A Person
         A Trajectory
 
+    or a CorSer instance
+
     """
 
     def __init__(self, source ='simulnet_TA-Office.h5',verbose=False,):
         """ object constructor
+
+
 
         Parameters
         ----------
@@ -98,6 +102,7 @@ class Simul(PyLayers):
         if isinstance(source,str):
             self.filetraj = source
             self.load_simul(source)
+
         elif isinstance(source,CorSer):
             self.filetraj = source._filename
             self.load_CorSer(source)
@@ -129,6 +134,7 @@ class Simul(PyLayers):
 
 
     def __repr__(self):
+
 
         s = 'Simul trajectories class\n'
         s = s + '------------------------\n'
@@ -222,7 +228,9 @@ class Simul(PyLayers):
                                   'name': techno
                                         }
                                  })
-
+        self.ctime = np.nan
+        self.Nag = len(B)
+        self.Nap = len(source.din)
 
 
     def gen_net(self):
