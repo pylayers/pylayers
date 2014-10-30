@@ -1,27 +1,72 @@
-Dependencies 
-------------
+1. Dependencies 
+---------------
 
-The prefer way to install pylayers is to first install anaconda on your
-platform. 
-
-Install mayavi from anaconda. 
-
-conda install mayavi
-
-The following modules are required 
-
+The following modules are required to use pylayers 
 
 numpy>=1.6.1
 scipy>=0.10.1
 networkx>=1.7
 matplotlib>=1.1.0
-shapely>=1.2.14
+shapely>=1.2.14  
 descartes>=1.0
 SimPy>=2.2
 PIL>=1.1.5
 bitstring>=3.0.2
 pyintervall>=1.0
+osmapi>=0.3
+imposm
+basemap>=1.0
 pandas >=0.12.0
+mayavi >=4.3.1
+
+2. Recomended way to install
+----------------------------
+
+2.1 Anaconda 
+------------
+------------
+
+The prefer way to install pylayers is to first install the free python distribution Anaconda on your
+platform. ( https://store.continuum.io/cshop/anaconda/ )
+By doing so, you're installing most of the required dependencies.
+
+
+2.2 Install extra packages not provided with the default Anaconda distribution
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+
+conda install mayavi
+conda install basemap
+conda install shapely
+conda install gdal
+
+2.3 Only if you're running Windows 
+----------------------------------
+----------------------------------
+
+If you're using windows, use this shapely package :
+http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely
+
+because the Anaconda shapely distribution for Windows doesn't contains the libgeos depencies.
+
+
+2.4 Set environement variables 
+------------------------------
+------------------------------
+
+It is then required to define the two enviroment variables PYLAYERS and BASENAME
+
+On linux platforms, in your .bashrc add those 2 lines 
+
+export PYLAYERS=<path to the directory where pylayers is located>
+export BASENAME=<path to a directory where you want to host your projects>
+
+Note : The PYLAYERS environement variable MUST be set in the directory conatining the setup.py
+
+
+
+3. Example of installation procedure for ubuntu 12.04
+-----------------------------------------------------
 
 The installation of matplotlib basemap requires installation of libraries GEOS
 and PROJ4. The installation procedure is well described in
@@ -53,16 +98,8 @@ Most of this dependencies are handled in the setup.py script.
 
 python setup.py install
 
-It is then required to define the two enviroment variables PYLAYERS and BASENAME
-
-On linux platforms, in your .bashrc add those 2 lines 
-
-#export PYLAYERS=<path to the directory where pylayers is installed>
-export PYLAYERS=~/pylayers
-export BASENAME=~/plproject
 
 Installing PyInterval
----------------------
 
 sudo easy_install pyinterval
 
@@ -72,8 +109,8 @@ http://lipforge.ens-lyon.fr/frs/?group_id=8&release_id=123
 if problem for compilation add 
 CPPFLAGS= -fPIC in scs_lib/Makefile
 
-Testing
--------
+4.Testing
+---------
 
 make test-code
 

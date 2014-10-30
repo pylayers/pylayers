@@ -20,7 +20,7 @@ Run simulation and data exploitation
 
     Simul.__init__
     Simul.run
-    Simul.gen_net
+    Simul._gen_net
     Simul.evaldeter
     Simul.evalstat
     Simul.show
@@ -50,6 +50,8 @@ from pylayers.gis.layout import Layout
 from pylayers.antprop import antenna
 from pylayers.network.network import Network
 from pylayers.simul.link import *
+from pylayers.measures.cormoran import *
+
 # Handle directory hierarchy
 from pylayers.util.project import *
 # Handle UWB measurements
@@ -69,21 +71,24 @@ class Simul(PyLayers):
         A Person
         A Trajectory
 
+    or a CorSer instance
+
     """
 
-    def __init__(self, _filetraj='simulnet_TA-Office.h5',verbose=False):
+    def __init__(self, source ='simulnet_TA-Office.h5',verbose=False,):
         """ object constructor
+
+
 
         Parameters
         ----------
 
-        _filetraj : string
+        source : string
             h5 trajectory
         verbose : boolean
 
         """
 
-        self.filetraj = _filetraj
 
         # self.progress = -1  # simulation not loaded
         self.verbose = verbose
@@ -93,10 +98,23 @@ class Simul(PyLayers):
         self.dap = {}
         self.Nag = 0
         self.Nap = 0
-        self.load_config(_filetraj)
-        self.gen_net()
+
+        if isinstance(source,str):
+            self.filetraj = source
+            self.load_simul(source)
+
+        elif isinstance(source,CorSer):
+            self.filetraj = source._filename
+            self.load_CorSer(source)
+            cutoff=2
+
+
+        
+        self._gen_net()
         self.SL = SLink()
         self.DL = DLink(L=self.L,verbose=self.verbose)
+        self.DL.cutoff=cutoff
+
         self.filename = 'simultraj_' + self.filetraj
         self.data = pd.DataFrame(columns=['id_a', 'id_b',
                                           'x_a', 'y_a', 'z_a',
@@ -120,6 +138,7 @@ class Simul(PyLayers):
 
     def __repr__(self):
 
+
         s = 'Simul trajectories class\n'
         s = s + '------------------------\n'
         s = s +'\n'
@@ -140,17 +159,17 @@ class Simul(PyLayers):
 
         return s
 
-    def load_config(self, _filetraj):
+    def load_simul(self, source):
         """  load a simultraj configuration file
 
         Parameters
         ----------
 
-        _filetraj : string
+        source : string
             name of simulation file to be loaded
 
         """
-        self.filetraj = _filetraj
+        self.filetraj = source
 
 
         # get the trajectory
@@ -181,8 +200,42 @@ class Simul(PyLayers):
         self.Nap = len(self.dap.keys())
         self.traj = traj
 
+    def load_CorSer(self,source):
 
-    def gen_net(self):
+        if isinstance(source.B,Body):
+            B=[source.B]
+        elif isinstance(source.B,list):
+            B=source.B
+        else:
+            raise AttributeError('CorSer.B must be a list or a Body')
+
+        self.L=source.L
+        self.traj = tr.Trajectories()
+        self.traj.Lfilename=self.L
+
+        for b in B:
+            self.dpersons.update({b.name: b})
+            self._tmin = b.time[0]
+            self._tmax = b.time[-1]
+            self.time = b.time
+            self.traj.append(b.traj)
+
+        for ap in source.din:
+            techno,ID=ap.split(':')
+            if techno == 'HKB':
+                techno = 'hikob'
+            
+
+            self.dap.update({ID: {'pos': source.din[ap]['p'],
+                                  'ant': antenna.Antenna(),
+                                  'name': techno
+                                        }
+                                 })
+        self.ctime = np.nan
+        self.Nag = len(B)
+        self.Nap = len(source.din)
+
+    def _gen_net(self):
         """ generate Network and associated links
 
         Notes
@@ -220,7 +273,7 @@ class Simul(PyLayers):
         fig, ax = self.N.show(fig=fig, ax=ax)
         return fig, ax
 
-    def evaldeter(self, na, nb, wstd, fmode='band', nf=10):
+    def evaldeter(self, na, nb, wstd, fmode='band', nf=10,**kwargs):
         """ deterministic evaluation of a link
 
         Parameters
@@ -263,7 +316,7 @@ class Simul(PyLayers):
             minb = self.N.node[na]['wstd'][wstd]['fbminghz']
             maxb = self.N.node[na]['wstd'][wstd]['fbmaxghz']
             self.DL.fGHz = np.linspace(minb, maxb, nf)
-        a, t = self.DL.eval()
+        a, t = self.DL.eval(**kwargs)
 
         return a, t
 
@@ -302,6 +355,15 @@ class Simul(PyLayers):
         ak, tk, eng = self.SL.onbody(self.dpersons[name], dida, didb, pa, pb)
 
         return ak, tk, eng
+
+
+    def settime(self,t):
+        """ set current time
+        """
+        self.ctime = t
+        self._traj=copy.copy(self.traj)
+        self.update_pos(t)
+
 
     def run(self, **kwargs):
         """ run the link evaluation along a trajectory

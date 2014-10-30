@@ -374,7 +374,6 @@ class Bsignal(PyLayers):
                             str(np.shape(self.x)),
                             str(np.shape(self.y)))
 
-        pdb.set_trace()
         for k in range(self.y.ndim):
             st = st + '\n' +self.label[k]+ ' : ' + str(self.y.shape[k])
 
