@@ -21,7 +21,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 def cor_ls():
-    filelog = os.environ['CORMORAN'] + '/RAW/Doc/MeasurementLog.csv'
+    filelog = os.path.join(os.environ['CORMORAN'],'RAW','Doc','MeasurementLog.csv')
     log = pd.read_csv(filelog)
     return log
 
@@ -201,7 +201,7 @@ bernard
 
         """
 
-        filename = self.rootdir + '/RAW/11-06-2014/MOCAP/scene.c3d'
+        filename = os.path.join(self.rootdir,'RAW','11-06-2014','MOCAP','scene.c3d')
         a,self.infraname,pts,i = c3d.ReadC3d(filename)
 
         pts = pts/1000.
@@ -258,7 +258,7 @@ bernard
             from MeasurementLog.csv
         """
 
-        filelog = self.rootdir + '/RAW/Doc/MeasurementLog.csv'
+        filelog = os.path.join(self.rootdir,'RAW','Doc','MeasurementLog.csv')
         log = pd.read_csv(filelog)
         date = str(self.day)+'/06/14'
         self.log = log[(log['Meas Serie'] == self.serie) & (log['Date'] == date)]
@@ -271,11 +271,11 @@ bernard
         for subject in self.subject:
 
             seriestr = str(self.serie).zfill(3)
-            filemocap = self.rootdir + '/RAW/' + \
-                        str(self.day)+'-06-2014/MOCAP/serie_' + seriestr + '.c3d'
-            baw = self.rootdir + '/POST-TREATED/' + str(self.day)+'-06-2014/BodyandWear/'
-            filebody = baw + subject + '.ini'
-            filewear = baw + subject + '_'  +str(self.day)+'-06-2014_' + self.typ + '.ini'
+            filemocap = os.path.join(self.rootdir,'RAW',str(self.day)+'-06-2014','MOCAP','serie_'+seriestr+'.c3d')
+            baw = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','BodyandWear')
+            filebody = os.path.join(baw, subject + '.ini')
+            filewear = os.path.join(baw,subject + '_'  +str(self.day)+'-06-2014_' + self.typ + '.ini')
+
             self.B.append(Body(_filebody=filebody,
                              _filemocap=filemocap,unit = 'mm', loop=False,
                              _filewear=filewear,
@@ -329,11 +329,11 @@ bernard
                   'KneeLeft':33,
                   'AnckleRight':36,
                   'AnckleLeft':37}
-            dirname = self.rootdir+'/POST-TREATED/11-06-2014/TCR'
+            dirname = os.path.join(self.rootdir,'POST-TREATED','11-06-2014','TCR')
 
 
         if day==12:
-            dirname = self.rootdir+'/POST-TREATED/12-06-2014/TCR'
+            dirname = os.path.join(self.rootdir,'POST-TREATED','12-06-2014','TCR')
             self.dTCR ={ 'COORD':31,
                         'AP1':32,
                         'AP2':24,
@@ -415,9 +415,9 @@ bernard
         """
         self.dBS = {'LeftWrist?':157,'RightAnckle?':74}
         if day==11:
-            dirname = self.rootdir+'/POST-TREATED/11-06-2014/BeSpoon'
+            dirname = os.path.join(self.rootdir,'POST-TREATED','11-06-2014','BeSpoon')
         if day==12:
-            dirname = self.rootdir+'/POST-TREATED/12-06-2014/BeSpoon'
+            dirname = os.path.join(self.rootdir,'POST-TREATED','12-06-2014','BeSpoon')
 
         files = os.listdir(dirname)
         if serie != '':
@@ -443,17 +443,17 @@ bernard
             self.dHKB ={'AP1':1,'AP2':2,'AP3':3,'AP4':4,
                        'HeadRight':5,'TorsoTopRight':6,'TorsoTopLeft':7,'BackCenter':8,'ElbowRight':9,'ElbowLeft':10,'HipRight':11,'WristRight':12,'WristLeft':13,'KneeLeft':14,'AnckleRight':16,'AnckleLeft':15}
             if source=='UR1':
-                dirname = self.rootdir+'/POST-TREATED/11-06-2014/HIKOB'
+                dirname = os.path.join(self.rootdir,'POST-TREATED','11-06-2014','HIKOB')
             elif source=='CITI':
-                dirname = self.rootdir+'/POST-TREATED/11-06-2014/HIKOB/CITI'
+                dirname = os.path.join(self.rootdir,'POST-TREATED','11-06-2014','HIKOB','CITI')
         if day==12:
             self.dHKB= {'AP1':1,'AP2':2,'AP3':3,'AP4':4,'Jihad:TorsoTopRight':10,'Jihad:TorsoTopLeft':9,'Jihad:BackCenter':11,'JihadShoulderLeft':12,
              'Nicolas:TorsoTopRight':6,'Nicolas:TorsoTopLeft':5,'Nicolas:BackCenter':7,'Nicolas:ShoulderLeft':8,
              'Eric:TooTopRight':15,'Eric:TorsoTopLeft':13,'Eric:BackCenter':16,'Eric:ShoulderLeft':14}
             if source=='UR1':
-                dirname = self.rootdir+'/POST-TREATED/12-06-2014/HIKOB'
+                dirname = os.path.join(self.rootdir,'POST-TREATED','12-06-2014','HIKOB')
             elif source=='CITI':
-                dirname = self.rootdir+'/POST-TREATED/12-06-2014/HIKOB/CITI'
+                dirname = os.path.join(self.rootdir,'POST-TREATED','12-06-2014','HIKOB','CITI')
 
         files = os.listdir(dirname)
 
@@ -596,7 +596,7 @@ bernard
     def vlc(self):
         """ play video of the associated serie
         """
-        videofile = self.rootdir+'/POST-TREATED/' +str(self.day) + '-06-2014/Videos/'
+        videofile = os.path.join(self.rootdir,'POST-TREATED', str(self.day)+'-06-2014','Videos')
         ldir = os.listdir(videofile)
         luldir = map(lambda x : self._filename in x,ldir)
         try:
@@ -617,7 +617,7 @@ bernard
         if ax == []:
             ax = fig.add_subplot(111)
 
-        videofile = self.rootdir+'/POST-TREATED/' +str(self.day) + '-06-2014/Videos/'
+        videofile = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','Videos')
         ldir = os.listdir(videofile)
         luldir = map(lambda x : self._filename in x,ldir)
         uldir = luldir.index(True)
@@ -638,7 +638,7 @@ bernard
     def snapshots(self,t0=0,t1=10,offset=15.5):
         """
         """
-        videofile = self.rootdir+'/POST-TREATED/' +str(self.day) + '-06-2014/Videos/'
+        videofile = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','Videos')
         ldir = os.listdir(videofile)
         luldir = map(lambda x : self._filename in x,ldir)
         uldir = luldir.index(True)
@@ -911,7 +911,7 @@ bernard
 
 
 
-        videofile = self.rootdir+'/POST-TREATED/' +str(self.day) + '-06-2014/Videos/'
+        videofile = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','Videos')
         ldir = os.listdir(videofile)
         luldir = map(lambda x : self._filename in x,ldir)
         uldir = luldir.index(True)
