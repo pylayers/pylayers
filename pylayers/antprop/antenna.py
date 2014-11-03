@@ -435,8 +435,11 @@ class Antenna(PyLayers):
         return lfile_s
 
 
-    def photo(self,directory='ant/UWBAN/PhotosVideos'):
+    def photo(self,directory=''):
         """ show a picture of the antenna """
+
+        if directory == '':
+            directory = os.path.join('ant','UWBAN','PhotosVideos')
 
         _filename = 'IMG_'+self.PhotoFile.split('-')[1]+'.JPG'
         filename = pyu.getlong(_filename,directory)

@@ -100,7 +100,7 @@ class CorSer(PyLayers):
 
     def __repr__(self):
         st = ''
-        st = st + 'Day : '+ str(self.day)+'/07/2014'+'\n'
+        st = st + 'Day : '+ str(self.day)+'/06/2014'+'\n'
         st = st + 'Serie : '+ str(self.serie)+'\n'
         st = st + 'Scenario : '+str(self.scenario)+'\n'
         st = st + 'Run : '+ str(self.run)+'\n'
@@ -382,7 +382,7 @@ bernard
             self.scenario= scenario
             self.run = str(run)
 
-        filename = dirname + '/'+ self._fileTCR
+        filename = os.path.join(dirname,self._fileTCR)
         dtTCR = pd.read_csv(filename)
         tcr={}
         for k in dTCRni:
@@ -426,7 +426,7 @@ bernard
             filesc = filter(lambda x : 'Sc'+scenario in x ,files)
             self._fileBS = filter(lambda x : 'R'+str(run) in x ,filsc)[0]
 
-        self.bespo = pd.read_csv(dirname+'/'+self._fileBS,index_col='tu')
+        self.bespo = pd.read_csv(os.path.join(dirname,self._fileBS),index_col='tu')
         self.s157 = self.bespo[self.bespo['Sensor']==157]
         #self.s157.set_index(self.s157['tu'].values/1e9)
         self.s74  = self.bespo[self.bespo['Sensor']==74]
@@ -485,7 +485,7 @@ bernard
                 self._filehkb = filter(lambda x : 'r'+str(run) in x ,filsc)[0]
 
 
-        data = io.loadmat(dirname+'/'+self._filehkb)
+        data = io.loadmat(os.path.join(dirname,self._filehkb))
         if source=='UR1':
             self.rssi = data['rssi']
             self.thkb = data['t']

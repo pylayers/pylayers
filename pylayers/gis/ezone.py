@@ -256,8 +256,8 @@ class DEM(PyLayers):
 
         _filehgt = self.prefix+'.HGT'
         _filelcv = self.prefix+'.lcv'
-        filehgt = pyu.getlong(_filehgt,'gis/srtm')
-        filelcv = pyu.getlong(_filelcv,'gis/srtm')
+        filehgt = pyu.getlong(_filehgt,os.path.join('gis','srtm'))
+        filelcv = pyu.getlong(_filelcv,os.path.join('gis','srtm'))
 
 
         data = np.fromfile(filehgt,dtype='>i2')
@@ -276,7 +276,7 @@ class DEM(PyLayers):
         _fileaster = 'ASTGTM2_'+self.prefix+'_dem.tif'
 
         if fileaster==[]:
-            fileaster = pyu.getlong(_fileaster,'gis/aster')
+            fileaster = pyu.getlong(_fileaster,os.path.join('gis','aster'))
         else:
             _fieleaster = pyu.getshort(fileaster)
 
@@ -430,7 +430,7 @@ class Ezone(PyLayers):
         self.height = th
 
     def ls(self):
-        files = os.listdir(basename+'/gis/h5')
+        files = os.listdir(os.path.join(basename,'gis','h5'))
         for f in files:
             print f
 
@@ -454,9 +454,9 @@ class Ezone(PyLayers):
         _filelcv  = self.prefix+'.lcv'
         _fileaster  = 'ASTGTM2_'+self.prefix+'_dem.tif'
 
-        filehgt = dirsrtm+'/'+_filehgt
-        filelcv = dirsrtm+'/'+_filelcv
-        fileaster = diraster+'/'+_fileaster
+        filehgt = os.path.join(dirsrtm,_filehgt)
+        filelcv = os.path.join(dirsrtm,_filelcv)
+        fileaster = os.path.join(diraster,_fileaster)
 
         if (os.path.isfile(filehgt) & os.path.isfile(filelcv)):
             print "Load srtm file"
@@ -498,7 +498,7 @@ class Ezone(PyLayers):
 
         """
 
-        self.fileh5 = pyu.getlong(_fileh5,'gis/h5')
+        self.fileh5 = pyu.getlong(_fileh5,os.path.join('gis','h5'))
         f = h5py.File(self.fileh5,'a')
         self.extent = f['extent'].value
 
@@ -984,7 +984,7 @@ class Ezone(PyLayers):
 
         """
 
-        fileh5 = pyu.getlong(_fileh5,'gis/h5')
+        fileh5 = pyu.getlong(_fileh5,os.path.join('gis','h5'))
         f = h5py.File(fileh5,'r',dtype=np.float32)
         self.bdpt = f['osm']['bdpt'].value
         self.bdma = f['osm']['bdma'].value
@@ -1024,7 +1024,7 @@ class Ezone(PyLayers):
 
         """
         _fileh5 = self.prefix+'.h5'
-        fileh5 = pyu.getlong(_fileh5,'gis/h5')
+        fileh5 = pyu.getlong(_fileh5,os.path.join('gis','h5'))
         with h5py.File(fileh5) as fh:
             if 'extent' in fh:
                 self.extent = fh['extent'][:]
@@ -1065,7 +1065,7 @@ class Ezone(PyLayers):
 
         """
         _fileh5 = self.prefix+'.h5'
-        fileh5 = pyu.getlong(_fileh5,'gis/h5')
+        fileh5 = pyu.getlong(_fileh5,os.path.join('gis','h5'))
         # if file exists open it in append mode
         f = h5py.File(fileh5,'a')
 

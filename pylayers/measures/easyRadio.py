@@ -7,7 +7,7 @@ class LPRS(object):
 
 
     def __init__(self,portId=0,baud='U4'):
-        self.port = '/dev/ttyUSB'+str(portId)
+        self.port = os.path.join('dev','ttyUSB'+str(portId))
         self.baudrate={'U1':2400,
                   'U2':4800,
                   'U3':9600,

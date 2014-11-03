@@ -413,7 +413,7 @@ class Layout(PyLayers):
         st = st + "----------------\n"
         st = st + self.filename + "\n"
         if self.display['fileoverlay']<>'':
-            filename = pyu.getlong(self.display['fileoverlay'],'struc/images')
+            filename = pyu.getlong(self.display['fileoverlay'],os.path.join('struc','images'))
             st = st + "Image('"+filename+"')\n"
         st = st + "----------------\n\n"
         st = st + "Number of points  : "+ str(self.Np)+"\n"
@@ -492,13 +492,13 @@ class Layout(PyLayers):
         if typ=='str':
             pathname = os.path.join(pstruc['DIRSTRUC'],'*.'+ typ)
         if typ=='str2':
-            pathname = os.path.join(pstruc['DIRSTRUC'],'/*.' + typ)
+            pathname = os.path.join(pstruc['DIRSTRUC'],'*.' + typ)
         if typ=='ini':
-            pathname = os.path.join(pstruc['DIRINI'],'/*.' + typ)
+            pathname = os.path.join(pstruc['DIRINI'],'*.' + typ)
         if typ=='osm':
-            pathname = os.path.join(pstruc['DIROSM'],'/*.' + typ)
+            pathname = os.path.join(pstruc['DIROSM'],'*.' + typ)
         if typ=='wrl':
-            pathname = os.path.join(pstruc['DIRWRL'],'/*.' + typ)
+            pathname = os.path.join(pstruc['DIRWRL'],'*.' + typ)
 
         lfile_l = glob.glob(os.path.join(basename,pathname))
         lfile_s = []
@@ -4783,7 +4783,7 @@ class Layout(PyLayers):
                     write_gpickle(getattr(self,gname1),os.path.join(basename,'struc','gpickle','G'+g+'_'+self.filename+'.gpickle'))
                 else:
                     gname='G'+g
-                    write_gpickle(getattr(self,gname),os.path.join(path,'/G'+g+'.gpickle'))
+                    write_gpickle(getattr(self,gname),os.path.join(path,'G'+g+'.gpickle'))
             except:
                 raise NameError('G'+g+' graph cannot be saved, probably because it has not been built')
         # save dictionnary which maps string interaction to [interactionnode, interaction type]
@@ -4815,8 +4815,6 @@ class Layout(PyLayers):
         specified by the $BASENAME environment variable
 
         """
-        import ipdb
-        ipdb.set_trace()
         graphs=['s','t','c','v','i','r','w']
         path = os.path.join(basename,'struc','gpickle',self.filename)
         for g in graphs:

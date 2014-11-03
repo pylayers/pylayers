@@ -302,15 +302,15 @@ class Simul(SimulationRT): # Sympy 2
         ## TODO remove the hard reference
         if 'txt' in self.save_opt['save']:
             pyu.writeDetails(self)
-            if os.path.isfile(basename+'/output/Nodes.txt'):
+            if os.path.isfile(os.path.join(basename,'output','Nodes.txt')):
                 print 'would you like to erase previous txt files ?'
                 A=raw_input()
                 if A == 'y':
-                    for f in os.listdir(basename+'/output/'):
+                    for f in os.listdir(os.path.join(basename,'output')):
                         try:
                             fi,ext=f.split('.')
                             if ext == 'txt':
-                                os.remove(basename+'/output/'+f)
+                                os.remove(os.path.join(basename,'output'+f))
                         except:
                             pass
 
