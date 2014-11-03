@@ -39,15 +39,22 @@ conda install mayavi
 conda install basemap
 conda install shapely
 conda install gdal
+pip install protobuf
 
 2.3 Only if you're running Windows 
 ----------------------------------
 ----------------------------------
 
+pip install protobuf
+
 If you're using windows, use this shapely package :
 http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely
 
 because the Anaconda shapely distribution for Windows doesn't contains the libgeos depencies.
+
+FYI in commnand line you can install this downloaded file with :
+
+easy_instal Shapely-<version>.<platform>-<pythonversion>.exe
 
 
 2.4 Set environement variables 
