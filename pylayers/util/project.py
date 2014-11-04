@@ -55,34 +55,65 @@ class PyLayers(object):
                                 except:
                                     pass
 
- 
+def _writedotpylayers(typ,path):
+    """ write .pylayers file
+
+        Parameters
+        ----------
+
+        typ: string
+            source : update the path to the pylayers' source directory
+            project : update the path to the pylayers' project directory
+        path : string
+            path to typ
+    """
+    home = os.path.expanduser('~')
+    # with open(os.path.join(home,'.pylayers'),'r') as f:
+    #         lines = f.readlines()
+    with open(os.path.join(home,'.pylayers'),'a') as f:
+        f.write(typ+'\n')
+        f.write(path+'\n')
+        # replaceline=False
+        # for l in lines:
+        #     if replaceline :
+        #         f.write(path+"\n")
+        #         replaceline=False
+        #     elif typ in l:
+        #         f.write(l)
+        #         replaceline=True
+        #     else:
+        #         f.write(l)
+
+
 home = os.path.expanduser('~')
 currentdir = os.getcwd()
 
+# if .pylayers exists
 if os.path.isfile(os.path.join(home,'.pylayers')):
     with open(os.path.join(home,'.pylayers'),'r') as f:
         lines = f.readlines()
-    # [:-1] to remove the '\n' character
-    pylayersdir = lines[1][:-1]
-    basename = lines[3]
+    # ''.join... to remove the '\n' character
+    pylayersdir = ''.join(lines[1].splitlines) 
+    basename = ''.join(lines[3].splitlines) 
 
-else :
-    try:
-        pylayersdir = os.environ['PYLAYERS']
-    except:
-        pylayersdir = currentdir.split('pylayers')[0] + 'pylayers'
+# BACKWARD COMPATIBILITY MODE (from now .pylayers is create each install)
+else:
+    if os.getenv('PYLAYERS') != None:
+        pylayersdir = os.getenv('PYLAYERS')
+        _writedotpylayers('source',pylayersdir)
+        print 'PYLAYERS environement variable detected: ~/.pylayers updated'
+    else :
+        raise EnvironmentError('pylayers source path not found. Try to re-run setup.py')
+    if os.getenv('BASENAME') != None:
+        basename = os.getenv('BASENAME')
+        _writedotpylayers('project',basename)
+        print 'BASENAME environement variable detected: ~/.pylayers updated'
+    else :
+        raise EnvironmentError('pylayers source path not found. Try to re-run setup.py')
 
 
-    if pylayersdir[-1] == '/' or pylayersdir[-1] == '\\':
-        pylayersdir = pylayersdir[:-1]
 
-    if len(pylayersdir) == 1:
-        raise EnvironmentError('Please verify that pylayers sources are into the "pylayers/" directory')
 
-    try:
-        basename = os.environ['BASENAME']
-    except:
-        raise EnvironmentError('Please position an environement variable $BASENAME where your pylayers project will be hosted')
 
 try:
     mesdir = os.environ['MESDIR']
