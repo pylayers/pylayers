@@ -1,5 +1,55 @@
-1. Dependencies 
----------------
+################################
+#       LINUX/OSX Install      #
+################################
+
+The prefer way to install pylayers is to first install the free python distribution Anaconda on your
+platform. ( https://store.continuum.io/cshop/anaconda/ )
+By doing so, you're installing most of the required dependencies.
+
+1 - Download Anaconda from https://store.continuum.io/cshop/anaconda/
+2 - Install Anaconda with the given command ( $bash Anaconda-<version>-<plateform>.sh ) . Say yes to add Anaconda to your path
+3 - Run installer_linux file from the pylayers directory
+4 - Set environement Variables :
+
+It is then required to define the two enviroment variables PYLAYERS and BASENAME
+
+On linux platforms, in your .bashrc add those 2 lines 
+
+export PYLAYERS=<path to the directory where pylayers is located>
+export BASENAME=<path to a directory where you want to host your projects>
+
+Note : The PYLAYERS environement variable MUST be set in the directory conatining the setup.py
+
+5- Done
+
+
+############################
+#      Windows Install     #
+############################
+
+
+1 - Download and Install Anaconda from https://store.continuum.io/cshop/anaconda/
+2 - Run installer_win.bat
+3 - Download the Shapely package corresponding to your platform from http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely *
+4 - Install shapely using the downloaded file
+5 - Set environement Variables :
+    Procedure for WinXP :  http://support.microsoft.com/kb/310519/fr-fr
+    Procedure for Vista/windows 7: Start -> Right click on computer -> Properties -> Advanced system parameters -> Environement variables
+
+
+    PYLAYERS=<path to the directory where pylayers is located>
+    BASENAME=<path to a directory where you want to host your projects>
+
+
+
+* Despite shapely is part of the Anaconda distribution, the Windows distibution doesn't contains the libgeos depencies.
+
+
+
+
+
+Dependencies 
+------------
 
 The following modules are required to use pylayers 
 
@@ -19,61 +69,12 @@ basemap>=1.0
 pandas >=0.12.0
 mayavi >=4.3.1
 
-2. Recomended way to install
-----------------------------
-
-2.1 Anaconda 
-------------
-------------
-
-The prefer way to install pylayers is to first install the free python distribution Anaconda on your
-platform. ( https://store.continuum.io/cshop/anaconda/ )
-By doing so, you're installing most of the required dependencies.
-
-
-2.2 Install extra packages not provided with the default Anaconda distribution
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-
-conda install mayavi
-conda install basemap
-conda install shapely
-conda install gdal
-pip install protobuf
-
-2.3 Only if you're running Windows 
-----------------------------------
-----------------------------------
-
-pip install protobuf
-
-If you're using windows, use this shapely package :
-http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely
-
-because the Anaconda shapely distribution for Windows doesn't contains the libgeos depencies.
-
-FYI in commnand line you can install this downloaded file with :
-
-easy_instal Shapely-<version>.<platform>-<pythonversion>.exe
-
-
-2.4 Set environement variables 
-------------------------------
-------------------------------
-
-It is then required to define the two enviroment variables PYLAYERS and BASENAME
-
-On linux platforms, in your .bashrc add those 2 lines 
-
-export PYLAYERS=<path to the directory where pylayers is located>
-export BASENAME=<path to a directory where you want to host your projects>
-
-Note : The PYLAYERS environement variable MUST be set in the directory conatining the setup.py
 
 
 
-3. Example of installation procedure for ubuntu 12.04
------------------------------------------------------
+
+Example of installation procedure for ubuntu 12.04 (DEPRECATED)
+---------------------------------------------------------------
 
 The installation of matplotlib basemap requires installation of libraries GEOS
 and PROJ4. The installation procedure is well described in
@@ -116,8 +117,8 @@ http://lipforge.ens-lyon.fr/frs/?group_id=8&release_id=123
 if problem for compilation add 
 CPPFLAGS= -fPIC in scs_lib/Makefile
 
-4.Testing
----------
+Testing
+-------
 
 make test-code
 
