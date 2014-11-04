@@ -413,7 +413,7 @@ class Layout(PyLayers):
         st = st + "----------------\n"
         st = st + self.filename + "\n"
         if self.display['fileoverlay']<>'':
-            filename = pyu.getlong(self.display['fileoverlay'],'struc/images')
+            filename = pyu.getlong(self.display['fileoverlay'],os.path.join('struc','images'))
             st = st + "Image('"+filename+"')\n"
         st = st + "----------------\n\n"
         st = st + "Number of points  : "+ str(self.Np)+"\n"
@@ -490,17 +490,17 @@ class Layout(PyLayers):
         """
 
         if typ=='str':
-            pathname = pstruc['DIRSTRUC'] + '/*.' + typ
+            pathname = os.path.join(pstruc['DIRSTRUC'],'*.'+ typ)
         if typ=='str2':
-            pathname = pstruc['DIRSTRUC'] + '/*.' + typ
+            pathname = os.path.join(pstruc['DIRSTRUC'],'*.' + typ)
         if typ=='ini':
-            pathname = pstruc['DIRINI'] + '/*.' + typ
+            pathname = os.path.join(pstruc['DIRINI'],'*.' + typ)
         if typ=='osm':
-            pathname = pstruc['DIROSM'] + '/*.' + typ
+            pathname = os.path.join(pstruc['DIROSM'],'*.' + typ)
         if typ=='wrl':
-            pathname = pstruc['DIRWRL'] + '/*.' + typ
+            pathname = os.path.join(pstruc['DIRWRL'],'*.' + typ)
 
-        lfile_l = glob.glob(basename+'/'+pathname)
+        lfile_l = glob.glob(os.path.join(basename,pathname))
         lfile_s = []
         for fi in lfile_l:
             fis = pyu.getshort(fi)
@@ -892,7 +892,7 @@ class Layout(PyLayers):
         """
 
         self.filename = _fileosm
-        fileosm = pyu.getlong(_fileosm,'struc/osm')
+        fileosm = pyu.getlong(_fileosm,os.path.join('struc','osm'))
         coords,nodes,ways,relations,m = osm.osmparse(fileosm,typ='floorplan')
         _np = 0 # _ to avoid name conflict with numpy alias
         _ns = 0
@@ -4577,7 +4577,7 @@ class Layout(PyLayers):
                 imok =True
             else:
                 if self.display['fileoverlay']<>'':
-                    image = Image.open(basename+'/'+pstruc['DIRIMAGE']+'/'+self.display['fileoverlay'])
+                    image = Image.open(os.path.join(basename,pstruc['DIRIMAGE'],self.display['fileoverlay']))
                     imok =True
             if imok:
                 if self.display['inverse']:
@@ -4773,24 +4773,24 @@ class Layout(PyLayers):
 
         """
         # create layout directory
-        path = basename+'/struc/gpickle/'+self.filename
+        path = os.path.join(basename,'struc','gpickle',self.filename)
         if not os.path.isdir(path):
            os.mkdir(path)
         for g in self.lbltg:
             try:
                 if g in ['v','i']:
                     gname1 ='G'+g
-                    write_gpickle(getattr(self,gname1),basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle')
+                    write_gpickle(getattr(self,gname1),os.path.join(basename,'struc','gpickle','G'+g+'_'+self.filename+'.gpickle'))
                 else:
                     gname='G'+g
-                    write_gpickle(getattr(self,gname),path+'/G'+g+'.gpickle')
+                    write_gpickle(getattr(self,gname),os.path.join(path,'G'+g+'.gpickle'))
             except:
                 raise NameError('G'+g+' graph cannot be saved, probably because it has not been built')
         # save dictionnary which maps string interaction to [interactionnode, interaction type]
         if 't' in self.lbltg:
-            write_gpickle(getattr(self,'ldiffin'),path+'/ldiffin.gpickle')
-            write_gpickle(getattr(self,'ldiffout'),path+'/ldiffout.gpickle')
-        write_gpickle(getattr(self,'dca'),path+'/dca.gpickle')
+            write_gpickle(getattr(self,'ldiffin'),os.path.join(path,'ldiffin.gpickle'))
+            write_gpickle(getattr(self,'ldiffout'),os.path.join(path,'ldiffout.gpickle'))
+        write_gpickle(getattr(self,'dca'),os.path.join(path,'dca.gpickle'))
 
 
         root,ext = os.path.splitext(self.filename)
@@ -4816,15 +4816,15 @@ class Layout(PyLayers):
 
         """
         graphs=['s','t','c','v','i','r','w']
-        path = basename+'/struc/gpickle/'+self.filename
+        path = os.path.join(basename,'struc','gpickle',self.filename)
         for g in graphs:
             try:
                 if g in ['v','i']:
                     gname1 ='G'+g
-                    setattr(self, gname1, read_gpickle(basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle'))
+                    setattr(self, gname1, read_gpickle(os.path.join(basename,'struc','gpickle','G'+g+'_'+self.filename+'.gpickle')))
                 else:
                     gname='G'+g
-                    setattr(self, gname,read_gpickle(path+'/G'+g+'.gpickle'))
+                    setattr(self, gname,read_gpickle(os.path.join(path,'G'+g+'.gpickle')))
                 self.lbltg.extend(g)
             except:
                 pass
@@ -4860,9 +4860,9 @@ class Layout(PyLayers):
                     self.Gs.node[k]['ncycles'].append(-1)
         # load dictionnary which maps string interaction to [interactionnode, interaction type]
         if 't' in graphs :
-            setattr(self,'ldiffin', read_gpickle(path+'/ldiffin.gpickle'))
-            setattr(self,'ldiffout', read_gpickle(path+'/ldiffout.gpickle'))
-        setattr(self,'dca', read_gpickle(path+'/dca.gpickle'))
+            setattr(self,'ldiffin', read_gpickle(os.path.join(path,'ldiffin.gpickle')))
+            setattr(self,'ldiffout', read_gpickle(os.path.join(path,'ldiffout.gpickle')))
+        setattr(self,'dca', read_gpickle(os.path.join(path,'dca.gpickle')))
 
 
     def buildGt(self):

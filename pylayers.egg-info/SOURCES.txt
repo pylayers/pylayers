@@ -6,6 +6,7 @@ pylayers.egg-info/SOURCES.txt
 pylayers.egg-info/dependency_links.txt
 pylayers.egg-info/requires.txt
 pylayers.egg-info/top_level.txt
+pylayers/antprop/SalehValenzuela.py
 pylayers/antprop/__init__.py
 pylayers/antprop/antenna.py
 pylayers/antprop/antssh.py
@@ -92,7 +93,6 @@ pylayers/network/prioritydict.py
 pylayers/network/show.py
 pylayers/network/wsn.py
 pylayers/signal/DF.py
-pylayers/signal/EnergyDetector.py
 pylayers/signal/__init__.py
 pylayers/signal/baseband.py
 pylayers/signal/bsignal.py

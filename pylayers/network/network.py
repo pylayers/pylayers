@@ -1691,12 +1691,12 @@ class Network(PyLayers,nx.MultiDiGraph):
         typ = nx.get_node_attributes(self,'typ')
         if self.idx == 0:
             entete = 'NodeID, True Position x, True Position y, Est Position x, Est Position y, Timestamp\n'
-            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/simulation.txt','write')
+            file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'simulation.txt'),'write')
             file.write(entete)
             file.close()
 
         try:
-            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/simulation.txt','a')
+            file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'simulation.txt'),'a')
             for n in self.nodes():
                 if typ[n] != 'ap':
                     data = n + ',' + str(pos[n][0]) + ',' + str(pos[n][1]) + ',' + str(pe[n][0][0]) + ',' + str(pe[n][0][1]) + ',' +pyu.timestamp(S.now()) +',\n'

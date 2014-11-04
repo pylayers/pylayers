@@ -511,7 +511,7 @@ class ScalChannel(object):
         return(ri)
 
     def doddoa(self):
-        """ doddoa() : DoD / DoA diagram
+        """ doddoa() : DoD | DoA diagram
 
         """
         dod = self.dod

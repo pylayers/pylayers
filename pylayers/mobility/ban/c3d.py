@@ -147,7 +147,7 @@ def read_header(_filename='serie_017.c3d'):
     _filename : string
     verbose : boolean
     """
-    FullFileName = pyu.getlong(_filename, 'body/c3d')
+    FullFileName = pyu.getlong(_filename, os.path.join('body','c3d'))
     Markers = []
     VideoFrameRate = 0
     AnalogSignals = []
@@ -253,7 +253,7 @@ def read_c3d(_filename='07_01.c3d',verbose=False):
 
     """
 
-    FullFileName = pyu.getlong(_filename, 'body/c3d')
+    FullFileName = pyu.getlong(_filename, os.path.join('body','c3d'))
     Markers = []
     VideoFrameRate = 0
     AnalogSignals = []
@@ -749,7 +749,7 @@ def ReadC3d(_filename='07_01.c3d', verbose=False):
     if ('/' or '\\') in _filename:
         FullFileName=_filename
     else: 
-        FullFileName = pyu.getlong(_filename, 'body/c3d')
+        FullFileName = pyu.getlong(_filename, os.path.join('body','c3d'))
     Markers = []
     VideoFrameRate = 0
     AnalogSignals = []
