@@ -8,7 +8,7 @@ By doing so, you're installing most of the required dependencies.
 
 1 - Download Anaconda from https://store.continuum.io/cshop/anaconda/
 2 - Install Anaconda with the given command ( $bash Anaconda-<version>-<plateform>.sh ) . Say yes to add Anaconda to your path
-3 - Run installer_linux file from the pylayers directory
+3 - Run "./installer.bat" file from the pylayers directory
 4 - Set environement Variables :
 
 It is then required to define the two enviroment variables PYLAYERS and BASENAME
@@ -29,7 +29,7 @@ Note : The PYLAYERS environement variable MUST be set in the directory conatinin
 
 
 1 - Download and Install Anaconda from https://store.continuum.io/cshop/anaconda/
-2 - Run installer_win.bat
+2 - Run installer.bat
 3 - Download the Shapely package corresponding to your platform from http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely *
 4 - Install shapely using the downloaded file
 5 - Set environement Variables :
