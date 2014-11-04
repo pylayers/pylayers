@@ -53,9 +53,10 @@ class CorSer(PyLayers):
             self.mocap = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35]
 
         if day==12:
-            stcr = []
-            shkb = []
-            sbs  = []
+            self.stcr = [22]
+            self.shkb = []
+            self.sbs  = []
+            self.mocap =[]
 
         if serie in self.shkb:
             self.loadhkb(serie=serie,day=day,source=source)
@@ -356,9 +357,11 @@ bernard
         # iTCR : (MAC , Name)
         # dTCR : (NodeId, Name)
         #
+
         self.idTCR={}
         for k in self.dTCR:
             self.idTCR[self.dTCR[k]]=k
+
 
         dTCRni={}
         for k in self.TNET.keys():
