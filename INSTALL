@@ -29,10 +29,9 @@ Note : The PYLAYERS environement variable MUST be set in the directory conatinin
 
 
 1 - Download and Install Anaconda from https://store.continuum.io/cshop/anaconda/
-2 - Run installer.bat
-3 - Download the Shapely package corresponding to your platform from http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely *
-4 - Install shapely using the downloaded file
-5 - Set environement Variables :
+2 - Download and Instal the Shapely package corresponding to your platform from http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely *
+3 - Run installer.bat
+4 - Set environement Variables :
     Procedure for WinXP :  http://support.microsoft.com/kb/310519/fr-fr
     Procedure for Vista/windows 7: Start -> Right click on computer -> Properties -> Advanced system parameters -> Environement variables
 
