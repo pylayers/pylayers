@@ -52,6 +52,7 @@ import matplotlib.collections as mc
 from cStringIO import StringIO
 from matplotlib.collections import LineCollection
 import mpl_toolkits.mplot3d.art3d as cc
+import os 
 import pdb
 
 
