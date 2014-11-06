@@ -51,12 +51,13 @@ class CorSer(PyLayers):
             self.shkb = [5,6,13,14,15,16,21,22,23,24,27,28,29,30,31,32,33,34,35]
             self.sbs  = [5,6,7,8,13,14,15,16,21,22,23,24,27,28,29,30,31,32,33,34,35]
             self.mocap = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35]
-
+            self.interferers =[]
         if day==12:
-            self.stcr = [22]
-            self.shkb = []
-            self.sbs  = []
-            self.mocap =[]
+            self.stcr = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+            self.shkb = []#[9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+            self.sbs  = []#[9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+            self.mocap =[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+            self.mocapinterf = [5,6,7,8,13,14,15,16,21,22,23,24,]
 
         if serie in self.shkb:
             self.loadhkb(serie=serie,day=day,source=source)
@@ -66,6 +67,7 @@ class CorSer(PyLayers):
 
         if serie in self.sbs:
             self.loadBS(serie=serie,day=day)
+
 
         if self.typ=='FULL':
             self._filename = 'Sc' + self.scenario + '_S' + str(self.serie) + '_R' + str(self.run) + '_' + self.typ.capitalize()
@@ -83,12 +85,20 @@ class CorSer(PyLayers):
         self.loadcam()
 
         # BODY
-        self.subject = [str(self.log['Subject'].values[0])]
+        self.subject = str(self.log['Subject'].values[0]).split(' ')
+        if 'Jihad' in self.subject:
+            uj = self.subject.index('Jihad')
+            self.subject[uj]='Jihan'
+
         if serie in self.mocap :
             self.loadbody(serie=serie,day=day)
             self._distancematrix()
             self.computedevpdf()
-            self.B.traj.Lfilename=copy.copy(self.L.filename)
+            if isinstance(self.B,dict):
+                for b in self.B:
+                    self.B[b].traj.Lfilename=copy.copy(self.L.filename)
+            else :
+                self.B.traj.Lfilename=copy.copy(self.L.filename)
 
         self.title1 = 'Scenario:'+str(self.scenario)+' Serie:'+str(self.serie)+' Run:'+str(self.run)
         self.title2 = 'Type:'+str(self.typ)+ ' Subject:'+str(self.subject[0])
@@ -268,23 +278,38 @@ bernard
     def loadbody(self,day=11,serie=''):
         """ load log file
         """
-        self.B=[]
-        for subject in self.subject:
-
+        self.B={}
+        color=['LightBlue','YellowGreen','PaleVioletRed','white','white','white','white','white','white','white']
+        for us,subject in enumerate(self.subject):
+            print "load ",subject, " body\n"
             seriestr = str(self.serie).zfill(3)
             if day == 11:
                 filemocap = os.path.join(self.rootdir,'RAW',str(self.day)+'-06-2014','MOCAP','serie_'+seriestr+'.c3d')
             elif day == 12:
                 filemocap = os.path.join(self.rootdir,'RAW',str(self.day)+'-06-2014','MOCAP','Nav_serie_'+seriestr+'.c3d')
             baw = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','BodyandWear')
+            if subject =='Jihad':
+                subject ='Jihan'
             filebody = os.path.join(baw, subject + '.ini')
             filewear = os.path.join(baw,subject + '_'  +str(self.day)+'-06-2014_' + self.typ + '.ini')
 
-            self.B.append(Body(_filebody=filebody,
+            self.B.update({subject:Body(_filebody=filebody,
                              _filemocap=filemocap,unit = 'mm', loop=False,
                              _filewear=filewear,
-                             centered=False))
+                             centered=False,
+                             multi_subject_mocap=True,
+                             color=color[us])})
 
+        if self.serie in self.mocapinterf:
+            self.interf = ['Anis_Cylindre:',
+                     'Benoit_Cylindre:',
+                     'Bernard_Cylindre:',
+                     'Claude_Cylindre:',
+                     'Meriem_Cylindre:']
+
+            for i in self.interf:
+                print "load ",i, " interfering body"
+                self.B.update({i:Cylinder(name=i,_filemocap=filemocap,unit = 'mm')})
 
         if len(self.subject) == 1:
             self.B = self.B[0]
@@ -510,27 +535,61 @@ bernard
             self.dist_nodes : list of used nodes (useful to make the association ;) )
         """
 
-        tdev = []
-        for k in self.B.dev:
-            tdev.append(self.B.dev[k]['uc3d'][0])
-        tdev = np.array(tdev)
 
-        # pnb : nframe x ndevices x 3
-        pnb = self.B._f[:,tdev,:]
+        # tdev = []
+        # for k in self.B.dev:
+        #     tdev.append(self.B.dev[k]['uc3d'][0])
+        # tdev = np.array(tdev)
+
+        # # pnb : nframe x ndevices x 3
+        # pnb = self.B._f[:,tdev,:]
+
+        # ln = []
+        # uin = []
+        # if ('HK' in self.typ) or ('FULL' in self.typ):
+        #     uin.extend(['HKB:1','HKB:2','HKB:3','HKB:4'])
+        # if ('TCR' in self.typ) or ('FULL' in self.typ):
+        #     uin.extend(['TCR:32','TCR:24','TCR:27','TCR:28'])
+        # ln = uin + self.B.dev.keys()
+        # pin = np.array([self.din[d]['p'] for d in uin])
+        # pin2=np.empty((pnb.shape[0],pin.shape[0],pin.shape[1]))
+        # pin2[:,:,:]=pin
+        # p = np.concatenate((pin2,pnb),axis=1)
+        # self.dist = np.sqrt(np.sum((p[:,:,np.newaxis,:]-p[:,np.newaxis,:,:])**2,axis=3))
+        # self.dist_nodes = ln
+
+        if not isinstance(self.B,dict):
+            B={self.subject[0]:self.B}
+        else :
+            B=self.B
+
+
+        bn= []
+
+        for b in B:
+            if 'dev' in dir(B[b]):
+                tdev=[]
+                for k in B[b].dev:
+                    bn.append(k) 
+                    tdev.append(B[b].dev[k]['uc3d'][0])
+                tdev=np.array(tdev)
+                try:
+                    pnb = np.concatenate((pnb,B[b]._f[:,tdev,:]),axis=1)
+                except:
+                    pnb = B[b]._f[:,tdev,:]
         ln = []
         uin = []
         if ('HK' in self.typ) or ('FULL' in self.typ):
             uin.extend(['HKB:1','HKB:2','HKB:3','HKB:4'])
         if ('TCR' in self.typ) or ('FULL' in self.typ):
             uin.extend(['TCR:32','TCR:24','TCR:27','TCR:28'])
-        ln = uin + self.B.dev.keys()
+        ln = uin + bn
         pin = np.array([self.din[d]['p'] for d in uin])
         pin2=np.empty((pnb.shape[0],pin.shape[0],pin.shape[1]))
         pin2[:,:,:]=pin
         p = np.concatenate((pin2,pnb),axis=1)
         self.dist = np.sqrt(np.sum((p[:,:,np.newaxis,:]-p[:,np.newaxis,:,:])**2,axis=3))
         self.dist_nodes = ln
-
 
     def accessdm(self,a,b,techno):
         """ access to the distance matrix
@@ -714,6 +773,7 @@ bernard
         """
         defaults = { 'L':True,
                      'body':True,
+                     'subject':[],
                      'trajectory' :True,
                      'devsize':100,
                      'inodes' : True,
@@ -735,12 +795,16 @@ bernard
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
-
         cold = pyu.coldict()
         camhex = cold[kwargs['cameracolor']]
         cam_color = tuple(pyu.rgb(camhex)/255.)
         inhex = cold[kwargs['incolor']]
         in_color = tuple(pyu.rgb(inhex)/255.)
+
+        if kwargs['subject'] == []:
+            subject = self.subject
+        else:
+            subject = kwargs['subject']
 
         if kwargs['L']:
             self.L._show3(opacity=0.5)
@@ -752,30 +816,32 @@ bernard
             [mlab.text3d(v[i][1]['p'][0],v[i][1]['p'][1],v[i][1]['p'][2],v[i][0],scale=0.5)
             for i in range(len(v))]
         if kwargs['body']:
+
             if kwargs['bodytime']==[]:
-                time =np.linspace(0,self.B.time[-1],5).astype(int)
+                time =np.linspace(0,self.B[subject[0]].time[-1],5).astype(int)
                 # time=range(10,100,20)
             else :
                 time=kwargs['bodytime']
             for ki, i in enumerate(time):
-                self.B.settopos(t=i,cs=True)
-                self.B._show3(dev=True,devsize=kwargs['devsize'])
-                if kwargs['tagtraj']:
-                    X=self.B.traj[['x','y','z']].values[self.B.toposFrameId]
-                    if kwargs['tagpoffset']==[]:
-                        X[2]=X[2]+0.2
-                    else : 
-                        X=X+kwargs['tagpoffset'][ki]
-                    if kwargs['tagname']==[]:
-                        name = 't='+str(i)+'s'
-                    else :
-                        name = str(kwargs['tagname'][ki])
-                    mlab.text3d(X[0],X[1],X[2],name,scale=kwargs['fontsizetag'])
-
+                for ib,b in enumerate(subject):
+                    self.B[b].settopos(t=i,cs=True)
+                    self.B[b]._show3(dev=True,devsize=kwargs['devsize'])
+                    if kwargs['tagtraj']:
+                        X=self.B[b].traj[['x','y','z']].values[self.B[b].toposFrameId]
+                        if kwargs['tagpoffset']==[]:
+                            X[2]=X[2]+0.2
+                        else : 
+                            X=X+kwargs['tagpoffset'][ki]
+                        if kwargs['tagname']==[]:
+                            name = 't='+str(i)+'s'
+                        else :
+                            name = str(kwargs['tagname'][ki])
+                        mlab.text3d(X[0],X[1],X[2],name,scale=kwargs['fontsizetag'])
 
 
         if kwargs['trajectory']:
-            self.B.traj._show3(kwargs['trajectory_color_range'])
+            for b in subject:
+                self.B[b].traj._show3(kwargs['trajectory_color_range'])
         if kwargs['camera'] : 
             mlab.points3d(self.cam[:,0],self.cam[:,1], self.cam[:,2],scale_factor=kwargs['camerasize'],color=cam_color)
         mlab.view(-111.44127634143871,
@@ -787,11 +853,11 @@ bernard
                    24.492297713984247,
                    np.array([-0.07235499,  0.04868631, -0.00314969]))
 
-
     def anim(self):
 
-        self._show3(body=False,inname=False)
-        self.B.anim()
+        self._show3(body=False,inname=False,trajectory=False)
+        [self.B[b].anim() for b in self.B]
+
         mlab.view(-43.413544538477254,
                     74.048193730704611,
                     11.425837641867618,
@@ -2177,27 +2243,111 @@ bernard
 
 
         """
-        dev = self.B.dev.keys()
-        udev=[self.B.dev[d]['uc3d'][0] for d in dev]
-        pos = self.B._f[:,udev,:]
-        t = self.B.time
-        for d in range(len(dev)):
-            df_tmp=pd.DataFrame(pos[:,d,:],columns=['x','y','z'],index=t)
-            df_tmp[['vx','vy','vz']]=df_tmp.diff()/(t[1]-t[0])
-            df_tmp['v']=np.sqrt(np.sum(df_tmp[['vx','vy','vz']]**2,axis=1))
-            df_tmp[['ax','ay','az']]=df_tmp[['vx','vy','vz']].diff()/(t[1]-t[0])
-            df_tmp['a']=np.sqrt(np.sum(df_tmp[['ax','ay','az']]**2,axis=1))
-            df_tmp['id']=self.B.dev.keys()[d]
-            try :
-                df = pd.concat([df,df_tmp])
-            except:
-                df = df_tmp
+
+
+        if not isinstance(self.B,dict):
+            B={self.subject[0]:self.B}
+        else :
+            B=self.B
+
+        for b in B:
+            if 'dev' in dir(B[b]):
+                dev = B[b].dev.keys()
+                udev=[B[b].dev[d]['uc3d'][0] for d in dev]
+                pos = B[b]._f[:,udev,:]
+                t = B[b].time
+                for d in range(len(dev)):
+                    df_tmp=pd.DataFrame(pos[:,d,:],columns=['x','y','z'],index=t)
+                    df_tmp[['vx','vy','vz']]=df_tmp.diff()/(t[1]-t[0])
+                    df_tmp['v']=np.sqrt(np.sum(df_tmp[['vx','vy','vz']]**2,axis=1))
+                    df_tmp[['ax','ay','az']]=df_tmp[['vx','vy','vz']].diff()/(t[1]-t[0])
+                    df_tmp['a']=np.sqrt(np.sum(df_tmp[['ax','ay','az']]**2,axis=1))
+                    df_tmp['id']=B[b].dev.keys()[d]
+                    df_tmp['subject']=B[b].name
+                    try :
+                        df = pd.concat([df,df_tmp])
+                    except:
+                        df = df_tmp
 
 
         df = df.sort_index()
-        cols=['id','x','y','z','v','vx','vy','vz','a','ax','ay','az']
+        cols=['id','subject','x','y','z','v','vx','vy','vz','a','ax','ay','az']
         self.devdf=df[cols]
         
+
+
+    def export_csv(self,**kwargs):
+        """
+        """
+
+        defaults={'unit' :'mm',
+                  'tunit':'ns',
+                  'df' :[],
+                  'alias':{}}
+
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+        unit=kwargs.pop('unit')
+        tunit=kwargs.pop('tunit')
+        alias = kwargs.pop('alias')
+
+        if alias == {}:
+
+            alias={'TCR:49':4 # Nicolas TorsoLeft
+            ,'TCR:34':5 # Nicolas TorsoRight
+            ,'TCR:48':6 # Nicolas Back
+            ,'TCR:36':7 # Nicolas Shoulder
+
+            ,'TCR:2':8 # Jihad TorsoLeft
+            ,'TCR:35':9 #Jihad TorsoRight
+            ,'TCR:33':10 #Jihad Back
+            ,'TCR:37':11 #Jihad Shoulder
+
+            ,'TCR:30':12 # Eric Torso
+            ,'TCR:25':13 # Eric Back
+            ,'TCR:26':14 # Eric Shoulder
+            }
+
+        filename =pyu.getlong(self._filename,pstruc['DIRNETSAVE']) + '.csv'
+
+        df = copy.deepcopy(self.devdf)
+
+        ldf = df[['id','x','y','z']]
+
+        # rename devices
+        for k in alias:
+            u=ldf['id'] == k
+            ldf.iloc[u.values,0]=str(alias[k])
+
+        # fix position unit
+        if unit == 'm':
+            _unit = 1.
+        if unit == 'cm':
+            _unit = 1e2
+        if unit == 'mm':
+            _unit = 1e3
+
+        ldf.loc[:,'x']=ldf.loc[:,'x']*_unit
+        ldf.loc[:,'y']=ldf.loc[:,'y']*_unit
+        ldf.loc[:,'z']=ldf.loc[:,'z']*_unit
+
+        # fix time unit
+        if tunit == 'ms':
+            _tunit = 1e3
+        if tunit == 'us':
+            _tunit = 1e6
+        if tunit == 'ns':
+            _tunit = 1e9
+        
+
+        # add timestamp column
+
+        ldf['Timestamp']=ldf.index*_tunit
+
+        ldf.to_csv(filename, sep = ' ',index=False)
+
 
     def getdevp(self,a,b,technoa='HKB',technob='HKB'):
         """    get device position

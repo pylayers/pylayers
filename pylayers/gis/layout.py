@@ -8090,7 +8090,6 @@ class Layout(PyLayers):
         fos.close()
         return pg
 
-    @mlab.show
     def _show3(self,centered=False,newfig=False,opacity=1.):
         """ create a .off geomview file
 

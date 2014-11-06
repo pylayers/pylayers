@@ -48,7 +48,7 @@ python setup.py install
 
 
 
-* Despite shapely is part of the Anaconda distribution, the Windows distibution doesn't contains the libgeos depencies.
+* Despite shapely and basemap are part of the Anaconda distribution, the Windows distibution doesn't contains the libgeos depencies.
 
 
 
