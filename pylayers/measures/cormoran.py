@@ -312,8 +312,8 @@ bernard
                 print "load ",i, " interfering body"
                 self.B.update({i:Cylinder(name=i,_filemocap=filemocap,unit = 'mm')})
 
-        if len(self.subject) == 1:
-            self.B = self.B[self.subject[0]]
+        # if len(self.subject) == 1:
+        #     self.B = self.B[self.subject]
 
 
     def loadTCR(self,day=11,serie='',scenario='20',run=1):
@@ -806,10 +806,6 @@ bernard
             subject = self.subject
         else:
             subject = kwargs['subject']
-        if len(subject)>1:
-            onesubject=False
-        else:
-            onesubject=True
 
         if kwargs['L']:
             self.L._show3(opacity=0.5)
@@ -823,26 +819,16 @@ bernard
         if kwargs['body']:
 
             if kwargs['bodytime']==[]:
-                if onesubject:
-                    time =np.linspace(0,self.B.time[-1],5).astype(int)
-                else:
-                    time =np.linspace(0,self.B[subject[0]].time[-1],5).astype(int)
+                time =np.linspace(0,self.B[subject[0]].time[-1],5).astype(int)
                 # time=range(10,100,20)
             else :
                 time=kwargs['bodytime']
             for ki, i in enumerate(time):
                 for ib,b in enumerate(subject):
-                    if onesubject:
-                        self.B.settopos(t=i,cs=True)
-                        self.B._show3(dev=True,devsize=kwargs['devsize'])
-                    else:
-                        self.B[b].settopos(t=i,cs=True)
-                        self.B[b]._show3(dev=True,devsize=kwargs['devsize'])
+                    self.B[b].settopos(t=i,cs=True)
+                    self.B[b]._show3(dev=True,devsize=kwargs['devsize'])
                     if kwargs['tagtraj']:
-                        if onesubject:
-                            X=self.B.traj[['x','y','z']].values[self.B.toposFrameId]
-                        else:
-                            X=self.B[b].traj[['x','y','z']].values[self.B[b].toposFrameId]
+                        X=self.B[b].traj[['x','y','z']].values[self.B[b].toposFrameId]
                         if kwargs['tagpoffset']==[]:
                             X[2]=X[2]+0.2
                         else : 
@@ -856,10 +842,7 @@ bernard
 
         if kwargs['trajectory']:
             for b in subject:
-                if onesubject:
-                    self.B.traj._show3(kwargs['trajectory_color_range'])
-                else:
-                    self.B[b].traj._show3(kwargs['trajectory_color_range'])
+                self.B[b].traj._show3(kwargs['trajectory_color_range'])
         if kwargs['camera'] : 
             mlab.points3d(self.cam[:,0],self.cam[:,1], self.cam[:,2],scale_factor=kwargs['camerasize'],color=cam_color)
         mlab.view(-111.44127634143871,
@@ -1116,7 +1099,7 @@ bernard
             var = 10*np.log10(1./(self.dist[:,dhk[0],dhk[1]])**2)
         else :
             var = self.dist[:,dhk[0],dhk[1]]
-        gt = ax.plot(self.B.time,var)
+        gt = ax.plot(self.B[self.B.keys()[0]].time,var)
 
         sab = self.hkb[a+'-'+b].values
         sabt = self.hkb[a+'-'+b].index
@@ -1256,7 +1239,8 @@ bernard
 
         Parameters
         ----------
-
+        subject: str
+            subject to display () if '', take the fist one from self.subject)
         showvel :  boolean
             display filtered velocity 
         velth: float (0.7)
@@ -1279,7 +1263,8 @@ bernard
         >>> plt.title('hatch = visibility / gray= mobility')
         >>> plt.show()
         """
-        defaults = { 'fig':[],
+        defaults = { 'subject':'',
+                    'fig':[],
                     'figsize':(10,10),
                      'ax':[],
                      'showvel':False,
@@ -1310,8 +1295,12 @@ bernard
         else :
             ax = kwargs['ax']
 
+        if kwargs['subject']=='':
+            subject=self.B.keys()[0]
+        else:
+            subject=kwargs['subject']
 
-        V=self.B.traj[['vx','vy']].values
+        V=self.B[subject].traj[['vx','vy']].values
         Vi=np.sqrt((V[:,0]**2+V[:,1]**2))
         f=DF()
         f.butter(kwargs['fo'],kwargs['fw'],'lowpass')
@@ -1330,7 +1319,7 @@ bernard
         if kwargs['showvel']:
             fig2 = plt.figure()
             ax2=fig2.add_subplot(111)
-            ax2.plot(self.B.time[:-2],Vif)
+            ax2.plot(self.B[subject].time[:-2],Vif)
             ax2.plot(Vif)
             cursor2 = Cursor(ax2, useblit=True, color='gray', linewidth=1)
 
@@ -1346,7 +1335,7 @@ bernard
             sunu = unu.shape
         nullr=null[unu].reshape(sunu[0]/2,2)
 
-        fig , ax =plu.rectplot(self.B.time,nullr,ylim=kwargs['ylim'],
+        fig , ax =plu.rectplot(self.B[subject].time,nullr,ylim=kwargs['ylim'],
                                 color=kwargs['color'],
                                 hatch=kwargs['hatch'],
                                 fig=fig,ax=ax)
@@ -1367,8 +1356,8 @@ bernard
             elif kwargs['label_pos'] == 'bottom':
                 yposM = kwargs['ylim'][0]+kwargs['label_pos_off']+0.5
                 yposS = kwargs['ylim'][0]+kwargs['label_pos_off']+0.5
-            xposM= self.B.time[nullr.mean(axis=1).astype(int)]
-            xposS= self.B.time[inullr.mean(axis=1).astype(int)]
+            xposM= self.B[subject].time[nullr.mean(axis=1).astype(int)]
+            xposS= self.B[subject].time[inullr.mean(axis=1).astype(int)]
             [ax.text(x,yposM,kwargs['label_mob']+str(ix+1),
                         horizontalalignment='center',
                         verticalalignment='center')
@@ -1719,7 +1708,8 @@ bernard
             'HKB' | 'TCR' | 'FULL'
         """
 
-        defaults = { 't0':0,
+        defaults = { 'subject':'',
+                     't0':0,
                      't1':-1,
                      'fig':[],
                      'ax':[],
@@ -1738,6 +1728,12 @@ bernard
         for k in defaults:
             if k not in kwargs:
                 kwargs[k] = defaults[k]
+
+        if kwargs['subject']=='':
+            subject=self.B.keys()[0]
+        else:
+            subject=kwargs['subject']
+
 
         t0 =kwargs.pop('t0')
         t1 =kwargs.pop('t1')
@@ -1804,7 +1800,7 @@ bernard
                     ax.set_ylabel(u'$10log_{10}m^{-2}$',fontsize=fontsize)
 
 
-            ax.plot(self.B.time,var,label=label,**kwargs)
+            ax.plot(self.B[subject].time,var,label=label,**kwargs)
         #
         # TCR | Full
         #
@@ -1831,7 +1827,7 @@ bernard
                 var = self.dist[:,dtcr[0],dtcr[1]]
                 if log :
                     var = gamma*10*np.log10(var)
-            ax.plot(self.B.time,var,**kwargs)
+            ax.plot(self.B[subject].time,var,**kwargs)
 
 
         if visibility:
@@ -2068,6 +2064,9 @@ bernard
         """
         # display nodes
         A,B = self.getdevp(a,b,technoa=technoa,technob=technob)
+        a,ia,ba,subjecta = self.devmapper(a,technoa)
+        b,ib,bb,subjectb = self.devmapper(b,technob)
+
         if A.ndim==2:
             plt.plot(A[iframe,0],A[iframe,1],'ob')
             plt.text(A[iframe,0],A[iframe,1],a)
@@ -2086,24 +2085,24 @@ bernard
         # display body
 
         #pc = self.B.d[:,2,iframe] + self.B.pg[:,iframe].T
-        pc0 = self.B.d[:,0,iframe] + self.B.pg[:,iframe].T
-        pc1 = self.B.d[:,1,iframe] + self.B.pg[:,iframe].T
-        pc15 = self.B.d[:,15,iframe] + self.B.pg[:,iframe].T
+        pc0 = self.B[subjecta].d[:,0,iframe] + self.B[subjecta].pg[:,iframe].T
+        pc1 = self.B[subjecta].d[:,1,iframe] + self.B[subjecta].pg[:,iframe].T
+        pc15 = self.B[subjecta].d[:,15,iframe] + self.B[subjecta].pg[:,iframe].T
         #plt.plot(pc0[0],pc0[1],'og')
         #plt.text(pc0[0]+0.1,pc0[1],str(iframe))
         #plt.plot(pc1[0],pc1[1],'og')
         #plt.plot(pc15[0],pc15[1],'og')
-        #ci00   = plt.Circle((pc0[0],pc0[1]),self.B.sl[0,2],color='green',alpha=0.6)
-        #ci01   = plt.Circle((pc1[0],pc1[1]),self.B.sl[0,2],color='green',alpha=0.1)
-        #ci100 = plt.Circle((pc0[0],pc0[1]),self.B.sl[10,2],color='red',alpha=0.1)
-        ci1015 = plt.Circle((pc15[0],pc15[1]),self.B.sl[10,2],color='green',alpha=0.5)
+        #ci00   = plt.Circle((pc0[0],pc0[1]),self.B[subjecta].sl[0,2],color='green',alpha=0.6)
+        #ci01   = plt.Circle((pc1[0],pc1[1]),self.B[subjecta].sl[0,2],color='green',alpha=0.1)
+        #ci100 = plt.Circle((pc0[0],pc0[1]),self.B[subjecta].sl[10,2],color='red',alpha=0.1)
+        ci1015 = plt.Circle((pc15[0],pc15[1]),self.B[subjecta].sl[10,2],color='green',alpha=0.5)
         plt.axis('equal')
         ax = plt.gca()
         ax.add_patch(ci1015)
         #ax.add_patch(ci01)
         #ax.add_patch(ci100)
         #ax.add_patch(ci1015)
-        #its = self.B.intersectBody(A[iframe,:],B[iframe,:],topos=False,frameId=iframe)
+        #its = self.B[subjecta].intersectBody(A[iframe,:],B[iframe,:],topos=False,frameId=iframe)
         #x.set_title('frameId :'+str(iframe)+' '+str(its.T))
 
 
@@ -2120,6 +2119,10 @@ bernard
         """
 
         A,B = self.getdevp(a,b,technoa,technob)
+        aa,ia,ba,subjecta= self.devmapper(a,technoa)
+        ab,ib,bb,subjectb= self.devmapper(b,technob)
+
+
         if 'AP' not in a:
             Nframe = A.shape[0]
         if 'AP' not in b:
@@ -2131,9 +2134,16 @@ bernard
         # B : Nframe x 3
         # B.pg : 3 x Nframe
         #
-        if self.B.centered:
-            A = A-self.B.pg.T
-            B = B-self.B.pg.T
+        if subjecta != '':
+            subject = subjecta
+        elif subjectb != '':
+            subject = subjectb
+        else :
+            raise AttributeError('Visibility can only be determine on a body for now')
+        if self.B[subject].centered:
+            A = A-self.B[subject].pg.T
+            B = B-self.B[subject].pg.T
+
 
         for k in iframe:
             if len(np.shape(A))<2:
@@ -2141,7 +2151,7 @@ bernard
             if len(np.shape(B))<2:
                 B=B[np.newaxis,:]*np.ones((len(A),3)) 
 
-            its = self.B.intersectBody(A[k,:],B[k,:],topos=False,frameId=k)
+            its = self.B[subject].intersectBody(A[k,:],B[k,:],topos=False,frameId=k)
             tvisi.append(its.any())
         visi = pd.Series(tvisi,index=iframe/100.)
         #return(visi,iframe)
@@ -2161,6 +2171,9 @@ bernard
         """
 
         A,B = self.getdevp(a,b,technoa,technob)
+        aa,ia,ba,subjecta= self.devmapper(a,technoa)
+        ab,ib,bb,subjectb= self.devmapper(b,technob)
+
         if 'AP' not in a:
             Nframe = A.shape[0]
         if 'AP' not in b:
@@ -2172,13 +2185,20 @@ bernard
         # B : Nframe x 3
         # B.pg : 3 x Nframe
         #
-        if self.B.centered:
-            A = A-self.B.pg.T
-            B = B-self.B.pg.T
+        if subjecta != '':
+            subject = subjecta
+        elif subjectb != '':
+            subject = subjectb
+        else :
+            raise AttributeError('Visibility can only be determine on a body for now')
+
+        if self.B[subject].centered:
+            A = A-self.B[subject].pg.T
+            B = B-self.B[subject].pg.T
 
         for t in trange:
-            fid = self.B.posvel(self.B.traj,t)[0]
-            its = self.B.intersectBody(A[fid,:],B[fid,:],topos=False,frameId=fid)
+            fid = self.B[subject].posvel(self.B[subjecta].traj,t)[0]
+            its = self.B[subject].intersectBody(A[fid,:],B[fid,:],topos=False,frameId=fid)
             tvisi.append(its.any())
         visi = pd.Series(tvisi,index=trange)
         #return(visi,iframe)
@@ -2396,47 +2416,15 @@ bernard
 
         """
 
-
-        if isinstance(a,str):
-            if technoa == 'TCR':
-                ia = self.dTCR[a]
-                nna='TCR:'+str(ia)
-            elif technoa == 'HKB':
-                ia = self.dHKB[a]
-                nna='HKB:'+str(ia)
-
-        else:
-            if technoa == 'TCR':
-                ia = a
-                a = self.idTCR[a]
-                nna='TCR:'+str(ia)
-            elif technoa == 'HKB':
-                ia = a
-                a = self.idHKB[a]
-                nna='HKB:'+str(ia)
-
-
-        if isinstance(b,str):
-            if technob == 'TCR':
-                ib = self.dTCR[b]
-                nnb='TCR:'+str(ib)
-            elif technob == 'HKB':
-                ib = self.dHKB[b]
-                nnb='HKB:'+str(ib)
-        else:
-            if technob == 'TCR':
-                ib = b
-                b = self.idTCR[b]
-                nnb='TCR:'+str(ib)
-            elif technob == 'HKB':
-                ib = b
-                b = self.idHKB[b]
-                nnb='HKB:'+str(ib)
+        a,ia,nna,subjecta = self.devmapper(a,technoa)
+        b,ib,nnb,subjectb = self.devmapper(b,technob)
+        
         # node a
         # body node
-        if nna in self.B.dev.keys():
-            unna = self.B.dev[nna]['uc3d'][0]
-            pa = self.B._f[:,unna,:]
+
+        if subjecta != '':
+            unna = self.B[subjecta].dev[nna]['uc3d'][0]
+            pa = self.B[subjecta]._f[:,unna,:]
         # infra node
         else :
             pa = self.din[nna]['p']
@@ -2444,14 +2432,75 @@ bernard
 
         # node b
         # body node
-        if nnb in self.B.dev.keys():
-            unnb = self.B.dev[nnb]['uc3d'][0]
-            pb = self.B._f[:,unnb,:]
+        if subjectb != '':
+            unnb = self.B[subjectb].dev[nnb]['uc3d'][0]
+            pb = self.B[subjectb]._f[:,unnb,:]
         # infra node
         else :
             pb = self.din[nnb]['p']
 
         return pa,pb
+
+
+    def devmapper(self,a,techno='HKB'):
+        """  retrieve name of device if input is number 
+             or 
+             retrieve number of device if input is name
+
+        Parameters
+        ----------
+
+        a : str | int
+            name | id
+        techno : str
+            radio techno
+
+
+        Return
+        ------
+
+        a : string
+            dev name
+        ia : int
+            dev number
+        ba : string
+            dev refernce in body
+        subject : string
+            body owning the device
+        
+
+        """
+        subject=''
+        if isinstance(a,str):
+            if techno == 'TCR':
+                ia = self.dTCR[a]
+                nna='TCR:'+str(ia)
+            elif techno == 'HKB':
+                ia = self.dHKB[a]
+                ba='HKB:'+str(ia)
+
+            
+            for b in self.B:
+                if ba in self.B[b].dev.keys():
+                    subject = b
+                    break
+
+        else:
+            if techno == 'TCR':
+                ia = a
+                a = self.idTCR[a]
+                nna='TCR:'+str(ia)
+            elif techno == 'HKB':
+                ia = a
+                a = self.idHKB[a]
+                ba='HKB:'+str(ia)
+
+            for b in self.B:
+                if ba in self.B[b].dev.keys():
+                    subject = b
+                    break
+
+        return a,ia,ba,subject
 
 
     def align(self,devdf,hkbdf):
