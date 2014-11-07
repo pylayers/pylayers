@@ -313,7 +313,7 @@ bernard
                 self.B.update({i:Cylinder(name=i,_filemocap=filemocap,unit = 'mm')})
 
         if len(self.subject) == 1:
-            self.B = self.B[0]
+            self.B = self.B[self.subject[0]]
 
 
     def loadTCR(self,day=11,serie='',scenario='20',run=1):
@@ -806,6 +806,10 @@ bernard
             subject = self.subject
         else:
             subject = kwargs['subject']
+        if len(subject)>1:
+            onesubject=False
+        else:
+            onesubject=True
 
         if kwargs['L']:
             self.L._show3(opacity=0.5)
@@ -819,16 +823,26 @@ bernard
         if kwargs['body']:
 
             if kwargs['bodytime']==[]:
-                time =np.linspace(0,self.B[subject[0]].time[-1],5).astype(int)
+                if onesubject:
+                    time =np.linspace(0,self.B.time[-1],5).astype(int)
+                else:
+                    time =np.linspace(0,self.B[subject[0]].time[-1],5).astype(int)
                 # time=range(10,100,20)
             else :
                 time=kwargs['bodytime']
             for ki, i in enumerate(time):
                 for ib,b in enumerate(subject):
-                    self.B[b].settopos(t=i,cs=True)
-                    self.B[b]._show3(dev=True,devsize=kwargs['devsize'])
+                    if onesubject:
+                        self.B.settopos(t=i,cs=True)
+                        self.B._show3(dev=True,devsize=kwargs['devsize'])
+                    else:
+                        self.B[b].settopos(t=i,cs=True)
+                        self.B[b]._show3(dev=True,devsize=kwargs['devsize'])
                     if kwargs['tagtraj']:
-                        X=self.B[b].traj[['x','y','z']].values[self.B[b].toposFrameId]
+                        if onesubject:
+                            X=self.B.traj[['x','y','z']].values[self.B.toposFrameId]
+                        else:
+                            X=self.B[b].traj[['x','y','z']].values[self.B[b].toposFrameId]
                         if kwargs['tagpoffset']==[]:
                             X[2]=X[2]+0.2
                         else : 
@@ -842,7 +856,10 @@ bernard
 
         if kwargs['trajectory']:
             for b in subject:
-                self.B[b].traj._show3(kwargs['trajectory_color_range'])
+                if onesubject:
+                    self.B.traj._show3(kwargs['trajectory_color_range'])
+                else:
+                    self.B[b].traj._show3(kwargs['trajectory_color_range'])
         if kwargs['camera'] : 
             mlab.points3d(self.cam[:,0],self.cam[:,1], self.cam[:,2],scale_factor=kwargs['camerasize'],color=cam_color)
         mlab.view(-111.44127634143871,
