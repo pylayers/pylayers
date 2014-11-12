@@ -530,7 +530,7 @@ bernard
 
 
     def _distancematrix(self):
-        """Compute the ditance matrix between the nodes 
+        """Compute the ditance matrix between the nodes
 
             self.dist : (nb frame x nb_node x nb_node)
             self.dist_nodes : list of used nodes (useful to make the association ;) )
@@ -571,7 +571,7 @@ bernard
             if 'dev' in dir(B[b]):
                 tdev=[]
                 for k in B[b].dev:
-                    bn.append(k) 
+                    bn.append(k)
                     tdev.append(B[b].dev[k]['uc3d'][0])
                 tdev=np.array(tdev)
                 try:
@@ -744,7 +744,7 @@ bernard
         tagtraj : boolean
             tag on trajectory at the 'bodytime' instants (True)
         tagname : list
-            name of the tagtrajs 
+            name of the tagtrajs
         tagpoffset : ndarray
             offset of the tag positions (nb_of_tags x 3)
         fontsizetag : float
@@ -757,7 +757,7 @@ bernard
             display infra strucutre node name
         incolor: str
             color of infrastructure nodes ('r')
-        insize 
+        insize
             size of infrastrucutre nodes (0.1)
 
 
@@ -831,7 +831,7 @@ bernard
                         X=self.B[b].traj[['x','y','z']].values[self.B[b].toposFrameId]
                         if kwargs['tagpoffset']==[]:
                             X[2]=X[2]+0.2
-                        else : 
+                        else :
                             X=X+kwargs['tagpoffset'][ki]
                         if kwargs['tagname']==[]:
                             name = 't='+str(i)+'s'
@@ -843,7 +843,7 @@ bernard
         if kwargs['trajectory']:
             for b in subject:
                 self.B[b].traj._show3(kwargs['trajectory_color_range'])
-        if kwargs['camera'] : 
+        if kwargs['camera'] :
             mlab.points3d(self.cam[:,0],self.cam[:,1], self.cam[:,2],scale_factor=kwargs['camerasize'],color=cam_color)
         mlab.view(-111.44127634143871,
                     60.40674368088245,
@@ -977,7 +977,7 @@ bernard
             time=time[0]
 
 
-        
+
         sab = self.hkb[a+'-'+b].values
         sabt = self.hkb[a+'-'+b].index
         hkb = axs[1].plot(sabt,sab)
@@ -994,7 +994,7 @@ bernard
         F0 = vc.get_frame(0)
         I0 = img_as_ubyte(F0)
         axs[0].imshow(F0)
-        
+
 
         ########
         # slider
@@ -1006,7 +1006,7 @@ bernard
 
         # vertc = [(0,-10),(0,-10),(0,10),(0,-10)]
         # poly = plt.Polygon(vertc)
-        # pp = axs[1].add_patch(poly)  
+        # pp = axs[1].add_patch(poly)
 
 
         def update_x(val):
@@ -1023,7 +1023,7 @@ bernard
         #         pass
         #     vertc = [(sabt[0]+val,min(sab)-10),(sabt[0]+val,min(sab)-10),(sabt[0]+val,max(sab)+10),(sabt[0]+val,max(sab)-10)]
         #     poly = plt.Polygon(vertc)
-        #     pp = axs[1].add_patch(poly)  
+        #     pp = axs[1].add_patch(poly)
         # sliderx.on_changed(cursor)
 
         def plus(event):
@@ -1149,14 +1149,14 @@ bernard
 
         Attributes
         ----------
-        color: 
-            fill color 
-        hatch: 
+        color:
+            fill color
+        hatch:
             hatch type
         label_pos: ('top'|'bottom'|'')
-            postion of the label 
+            postion of the label
         label_pos_off: float
-            offset of postion of the label 
+            offset of postion of the label
         label_mob: str
             prefix of label in mobility
         label_stat: str
@@ -1189,7 +1189,7 @@ bernard
 
         for k in defaults:
             if k not in kwargs:
-                kwargs[k] = defaults[k]                    
+                kwargs[k] = defaults[k]
 
         if kwargs['fig']==[]:
             fig = plt.figure(figsize=kwargs['figsize'])
@@ -1242,11 +1242,11 @@ bernard
         subject: str
             subject to display () if '', take the fist one from self.subject)
         showvel :  boolean
-            display filtered velocity 
+            display filtered velocity
         velth: float (0.7)
             velocity threshold
         fo : int (5)
-            filter order 
+            filter order
         fw: float (0.02)
             0 < fw < 1  (fN <=> 1)
         time_offset : int
@@ -1283,7 +1283,7 @@ bernard
 
         for k in defaults:
             if k not in kwargs:
-                kwargs[k] = defaults[k]                    
+                kwargs[k] = defaults[k]
 
         if kwargs['fig']==[]:
             fig = plt.figure(figsize=kwargs['figsize'])
@@ -1345,9 +1345,9 @@ bernard
         bb = np.insert(inullr[:,1],0,0)
         ee = np.hstack((inullr[:,0],null[-1]))
         inullr = np.array((bb,ee)).T
-        # remove last 
+        # remove last
         inullr = inullr[:-1,:]
-        
+
         if kwargs['label_pos']!='':
             if kwargs['label_pos'] == 'top':
                 yposM = kwargs['ylim'][1]-kwargs['label_pos_off']+0.5
@@ -1394,7 +1394,7 @@ bernard
             line[0].set_xdata(x[:i])
             return line
 
-        ani = animation.FuncAnimation(fig, animate, xrange(1, len(x)), 
+        ani = animation.FuncAnimation(fig, animate, xrange(1, len(x)),
                                       interval=interval, blit=True)
         if save:
             ani.save(link+'.mp4')
@@ -1409,7 +1409,7 @@ bernard
         Parameters
         ----------
 
-        a : node name 
+        a : node name
         AP_nb=[]
         save : bool
 
@@ -1417,7 +1417,7 @@ bernard
         -------
             >>> from pylayers.measures.cormoran import *
             >>> S = CorSer(6)
-            >>> S.animhkbAP('TorsoTopLeft',['AP1','AP2','AP3','AP4'],interval=100,xstart=58,figsize=(20,2))  
+            >>> S.animhkbAP('TorsoTopLeft',['AP1','AP2','AP3','AP4'],interval=100,xstart=58,figsize=(20,2))
 
         """
         import matplotlib.animation as animation
@@ -1431,7 +1431,7 @@ bernard
 
         for k in defaults:
             if k not in kwargs:
-                kwargs[k] = defaults[k]                    
+                kwargs[k] = defaults[k]
 
         if kwargs['fig']==[]:
             fig = plt.figure(figsize=kwargs['figsize'])
@@ -1465,7 +1465,7 @@ bernard
         plt.legend()
         plt.xlabel('time (s)')
         plt.ylabel('RSS (dBm)')
-        ani = animation.FuncAnimation(fig, animate, xrange(0, len(x)), 
+        ani = animation.FuncAnimation(fig, animate, xrange(0, len(x)),
                                       interval=interval, blit=True)
         if save:
             ani.save(a+'.mp4')
@@ -2147,9 +2147,9 @@ bernard
 
         for k in iframe:
             if len(np.shape(A))<2:
-                A=A[np.newaxis,:]*np.ones((len(B),3)) 
+                A=A[np.newaxis,:]*np.ones((len(B),3))
             if len(np.shape(B))<2:
-                B=B[np.newaxis,:]*np.ones((len(A),3)) 
+                B=B[np.newaxis,:]*np.ones((len(A),3))
 
             its = self.B[subject].intersectBody(A[k,:],B[k,:],topos=False,frameId=k)
             tvisi.append(its.any())
@@ -2158,7 +2158,7 @@ bernard
         return(visi)
 
     def visidev2(self,a,b,technoa='HKB',technob='HKB',trange=[]):
-        """ get link visibility status 
+        """ get link visibility status
 
         Returns
         -------
@@ -2255,7 +2255,7 @@ bernard
 
 
     # def computedevpdf(self):
-    #     """ create a timestamped data frame 
+    #     """ create a timestamped data frame
     #         with all positions of devices
     #     """
     #     t=self.B.traj.time()
@@ -2276,7 +2276,7 @@ bernard
     #     self.devdf=df[cols]
 
     def computedevpdf(self):
-        """ create a timestamped data frame 
+        """ create a timestamped data frame
             with positions of all devices
 
 
@@ -2311,16 +2311,33 @@ bernard
         df = df.sort_index()
         cols=['id','subject','x','y','z','v','vx','vy','vz','a','ax','ay','az']
         self.devdf=df[cols]
-        
+
 
 
     def export_csv(self,**kwargs):
-        """
+        """ export to csv devices positions
+
+        Parameters
+        ----------
+            unit : string ('mm'|'cm'|'m'),
+                unit of positions in csv(default mm)
+            tunit: string
+                time unit in csv (default 'ns')
+            'alias': dict
+                dictionnary to replace name of the devices into the csv .
+                example : if you want to replace a device id named 'TCR:34'
+                to an id = 5, you have to add an entry in the alias dictionnary as :
+                alias.update({'TCR34':5})
+
+        Return
+        ------
+
+            a csv file into the folder <PylayersProject>/netsave
+
         """
 
         defaults={'unit' :'mm',
                   'tunit':'ns',
-                  'df' :[],
                   'alias':{}}
 
         for key, value in defaults.items():
@@ -2355,9 +2372,10 @@ bernard
         ldf = df[['id','x','y','z']]
 
         # rename devices
-        for k in alias:
-            u=ldf['id'] == k
-            ldf.iloc[u.values,0]=str(alias[k])
+        if alias != {}:
+            for k in alias:
+                u=ldf['id'] == k
+                ldf.iloc[u.values,0]=str(alias[k])
 
         # fix position unit
         if unit == 'm':
@@ -2378,7 +2396,7 @@ bernard
             _tunit = 1e6
         if tunit == 'ns':
             _tunit = 1e9
-        
+
 
         # add timestamp column
 
@@ -2418,7 +2436,7 @@ bernard
 
         a,ia,nna,subjecta = self.devmapper(a,technoa)
         b,ib,nnb,subjectb = self.devmapper(b,technob)
-        
+
         # node a
         # body node
 
@@ -2443,8 +2461,8 @@ bernard
 
 
     def devmapper(self,a,techno='HKB'):
-        """  retrieve name of device if input is number 
-             or 
+        """  retrieve name of device if input is number
+             or
              retrieve number of device if input is name
 
         Parameters
@@ -2467,7 +2485,7 @@ bernard
             dev refernce in body
         subject : string
             body owning the device
-        
+
 
         """
         subject=''
@@ -2479,7 +2497,7 @@ bernard
                 ia = self.dHKB[a]
                 ba='HKB:'+str(ia)
 
-            
+
             for b in self.B:
                 if ba in self.B[b].dev.keys():
                     subject = b
@@ -2505,7 +2523,7 @@ bernard
 
     def align(self,devdf,hkbdf):
 
-        """ align time for device and hkb data frame 
+        """ align time for device and hkb data frame
 
         devdf : device dataframe
         hkbdf : hkbdataframe
