@@ -1351,6 +1351,38 @@ class Rays(PyLayers,dict):
                     #print "scpr :",self[k]['scpr'][:,43]
                     #print "theta :",self[k]['scpr'][:,43]
 
+                def fix_colinear():
+                    nw = np.sqrt(np.sum(w*w, axis=0))
+                    
+                    u = np.where(nw==0)
+                    if u[0].any() or u[1].any():
+                        
+
+                        uu = np.array([u[0],u[1]]).T
+                        # determine which interaction and rays 
+                        # present the colinearity issue
+                        uvv = abs(vn[2,uu[:,0],uu[:,1]])>0.99
+                        # uv : nbi x nbr colinear index
+                        uv = uu[uvv]
+                        # uh : nbi x nbr anti-colinear index
+                        uh = uu[np.logical_not(uvv)]
+                        try:
+                            # fiw w for colinear index
+                            w[:,uv[:,0],uv[:,1]] = np.array(([1,0,0]))[:,np.newaxis]
+                            # update normal
+                            nw[uv[:,0],uv[:,1]] = \
+                                np.sqrt(np.sum(w[:,uv[:,0],uh[:,1]]*w[:,uv[:,0],uv[:,1]],axis=0))
+                        except:
+                            pass
+                        try:
+                            # fix w for anti-colinear index
+                            w[:,uh[:,0],uh[:,1]] = np.array(([0,0,1]))[:,np.newaxis]
+                            # update normal
+                            nw[uh[:,0],uh[:,1]] = \
+                                np.sqrt(np.sum(w[:,uh[:,0],uh[:,1]]*w[:,uh[:,0],uh[:,1]],axis=0))
+                        except:
+                            pass
+                    return w, nw
                 #
                 # Warning need to handle singular case when s_in // vn
                 #
@@ -1360,29 +1392,9 @@ class Rays(PyLayers,dict):
                 #
                 #w = np.cross(s_in, vn, axisa=0, axisb=0, axisc=0)
                 w = np.cross(-s_in, vn, axisa=0, axisb=0, axisc=0)
-
                 # nw : i x r
-                #
-                #
-                # to do fix the colinear bug
-                #
-                nw = np.sqrt(np.sum(w*w, axis=0))
-                if (nw.any()==0):
-                    u = np.where(nw==0)
-                    # uv = np.array(filter(lambda x : abs(vn[2,x])>0.99,u))
-                    # # reshape information for the filter
-                    uu = np.array([u[0],u[1]]).T
-                    uv = np.array(filter(lambda x : abs(vn[2,x[:,0],x[:,1]])>0.99,[uu]))
-                    uh = np.setdiff1d(uu,uv)
-                    try:
-                        w[:,uv] = np.array(([1,0,0]))[:,np.newaxis,np.newaxis]
-                    except:
-                        pass
-                    try:
-                        w[:,uh] = np.array(([0,0,1]))[:,np.newaxis,np.newaxis]
-                    except:
-                        pass
-                #assert(nw.all()>0), pdb.set_trace()
+                w, nw = fix_colinear()
+
                 wn = w/nw
                 # Handling channel reciprocity s_in --> -s_in
                 #v = np.cross(wn, s_in, axisa=0, axisb=0, axisc=0)
@@ -1398,7 +1410,9 @@ class Rays(PyLayers,dict):
                 self[k]['Bi'] = np.concatenate((es_in,ew,ev),axis=1)
 
                 w = np.cross(s_out, vn, axisa=0, axisb=0, axisc=0)
-                wn = w/np.sqrt(np.sum(w*w, axis=0))
+
+                w, nw = fix_colinear()
+                #wn = w/np.sqrt(np.sum(w*w, axis=0))
                 v = np.cross(wn, s_out, axisa=0, axisb=0, axisc=0)
 
                 es_out = np.expand_dims(s_out, axis=1)
