@@ -1063,7 +1063,7 @@ class Rays(PyLayers,dict):
         #   sig = [0,0]
         #
 
-        if (self.los) & (np.sum(tx-rx,axis=0)<>0):
+        if (self.los) & (np.sqrt(np.sum((tx-rx)**2)) !=0) :
             r3d[0] = {}
             r3d[0]['sig'] = np.zeros((2,2,1))
             r3d[0]['sig2d'] = np.zeros((2,2,1))
