@@ -701,7 +701,7 @@ class GrRayTud(PyLayers,dict):
 
         &quot;&quot;&quot;
 
-        pathname = tuddir + &#39;/*.tud&#39;
+        pathname = os.path.join(tuddir,&#39;/*.tud&#39;)
         lfile_l = glob.glob(pathname)
         lfile_tud = []
         for fi in lfile_l:
@@ -709,7 +709,7 @@ class GrRayTud(PyLayers,dict):
             lfile_tud.append(fis)
         lfile_tud.sort()
 
-        pathname = tuddir + &#39;/*.tang&#39;
+        pathname =os.path.join(tuddir,&#39;/*.tang&#39;)
         lfile_l = glob.glob(pathname)
         lfile_tang = []
         for fi in lfile_l:
@@ -717,7 +717,7 @@ class GrRayTud(PyLayers,dict):
             lfile_tang.append(fis)
         lfile_tang.sort()
 
-        pathname = tuddir + &#39;/*.rang&#39;
+        pathname =os.path.join(tuddir,&#39;/*.rang&#39;)
         lfile_l = glob.glob(pathname)
         lfile_rang = []
         for fi in lfile_l:
@@ -725,7 +725,7 @@ class GrRayTud(PyLayers,dict):
             lfile_rang.append(fis)
         lfile_rang.sort()
 
-        pathname = tuddir + &#39;/*.tauk&#39;
+        pathname =os.path.join( tuddir,&#39;/*.tauk&#39;)
         lfile_l = glob.glob(pathname)
         lfile_tauk = []
         for fi in lfile_l:
@@ -1391,7 +1391,7 @@ class GrRay3D(PyLayers):
             limit to a given filestruc
         &quot;&quot;&quot;
 
-        pathname = tradir + &#39;/*.tra&#39;
+        pathname =os.ppath.join( tradir, &#39;/*.tra&#39;)
         lfile_l = glob.glob(pathname)
         lfile_s = []
         for fi in lfile_l:
@@ -1922,7 +1922,7 @@ if __name__ == &quot;__main__&quot;:
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on oct. 20, 2014.
+      Last updated on nov. 13, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

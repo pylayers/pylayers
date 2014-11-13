@@ -381,15 +381,15 @@
         <span class="c">## TODO remove the hard reference</span>
         <span class="k">if</span> <span class="s">&#39;txt&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">[</span><span class="s">&#39;save&#39;</span><span class="p">]:</span>
             <span class="n">pyu</span><span class="o">.</span><span class="n">writeDetails</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/output/Nodes.txt&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="s">&#39;output&#39;</span><span class="p">,</span><span class="s">&#39;Nodes.txt&#39;</span><span class="p">)):</span>
                 <span class="k">print</span> <span class="s">&#39;would you like to erase previous txt files ?&#39;</span>
                 <span class="n">A</span><span class="o">=</span><span class="nb">raw_input</span><span class="p">()</span>
                 <span class="k">if</span> <span class="n">A</span> <span class="o">==</span> <span class="s">&#39;y&#39;</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/output/&#39;</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="s">&#39;output&#39;</span><span class="p">)):</span>
                         <span class="k">try</span><span class="p">:</span>
                             <span class="n">fi</span><span class="p">,</span><span class="n">ext</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)</span>
                             <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s">&#39;txt&#39;</span><span class="p">:</span>
-                                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/output/&#39;</span><span class="o">+</span><span class="n">f</span><span class="p">)</span>
+                                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="s">&#39;output&#39;</span><span class="o">+</span><span class="n">f</span><span class="p">))</span>
                         <span class="k">except</span><span class="p">:</span>
                             <span class="k">pass</span>
 
@@ -468,8 +468,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">the_world</span><span class="o">.</span><span class="n">_boids</span><span class="o">=</span><span class="p">{}</span>
 
 
-            <span class="k">if</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">[</span><span class="s">&#39;savep&#39;</span><span class="p">]):</span>
-                <span class="k">pass</span>
+            <span class="c">#if str2bool(self.save_opt[&#39;savep&#39;]):</span>
                 <span class="c">#print &#39;Processing save results, please wait&#39;</span>
                 <span class="c">#self.save.mat_export()</span>
 
@@ -511,7 +510,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on oct. 20, 2014.
+      Last updated on nov. 13, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

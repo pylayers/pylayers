@@ -100,20 +100,20 @@
 <h1>pylayers.antprop.spharm.VCoeff.s1tos2<a class="headerlink" href="#pylayers-antprop-spharm-vcoeff-s1tos2" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.antprop.spharm.VCoeff.s1tos2">
-<tt class="descclassname">VCoeff.</tt><tt class="descname">s1tos2</tt><big>(</big><em>N2=-1</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/spharm.html#VCoeff.s1tos2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.VCoeff.s1tos2" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">VCoeff.</tt><tt class="descname">s1tos2</tt><big>(</big><em>L2=-1</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/spharm.html#VCoeff.s1tos2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.spharm.VCoeff.s1tos2" title="Permalink to this definition">¶</a></dt>
 <dd><p>convert shape 1 &#8211;&gt; shape 2</p>
 <p>shape 1   array [ Nf , (L+1) , (M+1) ]
 shape 2   array [ Nf , (L+1) * (M+1) ]</p>
-<p>n = 0...N2
-m = 0...N2</p>
+<p>l = 0...L2
+m = 0...M2</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>N2</strong> : int &lt;= N1</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L2</strong> : int &lt;= L1</p>
 <blockquote class="last">
 <div><p>shape 1 has 3 axis - shape 2 has 2 axis
-by default all s1 coefficients are kept N2=-1 means N2=min(N1,M1) because M2 must be equal to N2</p>
+by default all s1 coefficients are kept L2=-1 means L2=min(L1,M1) because M2 must be equal to L2</p>
 </div></blockquote>
 </td>
 </tr>
@@ -160,7 +160,7 @@ by default all s1 coefficients are kept N2=-1 means N2=min(N1,M1) because M2 mus
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on sept. 09, 2014.
+      Last updated on nov. 13, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

@@ -100,9 +100,26 @@
 <h1>pylayers.antprop.antenna.Antenna.Fsynth<a class="headerlink" href="#pylayers-antprop-antenna-antenna-fsynth" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.Fsynth">
-<tt class="descclassname">Antenna.</tt><tt class="descname">Fsynth</tt><big>(</big><em>theta=</em>, <span class="optional">[</span><span class="optional">]</span><em>phi=</em>, <span class="optional">[</span><span class="optional">]</span><em>pattern=True</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/antenna.html#Antenna.Fsynth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fsynth" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform Antenna synthesis
-call Antenna.Fpatt or Antenna.Fsynth3</p>
+<tt class="descclassname">Antenna.</tt><tt class="descname">Fsynth</tt><big>(</big><em>theta=</em>, <span class="optional">[</span><span class="optional">]</span><em>phi=</em>, <span class="optional">[</span><span class="optional">]</span><em>pattern=True</em>, <em>typ='vsh'</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/antenna.html#Antenna.Fsynth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fsynth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform Antenna synthesis</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>theta</strong> : np.array</p>
+<p><strong>phi</strong> :   np.array</p>
+<p><strong>pattern</strong> : boolean</p>
+<blockquote class="last">
+<div><p>call Antenna.Fpatt or Antenna.Fsynth3</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The antenna pattern synthesis is done either from spherical
+harmonics coefficients or from a analytical expression of the
+radiation pattern.</p>
 </dd></dl>
 
 </div>
@@ -140,7 +157,7 @@ call Antenna.Fpatt or Antenna.Fsynth3</p>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on oct. 20, 2014.
+      Last updated on nov. 13, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

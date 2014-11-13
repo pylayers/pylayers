@@ -100,8 +100,9 @@
 <h1>pylayers.antprop.antenna.Antenna.Fsynth3<a class="headerlink" href="#pylayers-antprop-antenna-antenna-fsynth3" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.Fsynth3">
-<tt class="descclassname">Antenna.</tt><tt class="descname">Fsynth3</tt><big>(</big><em>theta=</em>, <span class="optional">[</span><span class="optional">]</span><em>phi=</em>, <span class="optional">[</span><span class="optional">]</span><em>pattern=True</em>, <em>typ='sh3'</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/antenna.html#Antenna.Fsynth3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fsynth3" title="Permalink to this definition">¶</a></dt>
-<dd><p>synthesis of a complex antenna pattern from VSH coefficients (shape 3)</p>
+<tt class="descclassname">Antenna.</tt><tt class="descname">Fsynth3</tt><big>(</big><em>theta=</em>, <span class="optional">[</span><span class="optional">]</span><em>phi=</em>, <span class="optional">[</span><span class="optional">]</span><em>pattern=True</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/antenna.html#Antenna.Fsynth3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fsynth3" title="Permalink to this definition">¶</a></dt>
+<dd><p>synthesis of a complex antenna pattern from SH coefficients
+(vsh or ssh  in shape 3)</p>
 <p>Ndir is the number of directions</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -113,7 +114,7 @@
 <blockquote>
 <div><p>if True theta and phi are reorganized for building the pattern</p>
 </div></blockquote>
-<p><strong>typ</strong> : &#8216;vsh3&#8217; | &#8216;sh3&#8217; | &#8216;hfss&#8217;</p>
+<p><strong>typ</strong> : &#8216;vsh&#8217; | &#8216;ssh&#8217; | &#8216;hfss&#8217;</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>if pattern:</strong> :</p>
@@ -186,7 +187,7 @@ the pattern is multiplied by $frac{4pi}{120pi}=frac{1}{sqrt{30}$</p>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on oct. 20, 2014.
+      Last updated on nov. 13, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

@@ -251,13 +251,14 @@
     <span class="n">cx</span> <span class="o">=</span> <span class="n">lmreshape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s2</span><span class="p">)</span>
     <span class="n">cy</span> <span class="o">=</span> <span class="n">lmreshape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cy</span><span class="o">.</span><span class="n">s2</span><span class="p">)</span>
     <span class="n">cz</span> <span class="o">=</span> <span class="n">lmreshape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cz</span><span class="o">.</span><span class="n">s2</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">ifreq</span> <span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
         <span class="n">em</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cx</span><span class="p">[</span><span class="n">ifreq</span><span class="p">,:,</span><span class="n">L</span><span class="o">+</span><span class="n">m</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cy</span><span class="p">[</span><span class="n">ifreq</span><span class="p">,:,</span><span class="n">L</span><span class="o">+</span><span class="n">m</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cz</span><span class="p">[</span><span class="n">ifreq</span><span class="p">,:,</span><span class="n">L</span><span class="o">+</span><span class="n">m</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">Et</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cx</span><span class="p">[</span><span class="n">ifreq</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cy</span><span class="p">[</span><span class="n">ifreq</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cz</span><span class="p">[</span><span class="n">ifreq</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">em</span><span class="o">/</span><span class="n">Et</span>
 </div>
 <div class="viewcode-block" id="level_energy"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coeffModel.level_energy.html#pylayers.antprop.coeffModel.level_energy">[docs]</a><span class="k">def</span> <span class="nf">level_energy</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">l</span><span class="p">,</span> <span class="n">ifreq</span> <span class="o">=</span> <span class="mi">46</span><span class="p">,</span><span class="n">L</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; calculates energy of the level</span>
+    <span class="sd">&quot;&quot;&quot; calculates energy of the level l</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -277,12 +278,15 @@
     <span class="k">return</span> <span class="n">el</span><span class="o">/</span><span class="n">Et</span>
 </div>
 <div class="viewcode-block" id="modeMax"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coeffModel.modeMax.html#pylayers.antprop.coeffModel.modeMax">[docs]</a><span class="k">def</span> <span class="nf">modeMax</span><span class="p">(</span><span class="n">coeff</span><span class="p">,</span><span class="n">L</span><span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">ifreq</span>  <span class="o">=</span> <span class="mi">46</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; calulates maximal mode </span>
+    <span class="sd">&quot;&quot;&quot; calculates maximal mode</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 
+
+<span class="sd">    coeff : </span>
 <span class="sd">    L  : int</span>
+<span class="sd">        maximum level</span>
 <span class="sd">    ifreq : int</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -411,7 +415,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on oct. 20, 2014.
+      Last updated on nov. 13, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

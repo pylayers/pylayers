@@ -194,8 +194,9 @@
 <span class="sd">        transpose == False   (r,f)</span>
 <span class="sd">        transpose == True    (f,r)</span>
 
-<span class="sd">        A Ctilde object is the output of eval method</span>
-<span class="sd">        of a Rays object.</span>
+<span class="sd">        A Ctilde object can be :</span>
+<span class="sd">            + returned from eval method of a Rays object.</span>
+<span class="sd">            + generated from a statistical model of the propagation channel</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fail</span> <span class="o">=</span> <span class="bp">False</span>
@@ -880,7 +881,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">Tt</span> <span class="o">=</span> <span class="n">Tt</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Tr</span> <span class="o">=</span> <span class="n">Tr</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">islocal</span> <span class="o">=</span> <span class="bp">True</span>
-        <span class="c"># if a return to gloabl is requested</span>
+        <span class="c"># if a return to global is requested</span>
         <span class="k">elif</span> <span class="n">b2g</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">islocal</span> <span class="p">:</span>
                 <span class="k">if</span> <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;Tt&#39;</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;Tr&#39;</span><span class="p">)):</span>
@@ -1282,8 +1283,10 @@
 <span class="sd">            0 : theta</span>
 <span class="sd">            1 : phi</span>
 
-<span class="sd">        Ta : []</span>
-<span class="sd">        Tb : []</span>
+<span class="sd">        Ta : np.array(3x3)</span>
+<span class="sd">           unitary matrice for antenna orientation</span>
+<span class="sd">        Tb : np.array(3x3)</span>
+<span class="sd">           unitary matrice for antenna orientation</span>
 <span class="sd">        Friis : boolean</span>
 <span class="sd">            if True scale with :math:`-j\frac{\lambda}{f}`</span>
 
@@ -1306,8 +1309,9 @@
                 <span class="n">Fap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nray</span><span class="o">*</span><span class="n">nfreq</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">nray</span><span class="p">,</span> <span class="n">nfreq</span><span class="p">))</span>
 
             <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="s">&#39;phi&#39;</span><span class="p">:</span>
-                <span class="n">Fap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nray</span><span class="p">,</span> <span class="n">nfreq</span><span class="p">))</span>
                 <span class="n">Fat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nray</span><span class="o">*</span><span class="n">nfreq</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">nray</span><span class="p">,</span> <span class="n">nfreq</span><span class="p">))</span>
+                <span class="n">Fap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nray</span><span class="p">,</span> <span class="n">nfreq</span><span class="p">))</span>
+
             <span class="n">Fat</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Fat</span><span class="p">)</span>
             <span class="n">Fap</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Fap</span><span class="p">)</span>
 
@@ -2481,7 +2485,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on oct. 20, 2014.
+      Last updated on nov. 13, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

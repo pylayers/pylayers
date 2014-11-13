@@ -215,13 +215,13 @@
 <span class="sd">        This function handle filename from WHERE1 M1 measurement campaign</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">h</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
-        <span class="n">mesdir</span> <span class="o">=</span> <span class="n">dirname</span> <span class="o">+</span> <span class="s">&#39;/h1/&#39;</span>
+        <span class="n">mesdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span><span class="s">&#39;h1&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">279</span><span class="p">:</span>
             <span class="n">prefix</span> <span class="o">=</span> <span class="s">&#39;SIRADEL_08-08-01_P&#39;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">prefix</span> <span class="o">=</span> <span class="s">&#39;SIRADEL_08-07-31_P&#39;</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">mesdir</span> <span class="o">=</span> <span class="n">dirname</span> <span class="o">+</span> <span class="s">&#39;/h2/&#39;</span>
+        <span class="n">mesdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span><span class="s">&#39;h2&#39;</span><span class="p">)</span>
         <span class="n">prefix</span> <span class="o">=</span> <span class="s">&#39;SIRADEL_08-08-02_P&#39;</span>
 
     <span class="n">stn</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
@@ -230,7 +230,7 @@
     <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">stn</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">):</span>
         <span class="n">stn</span> <span class="o">=</span> <span class="s">&#39;0&#39;</span> <span class="o">+</span> <span class="n">stn</span>
 
-    <span class="n">filename</span> <span class="o">=</span> <span class="n">mesdir</span> <span class="o">+</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">stn</span> <span class="o">+</span> <span class="s">&#39;.mat&#39;</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mesdir</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">stn</span> <span class="o">+</span> <span class="s">&#39;.mat&#39;</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="ptw1"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.ptw1.html#pylayers.measures.mesuwb.ptw1">[docs]</a><span class="k">def</span> <span class="nf">ptw1</span><span class="p">():</span>
@@ -2415,7 +2415,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on oct. 20, 2014.
+      Last updated on nov. 13, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">
