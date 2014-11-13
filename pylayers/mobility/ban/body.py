@@ -238,7 +238,7 @@ class Body(PyLayers):
 
         """
          # check if local or global path
-        if ('/' or '\\') in _filebody:
+        if ('/'  in _filebody) or ('\\' in _filebody):
             filebody = _filebody
             ne = os.path.basename(_filebody)
             self.name = os.path.splitext(ne)[0]
