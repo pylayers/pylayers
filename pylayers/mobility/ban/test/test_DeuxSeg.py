@@ -3,42 +3,40 @@ from pylayers.mobility.ban.DeuxSeg import *
 
 
 
-nseg=10
+N=5
+M=10
 
-A = np.random.rand(3,nseg)
-B = np.random.rand(3,nseg)
-C = np.random.rand(3,nseg)
-D = np.random.rand(3,nseg)
+A = np.random.rand(3,N)
+B = np.random.rand(3,N)
 
-aa=[]
-bb=[]
-dd=[]
-ff=[]
-gg=[]
-for i in range(nseg):
-    a,b,d=dmin3d_old(A[:,i],B[:,i],C[:,i],D[:,i])
-    f,g = dist_old(A[:,i],B[:,i],C[:,i],D[:,i],a,b)
-    aa.append(a)
-    bb.append(b)
-    dd.append(d)
-    ff.append(f)
-    gg.append(g)
-
-aa=np.array(aa)
-bb=np.array(bb)
-dd=np.array(dd)
-ff=np.array(ff)
-gg=np.array(gg)
+C = np.random.rand(3,M)
+D = np.random.rand(3,M)
 
 
-a,b,d=dmin3d(A,B,C,D)
-f,g = dist(A,B,C,D,a,b)
+alpha,beta,dmin = dmin3d(A,B,C,D)
+f,g = dist(A,B,C,D,alpha,beta)
 
-assert (aa - a).any()==0
-assert (bb - b).any()==0
-assert (dd - d).any()==0
-assert (ff - f).any()==0
-assert (gg - g).any()==0
+
+
+## verif:
+aa=np.empty((N,M))
+bb=np.empty((N,M))
+dd=np.empty((N,M))
+ff=np.empty((N,M))
+gg=np.empty((N,M))
+for i in range(N):
+    for j in range(M):
+        aa[i,j],bb[i,j],dd[i,j]=dmin3d_nonvectorized(A[:,i],B[:,i],C[:,j],D[:,j])
+        ff[i,j],gg[i,j] = dist_nonvectorized(A[:,i],B[:,i],C[:,j],D[:,j],aa[i,j],bb[i,j])
+
+assert (aa-alpha).any()==0
+assert (bb-beta).any()==0
+assert (dd-dmin).any()==0
+assert (ff-f).any()==0
+assert (gg-g).any()==0
+
+######################
+
 
 
 ###############
@@ -75,3 +73,36 @@ assert (gg - g).any()==0
 # f,g = dist(A,B,C,D,a,b)
 
 
+
+# nseg1=5
+# nseg2=10
+
+# A = np.random.rand(3,nseg1)
+# B = np.random.rand(3,nseg1)
+# C = np.random.rand(3,nseg2)
+# D = np.random.rand(3,nseg2)
+
+# aa=[]
+# bb=[]
+# dd=[]
+# ff=[]
+# gg=[]
+# for i in range(nseg):
+#     a,b,d=dmin3d_old(A[:,i],B[:,i],C[:,i],D[:,i])
+#     f,g = dist_old(A[:,i],B[:,i],C[:,i],D[:,i],a,b)
+#     aa.append(a)
+#     bb.append(b)
+#     dd.append(d)
+#     ff.append(f)
+#     gg.append(g)
+
+# aa=np.array(aa)
+# bb=np.array(bb)
+# dd=np.array(dd)
+# ff=np.array(ff)
+# gg=np.array(gg)
+
+# import ipdb
+# ipdb.set_trace()
+# a,b,d=dmin3d(A,B,C,D)
+# f,g = dist(A,B,C,D,a,b)
