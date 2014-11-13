@@ -182,6 +182,13 @@ def dist(A,B,C,D,alpha,beta):
         C=C.reshape(3,1) 
     if len(D.shape) ==1 :
         D=D.reshape(3,1) 
+    
+    assert alpha.shape[0] == A.shape[1]
+    assert alpha.shape[1] == C.shape[1]
+    assert beta.shape[0] == A.shape[1]
+    assert beta.shape[1] == C.shape[1]
+
+
 
     # 3 x N x M
     AC = C[:,np.newaxis,:]-A[:,:,np.newaxis]

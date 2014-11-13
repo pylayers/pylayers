@@ -2350,15 +2350,16 @@ class Body(PyLayers):
                     C = self.d[:,kta,frameId]
                     D = self.d[:,khe,frameId]
 
+
                 alpha, beta,dmin = seg.dmin3d(A,B,C,D)
                 if alpha < 0:
-                    alpha = 0
+                    alpha = np.zeros(alpha.shape)
                 if alpha > 1 :
-                    alpha  = 1
+                    alpha  = np.ones(alpha.shape)
                 if beta < 0:
-                    beta = 0
+                    beta = np.zeros(beta.shape)
                 if beta > 1:
-                    beta = 1
+                    beta = np.ones(beta.shape)
                 dmin = np.sqrt(seg.dist (A,B,C,D,alpha,beta)[1])
 
                 if dmin  < self.sl[k,2]:
@@ -2413,13 +2414,13 @@ class Body(PyLayers):
 
             alpha, beta,dmin = seg.dmin3d(A,B,C,D)
             if alpha < 0:
-                alpha = 0
+                alpha = np.zeros(alpha.shape)
             if alpha > 1 :
-                alpha  = 1
+                alpha  = np.ones(alpha.shape)
             if beta < 0:
-                beta = 0
+                beta = np.zeros(beta.shape)
             if beta > 1:
-                beta = 1
+                beta = np.ones(beta.shape)
             dmin = np.sqrt(seg.dist (A,B,C,D,alpha,beta)[1])
 
             #~ if dmin  < self.sl[k,2]:
