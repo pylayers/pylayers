@@ -137,6 +137,7 @@ class Body(PyLayers):
         self._multi_subject_mocap=multi_subject_mocap
 
         # extract name from _filebody
+
         self.name = _filebody.replace('.ini','')
         di = self.load(_filebody,_filemocap,unit,_filewear)
         # if _filemocap != []:
@@ -237,6 +238,7 @@ class Body(PyLayers):
         + section [mocap]
 
         """
+
          # check if local or global path
         if ('/'  in _filebody) or ('\\' in _filebody):
             filebody = _filebody

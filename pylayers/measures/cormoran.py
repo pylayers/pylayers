@@ -87,10 +87,12 @@ class CorSer(PyLayers):
 
         # BODY
         self.subject = str(self.log['Subject'].values[0]).split(' ')
+        # filter typos in  self.subject
+        self.subject = filter(lambda x : len(x)!=0,self.subject)
         if 'Jihad' in self.subject:
             uj = self.subject.index('Jihad')
             self.subject[uj]='Jihan'
-
+        
         if serie in self.mocap :
             self.loadbody(serie=serie,day=day)
             self._distancematrix()
@@ -281,6 +283,8 @@ bernard
         """
         self.B={}
         color=['LightBlue','YellowGreen','PaleVioletRed','white','white','white','white','white','white','white']
+        import ipdb
+        ipdb.set_trace()
         for us,subject in enumerate(self.subject):
             print "load ",subject, " body\n"
             seriestr = str(self.serie).zfill(3)
