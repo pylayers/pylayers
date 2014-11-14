@@ -51,12 +51,11 @@ class CorSer(PyLayers):
             self.shkb = [5,6,13,14,15,16,21,22,23,24,27,28,29,30,31,32,33,34,35]
             self.sbs  = [5,6,7,8,13,14,15,16,21,22,23,24,27,28,29,30,31,32,33,34,35]
             self.mocap = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35]
-            self.interferers =[]
             self.mocapinterf=[]
         if day==12:
             self.stcr = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
-            self.shkb = []#[9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
-            self.sbs  = []#[9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+            self.shkb = [9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+            self.sbs  = [9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
             self.mocap =[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
             self.mocapinterf = [5,6,7,8,13,14,15,16,21,22,23,24,]
 
@@ -216,6 +215,7 @@ bernard
         """
 
         filename = os.path.join(self.rootdir,'RAW','11-06-2014','MOCAP','scene.c3d')
+        print "\nload infrastructure node position"
         a,self.infraname,pts,i = c3d.ReadC3d(filename)
 
         pts = pts/1000.
@@ -283,10 +283,9 @@ bernard
         """
         self.B={}
         color=['LightBlue','YellowGreen','PaleVioletRed','white','white','white','white','white','white','white']
-        import ipdb
-        ipdb.set_trace()
+
         for us,subject in enumerate(self.subject):
-            print "load ",subject, " body\n"
+            print "\nload ",subject, " body"
             seriestr = str(self.serie).zfill(3)
             if day == 11:
                 filemocap = os.path.join(self.rootdir,'RAW',str(self.day)+'-06-2014','MOCAP','serie_'+seriestr+'.c3d')
@@ -298,11 +297,15 @@ bernard
             filebody = os.path.join(baw, subject + '.ini')
             filewear = os.path.join(baw,subject + '_'  +str(self.day)+'-06-2014_' + self.typ + '.ini')
 
+            if len(self.subject) >1 or self.mocapinterf:
+                multi_subject=True
+            else:
+                multi_subject=False
             self.B.update({subject:Body(_filebody=filebody,
                              _filemocap=filemocap,unit = 'mm', loop=False,
                              _filewear=filewear,
                              centered=False,
-                             multi_subject_mocap=True,
+                             multi_subject_mocap=multi_subject,
                              color=color[us])})
 
         if self.serie in self.mocapinterf:
@@ -323,7 +326,7 @@ bernard
     def loadTCR(self,day=11,serie='',scenario='20',run=1):
         """ load TCR data
 
-        """
+        """  
 
         #
         # TNET : (NodeId,MAC)

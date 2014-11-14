@@ -357,7 +357,11 @@ class Body(PyLayers):
         try:
             # mocapprefix : retrieve where the prefix is the body name
             ump = [self.name.lower() in p.lower() for p in self._s]
-            self._mocap_prefix = self._s[ump.index(True)]
+            if sum(ump) >1:
+                # Handle case CorSer (serie=3,day=11)
+                self._mocap_prefix='Bernard:'
+            else:
+                self._mocap_prefix = self._s[ump.index(True)]
         except:
             self._mocap_prefix = self._p[-1].split(':')[0]+':'
 
@@ -366,6 +370,20 @@ class Body(PyLayers):
         # filter real device and get devices
         #
         rd = dict(filter(lambda x: x[1]['status']== 'real',self.dev.items()))
+
+
+        # for d in rd :
+        #     if self.dev[d]['name'] == 'hikob':
+        #         bd = [self.dev[d]['radiomarkname'] in n for n in self._p if not 'TCR' in n]
+        #         self.dev[d]['uc3d'] = np.where(bd)[0]
+        #     else :
+        #         bd = [self.dev[d]['radiomarkname'] in n for n in self._p]
+        #         self.dev[d]['uc3d'] = np.where(bd)[0]
+        #     if len(self.dev[d]['uc3d']) == 0:
+        #         print 'Warning : device ',d, 'not present in mocap'
+        #         import ipdb
+        #         ipdb.set_trace()
+
 
 
         prefix = ['Bernard:','Bernard_','NicolasCormoran:',
@@ -2554,6 +2572,11 @@ class Body(PyLayers):
         self.ant = x.reshape((len(x)), 1) * u0 + \
                    y.reshape((len(y)), 1) * w0 + \
                    z.reshape((len(z)), 1) * v0
+
+    def _checkdevid(self):
+            """ display 
+            """
+            [(k,self.dev[k]['uc3d']) for k in self.dev]
 
 
 def translate(cycle, new_origin):
