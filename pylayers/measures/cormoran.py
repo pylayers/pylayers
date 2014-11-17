@@ -536,6 +536,64 @@ bernard
         self.hkb = self.hkb[self.hkb!=0]
 
 
+    def visimda(self):
+        """ determine visibility MDA
+        """
+
+        import itertools
+        # link ids order 
+        ids = np.unique(self.devdf['id'])
+        # nblink ids
+        nbids = len(ids)
+        # nb infra nodes 
+        nbin = len(self.din)
+        # total link ids ( including infra nodes)
+        tids =np.hstack((ids,self.din.keys()))
+        # A-B corresponds to links
+
+        # extract all dev position on body
+        # dev : (3 x (nb devices + nb infra nodes) x nb_timestamp)
+        dev = np.empty((3,nbids+nbin,len(self.devdf.index)/nbids))
+        for ik,i in enumerate(ids) :
+            dev[:,ik,:] = self.devdf[self.devdf['id']==i][['x','y','z']].values.T
+        # add infra nodes
+        for ik,i in enumerate(self.din):
+            dev[:,nbids+ik,:]=self.din[i]['p'][:,np.newaxis]
+
+        # determine all the links
+        links = np.array([x for x in itertools.combinations(range(nbids+nbin),2)])
+        A = dev[:,links[:,0]]
+        B = dev[:,links[:,1]]
+
+        dev_map=np.array(zip(*[tids[links[:,0]],tids[links[:,1]]]))
+
+        # C-D correspond to bodies segments
+        # C or D : 3 x 11 body segments x time
+        for b in self.B:
+
+            uta = self.B[b].sl[:,0].astype('int')
+            uhe = self.B[b].sl[:,1].astype('int')
+
+            try:
+                C = np.concatenate((C,self.B[b].d[:,uta,:]),axis=1)
+                D = np.concatenate((D,self.B[b].d[:,uhe,:]),axis=1)
+                radius = np.hstack((radius,self.B[b].sl[:,2]))
+            except:
+                C = self.B[b].d[:,uta,:]
+                D = self.B[b].d[:,uhe,:]
+                radius = self.B[b].sl[:,2]
+
+        f,g,alpha,beta,dmin=seg.segdist(A,B,C,D,hard=True)
+        # intersection matrix
+        intersect2D = np.zeros(f.shape,dtype='int')
+
+        uinter= np.where(f<radius[np.newaxis,:,np.newaxis])
+        intersect2D[uinter[0],uinter[1],uinter[2]]=1
+
+        intersect = np.sum(intersect2D,axis=1)>0
+        return intersect,dev_map
+
+
     def _distancematrix(self):
         """Compute the ditance matrix between the nodes
 

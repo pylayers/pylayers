@@ -386,25 +386,25 @@ def segdist(A,B,C,D,hard=True):
     dmin = np.sqrt(u0 + 2*(alpha*u1+beta*u2+alpha*beta*u3)+alpha*alpha*u4+ beta*beta*u5)
 
     if hard :
-        ap = np.where(alpha>1)[0]
-        am = np.where(alpha<0)[0]
-        bp = np.where(beta>1)[0]
-        bm = np.where(beta<0)[0]
-        alpha[ap]=np.ones(len(ap))
-        alpha[am]=np.zeros(len(am))
-        beta[bp]=np.ones(len(bp))
-        beta[bm]=np.zeros(len(bm))
+        ap = np.where(alpha>1)
+        am = np.where(alpha<0)
+        bp = np.where(beta>1)
+        bm = np.where(beta<0)
+        alpha[ap[0],ap[1],ap[2]]=1.
+        alpha[am[0],am[1],am[2]]=0.
+        beta[bp[0],bp[1],bp[2]]=1.
+        beta[bm[0],bm[1],bm[2]]=0.
 
 
 
     # f : N x M
-    f = u0 + 2*(alpha*u1+beta*u2+alpha*beta*u3)+alpha*alpha*u4+ beta*beta*u5
+    f = np.sqrt(u0 + 2*(alpha*u1+beta*u2+alpha*beta*u3)+alpha*alpha*u4+ beta*beta*u5)
     # X : 3 x N x M
     X  = A[:,:,np.newaxis]-alpha[np.newaxis,:,:]*BA[:,:,np.newaxis] # A - alpha*BA
     # Y : 3 x N x M
     Y  = C[:,np.newaxis,:] + beta[np.newaxis,:,:]*CD[:,np.newaxis,:]# C + beta*CD
     # g : N x M
-    g =np.einsum('ijk...,ijk...->jk...',X-Y,X-Y)
+    g =np.sqrt(np.einsum('ijk...,ijk...->jk...',X-Y,X-Y))
 
     return(f,g,alpha,beta,dmin)
 
