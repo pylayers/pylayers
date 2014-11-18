@@ -60,14 +60,8 @@ class CorSer(PyLayers):
             self.mocapinterf = [5,6,7,8,13,14,15,16,21,22,23,24,]
 
         if serie in self.shkb:
-            if day == 12 and (serie in [17,18,19,20]):
-                self.typ ='HKBS'
-                self.scenario = self.log['Scenario'].values.astype('string')[0]
-                self.run = int(self.log['Meas Run'].values) 
-                print "WARNING HKB values not availvable for day ",day,"serie",serie
-            else:
-                self.loadhkb(serie=serie,day=day,source=source)
-
+            self.loadhkb(serie=serie,day=day,source=source)
+        
 
         if serie in self.stcr:
             self.loadTCR(serie=serie,day=day)
@@ -1774,10 +1768,31 @@ bernard
         figsize: tuple
         linestyle'
         inverse :False,
+            display 1/distance  instead of distance
         log : boolean
+            display log fo distance intead of distance
         gammma':1.,
+            mulitplication factor for log : gamma*log(distance) 
+            this can be used to fit RSS
         mode : string
             'HKB' | 'TCR' | 'FULL'
+        visi : boolean,
+            display visibility
+        color: string color ('k'|'m'|'g'),
+            color to display the visibility area
+        hatch': strin hatch type ('//')
+            hatch type to hatch visibility area
+        fontsize: int
+            title fontsize
+
+        Example
+        -------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> S=CorSer(6)
+        >>> S.pltgt('AP1','TorsoTopLeft')
+
+
         """
 
         defaults = { 'subject':'',
@@ -1801,16 +1816,13 @@ bernard
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
-        if kwargs['subject']=='':
-            subject=self.B.keys()[0]
-        else:
-            subject=kwargs['subject']
+
 
 
         t0 =kwargs.pop('t0')
         t1 =kwargs.pop('t1')
         if t1 ==-1:
-            t1=self.thkb[0][-1]
+            t1=self.thkb[-1]
 
 
         label = a+'-'+b
@@ -1822,8 +1834,13 @@ bernard
         visibility = kwargs.pop('visi')
         fontsize = kwargs.pop('fontsize')
         hatch = kwargs.pop('hatch')
+        subject = kwargs.pop('subject')
 
 
+        if subject=='':
+            subject=self.B.keys()[0]
+        else:
+            subject=subject
 
         if kwargs['fig']==[]:
             figsize = kwargs.pop('figsize')
@@ -1928,6 +1945,14 @@ bernard
     def pltlk(self,a,b,**kwargs):
         """ plt links
 
+        Parameters
+        ----------
+
+        a : string
+            node a name
+        b : string
+            node b name
+
         display: list
             techno to be displayed
         figsize
@@ -1963,6 +1988,12 @@ bernard
         axs :
             list of matplotlib axes
 
+        Example
+        -------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> S=CorSer(6)
+        >>> S.pltlk('AP1','TorsoTopLeft')
         """
 
         defaults = { 'display':[],
