@@ -60,15 +60,21 @@ class CorSer(PyLayers):
             self.mocapinterf = [5,6,7,8,13,14,15,16,21,22,23,24,]
 
         if serie in self.shkb:
-            self.loadhkb(serie=serie,day=day,source=source)
+            if day == 12 and (serie in [17,18,19,20]):
+                self.typ ='HKBS'
+                self.scenario = self.log['Scenario'].values.astype('string')[0]
+                self.run = int(self.log['Meas Run'].values) 
+                print "WARNING HKB values not availvable for day ",day,"serie",serie
+            else:
+                self.loadhkb(serie=serie,day=day,source=source)
+
 
         if serie in self.stcr:
             self.loadTCR(serie=serie,day=day)
 
         if serie in self.sbs:
             self.loadBS(serie=serie,day=day)
-        import ipdb
-        ipdb.set_trace()
+
 
         if self.typ=='FULL':
             self._filename = 'Sc' + self.scenario + '_S' + str(self.serie) + '_R' + str(self.run) + '_' + self.typ.capitalize()

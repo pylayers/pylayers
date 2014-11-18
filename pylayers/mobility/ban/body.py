@@ -390,7 +390,10 @@ class Body(PyLayers):
                   'Nicolas_FullBody_ClusterOnly:',
                   'Eric_FullBody_ClusterOnly:',
                   'Jihan_FullBody_ClusterOnly2:',
-                  'Jihan_FullBody_ClusterOnly:',
+                  'Jihan_FullBody_ClusterOnly:', # j12s8
+                  'Jihan_FullBody_sansClusters:', # j12s21
+                  'Nicolas_FullBody_sansClusters:', # j12s21
+                  'Eric_FullBody_sansClusters:', # j12s21
                   'Nicolas_FullBody:',
                   'Jihan_FullBody:',
                   'Eric_FullBody:']
