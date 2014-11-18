@@ -44,6 +44,14 @@ class CorSer(PyLayers):
         self.day = day
         self.loadlog()
 
+        if day == 11:
+            if serie in [7,8]:
+                raise AttributeError('Serie '+serie + \
+                                     ' has no hkb data and will not be loaded')
+        if day ==12:
+            if serie in [17,18,19,20]:
+                raise AttributeError('Serie '+serie + \
+                                     ' has no hkb data and will not be loaded')
         # Measures
 
         if day==11:
@@ -59,15 +67,17 @@ class CorSer(PyLayers):
             self.mocap =[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
             self.mocapinterf = [5,6,7,8,13,14,15,16,21,22,23,24,]
 
+        self.typ=''
+
         if serie in self.shkb:
             self.loadhkb(serie=serie,day=day,source=source)
-        
 
         if serie in self.stcr:
             self.loadTCR(serie=serie,day=day)
 
         if serie in self.sbs:
             self.loadBS(serie=serie,day=day)
+
 
 
         if self.typ=='FULL':
@@ -481,10 +491,14 @@ bernard
 
     def loadhkb(self,day=11,serie='',scenario='20',run=1,source='CITI'):
 
+        if day == 11:
+            if serie == 5:
+                source = 'UR1'
+
         if day==11:
             self.dHKB ={'AP1':1,'AP2':2,'AP3':3,'AP4':4,
                        'HeadRight':5,'TorsoTopRight':6,'TorsoTopLeft':7,'BackCenter':8,'ElbowRight':9,'ElbowLeft':10,'HipRight':11,'WristRight':12,'WristLeft':13,'KneeLeft':14,'AnckleRight':16,'AnckleLeft':15}
-            if source=='UR1':
+            if source=='UR1' :
                 dirname = os.path.join(self.rootdir,'POST-TREATED','11-06-2014','HIKOB')
             elif source=='CITI':
                 dirname = os.path.join(self.rootdir,'POST-TREATED','11-06-2014','HIKOB','CITI')
