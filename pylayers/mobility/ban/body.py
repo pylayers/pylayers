@@ -389,9 +389,15 @@ class Body(PyLayers):
         prefix = ['Bernard:','Bernard_','NicolasCormoran:',
                   'Nicolas_FullBody_ClusterOnly:',
                   'Eric_FullBody_ClusterOnly:',
-                  'Jihan_FullBody_ClusterOnly:']
+                  'Jihan_FullBody_ClusterOnly2:',
+                  'Jihan_FullBody_ClusterOnly:',
+                  'Nicolas_FullBody:',
+                  'Jihan_FullBody:',
+                  'Eric_FullBody:']
 
         self._mocanodes = self._p
+
+
         for p in prefix:
             tmpnode=[]
             for n in self._mocanodes:
@@ -2576,7 +2582,8 @@ class Body(PyLayers):
     def _checkdevid(self):
             """ display 
             """
-            [(k,self.dev[k]['uc3d']) for k in self.dev]
+            for k in self.dev:
+                print (k,self.dev[k]['uc3d']) 
 
 
 def translate(cycle, new_origin):

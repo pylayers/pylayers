@@ -31,7 +31,7 @@ class CorSer(PyLayers):
 
     """
 
-    def __init__(self,serie=6,day=11,source='UR1'):
+    def __init__(self,serie=6,day=11,source='CITI'):
 
         try:
             self.rootdir = os.environ['CORMORAN']
@@ -67,7 +67,8 @@ class CorSer(PyLayers):
 
         if serie in self.sbs:
             self.loadBS(serie=serie,day=day)
-
+        import ipdb
+        ipdb.set_trace()
 
         if self.typ=='FULL':
             self._filename = 'Sc' + self.scenario + '_S' + str(self.serie) + '_R' + str(self.run) + '_' + self.typ.capitalize()
@@ -88,7 +89,7 @@ class CorSer(PyLayers):
         self.subject = str(self.log['Subject'].values[0]).split(' ')
         # filter typos in  self.subject
         self.subject = filter(lambda x : len(x)!=0,self.subject)
-        if 'Jihad' in self.subject:
+        if 'Jihad' in self.subject :
             uj = self.subject.index('Jihad')
             self.subject[uj]='Jihan'
         
@@ -316,9 +317,11 @@ bernard
                      'Meriem_Cylindre:']
 
             for i in self.interf:
-                print "load ",i, " interfering body"
-                self.B.update({i:Cylinder(name=i,_filemocap=filemocap,unit = 'mm')})
-
+                try:
+                    print "load ",i, " interfering body"
+                    self.B.update({i:Cylinder(name=i,_filemocap=filemocap,unit = 'mm')})
+                except:
+                    print "Warning ! load ",i, " FAIL !"
         # if len(self.subject) == 1:
         #     self.B = self.B[self.subject]
 
@@ -476,7 +479,7 @@ bernard
         #self.t74 = t74 - t74[0]
 
 
-    def loadhkb(self,day=11,serie='',scenario='20',run=1,source='UR1'):
+    def loadhkb(self,day=11,serie='',scenario='20',run=1,source='CITI'):
 
         if day==11:
             self.dHKB ={'AP1':1,'AP2':2,'AP3':3,'AP4':4,
@@ -489,11 +492,9 @@ bernard
             self.dHKB= {'AP1':1,'AP2':2,'AP3':3,'AP4':4,'Jihad:TorsoTopRight':10,'Jihad:TorsoTopLeft':9,'Jihad:BackCenter':11,'JihadShoulderLeft':12,
              'Nicolas:TorsoTopRight':6,'Nicolas:TorsoTopLeft':5,'Nicolas:BackCenter':7,'Nicolas:ShoulderLeft':8,
              'Eric:TooTopRight':15,'Eric:TorsoTopLeft':13,'Eric:BackCenter':16,'Eric:ShoulderLeft':14}
-            if source=='UR1':
-                dirname = os.path.join(self.rootdir,'POST-TREATED','12-06-2014','HIKOB')
-            elif source=='CITI':
-                dirname = os.path.join(self.rootdir,'POST-TREATED','12-06-2014','HIKOB','CITI')
-
+            #if source=='UR1':
+            dirname = os.path.join(self.rootdir,'POST-TREATED','12-06-2014','HIKOB')
+         
         files = os.listdir(dirname)
 
         self.idHKB={}
