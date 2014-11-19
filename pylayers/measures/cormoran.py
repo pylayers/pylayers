@@ -552,7 +552,7 @@ bernard
         self.topandas()
         self.hkb = self.hkb[self.hkb!=0]
 
-    def visimda(self):
+    def visimda(self,square_mda=False):
         """ determine visibility of each HKB links
 
             Return
@@ -648,6 +648,7 @@ bernard
         intersect2D[uinter0[0],uinter0[1],uinter0[2]]=0
         # # integrate the effect of all bodies by summing on axis 1
         intersect = np.sum(intersect2D,axis=1)>0
+
         return intersect,links
 
     # def visimda(self):
@@ -2784,8 +2785,14 @@ bernard
         ihkb = hkbdf.index
         devdf.index = pd.to_datetime(idev,unit='s')
         hkbdf.index = pd.to_datetime(ihkb,unit='s')
+
         sf = (hkbdf.index[2]-hkbdf.index[1]).microseconds
         devdf= devdf.resample(str(sf)+'U')
+        
+        devdf.index = pd.Series([val.time() for val in devdf.index])
+        hkbdf.index = pd.Series([val.time() for val in hkbdf.index])
+
+
         return devdf,hkbdf
 
     def get_data(self,a,b):
