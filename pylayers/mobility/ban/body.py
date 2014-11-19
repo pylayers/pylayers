@@ -2857,7 +2857,8 @@ class Cylinder(object):
         self.pg = np.mean(self.d,axis=1)
         self.pg[2,:]=0
         self.radius = np.sqrt(np.sum((self.d[:,0,:]-self.d[:,1,:])**2,axis=0))/2.
-        self.topnode = 4
+        heighestpos = np.max(self.d[2,:,:])
+        self.topnode = np.where(self.d[2,:,:]==heighestpos)[0][0]
 
         self.Tmocap = self.nframes / info['VideoFrameRate']
 

@@ -550,7 +550,6 @@ bernard
         self.topandas()
         self.hkb = self.hkb[self.hkb!=0]
 
-
     def visimda(self):
         """ determine visibility MDA
         """
@@ -582,31 +581,137 @@ bernard
 
         dev_map=np.array(zip(*[tids[links[:,0]],tids[links[:,1]]]))
 
+        
+        # intersect2D matrix is 
+        # d_0: nb links
+        # d_1: (cylinder number) * nb body + 1 * nb  cylinder_object
+        # d_2 : nb frame
+        intersect2D = np.zeros((len(links),
+                                11*len(self.subject) + len(self.interf),
+                                dev.shape[-1]))
+        # usub : index axes subject
+        usub_start=0
+        usub_stop=0
         # C-D correspond to bodies segments
         # C or D : 3 x 11 body segments x time
+        # radius of cylinders are (nb_cylinder x time)
+        np.save('dev_map.npy',dev_map)
         for b in self.B:
+            print 'body', b
+            # if b is a body not a cylinder
+            if not 'Cylindre' in b:
+                uta = self.B[b].sl[:,0].astype('int')
+                uhe = self.B[b].sl[:,1].astype('int')
+                rad = self.B[b].sl[:,2]
 
-            uta = self.B[b].sl[:,0].astype('int')
-            uhe = self.B[b].sl[:,1].astype('int')
-
-            try:
-                C = np.concatenate((C,self.B[b].d[:,uta,:]),axis=1)
-                D = np.concatenate((D,self.B[b].d[:,uhe,:]),axis=1)
-                radius = np.hstack((radius,self.B[b].sl[:,2]))
-            except:
                 C = self.B[b].d[:,uta,:]
                 D = self.B[b].d[:,uhe,:]
-                radius = self.B[b].sl[:,2]
+                try:
+                    radius = np.concatenate((radius,rad[:,np.newaxis]*np.ones((1,C.shape[2]))),axis=0)
+                except:
+                    radius = rad[:,np.newaxis]*np.ones((1,C.shape[2]))
+                usub_start=usub_stop
+                usub_stop=usub_stop+11
+            else:
 
-        f,g,alpha,beta,dmin=seg.segdist(A,B,C,D,hard=True)
-        # intersection matrix
-        intersect2D = np.zeros(f.shape,dtype='int')
+                cyl = self.B[b]
+                # top of cylinder
+                top = cyl.d[:,cyl.topnode,:]
+                # bottom of cylinder =top with z =0
+                bottom = copy.copy(cyl.d[:,cyl.topnode,:])
+                bottom[2,:]=0.02
+                # top 3 x 1 X time
+                C=top[:,np.newaxis,:]
+                D=bottom[:,np.newaxis,:]
+                radius = np.concatenate((radius,cyl.radius[np.newaxis]))
+                usub_start=usub_stop
+                usub_stop=usub_stop+1
+            f,g,alpha,beta,dmin=seg.segdist(A,B,C,D,hard=True)
+            intersect2D[:,usub_start:usub_stop,:]=f
 
-        uinter= np.where(f<radius[np.newaxis,:,np.newaxis])
-        intersect2D[uinter[0],uinter[1],uinter[2]]=1
-
+        np.save('intersect2D',intersect2D)
+        uinter1 = np.where((intersect2D<=radius))
+        uinter0 = np.where((intersect2D>radius))
+        intersect2D[uinter1[0],uinter1[1],uinter1[2]]=1
+        intersect2D[uinter0[0],uinter0[1],uinter0[2]]=0
+        # # integrate the effect of all bodies by summing on axis 1
         intersect = np.sum(intersect2D,axis=1)>0
-        return intersect,dev_map
+        return intersect,dev_map,intersect2D,radius
+    # def visimda(self):
+    #     """ determine visibility MDA
+    #     """
+
+    #     import itertools
+    #     # link ids order 
+    #     ids = np.unique(self.devdf['id'])
+    #     # nblink ids
+    #     nbids = len(ids)
+    #     # nb infra nodes 
+    #     nbin = len(self.din)
+    #     # total link ids ( including infra nodes)
+    #     tids =np.hstack((ids,self.din.keys()))
+    #     # A-B corresponds to links
+
+    #     # extract all dev position on body
+    #     # dev : (3 x (nb devices + nb infra nodes) x nb_timestamp)
+    #     dev = np.empty((3,nbids+nbin,len(self.devdf.index)/nbids))
+    #     for ik,i in enumerate(ids) :
+    #         dev[:,ik,:] = self.devdf[self.devdf['id']==i][['x','y','z']].values.T
+    #     # add infra nodes
+    #     for ik,i in enumerate(self.din):
+    #         dev[:,nbids+ik,:]=self.din[i]['p'][:,np.newaxis]
+
+    #     # determine all the links
+    #     links = np.array([x for x in itertools.combinations(range(nbids+nbin),2)])
+    #     A = dev[:,links[:,0]]
+    #     B = dev[:,links[:,1]]
+
+    #     dev_map=np.array(zip(*[tids[links[:,0]],tids[links[:,1]]]))
+
+    #     # C-D correspond to bodies segments
+    #     # C or D : 3 x 11 body segments x time
+    #     # radius of cylinders are (nb_cylinder x time)
+    #     for b in self.B:
+    #         # if b is a body not a cylinder
+    #         if not 'Cylindre' in b:
+    #             uta = self.B[b].sl[:,0].astype('int')
+    #             uhe = self.B[b].sl[:,1].astype('int')
+    #             rad = self.B[b].sl[:,2]
+    #             try:
+    #                 C = np.concatenate((C,self.B[b].d[:,uta,:]),axis=1)
+    #                 D = np.concatenate((D,self.B[b].d[:,uhe,:]),axis=1)
+    #                 radius = np.concatenate((radius,rad[:,np.newaxis]*np.ones((1,C.shape[2]))),axis=0)
+    #             except:
+    #                 import ipdb
+    #                 ipdb.set_trace()
+    #                 C = self.B[b].d[:,uta,:]
+    #                 D = self.B[b].d[:,uhe,:]
+    #                 radius = rad[:,np.newaxis]*np.ones((1,C.shape[2]))
+    #         else:
+
+    #                 cyl = self.B[b]
+    #                 # top of cylinder
+    #                 top = cyl.d[:,cyl.topnode,:]
+    #                 # bottom of cylinder =top with z =0
+    #                 bottom = copy.copy(cyl.d[:,cyl.topnode,:])
+    #                 bottom[2,:]=0.
+    #                 # top 3 x 1 X time
+    #                 top=top[:,np.newaxis,:]
+    #                 bottom=bottom[:,np.newaxis,:]
+    #                 C = np.concatenate((C,top),axis=1)
+    #                 D = np.concatenate((D,bottom),axis=1)
+    #                 radius = np.concatenate((radius,cyl.radius[np.newaxis]))
+    #     import ipdb
+    #     ipdb.set_trace()
+    #     f,g,alpha,beta,dmin=seg.segdist(A,B,C,D,hard=True)
+    #     # intersection matrix
+    #     intersect2D = np.zeros(f.shape,dtype='int')
+
+    #     uinter= np.where(f<radius[np.newaxis,:,np.newaxis])
+    #     intersect2D[uinter[0],uinter[1],uinter[2]]=1
+
+    #     intersect = np.sum(intersect2D,axis=1)>0
+    #     return intersect,dev_map
 
 
     def _distancematrix(self):
@@ -1048,11 +1153,11 @@ bernard
         if isinstance(b,str):
             ib = self.dHKB[b]
         else:
-            ib = b
+            ib = bq
             b = self.idHKB[b]
 
 
-        time = self.thkb[0]
+        time = self.thkb
         if len(time) == 1:
             time=time[0]
 
@@ -1728,7 +1833,7 @@ bernard
         t0 =kwargs['t0']
         t1 =kwargs['t1']
         if t1 ==-1:
-            t1=self.thkb[0][-1]
+            t1=self.thkb[-1]
 
         if isinstance(a,str):
             ia = self.dTCR[a]
@@ -2244,6 +2349,8 @@ bernard
             Nframe = A.shape[0]
         if 'AP' not in b:
             Nframe = B.shape[0]
+        else: 
+            Nframe = self.B[self.B.keys()[0]]
         iframe = np.arange(0,Nframe-1,dsf)
         tvisi = []
         #
@@ -2616,9 +2723,10 @@ bernard
 
 
             for b in self.B:
-                if ba in self.B[b].dev.keys():
-                    subject = b
-                    break
+                if not 'Cylindre' in b:
+                    if ba in self.B[b].dev.keys():
+                        subject = b
+                        break
 
         else:
             if techno == 'TCR':
@@ -2631,9 +2739,10 @@ bernard
                 ba='HKB:'+str(ia)
 
             for b in self.B:
-                if ba in self.B[b].dev.keys():
-                    subject = b
-                    break
+                if not 'Cylindre' in b:
+                    if ba in self.B[b].dev.keys():
+                        subject = b
+                        break
 
         return a,ia,ba,subject
 
