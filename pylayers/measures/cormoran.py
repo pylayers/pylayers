@@ -332,6 +332,8 @@ bernard
                     self.B.update({i:Cylinder(name=i,_filemocap=filemocap,unit = 'mm')})
                 except:
                     print "Warning ! load ",i, " FAIL !"
+        else :
+            self.interf=[]
         # if len(self.subject) == 1:
         #     self.B = self.B[self.subject]
 
@@ -551,53 +553,63 @@ bernard
         self.hkb = self.hkb[self.hkb!=0]
 
     def visimda(self):
-        """ determine visibility MDA
+        """ determine visibility of each HKB links
+
+            Return
+            ------
+
+            intersection : (nblink x nb_timestamp)
+                matrice of intersection (1 if link is cut 0 otherwise)
+            links : (nblink x2)
+                name of the links
         """
 
-        import itertools
-        # link ids order 
-        ids = np.unique(self.devdf['id'])
-        # nblink ids
-        nbids = len(ids)
-        # nb infra nodes 
-        nbin = len(self.din)
-        # total link ids ( including infra nodes)
-        tids =np.hstack((ids,self.din.keys()))
-        # A-B corresponds to links
-
-        # extract all dev position on body
-        # dev : (3 x (nb devices + nb infra nodes) x nb_timestamp)
-        dev = np.empty((3,nbids+nbin,len(self.devdf.index)/nbids))
-        for ik,i in enumerate(ids) :
-            dev[:,ik,:] = self.devdf[self.devdf['id']==i][['x','y','z']].values.T
-        # add infra nodes
-        for ik,i in enumerate(self.din):
-            dev[:,nbids+ik,:]=self.din[i]['p'][:,np.newaxis]
-
-        # determine all the links
-        links = np.array([x for x in itertools.combinations(range(nbids+nbin),2)])
-        A = dev[:,links[:,0]]
-        B = dev[:,links[:,1]]
-
-        dev_map=np.array(zip(*[tids[links[:,0]],tids[links[:,1]]]))
-
         
+        # get link list
+        links=[n.split('-') for n in self.hkb.keys()]
+        # mapping between device name in self.hkb and on body/in self.devdf
+        dev_bid = [self.devmapper(k)[2] for k in self.dHKB.keys()]
+
+        nb_totaldev=len(np.unique(self.devdf['id'])) 
+        # extract all dev position on body
+        # Mpdev : (3 x (nb devices + nb infra nodes) x nb_timestamp)
+        Mpdev = np.empty((3,len(dev_bid)+4,len(self.devdf.index)/nb_totaldev))
+
+        # get all positions
+        for ik,i in enumerate(dev_bid) :
+            try:
+                Mpdev[:,ik,:] = self.devdf[self.devdf['id']==i][['x','y','z']].values.T
+            except:
+                Mpdev[:,ik,:] = self.din[i]['p'][:,np.newaxis]
+
+        # create A and B from links 
+        nA = np.array(['HKB:'+ str(self.dHKB[l[0]]) for l in links])
+        nB = np.array(['HKB:'+ str(self.dHKB[l[1]]) for l in links])
+
+        dma = dict(zip(dev_bid,range(len(dev_bid))))
+        mnA = [dma[n] for n in nA]
+        mnB = [dma[n] for n in nB]
+
+        A=Mpdev[:,mnA]
+        B=Mpdev[:,mnB]
+
+
+
         # intersect2D matrix is 
         # d_0: nb links
         # d_1: (cylinder number) * nb body + 1 * nb  cylinder_object
         # d_2 : nb frame
         intersect2D = np.zeros((len(links),
                                 11*len(self.subject) + len(self.interf),
-                                dev.shape[-1]))
+                                Mpdev.shape[-1]))
         # usub : index axes subject
         usub_start=0
         usub_stop=0
         # C-D correspond to bodies segments
         # C or D : 3 x 11 body segments x time
         # radius of cylinders are (nb_cylinder x time)
-        np.save('dev_map.npy',dev_map)
         for b in self.B:
-            print 'body', b
+            print 'processing shadowing from ',b
             # if b is a body not a cylinder
             if not 'Cylindre' in b:
                 uta = self.B[b].sl[:,0].astype('int')
@@ -636,7 +648,8 @@ bernard
         intersect2D[uinter0[0],uinter0[1],uinter0[2]]=0
         # # integrate the effect of all bodies by summing on axis 1
         intersect = np.sum(intersect2D,axis=1)>0
-        return intersect,dev_map,intersect2D,radius
+        return intersect,links
+
     # def visimda(self):
     #     """ determine visibility MDA
     #     """
