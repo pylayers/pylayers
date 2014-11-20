@@ -552,23 +552,81 @@ bernard
         self.topandas()
         self.hkb = self.hkb[self.hkb!=0]
 
-    def visimda(self,square_mda=False):
-        """ determine visibility of each HKB links
+    def visimda(self,techno='HKB',square_mda=True,all_links=True):
+        """ determine visibility of links of a givcen techno
+
+
+            Parameters
+            ----------
+
+            techno  string
+                select the given radio technology of the nodes ( to determine 
+                    the visi matrix)
+
+            square_mda  boolean
+                select ouput format
+                    True : (device x device x timestamp)
+                    False : (link x timestamp)
+
+            all_links : bool
+                compute all links or just those for which data is available
 
             Return
             ------
+
+            if square_mda = True
+            
+            intersection : (ndevice x nbdevice x nb_timestamp)
+                matrice of intersection (1 if link is cut 0 otherwise)
+            links : (nbdevice)
+                name of the links
+
+
+            if square_mda = False
 
             intersection : (nblink x nb_timestamp)
                 matrice of intersection (1 if link is cut 0 otherwise)
             links : (nblink x2)
                 name of the links
+
+            Example
+            -------
+
+            >>> from pylayers.measures.cormoran import *
+            >>> import matplotlib.pyplot as plt
+            >>> C=CorSer(serie=14,day=12)
+            >>> inter,links=C.visimda(techno='TCR',square_mda=True)
+            >>> inter.shape
+                (15, 15, 12473)
+            >>>C.imshowvisimda(inter,links)
+
+
         """
 
-        
+
+
+        if techno == 'TCR':
+            if not ((self.typ == 'TCR') or  (self.typ == 'FULL')):
+                raise AttributeError('Serie has not data for techno: ',techno)
+            hname = self.tcr.keys()
+            dnode=copy.copy(self.dTCR)
+            dnode.pop('COORD')
+            prefix = 'TCR:'
+        elif techno=='HKB':
+            if not ((self.typ == 'HKBS') or not (self.typ == 'FULL')):
+                raise AttributeError('Serie has not data for techno: '+techno)
+            hname = self.hkb.keys()
+            dnode=self.dHKB
+            prefix = 'HKB:'
         # get link list
-        links=[n.split('-') for n in self.hkb.keys()]
+        if all_links:
+            import itertools
+            links =[l for l in itertools.combinations(dnode.keys(),2)]
+        else:
+            links=[n.split('-') for n in hname]
+            links = [l for l in links if ('COORD' not in l[0]) and ('COORD' not in l[1])]
         # mapping between device name in self.hkb and on body/in self.devdf
-        dev_bid = [self.devmapper(k)[2] for k in self.dHKB.keys()]
+        dev_bid = [self.devmapper(k,techno=techno)[2] for k in dnode.keys()]
 
         nb_totaldev=len(np.unique(self.devdf['id'])) 
         # extract all dev position on body
@@ -577,14 +635,14 @@ bernard
 
         # get all positions
         for ik,i in enumerate(dev_bid) :
-            try:
-                Mpdev[:,ik,:] = self.devdf[self.devdf['id']==i][['x','y','z']].values.T
-            except:
-                Mpdev[:,ik,:] = self.din[i]['p'][:,np.newaxis]
+                try:
+                    Mpdev[:,ik,:] = self.devdf[self.devdf['id']==i][['x','y','z']].values.T
+                except:
+                    Mpdev[:,ik,:] = self.din[i]['p'][:,np.newaxis]
 
         # create A and B from links 
-        nA = np.array(['HKB:'+ str(self.dHKB[l[0]]) for l in links])
-        nB = np.array(['HKB:'+ str(self.dHKB[l[1]]) for l in links])
+        nA = np.array([prefix+ str(dnode[l[0]]) for l in links])
+        nB = np.array([prefix+ str(dnode[l[1]]) for l in links])
 
         dma = dict(zip(dev_bid,range(len(dev_bid))))
         mnA = [dma[n] for n in nA]
@@ -649,7 +707,59 @@ bernard
         # # integrate the effect of all bodies by summing on axis 1
         intersect = np.sum(intersect2D,axis=1)>0
 
+        if square_mda:
+            dev= np.unique(links)
+            ddev = dict(zip(dev,range(len(dev))))
+            lmap = np.array(map(lambda x: (ddev[x[0]],ddev[x[1]]),links))
+            M = np.nan*np.ones((len(dev),len(dev),intersect.shape[-1]))
+            for i in range(len(intersect)):
+                id1 = lmap[i][0]
+                id2 = lmap[i][1]
+                M[id1,id2,:]=intersect[i,:]
+                M[id2,id1,:]=intersect[i,:]
+            intersect=M
+            links = dev
+
         return intersect,links
+
+    def imshowvisimda(self,inter,links,**kwargs):
+        """  imshow visibility mda
+
+        inter : (nb link x nb link x timestamps)
+        links : (nblinks)
+
+        """
+        defaults = { 't':0,
+                    }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        if 'fig' not in kwargs:
+           fig = plt.figure()
+        else:
+           fig = kwargs.pop('fig')
+
+        if 'ax' not in kwargs:
+            ax = fig.add_subplot(111)
+        else:
+            ax = kwargs.pop('ax')
+
+
+        plt.xticks(np.arange(0, len(links), 1.0))
+        plt.yticks(np.arange(0, len(links), 1.0))
+        ax.set_xlim([-0.5,len(links)-0.5])
+        ax.set_ylim([len(links)-0.5,-0.5])
+        ax.xaxis.set_ticks_position('top') 
+        xtickNames = plt.setp(ax, xticklabels=links)
+        ytickNames = plt.setp(ax, yticklabels=links)
+        plt.setp(xtickNames, rotation=90, fontsize=8)
+        plt.setp(ytickNames, rotation=0, fontsize=8)
+        ims=[]
+        ax.imshow(inter[:,:,kwargs['t']],interpolation='nearest')
+        return fig,ax
+
 
     # def visimda(self):
     #     """ determine visibility MDA
@@ -1729,18 +1839,9 @@ bernard
             except:
                 t1=self.thkb[-1]
 
-        if isinstance(a,str):
-            ia = self.dHKB[a]
-        else:
-            ia = a
-            a = self.idHKB[a]
-
-        if isinstance(b,str):
-            ib = self.dHKB[b]
-        else:
-            ib = b
-            b = self.idHKB[b]
-
+        a,ia,bia,subja=self.devmapper(a)
+        b,ib,bib,subjb=self.devmapper(b)
+        
         if kwargs['shortlabel']:
 
             #find uppercase position
@@ -2730,7 +2831,7 @@ bernard
         if isinstance(a,str):
             if techno == 'TCR':
                 ia = self.dTCR[a]
-                nna='TCR:'+str(ia)
+                ba='TCR:'+str(ia)
             elif techno == 'HKB':
                 ia = self.dHKB[a]
                 ba='HKB:'+str(ia)
@@ -2746,7 +2847,7 @@ bernard
             if techno == 'TCR':
                 ia = a
                 a = self.idTCR[a]
-                nna='TCR:'+str(ia)
+                ba='TCR:'+str(ia)
             elif techno == 'HKB':
                 ia = a
                 a = self.idHKB[a]
