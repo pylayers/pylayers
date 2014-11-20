@@ -652,7 +652,6 @@ bernard
         B=Mpdev[:,mnB]
 
 
-
         # intersect2D matrix is 
         # d_0: nb links
         # d_1: (cylinder number) * nb body + 1 * nb  cylinder_object
@@ -2667,6 +2666,8 @@ bernard
                 example : if you want to replace a device id named 'TCR:34'
                 to an id = 5, you have to add an entry in the alias dictionnary as :
                 alias.update({'TCR34':5})
+            offset : np.array
+                apply an offset on positions
 
         Return
         ------
@@ -2677,6 +2678,7 @@ bernard
 
         defaults={'unit' :'mm',
                   'tunit':'ns',
+                  'offset':np.array(([0,0,0])),
                   'alias':{}}
 
         for key, value in defaults.items():
@@ -2724,9 +2726,9 @@ bernard
         if unit == 'mm':
             _unit = 1e3
 
-        ldf.loc[:,'x']=ldf.loc[:,'x']*_unit
-        ldf.loc[:,'y']=ldf.loc[:,'y']*_unit
-        ldf.loc[:,'z']=ldf.loc[:,'z']*_unit
+        ldf.loc[:,'x']=ldf.loc[:,'x']*_unit-kwargs['offset'][0]
+        ldf.loc[:,'y']=ldf.loc[:,'y']*_unit-kwargs['offset'][1]
+        ldf.loc[:,'z']=ldf.loc[:,'z']*_unit-kwargs['offset'][2]
 
         # fix time unit
         if tunit == 'ms':
