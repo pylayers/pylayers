@@ -695,12 +695,53 @@ bernard
                 radius = np.concatenate((radius,cyl.radius[np.newaxis]))
                 usub_start=usub_stop
                 usub_stop=usub_stop+1
-            f,g,alpha,beta,dmin=seg.segdist(A,B,C,D,hard=True)
-            intersect2D[:,usub_start:usub_stop,:]=f
+            f,g,X,Y,alpha,beta,dmin=seg.segdist(A,B,C,D,hard=True)
+            intersect2D[:,usub_start:usub_stop,:]=g
 
-        np.save('intersect2D',intersect2D)
-        uinter1 = np.where((intersect2D<=radius))
-        uinter0 = np.where((intersect2D>radius))
+            # fig=plt.figure()
+            # ax=fig.add_subplot(111,projection='3d')
+            # ndev=58
+            # ncyl=0
+            # ax.plot([A[0,ndev,0],B[0,ndev,0]],[A[1,ndev,0],B[1,ndev,0]],[A[2,ndev,0],B[2,ndev,0]])
+            # for k in range(11):
+            #     ax.plot([C[0,k,0],D[0,k,0]],[C[1,k,0],D[1,k,0]],[C[2,k,0],D[2,k,0]],'k')
+            # ax.plot([X[0,ndev,ncyl,0],Y[0,ndev,ncyl,0]],[X[1,ndev,ncyl,0],Y[1,ndev,ncyl,0]],[X[2,ndev,ncyl,0],Y[2,ndev,ncyl,0]])
+            # plt.show()
+            # import ipdb
+            # ipdb.set_trace()
+            # import ipdb
+            # ipdb.set_trace()
+
+            # # al1,be1,dm1=seg.dmin3d(A,B,C,D)
+            # # f1,g1=seg.dist(A,B,C,D,al1,be1)
+            # # gg1=np.sqrt(g1)
+
+
+            
+            # aa=A[:,ndev,0]
+            # bb=B[:,ndev,0]
+            # interf=[0]*11
+            # interg=[0]*11
+            # for i in range(11):
+            #     cc=C[:,i,0]
+            #     dd=D[:,i,0]
+            #     alpha,beta,dmin=seg.dmin3d_nonvectorized(aa,bb,cc,dd)
+            #     ff,gg,xx,yy=seg.dist_nonvectorized(aa,bb,cc,dd,alpha,beta)
+
+            #     interf[i]=np.sqrt(ff)#<radius[i,0]
+            #     interg[i]=np.sqrt(gg)#<radius[i,0]
+            # f1=plt.figure()
+            # ax1=f1.add_subplot(111,projection='3d')
+            # ax1.plot([aa[0],bb[0]],[aa[1],bb[1]],[aa[2],bb[2]])
+            # ax1.plot([cc[0],dd[0]],[cc[1],dd[1]],[cc[2],dd[2]])
+            # ax1.plot([xx[0],yy[0]],[xx[1],yy[1]],[xx[2],yy[2]])
+            # plt.draw()
+            # import ipdb
+            # ipdb.set_trace()
+
+
+        uinter1 = np.where((intersect2D<=(radius)))
+        uinter0 = np.where((intersect2D>(radius)))
         intersect2D[uinter1[0],uinter1[1],uinter1[2]]=1
         intersect2D[uinter0[0],uinter0[1],uinter0[2]]=0
         # # integrate the effect of all bodies by summing on axis 1
@@ -729,6 +770,7 @@ bernard
 
         """
         defaults = { 't':0,
+                     'grid':True,
                     }
 
         for k in defaults:
@@ -757,6 +799,9 @@ bernard
         plt.setp(ytickNames, rotation=0, fontsize=8)
         ims=[]
         ax.imshow(inter[:,:,kwargs['t']],interpolation='nearest')
+        if kwargs['grid']:
+            ax.grid()
+
         return fig,ax
 
 
@@ -976,7 +1021,7 @@ bernard
         try:
             uldir = luldir.index(True)
             _filename = ldir[uldir]
-            filename = videofile+_filename
+            filename = os.path.join(videofile,_filename)
             os.system('vlc '+filename +'&' )
         except:
             raise AttributeError('file '+ self._filename + ' not found')
@@ -1083,6 +1128,7 @@ bernard
         defaults = { 'L':True,
                      'body':True,
                      'subject':[],
+                     'interf':True,
                      'trajectory' :True,
                      'devsize':100,
                      'inodes' : True,
@@ -1134,7 +1180,7 @@ bernard
             for ki, i in enumerate(time):
                 for ib,b in enumerate(subject):
                     self.B[b].settopos(t=i,cs=True)
-                    self.B[b]._show3(dev=True,devsize=kwargs['devsize'])
+                    self.B[b]._show3(dev=True,devsize=kwargs['devsize'],tube_sides=12)
                     if kwargs['tagtraj']:
                         X=self.B[b].traj[['x','y','z']].values[self.B[b].toposFrameId]
                         if kwargs['tagpoffset']==[]:
@@ -1146,7 +1192,10 @@ bernard
                         else :
                             name = str(kwargs['tagname'][ki])
                         mlab.text3d(X[0],X[1],X[2],name,scale=kwargs['fontsizetag'])
-
+                if kwargs['interf']:
+                    for ib,b in enumerate(self.interf):
+                        self.B[b].settopos(t=i,cs=True)
+                        self.B[b]._show3(tube_sides=12)
 
         if kwargs['trajectory']:
             for b in subject:
@@ -2629,8 +2678,10 @@ bernard
         for b in B:
             if 'dev' in dir(B[b]):
                 dev = B[b].dev.keys()
-                udev=[B[b].dev[d]['uc3d'][0] for d in dev]
-                pos = B[b]._f[:,udev,:]
+                udev=[B[b].dev[d]['uc3d'] for d in dev]
+
+                postmp = np.array([np.mean(B[b]._f[:,u,:],axis=1) for u in udev])
+                pos = postmp.swapaxes(0,1)
                 t = B[b].time
                 for d in range(len(dev)):
                     df_tmp=pd.DataFrame(pos[:,d,:],columns=['x','y','z'],index=t)

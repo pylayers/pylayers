@@ -656,9 +656,15 @@ class Body(PyLayers):
 
         for d in self.dev:
             df[d]['dev_id'] = d
-            df[d]['dev_x'] = self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],0]
-            df[d]['dev_y'] = self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],1]
-            df[d]['dev_z'] = self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],2]
+
+            try:
+                df[d]['dev_x'] = np.mean(self._f[:len(self.time)-2,self.dev[d]['uc3d'],0],axis=1)
+                df[d]['dev_y'] = np.mean(self._f[:len(self.time)-2,self.dev[d]['uc3d'],1],axis=1)
+                df[d]['dev_z'] = np.mean(self._f[:len(self.time)-2,self.dev[d]['uc3d'],2],axis=1)
+            except:
+                df[d]['dev_x'] = self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],0]
+                df[d]['dev_y'] = self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],1]
+                df[d]['dev_z'] = self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],2]
             # gather all devices in a single dataframe:
             addf = pd.DataFrame()
             for d in df:
@@ -1241,7 +1247,7 @@ class Body(PyLayers):
                         self.dev[dev]['asscyl']= um[0]
 
 
-                    mp0 = self._f[fId,self.dev[dev]['uc3d'][0],:]
+                    mp0 = np.mean(self._f[fId,self.dev[dev]['uc3d'],:],axis=0)
                     Tn = self.ccs[self.dev[dev]['asscyl'],:,:]
 
                 self.dcs[dev] = np.hstack((mp0[:,np.newaxis],Tn))
@@ -1633,7 +1639,7 @@ class Body(PyLayers):
             fig.children[-1].__setattr__('name',self.filename )
             if kwargs['text']:
                 self._mayaptstxt=[mlab.text3d(self._f[fId,i,0],self._f[fId,i,1],self._f[fId,i,2],self._p[i].replace(self._s[0],''),
-                                    scale=15,
+                                    scale=(50.*self._unit,50.*self._unit,50.*self._unit),
                                     color=(0,0,0)) for i in range(len(self._p))]
 
         else :
@@ -1662,7 +1668,7 @@ class Body(PyLayers):
                 fig.children[-1].__setattr__('name',self.name )
             if kwargs['text']:
                 self._mayaptstxt=[mlab.text3d(X[0,i],X[1,i], X[2,i],self.idcyl[i],
-                                scale=(0.1,0.1,0.1),
+                                scale=(50.*self._unit,50.*self._unit,50.*self._unit),
                                 color=(0,0,0)) for i in range(self.ncyl)]
 
     def plot3d(self,iframe=0,topos=False,fig=[],ax=[],col='b'):
@@ -1830,6 +1836,7 @@ class Body(PyLayers):
                 X=np.array(self.getdevp(dev)).T
             else:
                 udev = [self.dev[i]['uc3d'][0] for i in self.dev]
+
                 center = self.pg[:,fId]
                 X=self._f[fId,udev,:].T-center[:,np.newaxis]
 

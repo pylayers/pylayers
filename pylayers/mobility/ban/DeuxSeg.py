@@ -16,7 +16,10 @@ def dist_nonvectorized(A,B,C,D,alpha,beta):
     D
     alpha
     beta
+    Return
+    ------
 
+        distance f ( =g <= comuted from another way)
     """
     AC=C-A
     CD=D-C
@@ -327,9 +330,8 @@ def segdist(A,B,C,D,hard=True):
         D   (3xM) end point segment 2  
             [or (3xMxK) end point segment 2 for K realizations]
         hard : boolean:
-            if True when alpha<0 and beta<0 then alpha=0 and beta =0
-                    and when alpha>1 and beta>1 then alpha=1 and beta=1
-            elif False: use True alpha beta values in computation
+            if True minimal distance between AB and CD must be on both segments
+            elif False: minimal distnace can be located on the lines descibed by AB or CD 
     Returns
     -------
 
@@ -360,7 +362,7 @@ def segdist(A,B,C,D,hard=True):
     AC = C[:,np.newaxis,:]-A[:,:,np.newaxis]
     # 3 x M 
     CD = D-C
-    # 3 x N 
+    # 3 x N p
     BA = A-B
 
     # u0 : N x M
@@ -406,7 +408,7 @@ def segdist(A,B,C,D,hard=True):
     # g : N x M
     g =np.sqrt(np.einsum('ijk...,ijk...->jk...',X-Y,X-Y))
 
-    return(f,g,alpha,beta,dmin)
+    return(f,g,X,Y,alpha,beta,dmin)
 
 
 # <codecell>
