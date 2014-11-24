@@ -29,15 +29,9 @@ Note : The PYLAYERS environement variable MUST be set in the directory conatinin
 
 
 1 - Download and Install Anaconda from https://store.continuum.io/cshop/anaconda/
-2 - Download and Instal the Shapely package corresponding to your platform from http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely *
-3 - Download and Instal basemap package corresponding to your platform from http://sourceforge.net/projects/matplotlib/files/matplotlib-toolkits/basemap-1.0.7/ *
-4 - open a terminal and execute the following lines :
-
-conda install mayavi --yes
-conda install gdal --yes
-pip install protobuf 
-python setup.py install
-
+2 - Run installer.bat
+3 - Download the Shapely package corresponding to your platform from http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely *
+4 - Install shapely using the downloaded file
 5 - Set environement Variables :
     Procedure for WinXP :  http://support.microsoft.com/kb/310519/fr-fr
     Procedure for Vista/windows 7: Start -> Right click on computer -> Properties -> Advanced system parameters -> Environement variables
@@ -48,7 +42,7 @@ python setup.py install
 
 
 
-* Despite shapely and basemap are part of the Anaconda distribution, the Windows distibution doesn't contains the libgeos depencies.
+* Despite shapely is part of the Anaconda distribution, the Windows distibution doesn't contains the libgeos depencies.
 
 
 

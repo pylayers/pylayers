@@ -138,7 +138,7 @@ class Furniture(object):
             >>> axis = plt.axis('scaled')
             >>> plt.show()
         """
-        filefurn = pyu.getlong(_filename, "struc/furnitures")
+        filefurn = pyu.getlong(_filename,os.path.join('struc','furnitures'))
         config = ConfigParser.ConfigParser()
         config.read(filefurn)
 

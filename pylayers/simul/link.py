@@ -390,7 +390,6 @@ class DLink(Link):
             self.L.dumpw()
         #self.L.build()
 
-
         ###########
         # init pos & cycles
         #
@@ -1052,8 +1051,6 @@ class DLink(Link):
             Force the computation (['sig','ray','Ct','H']) AND save (replace previous computations)
         si_algo : str ('old'|'new')
             signature.run algo type
-        ra_ceil_height_meter : int
-            rays.to3D ceil height in meters
         ra_number_mirror_cf : int
             rays.to3D number of ceil/floor reflexions
 
@@ -1158,7 +1155,7 @@ class DLink(Link):
         else :
             # perform computation ...
             r2d = Si.rays(self.a,self.b)
-            R = r2d.to3D(self.L,H=kwargs['ra_ceil_height_meter'], N=kwargs['ra_number_mirror_cf'])
+            R = r2d.to3D(self.L,H=self.L.maxheight, N=kwargs['ra_number_mirror_cf'])
             R.locbas(self.L)
             # ...and save
             self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])
@@ -1190,7 +1187,7 @@ class DLink(Link):
         ############
         # H
         ############
-        H=Tchannel()
+        H = Tchannel()
 
         if self.dexist['H']['exist'] and not ('H' in kwargs['force']):
             self.load(H,self.dexist['H']['grpname'])

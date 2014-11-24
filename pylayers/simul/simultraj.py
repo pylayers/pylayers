@@ -20,7 +20,7 @@ Run simulation and data exploitation
 
     Simul.__init__
     Simul.run
-    Simul.gen_net
+    Simul._gen_net
     Simul.evaldeter
     Simul.evalstat
     Simul.show
@@ -50,6 +50,8 @@ from pylayers.gis.layout import Layout
 from pylayers.antprop import antenna
 from pylayers.network.network import Network
 from pylayers.simul.link import *
+from pylayers.measures.cormoran import *
+
 # Handle directory hierarchy
 from pylayers.util.project import *
 # Handle UWB measurements
@@ -58,7 +60,6 @@ from pylayers.mobility.ban.body import *
 from pylayers.antprop.statModel import *
 import pandas as pd
 import csv
-from pylayers.measures.cormoran import *
 
 class Simul(PyLayers):
     """
@@ -70,21 +71,24 @@ class Simul(PyLayers):
         A Person
         A Trajectory
 
+    or a CorSer instance
+
     """
 
-    def __init__(self, _filetraj='simulnet_TA-Office.h5',verbose=False,mocap=False,serie=5,day=11):
+    def __init__(self, source ='simulnet_TA-Office.h5',verbose=False,):
         """ object constructor
+
+
 
         Parameters
         ----------
 
-        _filetraj : string
+        source : string
             h5 trajectory
         verbose : boolean
 
         """
 
-        self.filetraj = _filetraj
 
         # self.progress = -1  # simulation not loaded
         self.verbose = verbose
@@ -94,13 +98,23 @@ class Simul(PyLayers):
         self.dap = {}
         self.Nag = 0
         self.Nap = 0
-        if not mocap:
-            self.load_config(_filetraj)
-        else:
-            self.load_corser(serie=serie,day=day)
-        self.gen_net()
+
+        if isinstance(source,str):
+            self.filetraj = source
+            self.load_simul(source)
+
+        elif isinstance(source,CorSer):
+            self.filetraj = source._filename
+            self.load_CorSer(source)
+            cutoff=2
+
+
+        
+        self._gen_net()
         self.SL = SLink()
         self.DL = DLink(L=self.L,verbose=self.verbose)
+        self.DL.cutoff=cutoff
+
         self.filename = 'simultraj_' + self.filetraj
         self.data = pd.DataFrame(columns=['id_a', 'id_b',
                                           'x_a', 'y_a', 'z_a',
@@ -124,6 +138,7 @@ class Simul(PyLayers):
 
     def __repr__(self):
 
+
         s = 'Simul trajectories class\n'
         s = s + '------------------------\n'
         s = s +'\n'
@@ -143,66 +158,18 @@ class Simul(PyLayers):
 
 
         return s
-    def load_corser(self, serie=serie,day=day):
-        
-         """  load a simultraj configuration from measure serie
 
-        Parameters
-        ----------
-
-        serie: integer
-            serie number
-        day: integer 
-            measurement day 
-
-        """
-        
-        Serie =  CorSer(serie = serie, day = day)
-       
-        #self.filetraj = _filetraj
-
-        # get the trajectory
-        traj = tr.Trajectories()
-        for body in Serie.B:
-            
-            #traj.loadh5(self.filetraj)
-
-        # get the layout
-        self.L = Layout(traj.Lfilename)
-
-        # resample trajectory
-
-        for ut, t in enumerate(traj):
-            if t.typ == 'ag':
-                person = Body(t.name + '.ini')
-                tt = t.time()
-                self.dpersons.update({t.name: person})
-                self._tmin = tt[0]
-                self._tmax = tt[-1]
-                self.time = tt
-            else:
-                pos = np.array([t.x[0], t.y[0], t.z[0]])
-                self.dap.update({t.ID: {'pos': pos,
-                                        'ant': antenna.Antenna(),
-                                        'name': t.name
-                                        }
-                                 })
-        self.ctime = np.nan
-        self.Nag = len(self.dpersons.keys())
-        self.Nap = len(self.dap.keys())
-        self.traj = traj
-        return 0
-    def load_config(self, _filetraj):
+    def load_simul(self, source):
         """  load a simultraj configuration file
 
         Parameters
         ----------
 
-        _filetraj : string
+        source : string
             name of simulation file to be loaded
 
         """
-        self.filetraj = _filetraj
+        self.filetraj = source
 
 
         # get the trajectory
@@ -213,7 +180,6 @@ class Simul(PyLayers):
         self.L = Layout(traj.Lfilename)
 
         # resample trajectory
-
         for ut, t in enumerate(traj):
             if t.typ == 'ag':
                 person = Body(t.name + '.ini')
@@ -234,8 +200,42 @@ class Simul(PyLayers):
         self.Nap = len(self.dap.keys())
         self.traj = traj
 
+    def load_CorSer(self,source):
 
-    def gen_net(self):
+        if isinstance(source.B,Body):
+            B=[source.B]
+        elif isinstance(source.B,list):
+            B=source.B
+        else:
+            raise AttributeError('CorSer.B must be a list or a Body')
+
+        self.L=source.L
+        self.traj = tr.Trajectories()
+        self.traj.Lfilename=self.L
+
+        for b in B:
+            self.dpersons.update({b.name: b})
+            self._tmin = b.time[0]
+            self._tmax = b.time[-1]
+            self.time = b.time
+            self.traj.append(b.traj)
+
+        for ap in source.din:
+            techno,ID=ap.split(':')
+            if techno == 'HKB':
+                techno = 'hikob'
+            
+
+            self.dap.update({ID: {'pos': source.din[ap]['p'],
+                                  'ant': antenna.Antenna(),
+                                  'name': techno
+                                        }
+                                 })
+        self.ctime = np.nan
+        self.Nag = len(B)
+        self.Nap = len(source.din)
+
+    def _gen_net(self):
         """ generate Network and associated links
 
         Notes
@@ -248,7 +248,6 @@ class Simul(PyLayers):
 
         pylayers.network.network
 
-
         """
 
         N = Network()
@@ -256,7 +255,6 @@ class Simul(PyLayers):
         for p in self.dpersons:
             D = []
             for dev in self.dpersons[p].dev:
-             
                 D.append(
                     Device(self.dpersons[p].dev[dev]['name'], ID=dev + '_' + p))
             N.add_devices(D, grp=p)
@@ -275,7 +273,7 @@ class Simul(PyLayers):
         fig, ax = self.N.show(fig=fig, ax=ax)
         return fig, ax
 
-    def evaldeter(self, na, nb, wstd, fmode='band', nf=10, trunk = False):
+    def evaldeter(self, na, nb, wstd, fmode='band', nf=10,**kwargs):
         """ deterministic evaluation of a link
 
         Parameters
@@ -312,30 +310,14 @@ class Simul(PyLayers):
         self.DL.Ta = self.N.node[na]['T']
         self.DL.b = self.N.node[nb]['p']
         self.DL.Tb = self.N.node[nb]['T']
-        
         if fmode == 'center':
             self.DL.fGHz = self.N.node[na]['wstd'][wstd]['fcghz']
         else:
             minb = self.N.node[na]['wstd'][wstd]['fbminghz']
             maxb = self.N.node[na]['wstd'][wstd]['fbmaxghz']
             self.DL.fGHz = np.linspace(minb, maxb, nf)
-        a, t = self.DL.eval(alg =5,cutoff=2)
-        if trunk == True:
-        
-            intersecta =1
-            if self.N.node[na]['typ'] == 'ag':
-                person_name = na.split('_')[1]
-                intersecta = self.dpersons[person_name].intersectBody4(self.DL.a,self.DL.b, topos = True)
-            intersectb =1
-            if self.N.node[nb]['typ'] == 'ag':
-                person_name = na.split('_')[1]
-                intersectb = self.dpersons[person_name].intersectBody4(self.DL.a,self.DL.b, topos = True)
-            intersect = np.min(np.array([intersecta,intersectb])) 
-            
-            
-            a = intersect*a  
-            self.DL.update(a,t)
-            
+        a, t = self.DL.eval(**kwargs)
+
         return a, t
 
     def evalstat(self, na, nb):
@@ -360,7 +342,6 @@ class Simul(PyLayers):
             tau_k
         eng : float
             engagement
-
         """
 
 
@@ -374,6 +355,15 @@ class Simul(PyLayers):
         ak, tk, eng = self.SL.onbody(self.dpersons[name], dida, didb, pa, pb)
 
         return ak, tk, eng
+
+
+    def settime(self,t):
+        """ set current time
+        """
+        self.ctime = t
+        self._traj=copy.copy(self.traj)
+        self.update_pos(t)
+
 
     def run(self, **kwargs):
         """ run the link evaluation along a trajectory
@@ -457,7 +447,7 @@ class Simul(PyLayers):
                 lt = np.array([kwargs['t']])
         else :
             lt = kwargs['t']
-        
+
         if len(lt) == 0:
             lt = self.time
         # check time attribute
@@ -473,40 +463,35 @@ class Simul(PyLayers):
             self._traj = self.traj.resample(sf=sf, tstart=lt[0])
 
         else:
-
             self._traj = self.traj.resample(sf=1.0, tstart=lt[0])
-
             self._traj.time()
-        
+
         self.time = self._traj.t
         self._time = pd.to_datetime(self.time,unit='s')
 
         #
         # Code
         #
-       
+
         init = True
         for ut, t in enumerate(lt):
-            self.ctime = t            
+            self.ctime = t
             self.update_pos(t)
-            #print self.N.__repr__()
-            print 'ut = ', ut, 't = ', t
-            for w in wstd:                
+            print self.N.__repr__()
+            for w in wstd:
                 for na, nb, typ in llink[w]:
-                    
                     if self.todo[typ]:
-                        
                         if self.verbose:
                             print '-'*30
                             print 'time:', t, '/',  lt[-1] ,' time idx:', ut, '/',len(lt)
                             print 'processing: ',na, ' <-> ', nb, 'wstd: ', w
                             print '-'*30
                         eng = 0
-                        self.evaldeter(na, nb, w, trunk = True)
+                        self.evaldeter(na, nb, w)
                         if typ == 'OB':
-                            #~ self.evalstat(na, nb)
-                            #~ eng = self.SL.eng
-                            L = self.DL #+ self.SL
+                            self.evalstat(na, nb)
+                            eng = self.SL.eng
+                            L = self.DL + self.SL
                             self._ak = L.H.ak
                             self._tk = L.H.tk
                         else :
@@ -542,17 +527,18 @@ class Simul(PyLayers):
                                               'fbminghz', 'fbmaxghz', 'fstep', 'aktk_id',
                                               'sig_id', 'ray_id', 'Ct_id', 'H_id'
                                               ],index=[self._time[ut]])
-                        #if not self.check_exist(df):
-                        self.data = self.data.append(df)
-                        # self._index = self._index + 1
-                        # save csv
-                        self.tocsv(ut, na, nb, w,init=init)
-                        init=False
 
-                        # save pandas self.data
-                        #self.savepd()
-                        # save ak tauk
-                        self._saveh5(ut, na, nb, w)
+                        if not self.check_exist(df):
+                            self.data = self.data.append(df)
+                            # self._index = self._index + 1
+                            # save csv
+                            self.tocsv(ut, na, nb, w,init=init)
+                            init=False
+
+                            # save pandas self.data
+                            self.savepd()
+                            # save ak tauk
+                            self._saveh5(ut, na, nb, w)
 
 
     def check_exist(self, df):
@@ -570,16 +556,16 @@ class Simul(PyLayers):
             False otherwise
 
         """
+        # check init case 
+        if not len(self.data.index) == 0:
+            ud = self.data[(self.data.index == df.index) & (self.data['id_a'] == df['id_a'].values[0]) & (self.data['id_b'] == df['id_b'].values[0]) & (self.data['wstd'] == df['wstd'].values[0])]
 
-        ud = self.data[(self.data.index == df.index)
-                        & (self.data['id_a'] == df['id_a'].values[0])
-                        & (self.data['id_b'] == df['id_b'].values[0])
-                        & (self.data['wstd'] == df['wstd'].values[0])
-                        ]
-        if len(ud) == 0:
-            return False
+            if len(ud) == 0:
+                return False
+            else :
+                return True
         else :
-            return True
+            return False
 
 
     def savepd(self):
@@ -613,10 +599,8 @@ class Simul(PyLayers):
             nodeid = []
             pos = []
             orient = []
-            for up, person in enumerate(self.dpersons.values()):   
-                #person.settopos(self._traj[up], t=t, cs=True)
-                #person.settopos(self._traj[up], t=t, cs=True,treadmill = True, p0 = np.array([1.5,2.0]))
-                person.settopos2(self._traj[up], t=t, cs=True)
+            for up, person in enumerate(self.dpersons.values()):
+                person.settopos(self._traj[up], t=t, cs=True)
                 name = person.name
                 dev = person.dev.keys()
                 nodeid.extend([n + '_' + name for n in dev])
@@ -651,7 +635,6 @@ class Simul(PyLayers):
             show rays
         """
 
-
         defaults = {'t': 0,
                     'link': [],
                     'wstd':[],
@@ -669,13 +652,14 @@ class Simul(PyLayers):
 
         link = kwargs['link']
 
-        df = self.data[self.data['t'] == kwargs['t']]
+        df = self.data[self.data.index == pd.to_datetime(kwargs['t'])]
         if len(df) == 0:
             raise AttributeError('invalid time')
 
+
         # default
         if link ==[]:
-            line = df[df.index==1]
+            line = df[df.index<=pd.to_datetime(0)]
             link = [line['id_a'].values[0],line['id_b'].values[0]]
         else :
             # get info of the corresponding timestamp
@@ -777,7 +761,6 @@ class Simul(PyLayers):
 
         pylayers.simul.links
 
-
         """
 
         filenameh5 = pyu.getlong(self.filename, pstruc['DIRLNK'])
@@ -829,7 +812,6 @@ class Simul(PyLayers):
             alpha_k
         """
 
-
         filenameh5 = pyu.getlong(self.filename, pstruc['DIRLNK'])
         # try/except to avoid loosing the h5 file if
         # read/write error
@@ -876,4 +858,3 @@ class Simul(PyLayers):
 if (__name__ == "__main__"):
     #plt.ion()
     doctest.testmod()
-

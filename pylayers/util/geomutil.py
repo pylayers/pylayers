@@ -3315,7 +3315,8 @@ def angledir(s):
 
 
 def BTB_rx(a_g, T):
-    """ Produce a set of rotation matrices for passage between global and local frame
+    """ Produce a set of rotation matrices for passage between global and
+    local frames
 
     Parameters
     ----------
@@ -3366,10 +3367,8 @@ def BTB_tx(a_g, T):
     Parameters
     ----------
 
-    a_g  :
-        angle in global reference frame      2 x N  :  (theta,phi) x N
-    T    :
-        Tx rotation matrix     3 x 3
+    a_g  : angle in global reference frame      2 x N  :  (theta,phi) x N
+    T    : Tx rotation matrix     3 x 3
 
     """
     G = SphericalBasis(a_g)

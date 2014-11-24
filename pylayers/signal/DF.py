@@ -221,18 +221,26 @@ class DF(PyLayers):
         Parameters
         ----------
 
-        display : boolean 
+        display : boolean
             True
+        fsGHz : []
 
         """
 
-        defaults = {'display':True}
+        defaults = {'display':True,
+                    'fsGHz':0}
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]
 
         (w,h)    = si.freqz(self.b,self.a)
-        self.H   = bs.FUsignal(w/np.pi,h)
+        if kwargs['fsGHz']!=0:
+            fNGHz = kwargs['fsGHz']/2.
+            self.H   = bs.FUsignal(w*fNGHz/np.pi,h)
+            xlabel = 'Frequency (GHz)'
+        else:
+            self.H   = bs.FUsignal(w/np.pi,h)
+            xlabel = 'Relative frequency'
 
         if 'fig' not in kwargs:
             fig = plt.figure()
@@ -241,10 +249,10 @@ class DF(PyLayers):
 
         if kwargs['display']:
             ax1 = fig.add_subplot(211)
-            self.H.plot(typ=['l20'],xlabels=['relative frequency'],fig=fig,ax=ax1)
+            self.H.plot(typ=['l20'],xlabels=[xlabel],fig=fig,ax=ax1)
             plt.grid()
             ax2 = fig.add_subplot(212)
-            self.H.plot(typ=['d'],xlabels=['relative frequency'],fig=fig,ax=ax2)
+            self.H.plot(typ=['d'],xlabels=[xlabel],fig=fig,ax=ax2)
             plt.grid()
 
         #show()

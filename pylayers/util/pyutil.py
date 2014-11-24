@@ -116,7 +116,7 @@ def getlong(shortname,directory):
         logging.critical("BASENAME environment variable should be defined")
         #basename=os.environ['HOME']+"/Pyproject"
 
-    longname = basename+'/'+directory+'/'+shortname
+    longname = os.path.join(basename,directory,shortname)
     return(longname)
 
 def getshort(longname):
@@ -1470,36 +1470,36 @@ def writemeca(ID,time,p,v,a):
 
 
     ### TruePosition
-    if not os.path.isfile(basename+'/' + pstruc['DIRNETSAVE'] +'/TruePosition.txt'):
+    if not os.path.isfile(os.path.join(basename,pstruc['DIRNETSAVE'],'TruePosition.txt')):
         entete = 'TruePositionID,NodeID, Timestamp, X,Y,Z,ReferencePointID\n'
-        file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/TruePosition.txt','w')
+        file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'TruePosition.txt'),'w')
         file.write(entete)
         data = '1,'+str(ID) +','+ str(timestamp(time)) +',' + str(p[0])+',' +str(p[1])+','+',\n'
         file.write(data)
         file.close()
     else:
-        file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/TruePosition.txt','r')
+        file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'TruePosition.txt','r'))
         lst=file.readlines()
         file.close()
         data = str(eval(lst[-1].split(',')[0])+1) +','+str(ID) +','+ str(timestamp(time)) +',' + str(p[0])+ ',' +str(p[1])+','+',\n'
-        file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/TruePosition.txt','a')
+        file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'TruePosition.txt'),'a')
         file.write(data)
         file.close()
 
     ### UWBSensorMeasurements
-    if not os.path.isfile(basename+'/' + pstruc['DIRNETSAVE'] +'/UWBSensorMeasurements.txt'):
+    if not os.path.isfile(os.path.join(basename,pstruc['DIRNETSAVE'],'UWBSensorMeasurements.txt')):
         entete = 'UWBSensorMeasurementsID,NodeID, Timestamp, UWB_MagX,UWB_MagY,UWB_MagZ,UWB_AccX,UWB_AccY,UWB_AccZ,UWB_GyroX,UWB_GyroY,UWB_GyroZ\n'
-        file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/UWBSensorMeasurements.txt','w')
+        file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'UWBSensorMeasurements.txt'),'w')
         file.write(entete)
         data = '1,'+str(ID) +','+ str(timestamp(time)) +',' + str(v[0])+',' +str(v[1])+',,'+str(a[0])+','+str(a[1])+',,,,\n'
         file.write(data)
         file.close()
     else:
-        file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/UWBSensorMeasurements.txt','r')
+        file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'UWBSensorMeasurements.txt'),'r')
         lst=file.readlines()
         file.close()
         data = str(eval(lst[-1].split(',')[0])+1)+',' +str(ID) +','+ str(timestamp(time)) +',' + str(v[0])+',' +str(v[1])+',,'+str(a[0])+','+str(a[1])+',,,,\n'
-        file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/UWBSensorMeasurements.txt','a')
+        file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'UWBSensorMeasurements.txt'),'a')
         file.write(data)
         file.close()
 
@@ -1513,36 +1513,36 @@ def writenet(net,t):
     """
     for e in net.edges_iter(data=True):
         ### ZIGLinkMeasurements
-        if not os.path.isfile(basename+'/' + pstruc['DIRNETSAVE'] +'/ZIGLinkMeasurements.txt'):
+        if not os.path.isfile(os.path.join(basename,pstruc['DIRNETSAVE'],'ZIGLinkMeasurements.txt')):
             entete = 'ZIGLinkMeasurementsID,NodeID, ZIG_PeerID, ZIG_RSSI, Timestamp\n'
-            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/ZIGLinkMeasurements.txt','w')
+            file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'ZIGLinkMeasurements.txt'),'w')
             file.write(entete)
             data = '1,'+ e[0] +','+ e[1] +',' + str(e[2]['Pr'][0]) +',' +timestamp(t.now()) +',\n'
             file.write(data)
             file.close()
         else:
-            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/ZIGLinkMeasurements.txt','r')
+            file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'ZIGLinkMeasurements.txt'),'r')
             lst=file.readlines()
             file.close()
             data = str(eval(lst[-1].split(',')[0])+1)+','+ e[0] +','+ e[1] +',' + str(e[2]['Pr'][0]) +',' +timestamp(t.now()) +',\n'
-            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/ZIGLinkMeasurements.txt','a')
+            file=open(os.path.join(basename,pstruc['DIRNETSAVE'] ,'ZIGLinkMeasurements.txt'),'a')
             file.write(data)
             file.close()
 
         ### UWBLinkMeasurements
-        if not os.path.isfile(basename+'/' + pstruc['DIRNETSAVE'] +'/UWBLinkMeasurements.txt'):
+        if not os.path.isfile(os.path.join(basename,pstruc['DIRNETSAVE'],'UWBLinkMeasurements.txt')):
             entete = 'UWBLinkMeasurementsID, NodeID, Timestamp, UWB_PeerID, UWB_Dist, UWB_BER, UWB_FER, UWB_CIR\n'
-            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/UWBLinkMeasurements.txt','w')
+            file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'UWBLinkMeasurements.txt'),'w')
             file.write(entete)
             data = '1,'+ e[0] +','+ timestamp(t.now()) +',' +e[1] +','+ str(e[2]['d']) +',,,,\n'
             file.write(data)
             file.close()
         else:
-            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/UWBLinkMeasurements.txt','r')
+            file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'UWBLinkMeasurements.txt'),'r')
             lst=file.readlines()
             file.close()
             data = str(eval(lst[-1].split(',')[0])+1)+','+ e[0] +','+ timestamp(t.now()) +',' +e[1] +','+ str(e[2]['d']) +',,,,\n'
-            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/UWBLinkMeasurements.txt','a')
+            file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'UWBLinkMeasurements.txt'),'a')
             file.write(data)
             file.close()
 
@@ -1569,14 +1569,14 @@ def writenode(agent):
     '''
     write Nodes.txt
     '''
-    if not os.path.isfile(basename+'/' + pstruc['DIRNETSAVE'] +'/Nodes.txt'):
+    if not os.path.isfile(os.path.join(basename,pstruc['DIRNETSAVE'],'Nodes.txt')):
         entete = 'NodeID, NodeName, NodeOwner, NodeDescription, NodeOwnerID, Mobile OrAnchor, TrolleyID\n'
-        file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/Nodes.txt','w')
+        file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'Nodes.txt'),'w')
         file.write(entete)
         file.close()
 
     data = str(eval(agent.ID)) +','+ agent.name + ',,,,' + str(agent.MoA) +',\n'
-    file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/Nodes.txt','a')
+    file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'Nodes.txt'),'a')
     file.write(data)
     file.close()
 
@@ -1584,14 +1584,14 @@ def writeDetails(t,description='simulation', location ='Rennes'):
     '''
     write MeasurementsDetails.txt
     '''
-    if not os.path.isfile(basename+'/' + pstruc['DIRNETSAVE'] +'/MeasurementsDetails.txt'):
+    if not os.path.isfile(os.path.join(basename,pstruc['DIRNETSAVE'],'MeasurementsDetails.txt')):
         entete = 'MeasurementsDetailsID, MeasurementsDate, MeasurementsDescription, MeasurementsLocation\n'
-        file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/MeasurementsDetails.txt','w')
+        file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'MeasurementsDetails.txt'),'w')
         file.write(entete)
         file.close()
 
     data = '1' +','+ timestamp(t.now()) + ', ' +description + location +',\n'
-    file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/MeasurementsDetails.txt','a')
+    file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'MeasurementsDetails.txt'),'a')
     file.write(data)
     file.close()
 
@@ -1633,7 +1633,7 @@ def unzipd(path, zipfilename):
 
     for each in zip_file.namelist():
         print each
-        if not each.endswith('/'): 
+        if not each.endswith('/') or not each.endswith('\\'): 
             root, name = os.path.split(each)
             directory = os.path.normpath(os.path.join(path, root))
             if not os.path.isdir(directory):
@@ -1656,7 +1656,7 @@ def unzipf(path, filepath, zipfilename):
         os.makedirs(path)    
 
     for each in zip_file.namelist():
-        if each == filepath and not each.endswith('/'): 
+        if each == filepath and (not each.endswith('/') or not each.endswith('\\')): 
             root, name = os.path.split(each)
             directory = os.path.normpath(os.path.join(path, root))
             if not os.path.isdir(directory):

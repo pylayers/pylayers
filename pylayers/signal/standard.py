@@ -298,13 +298,14 @@ class Wstandard(dict):
         Parameters
         ----------
 
-        band : int /float/string 
-            'bandnb' : band number 
-            'fghz' : frequency 
+        band : int /float/string
+            'bandnb' : band number
+            'fghz' : frequency
+
             'bandname' : band name
 
         info : string ('max'|'min'|'step')
-            requested information about power 
+            requested information about power
 
         unit : string ('mw'|db)
             miliwatt or db

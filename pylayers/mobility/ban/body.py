@@ -103,8 +103,16 @@ class Body(PyLayers):
 
     """
 
-    def __init__(self,_filebody='John.ini',_filemocap=[],_filewear = [],
-                traj=[],unit=[],loop=True,centered=True):
+    def __init__(self,
+                 _filebody='John.ini',
+                 _filemocap=[],
+                 _filewear = [],
+                  traj=[],
+                  unit='cm',
+                  loop=True,
+                 centered=True,
+                 multi_subject_mocap=False,
+                 color='white'):
         """ object constructor
 
         Parameters
@@ -112,19 +120,23 @@ class Body(PyLayers):
 
         _filebody : string
         _filemocap : string
-        unit : str 
-            unit of the mocap file m|cm|mm
+        unit : str
+            unit of the mocap file 'm'|'cm'|'mm'
         _filewear : string
         traj : tr.Trajectory
         loop : bool
-            True : indicate if the mocap file is used as a loop to be put on a trajectory (default)
-            False: the mocap is self sufficent and describe the complete body movement
+            True : indicate if the mocap file is used as a sequence to be looped on a trajectory (default)
+            False: the mocap is self sufficient and describes the complete body movement
+
         See Also
         --------
 
         pylayers.mobility.trajectory
 
         """
+        self._multi_subject_mocap=multi_subject_mocap
+
+        # extract name from _filebody
 
         self.name = _filebody.replace('.ini','')
         di = self.load(_filebody,_filemocap,unit,_filewear)
@@ -151,6 +163,8 @@ class Body(PyLayers):
             self.traj=traj
         self.centered=centered
         self.mocap_loop=loop
+
+        self.color=color
         # otherwise self.traj use values from c3d file
         # obtain in self.loadC3D
 
@@ -226,7 +240,7 @@ class Body(PyLayers):
         """
 
          # check if local or global path
-        if ('/' or '\\') in _filebody:
+        if ('/'  in _filebody) or ('\\' in _filebody):
             filebody = _filebody
             ne = os.path.basename(_filebody)
             self.name = os.path.splitext(ne)[0]
@@ -235,7 +249,7 @@ class Body(PyLayers):
 
         if not os.path.isfile(filebody):
             raise NameError(_filebody + ' cannot be found in'
-                             + pyu.getlong('',pstruc['DIRBODY']))
+                             + filebody)
 
         config = ConfigParser.ConfigParser()
         config.read(filebody)
@@ -345,7 +359,11 @@ class Body(PyLayers):
         try:
             # mocapprefix : retrieve where the prefix is the body name
             ump = [self.name.lower() in p.lower() for p in self._s]
-            self._mocap_prefix = self._s[ump.index(True)]
+            if sum(ump) >1:
+                # Handle case CorSer (serie=3,day=11)
+                self._mocap_prefix='Bernard:'
+            else:
+                self._mocap_prefix = self._s[ump.index(True)]
         except:
             self._mocap_prefix = self._p[-1].split(':')[0]+':'
 
@@ -356,9 +374,35 @@ class Body(PyLayers):
         rd = dict(filter(lambda x: x[1]['status']== 'real',self.dev.items()))
 
 
-        prefix = ['Bernard:','Bernard_','NicolasCormoran:']
+        # for d in rd :
+        #     if self.dev[d]['name'] == 'hikob':
+        #         bd = [self.dev[d]['radiomarkname'] in n for n in self._p if not 'TCR' in n]
+        #         self.dev[d]['uc3d'] = np.where(bd)[0]
+        #     else :
+        #         bd = [self.dev[d]['radiomarkname'] in n for n in self._p]
+        #         self.dev[d]['uc3d'] = np.where(bd)[0]
+        #     if len(self.dev[d]['uc3d']) == 0:
+        #         print 'Warning : device ',d, 'not present in mocap'
+        #         import ipdb
+        #         ipdb.set_trace()
+
+
+
+        prefix = ['Bernard:','Bernard_','NicolasCormoran:',
+                  'Nicolas_FullBody_ClusterOnly:',
+                  'Eric_FullBody_ClusterOnly:',
+                  'Jihan_FullBody_ClusterOnly2:',
+                  'Jihan_FullBody_ClusterOnly:', # j12s8
+                  'Jihan_FullBody_sansClusters:', # j12s21
+                  'Nicolas_FullBody_sansClusters:', # j12s21
+                  'Eric_FullBody_sansClusters:', # j12s21
+                  'Nicolas_FullBody:',
+                  'Jihan_FullBody:',
+                  'Eric_FullBody:']
 
         self._mocanodes = self._p
+
+
         for p in prefix:
             tmpnode=[]
             for n in self._mocanodes:
@@ -404,6 +448,26 @@ class Body(PyLayers):
         # s, p, f, info = c3d.read_c3d(filename)
         self._s, self._p, self._f, info = c3d.ReadC3d(filename)
 
+        if self._multi_subject_mocap:
+            us = [us for us, s in enumerate(self._s) if self.name in s ]
+            up = [up for up, p in enumerate(self._p) if self.name in p ]
+
+            if len(us) == 0:
+                raise AttributeError(self.name +' is not in the MOCAP file :' +filename)
+
+
+            # in case of multiple body into the mocap file, 
+            # mocap is restricted to nodes belonging to a single body.
+            # the body is automatically selected by using the self.name
+            # 
+
+            self._f =self._f[:,up,:]
+            self._s=[s for s in self._s if self.name in s ]
+            self._p=[p for p in self._p if self.name in p ]
+            
+
+
+
         self.mocapinfo = info
 
         self.filename = filename
@@ -423,6 +487,8 @@ class Body(PyLayers):
             self._unit = 1e-2
         elif unit == 'mm':
             self._unit = 1e-3
+        elif unit == 'm':
+            self._unit = 1.
         else :
             raise AttributeError('unit'+unit + 'not recognized')
         # duration of the motion capture snapshot
@@ -437,9 +503,15 @@ class Body(PyLayers):
 
     def ccsfromc3d(self,config):
         """ Create ccs from C3D file
+
+        Parameters
+        ----------
+
+        config : dictionnary
+
         """
 
-        
+
         # dmn = dictionnary of mocap nodes position in self._p
         # for further ccs from marker creation
 
@@ -460,22 +532,22 @@ class Body(PyLayers):
             # 1.2 get tail and head position in self.d
             kta = self.sl[upart,0].astype(int)
             khe = self.sl[upart,1].astype(int)
-            # 1.3 create cylinder axis vector 
+            # 1.3 create cylinder axis vector
             ca = self.d[:,kta,:]-self.d[:,khe,:]
 
-            # 2 . create 2 extra vectors 
-            # 2.1determine their positions 
+            # 2 . create 2 extra vectors
+            # 2.1 determine their positions
             # pccs = position of cylinder coordinates system (Nframe x Npts x 3)
             # determine associated vetors
             pccs = self._f[:,uccs,:]
-            
+
             # vccs = vectors of cylinder coordinates system (Nframe x 3 x 3)
-            vccs = self.d[:,kta,np.newaxis,:] - pccs[:,np.newaxis:,:].T 
+            vccs = self.d[:,kta,np.newaxis,:] - pccs[:,np.newaxis:,:].T
 
             # vccs = pccs[:,0,np.newaxis,:]-pccs[:,1:,:]
             vccs=np.concatenate((ca[:,np.newaxis,:],vccs),axis=1)
             self._ccs[self.dcyl[k],:,:,:]=geu.qrdecomp(vccs)
-            
+
 
     def cylfromc3d(self,centered = False):
         """ Create cylinders from C3D file
@@ -586,9 +658,15 @@ class Body(PyLayers):
 
         for d in self.dev:
             df[d]['dev_id'] = d
-            df[d]['dev_x'] = self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],0]
-            df[d]['dev_y'] = self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],1]
-            df[d]['dev_z'] = self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],2]
+
+            try:
+                df[d]['dev_x'] = np.mean(self._f[:len(self.time)-2,self.dev[d]['uc3d'],0],axis=1)
+                df[d]['dev_y'] = np.mean(self._f[:len(self.time)-2,self.dev[d]['uc3d'],1],axis=1)
+                df[d]['dev_z'] = np.mean(self._f[:len(self.time)-2,self.dev[d]['uc3d'],2],axis=1)
+            except:
+                df[d]['dev_x'] = self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],0]
+                df[d]['dev_y'] = self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],1]
+                df[d]['dev_z'] = self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],2]
             # gather all devices in a single dataframe:
             addf = pd.DataFrame()
             for d in df:
@@ -1202,7 +1280,7 @@ class Body(PyLayers):
                         pta = self.d[:,c0,0]
                         phe = self.d[:,c1,0]
                         
-                        de = self._f[0,self.dev[dev]['uc3d'],:]
+                        de = self._f[0,self.dev[dev]['uc3d'][0],:][np.newaxis]
                         dtad = np.sqrt(np.sum((pta-de.T)**2,axis=0))
                         dhed = np.sqrt(np.sum((phe-de.T)**2,axis=0))
                         mta = np.min(dtad)
@@ -1215,7 +1293,7 @@ class Body(PyLayers):
                         self.dev[dev]['asscyl']= um[0]
 
 
-                    mp0 = self._f[fId,self.dev[dev]['uc3d'][0],:]
+                    mp0 = np.mean(self._f[fId,self.dev[dev]['uc3d'],:],axis=0)
                     Tn = self.ccs[self.dev[dev]['asscyl'],:,:]
 
                 self.dcs[dev] = np.hstack((mp0[:,np.newaxis],Tn))
@@ -1484,7 +1562,6 @@ class Body(PyLayers):
         >>> B.settopos(T[0],t=0,cs=True) 
         >>> L._show3()
         >>> B.anim(B)
-
         """
         self._show3()
         kta = self.sl[:,0].astype(int)
@@ -1610,7 +1687,7 @@ class Body(PyLayers):
             fig.children[-1].__setattr__('name',self.filename )
             if kwargs['text']:
                 self._mayaptstxt=[mlab.text3d(self._f[fId,i,0],self._f[fId,i,1],self._f[fId,i,2],self._p[i].replace(self._s[0],''),
-                                    scale=15,
+                                    scale=(50.*self._unit,50.*self._unit,50.*self._unit),
                                     color=(0,0,0)) for i in range(len(self._p))]
 
         else :
@@ -1639,7 +1716,7 @@ class Body(PyLayers):
                 fig.children[-1].__setattr__('name',self.name )
             if kwargs['text']:
                 self._mayaptstxt=[mlab.text3d(X[0,i],X[1,i], X[2,i],self.idcyl[i],
-                                scale=(0.1,0.1,0.1),
+                                scale=(50.*self._unit,50.*self._unit,50.*self._unit),
                                 color=(0,0,0)) for i in range(self.ncyl)]
 
     def plot3d(self,iframe=0,topos=False,fig=[],ax=[],col='b'):
@@ -1746,7 +1823,6 @@ class Body(PyLayers):
                     'devopacity':1,
                     'devsize':5e1,
                     'devtyp':[],
-                    'color':'white',
                     'k':0,
                     'save':False}
 
@@ -1768,7 +1844,7 @@ class Body(PyLayers):
 
 
         cold = pyu.coldict()
-        colhex = cold[kwargs['color']]
+        colhex = cold[self.color]
         body_color = tuple(pyu.rgb(colhex)/255.)
 
         kta = self.sl[:,0].astype(int)
@@ -1816,6 +1892,7 @@ class Body(PyLayers):
                 X=np.array(self.getdevp(dev)).T
             else:
                 udev = [self.dev[i]['uc3d'][0] for i in self.dev]
+
                 center = self.pg[:,fId]
                 X=self._f[fId,udev,:].T-center[:,np.newaxis]
 
@@ -2366,15 +2443,16 @@ class Body(PyLayers):
                     C = self.d[:,kta,frameId]
                     D = self.d[:,khe,frameId]
 
+
                 alpha, beta,dmin = seg.dmin3d(A,B,C,D)
                 if alpha < 0:
-                    alpha = 0
+                    alpha = np.zeros(alpha.shape)
                 if alpha > 1 :
-                    alpha  = 1
+                    alpha  = np.ones(alpha.shape)
                 if beta < 0:
-                    beta = 0
+                    beta = np.zeros(beta.shape)
                 if beta > 1:
-                    beta = 1
+                    beta = np.ones(beta.shape)
                 dmin = np.sqrt(seg.dist (A,B,C,D,alpha,beta)[1])
 
                 if dmin  < self.sl[k,2]:
@@ -2487,13 +2565,13 @@ class Body(PyLayers):
 
             alpha, beta,dmin = seg.dmin3d(A,B,C,D)
             if alpha < 0:
-                alpha = 0
+                alpha = np.zeros(alpha.shape)
             if alpha > 1 :
-                alpha  = 1
+                alpha  = np.ones(alpha.shape)
             if beta < 0:
-                beta = 0
+                beta = np.zeros(beta.shape)
             if beta > 1:
-                beta = 1
+                beta = np.ones(beta.shape)
             dmin = np.sqrt(seg.dist (A,B,C,D,alpha,beta)[1])
 
             #~ if dmin  < self.sl[k,2]:
@@ -2707,6 +2785,12 @@ class Body(PyLayers):
                    y.reshape((len(y)), 1) * w0 + \
                    z.reshape((len(z)), 1) * v0
 
+    def _checkdevid(self):
+            """ display 
+            """
+            for k in self.dev:
+                print (k,self.dev[k]['uc3d']) 
+
 
 def translate(cycle, new_origin):
     """  rotate a cycle of frames by an angle alpha
@@ -2874,3 +2958,220 @@ if __name__ == '__main__':
     #bd.show3(wire=True,dcs=True,topos=True)
     #bd.show3(wire=False,dcs=True,topos=True)
     #bd.movie(traj=lt[0],wire=True,dcs=False,pattern=False,filestruc='TA-Office.off')
+
+
+
+
+
+class Cylinder(object):
+    """
+    """
+
+    def __init__(self,name = 'Meriem_Cylindre:',
+                _filemocap='/media/niamiot/DONNEES/svn2/measures/CORMORAN/RAW/12-06-2014/MOCAP/Nav_serie_006.c3d',
+                unit='mm',
+                color='white'):
+        self.name = name
+        self.loadC3D(_filemocap,unit=unit)
+        self.init_traj()
+        self.color=color
+        self.settopos(t=0)
+
+    def __repr__(self):
+        st = ''
+
+        st = "I am cylinder : " + self.name + '\n\n'
+
+        if 'topos' not in dir(self):
+            st = st+ '\nI am nowhere yet\n\n'
+        else :
+            st = st + '\n@ t=' +str(self.time[self.toposFrameId]) +' (frameID='+ str(self.toposFrameId) +'),\n'+'My centroid position is ' +str(self.pg[:2,self.toposFrameId])+"\n\n"
+        
+        st = st + '\n'
+
+        return(st)
+
+    def loadC3D(self, filename='07_01.c3d', nframes=-1 ,unit='cm'):
+        """ load nframes of motion capture C3D file
+
+        Parameters
+        ----------
+
+        filename : string
+            file name
+        nframes : int
+            number of frames
+        unit : str (mm|cm|mm
+            unit of c3d file
+        rot : list ['x','y','z']
+            swap axes of the c3d file
+        """
+
+
+        #if 'pg' in dir(self):
+        # del self.pg
+        # s, p, f, info = c3d.read_c3d(filename)
+        self._s, self._p, self._f, info = c3d.ReadC3d(filename)
+        us = [us for us, s in enumerate(self._s) if self.name in s ]
+        up = [up for up, p in enumerate(self._p) if self.name in p ]
+
+        if len(us) == 0:
+            raise AttributeError(self.name +' is not in the MOCAP file :' +filename)
+
+
+            # in case of multiple body into the mocap file, 
+            # mocap is restricted to nodes belonging to a single body.
+            # the body is automatically selected by using the self.name
+        # 
+
+        self._f =self._f[:,up,:]
+        self._s=[s for s in self._s if self.name in s ]
+        self._p=[p for p in self._p if self.name in p ]
+            
+
+
+
+        self.mocapinfo = info
+
+        if nframes<>-1:
+            self.nframes = nframes
+        else:
+            self.nframes = np.shape(self._f)[0]
+        #
+        # s : prefix
+        # p : list of points name
+        # f : nframe x npoints x 3
+        #
+
+
+        self.unit = unit
+        if unit == 'cm':
+            self._unit = 1e-2
+        elif unit == 'mm':
+            self._unit = 1e-3
+        elif unit == 'm':
+            self._unit = 1.
+        else :
+            raise AttributeError('unit'+unit + 'not recognized')
+        # duration of the motion capture snapshot
+
+
+        self._f=self._f*self._unit
+        self.d = self._f[0:self.nframes,:,:].T
+        self.pg = np.mean(self.d,axis=1)
+        self.pg[2,:]=0
+        self.radius = np.sqrt(np.sum((self.d[:,0,:]-self.d[:,1,:])**2,axis=0))/2.
+        heighestpos = np.max(self.d[2,:,:])
+        self.topnode = np.where(self.d[2,:,:]==heighestpos)[0][0]
+
+        self.Tmocap = self.nframes / info['VideoFrameRate']
+
+        # time base of the motion capture file (sec)
+        self.time = np.linspace(0,self.Tmocap,self.nframes)
+
+
+    def settopos(self,t,**kwargs):
+        ut = np.where(t<=self.time)[0]
+        self.topos =self.d[:,:,ut[0]]
+        self.top = self.topos[:,self.topnode]
+        self.bottom = copy.copy(self.top)
+        self.bottom[2]=0
+        self.toposradius =self.radius[ut[0]]
+        self.toposFrameId = ut
+
+    def init_traj(self):
+        """ create trajectory object from given trajectory or mocap 
+        """
+
+        # speed vector of the gravity centernp.
+        self.vg = self.pg[:,1:]-self.pg[:,0:-1]
+        # duplicate last spped vector for size homogeneity
+        self.vg = np.hstack((self.vg,self.vg[:,-1][:,np.newaxis]))
+        # length of trajectory
+        d = self.pg[0:-1,1:]-self.pg[0:-1,0:-1]
+        # creates a trajectory associated to mocap file
+        self.traj = tr.Trajectory()
+        self.traj.generate(t=self.time,pt=self.pg.T,name=self.name)
+        self.smocap = np.cumsum(np.sqrt(np.sum(d*d,axis=0)))
+        self.vmocap = self.smocap[-1]/self.Tmocap
+
+
+    def _show3(self,**kwargs):
+        """ mayavi visualization
+
+        """
+        defaults = {'iframe' : 0,
+                    'widthfactor' : 1.,
+                    'tube_sides' : 6,
+                    'opacity':1,
+                    }       
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        args = {}
+        for k in kwargs:
+            if k not in defaults:
+                args[k] = kwargs[k]
+
+        f = mlab.gcf()
+
+
+        fId = kwargs['iframe']
+
+
+        cold = pyu.coldict()
+        colhex = cold[self.color]
+        body_color = tuple(pyu.rgb(colhex)/255.)
+
+       
+        X=np.vstack((self.top,self.bottom))
+       
+        connections=(0,1)
+        s = np.hstack((self.toposradius,self.toposradius))
+        #pts = mlab.points3d(X[0,:],X[1,:], X[2,:], 5*s ,
+                                             # scale_factor=0.1, resolution=10)
+        self._mayapts = mlab.pipeline.line_source(X[:,0],X[:,1], X[:,2], s ,
+                                             scale_factor=0.001, resolution=10)
+        self._mayapts.mlab_source.dataset.lines = np.array([connections])
+        tube = mlab.pipeline.tube(self._mayapts, tube_radius=0.05,tube_sides=kwargs['tube_sides'])
+        tube.filter.radius_factor = 1.
+        tube.filter.vary_radius = 'vary_radius_by_absolute_scalar'
+        mlab.pipeline.surface(tube, color=body_color,opacity=kwargs['opacity'])
+        f.children[-1].__setattr__('name',self.name )
+
+
+
+    @mlab.animate(delay=100)
+    def anim(self):
+        """ animate cylinder
+
+        Example
+        -------
+
+        >>> from pylayers.mobility.trajectory import *
+        >>> from pylayers.mobility.ban.body import *
+        >>> from pylayers.gis.layout import *
+        >>> T=Trajectories()
+        >>> T.loadh5()
+        >>> L=Layout(T.Lfilename)
+        >>> B = Body()
+        >>> B.settopos(T[0],t=0,cs=True) 
+        >>> L._show3()
+        >>> B.anim(B)
+        """
+        self._show3()
+        t=self.traj.time()
+
+        anim = range(5000,self.nframes,10)
+
+        
+        while True:
+            for k in anim:#range(len(t)):
+                self.settopos(t=t[k],cs=True)
+                # connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
+                X=np.vstack((self.top,self.bottom))
+                # s = np.hstack((cylrad,cylrad))
+                self._mayapts.mlab_source.set(x=X[:,0], y=X[:,1], z=X[:,2])
+                yield

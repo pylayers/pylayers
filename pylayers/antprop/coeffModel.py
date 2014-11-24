@@ -174,13 +174,14 @@ def mode_energy2(A,m, ifreq=46, L= 20):
     cx = lmreshape(A.S.Cx.s2)
     cy = lmreshape(A.S.Cy.s2)
     cz = lmreshape(A.S.Cz.s2)
+
     if ifreq >0:
         em = np.sum(np.abs(cx[ifreq,:,L+m])**2+np.abs(cy[ifreq,:,L+m])**2+np.abs(cz[ifreq,:,L+m])**2)
         Et = np.sum(np.abs(cx[ifreq])**2+np.abs(cy[ifreq])**2+np.abs(cz[ifreq])**2)
     return em/Et
 
 def level_energy(A,l, ifreq = 46,L=20):
-    """ calculates energy of the level
+    """ calculates energy of the level l
 
     Parameters
     ----------
@@ -201,12 +202,16 @@ def level_energy(A,l, ifreq = 46,L=20):
 
 def modeMax(coeff,L= 20, ifreq  = 46):
 
-    """ calulates maximal mode 
+    """ calculates maximal mode
+
 
     Parameters
     ----------
 
+
+    coeff : 
     L  : int
+        maximum level
     ifreq : int
 
     """

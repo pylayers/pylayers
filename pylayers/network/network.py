@@ -353,9 +353,9 @@ class Network(PyLayers,nx.MultiDiGraph):
                 except:
                     wstd = self.node[n]['wstd']
                 s = s + '{0:7} | {1:15} |{2:7} | {3:4} | {4:5.2f} {5:5.2f} {6:5.2f} | {7:10} '\
-                .format(self.node[n]['ID'], self.node[n]['name'],
-                self.node[n]['grp'], self.node[n]['typ'], self.node[n]['p'][0],
-                self.node[n]['p'][1],self.node[n]['p'][2],wstd) + '\n'
+                .format(self.node[n]['ID'][:7], self.node[n]['name'][:15],
+                self.node[n]['grp'][:7], self.node[n]['typ'][:4], self.node[n]['p'][0],
+                self.node[n]['p'][1],self.node[n]['p'][2],wstd[:10]) + '\n'
 
     #             try:
     #                 s = s + 'node ID: ' + str(self.node[n]['ID']) + '\n'
@@ -1691,12 +1691,12 @@ class Network(PyLayers,nx.MultiDiGraph):
         typ = nx.get_node_attributes(self,'typ')
         if self.idx == 0:
             entete = 'NodeID, True Position x, True Position y, Est Position x, Est Position y, Timestamp\n'
-            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/simulation.txt','write')
+            file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'simulation.txt'),'write')
             file.write(entete)
             file.close()
 
         try:
-            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/simulation.txt','a')
+            file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'simulation.txt'),'a')
             for n in self.nodes():
                 if typ[n] != 'ap':
                     data = n + ',' + str(pos[n][0]) + ',' + str(pos[n][1]) + ',' + str(pe[n][0][0]) + ',' + str(pe[n][0][1]) + ',' +pyu.timestamp(S.now()) +',\n'

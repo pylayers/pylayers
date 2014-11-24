@@ -121,6 +121,7 @@ class Cone(PyLayers):
         lie in the same side outside the cone.
 
         """
+
         vc  = (self.u+self.v)/2
         #vcn = vc/np.sqrt(np.dot(vc,vc))
         w = vc/np.sqrt(np.dot(vc,vc))

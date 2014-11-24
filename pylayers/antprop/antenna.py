@@ -4,7 +4,7 @@
 .. currentmodule:: pylayers.antprop.antenna
 
 This module handles antennas
-An antenna can be loaded from various specific file formats among 
+An antenna can be loaded from various file formats among
 them ( .vsh2 .vsh3 .sh2 .sh3 .mat)
 
 
@@ -126,6 +126,9 @@ from mpl_toolkits.mplot3d import axes3d
 from matplotlib import rc
 from matplotlib import cm # colormaps
 from pylayers.antprop.antssh import *
+from pylayers.antprop.coeffModel import *
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+from matplotlib.ticker import MaxNLocator
 import pandas as pd
 
 import matplotlib.pylab as plt
@@ -186,7 +189,7 @@ class Antenna(PyLayers):
                     antenna file name
         directory : str
                     subdirectory of the current project where to find the antenna file
-                    the file is seek in the $PyProject/ant directory
+                    the file is seek in the $BASENAME/ant directory
         nf        : integer
                      number of frequency (default 104)
         ntheta    : integer
@@ -198,10 +201,10 @@ class Antenna(PyLayers):
         Notes
         -----
 
-        There are various supported data formats for storing antenna patterns
+        The supported data formats for storing antenna patterns are
 
         'mat': Matlab File
-        'vsh2': un thresholdes vector spherical coefficients
+        'vsh2': unthresholded vector spherical coefficients
         'vsh3': thresholded vector spherical cpoefficients
         'trx' : Satimo NFC raw data
         'trx1' : Satimo NFC raw data  (deprecated)
@@ -209,9 +212,7 @@ class Antenna(PyLayers):
          A = Antenna('my_antenna.mat')
 
         """
-
-
-        defaults = { 'directory': 'ant',
+        defaults = {'directory': 'ant',
                     'nf':104,
                     'source':'satimo',
                     'ntheta':90,
@@ -219,7 +220,10 @@ class Antenna(PyLayers):
                     'p0':0,
                     't0':np.pi/2.,
                     'p3':np.pi/6.,
-                    't3':np.pi/6.}
+                    't3':np.pi/6.,
+                    'L':90,
+                    'fmin':0.8,
+                    'fmax':5.95}
 
         for k in defaults:
             if k not in kwargs:
@@ -230,10 +234,11 @@ class Antenna(PyLayers):
         self.Np = kwargs['nphi']
         self.source = kwargs['source']
 
+        # if typ has an extension it is a file
         if isinstance(typ,str):
             AntennaName,Extension = os.path.splitext(typ)
-            self.typ = Extension[1:]
-            if self.typ=='':
+            self.ext = Extension[1:]
+            if self.ext=='':
                 self.fromfile = False
             else:
                 self.fromfile = True
@@ -246,30 +251,36 @@ class Antenna(PyLayers):
         if self.fromfile:
             if isinstance(typ,str):
                 self._filename = typ
-                if self.typ == 'vsh3':
+                if self.ext == 'vsh3':
+                    self.typ='vsh'
                     self.loadvsh3()
-                if self.typ == 'vsh2':
+                if self.ext == 'vsh2':
+                    self.typ='vsh'
                     self.loadvsh2()
-                if self.typ == 'sh3':
+                if self.ext == 'sh3':
+                    self.typ='ssh'
                     self.loadsh3()
-                if self.typ == 'sh2':
+                if self.ext == 'sh2':
+                    self.typ='ssh'
                     self.loadsh2()
-                if self.typ == 'trx1':
-                    self.load_trx(kwargs['directory'], self.Nf, self.Nt, self.Np)
-                if self.typ == 'trx':
+                if self.ext == 'trx1':
+                    self.typ='trx'
+                    self.load_trx(kwargs['directory'],self.Nf,self.Nt,self.Np)
+                if self.ext == 'trx':
+                    self.typ='trx'
                     self.loadtrx(kwargs['directory'])
-                if self.typ == 'mat':
+                if self.ext == 'mat':
+                    self.typ='mat'
                     self.loadmat(kwargs['directory'])
             elif isinstance(typ,list):
                 self._filename = typ
-                self.typ='hfss'
+                self.ext='hfss'
                 self.loadhfss(typ, self.Nt, self.Np)
 
         else :
             self._filename = typ
+            self.typ = typ
             if typ == 'Gauss':
-                self.typ = typ
-
                 self.p0 = kwargs['p0']
                 self.t0 = kwargs['t0']#np.pi/2.
                 self.p3 = kwargs['p3']#np.pi/6. # 30 degrees
@@ -279,7 +290,6 @@ class Antenna(PyLayers):
                 self.sqG = np.sqrt(self.G)
                 self.evaluated = False
             elif typ == 'WirePlate':
-                self.typ = typ
                 self.p0 = kwargs['p0']
                 kwargs['t0'] = 5*np.pi/6.
                 self.t0 =  kwargs['t0']#
@@ -288,11 +298,32 @@ class Antenna(PyLayers):
                 self.sqG = np.sqrt(self.G)
                 self.evaluated = False
             elif typ == 'Omni':
-                self.typ = typ
                 self.GdB  = 0. # gain
                 self.G  = pow(10.,self.GdB/10.) # gain
                 self.sqG = np.sqrt(self.G)
                 self.evaluated = False
+            elif typ == 'ssh':
+                pass
+            elif typ == 'vsh':
+                L = kwargs['L']
+                fmin = kwargs['fmin']
+                fmax = kwargs['fmax']
+                nf = kwargs['nf']
+                self.fa = np.linspace(fmin,fmax,nf)
+                # initialize a VSHCoeff with zeros
+
+                dBr = np.zeros((nf,L+1,L),dtype='complex128')
+                dBi = np.zeros((nf,L+1,L),dtype='complex128')
+                dCr = np.zeros((nf,L+1,L),dtype='complex128')
+                dCi = np.zeros((nf,L+1,L),dtype='complex128')
+
+                Br = VCoeff(typ='s1',fmin=fmin,fmax=fmax,data=dBr)
+                Bi = VCoeff(typ='s1',fmin=fmin,fmax=fmax,data=dBi)
+                Cr = VCoeff(typ='s1',fmin=fmin,fmax=fmax,data=dCr)
+                Ci = VCoeff(typ='s1',fmin=fmin,fmax=fmax,data=dCi)
+
+                self.C = VSHCoeff(Br,Bi,Cr,Ci)
+
             else:
                 raise NameError('antenna typ is not known')
 
@@ -404,8 +435,11 @@ class Antenna(PyLayers):
         return lfile_s
 
 
-    def photo(self,directory='ant/UWBAN/PhotosVideos'):
+    def photo(self,directory=''):
         """ show a picture of the antenna """
+
+        if directory == '':
+            directory = os.path.join('ant','UWBAN','PhotosVideos')
 
         _filename = 'IMG_'+self.PhotoFile.split('-')[1]+'.JPG'
         filename = pyu.getlong(_filename,directory)
@@ -718,6 +752,94 @@ class Antenna(PyLayers):
         #FPh = Fph.reshape(Nf, Nt, Np)
 
         return(FTh,FPh)
+
+    def coeffshow(self,**kwargs):
+        """ Display antenna coefficient
+
+            typ : string
+                'ssh' | 'vsh'
+            L  : maximum level
+            kf : frequency index
+            vmin  : float
+            vmax  : float
+
+        """
+        defaults = {'typ':'vsh',
+                    'L':20,
+                    'kf':46,
+                    'vmin':-40,
+                    'vmax':0,
+                    'cmap':cm.hot_r,
+                    'dB':True
+                   }
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+        L  = kwargs['L']
+        kf = kwargs['kf']
+
+        # calculates mode energy
+        # linear and log scale
+        # E : f , l , m
+        if kwargs['typ']=='vsh':
+            E  = self.C.energy(typ='s1')
+        if kwargs['typ']=='ssh':
+            E  = self.S.energy(typ='s1')
+        # Aem : f,l
+        # calculates energy integrated over m
+
+        Aem = np.sum(E,axis=2)
+        Aem_dB = 10*np.log10(Aem)
+
+        # Ael : f,m
+        # calculates energy integrated over l
+
+        Ael = np.sum(E,axis=1)
+        Ael_dB = 10*np.log10(Ael)
+
+
+        fig, ax = plt.subplots()
+        fig.set_figwidth(15)
+        fig.set_figheight(10)
+
+        if kwargs['dB']:
+            im = ax.imshow(10*np.log10(E[kf,:,:]),
+                           vmin = kwargs['vmin'],
+                           vmax = kwargs['vmax'],
+                           extent =[-L,L,L,0],
+                           interpolation = 'nearest',
+                           cmap = kwargs['cmap'])
+
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes("right", size="5%", pad=0.05)
+        axHistx = divider.append_axes("top", 1., pad=0.5, sharex=ax)
+        axHisty = divider.append_axes("left", 1., pad=0.5, sharey=ax)
+        #axHistx.bar(range(-L,L),Aem)
+        #axHisty.barh(range(0,L),Ael )
+        axHistx.yaxis.set_ticks(np.array([0,0.2,0.4,0.6,0.8]))
+        axHisty.xaxis.set_ticks(np.array([0,0.1,0.2,0.3]))
+        cbar = plt.colorbar(im, cax=cax)
+        fig.tight_layout()
+
+        plt.text(-0.02,0.6 ,'levels',
+             horizontalalignment='right',
+             verticalalignment='top',
+             transform=ax.transAxes,
+             rotation =90, fontsize= 15)
+
+        plt.text(0.6,1.1 ,'free space',
+             horizontalalignment='right',
+             verticalalignment='top',
+             transform=ax.transAxes,
+             fontsize= 15)
+
+        plt.text(0.55,-0.1 ,'modes',
+             horizontalalignment='right'
+             ,verticalalignment='top', transform=ax.transAxes, fontsize= 15)
+
+        return fig,ax
+
 
     def errel(self,kf=-1, dsf=1, typ='s3'):
         """ calculates error between antenna pattern and reference pattern
@@ -1136,10 +1258,10 @@ class Antenna(PyLayers):
         Parameters
         ----------
 
-        'fGHz' : frequzncy
-        phd : phi in degrees
-        thd : theta in degrees
-        'GmaxdB':  max gain to be displayed
+        fGHz : frequency
+        phd  : phi in degrees
+        thd  : theta in degrees
+        GmaxdB :  max gain to be displayed
 
         Returns
         -------
@@ -1160,6 +1282,7 @@ class Antenna(PyLayers):
             >>> fig,ax = A.polar(fGHz=[2,3,4],thd=90)
 
         """
+
         if not self.evaluated:
             self.Fsynth(pattern=True)
 
@@ -1213,7 +1336,7 @@ class Antenna(PyLayers):
 
         if len(self.fa) > 1 :
             fstep = self.fa[1]-self.fa[0]
-        else : 
+        else :
             fstep = np.array((abs(self.fa-kwargs['fGHz'][0])+1))
         #dtheta = self.theta[1,0]-self.theta[0,0]
         #dphi = self.phi[0,1]-self.phi[0,0]
@@ -1746,12 +1869,27 @@ class Antenna(PyLayers):
             raise Warning('antenna has not been evaluated')
 
 
-    def Fsynth(self, theta = [], phi=[], pattern=True):
+    def Fsynth(self,theta=[],phi=[],pattern=True,typ='vsh'):
         """ Perform Antenna synthesis
+
+        Parameters
+        ----------
+
+        theta : np.array
+        phi :   np.array
+        pattern : boolean
             call Antenna.Fpatt or Antenna.Fsynth3
+
+        Notes
+        -----
+
+        The antenna pattern synthesis is done either from spherical
+        harmonics coefficients or from a analytical expression of the
+        radiation pattern.
+
         """
 
-        if self.fromfile:
+        if ((self.fromfile) or (self.typ=='vsh') or (self.typ=='ssh')):
             self.Fsynth3(theta,phi,pattern)
         else :
             self.Fpatt(theta,phi,pattern)
@@ -2091,8 +2229,9 @@ class Antenna(PyLayers):
         return Fth, Fph
 
 
-    def Fsynth3(self, theta = [], phi=[], pattern=True,typ='sh3'):
-        r""" synthesis of a complex antenna pattern from VSH coefficients (shape 3)
+    def Fsynth3(self, theta = [], phi=[], pattern=True):
+        r""" synthesis of a complex antenna pattern from SH coefficients
+        (vsh or ssh  in shape 3)
 
 
         Ndir is the number of directions
@@ -2105,7 +2244,7 @@ class Antenna(PyLayers):
 
         pattern : boolean
             if True theta and phi are reorganized for building the pattern
-        typ  : 'vsh3' | 'sh3' | 'hfss'
+        typ  : 'vsh' | 'ssh' | 'hfss'
 
         Returns
         -------
@@ -2144,13 +2283,15 @@ class Antenna(PyLayers):
 
         """
 
-        typ = self.typ#self._filename.split('.')[1]
-        if typ=='satimo':
-            coeff=1.
-        if typ=='cst':
-            coeff=1./sqrt(30)
+        typ = self.typ
+        #self._filename.split('.')[1]
+        #if typ=='satimo':
+        #    coeff=1.
+        #if typ=='cst':
+        #    coeff=1./sqrt(30)
 
-        assert typ in ['sh3','vsh3'], "Error wrong file type"
+
+        assert typ in ['ssh','vsh','hfss'], "Error wrong file type"
 
         Nf = len(self.fa)
         if theta==[]:
@@ -2173,7 +2314,7 @@ class Antenna(PyLayers):
             phi = np.kron(np.ones(Nt),phi)
 
 
-        if typ =='vsh3':
+        if typ =='vsh':
 
             nray = len(theta)
 
@@ -2182,26 +2323,24 @@ class Antenna(PyLayers):
             mBr = self.C.Br.ind3[:, 1]
 
             Bi  = self.C.Bi.s3
-
             Cr  = self.C.Cr.s3
-
             Ci  = self.C.Ci.s3
 
             L = lBr.max()
             M = mBr.max()
 
             # vector spherical harmonics basis functions
-
             V, W = VW(lBr, mBr, theta, phi)
+
             Fth = np.dot(Br, np.real(V.T)) - \
-                np.dot(Bi, np.imag(V.T)) + \
-                np.dot(Ci, np.real(W.T)) + \
-                np.dot(Cr, np.imag(W.T))
+                  np.dot(Bi, np.imag(V.T)) + \
+                  np.dot(Ci, np.real(W.T)) + \
+                  np.dot(Cr, np.imag(W.T))
 
             Fph = -np.dot(Cr, np.real(V.T)) + \
-                np.dot(Ci, np.imag(V.T)) + \
-                np.dot(Bi, np.real(W.T)) + \
-                np.dot(Br, np.imag(W.T))
+                   np.dot(Ci, np.imag(V.T)) + \
+                   np.dot(Bi, np.real(W.T)) + \
+                   np.dot(Br, np.imag(W.T))
 
             if pattern:
 
@@ -2209,7 +2348,7 @@ class Antenna(PyLayers):
                 Fph = Fph.reshape(Nf, Nt, Np)
 
 
-        if typ == 'sh3':
+        if typ == 'ssh':
             cx = self.S.Cx.s3
             cy = self.S.Cy.s3
             cz = self.S.Cz.s3
@@ -2524,7 +2663,7 @@ class Antenna(PyLayers):
                 fmin = coeff['fmin'][0][0]
                 fmax = coeff['fmax'][0][0]
             # .. Warning
-            # Warning modification take only one dimension for k
+            # Warning modification takes only one dimension for k
             # if the .vsh3 format evolve it may not work anymore
             #
             Br = VCoeff('s3', fmin, fmax, coeff['Br.s3'],

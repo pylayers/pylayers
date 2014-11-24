@@ -83,8 +83,6 @@ class Waveform(dict):
 
         if self['typ']  == 'generic':
             [st,sf]=self.ip_generic()
-        elif self['typ']  == 'ref156':
-            [st,sf]=self.ip_ref156()
         #elif self['typ']  == 'mbofdm':
         #    [st,sf]=self.mbofdm()
         elif self['typ'] == 'W1compensate':
@@ -163,41 +161,26 @@ class Waveform(dict):
         #W = w.ft()
         W   = w.ftshift()
         return (w,W)
-        
-    def ip_ref156(self,beta=0.5):
-        """ the reference pulse given in 802.15.6 standard 
-        """    
+
+    def ref156(self):
+        """ reference pulse of IEEE 802.15.6 UWB standard
+        """
         Tw     = self['twns']
         fc     = self['fcGHz']
         band   = self['bandGHz']
         thresh = self['threshdB']
         fe     = self['feGHz']
-        Tns = 1./self['bandGHz']
-        Np     = fe*Tw
-        te = 1/fe
-        t  = np.linspace(-0.5*Tw+te/2,0.5*Tw+te/2,Np,endpoint=False)
-        tn = t/Tns
-        d1 = np.pi*tn
-        d1eqzr = np.where(d1==0)[0]
-        d2 = (1-(4*beta*tn)**2)
-        d2eqzr = np.where(d2==0)[0]
-        y = (np.sin(np.pi*(1-beta)*tn)+4*beta*tn*np.cos(np.pi*(1+beta)*tn))/(d1*d2)
-        y[d1eqzr] = 1 -beta + 4*beta/np.pi 
-        y[d2eqzr] = (beta/np.sqrt(2))*((1+2/np.pi)*np.sin(np.pi/(4*beta))+(1-2/np.pi)*np.cos(np.pi/(4*beta)))
-        w = bs.TUsignal(t,y)
-        W = w.ftshift()
-        return (w,W)
-        
-    def check156(self):
-        self.eval()
-        ref = Waveform(typ='ref156')
-        ref.eval()
-        Er = ref.st.energy()
-        Ep = self.st.energy()
-        corr = np.correlate(np.abs(self.st.y),ref.st.y,mode='full')*self.st.dx()/(np.sqrt(Er*Ep))
-        return(corr)    
-        
-        
+        te     = 1./fe
+        beta = 0.5
+        Tns  = 1./0.4992
+        x    =  np.linspace(-0.5*Tw+te/2,0.5*Tw+te/2,Np,endpoint=False)
+        z    = x/T
+        t1  = np.sin(np.pi*(1-beta)*z)
+        t2  = np.cos(np.pi*(1+beta)*z)
+        t3  = (np.pi*z)*(1-(4*beta*z)**2)
+        y   = (t1+4*beta*z*t2)/t3
+
+
     def fromfile(self):
         """
         get the measurement waveform from WHERE1 measurement campaign

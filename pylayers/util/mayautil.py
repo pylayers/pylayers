@@ -213,9 +213,9 @@ def savefig(filename,mlabview=[],magnification = 3,doc=False):
     import os
 
     if doc:
-        path = '../maya_images/'
+        path = os.path.join('..','maya_images')
     else :
-        path = './maya_images/'
+        path = os.path.join('.','maya_images')
 
 
     if not mlabview == []:
@@ -261,9 +261,9 @@ def inotshow(filename,**kwargs):
     doc=kwargs.pop('doc')
 
     if doc:
-        path = '../maya_images/'
+        path = os.path.join('..','maya_images')
     else :
-        path = './maya_images/'
+        path = os.path.join('.','maya_images')
 
     savefig(filename,mlabview,magnification,doc)
 

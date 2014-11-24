@@ -136,13 +136,13 @@ def mesname(n, dirname, h=1):
         This function handle filename from WHERE1 M1 measurement campaign
     """
     if (h == 1):
-        mesdir = dirname + '/h1/'
+        mesdir = os.path.join(dirname,'h1')
         if n > 279:
             prefix = 'SIRADEL_08-08-01_P'
         else:
             prefix = 'SIRADEL_08-07-31_P'
     else:
-        mesdir = dirname + '/h2/'
+        mesdir = os.path.join(dirname,'h2')
         prefix = 'SIRADEL_08-08-02_P'
 
     stn = str(n)
@@ -151,7 +151,7 @@ def mesname(n, dirname, h=1):
     if (len(stn) == 2):
         stn = '0' + stn
 
-    filename = mesdir + prefix + stn + '.mat'
+    filename = os.path.join(mesdir, prefix + stn + '.mat')
     return(filename)
 
 def ptw1():

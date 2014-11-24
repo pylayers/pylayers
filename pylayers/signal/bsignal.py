@@ -374,7 +374,6 @@ class Bsignal(PyLayers):
                             str(np.shape(self.x)),
                             str(np.shape(self.y)))
 
-        pdb.set_trace()
         for k in range(self.y.ndim):
             st = st + '\n' +self.label[k]+ ' : ' + str(self.y.shape[k])
 
@@ -1735,11 +1734,12 @@ class TUsignal(TBsignal, Usignal):
 
         Parameters
         ----------
-
         PSDdBmpHz : float
+        snr : float
         seed : float
         typ : string
             'psd' | 'snr'
+        R : float
 
         Returns
         -------
@@ -4950,7 +4950,13 @@ class FHsignal(FUsignal):
 class Noise(TUsignal):
     """ Create noise
     """
-    def __init__(self, ti=0,tf = 100, fsGHz = 50, PSDdBmpHz=-174, NF=0, R=50, seed=1):
+    def __init__(self,
+                 ti=0,
+                 tf = 100,
+                 fsGHz = 50,
+                 PSDdBmpHz=-174,
+                 NF=0,
+                 R=50, seed=1):
         """ object constructor
 
         Parameters
@@ -4966,8 +4972,9 @@ class Noise(TUsignal):
             Power Spectral Density Noise (dBm/Hz)
         R         : float
             50 Ohms
-        NF        : 0
-        seed      : []
+        NF        : float
+            (Default Value : 0)
+        seed      : float
 
         """
         TUsignal.__init__(self)
@@ -5089,16 +5096,17 @@ class Noise(TUsignal):
         st = st+ 'Power realized /'+str(self.R)+' Ohms : '+ str(10*np.log10(self.Pr)-60)+ ' dBm\n'
         return(st)
 
-    def psd(self,mask=True):
-        """
+    def ppsd(self,mask=True):
+        """ plot Power Spectral Density
+
         Parameters
         ----------
 
         mask : boolean
             True
         """
-        w2 = TUsignal.psd(self,periodic=False)
-        w2.plotdB(mask=mask)
+        W = TUsignal.psd(self,periodic=False)
+        W.plotdB(mask=mask)
 
     def amplify(self, GdB, NF):
         sel

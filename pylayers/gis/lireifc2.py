@@ -6,7 +6,7 @@ from pylayers.util import geomutil as geo
 from pylayers.util import pyutil as pyu
 import re
 _filename = 'P-0007-BEAULIEU_BAT11D-x-2-E1.ifc'
-filename = pyu.getlong(_filename,'struc/bat11/')
+filename = pyu.getlong(_filename,os.path.join('struc','bat11'))
 
 fd  = open(filename,'r')
 lig = fd.readlines()

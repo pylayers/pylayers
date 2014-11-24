@@ -14,9 +14,9 @@ class Hikob(PyLayers):
     """
     def load(day=11,serie='',scenario='20',run=1):
         if day==11:
-            files = os.listir(CORMORAN+'/POST-TREATED/11-06-2014/HIKOB')
+            files = os.listir(os.path.join(CORMORAN,'POST-TREATED','11-06-2014','HIKOB'))
         if day==12:
-            files = os.listdir(CORMORAN+'/POST-TREATED/12-06-2014/HIKOB')
+            files = os.listdir(os.path.join(CORMORAN,'POST-TREATED','12-06-2014','HIKOB'))
 
         if serie != '':
             filename = filter(lambda x : 'S'+serie in x ,files)
@@ -47,7 +47,7 @@ def extract(D):
     return(trssi)
 
 CORMORAN=os.environ['CORMORAN']#'/home/uguen/svn2/measures/CORMORAN'
-os.chdir(CORMORAN+'/RAW/11-06-2014/HIKOB')
+os.chdir(os.path.join(CORMORAN,'RAW','11-06-2014','HIKOB'))
 files = os.listdir('.')
 rawfiles = filter(lambda x: 'RAW' in x ,files)
 

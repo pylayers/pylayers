@@ -23,9 +23,9 @@ import os
 class Save(Process):
     """
 
-    Save all variable of a simulnet simulation.
+    Save all variables of a simulnet simulation.
     Save process can be setup with the save.ini file from /<project>/ini
-        
+
     Attributes
     ----------
 
@@ -39,13 +39,13 @@ class Save(Process):
     -------
 
     run ():
-        save the current simulation evey k step (setup into save.ini)
+        save the current simulation every k steps (setup into save.ini)
     load():
         Load saved results of a simulation. file extension  .pck
-        
+
     export(etype) :
         export the results into the etype format.
-        available format : 
+        available format :
         - 'python'
         - 'matlab'
 
@@ -98,7 +98,7 @@ class Save(Process):
             filename = self.filename
 
         out=[0]
-        infile = open(basename+'/' + pstruc['DIRNETSAVE'] +'/'+filename, 'r')
+        infile = open(os.path.join(basename,pstruc['DIRNETSAVE'],filename), 'r')
         while 1:
             try:
                 out.append(pickle.load(infile))
@@ -140,7 +140,7 @@ class Save(Process):
                     for r in self.save['saveopt']['lwstd']:
                         li=self.save['saveopt'][o][r]
                         self.savemat['saveopt'][o][r]=['node_'+l for l in li]
-                
+
                 else :
                     try:
                         self.savemat['saveopt'][o]['node_'+n]=self.save['saveopt'][o][n]
@@ -148,7 +148,7 @@ class Save(Process):
                     except:
                         pass
 
-        spio.savemat(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename,self.savemat)
+        spio.savemat(os.path.join(basename,pstruc['DIRNETSAVE'],self.filename),self.savemat)
         self.save=self.load()
 
     def run(self):
@@ -157,14 +157,14 @@ class Save(Process):
         """
         self.save={}
         self.filename = eval(self.opt['filename'])
-        self.file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename,'write')
-        self.save['saveopt']={}
-        self.save['saveopt']['lpos']=self.lpos
-        self.save['saveopt']['lldp']=self.lldp
-        self.save['saveopt']['lwstd']=self.lwstd
-        self.save['saveopt']['nbsamples']=np.ceil(eval(self.sim.sim_opt['duration'])/eval(self.opt['save_update_time']))+1
-        self.save['saveopt']['duration']=eval(self.sim.sim_opt['duration'])
-        self.save['saveopt']['save_update_time']=eval(self.opt['save_update_time'])
+        self.file=open(os.path.join(basename,pstruc['DIRNETSAVE'],self.filename),'write')
+        self.save['saveopt'] = {}
+        self.save['saveopt']['lpos'] = self.lpos
+        self.save['saveopt']['lldp'] = self.lldp
+        self.save['saveopt']['lwstd'] = self.lwstd
+        self.save['saveopt']['nbsamples'] = np.ceil(eval(self.sim.sim_opt['duration'])/eval(self.opt['save_update_time']))+1
+        self.save['saveopt']['duration'] = eval(self.sim.sim_opt['duration'])
+        self.save['saveopt']['save_update_time'] = eval(self.opt['save_update_time'])
 
         pickle.dump(self.save, self.file)
         self.file.close()
@@ -209,6 +209,7 @@ class Save(Process):
             rl={}
             for wstd in self.lwstd:
                 for ldp in self.lldp:
+
                     rl[wstd+ldp]=nx.get_edge_attributes(self.net.SubNet[wstd],ldp)
 
             for n in self.net.nodes():
@@ -223,11 +224,14 @@ class Save(Process):
                 for wstd in self.lwstd:
                     for ldp in self.lldp:
                         try:
-                            self.save[e[0]][e[1]][wstd][ldp][self.idx]=rl[wstd+ldp][e]
-                            self.save[e[1]][e[0]][wstd][ldp][self.idx]=rl[wstd+ldp][e]
+                            le=tuple([e[0],e[1],wstd])
+                            self.save[e[0]][e[1]][wstd][ldp][self.idx]=rl[wstd+ldp][le] 
+                            self.save[e[1]][e[0]][wstd][ldp][self.idx]=rl[wstd+ldp][le]
+
                         except:
                             pass
-            self.file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename,'a')
+
+            self.file=open(os.path.join(basename,pstruc['DIRNETSAVE'],self.filename),'a')
             pickle.dump(self.save, self.file)
             self.file.close()
             self.idx=self.idx+1
