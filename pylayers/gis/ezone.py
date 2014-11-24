@@ -250,7 +250,7 @@ class DEM(PyLayers):
         self.hgts[self.hgts<0]=0
 
     def loadsrtm(self):
-        """ load hgt and lcv files fro_m srtm directory
+        """ load hgt and lcv files from srtm directory
 
         """
 
