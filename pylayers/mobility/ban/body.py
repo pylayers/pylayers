@@ -946,6 +946,7 @@ class Body(PyLayers):
 
 
         kf,kt,vsn,wsn,vtn,wtn,alpha= self.posvel(traj,t)
+        self.toposFrameId = kf
         if self.mocap_loop:
 
             psa = np.array([0,0])
@@ -971,18 +972,17 @@ class Body(PyLayers):
             A[0:-1,0:-1] = a
             B[0:-1,:] = b
 
-
-        self.toposFrameId = kf
-        #
-        # TOPOS = A d + B     d == BODY at kf frame
-        #
-        #self.topos = (np.dot(A,self.d[:,:,kf])+B)
-        self.topos = (np.dot(A,alpha*self.d[:,:,kf]+(1-alpha)*self.d[:,:,kf])+B)
-
+            self.topos = (np.dot(A,alpha*self.d[:,:,kf]+(1-alpha)*self.d[:,:,kf])+B)
             #
             # TOPOS = A d + B     d == BODY at kf frame
             #
             #self.topos = (np.dot(A,self.d[:,:,kf])+B)
+                
+
+                #
+                # TOPOS = A d + B     d == BODY at kf frame
+                #
+                #self.topos = (np.dot(A,self.d[:,:,kf])+B)
         else :
 
             self.topos = self.d[:,:,kf]

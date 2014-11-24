@@ -58,6 +58,7 @@ from pylayers.mobility.ban.body import *
 from pylayers.antprop.statModel import *
 import pandas as pd
 import csv
+from pylayers.measures.cormoran import *
 
 class Simul(PyLayers):
     """
@@ -142,7 +143,55 @@ class Simul(PyLayers):
 
 
         return s
+    def load_corser(self, serie=serie,day=day):
+        
+         """  load a simultraj configuration from measure serie
 
+        Parameters
+        ----------
+
+        serie: integer
+            serie number
+        day: integer 
+            measurement day 
+
+        """
+        
+        Serie =  CorSer(serie = serie, day = day)
+       
+        #self.filetraj = _filetraj
+
+        # get the trajectory
+        traj = tr.Trajectories()
+        for body in Serie.B:
+            
+            #traj.loadh5(self.filetraj)
+
+        # get the layout
+        self.L = Layout(traj.Lfilename)
+
+        # resample trajectory
+
+        for ut, t in enumerate(traj):
+            if t.typ == 'ag':
+                person = Body(t.name + '.ini')
+                tt = t.time()
+                self.dpersons.update({t.name: person})
+                self._tmin = tt[0]
+                self._tmax = tt[-1]
+                self.time = tt
+            else:
+                pos = np.array([t.x[0], t.y[0], t.z[0]])
+                self.dap.update({t.ID: {'pos': pos,
+                                        'ant': antenna.Antenna(),
+                                        'name': t.name
+                                        }
+                                 })
+        self.ctime = np.nan
+        self.Nag = len(self.dpersons.keys())
+        self.Nap = len(self.dap.keys())
+        self.traj = traj
+        return 0
     def load_config(self, _filetraj):
         """  load a simultraj configuration file
 

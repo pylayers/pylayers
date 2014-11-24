@@ -523,7 +523,10 @@ class Antenna(PyLayers):
             else:
                 Fat = self.sqG * np.ones((len(self.theta),self.Nf))
                 Fap = self.sqG * np.zeros((len(self.theta),self.Nf))
-
+        
+        self.Ftheta = Fat
+        self.Fphi = Fap
+        
         # TODO create 2 separate functions
         if not pattern:
             return (Fat,Fap)
