@@ -1354,8 +1354,10 @@ class Rays(PyLayers,dict):
                 def fix_colinear():
                     nw = np.sqrt(np.sum(w*w, axis=0))
                     
-                    u = np.where(nw==0)
-                    if u[0].any() or u[1].any():
+                    u = np.where(nw==0) 
+
+                    if (u[0].any() or u[1].any()) \
+                        or (u[0].any()==0 or u[1].any()==0):
                         
 
                         uu = np.array([u[0],u[1]]).T
@@ -1391,6 +1393,7 @@ class Rays(PyLayers,dict):
                 # Handling channel reciprocity s_in --> -s_in
                 #
                 #w = np.cross(s_in, vn, axisa=0, axisb=0, axisc=0)
+
                 w = np.cross(-s_in, vn, axisa=0, axisb=0, axisc=0)
                 # nw : i x r
                 w, nw = fix_colinear()

@@ -16,7 +16,10 @@ def dist_nonvectorized(A,B,C,D,alpha,beta):
     D
     alpha
     beta
+    Return
+    ------
 
+        distance f ( =g <= comuted from another way)
     """
     AC=C-A
     CD=D-C
@@ -327,9 +330,8 @@ def segdist(A,B,C,D,hard=True):
         D   (3xM) end point segment 2  
             [or (3xMxK) end point segment 2 for K realizations]
         hard : boolean:
-            if True when alpha<0 and beta<0 then alpha=0 and beta =0
-                    and when alpha>1 and beta>1 then alpha=1 and beta=1
-            elif False: use True alpha beta values in computation
+            if True minimal distance between AB and CD must be on both segments
+            elif False: minimal distnace can be located on the lines descibed by AB or CD 
     Returns
     -------
 
@@ -360,7 +362,7 @@ def segdist(A,B,C,D,hard=True):
     AC = C[:,np.newaxis,:]-A[:,:,np.newaxis]
     # 3 x M 
     CD = D-C
-    # 3 x N 
+    # 3 x N p
     BA = A-B
 
     # u0 : N x M
@@ -386,27 +388,27 @@ def segdist(A,B,C,D,hard=True):
     dmin = np.sqrt(u0 + 2*(alpha*u1+beta*u2+alpha*beta*u3)+alpha*alpha*u4+ beta*beta*u5)
 
     if hard :
-        ap = np.where(alpha>1)[0]
-        am = np.where(alpha<0)[0]
-        bp = np.where(beta>1)[0]
-        bm = np.where(beta<0)[0]
-        alpha[ap]=np.ones(len(ap))
-        alpha[am]=np.zeros(len(am))
-        beta[bp]=np.ones(len(bp))
-        beta[bm]=np.zeros(len(bm))
+        ap = np.where(alpha>1)
+        am = np.where(alpha<0)
+        bp = np.where(beta>1)
+        bm = np.where(beta<0)
+        alpha[ap[0],ap[1],ap[2]]=1.
+        alpha[am[0],am[1],am[2]]=0.
+        beta[bp[0],bp[1],bp[2]]=1.
+        beta[bm[0],bm[1],bm[2]]=0.
 
 
 
     # f : N x M
-    f = u0 + 2*(alpha*u1+beta*u2+alpha*beta*u3)+alpha*alpha*u4+ beta*beta*u5
+    f = np.sqrt(u0 + 2*(alpha*u1+beta*u2+alpha*beta*u3)+alpha*alpha*u4+ beta*beta*u5)
     # X : 3 x N x M
     X  = A[:,:,np.newaxis]-alpha[np.newaxis,:,:]*BA[:,:,np.newaxis] # A - alpha*BA
     # Y : 3 x N x M
     Y  = C[:,np.newaxis,:] + beta[np.newaxis,:,:]*CD[:,np.newaxis,:]# C + beta*CD
     # g : N x M
-    g =np.einsum('ijk...,ijk...->jk...',X-Y,X-Y)
+    g =np.sqrt(np.einsum('ijk...,ijk...->jk...',X-Y,X-Y))
 
-    return(f,g,alpha,beta,dmin)
+    return(f,g,X,Y,alpha,beta,dmin)
 
 
 # <codecell>
