@@ -325,13 +325,15 @@ bernard
                      'Bernard_Cylindre:',
                      'Claude_Cylindre:',
                      'Meriem_Cylindre:']
-
+            intertmp=[]
             for i in self.interf:
                 try:
                     print "load ",i, " interfering body"
                     self.B.update({i:Cylinder(name=i,_filemocap=filemocap,unit = 'mm')})
+                    intertmp.append(i)
                 except:
                     print "Warning ! load ",i, " FAIL !"
+            self.interf=intertmp
         else :
             self.interf=[]
         # if len(self.subject) == 1:
@@ -613,7 +615,7 @@ bernard
             dnode.pop('COORD')
             prefix = 'TCR:'
         elif techno=='HKB':
-            if not ((self.typ == 'HKBS') or not (self.typ == 'FULL')):
+            if not ((self.typ == 'HKBS') or  (self.typ == 'FULL')):
                 raise AttributeError('Serie has not data for techno: '+techno)
             hname = self.hkb.keys()
             dnode=self.dHKB
