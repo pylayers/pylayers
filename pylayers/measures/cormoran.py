@@ -528,7 +528,8 @@ bernard
                 self.typ = tt[3]
                 self.video = tt[4].replace('.mat','')
             elif source == 'CITI':
-                self.scenario=tt[0].replace('Sc','')
+                self.scenario=tt[0].replace('Sc','')+tt[1]
+
                 self.run = tt[3].replace('r','')
                 self.typ = tt[4]
                 if self.typ == 'HKB':
@@ -1020,6 +1021,7 @@ bernard
         videofile = os.path.join(self.rootdir,'POST-TREATED', str(self.day)+'-06-2014','Videos')
         ldir = os.listdir(videofile)
         luldir = map(lambda x : self._filename in x,ldir)
+
         try:
             uldir = luldir.index(True)
             _filename = ldir[uldir]
