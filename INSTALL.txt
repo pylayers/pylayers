@@ -7,8 +7,9 @@ platform. ( https://store.continuum.io/cshop/anaconda/ )
 By doing so, you're installing most of the required dependencies.
 
 1 - Download Anaconda from https://store.continuum.io/cshop/anaconda/
-2 - Install Anaconda with the given command ( $bash Anaconda-<version>-<plateform>.sh ) . Say yes to add Anaconda to your path
-3 - Run "./installer.bat" file from the pylayers directory
+2 - Install Anaconda with the given command ( $bash Anaconda-<version>-<plateform>.sh ) . 
+Important : Say yes to add Anaconda to your path
+3 - Run "./installer_unix" file from the pylayers directory (eventually add exe rights using the command: chmod +x ./installer_unix )
 4 - Set environement Variables :
 
 It is then required to define the two enviroment variables PYLAYERS and BASENAME
@@ -29,10 +30,11 @@ Note : The PYLAYERS environement variable MUST be set in the directory conatinin
 
 
 1 - Download and Install Anaconda from https://store.continuum.io/cshop/anaconda/
-2 - Run installer.bat
-3 - Download the Shapely package corresponding to your platform from http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely *
-4 - Install shapely using the downloaded file
-5 - Set environement Variables :
+2 - Download the Shapely package corresponding to your platform from http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely *
+3 - Download the Basemap package corresponding to your platform fromhttp://www.lfd.uci.edu/~gohlke/pythonlibs/#basemap
+4 - Install Shapely and Basemap using the downloaded file
+5 - Run installer.bat
+6 - Set environement Variables :
     Procedure for WinXP :  http://support.microsoft.com/kb/310519/fr-fr
     Procedure for Vista/windows 7: Start -> Right click on computer -> Properties -> Advanced system parameters -> Environement variables
 
@@ -44,6 +46,38 @@ Note : The PYLAYERS environement variable MUST be set in the directory conatinin
 
 * Despite shapely is part of the Anaconda distribution, the Windows distibution doesn't contains the libgeos depencies.
 
+
+#################################
+#      Usual install issues     #
+#################################
+
+Most of the issue encountered during the install is due to 
+        1- Multiple python installations
+and/or  2- Multiple installation of some packages ( especially shapely/basemap under windows)
+
+1- Often, multiple python installation co-exists on a same computer, and this can cause complex PyLayers installation issues. To avoid that kind of issue, please,, make sure that you're using the python installation provided by Anaconda ,and not another one.
+To this end, you can check this on unix platform with :
+$ which python
+
+and under windows by opening 'cmd' and using :
+c:\ for %i in (python.exe) do @echo.   %~$PATH:i
+
+If the answer doesn't point to the Anaconda installation directory, you're using the wrong python version.
+You have to update the default python installation. I cannot describe here the detail procedure because it 
+is really depend to your configuration.
+
+
+2- Another source of issues comes from some package conflicts.
+This is especially the case by using a WINDOWS OS, when the shaeply installation has to be perfomed by using an external installer and not the one provided by Anaconda (because it does not contains required dependencies). 
+
+If after the installation, the import of a PyLayers module cause an Error involving shapely and/or basemap, you're probably facing the package conflict issue. 
+
+The easiest way to solve it is to remove the '.egg' of the incriminated package in :
+
+$ <Path to Anaconda>/lib/python2.7/site-packages/   (UNIX)
+
+or 
+c:\<Path to Anaconda>\Lib\site-packages (Windows)
 
 
 
