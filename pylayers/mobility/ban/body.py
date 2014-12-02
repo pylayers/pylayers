@@ -1800,8 +1800,8 @@ class Body(PyLayers):
             >>> traj = Trajectory()
             >>> traj.generate()
             >>> b.settopos(traj,t=3,cs=True)
-            #>>> b._show3(topos=True,pattern=True)
->>>>>>> fbc25f434b4901adabf1cf2a52cf63aa5844bb99
+            >>> b._show3(topos=True,pattern=True)
+
 
         """
         defaults = {'iframe' : 0,
@@ -1814,6 +1814,8 @@ class Body(PyLayers):
                     'lccs':[],
 
                     'dev':False,
+
+                    'devlist':[],
 
                     'ccs':False,
 
@@ -1887,11 +1889,17 @@ class Body(PyLayers):
         if kwargs['dev']:
             colhex = cold[kwargs['devcolor']]
             dev_color = tuple(pyu.rgb(colhex)/255.)
-            if 'dcs' in dir(self):
+
+            if kwargs['devlist'] == []:
                 dev = self.dev.keys()
+            else :
+                dev = [d  for d in self.dev if d in kwargs['devlist']]
+
+
+            if 'dcs' in dir(self):
                 X=np.array(self.getdevp(dev)).T
             else:
-                udev = [self.dev[i]['uc3d'][0] for i in self.dev]
+                udev = [self.dev[i]['uc3d'][0] for i in dev]
 
                 center = self.pg[:,fId]
                 X=self._f[fId,udev,:].T-center[:,np.newaxis]
@@ -1908,7 +1916,7 @@ class Body(PyLayers):
                 if kwargs['devtyp']== []:
                     udt = np.arange(len(nodename))
                 else:
-                    devtyp = np.unique([self.dev[x]['name'] for x in self.dev])
+                    devtyp = np.unique([self.dev[x]['name'] for x in dev])
                     ln =[filter(lambda x: d in x,nodename) for d in devtyp]
                     udev = [[nodename.index(n) for n in ln[i]] for i in range(len(ln))]
 

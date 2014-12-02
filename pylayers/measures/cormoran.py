@@ -327,13 +327,15 @@ bernard
                      'Bernard_Cylindre:',
                      'Claude_Cylindre:',
                      'Meriem_Cylindre:']
-
+            intertmp=[]
             for i in self.interf:
                 try:
                     print "load ",i, " interfering body"
                     self.B.update({i:Cylinder(name=i,_filemocap=filemocap,unit = 'mm')})
+                    intertmp.append(i)
                 except:
                     print "Warning ! load ",i, " FAIL !"
+            self.interf=intertmp
         else :
             self.interf=[]
         # if len(self.subject) == 1:
@@ -534,7 +536,8 @@ bernard
                 self.typ = tt[3]
                 self.video = tt[4].replace('.mat','')
             elif source == 'CITI':
-                self.scenario=tt[0].replace('Sc','')
+                self.scenario=tt[0].replace('Sc','')+tt[1]
+
                 self.run = tt[3].replace('r','')
                 self.typ = tt[4]
                 if self.typ == 'HKB':
@@ -621,7 +624,7 @@ bernard
             dnode.pop('COORD')
             prefix = 'TCR:'
         elif techno=='HKB':
-            if not ((self.typ == 'HKBS') or not (self.typ == 'FULL')):
+            if not ((self.typ == 'HKBS') or  (self.typ == 'FULL')):
                 raise AttributeError('Serie has not data for techno: '+techno)
             hname = self.hkb.keys()
             dnode=self.dHKB
@@ -1026,6 +1029,7 @@ bernard
         videofile = os.path.join(self.rootdir,'POST-TREATED', str(self.day)+'-06-2014','Videos')
         ldir = os.listdir(videofile)
         luldir = map(lambda x : self._filename in x,ldir)
+
         try:
             uldir = luldir.index(True)
             _filename = ldir[uldir]
@@ -1095,10 +1099,14 @@ bernard
 
         body :boolean
             display bodytime(True)
-        devsize : float
-            device on body size (100)
         bodytime: list
             list of time instant where body topos has to be shown
+
+
+        devsize : float
+            device on body size (100)
+        devlist : list
+            list of device name to show on body
 
         trajectory : boolean
             display trajectory  (True)
@@ -1139,6 +1147,7 @@ bernard
                      'interf':True,
                      'trajectory' :True,
                      'devsize':100,
+                     'devlist':[],
                      'inodes' : True,
                      'inname' : True,
                      'incolor' : 'r',
@@ -1185,10 +1194,11 @@ bernard
                 # time=range(10,100,20)
             else :
                 time=kwargs['bodytime']
+
             for ki, i in enumerate(time):
                 for ib,b in enumerate(subject):
                     self.B[b].settopos(t=i,cs=True)
-                    self.B[b]._show3(dev=True,devsize=kwargs['devsize'],tube_sides=12)
+                    self.B[b]._show3(dev=True,devlist=kwargs['devlist'],devsize=kwargs['devsize'],tube_sides=12)
                     if kwargs['tagtraj']:
                         X=self.B[b].traj[['x','y','z']].values[self.B[b].toposFrameId]
                         if kwargs['tagpoffset']==[]:
@@ -2927,8 +2937,20 @@ bernard
 
         """ align time for device and hkb data frame
 
+
+        Parameters
+        ----------
+
         devdf : device dataframe
         hkbdf : hkbdataframe
+
+        Return
+        ------
+
+        devdfc : 
+            aligned copy device dataframe
+        hkbdfc : 
+            aligned copy hkbdataframe
 
         Examples
         --------
@@ -2942,20 +2964,21 @@ bernard
 
         """
 
+        devdfc=copy.deepcopy(devdf)
+        hkbdfc=copy.deepcopy(hkbdf)
+        idev = devdfc.index
+        ihkb = hkbdfc.index
 
-        idev = devdf.index
-        ihkb = hkbdf.index
-        devdf.index = pd.to_datetime(idev,unit='s')
-        hkbdf.index = pd.to_datetime(ihkb,unit='s')
-
-        sf = (hkbdf.index[2]-hkbdf.index[1]).microseconds
-        devdf= devdf.resample(str(sf)+'U')
+        devdfc.index = pd.to_datetime(idev,unit='s')
+        hkbdfc.index = pd.to_datetime(ihkb,unit='s')
         
-        devdf.index = pd.Series([val.time() for val in devdf.index])
-        hkbdf.index = pd.Series([val.time() for val in hkbdf.index])
+        sf = (hkbdfc.index[2]-hkbdfc.index[1]).microseconds
+        devdfc= devdfc.resample(str(sf)+'U')
+        
+        devdfc.index = pd.Series([val.time() for val in devdfc.index])
+        hkbdfc.index = pd.Series([val.time() for val in hkbdfc.index])
 
-
-        return devdf,hkbdf
+        return devdfc,hkbdfc
 
     def get_data(self,a,b):
 
