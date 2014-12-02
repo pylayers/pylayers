@@ -1091,10 +1091,14 @@ bernard
 
         body :boolean
             display bodytime(True)
-        devsize : float
-            device on body size (100)
         bodytime: list
             list of time instant where body topos has to be shown
+
+
+        devsize : float
+            device on body size (100)
+        devlist : list
+            list of device name to show on body
 
         trajectory : boolean
             display trajectory  (True)
@@ -1135,6 +1139,7 @@ bernard
                      'interf':True,
                      'trajectory' :True,
                      'devsize':100,
+                     'devlist':[],
                      'inodes' : True,
                      'inname' : True,
                      'incolor' : 'r',
@@ -1181,10 +1186,11 @@ bernard
                 # time=range(10,100,20)
             else :
                 time=kwargs['bodytime']
+
             for ki, i in enumerate(time):
                 for ib,b in enumerate(subject):
                     self.B[b].settopos(t=i,cs=True)
-                    self.B[b]._show3(dev=True,devsize=kwargs['devsize'],tube_sides=12)
+                    self.B[b]._show3(dev=True,devlist=kwargs['devlist'],devsize=kwargs['devsize'],tube_sides=12)
                     if kwargs['tagtraj']:
                         X=self.B[b].traj[['x','y','z']].values[self.B[b].toposFrameId]
                         if kwargs['tagpoffset']==[]:
