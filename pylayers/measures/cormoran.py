@@ -2923,8 +2923,20 @@ bernard
 
         """ align time for device and hkb data frame
 
+
+        Parameters
+        ----------
+
         devdf : device dataframe
         hkbdf : hkbdataframe
+
+        Return
+        ------
+
+        devdfc : 
+            aligned copy device dataframe
+        hkbdfc : 
+            aligned copy hkbdataframe
 
         Examples
         --------
@@ -2938,20 +2950,21 @@ bernard
 
         """
 
+        devdfc=copy.deepcopy(devdf)
+        hkbdfc=copy.deepcopy(hkbdf)
+        idev = devdfc.index
+        ihkb = hkbdfc.index
 
-        idev = devdf.index
-        ihkb = hkbdf.index
-        devdf.index = pd.to_datetime(idev,unit='s')
-        hkbdf.index = pd.to_datetime(ihkb,unit='s')
-
-        sf = (hkbdf.index[2]-hkbdf.index[1]).microseconds
-        devdf= devdf.resample(str(sf)+'U')
+        devdfc.index = pd.to_datetime(idev,unit='s')
+        hkbdfc.index = pd.to_datetime(ihkb,unit='s')
         
-        devdf.index = pd.Series([val.time() for val in devdf.index])
-        hkbdf.index = pd.Series([val.time() for val in hkbdf.index])
+        sf = (hkbdfc.index[2]-hkbdfc.index[1]).microseconds
+        devdfc= devdfc.resample(str(sf)+'U')
+        
+        devdfc.index = pd.Series([val.time() for val in devdfc.index])
+        hkbdfc.index = pd.Series([val.time() for val in hkbdfc.index])
 
-
-        return devdf,hkbdf
+        return devdfc,hkbdfc
 
     def get_data(self,a,b):
 
