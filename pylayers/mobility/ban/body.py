@@ -1841,7 +1841,7 @@ class Body(PyLayers):
 
         fId = kwargs['iframe']
 
-
+        f = mlab.gcf()
 
         cold = pyu.coldict()
         colhex = cold[self.color]

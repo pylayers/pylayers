@@ -181,6 +181,7 @@ class Simul(PyLayers):
 
         # resample trajectory
         for ut, t in enumerate(traj):
+            
             if t.typ == 'ag':
                 person = Body(t.name + '.ini')
                 tt = t.time()
@@ -202,17 +203,17 @@ class Simul(PyLayers):
 
     def load_CorSer(self,source):
 
-        if isinstance(source.B,Body):
-            B=[source.B]
-        elif isinstance(source.B,list):
-            B=source.B
+        if isinstance(source.B.values(),Body):
+            B=[source.B.values()]
+        elif isinstance(source.B.values(),list):
+            B=source.B.values()
         else:
             raise AttributeError('CorSer.B must be a list or a Body')
 
         self.L=source.L
         self.traj = tr.Trajectories()
         self.traj.Lfilename=self.L
-
+    
         for b in B:
             self.dpersons.update({b.name: b})
             self._tmin = b.time[0]
@@ -475,6 +476,7 @@ class Simul(PyLayers):
 
         init = True
         for ut, t in enumerate(lt):
+            print 'ut =', ut, 't = ', t
             self.ctime = t
             self.update_pos(t)
             print self.N.__repr__()
@@ -489,9 +491,10 @@ class Simul(PyLayers):
                         eng = 0
                         self.evaldeter(na, nb, w)
                         if typ == 'OB':
-                            self.evalstat(na, nb)
-                            eng = self.SL.eng
-                            L = self.DL + self.SL
+                            #self.evalstat(na, nb)
+                            #eng = self.SL.eng
+                            #L = self.DL + self.SL
+                            L = self.DL
                             self._ak = L.H.ak
                             self._tk = L.H.tk
                         else :
