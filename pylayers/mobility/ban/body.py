@@ -1726,17 +1726,59 @@ class Body(PyLayers):
         Parameters
         ----------
 
-        iframe : int
-            frame index (default 0 )
+
+
+        name : boolean (False)
+            display body name
+
+
+        Cylinders 
+        ---------
+        cylinder : boolean (True)
+            dispaly body cylinder
         widthfactor : float
             cylinder scaling factor (default 1.0)
-        pattern : boolean
-            show pattern if True
+        tube_sides : int (6)
+            number of sides of polygone to approximate cylinder
+        opacity : float (1)
+            set body opacity
         ccs : boolean
             show ccs if True
+
+        Devices 
+        -------
+        dcs : boolean (False)
+            show dcs if True
+        devlist: list
+            list of devices to display 
+        devtyp : list ([])
+            list of device type ( when multiple RAT)
+        devcolor : color ('g')
+            device color
+        devid : boolean 
+            show device id
+        devopacity : float (1)
+            device opacity 
+        devsize : float
+            device size
+        pattern : boolean (False)
+            show pattern if True
+
+
+
+
+        Config 
+        -------
+        iframe : int
+            frame index (default 0 )
         k : frequency index
             select frequency index for displaying antenna pattern
-        devid : boolean
+
+        save : boolean (False)
+            save _show3 into file
+        returnfig': booleéan (False)
+            return mlab.figure instance
+
 
         Examples
         --------
@@ -1754,6 +1796,7 @@ class Body(PyLayers):
 
         """
         defaults = {'iframe' : 0,
+                    'name':False,
                     'cylinder':True,
                     'widthfactor' : 1.,
                     'tube_sides' : 6,
@@ -1769,7 +1812,8 @@ class Body(PyLayers):
                     'devsize':5e1,
                     'devtyp':[],
                     'k':0,
-                    'save':False}
+                    'save':False,
+                    'returnfig':False}
 
         for k in defaults:
             if k not in kwargs:
@@ -1829,6 +1873,10 @@ class Body(PyLayers):
         # [f.children[k].__setattr__('name', partnames[k]+str(k))
         #  for k in range(self.ncyl)]
 
+        if kwargs['name']:
+            uupper = np.where(X[2]==X[2].max())[0]
+            self._mayaname = mlab.text3d(X[0,uupper][0],X[1,uupper][0],X[2,uupper][0],self.name,scale=0.05,color=(1,0,0))
+
         if kwargs['dev']:
             colhex = cold[kwargs['devcolor']]
             dev_color = tuple(pyu.rgb(colhex)/255.)
@@ -1847,7 +1895,7 @@ class Body(PyLayers):
                 center = self.pg[:,fId]
                 X=self._f[fId,udev,:].T-center[:,np.newaxis]
 
-            mlab.points3d(X[0,:],X[1,:], X[2,:], 
+            self._mayadev = mlab.points3d(X[0,:],X[1,:], X[2,:], 
                           scale_factor=kwargs['devsize']*self._unit, 
                           resolution=10, 
                           color = dev_color,
@@ -1941,6 +1989,10 @@ class Body(PyLayers):
         if kwargs['save']:
             fig = mlab.gcf()
             mlab.savefig('Body.png',figure=fig)
+
+        if kwargs['returnfig']:
+            return fig
+
 
     def show(self,**kwargs):
         """ show a 2D plane projection of the body
@@ -2881,12 +2933,13 @@ class Cylinder(object):
 
 
     def settopos(self,t,**kwargs):
-        ut = np.where(t<=self.time)[0]
-        self.topos =self.d[:,:,ut[0]]
+
+        ut = np.where(t<=self.time)[0][0]
+        self.topos =self.d[:,:,ut]
         self.top = self.topos[:,self.topnode]
         self.bottom = copy.copy(self.top)
         self.bottom[2]=0
-        self.toposradius =self.radius[ut[0]]
+        self.toposradius =self.radius[ut]
         self.toposFrameId = ut
 
     def init_traj(self):
@@ -2911,9 +2964,11 @@ class Cylinder(object):
 
         """
         defaults = {'iframe' : 0,
+                    'name':False,
                     'widthfactor' : 1.,
                     'tube_sides' : 6,
                     'opacity':1,
+                    'vecdir':True
                     }       
 
         for k in defaults:
@@ -2933,12 +2988,13 @@ class Cylinder(object):
 
         cold = pyu.coldict()
         colhex = cold[self.color]
-        body_color = tuple(pyu.rgb(colhex)/255.)
+        cyl_color = tuple(pyu.rgb(colhex)/255.)
 
        
         X=np.vstack((self.top,self.bottom))
        
         connections=(0,1)
+    
         s = np.hstack((self.toposradius,self.toposradius))
         #pts = mlab.points3d(X[0,:],X[1,:], X[2,:], 5*s ,
                                              # scale_factor=0.1, resolution=10)
@@ -2948,9 +3004,20 @@ class Cylinder(object):
         tube = mlab.pipeline.tube(self._mayapts, tube_radius=0.05,tube_sides=kwargs['tube_sides'])
         tube.filter.radius_factor = 1.
         tube.filter.vary_radius = 'vary_radius_by_absolute_scalar'
-        mlab.pipeline.surface(tube, color=body_color,opacity=kwargs['opacity'])
+        mlab.pipeline.surface(tube, color=cyl_color,opacity=kwargs['opacity'])
         f.children[-1].__setattr__('name',self.name )
 
+
+        if kwargs['name']:
+            self._mayaname = mlab.text3d(self.top[0],self.top[1],self.top[2],self.name,scale=0.05,color=(1,0,0))
+
+
+        if kwargs['vecdir']:
+
+            V = self.traj[['vx','vy','vz']].iloc[self.toposFrameId].values
+            self._mayavdic =  mlab.quiver3d(self.top[0], self.top[1], self.top[2],
+                              V[ 0], V[ 1], V[ 2],
+                              scale_factor=2e2*self._unit)
 
 
     @mlab.animate(delay=100)

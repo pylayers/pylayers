@@ -19,6 +19,13 @@ from skimage import img_as_ubyte
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
+# Those lines handle incompatibility between mayavi and VTK
+# and redirect noisy warning message into a log file
+import vtk 
+output=vtk.vtkFileOutputWindow()
+output.SetFileName("mayaviwarninglog.tmp")
+vtk.vtkOutputWindow().SetInstance(output)
+
 
 def cor_ls():
     filelog = os.path.join(os.environ['CORMORAN'],'RAW','Doc','MeasurementLog.csv')
@@ -326,10 +333,14 @@ bernard
                      'Claude_Cylindre:',
                      'Meriem_Cylindre:']
             intertmp=[]
-            for i in self.interf:
+            for ui,i in enumerate(self.interf):
                 try:
                     print "load ",i, " interfering body"
-                    self.B.update({i:Cylinder(name=i,_filemocap=filemocap,unit = 'mm')})
+
+                    self.B.update({i:Cylinder(name=i,
+                                              _filemocap=filemocap,
+                                              unit = 'mm',
+                                              color = color[ui])})
                     intertmp.append(i)
                 except:
                     print "Warning ! load ",i, " FAIL !"
@@ -698,53 +709,37 @@ bernard
                 radius = np.concatenate((radius,cyl.radius[np.newaxis]))
                 usub_start=usub_stop
                 usub_stop=usub_stop+1
+
             f,g,X,Y,alpha,beta,dmin=seg.segdist(A,B,C,D,hard=True)
+
             intersect2D[:,usub_start:usub_stop,:]=g
-
-            # fig=plt.figure()
-            # ax=fig.add_subplot(111,projection='3d')
-            # ndev=58
-            # ncyl=0
-            # ax.plot([A[0,ndev,0],B[0,ndev,0]],[A[1,ndev,0],B[1,ndev,0]],[A[2,ndev,0],B[2,ndev,0]])
-            # for k in range(11):
-            #     ax.plot([C[0,k,0],D[0,k,0]],[C[1,k,0],D[1,k,0]],[C[2,k,0],D[2,k,0]],'k')
-            # ax.plot([X[0,ndev,ncyl,0],Y[0,ndev,ncyl,0]],[X[1,ndev,ncyl,0],Y[1,ndev,ncyl,0]],[X[2,ndev,ncyl,0],Y[2,ndev,ncyl,0]])
-            # plt.show()
             # import ipdb
             # ipdb.set_trace()
-            # import ipdb
-            # ipdb.set_trace()
+            # USEFUL Lines for debug
+            #########################
 
-            # # al1,be1,dm1=seg.dmin3d(A,B,C,D)
-            # # f1,g1=seg.dist(A,B,C,D,al1,be1)
-            # # gg1=np.sqrt(g1)
+            # def plt3d(ndev=53,ncyl=0,kl=11499):
+            #     fig=plt.figure()
+            #     ax=fig.add_subplot(111,projection='3d')
+            #     if not isinstance(kl,list):
+            #         kl=[kl]
 
-
-            
-            # aa=A[:,ndev,0]
-            # bb=B[:,ndev,0]
-            # interf=[0]*11
-            # interg=[0]*11
-            # for i in range(11):
-            #     cc=C[:,i,0]
-            #     dd=D[:,i,0]
-            #     alpha,beta,dmin=seg.dmin3d_nonvectorized(aa,bb,cc,dd)
-            #     ff,gg,xx,yy=seg.dist_nonvectorized(aa,bb,cc,dd,alpha,beta)
-
-            #     interf[i]=np.sqrt(ff)#<radius[i,0]
-            #     interg[i]=np.sqrt(gg)#<radius[i,0]
-            # f1=plt.figure()
-            # ax1=f1.add_subplot(111,projection='3d')
-            # ax1.plot([aa[0],bb[0]],[aa[1],bb[1]],[aa[2],bb[2]])
-            # ax1.plot([cc[0],dd[0]],[cc[1],dd[1]],[cc[2],dd[2]])
-            # ax1.plot([xx[0],yy[0]],[xx[1],yy[1]],[xx[2],yy[2]])
-            # plt.draw()
+            #     for ktime in kl:
+            #         ax.plot([A[0,ndev,ktime],B[0,ndev,ktime]],[A[1,ndev,ktime],B[1,ndev,ktime]],[A[2,ndev,ktime],B[2,ndev,ktime]])
+            #         [ax.plot([C[0,k,ktime],D[0,k,ktime]],[C[1,k,ktime],D[1,k,ktime]],[C[2,k,ktime],D[2,k,ktime]],'k') for k in range(11) ]
+            #         ax.plot([X[0,ndev,ncyl,ktime],Y[0,ndev,ncyl,ktime]],[X[1,ndev,ncyl,ktime],Y[1,ndev,ncyl,ktime]],[X[2,ndev,ncyl,ktime],Y[2,ndev,ncyl,ktime]])
+            #     ax.auto_scale_xyz([-5, 5], [-5, 5], [0, 2])
+            #     plt.show()
             # import ipdb
             # ipdb.set_trace()
 
 
-        uinter1 = np.where((intersect2D<=(radius)))
-        uinter0 = np.where((intersect2D>(radius)))
+
+
+        uinter1 = np.where((intersect2D<=(radius-0.01)))
+        uinter0 = np.where((intersect2D>(radius-0.01)))
+        intersect2D_=copy.copy(intersect2D)
+
         intersect2D[uinter1[0],uinter1[1],uinter1[2]]=1
         intersect2D[uinter0[0],uinter0[1],uinter0[2]]=0
         # # integrate the effect of all bodies by summing on axis 1
@@ -768,8 +763,23 @@ bernard
     def imshowvisimda(self,inter,links,**kwargs):
         """  imshow visibility mda
 
+
+        Parameters 
+        ----------
+
         inter : (nb link x nb link x timestamps)
         links : (nblinks)
+        t : time
+
+
+        Example 
+        -------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> import matplotlib.pyplot as plt
+        >>> C=CorSer(serie=6,day=12)
+        >>> inter,links=C.visimda(techno='TCR',square_mda=True)
+        >>> i,l=C.imshowvisimda(inter,links)
 
         """
         defaults = { 't':0,
@@ -791,6 +801,8 @@ bernard
             ax = kwargs.pop('ax')
 
 
+        kt=np.where(self.B[self.B.keys()[0]].time <= kwargs['t'])[0][-1]
+        print kt
         plt.xticks(np.arange(0, len(links), 1.0))
         plt.yticks(np.arange(0, len(links), 1.0))
         ax.set_xlim([-0.5,len(links)-0.5])
@@ -801,88 +813,173 @@ bernard
         plt.setp(xtickNames, rotation=90, fontsize=8)
         plt.setp(ytickNames, rotation=0, fontsize=8)
         ims=[]
-        ax.imshow(inter[:,:,kwargs['t']],interpolation='nearest')
+        ax.imshow(inter[:,:,kt],interpolation='nearest')
         if kwargs['grid']:
             ax.grid()
-
         return fig,ax
 
 
-    # def visimda(self):
-    #     """ determine visibility MDA
-    #     """
+    def _show3i(self,kt):
+        """ show3 update for interactive mode
+            USED in imshowvisimdai
+        """
+        t=self.B[self.subject[0]].time[kt]
 
-    #     import itertools
-    #     # link ids order 
-    #     ids = np.unique(self.devdf['id'])
-    #     # nblink ids
-    #     nbids = len(ids)
-    #     # nb infra nodes 
-    #     nbin = len(self.din)
-    #     # total link ids ( including infra nodes)
-    #     tids =np.hstack((ids,self.din.keys()))
-    #     # A-B corresponds to links
+        for ib,b in enumerate(self.B):
+            self.B[b].settopos(t=t,cs=True)
 
-    #     # extract all dev position on body
-    #     # dev : (3 x (nb devices + nb infra nodes) x nb_timestamp)
-    #     dev = np.empty((3,nbids+nbin,len(self.devdf.index)/nbids))
-    #     for ik,i in enumerate(ids) :
-    #         dev[:,ik,:] = self.devdf[self.devdf['id']==i][['x','y','z']].values.T
-    #     # add infra nodes
-    #     for ik,i in enumerate(self.din):
-    #         dev[:,nbids+ik,:]=self.din[i]['p'][:,np.newaxis]
+            try:
+                # body
+                X=np.hstack((self.B[b]._pta,self.B[b]._phe))
+                self.B[b]._mayapts.mlab_source.set(x=X[0,:], y=X[1,:], z=X[2,:])
+                # device
+                udev = [self.B[b].dev[i]['uc3d'][0] for i in self.B[b].dev]
+                Xd=self.B[b]._f[kt,udev,:].T
+                self.B[b]._mayadev.mlab_source.set(x=Xd[0,:], y=Xd[1,:], z=Xd[2,:])
+                # name
+                uupper = np.where(X[2]==X[2].max())[0]
+                self.B[b]._mayaname.actors.pop()
+                self.B[b]._mayaname = mlab.text3d(X[0,uupper][0],X[1,uupper][0],X[2,uupper][0],self.B[b].name,scale=0.05,color=(1,0,0))
+                # s = np.hstack((cylrad,cylrad))
+            except:
+                # cylinder
+                X=np.vstack((self.B[b].top,self.B[b].bottom))
+                self.B[b]._mayapts.mlab_source.set(x=X[:,0], y=X[:,1], z=X[:,2])
+                # name
+                self.B[b]._mayaname.actors.pop()
+                self.B[b]._mayaname = mlab.text3d(self.B[b].top[0],self.B[b].top[1],self.B[b].top[2],self.B[b].name,scale=0.05,color=(1,0,0))
+                # vdict
+                V = self.B[b].traj[['vx','vy','vz']].iloc[self.B[b].toposFrameId].values
 
-    #     # determine all the links
-    #     links = np.array([x for x in itertools.combinations(range(nbids+nbin),2)])
-    #     A = dev[:,links[:,0]]
-    #     B = dev[:,links[:,1]]
+                self.B[b]._mayavdic.mlab_source.set(x= self.B[b].top[0],y=self.B[b].top[1],z=self.B[b].top[2],u=V[ 0],v=V[ 1],w=V[ 2])
 
-    #     dev_map=np.array(zip(*[tids[links[:,0]],tids[links[:,1]]]))
 
-    #     # C-D correspond to bodies segments
-    #     # C or D : 3 x 11 body segments x time
-    #     # radius of cylinders are (nb_cylinder x time)
-    #     for b in self.B:
-    #         # if b is a body not a cylinder
-    #         if not 'Cylindre' in b:
-    #             uta = self.B[b].sl[:,0].astype('int')
-    #             uhe = self.B[b].sl[:,1].astype('int')
-    #             rad = self.B[b].sl[:,2]
-    #             try:
-    #                 C = np.concatenate((C,self.B[b].d[:,uta,:]),axis=1)
-    #                 D = np.concatenate((D,self.B[b].d[:,uhe,:]),axis=1)
-    #                 radius = np.concatenate((radius,rad[:,np.newaxis]*np.ones((1,C.shape[2]))),axis=0)
-    #             except:
-    #                 import ipdb
-    #                 ipdb.set_trace()
-    #                 C = self.B[b].d[:,uta,:]
-    #                 D = self.B[b].d[:,uhe,:]
-    #                 radius = rad[:,np.newaxis]*np.ones((1,C.shape[2]))
-    #         else:
+    def imshowvisimdai(self,inter,links,t=0,**kwargs):
+        """  imshow visibility mda
 
-    #                 cyl = self.B[b]
-    #                 # top of cylinder
-    #                 top = cyl.d[:,cyl.topnode,:]
-    #                 # bottom of cylinder =top with z =0
-    #                 bottom = copy.copy(cyl.d[:,cyl.topnode,:])
-    #                 bottom[2,:]=0.
-    #                 # top 3 x 1 X time
-    #                 top=top[:,np.newaxis,:]
-    #                 bottom=bottom[:,np.newaxis,:]
-    #                 C = np.concatenate((C,top),axis=1)
-    #                 D = np.concatenate((D,bottom),axis=1)
-    #                 radius = np.concatenate((radius,cyl.radius[np.newaxis]))
-    #     import ipdb
-    #     ipdb.set_trace()
-    #     f,g,alpha,beta,dmin=seg.segdist(A,B,C,D,hard=True)
-    #     # intersection matrix
-    #     intersect2D = np.zeros(f.shape,dtype='int')
+        Parameters 
+        ----------
 
-    #     uinter= np.where(f<radius[np.newaxis,:,np.newaxis])
-    #     intersect2D[uinter[0],uinter[1],uinter[2]]=1
+        inter : (nb link x nb link x timestamps)
+        links : (nblinks)
+        t : time
 
-    #     intersect = np.sum(intersect2D,axis=1)>0
-    #     return intersect,dev_map
+
+        Example 
+        -------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> import matplotlib.pyplot as plt
+        >>> C=CorSer(serie=6,day=12)
+        >>> inter,links=C.visimda(techno='TCR',square_mda=True)
+        >>> i,l=C.imshowvisimdai(inter,links)
+
+        """
+        defaults = { 
+                    }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+
+        fig, ax = plt.subplots()
+        fig.subplots_adjust(bottom=0.3)
+
+
+
+        vertc = [(0,-10),(0,-10),(0,10),(0,-10)]
+        poly = plt.Polygon(vertc)
+        pp = ax.add_patch(poly)
+
+        plt.xticks(np.arange(0, len(links), 1.0))
+        plt.yticks(np.arange(0, len(links), 1.0))
+        ax.set_xlim([-0.5,len(links)-0.5])
+        ax.set_ylim([len(links)-0.5,-0.5])
+        ax.xaxis.set_ticks_position('top') 
+        xtickNames = plt.setp(ax, xticklabels=links)
+        ytickNames = plt.setp(ax, yticklabels=links)
+        plt.setp(xtickNames, rotation=90, fontsize=8)
+        plt.setp(ytickNames, rotation=0, fontsize=8)
+        ims=[]
+        l=ax.imshow(inter[:,:,kwargs['init']],interpolation='nearest')
+        kwargs['bodytime']=[self.B[self.subject[0]].time[kwargs['init']]]
+        kwargs['returnfig']=True
+        mayafig = self._show3(**kwargs)
+        # ax.grid()
+
+
+        # matplotlib Widgets 
+
+        slax=plt.axes([0.1, 0.15, 0.8, 0.02])
+        sliderx = Slider(slax, "time", 0, inter.shape[-1],
+                        valinit=kwargs['init'], color='#AAAAAA')
+
+        def update_x(val):
+            value = int(sliderx.val)
+            sliderx.valtext.set_text('{}'.format(value))
+            l.set_data(inter[:,:,value])
+            self._show3i(val)
+            fig.canvas.draw_idle()
+        sliderx.on_changed(update_x)
+
+
+        def plus(event):
+            sliderx.set_val(sliderx.val +1)
+            fig.canvas.draw_idle()
+        sliderx.on_changed(update_x)
+
+
+        def minus(event):
+            sliderx.set_val(sliderx.val -1)
+            fig.canvas.draw_idle()
+        sliderx.on_changed(update_x)
+
+        def pplus(event):
+            sliderx.set_val(sliderx.val +10)
+            fig.canvas.draw_idle()
+        sliderx.on_changed(update_x)
+
+
+        def mminus(event):
+            sliderx.set_val(sliderx.val -10)
+            fig.canvas.draw_idle()
+        sliderx.on_changed(update_x)
+
+        # # QUIT by pressing 'q'
+        # def press(event):
+        #     if event.key == 'q':
+        #         mlab.close(mayafig)
+        #         plt.close(fig)
+        # fig.canvas.mpl_connect('key_press_event', press)
+
+
+        # -1 frame axes
+        axm = plt.axes([0.3, 0.05, 0.1, 0.075])
+        bm = Button(axm, '<-')
+        bm.on_clicked(minus)
+
+        # +1 frame axes
+        axp = plt.axes([0.7, 0.05, 0.1, 0.075])
+        bp = Button(axp, '->')
+        bp.on_clicked(plus)
+
+        # -10 frames axes
+        axmm = plt.axes([0.1, 0.05, 0.1, 0.075])
+        bmm = Button(axmm, '<<')
+        bmm.on_clicked(mminus)
+
+        # +10 frames axes
+        axpp = plt.axes([0.9, 0.05, 0.1, 0.075])
+        bpp = Button(axpp, '>>')
+        bpp.on_clicked(pplus)
+
+            
+
+        plt.show()
+
+
+        
 
 
     def _distancematrix(self):
@@ -1045,7 +1142,7 @@ bernard
         luldir = map(lambda x : self._filename in x,ldir)
         uldir = luldir.index(True)
         _filename = ldir[uldir]
-        filename = videofile+_filename
+        filename = os.path.join(videofile,_filename)
         vc = VideoFileClip(filename)
         F0 = vc.get_frame(t0+offset)
         I0 = img_as_ubyte(F0)
@@ -1066,7 +1163,7 @@ bernard
         luldir = map(lambda x : self._filename in x,ldir)
         uldir = luldir.index(True)
         _filename = ldir[uldir]
-        filename = videofile+_filename
+        filename = os.path.join(videofile,_filename)
         vc = VideoFileClip(filename)
         F0 = vc.get_frame(t0+offset)
         F1 = vc.get_frame(t1+offset)
@@ -1091,6 +1188,8 @@ bernard
 
         body :boolean
             display bodytime(True)
+        bodyname : boolean
+            display body name
         bodytime: list
             list of time instant where body topos has to be shown
 
@@ -1116,6 +1215,8 @@ bernard
             display infrastructure nodes
         inname : boolean
             display infra strucutre node name
+        innamesize : float,
+            size of name of infrastrucutre nodes (0.1)
         incolor: str
             color of infrastructure nodes ('r')
         insize
@@ -1135,13 +1236,15 @@ bernard
         """
         defaults = { 'L':True,
                      'body':True,
+                     'bodyname':True,
                      'subject':[],
                      'interf':True,
-                     'trajectory' :True,
+                     'trajectory' :False,
                      'devsize':100,
                      'devlist':[],
                      'inodes' : True,
                      'inname' : True,
+                     'innamesize' : 0.1,
                      'incolor' : 'r',
                      'insize' : 0.1,
                      'camera':True,
@@ -1151,7 +1254,7 @@ bernard
                      'tagtraj':True,
                      'tagname':[],
                      'tagpoffset':[],
-                     'fontsizetag':0.5,
+                     'fontsizetag':0.1,
                      'trajectory_color_range':True
                     }
 
@@ -1177,7 +1280,7 @@ bernard
             X= np.array([v[i][1]['p'] for i in range(len(v))])
             mlab.points3d(X[:,0],X[:,1], X[:,2],scale_factor=kwargs['insize'],color=in_color)
         if kwargs['inname']:
-            [mlab.text3d(v[i][1]['p'][0],v[i][1]['p'][1],v[i][1]['p'][2],v[i][0],scale=0.5)
+            [mlab.text3d(v[i][1]['p'][0],v[i][1]['p'][1],v[i][1]['p'][2],v[i][0],scale=kwargs['innamesize'])
             for i in range(len(v))]
         if kwargs['body']:
 
@@ -1190,7 +1293,11 @@ bernard
             for ki, i in enumerate(time):
                 for ib,b in enumerate(subject):
                     self.B[b].settopos(t=i,cs=True)
-                    self.B[b]._show3(dev=True,devlist=kwargs['devlist'],devsize=kwargs['devsize'],tube_sides=12)
+                    self.B[b]._show3(dev=True,
+                                    name = kwargs['bodyname'],
+                                    devlist=kwargs['devlist'],
+                                    devsize=kwargs['devsize'],
+                                    tube_sides=12)
                     if kwargs['tagtraj']:
                         X=self.B[b].traj[['x','y','z']].values[self.B[b].toposFrameId]
                         if kwargs['tagpoffset']==[]:
@@ -1205,7 +1312,7 @@ bernard
                 if kwargs['interf']:
                     for ib,b in enumerate(self.interf):
                         self.B[b].settopos(t=i,cs=True)
-                        self.B[b]._show3(tube_sides=12)
+                        self.B[b]._show3(name=kwargs['bodyname'],tube_sides=12)
 
         if kwargs['trajectory']:
             for b in subject:
@@ -2927,7 +3034,10 @@ bernard
 
     def align(self,devdf,hkbdf):
 
-        """ align time for device and hkb data frame
+        """ align time of 2 data frames:
+
+        the time delta of the second data frame is applyied on the first one
+        (e.g. time for devdf donwsampled by hkb data frame time)
 
 
         Parameters
