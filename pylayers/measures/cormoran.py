@@ -19,12 +19,14 @@ from skimage import img_as_ubyte
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
+import pickle
+
 # Those lines handle incompatibility between mayavi and VTK
 # and redirect noisy warning message into a log file
-import vtk 
-output=vtk.vtkFileOutputWindow()
-output.SetFileName("mayaviwarninglog.tmp")
-vtk.vtkOutputWindow().SetInstance(output)
+# import vtk 
+# output=vtk.vtkFileOutputWindow()
+# output.SetFileName("mayaviwarninglog.tmp")
+# vtk.vtkOutputWindow().SetInstance(output)
 
 
 def cor_ls():
@@ -95,8 +97,7 @@ class CorSer(PyLayers):
 
         # Layout
         self.L= Layout('MOCAP-small2.ini')
-        #self.L= Layout('MOCAP.ini')
-        #self.L= Layout('MOCAPext.ini')
+
 
         # Infrastructure Nodes
         self.loadinfranodes()
@@ -113,7 +114,7 @@ class CorSer(PyLayers):
         if serie in self.mocap :
             self.loadbody(serie=serie,day=day)
             self._distancematrix()
-            self.computedevpdf()
+            self._computedevpdf()
             if isinstance(self.B,dict):
                 for b in self.B:
                     self.B[b].traj.Lfilename=copy.copy(self.L.filename)
@@ -123,11 +124,10 @@ class CorSer(PyLayers):
         self.title1 = 'Scenario:'+str(self.scenario)+' Serie:'+str(self.serie)+' Run:'+str(self.run)
         self.title2 = 'Type:'+str(self.typ)+ ' Subject:'+str(self.subject[0])
 
-        self.offset={'video':[],
-                     'hkb':[],
-                     'tcr':[],
-                     'bs':[]
-                     }
+        self.time = self.B[self.subject[0]].time
+
+
+        self.offsetd= self._load_offset_dict()
 
     def __repr__(self):
         st = ''
@@ -738,7 +738,7 @@ bernard
 
         uinter1 = np.where((intersect2D<=(radius-0.01)))
         uinter0 = np.where((intersect2D>(radius-0.01)))
-        intersect2D_=copy.copy(intersect2D)
+        # intersect2D_=copy.copy(intersect2D)
 
         intersect2D[uinter1[0],uinter1[1],uinter1[2]]=1
         intersect2D[uinter0[0],uinter0[1],uinter0[2]]=0
@@ -801,8 +801,7 @@ bernard
             ax = kwargs.pop('ax')
 
 
-        kt=np.where(self.B[self.B.keys()[0]].time <= kwargs['t'])[0][-1]
-        print kt
+        kt=np.where(self.time <= kwargs['t'])[0][-1]
         plt.xticks(np.arange(0, len(links), 1.0))
         plt.yticks(np.arange(0, len(links), 1.0))
         ax.set_xlim([-0.5,len(links)-0.5])
@@ -823,7 +822,7 @@ bernard
         """ show3 update for interactive mode
             USED in imshowvisimdai
         """
-        t=self.B[self.subject[0]].time[kt]
+        t=self.time[kt]
 
         for ib,b in enumerate(self.B):
             self.B[b].settopos(t=t,cs=True)
@@ -854,7 +853,7 @@ bernard
                 self.B[b]._mayavdic.mlab_source.set(x= self.B[b].top[0],y=self.B[b].top[1],z=self.B[b].top[2],u=V[ 0],v=V[ 1],w=V[ 2])
 
 
-    def imshowvisimdai(self,inter,links,t=0,**kwargs):
+    def imshowvisimdai(self,inter,links,fId=0,**kwargs):
         """  imshow visibility mda
 
         Parameters 
@@ -862,7 +861,7 @@ bernard
 
         inter : (nb link x nb link x timestamps)
         links : (nblinks)
-        t : time
+        fId: frame Id
 
 
         Example 
@@ -875,18 +874,14 @@ bernard
         >>> i,l=C.imshowvisimdai(inter,links)
 
         """
-        defaults = { 
-                    }
 
-        for k in defaults:
-            if k not in kwargs:
-                kwargs[k] = defaults[k]
 
 
         fig, ax = plt.subplots()
         fig.subplots_adjust(bottom=0.3)
 
 
+        time=self.B[self.subject[0]].time
 
         vertc = [(0,-10),(0,-10),(0,10),(0,-10)]
         poly = plt.Polygon(vertc)
@@ -902,24 +897,32 @@ bernard
         plt.setp(xtickNames, rotation=90, fontsize=8)
         plt.setp(ytickNames, rotation=0, fontsize=8)
         ims=[]
-        l=ax.imshow(inter[:,:,kwargs['init']],interpolation='nearest')
-        kwargs['bodytime']=[self.B[self.subject[0]].time[kwargs['init']]]
+        l=ax.imshow(inter[:,:,fId],interpolation='nearest')
+        # set time to -10 is a trick to make appear interferers cylinder
+        # because _show3i only update the data of the cylinder.
+        # if cylinder is not present in the first _show3, they are not displayed
+        # later.
+        kwargs['bodytime']=[self.time[-10]]
         kwargs['returnfig']=True
+        kwargs['tagtraj']=False
         mayafig = self._show3(**kwargs)
+        self._show3i(fId)
         # ax.grid()
 
 
         # matplotlib Widgets 
 
         slax=plt.axes([0.1, 0.15, 0.8, 0.02])
+        slax.set_title('t='+str(time[fId]),loc='left')
         sliderx = Slider(slax, "time", 0, inter.shape[-1],
-                        valinit=kwargs['init'], color='#AAAAAA')
+                        valinit=fId, color='#AAAAAA')
 
         def update_x(val):
             value = int(sliderx.val)
             sliderx.valtext.set_text('{}'.format(value))
             l.set_data(inter[:,:,value])
             self._show3i(val)
+            slax.set_title('t='+str(time[val]),loc='left')
             fig.canvas.draw_idle()
         sliderx.on_changed(update_x)
 
@@ -956,22 +959,22 @@ bernard
 
         # -1 frame axes
         axm = plt.axes([0.3, 0.05, 0.1, 0.075])
-        bm = Button(axm, '<-')
+        bm = Button(axm, '-1')
         bm.on_clicked(minus)
 
         # +1 frame axes
         axp = plt.axes([0.7, 0.05, 0.1, 0.075])
-        bp = Button(axp, '->')
+        bp = Button(axp, '+1')
         bp.on_clicked(plus)
 
         # -10 frames axes
         axmm = plt.axes([0.1, 0.05, 0.1, 0.075])
-        bmm = Button(axmm, '<<')
+        bmm = Button(axmm, '-10')
         bmm.on_clicked(mminus)
 
         # +10 frames axes
         axpp = plt.axes([0.9, 0.05, 0.1, 0.075])
-        bpp = Button(axpp, '>>')
+        bpp = Button(axpp, '+10')
         bpp.on_clicked(pplus)
 
             
@@ -986,31 +989,8 @@ bernard
         """Compute the ditance matrix between the nodes
 
             self.dist : (nb frame x nb_node x nb_node)
-            self.dist_nodes : list of used nodes (useful to make the association ;) )
+            self.dist_nodesmap : list of used nodes (useful to make the association ;) )
         """
-
-
-        # tdev = []
-        # for k in self.B.dev:
-        #     tdev.append(self.B.dev[k]['uc3d'][0])
-        # tdev = np.array(tdev)
-
-        # # pnb : nframe x ndevices x 3
-        # pnb = self.B._f[:,tdev,:]
-
-        # ln = []
-        # uin = []
-        # if ('HK' in self.typ) or ('FULL' in self.typ):
-        #     uin.extend(['HKB:1','HKB:2','HKB:3','HKB:4'])
-        # if ('TCR' in self.typ) or ('FULL' in self.typ):
-        #     uin.extend(['TCR:32','TCR:24','TCR:27','TCR:28'])
-        # ln = uin + self.B.dev.keys()
-        # pin = np.array([self.din[d]['p'] for d in uin])
-        # pin2=np.empty((pnb.shape[0],pin.shape[0],pin.shape[1]))
-        # pin2[:,:,:]=pin
-        # p = np.concatenate((pin2,pnb),axis=1)
-        # self.dist = np.sqrt(np.sum((p[:,:,np.newaxis,:]-p[:,np.newaxis,:,:])**2,axis=3))
-        # self.dist_nodes = ln
 
         if not isinstance(self.B,dict):
             B={self.subject[0]:self.B}
@@ -1043,14 +1023,17 @@ bernard
         pin2[:,:,:]=pin
         p = np.concatenate((pin2,pnb),axis=1)
         self.dist = np.sqrt(np.sum((p[:,:,np.newaxis,:]-p[:,np.newaxis,:,:])**2,axis=3))
-        self.dist_nodes = ln
+        self.dist_nodesmap = ln
 
-    def accessdm(self,a,b,techno):
+    def accessdm(self,a,b,techno=''):
         """ access to the distance matrix
 
             give name|id of node a and b and a given techno. retrun Groung truth
             distance between the 2 nodes
-        """
+        # """
+
+        # a,ia,bia,subja=self.devmapper(a,techno)
+        # b,ib,bib,subjb=self.devmapper(b,techno)
 
         if 'HKB' in techno :
             if isinstance(a,str):
@@ -1084,8 +1067,8 @@ bernard
         ka = techno+':'+str(ia)
         kb = techno+':'+str(ib)
 
-        ua = self.dist_nodes.index(ka)
-        ub = self.dist_nodes.index(kb)
+        ua = self.dist_nodesmap.index(ka)
+        ub = self.dist_nodesmap.index(kb)
 
         return(ua,ub)
 
@@ -1416,6 +1399,32 @@ bernard
         #        cpt = cpt + 1
         return fig,(ax1,ax2)
 
+    def _load_offset_dict(self):
+        
+        path = os.path.join(os.environ['CORMORAN'],'POST-TREATED')
+        d = pickle.load( open( os.path.join(path,'offset_dictionnary.bin'), "rb" ) )
+
+        return d
+
+    def _save_offset_dict(self,d):
+
+        path = os.path.join(os.environ['CORMORAN'],'POST-TREATED')
+        d = pickle.dump( d, open( os.path.join(path,'offset_dictionnary.bin'), "wb" ) )
+
+    def _save_data_off_dict(self,filename,typ,value):
+        """ save 
+                - a given "value" of an for,
+                - a serie/run "filename",
+                - of a given typ (video|hkb|tcr|...)
+        """
+
+        d = self._load_offset_dict()
+        try:
+            d[filename].update({typ:value})
+        except:
+            d[filename]={}
+            d[filename][typ]=value
+        self._save_offset_dict(d)
 
 
     def offset_setter_video(self,a='AP1',b='WristRight',**kwargs):
@@ -1451,11 +1460,16 @@ bernard
             time=time[0]
 
 
-
         sab = self.hkb[a+'-'+b].values
         sabt = self.hkb[a+'-'+b].index
-        hkb = axs[1].plot(sabt,sab)
+        hkb = axs[1].plot(sabt,sab,label = a+'-'+b)
+        axs[1].legend()
 
+
+        try : 
+            init = self.offset[self._filename]['video']
+        except:
+            init=time[0]
 
 
         videofile = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','Videos')
@@ -1463,11 +1477,12 @@ bernard
         luldir = map(lambda x : self._filename in x,ldir)
         uldir = luldir.index(True)
         _filename = ldir[uldir]
-        filename = videofile+_filename
+        filename = os.path.join(videofile,_filename)
         vc = VideoFileClip(filename)
-        F0 = vc.get_frame(0)
+        F0 = vc.get_frame(init)
         I0 = img_as_ubyte(F0)
         axs[0].imshow(F0)
+
 
 
         ########
@@ -1475,7 +1490,7 @@ bernard
         ########
         slide_xoffset_ax = plt.axes([0.1, 0.15, 0.8, 0.05])
         sliderx = Slider(slide_xoffset_ax, "video offset", 0, self.hkb.index[-1],
-                        valinit=time[0], color='#AAAAAA')
+                        valinit=init, color='#AAAAAA')
 
 
         # vertc = [(0,-10),(0,-10),(0,10),(0,-10)]
@@ -1513,8 +1528,8 @@ bernard
 
 
         def setter(event):
-            self.offset['video']=sliderx.val
-
+            self._save_data_off_dict(self._filename,'video',sliderx.val)
+            self.offset= self._load_offset_dict()
         axp = plt.axes([0.3, 0.05, 0.1, 0.075])
         axset = plt.axes([0.5, 0.05, 0.1, 0.075])
         axm = plt.axes([0.7, 0.05, 0.1, 0.075])
@@ -1522,8 +1537,8 @@ bernard
         bp = Button(axp, '<-')
         bp.on_clicked(minus)
 
-        bs = Button(axset, 'SET offs.')
-        bs.on_clicked(setter)
+        bset = Button(axset, 'SET offs.')
+        bset.on_clicked(setter)
 
         bm = Button(axm, '->')
         bm.on_clicked(plus)
@@ -1535,7 +1550,7 @@ bernard
 
 
 
-    def offset_setter_hkb(self,a,b,**kwargs):
+    def offset_setter_hkb(self,a='AP1',b='WristRight',**kwargs):
         """ offset setter
         """
         defaults = { 'inverse':True
@@ -1563,9 +1578,12 @@ bernard
             b = self.idHKB[b]
 
 
-        time = self.thkb[0]
-        if len(time) == 1:
-            time=time[0]
+        time = self.thkb
+
+        try : 
+            init = self.offset[self._filename]['hkb']
+        except:
+            init=time[0]
 
 
         dhk = self.accessdm(ia,ib,'HKB')
@@ -1585,7 +1603,7 @@ bernard
         ########
         slide_xoffset_ax = plt.axes([0.1, 0.15, 0.8, 0.02])
         sliderx = Slider(slide_xoffset_ax, "hkb offset", -(len(sabt)/16), (len(sabt)/16),
-                        valinit=time[0], color='#AAAAAA')
+                        valinit=init, color='#AAAAAA')
 
         slide_yoffset_ax = plt.axes([0.1, 0.10, 0.8, 0.02])
         slidery = Slider(slide_yoffset_ax, "gt_yoff", -100, 0,
@@ -1613,6 +1631,15 @@ bernard
             fig.canvas.draw_idle()
         slidery.on_changed(update_y)
         slideralpha.on_changed(update_y)
+
+
+        def setter(event):
+            self._save_data_off_dict(self._filename,'hkb',sliderx.val)
+            self.offset= self._load_offset_dict()
+        axset = plt.axes([0.0, 0.5, 0.2, 0.05])
+
+        bset = Button(axset, 'SET offs.')
+        bset.on_clicked(setter)
 
         plt.show()
 
@@ -2565,7 +2592,7 @@ bernard
 
         """
         # display nodes
-        A,B = self.getdevp(a,b,technoa=technoa,technob=technob)
+        A,B = self.getlinkp(a,b,technoa=technoa,technob=technob)
         a,ia,ba,subjecta = self.devmapper(a,technoa)
         b,ib,bb,subjectb = self.devmapper(b,technob)
 
@@ -2620,7 +2647,7 @@ bernard
 
         """
 
-        A,B = self.getdevp(a,b,technoa,technob)
+        A,B = self.getlinkp(a,b,technoa,technob)
         aa,ia,ba,subjecta= self.devmapper(a,technoa)
         ab,ib,bb,subjectb= self.devmapper(b,technob)
 
@@ -2674,7 +2701,7 @@ bernard
 
         """
 
-        A,B = self.getdevp(a,b,technoa,technob)
+        A,B = self.getlinkp(a,b,technoa,technob)
         aa,ia,ba,subjecta= self.devmapper(a,technoa)
         ab,ib,bb,subjectb= self.devmapper(b,technob)
 
@@ -2758,7 +2785,7 @@ bernard
         return vv,tv,tseg,itseg
 
 
-    # def computedevpdf(self):
+    # def _computedevpdf(self):
     #     """ create a timestamped data frame
     #         with all positions of devices
     #     """
@@ -2766,7 +2793,7 @@ bernard
     #     pos = np.empty((len(t),12,3))
     #     for ik,k in enumerate(t):
     #         self.B.settopos(t=k)
-    #         pos[ik,:,:]=self.B.getdevp()
+    #         pos[ik,:,:]=self.B.getlinkp()
     #     df=[]
     #     for d in range(pos.shape[1]):
     #         df_tmp=pd.DataFrame(pos[:,d,:],columns=['x','y','z'],index=t)
@@ -2779,7 +2806,7 @@ bernard
     #     cols=['id','x','y','z']
     #     self.devdf=df[cols]
 
-    def computedevpdf(self):
+    def _computedevpdf(self):
         """ create a timestamped data frame
             with positions of all devices
 
@@ -2913,9 +2940,8 @@ bernard
 
         ldf.to_csv(filename, sep = ' ',index=False)
 
-
-    def getdevp(self,a,b,technoa='HKB',technob='HKB'):
-        """    get device position
+    def getlinkd(self,a,b,technoa='',technob='',t='',fId=''):
+        """    get a link devices distances
 
         Parameters
         ----------
@@ -2924,10 +2950,90 @@ bernard
             name | id
         b : str | int
             name | id
+
+        oprional 
+        
         technoa : str
             radio techno
         technob : str
             radio techno
+        t : float
+            givent time
+        fId : int
+            frame id
+
+        Returns
+        -------
+
+        dist : np.array() 
+            all distances for all timestamp for the given link
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> S=CorSer(serie=34)
+        >>> d=S.getlinkd('AP1','WristLeft')
+
+        """
+
+        if technoa == '':
+            if self.typ != 'FULL':
+                technoa=self.typ
+            else:
+                raise AttributeError('Please indicate the radio technoa in argument : TCR or HKB')
+        if technob == '':
+            if self.typ != 'FULL':
+                technob=self.typ
+            else:
+                raise AttributeError('Please indicate the radio technob in argument : TCR or HKB')
+
+        if t !='':
+            ui  = np.where(self.time <= t)[0][-1]
+            findex = slice(ui,ui+1)
+        elif fId != '':
+            findex = slice(fId,fId+1)
+        else :
+            findex = slice(self.dist.shape[0])
+
+
+
+        a,ia,nna,subjecta = self.devmapper(a,technoa)
+        b,ib,nnb,subjectb = self.devmapper(b,technob)
+
+        ua = self.dist_nodesmap.index(nna)
+        ub = self.dist_nodesmap.index(nnb)
+
+        return self.dist[findex,ua,ub]
+        
+
+
+    def getlinkp(self,a,b,technoa='',technob='',t='',fId=''):
+        """    get a link devices positions
+
+        Parameters
+        ----------
+
+        a : str | int
+            name | id
+        b : str | int
+            name | id
+
+
+        optional :
+
+        technoa : str
+            radio techno
+        technob : str
+            radio techno
+
+        t : float
+            givent time
+
+        OR 
+
+        fId : int
+            frame id
 
         Returns
         -------
@@ -2939,37 +3045,94 @@ bernard
 
         >>> from pylayers.measures.cormoran import *
         >>> S=CorSer(serie=34)
-        >>> a,b=S.getdevp('AP1','WristLeft')
+        >>> a,b=S.getlinkp('AP1','WristLeft')
 
         """
 
-        a,ia,nna,subjecta = self.devmapper(a,technoa)
-        b,ib,nnb,subjectb = self.devmapper(b,technob)
+        if technoa == '':
+            if self.typ != 'FULL':
+                technoa=self.typ
+            else:
+                raise AttributeError('Please indicate the radio technoa in argument : TCR or HKB')
+        if technob == '':
+            if self.typ != 'FULL':
+                technob=self.typ
+            else:
+                raise AttributeError('Please indicate the radio technob in argument : TCR or HKB')
+
+
+        pa = self.getdevp(a,technoa,t,fId)
+        pb = self.getdevp(b,technob,t,fId)
+
+        return pa,pb
+
+    def getdevp(self,a,techno='',t='',fId=''):
+        """ get a  device position
+
+        Parameters
+        ----------
+
+        a : str | int
+            name | id
+        techno : str
+            radio techno
+
+        optional :
+
+        t : float
+            givent time
+
+        OR 
+
+        fId : int
+            frame id
+
+        Returns
+        -------
+
+        pa : np.array()
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> S=CorSer(serie=34)
+        >>> a=S.getdevp('AP1','WristLeft')
+
+        """
+
+        if techno == '':
+            if self.typ != 'FULL':
+                techno=self.typ
+            else:
+                raise AttributeError('Please indicate the radio techno in argument : TCR or HKB')
+
+        if t !='':
+            findex = np.where(self.time <= t)[0][-1]
+        elif fId != '':
+            findex = fId
+        else :
+            findex = slice(self.dist.shape[0])
+
+
+        a,ia,nna,subjecta = self.devmapper(a,techno)
 
         # node a
         # body node
 
         if subjecta != '':
             unna = self.B[subjecta].dev[nna]['uc3d'][0]
-            pa = self.B[subjecta]._f[:,unna,:]
+            pa = self.B[subjecta]._f[findex,unna,:]
         # infra node
         else :
             pa = self.din[nna]['p']
 
-
-        # node b
-        # body node
-        if subjectb != '':
-            unnb = self.B[subjectb].dev[nnb]['uc3d'][0]
-            pb = self.B[subjectb]._f[:,unnb,:]
-        # infra node
-        else :
-            pb = self.din[nnb]['p']
-
-        return pa,pb
+        return pa
 
 
-    def devmapper(self,a,techno='HKB'):
+
+
+    def devmapper(self,a,techno=''):
         """  retrieve name of device if input is number
              or
              retrieve number of device if input is name
@@ -2998,6 +3161,13 @@ bernard
 
         """
         subject=''
+
+        if techno == '':
+            if self.typ != 'FULL':
+                techno=self.typ
+            else:
+                raise AttributeError('Please indicate the radio techno in argument : TCR or HKB')
+
         if isinstance(a,str):
             if techno == 'TCR':
                 ia = self.dTCR[a]
