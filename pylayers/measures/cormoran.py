@@ -34,6 +34,16 @@ def cor_ls():
     log = pd.read_csv(filelog)
     return log
 
+def time2npa(lt):
+
+    """ pd.datetime.time to numpy array
+    """
+    ta = (lt.microsecond*1e-6+
+    lt.second+
+    lt.minute*60+
+    lt.hour*3600)
+    return(ta)
+
 
 class CorSer(PyLayers):
     """ Hikob data handling from CORMORAN measurement campaign 11/06/2014
@@ -62,7 +72,6 @@ class CorSer(PyLayers):
                 raise AttributeError('Serie '+serie + \
                                      ' has no hkb data and will not be loaded')
         # Measures
-
         if day==11:
             self.stcr = [1,2,3,4,10,11,12,32,33,34,35,9,17,18,19,20,25,26]
             self.shkb = [5,6,13,14,15,16,21,22,23,24,27,28,29,30,31,32,33,34,35]
@@ -79,16 +88,15 @@ class CorSer(PyLayers):
         self.typ=''
 
         if serie in self.shkb:
-            self.loadhkb(serie=serie,day=day,source=source)
+            self._loadhkb(serie=serie,day=day,source=source)
 
         if serie in self.stcr:
-            self.loadTCR(serie=serie,day=day)
+            self._loadTCR(serie=serie,day=day)
 
         if serie in self.sbs:
-            self.loadBS(serie=serie,day=day)
+            self._loadBS(serie=serie,day=day)
 
-
-
+        # set filename
         if self.typ=='FULL':
             self._filename = 'Sc' + self.scenario + '_S' + str(self.serie) + '_R' + str(self.run) + '_' + self.typ.capitalize()
         else:
@@ -100,10 +108,10 @@ class CorSer(PyLayers):
 
 
         # Infrastructure Nodes
-        self.loadinfranodes()
-        self.loadcam()
+        self._loadinfranodes()
+        self._loadcam()
 
-        # BODY
+        # BODY & interferers
         self.subject = str(self.log['Subject'].values[0]).split(' ')
         # filter typos in  self.subject
         self.subject = filter(lambda x : len(x)!=0,self.subject)
@@ -112,7 +120,7 @@ class CorSer(PyLayers):
             self.subject[uj]='Jihan'
         
         if serie in self.mocap :
-            self.loadbody(serie=serie,day=day)
+            self._loadbody(serie=serie,day=day)
             self._distancematrix()
             self._computedevpdf()
             if isinstance(self.B,dict):
@@ -121,13 +129,16 @@ class CorSer(PyLayers):
             else :
                 self.B.traj.Lfilename=copy.copy(self.L.filename)
 
-        self.title1 = 'Scenario:'+str(self.scenario)+' Serie:'+str(self.serie)+' Run:'+str(self.run)
-        self.title2 = 'Type:'+str(self.typ)+ ' Subject:'+str(self.subject[0])
+        # reference time is tmocap 
+        self.tmocap = self.B[self.subject[0]].time
 
-        self.time = self.B[self.subject[0]].time
+        # load offset dict
+        self.offset= self._load_offset_dict()
 
-
-        self.offsetd= self._load_offset_dict()
+        # realign Radio on mocap
+        # if ('HK' in self.typ) or ('FULL' in self.typ):
+        #     self._align_hkb_on_devdf()
+        #     self._apply_hkb_offset()
 
     def __repr__(self):
         st = ''
@@ -160,7 +171,7 @@ class CorSer(PyLayers):
         return(st)
 
 
-    def loadcam(self):
+    def _loadcam(self):
 
         self.cam = np.array([
             [-6502.16643961174,5440.97951452912,2296.44437108561],
@@ -181,7 +192,7 @@ class CorSer(PyLayers):
             ])*1e-3
 
 
-    def loadinfranodes(self):
+    def _loadinfranodes(self):
         """ load infrastrucutre nodes
 
 
@@ -296,7 +307,7 @@ bernard
         self.log = log[(log['Meas Serie'] == self.serie) & (log['Date'] == date)]
 
 
-    def loadbody(self,day=11,serie=''):
+    def _loadbody(self,day=11,serie=''):
         """ load log file
         """
         self.B={}
@@ -351,7 +362,7 @@ bernard
         #     self.B = self.B[self.subject]
 
 
-    def loadTCR(self,day=11,serie='',scenario='20',run=1):
+    def _loadTCR(self,day=11,serie='',scenario='20',run=1):
         """ load TCR data
 
         """  
@@ -476,7 +487,7 @@ bernard
         self.tcr.index = t
         self.ttcr=self.tcr.index
 
-    def loadBS(self,day=11,serie='',scenario='20',run=1):
+    def _loadBS(self,day=11,serie='',scenario='20',run=1):
         """ load BeSpoon data
 
         """
@@ -494,9 +505,9 @@ bernard
             self._fileBS = filter(lambda x : 'R'+str(run) in x ,filsc)[0]
 
         self.bespo = pd.read_csv(os.path.join(dirname,self._fileBS),index_col='tu')
-        self.s157 = self.bespo[self.bespo['Sensor']==157]
+        #self.s157 = self.bespo[self.bespo['Sensor']==157]
         #self.s157.set_index(self.s157['tu'].values/1e9)
-        self.s74  = self.bespo[self.bespo['Sensor']==74]
+        #self.s74  = self.bespo[self.bespo['Sensor']==74]
         #self.s74.set_index(self.s74['tu'].values/1e9)
         #t157 = np.array(self.s157['tu']/(1e9))
         #self.t157 = t157-t157[0]
@@ -504,7 +515,7 @@ bernard
         #self.t74 = t74 - t74[0]
 
 
-    def loadhkb(self,day=11,serie='',scenario='20',run=1,source='CITI'):
+    def _loadhkb(self,day=11,serie='',scenario='20',run=1,source='CITI'):
 
         if day == 11:
             if serie == 5:
@@ -801,7 +812,7 @@ bernard
             ax = kwargs.pop('ax')
 
 
-        kt=np.where(self.time <= kwargs['t'])[0][-1]
+        kt=np.where(self.tmocap <= kwargs['t'])[0][-1]
         plt.xticks(np.arange(0, len(links), 1.0))
         plt.yticks(np.arange(0, len(links), 1.0))
         ax.set_xlim([-0.5,len(links)-0.5])
@@ -822,7 +833,7 @@ bernard
         """ show3 update for interactive mode
             USED in imshowvisimdai
         """
-        t=self.time[kt]
+        t=self.tmocap[kt]
 
         for ib,b in enumerate(self.B):
             self.B[b].settopos(t=t,cs=True)
@@ -902,7 +913,7 @@ bernard
         # because _show3i only update the data of the cylinder.
         # if cylinder is not present in the first _show3, they are not displayed
         # later.
-        kwargs['bodytime']=[self.time[-10]]
+        kwargs['bodytime']=[self.tmocap[-10]]
         kwargs['returnfig']=True
         kwargs['tagtraj']=False
         mayafig = self._show3(**kwargs)
@@ -912,7 +923,7 @@ bernard
 
         # matplotlib Widgets 
 
-        slax=plt.axes([0.1, 0.15, 0.8, 0.02])
+        slax=plt.axes([0.1, 0.15, 0.8, 0.05])
         slax.set_title('t='+str(time[fId]),loc='left')
         sliderx = Slider(slax, "time", 0, inter.shape[-1],
                         valinit=fId, color='#AAAAAA')
@@ -1467,7 +1478,7 @@ bernard
 
 
         try : 
-            init = self.offset[self._filename]['video']
+            init = self.offset[self._filename]['video_sec']
         except:
             init=time[0]
 
@@ -1528,7 +1539,7 @@ bernard
 
 
         def setter(event):
-            self._save_data_off_dict(self._filename,'video',sliderx.val)
+            self._save_data_off_dict(self._filename,'video_sec',sliderx.val)
             self.offset= self._load_offset_dict()
         axp = plt.axes([0.3, 0.05, 0.1, 0.075])
         axset = plt.axes([0.5, 0.05, 0.1, 0.075])
@@ -1565,25 +1576,20 @@ bernard
         fig, ax = plt.subplots()
         fig.subplots_adjust(bottom=0.2, left=0.3)
 
-        if isinstance(a,str):
-            ia = self.dHKB[a]
-        else:
-            ia = a
-            a = self.idHKB[a]
-
-        if isinstance(b,str):
-            ib = self.dHKB[b]
-        else:
-            ib = b
-            b = self.idHKB[b]
+        a,ia,bia,subja=self.devmapper(a,'HKB')
+        b,ib,bib,subjb=self.devmapper(b,'HKB')
 
 
         time = self.thkb
+        if len(time.shape) == 2:
+            time = time[0,:]
+
 
         try : 
-            init = self.offset[self._filename]['hkb']
+            init = self.offset[self._filename]['hkb_index']
         except:
             init=time[0]
+
 
 
         dhk = self.accessdm(ia,ib,'HKB')
@@ -1611,7 +1617,7 @@ bernard
 
         slide_alpha_ax = plt.axes([0.1, 0.05, 0.8, 0.02])
         slideralpha = Slider(slide_alpha_ax, "gt_alpha", 0, 10,
-                        valinit=0, color='#AAAAAA')
+                        valinit=5, color='#AAAAAA')
 
         def update_x(val):
             value = int(sliderx.val)
@@ -1629,12 +1635,15 @@ bernard
             alpha = slideralpha.val
             gt[0].set_ydata(alpha*var + yoff)
             fig.canvas.draw_idle()
+        # initpurpose
+        update_y(5)
         slidery.on_changed(update_y)
         slideralpha.on_changed(update_y)
 
 
         def setter(event):
-            self._save_data_off_dict(self._filename,'hkb',sliderx.val)
+            value = int(sliderx.val)
+            self._save_data_off_dict(self._filename,'hkb_index',value)
             self.offset= self._load_offset_dict()
         axset = plt.axes([0.0, 0.5, 0.2, 0.05])
 
@@ -2845,6 +2854,8 @@ bernard
         cols=['id','subject','x','y','z','v','vx','vy','vz','a','ax','ay','az']
         self.devdf=df[cols]
 
+        # if ('HKB' in self.typ) or ('FULL' in selftyp):
+        #     self.devdf=self._align_devdf_on_hkb(self.devdf,self.hkb)
 
 
     def export_csv(self,**kwargs):
@@ -2989,7 +3000,7 @@ bernard
                 raise AttributeError('Please indicate the radio technob in argument : TCR or HKB')
 
         if t !='':
-            ui  = np.where(self.time <= t)[0][-1]
+            ui  = np.where(self.tmocap <= t)[0][-1]
             findex = slice(ui,ui+1)
         elif fId != '':
             findex = slice(fId,fId+1)
@@ -3108,7 +3119,7 @@ bernard
                 raise AttributeError('Please indicate the radio techno in argument : TCR or HKB')
 
         if t !='':
-            findex = np.where(self.time <= t)[0][-1]
+            findex = np.where(self.tmocap <= t)[0][-1]
         elif fId != '':
             findex = fId
         else :
@@ -3168,11 +3179,12 @@ bernard
             else:
                 raise AttributeError('Please indicate the radio techno in argument : TCR or HKB')
 
+
         if isinstance(a,str):
-            if techno == 'TCR':
+            if techno.upper() == 'TCR':
                 ia = self.dTCR[a]
                 ba='TCR:'+str(ia)
-            elif techno == 'HKB':
+            elif (techno.upper() == 'HKB') or (techno.upper() == 'HKBS'):
                 ia = self.dHKB[a]
                 ba='HKB:'+str(ia)
 
@@ -3184,11 +3196,11 @@ bernard
                         break
 
         else:
-            if techno == 'TCR':
+            if techno.upper() == 'TCR':
                 ia = a
                 a = self.idTCR[a]
                 ba='TCR:'+str(ia)
-            elif techno == 'HKB':
+            elif (techno.upper() == 'HKB') or (techno.upper() == 'HKBS'):
                 ia = a
                 a = self.idHKB[a]
                 ba='HKB:'+str(ia)
@@ -3204,7 +3216,7 @@ bernard
 
     def align(self,devdf,hkbdf):
 
-        """ align time of 2 data frames:
+        """ DEPRECATED align time of 2 data frames:
 
         the time delta of the second data frame is applyied on the first one
         (e.g. time for devdf donwsampled by hkb data frame time)
@@ -3236,6 +3248,8 @@ bernard
 
         """
 
+        print ('warning DEPRECATED')
+
         devdfc=copy.deepcopy(devdf)
         hkbdfc=copy.deepcopy(hkbdf)
         idev = devdfc.index
@@ -3243,7 +3257,8 @@ bernard
 
         devdfc.index = pd.to_datetime(idev,unit='s')
         hkbdfc.index = pd.to_datetime(ihkb,unit='s')
-        
+        import ipdb
+        ipdb.set_trace()
         sf = (hkbdfc.index[2]-hkbdfc.index[1]).microseconds
         devdfc= devdfc.resample(str(sf)+'U')
         
@@ -3251,6 +3266,143 @@ bernard
         hkbdfc.index = pd.Series([val.time() for val in hkbdfc.index])
 
         return devdfc,hkbdfc
+
+
+
+    def _apply_hkb_offset(self):
+        """ apply offset
+            #trick : http://stackoverflow.com/questions/656297/python-time-timedelta-equivalent
+        """
+
+
+        offset = self.offset[self._filename]['hkb_index']
+        if offset >=0:
+            self.hkb = self.hkb.iloc[offset:]
+        else :
+            import ipdb
+            ipdb.set_trace()
+            # new length
+            lhkb = len(self.hkb) + (-offset)
+            # extract time values
+            npahkbi = self.hkb.index.values
+            # calculate new termianl time
+            step = npahkbi[1]- npahkbi[0]
+            nstop = npahkbi[-1]+ (step * (-offset))
+            ni = np.linspace(0,nstop,lhkb)
+            df = pd.DataFrame({},columns=self.hkb.keys(),index=ni[0:-offset])
+
+            self.hkb.index=pd.Index(ni[-offset:])
+            ndf=pd.concat([df,self.hkb])
+
+            self.hkb=ndf
+            # delta = 
+        # pd.datetools.timedelta(minutes=self.)
+        # pd.datetime.combine(pd.datetime.today(),S.hkb.index[0]) +Z
+
+    def _align_hkb_on_devdf(self):
+
+        """ align hkb time on device data frame ( devdf) time index
+            In place (a.k.a. replace old self.hkb by the resampled one)
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> S=CorSer(6)
+        >>> devdf = S.devdf[S.devdf['id']=='HKB:15']
+        >>> hkbdf = S.hkb['AP1-AnckleLeft']
+        >>> devdf2 = S._align_devdf_on_hkb(devdf,hkbdf)
+
+
+        """
+        
+        print '\nAlign HKB data frame index on mocap'
+        mocapindex = pd.to_datetime(self.tmocap,unit='s')
+        self.hkb.index = pd.to_datetime(self.hkb.index,unit='s')
+
+        sf = (mocapindex[2]-mocapindex[1]).microseconds
+        df = self.hkb.resample(str(sf)+'U',fill_method='ffill')
+
+
+
+        nindex = time2npa(df.index)
+        df.index = pd.Index(nindex)
+        self.hkb = df
+
+
+
+    def _align_devdf_on_hkb(self,devdf,hkbdf):
+
+        """ NOT USED Practivcally 
+            align time of 2 data frames:
+
+        the time delta of the second data frame is applyied on the first one
+        (e.g. time for devdf donwsampled by hkb data frame time)
+
+
+        Parameters
+        ----------
+
+        devdf : device dataframe
+        hkbdf : hkbdataframe
+
+        Return
+        ------
+
+        devdfc : 
+            aligned copy device dataframe
+        hkbdfc : 
+            aligned copy hkbdataframe
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> S=CorSer(6)
+        >>> devdf = S.devdf[S.devdf['id']=='HKB:15']
+        >>> hkbdf = S.hkb['AP1-AnckleLeft']
+        >>> devdf2 = S._align_devdf_on_hkb(devdf,hkbdf)
+
+
+        """
+
+        devdfc=copy.deepcopy(devdf)
+
+        hkbdfc=copy.deepcopy(hkbdf)
+
+        idev = devdfc.index
+        ihkb = hkbdfc.index
+
+        devdfc.index = pd.to_datetime(idev,unit='s')
+        hkbdfc.index = pd.to_datetime(ihkb,unit='s')
+        sf = (hkbdfc.index[2]-hkbdfc.index[1]).microseconds
+
+        # cannot resapmple devdf directly because multiple similar index values
+        # need to resampl each groupby separately
+        gb = devdfc.groupby(['id'])
+        # get device id 
+        devid,idevid = np.unique(devdfc['id'],return_index=True)
+        # save corresponding subject to each device
+        subject = {devid[i]:devdfc['subject'].iloc[i] for i in idevid}
+        # resample each group separatley
+        dgb={d:gb.get_group(d).resample(str(sf)+'U') for d in devid}
+        # re insert subject and device id information in each resampled group
+        for d in dgb:
+            dgb[d]['subject']=subject[d]
+            dgb[d]['id']=d
+
+        # create the realigned dataframe
+        lgb = [dgb[d] for d in dgb]
+        df = pd.concat(lgb)
+        df.sort_index(inplace=True)
+        
+        nindex = time2npa(df.index)
+        df.index = pd.Index(nindex)
+        cols=['id','subject','x','y','z','v','vx','vy','vz','a','ax','ay','az']
+        df=df[cols]
+
+        return df
+
 
     def get_data(self,a,b):
 
