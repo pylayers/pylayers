@@ -29,7 +29,7 @@ import pickle
 # vtk.vtkOutputWindow().SetInstance(output)
 
 
-def cor_ls():
+def cor_ls(short=True):
     filelog = os.path.join(os.environ['CORMORAN'],'RAW','Doc','MeasurementLog.csv')
     log = pd.read_csv(filelog)
     return log
@@ -136,9 +136,12 @@ class CorSer(PyLayers):
         self.offset= self._load_offset_dict()
 
         # realign Radio on mocap
-        # if ('HK' in self.typ) or ('FULL' in self.typ):
-        #     self._align_hkb_on_devdf()
-        #     self._apply_hkb_offset()
+        if ('HK' in self.typ) or ('FULL' in self.typ):
+            self._align_hkb_on_devdf()
+            try:
+                self._apply_hkb_offset()
+            except: 
+                print ('WARNING : No HKB offset applied (not yet set)')
 
     def __repr__(self):
         st = ''
@@ -1035,6 +1038,14 @@ bernard
         p = np.concatenate((pin2,pnb),axis=1)
         self.dist = np.sqrt(np.sum((p[:,:,np.newaxis,:]-p[:,np.newaxis,:,:])**2,axis=3))
         self.dist_nodesmap = ln
+
+
+    def _computedistdf(self):
+        """Compute the ditance dataframe from distance matrix
+        """
+        devmap = {S.devmapper(k,'hkb')[2]:S.devmapper(k,'hkb')[0] for k in S.dHKB}
+        devmap.update({S.devmapper(k,'tcr')[2]:S.devmapper(k,'tcr')[0] for k in S.dTCR})
+
 
     def accessdm(self,a,b,techno=''):
         """ access to the distance matrix
@@ -2988,16 +2999,6 @@ bernard
 
         """
 
-        if technoa == '':
-            if self.typ != 'FULL':
-                technoa=self.typ
-            else:
-                raise AttributeError('Please indicate the radio technoa in argument : TCR or HKB')
-        if technob == '':
-            if self.typ != 'FULL':
-                technob=self.typ
-            else:
-                raise AttributeError('Please indicate the radio technob in argument : TCR or HKB')
 
         if t !='':
             ui  = np.where(self.tmocap <= t)[0][-1]
@@ -3060,16 +3061,6 @@ bernard
 
         """
 
-        if technoa == '':
-            if self.typ != 'FULL':
-                technoa=self.typ
-            else:
-                raise AttributeError('Please indicate the radio technoa in argument : TCR or HKB')
-        if technob == '':
-            if self.typ != 'FULL':
-                technob=self.typ
-            else:
-                raise AttributeError('Please indicate the radio technob in argument : TCR or HKB')
 
 
         pa = self.getdevp(a,technoa,t,fId)
@@ -3112,9 +3103,15 @@ bernard
 
         """
 
+        if isinstance(a,str):
+            if ('HK' in a) :
+                techno = 'HKB'
+            elif ('TCR' in a) :
+                techno = 'TCR'
+
         if techno == '':
             if self.typ != 'FULL':
-                techno=self.typ
+                techno = self.typ
             else:
                 raise AttributeError('Please indicate the radio techno in argument : TCR or HKB')
 
@@ -3173,27 +3170,50 @@ bernard
         """
         subject=''
 
+        if isinstance(a,str):
+            if ('HK' in a) :
+                techno = 'HKB'
+            elif ('TCR' in a) :
+                techno = 'TCR'
+
         if techno == '':
             if self.typ != 'FULL':
-                techno=self.typ
+                techno = self.typ
             else:
                 raise AttributeError('Please indicate the radio techno in argument : TCR or HKB')
 
 
         if isinstance(a,str):
-            if techno.upper() == 'TCR':
-                ia = self.dTCR[a]
-                ba='TCR:'+str(ia)
-            elif (techno.upper() == 'HKB') or (techno.upper() == 'HKBS'):
-                ia = self.dHKB[a]
-                ba='HKB:'+str(ia)
+            
+            # case where body id is given as input 
+            if ('HKB' in a) or ('TCR' in a ):
+                ba = a 
+                ia = int(a.split(':')[1])
+                if techno.upper() == 'TCR':
+                    a = self.idTCR[ia]
+                elif (techno.upper() == 'HKB') or (techno.upper() == 'HKBS'):
+                    a = self.idHKB[ia]
+                for b in self.B:
+                    if not 'Cylindre' in b:
+                        if ba in self.B[b].dev.keys():
+                            subject = b
+                            break
 
 
-            for b in self.B:
-                if not 'Cylindre' in b:
-                    if ba in self.B[b].dev.keys():
-                        subject = b
-                        break
+            else :
+
+                if techno.upper() == 'TCR':
+                    ia = self.dTCR[a]
+                    ba='TCR:'+str(ia)
+                elif (techno.upper() == 'HKB') or (techno.upper() == 'HKBS'):
+                    ia = self.dHKB[a]
+                    ba='HKB:'+str(ia)
+
+                for b in self.B:
+                    if not 'Cylindre' in b:
+                        if ba in self.B[b].dev.keys():
+                            subject = b
+                            break
 
         else:
             if techno.upper() == 'TCR':
@@ -3270,8 +3290,12 @@ bernard
 
 
     def _apply_hkb_offset(self):
-        """ apply offset
-            #trick : http://stackoverflow.com/questions/656297/python-time-timedelta-equivalent
+        """ apply offset from self.offset[self._filename]['hkb_index']
+
+            if offset >0
+                resulting self.hkb is shorten
+            if offset <0
+                resulting self.hkb is longer with np.nan at the begining
         """
 
 
@@ -3279,8 +3303,6 @@ bernard
         if offset >=0:
             self.hkb = self.hkb.iloc[offset:]
         else :
-            import ipdb
-            ipdb.set_trace()
             # new length
             lhkb = len(self.hkb) + (-offset)
             # extract time values
@@ -3295,9 +3317,6 @@ bernard
             ndf=pd.concat([df,self.hkb])
 
             self.hkb=ndf
-            # delta = 
-        # pd.datetools.timedelta(minutes=self.)
-        # pd.datetime.combine(pd.datetime.today(),S.hkb.index[0]) +Z
 
     def _align_hkb_on_devdf(self):
 
