@@ -173,6 +173,22 @@ class CorSer(PyLayers):
             pass
         return(st)
 
+    def dev(self):
+        """ display device techno, id , id on body, body owner,...
+        """
+        
+        title = '{0:21} | {1:3} | {2:8} | {3:10} '.format('Position name', 'Id', 'Body Id', 'Subject')
+        print title + '\n' + '-'*len(title) 
+        if ('HK' in self.typ) or ('FULL' in self.typ):
+            for d in self.dHKB.keys():
+                dev = self.devmapper(self.dHKB[d],'HKB')
+                print '{0:21} | {1:3} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+        if ('TCR' in self.typ) or ('FULL' in self.typ):
+            for d in self.dTCR.keys():
+                dev = self.devmapper(self.dTCR[d],'TCR')
+                print '{0:21} | {1:3} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+        
+
 
     def _loadcam(self):
 
@@ -3068,6 +3084,101 @@ bernard
 
         return pa,pb
 
+
+    def getlinkval(self,a,b,technoa='',technob='',t=''):
+        """    get a link value
+
+        Parameters
+        ----------
+
+        a : str | int
+            name | id
+        b : str | int
+            name | id
+
+
+        optional :
+
+        technoa : str
+            radio techno
+        technob : str
+            radio techno
+
+        t : float | list
+            given time
+            or [start,stop] time
+
+        Returns
+        -------
+
+        Pandas Serie 
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> S=CorSer(serie=34)
+        >>> S.getlinkval('AP1','WristLeft')
+        """
+
+        # check technoa 
+        if isinstance(a,str):
+            if ('HK' in a) :
+                technoa = 'HKB'
+            elif ('TCR' in a) :
+                technoa = 'TCR'
+
+        if technoa == '':
+            if self.typ != 'FULL':
+                technoa = self.typ
+            else:
+                raise AttributeError('Please indicate the radio technoa in argument : TCR or HKB')
+
+        # check technob
+        if isinstance(b,str):
+            if ('HK' in b) :
+                technob = 'HKB'
+            elif ('TCR' in b) :
+                technob = 'TCR'
+
+        if technob == '':
+            if self.typ != 'FULL':
+                technob = self.typ
+            else:
+                raise AttributeError('Please indicate the radio technob in argument : TCR or HKB')
+
+        if technoa != technob:
+            raise AttributeError('technoa and technob must be the same')
+
+
+
+
+        a,ia,nna,subjecta = self.devmapper(a,technoa)
+        b,ib,nnb,subjectb = self.devmapper(b,technob)
+
+        if ('HKB' in technoa) or ('FULL' in technoa ):
+            
+            if (a +'-' + b) in self.hkb.keys():
+                link = a +'-' + b
+            else :
+                link = b +'-' + a
+
+            # determine time
+            if isinstance(t,list):
+                tstart = t[0]
+                tstop = t[-1]
+                val = self.hkb[(self.hkb.index >= tstart) & (self.hkb.index <= tstop)][link]
+            elif t == '':
+                val = self.hkb[link]
+            else :
+                hstep = (self.hkb.index[1]-self.hkb.index[0])/2.
+                val = self.hkb[(self.hkb.index >= t-hstep) & (self.hkb.index <= t+hstep)][link]
+
+
+        return val
+
+
+
     def getdevp(self,a,techno='',t='',fId=''):
         """ get a  device position
 
@@ -3423,39 +3534,39 @@ bernard
         return df
 
 
-    def get_data(self,a,b):
+    # def get_data(self,a,b):
 
 
-        T=self.tcr[a+'-'+b]
-        T.name=T.name+'-tcr'
-        H=self.hkb[a+'-'+b]
-        H.name=H.name+'-hkb'
-        udhk = self.accessdm(a,b,'HKB')
-        udtcr = self.accessdm(a,b,'HKB')
-        dist_tcr=self.dist[:,udtcr[0],udtcr[1]]
-        dist_hkb=self.dist[:,udhk[0],udhk[1]]
-        tdist=np.linspace(0,self.dist.shape[0]/100.,self.dist.shape[0])
-        D_tcr=pd.Series(dist_tcr,index=tdist)
-        D_tcr.name = 'dist-tcr'
-        D_hkb=pd.Series(dist_hkb,index=tdist)
-        D_hkb.name = 'dist-hkb'
+    #     T=self.tcr[a+'-'+b]
+    #     T.name=T.name+'-tcr'
+    #     H=self.hkb[a+'-'+b]
+    #     H.name=H.name+'-hkb'
+    #     udhk = self.accessdm(a,b,'HKB')
+    #     udtcr = self.accessdm(a,b,'HKB')
+    #     dist_tcr=self.dist[:,udtcr[0],udtcr[1]]
+    #     dist_hkb=self.dist[:,udhk[0],udhk[1]]
+    #     tdist=np.linspace(0,self.dist.shape[0]/100.,self.dist.shape[0])
+    #     D_tcr=pd.Series(dist_tcr,index=tdist)
+    #     D_tcr.name = 'dist-tcr'
+    #     D_hkb=pd.Series(dist_hkb,index=tdist)
+    #     D_hkb.name = 'dist-hkb'
 
-        return T,H,D_tcr,D_hkb
+    #     return T,H,D_tcr,D_hkb
 
 
-    def get_dataframes(self,a,b):
-        """ assemble all series in a DataFrame
-        """
+    # def get_dataframes(self,a,b):
+    #     """ assemble all series in a DataFrame
+    #     """
 
-        T,H,DT,DH = self.get_data(a,b)
-        NH=(np.sqrt(1/(10**(H/10)))/4e4)
-        NHc=NH-NH.mean()
-        DHc=DH-DH.mean()
-        inh = NHc.index
-        idh = DHc.index
-        NHc.index = pd.to_datetime(inh,unit='m')
-        DHc.index = pd.to_datetime(idh,unit='m')
-        sD = (DHc.index[1]-DHc.index[0])
-        sf= str(int(sD.microseconds*1e-3)) + 'ms'
-        NHcr = NHc.resample(sf,fill_method='ffill')
-        return NHcr,DHc
+    #     T,H,DT,DH = self.get_data(a,b)
+    #     NH=(np.sqrt(1/(10**(H/10)))/4e4)
+    #     NHc=NH-NH.mean()
+    #     DHc=DH-DH.mean()
+    #     inh = NHc.index
+    #     idh = DHc.index
+    #     NHc.index = pd.to_datetime(inh,unit='m')
+    #     DHc.index = pd.to_datetime(idh,unit='m')
+    #     sD = (DHc.index[1]-DHc.index[0])
+    #     sf= str(int(sD.microseconds*1e-3)) + 'ms'
+    #     NHcr = NHc.resample(sf,fill_method='ffill')
+    #     return NHcr,DHc
