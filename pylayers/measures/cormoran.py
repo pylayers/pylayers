@@ -1059,8 +1059,14 @@ bernard
     def _computedistdf(self):
         """Compute the ditance dataframe from distance matrix
         """
-        devmap = {S.devmapper(k,'hkb')[2]:S.devmapper(k,'hkb')[0] for k in S.dHKB}
-        devmap.update({S.devmapper(k,'tcr')[2]:S.devmapper(k,'tcr')[0] for k in S.dTCR})
+        if ('HK' in self.typ) or ('FULL' in self.typ):
+            devmap = {self.devmapper(k,'hkb')[0]:self.devmapper(k,'hkb')[2] for k in self.dHKB}
+        if ('TCR' in self.typ) or ('FULL' in self.typ):
+            devmap.update({self.devmapper(k,'tcr')[0]:self.devmapper(k,'tcr')[2] for k in self.dTCR})
+        udev = np.array([[self.dist_nodesmap.index(devmap[k.split('-')[0]]),self.dist_nodesmap.index(devmap[k.split('-')[1]])] for k in self.hkb.keys()])
+        import ipdb
+        ipdb.set_trace()
+        self.distdf = pd.DataFrame(self.dist[:,udev[:,0],udev[:,1]],columns=self.hkb.keys(),index=self.hkb.index)
 
 
     def accessdm(self,a,b,techno=''):
@@ -1613,7 +1619,7 @@ bernard
 
 
         try : 
-            init = self.offset[self._filename]['hkb_index']
+            init = time[0]#self.offset[self._filename]['hkb_index']
         except:
             init=time[0]
 
@@ -3173,7 +3179,6 @@ bernard
             else :
                 hstep = (self.hkb.index[1]-self.hkb.index[0])/2.
                 val = self.hkb[(self.hkb.index >= t-hstep) & (self.hkb.index <= t+hstep)][link]
-
 
         return val
 
