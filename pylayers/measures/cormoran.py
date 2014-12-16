@@ -29,10 +29,18 @@ import pickle
 # vtk.vtkOutputWindow().SetInstance(output)
 
 
-def cor_ls(short=True):
+def cor_log(short=True):
     filelog = os.path.join(os.environ['CORMORAN'],'RAW','Doc','MeasurementLog.csv')
     log = pd.read_csv(filelog)
-    return log
+    if short :
+        log['day'] =  [x.split('/')[0] for x in log['Date'].values]
+        log['serie']=log['Meas Serie']
+        return log[['day','serie','Subject','techno']]
+    else:
+        return log
+
+
+
 
 def time2npa(lt):
 
@@ -146,7 +154,6 @@ class CorSer(PyLayers):
             except: 
                 print ('WARNING : No HKB offset not yet set => use self.offset_setter_hkb()')
 
-
     def __repr__(self):
         st = ''
         st = st + 'Day : '+ str(self.day)+'/06/2014'+'\n'
@@ -177,20 +184,22 @@ class CorSer(PyLayers):
             pass
         return(st)
 
+
+    @property
     def dev(self):
         """ display device techno, id , id on body, body owner,...
         """
         
-        title = '{0:21} | {1:3} | {2:8} | {3:10} '.format('Position name', 'Id', 'Body Id', 'Subject')
+        title = '{0:21} | {1:7} | {2:8} | {3:10} '.format('Name in Dataframe', 'Real Id', 'Body Id', 'Subject')
         print title + '\n' + '-'*len(title) 
         if ('HK' in self.typ) or ('FULL' in self.typ):
             for d in self.dHKB.keys():
                 dev = self.devmapper(self.dHKB[d],'HKB')
-                print '{0:21} | {1:3} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
         if ('TCR' in self.typ) or ('FULL' in self.typ):
             for d in self.dTCR.keys():
                 dev = self.devmapper(self.dTCR[d],'TCR')
-                print '{0:21} | {1:3} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
         
 
 
@@ -1684,6 +1693,7 @@ bernard
                 nval = value
             self._save_data_off_dict(self._filename,'hkb_index',nval)
             self.offset= self._load_offset_dict()
+            ax.set_title('WARNING : Please Reload serie to Valide offset change',color='r',weight='bold')
         axset = plt.axes([0.0, 0.5, 0.2, 0.05])
 
         bset = Button(axset, 'SET offs.')
@@ -3426,7 +3436,7 @@ bernard
             if offset >0
                 add np.nan at the begining 
             if offset <0
-                first values of self.hkb will be dropped 
+                first values of self.hkb will be dropped
         """
 
 
