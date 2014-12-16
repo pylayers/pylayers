@@ -35,7 +35,7 @@ def cor_log(short=True):
     if short :
         log['day'] =  [x.split('/')[0] for x in log['Date'].values]
         log['serie']=log['Meas Serie']
-        return log[['day','serie','Subject','techno']]
+        return log[['serie','day','Subject','techno']]
     else:
         return log
 
@@ -185,23 +185,61 @@ class CorSer(PyLayers):
         return(st)
 
 
+    # @property
+    # def dev(self):
+    #     """ display device techno, id , id on body, body owner,...
+    #     """
+        
+    #     title = '{0:21} | {1:7} | {2:8} | {3:10} '.format('Name in Dataframe', 'Real Id', 'Body Id', 'Subject')
+    #     print title + '\n' + '-'*len(title) 
+    #     if ('HK' in self.typ) or ('FULL' in self.typ):
+    #         hkbkeys = self.idHKB.keys()
+    #         hkbkeys.sort()
+    #         for d in hkbkeys:
+    #             dev = self.devmapper(self.idHKB[d],'HKB')
+    #             print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+    #     if ('TCR' in self.typ) or ('FULL' in self.typ):
+    #         tcrkeys = self.idTCR.keys()
+    #         tcrkeys.sort()
+    #         for d in tcrkeys:
+    #             dev = self.devmapper(self.idTCR[d],'TCR')
+    #             print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+
     @property
     def dev(self):
         """ display device techno, id , id on body, body owner,...
         """
         
         title = '{0:21} | {1:7} | {2:8} | {3:10} '.format('Name in Dataframe', 'Real Id', 'Body Id', 'Subject')
-        print title + '\n' + '-'*len(title) 
-        if ('HK' in self.typ) or ('FULL' in self.typ):
-            for d in self.dHKB.keys():
-                dev = self.devmapper(self.dHKB[d],'HKB')
+        print title + '\n' + '='*len(title) 
+        # access points HKB
+        for d in self.din:
+            if ('HK' in d) :
+                dev = self.devmapper(d,'HKB')
                 print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
-        if ('TCR' in self.typ) or ('FULL' in self.typ):
-            for d in self.dTCR.keys():
-                dev = self.devmapper(self.dTCR[d],'TCR')
+        if 'FULL' in self.typ:
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+        # access points TCR
+        for d in self.din:
+            if ('TCR' in d)  :
+                dev = self.devmapper(d,'TCR')
                 print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
-        
-
+        print '{0:66}'.format('-'*len(title) )
+        # device per RAT per body
+        for b in self.B:
+            # HKB per body
+            for d in self.B[b].dev.keys():
+                if ('HK' in d):
+                    dev = self.devmapper(d,'HKB')
+                    print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+            # TCR per body
+            if 'FULL' in self.typ:
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+            for d in self.B[b].dev.keys():
+                if ('TCR' in d):
+                    dev = self.devmapper(d,'TCR')
+                    print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+            print '{0:66}'.format('-'*len(title) )
 
     def _loadcam(self):
 
