@@ -65,11 +65,11 @@ class CorSer(PyLayers):
 
         if day == 11:
             if serie in [7,8]:
-                raise AttributeError('Serie '+serie + \
+                raise AttributeError('Serie '+str(serie) + \
                                      ' has no hkb data and will not be loaded')
         if day ==12:
             if serie in [17,18,19,20]:
-                raise AttributeError('Serie '+serie + \
+                raise AttributeError('Serie '+str(serie) + \
                                      ' has no hkb data and will not be loaded')
         # Measures
         if day==11:
@@ -137,11 +137,15 @@ class CorSer(PyLayers):
 
         # realign Radio on mocap
         if ('HK' in self.typ) or ('FULL' in self.typ):
+            print '\nAlign HKB data frame index on mocap'
             self._align_hkb_on_devdf()
             try:
                 self._apply_hkb_offset()
+                print '\nCreate distance Dataframe'
+                self._computedistdf()
             except: 
-                print ('WARNING : No HKB offset applied (not yet set)')
+                print ('WARNING : No HKB offset not yet set => use self.offset_setter_hkb()')
+
 
     def __repr__(self):
         st = ''
@@ -1064,9 +1068,7 @@ bernard
         if ('TCR' in self.typ) or ('FULL' in self.typ):
             devmap.update({self.devmapper(k,'tcr')[0]:self.devmapper(k,'tcr')[2] for k in self.dTCR})
         udev = np.array([[self.dist_nodesmap.index(devmap[k.split('-')[0]]),self.dist_nodesmap.index(devmap[k.split('-')[1]])] for k in self.hkb.keys()])
-        import ipdb
-        ipdb.set_trace()
-        self.distdf = pd.DataFrame(self.dist[:,udev[:,0],udev[:,1]],columns=self.hkb.keys(),index=self.hkb.index)
+        self.distdf = pd.DataFrame(self.dist[:,udev[:,0],udev[:,1]],columns=self.hkb.keys(),index=self.tmocap)
 
 
     def accessdm(self,a,b,techno=''):
@@ -1676,7 +1678,11 @@ bernard
 
         def setter(event):
             value = int(sliderx.val)
-            self._save_data_off_dict(self._filename,'hkb_index',value)
+            try :
+                nval = self.offset[self._filename]['hkb_index'] + value
+            except : 
+                nval = value
+            self._save_data_off_dict(self._filename,'hkb_index',nval)
             self.offset= self._load_offset_dict()
         axset = plt.axes([0.0, 0.5, 0.2, 0.05])
 
@@ -3091,7 +3097,7 @@ bernard
         return pa,pb
 
 
-    def getlinkval(self,a,b,technoa='',technob='',t=''):
+    def getlinkval(self,a,b,technoa='',technob='',t='',mode='radio'):
         """    get a link value
 
         Parameters
@@ -3104,6 +3110,10 @@ bernard
 
 
         optional :
+
+        mode : str ('radio'|'dist')
+            radio : display Radio observable value
+            dist : display distance
 
         technoa : str
             radio techno
@@ -3169,16 +3179,21 @@ bernard
             else :
                 link = b +'-' + a
 
+            if mode =='radio':
+                df = self.hkb
+            elif mode == 'dist':
+                df = self.distdf
+
             # determine time
             if isinstance(t,list):
                 tstart = t[0]
                 tstop = t[-1]
-                val = self.hkb[(self.hkb.index >= tstart) & (self.hkb.index <= tstop)][link]
+                val = df[(df.index >= tstart) & (df.index <= tstop)][link]
             elif t == '':
-                val = self.hkb[link]
+                val = df[link]
             else :
-                hstep = (self.hkb.index[1]-self.hkb.index[0])/2.
-                val = self.hkb[(self.hkb.index >= t-hstep) & (self.hkb.index <= t+hstep)][link]
+                hstep = (df.index[1]-df.index[0])/2.
+                val = df[(df.index >= t-hstep) & (df.index <= t+hstep)][link]
 
         return val
 
@@ -3409,30 +3424,48 @@ bernard
         """ apply offset from self.offset[self._filename]['hkb_index']
 
             if offset >0
-                resulting self.hkb is shorten
+                add np.nan at the begining 
             if offset <0
-                resulting self.hkb is longer with np.nan at the begining
+                first values of self.hkb will be dropped 
         """
 
 
+        # offset = self.offset[self._filename]['hkb_index']
+        # if offset >=0:
+        #     self.hkb = self.hkb.iloc[offset:]
+        # else :
+        #     # new length
+        #     lhkb = len(self.hkb) + (-offset)
+        #     # extract time values
+        #     npahkbi = self.hkb.index.values
+        #     # calculate new termianl time
+        #     step = npahkbi[1]- npahkbi[0]
+        #     nstop = npahkbi[-1]+ (step * (-offset))
+        #     ni = np.linspace(0,nstop,lhkb)
+        #     df = pd.DataFrame({},columns=self.hkb.keys(),index=ni[0:-offset])
+
+        #     self.hkb.index=pd.Index(ni[-offset:])
+        #     ndf=pd.concat([df,self.hkb])
+
+        #     self.hkb=ndf
+
         offset = self.offset[self._filename]['hkb_index']
-        if offset >=0:
-            self.hkb = self.hkb.iloc[offset:]
+        if offset <= 0 :
+            index = self.hkb.index
+            self.hkb = self.hkb.iloc[-offset:]
+            self.hkb.index = index[0:offset]
         else :
-            # new length
-            lhkb = len(self.hkb) + (-offset)
             # extract time values
             npahkbi = self.hkb.index.values
-            # calculate new termianl time
             step = npahkbi[1]- npahkbi[0]
-            nstop = npahkbi[-1]+ (step * (-offset))
-            ni = np.linspace(0,nstop,lhkb)
-            df = pd.DataFrame({},columns=self.hkb.keys(),index=ni[0:-offset])
+            nstart = npahkbi[0]+ (step * (offset))
+            self.hkb.index = pd.Index(npahkbi + nstart)
 
-            self.hkb.index=pd.Index(ni[-offset:])
+            # add blank at begining
+            df = pd.DataFrame({},columns=self.hkb.keys(),index=npahkbi[:offset])
             ndf=pd.concat([df,self.hkb])
-
             self.hkb=ndf
+            self.thkb = self.hkb.index
 
     def _align_hkb_on_devdf(self):
 
@@ -3451,7 +3484,6 @@ bernard
 
         """
         
-        print '\nAlign HKB data frame index on mocap'
         mocapindex = pd.to_datetime(self.tmocap,unit='s')
         self.hkb.index = pd.to_datetime(self.hkb.index,unit='s')
 
