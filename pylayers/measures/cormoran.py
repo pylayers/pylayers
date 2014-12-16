@@ -155,7 +155,7 @@ class CorSer(PyLayers):
                 print ('WARNING : No HKB offset not yet set => use self.offset_setter_hkb()')
 
         if ('BS' in self.typ) or ('FULL' in self.typ):
-            print '\nAlign HKB data frame index on mocap'
+            print '\nAlign BS data frame index on mocap'
             self._align_bs_on_devdf()
             try:
                 self._apply_bs_offset()
