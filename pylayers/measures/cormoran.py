@@ -644,10 +644,24 @@ bernard
             self.rssi = data['val']
             self.thkb = np.arange(np.shape(self.rssi)[2])*25.832e-3
 
-        self.topandas()
+        def topandas():
+            try:
+                self.hkb = pd.DataFrame(index=self.thkb[0])
+            except:
+                self.hkb = pd.DataFrame(index=self.thkb)
+            for k in self.idHKB:
+                for l in self.idHKB:
+                    if k!=l:
+                        col  = self.idHKB[k]+'-'+self.idHKB[l]
+                        rcol = self.idHKB[l]+'-'+self.idHKB[k]
+                        if rcol not in self.hkb.columns:
+                            rssi  = self.rssi[k-1,l-1,:]
+                            self.hkb[col] = rssi
+
+        topandas()
         self.hkb = self.hkb[self.hkb!=0]
 
-    def visimda(self,techno='HKB',square_mda=True,all_links=True):
+    def compute_visibility(self,techno='HKB',square_mda=True,all_links=True):
         """ determine visibility of links of a givcen techno
 
 
@@ -690,10 +704,10 @@ bernard
             >>> from pylayers.measures.cormoran import *
             >>> import matplotlib.pyplot as plt
             >>> C=CorSer(serie=14,day=12)
-            >>> inter,links=C.visimda(techno='TCR',square_mda=True)
+            >>> inter,links=C.compute_visibility(techno='TCR',square_mda=True)
             >>> inter.shape
                 (15, 15, 12473)
-            >>>C.imshowvisimda(inter,links)
+            >>>C.imshowvisibility_i(inter,links)
 
 
         """
@@ -841,7 +855,7 @@ bernard
 
         return intersect,links
 
-    def imshowvisimda(self,inter,links,**kwargs):
+    def imshowvisibility(self,inter,links,**kwargs):
         """  imshow visibility mda
 
 
@@ -859,8 +873,8 @@ bernard
         >>> from pylayers.measures.cormoran import *
         >>> import matplotlib.pyplot as plt
         >>> C=CorSer(serie=6,day=12)
-        >>> inter,links=C.visimda(techno='TCR',square_mda=True)
-        >>> i,l=C.imshowvisimda(inter,links)
+        >>> inter,links=C.compute_visibility(techno='TCR',square_mda=True)
+        >>> i,l=C.imshowvisibility_i(inter,links)
 
         """
         defaults = { 't':0,
@@ -901,7 +915,7 @@ bernard
 
     def _show3i(self,kt):
         """ show3 update for interactive mode
-            USED in imshowvisimdai
+            USED in imshowvisibility_i
         """
         t=self.tmocap[kt]
 
@@ -934,8 +948,8 @@ bernard
                 self.B[b]._mayavdic.mlab_source.set(x= self.B[b].top[0],y=self.B[b].top[1],z=self.B[b].top[2],u=V[ 0],v=V[ 1],w=V[ 2])
 
 
-    def imshowvisimdai(self,inter,links,fId=0,**kwargs):
-        """  imshow visibility mda
+    def imshowvisibility_i(self,inter,links,fId=0,**kwargs):
+        """  imshow visibility mda interactive
 
         Parameters 
         ----------
@@ -952,7 +966,7 @@ bernard
         >>> import matplotlib.pyplot as plt
         >>> C=CorSer(serie=6,day=12)
         >>> inter,links=C.visimda(techno='TCR',square_mda=True)
-        >>> i,l=C.imshowvisimdai(inter,links)
+        >>> i,l=C.imshowvisibility_i(inter,links)
 
         """
 
@@ -1058,12 +1072,11 @@ bernard
         bpp = Button(axpp, '+10')
         bpp.on_clicked(pplus)
 
-            
+
 
         plt.show()
 
 
-        
 
 
     def _distancematrix(self):
@@ -1112,58 +1125,58 @@ bernard
         """
         if ('HK' in self.typ) or ('FULL' in self.typ):
             devmap = {self.devmapper(k,'hkb')[0]:self.devmapper(k,'hkb')[2] for k in self.dHKB}
-        if ('TCR' in self.typ) or ('FULL' in self.typ):
-            devmap.update({self.devmapper(k,'tcr')[0]:self.devmapper(k,'tcr')[2] for k in self.dTCR})
+        # if ('TCR' in self.typ) or ('FULL' in self.typ):
+        #     devmap.update({self.devmapper(k,'tcr')[0]:self.devmapper(k,'tcr')[2] for k in self.dTCR})
         udev = np.array([[self.dist_nodesmap.index(devmap[k.split('-')[0]]),self.dist_nodesmap.index(devmap[k.split('-')[1]])] for k in self.hkb.keys()])
         self.distdf = pd.DataFrame(self.dist[:,udev[:,0],udev[:,1]],columns=self.hkb.keys(),index=self.tmocap)
 
 
-    def accessdm(self,a,b,techno=''):
-        """ access to the distance matrix
+    # def accessdm(self,a,b,techno=''):
+    #     """ access to the distance matrix
 
-            give name|id of node a and b and a given techno. retrun Groung truth
-            distance between the 2 nodes
-        # """
+    #         give name|id of node a and b and a given techno. retrun Groung truth
+    #         distance between the 2 nodes
+    #     # """
 
-        # a,ia,bia,subja=self.devmapper(a,techno)
-        # b,ib,bib,subjb=self.devmapper(b,techno)
+    #     # a,ia,bia,subja=self.devmapper(a,techno)
+    #     # b,ib,bib,subjb=self.devmapper(b,techno)
 
-        if 'HKB' in techno :
-            if isinstance(a,str):
-                ia = self.dHKB[a]
-            else:
-                ia = a
-                a = self.idHKB[a]
+    #     if 'HKB' in techno :
+    #         if isinstance(a,str):
+    #             ia = self.dHKB[a]
+    #         else:
+    #             ia = a
+    #             a = self.idHKB[a]
 
-            if isinstance(b,str):
-                ib = self.dHKB[b]
-            else:
-                ib = b
-                b = self.idHKB[b]
+    #         if isinstance(b,str):
+    #             ib = self.dHKB[b]
+    #         else:
+    #             ib = b
+    #             b = self.idHKB[b]
 
-        elif 'TCR' in techno :
-            if isinstance(a,str):
-                ia = self.dTCR[a]
-            else:
-                ia = a
-                a = self.idTCR[a]
+    #     elif 'TCR' in techno :
+    #         if isinstance(a,str):
+    #             ia = self.dTCR[a]
+    #         else:
+    #             ia = a
+    #             a = self.idTCR[a]
 
-            if isinstance(b,str):
-                ib = self.dTCR[b]
-            else:
-                ib = b
-                b = self.idTCR[b]
+    #         if isinstance(b,str):
+    #             ib = self.dTCR[b]
+    #         else:
+    #             ib = b
+    #             b = self.idTCR[b]
 
-        else :
-            raise AttributeError('please give only 1 techno or radio node')
+    #     else :
+    #         raise AttributeError('please give only 1 techno or radio node')
 
-        ka = techno+':'+str(ia)
-        kb = techno+':'+str(ib)
+    #     ka = techno+':'+str(ia)
+    #     kb = techno+':'+str(ib)
 
-        ua = self.dist_nodesmap.index(ka)
-        ub = self.dist_nodesmap.index(kb)
+    #     ua = self.dist_nodesmap.index(ka)
+    #     ub = self.dist_nodesmap.index(kb)
 
-        return(ua,ub)
+    #     return(ua,ub)
 
 
 
@@ -1213,6 +1226,13 @@ bernard
         if ax == []:
             ax = fig.add_subplot(111)
 
+        if self.offset[self._filename].has_key('video_sec'):
+            offset = self.offset[self._filename]['video_sec']
+        elif offset != '':
+            offset = offset
+        else:
+            offset=0
+
         videofile = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','Videos')
         ldir = os.listdir(videofile)
         luldir = map(lambda x : self._filename in x,ldir)
@@ -1234,6 +1254,15 @@ bernard
     def snapshots(self,t0=0,t1=10,offset=15.5):
         """
         """
+
+        if self.offset[self._filename].has_key('video_sec'):
+            offset = self.offset[self._filename]['video_sec']
+        elif offset != '':
+            offset = offset
+        else:
+            offset=0
+
+
         videofile = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','Videos')
         ldir = os.listdir(videofile)
         luldir = map(lambda x : self._filename in x,ldir)
@@ -1414,19 +1443,7 @@ bernard
                     11.425837641867618,
                     array([ 0.48298163,  0.67806043,  0.0987967 ]))
 
-    def topandas(self):
-        try:
-            self.hkb = pd.DataFrame(index=self.thkb[0])
-        except:
-            self.hkb = pd.DataFrame(index=self.thkb)
-        for k in self.idHKB:
-            for l in self.idHKB:
-                if k!=l:
-                    col  = self.idHKB[k]+'-'+self.idHKB[l]
-                    rcol = self.idHKB[l]+'-'+self.idHKB[k]
-                    if rcol not in self.hkb.columns:
-                        rssi  = self.rssi[k-1,l-1,:]
-                        self.hkb[col] = rssi
+
 
 
     def imshow(self,time=100,kind='time'):
@@ -1673,12 +1690,9 @@ bernard
             init=time[0]
 
 
-
-        dhk = self.accessdm(ia,ib,'HKB')
+        var = self.getlinkval(ia,ib,'HKB',mode='dist').values
         if kwargs['inverse']:
-            var = 10*np.log10(1./(self.dist[:,dhk[0],dhk[1]])**2)
-        else :
-            var = self.dist[:,dhk[0],dhk[1]]
+            var = 10*np.log10(1./(var)**2)
         gt = ax.plot(self.B[self.B.keys()[0]].time,var)
 
         sab = self.hkb[a+'-'+b].values
@@ -2393,10 +2407,9 @@ bernard
                 ibhk = b
                 b = self.idHKB[b]
 
-            dhk = self.accessdm(iahk,ibhk,'HKB')
-
+            var = self.getlinkval(iahk,ibhk,'HKB',mode='dist').values
             if inverse:
-                var = 1./(self.dist[:,dhk[0],dhk[1]])
+                var = 1./(var)
                 ax.set_ylabel(u'$m^{-2}$',fontsize=fontsize)
                 if log :
                     #var = gamma*10*np.log10(var)
@@ -2404,7 +2417,6 @@ bernard
                     ax.set_ylabel(u'$- 20 \log_{10}(d)'+str(gamma)+'$  (dB)',fontsize=fontsize)
                     plt.ylim(-65,-40)
             else:
-                var = self.dist[:,dhk[0],dhk[1]]
                 ax.set_ylabel(u'meters',fontsize=fontsize)
                 if log :
                     var = gamma*10*np.log10(var)+gamma
@@ -2429,13 +2441,13 @@ bernard
                 ibtcr = b
                 b = self.idTCR[b]
 
-            dtcr = self.accessdm(iatcr,ibtcr,'TCR')
+            var = self.getlinkval(iatcr,ibtcr,'TCR',mode='dist').values
+
             if inverse:
-                var = 1./(self.dist[:,dtcr[0],dtcr[1]])**2
+                var = 1./(var)**2
                 if log :
                     var = gamma*10*np.log10(var)
             else:
-                var = self.dist[:,dtcr[0],dtcr[1]]
                 if log :
                     var = gamma*10*np.log10(var)
             ax.plot(self.B[subject].time,var,**kwargs)
@@ -3145,7 +3157,7 @@ bernard
         return pa,pb
 
 
-    def getlinkval(self,a,b,technoa='',technob='',t='',mode='radio'):
+    def getlinkval(self,a,b,techno='',t='',mode='radio'):
         """    get a link value
 
         Parameters
@@ -3188,39 +3200,39 @@ bernard
         # check technoa 
         if isinstance(a,str):
             if ('HK' in a) :
-                technoa = 'HKB'
+                techno = 'HKB'
             elif ('TCR' in a) :
-                technoa = 'TCR'
+                techno = 'TCR'
 
-        if technoa == '':
+        if techno == '':
             if self.typ != 'FULL':
-                technoa = self.typ
+                techno = self.typ
             else:
                 raise AttributeError('Please indicate the radio technoa in argument : TCR or HKB')
 
-        # check technob
-        if isinstance(b,str):
-            if ('HK' in b) :
-                technob = 'HKB'
-            elif ('TCR' in b) :
-                technob = 'TCR'
+        # # check technob
+        # if isinstance(b,str):
+        #     if ('HK' in b) :
+        #         technob = 'HKB'
+        #     elif ('TCR' in b) :
+        #         technob = 'TCR'
 
-        if technob == '':
-            if self.typ != 'FULL':
-                technob = self.typ
-            else:
-                raise AttributeError('Please indicate the radio technob in argument : TCR or HKB')
+        # if technob == '':
+        #     if self.typ != 'FULL':
+        #         technob = self.typ
+        #     else:
+        #         raise AttributeError('Please indicate the radio technob in argument : TCR or HKB')
 
-        if technoa != technob:
-            raise AttributeError('technoa and technob must be the same')
-
-
+        # if technoa != technob:
+        #     raise AttributeError('technoa and technob must be the same')
 
 
-        a,ia,nna,subjecta = self.devmapper(a,technoa)
-        b,ib,nnb,subjectb = self.devmapper(b,technob)
 
-        if ('HKB' in technoa) or ('FULL' in technoa ):
+
+        a,ia,nna,subjecta = self.devmapper(a,techno)
+        b,ib,nnb,subjectb = self.devmapper(b,techno)
+
+        if ('HKB' in techno) or ('FULL' in techno ):
             
             if (a +'-' + b) in self.hkb.keys():
                 link = a +'-' + b
