@@ -154,6 +154,15 @@ class CorSer(PyLayers):
             except: 
                 print ('WARNING : No HKB offset not yet set => use self.offset_setter_hkb()')
 
+        if ('BS' in self.typ) or ('FULL' in self.typ):
+            print '\nAlign HKB data frame index on mocap'
+            self._align_bs_on_devdf()
+            try:
+                self._apply_bs_offset()
+            except: 
+                print ('WARNING : No BS offset not yet set => use self.offset_setter_bs() (NOT YET IMPLEMENTED)')
+
+
     def __repr__(self):
         st = ''
         st = st + 'Day : '+ str(self.day)+'/06/2014'+'\n'
@@ -574,7 +583,27 @@ bernard
             filesc = filter(lambda x : 'Sc'+scenario in x ,files)
             self._fileBS = filter(lambda x : 'R'+str(run) in x ,filsc)[0]
 
-        self.bespo = pd.read_csv(os.path.join(dirname,self._fileBS),index_col='tu')
+        self.bespo = pd.read_csv(os.path.join(dirname,self._fileBS),index_col='ts')
+
+
+        gb = self.bespo.groupby(['Sensor'])
+        # get device id 
+        devid,idevid = np.unique(self.bespo['Sensor'],return_index=True)
+        # get index of each group
+        dgb={d:gb.get_group(d) for d in devid}
+        for i in dgb:
+            ind = dgb[i].index/1e3
+            dti = pd.to_datetime(ind,unit='s')
+            npai=time2npa(dti)
+            npai = npai - npai[0]
+            dgb[i].index=pd.Index(npai)
+
+        lgb = [dgb[d] for d in dgb]
+        df = pd.concat(lgb)
+        df.sort_index(inplace=True)
+        self.bespo=df
+
+
         #self.s157 = self.bespo[self.bespo['Sensor']==157]
         #self.s157.set_index(self.s157['tu'].values/1e9)
         #self.s74  = self.bespo[self.bespo['Sensor']==74]
@@ -1752,6 +1781,8 @@ bernard
         bset.on_clicked(setter)
 
         plt.show()
+
+
 
 
     def pltvisi(self,a,b,**kwargs):
@@ -3547,15 +3578,54 @@ bernard
         mocapindex = pd.to_datetime(self.tmocap,unit='s')
         self.hkb.index = pd.to_datetime(self.hkb.index,unit='s')
 
+
         sf = (mocapindex[2]-mocapindex[1]).microseconds
         df = self.hkb.resample(str(sf)+'U',fill_method='ffill')
-
-
 
         nindex = time2npa(df.index)
         df.index = pd.Index(nindex)
         self.hkb = df
 
+
+    def _align_bs_on_devdf(self):
+
+        """ align bs time on device data frame ( devdf) time index
+            In place (a.k.a. replace old self.hkb by the resampled one)
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> S=CorSer(6)
+        >>> devdf = S.devdf[S.devdf['id']=='HKB:15']
+        >>> hkbdf = S.hkb['AP1-AnckleLeft']
+        >>> devdf2 = S._align_devdf_on_hkb(devdf,hkbdf)
+
+
+        """
+        
+        mocapindex = pd.to_datetime(self.tmocap,unit='s')
+        self.bespo.index = pd.to_datetime(self.bespo.index,unit='s')
+        sf = (mocapindex[2]-mocapindex[1]).microseconds
+        gb = self.bespo.groupby(['Sensor'])
+        # get device id 
+        devid,idevid = np.unique(self.bespo['Sensor'],return_index=True)
+        # resample each group separatley
+        dgb={d:gb.get_group(d).resample(str(sf)+'U',fill_method='ffill') for d in devid}
+        # re insert subject and device id information in each resampled group
+        for d in dgb:
+            dgb[d]['Sensor']=d
+
+        # create the realigned dataframe
+        lgb = [dgb[d] for d in dgb]
+        df = pd.concat(lgb)
+        df.sort_index(inplace=True)
+        
+        nindex = time2npa(df.index)
+        df.index = pd.Index(nindex)
+        cols=['Measure','Sensor', 'tu', 'd', 'acy']
+        df=df[cols]
+        self.bespo=df
 
 
     def _align_devdf_on_hkb(self,devdf,hkbdf):
