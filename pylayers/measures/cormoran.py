@@ -143,24 +143,29 @@ class CorSer(PyLayers):
         # load offset dict
         self.offset= self._load_offset_dict()
 
-        # realign Radio on mocap
-        if ('HK' in self.typ) or ('FULL' in self.typ):
-            print '\nAlign HKB data frame index on mocap'
-            self._align_hkb_on_devdf()
-            try:
-                self._apply_hkb_offset()
-                print '\nCreate distance Dataframe'
-                self._computedistdf()
-            except: 
-                print ('WARNING : No HKB offset not yet set => use self.offset_setter_hkb()')
-
         if ('BS' in self.typ) or ('FULL' in self.typ):
-            print '\nAlign BS data frame index on mocap'
+            print '\nAlign BS data frame index on mocap...',
             self._align_bs_on_devdf()
             try:
                 self._apply_bs_offset()
+                print 'and time-offset applied'
             except: 
-                print ('WARNING : No BS offset not yet set => use self.offset_setter_bs() (NOT YET IMPLEMENTED)')
+                print ('\nWARNING : No BS offset not yet set => use self.offset_setter_bs() (NOT YET IMPLEMENTED)')
+
+
+        # realign Radio on mocap
+        if ('HK' in self.typ) or ('FULL' in self.typ):
+            print '\nAlign HKB data frame index on mocap...', 
+            self._align_hkb_on_devdf()
+            try:
+                self._apply_hkb_offset()
+                print 'and time-offset applied'
+                print '\nCreate distance Dataframe'
+                self._computedistdf()
+            except: 
+                print ('\nWARNING : No HKB offset not yet set => use self.offset_setter_hkb()')
+
+
 
 
     def __repr__(self):
@@ -241,6 +246,14 @@ class CorSer(PyLayers):
                 if ('HK' in d):
                     dev = self.devmapper(d,'HKB')
                     print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+            # bespoon
+            if ('FULL' in self.typ) or ('HKB' in self.typ):
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+            for d in self.B[b].dev.keys():
+                if ('BS' in d):
+                    dev = self.devmapper(d,'BS')
+                    print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+            print '{0:66}'.format('-'*len(title) )
             # TCR per body
             if 'FULL' in self.typ:
                 print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
@@ -323,7 +336,7 @@ bernard
         """
 
         filename = os.path.join(self.rootdir,'RAW','11-06-2014','MOCAP','scene.c3d')
-        print "\nload infrastructure node position"
+        print "\nload infrastructure node position:",
         a,self.infraname,pts,i = c3d.ReadC3d(filename)
 
         pts = pts/1000.
@@ -393,7 +406,7 @@ bernard
         color=['LightBlue','YellowGreen','PaleVioletRed','white','white','white','white','white','white','white']
 
         for us,subject in enumerate(self.subject):
-            print "\nload ",subject, " body"
+            print "\nload ",subject, " body:",
             seriestr = str(self.serie).zfill(3)
             if day == 11:
                 filemocap = os.path.join(self.rootdir,'RAW',str(self.day)+'-06-2014','MOCAP','serie_'+seriestr+'.c3d')
@@ -425,7 +438,7 @@ bernard
             intertmp=[]
             for ui,i in enumerate(self.interf):
                 try:
-                    print "load ",i, " interfering body"
+                    print "load ",i, " interfering body:",
 
                     self.B.update({i:Cylinder(name=i,
                                               _filemocap=filemocap,
@@ -570,7 +583,12 @@ bernard
         """ load BeSpoon data
 
         """
-        self.dBS = {'LeftWrist?':157,'RightAnckle?':74}
+        self.dBS = {'WristRight':157,'AnckleRight':74}
+
+        self.idBS={}
+        for k in self.dBS:
+            self.idBS[self.dBS[k]]=k
+
         if day==11:
             dirname = os.path.join(self.rootdir,'POST-TREATED','11-06-2014','BeSpoon')
         if day==12:
@@ -1704,8 +1722,8 @@ bernard
         fig, ax = plt.subplots()
         fig.subplots_adjust(bottom=0.2, left=0.3)
 
-        a,ia,bia,subja=self.devmapper(a,'HKB')
-        b,ib,bib,subjb=self.devmapper(b,'HKB')
+        a,ia,bia,subja,techno=self.devmapper(a,'HKB')
+        b,ib,bib,subjb,techno=self.devmapper(b,'HKB')
 
 
         time = self.thkb
@@ -2172,8 +2190,8 @@ bernard
             except:
                 t1=self.thkb[-1]
 
-        a,ia,bia,subja=self.devmapper(a)
-        b,ib,bib,subjb=self.devmapper(b)
+        a,ia,bia,subja,technoa=self.devmapper(a)
+        b,ib,bib,subjb,technob=self.devmapper(b)
         
         if kwargs['shortlabel']:
 
@@ -2732,8 +2750,8 @@ bernard
         """
         # display nodes
         A,B = self.getlinkp(a,b,technoa=technoa,technob=technob)
-        a,ia,ba,subjecta = self.devmapper(a,technoa)
-        b,ib,bb,subjectb = self.devmapper(b,technob)
+        a,ia,ba,subjecta,technoa = self.devmapper(a,technoa)
+        b,ib,bb,subjectb,technob = self.devmapper(b,technob)
 
         if A.ndim==2:
             plt.plot(A[iframe,0],A[iframe,1],'ob')
@@ -2787,8 +2805,8 @@ bernard
         """
 
         A,B = self.getlinkp(a,b,technoa,technob)
-        aa,ia,ba,subjecta= self.devmapper(a,technoa)
-        ab,ib,bb,subjectb= self.devmapper(b,technob)
+        aa,ia,ba,subjecta,technoa= self.devmapper(a,technoa)
+        ab,ib,bb,subjectb,technob= self.devmapper(b,technob)
 
 
         if 'AP' not in a:
@@ -2841,8 +2859,8 @@ bernard
         """
 
         A,B = self.getlinkp(a,b,technoa,technob)
-        aa,ia,ba,subjecta= self.devmapper(a,technoa)
-        ab,ib,bb,subjectb= self.devmapper(b,technob)
+        aa,ia,ba,subjecta,technoa= self.devmapper(a,technoa)
+        ab,ib,bb,subjectb,technob= self.devmapper(b,technob)
 
         if 'AP' not in a:
             Nframe = A.shape[0]
@@ -3129,8 +3147,8 @@ bernard
 
 
 
-        a,ia,nna,subjecta = self.devmapper(a,technoa)
-        b,ib,nnb,subjectb = self.devmapper(b,technob)
+        a,ia,nna,subjecta,technoa = self.devmapper(a,technoa)
+        b,ib,nnb,subjectb,technob = self.devmapper(b,technob)
 
         ua = self.dist_nodesmap.index(nna)
         ub = self.dist_nodesmap.index(nnb)
@@ -3228,40 +3246,11 @@ bernard
         >>> S.getlinkval('AP1','WristLeft')
         """
 
-        # check technoa 
-        if isinstance(a,str):
-            if ('HK' in a) :
-                techno = 'HKB'
-            elif ('TCR' in a) :
-                techno = 'TCR'
-
-        if techno == '':
-            if self.typ != 'FULL':
-                techno = self.typ
-            else:
-                raise AttributeError('Please indicate the radio technoa in argument : TCR or HKB')
-
-        # # check technob
-        # if isinstance(b,str):
-        #     if ('HK' in b) :
-        #         technob = 'HKB'
-        #     elif ('TCR' in b) :
-        #         technob = 'TCR'
-
-        # if technob == '':
-        #     if self.typ != 'FULL':
-        #         technob = self.typ
-        #     else:
-        #         raise AttributeError('Please indicate the radio technob in argument : TCR or HKB')
-
-        # if technoa != technob:
-        #     raise AttributeError('technoa and technob must be the same')
 
 
 
-
-        a,ia,nna,subjecta = self.devmapper(a,techno)
-        b,ib,nnb,subjectb = self.devmapper(b,techno)
+        a,ia,nna,subjecta,techno = self.devmapper(a,techno)
+        b,ib,nnb,subjectb,techno = self.devmapper(b,techno)
 
         if ('HKB' in techno) or ('FULL' in techno ):
             
@@ -3325,17 +3314,6 @@ bernard
 
         """
 
-        if isinstance(a,str):
-            if ('HK' in a) :
-                techno = 'HKB'
-            elif ('TCR' in a) :
-                techno = 'TCR'
-
-        if techno == '':
-            if self.typ != 'FULL':
-                techno = self.typ
-            else:
-                raise AttributeError('Please indicate the radio techno in argument : TCR or HKB')
 
         if t !='':
             findex = np.where(self.tmocap <= t)[0][-1]
@@ -3345,7 +3323,7 @@ bernard
             findex = slice(self.dist.shape[0])
 
 
-        a,ia,nna,subjecta = self.devmapper(a,techno)
+        a,ia,nna,subjecta,techno = self.devmapper(a,techno)
 
         # node a
         # body node
@@ -3371,7 +3349,7 @@ bernard
         ----------
 
         a : str | int
-            name | id
+            name | id | bodyid
         techno : str
             radio techno
 
@@ -3392,44 +3370,51 @@ bernard
         """
         subject=''
 
-        if isinstance(a,str):
-            if ('HK' in a) :
-                techno = 'HKB'
-            elif ('TCR' in a) :
-                techno = 'TCR'
-
-        if techno == '':
-            if self.typ != 'FULL':
-                techno = self.typ
-            else:
-                raise AttributeError('Please indicate the radio techno in argument : TCR or HKB')
-
-
+        # if a is a bodyid (e.g. 'HKB:16') or a body part (e.g. AnkleRight)
         if isinstance(a,str):
             
             # case where body id is given as input 
-            if ('HKB' in a) or ('TCR' in a ):
+            if ('HKB' in a) or ('TCR' in a ) or ('BS' in a ) :
+
                 ba = a 
-                ia = int(a.split(':')[1])
+                techno, ia = a.split(':')
+                ia=int(ia)
                 if techno.upper() == 'TCR':
                     a = self.idTCR[ia]
-                elif (techno.upper() == 'HKB') or (techno.upper() == 'HKBS'):
+                elif (techno.upper() == 'HKB'):
                     a = self.idHKB[ia]
+                elif (techno.upper() == 'BS'):
+                    a = self.idBS[ia]
+
                 for b in self.B:
                     if not 'Cylindre' in b:
                         if ba in self.B[b].dev.keys():
                             subject = b
                             break
 
-
+            # case where body part (e.g. AnkleRight) is given. Here techno is mandatory
             else :
+
+                if techno == '':
+                    if self.typ != 'FULL':
+                        if self.typ == 'HKBS':
+                            raise AttributeError('Please indicate the radio techno in argument : HKB or BS')
+                        else :
+                            techno = self.typ
+                    else:
+                        raise AttributeError('Please indicate the radio techno in argument : TCR, HKB, BS')
+
+
 
                 if techno.upper() == 'TCR':
                     ia = self.dTCR[a]
                     ba='TCR:'+str(ia)
-                elif (techno.upper() == 'HKB') or (techno.upper() == 'HKBS'):
+                elif (techno.upper() == 'HKB') :
                     ia = self.dHKB[a]
                     ba='HKB:'+str(ia)
+                elif techno.upper() == 'BS':
+                    ia = self.dBS[a]
+                    ba='BS:'+str(ia)
 
                 for b in self.B:
                     if not 'Cylindre' in b:
@@ -3437,15 +3422,43 @@ bernard
                             subject = b
                             break
 
+        # an id (number) is given
         else:
+            # techno autodetection raise an error if conflict and invite to precise radio techno
+            if techno == '':
+                if hasattr(self,'idHKB'):
+                    if a in self.idHKB.keys() :
+                        if techno == '':
+                            techno = 'HKB'
+                        else : 
+                            raise AttributeError('Please indicate the radio techno in argument : TCR, HKB, BS')
+                if hasattr(self,'idBS'):
+                    if a in self.idBS.keys():
+                        if techno == '':
+                            techno = 'BS'
+                        else :
+                            raise AttributeError('Please indicate the radio techno in argument : TCR, HKB, BS')
+                if hasattr(self,'idTCR'):
+                    if a in self.idTCR.keys():
+                        if techno == '':
+                            techno = 'TCR'
+                        else :
+                            raise AttributeError('Please indicate the radio techno in argument : TCR, HKB, BS')
+
             if techno.upper() == 'TCR':
                 ia = a
                 a = self.idTCR[a]
                 ba='TCR:'+str(ia)
-            elif (techno.upper() == 'HKB') or (techno.upper() == 'HKBS'):
+            elif (techno.upper() == 'HKB') :
                 ia = a
                 a = self.idHKB[a]
                 ba='HKB:'+str(ia)
+
+            elif (techno.upper() == 'BS') :
+                ia = a
+                a = self.idBS[a]
+                ba='BS:'+str(ia)
+
 
             for b in self.B:
                 if not 'Cylindre' in b:
@@ -3453,7 +3466,7 @@ bernard
                         subject = b
                         break
 
-        return a,ia,ba,subject
+        return a,ia,ba,subject,techno
 
 
     def align(self,devdf,hkbdf):
