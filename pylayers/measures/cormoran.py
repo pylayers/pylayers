@@ -145,7 +145,7 @@ class CorSer(PyLayers):
 
         if ('BS' in self.typ) or ('FULL' in self.typ):
             print '\nAlign BS data frame index on mocap...',
-            self._align_bs_on_devdf()
+            self._align_on_devdf(typ='BS')
             try:
                 self._apply_bs_offset()
                 print 'and time-offset applied'
@@ -156,7 +156,7 @@ class CorSer(PyLayers):
         # realign Radio on mocap
         if ('HK' in self.typ) or ('FULL' in self.typ):
             print '\nAlign HKB data frame index on mocap...', 
-            self._align_hkb_on_devdf()
+            self._align_on_devdf(typ='HKB')
             try:
                 self._apply_hkb_offset()
                 print 'and time-offset applied'
@@ -348,37 +348,61 @@ bernard
 
             self.din.update(
                 {'HKB:1':{'p':mphkb[3],
-                          'T':np.eye(3)},
+                          'T':np.eye(3),
+                          's3off':0.},
+
                  'HKB:2':{'p':mphkb[2],
                           'T': np.array([[-0.44807362,  0.89399666,  0.],
                                          [-0.89399666, -0.44807362,  0.],
-                                         [ 0.,0.,1.        ]])}      ,
+                                         [ 0.,0.,1.        ]]),
+                          's3off':0.}      ,
                  'HKB:3':{'p':mphkb[1],
                           'T':array([[-0.59846007, -0.80115264,  0.],
                                      [ 0.80115264, -0.59846007,  0.],
-                                     [ 0.,0.,  1.]])},
+                                     [ 0.,0.,  1.]]),
+                          's3off':0.},
                  'HKB:4':{'p':mphkb[0],
                           'T':array([[-0.44807362, -0.89399666,  0.],
                                      [ 0.89399666, -0.44807362,  0.],
-                                     [ 0.,0.,  1.]])}
+                                     [ 0.,0.,  1.]]),
+                          's3off':0.}
                  })
 
         if ('TCR' in self.typ) or ('FULL' in self.typ):
             self.din.update({'TCR:32':{'p':mpts[9],
-                                       'T':np.eye(3)},
+                                       'T':np.eye(3),
+                                       's3off':0.1},
                  'TCR:24':{'p':mpts[6],
                            'T': np.array([[-0.44807362,  0.89399666,  0.],
                                          [-0.89399666, -0.44807362,  0.],
-                                         [ 0.,0.,1.        ]])},
+                                         [ 0.,0.,1.        ]]),
+                           's3off':0.1},
                  'TCR:27':{'p':mpts[3],
                            'T':array([[-0.59846007, -0.80115264,  0.],
                                      [ 0.80115264, -0.59846007,  0.],
-                                     [ 0.,0.,  1.]])},
+                                     [ 0.,0.,  1.]]),
+                           's3off':0.1},
                  'TCR:28':{'p':mpts[0],
                            'T':array([[-0.44807362, -0.89399666,  0.],
                                      [ 0.89399666, -0.44807362,  0.],
-                                     [ 0.,0.,  1.]])}
+                                     [ 0.,0.,  1.]]),
+                           's3off':0.1}
                  })
+
+        if self.day == 12:
+            # BS idem HKB:1 and HKB:2
+            if ('BS'  in self.typ) or ('FULL' in self.typ):
+                self.din.update(
+                {'BS:74':{'p':mphkb[3],
+                          'T':np.eye(3),
+                          's3off':-0.2},
+                 'BS:157':{'p':mphkb[2],
+                          'T': np.array([[-0.44807362,  0.89399666,  0.],
+                                         [-0.89399666, -0.44807362,  0.],
+                                         [ 0.,0.,1.        ]]),
+                          's3off':-0.2}      ,
+                 })
+
 
         # self.pts= np.empty((12,3))
         # self.pts[:,0]= -mpts[:,1]
@@ -495,8 +519,8 @@ bernard
                   'WristRight':26,
                   'WristLeft':48,
                   'KneeLeft':33,
-                  'AnckleRight':36,
-                  'AnckleLeft':37}
+                  'AnkleRight':36,
+                  'AnkleLeft':37}
             dirname = os.path.join(self.rootdir,'POST-TREATED','11-06-2014','TCR')
 
 
@@ -583,8 +607,10 @@ bernard
         """ load BeSpoon data
 
         """
-        self.dBS = {'WristRight':157,'AnckleRight':74}
-
+        if day == 11:
+            self.dBS = {'WristRight':157,'AnkleRight':74,'HandRight':0}
+        elif day == 12:
+            self.dBS = {'AP1':157,'AP2':74,'HandRight':0}
         self.idBS={}
         for k in self.dBS:
             self.idBS[self.dBS[k]]=k
@@ -601,24 +627,23 @@ bernard
             filesc = filter(lambda x : 'Sc'+scenario in x ,files)
             self._fileBS = filter(lambda x : 'R'+str(run) in x ,filsc)[0]
 
-        self.bespo = pd.read_csv(os.path.join(dirname,self._fileBS),index_col='ts')
+        bespo = pd.read_csv(os.path.join(dirname,self._fileBS),index_col='ts')
 
 
-        gb = self.bespo.groupby(['Sensor'])
+        gb = bespo.groupby(['Sensor'])
         # get device id 
-        devid,idevid = np.unique(self.bespo['Sensor'],return_index=True)
+        devid,idevid = np.unique(bespo['Sensor'],return_index=True)
         # get index of each group
         dgb={d:gb.get_group(d) for d in devid}
+        lgb=[]
         for i in dgb:
             ind = dgb[i].index/1e3
             dti = pd.to_datetime(ind,unit='s')
             npai=time2npa(dti)
             npai = npai - npai[0]
             dgb[i].index=pd.Index(npai)
-
-        lgb = [dgb[d] for d in dgb]
-        df = pd.concat(lgb)
-        df.sort_index(inplace=True)
+            lgb.append(pd.DataFrame(dgb[i]['d'].values,columns=[self.idBS[0]+'-'+self.idBS[i]],index=dgb[74].index))
+        df =lgb[0].join(lgb[1])
         self.bespo=df
 
 
@@ -640,7 +665,7 @@ bernard
 
         if day==11:
             self.dHKB ={'AP1':1,'AP2':2,'AP3':3,'AP4':4,
-                       'HeadRight':5,'TorsoTopRight':6,'TorsoTopLeft':7,'BackCenter':8,'ElbowRight':9,'ElbowLeft':10,'HipRight':11,'WristRight':12,'WristLeft':13,'KneeLeft':14,'AnckleRight':16,'AnckleLeft':15}
+                       'HeadRight':5,'TorsoTopRight':6,'TorsoTopLeft':7,'BackCenter':8,'ElbowRight':9,'ElbowLeft':10,'HipRight':11,'WristRight':12,'WristLeft':13,'KneeLeft':14,'AnkleRight':16,'AnkleLeft':15}
             if source=='UR1' :
                 dirname = os.path.join(self.rootdir,'POST-TREATED','11-06-2014','HIKOB')
             elif source=='CITI':
@@ -1432,8 +1457,11 @@ bernard
             X= np.array([v[i][1]['p'] for i in range(len(v))])
             mlab.points3d(X[:,0],X[:,1], X[:,2],scale_factor=kwargs['insize'],color=in_color)
         if kwargs['inname']:
-            [mlab.text3d(v[i][1]['p'][0],v[i][1]['p'][1],v[i][1]['p'][2],v[i][0],scale=kwargs['innamesize'])
-            for i in range(len(v))]
+            [mlab.text3d(v[i][1]['p'][0],
+                        v[i][1]['p'][1],
+                        v[i][1]['p'][2]+v[i][1]['s3off'],
+                        v[i][0],
+                        scale=kwargs['innamesize']) for i in range(len(v))]
         if kwargs['body']:
 
             if kwargs['bodytime']==[]:
@@ -3252,7 +3280,7 @@ bernard
         a,ia,nna,subjecta,techno = self.devmapper(a,techno)
         b,ib,nnb,subjectb,techno = self.devmapper(b,techno)
 
-        if ('HKB' in techno) or ('FULL' in techno ):
+        if ('HKB' in techno) :
             
             if (a +'-' + b) in self.hkb.keys():
                 link = a +'-' + b
@@ -3274,6 +3302,27 @@ bernard
             else :
                 hstep = (df.index[1]-df.index[0])/2.
                 val = df[(df.index >= t-hstep) & (df.index <= t+hstep)][link]
+
+        if ('BS' in techno):
+            
+            if (a +'-' + b) in self.bespo.keys():
+                link = a +'-' + b
+            else :
+                link = b +'-' + a
+
+            df = self.bespo
+
+            # determine time
+            if isinstance(t,list):
+                tstart = t[0]
+                tstop = t[-1]
+                val = df[(df.index >= tstart) & (df.index <= tstop)][link]
+            elif t == '':
+                val = df[link]
+            else :
+                hstep = (df.index[1]-df.index[0])/2.
+                val = df[(df.index >= t-hstep) & (df.index <= t+hstep)][link]
+
 
         return val
 
@@ -3497,7 +3546,7 @@ bernard
         >>> from pylayers.measures.cormoran import *
         >>> S=CorSer(6)
         >>> devdf = S.devdf[S.devdf['id']=='HKB:15']
-        >>> hkbdf = S.hkb['AP1-AnckleLeft']
+        >>> hkbdf = S.hkb['AP1-AnkleLeft']
         >>> devdf2,hkbdf2 = S.align(devdf,hkbdf)
 
 
@@ -3571,10 +3620,14 @@ bernard
             self.hkb=ndf
             self.thkb = self.hkb.index
 
-    def _align_hkb_on_devdf(self):
+    def _align_on_devdf(self,typ=''):
 
-        """ align hkb time on device data frame ( devdf) time index
+        """ align hkb or bs time on device data frame ( devdf) time index
             In place (a.k.a. replace old self.hkb by the resampled one)
+
+        Parameters 
+        ----------
+            typ : 'HKB' | 'BS'
 
         Examples
         --------
@@ -3582,68 +3635,33 @@ bernard
         >>> from pylayers.measures.cormoran import *
         >>> S=CorSer(6)
         >>> devdf = S.devdf[S.devdf['id']=='HKB:15']
-        >>> hkbdf = S.hkb['AP1-AnckleLeft']
-        >>> devdf2 = S._align_devdf_on_hkb(devdf,hkbdf)
+        >>> hkbdf = S.hkb['AP1-AnkleLeft']
+        >>> devdf2 = S._align_on_hkb(devdf,hkbdf,typ ='HKB')
 
 
         """
-        
+        if typ == 'HKB':
+            idf = self.hkb
+        elif typ == 'BS':
+            idf = self.bespo
         mocapindex = pd.to_datetime(self.tmocap,unit='s')
-        self.hkb.index = pd.to_datetime(self.hkb.index,unit='s')
+        idf.index = pd.to_datetime(idf.index,unit='s')
 
 
         sf = (mocapindex[2]-mocapindex[1]).microseconds
-        df = self.hkb.resample(str(sf)+'U',fill_method='ffill')
+        df = idf.resample(str(sf)+'U',fill_method='ffill')
 
         nindex = time2npa(df.index)
         df.index = pd.Index(nindex)
-        self.hkb = df
-
-
-    def _align_bs_on_devdf(self):
-
-        """ align bs time on device data frame ( devdf) time index
-            In place (a.k.a. replace old self.hkb by the resampled one)
-
-        Examples
-        --------
-
-        >>> from pylayers.measures.cormoran import *
-        >>> S=CorSer(6)
-        >>> devdf = S.devdf[S.devdf['id']=='HKB:15']
-        >>> hkbdf = S.hkb['AP1-AnckleLeft']
-        >>> devdf2 = S._align_devdf_on_hkb(devdf,hkbdf)
-
-
-        """
-        
-        mocapindex = pd.to_datetime(self.tmocap,unit='s')
-        self.bespo.index = pd.to_datetime(self.bespo.index,unit='s')
-        sf = (mocapindex[2]-mocapindex[1]).microseconds
-        gb = self.bespo.groupby(['Sensor'])
-        # get device id 
-        devid,idevid = np.unique(self.bespo['Sensor'],return_index=True)
-        # resample each group separatley
-        dgb={d:gb.get_group(d).resample(str(sf)+'U',fill_method='ffill') for d in devid}
-        # re insert subject and device id information in each resampled group
-        for d in dgb:
-            dgb[d]['Sensor']=d
-
-        # create the realigned dataframe
-        lgb = [dgb[d] for d in dgb]
-        df = pd.concat(lgb)
-        df.sort_index(inplace=True)
-        
-        nindex = time2npa(df.index)
-        df.index = pd.Index(nindex)
-        cols=['Measure','Sensor', 'tu', 'd', 'acy']
-        df=df[cols]
-        self.bespo=df
+        if typ == 'HKB':
+            self.hkb = df
+        elif typ == 'BS':
+            self.bespo = df
 
 
     def _align_devdf_on_hkb(self,devdf,hkbdf):
 
-        """ NOT USED Practivcally 
+        """ NOT USED Practically 
             align time of 2 data frames:
 
         the time delta of the second data frame is applyied on the first one
@@ -3670,7 +3688,7 @@ bernard
         >>> from pylayers.measures.cormoran import *
         >>> S=CorSer(6)
         >>> devdf = S.devdf[S.devdf['id']=='HKB:15']
-        >>> hkbdf = S.hkb['AP1-AnckleLeft']
+        >>> hkbdf = S.hkb['AP1-AnkleLeft']
         >>> devdf2 = S._align_devdf_on_hkb(devdf,hkbdf)
 
 
