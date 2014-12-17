@@ -143,6 +143,12 @@ class CorSer(PyLayers):
         # load offset dict
         self.offset= self._load_offset_dict()
 
+        # #######################
+        # realign Radio on mocap
+        ########################
+        # 1 - Resample radio time => mocap time
+        # 2 - (if available) apply offset
+
         if ('BS' in self.typ) or ('FULL' in self.typ):
             print '\nAlign BS data frame index on mocap...',
             self._align_on_devdf(typ='BS')
@@ -152,20 +158,27 @@ class CorSer(PyLayers):
             except: 
                 print ('\nWARNING : No BS offset not yet set => use self.offset_setter_bs() (NOT YET IMPLEMENTED)')
 
+        if ('TCR' in self.typ) or ('FULL' in self.typ):
+            print '\nAlign TCR data frame index on mocap...', 
+            self._align_on_devdf(typ='TCR')
+            try:
+                self._apply_tcr_offset()
+                print 'and time-offset applied'
+            except: 
+                print ('\nWARNING : No HKB offset not yet set => use self.offset_setter_hkb()')
 
-        # realign Radio on mocap
+
         if ('HK' in self.typ) or ('FULL' in self.typ):
             print '\nAlign HKB data frame index on mocap...', 
             self._align_on_devdf(typ='HKB')
             try:
                 self._apply_hkb_offset()
                 print 'and time-offset applied'
-                print '\nCreate distance Dataframe'
-                self._computedistdf()
             except: 
                 print ('\nWARNING : No HKB offset not yet set => use self.offset_setter_hkb()')
 
-
+        print '\nCreate distance Dataframe'
+        self._computedistdf()
 
 
     def __repr__(self):
@@ -233,6 +246,13 @@ class CorSer(PyLayers):
                 print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
         if 'FULL' in self.typ:
                 print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+        for d in self.din:
+            if ('BS' in d) :
+                dev = self.devmapper(d,'BS')
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+        if 'FULL' in self.typ:
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+
         # access points TCR
         for d in self.din:
             if ('TCR' in d)  :
@@ -253,7 +273,7 @@ class CorSer(PyLayers):
                 if ('BS' in d):
                     dev = self.devmapper(d,'BS')
                     print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
-            print '{0:66}'.format('-'*len(title) )
+            # print '{0:66}'.format('-'*len(title) )
             # TCR per body
             if 'FULL' in self.typ:
                 print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
@@ -984,8 +1004,94 @@ bernard
             ax.grid()
         return fig,ax
 
+    def _show3i(self,t=0,**kwargs):
+        """ show3 interactive
+        """
 
-    def _show3i(self,kt):
+        fig =plt.figure(num='Jog',figsize=(5,1.5))
+
+        # set time to -10 is a trick to make appear interferers cylinder
+        # because __refreshshow3i only update the data of the cylinder.
+        # if cylinder is not present in the first _show3, they are not displayed
+        # later.
+        time=self.B[self.subject[0]].time
+
+        fId = np.where(time<= t)[0][-1]
+
+        kwargs['bodytime']=[self.tmocap[-10]]
+        kwargs['returnfig']=True
+        kwargs['tagtraj']=False
+        mayafig = self._show3(**kwargs)
+        self.__refreshshow3i(fId)
+        # ax.grid()
+
+
+        # matplotlib Widgets 
+
+        slax=plt.axes([0.1, 0.5, 0.8, 0.3])
+        slax.set_title('t='+str(time[fId]),loc='left')
+        sliderx = Slider(slax, "time", 0, len(time),
+                        valinit=fId, color='#AAAAAA')
+
+        def update_x(val):
+            value = int(sliderx.val)
+            self.__refreshshow3i(val)
+            slax.set_title('t='+str(time[val]),loc='left')
+            fig.canvas.draw_idle()
+        sliderx.on_changed(update_x)
+
+
+        def plus(event):
+
+            sliderx.set_val(sliderx.val +1)
+            fig.canvas.draw_idle()
+
+        def minus(event):
+            sliderx.set_val(sliderx.val -1)
+            fig.canvas.draw_idle()
+
+        def pplus(event):
+            sliderx.set_val(sliderx.val +10)
+            fig.canvas.draw_idle()
+
+
+        def mminus(event):
+            sliderx.set_val(sliderx.val -10)
+            fig.canvas.draw_idle()
+
+        # QUIT by pressing 'q'
+        def press(event):
+            if event.key == 'q':
+                mlab.close(mayafig)
+                plt.close(fig)
+        fig.canvas.mpl_connect('key_press_event', press)
+
+
+        # -1 frame axes
+        axm = plt.axes([0.2, 0.05, 0.1, 0.15])
+        bm = Button(axm, '-1')
+        bm.on_clicked(minus)
+
+        # +1 frame axes
+        axp = plt.axes([0.7, 0.05, 0.1, 0.15])
+        bp = Button(axp, '+1')
+        bp.on_clicked(plus)
+
+
+        # -10 frames axes
+        axmm = plt.axes([0.1, 0.05, 0.1, 0.15])
+        bmm = Button(axmm, '-10')
+        bmm.on_clicked(mminus)
+
+        # +10 frames axes
+        axpp = plt.axes([0.8, 0.05, 0.1, 0.15])
+        bpp = Button(axpp, '+10')
+        bpp.on_clicked(pplus)
+
+        plt.show()
+
+
+    def __refreshshow3i(self,kt):
         """ show3 update for interactive mode
             USED in imshowvisibility_i
         """
@@ -1066,14 +1172,14 @@ bernard
         ims=[]
         l=ax.imshow(inter[:,:,fId],interpolation='nearest')
         # set time to -10 is a trick to make appear interferers cylinder
-        # because _show3i only update the data of the cylinder.
+        # because __refreshshow3i only update the data of the cylinder.
         # if cylinder is not present in the first _show3, they are not displayed
         # later.
         kwargs['bodytime']=[self.tmocap[-10]]
         kwargs['returnfig']=True
         kwargs['tagtraj']=False
         mayafig = self._show3(**kwargs)
-        self._show3i(fId)
+        self.__refreshshow3i(fId)
         # ax.grid()
 
 
@@ -1088,7 +1194,7 @@ bernard
             value = int(sliderx.val)
             sliderx.valtext.set_text('{}'.format(value))
             l.set_data(inter[:,:,value])
-            self._show3i(val)
+            self.__refreshshow3i(val)
             slax.set_title('t='+str(time[val]),loc='left')
             fig.canvas.draw_idle()
         sliderx.on_changed(update_x)
@@ -1179,10 +1285,14 @@ bernard
                     pnb = B[b]._f[:,tdev,:]
         ln = []
         uin = []
+
         if ('HK' in self.typ) or ('FULL' in self.typ):
             uin.extend(['HKB:1','HKB:2','HKB:3','HKB:4'])
         if ('TCR' in self.typ) or ('FULL' in self.typ):
             uin.extend(['TCR:32','TCR:24','TCR:27','TCR:28'])
+        if self.day == 12:
+            if ('BS' in self.typ) or ('FULL' in self.typ):
+                uin.extend(['BS:74','BS:157'])
         ln = uin + bn
         pin = np.array([self.din[d]['p'] for d in uin])
         pin2=np.empty((pnb.shape[0],pin.shape[0],pin.shape[1]))
@@ -1195,13 +1305,33 @@ bernard
     def _computedistdf(self):
         """Compute the ditance dataframe from distance matrix
         """
+
         if ('HK' in self.typ) or ('FULL' in self.typ):
             devmap = {self.devmapper(k,'hkb')[0]:self.devmapper(k,'hkb')[2] for k in self.dHKB}
-        # if ('TCR' in self.typ) or ('FULL' in self.typ):
-        #     devmap.update({self.devmapper(k,'tcr')[0]:self.devmapper(k,'tcr')[2] for k in self.dTCR})
-        udev = np.array([[self.dist_nodesmap.index(devmap[k.split('-')[0]]),self.dist_nodesmap.index(devmap[k.split('-')[1]])] for k in self.hkb.keys()])
-        self.distdf = pd.DataFrame(self.dist[:,udev[:,0],udev[:,1]],columns=self.hkb.keys(),index=self.tmocap)
+            udev = np.array([[self.dist_nodesmap.index(devmap[k.split('-')[0]]),self.dist_nodesmap.index(devmap[k.split('-')[1]])] for k in self.hkb.keys()])
+            iudev =np.array([(self.dist_nodesmap[u[0]]+'-'+self.dist_nodesmap[u[1]]) for u in udev])
+            df = pd.DataFrame(self.dist[:,udev[:,0],udev[:,1]],columns=iudev,index=self.tmocap)
 
+        if ('BS' in self.typ) or ('FULL' in self.typ):
+            devmap = {self.devmapper(k,'BS')[0]:self.devmapper(k,'BS')[2] for k in self.dBS}
+            udev = np.array([[self.dist_nodesmap.index(devmap[k.split('-')[0]]),self.dist_nodesmap.index(devmap[k.split('-')[1]])] for k in self.bespo.keys()])
+            iudev =np.array([(self.dist_nodesmap[u[0]]+'-'+self.dist_nodesmap[u[1]]) for u in udev])
+            dfb = pd.DataFrame(self.dist[:,udev[:,0],udev[:,1]],columns=iudev,index=self.tmocap)
+            df = df.join(dfb)
+            del dfb
+
+        if ('TCR' in self.typ) or ('FULL' in self.typ):
+            devmap = {self.devmapper(k,'tcr')[0]:self.devmapper(k,'tcr')[2] for k in self.dTCR}
+            udev = np.array([[self.dist_nodesmap.index(devmap[k.split('-')[0]]),self.dist_nodesmap.index(devmap[k.split('-')[1]])] for k in self.tcr.keys() if not 'COORD' in k])
+            iudev =np.array([(self.dist_nodesmap[u[0]]+'-'+self.dist_nodesmap[u[1]]) for u in udev])
+            dft = pd.DataFrame(self.dist[:,udev[:,0],udev[:,1]],columns=iudev,index=self.tmocap)
+            if ('FULL' in self.typ):
+                df = df.join(dft)
+            else :
+                df = dft
+            del dft
+
+        self.distdf=df
 
     # def accessdm(self,a,b,techno=''):
     #     """ access to the distance matrix
@@ -1519,8 +1649,6 @@ bernard
                     array([ 0.48298163,  0.67806043,  0.0987967 ]))
 
 
-
-
     def imshow(self,time=100,kind='time'):
         """
 
@@ -1732,9 +1860,6 @@ bernard
 
 
 
-
-
-
     def offset_setter_hkb(self,a='AP1',b='WristRight',**kwargs):
         """ offset setter
         """
@@ -1765,7 +1890,7 @@ bernard
             init=time[0]
 
 
-        var = self.getlinkval(ia,ib,'HKB',mode='dist').values
+        var = self.getlink(ia,ib,'HKB',mode='dist').values
         if kwargs['inverse']:
             var = 10*np.log10(1./(var)**2)
         gt = ax.plot(self.B[self.B.keys()[0]].time,var)
@@ -2484,7 +2609,7 @@ bernard
                 ibhk = b
                 b = self.idHKB[b]
 
-            var = self.getlinkval(iahk,ibhk,'HKB',mode='dist').values
+            var = self.getlink(iahk,ibhk,'HKB',mode='dist').values
             if inverse:
                 var = 1./(var)
                 ax.set_ylabel(u'$m^{-2}$',fontsize=fontsize)
@@ -2518,7 +2643,7 @@ bernard
                 ibtcr = b
                 b = self.idTCR[b]
 
-            var = self.getlinkval(iatcr,ibtcr,'TCR',mode='dist').values
+            var = self.getlink(iatcr,ibtcr,'TCR',mode='dist').values
 
             if inverse:
                 var = 1./(var)**2
@@ -3127,7 +3252,8 @@ bernard
 
         ldf.to_csv(filename, sep = ' ',index=False)
 
-    def getlinkd(self,a,b,technoa='',technob='',t='',fId=''):
+
+    def getlinkd(self,a,b,techno='',t=''):
         """    get a link devices distances
 
         Parameters
@@ -3140,14 +3266,13 @@ bernard
 
         oprional 
         
-        technoa : str
+        techno : str
             radio techno
-        technob : str
-            radio techno
-        t : float
-            givent time
-        fId : int
-            frame id
+
+        t : float | list
+            given time
+            or [start,stop] time
+
 
         Returns
         -------
@@ -3165,23 +3290,33 @@ bernard
         """
 
 
-        if t !='':
-            ui  = np.where(self.tmocap <= t)[0][-1]
-            findex = slice(ui,ui+1)
-        elif fId != '':
-            findex = slice(fId,fId+1)
+        a,ia,nna,subjecta,techno = self.devmapper(a,techno)
+        b,ib,nnb,subjectb,techno = self.devmapper(b,techno)
+
+
+        df = self.distdf
+
+
+        if (nna +'-' + nnb) in self.distdf.keys():
+            link = nna +'-' + nnb
         else :
-            findex = slice(self.dist.shape[0])
+            link = nnb +'-' + nna
 
 
+        # determine time
+        if isinstance(t,list):
+            tstart = t[0]
+            tstop = t[-1]
+            val = df[(df.index >= tstart) & (df.index <= tstop)][link]
+        elif t == '':
+            val = df[link]
+        else :
+            hstep = (df.index[1]-df.index[0])/2.
+            val = df[(df.index >= t-hstep) & (df.index <= t+hstep)][link]
 
-        a,ia,nna,subjecta,technoa = self.devmapper(a,technoa)
-        b,ib,nnb,subjectb,technob = self.devmapper(b,technob)
+        
 
-        ua = self.dist_nodesmap.index(nna)
-        ub = self.dist_nodesmap.index(nnb)
-
-        return self.dist[findex,ua,ub]
+        return val
         
 
 
@@ -3234,7 +3369,7 @@ bernard
         return pa,pb
 
 
-    def getlinkval(self,a,b,techno='',t='',mode='radio'):
+    def getlink(self,a,b,techno='',t=''):
         """    get a link value
 
         Parameters
@@ -3248,13 +3383,8 @@ bernard
 
         optional :
 
-        mode : str ('radio'|'dist')
-            radio : display Radio observable value
-            dist : display distance
 
-        technoa : str
-            radio techno
-        technob : str
+        techno : str
             radio techno
 
         t : float | list
@@ -3271,7 +3401,7 @@ bernard
 
         >>> from pylayers.measures.cormoran import *
         >>> S=CorSer(serie=34)
-        >>> S.getlinkval('AP1','WristLeft')
+        >>> S.getlink('AP1','WristLeft')
         """
 
 
@@ -3279,32 +3409,15 @@ bernard
 
         a,ia,nna,subjecta,techno = self.devmapper(a,techno)
         b,ib,nnb,subjectb,techno = self.devmapper(b,techno)
-
-        if ('HKB' in techno) :
-            
+        if ('HK' in techno) :
             if (a +'-' + b) in self.hkb.keys():
                 link = a +'-' + b
             else :
                 link = b +'-' + a
 
-            if mode =='radio':
-                df = self.hkb
-            elif mode == 'dist':
-                df = self.distdf
+            df = self.hkb
 
-            # determine time
-            if isinstance(t,list):
-                tstart = t[0]
-                tstop = t[-1]
-                val = df[(df.index >= tstart) & (df.index <= tstop)][link]
-            elif t == '':
-                val = df[link]
-            else :
-                hstep = (df.index[1]-df.index[0])/2.
-                val = df[(df.index >= t-hstep) & (df.index <= t+hstep)][link]
-
-        if ('BS' in techno):
-            
+        elif ('BS' in techno):
             if (a +'-' + b) in self.bespo.keys():
                 link = a +'-' + b
             else :
@@ -3312,16 +3425,25 @@ bernard
 
             df = self.bespo
 
-            # determine time
-            if isinstance(t,list):
-                tstart = t[0]
-                tstop = t[-1]
-                val = df[(df.index >= tstart) & (df.index <= tstop)][link]
-            elif t == '':
-                val = df[link]
+        elif ('TCR' in techno):
+            if (a +'-' + b) in self.tcr.keys():
+                link = a +'-' + b
             else :
-                hstep = (df.index[1]-df.index[0])/2.
-                val = df[(df.index >= t-hstep) & (df.index <= t+hstep)][link]
+                link = b +'-' + a
+
+            df = self.tcr
+
+
+        # determine time
+        if isinstance(t,list):
+            tstart = t[0]
+            tstop = t[-1]
+            val = df[(df.index >= tstart) & (df.index <= tstop)][link]
+        elif t == '':
+            val = df[link]
+        else :
+            hstep = (df.index[1]-df.index[0])/2.
+            val = df[(df.index >= t-hstep) & (df.index <= t+hstep)][link]
 
 
         return val
@@ -3644,6 +3766,8 @@ bernard
             idf = self.hkb
         elif typ == 'BS':
             idf = self.bespo
+        elif typ == 'TCR':
+            idf = self.tcr
         mocapindex = pd.to_datetime(self.tmocap,unit='s')
         idf.index = pd.to_datetime(idf.index,unit='s')
 
@@ -3657,7 +3781,8 @@ bernard
             self.hkb = df
         elif typ == 'BS':
             self.bespo = df
-
+        elif typ == 'TCR':
+            self.tcr = df
 
     def _align_devdf_on_hkb(self,devdf,hkbdf):
 
