@@ -19,11 +19,38 @@ from skimage import img_as_ubyte
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
+import pickle
 
-def cor_ls():
+# Those lines handle incompatibility between mayavi and VTK
+# and redirect noisy warning message into a log file
+# import vtk 
+# output=vtk.vtkFileOutputWindow()
+# output.SetFileName("mayaviwarninglog.tmp")
+# vtk.vtkOutputWindow().SetInstance(output)
+
+
+def cor_log(short=True):
     filelog = os.path.join(os.environ['CORMORAN'],'RAW','Doc','MeasurementLog.csv')
     log = pd.read_csv(filelog)
-    return log
+    if short :
+        log['day'] =  [x.split('/')[0] for x in log['Date'].values]
+        log['serie']=log['Meas Serie']
+        return log[['serie','day','Subject','techno']]
+    else:
+        return log
+
+
+
+
+def time2npa(lt):
+
+    """ pd.datetime.time to numpy array
+    """
+    ta = (lt.microsecond*1e-6+
+    lt.second+
+    lt.minute*60+
+    lt.hour*3600)
+    return(ta)
 
 
 class CorSer(PyLayers):
@@ -46,14 +73,13 @@ class CorSer(PyLayers):
 
         if day == 11:
             if serie in [7,8]:
-                raise AttributeError('Serie '+serie + \
+                raise AttributeError('Serie '+str(serie) + \
                                      ' has no hkb data and will not be loaded')
         if day ==12:
             if serie in [17,18,19,20]:
-                raise AttributeError('Serie '+serie + \
+                raise AttributeError('Serie '+str(serie) + \
                                      ' has no hkb data and will not be loaded')
         # Measures
-
         if day==11:
             self.stcr = [1,2,3,4,10,11,12,32,33,34,35,9,17,18,19,20,25,26]
             self.shkb = [5,6,13,14,15,16,21,22,23,24,27,28,29,30,31,32,33,34,35]
@@ -70,16 +96,15 @@ class CorSer(PyLayers):
         self.typ=''
 
         if serie in self.shkb:
-            self.loadhkb(serie=serie,day=day,source=source)
+            self._loadhkb(serie=serie,day=day,source=source)
 
         if serie in self.stcr:
-            self.loadTCR(serie=serie,day=day)
+            self._loadTCR(serie=serie,day=day)
 
         if serie in self.sbs:
-            self.loadBS(serie=serie,day=day)
+            self._loadBS(serie=serie,day=day)
 
-
-
+        # set filename
         if self.typ=='FULL':
             self._filename = 'Sc' + self.scenario + '_S' + str(self.serie) + '_R' + str(self.run) + '_' + self.typ.capitalize()
         else:
@@ -88,14 +113,13 @@ class CorSer(PyLayers):
 
         # Layout
         self.L= Layout('MOCAP-small2.ini')
-        #self.L= Layout('MOCAP.ini')
-        #self.L= Layout('MOCAPext.ini')
+
 
         # Infrastructure Nodes
-        self.loadinfranodes()
-        self.loadcam()
+        self._loadinfranodes()
+        self._loadcam()
 
-        # BODY
+        # BODY & interferers
         self.subject = str(self.log['Subject'].values[0]).split(' ')
         # filter typos in  self.subject
         self.subject = filter(lambda x : len(x)!=0,self.subject)
@@ -104,23 +128,58 @@ class CorSer(PyLayers):
             self.subject[uj]='Jihan'
         
         if serie in self.mocap :
-            self.loadbody(serie=serie,day=day)
+            self._loadbody(serie=serie,day=day)
             self._distancematrix()
-            self.computedevpdf()
+            self._computedevpdf()
             if isinstance(self.B,dict):
                 for b in self.B:
                     self.B[b].traj.Lfilename=copy.copy(self.L.filename)
             else :
                 self.B.traj.Lfilename=copy.copy(self.L.filename)
 
-        self.title1 = 'Scenario:'+str(self.scenario)+' Serie:'+str(self.serie)+' Run:'+str(self.run)
-        self.title2 = 'Type:'+str(self.typ)+ ' Subject:'+str(self.subject[0])
+        # reference time is tmocap 
+        self.tmocap = self.B[self.subject[0]].time
 
-        self.offset={'video':[],
-                     'hkb':[],
-                     'tcr':[],
-                     'bs':[]
-                     }
+        # load offset dict
+        self.offset= self._load_offset_dict()
+
+        # #######################
+        # realign Radio on mocap
+        ########################
+        # 1 - Resample radio time => mocap time
+        # 2 - (if available) apply offset
+
+        if ('BS' in self.typ) or ('FULL' in self.typ):
+            print '\nAlign BS data frame index on mocap...',
+            self._align_on_devdf(typ='BS')
+            try:
+                self._apply_bs_offset()
+                print 'and time-offset applied'
+            except: 
+                print ('\nWARNING : No BS offset not yet set => use self.offset_setter_bs() (NOT YET IMPLEMENTED)')
+
+        if ('TCR' in self.typ) or ('FULL' in self.typ):
+            print '\nAlign TCR data frame index on mocap...', 
+            self._align_on_devdf(typ='TCR')
+            try:
+                self._apply_tcr_offset()
+                print 'and time-offset applied'
+            except: 
+                print ('\nWARNING : No HKB offset not yet set => use self.offset_setter_hkb()')
+
+
+        if ('HK' in self.typ) or ('FULL' in self.typ):
+            print '\nAlign HKB data frame index on mocap...', 
+            self._align_on_devdf(typ='HKB')
+            try:
+                self._apply_hkb_offset()
+                print 'and time-offset applied'
+            except: 
+                print ('\nWARNING : No HKB offset not yet set => use self.offset_setter_hkb()')
+
+        print '\nCreate distance Dataframe'
+        self._computedistdf()
+
 
     def __repr__(self):
         st = ''
@@ -153,7 +212,78 @@ class CorSer(PyLayers):
         return(st)
 
 
-    def loadcam(self):
+    # @property
+    # def dev(self):
+    #     """ display device techno, id , id on body, body owner,...
+    #     """
+        
+    #     title = '{0:21} | {1:7} | {2:8} | {3:10} '.format('Name in Dataframe', 'Real Id', 'Body Id', 'Subject')
+    #     print title + '\n' + '-'*len(title) 
+    #     if ('HK' in self.typ) or ('FULL' in self.typ):
+    #         hkbkeys = self.idHKB.keys()
+    #         hkbkeys.sort()
+    #         for d in hkbkeys:
+    #             dev = self.devmapper(self.idHKB[d],'HKB')
+    #             print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+    #     if ('TCR' in self.typ) or ('FULL' in self.typ):
+    #         tcrkeys = self.idTCR.keys()
+    #         tcrkeys.sort()
+    #         for d in tcrkeys:
+    #             dev = self.devmapper(self.idTCR[d],'TCR')
+    #             print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+
+    @property
+    def dev(self):
+        """ display device techno, id , id on body, body owner,...
+        """
+        
+        title = '{0:21} | {1:7} | {2:8} | {3:10} '.format('Name in Dataframe', 'Real Id', 'Body Id', 'Subject')
+        print title + '\n' + '='*len(title) 
+        # access points HKB
+        for d in self.din:
+            if ('HK' in d) :
+                dev = self.devmapper(d,'HKB')
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+        if 'FULL' in self.typ:
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+        for d in self.din:
+            if ('BS' in d) :
+                dev = self.devmapper(d,'BS')
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+        if 'FULL' in self.typ:
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+
+        # access points TCR
+        for d in self.din:
+            if ('TCR' in d)  :
+                dev = self.devmapper(d,'TCR')
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+        print '{0:66}'.format('-'*len(title) )
+        # device per RAT per body
+        for b in self.B:
+            # HKB per body
+            for d in self.B[b].dev.keys():
+                if ('HK' in d):
+                    dev = self.devmapper(d,'HKB')
+                    print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+            # bespoon
+            if ('FULL' in self.typ) or ('HKB' in self.typ):
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+            for d in self.B[b].dev.keys():
+                if ('BS' in d):
+                    dev = self.devmapper(d,'BS')
+                    print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+            # print '{0:66}'.format('-'*len(title) )
+            # TCR per body
+            if 'FULL' in self.typ:
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+            for d in self.B[b].dev.keys():
+                if ('TCR' in d):
+                    dev = self.devmapper(d,'TCR')
+                    print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+            print '{0:66}'.format('-'*len(title) )
+
+    def _loadcam(self):
 
         self.cam = np.array([
             [-6502.16643961174,5440.97951452912,2296.44437108561],
@@ -174,7 +304,7 @@ class CorSer(PyLayers):
             ])*1e-3
 
 
-    def loadinfranodes(self):
+    def _loadinfranodes(self):
         """ load infrastrucutre nodes
 
 
@@ -226,7 +356,7 @@ bernard
         """
 
         filename = os.path.join(self.rootdir,'RAW','11-06-2014','MOCAP','scene.c3d')
-        print "\nload infrastructure node position"
+        print "\nload infrastructure node position:",
         a,self.infraname,pts,i = c3d.ReadC3d(filename)
 
         pts = pts/1000.
@@ -238,37 +368,61 @@ bernard
 
             self.din.update(
                 {'HKB:1':{'p':mphkb[3],
-                          'T':np.eye(3)},
+                          'T':np.eye(3),
+                          's3off':0.},
+
                  'HKB:2':{'p':mphkb[2],
                           'T': np.array([[-0.44807362,  0.89399666,  0.],
                                          [-0.89399666, -0.44807362,  0.],
-                                         [ 0.,0.,1.        ]])}      ,
+                                         [ 0.,0.,1.        ]]),
+                          's3off':0.}      ,
                  'HKB:3':{'p':mphkb[1],
                           'T':array([[-0.59846007, -0.80115264,  0.],
                                      [ 0.80115264, -0.59846007,  0.],
-                                     [ 0.,0.,  1.]])},
+                                     [ 0.,0.,  1.]]),
+                          's3off':0.},
                  'HKB:4':{'p':mphkb[0],
                           'T':array([[-0.44807362, -0.89399666,  0.],
                                      [ 0.89399666, -0.44807362,  0.],
-                                     [ 0.,0.,  1.]])}
+                                     [ 0.,0.,  1.]]),
+                          's3off':0.}
                  })
 
         if ('TCR' in self.typ) or ('FULL' in self.typ):
             self.din.update({'TCR:32':{'p':mpts[9],
-                                       'T':np.eye(3)},
+                                       'T':np.eye(3),
+                                       's3off':0.1},
                  'TCR:24':{'p':mpts[6],
                            'T': np.array([[-0.44807362,  0.89399666,  0.],
                                          [-0.89399666, -0.44807362,  0.],
-                                         [ 0.,0.,1.        ]])},
+                                         [ 0.,0.,1.        ]]),
+                           's3off':0.1},
                  'TCR:27':{'p':mpts[3],
                            'T':array([[-0.59846007, -0.80115264,  0.],
                                      [ 0.80115264, -0.59846007,  0.],
-                                     [ 0.,0.,  1.]])},
+                                     [ 0.,0.,  1.]]),
+                           's3off':0.1},
                  'TCR:28':{'p':mpts[0],
                            'T':array([[-0.44807362, -0.89399666,  0.],
                                      [ 0.89399666, -0.44807362,  0.],
-                                     [ 0.,0.,  1.]])}
+                                     [ 0.,0.,  1.]]),
+                           's3off':0.1}
                  })
+
+        if self.day == 12:
+            # BS idem HKB:1 and HKB:2
+            if ('BS'  in self.typ) or ('FULL' in self.typ):
+                self.din.update(
+                {'BS:74':{'p':mphkb[3],
+                          'T':np.eye(3),
+                          's3off':-0.2},
+                 'BS:157':{'p':mphkb[2],
+                          'T': np.array([[-0.44807362,  0.89399666,  0.],
+                                         [-0.89399666, -0.44807362,  0.],
+                                         [ 0.,0.,1.        ]]),
+                          's3off':-0.2}      ,
+                 })
+
 
         # self.pts= np.empty((12,3))
         # self.pts[:,0]= -mpts[:,1]
@@ -289,14 +443,14 @@ bernard
         self.log = log[(log['Meas Serie'] == self.serie) & (log['Date'] == date)]
 
 
-    def loadbody(self,day=11,serie=''):
+    def _loadbody(self,day=11,serie=''):
         """ load log file
         """
         self.B={}
         color=['LightBlue','YellowGreen','PaleVioletRed','white','white','white','white','white','white','white']
 
         for us,subject in enumerate(self.subject):
-            print "\nload ",subject, " body"
+            print "\nload ",subject, " body:",
             seriestr = str(self.serie).zfill(3)
             if day == 11:
                 filemocap = os.path.join(self.rootdir,'RAW',str(self.day)+'-06-2014','MOCAP','serie_'+seriestr+'.c3d')
@@ -326,10 +480,14 @@ bernard
                      'Claude_Cylindre:',
                      'Meriem_Cylindre:']
             intertmp=[]
-            for i in self.interf:
+            for ui,i in enumerate(self.interf):
                 try:
-                    print "load ",i, " interfering body"
-                    self.B.update({i:Cylinder(name=i,_filemocap=filemocap,unit = 'mm')})
+                    print "load ",i, " interfering body:",
+
+                    self.B.update({i:Cylinder(name=i,
+                                              _filemocap=filemocap,
+                                              unit = 'mm',
+                                              color = color[ui])})
                     intertmp.append(i)
                 except:
                     print "Warning ! load ",i, " FAIL !"
@@ -340,7 +498,7 @@ bernard
         #     self.B = self.B[self.subject]
 
 
-    def loadTCR(self,day=11,serie='',scenario='20',run=1):
+    def _loadTCR(self,day=11,serie='',scenario='20',run=1):
         """ load TCR data
 
         """  
@@ -381,8 +539,8 @@ bernard
                   'WristRight':26,
                   'WristLeft':48,
                   'KneeLeft':33,
-                  'AnckleRight':36,
-                  'AnckleLeft':37}
+                  'AnkleRight':36,
+                  'AnkleLeft':37}
             dirname = os.path.join(self.rootdir,'POST-TREATED','11-06-2014','TCR')
 
 
@@ -465,11 +623,18 @@ bernard
         self.tcr.index = t
         self.ttcr=self.tcr.index
 
-    def loadBS(self,day=11,serie='',scenario='20',run=1):
+    def _loadBS(self,day=11,serie='',scenario='20',run=1):
         """ load BeSpoon data
 
         """
-        self.dBS = {'LeftWrist?':157,'RightAnckle?':74}
+        if day == 11:
+            self.dBS = {'WristRight':157,'AnkleRight':74,'HandRight':0}
+        elif day == 12:
+            self.dBS = {'AP1':157,'AP2':74,'HandRight':0}
+        self.idBS={}
+        for k in self.dBS:
+            self.idBS[self.dBS[k]]=k
+
         if day==11:
             dirname = os.path.join(self.rootdir,'POST-TREATED','11-06-2014','BeSpoon')
         if day==12:
@@ -482,10 +647,29 @@ bernard
             filesc = filter(lambda x : 'Sc'+scenario in x ,files)
             self._fileBS = filter(lambda x : 'R'+str(run) in x ,filsc)[0]
 
-        self.bespo = pd.read_csv(os.path.join(dirname,self._fileBS),index_col='tu')
-        self.s157 = self.bespo[self.bespo['Sensor']==157]
+        bespo = pd.read_csv(os.path.join(dirname,self._fileBS),index_col='ts')
+
+
+        gb = bespo.groupby(['Sensor'])
+        # get device id 
+        devid,idevid = np.unique(bespo['Sensor'],return_index=True)
+        # get index of each group
+        dgb={d:gb.get_group(d) for d in devid}
+        lgb=[]
+        for i in dgb:
+            ind = dgb[i].index/1e3
+            dti = pd.to_datetime(ind,unit='s')
+            npai=time2npa(dti)
+            npai = npai - npai[0]
+            dgb[i].index=pd.Index(npai)
+            lgb.append(pd.DataFrame(dgb[i]['d'].values,columns=[self.idBS[0]+'-'+self.idBS[i]],index=dgb[74].index))
+        df =lgb[0].join(lgb[1])
+        self.bespo=df
+
+
+        #self.s157 = self.bespo[self.bespo['Sensor']==157]
         #self.s157.set_index(self.s157['tu'].values/1e9)
-        self.s74  = self.bespo[self.bespo['Sensor']==74]
+        #self.s74  = self.bespo[self.bespo['Sensor']==74]
         #self.s74.set_index(self.s74['tu'].values/1e9)
         #t157 = np.array(self.s157['tu']/(1e9))
         #self.t157 = t157-t157[0]
@@ -493,7 +677,7 @@ bernard
         #self.t74 = t74 - t74[0]
 
 
-    def loadhkb(self,day=11,serie='',scenario='20',run=1,source='CITI'):
+    def _loadhkb(self,day=11,serie='',scenario='20',run=1,source='CITI'):
 
         if day == 11:
             if serie == 5:
@@ -501,7 +685,7 @@ bernard
 
         if day==11:
             self.dHKB ={'AP1':1,'AP2':2,'AP3':3,'AP4':4,
-                       'HeadRight':5,'TorsoTopRight':6,'TorsoTopLeft':7,'BackCenter':8,'ElbowRight':9,'ElbowLeft':10,'HipRight':11,'WristRight':12,'WristLeft':13,'KneeLeft':14,'AnckleRight':16,'AnckleLeft':15}
+                       'HeadRight':5,'TorsoTopRight':6,'TorsoTopLeft':7,'BackCenter':8,'ElbowRight':9,'ElbowLeft':10,'HipRight':11,'WristRight':12,'WristLeft':13,'KneeLeft':14,'AnkleRight':16,'AnkleLeft':15}
             if source=='UR1' :
                 dirname = os.path.join(self.rootdir,'POST-TREATED','11-06-2014','HIKOB')
             elif source=='CITI':
@@ -552,10 +736,24 @@ bernard
             self.rssi = data['val']
             self.thkb = np.arange(np.shape(self.rssi)[2])*25.832e-3
 
-        self.topandas()
+        def topandas():
+            try:
+                self.hkb = pd.DataFrame(index=self.thkb[0])
+            except:
+                self.hkb = pd.DataFrame(index=self.thkb)
+            for k in self.idHKB:
+                for l in self.idHKB:
+                    if k!=l:
+                        col  = self.idHKB[k]+'-'+self.idHKB[l]
+                        rcol = self.idHKB[l]+'-'+self.idHKB[k]
+                        if rcol not in self.hkb.columns:
+                            rssi  = self.rssi[k-1,l-1,:]
+                            self.hkb[col] = rssi
+
+        topandas()
         self.hkb = self.hkb[self.hkb!=0]
 
-    def visimda(self,techno='HKB',square_mda=True,all_links=True):
+    def compute_visibility(self,techno='HKB',square_mda=True,all_links=True):
         """ determine visibility of links of a givcen techno
 
 
@@ -598,10 +796,10 @@ bernard
             >>> from pylayers.measures.cormoran import *
             >>> import matplotlib.pyplot as plt
             >>> C=CorSer(serie=14,day=12)
-            >>> inter,links=C.visimda(techno='TCR',square_mda=True)
+            >>> inter,links=C.compute_visibility(techno='TCR',square_mda=True)
             >>> inter.shape
                 (15, 15, 12473)
-            >>>C.imshowvisimda(inter,links)
+            >>>C.imshowvisibility_i(inter,links)
 
 
         """
@@ -698,53 +896,37 @@ bernard
                 radius = np.concatenate((radius,cyl.radius[np.newaxis]))
                 usub_start=usub_stop
                 usub_stop=usub_stop+1
+
             f,g,X,Y,alpha,beta,dmin=seg.segdist(A,B,C,D,hard=True)
+
             intersect2D[:,usub_start:usub_stop,:]=g
-
-            # fig=plt.figure()
-            # ax=fig.add_subplot(111,projection='3d')
-            # ndev=58
-            # ncyl=0
-            # ax.plot([A[0,ndev,0],B[0,ndev,0]],[A[1,ndev,0],B[1,ndev,0]],[A[2,ndev,0],B[2,ndev,0]])
-            # for k in range(11):
-            #     ax.plot([C[0,k,0],D[0,k,0]],[C[1,k,0],D[1,k,0]],[C[2,k,0],D[2,k,0]],'k')
-            # ax.plot([X[0,ndev,ncyl,0],Y[0,ndev,ncyl,0]],[X[1,ndev,ncyl,0],Y[1,ndev,ncyl,0]],[X[2,ndev,ncyl,0],Y[2,ndev,ncyl,0]])
-            # plt.show()
             # import ipdb
             # ipdb.set_trace()
-            # import ipdb
-            # ipdb.set_trace()
+            # USEFUL Lines for debug
+            #########################
 
-            # # al1,be1,dm1=seg.dmin3d(A,B,C,D)
-            # # f1,g1=seg.dist(A,B,C,D,al1,be1)
-            # # gg1=np.sqrt(g1)
+            # def plt3d(ndev=53,ncyl=0,kl=11499):
+            #     fig=plt.figure()
+            #     ax=fig.add_subplot(111,projection='3d')
+            #     if not isinstance(kl,list):
+            #         kl=[kl]
 
-
-            
-            # aa=A[:,ndev,0]
-            # bb=B[:,ndev,0]
-            # interf=[0]*11
-            # interg=[0]*11
-            # for i in range(11):
-            #     cc=C[:,i,0]
-            #     dd=D[:,i,0]
-            #     alpha,beta,dmin=seg.dmin3d_nonvectorized(aa,bb,cc,dd)
-            #     ff,gg,xx,yy=seg.dist_nonvectorized(aa,bb,cc,dd,alpha,beta)
-
-            #     interf[i]=np.sqrt(ff)#<radius[i,0]
-            #     interg[i]=np.sqrt(gg)#<radius[i,0]
-            # f1=plt.figure()
-            # ax1=f1.add_subplot(111,projection='3d')
-            # ax1.plot([aa[0],bb[0]],[aa[1],bb[1]],[aa[2],bb[2]])
-            # ax1.plot([cc[0],dd[0]],[cc[1],dd[1]],[cc[2],dd[2]])
-            # ax1.plot([xx[0],yy[0]],[xx[1],yy[1]],[xx[2],yy[2]])
-            # plt.draw()
+            #     for ktime in kl:
+            #         ax.plot([A[0,ndev,ktime],B[0,ndev,ktime]],[A[1,ndev,ktime],B[1,ndev,ktime]],[A[2,ndev,ktime],B[2,ndev,ktime]])
+            #         [ax.plot([C[0,k,ktime],D[0,k,ktime]],[C[1,k,ktime],D[1,k,ktime]],[C[2,k,ktime],D[2,k,ktime]],'k') for k in range(11) ]
+            #         ax.plot([X[0,ndev,ncyl,ktime],Y[0,ndev,ncyl,ktime]],[X[1,ndev,ncyl,ktime],Y[1,ndev,ncyl,ktime]],[X[2,ndev,ncyl,ktime],Y[2,ndev,ncyl,ktime]])
+            #     ax.auto_scale_xyz([-5, 5], [-5, 5], [0, 2])
+            #     plt.show()
             # import ipdb
             # ipdb.set_trace()
 
 
-        uinter1 = np.where((intersect2D<=(radius)))
-        uinter0 = np.where((intersect2D>(radius)))
+
+
+        uinter1 = np.where((intersect2D<=(radius-0.01)))
+        uinter0 = np.where((intersect2D>(radius-0.01)))
+        # intersect2D_=copy.copy(intersect2D)
+
         intersect2D[uinter1[0],uinter1[1],uinter1[2]]=1
         intersect2D[uinter0[0],uinter0[1],uinter0[2]]=0
         # # integrate the effect of all bodies by summing on axis 1
@@ -765,11 +947,26 @@ bernard
 
         return intersect,links
 
-    def imshowvisimda(self,inter,links,**kwargs):
+    def imshowvisibility(self,inter,links,**kwargs):
         """  imshow visibility mda
+
+
+        Parameters 
+        ----------
 
         inter : (nb link x nb link x timestamps)
         links : (nblinks)
+        t : time
+
+
+        Example 
+        -------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> import matplotlib.pyplot as plt
+        >>> C=CorSer(serie=6,day=12)
+        >>> inter,links=C.compute_visibility(techno='TCR',square_mda=True)
+        >>> i,l=C.imshowvisibility_i(inter,links)
 
         """
         defaults = { 't':0,
@@ -791,6 +988,7 @@ bernard
             ax = kwargs.pop('ax')
 
 
+        kt=np.where(self.tmocap <= kwargs['t'])[0][-1]
         plt.xticks(np.arange(0, len(links), 1.0))
         plt.yticks(np.arange(0, len(links), 1.0))
         ax.set_xlim([-0.5,len(links)-0.5])
@@ -801,119 +999,270 @@ bernard
         plt.setp(xtickNames, rotation=90, fontsize=8)
         plt.setp(ytickNames, rotation=0, fontsize=8)
         ims=[]
-        ax.imshow(inter[:,:,kwargs['t']],interpolation='nearest')
+        ax.imshow(inter[:,:,kt],interpolation='nearest')
         if kwargs['grid']:
             ax.grid()
-
         return fig,ax
 
+    def _show3i(self,t=0,**kwargs):
+        """ show3 interactive
+        """
 
-    # def visimda(self):
-    #     """ determine visibility MDA
-    #     """
+        fig =plt.figure(num='Jog',figsize=(5,1.5))
 
-    #     import itertools
-    #     # link ids order 
-    #     ids = np.unique(self.devdf['id'])
-    #     # nblink ids
-    #     nbids = len(ids)
-    #     # nb infra nodes 
-    #     nbin = len(self.din)
-    #     # total link ids ( including infra nodes)
-    #     tids =np.hstack((ids,self.din.keys()))
-    #     # A-B corresponds to links
+        # set time to -10 is a trick to make appear interferers cylinder
+        # because __refreshshow3i only update the data of the cylinder.
+        # if cylinder is not present in the first _show3, they are not displayed
+        # later.
+        time=self.B[self.subject[0]].time
 
-    #     # extract all dev position on body
-    #     # dev : (3 x (nb devices + nb infra nodes) x nb_timestamp)
-    #     dev = np.empty((3,nbids+nbin,len(self.devdf.index)/nbids))
-    #     for ik,i in enumerate(ids) :
-    #         dev[:,ik,:] = self.devdf[self.devdf['id']==i][['x','y','z']].values.T
-    #     # add infra nodes
-    #     for ik,i in enumerate(self.din):
-    #         dev[:,nbids+ik,:]=self.din[i]['p'][:,np.newaxis]
+        fId = np.where(time<= t)[0][-1]
 
-    #     # determine all the links
-    #     links = np.array([x for x in itertools.combinations(range(nbids+nbin),2)])
-    #     A = dev[:,links[:,0]]
-    #     B = dev[:,links[:,1]]
+        kwargs['bodytime']=[self.tmocap[-10]]
+        kwargs['returnfig']=True
+        kwargs['tagtraj']=False
+        mayafig = self._show3(**kwargs)
+        self.__refreshshow3i(fId)
+        # ax.grid()
 
-    #     dev_map=np.array(zip(*[tids[links[:,0]],tids[links[:,1]]]))
 
-    #     # C-D correspond to bodies segments
-    #     # C or D : 3 x 11 body segments x time
-    #     # radius of cylinders are (nb_cylinder x time)
-    #     for b in self.B:
-    #         # if b is a body not a cylinder
-    #         if not 'Cylindre' in b:
-    #             uta = self.B[b].sl[:,0].astype('int')
-    #             uhe = self.B[b].sl[:,1].astype('int')
-    #             rad = self.B[b].sl[:,2]
-    #             try:
-    #                 C = np.concatenate((C,self.B[b].d[:,uta,:]),axis=1)
-    #                 D = np.concatenate((D,self.B[b].d[:,uhe,:]),axis=1)
-    #                 radius = np.concatenate((radius,rad[:,np.newaxis]*np.ones((1,C.shape[2]))),axis=0)
-    #             except:
-    #                 import ipdb
-    #                 ipdb.set_trace()
-    #                 C = self.B[b].d[:,uta,:]
-    #                 D = self.B[b].d[:,uhe,:]
-    #                 radius = rad[:,np.newaxis]*np.ones((1,C.shape[2]))
-    #         else:
+        # matplotlib Widgets 
 
-    #                 cyl = self.B[b]
-    #                 # top of cylinder
-    #                 top = cyl.d[:,cyl.topnode,:]
-    #                 # bottom of cylinder =top with z =0
-    #                 bottom = copy.copy(cyl.d[:,cyl.topnode,:])
-    #                 bottom[2,:]=0.
-    #                 # top 3 x 1 X time
-    #                 top=top[:,np.newaxis,:]
-    #                 bottom=bottom[:,np.newaxis,:]
-    #                 C = np.concatenate((C,top),axis=1)
-    #                 D = np.concatenate((D,bottom),axis=1)
-    #                 radius = np.concatenate((radius,cyl.radius[np.newaxis]))
-    #     import ipdb
-    #     ipdb.set_trace()
-    #     f,g,alpha,beta,dmin=seg.segdist(A,B,C,D,hard=True)
-    #     # intersection matrix
-    #     intersect2D = np.zeros(f.shape,dtype='int')
+        slax=plt.axes([0.1, 0.5, 0.8, 0.3])
+        slax.set_title('t='+str(time[fId]),loc='left')
+        sliderx = Slider(slax, "time", 0, len(time),
+                        valinit=fId, color='#AAAAAA')
 
-    #     uinter= np.where(f<radius[np.newaxis,:,np.newaxis])
-    #     intersect2D[uinter[0],uinter[1],uinter[2]]=1
+        def update_x(val):
+            value = int(sliderx.val)
+            self.__refreshshow3i(val)
+            slax.set_title('t='+str(time[val]),loc='left')
+            fig.canvas.draw_idle()
+        sliderx.on_changed(update_x)
 
-    #     intersect = np.sum(intersect2D,axis=1)>0
-    #     return intersect,dev_map
+
+        def plus(event):
+
+            sliderx.set_val(sliderx.val +1)
+            fig.canvas.draw_idle()
+
+        def minus(event):
+            sliderx.set_val(sliderx.val -1)
+            fig.canvas.draw_idle()
+
+        def pplus(event):
+            sliderx.set_val(sliderx.val +10)
+            fig.canvas.draw_idle()
+
+
+        def mminus(event):
+            sliderx.set_val(sliderx.val -10)
+            fig.canvas.draw_idle()
+
+        # QUIT by pressing 'q'
+        def press(event):
+            if event.key == 'q':
+                mlab.close(mayafig)
+                plt.close(fig)
+        fig.canvas.mpl_connect('key_press_event', press)
+
+
+        # -1 frame axes
+        axm = plt.axes([0.2, 0.05, 0.1, 0.15])
+        bm = Button(axm, '-1')
+        bm.on_clicked(minus)
+
+        # +1 frame axes
+        axp = plt.axes([0.7, 0.05, 0.1, 0.15])
+        bp = Button(axp, '+1')
+        bp.on_clicked(plus)
+
+
+        # -10 frames axes
+        axmm = plt.axes([0.1, 0.05, 0.1, 0.15])
+        bmm = Button(axmm, '-10')
+        bmm.on_clicked(mminus)
+
+        # +10 frames axes
+        axpp = plt.axes([0.8, 0.05, 0.1, 0.15])
+        bpp = Button(axpp, '+10')
+        bpp.on_clicked(pplus)
+
+        plt.show()
+
+
+    def __refreshshow3i(self,kt):
+        """ show3 update for interactive mode
+            USED in imshowvisibility_i
+        """
+        t=self.tmocap[kt]
+
+        for ib,b in enumerate(self.B):
+            self.B[b].settopos(t=t,cs=True)
+
+            try:
+                # body
+                X=np.hstack((self.B[b]._pta,self.B[b]._phe))
+                self.B[b]._mayapts.mlab_source.set(x=X[0,:], y=X[1,:], z=X[2,:])
+                # device
+                udev = [self.B[b].dev[i]['uc3d'][0] for i in self.B[b].dev]
+                Xd=self.B[b]._f[kt,udev,:].T
+                self.B[b]._mayadev.mlab_source.set(x=Xd[0,:], y=Xd[1,:], z=Xd[2,:])
+                # name
+                uupper = np.where(X[2]==X[2].max())[0]
+                self.B[b]._mayaname.actors.pop()
+                self.B[b]._mayaname = mlab.text3d(X[0,uupper][0],X[1,uupper][0],X[2,uupper][0],self.B[b].name,scale=0.05,color=(1,0,0))
+                # s = np.hstack((cylrad,cylrad))
+            except:
+                # cylinder
+                X=np.vstack((self.B[b].top,self.B[b].bottom))
+                self.B[b]._mayapts.mlab_source.set(x=X[:,0], y=X[:,1], z=X[:,2])
+                # name
+                self.B[b]._mayaname.actors.pop()
+                self.B[b]._mayaname = mlab.text3d(self.B[b].top[0],self.B[b].top[1],self.B[b].top[2],self.B[b].name,scale=0.05,color=(1,0,0))
+                # vdict
+                V = self.B[b].traj[['vx','vy','vz']].iloc[self.B[b].toposFrameId].values
+
+                self.B[b]._mayavdic.mlab_source.set(x= self.B[b].top[0],y=self.B[b].top[1],z=self.B[b].top[2],u=V[ 0],v=V[ 1],w=V[ 2])
+
+
+    def imshowvisibility_i(self,inter,links,fId=0,**kwargs):
+        """  imshow visibility mda interactive
+
+        Parameters 
+        ----------
+
+        inter : (nb link x nb link x timestamps)
+        links : (nblinks)
+        fId: frame Id
+
+
+        Example 
+        -------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> import matplotlib.pyplot as plt
+        >>> C=CorSer(serie=6,day=12)
+        >>> inter,links=C.visimda(techno='TCR',square_mda=True)
+        >>> i,l=C.imshowvisibility_i(inter,links)
+
+        """
+
+
+
+        fig, ax = plt.subplots()
+        fig.subplots_adjust(bottom=0.3)
+
+
+        time=self.B[self.subject[0]].time
+
+        vertc = [(0,-10),(0,-10),(0,10),(0,-10)]
+        poly = plt.Polygon(vertc)
+        pp = ax.add_patch(poly)
+
+        plt.xticks(np.arange(0, len(links), 1.0))
+        plt.yticks(np.arange(0, len(links), 1.0))
+        ax.set_xlim([-0.5,len(links)-0.5])
+        ax.set_ylim([len(links)-0.5,-0.5])
+        ax.xaxis.set_ticks_position('top') 
+        xtickNames = plt.setp(ax, xticklabels=links)
+        ytickNames = plt.setp(ax, yticklabels=links)
+        plt.setp(xtickNames, rotation=90, fontsize=8)
+        plt.setp(ytickNames, rotation=0, fontsize=8)
+        ims=[]
+        l=ax.imshow(inter[:,:,fId],interpolation='nearest')
+        # set time to -10 is a trick to make appear interferers cylinder
+        # because __refreshshow3i only update the data of the cylinder.
+        # if cylinder is not present in the first _show3, they are not displayed
+        # later.
+        kwargs['bodytime']=[self.tmocap[-10]]
+        kwargs['returnfig']=True
+        kwargs['tagtraj']=False
+        mayafig = self._show3(**kwargs)
+        self.__refreshshow3i(fId)
+        # ax.grid()
+
+
+        # matplotlib Widgets 
+
+        slax=plt.axes([0.1, 0.15, 0.8, 0.05])
+        slax.set_title('t='+str(time[fId]),loc='left')
+        sliderx = Slider(slax, "time", 0, inter.shape[-1],
+                        valinit=fId, color='#AAAAAA')
+
+        def update_x(val):
+            value = int(sliderx.val)
+            sliderx.valtext.set_text('{}'.format(value))
+            l.set_data(inter[:,:,value])
+            self.__refreshshow3i(val)
+            slax.set_title('t='+str(time[val]),loc='left')
+            fig.canvas.draw_idle()
+        sliderx.on_changed(update_x)
+
+
+        def plus(event):
+            sliderx.set_val(sliderx.val +1)
+            fig.canvas.draw_idle()
+        sliderx.on_changed(update_x)
+
+
+        def minus(event):
+            sliderx.set_val(sliderx.val -1)
+            fig.canvas.draw_idle()
+        sliderx.on_changed(update_x)
+
+        def pplus(event):
+            sliderx.set_val(sliderx.val +10)
+            fig.canvas.draw_idle()
+        sliderx.on_changed(update_x)
+
+
+        def mminus(event):
+            sliderx.set_val(sliderx.val -10)
+            fig.canvas.draw_idle()
+        sliderx.on_changed(update_x)
+
+        # # QUIT by pressing 'q'
+        # def press(event):
+        #     if event.key == 'q':
+        #         mlab.close(mayafig)
+        #         plt.close(fig)
+        # fig.canvas.mpl_connect('key_press_event', press)
+
+
+        # -1 frame axes
+        axm = plt.axes([0.3, 0.05, 0.1, 0.075])
+        bm = Button(axm, '-1')
+        bm.on_clicked(minus)
+
+        # +1 frame axes
+        axp = plt.axes([0.7, 0.05, 0.1, 0.075])
+        bp = Button(axp, '+1')
+        bp.on_clicked(plus)
+
+        # -10 frames axes
+        axmm = plt.axes([0.1, 0.05, 0.1, 0.075])
+        bmm = Button(axmm, '-10')
+        bmm.on_clicked(mminus)
+
+        # +10 frames axes
+        axpp = plt.axes([0.9, 0.05, 0.1, 0.075])
+        bpp = Button(axpp, '+10')
+        bpp.on_clicked(pplus)
+
+
+
+        plt.show()
+
+
 
 
     def _distancematrix(self):
         """Compute the ditance matrix between the nodes
 
             self.dist : (nb frame x nb_node x nb_node)
-            self.dist_nodes : list of used nodes (useful to make the association ;) )
+            self.dist_nodesmap : list of used nodes (useful to make the association ;) )
         """
-
-
-        # tdev = []
-        # for k in self.B.dev:
-        #     tdev.append(self.B.dev[k]['uc3d'][0])
-        # tdev = np.array(tdev)
-
-        # # pnb : nframe x ndevices x 3
-        # pnb = self.B._f[:,tdev,:]
-
-        # ln = []
-        # uin = []
-        # if ('HK' in self.typ) or ('FULL' in self.typ):
-        #     uin.extend(['HKB:1','HKB:2','HKB:3','HKB:4'])
-        # if ('TCR' in self.typ) or ('FULL' in self.typ):
-        #     uin.extend(['TCR:32','TCR:24','TCR:27','TCR:28'])
-        # ln = uin + self.B.dev.keys()
-        # pin = np.array([self.din[d]['p'] for d in uin])
-        # pin2=np.empty((pnb.shape[0],pin.shape[0],pin.shape[1]))
-        # pin2[:,:,:]=pin
-        # p = np.concatenate((pin2,pnb),axis=1)
-        # self.dist = np.sqrt(np.sum((p[:,:,np.newaxis,:]-p[:,np.newaxis,:,:])**2,axis=3))
-        # self.dist_nodes = ln
 
         if not isinstance(self.B,dict):
             B={self.subject[0]:self.B}
@@ -936,61 +1285,100 @@ bernard
                     pnb = B[b]._f[:,tdev,:]
         ln = []
         uin = []
+
         if ('HK' in self.typ) or ('FULL' in self.typ):
             uin.extend(['HKB:1','HKB:2','HKB:3','HKB:4'])
         if ('TCR' in self.typ) or ('FULL' in self.typ):
             uin.extend(['TCR:32','TCR:24','TCR:27','TCR:28'])
+        if self.day == 12:
+            if ('BS' in self.typ) or ('FULL' in self.typ):
+                uin.extend(['BS:74','BS:157'])
         ln = uin + bn
         pin = np.array([self.din[d]['p'] for d in uin])
         pin2=np.empty((pnb.shape[0],pin.shape[0],pin.shape[1]))
         pin2[:,:,:]=pin
         p = np.concatenate((pin2,pnb),axis=1)
         self.dist = np.sqrt(np.sum((p[:,:,np.newaxis,:]-p[:,np.newaxis,:,:])**2,axis=3))
-        self.dist_nodes = ln
+        self.dist_nodesmap = ln
 
-    def accessdm(self,a,b,techno):
-        """ access to the distance matrix
 
-            give name|id of node a and b and a given techno. retrun Groung truth
-            distance between the 2 nodes
+    def _computedistdf(self):
+        """Compute the ditance dataframe from distance matrix
         """
 
-        if 'HKB' in techno :
-            if isinstance(a,str):
-                ia = self.dHKB[a]
-            else:
-                ia = a
-                a = self.idHKB[a]
+        if ('HK' in self.typ) or ('FULL' in self.typ):
+            devmap = {self.devmapper(k,'hkb')[0]:self.devmapper(k,'hkb')[2] for k in self.dHKB}
+            udev = np.array([[self.dist_nodesmap.index(devmap[k.split('-')[0]]),self.dist_nodesmap.index(devmap[k.split('-')[1]])] for k in self.hkb.keys()])
+            iudev =np.array([(self.dist_nodesmap[u[0]]+'-'+self.dist_nodesmap[u[1]]) for u in udev])
+            df = pd.DataFrame(self.dist[:,udev[:,0],udev[:,1]],columns=iudev,index=self.tmocap)
 
-            if isinstance(b,str):
-                ib = self.dHKB[b]
-            else:
-                ib = b
-                b = self.idHKB[b]
+        if ('BS' in self.typ) or ('FULL' in self.typ):
+            devmap = {self.devmapper(k,'BS')[0]:self.devmapper(k,'BS')[2] for k in self.dBS}
+            udev = np.array([[self.dist_nodesmap.index(devmap[k.split('-')[0]]),self.dist_nodesmap.index(devmap[k.split('-')[1]])] for k in self.bespo.keys()])
+            iudev =np.array([(self.dist_nodesmap[u[0]]+'-'+self.dist_nodesmap[u[1]]) for u in udev])
+            dfb = pd.DataFrame(self.dist[:,udev[:,0],udev[:,1]],columns=iudev,index=self.tmocap)
+            df = df.join(dfb)
+            del dfb
 
-        elif 'TCR' in techno :
-            if isinstance(a,str):
-                ia = self.dTCR[a]
-            else:
-                ia = a
-                a = self.idTCR[a]
+        if ('TCR' in self.typ) or ('FULL' in self.typ):
+            devmap = {self.devmapper(k,'tcr')[0]:self.devmapper(k,'tcr')[2] for k in self.dTCR}
+            udev = np.array([[self.dist_nodesmap.index(devmap[k.split('-')[0]]),self.dist_nodesmap.index(devmap[k.split('-')[1]])] for k in self.tcr.keys() if not 'COORD' in k])
+            iudev =np.array([(self.dist_nodesmap[u[0]]+'-'+self.dist_nodesmap[u[1]]) for u in udev])
+            dft = pd.DataFrame(self.dist[:,udev[:,0],udev[:,1]],columns=iudev,index=self.tmocap)
+            if ('FULL' in self.typ):
+                df = df.join(dft)
+            else :
+                df = dft
+            del dft
 
-            if isinstance(b,str):
-                ib = self.dTCR[b]
-            else:
-                ib = b
-                b = self.idTCR[b]
+        self.distdf=df
 
-        else :
-            raise AttributeError('please give only 1 techno or radio node')
+    # def accessdm(self,a,b,techno=''):
+    #     """ access to the distance matrix
 
-        ka = techno+':'+str(ia)
-        kb = techno+':'+str(ib)
+    #         give name|id of node a and b and a given techno. retrun Groung truth
+    #         distance between the 2 nodes
+    #     # """
 
-        ua = self.dist_nodes.index(ka)
-        ub = self.dist_nodes.index(kb)
+    #     # a,ia,bia,subja=self.devmapper(a,techno)
+    #     # b,ib,bib,subjb=self.devmapper(b,techno)
 
-        return(ua,ub)
+    #     if 'HKB' in techno :
+    #         if isinstance(a,str):
+    #             ia = self.dHKB[a]
+    #         else:
+    #             ia = a
+    #             a = self.idHKB[a]
+
+    #         if isinstance(b,str):
+    #             ib = self.dHKB[b]
+    #         else:
+    #             ib = b
+    #             b = self.idHKB[b]
+
+    #     elif 'TCR' in techno :
+    #         if isinstance(a,str):
+    #             ia = self.dTCR[a]
+    #         else:
+    #             ia = a
+    #             a = self.idTCR[a]
+
+    #         if isinstance(b,str):
+    #             ib = self.dTCR[b]
+    #         else:
+    #             ib = b
+    #             b = self.idTCR[b]
+
+    #     else :
+    #         raise AttributeError('please give only 1 techno or radio node')
+
+    #     ka = techno+':'+str(ia)
+    #     kb = techno+':'+str(ib)
+
+    #     ua = self.dist_nodesmap.index(ka)
+    #     ub = self.dist_nodesmap.index(kb)
+
+    #     return(ua,ub)
 
 
 
@@ -1040,12 +1428,19 @@ bernard
         if ax == []:
             ax = fig.add_subplot(111)
 
+        if self.offset[self._filename].has_key('video_sec'):
+            offset = self.offset[self._filename]['video_sec']
+        elif offset != '':
+            offset = offset
+        else:
+            offset=0
+
         videofile = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','Videos')
         ldir = os.listdir(videofile)
         luldir = map(lambda x : self._filename in x,ldir)
         uldir = luldir.index(True)
         _filename = ldir[uldir]
-        filename = videofile+_filename
+        filename = os.path.join(videofile,_filename)
         vc = VideoFileClip(filename)
         F0 = vc.get_frame(t0+offset)
         I0 = img_as_ubyte(F0)
@@ -1061,12 +1456,21 @@ bernard
     def snapshots(self,t0=0,t1=10,offset=15.5):
         """
         """
+
+        if self.offset[self._filename].has_key('video_sec'):
+            offset = self.offset[self._filename]['video_sec']
+        elif offset != '':
+            offset = offset
+        else:
+            offset=0
+
+
         videofile = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','Videos')
         ldir = os.listdir(videofile)
         luldir = map(lambda x : self._filename in x,ldir)
         uldir = luldir.index(True)
         _filename = ldir[uldir]
-        filename = videofile+_filename
+        filename = os.path.join(videofile,_filename)
         vc = VideoFileClip(filename)
         F0 = vc.get_frame(t0+offset)
         F1 = vc.get_frame(t1+offset)
@@ -1091,6 +1495,8 @@ bernard
 
         body :boolean
             display bodytime(True)
+        bodyname : boolean
+            display body name
         bodytime: list
             list of time instant where body topos has to be shown
 
@@ -1116,6 +1522,8 @@ bernard
             display infrastructure nodes
         inname : boolean
             display infra strucutre node name
+        innamesize : float,
+            size of name of infrastrucutre nodes (0.1)
         incolor: str
             color of infrastructure nodes ('r')
         insize
@@ -1135,13 +1543,15 @@ bernard
         """
         defaults = { 'L':True,
                      'body':True,
+                     'bodyname':True,
                      'subject':[],
                      'interf':True,
-                     'trajectory' :True,
+                     'trajectory' :False,
                      'devsize':100,
                      'devlist':[],
                      'inodes' : True,
                      'inname' : True,
+                     'innamesize' : 0.1,
                      'incolor' : 'r',
                      'insize' : 0.1,
                      'camera':True,
@@ -1151,7 +1561,7 @@ bernard
                      'tagtraj':True,
                      'tagname':[],
                      'tagpoffset':[],
-                     'fontsizetag':0.5,
+                     'fontsizetag':0.1,
                      'trajectory_color_range':True
                     }
 
@@ -1177,8 +1587,11 @@ bernard
             X= np.array([v[i][1]['p'] for i in range(len(v))])
             mlab.points3d(X[:,0],X[:,1], X[:,2],scale_factor=kwargs['insize'],color=in_color)
         if kwargs['inname']:
-            [mlab.text3d(v[i][1]['p'][0],v[i][1]['p'][1],v[i][1]['p'][2],v[i][0],scale=0.5)
-            for i in range(len(v))]
+            [mlab.text3d(v[i][1]['p'][0],
+                        v[i][1]['p'][1],
+                        v[i][1]['p'][2]+v[i][1]['s3off'],
+                        v[i][0],
+                        scale=kwargs['innamesize']) for i in range(len(v))]
         if kwargs['body']:
 
             if kwargs['bodytime']==[]:
@@ -1190,7 +1603,11 @@ bernard
             for ki, i in enumerate(time):
                 for ib,b in enumerate(subject):
                     self.B[b].settopos(t=i,cs=True)
-                    self.B[b]._show3(dev=True,devlist=kwargs['devlist'],devsize=kwargs['devsize'],tube_sides=12)
+                    self.B[b]._show3(dev=True,
+                                    name = kwargs['bodyname'],
+                                    devlist=kwargs['devlist'],
+                                    devsize=kwargs['devsize'],
+                                    tube_sides=12)
                     if kwargs['tagtraj']:
                         X=self.B[b].traj[['x','y','z']].values[self.B[b].toposFrameId]
                         if kwargs['tagpoffset']==[]:
@@ -1205,7 +1622,7 @@ bernard
                 if kwargs['interf']:
                     for ib,b in enumerate(self.interf):
                         self.B[b].settopos(t=i,cs=True)
-                        self.B[b]._show3(tube_sides=12)
+                        self.B[b]._show3(name=kwargs['bodyname'],tube_sides=12)
 
         if kwargs['trajectory']:
             for b in subject:
@@ -1230,20 +1647,6 @@ bernard
                     74.048193730704611,
                     11.425837641867618,
                     array([ 0.48298163,  0.67806043,  0.0987967 ]))
-
-    def topandas(self):
-        try:
-            self.hkb = pd.DataFrame(index=self.thkb[0])
-        except:
-            self.hkb = pd.DataFrame(index=self.thkb)
-        for k in self.idHKB:
-            for l in self.idHKB:
-                if k!=l:
-                    col  = self.idHKB[k]+'-'+self.idHKB[l]
-                    rcol = self.idHKB[l]+'-'+self.idHKB[k]
-                    if rcol not in self.hkb.columns:
-                        rssi  = self.rssi[k-1,l-1,:]
-                        self.hkb[col] = rssi
 
 
     def imshow(self,time=100,kind='time'):
@@ -1309,6 +1712,32 @@ bernard
         #        cpt = cpt + 1
         return fig,(ax1,ax2)
 
+    def _load_offset_dict(self):
+        
+        path = os.path.join(os.environ['CORMORAN'],'POST-TREATED')
+        d = pickle.load( open( os.path.join(path,'offset_dictionnary.bin'), "rb" ) )
+
+        return d
+
+    def _save_offset_dict(self,d):
+
+        path = os.path.join(os.environ['CORMORAN'],'POST-TREATED')
+        d = pickle.dump( d, open( os.path.join(path,'offset_dictionnary.bin'), "wb" ) )
+
+    def _save_data_off_dict(self,filename,typ,value):
+        """ save 
+                - a given "value" of an for,
+                - a serie/run "filename",
+                - of a given typ (video|hkb|tcr|...)
+        """
+
+        d = self._load_offset_dict()
+        try:
+            d[filename].update({typ:value})
+        except:
+            d[filename]={}
+            d[filename][typ]=value
+        self._save_offset_dict(d)
 
 
     def offset_setter_video(self,a='AP1',b='WristRight',**kwargs):
@@ -1344,11 +1773,16 @@ bernard
             time=time[0]
 
 
-
         sab = self.hkb[a+'-'+b].values
         sabt = self.hkb[a+'-'+b].index
-        hkb = axs[1].plot(sabt,sab)
+        hkb = axs[1].plot(sabt,sab,label = a+'-'+b)
+        axs[1].legend()
 
+
+        try : 
+            init = self.offset[self._filename]['video_sec']
+        except:
+            init=time[0]
 
 
         videofile = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','Videos')
@@ -1356,11 +1790,12 @@ bernard
         luldir = map(lambda x : self._filename in x,ldir)
         uldir = luldir.index(True)
         _filename = ldir[uldir]
-        filename = videofile+_filename
+        filename = os.path.join(videofile,_filename)
         vc = VideoFileClip(filename)
-        F0 = vc.get_frame(0)
+        F0 = vc.get_frame(init)
         I0 = img_as_ubyte(F0)
         axs[0].imshow(F0)
+
 
 
         ########
@@ -1368,7 +1803,7 @@ bernard
         ########
         slide_xoffset_ax = plt.axes([0.1, 0.15, 0.8, 0.05])
         sliderx = Slider(slide_xoffset_ax, "video offset", 0, self.hkb.index[-1],
-                        valinit=time[0], color='#AAAAAA')
+                        valinit=init, color='#AAAAAA')
 
 
         # vertc = [(0,-10),(0,-10),(0,10),(0,-10)]
@@ -1406,8 +1841,8 @@ bernard
 
 
         def setter(event):
-            self.offset['video']=sliderx.val
-
+            self._save_data_off_dict(self._filename,'video_sec',sliderx.val)
+            self.offset= self._load_offset_dict()
         axp = plt.axes([0.3, 0.05, 0.1, 0.075])
         axset = plt.axes([0.5, 0.05, 0.1, 0.075])
         axm = plt.axes([0.7, 0.05, 0.1, 0.075])
@@ -1415,8 +1850,8 @@ bernard
         bp = Button(axp, '<-')
         bp.on_clicked(minus)
 
-        bs = Button(axset, 'SET offs.')
-        bs.on_clicked(setter)
+        bset = Button(axset, 'SET offs.')
+        bset.on_clicked(setter)
 
         bm = Button(axm, '->')
         bm.on_clicked(plus)
@@ -1425,10 +1860,7 @@ bernard
 
 
 
-
-
-
-    def offset_setter_hkb(self,a,b,**kwargs):
+    def offset_setter_hkb(self,a='AP1',b='WristRight',**kwargs):
         """ offset setter
         """
         defaults = { 'inverse':True
@@ -1443,29 +1875,24 @@ bernard
         fig, ax = plt.subplots()
         fig.subplots_adjust(bottom=0.2, left=0.3)
 
-        if isinstance(a,str):
-            ia = self.dHKB[a]
-        else:
-            ia = a
-            a = self.idHKB[a]
-
-        if isinstance(b,str):
-            ib = self.dHKB[b]
-        else:
-            ib = b
-            b = self.idHKB[b]
+        a,ia,bia,subja,techno=self.devmapper(a,'HKB')
+        b,ib,bib,subjb,techno=self.devmapper(b,'HKB')
 
 
-        time = self.thkb[0]
-        if len(time) == 1:
-            time=time[0]
+        time = self.thkb
+        if len(time.shape) == 2:
+            time = time[0,:]
 
 
-        dhk = self.accessdm(ia,ib,'HKB')
+        try : 
+            init = time[0]#self.offset[self._filename]['hkb_index']
+        except:
+            init=time[0]
+
+
+        var = self.getlink(ia,ib,'HKB',mode='dist').values
         if kwargs['inverse']:
-            var = 10*np.log10(1./(self.dist[:,dhk[0],dhk[1]])**2)
-        else :
-            var = self.dist[:,dhk[0],dhk[1]]
+            var = 10*np.log10(1./(var)**2)
         gt = ax.plot(self.B[self.B.keys()[0]].time,var)
 
         sab = self.hkb[a+'-'+b].values
@@ -1478,7 +1905,7 @@ bernard
         ########
         slide_xoffset_ax = plt.axes([0.1, 0.15, 0.8, 0.02])
         sliderx = Slider(slide_xoffset_ax, "hkb offset", -(len(sabt)/16), (len(sabt)/16),
-                        valinit=time[0], color='#AAAAAA')
+                        valinit=init, color='#AAAAAA')
 
         slide_yoffset_ax = plt.axes([0.1, 0.10, 0.8, 0.02])
         slidery = Slider(slide_yoffset_ax, "gt_yoff", -100, 0,
@@ -1486,7 +1913,7 @@ bernard
 
         slide_alpha_ax = plt.axes([0.1, 0.05, 0.8, 0.02])
         slideralpha = Slider(slide_alpha_ax, "gt_alpha", 0, 10,
-                        valinit=0, color='#AAAAAA')
+                        valinit=5, color='#AAAAAA')
 
         def update_x(val):
             value = int(sliderx.val)
@@ -1504,10 +1931,29 @@ bernard
             alpha = slideralpha.val
             gt[0].set_ydata(alpha*var + yoff)
             fig.canvas.draw_idle()
+        # initpurpose
+        update_y(5)
         slidery.on_changed(update_y)
         slideralpha.on_changed(update_y)
 
+
+        def setter(event):
+            value = int(sliderx.val)
+            try :
+                nval = self.offset[self._filename]['hkb_index'] + value
+            except : 
+                nval = value
+            self._save_data_off_dict(self._filename,'hkb_index',nval)
+            self.offset= self._load_offset_dict()
+            ax.set_title('WARNING : Please Reload serie to Valide offset change',color='r',weight='bold')
+        axset = plt.axes([0.0, 0.5, 0.2, 0.05])
+
+        bset = Button(axset, 'SET offs.')
+        bset.on_clicked(setter)
+
         plt.show()
+
+
 
 
     def pltvisi(self,a,b,**kwargs):
@@ -1897,8 +2343,8 @@ bernard
             except:
                 t1=self.thkb[-1]
 
-        a,ia,bia,subja=self.devmapper(a)
-        b,ib,bib,subjb=self.devmapper(b)
+        a,ia,bia,subja,technoa=self.devmapper(a)
+        b,ib,bib,subjb,technob=self.devmapper(b)
         
         if kwargs['shortlabel']:
 
@@ -2163,10 +2609,9 @@ bernard
                 ibhk = b
                 b = self.idHKB[b]
 
-            dhk = self.accessdm(iahk,ibhk,'HKB')
-
+            var = self.getlink(iahk,ibhk,'HKB',mode='dist').values
             if inverse:
-                var = 1./(self.dist[:,dhk[0],dhk[1]])
+                var = 1./(var)
                 ax.set_ylabel(u'$m^{-2}$',fontsize=fontsize)
                 if log :
                     #var = gamma*10*np.log10(var)
@@ -2174,7 +2619,6 @@ bernard
                     ax.set_ylabel(u'$- 20 \log_{10}(d)'+str(gamma)+'$  (dB)',fontsize=fontsize)
                     plt.ylim(-65,-40)
             else:
-                var = self.dist[:,dhk[0],dhk[1]]
                 ax.set_ylabel(u'meters',fontsize=fontsize)
                 if log :
                     var = gamma*10*np.log10(var)+gamma
@@ -2199,13 +2643,13 @@ bernard
                 ibtcr = b
                 b = self.idTCR[b]
 
-            dtcr = self.accessdm(iatcr,ibtcr,'TCR')
+            var = self.getlink(iatcr,ibtcr,'TCR',mode='dist').values
+
             if inverse:
-                var = 1./(self.dist[:,dtcr[0],dtcr[1]])**2
+                var = 1./(var)**2
                 if log :
                     var = gamma*10*np.log10(var)
             else:
-                var = self.dist[:,dtcr[0],dtcr[1]]
                 if log :
                     var = gamma*10*np.log10(var)
             ax.plot(self.B[subject].time,var,**kwargs)
@@ -2458,9 +2902,9 @@ bernard
 
         """
         # display nodes
-        A,B = self.getdevp(a,b,technoa=technoa,technob=technob)
-        a,ia,ba,subjecta = self.devmapper(a,technoa)
-        b,ib,bb,subjectb = self.devmapper(b,technob)
+        A,B = self.getlinkp(a,b,technoa=technoa,technob=technob)
+        a,ia,ba,subjecta,technoa = self.devmapper(a,technoa)
+        b,ib,bb,subjectb,technob = self.devmapper(b,technob)
 
         if A.ndim==2:
             plt.plot(A[iframe,0],A[iframe,1],'ob')
@@ -2513,9 +2957,9 @@ bernard
 
         """
 
-        A,B = self.getdevp(a,b,technoa,technob)
-        aa,ia,ba,subjecta= self.devmapper(a,technoa)
-        ab,ib,bb,subjectb= self.devmapper(b,technob)
+        A,B = self.getlinkp(a,b,technoa,technob)
+        aa,ia,ba,subjecta,technoa= self.devmapper(a,technoa)
+        ab,ib,bb,subjectb,technob= self.devmapper(b,technob)
 
 
         if 'AP' not in a:
@@ -2567,9 +3011,9 @@ bernard
 
         """
 
-        A,B = self.getdevp(a,b,technoa,technob)
-        aa,ia,ba,subjecta= self.devmapper(a,technoa)
-        ab,ib,bb,subjectb= self.devmapper(b,technob)
+        A,B = self.getlinkp(a,b,technoa,technob)
+        aa,ia,ba,subjecta,technoa= self.devmapper(a,technoa)
+        ab,ib,bb,subjectb,technob= self.devmapper(b,technob)
 
         if 'AP' not in a:
             Nframe = A.shape[0]
@@ -2651,7 +3095,7 @@ bernard
         return vv,tv,tseg,itseg
 
 
-    # def computedevpdf(self):
+    # def _computedevpdf(self):
     #     """ create a timestamped data frame
     #         with all positions of devices
     #     """
@@ -2659,7 +3103,7 @@ bernard
     #     pos = np.empty((len(t),12,3))
     #     for ik,k in enumerate(t):
     #         self.B.settopos(t=k)
-    #         pos[ik,:,:]=self.B.getdevp()
+    #         pos[ik,:,:]=self.B.getlinkp()
     #     df=[]
     #     for d in range(pos.shape[1]):
     #         df_tmp=pd.DataFrame(pos[:,d,:],columns=['x','y','z'],index=t)
@@ -2672,7 +3116,7 @@ bernard
     #     cols=['id','x','y','z']
     #     self.devdf=df[cols]
 
-    def computedevpdf(self):
+    def _computedevpdf(self):
         """ create a timestamped data frame
             with positions of all devices
 
@@ -2711,6 +3155,8 @@ bernard
         cols=['id','subject','x','y','z','v','vx','vy','vz','a','ax','ay','az']
         self.devdf=df[cols]
 
+        # if ('HKB' in self.typ) or ('FULL' in selftyp):
+        #     self.devdf=self._align_devdf_on_hkb(self.devdf,self.hkb)
 
 
     def export_csv(self,**kwargs):
@@ -2807,8 +3253,8 @@ bernard
         ldf.to_csv(filename, sep = ' ',index=False)
 
 
-    def getdevp(self,a,b,technoa='HKB',technob='HKB'):
-        """    get device position
+    def getlinkd(self,a,b,techno='',t=''):
+        """    get a link devices distances
 
         Parameters
         ----------
@@ -2817,10 +3263,89 @@ bernard
             name | id
         b : str | int
             name | id
+
+        oprional 
+        
+        techno : str
+            radio techno
+
+        t : float | list
+            given time
+            or [start,stop] time
+
+
+        Returns
+        -------
+
+        dist : np.array() 
+            all distances for all timestamp for the given link
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> S=CorSer(serie=34)
+        >>> d=S.getlinkd('AP1','WristLeft')
+
+        """
+
+
+        a,ia,nna,subjecta,techno = self.devmapper(a,techno)
+        b,ib,nnb,subjectb,techno = self.devmapper(b,techno)
+
+
+        df = self.distdf
+
+
+        if (nna +'-' + nnb) in self.distdf.keys():
+            link = nna +'-' + nnb
+        else :
+            link = nnb +'-' + nna
+
+
+        # determine time
+        if isinstance(t,list):
+            tstart = t[0]
+            tstop = t[-1]
+            val = df[(df.index >= tstart) & (df.index <= tstop)][link]
+        elif t == '':
+            val = df[link]
+        else :
+            hstep = (df.index[1]-df.index[0])/2.
+            val = df[(df.index >= t-hstep) & (df.index <= t+hstep)][link]
+
+        
+
+        return val
+        
+
+
+    def getlinkp(self,a,b,technoa='',technob='',t='',fId=''):
+        """    get a link devices positions
+
+        Parameters
+        ----------
+
+        a : str | int
+            name | id
+        b : str | int
+            name | id
+
+
+        optional :
+
         technoa : str
             radio techno
         technob : str
             radio techno
+
+        t : float
+            givent time
+
+        OR 
+
+        fId : int
+            frame id
 
         Returns
         -------
@@ -2832,37 +3357,161 @@ bernard
 
         >>> from pylayers.measures.cormoran import *
         >>> S=CorSer(serie=34)
-        >>> a,b=S.getdevp('AP1','WristLeft')
+        >>> a,b=S.getlinkp('AP1','WristLeft')
 
         """
 
-        a,ia,nna,subjecta = self.devmapper(a,technoa)
-        b,ib,nnb,subjectb = self.devmapper(b,technob)
+
+
+        pa = self.getdevp(a,technoa,t,fId)
+        pb = self.getdevp(b,technob,t,fId)
+
+        return pa,pb
+
+
+    def getlink(self,a,b,techno='',t=''):
+        """    get a link value
+
+        Parameters
+        ----------
+
+        a : str | int
+            name | id
+        b : str | int
+            name | id
+
+
+        optional :
+
+
+        techno : str
+            radio techno
+
+        t : float | list
+            given time
+            or [start,stop] time
+
+        Returns
+        -------
+
+        Pandas Serie 
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> S=CorSer(serie=34)
+        >>> S.getlink('AP1','WristLeft')
+        """
+
+
+
+
+        a,ia,nna,subjecta,techno = self.devmapper(a,techno)
+        b,ib,nnb,subjectb,techno = self.devmapper(b,techno)
+        if ('HK' in techno) :
+            if (a +'-' + b) in self.hkb.keys():
+                link = a +'-' + b
+            else :
+                link = b +'-' + a
+
+            df = self.hkb
+
+        elif ('BS' in techno):
+            if (a +'-' + b) in self.bespo.keys():
+                link = a +'-' + b
+            else :
+                link = b +'-' + a
+
+            df = self.bespo
+
+        elif ('TCR' in techno):
+            if (a +'-' + b) in self.tcr.keys():
+                link = a +'-' + b
+            else :
+                link = b +'-' + a
+
+            df = self.tcr
+
+
+        # determine time
+        if isinstance(t,list):
+            tstart = t[0]
+            tstop = t[-1]
+            val = df[(df.index >= tstart) & (df.index <= tstop)][link]
+        elif t == '':
+            val = df[link]
+        else :
+            hstep = (df.index[1]-df.index[0])/2.
+            val = df[(df.index >= t-hstep) & (df.index <= t+hstep)][link]
+
+
+        return val
+
+
+
+    def getdevp(self,a,techno='',t='',fId=''):
+        """ get a  device position
+
+        Parameters
+        ----------
+
+        a : str | int
+            name | id
+        techno : str
+            radio techno
+
+        optional :
+
+        t : float
+            givent time
+
+        OR 
+
+        fId : int
+            frame id
+
+        Returns
+        -------
+
+        pa : np.array()
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> S=CorSer(serie=34)
+        >>> a=S.getdevp('AP1','WristLeft')
+
+        """
+
+
+        if t !='':
+            findex = np.where(self.tmocap <= t)[0][-1]
+        elif fId != '':
+            findex = fId
+        else :
+            findex = slice(self.dist.shape[0])
+
+
+        a,ia,nna,subjecta,techno = self.devmapper(a,techno)
 
         # node a
         # body node
 
         if subjecta != '':
             unna = self.B[subjecta].dev[nna]['uc3d'][0]
-            pa = self.B[subjecta]._f[:,unna,:]
+            pa = self.B[subjecta]._f[findex,unna,:]
         # infra node
         else :
             pa = self.din[nna]['p']
 
-
-        # node b
-        # body node
-        if subjectb != '':
-            unnb = self.B[subjectb].dev[nnb]['uc3d'][0]
-            pb = self.B[subjectb]._f[:,unnb,:]
-        # infra node
-        else :
-            pb = self.din[nnb]['p']
-
-        return pa,pb
+        return pa
 
 
-    def devmapper(self,a,techno='HKB'):
+
+
+    def devmapper(self,a,techno=''):
         """  retrieve name of device if input is number
              or
              retrieve number of device if input is name
@@ -2871,7 +3520,7 @@ bernard
         ----------
 
         a : str | int
-            name | id
+            name | id | bodyid
         techno : str
             radio techno
 
@@ -2891,43 +3540,112 @@ bernard
 
         """
         subject=''
+
+        # if a is a bodyid (e.g. 'HKB:16') or a body part (e.g. AnkleRight)
         if isinstance(a,str):
-            if techno == 'TCR':
-                ia = self.dTCR[a]
-                ba='TCR:'+str(ia)
-            elif techno == 'HKB':
-                ia = self.dHKB[a]
-                ba='HKB:'+str(ia)
+            
+            # case where body id is given as input 
+            if ('HKB' in a) or ('TCR' in a ) or ('BS' in a ) :
+
+                ba = a 
+                techno, ia = a.split(':')
+                ia=int(ia)
+                if techno.upper() == 'TCR':
+                    a = self.idTCR[ia]
+                elif (techno.upper() == 'HKB'):
+                    a = self.idHKB[ia]
+                elif (techno.upper() == 'BS'):
+                    a = self.idBS[ia]
+
+                for b in self.B:
+                    if not 'Cylindre' in b:
+                        if ba in self.B[b].dev.keys():
+                            subject = b
+                            break
+
+            # case where body part (e.g. AnkleRight) is given. Here techno is mandatory
+            else :
+
+                if techno == '':
+                    if self.typ != 'FULL':
+                        if self.typ == 'HKBS':
+                            raise AttributeError('Please indicate the radio techno in argument : HKB or BS')
+                        else :
+                            techno = self.typ
+                    else:
+                        raise AttributeError('Please indicate the radio techno in argument : TCR, HKB, BS')
 
 
-            for b in self.B:
-                if not 'Cylindre' in b:
-                    if ba in self.B[b].dev.keys():
-                        subject = b
-                        break
 
+                if techno.upper() == 'TCR':
+                    ia = self.dTCR[a]
+                    ba='TCR:'+str(ia)
+                elif (techno.upper() == 'HKB') :
+                    ia = self.dHKB[a]
+                    ba='HKB:'+str(ia)
+                elif techno.upper() == 'BS':
+                    ia = self.dBS[a]
+                    ba='BS:'+str(ia)
+
+                for b in self.B:
+                    if not 'Cylindre' in b:
+                        if ba in self.B[b].dev.keys():
+                            subject = b
+                            break
+
+        # an id (number) is given
         else:
-            if techno == 'TCR':
+            # techno autodetection raise an error if conflict and invite to precise radio techno
+            if techno == '':
+                if hasattr(self,'idHKB'):
+                    if a in self.idHKB.keys() :
+                        if techno == '':
+                            techno = 'HKB'
+                        else : 
+                            raise AttributeError('Please indicate the radio techno in argument : TCR, HKB, BS')
+                if hasattr(self,'idBS'):
+                    if a in self.idBS.keys():
+                        if techno == '':
+                            techno = 'BS'
+                        else :
+                            raise AttributeError('Please indicate the radio techno in argument : TCR, HKB, BS')
+                if hasattr(self,'idTCR'):
+                    if a in self.idTCR.keys():
+                        if techno == '':
+                            techno = 'TCR'
+                        else :
+                            raise AttributeError('Please indicate the radio techno in argument : TCR, HKB, BS')
+
+            if techno.upper() == 'TCR':
                 ia = a
                 a = self.idTCR[a]
                 ba='TCR:'+str(ia)
-            elif techno == 'HKB':
+            elif (techno.upper() == 'HKB') :
                 ia = a
                 a = self.idHKB[a]
                 ba='HKB:'+str(ia)
 
+            elif (techno.upper() == 'BS') :
+                ia = a
+                a = self.idBS[a]
+                ba='BS:'+str(ia)
+
+
             for b in self.B:
                 if not 'Cylindre' in b:
                     if ba in self.B[b].dev.keys():
                         subject = b
                         break
 
-        return a,ia,ba,subject
+        return a,ia,ba,subject,techno
 
 
     def align(self,devdf,hkbdf):
 
-        """ align time for device and hkb data frame
+        """ DEPRECATED align time of 2 data frames:
+
+        the time delta of the second data frame is applyied on the first one
+        (e.g. time for devdf donwsampled by hkb data frame time)
 
 
         Parameters
@@ -2950,11 +3668,13 @@ bernard
         >>> from pylayers.measures.cormoran import *
         >>> S=CorSer(6)
         >>> devdf = S.devdf[S.devdf['id']=='HKB:15']
-        >>> hkbdf = S.hkb['AP1-AnckleLeft']
+        >>> hkbdf = S.hkb['AP1-AnkleLeft']
         >>> devdf2,hkbdf2 = S.align(devdf,hkbdf)
 
 
         """
+
+        print ('warning DEPRECATED')
 
         devdfc=copy.deepcopy(devdf)
         hkbdfc=copy.deepcopy(hkbdf)
@@ -2963,7 +3683,8 @@ bernard
 
         devdfc.index = pd.to_datetime(idev,unit='s')
         hkbdfc.index = pd.to_datetime(ihkb,unit='s')
-        
+        import ipdb
+        ipdb.set_trace()
         sf = (hkbdfc.index[2]-hkbdfc.index[1]).microseconds
         devdfc= devdfc.resample(str(sf)+'U')
         
@@ -2972,39 +3693,203 @@ bernard
 
         return devdfc,hkbdfc
 
-    def get_data(self,a,b):
 
 
-        T=self.tcr[a+'-'+b]
-        T.name=T.name+'-tcr'
-        H=self.hkb[a+'-'+b]
-        H.name=H.name+'-hkb'
-        udhk = self.accessdm(a,b,'HKB')
-        udtcr = self.accessdm(a,b,'HKB')
-        dist_tcr=self.dist[:,udtcr[0],udtcr[1]]
-        dist_hkb=self.dist[:,udhk[0],udhk[1]]
-        tdist=np.linspace(0,self.dist.shape[0]/100.,self.dist.shape[0])
-        D_tcr=pd.Series(dist_tcr,index=tdist)
-        D_tcr.name = 'dist-tcr'
-        D_hkb=pd.Series(dist_hkb,index=tdist)
-        D_hkb.name = 'dist-hkb'
+    def _apply_hkb_offset(self):
+        """ apply offset from self.offset[self._filename]['hkb_index']
 
-        return T,H,D_tcr,D_hkb
-
-
-    def get_dataframes(self,a,b):
-        """ assemble all series in a DataFrame
+            if offset >0
+                add np.nan at the begining 
+            if offset <0
+                first values of self.hkb will be dropped
         """
 
-        T,H,DT,DH = self.get_data(a,b)
-        NH=(np.sqrt(1/(10**(H/10)))/4e4)
-        NHc=NH-NH.mean()
-        DHc=DH-DH.mean()
-        inh = NHc.index
-        idh = DHc.index
-        NHc.index = pd.to_datetime(inh,unit='m')
-        DHc.index = pd.to_datetime(idh,unit='m')
-        sD = (DHc.index[1]-DHc.index[0])
-        sf= str(int(sD.microseconds*1e-3)) + 'ms'
-        NHcr = NHc.resample(sf,fill_method='ffill')
-        return NHcr,DHc
+
+        # offset = self.offset[self._filename]['hkb_index']
+        # if offset >=0:
+        #     self.hkb = self.hkb.iloc[offset:]
+        # else :
+        #     # new length
+        #     lhkb = len(self.hkb) + (-offset)
+        #     # extract time values
+        #     npahkbi = self.hkb.index.values
+        #     # calculate new termianl time
+        #     step = npahkbi[1]- npahkbi[0]
+        #     nstop = npahkbi[-1]+ (step * (-offset))
+        #     ni = np.linspace(0,nstop,lhkb)
+        #     df = pd.DataFrame({},columns=self.hkb.keys(),index=ni[0:-offset])
+
+        #     self.hkb.index=pd.Index(ni[-offset:])
+        #     ndf=pd.concat([df,self.hkb])
+
+        #     self.hkb=ndf
+
+        offset = self.offset[self._filename]['hkb_index']
+        if offset <= 0 :
+            index = self.hkb.index
+            self.hkb = self.hkb.iloc[-offset:]
+            self.hkb.index = index[0:offset]
+        else :
+            # extract time values
+            npahkbi = self.hkb.index.values
+            step = npahkbi[1]- npahkbi[0]
+            nstart = npahkbi[0]+ (step * (offset))
+            self.hkb.index = pd.Index(npahkbi + nstart)
+
+            # add blank at begining
+            df = pd.DataFrame({},columns=self.hkb.keys(),index=npahkbi[:offset])
+            ndf=pd.concat([df,self.hkb])
+            self.hkb=ndf
+            self.thkb = self.hkb.index
+
+    def _align_on_devdf(self,typ=''):
+
+        """ align hkb or bs time on device data frame ( devdf) time index
+            In place (a.k.a. replace old self.hkb by the resampled one)
+
+        Parameters 
+        ----------
+            typ : 'HKB' | 'BS'
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> S=CorSer(6)
+        >>> devdf = S.devdf[S.devdf['id']=='HKB:15']
+        >>> hkbdf = S.hkb['AP1-AnkleLeft']
+        >>> devdf2 = S._align_on_hkb(devdf,hkbdf,typ ='HKB')
+
+
+        """
+        if typ == 'HKB':
+            idf = self.hkb
+        elif typ == 'BS':
+            idf = self.bespo
+        elif typ == 'TCR':
+            idf = self.tcr
+        mocapindex = pd.to_datetime(self.tmocap,unit='s')
+        idf.index = pd.to_datetime(idf.index,unit='s')
+
+
+        sf = (mocapindex[2]-mocapindex[1]).microseconds
+        df = idf.resample(str(sf)+'U',fill_method='ffill')
+
+        nindex = time2npa(df.index)
+        df.index = pd.Index(nindex)
+        if typ == 'HKB':
+            self.hkb = df
+        elif typ == 'BS':
+            self.bespo = df
+        elif typ == 'TCR':
+            self.tcr = df
+
+    def _align_devdf_on_hkb(self,devdf,hkbdf):
+
+        """ NOT USED Practically 
+            align time of 2 data frames:
+
+        the time delta of the second data frame is applyied on the first one
+        (e.g. time for devdf donwsampled by hkb data frame time)
+
+
+        Parameters
+        ----------
+
+        devdf : device dataframe
+        hkbdf : hkbdataframe
+
+        Return
+        ------
+
+        devdfc : 
+            aligned copy device dataframe
+        hkbdfc : 
+            aligned copy hkbdataframe
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> S=CorSer(6)
+        >>> devdf = S.devdf[S.devdf['id']=='HKB:15']
+        >>> hkbdf = S.hkb['AP1-AnkleLeft']
+        >>> devdf2 = S._align_devdf_on_hkb(devdf,hkbdf)
+
+
+        """
+
+        devdfc=copy.deepcopy(devdf)
+
+        hkbdfc=copy.deepcopy(hkbdf)
+
+        idev = devdfc.index
+        ihkb = hkbdfc.index
+
+        devdfc.index = pd.to_datetime(idev,unit='s')
+        hkbdfc.index = pd.to_datetime(ihkb,unit='s')
+        sf = (hkbdfc.index[2]-hkbdfc.index[1]).microseconds
+
+        # cannot resapmple devdf directly because multiple similar index values
+        # need to resampl each groupby separately
+        gb = devdfc.groupby(['id'])
+        # get device id 
+        devid,idevid = np.unique(devdfc['id'],return_index=True)
+        # save corresponding subject to each device
+        subject = {devid[i]:devdfc['subject'].iloc[i] for i in idevid}
+        # resample each group separatley
+        dgb={d:gb.get_group(d).resample(str(sf)+'U') for d in devid}
+        # re insert subject and device id information in each resampled group
+        for d in dgb:
+            dgb[d]['subject']=subject[d]
+            dgb[d]['id']=d
+
+        # create the realigned dataframe
+        lgb = [dgb[d] for d in dgb]
+        df = pd.concat(lgb)
+        df.sort_index(inplace=True)
+        
+        nindex = time2npa(df.index)
+        df.index = pd.Index(nindex)
+        cols=['id','subject','x','y','z','v','vx','vy','vz','a','ax','ay','az']
+        df=df[cols]
+
+        return df
+
+
+    # def get_data(self,a,b):
+
+
+    #     T=self.tcr[a+'-'+b]
+    #     T.name=T.name+'-tcr'
+    #     H=self.hkb[a+'-'+b]
+    #     H.name=H.name+'-hkb'
+    #     udhk = self.accessdm(a,b,'HKB')
+    #     udtcr = self.accessdm(a,b,'HKB')
+    #     dist_tcr=self.dist[:,udtcr[0],udtcr[1]]
+    #     dist_hkb=self.dist[:,udhk[0],udhk[1]]
+    #     tdist=np.linspace(0,self.dist.shape[0]/100.,self.dist.shape[0])
+    #     D_tcr=pd.Series(dist_tcr,index=tdist)
+    #     D_tcr.name = 'dist-tcr'
+    #     D_hkb=pd.Series(dist_hkb,index=tdist)
+    #     D_hkb.name = 'dist-hkb'
+
+    #     return T,H,D_tcr,D_hkb
+
+
+    # def get_dataframes(self,a,b):
+    #     """ assemble all series in a DataFrame
+    #     """
+
+    #     T,H,DT,DH = self.get_data(a,b)
+    #     NH=(np.sqrt(1/(10**(H/10)))/4e4)
+    #     NHc=NH-NH.mean()
+    #     DHc=DH-DH.mean()
+    #     inh = NHc.index
+    #     idh = DHc.index
+    #     NHc.index = pd.to_datetime(inh,unit='m')
+    #     DHc.index = pd.to_datetime(idh,unit='m')
+    #     sD = (DHc.index[1]-DHc.index[0])
+    #     sf= str(int(sD.microseconds*1e-3)) + 'ms'
+    #     NHcr = NHc.resample(sf,fill_method='ffill')
+    #     return NHcr,DHc
