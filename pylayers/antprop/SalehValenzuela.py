@@ -2,6 +2,7 @@ import scipy.stats as st
 import numpy as np
 import matplotlib.pyplot as plt
 import pylayers.signal.bsignal as bs
+import pdb
 
 def SalehValenzuela(**kwargs):
     """ generic Saleh and Valenzuela Model
@@ -11,19 +12,17 @@ def SalehValenzuela(**kwargs):
 
     Lam : clusters Poisson Process parameter (ns)
     lam : rays Poisson Process parameter (ns)
-    Nc  : number of clusters
-    Nr  : number of rays
     Gam : clusters exponential decay factor
     gam : rays exponential decay factor
+    T   : observation duration
 
 
     """
-    defaults = { 'Lam' : 10,
-                 'lam' : 5,
-                 'Nc'  : 5,
-                 'Nr'  : 5,
+    defaults = { 'Lam' : .1,
+                 'lam' : .5,
                  'Gam' : 30,
-                 'gam' : 5 }
+                 'gam' : 5 ,
+                 'T'   : 100}
 
     for k in defaults:
         if k not in kwargs:
@@ -33,24 +32,29 @@ def SalehValenzuela(**kwargs):
     lam = kwargs['lam']
     Gam = kwargs['Gam']
     gam = kwargs['gam']
-    Nc = kwargs['Nc']
-    Nr = kwargs['Nr']
-
-    p1 = st.poisson(Lam)
-    p2 = st.poisson(lam)
+    T   = kwargs['T']
+    Nr  = 2*T/Lam
+    Nc  = 2*T/lam
+    e1 = st.expon(1./Lam)
+    e2 = st.expon(1./lam)
     # cluster time of arrival
-    tc = np.cumsum(p1.rvs(Nc))
+    tc   = np.cumsum(e1.rvs(Nr))
+    tc   = tc[np.where(tc<T)]
+    Nc   = len(tc)
     tauc = np.kron(tc,np.ones((1,Nr)))[0,:]
     # rays time of arrival
-    taur = np.cumsum(p2.rvs((Nr,Nc)),axis=0).ravel()
+    taur = np.cumsum(e2.rvs((Nr,Nc)),axis=0).ravel()
     # exponential decays of cluster and rays
     etc = np.exp(-tauc/(1.0*Gam))
     etr = np.exp(-taur/(1.0*gam))
     et = etc*etr
     tau = tauc+taur
     # reordering in delay domain
+    tau = tau[np.where(tau<T)]
+    et = et[np.where(tau<T)]
     u = np.argsort(tau)
     taus = tau[u]
-    ets = et[u]
-    SVir = bs.Bsignal(taus,ets)
+    ets  = et[u]*np.sign(np.random.rand(len(u))-0.5)
+    SVir = bs.TBsignal(taus,ets)
+
     return(SVir)
