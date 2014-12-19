@@ -33,8 +33,8 @@ def SalehValenzuela(**kwargs):
     Gam = kwargs['Gam']
     gam = kwargs['gam']
     T   = kwargs['T']
-    Nr  = 2*T/Lam
-    Nc  = 2*T/lam
+    Nr  = 1.2*T/Lam
+    Nc  = 1.2*T/lam
     e1 = st.expon(1./Lam)
     e2 = st.expon(1./lam)
     # cluster time of arrival
@@ -49,12 +49,16 @@ def SalehValenzuela(**kwargs):
     etr = np.exp(-taur/(1.0*gam))
     et = etc*etr
     tau = tauc+taur
-    # reordering in delay domain
+    # filtering < T and reordering in delay domain
     tau = tau[np.where(tau<T)]
     et = et[np.where(tau<T)]
     u = np.argsort(tau)
     taus = tau[u]
     ets  = et[u]*np.sign(np.random.rand(len(u))-0.5)
     SVir = bs.TBsignal(taus,ets)
-
     return(SVir)
+
+if __name__ =="__main__":
+    h = SalehValenzuela()
+    h.stem()
+    Hu = h.b2fud()

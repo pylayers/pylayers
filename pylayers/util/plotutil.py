@@ -132,7 +132,8 @@ def mulcplot(x,y,**kwargs):
             'gdm' : group distance (m)
             're'  : real part
             'im'  : imaginary part
-
+    att  : boolean
+        False
     ncol : int
         number of columns
     nlin : int
@@ -180,7 +181,8 @@ def mulcplot(x,y,**kwargs):
                 'nlin':1,
                 'fig':[],
                 'ax':[],
-                'figsize':(8,8)
+                'figsize':(8,8),
+                'att':False
                }
 
     # radians to degree coefficient
@@ -208,9 +210,15 @@ def mulcplot(x,y,**kwargs):
             if t=='v':
                 ylabels.append('Amplitude'),
             if t=='l10':
-                ylabels.append('Amplitude (dB)'),
+                if kwargs['att']:
+                    ylabels.append('Attenuation (dB)'),
+                else:
+                    ylabels.append('Amplitude (dB)'),
             if t=='l20':
-                ylabels.append('Amplitude (dB)'),
+                if kwargs['att']:
+                    ylabels.append('Attenuation (dB)'),
+                else:
+                    ylabels.append('Amplitude (dB)'),
             if t=='d':
                 ylabels.append('Phase (deg)'),
             if t=='r':
@@ -324,9 +332,15 @@ def mulcplot(x,y,**kwargs):
                 if types[0]=='m':
                     ax[l,c].plot(x,np.abs(y[l,c,:]),label=lablc,**args)
                 if types[0]=='l10':
-                    ax[l,c].plot(x,10*np.log10(np.abs(y[l,c,:])),label=lablc,**args)
+                    if kwargs['att']:
+                        ax[l,c].plot(x,10*np.log10(np.abs(y[l,c,:])),label=lablc,**args)
+                    else:
+                        ax[l,c].plot(x,-10*np.log10(np.abs(y[l,c,:])),label=lablc,**args)
                 if types[0]=='l20':
-                    ax[l,c].plot(x,20*np.log10(np.abs(y[l,c,:])),label=lablc,**args)
+                    if kwargs['att']:
+                        ax[l,c].plot(x,-20*np.log10(np.abs(y[l,c,:])),label=lablc,**args)
+                    else:
+                        ax[l,c].plot(x,20*np.log10(np.abs(y[l,c,:])),label=lablc,**args)
                 if types[0]=='re':
                     ax[l,c].plot(x,np.real(y[l,c,:]),label=lablc,**args)
                 if types[0]=='im':

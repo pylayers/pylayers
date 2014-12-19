@@ -1618,7 +1618,7 @@ class TBsignal(Bsignal):
     def b2fud(self, N=300):
         r""" conversion into a FUDsignal
 
-        Assuming that each element of TBsignal is a delta function.
+        This method is assuming that each element of TBsignal is a delta function.
 
         $$ h = \sum__k y \delta(x-x_k)$$
 
@@ -1626,7 +1626,6 @@ class TBsignal(Bsignal):
 
         """
         dtau = self.x[1:]-self.x[0:-1]
-        pdb.set_trace()
         mindtau = np.min(dtau)
         fmax  = 1./mindtau
         f = np.linspace(0,fmax,N)
