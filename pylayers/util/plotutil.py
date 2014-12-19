@@ -184,7 +184,6 @@ def mulcplot(x,y,**kwargs):
                 'figsize':(8,8),
                 'att':False
                }
-
     # radians to degree coefficient
     rtd = 180./np.pi
 
@@ -198,6 +197,7 @@ def mulcplot(x,y,**kwargs):
     for key, value in defaults.items():
         if key not in kwargs:
             kwargs[key] = value
+    #print "att",kwargs['att']
     #
     # ylabels is deduced from types
     # ==> do not set any ylabels defaults
@@ -383,7 +383,10 @@ def mulcplot(x,y,**kwargs):
                 if types[k%ntypes]=='l10':
                     ax[l,c].plot(x,10*np.log10(np.abs(y[k%nfigy,:])),label=labels[k%nlabels],**args)
                 if types[k%ntypes]=='l20':
-                    ax[l,c].plot(x,20*np.log10(np.abs(y[k%nfigy,:])),label=labels[k%nlabels],**args)
+                    if kwargs['att']:
+                        ax[l,c].plot(x,-20*np.log10(np.abs(y[k%nfigy,:])),label=labels[k%nlabels],**args)
+                    else:
+                        ax[l,c].plot(x,20*np.log10(np.abs(y[k%nfigy,:])),label=labels[k%nlabels],**args)
                 if types[k%ntypes]=='re':
                     ax[l,c].plot(x,np.real(y[k%nfigy,:]),label=labels[k%nlabels],**args)
                 if types[k%ntypes]=='im':
