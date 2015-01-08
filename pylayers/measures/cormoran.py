@@ -2337,6 +2337,185 @@ bernard
         plt.show()
 
 
+    def plot(self,a,b,techno='',t='',**kwargs):
+        """
+        Parameters
+        ----------
+
+        a : str | int
+            name | id
+        b : str | int
+            name | id
+        techno : str (optional)
+            radio techno
+        t : float | list (optional)
+            given time
+            or [start,stop] time
+
+        distance : boolean (False)
+            plot distance instead of value
+        lin : boolean (False)
+            display linear value instead of dB
+        sqrtinv : boolean (False)
+            apply : "sqrt (1/ dataset)"
+        xoffset : float (0)
+            add an offset on x axis
+        yoffset :  float (1|1e3|1e6)
+            add an offset on y axis
+        
+        title : boolean (True)
+            display title
+        shortlabel : boolean (True)
+            enable short labelling
+        fontsize : int (18)
+            font size
+
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.cormoran import *
+        >>> S = CorSer(6)
+        >>> f,ax = S.plot('AP1','TorsoTopLeft',techno='HKB')
+        >>> #f,ax = S.pltvisi('AP1','TorsoTopLeft',techno='HKB',fig=f,ax=ax)
+        >>> #f,ax = S.pltmob(fig=f,ax=ax)
+        >>> #plt.title('hatch = visibility / gray= mobility')
+        >>> plt.show()
+
+        """
+
+        defaults = { 'fig':[],
+                     'ax':[],
+                     'figsize':(8,8),
+                     'distance':False,
+                     'lin':False,
+                     'xoffset':0,
+                     'yoffset': 1e6,
+                     'sqrtinv':False,
+                     'title':True,
+                     'shortlabel':True,
+                     'fontsize':18,
+                    }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+
+        a,ia,bia,subja,techno=self.devmapper(a,techno)
+        b,ib,bib,subjb,techno=self.devmapper(b,techno)
+
+        ### create a short labeling
+        if kwargs['shortlabel']:
+
+            #find uppercase position
+            uu =  np.nonzero([l.isupper() or l.isdigit() for l in a])[0]
+            # cretae string from list
+            labela = ''.join([a[i] for i in uu])
+
+            uu =  np.nonzero([l.isupper() or l.isdigit() for l in b])[0]
+            # cretae string from list
+            labelb = ''.join([b[i] for i in uu])
+
+            label = labela +'-'+labelb
+        else:
+            label = a+'-'+b
+
+        if kwargs['fig']==[]:
+            fig = plt.figure(figsize=kwargs['figsize'])
+        else :
+            fig=kwargs['fig']
+
+        if kwargs['ax'] ==[]:
+            if kwargs['reciprocal']:
+                ax = fig.add_subplot(211)
+                ax2 = fig.add_subplot(212)
+            else :
+                ax = fig.add_subplot(111)
+        else :
+            ax = kwargs['ax']
+
+
+        # get dataframe
+        if not kwargs['distance']:
+            df = self.getlink(a,b,techno,t)
+            title = 'Received Power between ' + label
+            ylabel = 'Received Power dBm'
+        else :
+            df = self.getlinkd(a,b,techno,t)
+            title = 'Distance  between ' + label
+            ylabel = 'distance (m)'
+
+
+        # post processing on dataframe
+        if kwargs['lin']:
+            df = 10**(df/10) * kwargs['yoffset']
+            
+        if kwargs['sqrtinv']:
+            df = np.sqrt(1./df)
+            ylabel = u'$\prop (mW)^{-1/2} linear scale$'
+
+        df.plot(ax=ax,color=kwargs['colorba'],label=label)
+
+        # Managing labelling
+        if kwargs['title']:
+            ax.set_title(label=title,fontsize=kwargs['fontsize'])
+        if kwargs['lin']:
+            if kwargs['yoffset']==1:
+                ylabel = 'mW'
+            if kwargs['yoffset']==1e3:
+                ylabel = u'$\micro$W'
+            if kwargs['yoffset']==1e6:
+                ylabel = u'nW'
+
+        ax.set_ylabel(ylabel)
+        # if kwargs['data']==True:
+        #     #ax.plot(self.thkb[0],self.rssi[ia,ib,:])
+        #     #ax.plot(self.thkb[0],self.rssi[ib,ia,:])
+        #     sab = self.hkb[a+'-'+b]
+
+        #     if not(kwargs['dB']):
+        #         sab = 10**(sab/10) * kwargs['yoffset']
+        #         if kwargs['distance']:
+        #             sab = np.sqrt(1/sab)
+        #         if kwargs['reciprocal']:
+        #             sba = 10**(sba/10 ) * kwargs['yoffset']
+        #             sba = np.sqrt(1/sba)
+        #     sab[t0:t1].plot(ax=ax,color=kwargs['colorab'],label=label,xlim=(t0,t1))
+        #     if kwargs['reciprocal']:
+        #         sba[t0:t1].plot(ax=ax,color=kwargs['colorba'],label=label)
+
+        #     #title = 'Received Power   ' + self.title1
+        #     if kwargs['dis_title']:
+        #         #title = self.title1+kwargs['tit']
+        #         title = kwargs['tit']
+        #         ax.set_title(label=title,fontsize=kwargs['fontsize'])
+        #     if not kwargs['distance']:
+        #         if kwargs['dB']:
+        #             ax.set_ylabel('Received Power dBm')
+        #         else:
+        #             if kwargs['yoffset']==1:
+        #                 ax.set_ylabel('mW')
+        #             if kwargs['yoffset']==1e3:
+        #                 ax.set_ylabel(u'$\micro$W')
+        #             if kwargs['yoffset']==1e6:
+        #                 ax.set_ylabel(u'nW')
+
+        #     else:
+        #         ax.set_ylabel(u'$\prop (mW)^{-1/2} linear scale$')
+
+        # if kwargs['reciprocal']==True:
+        #     # if kwargs['data']==True:
+        #     #     ax2=fig.add_subplot(212)
+        #     r = self.hkb[a+'-'+b][self.hkb[a+'-'+b]!=0]- self.hkb[b+'-'+a][self.hkb[b+'-'+a]!=0]
+        #     r[t0:t1].plot(ax=ax2)
+        #     ax2.set_title('Reciprocity offset',fontsize=kwargs['fontsize'])
+
+        return fig,ax
+
+
+
+
     def plthkb(self,a,b,techno='',**kwargs):
         """
         Parameters
