@@ -293,7 +293,7 @@ class Wstandard(dict):
             print k + ' , ',
 
     def power(self, band, info ='max', unit='mw'):
-        """ Return inunition for a given channel
+        """ Return  for a given channel
 
         Parameters
         ----------

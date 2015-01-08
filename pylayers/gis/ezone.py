@@ -135,15 +135,15 @@ def dectile(prefix='N48W002'):
 
     """
     if prefix[0]=='N':
-        latmin = eval(prefix[1:3])
+        latmin = int(prefix[1:3])
         latmax = latmin+1
 
     if prefix[3]=='W':
-        lonmin = -eval(prefix[5:7])
+        lonmin = -int(prefix[5:7])
         lonmax = lonmin+1
 
     if prefix[3]=='E':
-        lonmin = eval(prefix[5:7])
+        lonmin = int(prefix[5:7])
         lonmax = lonmin+1
 
     return (lonmin,lonmax,latmin,latmax)
@@ -250,7 +250,7 @@ class DEM(PyLayers):
         self.hgts[self.hgts<0]=0
 
     def loadsrtm(self):
-        """ load hgt and lcv files fro_m srtm directory
+        """ load hgt and lcv files from srtm directory
 
         """
 

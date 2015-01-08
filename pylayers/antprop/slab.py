@@ -458,6 +458,7 @@ class Interface(PyLayers):
         defaults = {'typ':['l20'],
                 'polar':'po', # po | p | o
                 'coeff':'RT', # RT | R | T
+                'att':False
                }
 
         for key, value in defaults.items():
@@ -478,6 +479,7 @@ class Interface(PyLayers):
 
         args['titles'] = []
         args['typ'] = kwargs['typ']
+        args['att'] = kwargs['att']
 
         # Reflexion
         if 'R' in kwargs['coeff']:
@@ -809,8 +811,7 @@ class Mat(PyLayers,dict):
         theta.reshape(1, Nt)
         II = MatInterface(lmat, 0, fGHz, theta)
         II.RT()
-        #Ro = II.Ro
-        Ro = II.Ro # modif eric plouhinec
+        Ro = II.Ro 
         Rp = II.Rp
 
         return Ro, Rp
