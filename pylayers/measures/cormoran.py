@@ -2427,10 +2427,6 @@ bernard
             fig=kwargs['fig']
 
         if kwargs['ax'] ==[]:
-            if kwargs['reciprocal']:
-                ax = fig.add_subplot(211)
-                ax2 = fig.add_subplot(212)
-            else :
                 ax = fig.add_subplot(111)
         else :
             ax = kwargs['ax']
