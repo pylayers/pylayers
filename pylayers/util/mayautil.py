@@ -193,7 +193,7 @@ class VolumeSlicer(HasTraits):
                 )
 
 
-def savefig(filename,mlabview=[],magnification = 3,doc=False):
+def savefig(filename,mlabview=[],magnification = 3):
     """
     Save mayavi figure
 
@@ -206,25 +206,19 @@ def savefig(filename,mlabview=[],magnification = 3,doc=False):
         specifyy angle of camera view ( see mayavi.view )
     magnification : int
         resolution of the generated image ( see mayavi.savefig)
-    doc : bool
-    if doc, image is supposed to be generated for documentation
 
     """
     import os
 
-    if doc:
-        path = os.path.join('..','maya_images')
-    else :
-        path = os.path.join('.','maya_images')
 
-
+    path = os.path.dirname(filename)
     if not mlabview == []:
         mlab.view(mlabview)
     if os.path.exists(path):
-        mlab.savefig(path+filename+'.png',magnification=magnification )
+        mlab.savefig(filename+'.png',magnification=magnification )
     else:
         os.mkdir(path)
-        mlab.savefig(path+filename+'.png',magnification=magnification )
+        mlab.savefig(filename+'.png',magnification=magnification )
     mlab.close()
 
 
@@ -265,11 +259,11 @@ def inotshow(filename,**kwargs):
     else :
         path = os.path.join('.','maya_images')
 
-    savefig(filename,mlabview,magnification,doc)
+    savefig(os.path.join(path,filename),mlabview,magnification)
 
     try :
-        inb = Image(filename=path+filename+'.png',**kwargs)
+        inb = Image(filename=os.path.join(path,filename+'.png'),**kwargs)
     except:
         from IPython.display import Image,display
-        inb = Image(filename=path+filename+'.png',**kwargs)
+        inb = Image(filename=os.path.join(path,filename+'.png'),**kwargs)
     display(inb)

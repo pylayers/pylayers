@@ -2060,8 +2060,7 @@ bernard
 
         a,ia,nna,subjecta,technoa = self.devmapper(a,techno)
         b,ib,nnb,subjectb,technob = self.devmapper(b,techno)
-
-        vv,tv,tseg,itseg = self.visiarray(nna,nnb)
+        vv,tv,tseg,itseg = self._visiarray(nna,nnb)
         # vv.any : it exist NLOS regions
         if vv.any():
             if kwargs['color']=='':
@@ -2133,7 +2132,7 @@ bernard
                      'color':'gray',
                      'hatch':'',
                      'label_pos':'top',
-                     'label_pos_off':5,
+                     'label_pos_off':2,
                      'label_mob':'M',
                      'label_stat':'S'
                     }
@@ -2378,7 +2377,7 @@ bernard
         >>> from pylayers.measures.cormoran import *
         >>> S = CorSer(6)
         >>> f,ax = S.plot('AP1','TorsoTopLeft',techno='HKB')
-        >>> #f,ax = S.pltvisi('AP1','TorsoTopLeft',techno='HKB',fig=f,ax=ax)
+        >>> f,ax = S.pltvisi('AP1','TorsoTopLeft',techno='HKB',fig=f,ax=ax)
         >>> #f,ax = S.pltmob(fig=f,ax=ax)
         >>> #plt.title('hatch = visibility / gray= mobility')
         >>> plt.show()
@@ -2387,8 +2386,8 @@ bernard
 
         defaults = { 'fig':[],
                      'ax':[],
-                     'figsize':(8,8),
-                     'colorab':'g',
+                     'figsize':(6,4),
+                     'color':'g',
                      'distance':False,
                      'lin':False,
                      'xoffset':0,
@@ -2453,7 +2452,7 @@ bernard
             df = np.sqrt(1./df)
             ylabel = u'$\prop (mW)^{-1/2} linear scale$'
 
-        df.plot(ax=ax,color=kwargs['colorab'],label=label)
+        df.plot(ax=ax,color=kwargs['color'],label=label)
 
         # Managing labelling
         if kwargs['title']:
@@ -2885,7 +2884,7 @@ bernard
 
         if visibility:
             aa= ax.axis()
-            vv,tv,tseg,itseg = self.visiarray(a,b)
+            vv,tv,tseg,itseg = self._visiarray(a,b)
             # vv.any : it exist NLOS regions
             if vv.any():
                 fig,ax=plu.rectplot(tv,tseg,ylim=aa[2:],color=kwargs['color'],hatch=hatch,fig=fig,ax=ax)
@@ -3199,7 +3198,7 @@ bernard
         if 'AP' not in ab:
             Nframe = B.shape[0]
         else: 
-            Nframe = self.B[self.B.keys()[0]]
+            Nframe = len(self.B[self.B.keys()[0]].time)
         iframe = np.arange(0,Nframe-1,dsf)
         tvisi = []
         #
@@ -3281,7 +3280,7 @@ bernard
 
 
 
-    def visiarray(self,a,b,technoa='HKB',technob='HKB'):
+    def _visiarray(self,a,b,technoa='HKB',technob='HKB'):
         """ create entries for plu.rectplot
         """
 
@@ -3319,7 +3318,8 @@ bernard
         else:
             if vv.all():
                 tseg = np.array(zip(np.array([0]),np.array([len(vv)-1])))
-
+            else :
+                tseg = np.array([[0,0]])
         itseg = copy.copy(tseg)
         bb = np.insert(itseg[:,1],0,0)
         ee = np.hstack((itseg[:,0],len(vv)))
