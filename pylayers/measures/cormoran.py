@@ -2352,6 +2352,7 @@ bernard
             given time
             or [start,stop] time
 
+        colorab : color
         distance : boolean (False)
             plot distance instead of value
         lin : boolean (False)
@@ -2387,6 +2388,7 @@ bernard
         defaults = { 'fig':[],
                      'ax':[],
                      'figsize':(8,8),
+                     'colorab':'g',
                      'distance':False,
                      'lin':False,
                      'xoffset':0,
@@ -2451,7 +2453,7 @@ bernard
             df = np.sqrt(1./df)
             ylabel = u'$\prop (mW)^{-1/2} linear scale$'
 
-        df.plot(ax=ax,color=kwargs['colorba'],label=label)
+        df.plot(ax=ax,color=kwargs['colorab'],label=label)
 
         # Managing labelling
         if kwargs['title']:
