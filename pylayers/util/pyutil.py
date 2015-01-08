@@ -1762,5 +1762,18 @@ def printout(text, colour=WHITE):
                 sys.stdout.write(text)
 
 
+def in_ipynb():
+    """
+    check if program is run in ipython notebook
+    """
+    try:
+        cfg = get_ipython().config 
+        if cfg['IPKernelApp']['parent_appname'] == 'ipython-notebook':
+            return True
+        else:
+            return False
+    except NameError:
+        return False
+
 if __name__ == "__main__":
     doctest.testmod()

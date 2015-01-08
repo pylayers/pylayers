@@ -9,6 +9,7 @@ import numpy.ma as ma
 import scipy.io as io
 from pylayers.util.project import *
 from pylayers.util.pyutil import *
+import  pylayers.util.mayautil as myu
 from pylayers.mobility.ban.body import *
 from pylayers.gis.layout import *
 from matplotlib.widgets import Slider, CheckButtons, Button, Cursor
@@ -35,7 +36,7 @@ def cor_log(short=True):
     if short :
         log['day'] =  [x.split('/')[0] for x in log['Date'].values]
         log['serie']=log['Meas Serie']
-        return log[['serie','day','Subject','techno']]
+        return log[['serie','day','Subject','techno','Short Notes']]
     else:
         return log
 
@@ -45,6 +46,16 @@ def cor_log(short=True):
 def time2npa(lt):
 
     """ pd.datetime.time to numpy array
+
+    Parameters
+    ----------
+
+    lt : pd.datetime.time 
+
+    Return
+    ------
+    ta : numpy array
+
     """
     ta = (lt.microsecond*1e-6+
     lt.second+
@@ -831,8 +842,8 @@ bernard
 
         nb_totaldev=len(np.unique(self.devdf['id'])) 
         # extract all dev position on body
-        # Mpdev : (3 x (nb devices + nb infra nodes) x nb_timestamp)
-        Mpdev = np.empty((3,len(dev_bid)+4,len(self.devdf.index)/nb_totaldev))
+        # Mpdev : (3 x (nb devices and nb infra nodes) x nb_timestamp)
+        Mpdev = np.empty((3,len(dev_bid),len(self.devdf.index)/nb_totaldev))
 
         # get all positions
         for ik,i in enumerate(dev_bid) :
@@ -1149,6 +1160,13 @@ bernard
         """
 
 
+        # if in_ipynb():
+        #     notebook = False # program launch in ipyhon notebook
+        #     from IPython.html import widgets # Widget definitions
+        #     from IPython.display import display, clear_output# Used to display widgets in the notebook
+        # else :
+        #     notebook = False
+
 
         fig, ax = plt.subplots()
         fig.subplots_adjust(bottom=0.3)
@@ -1184,11 +1202,15 @@ bernard
 
 
         # matplotlib Widgets 
-
         slax=plt.axes([0.1, 0.15, 0.8, 0.05])
         slax.set_title('t='+str(time[fId]),loc='left')
         sliderx = Slider(slax, "time", 0, inter.shape[-1],
                         valinit=fId, color='#AAAAAA')
+
+        # else :
+        #     int_range = widgets.IntSliderWidget(min=0,max=inter.shape[-1],step=1,value=fId)
+        #     display(int_range)
+
 
         def update_x(val):
             value = int(sliderx.val)
@@ -1198,28 +1220,46 @@ bernard
             slax.set_title('t='+str(time[val]),loc='left')
             fig.canvas.draw_idle()
         sliderx.on_changed(update_x)
+        # else:
+        #     def update_x(name,value):
+
+        #         clear_output(wait=True)
+        #         display(plt.gcf())
+        #         plt.imshow(inter[:,:,value],interpolation='nearest')
+        #         # l.set_data(inter[:,:,value])
+        #         kwargs['bodytime']=[self.tmocap[value]]
+        #         self._show3(**kwargs)
+        #         myu.inotshow('fig1',width=200,height=200,magnification=1)
+        #         # slax.set_title('t='+str(time[val]),loc='left')
+        #         # fig.canvas.draw_idle()
+        #     int_range.on_trait_change(update_x, 'value')
+
 
 
         def plus(event):
             sliderx.set_val(sliderx.val +1)
             fig.canvas.draw_idle()
+        # if not notebook:
         sliderx.on_changed(update_x)
 
 
         def minus(event):
             sliderx.set_val(sliderx.val -1)
             fig.canvas.draw_idle()
+        # if not notebook:
         sliderx.on_changed(update_x)
 
         def pplus(event):
             sliderx.set_val(sliderx.val +10)
             fig.canvas.draw_idle()
+        # if not notebook:
         sliderx.on_changed(update_x)
 
 
         def mminus(event):
             sliderx.set_val(sliderx.val -10)
             fig.canvas.draw_idle()
+        # if not notebook:
         sliderx.on_changed(update_x)
 
         # # QUIT by pressing 'q'
@@ -1229,7 +1269,7 @@ bernard
         #         plt.close(fig)
         # fig.canvas.mpl_connect('key_press_event', press)
 
-
+        # if not notebook:
         # -1 frame axes
         axm = plt.axes([0.3, 0.05, 0.1, 0.075])
         bm = Button(axm, '-1')
@@ -1956,7 +1996,7 @@ bernard
 
 
 
-    def pltvisi(self,a,b,**kwargs):
+    def pltvisi(self,a,b,techno='',**kwargs):
         """ plot visibility between link a and b
 
 
@@ -1981,9 +2021,9 @@ bernard
 
         >>> from pylayers.measures.cormoran import *
         >>> S = CorSer(6)
-        >>> f,ax = S.plthkb('AP1','TorsoTopLeft')
-        >>> f,ax = S.pltvisi('AP1','TorsoTopLeft',fig=f,ax=ax)
-        >>> #f,ax = S.pltmob(showvel=False,ylim=([-100,-40]),fig=f,ax=ax)
+        >>> f,ax = S.plthkb('AP1','TorsoTopLeft',techno='HKB')
+        >>> f,ax = S.pltvisi('AP1','TorsoTopLeft',techno='HKB',fig=f,ax=ax)
+        >>> f,ax = S.pltmob(fig=f,ax=ax)
         >>> plt.title('hatch = visibility / gray= mobility')
         >>> plt.show()
         """
@@ -2017,7 +2057,11 @@ bernard
 
 
         aa= ax.axis()
-        vv,tv,tseg,itseg = self.visiarray(a,b)
+
+        a,ia,nna,subjecta,technoa = self.devmapper(a,techno)
+        b,ib,nnb,subjectb,technob = self.devmapper(b,techno)
+
+        vv,tv,tseg,itseg = self.visiarray(nna,nnb)
         # vv.any : it exist NLOS regions
         if vv.any():
             if kwargs['color']=='':
@@ -2070,9 +2114,9 @@ bernard
 
         >>> from pylayers.measures.cormoran import *
         >>> S = CorSer(6)
-        >>> f,ax = S.plthkb('AP1','TorsoTopLeft')
-        >>> #f,ax = S.pltvisi('AP1','TorsoTopLeft',fig=f,ax=ax)
-        >>> f,ax = S.pltmob(showvel=False,ylim=([-100,-40]),fig=f,ax=ax)
+        >>> f,ax = S.plthkb('AP1','TorsoTopLeft',techno='HKB')
+        >>> #f,ax = S.pltvisi('AP1','TorsoTopLeft',techno='HKB',fig=f,ax=ax)
+        >>> f,ax = S.pltmob(fig=f,ax=ax)
         >>> plt.title('hatch = visibility / gray= mobility')
         >>> plt.show()
         """
@@ -2084,7 +2128,7 @@ bernard
                      'velth':0.07,
                      'fo':5,
                      'fw':0.02,
-                     'ylim':(-200,0),
+                     'ylim':(),
                      'time_offset':0,
                      'color':'gray',
                      'hatch':'',
@@ -2148,7 +2192,14 @@ bernard
             sunu = unu.shape
         nullr=null[unu].reshape(sunu[0]/2,2)
 
-        fig , ax =plu.rectplot(self.B[subject].time,nullr,ylim=kwargs['ylim'],
+        if kwargs['ylim'] != ():
+            ylim = kwargs['ylim']
+        else :
+            axlim = ax.axis() 
+            ylim = [axlim[2],axlim[3]]
+
+
+        fig , ax =plu.rectplot(self.B[subject].time,nullr,ylim=ylim,
                                 color=kwargs['color'],
                                 hatch=kwargs['hatch'],
                                 fig=fig,ax=ax)
@@ -2163,12 +2214,12 @@ bernard
 
         if kwargs['label_pos']!='':
             if kwargs['label_pos'] == 'top':
-                yposM = kwargs['ylim'][1]-kwargs['label_pos_off']+0.5
-                yposS = kwargs['ylim'][1]-kwargs['label_pos_off']-0.5
+                yposM = ylim[1]-kwargs['label_pos_off']+0.5
+                yposS = ylim[1]-kwargs['label_pos_off']-0.5
 
             elif kwargs['label_pos'] == 'bottom':
-                yposM = kwargs['ylim'][0]+kwargs['label_pos_off']+0.5
-                yposS = kwargs['ylim'][0]+kwargs['label_pos_off']+0.5
+                yposM = ylim[0]+kwargs['label_pos_off']+0.5
+                yposS = ylim[0]+kwargs['label_pos_off']+0.5
             xposM= self.B[subject].time[nullr.mean(axis=1).astype(int)]
             xposS= self.B[subject].time[inullr.mean(axis=1).astype(int)]
             [ax.text(x,yposM,kwargs['label_mob']+str(ix+1),
@@ -2286,7 +2337,7 @@ bernard
         plt.show()
 
 
-    def plthkb(self,a,b,**kwargs):
+    def plthkb(self,a,b,techno='',**kwargs):
         """
         Parameters
         ----------
@@ -2302,9 +2353,9 @@ bernard
 
         >>> from pylayers.measures.cormoran import *
         >>> S = CorSer(6)
-        >>> f,ax = S.plthkb('AP1','TorsoTopLeft')
-        >>> f,ax = S.pltvisi('AP1','TorsoTopLeft',fig=f,ax=ax)
-        >>> f,ax = S.pltmob(showvel=False,ylim=([-100,-40]),fig=f,ax=ax)
+        >>> f,ax = S.plthkb('AP1','TorsoTopLeft',techno='HKB')
+        >>> f,ax = S.pltvisi('AP1','TorsoTopLeft',techno='HKB',fig=f,ax=ax)
+        >>> f,ax = S.pltmob(fig=f,ax=ax)
         >>> plt.title('hatch = visibility / gray= mobility')
         >>> plt.show()
 
@@ -2343,8 +2394,8 @@ bernard
             except:
                 t1=self.thkb[-1]
 
-        a,ia,bia,subja,technoa=self.devmapper(a)
-        b,ib,bib,subjb,technob=self.devmapper(b)
+        a,ia,bia,subja,technoa=self.devmapper(a,techno)
+        b,ib,bib,subjb,technob=self.devmapper(b,techno)
         
         if kwargs['shortlabel']:
 
@@ -2903,6 +2954,8 @@ bernard
         """
         # display nodes
         A,B = self.getlinkp(a,b,technoa=technoa,technob=technob)
+        A=A.values
+        B=B.values
         a,ia,ba,subjecta,technoa = self.devmapper(a,technoa)
         b,ib,bb,subjectb,technob = self.devmapper(b,technob)
 
@@ -2957,14 +3010,16 @@ bernard
 
         """
 
-        A,B = self.getlinkp(a,b,technoa,technob)
+        A,B = self.getlinkp(a,b)
+        A=A.values
+        B=B.values
         aa,ia,ba,subjecta,technoa= self.devmapper(a,technoa)
         ab,ib,bb,subjectb,technob= self.devmapper(b,technob)
 
 
-        if 'AP' not in a:
+        if 'AP' not in aa:
             Nframe = A.shape[0]
-        if 'AP' not in b:
+        if 'AP' not in ab:
             Nframe = B.shape[0]
         else: 
             Nframe = self.B[self.B.keys()[0]]
@@ -3012,6 +3067,8 @@ bernard
         """
 
         A,B = self.getlinkp(a,b,technoa,technob)
+        A=A.values
+        B=B.values
         aa,ia,ba,subjecta,technoa= self.devmapper(a,technoa)
         ab,ib,bb,subjectb,technob= self.devmapper(b,technob)
 
@@ -3150,6 +3207,21 @@ bernard
                     except:
                         df = df_tmp
 
+        for i in self.din:
+            pos = self.din[i]['p']
+            pos2 = pos[:,np.newaxis]*np.ones(len(t))
+            df_tmp=pd.DataFrame(pos2.T,columns=['x','y','z'],index=t)
+            df_tmp['v']=0.
+            df_tmp['vx']=0.
+            df_tmp['vy']=0.
+            df_tmp['vz']=0.
+            df_tmp['a']=0.
+            df_tmp['ax']=0.
+            df_tmp['ay']=0.
+            df_tmp['az']=0.
+            df_tmp['subject']=''
+            df_tmp['id']=i
+            df = pd.concat([df,df_tmp])
 
         df = df.sort_index()
         cols=['id','subject','x','y','z','v','vx','vy','vz','a','ax','ay','az']
@@ -3339,8 +3411,8 @@ bernard
         technob : str
             radio techno
 
-        t : float
-            givent time
+        t : float | list
+            given time | [time_start,time_stop]
 
         OR 
 
@@ -3463,13 +3535,9 @@ bernard
 
         optional :
 
-        t : float
-            givent time
+        t : float | list 
+            given time | [time_start,time_stop]
 
-        OR 
-
-        fId : int
-            frame id
 
         Returns
         -------
@@ -3485,26 +3553,29 @@ bernard
 
         """
 
-
-        if t !='':
-            findex = np.where(self.tmocap <= t)[0][-1]
-        elif fId != '':
-            findex = fId
-        else :
-            findex = slice(self.dist.shape[0])
-
-
         a,ia,nna,subjecta,techno = self.devmapper(a,techno)
 
-        # node a
-        # body node
+        device_select = self.devdf['id'] == nna
 
-        if subjecta != '':
-            unna = self.B[subjecta].dev[nna]['uc3d'][0]
-            pa = self.B[subjecta]._f[findex,unna,:]
-        # infra node
+
+        if isinstance(t,list):
+            tstart = t[0]
+            tstop = t[-1]
+            #findex = np.where((self.tmocap>=tstart) & (self.tmocap<=tstop))[0]
+
+
+        elif t == '':
+            tstart = 0.0
+            tstop = 1000000
         else :
-            pa = self.din[nna]['p']
+            hstep = (self.devdf[device_select].index[1]-self.devdf[device_select].index[0])/2.
+            tstart = t-hstep
+            tstop = t+hstep
+
+
+        pa = self.devdf[(self.devdf.index >= tstart) &
+                        (self.devdf.index <= tstop) & 
+                        device_select][['x','y','z']]
 
         return pa
 

@@ -240,7 +240,7 @@ def inotshow(filename,**kwargs):
 
     See IPython.display.Image
     """
-
+    import os
 
     defaults = {'mlabview':[],
                 'magnification':3,
