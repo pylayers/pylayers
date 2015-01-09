@@ -103,7 +103,7 @@ class Simul(PyLayers):
             self.filetraj = source
             self.load_simul(source)
 
-        elif isinstance(source,CorSer):
+        elif 'pylayers' in source.__module__:
             self.filetraj = source._filename
             self.load_CorSer(source)
             cutoff=2
@@ -206,6 +206,8 @@ class Simul(PyLayers):
             B=[source.B]
         elif isinstance(source.B,list):
             B=source.B
+        elif isinstance(source.B,dict):
+            B=source.B.values()
         else:
             raise AttributeError('CorSer.B must be a list or a Body')
 
@@ -257,6 +259,7 @@ class Simul(PyLayers):
             for dev in self.dpersons[p].dev:
                 D.append(
                     Device(self.dpersons[p].dev[dev]['name'], ID=dev + '_' + p))
+
             N.add_devices(D, grp=p)
         # get access point devices
         for ap in self.dap:
