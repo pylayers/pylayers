@@ -197,7 +197,7 @@
             "width": 3.6
         },
         "standards": {
-            "ieee802154": {
+            "ieee802154b": {
                 "antenna": [
                     "A1"
                 ]

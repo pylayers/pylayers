@@ -956,19 +956,20 @@ bernard
             intersect=M
             links = dev
 
+        self._visilinks = links
+        self._visiintersect = intersect
+
         return intersect,links
 
-    def imshowvisibility(self,inter,links,**kwargs):
+    def imshowvisibility(self,techno='HKB',t=0,**kwargs):
         """  imshow visibility mda
 
 
         Parameters 
         ----------
-
-        inter : (nb link x nb link x timestamps)
-        links : (nblinks)
-        t : time
-
+        techno : (HKB|TCR)
+        t : float
+            time in second
 
         Example 
         -------
@@ -979,9 +980,13 @@ bernard
         >>> inter,links=C.compute_visibility(techno='TCR',square_mda=True)
         >>> i,l=C.imshowvisibility_i(inter,links)
 
+        See Also
+        --------
+
+        pylayers.measures.CorSer.compute_visibility()
+
         """
-        defaults = { 't':0,
-                     'grid':True,
+        defaults = { 'grid':True,
                     }
 
         for k in defaults:
@@ -998,8 +1003,17 @@ bernard
         else:
             ax = kwargs.pop('ax')
 
+        if not '_visiintersect' in dir(self):
+            print 'Visibility computed only once'
+            self.compute_visibility(techno=techno)
 
-        kt=np.where(self.tmocap <= kwargs['t'])[0][-1]
+
+        links = self._visilinks
+        inter = self._visiintersect
+
+
+
+        kt=np.where(self.tmocap <= t)[0][-1]
         plt.xticks(np.arange(0, len(links), 1.0))
         plt.yticks(np.arange(0, len(links), 1.0))
         ax.set_xlim([-0.5,len(links)-0.5])
@@ -1137,7 +1151,7 @@ bernard
                 self.B[b]._mayavdic.mlab_source.set(x= self.B[b].top[0],y=self.B[b].top[1],z=self.B[b].top[2],u=V[ 0],v=V[ 1],w=V[ 2])
 
 
-    def imshowvisibility_i(self,inter,links,fId=0,**kwargs):
+    def imshowvisibility_i(self,techno='HKB',t=0,**kwargs):
         """  imshow visibility mda interactive
 
         Parameters 
@@ -1145,7 +1159,7 @@ bernard
 
         inter : (nb link x nb link x timestamps)
         links : (nblinks)
-        fId: frame Id
+        time : intial time (s)
 
 
         Example 
@@ -1167,12 +1181,22 @@ bernard
         # else :
         #     notebook = False
 
+        if not '_visiintersect' in dir(self):
+            print 'Visibility is computed only once, Please wait\n'
+            self.compute_visibility(techno=techno)
+
+
+        links = self._visilinks
+        inter = self._visiintersect
+
 
         fig, ax = plt.subplots()
         fig.subplots_adjust(bottom=0.3)
 
 
-        time=self.B[self.subject[0]].time
+        time=self.tmocap
+
+        fId = np.where(time<=t)[0][-1]
 
         vertc = [(0,-10),(0,-10),(0,10),(0,-10)]
         poly = plt.Polygon(vertc)

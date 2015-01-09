@@ -133,6 +133,7 @@ class Simul(PyLayers):
         filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
         if os.path.exists(filenameh5) :
             self.loadpd()
+        self.settime(0.)
         # self._saveh5_init()
 
 
@@ -213,7 +214,7 @@ class Simul(PyLayers):
 
         self.L=source.L
         self.traj = tr.Trajectories()
-        self.traj.Lfilename=self.L
+        self.traj.Lfilename=self.L.filename
 
         for b in B:
             self.dpersons.update({b.name: b})
@@ -228,7 +229,7 @@ class Simul(PyLayers):
                 techno = 'hikob'
             
 
-            self.dap.update({ID: {'pos': source.din[ap]['p'],
+            self.dap.update({ap: {'pos': source.din[ap]['p'],
                                   'ant': antenna.Antenna(),
                                   'name': techno
                                         }
@@ -258,8 +259,7 @@ class Simul(PyLayers):
             D = []
             for dev in self.dpersons[p].dev:
                 D.append(
-                    Device(self.dpersons[p].dev[dev]['name'], ID=dev + '_' + p))
-
+                    Device(self.dpersons[p].dev[dev]['name'], ID=dev))
             N.add_devices(D, grp=p)
         # get access point devices
         for ap in self.dap:
@@ -606,14 +606,14 @@ class Simul(PyLayers):
                 person.settopos(self._traj[up], t=t, cs=True)
                 name = person.name
                 dev = person.dev.keys()
-                nodeid.extend([n + '_' + name for n in dev])
+                #nodeid.extend([n + '_' + name for n in dev])
                 pos.extend([person.dcs[d][:, 0] for d in dev])
                 orient.extend([person.acs[d] for d in dev])
             # TODO !!!!!!!!!!!!!!!!!!!!
             # in a future version , the network update must also update
             # antenna positon in the device coordinate system
-            self.N.update_pos(nodeid, pos, now=t)
-            self.N.update_orient(nodeid, orient, now=t)
+            self.N.update_pos(dev, pos, now=t)
+            self.N.update_orient(dev, orient, now=t)
         self.N.update_dis()
 
     def _show3(self, **kwargs):
@@ -654,37 +654,47 @@ class Simul(PyLayers):
                 kwargs[k] = defaults[k]
 
         link = kwargs['link']
-
-        df = self.data[self.data.index == pd.to_datetime(kwargs['t'])]
-        if len(df) == 0:
-            raise AttributeError('invalid time')
-
-
-        # default
-        if link ==[]:
-            line = df[df.index<=pd.to_datetime(0)]
-            link = [line['id_a'].values[0],line['id_b'].values[0]]
-        else :
-            # get info of the corresponding timestamp
-            line = df[(df['id_a'] == link[0]) & (df['id_b'] == link[1])]
-        if len(line) == 0:
-            line = df[(df['id_b'] == link[0]) & (df['id_a'] == link[1])]
-            if len(line) == 0:
-                raise AttributeError('invalid link')
-        rayid = line['ray_id'].values[0]
-
-
         self.update_pos(kwargs['t'])
-        self.DL.a = self.N.node[link[0]]['p']
-        self.DL.b = self.N.node[link[1]]['p']
-        self.DL.Ta = self.N.node[link[0]]['T']
-        self.DL.Tb = self.N.node[link[1]]['T']
-        self.DL.load(self.DL.R,rayid)
 
-        self.DL._show3(newfig= False,
-                       lay= kwargs['lay'],
-                       rays= kwargs['rays'],
-                       ant=False)
+        if len(self.data) != 0:
+            df = self.data[self.data.index == pd.to_datetime(kwargs['t'])]
+            if len(df) != 0:
+                raise AttributeError('invalid time')
+
+
+            # default
+            if link ==[]:
+                line = df[df.index<=pd.to_datetime(0)]
+                link = [line['id_a'].values[0],line['id_b'].values[0]]
+            else :
+                # get info of the corresponding timestamp
+                line = df[(df['id_a'] == link[0]) & (df['id_b'] == link[1])]
+            if len(line) == 0:
+                line = df[(df['id_b'] == link[0]) & (df['id_a'] == link[1])]
+                if len(line) == 0:
+                    raise AttributeError('invalid link')
+            rayid = line['ray_id'].values[0]
+
+
+            self.DL.a = self.N.node[link[0]]['p']
+            self.DL.b = self.N.node[link[1]]['p']
+            self.DL.Ta = self.N.node[link[0]]['T']
+            self.DL.Tb = self.N.node[link[1]]['T']
+            self.DL.load(self.DL.R,rayid)
+
+
+
+
+
+            self.DL._show3(newfig= False,
+                           lay= kwargs['lay'],
+                           rays= kwargs['rays'],
+                           ant=False)
+        else :
+            self.DL._show3(newfig= False,
+                           lay= True,
+                           rays= False,
+                           ant=False)
         if kwargs['net']:
             self.N._show3(newfig=False)
         if kwargs['body']:
