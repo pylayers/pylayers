@@ -14,7 +14,7 @@ Important : Say yes to add Anaconda to your path
 
 It is then required to define the two enviroment variables PYLAYERS and BASENAME
 
-On linux platforms, in your .bashrc add those 2 lines 
+On linux platforms, in your .bashrc ( .bash_profile if you're using OSX ) add those 2 lines 
 
 export PYLAYERS=<path to the directory where pylayers is located>
 export BASENAME=<path to a directory where you want to host your projects>

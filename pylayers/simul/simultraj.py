@@ -475,7 +475,6 @@ class Simul(PyLayers):
         #
         # Code
         #
-
         init = True
         for ut, t in enumerate(lt):
             self.ctime = t
