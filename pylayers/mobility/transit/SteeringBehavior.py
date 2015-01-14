@@ -497,14 +497,20 @@ class Containment:
         if front_intersect:
             sf = 1 / max(front_distance**2,1e-9)
 
-
             if front_direction == 'left':
                 acceleration += -boid.localy.scale(sf) 
                 acceleration += boid.localx.scale(sf) 
+
             else:
                 acceleration += -boid.localy.scale(sf) 
                 acceleration += -boid.localx.scale(sf) 
                 # acceleration += boid.localx.scale(sr) 
+        # if left_intersect:
+        #     sl = 1 / max(sqrt(left_distance),1e-9)
+        #     acceleration += boid.localx.scale(sl) 
+        # if right_intersect:
+        #     sr = 1 / max(sqrt(right_distance),1e-9)
+        #     acceleration += -boid.localx.scale(sr) 
 
         return acceleration
 
