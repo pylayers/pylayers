@@ -1076,7 +1076,6 @@ bernard
 
 
         def plus(event):
-
             sliderx.set_val(sliderx.val +1)
             fig.canvas.draw_idle()
 
@@ -1105,23 +1104,21 @@ bernard
         axm = plt.axes([0.2, 0.05, 0.1, 0.15])
         bm = Button(axm, '-1')
         bm.on_clicked(minus)
-
-        # +1 frame axes
+                # +1 frame axes
         axp = plt.axes([0.7, 0.05, 0.1, 0.15])
         bp = Button(axp, '+1')
         bp.on_clicked(plus)
-
 
         # -10 frames axes
         axmm = plt.axes([0.1, 0.05, 0.1, 0.15])
         bmm = Button(axmm, '-10')
         bmm.on_clicked(mminus)
 
+
         # +10 frames axes
         axpp = plt.axes([0.8, 0.05, 0.1, 0.15])
         bpp = Button(axpp, '+10')
         bpp.on_clicked(pplus)
-
         plt.show()
 
 
