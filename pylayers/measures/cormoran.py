@@ -161,39 +161,46 @@ class CorSer(PyLayers):
         # 2 - (if available) apply offset
 
         if ('BS' in self.typ) or ('FULL' in self.typ):
-            print '\nAlign BS data frame index on mocap...',
+            print '\nBS data frame index: ',
             self._align_on_devdf(typ='BS')
+            print 'Align on mocap OK...',
             try:
-                self._apply_bs_offset()
-                print 'and time-offset applied'
+                self._apply_offset('BS')
+                print 'time-offset applied OK'
             except: 
-                print ('\nWARNING : No BS offset not yet set => use self.offset_setter_bs() (NOT YET IMPLEMENTED)')
+                print 'WARNING time-offset NOT applied'
+                print ('No BS offset not yet set => use self.offset_setter ')
 
         if ('TCR' in self.typ) or ('FULL' in self.typ):
-            print '\nAlign TCR data frame index on mocap...', 
+            print '\nTCR data frame index:', 
             self._align_on_devdf(typ='TCR')
+            print 'Align on mocap OK...',
             try:
-                self._apply_tcr_offset()
-                print 'and time-offset applied'
+                self._apply_offset('TCR')
+                print 'time-offset applied OK'
             except: 
-                print ('\nWARNING : No HKB offset not yet set => use self.offset_setter_hkb()')
+                print 'WARNING time-offset NOT applied'
+                print ('No TCR offset not yet set => use self.offset_setter')
 
 
         if ('HK' in self.typ) or ('FULL' in self.typ):
-            print '\nAlign HKB data frame index on mocap...', 
+            print '\nHKB data frame index:', 
             self._align_on_devdf(typ='HKB')
+            print 'Align on mocap OK...',
             try:
-                self._apply_hkb_offset()
-                print 'and time-offset applied'
+                self._apply_offset('HKB')
+                print 'time-offset applied OK'
             except: 
-                print ('\nWARNING : No HKB offset not yet set => use self.offset_setter_hkb()')
+                print 'WARNING time-offset NOT applied'
+                print ('No HKB offset not yet set => use self.offset_setter')
 
-        print '\nCreate distance Dataframe'
+        print '\nCreate distance Dataframe...',
         self._computedistdf()
-
+        print 'OK',
 
     def __repr__(self):
         st = ''
+        st = st + 'Filename: ' + self._filename + '\n'
         st = st + 'Day : '+ str(self.day)+'/06/2014'+'\n'
         st = st + 'Serie : '+ str(self.serie)+'\n'
         st = st + 'Scenario : '+str(self.scenario)+'\n'
@@ -272,27 +279,29 @@ class CorSer(PyLayers):
         print '{0:66}'.format('-'*len(title) )
         # device per RAT per body
         for b in self.B:
-            # HKB per body
-            for d in self.B[b].dev.keys():
-                if ('HK' in d):
-                    dev = self.devmapper(d,'HKB')
-                    print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
-            # bespoon
-            if ('FULL' in self.typ) or ('HKB' in self.typ):
-                print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
-            for d in self.B[b].dev.keys():
-                if ('BS' in d):
-                    dev = self.devmapper(d,'BS')
-                    print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
-            # print '{0:66}'.format('-'*len(title) )
-            # TCR per body
-            if 'FULL' in self.typ:
-                print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
-            for d in self.B[b].dev.keys():
-                if ('TCR' in d):
-                    dev = self.devmapper(d,'TCR')
-                    print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
-            print '{0:66}'.format('-'*len(title) )
+            if b not in self.interf:
+                # HKB per body
+                for d in self.B[b].dev.keys():
+
+                    if ('HK' in d):
+                        dev = self.devmapper(d,'HKB')
+                        print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+                # bespoon
+                if ('FULL' in self.typ) or ('HKB' in self.typ):
+                    print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+                for d in self.B[b].dev.keys():
+                    if ('BS' in d):
+                        dev = self.devmapper(d,'BS')
+                        print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+                # print '{0:66}'.format('-'*len(title) )
+                # TCR per body
+                if 'FULL' in self.typ:
+                    print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+                for d in self.B[b].dev.keys():
+                    if ('TCR' in d):
+                        dev = self.devmapper(d,'TCR')
+                        print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+                print '{0:66}'.format('-'*len(title) )
 
     def _loadcam(self):
 
@@ -1923,8 +1932,7 @@ bernard
         plt.show()
 
 
-
-    def offset_setter_hkb(self,a='AP1',b='WristRight',**kwargs):
+    def offset_setter(self,a='HKB:1',b='HKB:12',techno='',**kwargs):
         """ offset setter
         """
         defaults = { 'inverse':True
@@ -1936,14 +1944,20 @@ bernard
                 kwargs[k] = defaults[k]
 
 
+        if plt.isinteractive():
+            interactive = True
+            plt.ioff()
+        else :
+            interactive = False
+
         fig, ax = plt.subplots()
         fig.subplots_adjust(bottom=0.2, left=0.3)
 
-        a,ia,bia,subja,techno=self.devmapper(a,'HKB')
-        b,ib,bib,subjb,techno=self.devmapper(b,'HKB')
+        a,ia,bia,subja,techno=self.devmapper(a,techno)
+        b,ib,bib,subjb,techno=self.devmapper(b,techno)
 
 
-        time = self.thkb
+        time = self.tmocap
         if len(time.shape) == 2:
             time = time[0,:]
 
@@ -1954,21 +1968,23 @@ bernard
             init=time[0]
 
 
-        var = self.getlink(ia,ib,'HKB',mode='dist').values
+        var = self.getlinkd(ia,ib,techno).values
         if kwargs['inverse']:
             var = 10*np.log10(1./(var)**2)
-        gt = ax.plot(self.B[self.B.keys()[0]].time,var)
+        gt = ax.plot(time,var)
 
-        sab = self.hkb[a+'-'+b].values
-        sabt = self.hkb[a+'-'+b].index
-        hkb = ax.plot(sabt,sab)
+
+        ab = self.getlink(ia,ib,techno)
+        sab = ab.values
+        sabt = ab.index.values
+        technoval = ax.plot(sabt,sab)
 
 
         ########
         # slider
         ########
         slide_xoffset_ax = plt.axes([0.1, 0.15, 0.8, 0.02])
-        sliderx = Slider(slide_xoffset_ax, "hkb offset", -(len(sabt)/16), (len(sabt)/16),
+        sliderx = Slider(slide_xoffset_ax, techno + " offset", -(len(sabt)/16), (len(sabt)/16),
                         valinit=init, color='#AAAAAA')
 
         slide_yoffset_ax = plt.axes([0.1, 0.10, 0.8, 0.02])
@@ -1981,10 +1997,10 @@ bernard
 
         def update_x(val):
             value = int(sliderx.val)
-            rhkb = np.roll(sab,value)
+            rtechnoval = np.roll(sab,value)
             sliderx.valtext.set_text('{}'.format(value))
-            hkb[0].set_xdata(sabt)
-            hkb[0].set_ydata(rhkb)
+            technoval[0].set_xdata(sabt)
+            technoval[0].set_ydata(rtechnoval)
             fig.canvas.draw_idle()
         sliderx.on_changed(update_x)
         sliderx.drawon = False
@@ -2004,18 +2020,122 @@ bernard
         def setter(event):
             value = int(sliderx.val)
             try :
-                nval = self.offset[self._filename]['hkb_index'] + value
+                nval = self.offset[self._filename][techno.lower()+'_index'] + value
             except : 
                 nval = value
-            self._save_data_off_dict(self._filename,'hkb_index',nval)
+            self._save_data_off_dict(self._filename,techno.lower()+'_index',nval)
             self.offset= self._load_offset_dict()
             ax.set_title('WARNING : Please Reload serie to Valide offset change',color='r',weight='bold')
-        axset = plt.axes([0.0, 0.5, 0.2, 0.05])
 
-        bset = Button(axset, 'SET offs.')
+        axset = plt.axes([0.0, 0.5, 0.2, 0.05])
+        bset = Button(axset, 'SET ' +techno+' offs.')
         bset.on_clicked(setter)
 
         plt.show()
+        if interactive :
+            plt.ion()
+
+
+    # def offset_setter_hkb(self,a='AP1',b='WristRight',**kwargs):
+    #     """ offset setter
+    #     """
+    #     defaults = { 'inverse':True
+    #                 }
+
+
+    #     for k in defaults:
+    #         if k not in kwargs:
+    #             kwargs[k] = defaults[k]
+
+    #     if plt.isinteractive():
+    #         interactive = True
+    #         plt.ioff()
+    #     else :
+    #         interactive = False
+
+    #     fig, ax = plt.subplots()
+    #     fig.subplots_adjust(bottom=0.2, left=0.3)
+
+    #     a,ia,bia,subja,techno=self.devmapper(a,'HKB')
+    #     b,ib,bib,subjb,techno=self.devmapper(b,'HKB')
+
+
+    #     time = self.thkb
+    #     if len(time.shape) == 2:
+    #         time = time[0,:]
+
+
+    #     try : 
+    #         init = time[0]#self.offset[self._filename]['hkb_index']
+    #     except:
+    #         init=time[0]
+
+
+    #     var = self.getlinkd(ia,ib,'HKB').values
+    #     if kwargs['inverse']:
+    #         var = 10*np.log10(1./(var)**2)
+    #     gt = ax.plot(self.B[self.B.keys()[0]].time,var)
+
+    #     sab = self.hkb[a+'-'+b].values
+    #     sabt = self.hkb[a+'-'+b].index
+    #     hkb = ax.plot(sabt,sab)
+
+
+    #     ########
+    #     # slider
+    #     ########
+    #     slide_xoffset_ax = plt.axes([0.1, 0.15, 0.8, 0.02])
+    #     sliderx = Slider(slide_xoffset_ax, "hkb offset", -(len(sabt)/16), (len(sabt)/16),
+    #                     valinit=init, color='#AAAAAA')
+
+    #     slide_yoffset_ax = plt.axes([0.1, 0.10, 0.8, 0.02])
+    #     slidery = Slider(slide_yoffset_ax, "gt_yoff", -100, 0,
+    #                     valinit=0, color='#AAAAAA')
+
+    #     slide_alpha_ax = plt.axes([0.1, 0.05, 0.8, 0.02])
+    #     slideralpha = Slider(slide_alpha_ax, "gt_alpha", 0, 10,
+    #                     valinit=5, color='#AAAAAA')
+
+    #     def update_x(val):
+    #         value = int(sliderx.val)
+    #         rhkb = np.roll(sab,value)
+    #         sliderx.valtext.set_text('{}'.format(value))
+    #         hkb[0].set_xdata(sabt)
+    #         hkb[0].set_ydata(rhkb)
+    #         fig.canvas.draw_idle()
+    #     sliderx.on_changed(update_x)
+    #     sliderx.drawon = False
+
+
+    #     def update_y(val):
+    #         yoff = slidery.val
+    #         alpha = slideralpha.val
+    #         gt[0].set_ydata(alpha*var + yoff)
+    #         fig.canvas.draw_idle()
+    #     # initpurpose
+    #     update_y(5)
+    #     slidery.on_changed(update_y)
+    #     slideralpha.on_changed(update_y)
+
+
+    #     def setter(event):
+    #         value = int(sliderx.val)
+    #         try :
+    #             nval = self.offset[self._filename]['hkb_index'] + value
+    #         except : 
+    #             nval = value
+    #         self._save_data_off_dict(self._filename,'hkb_index',nval)
+    #         self.offset= self._load_offset_dict()
+    #         ax.set_title('WARNING : Please Reload serie to Valide offset change',color='r',weight='bold')
+    #     axset = plt.axes([0.0, 0.5, 0.2, 0.05])
+
+    #     bset = Button(axset, 'SET offs.')
+    #     bset.on_clicked(setter)
+
+
+    #     plt.show()
+    #     if interactive:
+    #         plt.ion()
 
 
 
@@ -2375,7 +2495,7 @@ bernard
             given time
             or [start,stop] time
 
-        colorab : color
+        color : color
         distance : boolean (False)
             plot distance instead of value
         lin : boolean (False)
@@ -2394,6 +2514,8 @@ bernard
         fontsize : int (18)
             font size
 
+        returnlines : boolean
+            if True return the matplotlib ploted lines
 
         Examples
         --------
@@ -2420,6 +2542,7 @@ bernard
                      'title':True,
                      'shortlabel':True,
                      'fontsize':18,
+                     'returnlines':False
                     }
 
         for k in defaults:
@@ -2441,10 +2564,14 @@ bernard
             uu =  np.nonzero([l.isupper() or l.isdigit() for l in b])[0]
             # cretae string from list
             labelb = ''.join([b[i] for i in uu])
-
             label = labela +'-'+labelb
+
+            
         else:
             label = a+'-'+b
+
+        if kwargs['distance']:
+            label = 'dist ' + label
 
         if kwargs['fig']==[]:
             fig = plt.figure(figsize=kwargs['figsize'])
@@ -2474,9 +2601,9 @@ bernard
             
         if kwargs['sqrtinv']:
             df = np.sqrt(1./df)
-            ylabel = u'$\prop (mW)^{-1/2} linear scale$'
+            ylabel = u'$ (mW)^{-1/2} linear scale$'
 
-        df.plot(ax=ax,color=kwargs['color'],label=label)
+        lines = df.plot(ax=ax,color=kwargs['color'],label=label)
 
         # Managing labelling
         if kwargs['title']:
@@ -2531,14 +2658,15 @@ bernard
         #     r = self.hkb[a+'-'+b][self.hkb[a+'-'+b]!=0]- self.hkb[b+'-'+a][self.hkb[b+'-'+a]!=0]
         #     r[t0:t1].plot(ax=ax2)
         #     ax2.set_title('Reciprocity offset',fontsize=kwargs['fontsize'])
-
-        return fig,ax
-
-
+        if not kwargs['returnlines']:
+            return fig,ax
+        else:
+            return fig,ax,lines
 
 
     def plthkb(self,a,b,techno='',**kwargs):
         """
+        DEPRECATED
         Parameters
         ----------
 
@@ -3562,7 +3690,8 @@ bernard
 
         """
 
-
+        ra=a
+        rb=b
         a,ia,nna,subjecta,techno = self.devmapper(a,techno)
         b,ib,nnb,subjectb,techno = self.devmapper(b,techno)
 
@@ -3572,9 +3701,10 @@ bernard
 
         if (nna +'-' + nnb) in self.distdf.keys():
             link = nna +'-' + nnb
-        else :
+        elif (nnb +'-' + nna) in self.distdf.keys():
             link = nnb +'-' + nna
-
+        else :
+            raise AttributeError('Link between ' + str(ra) +' and ' + str(rb) + ' is not available in distdf dataframe')
 
         # determine time
         if isinstance(t,list):
@@ -3679,30 +3809,36 @@ bernard
 
 
 
-
+        ra = a
+        rb = b
         a,ia,nna,subjecta,techno = self.devmapper(a,techno)
         b,ib,nnb,subjectb,techno = self.devmapper(b,techno)
         if ('HK' in techno) :
             if (a +'-' + b) in self.hkb.keys():
                 link = a +'-' + b
-            else :
+            elif (b +'-' + a) in self.hkb.keys():
                 link = b +'-' + a
-
+            else :
+                raise AttributeError('Link between ' + str(ra) +' and ' + str(rb) + ' is not available in hkb dataframe')
             df = self.hkb
 
         elif ('BS' in techno):
             if (a +'-' + b) in self.bespo.keys():
                 link = a +'-' + b
-            else :
+            elif (b +'-' + a) in self.bespo.keys():
                 link = b +'-' + a
+            else:
+                raise AttributeError('Link between ' + str(ra) +' and ' + str(rb) + ' is not available in bespo dataframe')
 
             df = self.bespo
 
         elif ('TCR' in techno):
             if (a +'-' + b) in self.tcr.keys():
                 link = a +'-' + b
-            else :
+            elif (b +'-' + a) in self.tcr.keys():
                 link = b +'-' + a
+            else:
+                raise AttributeError('Link between ' + str(ra) +' and ' + str(rb) + ' is not available in tcr dataframe')
 
             df = self.tcr
 
@@ -3822,12 +3958,15 @@ bernard
                 ba = a 
                 techno, ia = a.split(':')
                 ia=int(ia)
-                if techno.upper() == 'TCR':
-                    a = self.idTCR[ia]
-                elif (techno.upper() == 'HKB'):
-                    a = self.idHKB[ia]
-                elif (techno.upper() == 'BS'):
-                    a = self.idBS[ia]
+                try:
+                    if techno.upper() == 'TCR':
+                        a = self.idTCR[ia]
+                    elif (techno.upper() == 'HKB'):
+                        a = self.idHKB[ia]
+                    elif (techno.upper() == 'BS'):
+                        a = self.idBS[ia]
+                except:
+                    raise AttributeError('No device ' + a + ' for techno ' +techno)
 
                 for b in self.B:
                     if not 'Cylindre' in b:
@@ -3848,16 +3987,19 @@ bernard
                         raise AttributeError('Please indicate the radio techno in argument : TCR, HKB, BS')
 
 
+                try :
+                    if techno.upper() == 'TCR':
+                        ia = self.dTCR[a]
+                        ba='TCR:'+str(ia)
+                    elif (techno.upper() == 'HKB') :
+                        ia = self.dHKB[a]
+                        ba='HKB:'+str(ia)
+                    elif techno.upper() == 'BS':
+                        ia = self.dBS[a]
+                        ba='BS:'+str(ia)
+                except:
+                    raise AttributeError('No device on body part: ' + a + ' for techno ' +techno)
 
-                if techno.upper() == 'TCR':
-                    ia = self.dTCR[a]
-                    ba='TCR:'+str(ia)
-                elif (techno.upper() == 'HKB') :
-                    ia = self.dHKB[a]
-                    ba='HKB:'+str(ia)
-                elif techno.upper() == 'BS':
-                    ia = self.dBS[a]
-                    ba='BS:'+str(ia)
 
                 for b in self.B:
                     if not 'Cylindre' in b:
@@ -3888,19 +4030,22 @@ bernard
                         else :
                             raise AttributeError('Please indicate the radio techno in argument : TCR, HKB, BS')
 
-            if techno.upper() == 'TCR':
-                ia = a
-                a = self.idTCR[a]
-                ba='TCR:'+str(ia)
-            elif (techno.upper() == 'HKB') :
-                ia = a
-                a = self.idHKB[a]
-                ba='HKB:'+str(ia)
+            try :
+                if techno.upper() == 'TCR':
+                    ia = a
+                    a = self.idTCR[a]
+                    ba='TCR:'+str(ia)
+                elif (techno.upper() == 'HKB') :
+                    ia = a
+                    a = self.idHKB[a]
+                    ba='HKB:'+str(ia)
 
-            elif (techno.upper() == 'BS') :
-                ia = a
-                a = self.idBS[a]
-                ba='BS:'+str(ia)
+                elif (techno.upper() == 'BS') :
+                    ia = a
+                    a = self.idBS[a]
+                    ba='BS:'+str(ia)
+            except:
+                raise AttributeError('No device with ID: ' + str(a) + ' for techno ' +techno)
 
 
             for b in self.B:
@@ -3965,6 +4110,48 @@ bernard
 
         return devdfc,hkbdfc
 
+
+    def _apply_offset(self,techno):
+        """ apply offset from self.offset[self._filename][techno+'_index']
+
+            if offset >0
+                add np.nan at the begining 
+            if offset <0
+                first values of self.hkb will be dropped
+        """
+
+        if techno == 'HKB':
+            df = self.hkb
+        elif techno == 'TCR':
+            df = self.tcr
+        elif techno == 'BS':
+            df = self.bespo
+        else : 
+            raise AttributeError('Unknown tecnology got applying offset')
+
+
+        offset = self.offset[self._filename][techno.lower()+'_index']
+        if offset <= 0 :
+            index = df.index
+            df = df.iloc[-offset:]
+            df.index = index[0:offset]
+        else :
+            # extract time values
+            npahkbi = df.index.values
+            step = npahkbi[1]- npahkbi[0]
+            nstart = npahkbi[0]+ (step * (offset))
+            df.index = pd.Index(npahkbi + nstart)
+
+            # add blank at begining
+            df = pd.DataFrame({},columns=df.keys(),index=npahkbi[:offset])
+            ndf=pd.concat([df,df])
+            df=ndf
+        if techno == 'HKB':
+            self.thkb = df.index
+        elif techno == 'TCR':
+            self.ttcr = df.index
+        elif techno == 'BS':
+            self.tbs = df.index
 
 
     def _apply_hkb_offset(self):
