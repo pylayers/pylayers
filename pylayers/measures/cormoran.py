@@ -1,5 +1,148 @@
 # -*- coding:Utf-8 -*-
 
+
+"""
+
+This module help to the CORMORAN measurement campaign exploitation
+
+CorSer Class
+============
+
+.. autosummary::
+    :toctree: generated/
+
+    cor_log
+
+CorSer init and load data
+-------------------------
+
+.. autosummary::
+    :toctree: generated/
+
+    CorSer.__init__
+    CorSer.__repr__
+    CorSer._loadBS
+    CorSer._loadTCR
+    CorSer._load_offset_dict
+    CorSer._loadbody
+    CorSer._loadcam
+    CorSer._loadhkb
+    CorSer._loadinfranodes
+    CorSer.loadlog
+
+
+CorSer exploit data
+-------------------
+
+.. autosummary::
+    :toctree: generated/
+
+    CorSer.getdevp
+    CorSer.getlink
+    CorSer.getlinkd
+    CorSer.getlinkp
+    CorSer.devmapper
+    CorSer.export_csv
+
+
+CorSer visualization tools
+--------------------------
+
+.. autosummary::
+    :toctree: generated/
+
+
+2D  vizualization
+~~~~~~~~~~~~~~~~
+
+.. autosummary::
+    :toctree: generated/
+
+    CorSer.plot
+    CorSer.pltmob
+    CorSer.plttcr
+    CorSer.pltvisi
+    CorSer.animhkb
+    CorSer.animhkbAP
+    CorSer.imshow
+    CorSer.pltgt
+
+
+3D vizualization
+~~~~~~~~~~~~~~~~
+
+.. autosummary::
+    :toctree: generated/
+
+    CorSer._show3
+    CorSer._show3i
+    CorSer.imshowvisibility
+    CorSer.imshowvisibility_i
+    CorSer.anim
+
+
+
+Video Vizualization
+~~~~~~~~~~~~~~~~~~~
+
+.. autosummary::
+    :toctree: generated/
+
+    CorSer.snapshot
+    CorSer.snapshots
+    CorSer.vlc
+
+
+CorSer Internal processing
+--------------------------
+
+.. autosummary::
+    :toctree: generated/
+
+
+Time Alignement
+~~~~~~~~~~~~~~~
+
+.. autosummary::
+    :toctree: generated/
+
+
+    CorSer.align
+    CorSer.offset_setter
+    CorSer.offset_setter_video
+    CorSer._align_on_devdf
+    CorSer._align_devdf_on_hkb
+    CorSer._apply_offset'
+    CorSer._save_data_off_dict
+    CorSer._save_offset_dict
+
+Data frame transformation
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autosummary::
+    :toctree: generated/
+
+    CorSer.compute_visibility
+    CorSer._computedevpdf
+    CorSer._computedistdf
+    CorSer._distancematrix
+    CorSer._visiarray
+
+
+Vizualizing processing
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. autosummary::
+    :toctree: generated/
+
+    CorSer.visidev
+    CorSer.visidev2
+    CorSer.__refreshshow3i
+
+     
+
+"""
+
 import os
 import pdb
 import sys
@@ -1720,7 +1863,7 @@ bernard
 
 
     def imshow(self,time=100,kind='time'):
-        """
+        """ DEPRECATED
 
         Parameters
         ----------
