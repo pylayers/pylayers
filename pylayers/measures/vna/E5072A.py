@@ -145,8 +145,11 @@ class SCPI:
         com1 = ":CALC"+str(chan)+":PAR "+par+"\n"
         self.s.send(com1)
 
-    def autoscale(self,win=1):
-        pass
+    def autoscale(self,win=1,tr=1):
+        """ autoscale on window win trace tr
+        """
+        com ="DISP:WIND"+str(win)+":TRAC"+str(tr)+":Y:SCAL:AUTO"
+        self.write(com)
 
     def setfstar(self,fstartGHz=1.8,sens=1):
         """ frequency start
@@ -232,7 +235,7 @@ class SCPI:
             return ""
         return(data)
 
-    def getdata(self,N=1,chan=1,param='S11'):
+    def getdata(self,N=1,chan=1,param='S11',Np=201):
         """
 
         """
@@ -247,7 +250,7 @@ class SCPI:
         for k in range(N):
             self.write("TRIG:SING")
             self.write('CALC'+str(chan)+':DATA:SDAT?')
-            self.s.recv_into(S,4*201*16)
+            self.s.recv_into(S,4*Np*16)
             endS = self.ask("*OPC")
 
             #S = np.array(map(lambda x: eval(x),S.split(',')))

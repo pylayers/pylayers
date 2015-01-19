@@ -1585,6 +1585,11 @@ class TBsignal(Bsignal):
 
         return(fig,ax)
 
+    def energy(self):
+        """ return energy
+        """
+        return(sum(self.y*np.conj(self.y)))
+
     def translate(self, tau):
         """  translate signal by tau
 
@@ -1625,10 +1630,15 @@ class TBsignal(Bsignal):
         $$ H = \sum__k y \exp(2j\pi f x_k)$$
 
         """
+        # difference of times 
         dtau = self.x[1:]-self.x[0:-1]
+        # determine the minimum value
         mindtau = np.min(dtau)
+        # fix maximum frequency as the inverse of the minimum delay between
+        # delta functions
         fmax  = 1./mindtau
-        f = np.linspace(0,fmax,N)
+        # create an uniform frequency base
+        f = np.linspace(fmax/(1.0*N),fmax,N)
         z = np.sum(self.y[:,None]*np.exp(-2*1j*f[None,:]*np.pi*self.x[:,None]),axis=0)
         H = FUDsignal(f,z,taud=self.x)
         return(H)
@@ -3493,7 +3503,7 @@ class FUsignal(FBsignal, Usignal):
             >>> y = np.ones(len(x))
             >>> U = FUsignal(x,y)
             >>> fi = plt.figure()
-            >>> fig,ax = U.plot()
+         fig,ax = U.plot()
             >>> U.window('hamming')
             >>> fig,ax = U.plot()
 
