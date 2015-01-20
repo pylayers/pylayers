@@ -3543,6 +3543,151 @@ class Signatures(PyLayers,dict):
         rays.origin_sig_name = self.filename
         return rays
 
+    def image(self,tx):
+        ''' this is an attempt to vectorize the image process.
+            This is still with no guarantees and need to be 
+            accurately tested!!!!!
+
+            Return a dictionnary : {number_of_interaction : M}
+            where shape(M ) = (x_and_y_coodinates , nb signatures,nb interactions)
+
+        '''
+
+        dM={}
+        for ninter in self.keys():
+
+
+            # get segment ids of signature with ninter interactions
+            seg = self[ninter][::2]
+            nsig = len(seg)
+            # determine positions of points limiting the semgments 
+            # 1 get index in L.tahe
+            # 2 get associated position in L.pt
+
+            # utahe (2 pt indexes,nb_signatures,nb_interactions)
+            utahe = self.L.tahe[:,seg-1]
+
+
+
+
+            # pt : (xycoord (2),pt indexes (2),nb_signatures,nb_interactions)
+            pt = self.L.pt[:,utahe]
+
+            # pt shape =
+            # 0 : (x,y) coordinates x=0,y=1
+            # 1 : 2 points (linking the semgnet) a=0,b=1
+            # 2 : nb of found signatures/segments
+            # 3 : nb interaction
+
+            ############
+            # formula 2.61 -> 2.64 N.AMIOT thesis
+            ############
+            den = ((pt[0,0,:,:]-pt[0,1,:,:])**2+(pt[1,0,:,:]-pt[1,1,:,:])**2)
+
+            a = ((pt[0,0,:,:]-pt[0,1,:,:])**2-(pt[1,0,:,:]-pt[1,1,:,:])**2)
+            a=a/(1.*den)
+
+            b = 2*(pt[0,1,:,:]-pt[0,0,:,:])*(pt[1,1,:,:]-pt[1,0,:,:])
+            b=b/(1.*den)
+
+            c= 2*(pt[0,0,:,:]*(pt[1,0,:,:]-pt[1,1,:,:])**2+pt[1,0,:,:]*(pt[0,1,:,:]-pt[0,0,:,:])*(pt[1,0,:,:]-pt[1,1,:,:]))
+            c = c/(1.*den)
+
+            d= 2*(pt[0,0,:,:]*(pt[1,0,:,:]-pt[1,1,:,:])*(pt[0,1,:,:]-pt[0,0,:,:])+pt[1,0,:,:]*(pt[0,1,:,:]-pt[0,0,:,:])**2)
+            d= d/(1.*den)
+
+            # get segment ids of signature with ninter interactions
+            ityp = self[ninter][1::2]
+            uT = np.where(ityp==3)
+            uR = np.where(ityp==2)
+            uD=np.where(ityp==1)
+
+            # create matrix AM which is used to create marix A from eq. 2.65 
+            AM = np.eye(2*ninter)[:,:,np.newaxis]*np.ones(nsig)
+
+            # Reflexion MAtrix K (2.59)  
+            K=np.array([[a,-b],[-b,-a]])
+            # translation vector v (2.60)
+            v =np.array(([c,d]))
+
+            ############
+            # Create matrix A (2.66) which is fill by blocks
+            ############
+
+            blocks=np.zeros((2,2,nsig,ninter))
+
+            # Reflexion block
+            blocks[:,:,uR[0],uR[1]]=-K[:,:,uR[0],uR[1]]
+            # Transmission block
+            blocks[:,:,uT[0],uT[1]]=-np.eye(2)[:,:,np.newaxis]*np.ones((len(uT[0])))
+            # Diff block
+            blocks[:,:,uT[0],uT[1]]=0.
+
+            # fill the AM mda on the diagonal below the mda diagonal....
+            A=pyu.fill_block_diagMDA(AM,blocks,2,-1)
+
+            # The 2nd member y is firslty completly fill, without taking into account that the 1st line differst from others.
+            # 1. find which interaction and signature are R|T|D => create a masked array
+            # 2. repeat is created because to each signature/interaction correspond a 2x1 column. Repeat allow to have the correct size to fill y
+            # 3. fill the 1st line of y to take into consideration that difference.
+
+            # y is the 2nd memeber from from (2.65) and will be filled following (2.67)
+            y = np.zeros((2 * ninter,nsig))
+
+            #######
+            # Determine where y has to be filed with R|T|D
+            #####
+            # find the position where there is T|R|D. because non continuous => need mask array
+            uT1m=np.ma.masked_where(ityp==3,ityp)
+            uR1m = np.ma.masked_where(ityp==2,ityp)#np.where(ityp[:,1:]==2)
+            uD1m = np.ma.masked_where(ityp==1,ityp)#np.where(ityp[:,1:]==1)
+
+            # postiion in signature <=> 2 lines in y . need to repeat to get the correct size
+            try:
+                uR1mr = np.repeat(uR1m.mask,2,axis=1).T
+                y[uR1mr]=v[:,uR[0],uR[1]].T.ravel()  
+            except: 
+                pass #print 'no R'
+            try:
+                uT1mr = np.repeat(uT1m.mask,2,axis=1).T
+                # nothing to do. shoould be a zero vector , already initialized by y
+            except:
+                pass #print 'no T'
+            try:
+                uD1mr = np.repeat(uD1m.mask,2,axis=1).T
+                y[uD1mr]=a[uD1]
+            except:
+                pass #print 'no D'
+
+            ######    
+            #FIRST LINE specific processing of (2.67)
+            ######
+            uT0 = np.where(ityp[:,0]==3)[0]
+            uR0 = np.where(ityp[:,0]==2)[0]
+            uD0 =np.where(ityp[:,0]==1)[0]
+
+            # reflexion 0 (2.67)
+            r0 = np.einsum('ijk,j->jk',K[:,:,uR0,0],tx)+v[:,uR0,0]
+            # trnasmission 0 (2.67)
+            t0 = tx[:,np.newaxis]*np.ones(len(uT0))
+            # diff 0 (2.67)
+            d0 = a[uD0,0]
+            # first line
+            y[0:2,uR0]=r0
+            y[0:2,uT0]=t0
+            y[0:2,uD0]=d0
+
+            # reshape for compliant size with linalg
+            A=np.rollaxis(A,-1)
+            y=np.rollaxis(y,-1)
+
+            m=np.linalg.solve(A, y)
+            M=np.array((m[:,0::2],m[:,1::2]))
+
+            dM.update({ninter:M})
+        return dM
+
+
 class Signature(object):
     """ class Signature
 

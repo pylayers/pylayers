@@ -9,12 +9,12 @@ By doing so, you're installing most of the required dependencies.
 1 - Download Anaconda from https://store.continuum.io/cshop/anaconda/
 2 - Install Anaconda with the given command ( $bash Anaconda-<version>-<plateform>.sh ) . 
 Important : Say yes to add Anaconda to your path
-3 - Run "./installer_unix" file from the pylayers directory (eventually add exe rights using the command: chmod +x ./installer_unix )
+3 - Run "./installer_unix" file from the pylayers directory (YOUR FIRST NEED to add exe rights using the command: chmod +x ./installer_unix )
 4 - Set environement Variables :
 
 It is then required to define the two enviroment variables PYLAYERS and BASENAME
 
-On linux platforms, in your .bashrc add those 2 lines 
+On linux platforms, in your .bashrc ( .bash_profile if you're using OSX ) add those 2 lines 
 
 export PYLAYERS=<path to the directory where pylayers is located>
 export BASENAME=<path to a directory where you want to host your projects>

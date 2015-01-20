@@ -316,7 +316,7 @@ class DLink(Link):
                    'Ta':np.eye(3),
                    'Tb':np.eye(3),
                    'fGHz':np.linspace(2, 11, 181, endpoint=True),
-                   'wav':wvf.Waveform(),
+                   'wav':wvf.Waveform(typ='W1compensate'),
                    'cutoff':3,
                    'save_opt':['sig','ray','Ct','H'],
                    'save_idx':0,
@@ -325,7 +325,7 @@ class DLink(Link):
                 }
 
 
-        specset = ['a','b','Aa','Ab','Ta','Tb','L','fGHz']
+        specset = ['a','b','Aa','Ab','Ta','Tb','L','fGHz','wav']
 
         for key, value in defaults.items():
             if key not in kwargs:
@@ -463,6 +463,10 @@ class DLink(Link):
     def fGHz(self):
         return self._fGHz
 
+    @property
+    def wav(self):
+        return self._wav
+
     @L.setter
     def L(self,L):
         # change layout and build/load
@@ -538,6 +542,13 @@ class DLink(Link):
         self.fmax = freq[-1]
         self.fstep = freq[1]-freq[0]
 
+
+    @wav.setter
+    def wav(self,waveform):
+        self._wav = waveform
+        if 'H' in dir(self):
+            self.chanreal = self.H.applywavB(self.wav.sfg)
+        
 
     def __repr__(self):
         """ __repr__
@@ -1198,6 +1209,8 @@ class DLink(Link):
             self.save(H,'H',self.dexist['H']['grpname'],force = kwargs['force'])
 
         self.H = H
+
+        self.chanreal = self.H.applywavB(self.wav.sfg)
 
         return self.H.ak, self.H.tk
 

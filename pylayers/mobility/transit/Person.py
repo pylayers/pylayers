@@ -140,7 +140,7 @@ class Person(Process):
     # 2r = 0.5 to 0.7 for "sports fans", per the Helbing, Farkas, Vicsek paper
     radius       = 2.85   # per the Teknomo, et al, paper
     mass         = 80 # kg
-    average_radius   = 0.6
+    average_radius   = 0.8/(2*np.pi)# Radius = Perimeter / 2pi 
     npers        = 0
     #GeomNet      = np.array((0,0,[[1,2,3]],[[1,0,0]],[[0,0,1]]),dtype=GeomNetType)
     def __init__(self, ID = 0, interval=0.05,roomId=-1, L=[], net=Network(),
@@ -336,10 +336,13 @@ class Person(Process):
                     if hasattr(self, 'pl'):
                         self.pl[0].set_data(self.df['x'].tail(1),self.df['y'].tail(1))
                         self.pla[0].set_data(ptmp[:,0],ptmp[:,1])
+                        circle= plt.Circle((self.df['x'].tail(1),self.df['y'].tail(1)),radius = self.radius,alpha=0.3)
+                        ax.add_patch(circle)
                     else :
                         self.pl = ax.plot(self.df['x'].tail(1),self.df['y'].tail(1),'o',color=self.color,ms=self.radius*10)
                         self.pla = ax.plot(ptmp[:,0],ptmp[:,1],'r')
-
+                        circle= plt.Circle((self.df['x'].tail(1),self.df['y'].tail(1)),radius = self.radius,alpha=0.3)
+                        ax.add_patch(circle)
                     # try:
                     #     fig,ax=plu.displot(p[:2],p[:2]+v[:2],'r')
                     # except:
