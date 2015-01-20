@@ -145,7 +145,7 @@ class MIMO(object):
             rho = 10**(trhodB[ir]/10)
             for ik in range(len(self.fGHz)):
                 H   = self.H.y[:,:,ik]
-                HHc  = np.dot(H,np.conj(H).T)
+                HHc = np.dot(H,np.conj(H).T)
                 IR  = np.eye(self.Nr)
                 tC[ir,ik] = np.log(la.det(IR+(rho/self.Nt)*HHc))/np.log(2)
 
