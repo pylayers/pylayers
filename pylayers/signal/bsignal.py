@@ -3870,9 +3870,12 @@ class FUsignal(FBsignal, Usignal):
 
         Nz :  int
             Number of zero above f[-1]
+        scale : string
+            default : 'extract' | 'cir'
 
         Returns
         -------
+
         SH : FHsignal
 
         Warnings
@@ -3948,17 +3951,13 @@ class FUsignal(FBsignal, Usignal):
         fp = np.concatenate((fl, fz, fz + fz[-1], fl[0:-1] + 2 * fz[-1]), 0)
 
         Nfp = len(fp)
-        #if scale == 'extract':
-        #    scale = ((Nfp - 1) / (1.0 * N)) / 2.0
-        #if scale == 'cir':
-        #    scale = ((Nfp - 1) / (1.0 * N)) 
         if scale=='extract':
-            scale = ((Nfp-1)/(4*N))
-            #scale = Nfp/(N+1)
+            scale = np.sqrt(Nfp/(2.*N))
+
         if scale=='cir':
             Df = df*Nfp
             #scale = ((Nfp-1)/(2*N))/Df
-            scale = ((Nfp-1)/(2*N))/Df
+            scale = ((Nfp-1)/(2.*N))/Df
 
         #self.hermitian=True
         #self.x = fp
