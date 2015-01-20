@@ -3522,9 +3522,7 @@ class Signatures(PyLayers,dict):
                     #
                     # Transform signature into a ray
                     # --> sig2ray
-                    if k == 4:
-                        import ipdb
-                        ipdb.set_trace()
+
                     isray,Yi  = s.sig2ray(self.L, ptx[:2], prx[:2])
 
                     if isray:
