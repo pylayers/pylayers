@@ -3522,7 +3522,9 @@ class Signatures(PyLayers,dict):
                     #
                     # Transform signature into a ray
                     # --> sig2ray
-
+                    if k == 4:
+                        import ipdb
+                        ipdb.set_trace()
                     isray,Yi  = s.sig2ray(self.L, ptx[:2], prx[:2])
 
                     if isray:
@@ -3544,18 +3546,33 @@ class Signatures(PyLayers,dict):
         return rays
 
     def image(self,tx):
-        ''' this is an attempt to vectorize the image process.
-            This is still with no guarantees and need to be 
-            accurately tested!!!!!
+        ''' Warning :
+            This is an attempt to vectorize the image process.
+            Despite it has been tested on few cases with succes, 
+            this is quite new need to be validated !!!
 
-            Return a dictionnary : {number_of_interaction : M}
-            where shape(M ) = (x_and_y_coodinates , nb signatures,nb interactions)
+
+            Parameters
+            ----------
+
+                tx : ndarray
+                    position of tx (2,)
+
+            Return
+            -------
+
+                M : dictionnary
+
+            dictionnary of intermediate coordinated :
+            key = number_of_interactions 
+            value = nd array M with shape : (2,nb_signatures,nb_interactions)
+            and 2 represent x and y coordinates
+            
 
         '''
 
         dM={}
         for ninter in self.keys():
-
 
             # get segment ids of signature with ninter interactions
             seg = self[ninter][::2]
@@ -3598,9 +3615,9 @@ class Signatures(PyLayers,dict):
 
             # get segment ids of signature with ninter interactions
             ityp = self[ninter][1::2]
-            uT = np.where(ityp==3)
-            uR = np.where(ityp==2)
-            uD=np.where(ityp==1)
+            uT = np.where(ityp[:,1:]==3)
+            uR = np.where(ityp[:,1:]==2)
+            uD=np.where(ityp[:,1:]==1)
 
             # create matrix AM which is used to create marix A from eq. 2.65 
             AM = np.eye(2*ninter)[:,:,np.newaxis]*np.ones(nsig)
@@ -3614,10 +3631,10 @@ class Signatures(PyLayers,dict):
             # Create matrix A (2.66) which is fill by blocks
             ############
 
-            blocks=np.zeros((2,2,nsig,ninter))
+            blocks=np.zeros((2,2,nsig,ninter-1))
 
             # Reflexion block
-            blocks[:,:,uR[0],uR[1]]=-K[:,:,uR[0],uR[1]]
+            blocks[:,:,uR[0],uR[1]]=-K[:,:,uR[0],uR[1]+1]
             # Transmission block
             blocks[:,:,uT[0],uT[1]]=-np.eye(2)[:,:,np.newaxis]*np.ones((len(uT[0])))
             # Diff block
@@ -3637,15 +3654,23 @@ class Signatures(PyLayers,dict):
             #######
             # Determine where y has to be filed with R|T|D
             #####
-            # find the position where there is T|R|D. because non continuous => need mask array
-            uT1m=np.ma.masked_where(ityp==3,ityp)
-            uR1m = np.ma.masked_where(ityp==2,ityp)#np.where(ityp[:,1:]==2)
-            uD1m = np.ma.masked_where(ityp==1,ityp)#np.where(ityp[:,1:]==1)
+            # find the position where there is T|R|D. non continuous => need mask array
+            uTf = np.where(ityp==3)
+            uRf = np.where(ityp==2)
+            uDf =np.where(ityp==1)
 
             # postiion in signature <=> 2 lines in y . need to repeat to get the correct size
+            uRy2=np.repeat(uRf[0],2)
+            uRy1=np.repeat(uRf[1],2)
+            uRy1=2*uRy1
+            uRy1[1::2]=uRy1[::2]+1
+
+            uDy2=np.repeat(uDf[0],2)
+            uDy1=np.repeat(uDf[1],2)
+            uDy1=2*uDy1
+            uDy1[1::2]=uDy1[::2]+1
             try:
-                uR1mr = np.repeat(uR1m.mask,2,axis=1).T
-                y[uR1mr]=v[:,uR[0],uR[1]].T.ravel()  
+                y[uRy1,uRy2]=v[:,uRf[0],uRf[1]].ravel(order='F')
             except: 
                 pass #print 'no R'
             try:
@@ -3654,9 +3679,11 @@ class Signatures(PyLayers,dict):
             except:
                 pass #print 'no T'
             try:
-                uD1mr = np.repeat(uD1m.mask,2,axis=1).T
-                y[uD1mr]=a[uD1]
+                # NEVER TESTED !!!!!!!!!!!
+                y[uDy1,uDy2]=a[uDf]
             except:
+                print "signatures.image diffraction line 3672 Not yet tested !"
+
                 pass #print 'no D'
 
             ######    
