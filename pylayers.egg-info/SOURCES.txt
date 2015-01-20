@@ -67,8 +67,19 @@ pylayers/measures/Hikobstart.py
 pylayers/measures/__init__.py
 pylayers/measures/cormoran.py
 pylayers/measures/easyRadio.py
+<<<<<<< HEAD
+=======
+pylayers/measures/figurepatch.py
+pylayers/measures/gpsstation.py
+>>>>>>> 5e49d622f16b69de2ad4716c1fa7d14013fa62ec
 pylayers/measures/mesmimo.py
 pylayers/measures/mesuwb.py
+<<<<<<< HEAD
+=======
+pylayers/measures/test_cormoran.py
+pylayers/measures/switch/__init__.py
+pylayers/measures/switch/ni_usb_6501.py
+>>>>>>> 5e49d622f16b69de2ad4716c1fa7d14013fa62ec
 pylayers/mobility/__init__.py
 pylayers/mobility/agent.py
 pylayers/mobility/trajectory.py
