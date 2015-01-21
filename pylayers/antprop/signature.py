@@ -3276,145 +3276,145 @@ class Signatures(PyLayers,dict):
             else:
                 print 'press n for next signature'
 
-    def raysmt(self,ptx=0,prx=1):
-        """ from signatures dict to 2D rays
-            mutithread
+    # def raysmt(self,ptx=0,prx=1):
+    #     """ from signatures dict to 2D rays
+    #         mutithread
             
-        Parameters
-        ----------
+    #     Parameters
+    #     ----------
 
-        ptx : numpy.array or int
-            Tx coordinates is the center of gravity of the cycle number if
-            type(tx)=int
-        prx :  numpy.array or int
-            Rx coordinates is the center of gravity of the cycle number if
-            type(rx)=int
+    #     ptx : numpy.array or int
+    #         Tx coordinates is the center of gravity of the cycle number if
+    #         type(tx)=int
+    #     prx :  numpy.array or int
+    #         Rx coordinates is the center of gravity of the cycle number if
+    #         type(rx)=int
 
-        Returns
-        -------
+    #     Returns
+    #     -------
 
-        rays : Rays
+    #     rays : Rays
 
-        Notes
-        -----
+    #     Notes
+    #     -----
 
-        In the same time the signature of the ray is stored in the Rays object
+    #     In the same time the signature of the ray is stored in the Rays object
 
-        Todo : Find the best memory implemntation
+    #     Todo : Find the best memory implemntation
 
-        See Also
-        --------
+    #     See Also
+    #     --------
 
-        Signature.sig2ray
+    #     Signature.sig2ray
 
-        """
+    #     """
 
-        if type(ptx)==int:
-            ptx = np.array(self.L.Gt.pos[ptx])
-        if type(prx)==int:
-            prx = np.array(self.L.Gt.pos[prx])
+    #     if type(ptx)==int:
+    #         ptx = np.array(self.L.Gt.pos[ptx])
+    #     if type(prx)==int:
+    #         prx = np.array(self.L.Gt.pos[prx])
 
-        rays = Rays(ptx,prx)
+    #     rays = Rays(ptx,prx)
 
-        #
-        # detect LOS situation
-        #
-        #
-        # cycle on a line between 2 cycles
-        # lc  = self.L.cycleinline(self.source,self.target)
+    #     #
+    #     # detect LOS situation
+    #     #
+    #     #
+    #     # cycle on a line between 2 cycles
+    #     # lc  = self.L.cycleinline(self.source,self.target)
 
-        #
-        # if source and target in the same merged cycle
-        # and ptx != prx
-        #
-        los = shg.LineString(((ptx[0], ptx[1]), (prx[0], prx[1])))
+    #     #
+    #     # if source and target in the same merged cycle
+    #     # and ptx != prx
+    #     #
+    #     los = shg.LineString(((ptx[0], ptx[1]), (prx[0], prx[1])))
 
-        # convex cycle of each point
-        cyptx = self.L.pt2cy(ptx)
-        cyprx = self.L.pt2cy(prx)
+    #     # convex cycle of each point
+    #     cyptx = self.L.pt2cy(ptx)
+    #     cyprx = self.L.pt2cy(prx)
 
-        # merged cycle of each point
-        polyctx = self.L.Gt.node[cyptx]['polyg']
-        polycrx = self.L.Gt.node[cyprx]['polyg']
+    #     # merged cycle of each point
+    #     polyctx = self.L.Gt.node[cyptx]['polyg']
+    #     polycrx = self.L.Gt.node[cyprx]['polyg']
 
-        dtxrx = np.sum((ptx-prx)*(ptx-prx))
-        if dtxrx>1e-15:
-            if cyptx==cyprx:
-                if polyctx.contains(los):
-                    rays.los = True
-                else:
-                    rays.los = False
+    #     dtxrx = np.sum((ptx-prx)*(ptx-prx))
+    #     if dtxrx>1e-15:
+    #         if cyptx==cyprx:
+    #             if polyctx.contains(los):
+    #                 rays.los = True
+    #             else:
+    #                 rays.los = False
 
-        # k : Loop on interaction group
-        #   l : loop on signature
-        # --->
-        #  this part should be a generator
-        #
+    #     # k : Loop on interaction group
+    #     #   l : loop on signature
+    #     # --->
+    #     #  this part should be a generator
+    #     #
 
-        def rayproc(tsig,rays):
+    #     def rayproc(tsig,rays):
 
-            shsig = np.shape(tsig)
-            for l in range(shsig[0]/2):
-                sig = tsig[2*l:2*l+2,:]
-                ns0 = sig[0,0]
-                nse = sig[0,-1]
-                validtx = True
-                validrx = True
+    #         shsig = np.shape(tsig)
+    #         for l in range(shsig[0]/2):
+    #             sig = tsig[2*l:2*l+2,:]
+    #             ns0 = sig[0,0]
+    #             nse = sig[0,-1]
+    #             validtx = True
+    #             validrx = True
 
-                if (ns0<0):
-                    pD = self.L.Gs.pos[ns0]
-                    TxD = shg.LineString(((ptx[0], ptx[1]), (pD[0], pD[1])))
-                    seg = polyctx.intersection(TxD)
-                    validtx = seg.almost_equals(TxD,decimal=4)
-                    if not validtx:
-                        print ns0
+    #             if (ns0<0):
+    #                 pD = self.L.Gs.pos[ns0]
+    #                 TxD = shg.LineString(((ptx[0], ptx[1]), (pD[0], pD[1])))
+    #                 seg = polyctx.intersection(TxD)
+    #                 validtx = seg.almost_equals(TxD,decimal=4)
+    #                 if not validtx:
+    #                     print ns0
 
-                if (nse<0):
-                    pD = self.L.Gs.pos[nse]
-                    DRx = shg.LineString(((pD[0], pD[1]), (prx[0], prx[1])))
-                    validrx = polyctx.contains(DRx)
-                    if not validrx:
-                        print nse
+    #             if (nse<0):
+    #                 pD = self.L.Gs.pos[nse]
+    #                 DRx = shg.LineString(((pD[0], pD[1]), (prx[0], prx[1])))
+    #                 validrx = polyctx.contains(DRx)
+    #                 if not validrx:
+    #                     print nse
 
-                if validtx & validrx:
-                    #    print sig
-                    #    print pD
-                    s  = Signature(sig)
-                    #
-                    # Transform signature into a ray
-                    # --> sig2ray
+    #             if validtx & validrx:
+    #                 #    print sig
+    #                 #    print pD
+    #                 s  = Signature(sig)
+    #                 #
+    #                 # Transform signature into a ray
+    #                 # --> sig2ray
 
-                    isray,Yi  = s.sig2ray(self.L, ptx[:2], prx[:2])
+    #                 isray,Yi  = s.sig2ray(self.L, ptx[:2], prx[:2])
 
-                    if isray:
-                        Yi = np.fliplr(Yi)
-                        if k in rays.keys():
-                            Yi3d = np.vstack((Yi[:, 1:-1], np.zeros((1, k))))
-                            Yi3d = Yi3d.reshape(3, k, 1)
-                            rays[k]['pt'] = np.dstack(( rays[k]['pt'], Yi3d))
-                            rays[k]['sig'] = np.dstack(( rays[k]['sig'],
-                                                        sig.reshape(2, k, 1)))
-                        else:
-                            rays[k] = {'pt': np.zeros((3, k, 1)),
-                                       'sig': np.zeros((2, k, 1),dtype=int)}
-                            rays[k]['pt'][0:2, :, 0] = Yi[:, 1:-1]
-                            rays[k]['sig'][:, :, 0] = sig
+    #                 if isray:
+    #                     Yi = np.fliplr(Yi)
+    #                     if k in rays.keys():
+    #                         Yi3d = np.vstack((Yi[:, 1:-1], np.zeros((1, k))))
+    #                         Yi3d = Yi3d.reshape(3, k, 1)
+    #                         rays[k]['pt'] = np.dstack(( rays[k]['pt'], Yi3d))
+    #                         rays[k]['sig'] = np.dstack(( rays[k]['sig'],
+    #                                                     sig.reshape(2, k, 1)))
+    #                     else:
+    #                         rays[k] = {'pt': np.zeros((3, k, 1)),
+    #                                    'sig': np.zeros((2, k, 1),dtype=int)}
+    #                         rays[k]['pt'][0:2, :, 0] = Yi[:, 1:-1]
+    #                         rays[k]['sig'][:, :, 0] = sig
 
 
-        import threading as thg
-        jobs = []
+    #     import threading as thg
+    #     jobs = []
 
-        for k in self:
-            # get signature block with k interactions
-            tsig = self[k]
-            p = thg.Thread(target=rayproc, args=(tsig,rays))
-            jobs.append(p)
-            p.start()
-            p.join()
+    #     for k in self:
+    #         # get signature block with k interactions
+    #         tsig = self[k]
+    #         p = thg.Thread(target=rayproc, args=(tsig,rays))
+    #         jobs.append(p)
+    #         p.start()
+    #         p.join()
 
-        rays.nb_origin_sig = len(self)
-        rays.origin_sig_name = self.filename
-        return rays
+    #     rays.nb_origin_sig = len(self)
+    #     rays.origin_sig_name = self.filename
+    #     return rays
 
     def rays(self,ptx=0,prx=1):
         """ from signatures dict to 2D rays
@@ -3538,6 +3538,7 @@ class Signatures(PyLayers,dict):
                             rays[k]['sig'] = np.dstack(( rays[k]['sig'],
                                                         sig.reshape(2, k, 1)))
                         else:
+
                             rays[k] = {'pt': np.zeros((3, k, 1)),
                                        'sig': np.zeros((2, k, 1),dtype=int)}
                             rays[k]['pt'][0:2, :, 0] = Yi[:, 1:-1]
@@ -3583,6 +3584,7 @@ class Signatures(PyLayers,dict):
         rayp={}
         # loop on number of interactions
         for ninter in self.keys():
+            signatures = copy.deepcopy(self[ninter])
             # get segment ids of signature with 4 interactions
             seg = self[ninter][::2]
             nsig = len(seg)
@@ -3621,7 +3623,8 @@ class Signatures(PyLayers,dict):
             Mr = copy.deepcopy(M)
 
             epsilon = 1e-2
-            rayp_i = np.empty((2,nsig,ninter))
+            rayp_i = np.zeros((3,nsig,ninter))
+            # rayp_i[:2,:,-1]=rx[:,None]
             # backtrace process
             while kinter > -1:
                 # Initilization, using the Tx position
@@ -3631,7 +3634,6 @@ class Signatures(PyLayers,dict):
                     p_min_m = pvalid[:].T-Mr[ninter][:,:,kinter]
 
                 a_min_b = ptr[:,0,:,kinter]-ptr[:,1,:,kinter]
-
 
                 # Creating W from  eq (2.71)
                 # a_min_b <=> a_{Lh-l}-b_{Lh-l}
@@ -3657,23 +3659,37 @@ class Signatures(PyLayers,dict):
                 invalid_sig=np.where(abs(np.linalg.det(W))<1e-15)
                 W = np.delete(W,invalid_sig,axis=0)
                 y = np.delete(y,invalid_sig,axis=0)
-
                 ptr = np.delete(ptr,invalid_sig,axis=2)
                 Mr[ninter] = np.delete(Mr[ninter],invalid_sig,axis=1)
                 rayp_i = np.delete(rayp_i,invalid_sig,axis=1)
-                
-                psolved = np.linalg.solve(W,y)
+
+                # remove signatures
+                usig = np.repeat(invalid_sig[0],2)
+                usig[::2]=usig[::2]*2
+                usig[1::2]=usig[1::2]*2+1
+                signatures = np.delete(signatures,usig,axis=0)
+
+
+                lw=len(W) 
+                psolved = np.empty((lw,4))
+                for zz in range(lw):
+                    psolved[zz] = la.solve(W[zz],y[zz])
+
+                # psolved = np.linalg.solve(W,y)
                 # np.linalg.solve and sp.linalg.solve don't give the exact same answer
                 # one approximate the result from the lower value and the other form the upper
                 # which is very embarassing when values are arround bounds
 
 
                 # valid ray is : 0 < \alpha < 1 and 0< \beta < 1
-                uvalid = (np.where(psolved[:,2]>0) and 
-                          np.where(psolved[:,2]<1) and
-                          np.where(psolved[:,3]>=epsilon) and 
-                          np.where(psolved[:,3]<1-epsilon)
-                          )[0]
+                # alpha
+                uvalidA= psolved[:,2]>0.
+                uvalidB= psolved[:,2]<1.
+                # beta
+                uvalidC= psolved[:,3]>=epsilon
+                uvalidD= psolved[:,3]<=1.-epsilon
+                uvalid = np.where(uvalidA & uvalidB & uvalidC & uvalidD)[0]
+                
                 # uvalid = (np.where(psolved[:,2]>1) and np.where(psolved[:,3]>0))[0]
 
                 pvalid = psolved[uvalid,:2]
@@ -3683,14 +3699,28 @@ class Signatures(PyLayers,dict):
                 ptr=ptr[:,:,uvalid,:]
                 W = W[uvalid,:,:]
 
+                # remove signatures
+                usigv = np.repeat(uvalid,2)
+                usigv[::2]=usigv[::2]*2
+                usigv[1::2]=usigv[1::2]*2+1
+                signatures = signatures[usigv,:]
                 
-                rayp_i[:,uvalid,kinter] = pvalid.T
+
+                rayp_i[:2,uvalid,kinter] = pvalid.T
                 rayp_i = rayp_i[:,uvalid,:]
 
 
                 kinter=kinter-1
-            # rayp_i[:,:,0]=tx[:,None]
-            rayp.update({ninter:rayp_i})
+
+            # rayp_i[:2,:,0]=tx[:,None]
+
+            sir1=signatures[::2].T.reshape(ninter,len(usigv)/2)
+            sir2=signatures[1::2].T.reshape(ninter,len(usigv)/2)
+            sig = np.empty((2,ninter,len(usigv)/2))
+            sig[0,:,:]=sir1
+            sig[1,:,:]=sir2
+            rayp_i=np.swapaxes(rayp_i,1,2)
+            rayp.update({ninter:{'pt':rayp_i,'sig':sig}})
         return rayp
 
     def image(self,tx):
