@@ -3586,7 +3586,7 @@ class Signatures(PyLayers,dict):
         for ninter in self.keys():
             signatures = copy.deepcopy(self[ninter])
             # get segment ids of signature with 4 interactions
-            seg = self[ninter][::2]
+            seg = signatures[::2]
             nsig = len(seg)
             # determine positions of points limiting the semgments 
             # 1 get index in L.tahe
@@ -3657,6 +3657,7 @@ class Signatures(PyLayers,dict):
 
                 # search and remove point with singular matrix
                 invalid_sig=np.where(abs(np.linalg.det(W))<1e-15)
+
                 W = np.delete(W,invalid_sig,axis=0)
                 y = np.delete(y,invalid_sig,axis=0)
                 ptr = np.delete(ptr,invalid_sig,axis=2)
@@ -3670,12 +3671,14 @@ class Signatures(PyLayers,dict):
                 signatures = np.delete(signatures,usig,axis=0)
 
 
-                lw=len(W) 
-                psolved = np.empty((lw,4))
-                for zz in range(lw):
-                    psolved[zz] = la.solve(W[zz],y[zz])
+                # lw=len(W) 
+                # psolved = np.empty((lw,4))
+                # for zz in xrange(lw):
+                #     psolved[zz] = la.solve(W[zz],y[zz])
 
-                # psolved = np.linalg.solve(W,y)
+                psolved = np.linalg.solve(W,y)
+
+
                 # np.linalg.solve and sp.linalg.solve don't give the exact same answer
                 # one approximate the result from the lower value and the other form the upper
                 # which is very embarassing when values are arround bounds
@@ -3686,12 +3689,10 @@ class Signatures(PyLayers,dict):
                 uvalidA= psolved[:,2]>0.
                 uvalidB= psolved[:,2]<1.
                 # beta
-                uvalidC= psolved[:,3]>=epsilon
-                uvalidD= psolved[:,3]<=1.-epsilon
+                uvalidC= psolved[:,3] >= epsilon
+                uvalidD= psolved[:,3] <=1.-epsilon
                 uvalid = np.where(uvalidA & uvalidB & uvalidC & uvalidD)[0]
                 
-                # uvalid = (np.where(psolved[:,2]>1) and np.where(psolved[:,3]>0))[0]
-
                 pvalid = psolved[uvalid,:2]
 
                 # keep only valid rays for ptr and Mr 
@@ -3809,6 +3810,8 @@ class Signatures(PyLayers,dict):
             # Create matrix A (2.66) which is fill by blocks
             ############
 
+            
+
             blocks=np.zeros((2,2,nsig,ninter-1))
 
             # Reflexion block
@@ -3816,7 +3819,7 @@ class Signatures(PyLayers,dict):
             # Transmission block
             blocks[:,:,uT[0],uT[1]]=-np.eye(2)[:,:,np.newaxis]*np.ones((len(uT[0])))
             # Diff block
-            blocks[:,:,uT[0],uT[1]]=0.
+            blocks[:,:,uD[0],uD[1]]=0.
 
             # fill the AM mda on the diagonal below the mda diagonal....
             A=pyu.fill_block_diagMDA(AM,blocks,2,-1)
@@ -3852,7 +3855,8 @@ class Signatures(PyLayers,dict):
             except: 
                 pass #print 'no R'
             try:
-                uT1mr = np.repeat(uT1m.mask,2,axis=1).T
+                pass
+                #uT1mr = np.repeat(uT1m.mask,2,axis=1).T
                 # nothing to do. shoould be a zero vector , already initialized by y
             except:
                 pass #print 'no T'
