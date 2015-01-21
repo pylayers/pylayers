@@ -3490,6 +3490,10 @@ class Signatures(PyLayers,dict):
         #  this part should be a generator
         #
         for k in self:
+            # print 'block#',k
+            # if k ==3:
+            #     import ipdb
+            #     ipdb.set_trace()
             # get signature block with k interactions
             tsig = self[k]
             shsig = np.shape(tsig)
@@ -3614,12 +3618,10 @@ class Signatures(PyLayers,dict):
             kinter=ninter-1
 
             ptr = pt
-            Mr = M
+            Mr = copy.deepcopy(M)
 
-
-            rayp_i = np.empty((2,nsig,ninter+2))
-            rayp_i[:,:,-1]=rx[:,None]
-
+            epsilon = 1e-2
+            rayp_i = np.empty((2,nsig,ninter))
             # backtrace process
             while kinter > -1:
                 # Initilization, using the Tx position
@@ -3641,7 +3643,6 @@ class Signatures(PyLayers,dict):
                 W[...,:2,2] = p_min_m.T 
                 W[...,2:,3] = a_min_b.T
 
-
                 # create 2nd member from eq (2.72)
                 if kinter == ninter-1:
                     y= np.concatenate((p[:,np.newaxis]*np.ones((nsig)),ptr[:,0,:,kinter]))
@@ -3652,20 +3653,29 @@ class Signatures(PyLayers,dict):
                 # y (nsig,4)
                 y=y.T
 
-
                 # search and remove point with singular matrix
-                invalid_sig=np.where(np.linalg.det(W)==0)
+                invalid_sig=np.where(abs(np.linalg.det(W))<1e-15)
                 W = np.delete(W,invalid_sig,axis=0)
                 y = np.delete(y,invalid_sig,axis=0)
 
                 ptr = np.delete(ptr,invalid_sig,axis=2)
                 Mr[ninter] = np.delete(Mr[ninter],invalid_sig,axis=1)
-
+                rayp_i = np.delete(rayp_i,invalid_sig,axis=1)
                 
                 psolved = np.linalg.solve(W,y)
+                # np.linalg.solve and sp.linalg.solve don't give the exact same answer
+                # one approximate the result from the lower value and the other form the upper
+                # which is very embarassing when values are arround bounds
 
-                # valid ray is : \alpha > 1 and \beta > 0
-                uvalid = (np.where(psolved[:,2]>1) and np.where(psolved[:,3]>0))[0]
+
+                # valid ray is : 0 < \alpha < 1 and 0< \beta < 1
+                uvalid = (np.where(psolved[:,2]>0) and 
+                          np.where(psolved[:,2]<1) and
+                          np.where(psolved[:,3]>=epsilon) and 
+                          np.where(psolved[:,3]<1-epsilon)
+                          )[0]
+                # uvalid = (np.where(psolved[:,2]>1) and np.where(psolved[:,3]>0))[0]
+
                 pvalid = psolved[uvalid,:2]
 
                 # keep only valid rays for ptr and Mr 
@@ -3673,15 +3683,13 @@ class Signatures(PyLayers,dict):
                 ptr=ptr[:,:,uvalid,:]
                 W = W[uvalid,:,:]
 
-                # save rayp_i for interation kinter+1
-                # kinter+1 for ray p because 
-                # a ray is nb_interaction+2 (Tx, nbinteraction,Rx)
-                rayp_i[:,uvalid,kinter+1] = pvalid.T
+                
+                rayp_i[:,uvalid,kinter] = pvalid.T
                 rayp_i = rayp_i[:,uvalid,:]
 
 
                 kinter=kinter-1
-            rayp_i[:,:,0]=tx[:,None]
+            # rayp_i[:,:,0]=tx[:,None]
             rayp.update({ninter:rayp_i})
         return rayp
 
@@ -4332,6 +4340,7 @@ class Signature(object):
         beta = .5      # to enter into the loop
         isvalid = True # signature is asumed being valid by default
         epsilon = 1e-2
+
         # while (((beta <= 1) & (beta >= 0)) & (k < N)):
         while (((beta <= 1-epsilon) & (beta >= epsilon)) & (k < N)):
             #if int(typ[k]) != 1: # not a diffraction (surprisingly it works)
@@ -4342,10 +4351,14 @@ class Signature(object):
                                 pa[:, N - (k + 1)].reshape(2, 1) -
                                 pb[:, N - (k + 1)].reshape(2, 1)
                                 ))
-
+                # print pkm1 
+                # import ipdb
+                # ipdb.set_trace()
                 T = np.vstack((l0, l1))
                 yk = np.hstack((pkm1[:, 0].T, pa[:, N - (k + 1)].T))
+
                 deT = np.linalg.det(T)
+
                 if abs(deT) < 1e-15:
                     return(False,(k,None,None))
                 xk = la.solve(T, yk)
