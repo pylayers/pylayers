@@ -3543,6 +3543,148 @@ class Signatures(PyLayers,dict):
         rays.origin_sig_name = self.filename
         return rays
 
+    def backtrace(self, tx, rx, M):
+        ''' Warning :
+            This is an attempt to vectorize the backtrace process.
+            Despite it has been tested on few cases with succes, 
+            this is quite new need to be validated !!!
+
+
+            Parameters
+            ----------
+
+                tx : ndarray
+                    position of tx (2,)
+                rx : ndarray
+                    position of tx (2,)
+                M : dict
+                    position of intermediate point from self.image()
+
+            Return
+            -------
+
+                rayp : dict 
+                key = number_of_interactions 
+                value =ndarray positions of interactions for creating rays
+
+            Notes
+            -----
+            dictionnary of intermediate coordinated :
+            key = number_of_interactions 
+            value = nd array M with shape : (2,nb_signatures,nb_interactions)
+            and 2 represent x and y coordinates
+            
+
+        '''
+        rayp={}
+        # loop on number of interactions
+        for ninter in self.keys():
+            # get segment ids of signature with 4 interactions
+            seg = self[ninter][::2]
+            nsig = len(seg)
+            # determine positions of points limiting the semgments 
+            # 1 get index in L.tahe
+            # 2 get associated position in L.pt
+
+            # utahe (2 pt indexes,nb_signatures,nb_interactions)
+            utahe = self.L.tahe[:,seg-1]
+
+            # pt : (xycoord (2),pt indexes (2),nb_signatures,nb_interactions)
+            pt = self.L.pt[:,utahe]
+            #shape =
+            # 0 : (x,y) coordinates x=0,y=1
+            # 1 : 2 points (linking the semgnet) a=0,b=1
+            # 2 : nb of found signatures/segments
+            # 3 : nb interaction
+            # how to do this into a while loop
+            p=rx
+
+            # creating W matrix required in eq (2.70) thesis Nicolas AMIOT
+            # Warning W is rolled after and becomes (nsig,4,4)
+            W=np.zeros((4,4,nsig))
+            I=np.eye(2)[:,:,np.newaxis]*np.ones((nsig))
+            W[:2,:2,...] = I
+            W[2:4,:2,...] = I
+
+            # once rolled :
+            # W (nsig,4,4)
+            W = np.rollaxis(W,-1)
+
+
+            kinter=ninter-1
+
+            ptr = pt
+            Mr = M
+
+
+            rayp_i = np.empty((2,nsig,ninter+2))
+            rayp_i[:,:,-1]=rx[:,None]
+
+            # backtrace process
+            while kinter > -1:
+                # Initilization, using the Tx position
+                if kinter == ninter-1:
+                    p_min_m = p[:,np.newaxis]-Mr[ninter][:,:,kinter]
+                else :
+                    p_min_m = pvalid[:].T-Mr[ninter][:,:,kinter]
+
+                a_min_b = ptr[:,0,:,kinter]-ptr[:,1,:,kinter]
+
+
+                # Creating W from  eq (2.71)
+                # a_min_b <=> a_{Lh-l}-b_{Lh-l}
+                # p_min_m <=> \tilde{p}_{Lh}-\tilde{b}_{Lh-l}
+
+                # W (nsig,4,4)
+                # p_min_m (2,nsig)
+                # a_min_b (2,nsig)
+                W[...,:2,2] = p_min_m.T 
+                W[...,2:,3] = a_min_b.T
+
+
+                # create 2nd member from eq (2.72)
+                if kinter == ninter-1:
+                    y= np.concatenate((p[:,np.newaxis]*np.ones((nsig)),ptr[:,0,:,kinter]))
+                else: 
+                    y= np.concatenate((pvalid.T,ptr[:,0,:,kinter]))
+
+                # y once transposed :
+                # y (nsig,4)
+                y=y.T
+
+
+                # search and remove point with singular matrix
+                invalid_sig=np.where(np.linalg.det(W)==0)
+                W = np.delete(W,invalid_sig,axis=0)
+                y = np.delete(y,invalid_sig,axis=0)
+
+                ptr = np.delete(ptr,invalid_sig,axis=2)
+                Mr[ninter] = np.delete(Mr[ninter],invalid_sig,axis=1)
+
+                
+                psolved = np.linalg.solve(W,y)
+
+                # valid ray is : \alpha > 1 and \beta > 0
+                uvalid = (np.where(psolved[:,2]>1) and np.where(psolved[:,3]>0))[0]
+                pvalid = psolved[uvalid,:2]
+
+                # keep only valid rays for ptr and Mr 
+                Mr[ninter]=Mr[ninter][:,uvalid,:]
+                ptr=ptr[:,:,uvalid,:]
+                W = W[uvalid,:,:]
+
+                # save rayp_i for interation kinter+1
+                # kinter+1 for ray p because 
+                # a ray is nb_interaction+2 (Tx, nbinteraction,Rx)
+                rayp_i[:,uvalid,kinter+1] = pvalid.T
+                rayp_i = rayp_i[:,uvalid,:]
+
+
+                kinter=kinter-1
+            rayp_i[:,:,0]=tx[:,None]
+            rayp.update({ninter:rayp_i})
+        return rayp
+
     def image(self,tx):
         ''' Warning :
             This is an attempt to vectorize the image process.
