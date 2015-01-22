@@ -3548,6 +3548,78 @@ class Signatures(PyLayers,dict):
         rays.origin_sig_name = self.filename
         return rays
 
+
+    def raysv(self,ptx=0,prx=1):
+    
+        """ from signatures dict to 2D rays Vectorized version 
+
+        Parameters
+        ----------
+
+        ptx : numpy.array or int
+            Tx coordinates is the center of gravity of the cycle number if
+            type(tx)=int
+        prx :  numpy.array or int
+            Rx coordinates is the center of gravity of the cycle number if
+            type(rx)=int
+
+        Returns
+        -------
+
+        rays : Rays
+
+        Notes
+        -----
+
+        This is a vectorized version of Signatures.rays.
+        This implementation take advantage of the np.ndarray
+        and calculate images and backtrace for block of signatures.
+        A block of signature gather all signatures with the same number of interaction.
+
+        For mathematical details see :
+
+        @phdthesis{amiot:tel-00971809,
+          TITLE = {{Design of simulation platform joigning site specific radio propagation and human mobility for localization applications}},
+          AUTHOR = {Amiot, Nicolas},
+          URL = {https://tel.archives-ouvertes.fr/tel-00971809},
+          NUMBER = {2013REN1S125},
+          SCHOOL = {{Universit{\'e} Rennes 1}},
+          YEAR = {2013},
+          MONTH = Dec,
+          KEYWORDS = {Electromagnetic wave propagation simulation ; Human mobility simulation ; Wireless localization methods ; Position estimation methods in wireless networks ; Vectorized computation ; Ray-tracing ; Ultra wide band ; Simulateur de propagation {\'e}lectromagn{\'e}tique ; Simulateur de mobilit{\'e} humaine ; M{\'e}thodes de localisation sans fils ; M{\'e}thodes d'estimation de la position dans les r{\'e}seaux sans fils ; Calcul informatique vectoris{\'e} ; Outil de trac{\'e} de rayons ; Ultra large bande},
+          TYPE = {Theses},
+          HAL_ID = {tel-00971809},
+          HAL_VERSION = {v1},
+        }
+
+        See Also
+        --------
+
+        Signatures.image
+        Signatures.backtrace
+
+        """
+        if type(ptx)==int:
+            ptx = np.array(self.L.Gt.pos[ptx])
+        
+        if type(prx)==int:
+            prx = np.array(self.L.Gt.pos[prx])
+        
+
+        if len(ptx) == 2:
+            ptx= np.r_[ptx,0.5]
+        if len(ptx) == 2:
+            prx= np.r_[prx,0.5]
+
+        rays = Rays(ptx,prx)
+
+        M = self.image(ptx)
+        R = self.backtrace(ptx,prx,M)
+        rays.update(R)
+        rays.nb_origin_sig = len(self)
+        rays.origin_sig_name = self.filename
+        return rays
+
     def backtrace(self, tx, rx, M):
         ''' Warning :
             This is an attempt to vectorize the backtrace process.
@@ -3581,6 +3653,12 @@ class Signatures(PyLayers,dict):
             
 
         '''
+
+        if len(tx) > 2:
+            tx = tx[:2]
+        if len(rx) > 2:
+            rx = rx[:2]
+
         rayp={}
         # loop on number of interactions
         for ninter in self.keys():
@@ -3671,17 +3749,17 @@ class Signatures(PyLayers,dict):
                 signatures = np.delete(signatures,usig,axis=0)
 
 
+                
+                psolved = np.linalg.solve(W,y)
+
+                # np.linalg.solve and sp.linalg.solve don't give the exact same answer
+                # one approximate the result from the lower value and the other form the upper
+                # alternatively, it can be used :
                 # lw=len(W) 
                 # psolved = np.empty((lw,4))
                 # for zz in xrange(lw):
                 #     psolved[zz] = la.solve(W[zz],y[zz])
 
-                psolved = np.linalg.solve(W,y)
-
-
-                # np.linalg.solve and sp.linalg.solve don't give the exact same answer
-                # one approximate the result from the lower value and the other form the upper
-                # which is very embarassing when values are arround bounds
 
 
                 # valid ray is : 0 < \alpha < 1 and 0< \beta < 1
@@ -3721,7 +3799,7 @@ class Signatures(PyLayers,dict):
             sig[0,:,:]=sir1
             sig[1,:,:]=sir2
             rayp_i=np.swapaxes(rayp_i,1,2)
-            rayp.update({ninter:{'pt':rayp_i,'sig':sig}})
+            rayp.update({ninter:{'pt':rayp_i,'sig':sig.astype('int')}})
         return rayp
 
     def image(self,tx):
@@ -3749,6 +3827,8 @@ class Signatures(PyLayers,dict):
             
 
         '''
+        if len(tx) > 2:
+            tx = tx[:2]
 
         dM={}
         for ninter in self.keys():

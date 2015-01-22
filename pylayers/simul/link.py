@@ -1063,6 +1063,10 @@ class DLink(Link):
             signature.run algo type
         ra_number_mirror_cf : int
             rays.to3D number of ceil/floor reflexions
+        ra_ceil_height_meter:float,
+            ceil height
+        ra_vectorized: boolean (True)
+            if True used the (2015 new) vectorized approach to determine 2drays 
 
 
         Returns
@@ -1106,6 +1110,7 @@ class DLink(Link):
         defaults={ 'output':['sig','ray','Ct','H'],
                    'si_algo':'old',
                    'diffraction':False,
+                   'ra_vectorized':True,
                    'ra_ceil_height_meter':3,
                    'ra_number_mirror_cf':1,
                    'force':[],
@@ -1162,7 +1167,12 @@ class DLink(Link):
 
         else :
             # perform computation ...
-            r2d = Si.rays(self.a,self.b)
+            # ... with vetorized ray evaluation approach
+            if kwargs['ra_vectorized']:
+                r2d = Si.raysv(self.a,self.b)
+            # ... or with original and slow approach ( to be removed in a near future)
+            else :
+                r2d = Si.rays(self.a,self.b)
             R = r2d.to3D(self.L,H=self.L.maxheight, N=kwargs['ra_number_mirror_cf'])
             R.locbas(self.L)
             # ...and save
