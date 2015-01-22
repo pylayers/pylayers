@@ -2741,6 +2741,9 @@ class Layout(PyLayers):
         if gui:
             data0 = choicebox('chose slab',title,self.sl.keys())
             data1 = multenterbox('attribute for ' + data0, title, tuple(de1k[1:]), tuple(de1v[1:]))
+            d1 = data1[0].split(' ')
+            d1t = tuple((eval(d1[0]),eval(d1[1])))
+            data1[0]=d1t
             data = [data0]+data1
             #data = multenterbox(message, title, tuple(de1k), tuple(de1v))
             i = 0
