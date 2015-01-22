@@ -3788,18 +3788,22 @@ class Signatures(PyLayers,dict):
                 rayp_i[:2,uvalid,kinter] = pvalid.T
                 rayp_i = rayp_i[:,uvalid,:]
 
-
-                kinter=kinter-1
+                # if no more rays are valid , then quit block 
+                # (kinter <0 is the exit while condition)
+                if len(uvalid) > 0 :
+                    kinter=kinter-1
+                else : 
+                    kinter = -2
 
             # rayp_i[:2,:,0]=tx[:,None]
-
-            sir1=signatures[::2].T.reshape(ninter,len(usigv)/2)
-            sir2=signatures[1::2].T.reshape(ninter,len(usigv)/2)
-            sig = np.empty((2,ninter,len(usigv)/2))
-            sig[0,:,:]=sir1
-            sig[1,:,:]=sir2
-            rayp_i=np.swapaxes(rayp_i,1,2)
-            rayp.update({ninter:{'pt':rayp_i,'sig':sig.astype('int')}})
+            if len(uvalid) !=0:
+                sir1=signatures[::2].T.reshape(ninter,len(usigv)/2)
+                sir2=signatures[1::2].T.reshape(ninter,len(usigv)/2)
+                sig = np.empty((2,ninter,len(usigv)/2))
+                sig[0,:,:]=sir1
+                sig[1,:,:]=sir2
+                rayp_i=np.swapaxes(rayp_i,1,2)
+                rayp.update({ninter:{'pt':rayp_i,'sig':sig.astype('int')}})
         return rayp
 
     def image(self,tx):

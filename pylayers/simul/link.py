@@ -1109,6 +1109,7 @@ class DLink(Link):
 
         defaults={ 'output':['sig','ray','Ct','H'],
                    'si_algo':'old',
+                   'si_progress':False,
                    'diffraction':False,
                    'ra_vectorized':True,
                    'ra_ceil_height_meter':3,
@@ -1142,12 +1143,16 @@ class DLink(Link):
 
         else :
             if kwargs['alg']==5:
-                Si.run5(cutoff=kwargs['cutoff'],algo=kwargs['si_algo'],diffraction=kwargs['diffraction'])
+                Si.run5(cutoff=kwargs['cutoff'],
+                        algo=kwargs['si_algo'],
+                        diffraction=kwargs['diffraction'],
+                        progress=kwargs['si_progress'])
             if kwargs['alg']==7:
                 Si.run7(cutoff=kwargs['cutoff'],
                     algo=kwargs['si_algo'],
                     diffraction=kwargs['diffraction'],
-                    threshold=kwargs['threshold'])
+                    threshold=kwargs['threshold'],
+                    progress=kwargs['si_progress'])
 
             #Si.run6(diffraction=kwargs['diffraction'])
             # save sig
