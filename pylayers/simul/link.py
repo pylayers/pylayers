@@ -1059,14 +1059,28 @@ class DLink(Link):
 
         force : list
             Force the computation (['sig','ray','Ct','H']) AND save (replace previous computations)
+
         si_algo : str ('old'|'new')
-            signature.run algo type
+            signature.run algo type 
+            'old' : call propaths2
+            'new' : call procone2
+        alg : 5 | 7
+            version of run for signature
+        si_mt: boolean
+            Multuithreat version of algo version 7
+        si_progress: bollean ( False)
+            display progression bar for signatures
+        diffraction : bollean (False)
+            take into consideration diffraction points
+
         ra_number_mirror_cf : int
             rays.to3D number of ceil/floor reflexions
         ra_ceil_height_meter:float,
             ceil height
         ra_vectorized: boolean (True)
             if True used the (2015 new) vectorized approach to determine 2drays 
+
+
 
 
         Returns
@@ -1109,6 +1123,7 @@ class DLink(Link):
 
         defaults={ 'output':['sig','ray','Ct','H'],
                    'si_algo':'old',
+                   'si_mt':False,
                    'si_progress':False,
                    'diffraction':False,
                    'ra_vectorized':True,
@@ -1122,16 +1137,20 @@ class DLink(Link):
             if key not in kwargs:
                 kwargs[key]=value
 
-        self.checkh5()
 
         if 'cutoff' not in kwargs:
             kwargs['cutoff']=self.cutoff
+
         if 'force' not in kwargs:
             if not isinstance(kwargs['force'],list):
                 if kwargs['force'] == True :
                     kwargs['force'] = ['sig','ray','Ct','H']
                 else :
                     kwargs['force'] = []
+
+        # must be placed after all the init !!!!
+        self.checkh5()
+
 
         ############
         # Signatures
@@ -1148,11 +1167,18 @@ class DLink(Link):
                         diffraction=kwargs['diffraction'],
                         progress=kwargs['si_progress'])
             if kwargs['alg']==7:
-                Si.run7(cutoff=kwargs['cutoff'],
-                    algo=kwargs['si_algo'],
-                    diffraction=kwargs['diffraction'],
-                    threshold=kwargs['threshold'],
-                    progress=kwargs['si_progress'])
+                if kwargs['si_mt']==7:
+                    Si.run7mt(cutoff=kwargs['cutoff'],
+                        algo=kwargs['si_algo'],
+                        diffraction=kwargs['diffraction'],
+                        threshold=kwargs['threshold'],
+                        progress=kwargs['si_progress'])
+                else :
+                    Si.run7(cutoff=kwargs['cutoff'],
+                        algo=kwargs['si_algo'],
+                        diffraction=kwargs['diffraction'],
+                        threshold=kwargs['threshold'],
+                        progress=kwargs['si_progress'])
 
             #Si.run6(diffraction=kwargs['diffraction'])
             # save sig
