@@ -6685,6 +6685,9 @@ class Layout(PyLayers):
             #
 
             edges = G.edges()
+            
+            if kwargs['edgelist'] != []:
+                edges = kwargs['edgelist']
 
             rle = range(len(edges))
 
