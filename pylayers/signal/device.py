@@ -78,7 +78,7 @@ class Device(object):
             type of the device
         wstd : dict
             dictionnary of wireless standards
-            key : 
+            key :
                 wireless standard name
             values : dict of std information (from Wstandard class)
 

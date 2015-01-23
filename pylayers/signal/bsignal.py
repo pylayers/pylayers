@@ -65,7 +65,8 @@ TBsignal Class
     TBsignal.__repr__
     TBsignal.plot
     TBsignal.translate
-    TBsignal.b2u
+    TBsignal.b2tu
+    TBsignal.b2fu
 
 TUsignal Class
 ==============
@@ -1584,6 +1585,11 @@ class TBsignal(Bsignal):
 
         return(fig,ax)
 
+    def energy(self):
+        """ return energy
+        """
+        return(sum(self.y*np.conj(self.y)))
+
     def translate(self, tau):
         """  translate signal by tau
 
@@ -1614,8 +1620,31 @@ class TBsignal(Bsignal):
         """
         self.x = self.x + tau
 
-    def b2u(self, N):
-        """ conversion into an uniform signal
+    def b2fud(self, N=300):
+        r""" conversion into a FUDsignal
+
+        This method is assuming that each element of TBsignal is a delta function.
+
+        $$ h = \sum__k y \delta(x-x_k)$$
+
+        $$ H = \sum__k y \exp(2j\pi f x_k)$$
+
+        """
+        # difference of times 
+        dtau = self.x[1:]-self.x[0:-1]
+        # determine the minimum value
+        mindtau = np.min(dtau)
+        # fix maximum frequency as the inverse of the minimum delay between
+        # delta functions
+        fmax  = 1./mindtau
+        # create an uniform frequency base
+        f = np.linspace(fmax/(1.0*N),fmax,N)
+        z = np.sum(self.y[:,None]*np.exp(-2*1j*f[None,:]*np.pi*self.x[:,None]),axis=0)
+        H = FUDsignal(f,z,taud=self.x)
+        return(H)
+
+    def b2tu(self, N):
+        """ conversion into a TUsignal
 
         Parameters
         ----------
@@ -1645,13 +1674,13 @@ class TBsignal(Bsignal):
             >>> x = np.array( [ 1, 3 , 6 , 11 , 18])
             >>> y = np.array( [ 0,1 ,-5, 8 , 10])
             >>> sb = TBsignal(x,y)
-            >>> su20 = sb.b2u(20)
-            >>> su100 = sb.b2u(100)
+            >>> su20 = sb.b2tu(20)
+            >>> su100 = sb.b2tu(100)
             >>> fi = plt.figure()
             >>> st = sb.stem()
             >>> fig,ax = su20.plot(color='k')
             >>> fig,ax = su100.plot(color='r')
-            >>> ti = plt.title('b2u : sb(blue) su20(black) su200(red)')
+            >>> ti = plt.title('b2tu : sb(blue) su20(black) su200(red)')
 
         """
 
@@ -3476,7 +3505,7 @@ class FUsignal(FBsignal, Usignal):
             >>> y = np.ones(len(x))
             >>> U = FUsignal(x,y)
             >>> fi = plt.figure()
-            >>> fig,ax = U.plot()
+         fig,ax = U.plot()
             >>> U.window('hamming')
             >>> fig,ax = U.plot()
 
@@ -3513,7 +3542,7 @@ class FUsignal(FBsignal, Usignal):
         The Friis factor is multiplied to y
 
         .. math::
-            y := \frac{c}{4\pif} y
+            y := \frac{c}{4 \pi f} y
 
         boolean `isFriis` is set to `True`
 
@@ -3796,7 +3825,7 @@ class FUsignal(FBsignal, Usignal):
         U = FUsignal(x_new, y_new)
         return(U)
 
-    def symH(self, parity):
+    def symH(self, parity=0):
         """ enforce Hermitian symetry
 
         Parameters
@@ -3811,6 +3840,7 @@ class FUsignal(FBsignal, Usignal):
         V  : FHsignal
 
         """
+        assert self.x[0]!=0
         f = self.x
         U = self.y
         N = len(f)
@@ -3842,9 +3872,12 @@ class FUsignal(FBsignal, Usignal):
 
         Nz :  int
             Number of zero above f[-1]
+        scale : string
+            default : 'extract' | 'cir'
 
         Returns
         -------
+
         SH : FHsignal
 
         Warnings
@@ -3920,17 +3953,13 @@ class FUsignal(FBsignal, Usignal):
         fp = np.concatenate((fl, fz, fz + fz[-1], fl[0:-1] + 2 * fz[-1]), 0)
 
         Nfp = len(fp)
-        #if scale == 'extract':
-        #    scale = ((Nfp - 1) / (1.0 * N)) / 2.0
-        #if scale == 'cir':
-        #    scale = ((Nfp - 1) / (1.0 * N)) 
         if scale=='extract':
-            scale = ((Nfp-1)/(4*N))
-            #scale = Nfp/(N+1)
+            scale = np.sqrt(Nfp/(2.*N))
+
         if scale=='cir':
             Df = df*Nfp
             #scale = ((Nfp-1)/(2*N))/Df
-            scale = ((Nfp-1)/(2*N))/Df
+            scale = ((Nfp-1)/(2.*N))/Df
 
         #self.hermitian=True
         #self.x = fp
@@ -4000,7 +4029,7 @@ class FUsignal(FBsignal, Usignal):
         ----------
 
         Npt : int
-            default -1 (same number as x) 
+            default -1 (same number as x)
 
         Returns
         -------
@@ -4692,7 +4721,7 @@ class FUDAsignal(FUDsignal):
 
         fcGHz : float
             center frequency
-        WMHz : floar
+        WMHz : float
             bandwidth
         Ntap : int
             number of taps (related to bandwith)
@@ -4860,7 +4889,7 @@ class FHsignal(FUsignal):
         U = FHsignal(x, self.y * u.y)
         return(U)
 
-    def ifft(self, ffts=0, tt='centered'):
+    def ifft(self, ffts=0, centered=True):
         """ Inverse Fourier Transform
 
         Parameters
@@ -4869,8 +4898,7 @@ class FHsignal(FUsignal):
         ffts : int
             0 no fftshift (default)
             1 apply fftshift
-        tt : string
-            'centered'  default
+        centered:  boolean
 
         Returns
         -------
@@ -4891,7 +4919,7 @@ class FHsignal(FUsignal):
         Df = Np * df
         te = 1.0 / Df
         Tww = 1.0 / df
-        if (tt == 'centered'):
+        if centered:
             t = np.linspace(-0.5 * Tww + te / 2, 0.5 *
                             Tww + te / 2, Np, endpoint=False)
         else:
@@ -5339,8 +5367,9 @@ def test():
 #
 
 if __name__ == "__main__":
-    plt.ion()
-    doctest.testmod()
+    pass
+    #plt.ion()
+    #doctest.testmod()
     #ip1 = EnImpulse(fc=4.493,band=0.499,thresh=3,fe=40)
     #ip2 = EnImpulse(fc=4.493,band=0.499,thresh=3,fe=40)
     #ip2.translate(1.123)

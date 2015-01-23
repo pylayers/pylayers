@@ -316,7 +316,7 @@ class DLink(Link):
                    'Ta':np.eye(3),
                    'Tb':np.eye(3),
                    'fGHz':np.linspace(2, 11, 181, endpoint=True),
-                   'wav':wvf.Waveform(),
+                   'wav':wvf.Waveform(typ='W1compensate'),
                    'cutoff':3,
                    'save_opt':['sig','ray','Ct','H'],
                    'save_idx':0,
@@ -325,7 +325,7 @@ class DLink(Link):
                 }
 
 
-        specset = ['a','b','Aa','Ab','Ta','Tb','L','fGHz']
+        specset = ['a','b','Aa','Ab','Ta','Tb','L','fGHz','wav']
 
         for key, value in defaults.items():
             if key not in kwargs:
@@ -464,6 +464,10 @@ class DLink(Link):
     def fGHz(self):
         return self._fGHz
 
+    @property
+    def wav(self):
+        return self._wav
+
     @L.setter
     def L(self,L):
         # change layout and build/load
@@ -539,6 +543,13 @@ class DLink(Link):
         self.fmax = freq[-1]
         self.fstep = freq[1]-freq[0]
 
+
+    @wav.setter
+    def wav(self,waveform):
+        self._wav = waveform
+        if 'H' in dir(self):
+            self.chanreal = self.H.applywavB(self.wav.sfg)
+        
 
     def __repr__(self):
         """ __repr__
@@ -1049,10 +1060,28 @@ class DLink(Link):
 
         force : list
             Force the computation (['sig','ray','Ct','H']) AND save (replace previous computations)
+
         si_algo : str ('old'|'new')
-            signature.run algo type
+            signature.run algo type 
+            'old' : call propaths2
+            'new' : call procone2
+        alg : 5 | 7
+            version of run for signature
+        si_mt: boolean
+            Multuithreat version of algo version 7
+        si_progress: bollean ( False)
+            display progression bar for signatures
+        diffraction : bollean (False)
+            take into consideration diffraction points
+
         ra_number_mirror_cf : int
             rays.to3D number of ceil/floor reflexions
+        ra_ceil_height_meter:float,
+            ceil height
+        ra_vectorized: boolean (True)
+            if True used the (2015 new) vectorized approach to determine 2drays 
+
+
 
 
         Returns
@@ -1095,7 +1124,10 @@ class DLink(Link):
 
         defaults={ 'output':['sig','ray','Ct','H'],
                    'si_algo':'old',
+                   'si_mt':False,
+                   'si_progress':False,
                    'diffraction':False,
+                   'ra_vectorized':True,
                    'ra_ceil_height_meter':3,
                    'ra_number_mirror_cf':1,
                    'force':[],
@@ -1106,16 +1138,20 @@ class DLink(Link):
             if key not in kwargs:
                 kwargs[key]=value
 
-        self.checkh5()
 
         if 'cutoff' not in kwargs:
             kwargs['cutoff']=self.cutoff
+
         if 'force' not in kwargs:
             if not isinstance(kwargs['force'],list):
                 if kwargs['force'] == True :
                     kwargs['force'] = ['sig','ray','Ct','H']
                 else :
                     kwargs['force'] = []
+
+        # must be placed after all the init !!!!
+        self.checkh5()
+
 
         ############
         # Signatures
@@ -1129,12 +1165,23 @@ class DLink(Link):
 
         else :
             if kwargs['alg']==5:
-                Si.run5(cutoff=kwargs['cutoff'],algo=kwargs['si_algo'],diffraction=kwargs['diffraction'])
+                Si.run5(cutoff=kwargs['cutoff'],
+                        algo=kwargs['si_algo'],
+                        diffraction=kwargs['diffraction'],
+                        progress=kwargs['si_progress'])
             if kwargs['alg']==7:
-                Si.run7(cutoff=kwargs['cutoff'],
-                    algo=kwargs['si_algo'],
-                    diffraction=kwargs['diffraction'],
-                    threshold=kwargs['threshold'])
+                if kwargs['si_mt']==7:
+                    Si.run7mt(cutoff=kwargs['cutoff'],
+                        algo=kwargs['si_algo'],
+                        diffraction=kwargs['diffraction'],
+                        threshold=kwargs['threshold'],
+                        progress=kwargs['si_progress'])
+                else :
+                    Si.run7(cutoff=kwargs['cutoff'],
+                        algo=kwargs['si_algo'],
+                        diffraction=kwargs['diffraction'],
+                        threshold=kwargs['threshold'],
+                        progress=kwargs['si_progress'])
 
             #Si.run6(diffraction=kwargs['diffraction'])
             # save sig
@@ -1154,7 +1201,12 @@ class DLink(Link):
 
         else :
             # perform computation ...
-            r2d = Si.rays(self.a,self.b)
+            # ... with vetorized ray evaluation approach
+            if kwargs['ra_vectorized']:
+                r2d = Si.raysv(self.a,self.b)
+            # ... or with original and slow approach ( to be removed in a near future)
+            else :
+                r2d = Si.rays(self.a,self.b)
             R = r2d.to3D(self.L,H=self.L.maxheight, N=kwargs['ra_number_mirror_cf'])
             R.locbas(self.L)
             # ...and save
@@ -1201,6 +1253,8 @@ class DLink(Link):
             self.save(H,'H',self.dexist['H']['grpname'],force = kwargs['force'])
 
         self.H = H
+
+        self.chanreal = self.H.applywavB(self.wav.sfg)
 
         return self.H.ak, self.H.tk
         

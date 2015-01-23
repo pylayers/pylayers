@@ -866,7 +866,7 @@ class Layout(PyLayers):
         # wedge < 179 (not flat)
         idiff = filter(lambda x: wedgea[x]<179,range(len(self.degree[2])))
         self.ldiff = map(lambda x : self.degree[2][x],idiff)
-
+        # if problem here check file format 'z' should be a string 
         self.maxheight = np.max([v[1] for v in nx.get_node_attributes(self.Gs,'z').values()])
 
         self.extrseg()
@@ -2741,6 +2741,9 @@ class Layout(PyLayers):
         if gui:
             data0 = choicebox('chose slab',title,self.sl.keys())
             data1 = multenterbox('attribute for ' + data0, title, tuple(de1k[1:]), tuple(de1v[1:]))
+            d1 = data1[0].split(' ')
+            d1t = tuple((eval(d1[0]),eval(d1[1])))
+            data1[0]=d1t
             data = [data0]+data1
             #data = multenterbox(message, title, tuple(de1k), tuple(de1v))
             i = 0

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Pylint: Disable name warnings
+# Pylint: Disable name warningsos.path.join(self.directory,continent)
 # pylint: disable-msg=C0103
 
 """Load and process SRTM data."""
@@ -26,10 +26,10 @@ class NoSuchTileError(Exception):
         self.lon = lon
 
     def __str__(self):
-        return "No SRTM tile for %d, %d available!" % (self.lat, self.lon)
+        return "No SRTM tile for %d, %d available!" % (self.lat, self .lon)
 
 class WrongTileError(Exception):
-    """Raised when the value of a pixel outside the tile area is requested."""
+    """Raised when the value of a pixel outside the tile area is reque sted."""
     def __init__(self, tile_lat, tile_lon, req_lat, req_lon):
         Exception.__init__()
         self.tile_lat = tile_lat
@@ -42,7 +42,7 @@ class WrongTileError(Exception):
             self.tile_lat, self.tile_lon, self.req_lat, self.req_lon)
 
 class InvalidTileError(Exception):
-    """Raised when the SRTM tile file contains invalid data."""
+    """Raised when the SRTM tile file contains invalid data.""" 
     def __init__(self, lat, lon):
         Exception.__init__()
         self.lat = lat
@@ -66,9 +66,8 @@ class SRTMDownloader:
         if not os.path.exists(cachedir):
             os.mkdir(cachedir)
         self.filelist = {}
-        self.filename_regex = re.compile(
-                r"([NS])(\d{2})([EW])(\d{3})\.hgt\.zip")
-        self.filelist_file = os.path.join(self.cachedir,"filelist_python"
+        self.filename_regex = re.compile(r"([NS])(\d{2})([EW])(\d{3})\.hgt\.zip")
+        self.filelist_file = os.path.join(self.cachedir,"filelist_python")
         self.ftpfile = None
         self.ftp_bytes_transfered = 0
 
@@ -101,6 +100,7 @@ class SRTMDownloader:
                     ftp.cwd(os.path.join(self.directory,continent))
                     files = ftp.nlst()
                     for filename in files:
+                        s.path.join(self.directory,continent)
                         self.filelist[self.parseFilename(filename)] = (
                                 continent, filename)
             finally:

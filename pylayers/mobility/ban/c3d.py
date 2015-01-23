@@ -178,9 +178,9 @@ def read_header(_filename='serie_017.c3d'):
     proctype, content = getNumber(content, 1)
     proctype = proctype - 83                      # proctype: 1(INTEL-PC); 2(DEC-VAX); 3(MIPS-SUN/SGI)
 
-    print "*************************"
-    print "**** Processor coding ***"
-    print "*************************"
+    # print "*************************"
+    print "**** Processor coding :",
+    # print "*************************"
 
 
     if proctype == 1:
@@ -780,9 +780,9 @@ def ReadC3d(_filename='07_01.c3d', verbose=False):
     proctype = proctype - 83                      # proctype: 1(INTEL-PC); 2(DEC-VAX); 3(MIPS-SUN/SGI)
 
     dinfo = {}
-    print "*************************"
-    print "**** Processor coding ***"
-    print "*************************"
+    # print "*************************"
+    print "**** Processor coding :",
+    # print "************************"
 
     if proctype == 1:
         print "Intel-PC"

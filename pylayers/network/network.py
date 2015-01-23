@@ -345,17 +345,19 @@ class Network(PyLayers,nx.MultiDiGraph):
             s = s + 'number of nodes: ' + str(len(self.nodes())) +'\n'
             title = '{0:7} | {1:15} |{2:7} | {3:4} | {4:17} | {5:10} '.format('ID', 'name', 'group', 'type', 'position (x,y,z)','wstd')
             s = s + title + '\n' + '-'*len(title) + '\n'
-            for n in self.nodes():
-                # for compliance with simulnet and simultraj
-                # to be merged
-                try:
-                    wstd = self.node[n]['wstd'].keys()
-                except:
-                    wstd = self.node[n]['wstd']
-                s = s + '{0:7} | {1:15} |{2:7} | {3:4} | {4:5.2f} {5:5.2f} {6:5.2f} | {7:10} '\
-                .format(self.node[n]['ID'][:7], self.node[n]['name'][:15],
-                self.node[n]['grp'][:7], self.node[n]['typ'][:4], self.node[n]['p'][0],
-                self.node[n]['p'][1],self.node[n]['p'][2],wstd[:10]) + '\n'
+            subnet = self.SubNet.keys()
+            for sn in subnet:
+                for n in self.SubNet[sn].nodes():
+                    # for compliance with simulnet and simultraj
+                    # to be merged
+                    try:
+                        wstd = self.node[n]['wstd'].keys()
+                    except:
+                        wstd = self.node[n]['wstd']
+                    s = s + '{0:7} | {1:15} |{2:7} | {3:4} | {4:5.2f} {5:5.2f} {6:5.2f} | {7:10} '\
+                    .format(self.node[n]['ID'][:7], self.node[n]['name'][:15],
+                    self.node[n]['grp'][:7], self.node[n]['typ'][:4], self.node[n]['p'][0],
+                    self.node[n]['p'][1],self.node[n]['p'][2],wstd[:10]) + '\n'
 
     #             try:
     #                 s = s + 'node ID: ' + str(self.node[n]['ID']) + '\n'
@@ -1297,7 +1299,7 @@ class Network(PyLayers,nx.MultiDiGraph):
 
 
 
-    def show(self, wstd=None, legend=False, ion=False, info=False, fig=plt.figure() ,ax=None, name=None):
+    
         """ 
         Show the network
 
