@@ -1971,7 +1971,7 @@ class Signatures(PyLayers,dict):
                     except:
                         pass
 
-                
+
 
                 elif (len(visited) < (cutoff + sum(lawp))) and sum(lawp)<5  :# if visited list length is less than cutoff
 
@@ -2199,8 +2199,6 @@ class Signatures(PyLayers,dict):
                                 lawp.pop()
                             except:
                                 pass
-
-                        
 
                         elif (len(visited) < (cutoff + sum(lawp))) :# if visited list length is less than cutoff
                             if child == t:  # if child is the target point
@@ -3550,8 +3548,7 @@ class Signatures(PyLayers,dict):
 
 
     def raysv(self,ptx=0,prx=1):
-    
-        """ from signatures dict to 2D rays Vectorized version 
+        """ from signatures dict to 2D rays Vectorized version
 
         Parameters
         ----------
@@ -3601,21 +3598,26 @@ class Signatures(PyLayers,dict):
         """
         if type(ptx)==int:
             ptx = np.array(self.L.Gt.pos[ptx])
-        
+
         if type(prx)==int:
             prx = np.array(self.L.Gt.pos[prx])
-        
+
 
         if len(ptx) == 2:
             ptx= np.r_[ptx,0.5]
         if len(ptx) == 2:
             prx= np.r_[prx,0.5]
 
-        rays = Rays(ptx,prx)
 
+        # rays void initialization
+        rays = Rays(ptx,prx)
+        # image
         M = self.image(ptx)
+        # backtrace
         R = self.backtrace(ptx,prx,M)
+        # update rays
         rays.update(R)
+
         rays.nb_origin_sig = len(self)
         rays.origin_sig_name = self.filename
         return rays
@@ -3623,7 +3625,7 @@ class Signatures(PyLayers,dict):
     def backtrace(self, tx, rx, M):
         ''' Warning :
             This is an attempt to vectorize the backtrace process.
-            Despite it has been tested on few cases with succes, 
+            Despite it has been tested on few cases with succes,
             this is quite new need to be validated !!!
 
 
