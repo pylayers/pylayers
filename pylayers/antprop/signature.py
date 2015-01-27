@@ -1392,6 +1392,108 @@ class Signatures(PyLayers,dict):
             return False
 
 
+
+    def run2015(self,source=1,target=3,cutoff=3):
+
+
+        # list of cycle to reach source -> target. this will be imporve next
+        lcil = self.L.cycleinline(source,target)
+        llcil=len(lcil)
+
+
+
+
+
+
+
+
+
+        # 2 determine input signatures for each cycles
+        di={}
+        for icy,cy in enumerate(lcil):
+
+            vinT=[]
+            # valid 'out' interatcion
+            voutT=[]
+
+            if icy == 0:
+                # the interactions of 1st cycle are kept appart
+                di0 = {}
+
+                outR,outT,outD = self.L.intercy(cy,typ='source')
+
+                for cycle in lcil:
+                    fcy = filter(lambda x: cycle == x[2],outT)
+                    voutT.extend(fcy) 
+                vinT = outR + outD
+                for i in vinT:
+                    for o in voutT:
+                        di[(i,o)]=self.propaths2(self.L.Gi,i,o,cutoff=cutoff).values()
+                        di0[(i,o)]=(o)
+            elif (icy >=1) and (icy <llcil-1):
+                # valid 'in' interatcion
+
+                # select input signatures in regard of selected 
+                inR,inT,inD = self.L.intercy(cy,typ='target')
+                outR,outT,outD = self.L.intercy(cy,typ='source')
+
+
+                # keep only interesting interactions
+                for cycle in lcil:
+                    fcy = filter(lambda x: cycle == x[1],inT)
+                    vinT.extend(fcy)
+                    fcy = filter(lambda x: cycle == x[2],outT)
+                    voutT.extend(fcy)
+
+
+                for i in vinT:
+                    for o in voutT:
+                        di[(i,o)]=self.propaths2(self.L.Gi,i,o,cutoff=cutoff).values()
+
+            elif icy == llcil-1:
+
+                # the interactions of last cycle are kept appart
+                dif = {}
+
+                inR,inT,inD = self.L.intercy(cy,typ='target')
+
+                for cycle in lcil:
+                    fcy = filter(lambda x: cycle == x[1],inT)
+                    vinT.extend(fcy) 
+                voutT = inR + inD
+                for i in vinT:
+                    for o in voutT:
+                        di[(i,o)]=self.propaths2(self.L.Gi,i,o,cutoff=cutoff).values()
+                        dif[(i,o)]=(i)
+        # revert the input transmission to find a connection to output transmissions
+        adi = np.array(di.keys())
+        adi0 = adi[:,0]
+        adi1 = adi[:,1]
+        ladi0 =list(adi0)
+        iladi0 = []
+        for l in ladi0:
+            if len(l) == 3:
+                iladi0.append((l[0],l[2],l[1]))
+            else :
+                iladi0.append(l)
+        iadi0 = np.array(iladi0)
+
+        import ipdb
+        ipdb.set_trace()
+        # WARNING here :!!!
+        # array must be a list of tuple and not interpreted as a np.array
+        # this last case occurs when the list of tuple has the same length !!!
+        if len(voutT0) ==1:
+            ao0 = np.array(tuple((voutT0[0],())))
+        if len(voutT0) ==1:
+            aif = np.array(tuple((vinTf[0],())))
+
+
+
+        return di
+
+
+
     def run(self,cutoff=1,dcut=2):
         """ run signature calculation
 
