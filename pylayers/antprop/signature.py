@@ -1518,6 +1518,7 @@ class Signatures(PyLayers,dict):
             Vectorized approach of signature search
 
 
+
         Parameters
         ----------
 
@@ -1553,6 +1554,8 @@ class Signatures(PyLayers,dict):
         ###
         ### Find interactions per cycles
         ###
+        if llcil == 1:
+            raise AttributeError('Signatures.run2015 doesn\'t work when source==target')
         for icy,cy in enumerate(lcil):
 
             vinT=[]
@@ -1573,6 +1576,8 @@ class Signatures(PyLayers,dict):
                     fcy = filter(lambda x: cycle == x[2],outT)
                     voutT.extend(fcy) 
                 vinT = outR + outD
+                import ipdb
+                ipdb.set_trace()
                 kdi0 = (0,0,0,voutT[0][0],voutT[0][1],voutT[0][2])
                 
                 # for each reverb/diffract interaction,
@@ -4032,7 +4037,7 @@ class Signatures(PyLayers,dict):
             # 2 get associated position in L.pt
 
             # utahe (2 pt indexes,nb_signatures,nb_interactions)
-            utahe = self.L.tahe[:,seg-1]
+            utahe = self.L.tahe[:,self.L.tgs[seg]]
 
             # pt : (xycoord (2),pt indexes (2),nb_signatures,nb_interactions)
             pt = self.L.pt[:,utahe]
@@ -4197,7 +4202,6 @@ class Signatures(PyLayers,dict):
 
         dM={}
         for ninter in self.keys():
-
             # get segment ids of signature with ninter interactions
             seg = self[ninter][::2]
             nsig = len(seg)
@@ -4206,7 +4210,8 @@ class Signatures(PyLayers,dict):
             # 2 get associated position in L.pt
 
             # utahe (2 pt indexes,nb_signatures,nb_interactions)
-            utahe = self.L.tahe[:,seg-1]
+
+            utahe = self.L.tahe[:,self.L.tgs[seg]]
 
 
 
