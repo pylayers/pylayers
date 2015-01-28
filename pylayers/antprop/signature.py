@@ -1576,8 +1576,7 @@ class Signatures(PyLayers,dict):
                     fcy = filter(lambda x: cycle == x[2],outT)
                     voutT.extend(fcy) 
                 vinT = outR + outD
-                import ipdb
-                ipdb.set_trace()
+
                 kdi0 = (0,0,0,voutT[0][0],voutT[0][1],voutT[0][2])
                 
                 # for each reverb/diffract interaction,
