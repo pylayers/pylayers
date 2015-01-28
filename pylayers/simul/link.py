@@ -324,7 +324,8 @@ class DLink(Link):
                    'verbose':True
                 }
 
-
+        self._ca=-1
+        self._cb=-1
         specset = ['a','b','Aa','Ab','Ta','Tb','L','fGHz','wav']
 
         for key, value in defaults.items():
@@ -444,6 +445,14 @@ class DLink(Link):
         return self._b
 
     @property
+    def ca(self):
+        return self._ca
+
+    @property
+    def cb(self):
+        return self._cb
+
+    @property
     def Aa(self):
         return self._Aa
 
@@ -495,6 +504,34 @@ class DLink(Link):
         self._b = position
         self.cb = self.L.pt2cy(position)
         self.rx.position = position
+
+    @ca.setter
+    def ca(self,cycle):
+        if not cycle in self.L.Gc.nodes():
+            raise NameError ('cycle ca is not inside Gc')
+        if len(self.a) != 0:
+            if self.L.pt2cy(self.a) == cycle:
+                pass
+            else :
+                self._ca = cycle
+                self.a = self.L.cy2pt(cycle)
+        else :
+            self._ca = cycle
+            self.a = self.L.cy2pt(cycle)
+
+    @cb.setter
+    def cb(self,cycle):
+        if not cycle in self.L.Gc.nodes():
+            raise NameError ('cycle cb is not inside Gc')
+        if len(self.b) != 0:
+            if self.L.pt2cy(self.b) == cycle:
+                pass
+            else :
+                self._cb = cycle
+                self.b = self.L.cy2pt(cycle)
+        else :
+            self._cb = cycle
+            self.b = self.L.cy2pt(cycle)
 
     @Aa.setter
     def Aa(self,Ant):
