@@ -510,7 +510,7 @@ class DLink(Link):
         if not cycle in self.L.Gc.nodes():
             raise NameError ('cycle ca is not inside Gc')
         if len(self.a) != 0:
-            if self.L.pt2cy(self.a) == cycle:
+            if self.L.pt2cy(self.a) == self.ca:
                 pass
             else :
                 self._ca = cycle
@@ -524,7 +524,7 @@ class DLink(Link):
         if not cycle in self.L.Gc.nodes():
             raise NameError ('cycle cb is not inside Gc')
         if len(self.b) != 0:
-            if self.L.pt2cy(self.b) == cycle:
+            if self.L.pt2cy(self.b) == self.cb:
                 pass
             else :
                 self._cb = cycle
