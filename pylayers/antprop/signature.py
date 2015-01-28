@@ -1121,116 +1121,6 @@ class Signatures(PyLayers,dict):
         dout : dictionnary
             key : int
                number of interactions
-            values : list
-
-        Notes
-        -----
-
-        adapted from all_simple_path of networkx
-
-        1- Determine all nodes connected to Gi
-
-        """
-        #print "source :",source
-        #print "target :",target
-
-        if cutoff < 1:
-            return
-
-
-        visited = [source]
-        # stack is a list of iterators
-        stack = [iter(G[source])]
-        # lawp = list of airwall position in visited
-        lawp = []
-
-        # while the list of iterators is not void
-        # import ipdb
-        # ipdb.set_trace()
-        while stack: #
-            # children is the last iterator of stack
-
-            children = stack[-1]
-            # next child
-
-            child = next(children, None)
-
-            # update number of useful segments
-            # if there is airwall in visited
-            if child is None  : # if no more child
-                stack.pop()   # remove last iterator
-                visited.pop() # remove from visited list
-                # try:
-                #     lawp.pop()
-                # except:
-                #     pass
-
-            elif len(visited) < (cutoff ):# if visited list length is less than cutoff
-                if child == target:  # if child is the target point
-                    #print visited + [target]
-                    path = visited + [target]
-                    try:
-                        dout.append([[p[0],len(p)] for p in path])
-                    except:
-                        dout=[]
-                        dout.append([[p[0],len(p)] for p in path])
-
-                    #yield visited + [target] # output signature
-
-                elif (child not in visited): # else visit other node
-                    # only visit output nodes except if bt
-                    #pdb.set_trace()
-                    # try:
-                    #     dintpro = G[visited[-1]][child]['output']
-                    # except:
-                    #     dintpro ={}
-                    visited.append(child)
-                    stack.append(iter(G[child]))
-                    
-
-
-
-
-            else: #len(visited) == cutoff (visited list is too long)
-                if child == target or target in children:
-                    path = visited + [target]
-                    try:
-                        dout.append([[p[0],len(p)] for p in path])
-                    except:
-                        #print "non existing : ",len(path)
-                        dout=[]
-                        dout.append([[p[0],len(p)] for p in path])
-                    #print visited + [target]
-                    #yield visited + [target]
-
-                stack.pop()
-                visited.pop()
-
-        return dout
-
-    def propaths2015_2(self,G, source, target,dout={}, cutoff=1):
-        """ seek all simple_path from source to target
-
-        Parameters
-        ----------
-
-        G : networkx Graph Gi
-        dout : dictionnary
-            ouput dictionnary
-        source : tuple
-            interaction (node of Gi)
-        target : tuple
-            interaction (node of Gi)
-        cutoff : int
-        bt : bool
-            allow backtrace (visite nodes already visited)
-
-        Returns
-        -------
-
-        dout : dictionnary
-            key : int
-               number of interactions
             values : list of numpy array
 
 
@@ -1623,186 +1513,33 @@ class Signatures(PyLayers,dict):
             return False
 
 
-
-    # def run2015(self,source=11,target=3,cutoff=1,cutoffbound=1):
-
-
-    #     # list of cycle to reach source -> target. this will be imporve next
-    #     lcil = self.L.cycleinline(source,target)
-    #     llcil=len(lcil)
-    #     # 2 determine input signatures for each cycles
-    #     # di key = [input seg, input room, output seg, output room]
-    #     di={}
-    #     for icy,cy in enumerate(lcil):
-
-    #         vinT=[]
-    #         # valid 'out' interatcion
-    #         voutT=[]
-
-    #         inter = self.L.Gc.node[cy]['inter']
-    #         sGi = nx.subgraph(self.L.Gi,inter)
-
-    #         if icy == 0:
-
-                
-
-    #             # the interactions of 1st cycle are kept appart
-    #             # di0 = {}
-
-    #             outR,outT,outD = self.L.intercy(cy,typ='source')
-
-    #             for cycle in lcil:
-    #                 fcy = filter(lambda x: cycle == x[2],outT)
-    #                 voutT.extend(fcy) 
-    #             vinT = outR + outD
-    #             kdi0 = (-1,-1,-1,voutT[0][0],voutT[0][1],voutT[0][2])
-
-    #             for i in vinT:
-    #                 for o in voutT:
-    #                     # io = list(nx.all_simple_paths(sGi,i,o,cutoff=cutoffbound))
-    #                     io = self.propaths2015(sGi,i,o,dout=[],cutoff=cutoffbound)
-    #                     if len(io) !=0:
-    #                         try:
-    #                             di[-1,-1,-1,o[0],o[1],o[2]].extend(io)
-    #                         except: 
-    #                             di[-1,-1,-1,o[0],o[1],o[2]] = io
-    #                     #di0[o[0],o[1],o[2]] = self.propaths2(sGi,i,o,cutoff=cutoff).values()
-
-
-    #         elif (icy >=1) and (icy <llcil-1):
-    #             # valid 'in' interatcion
-
-    #             # select input signatures in regard of selected 
-    #             inR,inT,inD = self.L.intercy(cy,typ='target')
-    #             outR,outT,outD = self.L.intercy(cy,typ='source')
-
-
-    #             # keep only interesting interactions
-    #             for cycle in lcil:
-    #                 fcy = filter(lambda x: cycle == x[1],inT)
-    #                 vinT.extend(fcy)
-    #                 fcy = filter(lambda x: cycle == x[2],outT)
-    #                 voutT.extend(fcy)
-
-
-    #             for i in vinT:
-    #                 for o in voutT:
-
-    #                     if not (i[1],i[2])==(o[2],o[1]):
-    #                         io = self.propaths2015(sGi,i,o,dout=[],cutoff=cutoffbound)
-    #                         # io = list(nx.all_simple_paths(sGi,i,o,cutoff=cutoff))
-    #                         if len(io) !=0:
-    #                             try:
-    #                                 di[i[0],i[1],i[2],o[0],o[1],o[2]].extend(io)
-    #                             except: 
-    #                                 di[i[0],i[1],i[2],o[0],o[1],o[2]] = io
-    #                         # di[i[0],i[1],i[2],o[0],o[1],o[2]]=self.propaths2(sGi,i,o,cutoff=cutoff).values()
-    #                         #di[(i,o)]=self.propaths2(self.L.Gi,i,o,cutoff=cutoff).values()
-
-    #         elif icy == llcil-1:
-
-    #             # dif = {}
-
-    #             # the interactions of last cycle are kept appart
-
-    #             inR,inT,inD = self.L.intercy(cy,typ='target')
-
-    #             for cycle in lcil:
-    #                 fcy = filter(lambda x: cycle == x[1],inT)
-    #                 vinT.extend( fcy) 
-    #             voutT = inR #+ inD
-    #             kdif = (vinT[0][0],vinT[0][1],vinT[0][2],-1,-1,-1)
-
-    #             for i in vinT:
-    #                 for o in voutT:
-    #                     io=self.propaths2015(sGi,i,o,dout=[],cutoff=cutoffbound)
-    #                     # io = list(nx.all_simple_paths(sGi,i,o,cutoff=cutoffbound))
-    #                     if len(io) !=0:
-    #                         try:
-    #                             di[i[0],i[1],i[2],-1,-1,-1].extend(io)
-    #                         except: 
-    #                             di[i[0],i[1],i[2],-1,-1,-1] = io
-    #                     #dif[i[0],i[1],i[2]]=list(nx.all_simple_paths(sGi,i,o,cutoff=cutoff))
-    #                     #dif[i[0],i[1],i[2]]=self.propaths2(sGi,i,o,cutoff=cutoff).values()
-
-    #     # revert the input transmission to find a connection to output transmissions
-    #     kdi = di.keys()
-        
-
-    #     adi0 = np.array(kdi0)
-    #     adif = np.array(kdif)
-
-    #     adi = np.array(di.keys())
-    #     adii = adi[:,:3]
-    #     adio = adi[:,3:]
-    #     print adi
-    #     out=[]
-    #     lsig=[]
-
-
-    #     uinit = np.unique(np.where(adi[:,:3]==-1)[0])
-    #     oldout=uinit
-    #     stop=False
-    #     # while not stop:
-    #     #     for k in oldout:
-    #     #         us = np.where(-(adii-adio[k]).T.any(0))[0]
-    #     #         out.extend(us.tolist())
-    #     #         # 1st input interactions to all identified a outputs
-    #     #         if lsig ==[]:
-    #     #             lsig=di[kdi[k]]
-    #     #         print kdi[k],'=>',kdi[us]
-    #     #         lsigtmp=[]
-    #     #         import ipdb
-    #     #         ipdb.set_trace()
-    #     #         for i in lsig:#di[kdi[k]]:
-    #     #             for o in di[kdi[us]]:
-    #     #                 sig=copy.copy(i)
-    #     #                 sig.extend(o[1:])
-    #     #                 lsigtmp.append(sig)
-    #     #         lsig=lsigtmp
-
-    #     #     print lsig[-1],'\n'
-    #     #     if kdi[us][3:] == (-1,-1,-1):
-    #     #         stop=True
-    #     #     oldout=out
-    #     #     out=[]
-    #     import ipdb
-    #     ipdb.set_trace()
-    #     import itertools as it
-    #     while not stop:
-    #         for k in oldout:
-    #             us = np.where(-(adii-adio[k]).T.any(0))[0]
-    #             out.extend(us.tolist())
-    #             # 1st input interactions to all identified a outputs
-
-    #             if lsig ==[]:
-    #                 lsig=di[kdi[k]]
-    #             print kdi[k],'=>',kdi[us]
-    #             lsigtmp=[]
-
-    #             [[lsigtmp.append(list(it.chain(a,b[1:]))) for a in iter(lsig)] for b in iter(di[kdi[us]])]
-                
-    #             # for i in lsig:#di[kdi[k]]:
-    #             #     for o in di[kdi[us]]:
-    #             #         sig=copy.copy(i)
-    #             #         sig.extend(o[1:])
-    #             #         lsigtmp.append(sig)
-    #             # lsig=lsigtmp
-    #             lsig=lsigtmp
-    #         print lsig[-1],'\n'
-    #         if kdi[us][3:] == (-1,-1,-1):
-    #             stop=True
-    #         oldout=out
-    #         out=[]
-
-    #     return lsig
-
-    import timeout_decorator
-
-
-    # @timeout_decorator.timeout(15)
     def run2015(self,source=-1,target=-1,cutoff=1,cutoffbound=1):
+        """ EXPERIMENTAL
+            Vectorized approach of signature search
 
+
+        Parameters
+        ----------
+
+        source: int (-1)
+            source cycle . 
+            If =-1 => self.source used
+        target: int (-1)
+            target cycle . 
+            If =-1 => self.target used
+        cutoff= int (1)
+            max number of interactions per cycle
+            except 1st and last cycle
+        cutoffbound= int (1)
+            max number of interactions in 1st and last cycle
+
+        Returns
+        -------
+
+        Nothing, fill self
+
+
+        """
         if source == -1:
             source = self.source
         if target == -1:
@@ -1813,6 +1550,9 @@ class Signatures(PyLayers,dict):
         # 2 determine input signatures for each cycles
         # di key = [input seg, input room, output seg, output room]
         di={}
+        ###
+        ### Find interactions per cycles
+        ###
         for icy,cy in enumerate(lcil):
 
             vinT=[]
@@ -1823,8 +1563,6 @@ class Signatures(PyLayers,dict):
             sGi = nx.subgraph(self.L.Gi,inter)
 
             if icy == 0:
-
-                
 
                 # the interactions of 1st cycle are kept appart
                 # di0 = {}
@@ -1842,10 +1580,8 @@ class Signatures(PyLayers,dict):
                 for o in voutT:
                     io={}
                     for i in vinT:
-                        io = self.propaths2015_2(sGi,i,o,dout=io,cutoff=cutoffbound)
+                        io = self.propaths2015(sGi,i,o,dout=io,cutoff=cutoffbound)
                     di[0,0,0,o[0],o[1],o[2]] = io
-
-
 
             elif (icy >=1) and (icy <llcil-1):
                 # valid 'in' interatcion
@@ -1868,7 +1604,7 @@ class Signatures(PyLayers,dict):
                     for o in voutT:
                         io={}
                         if not (i[1],i[2])==(o[2],o[1]):
-                            io = self.propaths2015_2(sGi,i,o,dout=io,cutoff=cutoffbound)
+                            io = self.propaths2015(sGi,i,o,dout=io,cutoff=cutoffbound)
                             # io = list(nx.all_simple_paths(sGi,i,o,cutoff=cutoff))
                             # if len(io) !=0:
                             #     try:
@@ -1894,7 +1630,7 @@ class Signatures(PyLayers,dict):
                 io={}
                 for i in vinT:
                     for o in voutT:
-                        io=self.propaths2015_2(sGi,i,o,dout=io,cutoff=cutoffbound)
+                        io=self.propaths2015(sGi,i,o,dout=io,cutoff=cutoffbound)
                 di[i[0],i[1],i[2],0,0,0] = io
 
 
@@ -1942,6 +1678,10 @@ class Signatures(PyLayers,dict):
         #             uuk=uuk+1
         #     return sa1,sa2,sli
 
+
+        ###
+        ### plug interactions of each cycle with the others
+        ###
 
         while not stop:
             # for all detected valid output
