@@ -1119,6 +1119,12 @@ class DLink(Link):
         pylayers.antprop.signature
         pylayers.antprop.rays
 
+        Experimental
+        ------------
+        alg = 2015
+            vectorized signature research
+        si_reverb : number of reverb in source/target cycle if alg=2015
+
         """
 
         defaults={ 'output':['sig','ray','Ct','H'],
@@ -1126,11 +1132,12 @@ class DLink(Link):
                    'si_mt':False,
                    'si_progress':False,
                    'diffraction':False,
-                   'ra_vectorized':True,
+                   'ra_vectorized':False,
                    'ra_ceil_height_meter':3,
                    'ra_number_mirror_cf':1,
                    'force':[],
                    'alg':7,
+                   'si_reverb':4,
                    'threshold':0.1,
                    }
         for key, value in defaults.items():
@@ -1161,6 +1168,10 @@ class DLink(Link):
             self.load(Si,self.dexist['sig']['grpname'])
 
         else :
+            if kwargs['alg']==2015:
+                TMP=Si.run2015(cutoff=kwargs['cutoff'],
+                        cutoffbound=kwargs['si_reverb'])
+
             if kwargs['alg']==5:
                 Si.run5(cutoff=kwargs['cutoff'],
                         algo=kwargs['si_algo'],
