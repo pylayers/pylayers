@@ -1672,6 +1672,7 @@ class UWBMeasure(PyLayers):
         if not os.path.exists(mesdir):
             raise AttributeError('Incorrect Measure directory set in $MESDIR')
         filename = mesname(nTx, mesdir, h)
+      
         if os.path.exists(filename) :
             b = io.loadmat(filename)
             # Conversion

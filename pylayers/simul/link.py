@@ -1202,6 +1202,7 @@ class DLink(Link):
         else :
             # perform computation ...
             # ... with vetorized ray evaluation approach
+            print '***', kwargs['ra_vectorized']
             if kwargs['ra_vectorized']:
                 r2d = Si.raysv(self.a,self.b)
             # ... or with original and slow approach ( to be removed in a near future)
