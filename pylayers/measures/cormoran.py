@@ -333,7 +333,7 @@ class CorSer(PyLayers):
             self._align_on_devdf(typ='HKB')
             print 'Align on mocap OK...',
             try:
-                self._apply_offset('HKB')
+                # self._apply_offset('HKB')
                 print 'time-offset applied OK'
             except: 
                 print 'WARNING time-offset NOT applied'
@@ -2140,8 +2140,8 @@ bernard
                         valinit=0, color='#AAAAAA')
 
         slide_alpha_ax = plt.axes([0.1, 0.05, 0.8, 0.02])
-        slideralpha = Slider(slide_alpha_ax, "gt_alpha", 0, 10,
-                        valinit=5, color='#AAAAAA')
+        slideralpha = Slider(slide_alpha_ax, "gt_alpha", 0, 60,
+                        valinit=30, color='#AAAAAA')
 
         def update_x(val):
             value = int(sliderx.val)

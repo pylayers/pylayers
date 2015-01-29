@@ -116,7 +116,7 @@ class Coverage(PyLayers):
 
         # create grid
         # we could here construct a grid locally around the access point
-        # to be done later for code acceleration
+        # !! to be done later for code acceleration
         #
         self.creategrid(full=self.mode,boundary=self.boundary)
 

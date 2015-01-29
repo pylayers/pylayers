@@ -252,7 +252,9 @@ class Wstandard(dict):
 
         """
 
-        fp = open(pyu.getlong('wstd.json',pstruc['DIRSIMUL']))
+        filename=pyu.getlong(_fileini,pstruc['DIRSIMUL'])
+        print filename
+        fp = open(filename)
         stds = json.load(fp)
         fp.close()
         std = stds[stdname]
@@ -447,6 +449,7 @@ class AP(dict):
         self['sensdBm'] = kwargs['sensdBm']
         self['nant'] = kwargs['nant']
 
+        pdb.set_trace()
         standard = Wstandard(kwargs['wstd'])
         self.s = standard
 

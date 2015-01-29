@@ -6219,7 +6219,8 @@ class Layout(PyLayers):
             lT = filter(lambda x: x[1]==ncy,lT)
         if typ=='target':
             lT = filter(lambda x: x[2]==ncy,lT)
-
+        if typ=='all':
+            lT=lT
         # Finding the diffraction points
         # Diffraction points are different from indoor cycle and outdoor
         # cycles
