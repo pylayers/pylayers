@@ -1098,7 +1098,127 @@ class Signatures(PyLayers,dict):
 
 
 
-    def propaths2015(self,G, source, target,dout={}, cutoff=1):
+    # def propaths2015(self,G, source, target,dout={}, cutoff=1):
+    #     """ seek all simple_path from source to target
+
+    #     Parameters
+    #     ----------
+
+    #     G : networkx Graph Gi
+    #     dout : dictionnary
+    #         ouput dictionnary
+    #     source : tuple
+    #         interaction (node of Gi)
+    #     target : tuple
+    #         interaction (node of Gi)
+    #     cutoff : int
+    #     bt : bool
+    #         allow backtrace (visite nodes already visited)
+
+    #     Returns
+    #     -------
+
+    #     dout : dictionnary
+    #         key : int
+    #            number of interactions
+    #         values : list of numpy array
+
+
+
+    #     Notes
+    #     -----
+
+    #     adapted from all_simple_path of networkx
+
+    #     1- Determine all nodes connected to Gi
+
+    #     """
+    #     #print "source :",source
+    #     #print "target :",target
+
+    #     if cutoff < 1:
+    #         return
+
+
+    #     visited = [source]
+    #     # stack is a list of iterators
+    #     stack = [iter(G[source])]
+    #     # lawp = list of airwall position in visited
+    #     lawp = []
+
+    #     # while the list of iterators is not void
+    #     # import ipdb
+    #     # ipdb.set_trace()
+    #     while stack: #
+    #         # children is the last iterator of stack
+
+    #         children = stack[-1]
+    #         # next child
+
+    #         child = next(children, None)
+
+    #         # update number of useful segments
+    #         # if there is airwall in visited
+    #         if child is None  : # if no more child
+    #             stack.pop()   # remove last iterator
+    #             visited.pop() # remove from visited list
+    #             try:
+    #                 lawp.pop()
+    #             except:
+    #                 pass
+
+    #         elif (len(visited) < (cutoff + sum(lawp))):# if visited list length is less than cutoff
+    #             if child == target:  # if child is the target point
+    #                 #print visited + [target]
+    #                 path = visited + [target]
+
+    #                 try:
+    #                     dout[len(path)][0]=np.vstack((dout[len(path)][0],np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')))
+    #                 except:
+    #                     dout[len(path)]=[np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')]
+
+    #                 #yield visited + [target] # output signature
+
+    #             elif (child not in visited): # else visit other node
+    #                 # only visit output nodes except if bt
+    #                 #pdb.set_trace()
+    #                 try:
+    #                     dintpro = G[visited[-1]][child]['output']
+    #                 except:
+    #                     dintpro ={}
+    #                 stack.append(iter(dintpro.keys()))
+    #                 #stack.append(iter(G[visited[-1]][child]['output']))
+    #                 visited.append(child)
+    #                 if child[0] in self.L.name['AIR']:
+    #                     lawp.append(1)
+    #                 else:
+    #                     lawp.append(0)
+
+
+
+
+    #         else: #len(visited) == cutoff (visited list is too long)
+    #             if child == target or target in children:
+    #                 path = visited + [target]
+
+    #                 try:
+    #                     dout[len(path)][0]=np.vstack((dout[len(path)][0],np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')))
+    #                 except:
+    #                     dout[len(path)]=[np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')]
+
+    #                 #print visited + [target]
+    #                 #yield visited + [target]
+
+    #             stack.pop()
+    #             visited.pop()
+    #             try:
+    #                 lawp.pop()
+    #             except:
+    #                 pass
+    #     return dout
+
+
+    def propaths2015_2(self,G, source, target,dout={},M={}, cutoff=1):
         """ seek all simple_path from source to target
 
         Parameters
@@ -1145,7 +1265,6 @@ class Signatures(PyLayers,dict):
         stack = [iter(G[source])]
         # lawp = list of airwall position in visited
         lawp = []
-
         # while the list of iterators is not void
         # import ipdb
         # ipdb.set_trace()
@@ -1171,12 +1290,21 @@ class Signatures(PyLayers,dict):
                 if child == target:  # if child is the target point
                     #print visited + [target]
                     path = visited + [target]
-
+                    # M = np.zeros((1,NGs),dtype='bool')
+                    out = [i[0] for i in G[visited[-1]][target]['output'].keys()]
+                    M[path[-2][0],path[-1][0],out]=True
                     try:
-                        dout[len(path)][0]=np.vstack((dout[len(path)][0],np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')))
+                        dout[len(path)]=np.vstack((dout[len(path)],np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')))
+                        # dnvi[len(path)].append([[i[0],len(i)] for i in G[visited[-1]][child]['output'].keys()])
+                        # out = [i[0] for i in G[visited[-1]][child]['output'].keys()]
+                        # M[path[-2][0],path[-1][0],out]=True
+                        # dnvi[len(path)]=np.vstack((dnvi[len(path)],M))
+                        
                     except:
-                        dout[len(path)]=[np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')]
-
+                        dout[len(path)]=np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')
+                        # dnvi[len(path)]=[[[i[0],len(i)] for i in G[visited[-1]][child]['output'].keys()]]
+                        # dnvi[len(path)]=M
+                        
                     #yield visited + [target] # output signature
 
                 elif (child not in visited): # else visit other node
@@ -1194,17 +1322,32 @@ class Signatures(PyLayers,dict):
                     else:
                         lawp.append(0)
 
-
-
-
             else: #len(visited) == cutoff (visited list is too long)
-                if child == target or target in children:
+                # if child == (56, 8, 14):
+                #     import ipdb
+                #     ipdb.set_trace()
+                # print list(children)
+                # print ((child == target) or (target in children))
+                
+                CC=list(children)
+                if ((child == target) or (target in CC)):
                     path = visited + [target]
-
+                    # M = np.zeros((1,NGs),dtype='bool')
+                    out = [i[0] for i in G[visited[-1]][target]['output'].keys()]
+                    M[path[-2][0],path[-1][0],out]=True
                     try:
-                        dout[len(path)][0]=np.vstack((dout[len(path)][0],np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')))
+                        dout[len(path)]=np.vstack((dout[len(path)],np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')))
+                        # dnvi[len(path)].append([[i[0],len(i)] for i in G[visited[-1]][child]['output'].keys()])
+                        # dnvi[len(path)].append(np.unique([i[0] for i in G[visited[-1]][child]['output'].keys()]))
+                        # M[:,[i[0] for i in G[visited[-1]][child]['output'].keys()]]=True
+                        # dnvi[len(path)]=np.vstack((dnvi[len(path)],M))
+
                     except:
-                        dout[len(path)]=[np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')]
+                        dout[len(path)]=np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')
+                        # dnvi[len(path)]=[[[i[0],len(i)] for i in G[visited[-1]][child]['output'].keys()]]
+                        # dnvi[len(path)]=[np.unique([i[0] for i in G[visited[-1]][child]['output'].keys()])]
+                        # M[:,[i[0] for i in G[visited[-1]][child]['output'].keys()]]=True
+                        # dnvi[len(path)]=M
 
                     #print visited + [target]
                     #yield visited + [target]
@@ -1540,6 +1683,16 @@ class Signatures(PyLayers,dict):
         Nothing, fill self
 
 
+        Example
+        -------
+
+        >>> from pylayers.simul.link import *
+        >>> L=Layout('TA-Office.ini')
+        >>> DL=DLink(L=L)
+        >>> DL.ca=8
+        >>> DL.Cb=13
+        >>> DL.eval(force=['sig','ray','Ct','H'],alg=2015,si_reverb=3,cutoff=2,ra_vectorized=True)
+
         """
         if source == -1:
             source = self.source
@@ -1551,6 +1704,10 @@ class Signatures(PyLayers,dict):
         # 2 determine input signatures for each cycles
         # di key = [input seg, input room, output seg, output room]
         di={}
+        # number of points and seg of layout 
+        NGs = self.L.Ns+self.L.Np
+        M = np.zeros((NGs,NGs,NGs),dtype='bool')
+
         ###
         ### Find interactions per cycles
         ###
@@ -1584,9 +1741,10 @@ class Signatures(PyLayers,dict):
                 for o in voutT:
                     io={}
                     for i in vinT:
-                        io = self.propaths2015(sGi,i,o,dout=io,cutoff=cutoffbound)
+                        io = self.propaths2015_2(sGi,i,o,dout=io,M=M,cutoff=cutoffbound)
                     di[0,0,0,o[0],o[1],o[2]] = io
-
+                    # add direct signature
+                    di[0,0,0,o[0],o[1],o[2]][1]=np.array([o[0],len(o)],ndmin=3)
             elif (icy >=1) and (icy <llcil-1):
                 # valid 'in' interatcion
 
@@ -1608,8 +1766,9 @@ class Signatures(PyLayers,dict):
                     for o in voutT:
                         io={}
                         if not (i[1],i[2])==(o[2],o[1]):
-                            io = self.propaths2015(sGi,i,o,dout=io,cutoff=cutoffbound)
+                            io = self.propaths2015_2(sGi,i,o,dout=io,M=M,cutoff=cutoff)
                             di[i[0],i[1],i[2],o[0],o[1],o[2]] = io
+                            # dni[i[0],i[1],i[2],o[0],o[1],o[2]] = ino
 
             # the interactions of last cycle are kept appart
             elif icy == llcil-1:
@@ -1623,11 +1782,15 @@ class Signatures(PyLayers,dict):
 
                 # for each (identified interesting ) input interactions,
                 # find path to each reverb/diffract interaction of last cycle
-                io={}
                 for i in vinT:
+                    io={}
                     for o in voutT:
-                        io=self.propaths2015(sGi,i,o,dout=io,cutoff=cutoffbound)
-                di[i[0],i[1],i[2],0,0,0] = io
+                        io=self.propaths2015_2(sGi,i,o,dout=io,M=M,cutoff=cutoffbound)
+                    di[i[0],i[1],i[2],0,0,0] = io
+                    # add direct signature
+                    di[i[0],i[1],i[2],0,0,0][1]=np.array([i[0],len(i)],ndmin=3)
+
+                # dni[i[0],i[1],i[2],0,0,0] = ino
 
 
         # dictionnary of interactions id keys
@@ -1645,114 +1808,100 @@ class Signatures(PyLayers,dict):
         adi = np.array(di.keys())
         adii = adi[:,:3]
         adio = adi[:,3:]
-
         out=[]
-        lsig=[]
+        lsig={}
 
         # initialize loop on the 1st interaction id(0,0,0,X,X,X)
+
         uinit = np.unique(np.where(adi[:,:3]==0)[0])
         oldout=uinit
         stop=False
+        dsigiosave={}
+        dsigiosave.update({kdi[i][-3:]:di[kdi[i]] for i in uinit})
 
-        # this is used for with the commented slice array approach
-        # def slicer(a1,a2):
-        #     """ split a1 and a2 with the minimal 
-        #         number of slice
-        #     """
-        #     slices=range(2,20)
-        #     sli=slices[0]
-        #     splitted=False
-        #     uuk=0
+        def filldinda(d0,d1):
+            for kd1 in d1:
+                if d0.has_key(kd1):
+                    d0[kd1]=np.vstack((d0[kd1],d1[kd1]))
+                else:
+                    d0[kd1]=d1[kd1]
 
-        #     while not splitted:
-        #         try:
-        #             sa1 = np.split(a1,sli)
-        #             sa2 = np.split(a2,sli)
-        #             splitted=True
-        #         except:
-        #             sli=slices[uuk+1]
-        #             uuk=uuk+1
-        #     return sa1,sa2,sli
-
-
-        ###
-        ### plug interactions of each cycle with the others
-        ###
-
+        firstloop=True
+        dsigio={}
         while not stop:
             # for all detected valid output
             for k in oldout:
                 us = np.where(-(adii-adio[k]).T.any(0))[0]
                 out.extend(us.tolist())
-
+                
 
                 for uus in us:
+                    # print adi[uus]
                     # 1st input interactions to all identified a outputs
-                    if lsig ==[]:
-                        lsig=di[kdi[k]]
-                    lsigtmp={}
+                    try:
+                        lsig=dsigio[kdi[k][3:]]
+                    except:
+                        lsig = dsigiosave[kdi[k][3:]]
+                    # lni=dni[kdi[k]]
+                    sigio={}
                     # loop on input interactions
                     for ki in lsig.keys():
                         # loop on output interactions
                         for ko in di[kdi[uus]].keys():
-                            for sel in range(len(lsig[ki])):
+                            # remove impossible signature in terms of cones
+                            lin = len(lsig[ki])
+                            lout = len(di[kdi[uus]][ko])
+                            # manage case 1st interaction with no previous
+                            
+                            if ki >1 and ko>1:
+                                uso = lsig[ki][:,-2:,0]
+                                uout = di[kdi[uus]][ko][:,1][:,0]
+                                uvi = M[uso[:,0],uso[:,1],:][:,uout]
+                            else :
+                                uvi = np.ones((lin,lout),dtype='bool')
 
-                                ri = np.repeat(lsig[ki][sel],len(di[kdi[uus]][ko][0]),axis=0)
-                                ro= np.tile(di[kdi[uus]][ko][0][:,1:],(len(lsig[ki][sel]),1,1))
+                            ri = np.repeat(lsig[ki],lout,axis=0)
+                            ro = np.tile(di[kdi[uus]][ko],(lin,1,1))
 
-                                # this is an attempt to split array
-                                # when the hstack is to large....
-                                # but this require some tuning and test ,
-                                # and doesn't solve the 
-                                # complexity issue
-                                #
-                                # if len(ri) > 1e6:
-                                #     pass
-                                #     sri,sro,sli= slicer(ri,ro)
-                                #     for sl in range(sli):
-                                #         asig=np.hstack((sri[sl],sro[sl]))
+                            uvi=uvi.reshape(lin*lout,order='F')
 
-                                #         print 'slice stack'
+                            ri=ri[uvi]
+                            ro=ro[uvi]
 
-                                #         try:
-                                #             lsigtmp[ki+ko-1][sl]=np.vstack((lsigtmp[ki+ko-1][sl],asig))
-                                #         except:
-                                #             # chack has key
-                                #             if lsigtmp.has_key(ki+ko-1):
-                                #                 # check if subdivision alreadyexist
-                                #                 if not len(lsigtmp[ki+ko-1]) == sli:
-                                #                     lsigtmp[ki+ko-1]=[[]]*sli
-                                #             else :
-                                #                 lsigtmp[ki+ko-1]=[[]]*sli
-                                #             lsigtmp[ki+ko-1][sl]=asig
+                            asig=np.hstack((ri,ro[:,1:]))
 
-                                # else :
+                            try:
+                                sigio[ki+ko-1]=np.vstack((sigio[ki+ko-1],asig))
+                            except:
+                                sigio[ki+ko-1]=asig
+                    # key is the output segment
+                    if dsigio.has_key(kdi[uus][-3:]):
+                        filldinda(dsigio[kdi[uus][-3:]],sigio)
+                    else:
+                        dsigio[kdi[uus][-3:]]=sigio
+            dsigiosave.update(dsigio)
+            dsigio={}
+            if not firstloop:
+                if (adi[out][:,3:] == 0).all():
+                    stop=True
+                    break
 
-                                asig=np.hstack((ri,ro))
-                                try:
-                                    lsigtmp[ki+ko-1][sel]=np.vstack((lsigtmp[ki+ko-1][sel],asig))
-                                except:
-                                    lsigtmp[ki+ko-1]=[asig]
+            firstloop=False
+            oldout=out
+
+            out=[]
 
 
 
-                    lsig=lsigtmp
 
-                    # stop when the target cycle has been reached
-                    if kdi[uus][3:] == (0,0,0):
-                        stop=True
-                        break
-                oldout=out
-                out=[]
-
+        sig=dsigiosave[(0,0,0)]
         # reshaping to be compliant with signatures format
-        lsig2= {x:np.swapaxes(lsig[x][0],1,2) for x in lsig}
-        lsig2= {x:lsig2[x].reshape(np.prod(lsig2[x].shape[:2]),x) for x in lsig2}
-
-        self.update(lsig2)
-
+        sig2= {x:np.swapaxes(sig[x],1,2) for x in sig}
+        sig2= {x:sig2[x].reshape(np.prod(sig2[x].shape[:2]),x) for x in sig2}
+        self.update(sig2)
+        print sum([len(sig2[x]) for x in sig2])
         #for debug
-        return lsig2
+        return sig2
 
 
 

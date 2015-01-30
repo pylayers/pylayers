@@ -1173,6 +1173,8 @@ class DLink(Link):
 
         if 'cutoff' not in kwargs:
             kwargs['cutoff']=self.cutoff
+        else:
+            self.cutoff=kwargs['cutoff']
 
         if 'force' not in kwargs:
             if not isinstance(kwargs['force'],list):
