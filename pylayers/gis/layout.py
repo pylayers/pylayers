@@ -6395,6 +6395,10 @@ class Layout(PyLayers):
             line width (2)
         node_color: string
             w
+        posnode_color: string
+            positive node color (k)
+        negnode_color: string
+            negative node color (b)
         edge_color : string
             k
         node_size : float 

@@ -324,7 +324,8 @@ class DLink(Link):
                    'verbose':True
                 }
 
-
+        self._ca=-1
+        self._cb=-1
         specset = ['a','b','Aa','Ab','Ta','Tb','L','fGHz','wav']
 
         for key, value in defaults.items():
@@ -444,6 +445,14 @@ class DLink(Link):
         return self._b
 
     @property
+    def ca(self):
+        return self._ca
+
+    @property
+    def cb(self):
+        return self._cb
+
+    @property
     def Aa(self):
         return self._Aa
 
@@ -484,17 +493,34 @@ class DLink(Link):
     def a(self,position):
         if not self.L.ptin(position):
             raise NameError ('point a is not inside the Layout')
+        if not self.L.pt2cy(position) == self.ca:
+            self.ca = self.L.pt2cy(position)
         self._a = position
-        self.ca = self.L.pt2cy(position)
         self.tx.position = position
 
     @b.setter
     def b(self,position):
         if not self.L.ptin(position):
             raise NameError ('point b is not inside the Layout')
+        if not self.L.pt2cy(position) == self.cb:
+            self.cb = self.L.pt2cy(position)
         self._b = position
-        self.cb = self.L.pt2cy(position)
         self.rx.position = position
+
+    @ca.setter
+    def ca(self,cycle):
+        if not cycle in self.L.Gc.nodes():
+            raise NameError ('cycle ca is not inside Gc')
+    
+        self._ca = cycle
+        self.a = self.L.cy2pt(cycle)
+
+    @cb.setter
+    def cb(self,cycle):
+        if not cycle in self.L.Gc.nodes():
+            raise NameError ('cycle cb is not inside Gc')
+        self._cb = cycle
+        self.b = self.L.cy2pt(cycle)
 
     @Aa.setter
     def Aa(self,Ant):
@@ -1119,6 +1145,12 @@ class DLink(Link):
         pylayers.antprop.signature
         pylayers.antprop.rays
 
+        Experimental
+        ------------
+        alg = 2015
+            vectorized signature research
+        si_reverb : number of reverb in source/target cycle if alg=2015
+
         """
 
         defaults={ 'output':['sig','ray','Ct','H'],
@@ -1126,11 +1158,12 @@ class DLink(Link):
                    'si_mt':False,
                    'si_progress':False,
                    'diffraction':False,
-                   'ra_vectorized':True,
+                   'ra_vectorized':False,
                    'ra_ceil_height_meter':3,
                    'ra_number_mirror_cf':1,
                    'force':[],
                    'alg':7,
+                   'si_reverb':4,
                    'threshold':0.1,
                    }
         for key, value in defaults.items():
@@ -1140,6 +1173,8 @@ class DLink(Link):
 
         if 'cutoff' not in kwargs:
             kwargs['cutoff']=self.cutoff
+        else:
+            self.cutoff=kwargs['cutoff']
 
         if 'force' not in kwargs:
             if not isinstance(kwargs['force'],list):
@@ -1161,6 +1196,10 @@ class DLink(Link):
             self.load(Si,self.dexist['sig']['grpname'])
 
         else :
+            if kwargs['alg']==2015:
+                TMP=Si.run2015(cutoff=kwargs['cutoff'],
+                        cutoffbound=kwargs['si_reverb'])
+
             if kwargs['alg']==5:
                 Si.run5(cutoff=kwargs['cutoff'],
                         algo=kwargs['si_algo'],

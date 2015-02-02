@@ -403,6 +403,7 @@ class Signatures(PyLayers,dict):
         self.filename = self.L.filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
 
     def __repr__(self):
+
         def fun1(x):
             if x==1:
                 return('R')
@@ -1096,6 +1097,269 @@ class Signatures(PyLayers,dict):
         return dout
 
 
+
+    # def propaths2015(self,G, source, target,dout={}, cutoff=1):
+    #     """ seek all simple_path from source to target
+
+    #     Parameters
+    #     ----------
+
+    #     G : networkx Graph Gi
+    #     dout : dictionnary
+    #         ouput dictionnary
+    #     source : tuple
+    #         interaction (node of Gi)
+    #     target : tuple
+    #         interaction (node of Gi)
+    #     cutoff : int
+    #     bt : bool
+    #         allow backtrace (visite nodes already visited)
+
+    #     Returns
+    #     -------
+
+    #     dout : dictionnary
+    #         key : int
+    #            number of interactions
+    #         values : list of numpy array
+
+
+
+    #     Notes
+    #     -----
+
+    #     adapted from all_simple_path of networkx
+
+    #     1- Determine all nodes connected to Gi
+
+    #     """
+    #     #print "source :",source
+    #     #print "target :",target
+
+    #     if cutoff < 1:
+    #         return
+
+
+    #     visited = [source]
+    #     # stack is a list of iterators
+    #     stack = [iter(G[source])]
+    #     # lawp = list of airwall position in visited
+    #     lawp = []
+
+    #     # while the list of iterators is not void
+    #     # import ipdb
+    #     # ipdb.set_trace()
+    #     while stack: #
+    #         # children is the last iterator of stack
+
+    #         children = stack[-1]
+    #         # next child
+
+    #         child = next(children, None)
+
+    #         # update number of useful segments
+    #         # if there is airwall in visited
+    #         if child is None  : # if no more child
+    #             stack.pop()   # remove last iterator
+    #             visited.pop() # remove from visited list
+    #             try:
+    #                 lawp.pop()
+    #             except:
+    #                 pass
+
+    #         elif (len(visited) < (cutoff + sum(lawp))):# if visited list length is less than cutoff
+    #             if child == target:  # if child is the target point
+    #                 #print visited + [target]
+    #                 path = visited + [target]
+
+    #                 try:
+    #                     dout[len(path)][0]=np.vstack((dout[len(path)][0],np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')))
+    #                 except:
+    #                     dout[len(path)]=[np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')]
+
+    #                 #yield visited + [target] # output signature
+
+    #             elif (child not in visited): # else visit other node
+    #                 # only visit output nodes except if bt
+    #                 #pdb.set_trace()
+    #                 try:
+    #                     dintpro = G[visited[-1]][child]['output']
+    #                 except:
+    #                     dintpro ={}
+    #                 stack.append(iter(dintpro.keys()))
+    #                 #stack.append(iter(G[visited[-1]][child]['output']))
+    #                 visited.append(child)
+    #                 if child[0] in self.L.name['AIR']:
+    #                     lawp.append(1)
+    #                 else:
+    #                     lawp.append(0)
+
+
+
+
+    #         else: #len(visited) == cutoff (visited list is too long)
+    #             if child == target or target in children:
+    #                 path = visited + [target]
+
+    #                 try:
+    #                     dout[len(path)][0]=np.vstack((dout[len(path)][0],np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')))
+    #                 except:
+    #                     dout[len(path)]=[np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')]
+
+    #                 #print visited + [target]
+    #                 #yield visited + [target]
+
+    #             stack.pop()
+    #             visited.pop()
+    #             try:
+    #                 lawp.pop()
+    #             except:
+    #                 pass
+    #     return dout
+
+
+    def propaths2015_2(self,G, source, target,dout={},M={}, cutoff=1):
+        """ seek all simple_path from source to target
+
+        Parameters
+        ----------
+
+        G : networkx Graph Gi
+        dout : dictionnary
+            ouput dictionnary
+        source : tuple
+            interaction (node of Gi)
+        target : tuple
+            interaction (node of Gi)
+        cutoff : int
+        bt : bool
+            allow backtrace (visite nodes already visited)
+
+        Returns
+        -------
+
+        dout : dictionnary
+            key : int
+               number of interactions
+            values : list of numpy array
+
+
+
+        Notes
+        -----
+
+        adapted from all_simple_path of networkx
+
+        1- Determine all nodes connected to Gi
+
+        """
+        #print "source :",source
+        #print "target :",target
+
+        if cutoff < 1:
+            return
+
+
+        visited = [source]
+        # stack is a list of iterators
+        stack = [iter(G[source])]
+        # lawp = list of airwall position in visited
+        lawp = []
+        # while the list of iterators is not void
+        # import ipdb
+        # ipdb.set_trace()
+        while stack: #
+            # children is the last iterator of stack
+
+            children = stack[-1]
+            # next child
+
+            child = next(children, None)
+
+            # update number of useful segments
+            # if there is airwall in visited
+            if child is None  : # if no more child
+                stack.pop()   # remove last iterator
+                visited.pop() # remove from visited list
+                try:
+                    lawp.pop()
+                except:
+                    pass
+
+            elif (len(visited) < (cutoff + sum(lawp))):# if visited list length is less than cutoff
+                if child == target:  # if child is the target point
+                    #print visited + [target]
+                    path = visited + [target]
+                    # M = np.zeros((1,NGs),dtype='bool')
+                    out = [i[0] for i in G[visited[-1]][target]['output'].keys()]
+                    M[path[-2][0],path[-1][0],out]=True
+                    try:
+                        dout[len(path)]=np.vstack((dout[len(path)],np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')))
+                        # dnvi[len(path)].append([[i[0],len(i)] for i in G[visited[-1]][child]['output'].keys()])
+                        # out = [i[0] for i in G[visited[-1]][child]['output'].keys()]
+                        # M[path[-2][0],path[-1][0],out]=True
+                        # dnvi[len(path)]=np.vstack((dnvi[len(path)],M))
+                        
+                    except:
+                        dout[len(path)]=np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')
+                        # dnvi[len(path)]=[[[i[0],len(i)] for i in G[visited[-1]][child]['output'].keys()]]
+                        # dnvi[len(path)]=M
+                        
+                    #yield visited + [target] # output signature
+
+                elif (child not in visited): # else visit other node
+                    # only visit output nodes except if bt
+                    #pdb.set_trace()
+                    try:
+                        dintpro = G[visited[-1]][child]['output']
+                    except:
+                        dintpro ={}
+                    stack.append(iter(dintpro.keys()))
+                    #stack.append(iter(G[visited[-1]][child]['output']))
+                    visited.append(child)
+                    if child[0] in self.L.name['AIR']:
+                        lawp.append(1)
+                    else:
+                        lawp.append(0)
+
+            else: #len(visited) == cutoff (visited list is too long)
+                # if child == (56, 8, 14):
+                #     import ipdb
+                #     ipdb.set_trace()
+                # print list(children)
+                # print ((child == target) or (target in children))
+                
+                CC=list(children)
+                if ((child == target) or (target in CC)):
+                    path = visited + [target]
+                    # M = np.zeros((1,NGs),dtype='bool')
+                    out = [i[0] for i in G[visited[-1]][target]['output'].keys()]
+                    M[path[-2][0],path[-1][0],out]=True
+                    try:
+                        dout[len(path)]=np.vstack((dout[len(path)],np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')))
+                        # dnvi[len(path)].append([[i[0],len(i)] for i in G[visited[-1]][child]['output'].keys()])
+                        # dnvi[len(path)].append(np.unique([i[0] for i in G[visited[-1]][child]['output'].keys()]))
+                        # M[:,[i[0] for i in G[visited[-1]][child]['output'].keys()]]=True
+                        # dnvi[len(path)]=np.vstack((dnvi[len(path)],M))
+
+                    except:
+                        dout[len(path)]=np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')
+                        # dnvi[len(path)]=[[[i[0],len(i)] for i in G[visited[-1]][child]['output'].keys()]]
+                        # dnvi[len(path)]=[np.unique([i[0] for i in G[visited[-1]][child]['output'].keys()])]
+                        # M[:,[i[0] for i in G[visited[-1]][child]['output'].keys()]]=True
+                        # dnvi[len(path)]=M
+
+                    #print visited + [target]
+                    #yield visited + [target]
+
+                stack.pop()
+                visited.pop()
+                try:
+                    lawp.pop()
+                except:
+                    pass
+        return dout
+
     def procone2(self,L,G, source, target,dout={}, cutoff=1):
         """ seek all simple_path from source to target looking backward
 
@@ -1392,33 +1656,76 @@ class Signatures(PyLayers,dict):
             return False
 
 
+    def run2015(self,source=-1,target=-1,cutoff=1,cutoffbound=1):
+        """ EXPERIMENTAL
+            Vectorized approach of signature search
 
-    def run2015(self,source=1,target=3,cutoff=3):
 
 
+        Parameters
+        ----------
+
+        source: int (-1)
+            source cycle . 
+            If =-1 => self.source used
+        target: int (-1)
+            target cycle . 
+            If =-1 => self.target used
+        cutoff= int (1)
+            max number of interactions per cycle
+            except 1st and last cycle
+        cutoffbound= int (1)
+            max number of interactions in 1st and last cycle
+
+        Returns
+        -------
+
+        Nothing, fill self
+
+
+        Example
+        -------
+
+        >>> from pylayers.simul.link import *
+        >>> L=Layout('TA-Office.ini')
+        >>> DL=DLink(L=L)
+        >>> DL.ca=8
+        >>> DL.Cb=13
+        >>> DL.eval(force=['sig','ray','Ct','H'],alg=2015,si_reverb=3,cutoff=2,ra_vectorized=True)
+
+        """
+        if source == -1:
+            source = self.source
+        if target == -1:
+            target = self.target
         # list of cycle to reach source -> target. this will be imporve next
         lcil = self.L.cycleinline(source,target)
         llcil=len(lcil)
-
-
-
-
-
-
-
-
-
         # 2 determine input signatures for each cycles
+        # di key = [input seg, input room, output seg, output room]
         di={}
+        # number of points and seg of layout 
+        NGs = self.L.Ns+self.L.Np
+        M = np.zeros((NGs,NGs,NGs),dtype='bool')
+
+        ###
+        ### Find interactions per cycles
+        ###
+        if llcil == 1:
+            raise AttributeError('Signatures.run2015 doesn\'t work when source==target')
         for icy,cy in enumerate(lcil):
 
             vinT=[]
             # valid 'out' interatcion
             voutT=[]
 
+            inter = self.L.Gc.node[cy]['inter']
+            sGi = nx.subgraph(self.L.Gi,inter)
+
             if icy == 0:
+
                 # the interactions of 1st cycle are kept appart
-                di0 = {}
+                # di0 = {}
 
                 outR,outT,outD = self.L.intercy(cy,typ='source')
 
@@ -1426,10 +1733,18 @@ class Signatures(PyLayers,dict):
                     fcy = filter(lambda x: cycle == x[2],outT)
                     voutT.extend(fcy) 
                 vinT = outR + outD
-                for i in vinT:
-                    for o in voutT:
-                        di[(i,o)]=self.propaths2(self.L.Gi,i,o,cutoff=cutoff).values()
-                        di0[(i,o)]=(o)
+
+                kdi0 = (0,0,0,voutT[0][0],voutT[0][1],voutT[0][2])
+                
+                # for each reverb/diffract interaction,
+                # inside 1st cycle, search the output interactions
+                for o in voutT:
+                    io={}
+                    for i in vinT:
+                        io = self.propaths2015_2(sGi,i,o,dout=io,M=M,cutoff=cutoffbound)
+                    di[0,0,0,o[0],o[1],o[2]] = io
+                    # add direct signature
+                    di[0,0,0,o[0],o[1],o[2]][1]=np.array([o[0],len(o)],ndmin=3)
             elif (icy >=1) and (icy <llcil-1):
                 # valid 'in' interatcion
 
@@ -1438,59 +1753,156 @@ class Signatures(PyLayers,dict):
                 outR,outT,outD = self.L.intercy(cy,typ='source')
 
 
-                # keep only interesting interactions
+                # keep only interactions in identified interesting cycles
                 for cycle in lcil:
                     fcy = filter(lambda x: cycle == x[1],inT)
                     vinT.extend(fcy)
                     fcy = filter(lambda x: cycle == x[2],outT)
                     voutT.extend(fcy)
 
-
+                # for each (identified interesting ) input interactions of the cycle
+                # find all path to each (identified interesting) output interactions 
                 for i in vinT:
                     for o in voutT:
-                        di[(i,o)]=self.propaths2(self.L.Gi,i,o,cutoff=cutoff).values()
+                        io={}
+                        if not (i[1],i[2])==(o[2],o[1]):
+                            io = self.propaths2015_2(sGi,i,o,dout=io,M=M,cutoff=cutoff)
+                            di[i[0],i[1],i[2],o[0],o[1],o[2]] = io
+                            # dni[i[0],i[1],i[2],o[0],o[1],o[2]] = ino
 
+            # the interactions of last cycle are kept appart
             elif icy == llcil-1:
-
-                # the interactions of last cycle are kept appart
-                dif = {}
-
                 inR,inT,inD = self.L.intercy(cy,typ='target')
 
                 for cycle in lcil:
                     fcy = filter(lambda x: cycle == x[1],inT)
-                    vinT.extend(fcy) 
-                voutT = inR + inD
+                    vinT.extend( fcy) 
+                voutT = inR #+ inD
+                kdif = (vinT[0][0],vinT[0][1],vinT[0][2],0,0,0)
+
+                # for each (identified interesting ) input interactions,
+                # find path to each reverb/diffract interaction of last cycle
                 for i in vinT:
+                    io={}
                     for o in voutT:
-                        di[(i,o)]=self.propaths2(self.L.Gi,i,o,cutoff=cutoff).values()
-                        dif[(i,o)]=(i)
-        # revert the input transmission to find a connection to output transmissions
+                        io=self.propaths2015_2(sGi,i,o,dout=io,M=M,cutoff=cutoffbound)
+                    di[i[0],i[1],i[2],0,0,0] = io
+                    # add direct signature
+                    di[i[0],i[1],i[2],0,0,0][1]=np.array([i[0],len(i)],ndmin=3)
+
+                # dni[i[0],i[1],i[2],0,0,0] = ino
+
+
+        # dictionnary of interactions id keys
+        # interaction id key are build as tuple Transmission inter in , 
+        # Transmission interaction id input ,  Transmission interaction id output
+        # e.g. (34, 13, 12, 36, 12, 11).
+        # (0,0,0,X,X,X) stands for all interactions from the source
+        # (X,X,X,0,0,0) stands for all interactions from the target
+        kdi = di.keys()
+
+        # Create 2 arrays with 
+        # input and output interactions id respectively
+        adi0 = np.array(kdi0)
+        adif = np.array(kdif)
         adi = np.array(di.keys())
-        adi0 = adi[:,0]
-        adi1 = adi[:,1]
-        ladi0 =list(adi0)
-        iladi0 = []
-        for l in ladi0:
-            if len(l) == 3:
-                iladi0.append((l[0],l[2],l[1]))
-            else :
-                iladi0.append(l)
-        iadi0 = np.array(iladi0)
+        adii = adi[:,:3]
+        adio = adi[:,3:]
+        out=[]
+        lsig={}
 
-        import ipdb
-        ipdb.set_trace()
-        # WARNING here :!!!
-        # array must be a list of tuple and not interpreted as a np.array
-        # this last case occurs when the list of tuple has the same length !!!
-        if len(voutT0) ==1:
-            ao0 = np.array(tuple((voutT0[0],())))
-        if len(voutT0) ==1:
-            aif = np.array(tuple((vinTf[0],())))
+        # initialize loop on the 1st interaction id(0,0,0,X,X,X)
+
+        uinit = np.unique(np.where(adi[:,:3]==0)[0])
+        oldout=uinit
+        stop=False
+        dsigiosave={}
+        dsigiosave.update({kdi[i][-3:]:di[kdi[i]] for i in uinit})
+
+        def filldinda(d0,d1):
+            for kd1 in d1:
+                if d0.has_key(kd1):
+                    d0[kd1]=np.vstack((d0[kd1],d1[kd1]))
+                else:
+                    d0[kd1]=d1[kd1]
+
+        firstloop=True
+        dsigio={}
+        while not stop:
+            # for all detected valid output
+            for k in oldout:
+                us = np.where(-(adii-adio[k]).T.any(0))[0]
+                out.extend(us.tolist())
+                
+
+                for uus in us:
+                    # print adi[uus]
+                    # 1st input interactions to all identified a outputs
+                    try:
+                        lsig=dsigio[kdi[k][3:]]
+                    except:
+                        lsig = dsigiosave[kdi[k][3:]]
+                    # lni=dni[kdi[k]]
+                    sigio={}
+                    # loop on input interactions
+                    for ki in lsig.keys():
+                        # loop on output interactions
+                        for ko in di[kdi[uus]].keys():
+                            # remove impossible signature in terms of cones
+                            lin = len(lsig[ki])
+                            lout = len(di[kdi[uus]][ko])
+                            # manage case 1st interaction with no previous
+                            
+                            if ki >1 and ko>1:
+                                uso = lsig[ki][:,-2:,0]
+                                uout = di[kdi[uus]][ko][:,1][:,0]
+                                uvi = M[uso[:,0],uso[:,1],:][:,uout]
+                            else :
+                                uvi = np.ones((lin,lout),dtype='bool')
+
+                            ri = np.repeat(lsig[ki],lout,axis=0)
+                            ro = np.tile(di[kdi[uus]][ko],(lin,1,1))
+
+                            uvi=uvi.reshape(lin*lout,order='F')
+
+                            ri=ri[uvi]
+                            ro=ro[uvi]
+
+                            asig=np.hstack((ri,ro[:,1:]))
+
+                            try:
+                                sigio[ki+ko-1]=np.vstack((sigio[ki+ko-1],asig))
+                            except:
+                                sigio[ki+ko-1]=asig
+                    # key is the output segment
+                    if dsigio.has_key(kdi[uus][-3:]):
+                        filldinda(dsigio[kdi[uus][-3:]],sigio)
+                    else:
+                        dsigio[kdi[uus][-3:]]=sigio
+            dsigiosave.update(dsigio)
+            dsigio={}
+            if not firstloop:
+                if (adi[out][:,3:] == 0).all():
+                    stop=True
+                    break
+
+            firstloop=False
+            oldout=out
+
+            out=[]
 
 
 
-        return di
+
+        sig=dsigiosave[(0,0,0)]
+        # reshaping to be compliant with signatures format
+        sig2= {x:np.swapaxes(sig[x],1,2) for x in sig}
+        sig2= {x:sig2[x].reshape(np.prod(sig2[x].shape[:2]),x) for x in sig2}
+        self.update(sig2)
+        print sum([len(sig2[x]) for x in sig2])
+        #for debug
+        return sig2
+
 
 
 
@@ -2073,7 +2485,7 @@ class Signatures(PyLayers,dict):
                     except:
                         pass
 
-
+                
 
                 elif (len(visited) < (cutoff + sum(lawp))) and sum(lawp)<5  :# if visited list length is less than cutoff
 
@@ -2301,6 +2713,8 @@ class Signatures(PyLayers,dict):
                                 lawp.pop()
                             except:
                                 pass
+
+                        
 
                         elif (len(visited) < (cutoff + sum(lawp))) :# if visited list length is less than cutoff
                             if child == t:  # if child is the target point
@@ -3650,7 +4064,8 @@ class Signatures(PyLayers,dict):
 
 
     def raysv(self,ptx=0,prx=1):
-        """ from signatures dict to 2D rays Vectorized version
+    
+        """ from signatures dict to 2D rays Vectorized version 
 
         Parameters
         ----------
@@ -3700,26 +4115,21 @@ class Signatures(PyLayers,dict):
         """
         if type(ptx)==int:
             ptx = np.array(self.L.Gt.pos[ptx])
-
+        
         if type(prx)==int:
             prx = np.array(self.L.Gt.pos[prx])
-
+        
 
         if len(ptx) == 2:
             ptx= np.r_[ptx,0.5]
         if len(ptx) == 2:
             prx= np.r_[prx,0.5]
 
-
-        # rays void initialization
         rays = Rays(ptx,prx)
-        # image
-        M = self.image(ptx)
-        # backtrace
-        R = self.backtrace(ptx,prx,M)
-        # update rays
-        rays.update(R)
 
+        M = self.image(ptx)
+        R = self.backtrace(ptx,prx,M)
+        rays.update(R)
         rays.nb_origin_sig = len(self)
         rays.origin_sig_name = self.filename
         return rays
@@ -3727,7 +4137,7 @@ class Signatures(PyLayers,dict):
     def backtrace(self, tx, rx, M):
         ''' Warning :
             This is an attempt to vectorize the backtrace process.
-            Despite it has been tested on few cases with succes,
+            Despite it has been tested on few cases with succes, 
             this is quite new need to be validated !!!
 
 
@@ -3775,7 +4185,7 @@ class Signatures(PyLayers,dict):
             # 2 get associated position in L.pt
 
             # utahe (2 pt indexes,nb_signatures,nb_interactions)
-            utahe = self.L.tahe[:,seg-1]
+            utahe = self.L.tahe[:,self.L.tgs[seg]]
 
             # pt : (xycoord (2),pt indexes (2),nb_signatures,nb_interactions)
             pt = self.L.pt[:,utahe]
@@ -3940,7 +4350,6 @@ class Signatures(PyLayers,dict):
 
         dM={}
         for ninter in self.keys():
-
             # get segment ids of signature with ninter interactions
             seg = self[ninter][::2]
             nsig = len(seg)
@@ -3949,7 +4358,8 @@ class Signatures(PyLayers,dict):
             # 2 get associated position in L.pt
 
             # utahe (2 pt indexes,nb_signatures,nb_interactions)
-            utahe = self.L.tahe[:,seg-1]
+
+            utahe = self.L.tahe[:,self.L.tgs[seg]]
 
 
 
