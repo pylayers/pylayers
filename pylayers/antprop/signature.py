@@ -1732,12 +1732,13 @@ class Signatures(PyLayers,dict):
                 for cycle in lcil:
                     fcy = filter(lambda x: cycle == x[2],outT)
                     voutT.extend(fcy) 
-                vinT = outR + outD
+                vinT = outR #+ outD
 
                 kdi0 = (0,0,0,voutT[0][0],voutT[0][1],voutT[0][2])
                 
                 # for each reverb/diffract interaction,
                 # inside 1st cycle, search the output interactions
+
                 for o in voutT:
                     io={}
                     for i in vinT:
@@ -1779,7 +1780,8 @@ class Signatures(PyLayers,dict):
                     vinT.extend( fcy) 
                 voutT = inR #+ inD
                 kdif = (vinT[0][0],vinT[0][1],vinT[0][2],0,0,0)
-
+                # keep trace of last segments
+                sinf = np.array([vinT[i][0] for i in range(len(vinT))])
                 # for each (identified interesting ) input interactions,
                 # find path to each reverb/diffract interaction of last cycle
                 for i in vinT:
@@ -1828,12 +1830,13 @@ class Signatures(PyLayers,dict):
 
         firstloop=True
         dsigio={}
+        idx = 0
         while not stop:
             # for all detected valid output
             for k in oldout:
                 us = np.where(-(adii-adio[k]).T.any(0))[0]
                 out.extend(us.tolist())
-                
+
 
                 for uus in us:
                     # print adi[uus]
@@ -1848,32 +1851,54 @@ class Signatures(PyLayers,dict):
                     for ki in lsig.keys():
                         # loop on output interactions
                         for ko in di[kdi[uus]].keys():
+
                             # remove impossible signature in terms of cones
                             lin = len(lsig[ki])
                             lout = len(di[kdi[uus]][ko])
                             # manage case 1st interaction with no previous
-                            
+
                             if ki >1 and ko>1:
                                 uso = lsig[ki][:,-2:,0]
                                 uout = di[kdi[uus]][ko][:,1][:,0]
                                 uvi = M[uso[:,0],uso[:,1],:][:,uout]
+                                suvi=np.sum(uvi,axis=0)
                             else :
                                 uvi = np.ones((lin,lout),dtype='bool')
+                                suvi = lin*np.ones(lout)
 
-                            ri = np.repeat(lsig[ki],lout,axis=0)
-                            ro = np.tile(di[kdi[uus]][ko],(lin,1,1))
+                            for uv in range(lout):
+                                ri = lsig[ki][uvi[:,uv]]
+                                ro = np.tile(di[kdi[uus]][ko][uv],(suvi[uv],1,1))
 
-                            uvi=uvi.reshape(lin*lout,order='F')
+                                # ri = np.repeat(lsig[ki][uvi[:,uv]],suvi[uv],axis=0)
+                                # ro = np.tile(di[kdi[uus]][ko],(lin,1,1))
 
-                            ri=ri[uvi]
-                            ro=ro[uvi]
+                                # uvi=uvi.reshape(lin*lout,order='F')
 
-                            asig=np.hstack((ri,ro[:,1:]))
+                                # ri=ri[uvi]
+                                # ro=ro[uvi]
 
-                            try:
-                                sigio[ki+ko-1]=np.vstack((sigio[ki+ko-1],asig))
-                            except:
-                                sigio[ki+ko-1]=asig
+                                asig=np.hstack((ri,ro[:,1:]))
+
+                                try:
+                                    sigio[ki+ko-1]=np.vstack((sigio[ki+ko-1],asig))
+                                except:
+                                    sigio[ki+ko-1]=asig
+
+                            # ri = np.repeat(lsig[ki],lout,axis=0)
+                            # ro = np.tile(di[kdi[uus]][ko],(lin,1,1))
+
+                            # uvi=uvi.reshape(lin*lout,order='F')
+
+                            # ri=ri[uvi]
+                            # ro=ro[uvi]
+
+                            # asig=np.hstack((ri,ro[:,1:]))
+
+                            # try:
+                            #     sigio[ki+ko-1]=np.vstack((sigio[ki+ko-1],asig))
+                            # except:
+                            #     sigio[ki+ko-1]=asig
                     # key is the output segment
                     if dsigio.has_key(kdi[uus][-3:]):
                         filldinda(dsigio[kdi[uus][-3:]],sigio)
@@ -1888,8 +1913,11 @@ class Signatures(PyLayers,dict):
 
             firstloop=False
             oldout=out
-
             out=[]
+            idx = idx+1
+            # # attempt to limit the combinatory
+            # survive1=np.where(adi[oldout][:,2]==lcil[idx])[0]
+            # oldout=np.array(oldout)[survive1].tolist()
 
 
 
@@ -4360,7 +4388,6 @@ class Signatures(PyLayers,dict):
             # utahe (2 pt indexes,nb_signatures,nb_interactions)
 
             utahe = self.L.tahe[:,self.L.tgs[seg]]
-
 
 
 
