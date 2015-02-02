@@ -1719,7 +1719,7 @@ class Signatures(PyLayers,dict):
             # valid 'out' interatcion
             voutT=[]
 
-            inter = self.L.Gc.node[cy]['inter']
+            inter = self.L.Gr.node[cy]['inter']
             sGi = nx.subgraph(self.L.Gi,inter)
 
             if icy == 0:
