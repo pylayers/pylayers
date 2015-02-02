@@ -8098,7 +8098,7 @@ class Layout(PyLayers):
         fos.close()
         return pg
 
-    def _show3(self,centered=False,newfig=False,opacity=1.):
+    def _show3(self,centered=False,newfig=False,opacity=1.,roomid=[]):
         """ create a .off geomview file
 
         Parameters
@@ -8339,6 +8339,12 @@ class Layout(PyLayers):
         mlab.pipeline.surface(mlab.pipeline.extract_edges(surf),
                                     color=(0, 0, 0), )
         f.children[-1].name='Layout ' + self.filename
+
+        if roomid:
+            if len(self.Gr.nodes())>0:
+                pk=self.Gr.pos.keys()
+                v=np.array(self.Gr.pos.values())
+                [mlab.text3d(v[ik,0],v[ik,1],0.5,str(k)) for ik,k in enumerate(pk)]
 
 
     def show3(self, bdis=True,centered=True):
