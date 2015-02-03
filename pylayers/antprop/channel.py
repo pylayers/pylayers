@@ -1276,7 +1276,10 @@ class Ctilde(PyLayers):
         # Cg2cl should be applied here
         #
 
-
+        #
+        #  C  = 2 x 2 x r x f   ? 
+        #  Fa = 2 x r x f     ?
+        #  Fb = 2 x r x f
         #t1 = self.Ctt * Fat + self.Cpt * Fap
         #t2 = self.Ctp * Fat + self.Cpp * Fap
         t1 = self.Ctt * Fat + self.Ctp * Fap

@@ -509,16 +509,16 @@ class DLink(Link):
 
     @ca.setter
     def ca(self,cycle):
-        if not cycle in self.L.Gc.nodes():
-            raise NameError ('cycle ca is not inside Gc')
+        if not cycle in self.L.Gt.nodes():
+            raise NameError ('cycle ca is not inside Gt')
     
         self._ca = cycle
         self.a = self.L.cy2pt(cycle)
 
     @cb.setter
     def cb(self,cycle):
-        if not cycle in self.L.Gc.nodes():
-            raise NameError ('cycle cb is not inside Gc')
+        if not cycle in self.L.Gt.nodes():
+            raise NameError ('cycle cb is not inside Gt')
         self._cb = cycle
         self.b = self.L.cy2pt(cycle)
 

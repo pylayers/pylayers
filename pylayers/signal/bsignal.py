@@ -324,9 +324,9 @@ class Bsignal(PyLayers):
 
     x can have 1 or two axis
 
-    The first axis of x and y have the same length
+    The first axis of x the last axes of y have the same length
 
-    By construction shape(y)[1] :=len(x), len(x) takes priority in case of observed conflict
+    By construction shape(y)[-1] :=len(x), len(x) takes priority in case of observed conflict
 
     """
 
