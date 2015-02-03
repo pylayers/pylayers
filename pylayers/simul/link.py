@@ -400,17 +400,25 @@ class DLink(Link):
         ###########
         if len(self.a)==0:
             self.ca = 1
-            self.a = self.L.cy2pt(self.ca)
+            # self.a = self.L.cy2pt(self.ca)
         else:
-            self.a = kwargs['a']
-            self.ca = self.L.pt2cy(self.a)
+            if len(kwargs['a']) ==2:
+                a=np.r_[kwargs['a'],1.0]
+            else: 
+                a=kwargs['a']
+            self.a = a
+            # self.ca = self.L.pt2cy(self.a)
 
         if len(self.b)==0:
             self.cb = 1
-            self.b = self.L.cy2pt(self.cb)
+            # self.b = self.L.cy2pt(self.cb)
         else:
-            self.b = kwargs['b']
-            self.cb = self.L.pt2cy(self.b)
+            if len(kwargs['b']) ==2:
+                b=np.r_[kwargs['b'],1.0]
+            else: 
+                b=kwargs['b']
+            self.b = b
+            # self.cb = self.L.pt2cy(self.b)
 
 
         ###########
@@ -509,16 +517,16 @@ class DLink(Link):
 
     @ca.setter
     def ca(self,cycle):
-        if not cycle in self.L.Gc.nodes():
-            raise NameError ('cycle ca is not inside Gc')
+        if not cycle in self.L.Gt.nodes():
+            raise NameError ('cycle ca is not inside Gt')
     
         self._ca = cycle
         self.a = self.L.cy2pt(cycle)
 
     @cb.setter
     def cb(self,cycle):
-        if not cycle in self.L.Gc.nodes():
-            raise NameError ('cycle cb is not inside Gc')
+        if not cycle in self.L.Gt.nodes():
+            raise NameError ('cycle cb is not inside Gt')
         self._cb = cycle
         self.b = self.L.cy2pt(cycle)
 
@@ -651,10 +659,10 @@ class DLink(Link):
             self.L.dumpw()
 
 
-        self.ca = 0
+        self.ca = 1
         self.cb = 1
-        self.a = self.L.cy2pt(self.ca)
-        self.b = self.L.cy2pt(self.cb)
+        # self.a = self.L.cy2pt(self.ca)
+        # self.b = self.L.cy2pt(self.cb)
 
         # change h5py file if layout changed
         self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5'
@@ -1176,7 +1184,7 @@ class DLink(Link):
         else:
             self.cutoff=kwargs['cutoff']
 
-        if 'force' not in kwargs:
+        if 'force' in kwargs:
             if not isinstance(kwargs['force'],list):
                 if kwargs['force'] == True :
                     kwargs['force'] = ['sig','ray','Ct','H']

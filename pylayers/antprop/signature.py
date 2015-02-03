@@ -1916,8 +1916,10 @@ class Signatures(PyLayers,dict):
             out=[]
             idx = idx+1
             # # attempt to limit the combinatory
-            # survive1=np.where(adi[oldout][:,2]==lcil[idx])[0]
-            # oldout=np.array(oldout)[survive1].tolist()
+            survive1=adi[oldout][:,2]==lcil[idx]
+            survive2=adi[oldout][:,-1]==lcil[idx+1]
+            survive = np.where(survive1&survive2)[0]
+            oldout=np.array(oldout)[survive].tolist()
 
 
 
@@ -1927,7 +1929,6 @@ class Signatures(PyLayers,dict):
         sig2= {x:np.swapaxes(sig[x],1,2) for x in sig}
         sig2= {x:sig2[x].reshape(np.prod(sig2[x].shape[:2]),x) for x in sig2}
         self.update(sig2)
-        print sum([len(sig2[x]) for x in sig2])
         #for debug
         return sig2
 
