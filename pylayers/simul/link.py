@@ -316,7 +316,7 @@ class DLink(Link):
                    'Ta':np.eye(3),
                    'Tb':np.eye(3),
                    'fGHz':np.linspace(2, 11, 181, endpoint=True),
-                   'wav':wvf.Waveform(),
+                   'wav':wvf.Waveform(typ='W1compensate'),
                    'cutoff':3,
                    'save_opt':['sig','ray','Ct','H'],
                    'save_idx':0,
@@ -324,8 +324,9 @@ class DLink(Link):
                    'verbose':True
                 }
 
-
-        specset = ['a','b','Aa','Ab','Ta','Tb','L','fGHz']
+        self._ca=-1
+        self._cb=-1
+        specset = ['a','b','Aa','Ab','Ta','Tb','L','fGHz','wav']
 
         for key, value in defaults.items():
             if key not in kwargs:
@@ -399,17 +400,25 @@ class DLink(Link):
         ###########
         if len(self.a)==0:
             self.ca = 1
-            self.a = self.L.cy2pt(self.ca)
+            # self.a = self.L.cy2pt(self.ca)
         else:
-            self.a = kwargs['a']
-            self.ca = self.L.pt2cy(self.a)
+            if len(kwargs['a']) ==2:
+                a=np.r_[kwargs['a'],1.0]
+            else: 
+                a=kwargs['a']
+            self.a = a
+            # self.ca = self.L.pt2cy(self.a)
 
         if len(self.b)==0:
             self.cb = 1
-            self.b = self.L.cy2pt(self.cb)
+            # self.b = self.L.cy2pt(self.cb)
         else:
-            self.b = kwargs['b']
-            self.cb = self.L.pt2cy(self.b)
+            if len(kwargs['b']) ==2:
+                b=np.r_[kwargs['b'],1.0]
+            else: 
+                b=kwargs['b']
+            self.b = b
+            # self.cb = self.L.pt2cy(self.b)
 
 
         ###########
@@ -444,6 +453,14 @@ class DLink(Link):
         return self._b
 
     @property
+    def ca(self):
+        return self._ca
+
+    @property
+    def cb(self):
+        return self._cb
+
+    @property
     def Aa(self):
         return self._Aa
 
@@ -463,6 +480,10 @@ class DLink(Link):
     def fGHz(self):
         return self._fGHz
 
+    @property
+    def wav(self):
+        return self._wav
+
     @L.setter
     def L(self,L):
         # change layout and build/load
@@ -480,17 +501,34 @@ class DLink(Link):
     def a(self,position):
         if not self.L.ptin(position):
             raise NameError ('point a is not inside the Layout')
+        if not self.L.pt2cy(position) == self.ca:
+            self.ca = self.L.pt2cy(position)
         self._a = position
-        self.ca = self.L.pt2cy(position)
         self.tx.position = position
 
     @b.setter
     def b(self,position):
         if not self.L.ptin(position):
             raise NameError ('point b is not inside the Layout')
+        if not self.L.pt2cy(position) == self.cb:
+            self.cb = self.L.pt2cy(position)
         self._b = position
-        self.cb = self.L.pt2cy(position)
         self.rx.position = position
+
+    @ca.setter
+    def ca(self,cycle):
+        if not cycle in self.L.Gt.nodes():
+            raise NameError ('cycle ca is not inside Gt')
+    
+        self._ca = cycle
+        self.a = self.L.cy2pt(cycle)
+
+    @cb.setter
+    def cb(self,cycle):
+        if not cycle in self.L.Gt.nodes():
+            raise NameError ('cycle cb is not inside Gt')
+        self._cb = cycle
+        self.b = self.L.cy2pt(cycle)
 
     @Aa.setter
     def Aa(self,Ant):
@@ -538,6 +576,13 @@ class DLink(Link):
         self.fmax = freq[-1]
         self.fstep = freq[1]-freq[0]
 
+
+    @wav.setter
+    def wav(self,waveform):
+        self._wav = waveform
+        if 'H' in dir(self):
+            self.chanreal = self.H.applywavB(self.wav.sfg)
+        
 
     def __repr__(self):
         """ __repr__
@@ -614,10 +659,10 @@ class DLink(Link):
             self.L.dumpw()
 
 
-        self.ca = 0
+        self.ca = 1
         self.cb = 1
-        self.a = self.L.cy2pt(self.ca)
-        self.b = self.L.cy2pt(self.cb)
+        # self.a = self.L.cy2pt(self.ca)
+        # self.b = self.L.cy2pt(self.cb)
 
         # change h5py file if layout changed
         self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5'
@@ -1048,10 +1093,28 @@ class DLink(Link):
 
         force : list
             Force the computation (['sig','ray','Ct','H']) AND save (replace previous computations)
+
         si_algo : str ('old'|'new')
-            signature.run algo type
+            signature.run algo type 
+            'old' : call propaths2
+            'new' : call procone2
+        alg : 5 | 7
+            version of run for signature
+        si_mt: boolean
+            Multuithreat version of algo version 7
+        si_progress: bollean ( False)
+            display progression bar for signatures
+        diffraction : bollean (False)
+            take into consideration diffraction points
+
         ra_number_mirror_cf : int
             rays.to3D number of ceil/floor reflexions
+        ra_ceil_height_meter:float,
+            ceil height
+        ra_vectorized: boolean (True)
+            if True used the (2015 new) vectorized approach to determine 2drays 
+
+
 
 
         Returns
@@ -1090,31 +1153,47 @@ class DLink(Link):
         pylayers.antprop.signature
         pylayers.antprop.rays
 
+        Experimental
+        ------------
+        alg = 2015
+            vectorized signature research
+        si_reverb : number of reverb in source/target cycle if alg=2015
+
         """
 
         defaults={ 'output':['sig','ray','Ct','H'],
                    'si_algo':'old',
+                   'si_mt':False,
+                   'si_progress':False,
                    'diffraction':False,
+                   'ra_vectorized':False,
                    'ra_ceil_height_meter':3,
                    'ra_number_mirror_cf':1,
                    'force':[],
                    'alg':7,
+                   'si_reverb':4,
                    'threshold':0.1,
                    }
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key]=value
 
-        self.checkh5()
 
         if 'cutoff' not in kwargs:
             kwargs['cutoff']=self.cutoff
-        if 'force' not in kwargs:
+        else:
+            self.cutoff=kwargs['cutoff']
+
+        if 'force' in kwargs:
             if not isinstance(kwargs['force'],list):
                 if kwargs['force'] == True :
                     kwargs['force'] = ['sig','ray','Ct','H']
                 else :
                     kwargs['force'] = []
+
+        # must be placed after all the init !!!!
+        self.checkh5()
+
 
         ############
         # Signatures
@@ -1125,13 +1204,28 @@ class DLink(Link):
             self.load(Si,self.dexist['sig']['grpname'])
 
         else :
+            if kwargs['alg']==2015:
+                TMP=Si.run2015(cutoff=kwargs['cutoff'],
+                        cutoffbound=kwargs['si_reverb'])
+
             if kwargs['alg']==5:
-                Si.run5(cutoff=kwargs['cutoff'],algo=kwargs['si_algo'],diffraction=kwargs['diffraction'])
+                Si.run5(cutoff=kwargs['cutoff'],
+                        algo=kwargs['si_algo'],
+                        diffraction=kwargs['diffraction'],
+                        progress=kwargs['si_progress'])
             if kwargs['alg']==7:
-                Si.run7(cutoff=kwargs['cutoff'],
-                    algo=kwargs['si_algo'],
-                    diffraction=kwargs['diffraction'],
-                    threshold=kwargs['threshold'])
+                if kwargs['si_mt']==7:
+                    Si.run7mt(cutoff=kwargs['cutoff'],
+                        algo=kwargs['si_algo'],
+                        diffraction=kwargs['diffraction'],
+                        threshold=kwargs['threshold'],
+                        progress=kwargs['si_progress'])
+                else :
+                    Si.run7(cutoff=kwargs['cutoff'],
+                        algo=kwargs['si_algo'],
+                        diffraction=kwargs['diffraction'],
+                        threshold=kwargs['threshold'],
+                        progress=kwargs['si_progress'])
 
             #Si.run6(diffraction=kwargs['diffraction'])
             # save sig
@@ -1151,7 +1245,12 @@ class DLink(Link):
 
         else :
             # perform computation ...
-            r2d = Si.rays(self.a,self.b)
+            # ... with vetorized ray evaluation approach
+            if kwargs['ra_vectorized']:
+                r2d = Si.raysv(self.a,self.b)
+            # ... or with original and slow approach ( to be removed in a near future)
+            else :
+                r2d = Si.rays(self.a,self.b)
             R = r2d.to3D(self.L,H=self.L.maxheight, N=kwargs['ra_number_mirror_cf'])
             R.locbas(self.L)
             # ...and save
@@ -1198,6 +1297,8 @@ class DLink(Link):
             self.save(H,'H',self.dexist['H']['grpname'],force = kwargs['force'])
 
         self.H = H
+
+        self.chanreal = self.H.applywavB(self.wav.sfg)
 
         return self.H.ak, self.H.tk
 

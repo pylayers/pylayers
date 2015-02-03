@@ -252,7 +252,8 @@ class Wstandard(dict):
 
         """
 
-        fp = open(pyu.getlong('wstd.json',pstruc['DIRSIMUL']))
+        filename=pyu.getlong(_fileini,pstruc['DIRSIMUL'])
+        fp = open(filename)
         stds = json.load(fp)
         fp.close()
         std = stds[stdname]
@@ -293,7 +294,7 @@ class Wstandard(dict):
             print k + ' , ',
 
     def power(self, band, info ='max', unit='mw'):
-        """ Return inunition for a given channel
+        """ Return  for a given channel
 
         Parameters
         ----------
@@ -396,7 +397,6 @@ class Wstandard(dict):
 
         self.fcghz=np.sort(self.fcghz)
 
-
 class AP(dict):
     """ Access Point
 
@@ -457,7 +457,7 @@ class AP(dict):
         st = 'name : '+str(self['name'])+'\n'
         st = st + 'p : '+str(self['p'])+'\n'
         st = st+ 'PtdBm : '+str(self['PtdBm'])+'\n'
-        st = st+ 'chanels  : '+str(self['chan'])+'   '
+        st = st+ 'channels  : '+str(self['chan'])+'   '
         for k in self['chan']:
            st = st + self.s.chan[k].__repr__()
         st = st+ 'sensdBm : '+str(self['sensdBm'])+'\n'

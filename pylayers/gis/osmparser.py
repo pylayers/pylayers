@@ -638,7 +638,7 @@ def osmparse(_filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True
     if '/' or '\\' in _filename:
         filename = _filename
     else:
-        filename = pyu.getlong(_filename,'gis/osm')
+        filename = pyu.getlong(_filename,os.path.join('gis','osm'))
     #
     # Read coords and create basemap converter
     #

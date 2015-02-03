@@ -101,7 +101,7 @@ except:
 
 
 # Dictionnary which associate PULSRAY environment variable with sub direrories
-# of the project 
+# of the project
 #
 pstruc = {}
 pstruc['DIRSIMUL'] ='ini'
@@ -170,7 +170,15 @@ for nm,nv in pstruc.items():
     else :
 
         if not os.path.isdir(dirname):
-            os.mkdir(dirname)
+            try:
+                os.mkdir(dirname)
+            except:
+                # dictionnary is not necessarly ordonned !
+                # parent directory may not be created
+                dirtmp= os.path.dirname(dirname)
+                os.mkdir(dirtmp)
+                os.mkdir(dirname)
+
             print "create ",dirname
 
 

@@ -263,8 +263,10 @@ def cost231(pBS,pMS,hroof,phir,wr,fMHz,wb=20,dB=True,city='medium'):
 
 def cost259(pMS,pBS,fMHz):
     """
+
     Parameters
     ----------
+
     pMS : np.array (position of Mobile Station)
     pBS : np.array (position of Base station)
     fMHz : float
@@ -280,7 +282,8 @@ def cost259(pMS,pBS,fMHz):
     hMS = pMS[3,:]
     dm  = np.sqrt((pBS-pMS)*(pBS-pMS))
     lmbd = 300/fMHz
-    pl = 10*2.6*np.log10(dm)+20*log10(4*np.pi/lmbd) 
+    pl = 10*2.6*np.log10(dm)+20*log10(4*np.pi/lmbd)
+
     if not dB:
         pl = 10**(-pl/20.);
     return(pl)
@@ -289,12 +292,52 @@ def hata(pMS,pBS,fGHz,hMS,hBS,typ):
     """ Hata Path loss model
 
     pMS : np.array
-        Mobile position
+        Mobile position (meters)
     pBS : np.array
+        Base station position (meters)
     fGHz : np.array
+    hMS : height mobile station (m)
+    hBS : height base station (m)
+
+    Returns
+    -------
+
+    L : Attenuation (dB)
+
+
+    Notes
+    -----
+
+    This model is valid until 1.5GHz, for higher frequency see
+    COST231-Hata model
+
+    References
+    ----------
+
+    OKUMURA (Y.), OHMORI (E.), KAWANO (T.)
+    et FUKUA (K.). – Field strength and its varia-
+    bility in UHF and VHF land-mobile radio ser-
+    vice. Rev. Elec. Commun. Lab., vol. 16, n o 9,
+    1968.
+
+    HATA (M.). – Empirical formula for propaga-
+    tion loss in land mobile radio services. IEEE
+    Trans. Veh. Technol., vol. 29, pp. 317-325,
+    Aug. 1980
 
     """
     dm  = np.sqrt((pBS-pMS)*(pBS-pMS))
+    if (typ=='small'):
+       CH = (1.1*np.log10(fGHz*1000)-0.7)*hMS-(1.56*np.log10(fGHz*1000)-0.8)
+    if (typ=='big'):
+        if fGHz<0.2:
+            CH = 8.29*(np.log10(1.54*h_MS)**2)-1.1
+        else:# valid until 1.5GHz
+            CH = 3.2*(np.log10(11.75*h_MS)**2)-4.97
+
+    L = 69.55+26.16*np.log10(fGHz*1000)-13.82*np.log10(hBS)+(44.9-6.55*np.log10(hBS))*np.log10(dm/1000.)-CH
+
+    return(L)
 
 def cost2100(pMS,pBS,fGHz,nfloor=1,dB=True):
     """ cost 2100 model

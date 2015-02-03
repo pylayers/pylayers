@@ -1274,9 +1274,13 @@ class Ctilde(PyLayers):
         # Cg2cl should be applied here
         #
 
-
+        #
+        #  C  = 2 x 2 x r x f   ? 
+        #  Fa = 2 x r x f     ?
+        #  Fb = 2 x r x f
         #t1 = self.Ctt * Fat + self.Cpt * Fap
         #t2 = self.Ctp * Fat + self.Cpp * Fap
+
         t1 = self.Ctt * Fat + self.Ctp * Fap
         t2 = self.Cpt * Fat + self.Cpp * Fap
         alpha = t1 * Fbt + t2 * Fbp
@@ -1285,7 +1289,7 @@ class Ctilde(PyLayers):
         if Friis:
             H.applyFriis()
 
-        #average w.r.t frequency
+        # average w.r.t frequency
         H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y)/self.nfreq, axis=1)))
         H.tk = H.taud
         return(H)

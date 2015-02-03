@@ -3,6 +3,8 @@ import numpy as np
 
 
 def getchannel(emplacement = 'trunku',intersection = 1):
+    """ get channel
+    """
 
 
     pdp = {'trunku':{'los':{'gamma':25.9,'gamma0':3.37,'k':26,'lambda-1':2.13,'sigma':4.02},

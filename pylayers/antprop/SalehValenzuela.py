@@ -2,6 +2,7 @@ import scipy.stats as st
 import numpy as np
 import matplotlib.pyplot as plt
 import pylayers.signal.bsignal as bs
+import pdb
 
 def SalehValenzuela(**kwargs):
     """ generic Saleh and Valenzuela Model
@@ -38,16 +39,20 @@ def SalehValenzuela(**kwargs):
     p1 = st.poisson(Lam)
     p2 = st.poisson(lam)
     # cluster time of arrival
-    tc = np.cumsum(p1.rvs(Nc))
+    tc   = np.cumsum(e1.rvs(Nr))
+    tc   = tc[np.where(tc<T)]
+    Nc   = len(tc)
     tauc = np.kron(tc,np.ones((1,Nr)))[0,:]
     # rays time of arrival
-    taur = np.cumsum(p2.rvs((Nr,Nc)),axis=0).ravel()
+    taur = np.cumsum(e2.rvs((Nr,Nc)),axis=0).ravel()
     # exponential decays of cluster and rays
     etc = np.exp(-tauc/(1.0*Gam))
     etr = np.exp(-taur/(1.0*gam))
     et = etc*etr
     tau = tauc+taur
-    # reordering in delay domain
+    # filtering < T and reordering in delay domain
+    tau = tau[np.where(tau<T)]
+    et = et[np.where(tau<T)]
     u = np.argsort(tau)
     taus = tau[u]
     ets = et[u]
@@ -57,3 +62,8 @@ def SalehValenzuela(**kwargs):
     ets = ets[v]
     SVir = bs.Bsignal(taus,ets)
     return(SVir)
+
+if __name__ =="__main__":
+    h = SalehValenzuela()
+    h.stem()
+    Hu = h.b2fud()

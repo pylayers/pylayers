@@ -1,0 +1,8 @@
+conda install numpy --yes
+conda install mayavi --yes
+conda install basemap --yes
+conda install shapely --yes
+conda install gdal --yes
+conda install h5py --yes
+pip install protobuf 
+python setup.py install

@@ -44,6 +44,7 @@ import pdb
 import matplotlib.pyplot as plt
 import pylayers.util.pyutil as pyu
 from pylayers.util.project import *
+
 from pylayers.gis.layout import Layout
 import pandas as pd
 import copy
@@ -713,7 +714,7 @@ class Trajectory(PyLayers,pd.DataFrame):
     def _show3(self,color_range=True):
 
         X=self[['x','y','z']].values
-        
+
         if color_range:
             t = np.linspace(0, 100, len(X))
             mlab.plot3d(X[:,0],X[:,1],X[:,2],-t,colormap='gist_gray')

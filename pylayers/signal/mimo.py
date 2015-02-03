@@ -62,7 +62,7 @@ class MIMO(object):
 
     def loadraw(self,
                 _filename='S00_11.csv',
-                rep='/data/Sondage/MIMO-FB/12-9-2013/S00/',
+                rep=os.path.join('data','Sondage','MIMO-FB','12-9-2013','S00'),
                 nT=1):
         """ load a MIMO Nr x Nt raw data sounder file
 
@@ -110,7 +110,7 @@ class MIMO(object):
             for iT in range(self.Nt):
                 _filename = 'Calib'+str(iT+1)+'x'+str(iR+1)+'.txt'
                 C = MIMO()
-                C.loadraw(rep='/data/Sondage/MIMO-FB/calibration/',
+                C.loadraw(rep=os.path.join('data','Sondage','MIMO-FB','calibration'),
                           _filename=_filename)
                 try:
                     #tc = np.vstack((tc,C.H.y[iR*4+iT,:]))
@@ -145,7 +145,7 @@ class MIMO(object):
             rho = 10**(trhodB[ir]/10)
             for ik in range(len(self.fGHz)):
                 H   = self.H.y[:,:,ik]
-                HHc  = np.dot(H,np.conj(H).T)
+                HHc = np.dot(H,np.conj(H).T)
                 IR  = np.eye(self.Nr)
                 tC[ir,ik] = np.log(la.det(IR+(rho/self.Nt)*HHc))/np.log(2)
 
