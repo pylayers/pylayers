@@ -11,19 +11,17 @@ def SalehValenzuela(**kwargs):
 
     Lam : clusters Poisson Process parameter (ns)
     lam : rays Poisson Process parameter (ns)
-    Nc  : number of clusters
-    Nr  : number of rays
     Gam : clusters exponential decay factor
     gam : rays exponential decay factor
+    tauM : maximum delay
 
 
     """
-    defaults = { 'Lam' : 10,
-                 'lam' : 5,
-                 'Nc'  : 5,
-                 'Nr'  : 5,
-                 'Gam' : 30,
-                 'gam' : 5 }
+    defaults = { 'Lam' : 10.,
+                 'lam' : 5.,
+                 'Gam' : 30.,
+                 'gam' : 5. ,
+                 'tauM': 1000.}
 
     for k in defaults:
         if k not in kwargs:
@@ -33,8 +31,9 @@ def SalehValenzuela(**kwargs):
     lam = kwargs['lam']
     Gam = kwargs['Gam']
     gam = kwargs['gam']
-    Nc = kwargs['Nc']
-    Nr = kwargs['Nr']
+    tauM = kwargs['tauM']
+    Nc = tauM/Lam
+    Nr = tauM/lam
 
     p1 = st.poisson(Lam)
     p2 = st.poisson(lam)
@@ -52,5 +51,9 @@ def SalehValenzuela(**kwargs):
     u = np.argsort(tau)
     taus = tau[u]
     ets = et[u]
+    # limiting in delay domain
+    v = np.where(taus<tauM)[0]
+    taus = taus[v]
+    ets = ets[v]
     SVir = bs.Bsignal(taus,ets)
     return(SVir)

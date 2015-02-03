@@ -3,7 +3,7 @@
 #
 """
 
-This module runs the electromagnetic simulation at the link level
+This module runs the electromagnetic simulation for a link.
 It stores simulated objects in `hdf5` format.
 
 DLink Class

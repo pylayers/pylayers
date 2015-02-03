@@ -201,8 +201,6 @@ class Ctilde(PyLayers):
             raise NameError('Channel.Ctilde: issue when writting h5py file')
 
 
-
-
     def loadh5(self,Lfilename,idx,output=True):
         """ load Ctilde object in hdf5 format
 
@@ -213,7 +211,7 @@ class Ctilde(PyLayers):
             Layout filename
         idx : int
             file identifier number
-        output : bool 
+        output : bool
             return an output precised in return
 
         Returns
