@@ -40,7 +40,7 @@ import pdb
 
 class algloc(object):
     """
-    This class regroups algebraic localization algorithms
+    This class gathers algebraic localization algorithms
 
     Attributes
     ----------
@@ -89,11 +89,6 @@ class algloc(object):
         st = st + 'LDPs :' + str(self.ldp)+'\n'
         return(st)
 
-    def info(self):
-        """ Display scenario information
-        """
-        print "Nodes : ", self.nodes
-        print "Location dependent parameters : ", self.ldp
 
     def plot(self, rss = False , toa = True, tdoa = False):
         """ plot scenario
@@ -154,7 +149,7 @@ class algloc(object):
         rss : boolean
             False
         toa : boolean
-            True 
+            True
         tdoa : boolean
             False
 
