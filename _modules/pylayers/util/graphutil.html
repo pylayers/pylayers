@@ -144,6 +144,8 @@
                 <span class="s">&#39;width&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
                 <span class="s">&#39;node_color&#39;</span><span class="p">:</span><span class="s">&#39;w&#39;</span><span class="p">,</span>
                 <span class="s">&#39;edge_color&#39;</span><span class="p">:</span><span class="s">&#39;k&#39;</span><span class="p">,</span>
+                <span class="s">&#39;posnode_color&#39;</span><span class="p">:</span><span class="s">&#39;k&#39;</span><span class="p">,</span>
+                <span class="s">&#39;negnode_color&#39;</span><span class="p">:</span><span class="s">&#39;b&#39;</span><span class="p">,</span>
                 <span class="s">&#39;node_size&#39;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
                 <span class="s">&#39;width&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
                 <span class="s">&#39;font_size&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
@@ -213,8 +215,15 @@
                                <span class="n">node_size</span>  <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;node_size&#39;</span><span class="p">],</span>
                                <span class="n">alpha</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alphan&#39;</span><span class="p">],</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;labels&#39;</span><span class="p">]:</span>
+        <span class="n">nlp</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">,</span> <span class="n">nodelist</span><span class="p">)</span>
+        <span class="n">nln</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">,</span> <span class="n">nodelist</span><span class="p">)</span>
         <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_labels</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">G</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span>
-                                <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="n">n</span><span class="p">:</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">},</span>
+                                <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="n">n</span><span class="p">:</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nln</span><span class="p">},</span>
+                                <span class="n">font_color</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;negnode_color&#39;</span><span class="p">],</span>
+                                <span class="n">font_size</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;font_size&#39;</span><span class="p">],</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_labels</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">G</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span>
+                                <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="n">n</span><span class="p">:</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nlp</span><span class="p">},</span>
+                                <span class="n">font_color</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;posnode_color&#39;</span><span class="p">],</span>
                                 <span class="n">font_size</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;font_size&#39;</span><span class="p">],</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edges&#39;</span><span class="p">]:</span>
@@ -326,7 +335,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on déc. 02, 2014.
+      Last updated on févr. 03, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

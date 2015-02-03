@@ -537,6 +537,7 @@
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;typ&#39;</span><span class="p">:[</span><span class="s">&#39;l20&#39;</span><span class="p">],</span>
                 <span class="s">&#39;polar&#39;</span><span class="p">:</span><span class="s">&#39;po&#39;</span><span class="p">,</span> <span class="c"># po | p | o</span>
                 <span class="s">&#39;coeff&#39;</span><span class="p">:</span><span class="s">&#39;RT&#39;</span><span class="p">,</span> <span class="c"># RT | R | T</span>
+                <span class="s">&#39;att&#39;</span><span class="p">:</span><span class="bp">False</span>
                <span class="p">}</span>
 
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -557,6 +558,7 @@
 
         <span class="n">args</span><span class="p">[</span><span class="s">&#39;titles&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">args</span><span class="p">[</span><span class="s">&#39;typ&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;typ&#39;</span><span class="p">]</span>
+        <span class="n">args</span><span class="p">[</span><span class="s">&#39;att&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;att&#39;</span><span class="p">]</span>
 
         <span class="c"># Reflexion</span>
         <span class="k">if</span> <span class="s">&#39;R&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;coeff&#39;</span><span class="p">]:</span>
@@ -888,8 +890,7 @@
         <span class="n">theta</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Nt</span><span class="p">)</span>
         <span class="n">II</span> <span class="o">=</span> <span class="n">MatInterface</span><span class="p">(</span><span class="n">lmat</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
         <span class="n">II</span><span class="o">.</span><span class="n">RT</span><span class="p">()</span>
-        <span class="c">#Ro = II.Ro</span>
-        <span class="n">Ro</span> <span class="o">=</span> <span class="n">II</span><span class="o">.</span><span class="n">Ro</span> <span class="c"># modif eric plouhinec</span>
+        <span class="n">Ro</span> <span class="o">=</span> <span class="n">II</span><span class="o">.</span><span class="n">Ro</span> 
         <span class="n">Rp</span> <span class="o">=</span> <span class="n">II</span><span class="o">.</span><span class="n">Rp</span>
 
         <span class="k">return</span> <span class="n">Ro</span><span class="p">,</span> <span class="n">Rp</span>
@@ -2456,7 +2457,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on déc. 02, 2014.
+      Last updated on févr. 03, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

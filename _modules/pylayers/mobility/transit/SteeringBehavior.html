@@ -193,7 +193,7 @@
         <span class="n">displacement</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">destination</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">position</span>
         <span class="n">desired_velocity</span> <span class="o">=</span> <span class="n">displacement</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span> <span class="o">*</span> <span class="n">boid</span><span class="o">.</span><span class="n">desired_speed</span>
         <span class="n">steering</span> <span class="o">=</span> <span class="n">desired_velocity</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">displacement</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">boid</span><span class="o">.</span><span class="n">radius</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">displacement</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="o">*</span><span class="n">boid</span><span class="o">.</span><span class="n">radius</span><span class="p">):</span>
             <span class="n">boid</span><span class="o">.</span><span class="n">arrived</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="k">return</span> <span class="n">steering</span>
 </div>
@@ -388,6 +388,118 @@
                     <span class="k">return</span> <span class="o">-</span><span class="n">boid</span><span class="o">.</span><span class="n">localy</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">speed</span> <span class="o">/</span> <span class="n">boid</span><span class="o">.</span><span class="n">max_speed</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">vec3</span><span class="p">()</span>
 
+<span class="c"># class Containment:</span>
+<span class="c">#     &quot;&quot;&quot; Class Containment </span>
+
+<span class="c">#     &quot;&quot;&quot;</span>
+
+<span class="c">#     def calculate(self, boid):</span>
+<span class="c">#         &quot;&quot;&quot; calculate boid behavior</span>
+
+<span class="c">#         Parameters</span>
+<span class="c">#         ----------</span>
+
+<span class="c">#         boid</span>
+
+<span class="c">#         Returns</span>
+<span class="c">#         -------</span>
+
+<span class="c">#         steering</span>
+
+<span class="c">#         &quot;&quot;&quot;</span>
+
+<span class="c">#         the_world = boid.world</span>
+<span class="c">#         walls = the_world.obstacles(boid)</span>
+<span class="c">#         acceleration = vec3()</span>
+<span class="c">#         front_intersect = left_intersect = right_intersect = False</span>
+<span class="c">#         front_distance = left_distance = right_distance = 30000</span>
+<span class="c">#         speed = boid.velocity.length()</span>
+<span class="c">#         front_check = FCHK + speed * 0.5</span>
+<span class="c">#         side_check = SCHK + speed * 0.5</span>
+<span class="c">#         front_test = boid.localy.scale(front_check)</span>
+<span class="c">#         left_test = (boid.localy - boid.localx).scale(side_check)</span>
+<span class="c">#         right_test = (boid.localy + boid.localx).scale(side_check)</span>
+<span class="c">#         position = boid.position</span>
+<span class="c">#         boid.intersection = None</span>
+<span class="c">#         checked = []</span>
+<span class="c">#         df = FCHK+0.5</span>
+<span class="c">#         dl = SCHK</span>
+<span class="c">#         dr = SCHK</span>
+<span class="c">#         for wall in walls:</span>
+<span class="c">#             if wall in checked: continue</span>
+<span class="c">#             checked.append(wall)</span>
+<span class="c">#             intersect, distance_along_check, direction = self.test_intersection(boid, wall, position, front_test,method = &#39;gauss&#39;)</span>
+<span class="c">#             if df &gt; distance_along_check:</span>
+<span class="c">#                 df = distance_along_check</span>
+<span class="c">#                 if intersect and distance_along_check &lt; front_distance:</span>
+<span class="c">#                     front_intersect = True</span>
+<span class="c">#                     front_distance = distance_along_check</span>
+<span class="c">#                     front_direction = direction</span>
+<span class="c">#             intersect, distance_along_check, direction = self.test_intersection(boid, wall, position, left_test,method = &#39;direct&#39;)</span>
+<span class="c">#             if dl &gt; distance_along_check:</span>
+<span class="c">#                 dl = distance_along_check</span>
+<span class="c">#                 if not front_intersect and intersect and distance_along_check &lt; left_distance:</span>
+<span class="c">#                     left_intersect = True</span>
+<span class="c">#                     left_distance = distance_along_check</span>
+<span class="c">#                     left_direction = direction</span>
+<span class="c">#             intersect, distance_along_check, direction = self.test_intersection(boid, wall, position, right_test,method = &#39;direct&#39;)</span>
+<span class="c">#             if dr &gt; distance_along_check:</span>
+<span class="c">#                 dr = distance_along_check</span>
+<span class="c">#                 if not front_intersect and intersect and distance_along_check &lt; right_distance:</span>
+<span class="c">#                     right_intersect = True</span>
+<span class="c">#                     right_distance = distance_along_check</span>
+<span class="c">#                     right_direction = direction</span>
+<span class="c">#             # if front_intersect or left_intersect or right_intersect :</span>
+<span class="c">#             #     break</span>
+
+
+
+<span class="c"># #    print speed</span>
+<span class="c"># #    # parabolic speed </span>
+<span class="c">#         d_no_influ = 1.0#0.3 # m</span>
+<span class="c">#         repuls     = boid.velocity.length() #/ boid.max_speed</span>
+<span class="c"># #        speed = (repuls/(d_no_influ**2)*min(distance_along_check,d_no_influ)**2 - 2*repuls/(d_no_influ)*min(distance_along_check,d_no_influ) + repuls) #/ boid.max_speed</span>
+<span class="c"># #        speed = max (1.2*boid.max_speed, 1.0/(sqrt(2*pi*d_no_influ**2))*exp(-repuls**2/(2**d_no_influ**2)))</span>
+<span class="c">#         speed = max (boid.max_speed, d_no_influ/max(0.0001,(1.*repuls)))</span>
+<span class="c">#         speed = boid.velocity.length() / boid.max_speed # ORIGINAL CODE</span>
+<span class="c">#         # sf = max (boid.max_speed, speed*d_no_influ/max(0.0001,(1.*df)))</span>
+<span class="c">#         # sl = max (boid.max_speed, speed*d_no_influ/max(0.0001,(1.*dl)))</span>
+<span class="c">#         # sr = max (boid.max_speed, speed*d_no_influ/max(0.0001,(1.*dr)))</span>
+<span class="c">#         sf = 1 / max(df**2,1e-9)</span>
+<span class="c">#         sl = 1 / max(dl**2,1e-9)</span>
+<span class="c">#         sr = 1 / max(dr**2,1e-9)</span>
+<span class="c">#         acceleration = vec3()</span>
+<span class="c">#         if front_intersect:</span>
+<span class="c">#             if front_direction == &#39;left&#39;:</span>
+<span class="c">#                 acceleration = boid.localx.scale(sl) </span>
+<span class="c">#                 acceleration = -boid.localy.scale(sf) </span>
+<span class="c">#             else:</span>
+<span class="c">#                 acceleration = boid.localx.scale(sr) </span>
+<span class="c">#                 acceleration = -boid.localy.scale(sf) </span>
+<span class="c">#         # if left_intersect:</span>
+<span class="c">#         #     acceleration = boid.localx.scale(sl)</span>
+<span class="c">#         # if right_intersect:</span>
+<span class="c">#         #     acceleration = boid.localx.scale(sr)</span>
+        
+
+<span class="c">#         return acceleration</span>
+
+<span class="c">#         # if front_intersect:</span>
+<span class="c">#         #     if front_direction == &#39;left&#39;:</span>
+<span class="c">#         #         acceleration = boid.localx.scale(speed) </span>
+<span class="c">#         #     else:</span>
+<span class="c">#         #         acceleration = -boid.localx.scale(speed) </span>
+<span class="c">#         # elif left_intersect:</span>
+<span class="c">#         #     acceleration = boid.localx.scale(speed)</span>
+<span class="c">#         # elif right_intersect:</span>
+<span class="c">#         #     acceleration = -boid.localx.scale(speed)</span>
+<span class="c">#         # else:</span>
+<span class="c">#         #     acceleration = vec3()</span>
+
+<span class="c">#         # return acceleration</span>
+
+
+
 <span class="k">class</span> <span class="nc">Containment</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot; Class Containment </span>
 
@@ -412,7 +524,7 @@
         <span class="n">walls</span> <span class="o">=</span> <span class="n">the_world</span><span class="o">.</span><span class="n">obstacles</span><span class="p">(</span><span class="n">boid</span><span class="p">)</span>
         <span class="n">acceleration</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">()</span>
         <span class="n">front_intersect</span> <span class="o">=</span> <span class="n">left_intersect</span> <span class="o">=</span> <span class="n">right_intersect</span> <span class="o">=</span> <span class="bp">False</span>
-        <span class="n">front_distance</span> <span class="o">=</span> <span class="n">left_distance</span> <span class="o">=</span> <span class="n">right_distance</span> <span class="o">=</span> <span class="mi">30000</span>
+        <span class="n">front_distance</span> <span class="o">=</span> <span class="n">left_distance</span> <span class="o">=</span> <span class="n">right_distance</span> <span class="o">=</span> <span class="mi">10</span>
         <span class="n">speed</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
         <span class="n">front_check</span> <span class="o">=</span> <span class="n">FCHK</span> <span class="o">+</span> <span class="n">speed</span> <span class="o">*</span> <span class="mf">0.5</span>
         <span class="n">side_check</span> <span class="o">=</span> <span class="n">SCHK</span> <span class="o">+</span> <span class="n">speed</span> <span class="o">*</span> <span class="mf">0.5</span>
@@ -425,78 +537,63 @@
         <span class="n">df</span> <span class="o">=</span> <span class="n">FCHK</span><span class="o">+</span><span class="mf">0.5</span>
         <span class="n">dl</span> <span class="o">=</span> <span class="n">SCHK</span>
         <span class="n">dr</span> <span class="o">=</span> <span class="n">SCHK</span>
+        <span class="n">acceleration</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">wall</span> <span class="ow">in</span> <span class="n">walls</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">wall</span> <span class="ow">in</span> <span class="n">checked</span><span class="p">:</span> <span class="k">continue</span>
-            <span class="n">checked</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wall</span><span class="p">)</span>
-            <span class="n">intersect</span><span class="p">,</span> <span class="n">distance_along_check</span><span class="p">,</span> <span class="n">direction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_intersection</span><span class="p">(</span><span class="n">boid</span><span class="p">,</span> <span class="n">wall</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">front_test</span><span class="p">,</span><span class="n">method</span> <span class="o">=</span> <span class="s">&#39;gauss&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">df</span> <span class="o">&gt;</span> <span class="n">distance_along_check</span><span class="p">:</span>
-                <span class="n">df</span> <span class="o">=</span> <span class="n">distance_along_check</span>
-                <span class="k">if</span> <span class="n">intersect</span> <span class="ow">and</span> <span class="n">distance_along_check</span> <span class="o">&lt;</span> <span class="n">front_distance</span><span class="p">:</span>
-                    <span class="n">front_intersect</span> <span class="o">=</span> <span class="bp">True</span>
-                    <span class="n">front_distance</span> <span class="o">=</span> <span class="n">distance_along_check</span>
-                    <span class="n">front_direction</span> <span class="o">=</span> <span class="n">direction</span>
-            <span class="n">intersect</span><span class="p">,</span> <span class="n">distance_along_check</span><span class="p">,</span> <span class="n">direction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_intersection</span><span class="p">(</span><span class="n">boid</span><span class="p">,</span> <span class="n">wall</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">left_test</span><span class="p">,</span><span class="n">method</span> <span class="o">=</span> <span class="s">&#39;direct&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">dl</span> <span class="o">&gt;</span> <span class="n">distance_along_check</span><span class="p">:</span>
-                <span class="n">dl</span> <span class="o">=</span> <span class="n">distance_along_check</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">front_intersect</span> <span class="ow">and</span> <span class="n">intersect</span> <span class="ow">and</span> <span class="n">distance_along_check</span> <span class="o">&lt;</span> <span class="n">left_distance</span><span class="p">:</span>
-                    <span class="n">left_intersect</span> <span class="o">=</span> <span class="bp">True</span>
-                    <span class="n">left_distance</span> <span class="o">=</span> <span class="n">distance_along_check</span>
-                    <span class="n">left_direction</span> <span class="o">=</span> <span class="n">direction</span>
-            <span class="n">intersect</span><span class="p">,</span> <span class="n">distance_along_check</span><span class="p">,</span> <span class="n">direction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_intersection</span><span class="p">(</span><span class="n">boid</span><span class="p">,</span> <span class="n">wall</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">right_test</span><span class="p">,</span><span class="n">method</span> <span class="o">=</span> <span class="s">&#39;direct&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">dr</span> <span class="o">&gt;</span> <span class="n">distance_along_check</span><span class="p">:</span>
-                <span class="n">dr</span> <span class="o">=</span> <span class="n">distance_along_check</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">front_intersect</span> <span class="ow">and</span> <span class="n">intersect</span> <span class="ow">and</span> <span class="n">distance_along_check</span> <span class="o">&lt;</span> <span class="n">right_distance</span><span class="p">:</span>
-                    <span class="n">right_intersect</span> <span class="o">=</span> <span class="bp">True</span>
-                    <span class="n">right_distance</span> <span class="o">=</span> <span class="n">distance_along_check</span>
-                    <span class="n">right_direction</span> <span class="o">=</span> <span class="n">direction</span>
+            <span class="c"># if wall in checked: continue</span>
+            <span class="c"># checked.append(wall)</span>
+            <span class="n">intersect</span><span class="p">,</span> <span class="n">distance_along_check</span><span class="p">,</span> <span class="n">direction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_intersection</span><span class="p">(</span><span class="n">boid</span><span class="p">,</span> <span class="n">wall</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">front_test</span><span class="p">,</span><span class="n">method</span> <span class="o">=</span> <span class="s">&#39;direct&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">intersect</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">df</span> <span class="o">&gt;</span> <span class="n">distance_along_check</span><span class="p">:</span>
+                    <span class="n">df</span> <span class="o">=</span> <span class="n">distance_along_check</span>
+                    <span class="k">if</span> <span class="n">intersect</span> <span class="ow">and</span> <span class="n">distance_along_check</span> <span class="o">&lt;</span> <span class="n">front_distance</span><span class="p">:</span>
+                        <span class="n">front_intersect</span> <span class="o">=</span> <span class="bp">True</span>
+                        <span class="n">front_distance</span> <span class="o">=</span> <span class="n">distance_along_check</span>
+                        <span class="n">front_direction</span> <span class="o">=</span> <span class="n">direction</span>
+            <span class="c"># intersect, distance_along_check, direction = self.test_intersection(boid, wall, position, left_test,method = &#39;direct&#39;)</span>
+            <span class="c"># if intersect:</span>
+            <span class="c">#     if dl &gt; distance_along_check:</span>
+            <span class="c">#         dl = distance_along_check</span>
+            <span class="c">#         if not front_intersect and intersect and distance_along_check &lt; left_distance:</span>
+            <span class="c">#             left_intersect = True</span>
+            <span class="c">#             left_distance = distance_along_check</span>
+            <span class="c">#             left_direction = direction</span>
+            <span class="c"># intersect, distance_along_check, direction = self.test_intersection(boid, wall, position, right_test,method = &#39;direct&#39;)</span>
+            <span class="c"># if intersect:</span>
+            <span class="c">#     if dr &gt; distance_along_check:</span>
+            <span class="c">#         dr = distance_along_check</span>
+            <span class="c">#         if not front_intersect and intersect and distance_along_check &lt; right_distance:</span>
+            <span class="c">#             right_intersect = True</span>
+            <span class="c">#             right_distance = distance_along_check</span>
+            <span class="c">#             right_direction = direction</span>
             <span class="c"># if front_intersect or left_intersect or right_intersect :</span>
             <span class="c">#     break</span>
 
 
 
-<span class="c">#    print speed</span>
-<span class="c">#    # parabolic speed </span>
-        <span class="n">d_no_influ</span> <span class="o">=</span> <span class="mf">1.0</span><span class="c">#0.3 # m</span>
-        <span class="n">repuls</span>     <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="c">#/ boid.max_speed</span>
-<span class="c">#        speed = (repuls/(d_no_influ**2)*min(distance_along_check,d_no_influ)**2 - 2*repuls/(d_no_influ)*min(distance_along_check,d_no_influ) + repuls) #/ boid.max_speed</span>
-<span class="c">#        speed = max (1.2*boid.max_speed, 1.0/(sqrt(2*pi*d_no_influ**2))*exp(-repuls**2/(2**d_no_influ**2)))</span>
-        <span class="n">speed</span> <span class="o">=</span> <span class="nb">max</span> <span class="p">(</span><span class="n">boid</span><span class="o">.</span><span class="n">max_speed</span><span class="p">,</span> <span class="n">d_no_influ</span><span class="o">/</span><span class="nb">max</span><span class="p">(</span><span class="mf">0.0001</span><span class="p">,(</span><span class="mf">1.</span><span class="o">*</span><span class="n">repuls</span><span class="p">)))</span>
-        <span class="n">speed</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">/</span> <span class="n">boid</span><span class="o">.</span><span class="n">max_speed</span> <span class="c"># ORIGINAL CODE</span>
-        <span class="c"># sf = max (boid.max_speed, speed*d_no_influ/max(0.0001,(1.*df)))</span>
-        <span class="c"># sl = max (boid.max_speed, speed*d_no_influ/max(0.0001,(1.*dl)))</span>
-        <span class="c"># sr = max (boid.max_speed, speed*d_no_influ/max(0.0001,(1.*dr)))</span>
-        <span class="n">sf</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">df</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="mf">1e-9</span><span class="p">)</span>
-        <span class="n">sl</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">dl</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="mf">1e-9</span><span class="p">)</span>
-        <span class="n">sr</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">dr</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="mf">1e-9</span><span class="p">)</span>
-        <span class="n">acceleration</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">()</span>
+<span class="c"># #    print speed</span>
+            
         <span class="k">if</span> <span class="n">front_intersect</span><span class="p">:</span>
+            <span class="n">sf</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">front_distance</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="mf">1e-9</span><span class="p">)</span>
+
             <span class="k">if</span> <span class="n">front_direction</span> <span class="o">==</span> <span class="s">&#39;left&#39;</span><span class="p">:</span>
-                <span class="n">acceleration</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">localx</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">sl</span><span class="p">)</span> 
-                <span class="n">acceleration</span> <span class="o">=</span> <span class="o">-</span><span class="n">boid</span><span class="o">.</span><span class="n">localy</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">sf</span><span class="p">)</span> 
+                <span class="n">acceleration</span> <span class="o">+=</span> <span class="o">-</span><span class="n">boid</span><span class="o">.</span><span class="n">localy</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">sf</span><span class="p">)</span> 
+                <span class="n">acceleration</span> <span class="o">+=</span> <span class="n">boid</span><span class="o">.</span><span class="n">localx</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">sf</span><span class="p">)</span> 
+
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">acceleration</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">localx</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">sr</span><span class="p">)</span> 
-                <span class="n">acceleration</span> <span class="o">=</span> <span class="o">-</span><span class="n">boid</span><span class="o">.</span><span class="n">localy</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">sf</span><span class="p">)</span> 
+                <span class="n">acceleration</span> <span class="o">+=</span> <span class="o">-</span><span class="n">boid</span><span class="o">.</span><span class="n">localy</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">sf</span><span class="p">)</span> 
+                <span class="n">acceleration</span> <span class="o">+=</span> <span class="o">-</span><span class="n">boid</span><span class="o">.</span><span class="n">localx</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">sf</span><span class="p">)</span> 
+                <span class="c"># acceleration += boid.localx.scale(sr) </span>
         <span class="c"># if left_intersect:</span>
-        <span class="c">#     acceleration = boid.localx.scale(sl)</span>
+        <span class="c">#     sl = 1 / max(sqrt(left_distance),1e-9)</span>
+        <span class="c">#     acceleration += boid.localx.scale(sl) </span>
         <span class="c"># if right_intersect:</span>
-        <span class="c">#     acceleration = boid.localx.scale(sr)</span>
-        
+        <span class="c">#     sr = 1 / max(sqrt(right_distance),1e-9)</span>
+        <span class="c">#     acceleration += -boid.localx.scale(sr) </span>
 
         <span class="k">return</span> <span class="n">acceleration</span>
 
-        <span class="c"># if front_intersect:</span>
-        <span class="c">#     if front_direction == &#39;left&#39;:</span>
-        <span class="c">#         acceleration = boid.localx.scale(speed) </span>
-        <span class="c">#     else:</span>
-        <span class="c">#         acceleration = -boid.localx.scale(speed) </span>
-        <span class="c"># elif left_intersect:</span>
-        <span class="c">#     acceleration = boid.localx.scale(speed)</span>
-        <span class="c"># elif right_intersect:</span>
-        <span class="c">#     acceleration = -boid.localx.scale(speed)</span>
-        <span class="c"># else:</span>
-        <span class="c">#     acceleration = vec3()</span>
 
-        <span class="c"># return acceleration</span>
 
 
 <span class="c">#    def test_intersection(self, boid, wall, position, vector):</span>
@@ -743,7 +840,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on déc. 02, 2014.
+      Last updated on févr. 03, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

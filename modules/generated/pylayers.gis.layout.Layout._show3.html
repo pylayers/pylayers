@@ -100,9 +100,37 @@
 <h1>pylayers.gis.layout.Layout._show3<a class="headerlink" href="#pylayers-gis-layout-layout-show3" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout._show3">
-<tt class="descclassname">Layout.</tt><tt class="descname">_show3</tt><big>(</big><em>*args</em>, <em>**kw</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/gis/layout.html#Layout._show3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout._show3" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapper function to run given function inside the GUI event
-loop.</p>
+<tt class="descclassname">Layout.</tt><tt class="descname">_show3</tt><big>(</big><em>centered=False</em>, <em>newfig=False</em>, <em>opacity=1.0</em>, <em>roomid=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../../_modules/pylayers/gis/layout.html#Layout._show3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout._show3" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a .off geomview file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>newfig</strong> : Boolean</p>
+<blockquote>
+<div><p>create a new mayavi Figure</p>
+</div></blockquote>
+<p><strong>opacity</strong> : float ([0,1])</p>
+<blockquote>
+<div><p>set slab opacity</p>
+</div></blockquote>
+<p><strong>centered</strong> : Boolean</p>
+<blockquote class="last">
+<div><p>if True the layout is centered around its center of gravity</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The <cite>.off</cite> file can be vizualized through the show3 method</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">_show3</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-gis-layout-Layout-_show3-1.py">Source code</a>)</p>
 </dd></dl>
 
 </div>
@@ -140,7 +168,7 @@ loop.</p>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on sept. 09, 2014.
+      Last updated on févr. 03, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

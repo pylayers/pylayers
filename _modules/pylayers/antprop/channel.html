@@ -1355,7 +1355,10 @@
         <span class="c"># Cg2cl should be applied here</span>
         <span class="c">#</span>
 
-
+        <span class="c">#</span>
+        <span class="c">#  C  = 2 x 2 x r x f   ? </span>
+        <span class="c">#  Fa = 2 x r x f     ?</span>
+        <span class="c">#  Fb = 2 x r x f</span>
         <span class="c">#t1 = self.Ctt * Fat + self.Cpt * Fap</span>
         <span class="c">#t2 = self.Ctp * Fat + self.Cpp * Fap</span>
         <span class="n">t1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span> <span class="o">*</span> <span class="n">Fat</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span> <span class="o">*</span> <span class="n">Fap</span>
@@ -1366,7 +1369,7 @@
         <span class="k">if</span> <span class="n">Friis</span><span class="p">:</span>
             <span class="n">H</span><span class="o">.</span><span class="n">applyFriis</span><span class="p">()</span>
 
-        <span class="c">#average w.r.t frequency</span>
+        <span class="c"># average w.r.t frequency</span>
         <span class="n">H</span><span class="o">.</span><span class="n">ak</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">nfreq</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)))</span>
         <span class="n">H</span><span class="o">.</span><span class="n">tk</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">taud</span>
         <span class="k">return</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
@@ -2485,7 +2488,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on déc. 02, 2014.
+      Last updated on févr. 03, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">
