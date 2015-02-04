@@ -4172,7 +4172,7 @@ class Signatures(PyLayers,dict):
 
         rays = Rays(ptx,prx)
 
-        M = self.image(ptx)
+        M = self.image2(ptx)
         R = self.backtrace(ptx,prx,M)
         rays.update(R)
         rays.nb_origin_sig = len(self)
@@ -4365,7 +4365,81 @@ class Signatures(PyLayers,dict):
                 rayp.update({ninter:{'pt':rayp_i,'sig':sig.astype('int')}})
         return rayp
 
-    def image(self,tx):
+
+    def image2(self,tx):
+        if len(tx) > 2:
+            tx = tx[:2]
+        dM={}
+        for ninter in self.keys():
+
+            # get segment ids of signature with ninter interactions
+            seg = self[ninter][::2]
+            nsig = len(seg)
+            M=np.empty((2,nsig,ninter))
+            # determine positions of points limiting the semgments 
+            # 1 get index in L.tahe
+            # 2 get associated position in L.pt
+
+
+            utahe = self.L.tahe[:,self.L.tgs[seg]]
+
+            # pt : (xycoord (2),pt indexes (2),nb_signatures,nb_interactions)
+            pt = self.L.pt[:,utahe]
+
+            # pt shape =
+            # 0 : (x,y) coordinates x=0,y=1
+            # 1 : 2 points (linking the semgnet) a=0,b=1
+            # 2 : nb of found signatures/segments
+            # 3 : nb interaction
+
+            ############
+            # formula 2.61 -> 2.64 N.AMIOT thesis
+            ############
+            den = ((pt[0,0,:,:]-pt[0,1,:,:])**2+(pt[1,0,:,:]-pt[1,1,:,:])**2)
+
+            a = ((pt[0,0,:,:]-pt[0,1,:,:])**2-(pt[1,0,:,:]-pt[1,1,:,:])**2)
+            a=a/(1.*den)
+
+            b = 2*(pt[0,1,:,:]-pt[0,0,:,:])*(pt[1,1,:,:]-pt[1,0,:,:])
+            b=b/(1.*den)
+
+            c= 2*(pt[0,0,:,:]*(pt[1,0,:,:]-pt[1,1,:,:])**2+pt[1,0,:,:]*(pt[0,1,:,:]-pt[0,0,:,:])*(pt[1,0,:,:]-pt[1,1,:,:]))
+            c = c/(1.*den)
+
+            d= 2*(pt[0,0,:,:]*(pt[1,0,:,:]-pt[1,1,:,:])*(pt[0,1,:,:]-pt[0,0,:,:])+pt[1,0,:,:]*(pt[0,1,:,:]-pt[0,0,:,:])**2)
+            d= d/(1.*den)
+
+            K=np.array([[a,-b],[-b,-a]])
+            # translation vector v (2.60)
+            v =np.array(([c,d]))
+
+
+
+
+
+
+            ityp = self[ninter][1::2]
+
+            for n in xrange(ninter):
+                # get segment ids of signature with ninter interactions
+                uT = np.where(ityp[:,n]==3)[0]
+                uR = np.where(ityp[:,n]==2)[0]
+                uD=np.where(ityp[:,n]==1)[0]
+                if n ==0:
+                    p=tx[:,None]*np.ones((nsig))
+                else :
+                    p=M[:,:,n-1]
+                # reflexion 0 (2.67)
+                M[:,uR,n] = np.einsum('ijk,jk->jk',K[:,:,uR,n],p[:,uR])+v[:,uR,n]
+                # trnasmission 0 (2.67)
+                M[:,uT,n] = p[:,uT]
+                M[:,uD,n] = pt[:,0,uD,n]
+
+
+
+            dM.update({ninter:M})
+        return dM
+    def image(self,tx=np.array([2.7,12.5])):
         ''' Warning :
             This is an attempt to vectorize the image process.
             Despite it has been tested on few cases with succes, 
@@ -4392,6 +4466,17 @@ class Signatures(PyLayers,dict):
         '''
         if len(tx) > 2:
             tx = tx[:2]
+
+        def nb_split(a):
+            nsp = 2
+            out=False
+            while not out:
+                res=a%nsp
+                if res!=0:
+                    nsp=nsp+1
+                else:
+                    out=True
+            return nsp
 
         dM={}
         for ninter in self.keys():
@@ -4532,7 +4617,31 @@ class Signatures(PyLayers,dict):
             A=np.rollaxis(A,-1)
             y=np.rollaxis(y,-1)
 
-            m=np.linalg.solve(A, y)
+            leA = len(A)
+            res=0
+            # trick for memory usage
+            if leA > 1e4:
+                nsp = nb_split(leA)
+                if nsp != leA:
+                    lA=np.split(A,nsp)
+                    ly=np.split(y,nsp)
+                    del A
+                    del y
+                    print nsp
+                    for s in range(nsp):
+
+                        lm=np.linalg.solve(lA[s], ly[s])
+                        try:
+                            m = np.vstack((m,lm))
+                        except:
+                            m = lm
+                    del lm
+                    del lA
+                    del ly
+                else:
+                    m = np.linalg.solve(A, y)
+            else :
+                m = np.linalg.solve(A, y)
             M=np.array((m[:,0::2],m[:,1::2]))
 
             dM.update({ninter:M})
