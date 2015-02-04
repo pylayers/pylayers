@@ -859,6 +859,7 @@ class Bsignal(PyLayers):
                   'xmax'  : 1e15,
                   'logx'  : False,
                   'logy'  : False,
+                  'idx'   :[0,0,0,0,0,0,0]
                  }
 
         for key, value in defaults.items():
@@ -869,6 +870,7 @@ class Bsignal(PyLayers):
         vline = kwargs['vline']
         hline = kwargs['hline']
 
+        idx = kwargs['idx']
         # filtering kwargs argument for plot function
         args ={}
         for k in kwargs:
@@ -895,10 +897,16 @@ class Bsignal(PyLayers):
         #
         # if ndim(y) > 1
         #
-        if ndim > 1:
-            yx = self.y[...,u]
+        if ndim == 4:
+            yx = self.y[idx[0],idx[1],idx[2],u]
             fig,ax = mulcplot(self.x[u],yx*conversion,**args)
-        else:
+        if ndim == 3:
+            yx = self.y[idx[0],idx[1],u]
+            fig,ax = mulcplot(self.x[u],yx*conversion,**args)
+        if ndim == 2:
+            yx = self.y[idx[0],u]
+            fig,ax = mulcplot(self.x[u],yx*conversion,**args)
+        if ndim==1:
             fig,ax = mulcplot(self.x[u],self.y[u]*conversion,**args)
         #
         # Draw vertical and horizontal lines
@@ -3503,7 +3511,7 @@ class FUsignal(FBsignal, Usignal):
             >>> y = np.ones(len(x))
             >>> U = FUsignal(x,y)
             >>> fi = plt.figure()
-         fig,ax = U.plot()
+            >>> fig,ax = U.plot()
             >>> U.window('hamming')
             >>> fig,ax = U.plot()
 
@@ -4203,7 +4211,7 @@ class FUsignal(FBsignal, Usignal):
         [Tse] David Tse, http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf page 26
 
         """
-        defaults = { 'fcGHz':4.5,
+        defaults = {'fcGHz':4.5,
                     'WMHz':1,
                     'Ntap':100,
                     'baseband':True}
