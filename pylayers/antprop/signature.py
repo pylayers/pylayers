@@ -1835,11 +1835,26 @@ class Signatures(PyLayers,dict):
             # for all detected valid output
             for k in oldout:
                 us = np.where(-(adii-adio[k]).T.any(0))[0]
+                keep=[]
+                for iuus,uus in enumerate(us) :
+                    bue = adi[uus][np.array([0,3])]==adi[out][:,np.array([0,3])]
+                    ue =np.sum(bue,axis=1)
+                    if len(np.where(ue==2)[0]) <=0:
+                        keep.append(iuus)
+                us = us[keep]
+
                 out.extend(us.tolist())
 
-
+                #     print ue
+                #     if len(ue) == 0:
+                #         keep.append(ue)
+                #         
+                #     else:
+                #         pass
+                # import ipdb
+                # ipdb.set_trace()
+                # us=us[keep]
                 for uus in us:
-                    # print adi[uus]
                     # 1st input interactions to all identified a outputs
                     try:
                         lsig=dsigio[kdi[k][3:]]
@@ -1920,6 +1935,7 @@ class Signatures(PyLayers,dict):
             survive2=adi[oldout][:,-1]==lcil[idx+1]
             survive = np.where(survive1&survive2)[0]
             oldout=np.array(oldout)[survive].tolist()
+
 
 
 
