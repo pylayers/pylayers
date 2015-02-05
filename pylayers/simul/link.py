@@ -178,7 +178,7 @@ class SLink(Link):
 
 
 class DLink(Link):
- 
+
     def __init__(self, **kwargs):
         """ deterministic link evaluation
 
@@ -316,7 +316,7 @@ class DLink(Link):
                    'Ta':np.eye(3),
                    'Tb':np.eye(3),
                    'fGHz':np.linspace(2, 11, 181, endpoint=True),
-                   'wav':wvf.Waveform(typ='W1compensate'),
+                   'wav':wvf.Waveform(),
                    'cutoff':3,
                    'save_opt':['sig','ray','Ct','H'],
                    'save_idx':0,
@@ -404,7 +404,7 @@ class DLink(Link):
         else:
             if len(kwargs['a']) ==2:
                 a=np.r_[kwargs['a'],1.0]
-            else: 
+            else:
                 a=kwargs['a']
             self.a = a
             # self.ca = self.L.pt2cy(self.a)
@@ -415,7 +415,7 @@ class DLink(Link):
         else:
             if len(kwargs['b']) ==2:
                 b=np.r_[kwargs['b'],1.0]
-            else: 
+            else:
                 b=kwargs['b']
             self.b = b
             # self.cb = self.L.pt2cy(self.b)
@@ -519,7 +519,7 @@ class DLink(Link):
     def ca(self,cycle):
         if not cycle in self.L.Gt.nodes():
             raise NameError ('cycle ca is not inside Gt')
-    
+
         self._ca = cycle
         self.a = self.L.cy2pt(cycle)
 
@@ -582,7 +582,7 @@ class DLink(Link):
         self._wav = waveform
         if 'H' in dir(self):
             self.chanreal = self.H.applywavB(self.wav.sfg)
-        
+
 
     def __repr__(self):
         """ __repr__
@@ -1095,7 +1095,7 @@ class DLink(Link):
             Force the computation (['sig','ray','Ct','H']) AND save (replace previous computations)
 
         si_algo : str ('old'|'new')
-            signature.run algo type 
+            signature.run algo type
             'old' : call propaths2
             'new' : call procone2
         alg : 5 | 7
@@ -1112,7 +1112,7 @@ class DLink(Link):
         ra_ceil_height_meter:float,
             ceil height
         ra_vectorized: boolean (True)
-            if True used the (2015 new) vectorized approach to determine 2drays 
+            if True used the (2015 new) vectorized approach to determine 2drays
 
 
 
