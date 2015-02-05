@@ -346,7 +346,7 @@ class algloc(object):
                     P = P.reshape(np.shape(rn_toa[:, 0:1]))
                 else:
                     raise ValueError("Data are not sufficient to perform localization")
-                    
+
             elif toa == 0 and tdoa == 0:
                 rn_rss = self.nodes['RN_RSS']
                 rss_db = self.ldp['RSS']

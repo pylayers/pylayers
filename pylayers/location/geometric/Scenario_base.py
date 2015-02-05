@@ -11,27 +11,23 @@ import matplotlib.pyplot as plt
 from matplotlib.collections import PolyCollection # scenario CDF mode 3D
 from matplotlib.colors import colorConverter      # scenario CDF mode 3D
 
-sys.path.append('./util')
+from pylayers.location.geometric.util.boxn import *
+from pylayers.location.geometric.util.model import *
+import pylayers.location.geometric.util.geomview as g
+import pylayers.location.geometric.util.cdf2
 
-from boxn import *
-from model import *
-import geomview as g
-import CDF2
+from pylayers.location.algebraic.rss  import *
+from pylayers.location.algebraic.toa  import *
+from pylayers.location.algebraic.tdoa import *
+from pylayers.location.algebraic.hdf  import *
+from pylayers.location.algebraic.PyGraphTool import *
+from pylayers.location.algebraic.PyMathTool import *
 
-sys.path.append('../algebraic')
-from RSSLocation  import *
-from ToALocation  import *
-from TDoALocation import *
-from HDFLocation  import *
-from PyGraphTool import *
-from PyMathTool import *
-
-sys.path.append('./constraints')
-from EXCLUDE import *
-from RSS import *
-from TOA import *
-from TDOA import *
-from CLA import *
+from pylayers.location.geometric.constraints.exclude import *
+from pylayers.location.geometric.constraints.rss import *
+from pylayers.location.geometric.constraints.toa import *
+from pylayers.location.geometric.constraints.tdoa import *
+from pylayers.loaction.geometric.constraints.cla import *
 
 
 
