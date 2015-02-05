@@ -1275,6 +1275,7 @@ class Signatures(PyLayers,dict):
             # next child
 
             child = next(children, None)
+            
             # update number of useful segments
             # if there is airwall in visited
             if child is None  : # if no more child
@@ -1284,6 +1285,7 @@ class Signatures(PyLayers,dict):
                     lawp.pop()
                 except:
                     pass
+
 
             elif (len(visited) < (cutoff + sum(lawp))):# if visited list length is less than cutoff
                 if child == target:  # if child is the target point
@@ -1752,12 +1754,15 @@ class Signatures(PyLayers,dict):
                     di[0,0,0,o[0],o[1],o[2]] = io
                     # add direct signature
                     di[0,0,0,o[0],o[1],o[2]][1]=np.array([o[0],len(o)],ndmin=3)
+                # import ipdb
+                # ipdb.set_trace()
             elif (icy >=1) and (icy <llcil-1):
+
                 # valid 'in' interatcion
 
                 # select input signatures in regard of selected 
-                inR,inT,inD = self.L.intercy(cy,typ='target')
-                outR,outT,outD = self.L.intercy(cy,typ='source')
+                inR,inT,inD = self.L.intercyGc2Gt(cy,typ='target')
+                outR,outT,outD = self.L.intercyGc2Gt(cy,typ='source')
 
 
                 # keep only interactions in identified interesting cycles
@@ -1769,6 +1774,7 @@ class Signatures(PyLayers,dict):
 
                 # for each (identified interesting ) input interactions of the cycle
                 # find all path to each (identified interesting) output interactions 
+
                 for i in vinT:
                     for o in voutT:
                         io={}
@@ -1779,11 +1785,12 @@ class Signatures(PyLayers,dict):
 
             # the interactions of last cycle are kept appart
             elif icy == llcil-1:
-                inR,inT,inD = self.L.intercy(cy,typ='target')
+
+                inR,inT,inD = self.L.intercyGc2Gt(cy,typ='target')
 
                 for cycle in lcil:
-                    fcy = filter(lambda x: cycle == x[1],inT)
-                    vinT.extend( fcy) 
+                    fcy = filter(lambda x: cycle == x[2],inT)
+                    vinT.extend( fcy)
                 voutT = inR #+ inD
                 kdif = (vinT[0][0],vinT[0][1],vinT[0][2],0,0,0)
                 # keep trace of last segments
@@ -1821,7 +1828,8 @@ class Signatures(PyLayers,dict):
 
         # initialize loop on the 1st interaction id(0,0,0,X,X,X)
 
-        uinit = np.unique(np.where(adi[:,:3]==0)[0])
+        # uinit = np.unique(np.where(adi[:,:3]==0)[0])
+        uinit = np.where(np.sum(adi[:,:3]==0,axis=1)==3)[0]
         oldout=uinit
         stop=False
         dsigiosave={}
@@ -1837,10 +1845,10 @@ class Signatures(PyLayers,dict):
         firstloop=True
         dsigio={}
         idx = 0
-
         while not stop:
             # for all detected valid output
             for k in oldout:
+
                 us = np.where(-(adii-adio[k]).T.any(0))[0]
                 keep=[]
                 for iuus,uus in enumerate(us) :
@@ -1934,7 +1942,6 @@ class Signatures(PyLayers,dict):
             dsigiosave.update(dsigio)
             dsigio={}
             firstloop=False
-
             if not firstloop:
                 if (adi[out][:,3:] == 0).all():
                     stop=True

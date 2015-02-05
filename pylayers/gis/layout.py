@@ -6132,7 +6132,10 @@ class Layout(PyLayers):
                     pta = points[0:2,:]
                     phe = points[2:,:]
                     #cn.show()
-
+                    # if i0 == (38,79) and i1 == (135,79,23):
+                    #     print i0,i1
+                    #     import ipdb
+                    #     ipdb.set_trace()
                     # i1 : interaction T
                     if len(i1)==3:
                         typ,prob = cn.belong_seg(pta,phe)
@@ -6155,10 +6158,20 @@ class Layout(PyLayers):
                         #    plu.displot(pta[:,~bs],phe[:,~bs],color='m')
                         #    plt.show()
                         #    pdb.set_trace())
+                    ########
+                    # SOMETIMES PROBA IS 0 WHEREAS SEG IS SEEN
+                    ###########
+                    # # keep segment with prob above a threshold
+                    # isegkeep = isegments[prob>0]
+                    # # dict   {numint : proba}
+                    # dsegprob = {k:v for k,v in zip(isegkeep,prob[prob>0])}
+                    ########### 4 lines are replaced by
                     # keep segment with prob above a threshold
-                    isegkeep = isegments[prob>0]
+                    utypseg = typ!=0
+                    isegkeep = isegments[utypseg]
                     # dict   {numint : proba}
-                    dsegprob = {k:v for k,v in zip(isegkeep,prob[prob>0])}
+                    dsegprob = {k:v for k,v in zip(isegkeep,prob[utypseg])}
+                    #########
                     output = filter(lambda x : x[0] in isegkeep, i2)
                     probint = map(lambda x: dsegprob[x[0]],output)
                     # dict interaction : proba
@@ -6262,7 +6275,7 @@ class Layout(PyLayers):
             lcy = self.Gc.node[cym]['merged']
             
         else :
-            lcy=ncy
+            lcy=[ncy]
         # lint = self.Gi.node
         for c in lcy:
             # list of tuple interactions (R|T)
