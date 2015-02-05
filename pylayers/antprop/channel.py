@@ -1732,7 +1732,7 @@ class Tchannel(bs.FUDAsignal):
 
         """
         #
-        # return a FUDsignal
+        # return a TUsignal
         #
         Y = self.apply(Wgam)
         ri = Y.ft1(Nz=500,ffts=1)
