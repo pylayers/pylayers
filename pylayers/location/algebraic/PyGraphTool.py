@@ -17,8 +17,8 @@
 
 #-------------------------------------------------------------------
 #authors :
-#Bernard UGUEN		: buguen@univ-rennes1.fr
-#Mohamed LAARAIEDH	: mohamed.laaraiedh@univ-rennes1.fr
+#Bernard UGUEN        : buguen@univ-rennes1.fr
+#Mohamed LAARAIEDH    : mohamed.laaraiedh@univ-rennes1.fr
 #####################################################################
 import os
 from numpy import *
@@ -28,19 +28,18 @@ import matplotlib.pyplot as plt
 
 #################################
 def cdf(x,colsym="",lab="",lw=1):
+    """
+    Plot the cumulative density function
 
-	"""
-	Plot the cumulative density function
+    """
 
-	"""
-	
-	x  = sort(x)
-	n  = len(x)
-	x2 = repeat(x, 2)
-	y2 = hstack([0.0, repeat(arange(1,n) / float(n), 2), 1.0])
-	plt.plot(x2,y2,colsym,label=lab,linewidth=lw)
+    x  = sort(x)
+    n  = len(x)
+    x2 = repeat(x, 2)
+    y2 = hstack([0.0, repeat(arange(1,n) / float(n), 2), 1.0])
+    plt.plot(x2,y2,colsym,label=lab,linewidth=lw)
 
 def histo(x, n, fc,norm,xlab,ylab):
-	plt.hist(x, n, facecolor=fc,normed=norm)
-	plt.xlabel(xlab)
-	plt.ylabel(ylab)
+    plt.hist(x, n, facecolor=fc,normed=norm)
+    plt.xlabel(xlab)
+    plt.ylabel(ylab)

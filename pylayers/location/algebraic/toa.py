@@ -3,8 +3,8 @@ import numpy as np
 import scipy as sp
 from scipy import optimize
 import numpy.linalg as la
-import cvxmod as cvxm
-import cvxopt as cvxo
+#import cvxmod as cvxm
+#import cvxopt as cvxo
 from crlb import *
 
 class ToALocation(object):
@@ -308,42 +308,40 @@ class ToALocation(object):
 
         return X_cvx'''
 
-    def SDPToALocate(self, RN, ToA, ToAStd):
-        """
-        Apply SDP approximation and localization
-        """
-        RN = cvxm.matrix(RN)
-        ToA = cvxm.matrix(ToA)
-        
-        c       = 3e08                      # Speed of light
-        RoA     = c*ToA
-        RoAStd  = c*ToAStd
-        RoAStd = cvxm.matrix(RoAStd)
-        mtoa,ntoa=cvxm.size(RN)
-        Im = cvxm.eye(mtoa)
-        Y=cvxm.optvar('Y',mtoa+1,mtoa+1)
-        t=cvxm.optvar('t',ntoa,1)
-        prob=cvxm.problem(cvxm.minimize(cvxm.norm2(t)))
-        prob.constr.append(Y>=0)
-        prob.constr.append(Y[mtoa,mtoa]==1)
-        for i in range(ntoa):
-            X0=cvxm.matrix([[Im, -cvxm.transpose(RN[:,i])],[-RN[:,i], cvxm.transpose(RN[:,i])*RN[:,i]]])
-            prob.constr.append(-t[i]<(cvxm.trace(X0*Y)-RoA[i]**2)*(1/RoAStd[i]))
-            prob.constr.append(t[i]>(cvxm.trace(X0*Y)-RoA[i]**2)*(1/RoAStd[i]))
-        prob.solve()
-        Pval=Y.value
-        X_cvx=Pval[:2,-1]
+#    def SDPToALocate(self, RN, ToA, ToAStd):
+#        """ Apply SDP approximation and localization
+#        Parameters
+#        ----------
+#
+#        """
+#        RN = cvxm.matrix(RN)
+#        ToA = cvxm.matrix(ToA)
+#        c       = 0.3              # Speed of light (m/ns)
+#        RoA     = c*ToA
+#        RoAStd  = c*ToAStd
+#        RoAStd = cvxm.matrix(RoAStd)
+#        mtoa,ntoa=cvxm.size(RN)
+#        Im = cvxm.eye(mtoa)
+#        Y=cvxm.optvar('Y',mtoa+1,mtoa+1)
+#        t=cvxm.optvar('t',ntoa,1)
+#        prob=cvxm.problem(cvxm.minimize(cvxm.norm2(t)))
+#        prob.constr.append(Y>=0)
+#        prob.constr.append(Y[mtoa,mtoa]==1)
+#        for i in range(ntoa):
+#            X0=cvxm.matrix([[Im, -cvxm.transpose(RN[:,i])],[-RN[:,i], cvxm.transpose(RN[:,i])*RN[:,i]]])
+#            prob.constr.append(-t[i]<(cvxm.trace(X0*Y)-RoA[i]**2)*(1/RoAStd[i]))
+#            prob.constr.append(t[i]>(cvxm.trace(X0*Y)-RoA[i]**2)*(1/RoAStd[i]))
+#        prob.solve()
+#        Pval=Y.value
+#        X_cvx=Pval[:2,-1]
+#
+#        return X_cvx
 
-        return X_cvx
-    
     def CRBToALocate(self, P, RN, ToAStd):
+        """ Compute the CRB in P for the given scenario
         """
-        Compute the CRB in P for the given scenario
-        """
-        
         crlb=CRBLocation(RN)
         CRB=crlb.CRB_TOA_fim(P, RN, ToAStd)
-        
         return sqrt(abs(CRB))
 
 

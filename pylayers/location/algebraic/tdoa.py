@@ -3,8 +3,8 @@ import numpy as np
 import scipy as sp
 from scipy import optimize
 import numpy.linalg as la
-import cvxmod as cvxm
-import cvxopt as cvxo
+#import cvxmod as cvxm
+#import cvxopt as cvxo
 from crlb import *
 
 class TDoALocation(object):
@@ -300,71 +300,70 @@ class TDoALocation(object):
 
         return X_cvx'''
 
-    def SDPTDoALocate(self, RN1, RN2, TDoA, TDoAStd):
-        """
-        Apply SDP approximation and localization
-        """
-        RN1 = cvxm.matrix(RN1)
-        RN2 = cvxm.matrix(RN2)
-        TDoA = cvxm.matrix(TDoA)
-        c       = 3e08                      
-        RDoA     = c*TDoA
-        RDoAStd=cvxm.matrix(c*TDoAStd)
-        mtdoa,ntdoa=cvxm.size(RN1)
-        Im = cvxm.eye(mtdoa)
-        Y=cvxm.optvar('Y',mtdoa+1,mtdoa+1)
-        t=cvxm.optvar('t',ntdoa,1)
-        prob=cvxm.problem(cvxm.minimize(cvxm.norm2(t)))
-        prob.constr.append(Y>=0)
-        prob.constr.append(Y[mtdoa,mtdoa]==1)
-        for i in range(ntdoa):
-            X0=cvxm.matrix([[Im, -cvxm.transpose(RN1[:,i])],[-RN1[:,i], cvxm.transpose(RN1[:,i])*RN1[:,i]]])
-            X1=cvxm.matrix([[Im, -cvxm.transpose(RN2[:,i])],[-RN2[:,i], cvxm.transpose(RN2[:,i])*RN2[:,i]]])
-            '''prob.constr.append(-RDoAStd[i,0]*t[i]<cvxm.trace(X0*Y)-cvxm.trace(X1*Y)-RDoA[i,0]**2)
-            prob.constr.append(RDoAStd[i,0]*t[i]>cvxm.trace(X0*Y)-cvxm.trace(X1*Y)-RDoA[i,0]**2)'''
-            prob.constr.append(-RDoAStd[i,0]*t[i]<cvxm.trace((X1-X0)*Y)-RDoA[i,0]**2)
-            prob.constr.append(RDoAStd[i,0]*t[i]>cvxm.trace((X1-X0)*Y)-RDoA[i,0]**2)
-        prob.solve()
-        Pval=Y.value
-        X_cvx=Pval[:2,-1]
+#    def SDPTDoALocate(self, RN1, RN2, TDoA, TDoAStd):
+#        """
+#        Apply SDP approximation and localization
+#        """
+#        RN1 = cvxm.matrix(RN1)
+#        RN2 = cvxm.matrix(RN2)
+#        TDoA = cvxm.matrix(TDoA)
+#        c       = 3e08                      
+#        RDoA     = c*TDoA
+#        RDoAStd=cvxm.matrix(c*TDoAStd)
+#        mtdoa,ntdoa=cvxm.size(RN1)
+#        Im = cvxm.eye(mtdoa)
+#        Y=cvxm.optvar('Y',mtdoa+1,mtdoa+1)
+#        t=cvxm.optvar('t',ntdoa,1)
+#        prob=cvxm.problem(cvxm.minimize(cvxm.norm2(t)))
+#        prob.constr.append(Y>=0)
+#        prob.constr.append(Y[mtdoa,mtdoa]==1)
+#        for i in range(ntdoa):
+#            X0=cvxm.matrix([[Im, -cvxm.transpose(RN1[:,i])],[-RN1[:,i], cvxm.transpose(RN1[:,i])*RN1[:,i]]])
+#            X1=cvxm.matrix([[Im, -cvxm.transpose(RN2[:,i])],[-RN2[:,i], cvxm.transpose(RN2[:,i])*RN2[:,i]]])
+#            '''prob.constr.append(-RDoAStd[i,0]*t[i]<cvxm.trace(X0*Y)-cvxm.trace(X1*Y)-RDoA[i,0]**2)
+#            prob.constr.append(RDoAStd[i,0]*t[i]>cvxm.trace(X0*Y)-cvxm.trace(X1*Y)-RDoA[i,0]**2)'''
+#            prob.constr.append(-RDoAStd[i,0]*t[i]<cvxm.trace((X1-X0)*Y)-RDoA[i,0]**2)
+#            prob.constr.append(RDoAStd[i,0]*t[i]>cvxm.trace((X1-X0)*Y)-RDoA[i,0]**2)
+#        prob.solve()
+#        Pval=Y.value
+#        X_cvx=Pval[:2,-1]
+#
+#        return X_cvx
 
-        return X_cvx
 
-
-    def SDPTDoALocate1(self, RN1, RN2, TDoA, TDoAStd):
-        """
-        Apply SDP approximation and localization
-        """
-        RN1 = cvxm.matrix(RN1)
-        RN2 = cvxm.matrix(RN2)
-        TDoA = cvxm.matrix(TDoA)
-        c       = 3e08                      
-        RDoA     = c*TDoA
-        RDoAStd=cvxm.matrix(c*TDoAStd)
-        mtdoa,ntdoa=cvxm.size(RN1)
-        Im = cvxm.eye(mtdoa)
-        Y=cvxm.optvar('Y',mtdoa+1,mtdoa+1)
-        t=cvxm.optvar('t',ntdoa,1)
-        prob=cvxm.problem(cvxm.minimize(cvxm.norm2(t)))
-        prob.constr.append(Y>=0)
-        prob.constr.append(Y[mtdoa,mtdoa]==1)
-        for i in range(ntdoa):
-            
-            X0=cvxm.matrix([[Im, -cvxm.transpose(RN1[:,i])],[-RN1[:,i], cvxm.transpose(RN1[:,i])*RN1[:,i]]])
-            X1=cvxm.matrix([[Im, -cvxm.transpose(RN2[:,i])],[-RN2[:,i], cvxm.transpose(RN2[:,i])*RN2[:,i]]])
-            prob.constr.append(-RDoAStd[i,0]*t[i]<cvxm.trace((X1-X0)*Y)-RDoA[i,0]**2)
-            prob.constr.append(RDoAStd[i,0]*t[i]>cvxm.trace((X1-X0)*Y)-RDoA[i,0]**2)
-        prob.solve()
-        Pval=Y.value
-        X_cvx=Pval[:2,-1]
-
-        return X_cvx
+#    def SDPTDoALocate1(self, RN1, RN2, TDoA, TDoAStd):
+#        """
+#        Apply SDP approximation and localization
+#        """
+#        RN1 = cvxm.matrix(RN1)
+#        RN2 = cvxm.matrix(RN2)
+#        TDoA = cvxm.matrix(TDoA)
+#        c       = 3e08                      
+#        RDoA     = c*TDoA
+#        RDoAStd=cvxm.matrix(c*TDoAStd)
+#        mtdoa,ntdoa=cvxm.size(RN1)
+#        Im = cvxm.eye(mtdoa)
+#        Y=cvxm.optvar('Y',mtdoa+1,mtdoa+1)
+#        t=cvxm.optvar('t',ntdoa,1)
+#        prob=cvxm.problem(cvxm.minimize(cvxm.norm2(t)))
+#        prob.constr.append(Y>=0)
+#        prob.constr.append(Y[mtdoa,mtdoa]==1)
+#        for i in range(ntdoa):
+#            
+#            X0=cvxm.matrix([[Im, -cvxm.transpose(RN1[:,i])],[-RN1[:,i], cvxm.transpose(RN1[:,i])*RN1[:,i]]])
+#            X1=cvxm.matrix([[Im, -cvxm.transpose(RN2[:,i])],[-RN2[:,i], cvxm.transpose(RN2[:,i])*RN2[:,i]]])
+#            prob.constr.append(-RDoAStd[i,0]*t[i]<cvxm.trace((X1-X0)*Y)-RDoA[i,0]**2)
+#            prob.constr.append(RDoAStd[i,0]*t[i]>cvxm.trace((X1-X0)*Y)-RDoA[i,0]**2)
+#        prob.solve()
+#        Pval=Y.value
+#        X_cvx=Pval[:2,-1]
+#
+#        return X_cvx
 
     def CRBTDoALocate(self, P, RN1, RN2, TDoAStd):
         """
         Compute the CRB in P for the given scenario
         """
-        
         '''c       = 3e08
         shP     = shape(P)
         shRN    = shape(RN1)

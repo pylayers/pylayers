@@ -17,8 +17,8 @@
 
 #-------------------------------------------------------------------
 #authors :
-#Bernard UGUEN		: buguen@univ-rennes1.fr
-#Mohamed LAARAIEDH	: mohamed.laaraiedh@univ-rennes1.fr
+#Bernard UGUEN        : buguen@univ-rennes1.fr
+#Mohamed LAARAIEDH    : mohamed.laaraiedh@univ-rennes1.fr
 #####################################################################
 import os
 from numpy import *
@@ -27,27 +27,26 @@ from numpy.linalg import inv
 
 #################################
 def dist(a=array([]),b=array([])):
+    """
+    Compute euclidean distance between 2 points given by 2 arrays.
 
-	"""
-	Compute euclidean distance between 2 points given by 2 arrays.
+    """
 
-	"""
-
-	n1=len(a)
-	n2=len(b)
-	d=0.0
-	if (n1==n2):
-		d2 	= (a - b)*(a - b)
-		d	= sum(d2,axis=0)
-		return (sqrt(d)[0])
-	else :
-		print("ERROR: Coordinates are not in the same base")
+    n1=len(a)
+    n2=len(b)
+    d=0.0
+    if (n1==n2):
+        d2     = (a - b)*(a - b)
+        d    = sum(d2,axis=0)
+        return (sqrt(d)[0])
+    else :
+        print("ERROR: Coordinates are not in the same base")
 
 ##################################
 def lsop(H=array([])):
 
-	"""
-	Compute the least square operator 
-	
-	"""
-	return (dot(inv(dot(transpose(H),H)),transpose(H)))
+    """
+    Compute the least square operator 
+    
+    """
+    return (dot(inv(dot(transpose(H),H)),transpose(H)))

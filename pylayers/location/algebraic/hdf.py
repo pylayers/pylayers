@@ -2,8 +2,8 @@ from numpy import *
 from scipy import *
 from scipy import optimize
 from numpy.linalg import *
-import cvxmod as cvxm
-import cvxopt as cvxo
+#import cvxmod as cvxm
+#import cvxopt as cvxo
 from string import *
 from CRBLocation import *
 from RSSLocation import *

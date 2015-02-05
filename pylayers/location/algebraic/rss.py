@@ -2,11 +2,11 @@ import os
 import numpy as np
 import scipy as sp
 from scipy import optimize
-import numpy.linalg as la 
-import cvxmod as cvxm
-import cvxopt as cvxo
+import numpy.linalg as la
+#import cvxmod as cvxm
+#import cvxopt as cvxo
 from string import *
-from crbl import *
+from crlb import *
 
 class RSSLocation(object):
     """
@@ -77,21 +77,21 @@ class RSSLocation(object):
         print "Propagation constants:\n", self.RSSnp
         print "STD of Measured RSS shadowing:\n", self.RSSStd
 
-   def getPL0(self, lamda, d0):
+    def getPL0(self, lamda, d0):
        """ Compute PL0
 
        Parameters
        ----------
 
        """
-       return  20*log10(4*pi*d0/lamda)
+       return  20*np.log10(4*np.pi*d0/lamda)
 
-   def getPLmean(self, RN, P, PL0, d0, RSSnp):
+    def getPLmean(self, RN, P, PL0, d0, RSSnp):
        """ Compute PL mean
        """
        shRN            = shape(RN)
        RNmP            = (np.sqrt(sum((RN-P)**2,axis=0))).reshape((shRN[1],1))                    # distance between AN and P
-       return          PL0-10*RSSnp*log10(RNmP/d0)
+       return          PL0-10*RSSnp*np.log10(RNmP/d0)
 
     def getPL(self, RN, P, PL0, d0, RSSnp, RSSStd):
         """ Compute PL
@@ -114,7 +114,7 @@ class RSSLocation(object):
 
         """
         S           = -(np.log(10)/10)* RSSStd/RSSnp            # STD of ranges distribution
-        M           =  (np.log(10)/10)*(PL0-RSS)/RSSnp + log(d0)    # Mean of ranges distribution
+        M           =  (np.log(10)/10)*(PL0-RSS)/RSSnp + np.log(d0)    # Mean of ranges distribution
 
 
         if lower(Rest)      == 'mode':
@@ -134,13 +134,13 @@ class RSSLocation(object):
         S  = -(np.log(10)/10)* RSSStd/RSSnp                    # STD of ranges distribution
         M  = (np.log(10)/10)*(PL0-RSS)/RSSnp + np.log(d0)         # Mean of ranges distribution
         if lower(Rest)      == 'mode':
-            return      np.sqrt((exp(2*M-2*S**2))*(-exp(-S**2)+1))
+            return      np.sqrt((np.exp(2*M-2*S**2))*(-np.exp(-S**2)+1))
         elif lower(Rest)    == 'median':
-            return      np.sqrt((exp(2*M+S**2))*(exp(S**2)-1))
+            return      np.sqrt((np.exp(2*M+S**2))*(np.exp(S**2)-1))
         elif lower(Rest)    == 'mean':
-            return      np.sqrt((exp(2*M+3*S**2))*(exp(S**2)-1))
+            return      np.sqrt((np.exp(2*M+3*S**2))*(np.exp(S**2)-1))
         else:
-            return      np.sqrt((exp(2*M+S**2))*(exp(S**2)-1))
+            return      np.sqrt((np.exp(2*M+S**2))*(np.exp(S**2)-1))
             print       "No \"%s\" defined estimator" %Rest
 
     def LSRSSLocate(self, RN, PL0, d0, RSS, RSSnp, RSSStd, Rest):
@@ -227,8 +227,8 @@ class RSSLocation(object):
         # Construct the Covariance Matrix
         C       = la.diag((RoAStd[1:RNnum,0])**2)
         # Apply LS operator
-        P       =
-        0.5*np.dot(la.inv(np.dot(A.T,np.dot(la.inv(C),A))),np.dot(np.dot(A.T,la.inv(C)),K))
+        P       = 0.5*np.dot(la.inv(np.dot(A.T,np.dot(la.inv(C),A))),
+                             np.dot(np.dot(A.T,la.inv(C)),K))
 
         # Return the estimated position
         return P
@@ -284,7 +284,7 @@ class RSSLocation(object):
         RNmP    = RN - np.outer(P,np.ones(RNnum))
         mRNmP   = (np.sqrt(diag(np.dot(RNmP.T,RNmP)))).reshape(RNnum,1)
         tk      = (RoA-mRNmP)**2
-        uk      = tk/(2*RoAStd**2)+np.log(np.sqrt(2*pi)*RoAStd)
+        uk      = tk/(2*RoAStd**2)+np.log(np.sqrt(2*np.pi)*RoAStd)
         suk     = uk.sum(axis=0)
         msuk    = suk
 
@@ -332,7 +332,7 @@ class RSSLocation(object):
         
 
         # construct the ML function to be minimized     
-        RNmP    = RN - outer(P,ones(RNnum))
+        RNmP    = RN - np.outer(P,ones(RNnum))
         mRNmP   = (np.sqrt(diag(dot(RNmP.T,RNmP)))).reshape(RNnum,1)
         tk      = (RSS-PL0-10*RSSnp*np.log10(mRNmP/d0))**2
         uk      = tk/(2*RSSStd**2)
@@ -376,60 +376,51 @@ class RSSLocation(object):
         prob.constr.append(t[i]>qi[i]*cvxm.trace(X0*Y)-1)
        
         prob.solve()
-        
         Pval=Y.value
         X_cvx=Pval[:2,-1]
-        
         return X_cvx'''
 
-    def SDPRSSLocate(self, RN, PL0, d0, RSS, RSSnp, RSSStd, Rest):
-
-        RoA=self.getRange(RN, PL0, d0, RSS, RSSnp, RSSStd, Rest)
-        
-
-        RN=cvxm.matrix(RN)
-        RSS=cvxm.matrix(RSS)
-        RSSnp=cvxm.matrix(RSSnp)
-        RSSStd=cvxm.matrix(RSSStd)
-        PL0=cvxm.matrix(PL0)
-        RoA=cvxm.matrix(RoA)
-        mrss,nrss=cvxm.size(RN)
-        
-        Si = array([(1/d0**2)*10**((RSS[0,0]-PL0[0,0])/(5.0*RSSnp[0,0])),(1/d0**2)*10**((RSS[1,0]-PL0[1,0])/(5.0*RSSnp[1,0])),(1/d0**2)*10**((RSS[2,0]-PL0[2,0])/(5.0*RSSnp[2,0])),(1/d0**2)*10**((RSS[3,0]-PL0[3,0])/(5.0*RSSnp[3,0]))])
-        #Si = array([(1/d0**2)*10**(-(RSS[0,0]-PL0[0,0])/(5.0*RSSnp[0,0])),(1/d0**2)*10**(-(RSS[0,1]-PL0[1,0])/(5.0*RSSnp[0,1])),(1/d0**2)*10**(-(RSS[0,2]-PL0[2,0])/(5.0*RSSnp[0,2])),(1/d0**2)*10**(-(RSS[0,3]-PL0[3,0])/(5.0*RSSnp[0,3]))])
-        
-        Im = cvxm.eye(mrss)
-        Y=cvxm.optvar('Y',mrss+1,mrss+1)
-        t=cvxm.optvar('t',nrss,1)
-
-        prob=cvxm.problem(cvxm.minimize(cvxm.norm2(t)))
-        prob.constr.append(Y>=0)
-        prob.constr.append(Y[mrss,mrss]==1)
-        for i in range(nrss):
-        X0=cvxm.matrix([[Im, -cvxm.transpose(RN[:,i])],[-RN[:,i], cvxm.transpose(RN[:,i])*RN[:,i]]])
-        prob.constr.append(-RSSStd[i,0]*t[i]<Si[i]*cvxm.trace(X0*Y)-1)
-        prob.constr.append(RSSStd[i,0]*t[i]>Si[i]*cvxm.trace(X0*Y)-1)
-       
-        prob.solve()
-        
-        Pval=Y.value
-        X_cvx=Pval[:2,-1]
-        
-        return X_cvx
-
+#    def SDPRSSLocate(self, RN, PL0, d0, RSS, RSSnp, RSSStd, Rest):
+#
+#        RoA=self.getRange(RN, PL0, d0, RSS, RSSnp, RSSStd, Rest)
+#
+#        RN=cvxm.matrix(RN)
+#        RSS=cvxm.matrix(RSS)
+#        RSSnp=cvxm.matrix(RSSnp)
+#        RSSStd=cvxm.matrix(RSSStd)
+#        PL0=cvxm.matrix(PL0)
+#        RoA=cvxm.matrix(RoA)
+#        mrss,nrss=cvxm.size(RN)
+#        Si = array([(1/d0**2)*10**((RSS[0,0]-PL0[0,0])/(5.0*RSSnp[0,0])),(1/d0**2)*10**((RSS[1,0]-PL0[1,0])/(5.0*RSSnp[1,0])),(1/d0**2)*10**((RSS[2,0]-PL0[2,0])/(5.0*RSSnp[2,0])),(1/d0**2)*10**((RSS[3,0]-PL0[3,0])/(5.0*RSSnp[3,0]))])
+#        #Si = array([(1/d0**2)*10**(-(RSS[0,0]-PL0[0,0])/(5.0*RSSnp[0,0])),(1/d0**2)*10**(-(RSS[0,1]-PL0[1,0])/(5.0*RSSnp[0,1])),(1/d0**2)*10**(-(RSS[0,2]-PL0[2,0])/(5.0*RSSnp[0,2])),(1/d0**2)*10**(-(RSS[0,3]-PL0[3,0])/(5.0*RSSnp[0,3]))])
+#        Im = cvxm.eye(mrss)
+#        Y=cvxm.optvar('Y',mrss+1,mrss+1)
+#        t=cvxm.optvar('t',nrss,1)
+#        prob=cvxm.problem(cvxm.minimize(cvxm.norm2(t)))
+#        prob.constr.append(Y>=0)
+#        prob.constr.append(Y[mrss,mrss]==1)
+#        for i in range(nrss):
+#            X0 = cvxm.matrix([[Im, -cvxm.transpose(RN[:,i])],[-RN[:,i], cvxm.transpose(RN[:,i])*RN[:,i]]])
+#            prob.constr.append(-RSSStd[i,0]*t[i]<Si[i]*cvxm.trace(X0*Y)-1)
+#            prob.constr.append(RSSStd[i,0]*t[i]>Si[i]*cvxm.trace(X0*Y)-1)
+#
+#        prob.solve()
+#        Pval=Y.value
+#        X_cvx=Pval[:2,-1]
+#        return X_cvx
+#
 
     def CRBRSSLocate(self, P, RN, PL0, d0, RSSnp, RSSStd):
         """
         This computes CRB of RSS positioning
         """
-        
-        '''shP     = shape(P)
+        shP     = shape(P)
         shRN    = shape(RN)
         RNnum   = shRN[1]
 
         S       = (np.log(10)/10)* RSSStd/RSSnp
 
-        RNmP    = RN - outer(P,ones(RNnum))
+        RNmP    = RN - np.outer(P,ones(RNnum))
         mRNmP   = (np.sqrt(diag(dot(RNmP.T,RNmP))))
 
         num     = sum((1+S**2)/((S**2)*mRNmP**2),axis=0)[0]     # the numerator of the CRLB
