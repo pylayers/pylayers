@@ -6132,7 +6132,10 @@ class Layout(PyLayers):
                     pta = points[0:2,:]
                     phe = points[2:,:]
                     #cn.show()
-
+                    # if i0 == (38,79) and i1 == (135,79,23):
+                    #     print i0,i1
+                    #     import ipdb
+                    #     ipdb.set_trace()
                     # i1 : interaction T
                     if len(i1)==3:
                         typ,prob = cn.belong_seg(pta,phe)
@@ -6155,10 +6158,20 @@ class Layout(PyLayers):
                         #    plu.displot(pta[:,~bs],phe[:,~bs],color='m')
                         #    plt.show()
                         #    pdb.set_trace())
+                    ########
+                    # SOMETIMES PROBA IS 0 WHEREAS SEG IS SEEN
+                    ###########
+                    # # keep segment with prob above a threshold
+                    # isegkeep = isegments[prob>0]
+                    # # dict   {numint : proba}
+                    # dsegprob = {k:v for k,v in zip(isegkeep,prob[prob>0])}
+                    ########### 4 lines are replaced by
                     # keep segment with prob above a threshold
-                    isegkeep = isegments[prob>0]
+                    utypseg = typ!=0
+                    isegkeep = isegments[utypseg]
                     # dict   {numint : proba}
-                    dsegprob = {k:v for k,v in zip(isegkeep,prob[prob>0])}
+                    dsegprob = {k:v for k,v in zip(isegkeep,prob[utypseg])}
+                    #########
                     output = filter(lambda x : x[0] in isegkeep, i2)
                     probint = map(lambda x: dsegprob[x[0]],output)
                     # dict interaction : proba
@@ -6201,7 +6214,6 @@ class Layout(PyLayers):
         typ : string
             if 'source' connect source cycle
             if 'target' connect target cycle
-
         """
 
         # list of interactions
@@ -6238,6 +6250,69 @@ class Layout(PyLayers):
                                             self.ldiffout,vpoints))
 
         return lR,lT,lD
+
+
+    def intercyGc2Gt(self,ncy,typ='source'):
+        """ return the list of interactions in Gt from a Gc cycle
+
+        Parameters
+        ----------
+
+        ncy : cycle number from Gc
+        typ : string
+            if 'source' connect source cycle
+            if 'target' connect target cycle
+        """
+
+        # list of interactions
+
+        lint = self.Gi.node
+        lTa=[]
+        lRa=[]
+        lDa=[]
+        if self.Gt.node[ncy].has_key('merged'):
+            cym = self.Gt.node[ncy]['merged']
+            lcy = self.Gc.node[cym]['merged']
+            
+        else :
+            lcy=[ncy]
+        # lint = self.Gi.node
+        for c in lcy:
+            # list of tuple interactions (R|T)
+            lD = filter(lambda x: len(x)==1,lint)
+            lR = filter(lambda x: len(x)==2,lint)
+            lT = filter(lambda x: len(x)==3,lint)
+
+            # visible R|T source cycle is ncy
+
+            lR = filter(lambda x : x[1]==c,lR)
+            if typ=='source':
+                lT = filter(lambda x: x[1]==c,lT)
+            if typ=='target':
+                lT = filter(lambda x: x[2]==c,lT)
+            if typ=='all':
+                lT=lT
+
+            # Finding the diffraction points
+            # Diffraction points are different from indoor cycle and outdoor
+            # cycles
+            #
+            # TODO check wedge validity. 
+            #
+            vnodes = self.Gt.node[ncy]['polyg'].vnodes
+            vpoints = filter(lambda x: x<0,vnodes)
+            indoor = self.Gt.node[ncy]['indoor']
+            if indoor:
+                lD = map(lambda y : (y,),filter(lambda x : x in
+                                                self.ldiffin,vpoints))
+            else:
+                lD = map(lambda y : (y,),filter(lambda x : x in
+                                                self.ldiffout,vpoints))
+            lTa.extend(lT)
+            lRa.extend(lR)
+            lDa.extend(lD)
+        return lRa,lTa,lDa
+
 
 #    def showGraph(self,**kwargs):
 #        """
@@ -6385,8 +6460,10 @@ class Layout(PyLayers):
             display subsegments (False)
         slab : boolean
             display color and width of slabs (False)
-        labels : boolean
+        labels : boolean | list 
             display graph labels (False)
+            if list precise label of wich cycle to dusplay
+            (e.g. ['t'])
         alphan : float
             transparency of nodes (1.0)
         alphae : float
@@ -6532,6 +6609,12 @@ class Layout(PyLayers):
 
         cold = pyu.coldict()
 
+
+        if isinstance(kwargs['labels'],list):
+            labels = kwargs['labels']
+        else:
+            labels=['s','t','v','c','i','w']
+
         #
         # s : structure graph
         #
@@ -6568,6 +6651,10 @@ class Layout(PyLayers):
                         kwargs['edge_color']='k'
                         kwargs['width']=1
 
+                if 's' in labels:
+                    kwargs['labels']=True
+                else:
+                    kwargs['labels']=False
                 kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
 
             kwargs['nodelist'] = nodelistbkup
@@ -6614,6 +6701,10 @@ class Layout(PyLayers):
                 
             if kwargs['edge_color']=='':
                 kwargs['edge_color'] ='r'
+            if 't' in labels:
+                kwargs['labels']=True
+            else:
+                kwargs['labels']=False
             fig,ax = gru.draw(G,**kwargs)
             kwargs['fig']=fig
             kwargs['ax']=ax
@@ -6624,9 +6715,14 @@ class Layout(PyLayers):
             G = self.Gr
             if kwargs['edge_color']=='':
                 kwargs['edge_color'] ='g'
+
             kwargs['fig'],kwargs['ax'] = gru.draw(self.Gs,
                               nodes=False,edges=True,alphacy=1.,
                               fig=kwargs['fig'],ax=kwargs['ax'],labels=False)
+            if 'r' in labels:
+                kwargs['labels']=True
+            else:
+                kwargs['labels']=False
             fig,ax = gru.draw(G,**kwargs)
             kwargs['fig']=fig
             kwargs['ax']=ax
@@ -6652,6 +6748,11 @@ class Layout(PyLayers):
             ndnd  = filter(lambda x: (edges[x][0]<0) & (edges[x][1]<0),rle)
             nded  = filter(lambda x: (((edges[x][0]<0) & (edges[x][1]>0)) |
                                      ((edges[x][0]>0) & (edges[x][1]<0))),rle)
+            if 'v' in labels:
+                kwargs['labels']=True
+            else:
+                kwargs['labels']=False
+
             if 'ee' in kwargs['lvis']:
                 kwargs['edgelist'] = eded
                 kwargs['edge_color']='blue'
@@ -6674,7 +6775,10 @@ class Layout(PyLayers):
 
             if kwargs['edge_color']=='':
                 kwargs['edge_color'] ='k'
-
+            if 'c' in labels:
+                kwargs['labels']=True
+            else:
+                kwargs['labels']=False
             fig,ax = gru.draw(G,**kwargs)
             kwargs['fig']=fig
             kwargs['ax']=ax
@@ -6725,6 +6829,10 @@ class Layout(PyLayers):
 
             tabcol = ['b','g','r','m','c','orange','purple','maroon'][::-1]
             li = []
+            if 'i' in labels:
+                kwargs['labels']=True
+            else:
+                kwargs['labels']=False
             for inter in kwargs['linter']:
                 if len(eval(inter))>0:
                     li.append(inter)
@@ -6745,6 +6853,10 @@ class Layout(PyLayers):
             kwargs['fig'],kwargs['ax'] = gru.draw(self.Gs,
                               nodes=False,edges=True,alphacy=1.,
                               fig=kwargs['fig'],ax=kwargs['ax'],labels=False)
+            if 'w' in labels:
+                kwargs['labels']=True
+            else:
+                kwargs['labels']=False
             fig,ax = gru.draw(G,**kwargs)
             kwargs['fig']=fig
             kwargs['ax']=ax
@@ -8341,9 +8453,9 @@ class Layout(PyLayers):
         f.children[-1].name='Layout ' + self.filename
 
         if roomid:
-            if len(self.Gr.nodes())>0:
-                pk=self.Gr.pos.keys()
-                v=np.array(self.Gr.pos.values())
+            if len(self.Gt.nodes())>0:
+                pk=self.Gt.pos.keys()
+                v=np.array(self.Gt.pos.values())
                 [mlab.text3d(v[ik,0],v[ik,1],0.5,str(k)) for ik,k in enumerate(pk)]
 
 
