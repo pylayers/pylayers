@@ -1275,7 +1275,6 @@ class Signatures(PyLayers,dict):
             # next child
 
             child = next(children, None)
-
             # update number of useful segments
             # if there is airwall in visited
             if child is None  : # if no more child
@@ -1294,14 +1293,14 @@ class Signatures(PyLayers,dict):
                     out = [i[0] for i in G[visited[-1]][target]['output'].keys()]
                     M[path[-2][0],path[-1][0],out]=True
                     try:
-                        dout[len(path)]=np.vstack((dout[len(path)],np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')))
+                        dout[len(path)]=np.vstack((dout[len(path)],np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='int16')))
                         # dnvi[len(path)].append([[i[0],len(i)] for i in G[visited[-1]][child]['output'].keys()])
                         # out = [i[0] for i in G[visited[-1]][child]['output'].keys()]
                         # M[path[-2][0],path[-1][0],out]=True
                         # dnvi[len(path)]=np.vstack((dnvi[len(path)],M))
                         
                     except:
-                        dout[len(path)]=np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')
+                        dout[len(path)]=np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='int16')
                         # dnvi[len(path)]=[[[i[0],len(i)] for i in G[visited[-1]][child]['output'].keys()]]
                         # dnvi[len(path)]=M
                         
@@ -1332,18 +1331,19 @@ class Signatures(PyLayers,dict):
                 CC=list(children)
                 if ((child == target) or (target in CC)):
                     path = visited + [target]
+
                     # M = np.zeros((1,NGs),dtype='bool')
                     out = [i[0] for i in G[visited[-1]][target]['output'].keys()]
                     M[path[-2][0],path[-1][0],out]=True
                     try:
-                        dout[len(path)]=np.vstack((dout[len(path)],np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')))
+                        dout[len(path)]=np.vstack((dout[len(path)],np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='int16')))
                         # dnvi[len(path)].append([[i[0],len(i)] for i in G[visited[-1]][child]['output'].keys()])
                         # dnvi[len(path)].append(np.unique([i[0] for i in G[visited[-1]][child]['output'].keys()]))
                         # M[:,[i[0] for i in G[visited[-1]][child]['output'].keys()]]=True
                         # dnvi[len(path)]=np.vstack((dnvi[len(path)],M))
 
                     except:
-                        dout[len(path)]=np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='uint16')
+                        dout[len(path)]=np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='int16')
                         # dnvi[len(path)]=[[[i[0],len(i)] for i in G[visited[-1]][child]['output'].keys()]]
                         # dnvi[len(path)]=[np.unique([i[0] for i in G[visited[-1]][child]['output'].keys()])]
                         # M[:,[i[0] for i in G[visited[-1]][child]['output'].keys()]]=True
@@ -1701,6 +1701,7 @@ class Signatures(PyLayers,dict):
         # list of cycle to reach source -> target. this will be imporve next
         lcil = self.L.cycleinline(source,target)
         llcil=len(lcil)
+
         # 2 determine input signatures for each cycles
         # di key = [input seg, input room, output seg, output room]
         di={}
@@ -1718,16 +1719,21 @@ class Signatures(PyLayers,dict):
             vinT=[]
             # valid 'out' interatcion
             voutT=[]
-
-            inter = self.L.Gr.node[cy]['inter']
+            if self.L.Gt.node[cy].has_key('merged'):
+                cym = self.L.Gt.node[cy]['merged']
+                lcy = self.L.Gc.node[cym]['merged']
+                inter=[]
+                [inter.extend(self.L.Gt.node[x]['inter']) for x in lcy]
+            else:
+                lcy = cy
+                inter = self.L.Gt.node[cy]['inter']
             sGi = nx.subgraph(self.L.Gi,inter)
 
             if icy == 0:
-
                 # the interactions of 1st cycle are kept appart
                 # di0 = {}
 
-                outR,outT,outD = self.L.intercy(cy,typ='source')
+                outR,outT,outD = self.L.intercyGc2Gt(cy,typ='source')
 
                 for cycle in lcil:
                     fcy = filter(lambda x: cycle == x[2],outT)
@@ -1831,6 +1837,7 @@ class Signatures(PyLayers,dict):
         firstloop=True
         dsigio={}
         idx = 0
+
         while not stop:
             # for all detected valid output
             for k in oldout:
@@ -1875,7 +1882,11 @@ class Signatures(PyLayers,dict):
                             if ki >1 and ko>1:
                                 uso = lsig[ki][:,-2:,0]
                                 uout = di[kdi[uus]][ko][:,1][:,0]
-                                uvi = M[uso[:,0],uso[:,1],:][:,uout]
+                                try:
+                                    uvi = M[uso[:,0],uso[:,1],:][:,uout]
+                                except:
+                                    import ipdb
+                                    ipdb.set_trace()
                                 suvi=np.sum(uvi,axis=0)
                             else :
                                 uvi = np.ones((lin,lout),dtype='bool')
@@ -1919,20 +1930,24 @@ class Signatures(PyLayers,dict):
                         filldinda(dsigio[kdi[uus][-3:]],sigio)
                     else:
                         dsigio[kdi[uus][-3:]]=sigio
+
             dsigiosave.update(dsigio)
             dsigio={}
+            firstloop=False
+
             if not firstloop:
                 if (adi[out][:,3:] == 0).all():
                     stop=True
                     break
 
-            firstloop=False
             oldout=out
             out=[]
             idx = idx+1
             # # attempt to limit the combinatory
             survive1=adi[oldout][:,2]==lcil[idx]
-            survive2=adi[oldout][:,-1]==lcil[idx+1]
+
+            survive2 = adi[oldout][:,-1]==lcil[idx+1]
+            # survive2 = np.ones((len(oldout)),dtype=bool)
             survive = np.where(survive1&survive2)[0]
             oldout=np.array(oldout)[survive].tolist()
 
@@ -3986,7 +4001,7 @@ class Signatures(PyLayers,dict):
             type(tx)=int
         prx :  numpy.array or int
             Rx coordinates is the center of gravity of the cycle number if
-            type(rx)=int
+            sigtype(rx)=int
 
         Returns
         -------
