@@ -137,6 +137,7 @@ import pylayers.util.plotutil as plu
 from pylayers.util.easygui import *
 from scipy.interpolate import interp1d
 import pdb
+import copy
 
 class Interface(PyLayers):
     """ Interface between 2 medium
@@ -1424,6 +1425,7 @@ class Slab(dict, Interface):
         fGHz : frequency GHz ( np.array([1.0]) )
         theta : np.array
             incidence angle (from normal) radians
+        compensate : boolean
 
         """
 
@@ -1433,6 +1435,7 @@ class Slab(dict, Interface):
             theta = np.array([theta])
         self.theta = theta
         self.fGHz = fGHz
+        theta_in = copy.deepcopy(theta)
 
         nf = len(fGHz)
         nt = len(theta)
@@ -1494,7 +1497,7 @@ class Slab(dict, Interface):
                 else:
                     II = MatInterface([ml, mr], self['lthick'][i], fGHz, theta)
             #
-            # chains the angle
+            # chains the angle , theta can be complex
             #
                 theta = II.theta
             #
@@ -1549,7 +1552,10 @@ class Slab(dict, Interface):
         # TODO !!!
         if compensate:
             thickness = sum(self['lthick'])
-            d = thickness*np.cos(theta)
+            import pdb
+            #pdb.set_trace()
+            #d = thickness*np.cos(theta)
+            d = thickness*np.cos(theta_in[None,:])
             self.T = self.T*np.exp(1j*2*np.pi*
                                     fGHz[:,np.newaxis,np.newaxis,np.newaxis]
                                     *d[:,:,np.newaxis,np.newaxis]

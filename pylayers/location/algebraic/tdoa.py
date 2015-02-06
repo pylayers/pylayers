@@ -12,7 +12,7 @@ class TDoALocation(object):
     A TDoALocation contains:
     1- 2 sets of RadioNodes (RN1 and RN2) with associated position accuracies (RN1QoS and RN2QoS),
     2- a set of TDoAs measurements (TDoA) with associated STD (TDoAStd) 
-    
+
     This class manages the TDoA-based localization techniques.
     MEMBERS:
 
@@ -38,7 +38,6 @@ class TDoALocation(object):
         LSTDoALocate(RN, TDoA)              : Applies Least Square approximation and estimate position
         WLSTDoALocate(RN, TDoA, TDoAStd)        : Applies Weighted Least Square approximation and estimate position
         TSTDoALocation(P0, RN, TDoA, TDoAStd, Niter)    : Applies Taylor Series method and estimate position after Niter iterations
-                
         TDoAOptimizer(RN, TDoA, TDoAStd)        : Defines the function to be optimized
         MLTDoALocate(P0, RN, TDoA, TDoAStd)         : Optimize TDoAOptimizer() and estimate Position (P0:initial guess)
 
@@ -100,13 +99,13 @@ class TDoALocation(object):
         c       = 3e08                      # Speed of light
         # Construct the vector K (see theory)
         k1      = (sum((RN1-RN2)*(RN1-RN2),axis=0)).reshape(RNnum,1)    # first half of K
-        
+
         RDoA    = c*TDoA                    # Range of arrival (meters)
         RDoA2   = (RDoA*RDoA).reshape(RNnum,1)
         k2      = RDoA2                     # second half of K
-        
+
         K       = k1-k2
-        
+
         # Construct the matrix A (see theory)
         A       = hstack((RN1.T - RN2.T,RDoA))
         A2   = dot(transpose(A),A)

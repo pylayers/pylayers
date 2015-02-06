@@ -821,7 +821,8 @@ class IntT(Inter):
                         gamma = g
 
                     # find the index of angles which satisfied the data
-                    self.slab[m].ev(fGHz=fGHz, theta=ut, RT='T', compensate=False)
+                    self.slab[m].ev(fGHz=fGHz, theta=ut, RT='T',
+                                    compensate=True)
 
                     try:
                         T = np.concatenate((T, self.slab[m].T), axis=1)

@@ -366,7 +366,7 @@ class Bsignal(PyLayers):
         # last dimension of y should be equal to first dimension of x
         if (ly != self.N) :
             print "Error in Bsignal : Dimension incompatibility "
-            print "x : ", self.N 
+            print "x : ", self.N
             print "y : ", ly
 
 
