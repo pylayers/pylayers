@@ -1297,8 +1297,10 @@ class DLink(Link):
             self.save(H,'H',self.dexist['H']['grpname'],force = kwargs['force'])
 
         self.H = H
-
-        self.chanreal = self.H.applywavB(self.wav.sfg)
+        if self.H.isFriis:
+            self.ir = self.H.applywavB(self.wav.sf)
+        else:
+            self.ir = self.H.applywavB(self.wav.sfg)
 
         return self.H.ak, self.H.tk
 

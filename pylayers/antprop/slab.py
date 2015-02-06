@@ -136,6 +136,7 @@ import pylayers.util.pyutil as pyu
 import pylayers.util.plotutil as plu
 from pylayers.util.easygui import *
 from scipy.interpolate import interp1d
+import copy
 import pdb
 import copy
 
@@ -812,7 +813,7 @@ class Mat(PyLayers,dict):
         theta.reshape(1, Nt)
         II = MatInterface(lmat, 0, fGHz, theta)
         II.RT()
-        Ro = II.Ro 
+        Ro = II.Ro
         Rp = II.Rp
 
         return Ro, Rp
@@ -1066,7 +1067,7 @@ class MatDB(PyLayers,dict):
         Parameters
         ----------
 
-        _fileini : string 
+        _fileini : string
             name of the matDB file (usually matDB.ini)
 
         """
@@ -1089,7 +1090,7 @@ class MatDB(PyLayers,dict):
             M['mur'] = eval(config.get(matname,'mur'))
             self[matname] = M
 
-        # PULSRAY compatibility : save in the old .mat format 
+        # PULSRAY compatibility : save in the old .mat format
         self.savemat(self.filemat)
 
     def loadmat(self, _filemat):
@@ -1101,7 +1102,7 @@ class MatDB(PyLayers,dict):
         _filemat : string
         a short file name
 
-        Notes 
+        Notes
         -----
 
             Deprecated this the format for PyRay
@@ -1433,6 +1434,8 @@ class Slab(dict, Interface):
             fGHz = np.array([fGHz])
         if not isinstance(theta, np.ndarray):
             theta = np.array([theta])
+        theta_in=copy.deepcopy(theta)
+
         self.theta = theta
         self.fGHz = fGHz
         theta_in = copy.deepcopy(theta)
@@ -1552,7 +1555,6 @@ class Slab(dict, Interface):
         # TODO !!!
         if compensate:
             thickness = sum(self['lthick'])
-            import pdb
             #pdb.set_trace()
             #d = thickness*np.cos(theta)
             d = thickness*np.cos(theta_in[None,:])
