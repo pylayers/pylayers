@@ -356,8 +356,6 @@ class Coverage(PyLayers):
 
         na = self.na
 
-        pdb.set_trace()
-
         U = (np.ones((na,na))-np.eye(na))[np.newaxis,np.newaxis,:,:]
 
         ImW = np.einsum('ijkl,ijl->ijk',U,self.CmW)
