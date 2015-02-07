@@ -65,7 +65,7 @@ class Coverage(PyLayers):
         _fileini
             default coverage.ini
 
-        L :  a Layout
+        L     : a Layout
         nx    : number of point on x
         ny    : number of point on y
         tx    : transmitter position
@@ -98,10 +98,10 @@ class Coverage(PyLayers):
         self.config.read(pyu.getlong(_fileini,pstruc['DIRSIMUL']))
 
         self.layoutopt = dict(self.config.items('layout'))
-        self.gridopt = dict(self.config.items('grid'))
-        self.apopt = dict(self.config.items('ap'))
-        self.rxopt = dict(self.config.items('rx'))
-        self.showopt = dict(self.config.items('show'))
+        self.gridopt   = dict(self.config.items('grid'))
+        self.apopt     = dict(self.config.items('ap'))
+        self.rxopt     = dict(self.config.items('rx'))
+        self.showopt   = dict(self.config.items('show'))
 
         # get the Layout
         self.L = Layout(self.layoutopt['filename'])
@@ -125,68 +125,18 @@ class Coverage(PyLayers):
             kwargs  = eval(self.apopt[k])
             ap = std.AP(**kwargs)
             self.dap[eval(k)] = ap
-            try:
-                self.aap = np.vstack((self.aap,ap['p'][0:2]))
-                self.ptdbm = np.vstack((self.ptdbm,ap['PtdBm']))
-            except:
-                self.aap = ap['p'][0:2]
-                self.ptdbm = ap['PtdBm']
-        # 1 x na
-        self.ptdbm = self.ptdbm.T
 
-        # number of access points
-        self.na = len(self.dap)
-
-        # creating all links
-        p = product(range(self.ng),range(self.na))
-        #
-        # a : access point
-        # g : grid
-        #
-        for k in p:
-            pg = self.grid[k[0],:]
-            pa = self.aap[k[1]]
-            try:
-                self.pa = np.vstack((self.pa,pa))
-            except:
-                self.pa = pa
-            try:
-                self.pg = np.vstack((self.pg,pg))
-            except:
-                self.pg = pg
-
-        self.pa = self.pa.T
-        self.pg = self.pg.T
-
-        # frequency is chosen as all the center frequencies of the standard
-        # warning assuming the same standard
-        self.fGHz = self.dap[0].s.fcghz
-        self.nf = len(self.fGHz)
-
-        # AP section
+        self.fGHz = np.array([])
         #self.fGHz = eval(self.txopt['fghz'])
         #self.tx = np.array((eval(self.txopt['x']),eval(self.txopt['y'])))
         #self.ptdbm = eval(self.txopt['ptdbm'])
         #self.framelengthbytes = eval(self.txopt['framelengthbytes'])
 
         # receiver section
-        self.rxsens = eval(self.rxopt['sensitivity'])
+        #self.rxsens = eval(self.rxopt['sensitivity'])
 
-        kBoltzmann = 1.3806503e-23
-        self.temperaturek = eval(self.rxopt['temperaturek'])
+        self.temperaturek  = eval(self.rxopt['temperaturek'])
         self.noisefactordb = eval(self.rxopt['noisefactordb'])
-
-        # list of access points
-        lap  = self.dap.keys()
-        # list of channels
-        lchan = map(lambda x: self.dap[x]['chan'],lap)
-
-        apchan = zip(self.dap.keys(),lchan)
-        self.bmhz = np.array(map(lambda x: self.dap[x[0]].s.chan[x[1][0]]['BMHz']*len(x[1]),apchan))
-        # Evaluate Noise Power (in dBm)
-
-        Pn = (10**(self.noisefactordb/10.)+1)*kBoltzmann*self.temperaturek*self.bmhz*1e3
-        self.pndbm = 10*np.log10(Pn)+60
 
         # show section
         self.bshow = str2bool(self.showopt['show'])
@@ -248,64 +198,6 @@ class Coverage(PyLayers):
         self.grid=np.array((list(np.broadcast(*np.ix_(x, y)))))
 
 
-
-#    def coverold(self):
-#        """ run the coverage calculation (Deprecated)
-#
-#        Parameters
-#        ----------
-#
-#        lay_bound : bool
-#            If True, the coverage is performed only inside the Layout
-#            and clip the values of the grid chosen in coverage.ini
-#
-#        Examples
-#        --------
-#
-#        .. plot::
-#            :include-source:
-#
-#            >> from pylayers.antprop.coverage import *
-#            >> C = Coverage()
-#            >> C.cover()
-#            >> C.showPower()
-#
-#        Notes
-#        -----
-#
-#        self.fGHz is an array it means that coverage is calculated at once
-#        for a whole set of frequencies. In practice the center frequency of a
-#        given standard channel.
-#
-#        This function is calling `Losst` which calculates Losses along a
-#        straight path. In a future implementation we will
-#        abstract the EM solver in order to make use of other calculation
-#        approaches as full or partial Ray Tracing.
-#
-#        The following members variables are evaluated :
-#
-#        + freespace Loss @ fGHz   PL()  PathLoss (shoud be rename FS as free space) $
-#        + prdbmo : Received power in dBm .. math:`P_{rdBm} =P_{tdBm} - L_{odB}`
-#        + prdbmp : Received power in dBm .. math:`P_{rdBm} =P_{tdBm} - L_{pdB}`
-#        + snro : SNR polar o (H)
-#        + snrp : SNR polar p (H)
-#
-#        See Also
-#        --------
-#
-#        pylayers.antprop.loss.Losst
-#        pylayers.antprop.loss.PL
-#
-#        """
-#
-#        self.Lwo,self.Lwp,self.Edo,self.Edp = loss.Losst(self.L,self.fGHz,self.grid.T,self.tx)
-#        self.freespace = loss.PL(self.fGHz,self.grid,self.tx)
-#
-#        self.prdbmo = self.ptdbm - self.freespace - self.Lwo
-#        self.prdbmp = self.ptdbm - self.freespace - self.Lwp
-#        self.snro = self.prdbmo - self.pndbm
-#        self.snrp = self.prdbmp - self.pndbm
-
     def cover(self,polar='o',sinr=True,snr=True,best=True):
         """ run the coverage calculation
 
@@ -338,7 +230,9 @@ class Coverage(PyLayers):
         given standard channel.
 
         This function is calling `Losst` which calculates Losses along a
-        straight path. In a future implementation we will
+        straight path.
+
+        In a future implementation we will
         abstract the EM solver in order to make use of other calculation
         approaches as full or partial Ray Tracing.
 
@@ -357,9 +251,68 @@ class Coverage(PyLayers):
         pylayers.antprop.loss.PL
 
         """
+        #
+        # select active AP
+        #
+        lactiveAP = []
+        try:
+            del self.aap
+            del self.ptdbm
+        except:
+            pass
+
+        self.kB = 1.3806503e-23 # Boltzmann constant
+        for iap in self.dap:
+            if self.dap[iap]['on']:
+                lactiveAP.append(iap)
+                fGHz = self.dap[iap].s.fcghz
+                self.fGHz=np.unique(np.hstack((self.fGHz,fGHz)))
+                apchan = self.dap[iap]['chan']
+                try:
+                    self.aap   = np.vstack((self.aap,self.dap[iap]['p'][0:2]))
+                    self.ptdbm = np.vstack((self.ptdbm,self.dap[iap]['PtdBm']))
+                    self.bmhz  = np.vstack((self.bmhz,
+                                 self.dap[iap].s.chan[apchan[0]]['BMHz']))
+                except:
+                    self.aap   = self.dap[iap]['p'][0:2]
+                    self.ptdbm = np.array(self.dap[iap]['PtdBm'])
+                    self.bmhz  = np.array(self.dap[iap].s.chan[apchan[0]]['BMHz'])
+
+        PnW = np.array((10**(self.noisefactordb/10.))*self.kB*self.temperaturek*self.bmhz*1e6)
+        # Evaluate Noise Power (in dBm)
+        self.pndbm = np.array(10*np.log10(PnW)+30)
+        #lchan = map(lambda x: self.dap[x]['chan'],lap)
+        #apchan = zip(self.dap.keys(),lchan)
+        #self.bmhz = np.array(map(lambda x: self.dap[x[0]].s.chan[x[1][0]]['BMHz']*len(x[1]),apchan))
+
+        self.ptdbm = self.ptdbm.T
+        self.pndbm = self.pndbm.T
+        # creating all links
+        p = product(range(self.ng),lactiveAP)
+        #
+        # pa : access point
+        # pg : grid point
+        #
+        # 1 x na
+        for k in p:
+            pg = self.grid[k[0],:]
+            pa = self.dap[k[1]]['p'][0:2]
+            try:
+                self.pa = np.vstack((self.pa,pa))
+            except:
+                self.pa = pa
+            try:
+                self.pg = np.vstack((self.pg,pg))
+            except:
+                self.pg = pg
+
+        self.pa = self.pa.T
+        self.pg = self.pg.T
+        self.nf = len(self.fGHz)
 
         # retrieving dimensions along the 3 axis
-        na = self.na
+        na = len(lactiveAP)
+        self.na = na
         ng = self.ng
         nf = self.nf
 
@@ -376,43 +329,44 @@ class Coverage(PyLayers):
         freespace = loss.PL(self.fGHz,self.pa,self.pg,dB=False)
         self.freespace = freespace.reshape(nf,ng,na)
 
-        # Warning we are assuming here all transmitters have the same
-        # transmitting power (to be modified)
+        # transmitting power
         # f x g x a
 
         # CmW : Received Power coverage in mW
         self.CmW = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lw*self.freespace
 
         if snr:
-            self.snr()
+            self.evsnr()
         if sinr:
-            self.sinr()
+            self.evsinr()
         if best:
-            self.best()
+            self.evbestsv()
 
-    def snr(self):
-        """ calculate snr
+    def evsnr(self):
+        """ calculates snr
         """
 
-        NmW = 10**(self.pndbm/10.)[np.newaxis,np.newaxis,:]
+        NmW = 10**(self.pndbm/10.)[np.newaxis,:]
 
         self.snr = self.CmW/NmW
 
-    def sinr(self):
-        """ calculate sinr
+    def evsinr(self):
+        """ calculates sinr
         """
 
         na = self.na
+
+        pdb.set_trace()
 
         U = (np.ones((na,na))-np.eye(na))[np.newaxis,np.newaxis,:,:]
 
         ImW = np.einsum('ijkl,ijl->ijk',U,self.CmW)
 
-        NmW = 10**(self.pndbm/10.)[np.newaxis,np.newaxis,:]
+        NmW = 10**(self.pndbm/10.)[np.newaxis,:]
 
         self.sinr = self.CmW/(ImW+NmW)
 
-    def best(self):
+    def evbestsv(self):
         """ determine best server map
 
         Notes
@@ -738,6 +692,11 @@ class Coverage(PyLayers):
             >>> f,a = C.show(typ='sinr')
             >>> plt.show()
 
+        See Also
+        --------
+
+        pylayers.gis.layout.Layout.showG
+
         """
         defaults = { 'typ': 'pr',
                      'grid': False,
@@ -748,7 +707,7 @@ class Coverage(PyLayers):
                      'best':True
                    }
 
-        title = self.dap[0].s.name+ ' : '
+        title = self.dap[1].s.name+ ' : '
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]

@@ -5281,7 +5281,9 @@ class Layout(PyLayers):
 
     def _convexify(self):
         """ determine which cycles are not convex and convexify it.
-            if a cycle is tagged as non convex 
+
+            if a cycle is tagged as non convex
+
             1- find its polygon
             2- partion polygon into convex polygons (Delaunay)
             3- try to merge partioned polygon in order to obtain
@@ -5291,8 +5293,8 @@ class Layout(PyLayers):
 
         Notes
         -----
-            
-        The algorithm update the Gt nodes and edges created into self.buildGt
+
+        The algorithm updates the Gt nodes and edges created into self.buildGt
         by adding new nodes and connnections
 
         See Also
@@ -5316,7 +5318,7 @@ class Layout(PyLayers):
         for n in self.Gt.nodes():
             # if indoor cycle
             if n > 0:
-                
+
                 ncy=max(self.Gt.nodes())
 
                 ####
@@ -5349,7 +5351,7 @@ class Layout(PyLayers):
                             naw = []
                             for t in tri:
                                 ts = geu.Polygon(pucs[t])
-                                # check if the new polygon is contained into 
+                                # check if the new polygon is contained into
                                 # the original polygon (non guaratee by Delaunay)
                                 #U = self.Gt.node[n]['polyg'].contains(ts)
                                 U = self.Gt.node[n]['polyg'].intersection(ts)
@@ -5362,17 +5364,17 @@ class Layout(PyLayers):
                                         uaw = np.where(cp.vnodes == 0)[0]
                                         lvn = len(cp.vnodes)
                                         for i in uaw:
-                                            # keep trace of created airwalls, because some 
+                                            # keep trace of created airwalls, because some
                                             # of them will be destroyed in step 3.
                                             naw.append(self.add_segment(
                                                        cp.vnodes[np.mod(i-1,lvn)],
                                                        cp.vnodes[np.mod(i+1,lvn)]
                                                        ,name='AIR'))
                                         polys.append(cp)
-                        
+
                         #
                         # 3. merge delaunay triangulation in order to obtain
-                        #   the larger convex polygons partioning 
+                        #   the larger convex polygons partioning
                         #
                         cpolys = []
                         nbpolys = len(polys)
@@ -6388,9 +6390,12 @@ class Layout(PyLayers):
 #            plt.show()
 
     def show(self,**kwargs):
-        """
+        """ show layout
 
         See also
+        --------
+
+        showG
 
         """
         defaults = {'show': True,
@@ -6421,16 +6426,16 @@ class Layout(PyLayers):
         segments = np.array(edges)[:,0]
         dse = {k:v for k,v in zip(segments,range(Ne))}
 
-        #pdb.set_trace()
-
         edfilt = list(np.ravel(np.array(map(lambda x : [dse[x]-1,dse[x]],segfilt))))
         # Warning edgelist is to be understood as edge of graph and not segments of layout
         fig,ax = self.showG('s',nodes=False,edgelist=edfilt)
 
         ldeg1  = list(self.degree[1])
         ldeg4  = list(self.degree[4])
-        fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg1,edges=False,nodes=True,node_size=70,node_color='r')
-        fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg4,edges=False,nodes=True,node_size=70,node_color='g')
+        fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg1,edges=kwargs['edges'],
+                   nodes=kwargs['nodes'],node_size=kwargs['node_size'],node_color='r')
+        fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg4,edges=kwargs['edges'],
+                   nodes=kwargs['nodes'],node_size=kwargs['node_size'],node_color='g')
         #     if k==1:
         #         fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg,edges=False,nodes=True,node_size=50,node_color='c')
         #     if k==4:
@@ -6454,13 +6459,13 @@ class Layout(PyLayers):
             False
         edges : boolean
             True
-        airwalls : boolean 
+        airwalls : boolean
             display airwalls (False)
         subseg: boolean
             display subsegments (False)
         slab : boolean
             display color and width of slabs (False)
-        labels : boolean | list 
+        labels : boolean | list
             display graph labels (False)
             if list precise label of wich cycle to dusplay
             (e.g. ['t'])
@@ -6478,13 +6483,13 @@ class Layout(PyLayers):
             negative node color (b)
         edge_color : string
             k
-        node_size : float 
+        node_size : float
             20
-        font_size : float 
+        font_size : float
             15,
-        nodelist : list 
+        nodelist : list
             list of nodes to be displayed (all)
-        edgelist : list 
+        edgelist : list
             list of edges to be displayed (all)
         mode : string
             'cycle' | 'none' | 'room'
@@ -6651,10 +6656,10 @@ class Layout(PyLayers):
                         kwargs['edge_color']='k'
                         kwargs['width']=1
 
-                if 's' in labels:
-                    kwargs['labels']=True
-                else:
-                    kwargs['labels']=False
+                #if 's' in labels:
+                #    kwargs['labels']=False
+                #else:
+                #    kwargs['labels']=True
                 kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
 
             kwargs['nodelist'] = nodelistbkup
@@ -6688,17 +6693,17 @@ class Layout(PyLayers):
         if 't' in graph:
             G = self.Gt
             if not kwargs['show0']:
-                # filter out the 0 cycle 
+                # filter out the 0 cycle
                 nodes = G.nodes()
                 edges = G.edges()
                 nodf = filter(lambda x : x<>0,nodes)
                 edf  = filter(lambda x: ((edges[x][0]<>0) & (edges[x][1]<>0)),np.arange(len(edges)))
                 kwargs['nodelist']=nodf
                 kwargs['edgelist']=edf
-            else : 
+            else :
                 kwargs['nodelist'] = G.nodes()
                 kwargs['edgelist'] = np.arange(len(G.edges()))
-                
+
             if kwargs['edge_color']=='':
                 kwargs['edge_color'] ='r'
             if 't' in labels:
