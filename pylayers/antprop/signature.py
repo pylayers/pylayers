@@ -1702,13 +1702,13 @@ class Signatures(PyLayers,dict):
             target = self.target
         # list of cycle to reach source -> target. this will be imporve next
         lcil = self.L.cycleinline(source,target)
-        
-
-        G=nx.Graph(self.L.Gt)
-
-        G.remove_node(0)
-        lcil = nx.dijkstra_path(G,source,target)
         llcil=len(lcil)
+
+        # G=nx.Graph(self.L.Gt)
+
+        # G.remove_node(0)
+        # lcil = nx.dijkstra_path(G,source,target)
+        # llcil=len(lcil)
 
         # 2 determine input signatures for each cycles
         # di key = [input seg, input room, output seg, output room]
@@ -4384,14 +4384,14 @@ class Signatures(PyLayers,dict):
                 valid = valid | uD
                 uvalid = np.where(valid)[0]
 
-
-                pvalid = psolved[uvalid,:2]
-
                 # re-add correct position of diffraction interations
                 # indeed diffraction point should not been solved with linalg, 
                 # but by setting pa=-pb, no singular matrix appear
                 # and diffraction points can be re-add thereafter.
-                pvalid[uuD] = ptr[:,0,uuD,kinter].T
+                psolved[uuD,:2] = ptr[:,0,uuD,kinter].T
+
+                pvalid = psolved[uvalid,:2]
+
 
 
 
