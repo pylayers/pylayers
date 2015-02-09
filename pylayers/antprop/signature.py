@@ -1702,6 +1702,12 @@ class Signatures(PyLayers,dict):
             target = self.target
         # list of cycle to reach source -> target. this will be imporve next
         lcil = self.L.cycleinline(source,target)
+        
+
+        G=nx.Graph(self.L.Gt)
+
+        G.remove_node(0)
+        lcil = nx.dijkstra_path(G,source,target)
         llcil=len(lcil)
 
         # 2 determine input signatures for each cycles
@@ -1845,6 +1851,7 @@ class Signatures(PyLayers,dict):
         firstloop=True
         dsigio={}
         idx = 0
+
         while not stop:
             # for all detected valid output
             for k in oldout:
@@ -4447,6 +4454,9 @@ class Signatures(PyLayers,dict):
                 uT = np.where(ityp[:,n]==3)[0]
                 uR = np.where(ityp[:,n]==2)[0]
                 uD=np.where(ityp[:,n]==1)[0]
+                if len(uD)!=0:
+                    import ipdb
+                    ipdb.set_trace()
                 if n ==0:
                     p=tx[:,None]*np.ones((nsig))
                 else :
@@ -5013,6 +5023,9 @@ class Signature(object):
                             (pb[0, :] - pa[0, :]))
 
         typ = self.typ
+        if 1 in typ:
+            import ipdb
+            ipdb.set_trace()
         # number of interactions
         N = np.shape(pa)[1]
 
