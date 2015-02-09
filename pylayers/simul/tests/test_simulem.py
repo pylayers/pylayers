@@ -57,7 +57,7 @@ S.pafreq.fghzmin=2
 S.pafreq.fghzmax=11
 S.pafreq.nf=181
 S.pafreq.save()
-# showing the simulation 
+# showing the simulation
 print "Launching "
 print "-----------------"
 S.launching(1)

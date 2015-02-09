@@ -431,10 +431,16 @@ class Trajectory(PyLayers,pd.DataFrame):
 
     def copy(self,deep=True):
         """ copy of trajectroy
+
+        Parameters
+        ----------
+
+        deep : boolean
+
         """
         df = super(Trajectory, self).copy(deep=deep)
         return Trajectory(df=df,ID=self.ID,name=self.name,typ=self.typ)
-        
+
 
 
     def update(self):

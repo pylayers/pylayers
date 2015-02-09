@@ -456,6 +456,7 @@ def Losst(L,fGHz,p1,p2,dB=True):
     if (len(sh1)<2) & (len(sh2)<2):
         Nlink = 1
 
+    # determine incidence angles on segment crossing p1-p2 segment
     data = L.angleonlink(p1,p2)
 
     # as many slabs as segments
