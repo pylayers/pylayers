@@ -1704,6 +1704,12 @@ class Signatures(PyLayers,dict):
         lcil = self.L.cycleinline(source,target)
         llcil=len(lcil)
 
+        # G=nx.Graph(self.L.Gt)
+
+        # G.remove_node(0)
+        # lcil = nx.dijkstra_path(G,source,target)
+        # llcil=len(lcil)
+
         # 2 determine input signatures for each cycles
         # di key = [input seg, input room, output seg, output room]
         di={}
@@ -1740,7 +1746,7 @@ class Signatures(PyLayers,dict):
                 for cycle in lcil:
                     fcy = filter(lambda x: cycle == x[2],outT)
                     voutT.extend(fcy)
-                vinT = outR #+ outD
+                vinT = outR + outD
 
                 kdi0 = (0,0,0,voutT[0][0],voutT[0][1],voutT[0][2])
 
@@ -1791,7 +1797,7 @@ class Signatures(PyLayers,dict):
                 for cycle in lcil:
                     fcy = filter(lambda x: cycle == x[2],inT)
                     vinT.extend( fcy)
-                voutT = inR #+ inD
+                voutT = inR + inD
                 kdif = (vinT[0][0],vinT[0][1],vinT[0][2],0,0,0)
                 # keep trace of last segments
                 sinf = np.array([vinT[i][0] for i in range(len(vinT))])
@@ -1845,6 +1851,7 @@ class Signatures(PyLayers,dict):
         firstloop=True
         dsigio={}
         idx = 0
+
         while not stop:
             # for all detected valid output
             for k in oldout:
@@ -4245,17 +4252,39 @@ class Signatures(PyLayers,dict):
         for ninter in self.keys():
             signatures = copy.deepcopy(self[ninter])
             # get segment ids of signature with 4 interactions
-            seg = signatures[::2]
+            # get segment ids of signature with ninter interactions
+            seg = self[ninter][::2]
+            unegseg=np.where(seg<0)
+            uninegseg,idx = np.unique(seg[unegseg],return_inverse=True)
+            pneg = np.array([self.L.Gs.pos[x] for x in uninegseg])
+
             nsig = len(seg)
+
             # determine positions of points limiting the semgments
             # 1 get index in L.tahe
             # 2 get associated position in L.pt
 
-            # utahe (2 pt indexes,nb_signatures,nb_interactions)
-            utahe = self.L.tahe[:,self.L.tgs[seg]]
 
+            utahe = self.L.tahe[:,self.L.tgs[seg]]
             # pt : (xycoord (2),pt indexes (2),nb_signatures,nb_interactions)
             pt = self.L.pt[:,utahe]
+            
+
+            #### WARNING BIG TRICK HERE :
+            #### pa and pb are not set as the same value 
+            #### to avoid a singular matrixnext.
+            #### set pa =-pb has no incidence but avoid complex and vain code 
+            #### modification for handling diffractions
+            try:
+                pt[:,0,unegseg[0],unegseg[1]]=pneg[idx].T
+                pt[:,1,unegseg[0],unegseg[1]]=-pneg[idx].T
+            except:
+                pass
+            # pt shape =
+            # 0 : (x,y) coordinates x=0,y=1
+            # 1 : 2 points (linking the semgnet) a=0,b=1
+            # 2 : nb of found signatures/segments
+            # 3 : nb interaction
             #shape =
             # 0 : (x,y) coordinates x=0,y=1
             # 1 : 2 points (linking the semgnet) a=0,b=1
@@ -4285,7 +4314,13 @@ class Signatures(PyLayers,dict):
             rayp_i = np.zeros((3,nsig,ninter))
             # rayp_i[:2,:,-1]=rx[:,None]
             # backtrace process
+            # if ninter == 6:
+            #     print np.where(((signatures[:,0]==42) &(signatures[:,1]==-277) & (signatures[:,2]==135) & (signatures[:,3]==21) & (signatures[:,4]==46) & (signatures[:,5]==319)))
+            #     import ipdb
+            #     ipdb.set_trace()
+
             while kinter > -1:
+
                 # Initilization, using the Tx position
                 if kinter == ninter-1:
                     p_min_m = p[:,np.newaxis]-Mr[ninter][:,:,kinter]
@@ -4297,7 +4332,6 @@ class Signatures(PyLayers,dict):
                 # Creating W from  eq (2.71)
                 # a_min_b <=> a_{Lh-l}-b_{Lh-l}
                 # p_min_m <=> \tilde{p}_{Lh}-\tilde{b}_{Lh-l}
-
                 # W (nsig,4,4)
                 # p_min_m (2,nsig)
                 # a_min_b (2,nsig)
@@ -4314,6 +4348,7 @@ class Signatures(PyLayers,dict):
                 # y (nsig,4)
                 y=y.T
 
+
                 # search and remove point with singular matrix
                 invalid_sig=np.where(abs(np.linalg.det(W))<1e-15)
 
@@ -4324,51 +4359,60 @@ class Signatures(PyLayers,dict):
                 rayp_i = np.delete(rayp_i,invalid_sig,axis=1)
 
                 # remove signatures
+
                 usig = np.repeat(invalid_sig[0],2)
                 usig[::2]=usig[::2]*2
                 usig[1::2]=usig[1::2]*2+1
                 signatures = np.delete(signatures,usig,axis=0)
-
+                # detect diffrac
+                uD = signatures[1::2,kinter]==1
+                uuD = np.where(signatures[1::2,kinter]==1)[0]
 
 
                 psolved = np.linalg.solve(W,y)
 
-                # np.linalg.solve and sp.linalg.solve don't give the exact same answer
-                # one approximate the result from the lower value and the other form the upper
-                # alternatively, it can be used :
-                # lw=len(W)
-                # psolved = np.empty((lw,4))
-                # for zz in xrange(lw):
-                #     psolved[zz] = la.solve(W[zz],y[zz])
-
-
-
                 # valid ray is : 0 < \alpha < 1 and 0< \beta < 1
+
                 # alpha
                 uvalidA= psolved[:,2]>0.
                 uvalidB= psolved[:,2]<1.
                 # beta
                 uvalidC= psolved[:,3] >= epsilon
                 uvalidD= psolved[:,3] <=1.-epsilon
-                uvalid = np.where(uvalidA & uvalidB & uvalidC & uvalidD)[0]
+                valid = uvalidA & uvalidB & uvalidC & uvalidD
+                # consider valid diffraction interactions
+                valid = valid | uD
+                uvalid = np.where(valid)[0]
+
+                # re-add correct position of diffraction interations
+                # indeed diffraction point should not been solved with linalg, 
+                # but by setting pa=-pb, no singular matrix appear
+                # and diffraction points can be re-add thereafter.
+                psolved[uuD,:2] = ptr[:,0,uuD,kinter].T
 
                 pvalid = psolved[uvalid,:2]
+
+
+
+
+
 
                 # keep only valid rays for ptr and Mr
                 Mr[ninter]=Mr[ninter][:,uvalid,:]
                 ptr=ptr[:,:,uvalid,:]
                 W = W[uvalid,:,:]
 
+
                 # remove signatures
                 usigv = np.repeat(uvalid,2)
                 usigv[::2]=usigv[::2]*2
                 usigv[1::2]=usigv[1::2]*2+1
                 signatures = signatures[usigv,:]
-
+                
 
                 rayp_i[:2,uvalid,kinter] = pvalid.T
                 rayp_i = rayp_i[:,uvalid,:]
-
+                
                 # if no more rays are valid , then quit block
                 # (kinter <0 is the exit while condition)
                 if len(uvalid) > 0 :
@@ -4408,12 +4452,12 @@ class Signatures(PyLayers,dict):
 
 
             utahe = self.L.tahe[:,self.L.tgs[seg]]
-
             # pt : (xycoord (2),pt indexes (2),nb_signatures,nb_interactions)
             pt = self.L.pt[:,utahe]
+            
             try:
-                pt[0,:,unegseg[0],unegseg[1]]=pneg[idx]
-                pt[1,:,unegseg[0],unegseg[1]]=pneg[idx]
+                pt[:,0,unegseg[0],unegseg[1]]=pneg[idx].T
+                pt[:,1,unegseg[0],unegseg[1]]=pneg[idx].T
             except:
                 pass
             # pt shape =
@@ -4426,20 +4470,34 @@ class Signatures(PyLayers,dict):
             # formula 2.61 -> 2.64 N.AMIOT thesis
             ############
             den = ((pt[0,0,:,:]-pt[0,1,:,:])**2+(pt[1,0,:,:]-pt[1,1,:,:])**2)
+            uz = np.where(den ==0)
+            den[uz] = 1.
 
-            a = ((pt[0,0,:,:]-pt[0,1,:,:])**2-(pt[1,0,:,:]-pt[1,1,:,:])**2)
-            a=a/(1.*den)
+            a = 1 - (2. / den) * (pt[1,0,:, :] - pt[1,1,:, :]) ** 2
 
-            b = 2*(pt[0,1,:,:]-pt[0,0,:,:])*(pt[1,1,:,:]-pt[1,0,:,:])
-            b=b/(1.*den)
+            b= (2. / den) * (pt[0,1,:, :] - pt[0,0,:, :]) * (pt[1,0,:, :] - pt[1,1,:, :])
 
-            c= 2*(pt[0,0,:,:]*(pt[1,0,:,:]-pt[1,1,:,:])**2+pt[1,0,:,:]*(pt[0,1,:,:]-pt[0,0,:,:])*(pt[1,0,:,:]-pt[1,1,:,:]))
-            c = c/(1.*den)
+            c = (2. / den) * (pt[0,0,:, :] * (pt[1,0,:, :] - pt[1,1,:, :]) ** 2 +
+                                pt[1,0,:, :] * (pt[1,0,:, :] - pt[1,1,:, :]) *
+                                (pt[0,1,:, :] - pt[0,0,:, :]))
+            d = (2. / den) * (pt[1,0,:, :] * (pt[0,1,:, :] - pt[0,0,:, :]) ** 2 +
+                                pt[0,0,:, :] * (pt[1,0,:, :] - pt[1,1,:, :]) *
+                                (pt[0,1,:, :] - pt[0,0,:, :]))
+            # a = ((pt[0,0,:,:]-pt[0,1,:,:])**2-(pt[1,0,:,:]-pt[1,1,:,:])**2)
+            # a=a/(1.*den)
 
-            d= 2*(pt[0,0,:,:]*(pt[1,0,:,:]-pt[1,1,:,:])*(pt[0,1,:,:]-pt[0,0,:,:])+pt[1,0,:,:]*(pt[0,1,:,:]-pt[0,0,:,:])**2)
-            d= d/(1.*den)
+            # b = 2*(pt[0,1,:,:]-pt[0,0,:,:])*(pt[1,1,:,:]-pt[1,0,:,:])
+            # b=b/(1.*den)
 
+            # c= 2*(pt[0,0,:,:]*(pt[1,0,:,:]-pt[1,1,:,:])**2+pt[1,0,:,:]*(pt[0,1,:,:]-pt[0,0,:,:])*(pt[1,0,:,:]-pt[1,1,:,:]))
+            # c = c/(1.*den)
+
+            # d= 2*(pt[0,0,:,:]*(pt[1,0,:,:]-pt[1,1,:,:])*(pt[0,1,:,:]-pt[0,0,:,:])+pt[1,0,:,:]*(pt[0,1,:,:]-pt[0,0,:,:])**2)
+            # d= d/(1.*den)
+
+            # K=np.array([[a,-b],[-b,-a]])
             K=np.array([[a,-b],[-b,-a]])
+
             # translation vector v (2.60)
             v =np.array(([c,d]))
 
@@ -4455,18 +4513,20 @@ class Signatures(PyLayers,dict):
                 uT = np.where(ityp[:,n]==3)[0]
                 uR = np.where(ityp[:,n]==2)[0]
                 uD=np.where(ityp[:,n]==1)[0]
-
                 if n ==0:
                     p=tx[:,None]*np.ones((nsig))
                 else :
                     p=M[:,:,n-1]
                 # reflexion 0 (2.67)
-                M[:,uR,n] = np.einsum('ijk,jk->jk',K[:,:,uR,n],p[:,uR])+v[:,uR,n]
+                M[:,uR,n] = np.einsum('ijk,jk->ik',K[:,:,uR,n],p[:,uR])+v[:,uR,n]
                 # trnasmission 0 (2.67)
                 M[:,uT,n] = p[:,uT]
                 M[:,uD,n] = pt[:,0,uD,n]
 
-
+            # if ninter==6:
+            #     print np.where(((seg[:,0]==42) & (seg[:,1]==-277) & (seg[:,2]==135) & (seg[:,3]==21)&(seg[:,-1]==319)))
+            #     import ipdb
+            #     ipdb.set_trace()
 
             dM.update({ninter:M})
         return dM
@@ -4537,18 +4597,32 @@ class Signatures(PyLayers,dict):
             # formula 2.61 -> 2.64 N.AMIOT thesis
             ############
             den = ((pt[0,0,:,:]-pt[0,1,:,:])**2+(pt[1,0,:,:]-pt[1,1,:,:])**2)
+            uz = np.where(den ==0)
+            den[uz] = 1.
 
-            a = ((pt[0,0,:,:]-pt[0,1,:,:])**2-(pt[1,0,:,:]-pt[1,1,:,:])**2)
-            a=a/(1.*den)
+            a = 1 - (2. / den) * (pt[1,0,:, :] - pt[1,1,:, :]) ** 2
 
-            b = 2*(pt[0,1,:,:]-pt[0,0,:,:])*(pt[1,1,:,:]-pt[1,0,:,:])
-            b=b/(1.*den)
+            b= (2. / den) * (pt[0,1,:, :] - pt[0,0,:, :]) * (pt[1,0,:, :] - pt[1,1,:, :])
 
-            c= 2*(pt[0,0,:,:]*(pt[1,0,:,:]-pt[1,1,:,:])**2+pt[1,0,:,:]*(pt[0,1,:,:]-pt[0,0,:,:])*(pt[1,0,:,:]-pt[1,1,:,:]))
-            c = c/(1.*den)
+            c = (2. / den) * (pt[0,0,:, :] * (pt[1,0,:, :] - pt[1,1,:, :]) ** 2 +
+                                pt[1,0,:, :] * (pt[1,0,:, :] - pt[1,1,:, :]) *
+                                (pt[0,1,:, :] - pt[0,0,:, :]))
+            d = (2. / den) * (pt[1,0,:, :] * (pt[0,1,:, :] - pt[0,0,:, :]) ** 2 +
+                                pt[0,0,:, :] * (pt[1,0,:, :] - pt[1,1,:, :]) *
+                                (pt[0,1,:, :] - pt[0,0,:, :]))
+            # den = ((pt[0,0,:,:]-pt[0,1,:,:])**2+(pt[1,0,:,:]-pt[1,1,:,:])**2)
 
-            d= 2*(pt[0,0,:,:]*(pt[1,0,:,:]-pt[1,1,:,:])*(pt[0,1,:,:]-pt[0,0,:,:])+pt[1,0,:,:]*(pt[0,1,:,:]-pt[0,0,:,:])**2)
-            d= d/(1.*den)
+            # a = ((pt[0,0,:,:]-pt[0,1,:,:])**2-(pt[1,0,:,:]-pt[1,1,:,:])**2)
+            # a=a/(1.*den)
+
+            # b = 2*(pt[0,1,:,:]-pt[0,0,:,:])*(pt[1,1,:,:]-pt[1,0,:,:])
+            # b=b/(1.*den)
+
+            # c= 2*(pt[0,0,:,:]*(pt[1,0,:,:]-pt[1,1,:,:])**2+pt[1,0,:,:]*(pt[0,1,:,:]-pt[0,0,:,:])*(pt[1,0,:,:]-pt[1,1,:,:]))
+            # c = c/(1.*den)
+
+            # d= 2*(pt[0,0,:,:]*(pt[1,0,:,:]-pt[1,1,:,:])*(pt[0,1,:,:]-pt[0,0,:,:])+pt[1,0,:,:]*(pt[0,1,:,:]-pt[0,0,:,:])**2)
+            # d= d/(1.*den)
 
             # get segment ids of signature with ninter interactions
             ityp = self[ninter][1::2]
@@ -4634,7 +4708,7 @@ class Signatures(PyLayers,dict):
             uD0 =np.where(ityp[:,0]==1)[0]
 
             # reflexion 0 (2.67)
-            r0 = np.einsum('ijk,j->jk',K[:,:,uR0,0],tx)+v[:,uR0,0]
+            r0 = np.einsum('ijk,j->ik',K[:,:,uR0,0],tx)+v[:,uR0,0]
             # trnasmission 0 (2.67)
             t0 = tx[:,np.newaxis]*np.ones(len(uT0))
             # diff 0 (2.67)
@@ -5156,7 +5230,9 @@ class Signature(object):
         beta = .5      # to enter into the loop
         isvalid = True # signature is asumed being valid by default
         epsilon = 1e-2
-
+        # if tuple(self.seq) == ( 42, -277,  135,   21,   46,  319):
+        #     import ipdb
+        #     ipdb.set_trace()
         # while (((beta <= 1) & (beta >= 0)) & (k < N)):
         while (((beta <= 1-epsilon) & (beta >= epsilon)) & (k < N)):
             #if int(typ[k]) != 1: # not a diffraction (surprisingly it works)
