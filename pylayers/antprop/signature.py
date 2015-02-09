@@ -1746,7 +1746,7 @@ class Signatures(PyLayers,dict):
                 for cycle in lcil:
                     fcy = filter(lambda x: cycle == x[2],outT)
                     voutT.extend(fcy)
-                vinT = outR #+ outD
+                vinT = outR + outD
 
                 kdi0 = (0,0,0,voutT[0][0],voutT[0][1],voutT[0][2])
 
@@ -1797,7 +1797,7 @@ class Signatures(PyLayers,dict):
                 for cycle in lcil:
                     fcy = filter(lambda x: cycle == x[2],inT)
                     vinT.extend( fcy)
-                voutT = inR #+ inD
+                voutT = inR + inD
                 kdif = (vinT[0][0],vinT[0][1],vinT[0][2],0,0,0)
                 # keep trace of last segments
                 sinf = np.array([vinT[i][0] for i in range(len(vinT))])
@@ -4391,7 +4391,9 @@ class Signatures(PyLayers,dict):
                 # indeed diffraction point should not been solved with linalg, 
                 # but by setting pa=-pb, no singular matrix appear
                 # and diffraction points can be re-add thereafter.
-                pvalid[uD] = ptr[:,0,uD,kinter].T
+                pvalid[uuD] = ptr[:,0,uuD,kinter].T
+
+
 
 
 
