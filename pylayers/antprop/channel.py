@@ -1608,7 +1608,7 @@ class Tchannel(bs.FUDAsignal):
 
 
     def apply(self, W):
-        """ Apply a FUsignal W to the ScalChannel.
+        """ apply FUsignal W to the Tchannel
 
         Parameters
         ----------
@@ -1732,8 +1732,10 @@ class Tchannel(bs.FUDAsignal):
 
         """
         #
-        # return a FUDsignal
+        # return a TUsignal
         #
+        #import ipdb
+        #ipdb.set_trace()
         Y = self.apply(Wgam)
         ri = Y.ft1(Nz=500,ffts=1)
 

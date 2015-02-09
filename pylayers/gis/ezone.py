@@ -732,7 +732,7 @@ class Ezone(PyLayers):
         lon,lat = self.m(x,y,inverse=True)
         rx = np.round((lon - self.extent[0]) / self.lonstep).astype(int)
         ry = np.round((self.extent[3]-lat) / self.latstep).astype(int)
-        cov = self.hgt[ry,rx]
+        cov = self.hgts[ry,rx]
 
 
         # adding effect of earth equivalent curvature
@@ -741,7 +741,7 @@ class Ezone(PyLayers):
         hearth = (R*B)/(2*kwargs['K']*6375e3)
 
         # ground height + antenna height
-        Ha = kwargs['Ht'] + self.hgt[ry[0,0],rx[0,0]]
+        Ha = kwargs['Ht'] + self.hgts[ry[0,0],rx[0,0]]
         Hb = kwargs['Hr'] + cov
 
         Hb = Hb[:,np.newaxis,:]

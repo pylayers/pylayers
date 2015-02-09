@@ -136,7 +136,9 @@ import pylayers.util.pyutil as pyu
 import pylayers.util.plotutil as plu
 from pylayers.util.easygui import *
 from scipy.interpolate import interp1d
+import copy
 import pdb
+import copy
 
 class Interface(PyLayers):
     """ Interface between 2 medium
@@ -811,7 +813,7 @@ class Mat(PyLayers,dict):
         theta.reshape(1, Nt)
         II = MatInterface(lmat, 0, fGHz, theta)
         II.RT()
-        Ro = II.Ro 
+        Ro = II.Ro
         Rp = II.Rp
 
         return Ro, Rp
@@ -1065,7 +1067,7 @@ class MatDB(PyLayers,dict):
         Parameters
         ----------
 
-        _fileini : string 
+        _fileini : string
             name of the matDB file (usually matDB.ini)
 
         """
@@ -1088,7 +1090,7 @@ class MatDB(PyLayers,dict):
             M['mur'] = eval(config.get(matname,'mur'))
             self[matname] = M
 
-        # PULSRAY compatibility : save in the old .mat format 
+        # PULSRAY compatibility : save in the old .mat format
         self.savemat(self.filemat)
 
     def loadmat(self, _filemat):
@@ -1100,7 +1102,7 @@ class MatDB(PyLayers,dict):
         _filemat : string
         a short file name
 
-        Notes 
+        Notes
         -----
 
             Deprecated this the format for PyRay
@@ -1424,6 +1426,7 @@ class Slab(dict, Interface):
         fGHz : frequency GHz ( np.array([1.0]) )
         theta : np.array
             incidence angle (from normal) radians
+        compensate : boolean
 
         """
 
@@ -1431,8 +1434,11 @@ class Slab(dict, Interface):
             fGHz = np.array([fGHz])
         if not isinstance(theta, np.ndarray):
             theta = np.array([theta])
+        theta_in=copy.deepcopy(theta)
+
         self.theta = theta
         self.fGHz = fGHz
+        theta_in = copy.deepcopy(theta)
 
         nf = len(fGHz)
         nt = len(theta)
@@ -1494,7 +1500,7 @@ class Slab(dict, Interface):
                 else:
                     II = MatInterface([ml, mr], self['lthick'][i], fGHz, theta)
             #
-            # chains the angle
+            # chains the angle , theta can be complex
             #
                 theta = II.theta
             #
@@ -1549,7 +1555,9 @@ class Slab(dict, Interface):
         # TODO !!!
         if compensate:
             thickness = sum(self['lthick'])
-            d = thickness*np.cos(theta)
+            #pdb.set_trace()
+            #d = thickness*np.cos(theta)
+            d = thickness*np.cos(theta_in[None,:])
             self.T = self.T*np.exp(1j*2*np.pi*
                                     fGHz[:,np.newaxis,np.newaxis,np.newaxis]
                                     *d[:,:,np.newaxis,np.newaxis]

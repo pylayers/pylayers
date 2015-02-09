@@ -133,7 +133,7 @@ class RSS(Constraint):
 
         Returns
         -------
-        
+
         Nothing but update cmin, cmax
         """
         self.cmin = max(0, self.range - self.vcw * self.sstd)
