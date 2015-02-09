@@ -16,6 +16,8 @@ Class Coverage
 
 """
 from pylayers.util.project import *
+#from pylayers.measures.mesuwb import *
+from pylayers.simul.radionode import *
 import pylayers.util.pyutil as pyu
 from pylayers.util.utilnet import str2bool
 from pylayers.gis.layout import Layout
@@ -107,18 +109,16 @@ class Coverage(PyLayers):
         self.L = Layout(self.layoutopt['filename'])
 
         # get the receiving grid
-
         self.nx = eval(self.gridopt['nx'])
         self.ny = eval(self.gridopt['ny'])
-        self.ng = self.nx*self.ny
-        self.mode = eval(self.gridopt['full'])
+        self.mode = self.gridopt['mode']
         self.boundary = eval(self.gridopt['boundary'])
+        self.filespa = self.gridopt['file']
 
-        # create grid
-        # we could here construct a grid locally around the access point
-        # !! to be done later for code acceleration
         #
-        self.creategrid(full=self.mode,boundary=self.boundary)
+        # create grid
+        #
+        self.creategrid(mode=self.mode,boundary=self.boundary,_fileini=self.filespa)
 
         self.dap = {}
         for k in self.apopt:
@@ -159,19 +159,20 @@ class Coverage(PyLayers):
         for k in self.dap:
             st = st + self.dap[k].__repr__()+'\n'
         st = st + '-----Rx------'+'\n'
-        st= st+ 'rxsens (dBm) : '+ str(self.rxsens) + '\n'
-        st= st+ 'bandwith (Mhz) : '+ str(self.bmhz) + '\n'
         st= st+ 'temperature (K) : '+ str(self.temperaturek) + '\n'
         st= st+ 'noisefactor (dB) : '+ str(self.noisefactordb) + '\n\n'
         st = st + '--- Grid ----'+'\n'
-        st= st+ 'nx : ' + str(self.nx) + '\n'
-        st= st+ 'ny : ' + str(self.ny) + '\n'
-        st= st+ 'nlink : ' + str(self.ng*self.na) + '\n'
-        st= st+ 'full grid : ' + str(self.mode) + '\n'
-        st= st+ 'boundary (xmin,ymin,xmax,ymax) : ' + str(self.boundary) + '\n\n'
+        st= st+ 'mode : ' + str(self.mode) + '\n'
+        if self.mode<>'file':
+            st= st+ 'nx : ' + str(self.nx) + '\n'
+            st= st+ 'ny : ' + str(self.ny) + '\n'
+        if self.mode=='zone':
+            st= st+ 'boundary (xmin,ymin,xmax,ymax) : ' + str(self.boundary) + '\n\n'
+        if self.mode=='file':
+            st = st+' filename : '+self.filespa+'\n'
         return(st)
 
-    def creategrid(self,full=True,boundary=[]):
+    def creategrid(self,mode='full',boundary=[],_fileini=''):
         """ create a grid
 
         Parameters
@@ -183,20 +184,82 @@ class Coverage(PyLayers):
             if full is False the boundary argument is used
 
         """
-
-        if full:
-            mi=np.min(self.L.Gs.pos.values(),axis=0)+0.01
-            ma=np.max(self.L.Gs.pos.values(),axis=0)-0.01
+        if mode=="file":
+            self.RN = RadioNode(name='',
+                               typ='rx',
+                               _fileini = _fileini,
+                               _fileant = 'def.vsh3')
+            self.grid =self.RN.position[0:2,:].T
         else:
-            assert boundary<>[]
-            mi = np.array([boundary[0],boundary[1]])
-            ma = np.array([boundary[2],boundary[3]])
+            if mode=="full":
+                mi=np.min(self.L.Gs.pos.values(),axis=0)+0.01
+                ma=np.max(self.L.Gs.pos.values(),axis=0)-0.01
+            if mode=="zone":
+                assert boundary<>[]
+                mi = np.array([boundary[0],boundary[1]])
+                ma = np.array([boundary[2],boundary[3]])
 
-        x = np.linspace(mi[0],ma[0],self.nx)
-        y = np.linspace(mi[1],ma[1],self.ny)
+            x = np.linspace(mi[0],ma[0],self.nx)
+            y = np.linspace(mi[1],ma[1],self.ny)
 
-        self.grid=np.array((list(np.broadcast(*np.ix_(x, y)))))
+            self.grid=np.array((list(np.broadcast(*np.ix_(x, y)))))
 
+        self.ng = self.grid.shape[0]
+
+    def where1(self):
+        """
+        Unfinished : Not sure this is the right place (too specific)
+        """
+        M1 = UWBMeasure(1)
+        self.dap={}
+        self.dap[1]={}
+        self.dap[2]={}
+        self.dap[3]={}
+        self.dap[4]={}
+        self.dap[1]['p']=M1.rx[1,0:2]
+        self.dap[2]['p']=M1.rx[1,0:2]
+        self.dap[3]['p']=M1.rx[1,0:2]
+        self.dap[4]['p']=M1.rx[1,0:2]
+        for k in range(300):
+            try:
+                M = UWBMeasure(k)
+                tx = M.tx
+                self.grid=np.vstack((self.grid,tx[0:2]))
+                D  = M.rx-tx[np.newaxis,:]
+                D2 = D*D
+                dist = np.sqrt(np.sum(D2,axis=1))[1:]
+                Emax = M.Emax()
+                Etot = M.Etot()[0]
+                try:
+                    td1 = np.hstack((td1,dist[0]))
+                    td2 = np.hstack((td2,dist[1]))
+                    td3 = np.hstack((td3,dist[2]))
+                    td4 = np.hstack((td4,dist[3]))
+                    te1 = np.hstack((te1,Emax[0]))
+                    te2 = np.hstack((te2,Emax[1]))
+                    te3 = np.hstack((te3,Emax[2]))
+                    te4 = np.hstack((te4,Emax[3]))
+                    tt1 = np.hstack((tt1,Etot[0]))
+                    tt2 = np.hstack((tt2,Etot[1]))
+                    tt3 = np.hstack((tt3,Etot[2]))
+                    tt4 = np.hstack((tt4,Etot[3]))
+                    #tdist = np.hstack((tdist,dist))
+                    #te = np.hstack((te,Emax))
+                except:
+                    td1=np.array(dist[0])
+                    td2=np.array(dist[1])
+                    td3=np.array(dist[2])
+                    td4=np.array(dist[3])
+                    te1 =np.array(Emax[0])
+                    te2 =np.array(Emax[1])
+                    te3 =np.array(Emax[2])
+                    te4 =np.array(Emax[3])
+                    tt1 =np.array(Etot[0])
+                    tt2 =np.array(Etot[1])
+                    tt3 =np.array(Etot[2])
+                    tt4 =np.array(Etot[3])
+            except:
+                pass
 
     def cover(self,polar='o',sinr=True,snr=True,best=True):
         """ run the coverage calculation
@@ -219,7 +282,7 @@ class Coverage(PyLayers):
             >>> from pylayers.antprop.coverage import *
             >>> C = Coverage()
             >>> C.cover()
-            >>> f,a=C.show(typ='sinr')
+            >>> f,a=C.show(typ='sinr',figsize=(10,8))
             >>> plt.show()
 
         Notes
@@ -656,6 +719,47 @@ class Coverage(PyLayers):
 #        if self.show:
 #            plt.show()
 #
+    def plot(self,**kwargs):
+        """
+        """
+        defaults = { 'typ': 'pr',
+                     'grid': False,
+                     'f' : 0,
+                     'a' : 0,
+                     'db':True,
+                     'col':'b'
+                   }
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+        if 'fig' in kwargs:
+            fig=kwargs['fig']
+        else:
+            fig=plt.figure()
+
+        if 'ax' in kwargs:
+            ax = kwargs['ax']
+        else:
+            ax = fig.add_subplot(111)
+
+        if kwargs['typ']=='pr':
+            if kwargs['a']<>-1:
+                U = self.CmW[kwargs['f'],:,kwargs['a']]
+            else:
+                U = self.CmW[kwargs['f'],:,:].reshape(self.na*self.ng)
+            if kwargs['db']:
+                U = 10*np.log10(U)
+
+        D = np.sqrt(np.sum((self.pa-self.pg)*(self.pa-self.pg),axis=0))
+        if kwargs['a']<>-1:
+            D = D.reshape(self.ng,self.na)
+            ax.semilogx(D[:,kwargs['a']],U,'.',color=kwargs['col'])
+        else:
+            ax.semilogx(D,U,'.',color=kwargs['col'])
+
+        return fig,ax
+
     def show(self,**kwargs):
         """ show coverage
 
@@ -663,7 +767,7 @@ class Coverage(PyLayers):
         ----------
 
         typ : string
-            'pr' | 'sinr' | 'capacity' | 'loss' | 'best'
+            'pr' | 'sinr' | 'capacity' | 'loss' | 'best' | 'egd'
         grid : boolean
         best : boolean
             draw best server contour if True
@@ -681,13 +785,13 @@ class Coverage(PyLayers):
             >>> from pylayers.antprop.coverage import *
             >>> C = Coverage()
             >>> C.cover(polar='o')
-            >>> f,a = C.show(typ='pr')
+            >>> f,a = C.show(typ='pr',figsize=(10,8))
             >>> plt.show()
-            >>> f,a = C.show(typ='best')
+            >>> f,a = C.show(typ='best',figsize=(10,8))
             >>> plt.show()
-            >>> f,a = C.show(typ='loss')
+            >>> f,a = C.show(typ='loss',figsize=(10,8))
             >>> plt.show()
-            >>> f,a = C.show(typ='sinr')
+            >>> f,a = C.show(typ='sinr',figsize=(10,8))
             >>> plt.show()
 
         See Also
@@ -711,9 +815,15 @@ class Coverage(PyLayers):
                 kwargs[k]=defaults[k]
 
         if 'fig' in kwargs:
-            fig,ax=self.L.showG('s',fig=kwargs['fig'])
+            if 'ax' in kwargs:
+                fig,ax=self.L.showG('s',fig=kwargs['fig'],ax=kwargs['ax'])
+            else:
+                fig,ax=self.L.showG('s',fig=kwargs['fig'])
         else:
-            fig,ax=self.L.showG('s')
+            if 'figsize' in kwargs:
+                fig,ax=self.L.showG('s',figsize=kwargs['figsize'])
+            else:
+                fig,ax=self.L.showG('s')
 
         # plot the grid
         if kwargs['grid']:
@@ -740,13 +850,21 @@ class Coverage(PyLayers):
             for ka in range(self.na):
                 bestsv =  self.bestsv[f,:,ka]
                 m = np.ma.masked_where(bestsv == 0,bestsv)
-                W = m.reshape(self.nx,self.ny).T
-                ax.imshow(W, extent=(l,r,b,t),
+                if self.mode<>'file':
+                    W = m.reshape(self.nx,self.ny).T
+                    ax.imshow(W, extent=(l,r,b,t),
                             origin='lower',
                             vmin=1,
                             vmax=self.na+1)
+                else:
+                    ax.scatter(self.grid[:,0],self.grid[:,1],c=m,s=20,linewidth=0)
             ax.set_title(title)
         else:
+            if typ=='egd':
+                title = title + 'excess group delay : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
+                V = self.Ed
+                dB = False
+                legcb =  'Delay (ns)'
             if typ=='sinr':
                 title = title + 'SINR : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
                 if dB:
@@ -766,7 +884,7 @@ class Coverage(PyLayers):
             if typ=='capacity':
                 title = title + 'Capacity : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
                 legcb = 'Mbit/s'
-                V = self.bmhz[np.newaxis,np.newaxis,:]*np.log(1+self.sinr)/np.log(2)
+                V = self.bmhz.T[np.newaxis,:]*np.log(1+self.sinr)/np.log(2)
 
             if typ=='pr':
                 title = title + 'Pr : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
@@ -791,7 +909,11 @@ class Coverage(PyLayers):
                 V = V[f,:,a]
 
             # reshaping the data on the grid
-            U = V.reshape((self.nx,self.ny)).T
+            if self.mode<>'file':
+                U = V.reshape((self.nx,self.ny)).T
+            else:
+                U = V
+
             if dB:
                 U = 10*np.log10(U)
 
@@ -805,12 +927,15 @@ class Coverage(PyLayers):
             else:
                 vmax = U.max()
 
-            img = ax.imshow(U,
+            if self.mode<>'file':
+                img = ax.imshow(U,
                             extent=(l,r,b,t),
                             origin='lower',
                             vmin = vmin,
                             vmax = vmax,
                             cmap = kwargs['cmap'])
+            else:
+                img=ax.scatter(self.grid[:,0],self.grid[:,1],c=U,s=20,linewidth=0)
 
             for k in range(self.na):
                 ax.annotate(str(k),xy=(self.pa[0,k],self.pa[1,k]))
@@ -821,11 +946,15 @@ class Coverage(PyLayers):
             clb = fig.colorbar(img,cax)
             clb.set_label(legcb)
             if best:
-                ax.contour(np.sum(self.bestsv,axis=2)[f,:].reshape(self.nx,self.ny).T,extent=(l,r,b,t),linestyles='dotted')
+                if self.mode<>'file':
+                    ax.contour(np.sum(self.bestsv,axis=2)[f,:].reshape(self.nx,self.ny).T,extent=(l,r,b,t),linestyles='dotted')
 
         # display access points
-        ax.scatter(self.pa[0,:],self.pa[1,:],s=10,c='k',linewidth=0)
-
+        if a==-1:
+            ax.scatter(self.pa[0,:],self.pa[1,:],s=30,c='r',linewidth=0)
+        else:
+            ax.scatter(self.pa[0,a],self.pa[1,a],s=30,c='r',linewidth=0)
+        plt.tight_layout()
         return(fig,ax)
 
 #    def showLoss(self,polar='o',**kwargs):
@@ -846,7 +975,7 @@ class Coverage(PyLayers):
 #            >>> from pylayers.antprop.coverage import *
 #            >>> C = Coverage()
 #            >>> C.cover(polar='o')
-#            >>> f,a = C.show(typ='pr')
+#            >>> f,a = C.show(typ='pr',figsize=(10,8))
 #            >>> plt.show()
 #        """
 #

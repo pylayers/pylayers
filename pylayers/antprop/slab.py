@@ -1337,10 +1337,10 @@ class Slab(dict, Interface):
         Problem with length of slab !!
         """
         U = Slab(self.mat)
-        U['lthick']=self['lthick']+u['lthick']
-        U['lmatname']=self['lmatname']+u['lmatname']
-        U['name']=self['name']+u['name']
-        U['nbmat']=len(U['lmatname'])
+        U['lthick'] = self['lthick']+u['lthick']
+        U['lmatname'] = self['lmatname']+u['lmatname']
+        U['name'] = self['name']+u['name']
+        U['nbmat'] = len(U['lmatname'])
         imat = np.zeros(8).astype(int)
         thickness = np.zeros(8)
         for i in range(len(U['lmatname'])):
