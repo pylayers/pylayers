@@ -2257,9 +2257,9 @@ class SlabDB(dict):
                     lmat.append(self.mat.di[i])
                 else:
                     if lmat ==[]:
-                        lmat=['ABSORBENT']
+                        lmatname=['ABSORBENT']
                         break
-            config.set(name, 'lmat', lmat)
+            config.set(name, 'lmatname', lmatname)
 
         config.write(fd)
         fd.close()
