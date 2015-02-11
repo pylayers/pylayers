@@ -6119,6 +6119,7 @@ class Layout(PyLayers):
                 # list all potential successors of interaction i1
                 i2 = nx.neighbors(self.Gi,i1)
                 ipoints = filter(lambda x: len(x)==1,i2)
+                pipoints = np.array([self.Gs.pos[ip[0]] for ip in ipoints]).T
                 # filter tuple (R | T)
                 #istup = filter(lambda x : type(eval(x))==tuple,i2)
                 # map first argument segment number
@@ -6133,7 +6134,17 @@ class Layout(PyLayers):
                     points = self.seg2pts(isegments)
                     pta = points[0:2,:]
                     phe = points[2:,:]
+                    # add difraction points
+                    # WARNING Diffrraction points are added only if a segment isseen
+                    # it should be the case in 99% of cases
+                    
+                    if len(ipoints)>0:
+                        isegments = np.hstack((isegments,np.array(ipoints)[:,0]))
+                        pta = np.hstack((pta,pipoints))
+                        phe = np.hstack((phe,pipoints))
+
                     #cn.show()
+
                     # if i0 == (38,79) and i1 == (135,79,23):
                     #     print i0,i1
                     #     import ipdb
@@ -6198,6 +6209,7 @@ class Layout(PyLayers):
                 #  + using the wedge cone
                 #  + using the incident cone
                 #
+
                 output = nx.neighbors(self.Gi,(nstr1,))
                 nout = len(output)
                 probint = np.ones(nout) # temporary
@@ -6264,6 +6276,7 @@ class Layout(PyLayers):
         typ : string
             if 'source' connect source cycle
             if 'target' connect target cycle
+
         """
 
         # list of interactions
@@ -6292,8 +6305,7 @@ class Layout(PyLayers):
                 lT = filter(lambda x: x[1]==c,lT)
             if typ=='target':
                 lT = filter(lambda x: x[2]==c,lT)
-            if typ=='all':
-                lT=lT
+
 
             # Finding the diffraction points
             # Diffraction points are different from indoor cycle and outdoor
@@ -7072,6 +7084,34 @@ class Layout(PyLayers):
 
 
         return (c0 & c1)
+
+
+    def ptGs2cy(self,n=-1):
+        """ Gs node to cycle
+
+        Parameters
+        ----------
+        upt : point (ndarray)
+
+        Returns
+        -------
+        ncy : cycle number
+
+        Notes
+        -----
+            If a cycle contains the Gs pointt this function returns the cycle(s) number
+        """
+        if n >0:
+            return self.Gs.node[n]['ncycles']
+        else: 
+            nseg = self.Gs[n].keys()
+            cy=[]
+            for nn in nseg :
+                cy.extend(self.ptGs2cy(nn))
+            cy = np.unique(cy).tolist()
+            return cy
+
+
 
     def pt2cy(self, pt=np.array((0, 0))):
         """ point to cycle
@@ -8215,7 +8255,7 @@ class Layout(PyLayers):
         fos.close()
         return pg
 
-    def _show3(self,centered=False,newfig=False,opacity=1.,roomid=[]):
+    def _show3(self,centered=False,newfig=False,opacity=1.,cyid=False):
         """ create a .off geomview file
 
         Parameters
@@ -8227,6 +8267,8 @@ class Layout(PyLayers):
             set slab opacity
         centered : Boolean
             if True the layout is centered around its center of gravity
+        cyid : boolean
+            display cycle number
 
         Notes
         -----
@@ -8452,17 +8494,28 @@ class Layout(PyLayers):
             f = mlab.gcf()
             f.scene.background=(1,1,1)
 
+        f.scene.disable_render = True
+
         surf = mlab.pipeline.surface(mesh, opacity=opacity)
         mlab.pipeline.surface(mlab.pipeline.extract_edges(surf),
                                     color=(0, 0, 0), )
         f.children[-1].name='Layout ' + self.filename
 
-        if roomid:
+        if cyid:
             if len(self.Gt.nodes())>0:
                 pk=self.Gt.pos.keys()
                 v=np.array(self.Gt.pos.values())
                 [mlab.text3d(v[ik,0],v[ik,1],0.5,str(k)) for ik,k in enumerate(pk)]
+        # if segpt:
 
+        #     seg = dict(filter(lambda x: x[0]>0,self.Gs.pos.items()))
+        #     pt = dict(filter(lambda x: x[0]<0,self.Gs.pos.items()))
+        #     pseg = np.array(seg.values())
+        #     ppt = np.array(pt.values())
+        #     [mlab.text3d(pseg[ik,0],pseg[ik,1],0.5,str(k)) for ik,k in enumerate(seg)]
+        #     [mlab.text3d(ppt[ik,0],ppt[ik,1],3.,str(k)) for ik,k in enumerate(pt)]
+
+        f.scene.disable_render = False
 
     def show3(self, bdis=True,centered=True):
         """ geomview display of the indoor structure
