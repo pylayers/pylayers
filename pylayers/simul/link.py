@@ -1205,7 +1205,7 @@ class DLink(Link):
 
         else :
             if kwargs['alg']==2015:
-                TMP=Si.run2015(cutoff=kwargs['cutoff'],
+                TMP=Si.run2015_2(cutoff=kwargs['cutoff'],
                         cutoffbound=kwargs['si_reverb'])
 
             if kwargs['alg']==5:
