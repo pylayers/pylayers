@@ -1159,7 +1159,7 @@ class DLink(Link):
                    'si_mt':False,
                    'si_progress':False,
                    'diffraction':False,
-                   'ra_vectorized':False,
+                   'ra_vectorized':True,
                    'ra_ceil_height_meter':3,
                    'ra_number_mirror_cf':1,
                    'force':[],
@@ -1239,7 +1239,7 @@ class DLink(Link):
         else :
             # perform computation ...
             # ... with vetorized ray evaluation approach
-            print '***', kwargs['ra_vectorized']
+            
             if kwargs['ra_vectorized']:
                 r2d = Si.raysv(self.a,self.b)
             # ... or with original and slow approach ( to be removed in a near future)
