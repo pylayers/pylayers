@@ -94,7 +94,7 @@ class TDOA(Constraint):
 
 
     def update(self):
-        """ update constraint inforamtion
+        """ update constraint information
         """
         # if self.p.any():
         #     self.runable = True

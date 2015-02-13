@@ -1,11 +1,13 @@
 #!/usr/bin/python
-# -*- coding: latin1 -*-
+#-*- coding:Utf-8 -*-
 """
 
 DF Class
 ========
 
 This class implements a LTI digital filter
+
+.. currentmodule:: pylayers.signal.DF
 
 .. autosummary::
     :toctree: generated/
@@ -18,6 +20,7 @@ This class implements a LTI digital filter
     DF.remez
     DF.zplane
     DF.ir
+
 """
 import numpy as np
 from scipy import io

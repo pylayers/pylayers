@@ -415,19 +415,19 @@ class RadioNode(object):
         Parameters
         ----------
 
-        N1 : int 
+        N1 : int
             default 2
-        N2 : int     
+        N2 : int
             default 2
-        p0 : array or list 
-            first point  
-        p1 : array or list 
-            second point  
-        p2 : array or list 
-            third point  
-        mode : string 
+        p0 : array or list
+            first point
+        p1 : array or list
+            second point
+        p2 : array or list
+            third point
+        mode : string
             'subst'
-            'append' 
+            'append'
 
 
         Examples
@@ -556,9 +556,9 @@ class RadioNode(object):
                                            self.points[k].reshape(3,1)))
             except:
                 self.position = self.points[k].reshape(3,1)
-                
-        self.traj=Trajectory(pt=self.position.T)        
-        
+
+        self.traj=Trajectory(pt=self.position.T)
+
     def loadspa(self, _filespa, rep=pstruc['DIRLCH']):
         """ load a spa file
 

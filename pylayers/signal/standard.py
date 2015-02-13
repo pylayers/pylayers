@@ -253,7 +253,6 @@ class Wstandard(dict):
         """
 
         filename=pyu.getlong(_fileini,pstruc['DIRSIMUL'])
-        print filename
         fp = open(filename)
         stds = json.load(fp)
         fp.close()
@@ -399,7 +398,6 @@ class Wstandard(dict):
 
         self.fcghz=np.sort(self.fcghz)
 
-
 class AP(dict):
     """ Access Point
 
@@ -436,6 +434,7 @@ class AP(dict):
             'PtdBm':0,
             'sensdBm': -94,
             'nant':1,
+            'on':True
         }
 
         for k in defaults:
@@ -448,8 +447,8 @@ class AP(dict):
         self['chan'] = kwargs['chan']
         self['sensdBm'] = kwargs['sensdBm']
         self['nant'] = kwargs['nant']
+        self['on'] = kwargs['on']
 
-        pdb.set_trace()
         standard = Wstandard(kwargs['wstd'])
         self.s = standard
 
@@ -461,11 +460,12 @@ class AP(dict):
         st = 'name : '+str(self['name'])+'\n'
         st = st + 'p : '+str(self['p'])+'\n'
         st = st+ 'PtdBm : '+str(self['PtdBm'])+'\n'
-        st = st+ 'chanels  : '+str(self['chan'])+'   '
+        st = st+ 'channels  : '+str(self['chan'])+'   '
         for k in self['chan']:
            st = st + self.s.chan[k].__repr__()
         st = st+ 'sensdBm : '+str(self['sensdBm'])+'\n'
         st = st+ 'nant : '+str(self['nant'])+'\n'
+        st = st+ 'On : '+str(self['on'])+'\n'
         return(st)
 
 

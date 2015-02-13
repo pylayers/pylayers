@@ -139,7 +139,7 @@ Vizualizing processing
     CorSer.visidev2
     CorSer.__refreshshow3i
 
-     
+
 
 """
 
@@ -167,7 +167,7 @@ import pickle
 
 # Those lines handle incompatibility between mayavi and VTK
 # and redirect noisy warning message into a log file
-# import vtk 
+# import vtk
 # output=vtk.vtkFileOutputWindow()
 # output.SetFileName("mayaviwarninglog.tmp")
 # vtk.vtkOutputWindow().SetInstance(output)

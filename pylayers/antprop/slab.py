@@ -4,12 +4,12 @@
 This module exploits heavily numpy broadcasting mechanism :
 
 
-Axis Convention
+axis convention
 
 + nf : axis = 0 frequency axis
 + nt : axis = 1 angular axis
-+ p : axis = 2 parallel axis
-+ o : axis = 2 orhogonal axis
++ p  : axis = 2 parallel axis
++ o  : axis = 3 orhogonal axis
 
 
 .. currentmodule:: pylayers.antprop.slab
@@ -136,7 +136,9 @@ import pylayers.util.pyutil as pyu
 import pylayers.util.plotutil as plu
 from pylayers.util.easygui import *
 from scipy.interpolate import interp1d
+import copy
 import pdb
+import copy
 
 class Interface(PyLayers):
     """ Interface between 2 medium
@@ -442,7 +444,7 @@ class Interface(PyLayers):
             >>> fGHz = np.arange(0.1,10,0.2)
             >>> sl = SlabDB('matDB.ini','slabDB.ini')
             >>> mat = sl.mat
-            >>> lmat = [mat['AIR'],mat['WOOD']]
+            >>> lmatname = [mat['AIR'],mat['WOOD']]
             >>> II = MatInterface(lmat,0,fGHz,theta)
             >>> II.RT()
             >>> fig,ax = II.plotwrt(var='a',kv=10,typ=['m'])
@@ -811,7 +813,7 @@ class Mat(PyLayers,dict):
         theta.reshape(1, Nt)
         II = MatInterface(lmat, 0, fGHz, theta)
         II.RT()
-        Ro = II.Ro 
+        Ro = II.Ro
         Rp = II.Rp
 
         return Ro, Rp
@@ -936,7 +938,7 @@ class MatDB(PyLayers,dict):
         # update keys association dictionnary
         self.dass()
 
-    def add(self, name='MAT', cval=1 + 0 * 1j, sigma=0, alpha_cmm1=1, mur=1, fGHz=1, typ='epsr'):
+    def add(self,**kwargs):
         """ Add a material in the DB
 
         Parameters
@@ -957,13 +959,18 @@ class MatDB(PyLayers,dict):
 
         Different ways to enter a material are :
 
-        i) epsr : epsr and sigma
+        i) 'epsr' : epsr and sigma
+
         cval = epsr
         sigma = sigma
-        ii) ind : indice @ fGHz
+
+        ii) 'ind' : indice @ fGHz
+
         cval = indice
-        iii) reim : real(epsr) and imag(epsr) @fGHz
-        iv) THZ
+
+        iii) 'reim' : real(epsr) and imag(epsr) @fGHz
+
+        iv) 'THz'
 
 
 
@@ -978,47 +985,58 @@ class MatDB(PyLayers,dict):
         >>> out = m.save('Jacob.ini')
 
         """
-
+        defaults = {'name':'MAT',
+                    'cval':1+0*1j,
+                    'sigma':0,
+                    'alpha_cmm1':1,
+                    'mur':1,
+                    'fGHz':1,
+                    'typ':'epsr'
+                   }
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
         # get the next available index
         maxid = self.maxindex()
         M = Mat()
-        M['name'] = name
+        M['name'] = kwargs['name']
         M['index'] = maxid + 1
-        M['fGHz'] = fGHz
-        if typ == 'epsr':
-            M['epr'] = cval
-            M['sigma'] = sigma
+        M['fGHz'] = kwargs['fGHz']
+        if kwargs['typ'] == 'epsr':
+            M['epr'] = kwargs['cval']
+            M['sigma'] = kwargs['sigma']
 
-        if typ == 'reim':
-            M['epsr'] = cval
-            M['n'] = np.sqrt(mur*M['epsr']) # warning check causality
+        if kwargs['typ']== 'reim':
+            M['epsr'] = kwargs['cval']
+            M['n'] = np.sqrt(kwargs['mur']*M['epsr']) # warning check causality
             M['epr'] = np.real(M['epsr'])
             M['epr2'] = np.imag(M['epsr'])
-            M['sigma'] = -M['epr2'] * M['fGHz'] / 18
+            M['sigma'] = -M['epr2'] * M['fGHz'] / 18.
 
-        if typ == 'ind':
-            M['n'] = cval
-            M['epsr'] = cval ** 2 / mur
+        if kwargs['typ']  == 'ind':
+            M['n'] = kwargs['cval']
+            M['epsr'] = kwargs['cval'] ** 2 / kwargs['mur']
             M['epr'] = np.real(M['epsr'])
             M['epr2'] = np.imag(M['epsr'])
-            M['sigma'] = -M['epr2'] * M['fGHz'] / 18
+            M['sigma'] = -M['epr2'] * M['fGHz'] / 18.
         #
         # Terahertz Dielectric Properties of Polymers Yun-Sik Jin
         # Terahertz characterization of building materials (R.Piesiewicz) El.Jou Jan 2005 Vol 41 N°18
         #
-        if typ == 'THz':
-            M['n'] = cval
-            M['alpha_cmm1'] = alpha_cmm1
+        if kwargs['typ'] == 'THz':
+            M['n'] = kwargs['cval']
+            M['alpha_cmm1'] = kwargs['alpha_cmm1']
             M['kappa'] = 30 * M['alpha_cmm1'] / (4 * np.pi * M['fGHz'])
             M['epr'] = np.real(M['n'] ** 2 - M['kappa'] ** 2)
             M['epr2'] = np.real(2 * M['kappa'] * M['n'])
-            M['sigma'] = M['epr2'] * M['fGHz'] / 18
+            M['sigma'] = M['epr2'] * M['fGHz'] / 18.
             M['Z'] = 1.0 / np.sqrt(M['epr'] + 1j * M['epr2'])
 
-        M['mur'] = mur
+        M['mur'] = kwargs['mur']
         M['roughness'] = 0
 
-        self[name] = M
+        self[kwargs['name']] = M
+        # updating dictionnary
         self.dass()
 
     def addgui(self, name='MAT'):
@@ -1065,7 +1083,7 @@ class MatDB(PyLayers,dict):
         Parameters
         ----------
 
-        _fileini : string 
+        _fileini : string
             name of the matDB file (usually matDB.ini)
 
         """
@@ -1088,7 +1106,7 @@ class MatDB(PyLayers,dict):
             M['mur'] = eval(config.get(matname,'mur'))
             self[matname] = M
 
-        # PULSRAY compatibility : save in the old .mat format 
+        # PULSRAY compatibility : save in the old .mat format
         self.savemat(self.filemat)
 
     def loadmat(self, _filemat):
@@ -1100,7 +1118,7 @@ class MatDB(PyLayers,dict):
         _filemat : string
         a short file name
 
-        Notes 
+        Notes
         -----
 
             Deprecated this the format for PyRay
@@ -1306,10 +1324,33 @@ class Slab(dict, Interface):
         self['imat'] = (0, 0, 0, 0, 0, 0, 0, 0)
         self['thickness'] = (10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
         self['lthick'] = [0.1]
+        self['lmat'] = ['AIR']
         self['color'] = 'black'
         self['linewidth'] = 1.0
         self.mat = mat
         self['evaluated'] = False
+
+    def __add__(self,u):
+        """ This function makes the addition between 2 slab
+        It could be simplified once we decide not to be compatible
+        with old version odf slab for PyRay. Wait until diffraction are OK.
+        Problem with length of slab !!
+        """
+        U = Slab(self.mat)
+        U['lthick'] = self['lthick']+u['lthick']
+        U['lmatname'] = self['lmatname']+u['lmatname']
+        U['name'] = self['name']+u['name']
+        U['nbmat'] = len(U['lmatname'])
+        imat = np.zeros(8).astype(int)
+        thickness = np.zeros(8)
+        for i in range(len(U['lmatname'])):
+            namem = U['lmatname'][i]
+            imat[i] = U.mat[namem]['index']
+            thickness[i] = U['lthick'][i] * 100 # m ->cm
+        U['imat'] = tuple(imat)
+        U['thickness'] = tuple(thickness) # cm
+        U.conv()
+        return(U)
 
 #    def __repr__(self):
 #        if self['evaluated']:
@@ -1318,11 +1359,11 @@ class Slab(dict, Interface):
 #            st = st + '| '
 #        else:
 #            st = '| '
-#        for k in range(len(self['lmatname'])):
-#            st = st + self['lmatname'][k]+' | '
+#        for k in range(len(self['lmat'])):
+#            st = st + self['lmat'][k]+' | '
 #        st = st+'\n|'
 #
-#        for k in range(len(self['lmatname'])):
+#        for k in range(len(self['lmat'])):
 #            ntick = int(np.ceil(self['lthick'][k]/0.01))
 #            for l in range(ntick):
 #                st = st+'-'
@@ -1331,7 +1372,7 @@ class Slab(dict, Interface):
 #        return(st)
 
     def info(self):
-        """ Display Slab Info
+        """ display Slab Info
 
 
         Examples
@@ -1424,6 +1465,7 @@ class Slab(dict, Interface):
         fGHz : frequency GHz ( np.array([1.0]) )
         theta : np.array
             incidence angle (from normal) radians
+        compensate : boolean
 
         """
 
@@ -1431,8 +1473,11 @@ class Slab(dict, Interface):
             fGHz = np.array([fGHz])
         if not isinstance(theta, np.ndarray):
             theta = np.array([theta])
+        theta_in=copy.deepcopy(theta)
+
         self.theta = theta
         self.fGHz = fGHz
+        theta_in = copy.deepcopy(theta)
 
         nf = len(fGHz)
         nt = len(theta)
@@ -1494,7 +1539,7 @@ class Slab(dict, Interface):
                 else:
                     II = MatInterface([ml, mr], self['lthick'][i], fGHz, theta)
             #
-            # chains the angle
+            # chains the angle , theta can be complex
             #
                 theta = II.theta
             #
@@ -1549,7 +1594,9 @@ class Slab(dict, Interface):
         # TODO !!!
         if compensate:
             thickness = sum(self['lthick'])
-            d = thickness*np.cos(theta)
+            #pdb.set_trace()
+            #d = thickness*np.cos(theta)
+            d = thickness*np.cos(theta_in[None,:])
             self.T = self.T*np.exp(1j*2*np.pi*
                                     fGHz[:,np.newaxis,np.newaxis,np.newaxis]
                                     *d[:,:,np.newaxis,np.newaxis]
@@ -1913,7 +1960,7 @@ class SlabDB(dict):
         ----------
 
         name       : string
-        lmatname      : list of mat name
+        lmat       : list of mat name
         lthick     : list ot float
             lthick  is in meters
 
@@ -1992,6 +2039,7 @@ class SlabDB(dict):
 
         U = Slab(self.mat, name)
         maxi = self.maxindex()
+        # Do not confuse lmat and lmatname
         U['lmatname'] = lmatname
         U['lthick'] = lthick
         U['index'] = maxi + 1
@@ -2209,9 +2257,9 @@ class SlabDB(dict):
                     lmat.append(self.mat.di[i])
                 else:
                     if lmat ==[]:
-                        lmat=['ABSORBENT']
+                        lmatname=['ABSORBENT']
                         break
-            config.set(name, 'lmatname', lmat)
+            config.set(name, 'lmatname', lmatname)
 
         config.write(fd)
         fd.close()
