@@ -8255,7 +8255,7 @@ class Layout(PyLayers):
         fos.close()
         return pg
 
-    def _show3(self,centered=False,newfig=False,opacity=1.,cyid=False):
+    def _show3(self,centered=False,newfig=False,opacity=1.,cyid=False,**kwargs):
         """ create a .off geomview file
 
         Parameters

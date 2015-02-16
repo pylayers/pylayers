@@ -500,7 +500,8 @@ class DLink(Link):
     @a.setter
     def a(self,position):
         if not self.L.ptin(position):
-            raise NameError ('point a is not inside the Layout')
+            raise NameError ('Warning : point a is not inside the Layout')
+            # raise NameError ('Warning : point a is not inside the Layout')
         if not self.L.pt2cy(position) == self.ca:
             self.ca = self.L.pt2cy(position)
         self._a = position
@@ -509,7 +510,7 @@ class DLink(Link):
     @b.setter
     def b(self,position):
         if not self.L.ptin(position):
-            raise NameError ('point b is not inside the Layout')
+            raise NameError ('Warning : point b is not inside the Layout')
         if not self.L.pt2cy(position) == self.cb:
             self.cb = self.L.pt2cy(position)
         self._b = position
@@ -1205,6 +1206,9 @@ class DLink(Link):
 
         else :
             if kwargs['alg']==2015:
+                TMP=Si.run2015(cutoff=kwargs['cutoff'],
+                        cutoffbound=kwargs['si_reverb'])
+            if kwargs['alg']==20152:
                 TMP=Si.run2015_2(cutoff=kwargs['cutoff'],
                         cutoffbound=kwargs['si_reverb'])
 
@@ -1508,7 +1512,7 @@ class DLink(Link):
                 title=False,colorbar=False,newfig=False,name = '')
 
         if lay:
-            self.L._show3(newfig=False,opacity=0.7,centered=centered)
+            self.L._show3(newfig=False,opacity=0.7,centered=centered,**kwargs)
 
 
         if rays :

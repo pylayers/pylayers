@@ -1218,7 +1218,7 @@ class Signatures(PyLayers,dict):
     #     return dout
 
 
-    def propaths2015_2(self,G, source, target,dout={},M={}, cutoff=1):
+    def propaths2015_2(self,G, source, target,dout={},M={},Mmap=[], cutoff=1):
         """ seek all simple_path from source to target
 
         Parameters
@@ -1294,7 +1294,10 @@ class Signatures(PyLayers,dict):
                     # M = np.zeros((1,NGs),dtype='bool')
                     out = [i[0] for i in G[visited[-1]][target]['output'].keys()]
 
-                    M[path[-2][0],path[-1][0],out]=True
+                    if Mmap !=[]:
+                        M[Mmap[path[-2][0]],Mmap[path[-1][0]],Mmap[out]]=True
+                    else: 
+                        M[path[-2][0],path[-1][0],out]=True
                     try:
                         dout[len(path)]=np.vstack((dout[len(path)],np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='int16')))
                         # dnvi[len(path)].append([[i[0],len(i)] for i in G[visited[-1]][child]['output'].keys()])
@@ -1337,7 +1340,10 @@ class Signatures(PyLayers,dict):
 
                     # M = np.zeros((1,NGs),dtype='bool')
                     out = [i[0] for i in G[visited[-1]][target]['output'].keys()]
-                    M[path[-2][0],path[-1][0],out]=True
+                    if Mmap != []:
+                        M[Mmap[path[-2][0]],Mmap[path[-1][0]],Mmap[out]]=True
+                    else :
+                        M[path[-2][0],path[-1][0],out]=True
                     try:
                         dout[len(path)]=np.vstack((dout[len(path)],np.array([[p[0],len(p)] for p in path],ndmin=3,dtype='int16')))
                         # dnvi[len(path)].append([[i[0],len(i)] for i in G[visited[-1]][child]['output'].keys()])
@@ -1958,18 +1964,14 @@ class Signatures(PyLayers,dict):
             idx = idx+1
 
 
-            bo = np.ones((len(adi)),dtype='bool')
-            for ii in lcil[:idx] :
-                bo = bo | (adi[:,1] == ii)
-            bo = bo & (adi[:,2]==lcil[idx]) & (adi[:,4]==lcil[idx])
-            oldout=np.where(bo)[0].tolist()
-            # # # attempt to limit the combinatory
-            # survive1=adi[oldout][:,2]==licl[idx]
 
-            # survive2 = adi[oldout][:,-1]==lcil[idx+1]
-            # # survive2 = np.ones((len(oldout)),dtype=bool)
-            # survive = np.where(survive1&survive2)[0]
-            # oldout=np.array(oldout)[survive].tolist()
+            # # attempt to limit the combinatory
+            survive1=adi[oldout][:,2]==lcil[idx]
+
+            survive2 = adi[oldout][:,-1]==lcil[idx+1]
+            # survive2 = np.ones((len(oldout)),dtype=bool)
+            survive = np.where(survive1&survive2)[0]
+            oldout=np.array(oldout)[survive].tolist()
 
 
 
@@ -2054,8 +2056,16 @@ class Signatures(PyLayers,dict):
         # di key = [input seg, input room, output seg, output room]
         di={}
         # number of points and seg of layout
-        NGs = self.L.Ns+self.L.Np
-        M = np.zeros((NGs,NGs,NGs),dtype='bool')
+        allpt = np.hstack((self.L.tgs,self.L.ldiffin ))
+        # mapping segemnts
+        segmapp = self.L.tgs
+        # mapping diffraction
+        diffmapp = np.empty((-min(self.L.ldiffin)),dtype='int16')
+        diffmapp[self.L.ldiffin]=np.arange(len(self.L.ldiffin)) + self.L.Ns+1
+        # common mapping diff and segments
+        mapp = np.hstack((segmapp,diffmapp))
+        lapt = len(allpt)
+        M = np.zeros((lapt,lapt,lapt),dtype='bool')
 
         ###
         ### Find interactions per cycles
@@ -2075,9 +2085,11 @@ class Signatures(PyLayers,dict):
 
             Return
             ------
-                din
-                dout
-                dd a dcitionnary for naming diff poitns (points,cy in , cy out)
+                insideD: listr of diffraction inside cy
+                inD: list of diffraction points in going in cy
+                outD: list of diffraction points out going from cy
+                ddin : a dcitionnary for naming ingoing diff poitns (points,cy in , cy out)
+                dd : a dcitionnary for naming outgoing diff poitns (points,cy in , cy out)
 
             """
             if not isinstance(lcy,list):
@@ -2151,7 +2163,7 @@ class Signatures(PyLayers,dict):
                 for o in vout:
                     io={}
                     for i in insideRD:
-                        io = self.propaths2015_2(sGi,i,o,dout=io,M=M,cutoff=cutoffbound)
+                        io = self.propaths2015_2(sGi,i,o,dout=io,M=M,Mmap=mapp,cutoff=cutoffbound)
                     if len(o) >1:
                         di[0,0,0,o[0],o[1],o[2]] = io
                         # add direct signature
@@ -2200,33 +2212,30 @@ class Signatures(PyLayers,dict):
                     for o in vout:
                         io={}
                         # no difraction
-                        # if cy == 23 and i == (-269,):
-                        #     import ipdb
-                        #     ipdb.set_trace()
                         if len(i)>1 and len(o)>1:
                             # no backward
                             if (i[1],i[2])!=(o[2],o[1]) and (i[1],i[2])!=(o[1],o[2]):
-                                io = self.propaths2015_2(sGi,i,o,dout=io,M=M,cutoff=cutoff)
+                                io = self.propaths2015_2(sGi,i,o,dout=io,M=M,Mmap=mapp,cutoff=cutoff)
                                 di[i[0],i[1],i[2],o[0],o[1],o[2]] = io
                         # input diffraction
                         elif len(i)<2 and len(o)>1:
                             if o[0] not in dfi[i]:
                                 io={}
-                                io = self.propaths2015_2(sGi,i,o,dout=io,M=M,cutoff=cutoff)
+                                io = self.propaths2015_2(sGi,i,o,dout=io,M=M,Mmap=mapp,cutoff=cutoff)
                                 for ii in ddin[i]:
                                     di[ii[0],ii[1],ii[2],o[0],o[1],o[2]]=io
                         # output diffraction
                         elif len(i)>1 and len(o)<2:
                             if i[0] not in dfi[o]:
                                 io={}
-                                io = self.propaths2015_2(sGi,i,o,dout=io,M=M,cutoff=cutoff)
+                                io = self.propaths2015_2(sGi,i,o,dout=io,M=M,Mmap=mapp,cutoff=cutoff)
                                 for oo in ddout[o]:
                                     di[i[0],i[1],i[2],oo[0],oo[1],oo[2]]=io
                         # input and output diffraction
                         else :
                             if (i)!=(o) :
                                 io={}
-                                io = self.propaths2015_2(sGi,i,o,dout=io,M=M,cutoff=cutoff)
+                                io = self.propaths2015_2(sGi,i,o,dout=io,M=M,Mmap=mapp,cutoff=cutoff)
                                 for ii in ddin[i]:
                                     for oo in ddout[o]:
                                         di[ii[0],ii[1],ii[2],oo[0],oo[1],oo[2]]=io
@@ -2255,13 +2264,13 @@ class Signatures(PyLayers,dict):
                     io={}
                     if len(i)> 1:
                         for o in insideRD:
-                            io=self.propaths2015_2(sGi,i,o,dout=io,M=M,cutoff=cutoffbound)
+                            io=self.propaths2015_2(sGi,i,o,dout=io,M=M,Mmap=mapp,cutoff=cutoffbound)
                         di[i[0],i[1],i[2],0,0,0] = io
                         # add direct signature
                         di[i[0],i[1],i[2],0,0,0][1]=np.array([i[0],len(i)],ndmin=3)
                     else : 
                         for o in insideRD:
-                            io=self.propaths2015_2(sGi,i,o,dout=io,M=M,cutoff=cutoffbound)
+                            io=self.propaths2015_2(sGi,i,o,dout=io,M=M,Mmap=mapp,cutoff=cutoffbound)
                         for ii in ddin[i]:
                             di[ii[0],ii[1],ii[2],0,0,0] = io
                             # add direct signature
@@ -2305,9 +2314,9 @@ class Signatures(PyLayers,dict):
 
         while not stop:
             # for all detected valid output
-            print adi[oldout]
             import ipdb
             ipdb.set_trace()
+            print adi[oldout]
             for k in oldout:
 
                 us = np.where(-(adii-adio[k]).T.any(0))[0]
@@ -2318,7 +2327,6 @@ class Signatures(PyLayers,dict):
                     if len(np.where(ue==2)[0]) <=0:
                         keep.append(iuus)
                 us = us[keep]
-
                 out.extend(us.tolist())
 
                 for uus in us:
@@ -2334,11 +2342,15 @@ class Signatures(PyLayers,dict):
                             lin = len(lsig[ki])
                             lout = len(di[kdi[uus]][ko])
                             # manage case 1st interaction with no previous
+                            if kdi[k][3]==-269 and kdi[k][0] != 0:
+                                import ipdb
+                                ipdb.set_trace()
 
                             if ki >1 and ko>1:
                                 uso = lsig[ki][:,-2:,0]
                                 uout = di[kdi[uus]][ko][:,1][:,0]
-                                uvi = M[uso[:,0],uso[:,1],:][:,uout]
+
+                                uvi = M[mapp[uso[:,0]],mapp[uso[:,1]],:][:,mapp[uout]]
                                 suvi=np.sum(uvi,axis=0)
                             else :
 
@@ -2348,6 +2360,10 @@ class Signatures(PyLayers,dict):
                             for uv in range(lout):
                                 ri = lsig[ki][uvi[:,uv]]
                                 ro = np.tile(di[kdi[uus]][ko][uv],(suvi[uv],1,1))
+                                asig=np.hstack((ri,ro[:,1:]))
+
+                                    # ri = lsig[ki][uvi[:,uv]]
+                                    # ro = np.tile(di[kdi[uus]][ko][uv],(suvi[uv],1,1))
 
                                 # ri = np.repeat(lsig[ki][uvi[:,uv]],suvi[uv],axis=0)
                                 # ro = np.tile(di[kdi[uus]][ko],(lin,1,1))
@@ -2357,7 +2373,6 @@ class Signatures(PyLayers,dict):
                                 # ri=ri[uvi]
                                 # ro=ro[uvi]
 
-                                asig=np.hstack((ri,ro[:,1:]))
 
                                 try:
                                     sigio[ki+ko-1]=np.vstack((sigio[ki+ko-1],asig))
@@ -2383,9 +2398,10 @@ class Signatures(PyLayers,dict):
                         filldinda(dsigio[kdi[uus][-3:]],sigio)
                     else:
                         dsigio[kdi[uus][-3:]]=sigio
-
+                print dsigio.keys()
             dsigiosave.update(dsigio)
-
+            import ipdb
+            ipdb.set_trace()
             dsigio={}
             firstloop=False
 
@@ -2398,12 +2414,13 @@ class Signatures(PyLayers,dict):
             out=[]
             idx = idx+1
 
-            bo = np.ones((len(adi)),dtype='bool')
+            bo = np.zeros((len(adi)),dtype='bool')
             for ii in lcil[:idx] :
                 bo = bo | (adi[:,1] == ii)
+            for ii in lcil[:idx] :
+                bo = bo | (adi[:,-1] != ii)
             bo = bo & (adi[:,2]==lcil[idx]) & (adi[:,4]==lcil[idx])
             oldout=np.where(bo)[0].tolist()
-            
 
 
 
@@ -4917,7 +4934,8 @@ class Signatures(PyLayers,dict):
                                 pt[1,0,:, :] * (pt[1,0,:, :] - pt[1,1,:, :]) *
                                 (pt[0,1,:, :] - pt[0,0,:, :]))
             d = (2. / den) * (pt[1,0,:, :] * (pt[0,1,:, :] - pt[0,0,:, :]) ** 2 +
-                                pt[0,0,:, :] * (pt[1,0,:, :] - pt[1,1,:, :]) *
+                                pt[0,0,:, :] * (pt[1,0,:, :] - pt[
+                                    1,1,:, :]) *
                                 (pt[0,1,:, :] - pt[0,0,:, :]))
             # a = ((pt[0,0,:,:]-pt[0,1,:,:])**2-(pt[1,0,:,:]-pt[1,1,:,:])**2)
             # a=a/(1.*den)
