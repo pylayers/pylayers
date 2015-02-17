@@ -2308,31 +2308,52 @@ class Signatures(PyLayers,dict):
                 else:
                     d0[kd1]=d1[kd1]
 
-        firstloop=True
+        def filldinda2(d0,d1):
+            for kd1 in d1:
+                if d0.has_key(kd1):
+                    for kkd1 in d1[kd1]:
+                        if d0[kd1].has_key(kkd1):
+                            d0[kd1][kkd1]=np.vstack((d0[kd1][kkd1],d1[kd1][kkd1]))
+                        else:
+                            d0[kd1][kkd1]=d1[kd1][kkd1]
+                else:
+                    d0[kd1]=d1[kd1]
+
+        lastloop=False
         dsigio={}
         idx = 0
+        outall=[]
 
         while not stop:
             # for all detected valid output
-            import ipdb
-            ipdb.set_trace()
-            print adi[oldout]
+
             for k in oldout:
 
-                us = np.where(-(adii-adio[k]).T.any(0))[0]
-                keep=[]
-                for iuus,uus in enumerate(us) :
-                    bue = adi[uus][np.array([0,3])]==adi[out][:,np.array([0,3])]
-                    ue =np.sum(bue,axis=1)
-                    if len(np.where(ue==2)[0]) <=0:
-                        keep.append(iuus)
-                us = us[keep]
-                out.extend(us.tolist())
+                # if not last loop, 
+                # find all the output interaction with a given in interaction (adi[k])
+                if not lastloop:
+                    us = np.where(-(adii-adio[k]).T.any(0))[0]
+                    keep=[]
+                    # remove output interaction already visited
+                    # for lightned computation
+                    for iuus,uus in enumerate(us) :
+                        if not uus in outall :
+                            if adi[uus][-1] != 0 or lastloop:
+                                keep.append(iuus)
+                                outall.append(uus)
+
+                    us = us[keep]
+                    out.extend(us.tolist())
+
+                # else output interaction is the inner interactions
+                else :
+                    us = [k]
 
                 for uus in us:
-
-                    lsig = dsigiosave[kdi[k][3:]]
-                    # lni=dni[kdi[k]]
+                    if not lastloop:
+                        lsig = dsigiosave[kdi[k][3:]]
+                    else : 
+                        lsig = dsigiosave[kdi[k][:3]]
                     sigio={}
                     # loop on input interactions
                     for ki in lsig.keys():
@@ -2342,10 +2363,6 @@ class Signatures(PyLayers,dict):
                             lin = len(lsig[ki])
                             lout = len(di[kdi[uus]][ko])
                             # manage case 1st interaction with no previous
-                            if kdi[k][3]==-269 and kdi[k][0] != 0:
-                                import ipdb
-                                ipdb.set_trace()
-
                             if ki >1 and ko>1:
                                 uso = lsig[ki][:,-2:,0]
                                 uout = di[kdi[uus]][ko][:,1][:,0]
@@ -2353,10 +2370,8 @@ class Signatures(PyLayers,dict):
                                 uvi = M[mapp[uso[:,0]],mapp[uso[:,1]],:][:,mapp[uout]]
                                 suvi=np.sum(uvi,axis=0)
                             else :
-
                                 uvi = np.ones((lin,lout),dtype='bool')
                                 suvi = lin*np.ones(lout)
-
                             for uv in range(lout):
                                 ri = lsig[ki][uvi[:,uv]]
                                 ro = np.tile(di[kdi[uus]][ko][uv],(suvi[uv],1,1))
@@ -2379,49 +2394,49 @@ class Signatures(PyLayers,dict):
                                 except:
                                     sigio[ki+ko-1]=asig
 
-                            # ri = np.repeat(lsig[ki],lout,axis=0)
-                            # ro = np.tile(di[kdi[uus]][ko],(lin,1,1))
-
-                            # uvi=uvi.reshape(lin*lout,order='F')
-
-                            # ri=ri[uvi]
-                            # ro=ro[uvi]
-
-                            # asig=np.hstack((ri,ro[:,1:]))
-
-                            # try:
-                            #     sigio[ki+ko-1]=np.vstack((sigio[ki+ko-1],asig))
-                            # except:
-                            #     sigio[ki+ko-1]=asig
                     # key is the output segment
                     if dsigio.has_key(kdi[uus][-3:]):
                         filldinda(dsigio[kdi[uus][-3:]],sigio)
                     else:
                         dsigio[kdi[uus][-3:]]=sigio
-                print dsigio.keys()
-            dsigiosave.update(dsigio)
-            import ipdb
-            ipdb.set_trace()
-            dsigio={}
-            firstloop=False
 
-            if not firstloop:
-                if (adi[out][:,3:] == 0).all():
-                    stop=True
-                    break
+            filldinda2(dsigiosave,dsigio)
+            dsigio={}
+
+
+            if lastloop:
+                stop=True
+                break
 
             oldout=out
             out=[]
             idx = idx+1
 
+            if lcil[idx] == lcil[-1]:
+                lastloop=True
+
+            # filtering for avoiding computing extra 
+            # interaction in/out couples
             bo = np.zeros((len(adi)),dtype='bool')
+            tmp= np.zeros((len(adi)),dtype='bool')
+            # input cycle interaction must be in the already visited list of cycles (lcil)
             for ii in lcil[:idx] :
                 bo = bo | (adi[:,1] == ii)
+            # output cycle interaction must be in the remaining list of cycles (lcil)
             for ii in lcil[:idx] :
-                bo = bo | (adi[:,-1] != ii)
-            bo = bo & (adi[:,2]==lcil[idx]) & (adi[:,4]==lcil[idx])
+                bo = bo & (adi[:,-1] != ii)
+            # output cycle interaction must bethe next cycle in  list of cycles (lcil)
+            # or code 0 for inner interaction of last cycle
+            for ii in lcil[idx:] :
+                if not lastloop:
+                    tmp = tmp | (adi[:,-1] == ii)
+                else:
+                    tmp = tmp | (adi[:,-1] == 0)
+            bo = bo & tmp
+            # consider only insteraction from the current cycle
+            if not lastloop:
+                bo = bo & ((adi[:,2]==lcil[idx]) & (adi[:,4]==lcil[idx]))
             oldout=np.where(bo)[0].tolist()
-
 
 
 
