@@ -555,10 +555,16 @@ class Polygon(PyLayers,shg.Polygon):
 
         """
         x,y = self.exterior.xy
-        npts = map(lambda x :
-                   L.ispoint(np.array(x),tol=0.01),zip(x[0:-1],y[0:-1]))
+        # npts = map(lambda x :
+        #            L.ispoint(np.array(x),tol=0.01),zip(x[0:-1],y[0:-1]))
+        npts = [L.ispoint(np.array(xx),tol=0.01) for xx in zip(x[0:-1],y[0:-1])]
+        print npts
         seg = zip(npts,np.roll(npts,-1))
-        nseg = map(lambda x : L.numseg(x[0],x[1]),seg)
+        try:
+            nseg = map(lambda x : L.numseg(x[0],x[1]),seg)
+        except:
+            import ipdb
+            ipdb.set_trace()
         vnodes = np.kron(npts,np.array([1,0]))+np.kron(nseg,np.array([0,1]))
         self.vnodes = vnodes
 

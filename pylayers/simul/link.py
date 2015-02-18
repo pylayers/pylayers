@@ -1156,7 +1156,7 @@ class DLink(Link):
 
         Experimental
         ------------
-        alg = 2015
+        alg = 2015 | 20152 (best)
             vectorized signature research
         si_reverb : number of reverb in source/target cycle if alg=2015
 
