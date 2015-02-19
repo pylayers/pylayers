@@ -1521,31 +1521,48 @@ class Polygon(PyLayers,shg.Polygon):
 
         return(fig, ax)
 
-    def ptconvex2(self,L):
+    def ptconvex2(self):
         """ Determine convex / concave points in the Polygon
 
-        Parameters
-        ----------
-        
-        L : Layout
+            !!! Warning !!! cvex and ccve can be switched
+            depends on the Polygon direction of travel
         
         Returns
         -------
         cvex : list of convex points
         ccve : list of concave points
-        
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.util.geomutil import *
+            >>> import shapely.geometry as shg
+            >>> import matplotlib.pyplot as plt
+            >>> points  = shg.MultiPoint([(0, 0), (0, 1), (3.2, 1), (3.2, 0.7), (0.4, 0.7), (0.4, 0)])
+            >>> polyg1   = Polygon(points)
+            >>> cvex,ccave   = polyg.ptconvex2() 
+            >>> points  = shg.MultiPoint([(0, 0), (0, 1), (-3.2, 1), (-3.2, 0.7), (-0.4, 0.7), (-0.4, 0)])
+            >>> polyg1   = Polygon(points)
+            >>> cvex,ccave   = polyg.ptconvex2() 
 
         """
-
+        if not hasattr(self,'xy'):
+            self.coorddeter()
+        
         pts = filter(lambda x: x<0,self.vnodes)
         A=self.xy[:,:-1]
-        B=np.roll(A,1)
-        C=np.roll(B,1)
-        cw = ccw(A,B,C)
-        cvex = np.array(pts)[np.roll(cw,-1)]
-        ccve = np.array(pts)[np.roll(~cw,-1)]
-        if not cvex[0] in L.ldiffin :
-            cvex,ccve=ccve,cvex
+        B=np.roll(A,-1)
+        C=np.roll(B,-1)
+        if self.signedarea()>0:
+            cw = ccw(C,B,A)
+        else :
+            cw = ccw(A,B,C)
+        cvex = np.array(pts)[np.roll(cw,+1)]
+        ccve = np.array(pts)[np.roll(~cw,+1)]
+        
         return cvex.tolist(),ccve.tolist()
 
     def ptconvex(self, display=False):

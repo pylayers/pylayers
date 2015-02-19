@@ -5330,7 +5330,7 @@ class Layout(PyLayers):
 
                 if not self.Gt.node[n]['polyg'].isconvex():#self.Gt.node[n]['indoor']:
                     no = self.Gt.node[n]['cycle'].cycle
-                    cvex,ccve= self.Gt.node[n]['polyg'].ptconvex2(self)
+                    cvex,ccve= self.Gt.node[n]['polyg'].ptconvex2()
                     # keep all convex point (in + out) to build teh delaunay triangulation
                     ucs= cvex+ccve
                     
