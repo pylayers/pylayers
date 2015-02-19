@@ -5330,24 +5330,16 @@ class Layout(PyLayers):
 
                 if not self.Gt.node[n]['polyg'].isconvex():#self.Gt.node[n]['indoor']:
                     no = self.Gt.node[n]['cycle'].cycle
-                    tcc, nn = self.Gt.node[n]['polyg'].ptconvex()
-                    # diffracting points 
-                    utconvex = np.nonzero(tcc == 1)[0]
-                    # all possible diffracting point (in and out of cycle)
-                    utsconvex = np.nonzero(abs(tcc) == 1)[0]
-
-                    if len(utconvex) != 0:
-                        # get points ID in the cycle
-                        uus = filter(lambda x: x<0,no)
-                        # get point convex ID
-                        ucs = np.array(uus)[utconvex]
-                        # ucs = np.array(uus)[utsconvex]
+                    cvex,ccve= self.Gt.node[n]['polyg'].ptconvex2(self)
+                    # keep all convex point (in + out) to build teh delaunay triangulation
+                    ucs= cvex+ccve
+                    
+                    if len(ucs) !=0:
                         pucs = array(map(lambda x: self.Gs.pos[x], ucs))
                         pucs = np.vstack((pucs,pucs[-1]))
                         ####
                         #### 2 perform a Delaunay Partioning 
                         ####
-
                         if len(ucs) >2:
                             trid=sp.spatial.Delaunay(pucs)
                             tri =trid.simplices
@@ -5358,29 +5350,14 @@ class Layout(PyLayers):
                                 # check if the new polygon is contained into
                                 # the original polygon (non guaratee by Delaunay)
                                 C = self.Gt.node[n]['polyg'].contains(ts)
-                                # U = self.Gt.node[n]['polyg'].intersection(ts)
-
-                                # if isinstance(U,sh.Polygon):
-                                #     U=[U]
-                                # else: 
-                                #     U=filter(lambda x: isinstance(x,sh.Polygon),U)
                                 if C:
-                                    # for p in U:
-
-                                    # if self.Gt.node[n]['polyg'].contains(p):
                                     cp =ts
-                                    # try:
-                                    #     cp = geu.Polygon(p)
-                                    # except:
-                                    #     cp = geu.Polygon(p.envelope)
                                     cp.setvnodes(self)
-
                                     uaw = np.where(cp.vnodes == 0)[0]
                                     lvn = len(cp.vnodes)
                                     for i in uaw:
                                         # keep trace of created airwalls, because some
                                         # of them will be destroyed in step 3.
-                                        print cp.vnodes
                                         naw.append(self.add_segment(
                                                    cp.vnodes[np.mod(i-1,lvn)],
                                                    cp.vnodes[np.mod(i+1,lvn)]
@@ -5420,23 +5397,24 @@ class Layout(PyLayers):
                                     cpolys.append(pold)
                             if len(polys) == 0:
                                 cpolys.append(p)
-                            # polyplot(cpolys,fig=plt.gcf())
-                            # plt.draw()
-                            # import ipdb
-                            # ipdb.set_trace()
-                        ####
+
                         #### 4. ensure the correct vnode numerotaion of the polygons
                         #### and remove unecessary airwalls
 
                         # ncpol : new created polygons
                         ncpol = []
                         vnodes=[]
+
                         for p in cpolys:
                             interpoly = self.Gt.node[n]['polyg'].intersection(p)
                             if isinstance(interpoly,sh.MultiPolygon):
                                 raise AttributeError('multi polygon encountered')
                             else :
-                                ptmp = geu.Polygon(interpoly)
+                                try:
+                                    ptmp = geu.Polygon(interpoly)
+                                except:
+                                    import ipdb
+                                    ipdb.set_trace()
 
                             ptmp.setvnodes(self)
                             ncpol.append(ptmp)
@@ -5446,10 +5424,9 @@ class Layout(PyLayers):
                         daw = filter(lambda x: x not in vnodes,naw)
 
                         for d in daw:
-                            try:
-                                self.del_segment(d,verbose=False)
-                            except:
-                                pass
+                            self.del_segment(d,verbose=False)
+                        # remove old cycle
+                        self.Gt.remove_node(n)
                         nbpolys=len(ncpol)
 
                         # lcyid: (new) list of cycle id 
@@ -5475,38 +5452,37 @@ class Layout(PyLayers):
                                 p = geu.Polygon(p=pp,vnodes=pv)
 
                             cy  = cycl.Cycle(G,lnode=p.vnodes)
-                            Gt.add_node(cyid,cycle=cy)
-                            Gt.node[cyid]['polyg'] = p#geu.Polygon(p.xy,cy.cycle)
-                            Gt.node[cyid]['indoor']=True
-                            Gt.node[cyid]['isopen']=True
-                            Gt.pos[cyid] = tuple(cy.g)
-                        # remove old cycle
-                        Gt.remove_node(n)
+                            self.Gt.add_node(cyid,cycle=cy)
+                            self.Gt.node[cyid]['polyg'] = p#geu.Polygon(p.xy,cy.cycle)
+                            self.Gt.node[cyid]['indoor']=True
+                            self.Gt.node[cyid]['isopen']=True
+                            self.Gt.pos[cyid] = tuple(cy.g)
+
                         
-                        for k in combinations(Gt.nodes(), 2):
-                            if not 0 in k:
-                                vnodes0 = np.array(Gt.node[k[0]]['cycle'].cycle)
-                                vnodes1 = np.array(Gt.node[k[1]]['cycle'].cycle)
-                                #
-                                # Connect Cycles if they share at least one segments
-                                #
-                                intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
+        for k in combinations(self.Gt.nodes(), 2):
+            if not 0 in k:
+                vnodes0 = np.array(self.Gt.node[k[0]]['cycle'].cycle)
+                vnodes1 = np.array(self.Gt.node[k[1]]['cycle'].cycle)
+                #
+                # Connect Cycles if they share at least one segments
+                #
+                intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
 
-                                if len(intersection_vnodes) > 1:
-                                    segment = intersection_vnodes[np.where(intersection_vnodes>0)]
-                                    Gt.add_edge(k[0], k[1],segment= segment)
-                            else:
+                if len(intersection_vnodes) > 1:
+                    segment = intersection_vnodes[np.where(intersection_vnodes>0)]
+                    self.Gt.add_edge(k[0], k[1],segment= segment)
+            else:
 
-                                vnodes0 = Gt.node[k[0]]['polyg'].vnodes
-                                vnodes1 = Gt.node[k[1]]['polyg'].vnodes
-                                intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
+                vnodes0 = self.Gt.node[k[0]]['polyg'].vnodes
+                vnodes1 = self.Gt.node[k[1]]['polyg'].vnodes
+                intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
 
-                                if len(intersection_vnodes) > 1:
-                                    segment = intersection_vnodes[np.where(intersection_vnodes>0)]
-                                    Gt.add_edge(k[0], k[1],segment= segment)
+                if len(intersection_vnodes) > 1:
+                    segment = intersection_vnodes[np.where(intersection_vnodes>0)]
+                    self.Gt.add_edge(k[0], k[1],segment= segment)
                                
-                                
-                
+
+
         # # update self.Gs.node[x]['ncycles']
         # self._updGsncy()
         # # add outside cycle to Gs.node[x]['ncycles']
