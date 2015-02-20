@@ -2226,8 +2226,7 @@ class Rays(PyLayers,dict):
         else:
             return(filename)
 
-    @mlab.show
-    def _show3(self,L=[],ilist=[],rlist=[],newfig=False):
+    def _show3(self,L=[],ilist=[],rlist=[],newfig=False,**kwargs):
         """ plot 3D rays in environment using Mayavi
 
         Parameters

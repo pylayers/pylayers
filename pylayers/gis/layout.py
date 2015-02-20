@@ -5306,13 +5306,16 @@ class Layout(PyLayers):
 
         """
         # function for debug purpose
-        def polyplot(poly):
-            fig,ax=self.showG('s')
+        def polyplot(poly,pgs=True):
+            if pgs:
+                fig,ax=self.showG('s')
+
             color=['r','b','g']*10
             for ip, p in enumerate(poly):
                 fig,ax = p.plot(fig=fig,ax=ax,color=color[ip],alpha =0.5)
         # lacy : list of added cycles
         lacy =[]
+        Gt=copy.deepcopy(self.Gt)
         for n in self.Gt.nodes():
             # if indoor cycle
             if n > 0:
@@ -5325,23 +5328,16 @@ class Layout(PyLayers):
 
                 if not self.Gt.node[n]['polyg'].isconvex():#self.Gt.node[n]['indoor']:
                     no = self.Gt.node[n]['cycle'].cycle
-                    tcc, nn = self.Gt.node[n]['polyg'].ptconvex()
-                    # diffracting points 
-                    utconvex = np.nonzero(tcc == 1)[0]
-                    # all possible diffracting point (in and out of cycle)
-                    utsconvex = np.nonzero(abs(tcc) == 1)[0]
-                    if len(utconvex) != 0:
-                        # get points ID in the cycle
-                        uus = filter(lambda x: x<0,no)
-                        # get point convex ID
-                        uc = np.array(uus)[utconvex]
-                        ucs = np.array(uus)[utsconvex]
+                    cvex,ccve= self.Gt.node[n]['polyg'].ptconvex2()
+                    # keep all convex point (in + out) to build teh delaunay triangulation
+                    ucs= cvex+ccve
+                    
+                    if len(ucs) !=0:
                         pucs = array(map(lambda x: self.Gs.pos[x], ucs))
                         pucs = np.vstack((pucs,pucs[-1]))
                         ####
                         #### 2 perform a Delaunay Partioning 
                         ####
-
                         if len(ucs) >2:
                             trid=sp.spatial.Delaunay(pucs)
                             tri =trid.simplices
@@ -5351,24 +5347,20 @@ class Layout(PyLayers):
                                 ts = geu.Polygon(pucs[t])
                                 # check if the new polygon is contained into
                                 # the original polygon (non guaratee by Delaunay)
-                                #U = self.Gt.node[n]['polyg'].contains(ts)
-                                U = self.Gt.node[n]['polyg'].intersection(ts)
-                                if not isinstance(U,sh.MultiPolygon):
-                                    U=[U]
-                                for p in U:
-                                    if self.Gt.node[n]['polyg'].contains(p):
-                                        cp = geu.Polygon(p)
-                                        cp.setvnodes(self)
-                                        uaw = np.where(cp.vnodes == 0)[0]
-                                        lvn = len(cp.vnodes)
-                                        for i in uaw:
-                                            # keep trace of created airwalls, because some
-                                            # of them will be destroyed in step 3.
-                                            naw.append(self.add_segment(
-                                                       cp.vnodes[np.mod(i-1,lvn)],
-                                                       cp.vnodes[np.mod(i+1,lvn)]
-                                                       ,name='AIR'))
-                                        polys.append(cp)
+                                C = self.Gt.node[n]['polyg'].contains(ts)
+                                if C:
+                                    cp =ts
+                                    cp.setvnodes(self)
+                                    uaw = np.where(cp.vnodes == 0)[0]
+                                    lvn = len(cp.vnodes)
+                                    for i in uaw:
+                                        # keep trace of created airwalls, because some
+                                        # of them will be destroyed in step 3.
+                                        naw.append(self.add_segment(
+                                                   cp.vnodes[np.mod(i-1,lvn)],
+                                                   cp.vnodes[np.mod(i+1,lvn)]
+                                                   ,name='AIR'))
+                                    polys.append(cp)
 
                         #
                         # 3. merge delaunay triangulation in order to obtain
@@ -5403,33 +5395,38 @@ class Layout(PyLayers):
                                     cpolys.append(pold)
                             if len(polys) == 0:
                                 cpolys.append(p)
-                            # polyplot(cpolys,fig=plt.gcf())
-                            # plt.draw()
-                            # import ipdb
-                            # ipdb.set_trace()
-                        ####
+
                         #### 4. ensure the correct vnode numerotaion of the polygons
                         #### and remove unecessary airwalls
 
                         # ncpol : new created polygons
                         ncpol = []
                         vnodes=[]
+
                         for p in cpolys:
                             interpoly = self.Gt.node[n]['polyg'].intersection(p)
                             if isinstance(interpoly,sh.MultiPolygon):
                                 raise AttributeError('multi polygon encountered')
                             else :
-                                ptmp = geu.Polygon(interpoly)
+                                try:
+                                    ptmp = geu.Polygon(interpoly)
+                                except:
+                                    import ipdb
+                                    ipdb.set_trace()
+
                             ptmp.setvnodes(self)
                             ncpol.append(ptmp)
                             vnodes.extend(ptmp.vnodes)
                         # air walls to be deleted (because origin Delaunay triangle
                         # has been merged )
                         daw = filter(lambda x: x not in vnodes,naw)
-                        [self.del_segment(d,verbose=False) for d in daw]
-                        nbpolys=len(ncpol)
+
+                        for d in daw:
+                            self.del_segment(d,verbose=False)
                         # remove old cycle
                         self.Gt.remove_node(n)
+                        nbpolys=len(ncpol)
+
                         # lcyid: (new) list of cycle id 
                         lcyid = [n] + range(ncy+1,ncy+(nbpolys))
                         lacy.extend(lcyid)
@@ -5440,7 +5437,18 @@ class Layout(PyLayers):
                             lnode = p.vnodes
                             G = nx.subgraph(self.Gs,lnode)
                             G.pos = {}
+
                             G.pos.update({l: self.Gs.pos[l] for l in lnode})
+
+                            if not len (p.vnodes) == len(G.nodes()):
+                                # some point are counted twice during 
+                                # the "self.Gt.node[n]['polyg'].intersection(p)"
+                                # them make a unique with preserved order
+                                _, idx = np.unique(p.vnodes, return_index=True)
+                                pv = p.vnodes[np.sort(idx)]
+                                pp = p.ndarray()[:,np.sort(idx)[::2]/2]
+                                p = geu.Polygon(p=pp,vnodes=pv)
+
                             cy  = cycl.Cycle(G,lnode=p.vnodes)
                             self.Gt.add_node(cyid,cycle=cy)
                             self.Gt.node[cyid]['polyg'] = p#geu.Polygon(p.xy,cy.cycle)
@@ -5449,29 +5457,29 @@ class Layout(PyLayers):
                             self.Gt.pos[cyid] = tuple(cy.g)
 
                         
-                        for k in combinations(self.Gt.nodes(), 2):
-                            if not 0 in k:
-                                vnodes0 = np.array(self.Gt.node[k[0]]['cycle'].cycle)
-                                vnodes1 = np.array(self.Gt.node[k[1]]['cycle'].cycle)
-                                #
-                                # Connect Cycles if they share at least one segments
-                                #
-                                intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
+        for k in combinations(self.Gt.nodes(), 2):
+            if not 0 in k:
+                vnodes0 = np.array(self.Gt.node[k[0]]['cycle'].cycle)
+                vnodes1 = np.array(self.Gt.node[k[1]]['cycle'].cycle)
+                #
+                # Connect Cycles if they share at least one segments
+                #
+                intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
 
-                                if len(intersection_vnodes) > 1:
-                                    segment = intersection_vnodes[np.where(intersection_vnodes>0)]
-                                    self.Gt.add_edge(k[0], k[1],segment= segment)
-                            else:
+                if len(intersection_vnodes) > 1:
+                    segment = intersection_vnodes[np.where(intersection_vnodes>0)]
+                    self.Gt.add_edge(k[0], k[1],segment= segment)
+            else:
 
-                                vnodes0 = self.Gt.node[k[0]]['polyg'].vnodes
-                                vnodes1 = self.Gt.node[k[1]]['polyg'].vnodes
-                                intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
+                vnodes0 = self.Gt.node[k[0]]['polyg'].vnodes
+                vnodes1 = self.Gt.node[k[1]]['polyg'].vnodes
+                intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
 
-                                if len(intersection_vnodes) > 1:
-                                    segment = intersection_vnodes[np.where(intersection_vnodes>0)]
-                                    self.Gt.add_edge(k[0], k[1],segment= segment)
+                if len(intersection_vnodes) > 1:
+                    segment = intersection_vnodes[np.where(intersection_vnodes>0)]
+                    self.Gt.add_edge(k[0], k[1],segment= segment)
                                
-                                
+
 
         # # update self.Gs.node[x]['ncycles']
         # self._updGsncy()
@@ -6120,6 +6128,7 @@ class Layout(PyLayers):
                 # list all potential successors of interaction i1
                 i2 = nx.neighbors(self.Gi,i1)
                 ipoints = filter(lambda x: len(x)==1,i2)
+                pipoints = np.array([self.Gs.pos[ip[0]] for ip in ipoints]).T
                 # filter tuple (R | T)
                 #istup = filter(lambda x : type(eval(x))==tuple,i2)
                 # map first argument segment number
@@ -6134,7 +6143,17 @@ class Layout(PyLayers):
                     points = self.seg2pts(isegments)
                     pta = points[0:2,:]
                     phe = points[2:,:]
+                    # add difraction points
+                    # WARNING Diffrraction points are added only if a segment isseen
+                    # it should be the case in 99% of cases
+                    
+                    if len(ipoints)>0:
+                        isegments = np.hstack((isegments,np.array(ipoints)[:,0]))
+                        pta = np.hstack((pta,pipoints))
+                        phe = np.hstack((phe,pipoints))
+
                     #cn.show()
+
                     # if i0 == (38,79) and i1 == (135,79,23):
                     #     print i0,i1
                     #     import ipdb
@@ -6192,16 +6211,17 @@ class Layout(PyLayers):
                 #
                 #       output of the diffraction points
                 #       exploring
-                #
+                #b
                 #          + right of ISB
                 #          + right of RSB
                 #
                 #  + using the wedge cone
                 #  + using the incident cone
                 #
+
                 output = nx.neighbors(self.Gi,(nstr1,))
                 nout = len(output)
-                probint = np.ones(nout) # temporary
+                probint = np.ones(nout) # temporarybns
                 dintprob = {k:v for k,v in zip(output,probint)}
 
 
@@ -6213,7 +6233,7 @@ class Layout(PyLayers):
         Parameters
         ----------
 
-        ncy : cycle number
+        ncy : cycle number( Project -> save proejct)
         typ : string
             if 'source' connect source cycle
             if 'target' connect target cycle
@@ -6265,6 +6285,7 @@ class Layout(PyLayers):
         typ : string
             if 'source' connect source cycle
             if 'target' connect target cycle
+
         """
 
         # list of interactions
@@ -6293,8 +6314,7 @@ class Layout(PyLayers):
                 lT = filter(lambda x: x[1]==c,lT)
             if typ=='target':
                 lT = filter(lambda x: x[2]==c,lT)
-            if typ=='all':
-                lT=lT
+
 
             # Finding the diffraction points
             # Diffraction points are different from indoor cycle and outdoor
@@ -6618,9 +6638,10 @@ class Layout(PyLayers):
 
         if isinstance(kwargs['labels'],list):
             labels = kwargs['labels']
-        else:
+        elif kwargs['labels'] == True:
             labels=['s','t','v','c','i','w']
-
+        else:
+            labels=[]
         #
         # s : structure graph
         #
@@ -6657,10 +6678,10 @@ class Layout(PyLayers):
                         kwargs['edge_color']='k'
                         kwargs['width']=1
 
-                #if 's' in labels:
-                #    kwargs['labels']=False
-                #else:
-                #    kwargs['labels']=True
+                if 's' in labels:
+                   kwargs['labels']=True
+                else:
+                   kwargs['labels']=False
                 kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
 
             kwargs['nodelist'] = nodelistbkup
@@ -7073,6 +7094,34 @@ class Layout(PyLayers):
 
 
         return (c0 & c1)
+
+
+    def ptGs2cy(self,n=-1):
+        """ Gs node to cycle
+
+        Parameters
+        ----------
+        upt : point (ndarray)
+
+        Returns
+        -------
+        ncy : cycle number
+
+        Notes
+        -----
+            If a cycle contains the Gs pointt this function returns the cycle(s) number
+        """
+        if n >0:
+            return self.Gs.node[n]['ncycles']
+        else: 
+            nseg = self.Gs[n].keys()
+            cy=[]
+            for nn in nseg :
+                cy.extend(self.ptGs2cy(nn))
+            cy = np.unique(cy).tolist()
+            return cy
+
+
 
     def pt2cy(self, pt=np.array((0, 0))):
         """ point to cycle
@@ -7927,8 +7976,12 @@ class Layout(PyLayers):
             # if all layout points are different from pt
             return(0)
         else:
-            nup = np.nonzero(nz == False)
-            return(ke[nup[0]][0])
+            nup = np.where(nz == False)[0]
+            if len(nup)==1:
+                return(ke[nup][0])
+            else :
+                mi=np.where(min(v[nup])==v[nup])[0]
+                return(ke[nup[mi]][0])
 
     def onseg(self, pt, tol=0.01):
         """ segment number from point (deprecated)
@@ -8216,7 +8269,7 @@ class Layout(PyLayers):
         fos.close()
         return pg
 
-    def _show3(self,centered=False,newfig=False,opacity=1.,roomid=[]):
+    def _show3(self,centered=False,newfig=False,opacity=1.,cyid=False,**kwargs):
         """ create a .off geomview file
 
         Parameters
@@ -8228,6 +8281,8 @@ class Layout(PyLayers):
             set slab opacity
         centered : Boolean
             if True the layout is centered around its center of gravity
+        cyid : boolean
+            display cycle number
 
         Notes
         -----
@@ -8453,17 +8508,28 @@ class Layout(PyLayers):
             f = mlab.gcf()
             f.scene.background=(1,1,1)
 
+        f.scene.disable_render = True
+
         surf = mlab.pipeline.surface(mesh, opacity=opacity)
         mlab.pipeline.surface(mlab.pipeline.extract_edges(surf),
                                     color=(0, 0, 0), )
         f.children[-1].name='Layout ' + self.filename
 
-        if roomid:
+        if cyid:
             if len(self.Gt.nodes())>0:
                 pk=self.Gt.pos.keys()
                 v=np.array(self.Gt.pos.values())
                 [mlab.text3d(v[ik,0],v[ik,1],0.5,str(k)) for ik,k in enumerate(pk)]
+        # if segpt:
 
+        #     seg = dict(filter(lambda x: x[0]>0,self.Gs.pos.items()))
+        #     pt = dict(filter(lambda x: x[0]<0,self.Gs.pos.items()))
+        #     pseg = np.array(seg.values())
+        #     ppt = np.array(pt.values())
+        #     [mlab.text3d(pseg[ik,0],pseg[ik,1],0.5,str(k)) for ik,k in enumerate(seg)]
+        #     [mlab.text3d(ppt[ik,0],ppt[ik,1],3.,str(k)) for ik,k in enumerate(pt)]
+
+        f.scene.disable_render = False
 
     def show3(self, bdis=True,centered=True):
         """ geomview display of the indoor structure
