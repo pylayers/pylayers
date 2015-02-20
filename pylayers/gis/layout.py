@@ -401,7 +401,7 @@ class Layout(PyLayers):
         self.load(_filename)
         self.boundary()
 
-        # If a the layout has already been built then load the built structure
+        # If the layout has already been built then load the built structure
         if not force:
             try:
                 self.dumpr()
@@ -1147,9 +1147,9 @@ class Layout(PyLayers):
                 x,y =coords.xy[nn]  
             else :
                 x,y       = eval(di['points'][nn])
-            
-                    
-            
+
+
+
             #
             # limitation of point precision is important for avoiding
             # topological problems in shapely.
@@ -4686,7 +4686,6 @@ class Layout(PyLayers):
         """
         # list of built graphs
 
-
         if 't' in graph:
             if verbose:
                 print "Gt"
@@ -4696,7 +4695,7 @@ class Layout(PyLayers):
                 self._convex_hull()
                 # # Ensure convexity of all cycles
                 self._convexify()
-                # re-attach new cycles 
+                # re-attach new cycles
                 self.buildGt()
             self.lbltg.extend('t')
 
@@ -4809,7 +4808,6 @@ class Layout(PyLayers):
         graph : string
             't' : Gt
             'r' : Gr
-            's' : Gs
             'v' : Gv
             'i' : Gi
 
@@ -4818,7 +4816,7 @@ class Layout(PyLayers):
         specified by the $BASENAME environment variable
 
         """
-        graphs=['s','t','c','v','i','r','w']
+        graphs=['t','c','v','i','r','w']
         path = os.path.join(basename,'struc','gpickle',self.filename)
         for g in graphs:
             try:
@@ -4966,7 +4964,7 @@ class Layout(PyLayers):
                 self.Gt.add_edge(k[0], k[1],segment= segment)
 
         #
-        #   6 - Update graph Gs segment with their 2 cycles  information
+        #   6 - Update graph Gs segment with their 2 cycles information
         #
         #   initialize a void list 'ncycles' for each segment of Gs
         #
@@ -5086,7 +5084,7 @@ class Layout(PyLayers):
 
         Update graph Gs segment with their 2 cycles  information
         initialize a void list 'ncycles' for each segment of Gs
-        
+
         See Also
         --------
 
@@ -5125,7 +5123,7 @@ class Layout(PyLayers):
 
     def _interlist(self,nodelist=[]):
         """ Construct the list of interactions associated to each cycle
-        
+
 
         Parameters
         ----------
@@ -5138,11 +5136,11 @@ class Layout(PyLayers):
 
 
          Interaction labeling convention
-        
+
            tuple (npoint,)  : Diffraction on point npoint
            tuple (nseg,ncycle) : Reflection on nseg toward cycle ncycle
            tuple (nseg,cy0,cy1) : Transmission from cy0 to cy1 through nseg
-        
+
            At that stage the diffraction points are not included
            not enough information available. The diffraction point are not
            known yet
@@ -5154,7 +5152,7 @@ class Layout(PyLayers):
         pylayers.gis.layout._convex_hull
 
         """
-        
+
         if nodelist == []:
             nodelist = self.Gt.nodes()
         elif not isinstance(nodelist,list):
@@ -5191,14 +5189,14 @@ class Layout(PyLayers):
 
     def _convex_hull(self):
         """
-        Add air walls to the layout enveloppe in order the hull of the Layout 
+        Add air walls to the layout enveloppe in order the hull of the Layout
         to be convex.
 
         Notes
         -----
 
         This is a post processing of BuildGt
-        
+
         See Also
         --------
 
@@ -5848,6 +5846,9 @@ class Layout(PyLayers):
                 for nk in combinations(nseg, 2):
                     Gv.add_edge(nk[0],nk[1])
 
+                #
+                # Handle diffraction point
+                #
                 if isopen:
                     ndiffvalid = filter(lambda x :
                                         filter(lambda y : y in airwalls
