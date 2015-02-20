@@ -440,6 +440,12 @@ class Layout(PyLayers):
         if hasattr(self,'name'):
             st = st + "name :  {slab :seglist} " +"\n"
         st = st + "\nUseful arrays"+"\n----------------\n"
+        if hasattr(self,'pt'):
+            st = st + "pt : numpy array of points " +"\n"
+        if hasattr(self,'normal'):
+            st = st + "normal : numpy array of normal " +"\n"
+        if hasattr(self,'offset'):
+            st = st + "offset : numpy array of offset " +"\n"
         if hasattr(self,'tsg'):
             st = st + "tsg : get segment index in Gs from tahe" +"\n"
         if hasattr(self,'isss'):
@@ -685,7 +691,7 @@ class Layout(PyLayers):
         return np.setdiff1d(iseg, u)
 
     def g2npy(self):
-        """ conversion from graphs to numpy arrays 
+        """ conversion from graphs to numpy arrays
 
         Notes
         -----
@@ -826,6 +832,8 @@ class Layout(PyLayers):
             assert (scale.all()>0)
             self.normal = np.vstack((normx,normy,np.zeros(len(scale))))/scale
 
+            self.offset = np.empty(self.Ns+self.Nss)
+
             #for ks in ds:
             #
             # lsss : list of subsegment
@@ -845,17 +853,27 @@ class Layout(PyLayers):
             index = nsmax+1
             for ks in useg:
                 k = self.tgs[ks]                        # index numpy
+
+                self.offset[k]=self.Gs.node[ks]['offset']
+
                 self.Gs.node[ks]['norm'] = self.normal[:,k]  # update normal
                 self.sla[ks]=self.Gs.node[ks]['name']   # update sla array
                 self.stridess[ks]=0                     # initialize stridess[ks]
                 if self.Gs.node[ks].has_key('ss_name'): # if segment has sub segment
                     nss = len(self.Gs.node[ks]['ss_name'])  # retrieve number of sseg
                     self.stridess[ks]=index-1           # update stridess[ks] dict
-                    for slabname in self.Gs.node[ks]['ss_name']:
+                    for uk,slabname in enumerate(self.Gs.node[ks]['ss_name']):
                         self.lsss.append(ks)
                         self.sla[index] = slabname
                         self.isss.append(index)
+                        self.offset[self.stridess[ks]+uk] = self.Gs.node[ks]['ss_offset'][uk]
                         index = index+1
+
+        # append sub segment normal to normal
+
+        normal_ss = self.normal[:,self.tgs[self.lsss]]
+        self.normal = np.hstack((self.normal,normal_ss))
+
 
         # calculate extremum of segments
         #
@@ -866,7 +884,7 @@ class Layout(PyLayers):
         # wedge < 179 (not flat)
         idiff = filter(lambda x: wedgea[x]<179,range(len(self.degree[2])))
         self.ldiff = map(lambda x : self.degree[2][x],idiff)
-        # if problem here check file format 'z' should be a string 
+        # if problem here check file format 'z' should be a string
         self.maxheight = np.max([v[1] for v in nx.get_node_attributes(self.Gs,'z').values()])
 
         self.extrseg()
@@ -1128,7 +1146,7 @@ class Layout(PyLayers):
                 coords.boundary=np.hstack((np.min(np.array(coords.latlon.values()),axis=0),
                                            np.max(np.array(coords.latlon.values()),axis=0)))
                 coords.cartesian(cart=True)
-        else : 
+        else :
             or_coord_format = 'cart'
         #
         # update display section
@@ -1144,7 +1162,7 @@ class Layout(PyLayers):
         for nn in di['points']:
             nodeindex = eval(nn)
             if or_coord_format=='latlon':
-                x,y =coords.xy[nn]  
+                x,y =coords.xy[nn]
             else :
                 x,y       = eval(di['points'][nn])
 
@@ -1166,14 +1184,23 @@ class Layout(PyLayers):
             d = eval(di['segments'][ns])
             if d.has_key('ss_name'):
                 Nss = Nss + len(d['ss_name'])
+                ss_offset=[]
                 for n in d['ss_name']:
                     if n in self.name:
                         self.name[n].append(eval(ns))
                     else:
                         self.name[n]=[eval(ns)]
+                    ss_offset.append(0)
+                if not d.has_key('ss_offset'):
+                    d['ss_offset']=ss_offset
+
             name = d['name']
             nta = d['connect'][0]
             nhe = d['connect'][1]
+            if not d.has_key('offset'):
+                d['offset']=0
+
+
             x,y = tuple((np.array(self.Gs.pos[nta])+np.array(self.Gs.pos[nhe]))/2.)
             # round to mm
             self.Gs.pos[eval(ns)] = (round(1000*x)/1000.,round(1000*y)/1000.)
@@ -2666,7 +2693,7 @@ class Layout(PyLayers):
         self.Gs.pos[np]=tuple(eval(data[0]),eval(data[1]))
 
 
-    def chgmss(self,ns,ss_name=[],ss_z=[]):
+    def chgmss(self,ns,ss_name=[],ss_z=[],ss_offset=[]):
         """ change multi subseggments properties
 
         Parameters
@@ -2680,6 +2707,8 @@ class Layout(PyLayers):
 
         ss_z : list of Nss tuple (zmin,zmax)
 
+        ss_offset : list os subsegment offsets
+
         Examples
         --------
 
@@ -2689,12 +2718,21 @@ class Layout(PyLayers):
         pylayers.gis.layout.g2npy
 
         """
+
+        assert len(ss_name)==len(ss_z),'Error incompatible size in chgmss'
+        assert len(ss_z)==len(ss_offset),'Error incompatible size in chgmss'
+
         if ns in self.Gs.node.keys():
             if self.Gs.node[ns].has_key('ss_name'):
                 if ss_name<>[]:
                     self.Gs.node[ns]['ss_name']=ss_name
                 if ss_z<>[]:
                     self.Gs.node[ns]['ss_z']=ss_z
+                if ss_offset<>[]:
+                    self.Gs.node[ns]['ss_offset']=ss_offset
+                else:
+                    self.Gs.node[ns]['ss_offset']=[0]*len(ss_z)
+
 
                 # update Layout information
                 self.g2npy()
@@ -2804,7 +2842,7 @@ class Layout(PyLayers):
         elif verbose:
             print "no subseg to delete"
 
-    def add_subseg(self,s1,name='DOOR',zmin=0,zmax=2.24):
+    def add_subseg(self,s1,name='DOOR',zmin=0,zmax=2.24,offset=0,transition=True):
         """ add a subsegment on a segment
 
         Parameters
@@ -2823,14 +2861,17 @@ class Layout(PyLayers):
         self.info_segment(s1)
         message = str(self.sl.keys())
         title = 'Add a subsegment'
-        data = multenterbox(message, title, ('name', 'zmin', 'zmax'),
-                                            (name, zmin, zmax))
+        data = multenterbox(message, title, ('name', 'zmin', 'zmax','offset'),
+                                            (name, zmin, zmax,offset))
 
         self.Gs.node[s1]['ss_name'] = [data[0]]
-        self.Gs.node[s1]['ss_z'] = [(eval(data[1]),eval(data[2]))]
-        self.Gs.node[s1]['ss_ce'] = [ (0,0) ]
-        self.Gs.node[s1]['transition'] = True
         self.Nss += 1
+        self.chgmss(s1,ss_name=[data[0]],ss_offset=[eval(data[3])],ss_z=[(eval(data[1]),eval(data[2]))])
+        #self.Gs.node[s1]['ss_z'] = 
+        # ce is for Pulsray compatibility
+        #self.Gs.node[s1]['ss_ce'] = [ (0,0) ]
+        self.Gs.node[s1]['transition'] = transition
+
 
     def add_window(self, s1, z):
         """ add a window on segment
