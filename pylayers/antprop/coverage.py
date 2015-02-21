@@ -288,16 +288,16 @@ class Coverage(PyLayers):
         Notes
         -----
 
-        self.fGHz is an array it means that coverage is calculated at once
-        for a whole set of frequencies. In practice the center frequency of a
-        given standard channel.
+        self.fGHz is an array, it means that Coverage is calculated at once
+        for a whole set of frequencies. In practice, it would be the center
+        frequency of a given standard channel.
 
-        This function is calling `Losst` which calculates Losses along a
+        This function is calling `loss.Losst` which calculates Losses along a
         straight path.
 
         In a future implementation we will
         abstract the EM solver in order to make use of other calculation
-        approaches as full or partial Ray Tracing.
+        approaches as a full or partial Ray Tracing.
 
         The following members variables are evaluated :
 
@@ -379,6 +379,7 @@ class Coverage(PyLayers):
         ng = self.ng
         nf = self.nf
 
+        pdb.set_trace()
         Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
         if polar=='o':
             self.polar='o'

@@ -380,15 +380,28 @@ class Interface(PyLayers):
 
         fGHz : np.arrray (nf)
         display : boolean
-        default False
+            default False
+        dB : booean
+            default True
 
         Returns
         -------
 
         Lo : np.array
-        Loss orthogonal polarization (dB)
+            Loss orthogonal polarization (dB)
         Lp : np.array
-        Loss parallel polarization (dB)
+            Loss parallel polarization (dB)
+
+        Examples
+        --------
+
+        >>> from pylayers.antprop.slab import *
+
+        See Also
+        --------
+
+        pylayers.antprop.coverage
+        pylayers.antprop.loss
 
         """
 
@@ -1276,11 +1289,13 @@ class MatDB(PyLayers,dict):
 
 
 class Slab(dict, Interface):
-    """ Handle slab
+    """ Handle a Slab
 
     Summary
     -------
-    A slab is a sequence of layers which has
+
+    A Slab is a sequence of layers which each has
+
     - a given width
     - an integer index refering a given material in the material DB
 
@@ -1302,12 +1317,11 @@ class Slab(dict, Interface):
     color of slab dor display
     linewidth :
     linewidth for structure display
-    mat :
-    Associated Material Database
+    mat : Associated Material Database
     evaluated : Boolean
 
     """
-    def __init__(self, mat, name='NEWSLAB'):
+    def __init__(self, mat=MatDB(), name='NEWSLAB'):
         """ class constructor
 
         Parameters
@@ -1324,7 +1338,7 @@ class Slab(dict, Interface):
         self['imat'] = (0, 0, 0, 0, 0, 0, 0, 0)
         self['thickness'] = (10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
         self['lthick'] = [0.1]
-        self['lmat'] = ['AIR']
+        self['lmatname'] = ['AIR']
         self['color'] = 'black'
         self['linewidth'] = 1.0
         self.mat = mat
@@ -1332,9 +1346,11 @@ class Slab(dict, Interface):
 
     def __add__(self,u):
         """ This function makes the addition between 2 slab
+
         It could be simplified once we decide not to be compatible
         with old version odf slab for PyRay. Wait until diffraction are OK.
         Problem with length of slab !!
+
         """
         U = Slab(self.mat)
         U['lthick'] = self['lthick']+u['lthick']
@@ -1371,6 +1387,10 @@ class Slab(dict, Interface):
 #        st = st+'\n'
 #        return(st)
 
+    def __repr__(self):
+        st = self['name']
+        return(st)
+
     def info(self):
         """ display Slab Info
 
@@ -1396,7 +1416,7 @@ class Slab(dict, Interface):
 
         """
         print "------------"
-        print "name : ", self
+        print "name : ", self['name']
         print "nbmat : ", len(self['lmatname'])
         chaine = "[ "
         for name in self['lmatname']:
@@ -1431,6 +1451,8 @@ class Slab(dict, Interface):
 
         Warnings
         --------
+
+        Deprecated
 
         In .slab file thickness variable is expressed in cm
 
@@ -1617,17 +1639,23 @@ class Slab(dict, Interface):
     def filter(self,win,theta=0):
         """ filtering waveform
 
+        Warning
+        -------
+
+        Not implemented yet
+
         Parameters
         ----------
 
-        win : waveform
+        win : Waveform
 
         Returns
         -------
 
-        wout :
+        wout : Waveform
 
         """
+        # get frequency base of the waveform
         f = win.sf.x
         self.ev(f,theta)
         wout = Wafeform()
@@ -1645,6 +1673,7 @@ class Slab(dict, Interface):
 
         Returns
         -------
+
         delayo : excess delay polarization o
         delayp : excess delay polarization p
 
@@ -1867,6 +1896,14 @@ class SlabDB(dict):
             self.load(fileslab)
             self.dass()
 
+    def __repr__(self):
+        st = "Slab filename : ", self.fileslab + '\n'
+        st = st + "Associated material filename : ", self.mat.filemat+'\n'
+        #for i in self.keys():
+        #    S = self[i]
+        #    S.info()
+        return(st)    
+
     def showall(self):
         """ show all slabs
 
@@ -1882,13 +1919,8 @@ class SlabDB(dict):
         plt.show()
 
     def info(self):
-        """ information
+        """ provides information
         """
-        print "fileslab : ", self.fileslab
-        print "filemat : ", self.mat.filemat
-        for i in self.keys():
-            S = self[i]
-            S.info()
 
     def dass(self):
         """ update conversion dictionnary
