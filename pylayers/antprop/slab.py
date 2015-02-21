@@ -853,6 +853,7 @@ class MatDB(PyLayers,dict):
         """
         self.fileini = _fileini
         self.filemat = self.fileini.replace('.ini','.mat')
+        self.load(_fileini)
 
 
 
@@ -1120,6 +1121,7 @@ class MatDB(PyLayers,dict):
             self[matname] = M
 
         # PULSRAY compatibility : save in the old .mat format
+        # Should be deprecated soon
         self.savemat(self.filemat)
 
     def loadmat(self, _filemat):
@@ -1321,7 +1323,7 @@ class Slab(dict, Interface):
     evaluated : Boolean
 
     """
-    def __init__(self, mat=MatDB(), name='NEWSLAB'):
+    def __init__(self, mat=[], name='NEWSLAB'):
         """ class constructor
 
         Parameters
@@ -1332,6 +1334,9 @@ class Slab(dict, Interface):
         slab name
 
         """
+        # if not specified choose default material database
+        if mat==[]:
+            mat=MatDB()
         self['name'] = name
         self['index'] = 0
         self['nbmat'] = 1
@@ -1343,6 +1348,7 @@ class Slab(dict, Interface):
         self['linewidth'] = 1.0
         self.mat = mat
         self['evaluated'] = False
+        self.conv()
 
     def __add__(self,u):
         """ This function makes the addition between 2 slab
