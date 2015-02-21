@@ -261,14 +261,12 @@ class Coverage(PyLayers):
             except:
                 pass
 
-    def cover(self,polar='o',sinr=True,snr=True,best=True):
+    def cover(self,sinr=True,snr=True,best=True):
         """ run the coverage calculation
 
         Parameters
         ----------
 
-        polar : string
-            'o' | 'p'
         sinr : boolean
         snr  : boolean
         best : boolean
@@ -379,16 +377,11 @@ class Coverage(PyLayers):
         ng = self.ng
         nf = self.nf
 
-        pdb.set_trace()
         Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
-        if polar=='o':
-            self.polar='o'
-            self.Lw = Lwo.reshape(nf,ng,na)
-            self.Ed = Edo.reshape(nf,ng,na)
-        if polar=='p':
-            self.polar='p'
-            self.Lw = Lwp.reshape(nf,ng,na)
-            self.Ed = Edp.reshape(nf,ng,na)
+        self.Lwo = Lwo.reshape(nf,ng,na)
+        self.Edo = Edo.reshape(nf,ng,na)
+        self.Lwp = Lwp.reshape(nf,ng,na)
+        self.Edp = Edp.reshape(nf,ng,na)
 
         freespace = loss.PL(self.fGHz,self.pa,self.pg,dB=False)
         self.freespace = freespace.reshape(nf,ng,na)
@@ -397,7 +390,9 @@ class Coverage(PyLayers):
         # f x g x a
 
         # CmW : Received Power coverage in mW
-        self.CmW = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lw*self.freespace
+        self.CmWo = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwo*self.freespace
+        self.CmWp = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwp*self.freespace
+
 
         if snr:
             self.evsnr()
@@ -412,7 +407,8 @@ class Coverage(PyLayers):
 
         NmW = 10**(self.pndbm/10.)[np.newaxis,:]
 
-        self.snr = self.CmW/NmW
+        self.snro = self.CmWo/NmW
+        self.snrp = self.CmWp/NmW
 
     def evsinr(self):
         """ calculates sinr
@@ -422,11 +418,14 @@ class Coverage(PyLayers):
 
         U = (np.ones((na,na))-np.eye(na))[np.newaxis,np.newaxis,:,:]
 
-        ImW = np.einsum('ijkl,ijl->ijk',U,self.CmW)
+        ImWo = np.einsum('ijkl,ijl->ijk',U,self.CmWo)
+        ImWp = np.einsum('ijkl,ijl->ijk',U,self.CmWp)
+
 
         NmW = 10**(self.pndbm/10.)[np.newaxis,:]
 
-        self.sinr = self.CmW/(ImW+NmW)
+        self.sinro = self.CmWo/(ImWo+NmW)
+        self.sinrp = self.CmWp/(ImWp+NmW)
 
     def evbestsv(self):
         """ determine best server map
@@ -441,13 +440,18 @@ class Coverage(PyLayers):
         ng = self.ng
         nf = self.nf
         # find best server regions
-        V = self.CmW
-        self.bestsv = np.zeros(nf*ng*na).reshape(nf,ng,na)
+        Vo = self.CmWo
+        Vp = self.CmWp
+        self.bestsvo = np.empty(nf*ng*na).reshape(nf,ng,na)
+        self.bestsvp = np.empty(nf*ng*na).reshape(nf,ng,na)
         for kf in range(nf):
-            MaxV = np.max(V[kf,:,:],axis=1)
+            MaxVo = np.max(Vo[kf,:,:],axis=1)
+            MaxVp = np.max(Vp[kf,:,:],axis=1)
             for ka in range(na):
-                u = np.where(V[kf,:,ka]==MaxV)
-                self.bestsv[kf,u,ka]=ka+1
+                uo = np.where(Vo[kf,:,ka]==MaxVo)
+                up = np.where(Vp[kf,:,ka]==MaxVp)
+                self.bestsvo[kf,uo,ka]=ka+1
+                self.bestsvp[kf,up,ka]=ka+1
 
 
 #    def showEd(self,polar='o',**kwargs):
@@ -770,6 +774,8 @@ class Coverage(PyLayers):
         typ : string
             'pr' | 'sinr' | 'capacity' | 'loss' | 'best' | 'egd'
         grid : boolean
+        polar : string
+            'o' | 'p'
         best : boolean
             draw best server contour if True
         f : int
@@ -803,6 +809,7 @@ class Coverage(PyLayers):
         """
         defaults = { 'typ': 'pr',
                      'grid': False,
+                     'polar':'p',
                      'f' : 0,
                      'a' :-1,
                      'db':True,
@@ -811,10 +818,11 @@ class Coverage(PyLayers):
                    }
 
         title = self.dap[1].s.name+ ' : '
+
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]
-
+        polar = kwargs['polar']
         if 'fig' in kwargs:
             if 'ax' in kwargs:
                 fig,ax=self.L.showG('s',fig=kwargs['fig'],ax=kwargs['ax'])
@@ -847,9 +855,12 @@ class Coverage(PyLayers):
         t = self.grid[-1,-1]
 
         if typ=='best':
-            title = title + 'Best server'+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
+            title = title + 'Best server'+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+polar
             for ka in range(self.na):
-                bestsv =  self.bestsv[f,:,ka]
+                if polar=='p':
+                    bestsv =  self.bestsvp[f,:,ka]
+                if polar=='o':    
+                    bestsv =  self.bestsvo[f,:,ka]
                 m = np.ma.masked_where(bestsv == 0,bestsv)
                 if self.mode<>'file':
                     W = m.reshape(self.nx,self.ny).T
@@ -862,47 +873,58 @@ class Coverage(PyLayers):
             ax.set_title(title)
         else:
             if typ=='egd':
-                title = title + 'excess group delay : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
+                title = title + 'excess group delay : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+polar
                 V = self.Ed
                 dB = False
                 legcb =  'Delay (ns)'
             if typ=='sinr':
-                title = title + 'SINR : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
+                title = title + 'SINR : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+polar
                 if dB:
                     legcb = 'dB'
                 else:
                     legcb = 'Linear scale'
-                V = self.sinr
-
+                if polar=='o':        
+                    V = self.sinro
+                if polar=='p':    
+                    V = self.sinrp
             if typ=='snr':
-                title = title + 'SNR : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
+                title = title + 'SNR : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+polar
                 if dB:
                     legcb = 'dB'
                 else:
                     legcb = 'Linear scale'
-                V = self.snr
-
+                if polar=='o':
+                    V = self.snro
+                if polar=='p':
+                    V = self.snrp
             if typ=='capacity':
-                title = title + 'Capacity : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
+                title = title + 'Capacity : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+polar
                 legcb = 'Mbit/s'
-                V = self.bmhz.T[np.newaxis,:]*np.log(1+self.sinr)/np.log(2)
-
+                if polar=='o':
+                    V = self.bmhz.T[np.newaxis,:]*np.log(1+self.sinro)/np.log(2)
+                if polar=='p':
+                    V = self.bmhz.T[np.newaxis,:]*np.log(1+self.sinrp)/np.log(2)    
             if typ=='pr':
-                title = title + 'Pr : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
+                title = title + 'Pr : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+polar
                 if dB:
                     legcb = 'dBm'
                 else:
                     lgdcb = 'mW'
-                V = self.CmW
+                if polar=='o':    
+                    V = self.CmWo
+                if polar=='p':
+                    V = self.CmWp
 
             if typ=='loss':
-                title = title + 'Loss : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
+                title = title + 'Loss : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+polar
                 if dB:
                     legcb = 'dB'
                 else:
                     legcb = 'Linear scale'
-
-                V = self.Lw*self.freespace
+                if polar=='o':    
+                    V = self.Lwo*self.freespace
+                if polar=='p':    
+                    V = self.Lwp*self.freespace
 
             if a == -1:
                 V = np.max(V[f,:,:],axis=1)
@@ -910,7 +932,7 @@ class Coverage(PyLayers):
                 V = V[f,:,a]
 
             # reshaping the data on the grid
-            if self.mode<>'file':
+            if self.mode!='file':
                 U = V.reshape((self.nx,self.ny)).T
             else:
                 U = V
@@ -928,7 +950,7 @@ class Coverage(PyLayers):
             else:
                 vmax = U.max()
 
-            if self.mode<>'file':
+            if self.mode!='file':
                 img = ax.imshow(U,
                             extent=(l,r,b,t),
                             origin='lower',
@@ -948,7 +970,10 @@ class Coverage(PyLayers):
             clb.set_label(legcb)
             if best:
                 if self.mode<>'file':
-                    ax.contour(np.sum(self.bestsv,axis=2)[f,:].reshape(self.nx,self.ny).T,extent=(l,r,b,t),linestyles='dotted')
+                    if polar=='o':
+                        ax.contour(np.sum(self.bestsvo,axis=2)[f,:].reshape(self.nx,self.ny).T,extent=(l,r,b,t),linestyles='dotted')
+                    if polar=='p':
+                        ax.contour(np.sum(self.bestsvp,axis=2)[f,:].reshape(self.nx,self.ny).T,extent=(l,r,b,t),linestyles='dotted')
 
         # display access points
         if a==-1:
