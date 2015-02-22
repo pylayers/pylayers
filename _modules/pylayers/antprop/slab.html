@@ -537,7 +537,7 @@
 <span class="sd">            &gt;&gt;&gt; sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; mat = sl.mat</span>
 <span class="sd">            &gt;&gt;&gt; lmatname = [mat[&#39;AIR&#39;],mat[&#39;WOOD&#39;]]</span>
-<span class="sd">            &gt;&gt;&gt; II = MatInterface(lmat,0,fGHz,theta)</span>
+<span class="sd">            &gt;&gt;&gt; II = MatInterface(lmatname,0,fGHz,theta)</span>
 <span class="sd">            &gt;&gt;&gt; II.RT()</span>
 <span class="sd">            &gt;&gt;&gt; fig,ax = II.plotwrt(var=&#39;a&#39;,kv=10,typ=[&#39;m&#39;])</span>
 <span class="sd">            &gt;&gt;&gt; air = mat[&#39;AIR&#39;]</span>
@@ -1082,8 +1082,8 @@
 <span class="sd">        &gt;&gt;&gt; from pylayers.antprop.slab import *</span>
 <span class="sd">        &gt;&gt;&gt; m = MatDB()</span>
 <span class="sd">        &gt;&gt;&gt; m.load(&#39;matDB.ini&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; m.add(&#39;ConcreteJcB&#39;,cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ=&#39;THz&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; m.add(&#39;GlassJcB&#39;,cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ=&#39;THz&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; m.add(name=&#39;ConcreteJcB&#39;,cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ=&#39;THz&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; m.add(name=&#39;GlassJcB&#39;,cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ=&#39;THz&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; out = m.save(&#39;Jacob.ini&#39;)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1616,7 +1616,7 @@
         <span class="c">#self.thick.append(0.0)</span>
 </div>
     <span class="k">def</span> <span class="nf">ev</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span><span class="n">compensate</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">RT</span><span class="o">=</span><span class="s">&#39;RT&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; evaluation of the slab</span>
+        <span class="sd">&quot;&quot;&quot; evaluation of the Slab</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2013,7 +2013,7 @@
 <span class="sd">    DB : slab dictionnary</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="SlabDB.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.__init__.html#pylayers.antprop.slab.SlabDB.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filemat</span><span class="o">=</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span> <span class="n">fileini</span><span class="o">=</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="SlabDB.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.__init__.html#pylayers.antprop.slab.SlabDB.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filemat</span><span class="o">=</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span> <span class="n">fileslab</span><span class="o">=</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; class constructor</span>
 
 <span class="sd">        Parameters</span>
@@ -2024,18 +2024,18 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">fileini</span> <span class="o">=</span> <span class="n">fileini</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fileslab</span> <span class="o">=</span> <span class="n">fileslab</span>
         <span class="c"># deprecated</span>
         <span class="c">#self.fileslab = self.fileslab.replace(&#39;.ini&#39;,&#39;.slab&#39;) # WARNING !!! deprecated in new verion</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mat</span> <span class="o">=</span> <span class="n">MatDB</span><span class="p">()</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">filemat</span> <span class="o">!=</span> <span class="s">&#39;&#39;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filemat</span><span class="p">)</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">fileini</span> <span class="o">!=</span> <span class="s">&#39;&#39;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fileini</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">fileslab</span> <span class="o">!=</span> <span class="s">&#39;&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fileslab</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dass</span><span class="p">()</span>
 </div>
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">st</span> <span class="o">=</span>      <span class="s">&quot;Slab file name     : &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileini</span><span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span>      <span class="s">&quot;Slab file name     : &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileslab</span><span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;Material file name : &quot;</span> <span class="o">+</span>  <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">fileini</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;-----------------------------&#39;</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>

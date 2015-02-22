@@ -90,20 +90,34 @@
 <span class="sd">    Signatures.__len__</span>
 <span class="sd">    Signatures.num</span>
 <span class="sd">    Signatures.info</span>
-<span class="sd">    Signatures.save</span>
+<span class="sd">    Signatures.saveh5</span>
+<span class="sd">    Signatures.loadh5</span>
+<span class="sd">    Signatures._saveh5</span>
+<span class="sd">    Signatures._loadh5</span>
 <span class="sd">    Signatures.load</span>
+<span class="sd">    Signatures.save</span>
 <span class="sd">    Signatures.sp</span>
 <span class="sd">    Signatures.procone</span>
 <span class="sd">    Signatures.propaths</span>
+<span class="sd">    Signatures.short_propath</span>
 <span class="sd">    Signatures.propaths2</span>
+<span class="sd">    Signatures.propaths3</span>
+<span class="sd">    Signatures.propaths2015_2</span>
 <span class="sd">    Signatures.procone2</span>
 <span class="sd">    Signatures.calsig</span>
+<span class="sd">    Signatures.exist</span>
+<span class="sd">    Signatures.run2015</span>
+<span class="sd">    Signatures.run2015_2</span>
+<span class="sd">    Signatures.dido</span>
 <span class="sd">    Signatures.run</span>
 <span class="sd">    Signatures.run1</span>
-<span class="sd">    Signatures.run4</span>
-<span class="sd">    Signatures.run5</span>
 <span class="sd">    Signatures.run2</span>
 <span class="sd">    Signatures.run3</span>
+<span class="sd">    Signatures.run4</span>
+<span class="sd">    Signatures.run5</span>
+<span class="sd">    Signatures.run6</span>
+<span class="sd">    Signatures.run7</span>
+<span class="sd">    Signatures.run7mt</span>
 <span class="sd">    Signatures.meta</span>
 <span class="sd">    Signatures.lineofcycle</span>
 <span class="sd">    Signatures.cones</span>
@@ -111,6 +125,9 @@
 <span class="sd">    Signatures.show</span>
 <span class="sd">    Signatures.showi</span>
 <span class="sd">    Signatures.rays</span>
+<span class="sd">    Signatures.raysv</span>
+<span class="sd">    Signatures.image</span>
+<span class="sd">    Signatures.image2</span>
 
 <span class="sd">Class Signature</span>
 <span class="sd">===============</span>
@@ -565,7 +582,7 @@
 
                 <span class="c"># s = s + &#39;   &#39;+ str(a[i,1,:]) + &#39;\n&#39;</span>
 </div>
-    <span class="k">def</span> <span class="nf">saveh5</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Signatures.saveh5"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.saveh5.html#pylayers.antprop.signature.Signatures.saveh5">[docs]</a>    <span class="k">def</span> <span class="nf">saveh5</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save signatures in hdf5 format</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -585,8 +602,8 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Signature: issue when writting h5py file&#39;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="o">=</span><span class="p">[]):</span>
+</div>
+<div class="viewcode-block" id="Signatures.loadh5"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.loadh5.html#pylayers.antprop.signature.Signatures.loadh5">[docs]</a>    <span class="k">def</span> <span class="nf">loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; load signatures hdf5 format</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">filename</span> <span class="o">==</span> <span class="p">[]:</span>
@@ -616,8 +633,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
 
-
-    <span class="k">def</span> <span class="nf">_saveh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Signatures._saveh5"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures._saveh5.html#pylayers.antprop.signature.Signatures._saveh5">[docs]</a>    <span class="k">def</span> <span class="nf">_saveh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Save in hdf5 compliant with Links</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -646,8 +663,8 @@
             <span class="n">fh5</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Signature: issue when writting h5py file&#39;</span><span class="p">)</span>
 
-
-    <span class="k">def</span> <span class="nf">_loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Signatures._loadh5"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures._loadh5.html#pylayers.antprop.signature.Signatures._loadh5">[docs]</a>    <span class="k">def</span> <span class="nf">_loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load signatures in hdf5 format compliant with class Links</span>
 
 <span class="sd">        Parameters</span>
@@ -690,7 +707,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
 
-
+</div>
 <div class="viewcode-block" id="Signatures.save"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.save.html#pylayers.antprop.signature.Signatures.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save signatures</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -870,7 +887,7 @@
                 <span class="n">visited</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
 
 </div>
-    <span class="k">def</span> <span class="nf">short_propath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">G</span><span class="p">,</span><span class="n">source</span><span class="p">,</span><span class="n">target</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">dout</span><span class="o">=</span><span class="p">{},</span><span class="n">cutoff</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">weight</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Signatures.short_propath"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.short_propath.html#pylayers.antprop.signature.Signatures.short_propath">[docs]</a>    <span class="k">def</span> <span class="nf">short_propath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">G</span><span class="p">,</span><span class="n">source</span><span class="p">,</span><span class="n">target</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">dout</span><span class="o">=</span><span class="p">{},</span><span class="n">cutoff</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">weight</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; updated dijkstra</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">source</span><span class="o">==</span><span class="n">target</span><span class="p">:</span>
@@ -931,7 +948,7 @@
 
         <span class="k">return</span> <span class="n">dout</span>
 
-
+</div>
 <div class="viewcode-block" id="Signatures.propaths"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.propaths.html#pylayers.antprop.signature.Signatures.propaths">[docs]</a>    <span class="k">def</span> <span class="nf">propaths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">G</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">bt</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; seek all simple_path from source to target</span>
 
@@ -1024,7 +1041,7 @@
                 <span class="k">except</span><span class="p">:</span>
                     <span class="k">pass</span>
 </div>
-    <span class="k">def</span> <span class="nf">propaths3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Gi</span><span class="p">,</span><span class="n">source</span><span class="p">,</span><span class="n">target</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Signatures.propaths3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.propaths3.html#pylayers.antprop.signature.Signatures.propaths3">[docs]</a>    <span class="k">def</span> <span class="nf">propaths3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Gi</span><span class="p">,</span><span class="n">source</span><span class="p">,</span><span class="n">target</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; seek shortest path from source to target</span>
 
 <span class="sd">        Parameters</span>
@@ -1056,7 +1073,7 @@
             <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="o">+</span><span class="mi">1</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">cutoff</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">cutoff</span> <span class="o">&lt;=</span> <span class="n">level</span><span class="p">):</span>  <span class="k">break</span>
 
-
+</div>
 <div class="viewcode-block" id="Signatures.propaths2"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.propaths2.html#pylayers.antprop.signature.Signatures.propaths2">[docs]</a>    <span class="k">def</span> <span class="nf">propaths2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">G</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span><span class="n">dout</span><span class="o">=</span><span class="p">{},</span> <span class="n">cutoff</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">bt</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; seek all simple_path from source to target</span>
 
@@ -1297,7 +1314,7 @@
     <span class="c">#     return dout</span>
 
 </div>
-    <span class="k">def</span> <span class="nf">propaths2015_2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">G</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span><span class="n">dout</span><span class="o">=</span><span class="p">{},</span><span class="n">M</span><span class="o">=</span><span class="p">{},</span><span class="n">Mmap</span><span class="o">=</span><span class="p">[],</span> <span class="n">cutoff</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="Signatures.propaths2015_2"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.propaths2015_2.html#pylayers.antprop.signature.Signatures.propaths2015_2">[docs]</a>    <span class="k">def</span> <span class="nf">propaths2015_2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">G</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span><span class="n">dout</span><span class="o">=</span><span class="p">{},</span><span class="n">M</span><span class="o">=</span><span class="p">{},</span><span class="n">Mmap</span><span class="o">=</span><span class="p">[],</span> <span class="n">cutoff</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; seek all simple_path from source to target</span>
 
 <span class="sd">        Parameters</span>
@@ -1447,7 +1464,7 @@
                 <span class="k">except</span><span class="p">:</span>
                     <span class="k">pass</span>
         <span class="k">return</span> <span class="n">dout</span>
-
+</div>
 <div class="viewcode-block" id="Signatures.procone2"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.procone2.html#pylayers.antprop.signature.Signatures.procone2">[docs]</a>    <span class="k">def</span> <span class="nf">procone2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">G</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span><span class="n">dout</span><span class="o">=</span><span class="p">{},</span> <span class="n">cutoff</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; seek all simple_path from source to target looking backward</span>
 
@@ -1718,7 +1735,7 @@
                     <span class="n">out</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">d</span>
 </div>
-    <span class="k">def</span> <span class="nf">exist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">seq</span><span class="p">):</span>
+<div class="viewcode-block" id="Signatures.exist"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.exist.html#pylayers.antprop.signature.Signatures.exist">[docs]</a>    <span class="k">def</span> <span class="nf">exist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">seq</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; verifies if seq exists in signatures</span>
 
 <span class="sd">        Parameters</span>
@@ -1743,8 +1760,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">False</span>
 
-
-    <span class="k">def</span> <span class="nf">run2015</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">source</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">target</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">cutoffbound</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Signatures.run2015"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.run2015.html#pylayers.antprop.signature.Signatures.run2015">[docs]</a>    <span class="k">def</span> <span class="nf">run2015</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">source</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">target</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">cutoffbound</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; EXPERIMENTAL</span>
 <span class="sd">            Vectorized approach of signature search</span>
 
@@ -2063,8 +2080,8 @@
         <span class="c">#for debug</span>
         <span class="k">return</span> <span class="n">sig2</span>
 
-
-    <span class="k">def</span> <span class="nf">run2015_2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">source</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">target</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">cutoffbound</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Signatures.run2015_2"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.run2015_2.html#pylayers.antprop.signature.Signatures.run2015_2">[docs]</a>    <span class="k">def</span> <span class="nf">run2015_2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">source</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">target</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">cutoffbound</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; EXPERIMENTAL</span>
 <span class="sd">            Vectorized approach of signature search</span>
 
@@ -2526,7 +2543,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">sig2</span><span class="p">)</span>
         <span class="c">#for debug</span>
         <span class="k">return</span> <span class="n">sig2</span>
-
+</div>
 <div class="viewcode-block" id="Signatures.run"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.run.html#pylayers.antprop.signature.Signatures.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">dcut</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; run signature calculation</span>
 
@@ -3010,7 +3027,7 @@
 
 
 </div>
-    <span class="k">def</span> <span class="nf">run7mt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">algo</span><span class="o">=</span><span class="s">&#39;old&#39;</span><span class="p">,</span><span class="n">bt</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">progress</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">diffraction</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+<div class="viewcode-block" id="Signatures.run7mt"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.run7mt.html#pylayers.antprop.signature.Signatures.run7mt">[docs]</a>    <span class="k">def</span> <span class="nf">run7mt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">algo</span><span class="o">=</span><span class="s">&#39;old&#39;</span><span class="p">,</span><span class="n">bt</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">progress</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">diffraction</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get signatures (in one list of arrays) between tx and rx</span>
 <span class="sd">            multithreaded version</span>
 
@@ -3218,8 +3235,8 @@
 
 
 
-
-    <span class="k">def</span> <span class="nf">run7</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">algo</span><span class="o">=</span><span class="s">&#39;old&#39;</span><span class="p">,</span><span class="n">bt</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">progress</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">diffraction</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Signatures.run7"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.run7.html#pylayers.antprop.signature.Signatures.run7">[docs]</a>    <span class="k">def</span> <span class="nf">run7</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">algo</span><span class="o">=</span><span class="s">&#39;old&#39;</span><span class="p">,</span><span class="n">bt</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">progress</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">diffraction</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get signatures (in one list of arrays) between tx and rx</span>
 
 <span class="sd">        Parameters</span>
@@ -3406,8 +3423,8 @@
                     <span class="k">except</span><span class="p">:</span>
                         <span class="c">#print &quot;non existing : &quot;,len(path)</span>
                         <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">nstr</span><span class="p">,</span><span class="n">typ</span><span class="p">))</span>
-
-    <span class="k">def</span> <span class="nf">run6</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">bt</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">progress</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">diffraction</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Signatures.run6"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.run6.html#pylayers.antprop.signature.Signatures.run6">[docs]</a>    <span class="k">def</span> <span class="nf">run6</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">bt</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">progress</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">diffraction</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get signatures (in one list of arrays) between tx and rx</span>
 
 <span class="sd">        Parameters</span>
@@ -3527,7 +3544,7 @@
                     <span class="c">#except:</span>
                     <span class="c">#    dout[1]=[]</span>
                     <span class="c">#    dout[1].append([s[0],len(s)])</span>
-
+</div>
 <div class="viewcode-block" id="Signatures.run2"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.run2.html#pylayers.antprop.signature.Signatures.run2">[docs]</a>    <span class="k">def</span> <span class="nf">run2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">dcut</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get signatures (in one list of arrays) between tx and rx</span>
 
@@ -4153,7 +4170,7 @@
 
 </div>
 <div class="viewcode-block" id="Signatures.lineofcycle"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.lineofcycle.html#pylayers.antprop.signature.Signatures.lineofcycle">[docs]</a>    <span class="k">def</span> <span class="nf">lineofcycle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cs</span><span class="o">=</span><span class="p">[],</span><span class="n">ct</span><span class="o">=</span><span class="p">[]):</span>
-        <span class="sd">&quot;&quot;&quot; shortest path between 2 cycle</span>
+        <span class="sd">&quot;&quot;&quot; shortest path between 2 cycles</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -4684,7 +4701,7 @@
         <span class="k">return</span> <span class="n">rays</span>
 
 </div>
-    <span class="k">def</span> <span class="nf">raysv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ptx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">prx</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="Signatures.raysv"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.raysv.html#pylayers.antprop.signature.Signatures.raysv">[docs]</a>    <span class="k">def</span> <span class="nf">raysv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ptx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">prx</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 
         <span class="sd">&quot;&quot;&quot; from signatures dict to 2D rays Vectorized version</span>
 
@@ -4754,7 +4771,7 @@
         <span class="n">rays</span><span class="o">.</span><span class="n">nb_origin_sig</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">rays</span><span class="o">.</span><span class="n">origin_sig_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span>
         <span class="k">return</span> <span class="n">rays</span>
-
+</div>
     <span class="k">def</span> <span class="nf">backtrace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tx</span><span class="p">,</span> <span class="n">rx</span><span class="p">,</span> <span class="n">M</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39; Warning :</span>
 <span class="sd">            This is an attempt to vectorize the backtrace process.</span>
@@ -4976,7 +4993,7 @@
         <span class="k">return</span> <span class="n">rayp</span>
 
 
-    <span class="k">def</span> <span class="nf">image2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tx</span><span class="p">):</span>
+<div class="viewcode-block" id="Signatures.image2"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.image2.html#pylayers.antprop.signature.Signatures.image2">[docs]</a>    <span class="k">def</span> <span class="nf">image2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; determine rays from images (second implementation)</span>
 
 <span class="sd">        Parameters</span>
@@ -5087,8 +5104,8 @@
             <span class="c">#     ipdb.set_trace()</span>
 
             <span class="n">dM</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">ninter</span><span class="p">:</span><span class="n">M</span><span class="p">})</span>
-        <span class="k">return</span> <span class="n">dM</span>
-    <span class="k">def</span> <span class="nf">image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.7</span><span class="p">,</span><span class="mf">12.5</span><span class="p">])):</span>
+        <span class="k">return</span> <span class="n">dM</span></div>
+<div class="viewcode-block" id="Signatures.image"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.image.html#pylayers.antprop.signature.Signatures.image">[docs]</a>    <span class="k">def</span> <span class="nf">image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.7</span><span class="p">,</span><span class="mf">12.5</span><span class="p">])):</span>
         <span class="sd">&#39;&#39;&#39; Warning :</span>
 <span class="sd">            This is an attempt to vectorize the image process.</span>
 <span class="sd">            Despite it has been tested on few cases with succes,</span>
@@ -5310,7 +5327,7 @@
             <span class="n">dM</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">ninter</span><span class="p">:</span><span class="n">M</span><span class="p">})</span>
         <span class="k">return</span> <span class="n">dM</span>
 
-
+</div>
 <span class="k">class</span> <span class="nc">Signature</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; class Signature</span>
 
