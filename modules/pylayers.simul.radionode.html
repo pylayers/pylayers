@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.simul.simulem" href="pylayers.simul.simulem.html" />
+    <link rel="next" title="pylayers.simul.radionode.RadioNode.__init__" href="generated/pylayers.simul.radionode.RadioNode.__init__.html" />
     <link rel="prev" title="pylayers.simul.exploit_simulnet" href="pylayers.simul.exploit_simulnet.html" /> 
   </head>
   <body>
@@ -47,7 +47,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.simul.simulem.html" title="pylayers.simul.simulem"
+          <a href="generated/pylayers.simul.radionode.RadioNode.__init__.html" title="pylayers.simul.radionode.RadioNode.__init__"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pylayers.simul.exploit_simulnet.html" title="pylayers.simul.exploit_simulnet"
@@ -63,12 +63,20 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pylayers.simul.radionode</a><ul>
+<li><a class="reference internal" href="#radionode-class">RadioNode Class</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="pylayers.simul.exploit_simulnet.html"
                         title="previous chapter">pylayers.simul.exploit_simulnet</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.simul.simulem.html"
-                        title="next chapter">pylayers.simul.simulem</a></p>
+  <p class="topless"><a href="generated/pylayers.simul.radionode.RadioNode.__init__.html"
+                        title="next chapter">pylayers.simul.radionode.RadioNode.__init__</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/modules/pylayers.simul.radionode.txt"
@@ -95,8 +103,94 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="pylayers-simul-radionode">
-<h1>pylayers.simul.radionode<a class="headerlink" href="#pylayers-simul-radionode" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pylayers.simul.radionode">
+<span id="pylayers-simul-radionode"></span><h1>pylayers.simul.radionode<a class="headerlink" href="#module-pylayers.simul.radionode" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="radionode-class">
+<h2>RadioNode Class<a class="headerlink" href="#radionode-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.__init__.html#pylayers.simul.radionode.RadioNode.__init__" title="pylayers.simul.radionode.RadioNode.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.__init__</span></tt></a>([name,&nbsp;typ,&nbsp;_fileini,&nbsp;...])</td>
+<td>the _fileini file must be placed in the ini directory</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.__repr__.html#pylayers.simul.radionode.RadioNode.__repr__" title="pylayers.simul.radionode.RadioNode.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.__repr__</span></tt></a>()</td>
+<td>representation of radio node</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.pos2pt.html#pylayers.simul.radionode.RadioNode.pos2pt" title="pylayers.simul.radionode.RadioNode.pos2pt"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.pos2pt</span></tt></a>()</td>
+<td>convert position to points dict</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.transform.html#pylayers.simul.radionode.RadioNode.transform" title="pylayers.simul.radionode.RadioNode.transform"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.transform</span></tt></a>(alpha,&nbsp;trans)</td>
+<td>tranform position rotation + translation</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.info.html#pylayers.simul.radionode.RadioNode.info" title="pylayers.simul.radionode.RadioNode.info"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.info</span></tt></a>()</td>
+<td>display RadioNodes informations</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.clear.html#pylayers.simul.radionode.RadioNode.clear" title="pylayers.simul.radionode.RadioNode.clear"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.clear</span></tt></a>()</td>
+<td>clear positions</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.points</span></tt>(...)</td>
+<td>add a set of points to RadioNode</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.point.html#pylayers.simul.radionode.RadioNode.point" title="pylayers.simul.radionode.RadioNode.point"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.point</span></tt></a>([pt,&nbsp;time,&nbsp;orientation,&nbsp;mode])</td>
+<td>add a position to RadioNode</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.linevect.html#pylayers.simul.radionode.RadioNode.linevect" title="pylayers.simul.radionode.RadioNode.linevect"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.linevect</span></tt></a>([npt,&nbsp;step,&nbsp;ptt,&nbsp;vec,&nbsp;mode])</td>
+<td>create a line along a direction</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.line.html#pylayers.simul.radionode.RadioNode.line" title="pylayers.simul.radionode.RadioNode.line"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.line</span></tt></a>(npt[,&nbsp;ptt,&nbsp;pth,&nbsp;mode])</td>
+<td>build a line trajectory for a RadioNode</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.surface.html#pylayers.simul.radionode.RadioNode.surface" title="pylayers.simul.radionode.RadioNode.surface"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.surface</span></tt></a>([N1,&nbsp;N2,&nbsp;p0,&nbsp;p1,&nbsp;p2,&nbsp;mode])</td>
+<td>add a surface to RadioNode</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.volume.html#pylayers.simul.radionode.RadioNode.volume" title="pylayers.simul.radionode.RadioNode.volume"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.volume</span></tt></a>([N1,&nbsp;N2,&nbsp;N3,&nbsp;p0,&nbsp;p1,&nbsp;p2,&nbsp;...])</td>
+<td>add a volume to RadioNode</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.loadini.html#pylayers.simul.radionode.RadioNode.loadini" title="pylayers.simul.radionode.RadioNode.loadini"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.loadini</span></tt></a>(_filespa[,&nbsp;rep])</td>
+<td>load an .ini file</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.loadspa.html#pylayers.simul.radionode.RadioNode.loadspa" title="pylayers.simul.radionode.RadioNode.loadspa"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.loadspa</span></tt></a>(_filespa[,&nbsp;rep])</td>
+<td>load a spa file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.save.html#pylayers.simul.radionode.RadioNode.save" title="pylayers.simul.radionode.RadioNode.save"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.save</span></tt></a>()</td>
+<td>save RadioNode in  .ini, .spa, .vect file</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.gpoint.html#pylayers.simul.radionode.RadioNode.gpoint" title="pylayers.simul.radionode.RadioNode.gpoint"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.gpoint</span></tt></a>([mode,&nbsp;display])</td>
+<td>gui point</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.gline.html#pylayers.simul.radionode.RadioNode.gline" title="pylayers.simul.radionode.RadioNode.gline"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.gline</span></tt></a>([mode,&nbsp;display])</td>
+<td>gui line</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.gsurface.html#pylayers.simul.radionode.RadioNode.gsurface" title="pylayers.simul.radionode.RadioNode.gsurface"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.gsurface</span></tt></a>([mode,&nbsp;display])</td>
+<td>gui surface</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.gvolume.html#pylayers.simul.radionode.RadioNode.gvolume" title="pylayers.simul.radionode.RadioNode.gvolume"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.gvolume</span></tt></a>([mode,&nbsp;display])</td>
+<td>gui volume</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.show.html#pylayers.simul.radionode.RadioNode.show" title="pylayers.simul.radionode.RadioNode.show"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.show</span></tt></a>([num,&nbsp;fig,&nbsp;ax,&nbsp;linewidth,&nbsp;...])</td>
+<td>Display RadioNode position in the 2D strucure</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.show3.html#pylayers.simul.radionode.RadioNode.show3" title="pylayers.simul.radionode.RadioNode.show3"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.show3</span></tt></a>([_filestr])</td>
+<td>display RadioNode position in geomview</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.move.html#pylayers.simul.radionode.RadioNode.move" title="pylayers.simul.radionode.RadioNode.move"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.move</span></tt></a>(dx,&nbsp;dy,&nbsp;dz)</td>
+<td>move RadioNode with a specified offset over each cartesian axis</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.extract.html#pylayers.simul.radionode.RadioNode.extract" title="pylayers.simul.radionode.RadioNode.extract"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.extract</span></tt></a>(i)</td>
+<td>extract the i-th radionode component</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.loadvsh.html#pylayers.simul.radionode.RadioNode.loadvsh" title="pylayers.simul.radionode.RadioNode.loadvsh"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.loadvsh</span></tt></a>()</td>
+<td>load an antenna</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.radionode.RadioNode.gantenna.html#pylayers.simul.radionode.RadioNode.gantenna" title="pylayers.simul.radionode.RadioNode.gantenna"><tt class="xref py py-obj docutils literal"><span class="pre">RadioNode.gantenna</span></tt></a>([mode])</td>
+<td>get antenna file</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
@@ -115,7 +209,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.simul.simulem.html" title="pylayers.simul.simulem"
+          <a href="generated/pylayers.simul.radionode.RadioNode.__init__.html" title="pylayers.simul.radionode.RadioNode.__init__"
              >next</a> |</li>
         <li class="right" >
           <a href="pylayers.simul.exploit_simulnet.html" title="pylayers.simul.exploit_simulnet"

@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.location.localization" href="pylayers.location.localization.html" />
+    <link rel="next" title="pylayers.gis.readvrml.savestr2" href="generated/pylayers.gis.readvrml.savestr2.html" />
     <link rel="prev" title="pylayers.gis.osmparser.buildingsparse" href="generated/pylayers.gis.osmparser.buildingsparse.html" /> 
   </head>
   <body>
@@ -47,7 +47,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.location.localization.html" title="pylayers.location.localization"
+          <a href="generated/pylayers.gis.readvrml.savestr2.html" title="pylayers.gis.readvrml.savestr2"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="generated/pylayers.gis.osmparser.buildingsparse.html" title="pylayers.gis.osmparser.buildingsparse"
@@ -63,12 +63,21 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pylayers.gis.readvrml</a><ul>
+<li><a class="reference internal" href="#utility-functions">Utility Functions</a></li>
+<li><a class="reference internal" href="#vlayout-class">VLayout Class</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="generated/pylayers.gis.osmparser.buildingsparse.html"
                         title="previous chapter">pylayers.gis.osmparser.buildingsparse</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.location.localization.html"
-                        title="next chapter">pylayers.location.localization</a></p>
+  <p class="topless"><a href="generated/pylayers.gis.readvrml.savestr2.html"
+                        title="next chapter">pylayers.gis.readvrml.savestr2</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/modules/pylayers.gis.readvrml.txt"
@@ -95,8 +104,84 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="pylayers-gis-readvrml">
-<h1>pylayers.gis.readvrml<a class="headerlink" href="#pylayers-gis-readvrml" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pylayers.gis.readvrml">
+<span id="pylayers-gis-readvrml"></span><h1>pylayers.gis.readvrml<a class="headerlink" href="#module-pylayers.gis.readvrml" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="utility-functions">
+<h2>Utility Functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.readvrml.savestr2.html#pylayers.gis.readvrml.savestr2" title="pylayers.gis.readvrml.savestr2"><tt class="xref py py-obj docutils literal"><span class="pre">savestr2</span></tt></a>(dpt,&nbsp;dwall[,&nbsp;_filename])</td>
+<td>save walls in str2 format</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.readvrml.stretch.html#pylayers.gis.readvrml.stretch" title="pylayers.gis.readvrml.stretch"><tt class="xref py py-obj docutils literal"><span class="pre">stretch</span></tt></a>(s[,&nbsp;alphat,&nbsp;alphah])</td>
+<td>strech a LineString by a given perc on both terminations</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.readvrml.segsplit.html#pylayers.gis.readvrml.segsplit" title="pylayers.gis.readvrml.segsplit"><tt class="xref py py-obj docutils literal"><span class="pre">segsplit</span></tt></a>(s1,&nbsp;s2[,&nbsp;tol,&nbsp;alpha])</td>
+<td>split segment</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.readvrml.extract.html#pylayers.gis.readvrml.extract" title="pylayers.gis.readvrml.extract"><tt class="xref py py-obj docutils literal"><span class="pre">extract</span></tt></a>(vrmlstrg,&nbsp;dico)</td>
+<td>converts recursively a vrml string into a dictionnary</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.readvrml.inbracket.html#pylayers.gis.readvrml.inbracket" title="pylayers.gis.readvrml.inbracket"><tt class="xref py py-obj docutils literal"><span class="pre">inbracket</span></tt></a>(strg)</td>
+<td>extraction of bracket content</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.readvrml.incrochet.html#pylayers.gis.readvrml.incrochet" title="pylayers.gis.readvrml.incrochet"><tt class="xref py py-obj docutils literal"><span class="pre">incrochet</span></tt></a>(strg)</td>
+<td>get content inside crochet</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.readvrml.geomLine.html#pylayers.gis.readvrml.geomLine" title="pylayers.gis.readvrml.geomLine"><tt class="xref py py-obj docutils literal"><span class="pre">geomLine</span></tt></a>(st)</td>
+<td>build a Line from string</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.readvrml.geomFace.html#pylayers.gis.readvrml.geomFace" title="pylayers.gis.readvrml.geomFace"><tt class="xref py py-obj docutils literal"><span class="pre">geomFace</span></tt></a>(st)</td>
+<td>build a Face from string</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.readvrml.ParseDirectionalLight.html#pylayers.gis.readvrml.ParseDirectionalLight" title="pylayers.gis.readvrml.ParseDirectionalLight"><tt class="xref py py-obj docutils literal"><span class="pre">ParseDirectionalLight</span></tt></a>(st)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.readvrml.ParseMaterial.html#pylayers.gis.readvrml.ParseMaterial" title="pylayers.gis.readvrml.ParseMaterial"><tt class="xref py py-obj docutils literal"><span class="pre">ParseMaterial</span></tt></a>(st)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.readvrml.show.html#pylayers.gis.readvrml.show" title="pylayers.gis.readvrml.show"><tt class="xref py py-obj docutils literal"><span class="pre">show</span></tt></a>(dico)</td>
+<td>show dico</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.readvrml.parsevrml.html#pylayers.gis.readvrml.parsevrml" title="pylayers.gis.readvrml.parsevrml"><tt class="xref py py-obj docutils literal"><span class="pre">parsevrml</span></tt></a>(filename)</td>
+<td>parse a vrml file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.readvrml.vrml2sha.html#pylayers.gis.readvrml.vrml2sha" title="pylayers.gis.readvrml.vrml2sha"><tt class="xref py py-obj docutils literal"><span class="pre">vrml2sha</span></tt></a>(tg)</td>
+<td>convert vrml object into shapely polygons</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.readvrml.vrml2geom.html#pylayers.gis.readvrml.vrml2geom" title="pylayers.gis.readvrml.vrml2geom"><tt class="xref py py-obj docutils literal"><span class="pre">vrml2geom</span></tt></a>(tg,&nbsp;rac)</td>
+<td>convert vrml object into geomview files</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="vlayout-class">
+<h2>VLayout Class<a class="headerlink" href="#vlayout-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Vlayout.load</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">Vlayout.show</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Vlayout.wallanalysis</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">Vlayout.show3entity</span></tt></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
@@ -115,7 +200,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.location.localization.html" title="pylayers.location.localization"
+          <a href="generated/pylayers.gis.readvrml.savestr2.html" title="pylayers.gis.readvrml.savestr2"
              >next</a> |</li>
         <li class="right" >
           <a href="generated/pylayers.gis.osmparser.buildingsparse.html" title="pylayers.gis.osmparser.buildingsparse"

@@ -23,7 +23,9 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.antprop.coverage" href="../pylayers.antprop.coverage.html" />
+    <link rel="next" title="pylayers.gis.layout" href="../pylayers.gis.layout.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,16 +45,24 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="../pylayers.gis.layout.html" title="pylayers.gis.layout"
+             accesskey="N">next</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.antprop.coverage.html" accesskey="U">pylayers.antprop.coverage</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../pylayers.gis.layout.html"
+                        title="next chapter">pylayers.gis.layout</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.antprop.coverage.Coverage.show.txt"
@@ -81,6 +91,81 @@
             
   <div class="section" id="pylayers-antprop-coverage-coverage-show">
 <h1>pylayers.antprop.coverage.Coverage.show<a class="headerlink" href="#pylayers-antprop-coverage-coverage-show" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.antprop.coverage.Coverage.show">
+<tt class="descclassname">Coverage.</tt><tt class="descname">show</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/coverage.html#Coverage.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.coverage.Coverage.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>show coverage</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : string</p>
+<blockquote>
+<div><p>&#8216;pr&#8217; | &#8216;sinr&#8217; | &#8216;capacity&#8217; | &#8216;loss&#8217; | &#8216;best&#8217; | &#8216;egd&#8217;</p>
+</div></blockquote>
+<p><strong>grid</strong> : boolean</p>
+<p><strong>polar</strong> : string</p>
+<blockquote>
+<div><p>&#8216;o&#8217; | &#8216;p&#8217;</p>
+</div></blockquote>
+<p><strong>best</strong> : boolean</p>
+<blockquote>
+<div><p>draw best server contour if True</p>
+</div></blockquote>
+<p><strong>f</strong> : int</p>
+<blockquote>
+<div><p>frequency index</p>
+</div></blockquote>
+<p><strong>a</strong> : int</p>
+<blockquote class="last">
+<div><p>access point index (-1 all access point)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="pylayers.gis.layout.Layout.showG.html#pylayers.gis.layout.Layout.showG" title="pylayers.gis.layout.Layout.showG"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.gis.layout.Layout.showG</span></tt></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">(</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;pr&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-antprop-coverage-Coverage-show-1.py">Source code</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-coverage-Coverage-show-1_00_00.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-coverage-Coverage-show-1_00_00.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-coverage-Coverage-show-1_00_00.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../../_images/pylayers-antprop-coverage-Coverage-show-1_00_00.png" src="../../_images/pylayers-antprop-coverage-Coverage-show-1_00_00.png" />
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;best&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-antprop-coverage-Coverage-show-1_01_00.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-coverage-Coverage-show-1_01_00.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-coverage-Coverage-show-1_01_00.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../../_images/pylayers-antprop-coverage-Coverage-show-1_01_00.png" src="../../_images/pylayers-antprop-coverage-Coverage-show-1_01_00.png" />
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;loss&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-antprop-coverage-Coverage-show-1_02_00.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-coverage-Coverage-show-1_02_00.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-coverage-Coverage-show-1_02_00.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../../_images/pylayers-antprop-coverage-Coverage-show-1_02_00.png" src="../../_images/pylayers-antprop-coverage-Coverage-show-1_02_00.png" />
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;sinr&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-antprop-coverage-Coverage-show-1_03_00.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-coverage-Coverage-show-1_03_00.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-coverage-Coverage-show-1_03_00.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../../_images/pylayers-antprop-coverage-Coverage-show-1_03_00.png" src="../../_images/pylayers-antprop-coverage-Coverage-show-1_03_00.png" />
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -98,11 +183,16 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="../pylayers.gis.layout.html" title="pylayers.gis.layout"
+             >next</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.antprop.coverage.html" >pylayers.antprop.coverage</a> &raquo;</li> 
       </ul>
     </div>
 

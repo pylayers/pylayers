@@ -81,6 +81,48 @@
             
   <div class="section" id="pylayers-simul-simulem-simul-cir">
 <h1>pylayers.simul.simulem.Simul.cir<a class="headerlink" href="#pylayers-simul-simulem-simul-cir" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.simul.simulem.Simul.cir">
+<tt class="descclassname">Simul.</tt><tt class="descname">cir</tt><big>(</big><em>itx</em>, <em>irx</em>, <em>store_level=0</em>, <em>alpha=1.0</em>, <em>ext=''</em>, <em>rep='output'</em>, <em>format='a'</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/simul/simulem.html#Simul.cir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.simulem.Simul.cir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate a set of channel impulse responses</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>itx</strong> : transmitter index iterable set</p>
+<blockquote class="last">
+<div><blockquote>
+<div><p>irx : receiver index iterable set
+wav : applied waveform (st,sf,sfg)</p>
+<blockquote>
+<div><p>this waveform includes the gamma factor</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>store_level <span class="classifier-delimiter">:</span> <span class="classifier">binary mask</span></dt>
+<dd><p class="first last">bit  0 : save CVC
+bit  1 : save CVCO
+bit  2 : save CSCA
+bit  3 : save CIRo
+bit  4 : save CIRa</p>
+</dd>
+</dl>
+<p>alpha : normalization factor
+ext :
+rep :
+format : string</p>
+<blockquote>
+<div><p>a : with antenna
+o : omnidirectionnal</p>
+</div></blockquote>
+</div></blockquote>
+<p>A factor ::math`sqrt{1}{30}` is necessary when applying the antenna</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 

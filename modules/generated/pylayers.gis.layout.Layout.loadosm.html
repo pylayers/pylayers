@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.gis.layout" href="../pylayers.gis.layout.html" />
+    <link rel="next" title="pylayers.gis.layout.Layout.saveosm" href="pylayers.gis.layout.Layout.saveosm.html" />
+    <link rel="prev" title="pylayers.gis.layout.Layout.dumpr" href="pylayers.gis.layout.Layout.dumpr.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,16 +46,30 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.gis.layout.Layout.saveosm.html" title="pylayers.gis.layout.Layout.saveosm"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.gis.layout.Layout.dumpr.html" title="pylayers.gis.layout.Layout.dumpr"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.gis.layout.html" accesskey="U">pylayers.gis.layout</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.gis.layout.Layout.dumpr.html"
+                        title="previous chapter">pylayers.gis.layout.Layout.dumpr</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.gis.layout.Layout.saveosm.html"
+                        title="next chapter">pylayers.gis.layout.Layout.saveosm</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.gis.layout.Layout.loadosm.txt"
@@ -81,6 +98,26 @@
             
   <div class="section" id="pylayers-gis-layout-layout-loadosm">
 <h1>pylayers.gis.layout.Layout.loadosm<a class="headerlink" href="#pylayers-gis-layout-layout-loadosm" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.loadosm">
+<tt class="descclassname">Layout.</tt><tt class="descname">loadosm</tt><big>(</big><em>_fileosm</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/gis/layout.html#Layout.loadosm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.loadosm" title="Permalink to this definition">¶</a></dt>
+<dd><p>load layout from an osm file format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>_fileosm</strong> : string</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>In JOSM nodes are numbered with negative indexes. It is not valid to
+have a positive node number. To stay compliant with the PyLayers
+convention which tells that &lt;0 node are points and &gt;0 are segments,
+in the osm format, segments are numbered negatively with a known offset
+of 1e7=10000000. The convention is set back when loading the osm file.</p>
+</dd></dl>
+
 </div>
 
 
@@ -98,11 +135,19 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.gis.layout.Layout.saveosm.html" title="pylayers.gis.layout.Layout.saveosm"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.gis.layout.Layout.dumpr.html" title="pylayers.gis.layout.Layout.dumpr"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.gis.layout.html" >pylayers.gis.layout</a> &raquo;</li> 
       </ul>
     </div>
 

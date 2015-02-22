@@ -23,7 +23,9 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.antprop.signature" href="../pylayers.antprop.signature.html" />
+    <link rel="next" title="pylayers.antprop.signature.Signature.evf" href="pylayers.antprop.signature.Signature.evf.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,16 +45,24 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.signature.Signature.evf.html" title="pylayers.antprop.signature.Signature.evf"
+             accesskey="N">next</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.antprop.signature.html" accesskey="U">pylayers.antprop.signature</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.antprop.signature.Signature.evf.html"
+                        title="next chapter">pylayers.antprop.signature.Signature.evf</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.antprop.signature.Signature.ev2.txt"
@@ -81,6 +91,32 @@
             
   <div class="section" id="pylayers-antprop-signature-signature-ev2">
 <h1>pylayers.antprop.signature.Signature.ev2<a class="headerlink" href="#pylayers-antprop-signature-signature-ev2" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.antprop.signature.Signature.ev2">
+<tt class="descclassname">Signature.</tt><tt class="descname">ev2</tt><big>(</big><em>L</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/signature.html#Signature.ev2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signature.ev2" title="Permalink to this definition">¶</a></dt>
+<dd><p>evaluation of Signature</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>L</strong> : Layout</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This function converts the sequence of interactions into numpy arrays
+which contains coordinates of segments extremities involved in the
+signature. At that level the coordinates of extremities (tx and rx) is
+not known yet.</p>
+<p>members data</p>
+<p>pa  tail of segment  (2xN)
+pb  head of segment  (2xN)
+pc  the center of segment (2xN)</p>
+<p>norm normal to the segment if segment
+in case the interaction is a point the normal is undefined and then
+set to 0</p>
+</dd></dl>
+
 </div>
 
 
@@ -98,11 +134,16 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.signature.Signature.evf.html" title="pylayers.antprop.signature.Signature.evf"
+             >next</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.antprop.signature.html" >pylayers.antprop.signature</a> &raquo;</li> 
       </ul>
     </div>
 

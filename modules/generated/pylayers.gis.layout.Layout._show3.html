@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.gis.layout" href="../pylayers.gis.layout.html" />
+    <link rel="next" title="pylayers.gis.layout.Layout.show3" href="pylayers.gis.layout.Layout.show3.html" />
+    <link rel="prev" title="pylayers.gis.layout.Layout.geomfile" href="pylayers.gis.layout.Layout.geomfile.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,16 +46,30 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.gis.layout.Layout.show3.html" title="pylayers.gis.layout.Layout.show3"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.gis.layout.Layout.geomfile.html" title="pylayers.gis.layout.Layout.geomfile"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.gis.layout.html" accesskey="U">pylayers.gis.layout</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.gis.layout.Layout.geomfile.html"
+                        title="previous chapter">pylayers.gis.layout.Layout.geomfile</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.gis.layout.Layout.show3.html"
+                        title="next chapter">pylayers.gis.layout.Layout.show3</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.gis.layout.Layout._show3.txt"
@@ -81,6 +98,44 @@
             
   <div class="section" id="pylayers-gis-layout-layout-show3">
 <h1>pylayers.gis.layout.Layout._show3<a class="headerlink" href="#pylayers-gis-layout-layout-show3" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout._show3">
+<tt class="descclassname">Layout.</tt><tt class="descname">_show3</tt><big>(</big><em>centered=False</em>, <em>newfig=False</em>, <em>opacity=1.0</em>, <em>cyid=False</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/gis/layout.html#Layout._show3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout._show3" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a .off geomview file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>newfig</strong> : Boolean</p>
+<blockquote>
+<div><p>create a new mayavi Figure</p>
+</div></blockquote>
+<p><strong>opacity</strong> : float ([0,1])</p>
+<blockquote>
+<div><p>set slab opacity</p>
+</div></blockquote>
+<p><strong>centered</strong> : Boolean</p>
+<blockquote>
+<div><p>if True the layout is centered around its center of gravity</p>
+</div></blockquote>
+<p><strong>cyid</strong> : boolean</p>
+<blockquote class="last">
+<div><p>display cycle number</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The <cite>.off</cite> file can be vizualized through the show3 method</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-gis-layout-Layout-_show3-1.py">Source code</a>)</p>
+</dd></dl>
+
 </div>
 
 
@@ -98,11 +153,19 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.gis.layout.Layout.show3.html" title="pylayers.gis.layout.Layout.show3"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.gis.layout.Layout.geomfile.html" title="pylayers.gis.layout.Layout.geomfile"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.gis.layout.html" >pylayers.gis.layout</a> &raquo;</li> 
       </ul>
     </div>
 

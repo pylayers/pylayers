@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.network.network" href="../pylayers.network.network.html" />
+    <link rel="next" title="pylayers.network.network.PNetwork.__init__" href="pylayers.network.network.PNetwork.__init__.html" />
+    <link rel="prev" title="pylayers.network.network.Network.loc_save" href="pylayers.network.network.Network.loc_save.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,16 +46,30 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.network.network.PNetwork.__init__.html" title="pylayers.network.network.PNetwork.__init__"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.network.network.Network.loc_save.html" title="pylayers.network.network.Network.loc_save"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.network.network.html" accesskey="U">pylayers.network.network</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.network.network.Network.loc_save.html"
+                        title="previous chapter">pylayers.network.network.Network.loc_save</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.network.network.PNetwork.__init__.html"
+                        title="next chapter">pylayers.network.network.PNetwork.__init__</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.network.network.Network.ini_save.txt"
@@ -81,6 +98,27 @@
             
   <div class="section" id="pylayers-network-network-network-ini-save">
 <h1>pylayers.network.network.Network.ini_save<a class="headerlink" href="#pylayers-network-network-network-ini-save" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.network.network.Network.ini_save">
+<tt class="descclassname">Network.</tt><tt class="descname">ini_save</tt><big>(</big><em>S</em>, <em>filename='simulnet_data.ini'</em>, <em>height=1.5</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/network/network.html#Network.ini_save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.ini_save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save an .ini file of node position . 
+Only links  which involve mobile nodes (typ &#8216;ag&#8217;) are kept.</p>
+<p>The produced init file is filled as follow:</p>
+<blockquote>
+<div>[timestamp]
+nodeID1_nodeID2 = x1,y1,z1,x2,y2,z2
+nodeID2_nodeID4 = x2,y2,z2,x4,y4,z4
+....</div></blockquote>
+<dl class="docutils">
+<dt>S <span class="classifier-delimiter">:</span> <span class="classifier">Simulation</span></dt>
+<dd>Scipy.Simulation object</dd>
+<dt>filename <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>name of the saved ini file</dd>
+<dt>height <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>height of the nodes</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
@@ -98,11 +136,19 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.network.network.PNetwork.__init__.html" title="pylayers.network.network.PNetwork.__init__"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.network.network.Network.loc_save.html" title="pylayers.network.network.Network.loc_save"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.network.network.html" >pylayers.network.network</a> &raquo;</li> 
       </ul>
     </div>
 

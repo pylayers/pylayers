@@ -121,7 +121,7 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">pylayers.util</span> <span class="kn">import</span> <span class="n">geomutil</span> <span class="k">as</span> <span class="n">geo</span>
 <span class="kn">from</span> <span class="nn">pylayers.util</span> <span class="kn">import</span> <span class="n">pyutil</span> <span class="k">as</span> <span class="n">pyu</span>
-<span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span> 
+<span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">descartes.patch</span> <span class="kn">import</span> <span class="n">PolygonPatch</span>
 <span class="kn">import</span> <span class="nn">shapely.geometry</span> <span class="kn">as</span> <span class="nn">shg</span>
 <span class="kn">import</span> <span class="nn">shapely.ops</span> <span class="kn">as</span> <span class="nn">sho</span>
@@ -752,7 +752,7 @@
     <span class="c">#</span>
     <span class="c">#</span>
 
-    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; show entities</span>
 
 <span class="sd">        Parameters</span>
@@ -760,21 +760,34 @@
 <span class="sd">        num : int</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">fig</span><span class="o">==</span><span class="p">[]:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">fig</span>
+        <span class="k">if</span> <span class="n">ax</span> <span class="o">==</span><span class="p">[]:</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">ax</span>
+
         <span class="k">if</span> <span class="n">num</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
             <span class="n">group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">group</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="n">num</span><span class="p">]]</span>
+
         <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">group</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">ID</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">]:</span>
                 <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;poly&#39;</span><span class="p">]:</span>
-                    <span class="n">colrand</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="mi">2</span><span class="o">**</span><span class="mi">23</span><span class="p">)</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span>
-                        <span class="mi">1</span><span class="p">))</span><span class="o">+</span><span class="mi">2</span><span class="o">**</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;0x&#39;</span><span class="p">,</span> <span class="s">&#39;#&#39;</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;poly&#39;</span><span class="p">][</span>
-                        <span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">colrand</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+                    <span class="n">colrand</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="mi">2</span><span class="o">**</span><span class="mi">23</span><span class="p">)</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">+</span><span class="mi">2</span><span class="o">**</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;0x&#39;</span><span class="p">,</span> <span class="s">&#39;#&#39;</span><span class="p">)</span>
+
+                    <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;poly&#39;</span><span class="p">][</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">colrand</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;scaled&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">,</span><span class="n">a</span>
 
     <span class="k">def</span> <span class="nf">wallanalysis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; walls analysis</span>
+
+<span class="sd">        get height</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="s">&#39;WALL&#39;</span><span class="p">]</span>
         <span class="n">dwall</span> <span class="o">=</span> <span class="p">{}</span>
@@ -861,6 +874,21 @@
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+    <span class="n">_filename</span> <span class="o">=</span> <span class="s">&#39;bat11DE1.wrl&#39;</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span><span class="s">&#39;struc&#39;</span><span class="p">)</span>
+    <span class="n">VL</span> <span class="o">=</span> <span class="n">VLayout</span><span class="p">()</span>
+    <span class="n">VL</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">dwall</span> <span class="o">=</span> <span class="n">VL</span><span class="o">.</span><span class="n">wallanalysis</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">iw</span> <span class="ow">in</span> <span class="n">dwall</span><span class="p">:</span>
+        <span class="n">seg</span> <span class="o">=</span> <span class="n">dwall</span><span class="p">[</span><span class="n">iw</span><span class="p">][</span><span class="s">&#39;seg&#39;</span><span class="p">]</span>
+        <span class="n">thick</span> <span class="o">=</span> <span class="n">dwall</span><span class="p">[</span><span class="n">iw</span><span class="p">][</span><span class="s">&#39;thickness&#39;</span><span class="p">]</span>
+        <span class="n">bdoor</span> <span class="o">=</span> <span class="n">dwall</span><span class="p">[</span><span class="n">iw</span><span class="p">][</span><span class="s">&#39;door&#39;</span><span class="p">]</span>
+        <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">xy</span>
+        <span class="k">if</span> <span class="n">bdoor</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="n">thick</span><span class="o">*</span><span class="mi">10</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="n">thick</span><span class="o">*</span><span class="mi">10</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;scaled&#39;</span><span class="p">)</span>
 </pre></div>
 
           </div>
@@ -888,7 +916,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on févr. 03, 2015.
+      Last updated on févr. 22, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

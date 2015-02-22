@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.network.network" href="../pylayers.network.network.html" />
+    <link rel="next" title="pylayers.network.network.Network.Gen_tuple" href="pylayers.network.network.Network.Gen_tuple.html" />
+    <link rel="prev" title="pylayers.network.network.Network.perm" href="pylayers.network.network.Network.perm.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,16 +46,30 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.network.network.Network.Gen_tuple.html" title="pylayers.network.network.Network.Gen_tuple"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.network.network.Network.perm.html" title="pylayers.network.network.Network.perm"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.network.network.html" accesskey="U">pylayers.network.network</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.network.network.Network.perm.html"
+                        title="previous chapter">pylayers.network.network.Network.perm</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.network.network.Network.Gen_tuple.html"
+                        title="next chapter">pylayers.network.network.Network.Gen_tuple</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.network.network.Network.combi.txt"
@@ -81,6 +98,62 @@
             
   <div class="section" id="pylayers-network-network-network-combi">
 <h1>pylayers.network.network.Network.combi<a class="headerlink" href="#pylayers-network-network-network-combi" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.network.network.Network.combi">
+<tt class="descclassname">Network.</tt><tt class="descname">combi</tt><big>(</big><em>iterable</em>, <em>r</em>, <em>key</em>, <em>d={}</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/network/network.html#Network.combi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.combi" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate combination</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>iterable</strong> : list</p>
+<blockquote>
+<div><p>list of node</p>
+</div></blockquote>
+<p><strong>r</strong> : int</p>
+<blockquote>
+<div><p>number of node gathered in the output tuple ( always set 2 ! )</p>
+</div></blockquote>
+<p><strong>d</strong> : dict</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> : tuple(node_list,r,wstd,d):</p>
+<p><strong>node_list</strong> : list of node1</p>
+<p><strong>r</strong> : gather r node in the tuple</p>
+<p><strong>wstd</strong> : the specified wstd</p>
+<p class="last"><strong>d</strong> : dictionnary of wstd attribute</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>combi = itertools.combination(iterable,r) adapted</p>
+<p>This is an adapted version of itertools.combinations in order
+to comply with the networkx.add_edges_from method.
+itertools.combinations(&#8216;ABCD&#8217;, 2) &#8211;&gt; AB AC AD BC BD CD
+itertools.combinations(range(4), 3) &#8211;&gt; 012 013 023 123</p>
+<dl class="docutils">
+<dt>self.combi([10,11,12],2,&#8217;wifi&#8217;) &#8211;&gt;     (10, 11, &#8216;wifi&#8217;, {&#8216;Pr&#8217;: [], &#8216;TOA&#8217;: []}) </dt>
+<dd><blockquote class="first">
+<div>(10, 12, &#8216;wifi&#8217;, {&#8216;Pr&#8217;: [], &#8216;TOA&#8217;: []})</div></blockquote>
+<p class="last">(11, 12, &#8216;wifi&#8217;, {&#8216;Pr&#8217;: [], &#8216;TOA&#8217;: []})</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.network.network</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">N</span><span class="o">=</span><span class="n">Network</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">key</span><span class="o">=</span><span class="s">&#39;toto&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">key1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">key2</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">comb</span><span class="o">=</span><span class="n">N</span><span class="o">.</span><span class="n">combi</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">d</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">comb</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+<span class="go">(0, 1, &#39;toto&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: [], &#39;key1&#39;: 1, &#39;key2&#39;: 2})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">comb</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+<span class="go">(0, 2, &#39;toto&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: [], &#39;key1&#39;: 1, &#39;key2&#39;: 2})</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -98,11 +171,19 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.network.network.Network.Gen_tuple.html" title="pylayers.network.network.Network.Gen_tuple"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.network.network.Network.perm.html" title="pylayers.network.network.Network.perm"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.network.network.html" >pylayers.network.network</a> &raquo;</li> 
       </ul>
     </div>
 

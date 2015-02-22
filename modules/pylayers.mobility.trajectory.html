@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.mobility.ban.body" href="pylayers.mobility.ban.body.html" />
+    <link rel="next" title="pylayers.mobility.trajectory.Trajectories.__init__" href="generated/pylayers.mobility.trajectory.Trajectories.__init__.html" />
     <link rel="prev" title="pylayers.mobility.agent" href="pylayers.mobility.agent.html" /> 
   </head>
   <body>
@@ -47,7 +47,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.mobility.ban.body.html" title="pylayers.mobility.ban.body"
+          <a href="generated/pylayers.mobility.trajectory.Trajectories.__init__.html" title="pylayers.mobility.trajectory.Trajectories.__init__"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pylayers.mobility.agent.html" title="pylayers.mobility.agent"
@@ -63,12 +63,22 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pylayers.mobility.trajectory</a><ul>
+<li><a class="reference internal" href="#trajectories-class">Trajectories Class</a></li>
+<li><a class="reference internal" href="#trajectory-class">Trajectory Class</a></li>
+<li><a class="reference internal" href="#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="pylayers.mobility.agent.html"
                         title="previous chapter">pylayers.mobility.agent</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.mobility.ban.body.html"
-                        title="next chapter">pylayers.mobility.ban.body</a></p>
+  <p class="topless"><a href="generated/pylayers.mobility.trajectory.Trajectories.__init__.html"
+                        title="next chapter">pylayers.mobility.trajectory.Trajectories.__init__</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/modules/pylayers.mobility.trajectory.txt"
@@ -95,8 +105,92 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="pylayers-mobility-trajectory">
-<h1>pylayers.mobility.trajectory<a class="headerlink" href="#pylayers-mobility-trajectory" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pylayers.mobility.trajectory">
+<span id="pylayers-mobility-trajectory"></span><h1>pylayers.mobility.trajectory<a class="headerlink" href="#module-pylayers.mobility.trajectory" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="trajectories-class">
+<h2>Trajectories Class<a class="headerlink" href="#trajectories-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectories.__init__.html#pylayers.mobility.trajectory.Trajectories.__init__" title="pylayers.mobility.trajectory.Trajectories.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectories.__init__</span></tt></a>()</td>
+<td>initialization</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectories.__repr__.html#pylayers.mobility.trajectory.Trajectories.__repr__" title="pylayers.mobility.trajectory.Trajectories.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectories.__repr__</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectories.loadh5.html#pylayers.mobility.trajectory.Trajectories.loadh5" title="pylayers.mobility.trajectory.Trajectories.loadh5"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectories.loadh5</span></tt></a>([_filename,&nbsp;append])</td>
+<td>import simulnet h5 file</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectories.ishow.html#pylayers.mobility.trajectory.Trajectories.ishow" title="pylayers.mobility.trajectory.Trajectories.ishow"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectories.ishow</span></tt></a>()</td>
+<td>interactive show of trajectories</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="trajectory-class">
+<h2>Trajectory Class<a class="headerlink" href="#trajectory-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.__init__.html#pylayers.mobility.trajectory.Trajectory.__init__" title="pylayers.mobility.trajectory.Trajectory.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectory.__init__</span></tt></a>([df,&nbsp;ID,&nbsp;name,&nbsp;typ])</td>
+<td>initialization</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.__repr__.html#pylayers.mobility.trajectory.Trajectory.__repr__" title="pylayers.mobility.trajectory.Trajectory.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectory.__repr__</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.update.html#pylayers.mobility.trajectory.Trajectory.update" title="pylayers.mobility.trajectory.Trajectory.update"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectory.update</span></tt></a>()</td>
+<td>update class member data</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.generate.html#pylayers.mobility.trajectory.Trajectory.generate" title="pylayers.mobility.trajectory.Trajectory.generate"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectory.generate</span></tt></a>(**kwargs)</td>
+<td>generate a trajectory from a numpy array</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.resample.html#pylayers.mobility.trajectory.Trajectory.resample" title="pylayers.mobility.trajectory.Trajectory.resample"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectory.resample</span></tt></a>([sf,&nbsp;tstart,&nbsp;tstop])</td>
+<td>resample trajectory</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.rescale.html#pylayers.mobility.trajectory.Trajectory.rescale" title="pylayers.mobility.trajectory.Trajectory.rescale"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectory.rescale</span></tt></a>([speedkmph])</td>
+<td>same length but specified speed</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.replay.html#pylayers.mobility.trajectory.Trajectory.replay" title="pylayers.mobility.trajectory.Trajectory.replay"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectory.replay</span></tt></a>([fig,&nbsp;ax,&nbsp;Nlabels,&nbsp;typ,&nbsp;...])</td>
+<td>replay a trajectory</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.distance.html#pylayers.mobility.trajectory.Trajectory.distance" title="pylayers.mobility.trajectory.Trajectory.distance"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectory.distance</span></tt></a>(tk)</td>
+<td>recover distance at time tk</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.space.html#pylayers.mobility.trajectory.Trajectory.space" title="pylayers.mobility.trajectory.Trajectory.space"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectory.space</span></tt></a>([ndim])</td>
+<td>extract space information</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.time.html#pylayers.mobility.trajectory.Trajectory.time" title="pylayers.mobility.trajectory.Trajectory.time"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectory.time</span></tt></a>([unit])</td>
+<td>extract time</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.plot.html#pylayers.mobility.trajectory.Trajectory.plot" title="pylayers.mobility.trajectory.Trajectory.plot"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectory.plot</span></tt></a>([fig,&nbsp;ax,&nbsp;Nlabels,&nbsp;typ,&nbsp;L])</td>
+<td>plot trajectory</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="utility-functions">
+<h2>Utility Functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.importsn.html#pylayers.mobility.trajectory.importsn" title="pylayers.mobility.trajectory.importsn"><tt class="xref py py-obj docutils literal"><span class="pre">importsn</span></tt></a>([_filename])</td>
+<td>import simulnet csv file</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">importh5</span></tt></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
@@ -115,7 +209,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.mobility.ban.body.html" title="pylayers.mobility.ban.body"
+          <a href="generated/pylayers.mobility.trajectory.Trajectories.__init__.html" title="pylayers.mobility.trajectory.Trajectories.__init__"
              >next</a> |</li>
         <li class="right" >
           <a href="pylayers.mobility.agent.html" title="pylayers.mobility.agent"
