@@ -23,10 +23,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" />
-    <link rel="up" title="pylayers.antprop.coverage" href="../pylayers.antprop.coverage.html" />
-    <link rel="next" title="pylayers.antprop.coverage.Coverage.sinr" href="pylayers.antprop.coverage.Coverage.sinr.html" />
-    <link rel="prev" title="pylayers.antprop.coverage.Coverage.creategrid" href="pylayers.antprop.coverage.Coverage.creategrid.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -46,30 +43,16 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="pylayers.antprop.coverage.Coverage.sinr.html" title="pylayers.antprop.coverage.Coverage.sinr"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="pylayers.antprop.coverage.Coverage.creategrid.html" title="pylayers.antprop.coverage.Coverage.creategrid"
-             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="../pylayers.antprop.coverage.html" accesskey="U">pylayers.antprop.coverage</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="pylayers.antprop.coverage.Coverage.creategrid.html"
-                        title="previous chapter">pylayers.antprop.coverage.Coverage.creategrid</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.antprop.coverage.Coverage.sinr.html"
-                        title="next chapter">pylayers.antprop.coverage.Coverage.sinr</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.antprop.coverage.Coverage.cover.txt"
@@ -98,59 +81,6 @@
             
   <div class="section" id="pylayers-antprop-coverage-coverage-cover">
 <h1>pylayers.antprop.coverage.Coverage.cover<a class="headerlink" href="#pylayers-antprop-coverage-coverage-cover" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="pylayers.antprop.coverage.Coverage.cover">
-<tt class="descclassname">Coverage.</tt><tt class="descname">cover</tt><big>(</big><em>polar='o'</em>, <em>sinr=True</em>, <em>snr=True</em>, <em>best=True</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/coverage.html#Coverage.cover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.coverage.Coverage.cover" title="Permalink to this definition">¶</a></dt>
-<dd><p>run the coverage calculation</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>polar</strong> : string</p>
-<blockquote>
-<div><p>&#8216;o&#8217; | &#8216;p&#8217;</p>
-</div></blockquote>
-<p><strong>sinr</strong> : boolean</p>
-<p><strong>snr</strong> : boolean</p>
-<p class="last"><strong>best</strong> : boolean</p>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="pylayers.antprop.loss.Losst.html#pylayers.antprop.loss.Losst" title="pylayers.antprop.loss.Losst"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.loss.Losst</span></tt></a>, <a class="reference internal" href="pylayers.antprop.loss.PL.html#pylayers.antprop.loss.PL" title="pylayers.antprop.loss.PL"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.loss.PL</span></tt></a></p>
-</div>
-<p class="rubric">Notes</p>
-<p>self.fGHz is an array it means that coverage is calculated at once
-for a whole set of frequencies. In practice the center frequency of a
-given standard channel.</p>
-<p>This function is calling <cite>Losst</cite> which calculates Losses along a
-straight path. In a future implementation we will
-abstract the EM solver in order to make use of other calculation
-approaches as full or partial Ray Tracing.</p>
-<p>The following members variables are evaluated :</p>
-<ul class="simple">
-<li>freespace Loss &#64; fGHz   PL()  PathLoss (shoud be rename FS as free space) $</li>
-<li>prdbmo : Received power in dBm .. math:<cite>P_{rdBm} =P_{tdBm} - L_{odB}</cite></li>
-<li>prdbmp : Received power in dBm .. math:<cite>P_{rdBm} =P_{tdBm} - L_{pdB}</cite></li>
-<li>snro : SNR polar o (H)</li>
-<li>snrp : SNR polar p (H)</li>
-</ul>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;sinr&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>(<a class="reference external" href="../../modules/generated/pylayers-antprop-coverage-Coverage-cover-1.py">Source code</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-coverage-Coverage-cover-1.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-coverage-Coverage-cover-1.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-coverage-Coverage-cover-1.pdf">pdf</a>)</p>
-<div class="figure">
-<img alt="../../_images/pylayers-antprop-coverage-Coverage-cover-1.png" src="../../_images/pylayers-antprop-coverage-Coverage-cover-1.png" />
-</div>
-</dd></dl>
-
 </div>
 
 
@@ -168,25 +98,17 @@ approaches as full or partial Ray Tracing.</p>
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="pylayers.antprop.coverage.Coverage.sinr.html" title="pylayers.antprop.coverage.Coverage.sinr"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="pylayers.antprop.coverage.Coverage.creategrid.html" title="pylayers.antprop.coverage.Coverage.creategrid"
-             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="../pylayers.antprop.coverage.html" >pylayers.antprop.coverage</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on févr. 03, 2015.
+      Last updated on févr. 22, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

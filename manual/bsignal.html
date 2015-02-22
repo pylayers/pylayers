@@ -113,8 +113,8 @@
 
 <span class="gp">In [7]: </span><span class="n">ip</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="gr">Out[7]: </span>
-<span class="go">(&lt;matplotlib.figure.Figure at 0x2b430af7b0d0&gt;,</span>
-<span class="go"> array([[&lt;matplotlib.axes.AxesSubplot object at 0x2b430af7b850&gt;]], dtype=object))</span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x2b0a331bc6d0&gt;,</span>
+<span class="go"> array([[&lt;matplotlib.axes.AxesSubplot object at 0x2b0a4548a650&gt;]], dtype=object))</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/simple_impulse.png"><img alt="../_images/simple_impulse.png" src="../_images/simple_impulse.png" style="width: 5in;" /></a>
@@ -134,77 +134,65 @@
 </div>
 <p>A simulation file contains the description of an applied waveform.</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [13]: </span><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="go">  File &quot;/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.py&quot;, line 6971</span>
+<span class="go">    &quot;&quot;&quot; show graph Gv (visibility)</span>
+<span class="go">                                  </span>
+<span class="go">^</span>
+<span class="go">SyntaxError: invalid syntax</span>
+
 
 <span class="gp">In [14]: </span><span class="kn">from</span> <span class="nn">matplotlib.pylab</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="gp">In [15]: </span><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
-<span class="go">new file WHERE1.str</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">NameError                                 Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-15-3affa4d4a99f&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 S = Simul()</span>
+
+<span class="go">NameError: name &#39;Simul&#39; is not defined</span>
 
 <span class="gp">In [16]: </span><span class="n">S</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;default.ini&#39;</span><span class="p">)</span>
-<span class="go">new file WHERE1.str</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">NameError                                 Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-16-4ea56c3c3160&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 S.load(&#39;default.ini&#39;)</span>
+
+<span class="go">NameError: name &#39;S&#39; is not defined</span>
 
 <span class="gp">In [17]: </span><span class="n">st</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">NameError                                 Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-17-5fcb67a44ed8&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 st = S.wav.st</span>
+
+<span class="go">NameError: name &#39;S&#39; is not defined</span>
 
 <span class="gp">In [18]: </span><span class="n">sf</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">NameError                                 Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-18-770353f2b154&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 sf = S.wav.sf</span>
+
+<span class="go">NameError: name &#39;S&#39; is not defined</span>
 
 <span class="gp">In [19]: </span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
-<span class="go">fcGHz  :  4.493</span>
-<span class="go">typ  :  generic</span>
-<span class="go">feGHz  :  100</span>
-<span class="go">Np  :  3000</span>
-<span class="go">twns  :  30</span>
-<span class="go">te  :  0.01</span>
-<span class="go">threshdB  :  3</span>
-<span class="go">bandGHz  :  0.499</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">NameError                                 Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-19-1ff99e7d2cdd&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 S.wav.info()</span>
+
+<span class="go">NameError: name &#39;S&#39; is not defined</span>
 
 <span class="gp">In [20]: </span><span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-<span class="gr">Out[20]: </span>
-<span class="go">(&lt;matplotlib.figure.Figure at 0x2b432ffce750&gt;,</span>
-<span class="go"> array([[&lt;matplotlib.axes.AxesSubplot object at 0x2b432ffcec90&gt;]], dtype=object))</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">AttributeError                            Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-20-305dce2e93c6&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 st.plot()</span>
+
+<span class="go">AttributeError: &#39;module&#39; object has no attribute &#39;plot&#39;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/default_wav.png"><img alt="../_images/default_wav.png" src="../_images/default_wav.png" style="width: 5in;" /></a>
-<p><em>Construction of the VectChannel</em></p>
-<p><em class="xref std std-ref">pylayers.antprop.channel.VectChannel</em></p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [21]: </span><span class="n">vc</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">VC</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="gp">In [22]: </span><span class="n">vc</span><span class="o">.</span><span class="n">doadod</span><span class="p">()</span>
-<span class="gr">Out[22]: </span>
-<span class="go">(&lt;matplotlib.figure.Figure at 0x2b432ffce750&gt;,</span>
-<span class="go"> [&lt;matplotlib.axes.AxesSubplot at 0x2b43300aded0&gt;,</span>
-<span class="go">  &lt;matplotlib.axes.AxesSubplot at 0x2b433016b790&gt;])</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/doadod.png"><img alt="../_images/doadod.png" src="../_images/doadod.png" style="width: 8in;" /></a>
-<p><em>Construction of the ScalChannel</em></p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [23]: </span><span class="n">H</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">tran2prop</span><span class="p">()</span>
-<span class="go">---------------------------------------------------------------------------</span>
-<span class="go">AttributeError                            Traceback (most recent call last)</span>
-<span class="go">&lt;ipython-input-23-37573399afd8&gt; in &lt;module&gt;()</span>
-<span class="go">----&gt; 1 H = vc.tran2prop()</span>
-
-<span class="go">AttributeError: &#39;VectChannel&#39; object has no attribute &#39;tran2prop&#39;</span>
-</pre></div>
-</div>
-<p>Tchannel object is the container for the ray transfer function</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [24]: </span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
-<span class="go">defant.vsh3</span>
-<span class="go">type :  vsh</span>
-<span class="go">No vsh coefficient calculated yet</span>
-
-<span class="gp">In [25]: </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="gr">Out[25]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span> <span class="n">at</span> <span class="mh">0x2b43302ae890</span><span class="o">&gt;</span>
-
-<span class="gp">In [26]: </span><span class="n">H</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ix</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
-<span class="go">---------------------------------------------------------------------------</span>
-<span class="go">NameError                                 Traceback (most recent call last)</span>
-<span class="go">&lt;ipython-input-26-595623b35632&gt; in &lt;module&gt;()</span>
-<span class="go">----&gt; 1 H.plot(ix=np.arange(10))</span>
-
-<span class="go">NameError: name &#39;H&#39; is not defined</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/rayTF.png"><img alt="../_images/rayTF.png" src="../_images/rayTF.png" style="width: 6in;" /></a>
 </div>
 </div>
 
@@ -233,7 +221,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on févr. 03, 2015.
+      Last updated on févr. 22, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

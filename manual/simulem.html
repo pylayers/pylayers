@@ -207,15 +207,29 @@ project.</p>
 <h2>3.1.3. Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
 <p>Modules are loded</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="go">  File &quot;/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.py&quot;, line 6971</span>
+<span class="go">    &quot;&quot;&quot; show graph Gv (visibility)</span>
+<span class="go">                                  </span>
+<span class="go">^</span>
+<span class="go">SyntaxError: invalid syntax</span>
 </pre></div>
 </div>
 <p>A simulation is loaded from file &#8216;default.ini&#8217;</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [2]: </span><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">(</span><span class="s">&#39;defstr.ini&#39;</span><span class="p">)</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">NameError                                 Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-2-8dec02db198d&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 S = Simul(&#39;defstr.ini&#39;)</span>
+
+<span class="go">NameError: name &#39;Simul&#39; is not defined</span>
 
 <span class="gp">In [3]: </span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
-<span class="gr">Out[3]: </span>
-<span class="go">(&lt;matplotlib.figure.Figure at 0x2b432ffce3d0&gt;,</span>
-<span class="go"> &lt;matplotlib.axes.AxesSubplot at 0x2b433050b0d0&gt;)</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">NameError                                 Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-3-c4521b4645d7&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 S.L.showGs()</span>
+
+<span class="go">NameError: name &#39;S&#39; is not defined</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/DefaultLayout.png"><img alt="../_images/DefaultLayout.png" src="../_images/DefaultLayout.png" style="width: 8in;" /></a>
@@ -254,7 +268,7 @@ project.</p>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on févr. 03, 2015.
+      Last updated on févr. 22, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

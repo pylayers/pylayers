@@ -435,17 +435,18 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;ax&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="o">=</span><span class="n">label</span>
-        <span class="k">if</span> <span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">shy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
-            <span class="n">shx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
-            <span class="n">lx</span>  <span class="o">=</span> <span class="n">shx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">ly</span>  <span class="o">=</span> <span class="n">shy</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="c"># last dimension of y should be equal to dimension of x</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">ly</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">):</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">ly</span> <span class="o">!=</span> <span class="n">lx</span><span class="p">)</span> <span class="p">:</span>
-                    <span class="k">print</span> <span class="s">&quot;Error in Bsignal : Dimension incompatibility &quot;</span>
-                    <span class="k">print</span> <span class="s">&quot;x : &quot;</span><span class="p">,</span> <span class="n">lx</span>
-                    <span class="k">print</span> <span class="s">&quot;y : &quot;</span><span class="p">,</span> <span class="n">ly</span>
+
+        <span class="n">shx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">shy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N</span>  <span class="o">=</span> <span class="n">shx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ly</span>  <span class="o">=</span> <span class="n">shy</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c"># multi axes indexation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">ndim</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">]))</span>
+        <span class="c"># last dimension of y should be equal to first dimension of x</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ly</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)</span> <span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Error in Bsignal : Dimension incompatibility &quot;</span>
+            <span class="k">print</span> <span class="s">&quot;x : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span>
+            <span class="k">print</span> <span class="s">&quot;y : &quot;</span><span class="p">,</span> <span class="n">ly</span>
 
 </div>
 <div class="viewcode-block" id="Bsignal.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.__repr__.html#pylayers.signal.bsignal.Bsignal.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -660,7 +661,7 @@
 <span class="sd">        typ : string</span>
 <span class="sd">            [&#39;l10&#39;,&#39;l20&#39;,&#39;d&#39;,&#39;r&#39;,&#39;du&#39;,&#39;ru&#39;,&#39;m&#39;,&#39;re&#39;,&#39;im&#39;]</span>
 <span class="sd">        sel  : list of ndarray()</span>
-<span class="sd">            data selection along selected axis, all the axis void </span>
+<span class="sd">            data selection along selected axis, all the axis void</span>
 <span class="sd">            default [[],[]]</span>
 <span class="sd">        ik : fixed axis value default (0)</span>
 
@@ -938,6 +939,7 @@
                   <span class="s">&#39;xmax&#39;</span>  <span class="p">:</span> <span class="mf">1e15</span><span class="p">,</span>
                   <span class="s">&#39;logx&#39;</span>  <span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
                   <span class="s">&#39;logy&#39;</span>  <span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                  <span class="s">&#39;idx&#39;</span>   <span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
                  <span class="p">}</span>
 
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -948,6 +950,7 @@
         <span class="n">vline</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;vline&#39;</span><span class="p">]</span>
         <span class="n">hline</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;hline&#39;</span><span class="p">]</span>
 
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;idx&#39;</span><span class="p">]</span>
         <span class="c"># filtering kwargs argument for plot function</span>
         <span class="n">args</span> <span class="o">=</span><span class="p">{}</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
@@ -974,10 +977,16 @@
         <span class="c">#</span>
         <span class="c"># if ndim(y) &gt; 1</span>
         <span class="c">#</span>
-        <span class="k">if</span> <span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">yx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">u</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">ndim</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">yx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">u</span><span class="p">]</span>
             <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">mulcplot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">u</span><span class="p">],</span><span class="n">yx</span><span class="o">*</span><span class="n">conversion</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">yx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">u</span><span class="p">]</span>
+            <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">mulcplot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">u</span><span class="p">],</span><span class="n">yx</span><span class="o">*</span><span class="n">conversion</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">yx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">u</span><span class="p">]</span>
+            <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">mulcplot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">u</span><span class="p">],</span><span class="n">yx</span><span class="o">*</span><span class="n">conversion</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ndim</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
             <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">mulcplot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">u</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">*</span><span class="n">conversion</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
         <span class="c">#</span>
         <span class="c"># Draw vertical and horizontal lines</span>
@@ -1701,6 +1710,15 @@
 </div>
     <span class="k">def</span> <span class="nf">b2fud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot; conversion into a FUDsignal</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        N :</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
 
 <span class="sd">        This method is assuming that each element of TBsignal is a delta function.</span>
 
@@ -3492,7 +3510,7 @@
 <span class="sd">    ----------</span>
 
 <span class="sd">    x  : nd.array((1xN))</span>
-<span class="sd">    y  : Complex nd.array((M x N )</span>
+<span class="sd">    y  : Complex nd.array((... x N )</span>
 
 
 <span class="sd">    Methods</span>
@@ -3516,7 +3534,6 @@
 <div class="viewcode-block" id="FUsignal.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.__init__.html#pylayers.signal.bsignal.FUsignal.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span><span class="n">label</span><span class="o">=</span><span class="p">[]):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">FUsignal</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">label</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">isFriis</span> <span class="o">=</span> <span class="bp">False</span>
-        <span class="c">#FBsignal.__init__(self, x, y)</span>
 </div>
 <div class="viewcode-block" id="FUsignal.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.__repr__.html#pylayers.signal.bsignal.FUsignal.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">FBsignal</span><span class="o">.</span><span class="n">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -3562,10 +3579,11 @@
 
 </div>
 <div class="viewcode-block" id="FUsignal.window"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.window.html#pylayers.signal.bsignal.FUsignal.window">[docs]</a>    <span class="k">def</span> <span class="nf">window</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">win</span><span class="o">=</span><span class="s">&#39;hamming&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; windowing of FU signal</span>
+        <span class="sd">&quot;&quot;&quot; windowing FUsignal</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        win : string</span>
 <span class="sd">            window type (&#39;hamming&#39;,&#39;blackman&#39;,&#39;hanning&#39;)</span>
 
@@ -3581,7 +3599,6 @@
 <span class="sd">            &gt;&gt;&gt; x = np.arange(2,8,0.1)</span>
 <span class="sd">            &gt;&gt;&gt; y = np.ones(len(x))</span>
 <span class="sd">            &gt;&gt;&gt; U = FUsignal(x,y)</span>
-<span class="sd">            &gt;&gt;&gt; fi = plt.figure()</span>
 <span class="sd">            &gt;&gt;&gt; fig,ax = U.plot()</span>
 <span class="sd">            &gt;&gt;&gt; U.window(&#39;hamming&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; fig,ax = U.plot()</span>
@@ -3590,28 +3607,18 @@
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">Nx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
-        <span class="n">shy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shy</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">shy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">Nx</span><span class="p">:</span>
-                <span class="n">Ny</span> <span class="o">=</span> <span class="n">shy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                <span class="n">ind</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">Ny</span> <span class="o">=</span> <span class="n">shy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">ind</span> <span class="o">=</span> <span class="mi">1</span>
 
         <span class="k">if</span> <span class="n">win</span> <span class="o">==</span> <span class="s">&#39;hamming&#39;</span><span class="p">:</span>
-            <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hamming</span><span class="p">(</span><span class="n">Nx</span><span class="p">)</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hamming</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">win</span> <span class="o">==</span> <span class="s">&#39;blackman&#39;</span><span class="p">:</span>
-            <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">blackman</span><span class="p">(</span><span class="n">Nx</span><span class="p">)</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">blackman</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">win</span> <span class="o">==</span> <span class="s">&#39;hanning&#39;</span><span class="p">:</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hanning</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shy</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">ind</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">Ny</span><span class="p">))</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">Ny</span><span class="p">),</span> <span class="n">w</span><span class="p">)</span>
-
+        <span class="n">w</span>   <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uax</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">w</span>
+
+
 </div>
 <div class="viewcode-block" id="FUsignal.applyFriis"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.applyFriis.html#pylayers.signal.bsignal.FUsignal.applyFriis">[docs]</a>    <span class="k">def</span> <span class="nf">applyFriis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot; apply Friis factor</span>
@@ -3619,14 +3626,18 @@
 <span class="sd">        The Friis factor is multiplied to y</span>
 
 <span class="sd">        .. math::</span>
-<span class="sd">            y := \frac{c}{4 \pi f} y</span>
+<span class="sd">            y := \( \frac{-j c}{4 \pi f} \) y</span>
+
+<span class="sd">            x is frequency in GHz</span>
 
 <span class="sd">        boolean `isFriis` is set to `True`</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">isFriis</span><span class="p">:</span>
             <span class="n">factor</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1j</span><span class="o">*</span><span class="mf">0.3</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">factor</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
+            <span class="n">factor</span> <span class="o">=</span> <span class="n">factor</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uax</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">factor</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">isFriis</span> <span class="o">=</span> <span class="bp">True</span>
 
 </div>
@@ -4212,6 +4223,10 @@
         <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
         <span class="n">fig</span><span class="p">,</span><span class="n">ax1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;l20&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s">&#39;vmin&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span> 
+            <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;vmin&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s">&#39;vmax&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span> 
+            <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;vmax&#39;</span><span class="p">]</span>
         <span class="n">fig</span><span class="p">,</span><span class="n">ax2</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;d&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">fig</span><span class="p">,[</span><span class="n">ax1</span><span class="p">,</span><span class="n">ax2</span><span class="p">]</span>
@@ -4282,7 +4297,7 @@
 <span class="sd">        [Tse] David Tse, http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf page 26</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#39;fcGHz&#39;</span><span class="p">:</span><span class="mf">4.5</span><span class="p">,</span>
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;fcGHz&#39;</span><span class="p">:</span><span class="mf">4.5</span><span class="p">,</span>
                     <span class="s">&#39;WMHz&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
                     <span class="s">&#39;Ntap&#39;</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span>
                     <span class="s">&#39;baseband&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">}</span>
@@ -5531,7 +5546,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on févr. 03, 2015.
+      Last updated on févr. 22, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

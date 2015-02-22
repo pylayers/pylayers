@@ -100,34 +100,51 @@
 <h1>pylayers.antprop.slab.MatDB.add<a class="headerlink" href="#pylayers-antprop-slab-matdb-add" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.antprop.slab.MatDB.add">
-<tt class="descclassname">MatDB.</tt><tt class="descname">add</tt><big>(</big><em>name='MAT'</em>, <em>cval=(1+0j)</em>, <em>sigma=0</em>, <em>alpha_cmm1=1</em>, <em>mur=1</em>, <em>fGHz=1</em>, <em>typ='epsr'</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/slab.html#MatDB.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.MatDB.add" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a material in the DB</p>
+<tt class="descclassname">MatDB.</tt><tt class="descname">add</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/slab.html#MatDB.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.MatDB.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a material in the DB</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
-<p><strong>material name</strong> :</p>
+<blockquote>
+<div><p>material name</p>
+</div></blockquote>
 <p><strong>cval</strong> : float or complex</p>
-<p><strong>epsilon or index</strong> :</p>
+<blockquote>
+<div><p>epsilon or index</p>
+</div></blockquote>
 <p><strong>sigma</strong> : float or complex</p>
-<p><strong>permeability</strong> :</p>
+<blockquote>
+<div><p>conductivity</p>
+</div></blockquote>
 <p><strong>mur</strong> : float</p>
+<blockquote>
+<div><p>relative permeability</p>
+</div></blockquote>
 <p><strong>typ</strong> : string</p>
-<p class="last"><strong>{&#8216;epsr&#8217;|&#8217;ind&#8217;|,&#8217;reim&#8217;,|&#8217;THz&#8217;}</strong> :</p>
+<blockquote class="last">
+<div><p>{&#8216;epsr&#8217;|&#8217;ind&#8217;<a href="#id1"><span class="problematic" id="id2">|,&#8217;reim&#8217;,|</span></a>&#8216;THz&#8217;}</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
 <p>Different ways to enter a material are :</p>
-<p>i) epsr : epsr and sigma
-cval = epsr
-sigma = sigma
-ii) ind : indice &#64; fGHz
-cval = indice
-iii) reim : real(epsr) and imag(epsr) &#64;fGHz
-iv) THZ</p>
+<ol class="lowerroman simple">
+<li>&#8216;epsr&#8217; : epsr and sigma</li>
+</ol>
+<p>cval = epsr
+sigma = sigma</p>
+<ol class="lowerroman simple" start="2">
+<li>&#8216;ind&#8217; : indice &#64; fGHz</li>
+</ol>
+<p>cval = indice</p>
+<ol class="lowerroman simple" start="3">
+<li>&#8216;reim&#8217; : real(epsr) and imag(epsr) &#64;fGHz</li>
+<li>&#8216;THz&#8217;</li>
+</ol>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">MatDB</span><span class="p">()</span>
@@ -174,7 +191,7 @@ iv) THZ</p>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on févr. 03, 2015.
+      Last updated on févr. 22, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

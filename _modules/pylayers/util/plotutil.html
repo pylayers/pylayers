@@ -218,6 +218,10 @@
 <span class="sd">    nlin : int</span>
 <span class="sd">        number of lines</span>
 
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    fig,lax : figure and list of axes</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
@@ -227,7 +231,7 @@
 <span class="sd">    If len(y.shape) &gt; 2 the two first axes are used as nlin and ncol this</span>
 <span class="sd">    takes the priority over the passed values nlin and ncol</span>
 
-<span class="sd">    notice thet typ is la list of string and not a string</span>
+<span class="sd">    notice the typ is a list of string and not a string</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -323,6 +327,8 @@
     <span class="n">ncol</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ncol&#39;</span><span class="p">]</span>
     <span class="n">titles</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;titles&#39;</span><span class="p">]</span>
     <span class="n">types</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;typ&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">types</span><span class="p">)</span><span class="o">==</span><span class="nb">str</span><span class="p">:</span>
+        <span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="n">types</span><span class="p">]</span>
     <span class="n">labels</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;labels&#39;</span><span class="p">]</span>
     <span class="n">xlabels</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;xlabels&#39;</span><span class="p">]</span>
     <span class="n">figsize</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;figsize&#39;</span><span class="p">]</span>
@@ -892,7 +898,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on févr. 03, 2015.
+      Last updated on févr. 22, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

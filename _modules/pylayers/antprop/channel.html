@@ -1361,6 +1361,7 @@
         <span class="c">#  Fb = 2 x r x f</span>
         <span class="c">#t1 = self.Ctt * Fat + self.Cpt * Fap</span>
         <span class="c">#t2 = self.Ctp * Fat + self.Cpp * Fap</span>
+
         <span class="n">t1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span> <span class="o">*</span> <span class="n">Fat</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span> <span class="o">*</span> <span class="n">Fap</span>
         <span class="n">t2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span> <span class="o">*</span> <span class="n">Fat</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span> <span class="o">*</span> <span class="n">Fap</span>
         <span class="n">alpha</span> <span class="o">=</span> <span class="n">t1</span> <span class="o">*</span> <span class="n">Fbt</span> <span class="o">+</span> <span class="n">t2</span> <span class="o">*</span> <span class="n">Fbp</span>
@@ -1686,7 +1687,7 @@
 
 
 <div class="viewcode-block" id="Tchannel.apply"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.apply.html#pylayers.antprop.channel.Tchannel.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">W</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Apply a FUsignal W to the ScalChannel.</span>
+        <span class="sd">&quot;&quot;&quot; apply FUsignal W to the Tchannel</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1810,8 +1811,10 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c">#</span>
-        <span class="c"># return a FUDsignal</span>
+        <span class="c"># return a TUsignal</span>
         <span class="c">#</span>
+        <span class="c">#import ipdb</span>
+        <span class="c">#ipdb.set_trace()</span>
         <span class="n">Y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">Wgam</span><span class="p">)</span>
         <span class="n">ri</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">ft1</span><span class="p">(</span><span class="n">Nz</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span><span class="n">ffts</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
@@ -2488,7 +2491,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on févr. 03, 2015.
+      Last updated on févr. 22, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">
