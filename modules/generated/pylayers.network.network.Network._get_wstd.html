@@ -23,9 +23,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" />
-    <link rel="up" title="pylayers.network.network" href="../pylayers.network.network.html" />
-    <link rel="next" title="pylayers.network.network.Network._get_SubNet" href="pylayers.network.network.Network._get_SubNet.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -45,24 +43,16 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="pylayers.network.network.Network._get_SubNet.html" title="pylayers.network.network.Network._get_SubNet"
-             accesskey="N">next</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="../pylayers.network.network.html" accesskey="U">pylayers.network.network</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.network.network.Network._get_SubNet.html"
-                        title="next chapter">pylayers.network.network.Network._get_SubNet</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.network.network.Network._get_wstd.txt"
@@ -91,27 +81,6 @@
             
   <div class="section" id="pylayers-network-network-network-get-wstd">
 <h1>pylayers.network.network.Network._get_wstd<a class="headerlink" href="#pylayers-network-network-network-get-wstd" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="pylayers.network.network.Network._get_wstd">
-<tt class="descclassname">Network.</tt><tt class="descname">_get_wstd</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/pylayers/network/network.html#Network._get_wstd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network._get_wstd" title="Permalink to this definition">¶</a></dt>
-<dd><p>get wireless standards from nodes of the network</p>
-<p>wstd argument specifies which wireless standard to append to the network.
-If None, all wireless standards are appended.</p>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.network.network</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">N</span><span class="o">=</span><span class="n">Network</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span>   <span class="n">N</span><span class="o">=</span><span class="n">Network</span><span class="o">.</span><span class="n">Network</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
-<span class="go">        no = Node(ID=i,wstd=[&#39;wifi&#39;,&#39;bt&#39;])</span>
-<span class="go">        N.add_nodes_from(no.nodes(data=True))</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">N</span><span class="o">.</span><span class="n">_get_wstd</span><span class="p">()</span>
-<span class="go">{&#39;bt&#39;: [0, 1, 2], &#39;wifi&#39;: [0, 1, 2]}</span>
-</pre></div>
-</div>
-</dd></dl>
-
 </div>
 
 
@@ -129,21 +98,16 @@ If None, all wireless standards are appended.</p>
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="pylayers.network.network.Network._get_SubNet.html" title="pylayers.network.network.Network._get_SubNet"
-             >next</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="../pylayers.network.network.html" >pylayers.network.network</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
     <div class="footer">
-        &copy; Copyright 2014, PyLayers developer team.
+        &copy; Copyright 2015, PyLayers developer team.
       Last updated on févr. 22, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>

@@ -1,0 +1,421 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.measures.cormoran &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pylayers.measures.cormoran</a><ul>
+<li><a class="reference internal" href="#corser-class">CorSer Class</a><ul>
+<li><a class="reference internal" href="#corser-init-and-load-data">CorSer init and load data</a></li>
+<li><a class="reference internal" href="#corser-exploit-data">CorSer exploit data</a></li>
+<li><a class="reference internal" href="#corser-visualization-tools">CorSer visualization tools</a><ul>
+<li><a class="reference internal" href="#d-vizualization">2D  vizualization</a></li>
+<li><a class="reference internal" href="#id1">3D vizualization</a></li>
+<li><a class="reference internal" href="#video-vizualization">Video Vizualization</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#corser-internal-processing">CorSer Internal processing</a><ul>
+<li><a class="reference internal" href="#time-alignement">Time Alignement</a></li>
+<li><a class="reference internal" href="#data-frame-transformation">Data frame transformation</a></li>
+<li><a class="reference internal" href="#vizualizing-processing">Vizualizing processing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/pylayers.measures.cormoran.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-pylayers.measures.cormoran">
+<span id="pylayers-measures-cormoran"></span><h1>pylayers.measures.cormoran<a class="headerlink" href="#module-pylayers.measures.cormoran" title="Permalink to this headline">¶</a></h1>
+<p>This module help to the CORMORAN measurement campaign exploitation</p>
+<div class="section" id="corser-class">
+<h2>CorSer Class<a class="headerlink" href="#corser-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">cor_log</span></tt></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="corser-init-and-load-data">
+<h3>CorSer init and load data<a class="headerlink" href="#corser-init-and-load-data" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.__init__</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.__repr__</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._loadBS</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._loadTCR</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._load_offset_dict</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._loadbody</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._loadcam</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._loadhkb</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._loadinfranodes</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.loadlog</span></tt></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="corser-exploit-data">
+<h3>CorSer exploit data<a class="headerlink" href="#corser-exploit-data" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.getdevp</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.getlink</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.getlinkd</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.getlinkp</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.devmapper</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.export_csv</span></tt></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="corser-visualization-tools">
+<h3>CorSer visualization tools<a class="headerlink" href="#corser-visualization-tools" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+</tbody>
+</table>
+<div class="section" id="d-vizualization">
+<h4>2D  vizualization<a class="headerlink" href="#d-vizualization" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.plot</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.pltmob</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.plttcr</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.pltvisi</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.animhkb</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.animhkbAP</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.imshow</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.pltgt</span></tt></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id1">
+<h4>3D vizualization<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._show3</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._show3i</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.imshowvisibility</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.imshowvisibility_i</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.anim</span></tt></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="video-vizualization">
+<h4>Video Vizualization<a class="headerlink" href="#video-vizualization" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.snapshot</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.snapshots</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.vlc</span></tt></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="corser-internal-processing">
+<h3>CorSer Internal processing<a class="headerlink" href="#corser-internal-processing" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+</tbody>
+</table>
+<div class="section" id="time-alignement">
+<h4>Time Alignement<a class="headerlink" href="#time-alignement" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.align</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.offset_setter</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.offset_setter_video</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._align_on_devdf</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._align_devdf_on_hkb</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._apply_offset'</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._save_data_off_dict</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._save_offset_dict</span></tt></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="data-frame-transformation">
+<h4>Data frame transformation<a class="headerlink" href="#data-frame-transformation" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.compute_visibility</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._computedevpdf</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._computedistdf</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._distancematrix</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._visiarray</span></tt></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="vizualizing-processing">
+<h4>Vizualizing processing<a class="headerlink" href="#vizualizing-processing" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.visidev</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.visidev2</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.__refreshshow3i</span></tt></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2015, PyLayers developer team.
+      Last updated on févr. 22, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>
