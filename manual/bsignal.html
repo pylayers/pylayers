@@ -113,8 +113,8 @@
 
 <span class="gp">In [7]: </span><span class="n">ip</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="gr">Out[7]: </span>
-<span class="go">(&lt;matplotlib.figure.Figure at 0x2b0a331bc6d0&gt;,</span>
-<span class="go"> array([[&lt;matplotlib.axes.AxesSubplot object at 0x2b0a4548a650&gt;]], dtype=object))</span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x2b7ffac643d0&gt;,</span>
+<span class="go"> array([[&lt;matplotlib.axes.AxesSubplot object at 0x2b800cf1e690&gt;]], dtype=object))</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/simple_impulse.png"><img alt="../_images/simple_impulse.png" src="../_images/simple_impulse.png" style="width: 5in;" /></a>
@@ -134,62 +134,31 @@
 </div>
 <p>A simulation file contains the description of an applied waveform.</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [13]: </span><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="go">  File &quot;/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.py&quot;, line 6971</span>
-<span class="go">    &quot;&quot;&quot; show graph Gv (visibility)</span>
-<span class="go">                                  </span>
-<span class="go">^</span>
-<span class="go">SyntaxError: invalid syntax</span>
-
 
 <span class="gp">In [14]: </span><span class="kn">from</span> <span class="nn">matplotlib.pylab</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="gp">In [15]: </span><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
-<span class="go">---------------------------------------------------------------------------</span>
-<span class="go">NameError                                 Traceback (most recent call last)</span>
-<span class="go">&lt;ipython-input-15-3affa4d4a99f&gt; in &lt;module&gt;()</span>
-<span class="go">----&gt; 1 S = Simul()</span>
-
-<span class="go">NameError: name &#39;Simul&#39; is not defined</span>
 
 <span class="gp">In [16]: </span><span class="n">S</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;default.ini&#39;</span><span class="p">)</span>
-<span class="go">---------------------------------------------------------------------------</span>
-<span class="go">NameError                                 Traceback (most recent call last)</span>
-<span class="go">&lt;ipython-input-16-4ea56c3c3160&gt; in &lt;module&gt;()</span>
-<span class="go">----&gt; 1 S.load(&#39;default.ini&#39;)</span>
-
-<span class="go">NameError: name &#39;S&#39; is not defined</span>
 
 <span class="gp">In [17]: </span><span class="n">st</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span>
-<span class="go">---------------------------------------------------------------------------</span>
-<span class="go">NameError                                 Traceback (most recent call last)</span>
-<span class="go">&lt;ipython-input-17-5fcb67a44ed8&gt; in &lt;module&gt;()</span>
-<span class="go">----&gt; 1 st = S.wav.st</span>
-
-<span class="go">NameError: name &#39;S&#39; is not defined</span>
 
 <span class="gp">In [18]: </span><span class="n">sf</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span>
-<span class="go">---------------------------------------------------------------------------</span>
-<span class="go">NameError                                 Traceback (most recent call last)</span>
-<span class="go">&lt;ipython-input-18-770353f2b154&gt; in &lt;module&gt;()</span>
-<span class="go">----&gt; 1 sf = S.wav.sf</span>
-
-<span class="go">NameError: name &#39;S&#39; is not defined</span>
 
 <span class="gp">In [19]: </span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
-<span class="go">---------------------------------------------------------------------------</span>
-<span class="go">NameError                                 Traceback (most recent call last)</span>
-<span class="go">&lt;ipython-input-19-1ff99e7d2cdd&gt; in &lt;module&gt;()</span>
-<span class="go">----&gt; 1 S.wav.info()</span>
-
-<span class="go">NameError: name &#39;S&#39; is not defined</span>
+<span class="go">fcGHz  :  4.493</span>
+<span class="go">typ  :  generic</span>
+<span class="go">feGHz  :  100</span>
+<span class="go">Np  :  3000</span>
+<span class="go">twns  :  30</span>
+<span class="go">te  :  0.01</span>
+<span class="go">threshdB  :  3</span>
+<span class="go">bandGHz  :  0.499</span>
 
 <span class="gp">In [20]: </span><span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-<span class="go">---------------------------------------------------------------------------</span>
-<span class="go">AttributeError                            Traceback (most recent call last)</span>
-<span class="go">&lt;ipython-input-20-305dce2e93c6&gt; in &lt;module&gt;()</span>
-<span class="go">----&gt; 1 st.plot()</span>
-
-<span class="go">AttributeError: &#39;module&#39; object has no attribute &#39;plot&#39;</span>
+<span class="gr">Out[20]: </span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x2b8031f48d90&gt;,</span>
+<span class="go"> array([[&lt;matplotlib.axes.AxesSubplot object at 0x2b8031f83790&gt;]], dtype=object))</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/default_wav.png"><img alt="../_images/default_wav.png" src="../_images/default_wav.png" style="width: 5in;" /></a>
@@ -221,7 +190,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on Feb 22, 2015.
+      Last updated on févr. 22, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">
