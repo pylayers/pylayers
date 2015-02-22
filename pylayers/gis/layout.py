@@ -832,18 +832,28 @@ class Layout(PyLayers):
             assert (scale.all()>0)
             self.normal = np.vstack((normx,normy,np.zeros(len(scale))))/scale
 
-            self.offset = np.empty(self.Ns+self.Nss)
 
             #for ks in ds:
             #
             # lsss : list of subsegment
             #
             nsmax  = max(self.Gs.node.keys())
+            # Warning
             # nsmax can be different from the total number of segments
+            # This means that the numerotation of segment do not need to be
+            # contiguous.
+            # stridess : length is equal to nsmax+1
+            # sla is an array of string, index 0 is not used because there is
+            # no such segment number.
+            #
             self.lsss = []
             self.isss = []
-            self.stridess = np.array(np.zeros(nsmax+1),dtype=int)
-            self.sla  = np.zeros((nsmax+1+self.Nss), dtype='S20')
+
+            #self.stridess = np.array(np.zeros(nsmax+1),dtype=int)
+            self.stridess = np.empty(nsmax+1,dtype=int)
+            self.sla  = np.empty((nsmax+1+self.Nss), dtype='S20')
+            self.offset = np.empty(nsmax+self.Nss,dtype=int)
+
 
             # Storing segment normals
             # Handling of subsegments
@@ -853,12 +863,15 @@ class Layout(PyLayers):
             index = nsmax+1
             for ks in useg:
                 k = self.tgs[ks]                        # index numpy
-
                 self.offset[k]=self.Gs.node[ks]['offset']
-
                 self.Gs.node[ks]['norm'] = self.normal[:,k]  # update normal
-                self.sla[ks]=self.Gs.node[ks]['name']   # update sla array
-                self.stridess[ks]=0                     # initialize stridess[ks]
+                nameslab  = self.Gs.node[ks]['name']   # update sla array
+                assert nameslab!='', "segment "+str(ks)+ " is not defined"
+                self.sla[ks] = nameslab
+                # stridess is different from 0 only for subsegments
+                self.stridess[ks] = 0                   # initialize stridess[ks]
+                #if index==155:
+                #    pdb.set_trace()
                 if self.Gs.node[ks].has_key('ss_name'): # if segment has sub segment
                     nss = len(self.Gs.node[ks]['ss_name'])  # retrieve number of sseg
                     self.stridess[ks]=index-1           # update stridess[ks] dict
@@ -5372,7 +5385,7 @@ class Layout(PyLayers):
                     cvex,ccve= self.Gt.node[n]['polyg'].ptconvex2()
                     # keep all convex point (in + out) to build teh delaunay triangulation
                     ucs= cvex+ccve
-                    
+
                     if len(ucs) !=0:
                         pucs = array(map(lambda x: self.Gs.pos[x], ucs))
                         pucs = np.vstack((pucs,pucs[-1]))
@@ -6529,7 +6542,7 @@ class Layout(PyLayers):
             display color and width of slabs (False)
         labels : boolean | list
             display graph labels (False)
-            if list precise label of wich cycle to dusplay
+            if list precise label of which cycle to display
             (e.g. ['t'])
         alphan : float
             transparency of nodes (1.0)
@@ -8338,7 +8351,6 @@ class Layout(PyLayers):
 
             >>> from pylayers.gis.layout import *
             >>> L = Layout()
-            >>> L._show3()
 
         """
 
