@@ -458,7 +458,7 @@ class Interface(PyLayers):
             >>> sl = SlabDB('matDB.ini','slabDB.ini')
             >>> mat = sl.mat
             >>> lmatname = [mat['AIR'],mat['WOOD']]
-            >>> II = MatInterface(lmat,0,fGHz,theta)
+            >>> II = MatInterface(lmatname,0,fGHz,theta)
             >>> II.RT()
             >>> fig,ax = II.plotwrt(var='a',kv=10,typ=['m'])
             >>> air = mat['AIR']
@@ -1003,8 +1003,8 @@ class MatDB(PyLayers,dict):
         >>> from pylayers.antprop.slab import *
         >>> m = MatDB()
         >>> m.load('matDB.ini')
-        >>> m.add('ConcreteJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
-        >>> m.add('GlassJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
+        >>> m.add(name='ConcreteJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
+        >>> m.add(name='GlassJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
         >>> out = m.save('Jacob.ini')
 
         """
@@ -1537,7 +1537,7 @@ class Slab(dict,Interface):
         #self.thick.append(0.0)
 
     def ev(self, fGHz=np.array([1.0]), theta=np.linspace(0, np.pi / 2, 50),compensate=False,RT='RT'):
-        """ evaluation of the slab
+        """ evaluation of the Slab
 
         Parameters
         ----------
@@ -1934,7 +1934,7 @@ class SlabDB(dict):
     DB : slab dictionnary
 
     """
-    def __init__(self, filemat='matDB.ini', fileini='slabDB.ini'):
+    def __init__(self, filemat='matDB.ini', fileslab='slabDB.ini'):
         """ class constructor
 
         Parameters
@@ -1945,18 +1945,18 @@ class SlabDB(dict):
 
         """
 
-        self.fileini = fileini
+        self.fileslab = fileslab
         # deprecated
         #self.fileslab = self.fileslab.replace('.ini','.slab') # WARNING !!! deprecated in new verion
         self.mat = MatDB()
         if (filemat != ''):
             self.mat.load(filemat)
-        if (fileini != ''):
-            self.load(fileini)
+        if (fileslab != ''):
+            self.load(fileslab)
             self.dass()
 
     def __repr__(self):
-        st =      "Slab file name     : " + self.fileini+ '\n'
+        st =      "Slab file name     : " + self.fileslab+ '\n'
         st = st + "Material file name : " +  self.mat.fileini+'\n'
         st = st + '-----------------------------'+'\n'+'\n'
         for i in self.keys():

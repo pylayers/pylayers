@@ -11,20 +11,34 @@ Class Signatures
     Signatures.__len__
     Signatures.num
     Signatures.info
-    Signatures.save
+    Signatures.saveh5
+    Signatures.loadh5
+    Signatures._saveh5
+    Signatures._loadh5
     Signatures.load
+    Signatures.save
     Signatures.sp
     Signatures.procone
     Signatures.propaths
+    Signatures.short_propath
     Signatures.propaths2
+    Signatures.propaths3
+    Signatures.propaths2015_2
     Signatures.procone2
     Signatures.calsig
+    Signatures.exist
+    Signatures.run2015
+    Signatures.run2015_2
+    Signatures.dido
     Signatures.run
     Signatures.run1
-    Signatures.run4
-    Signatures.run5
     Signatures.run2
     Signatures.run3
+    Signatures.run4
+    Signatures.run5
+    Signatures.run6
+    Signatures.run7
+    Signatures.run7mt
     Signatures.meta
     Signatures.lineofcycle
     Signatures.cones
@@ -32,6 +46,9 @@ Class Signatures
     Signatures.show
     Signatures.showi
     Signatures.rays
+    Signatures.raysv
+    Signatures.image
+    Signatures.image2
 
 Class Signature
 ===============
@@ -4074,7 +4091,7 @@ class Signatures(PyLayers,dict):
 
 
     def lineofcycle(self,cs=[],ct=[]):
-        """ shortest path between 2 cycle
+        """ shortest path between 2 cycles
 
         Parameters
         ----------

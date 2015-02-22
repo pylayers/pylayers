@@ -4,11 +4,11 @@
 
 This class handle the description of an Indoor layout
 
-.. autosummary::
-    :toctree: generated
-
 Class Layout
 ============
+
+.. autosummary::
+    :toctree: generated
 
 Utility functions
 -----------------
@@ -3722,7 +3722,7 @@ class Layout(PyLayers):
         >>> L = Layout('TA-Office.ini')
         >>> ptlist  = np.array([0,1])
         >>> L.segpt(ptlist)
-        array([44, 61, 62, 86])
+        array([26, 61, 62, 70])
 
         """
 
@@ -6517,138 +6517,140 @@ class Layout(PyLayers):
         #         fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg,nodes=False,node_size=50,node_color='b')
 
     def showG(self, graph='r', **kwargs):
-        """ show the different graphs
-
-        Parameters
-        ----------
-
-        graph : char
-            't' : Gt 'r' : Gr 's' : Gs 'v' : Gv  'c': Gc 'i' : Gi
-        fig : matplotlib figure
-            []
-        ax : matplotlib figure
-            []
-        show : boolean
-            False
-        nodes : boolean
-            False
-        edges : boolean
-            True
-        airwalls : boolean
-            display airwalls (False)
-        subseg: boolean
-            display subsegments (False)
-        slab : boolean
-            display color and width of slabs (False)
-        labels : boolean | list
-            display graph labels (False)
-            if list precise label of which cycle to display
-            (e.g. ['t'])
-        alphan : float
-            transparency of nodes (1.0)
-        alphae : float
-            transparency of edges (1.0)
-        width : float
-            line width (2)
-        node_color: string
-            w
-        posnode_color: string
-            positive node color (k)
-        negnode_color: string
-            negative node color (b)
-        edge_color : string
-            k
-        node_size : float
-            20
-        font_size : float
-            15,
-        nodelist : list
-            list of nodes to be displayed (all)
-        edgelist : list
-            list of edges to be displayed (all)
-        mode : string
-            'cycle' | 'none' | 'room'
-        alphacy : string
-            transparency of cycles (0.8)
-        colorcy :
-            '#abcdef'
-        linter : list
-            list of interaction for Gi
-            ['RR','TT','RT','TR','RD','DR','TD','DT','DD']
-        show0 : boolean
-            If true display connection to cycle  0 of Gt (False)
-        eded : boolean
-            True
-        ndnd : boolean
-            True
-        nded : boolean
-            True
-        width : int
-            2
-        nodelist : list
-            []
-
-
-        defaults = {'show': False,
-                    'fig': [],
-                    'ax': [],
-                    'nodes': False,
-                    'edges': True,
-                    'sllist':[],
-                    'airwalls': False,
-                    'subseg': False,
-                    'slab': False,
-                    'labels': False,
-                    'alphan': 1.0,
-                    'alphae': 1.0,
-                    'width': 2,
-                    'node_color':'w',
-                    'edge_color':'k',
-                    'node_size':20,
-                    'font_size':15,
-                    'nodelist': [],
-                    'edgelist': [],
-                    'figsize': (5,5),
-                    'mode':'nocycle',
-                    'alphacy':0.8,
-                    'colorcy':'#abcdef',
-                    'linter':['RR','TT','RT','TR','RD','DR','TD','DT','DD'],
-                    'show0':False,
-                    'axis':False
-                    }
-
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> from pylayers.gis.layout import  *
-            >>> import matplotlib.pyplot as plt
-            >>> L = Layout('TA-Office.ini')
-            >>> L.dumpr()
-            >>> fig = plt.figure(figsize=(10,10))
-            >>> ax = fig.add_subplot(221)
-            >>> fig,ax = L.showG('s',fig=fig,ax=ax)
-            >>> tis = plt.title("Gs")
-            >>> ax = fig.add_subplot(222)
-            >>> fig,ax = L.showG('t',fig=fig,ax=ax)
-            >>> tit = plt.title("Gt")
-            >>> ax = fig.add_subplot(223)
-            >>> fig,ax = L.showG('r',fig=fig,ax=ax)
-            >>> tic = plt.title("Gr")
-            >>> ax = fig.add_subplot(224)
-            >>> fig,ax = L.showG('v',fig=fig,ax=ax)
-            >>> tiv = plt.title("Gv")
-            >>> plt.show()
-
-        See Also
-        --------
-
-        pylayers.util.graphutil.draw
-
         """
+        """
+#        """ show the different graphs
+#
+#        Parameters
+#        ----------
+#
+#        graph : char
+#            't' : Gt 'r' : Gr 's' : Gs 'v' : Gv  'c': Gc 'i' : Gi
+#        fig : matplotlib figure
+#            []
+#        ax : matplotlib figure
+#            []
+#        show : boolean
+#            False
+#        nodes : boolean
+#            False
+#        edges : boolean
+#            True
+#        airwalls : boolean
+#            display airwalls (False)
+#        subseg: boolean
+#            display subsegments (False)
+#        slab : boolean
+#            display color and width of slabs (False)
+#        labels : boolean | list
+#            display graph labels (False)
+#            if list precise label of which cycle to display
+#            (e.g. ['t'])
+#        alphan : float
+#            transparency of nodes (1.0)
+#        alphae : float
+#            transparency of edges (1.0)
+#        width : float
+#            line width (2)
+#        node_color: string
+#            w
+#        posnode_color: string
+#            positive node color (k)
+#        negnode_color: string
+#            negative node color (b)
+#        edge_color : string
+#            k
+#        node_size : float
+#            20
+#        font_size : float
+#            15,
+#        nodelist : list
+#            list of nodes to be displayed (all)
+#        edgelist : list
+#            list of edges to be displayed (all)
+#        mode : string
+#            'cycle' | 'none' | 'room'
+#        alphacy : string
+#            transparency of cycles (0.8)
+#        colorcy :
+#            '#abcdef'
+#        linter : list
+#            list of interaction for Gi
+#            ['RR','TT','RT','TR','RD','DR','TD','DT','DD']
+#        show0 : boolean
+#            If true display connection to cycle  0 of Gt (False)
+#        eded : boolean
+#            True
+#        ndnd : boolean
+#            True
+#        nded : boolean
+#            True
+#        width : int
+#            2
+#        nodelist : list
+#            []
+#
+#
+#        defaults = {'show': False,
+#                    'fig': [],
+#                    'ax': [],
+#                    'nodes': False,
+#                    'edges': True,
+#                    'sllist':[],
+#                    'airwalls': False,
+#                    'subseg': False,
+#                    'slab': False,
+#                    'labels': False,
+#                    'alphan': 1.0,
+#                    'alphae': 1.0,
+#                    'width': 2,
+#                    'node_color':'w',
+#                    'edge_color':'k',
+#                    'node_size':20,
+#                    'font_size':15,
+#                    'nodelist': [],
+#                    'edgelist': [],
+#                    'figsize': (5,5),
+#                    'mode':'nocycle',
+#                    'alphacy':0.8,
+#                    'colorcy':'abcdef',
+#                    'linter':['RR','TT','RT','TR','RD','DR','TD','DT','DD'],
+#                    'show0':False,
+#                    'axis':False
+#                    }
+#
+#
+#        Examples
+#        --------
+#
+#        .. plot::
+#            :include-source:
+#
+#            >>> from pylayers.gis.layout import  *
+#            >>> import matplotlib.pyplot as plt
+#            >>> L = Layout('TA-Office.ini')
+#            >>> L.dumpr()
+#            >>> fig = plt.figure(figsize=(10,10))
+#            >>> ax = fig.add_subplot(221)
+#            >>> fig,ax = L.showG('s',fig=fig,ax=ax)
+#            >>> tis = plt.title("Gs")
+#            >>> ax = fig.add_subplot(222)
+#            >>> fig,ax = L.showG('t',fig=fig,ax=ax)
+#            >>> tit = plt.title("Gt")
+#            >>> ax = fig.add_subplot(223)
+#            >>> fig,ax = L.showG('r',fig=fig,ax=ax)
+#            >>> tic = plt.title("Gr")
+#            >>> ax = fig.add_subplot(224)
+#            >>> fig,ax = L.showG('v',fig=fig,ax=ax)
+#            >>> tiv = plt.title("Gv")
+#            >>> plt.show()
+#
+#        See Also
+#        --------
+#
+#        pylayers.util.graphutil.draw
+#
+#        """
         defaults = {'show': False,
                     'fig': [],
                     'ax': [],
