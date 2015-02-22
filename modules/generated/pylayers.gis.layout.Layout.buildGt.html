@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.gis.layout" href="../pylayers.gis.layout.html" />
+    <link rel="next" title="pylayers.gis.layout.Layout.buildGw" href="pylayers.gis.layout.Layout.buildGw.html" />
+    <link rel="prev" title="pylayers.gis.layout.Layout.build" href="pylayers.gis.layout.Layout.build.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,16 +46,30 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.gis.layout.Layout.buildGw.html" title="pylayers.gis.layout.Layout.buildGw"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.gis.layout.Layout.build.html" title="pylayers.gis.layout.Layout.build"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.gis.layout.html" accesskey="U">pylayers.gis.layout</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.gis.layout.Layout.build.html"
+                        title="previous chapter">pylayers.gis.layout.Layout.build</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.gis.layout.Layout.buildGw.html"
+                        title="next chapter">pylayers.gis.layout.Layout.buildGw</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.gis.layout.Layout.buildGt.txt"
@@ -81,6 +98,44 @@
             
   <div class="section" id="pylayers-gis-layout-layout-buildgt">
 <h1>pylayers.gis.layout.Layout.buildGt<a class="headerlink" href="#pylayers-gis-layout-layout-buildgt" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.buildGt">
+<tt class="descclassname">Layout.</tt><tt class="descname">buildGt</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/pylayers/gis/layout.html#Layout.buildGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.buildGt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Built topological graph Gt</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">nx.algorithms.cycles.cycle_basis</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">pylayers.gis.layout._updGsncy</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">pylayers.gis.layout._addoutcy</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">pylayers.gis.layout._interlist</span></tt></p>
+</div>
+<p class="rubric">Notes</p>
+<ol class="arabic simple">
+<li>Exploit <cite>cycle_basis</cite> function of NetworkX to get a cycle
+decomposition of the graph</li>
+<li>Each discovered cycle in the graph Gs is transformed in a Cycles.Cycles object
+LC (List of Cycles) contains the list of all these Cycle objects</li>
+</ol>
+<p>Algorithm to create the Gt graph.
+Each simple cycle of Gs is a node of Gt</p>
+<p>Algorithm  : Seek for Cycle inter connectivity</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>For c1 in cycles :</dt>
+<dd><dl class="first last docutils">
+<dt>vnodesc = get vnodes(c1)</dt>
+<dd><dl class="first last docutils">
+<dt>For c2 in cycles &gt; c1</dt>
+<dd><dl class="first last docutils">
+<dt>vnodesl = get vnodes(l)</dt>
+<dd>nkinnl = vnodesk :math:cap vnodesl</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
 </div>
 
 
@@ -98,11 +153,19 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.gis.layout.Layout.buildGw.html" title="pylayers.gis.layout.Layout.buildGw"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.gis.layout.Layout.build.html" title="pylayers.gis.layout.Layout.build"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.gis.layout.html" >pylayers.gis.layout</a> &raquo;</li> 
       </ul>
     </div>
 
