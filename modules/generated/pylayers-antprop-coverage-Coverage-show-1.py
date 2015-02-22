@@ -1,0 +1,11 @@
+from pylayers.antprop.coverage import *
+C = Coverage()
+C.cover(polar='o')
+f,a = C.show(typ='pr',figsize=(10,8))
+plt.show()
+f,a = C.show(typ='best',figsize=(10,8))
+plt.show()
+f,a = C.show(typ='loss',figsize=(10,8))
+plt.show()
+f,a = C.show(typ='sinr',figsize=(10,8))
+plt.show()

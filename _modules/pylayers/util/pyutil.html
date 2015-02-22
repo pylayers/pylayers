@@ -77,7 +77,58 @@
           <div class="body">
             
   <h1>Source code for pylayers.util.pyutil</h1><div class="highlight"><pre>
-<span class="c"># -*- coding:Utf-8 -*-</span>
+<span class="c">#!/usr/bin/python</span>
+<span class="c">#-*- coding:Utf-8 -*-</span>
+<span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">.. currentmodule:: pylayers.util.pyutil</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: genaerated</span>
+
+<span class="sd">    delay</span>
+<span class="sd">    lt2idic</span>
+<span class="sd">    getlong</span>
+<span class="sd">    getshort</span>
+<span class="sd">    getdir</span>
+<span class="sd">    shp</span>
+<span class="sd">    dimcmp</span>
+<span class="sd">    tstincl</span>
+<span class="sd">    findpos</span>
+<span class="sd">    ininter</span>
+<span class="sd">    cshift</span>
+<span class="sd">    LegFunc</span>
+<span class="sd">    ExpFunc</span>
+<span class="sd">    InvFunc</span>
+<span class="sd">    PowFunc</span>
+<span class="sd">    randcol</span>
+<span class="sd">    coldict</span>
+<span class="sd">    createtrxfile</span>
+<span class="sd">    rgb</span>
+<span class="sd">    nbint</span>
+<span class="sd">    encodmtlb</span>
+<span class="sd">    sqrte</span>
+<span class="sd">    untie</span>
+<span class="sd">    corrcy</span>
+<span class="sd">    foo</span>
+<span class="sd">    cdf</span>
+<span class="sd">    bitreverse</span>
+<span class="sd">    timestamp</span>
+<span class="sd">    writemeca</span>
+<span class="sd">    writenet</span>
+<span class="sd">    writenode</span>
+<span class="sd">    writeDetails</span>
+<span class="sd">    zipd</span>
+<span class="sd">    unzipd</span>
+<span class="sd">    unzipf</span>
+<span class="sd">    rotate_line</span>
+<span class="sd">    extract_block_diag</span>
+<span class="sd">    fill_block_diag</span>
+<span class="sd">    fill_block_diagMDA</span>
+<span class="sd">    has_colours</span>
+<span class="sd">    printout</span>
+<span class="sd">    in_ipynb</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
@@ -106,7 +157,7 @@
 <span class="c"># Wave Related functions</span>
 <span class="c">#</span>
 <span class="c">###################################</span>
-<div class="viewcode-block" id="delay"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.delay">[docs]</a><span class="k">def</span> <span class="nf">delay</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">):</span>
+<div class="viewcode-block" id="delay"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.delay.html#pylayers.util.pyutil.delay">[docs]</a><span class="k">def</span> <span class="nf">delay</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; calculate delay in ns between 2 points</span>
 
 <span class="sd">    Parameters</span>
@@ -139,7 +190,7 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="lt2idic"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.lt2idic">[docs]</a><span class="k">def</span> <span class="nf">lt2idic</span><span class="p">(</span><span class="n">lt</span><span class="p">):</span>
+<div class="viewcode-block" id="lt2idic"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.lt2idic.html#pylayers.util.pyutil.lt2idic">[docs]</a><span class="k">def</span> <span class="nf">lt2idic</span><span class="p">(</span><span class="n">lt</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; convert list of tuple to dictionary</span>
 
 <span class="sd">    Parameters</span>
@@ -166,7 +217,7 @@
         <span class="n">dic</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">tup</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="mi">2</span><span class="p">])])</span>
     <span class="k">return</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="getlong"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.getlong">[docs]</a><span class="k">def</span> <span class="nf">getlong</span><span class="p">(</span><span class="n">shortname</span><span class="p">,</span><span class="n">directory</span><span class="p">):</span>
+<div class="viewcode-block" id="getlong"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.getlong.html#pylayers.util.pyutil.getlong">[docs]</a><span class="k">def</span> <span class="nf">getlong</span><span class="p">(</span><span class="n">shortname</span><span class="p">,</span><span class="n">directory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  get a long name</span>
 
 <span class="sd">    This function allows to construct the long file name relatively</span>
@@ -195,10 +246,10 @@
         <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s">&quot;BASENAME environment variable should be defined&quot;</span><span class="p">)</span>
         <span class="c">#basename=os.environ[&#39;HOME&#39;]+&quot;/Pyproject&quot;</span>
 
-    <span class="n">longname</span> <span class="o">=</span> <span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span><span class="o">+</span><span class="n">directory</span><span class="o">+</span><span class="s">&#39;/&#39;</span><span class="o">+</span><span class="n">shortname</span>
+    <span class="n">longname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">directory</span><span class="p">,</span><span class="n">shortname</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">longname</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="getshort"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.getshort">[docs]</a><span class="k">def</span> <span class="nf">getshort</span><span class="p">(</span><span class="n">longname</span><span class="p">):</span>
+<div class="viewcode-block" id="getshort"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.getshort.html#pylayers.util.pyutil.getshort">[docs]</a><span class="k">def</span> <span class="nf">getshort</span><span class="p">(</span><span class="n">longname</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  get a short name</span>
 
 <span class="sd">    Parameters</span>
@@ -218,7 +269,7 @@
     <span class="n">shortname</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">longname</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">return</span><span class="p">(</span><span class="n">shortname</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="getdir"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.getdir">[docs]</a><span class="k">def</span> <span class="nf">getdir</span><span class="p">(</span><span class="n">longname</span><span class="p">):</span>
+<div class="viewcode-block" id="getdir"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.getdir.html#pylayers.util.pyutil.getdir">[docs]</a><span class="k">def</span> <span class="nf">getdir</span><span class="p">(</span><span class="n">longname</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  get directory of a long name</span>
 
 <span class="sd">    Parameters</span>
@@ -238,7 +289,7 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">dirname</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="shp"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.shp">[docs]</a><span class="k">def</span> <span class="nf">shp</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+<div class="viewcode-block" id="shp"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.shp.html#pylayers.util.pyutil.shp">[docs]</a><span class="k">def</span> <span class="nf">shp</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; return dimension of an array</span>
 
 <span class="sd">    Parameters</span>
@@ -271,7 +322,7 @@
         <span class="n">shp</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">))</span>
     <span class="k">return</span><span class="p">(</span><span class="n">shp</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="dimcmp"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.dimcmp">[docs]</a><span class="k">def</span> <span class="nf">dimcmp</span><span class="p">(</span><span class="n">ar1</span><span class="p">,</span><span class="n">ar2</span><span class="p">):</span>
+<div class="viewcode-block" id="dimcmp"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.dimcmp.html#pylayers.util.pyutil.dimcmp">[docs]</a><span class="k">def</span> <span class="nf">dimcmp</span><span class="p">(</span><span class="n">ar1</span><span class="p">,</span><span class="n">ar2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; compare shape of arrays</span>
 
 <span class="sd">    Parameters</span>
@@ -300,7 +351,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="tstincl"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.tstincl">[docs]</a><span class="k">def</span> <span class="nf">tstincl</span><span class="p">(</span><span class="n">ar1</span><span class="p">,</span><span class="n">ar2</span><span class="p">):</span>
+<div class="viewcode-block" id="tstincl"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.tstincl.html#pylayers.util.pyutil.tstincl">[docs]</a><span class="k">def</span> <span class="nf">tstincl</span><span class="p">(</span><span class="n">ar1</span><span class="p">,</span><span class="n">ar2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; test wheteher ar1 interval is included in interval ar2</span>
 
 <span class="sd">    Parameters</span>
@@ -329,7 +380,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="findpos"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.findpos">[docs]</a><span class="k">def</span> <span class="nf">findpos</span><span class="p">(</span><span class="n">ar</span><span class="p">,</span><span class="n">val</span><span class="p">):</span>
+<div class="viewcode-block" id="findpos"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.findpos.html#pylayers.util.pyutil.findpos">[docs]</a><span class="k">def</span> <span class="nf">findpos</span><span class="p">(</span><span class="n">ar</span><span class="p">,</span><span class="n">val</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    findpos(ar,val)</span>
 
@@ -351,7 +402,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span><span class="p">(</span><span class="s">&#39;value not found&#39;</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="ininter"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.ininter">[docs]</a><span class="k">def</span> <span class="nf">ininter</span><span class="p">(</span><span class="n">ar</span><span class="p">,</span><span class="n">val1</span><span class="p">,</span><span class="n">val2</span><span class="p">):</span>
+<div class="viewcode-block" id="ininter"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.ininter.html#pylayers.util.pyutil.ininter">[docs]</a><span class="k">def</span> <span class="nf">ininter</span><span class="p">(</span><span class="n">ar</span><span class="p">,</span><span class="n">val1</span><span class="p">,</span><span class="n">val2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ininter(ar,val1,val2):</span>
 
@@ -364,7 +415,7 @@
     <span class="n">criterium</span><span class="o">=</span> <span class="p">(</span><span class="n">ar</span><span class="o">&gt;=</span><span class="n">val1</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">ar</span><span class="o">&lt;=</span><span class="n">val2</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">ar</span><span class="p">[</span><span class="n">criterium</span><span class="p">])</span>
 </div>
-<div class="viewcode-block" id="cshift"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.cshift">[docs]</a><span class="k">def</span> <span class="nf">cshift</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+<div class="viewcode-block" id="cshift"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.cshift.html#pylayers.util.pyutil.cshift">[docs]</a><span class="k">def</span> <span class="nf">cshift</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; ndarray circular shift     </span>
 <span class="sd">        Parameters</span>
 <span class="sd">         ----------</span>
@@ -383,7 +434,7 @@
     <span class="n">offset</span> <span class="o">%=</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">l</span><span class="p">[</span><span class="o">-</span><span class="n">offset</span><span class="p">:],</span> <span class="n">l</span><span class="p">[:</span><span class="o">-</span><span class="n">offset</span><span class="p">]))</span>
 </div>
-<div class="viewcode-block" id="LegFunc"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.LegFunc">[docs]</a><span class="k">def</span> <span class="nf">LegFunc</span><span class="p">(</span><span class="n">nn</span><span class="p">,</span><span class="n">ntrunc</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">):</span>
+<div class="viewcode-block" id="LegFunc"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.LegFunc.html#pylayers.util.pyutil.LegFunc">[docs]</a><span class="k">def</span> <span class="nf">LegFunc</span><span class="p">(</span><span class="n">nn</span><span class="p">,</span><span class="n">ntrunc</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Compute Legendre functions Ylm(theta,phi)</span>
 
 <span class="sd">    Parameters</span>
@@ -422,7 +473,7 @@
     <span class="n">Ylm</span><span class="o">=</span><span class="n">array</span><span class="p">(</span><span class="n">Ylm</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">Ylm</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="ExpFunc"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.ExpFunc">[docs]</a><span class="k">def</span> <span class="nf">ExpFunc</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
+<div class="viewcode-block" id="ExpFunc"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.ExpFunc.html#pylayers.util.pyutil.ExpFunc">[docs]</a><span class="k">def</span> <span class="nf">ExpFunc</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; exponential fitting</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -464,7 +515,7 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span><span class="n">beta</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="InvFunc"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.InvFunc">[docs]</a><span class="k">def</span> <span class="nf">InvFunc</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">z</span><span class="p">):</span>
+<div class="viewcode-block" id="InvFunc"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.InvFunc.html#pylayers.util.pyutil.InvFunc">[docs]</a><span class="k">def</span> <span class="nf">InvFunc</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">z</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; inverse fitting</span>
 
 <span class="sd">    Parameters</span>
@@ -492,7 +543,7 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="PowFunc"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.PowFunc">[docs]</a><span class="k">def</span> <span class="nf">PowFunc</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
+<div class="viewcode-block" id="PowFunc"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.PowFunc.html#pylayers.util.pyutil.PowFunc">[docs]</a><span class="k">def</span> <span class="nf">PowFunc</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; power fitting</span>
 
 <span class="sd">    Parameters</span>
@@ -524,7 +575,7 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span><span class="n">beta</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="randcol"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.randcol">[docs]</a><span class="k">def</span> <span class="nf">randcol</span><span class="p">(</span><span class="n">Nc</span><span class="p">):</span>
+<div class="viewcode-block" id="randcol"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.randcol.html#pylayers.util.pyutil.randcol">[docs]</a><span class="k">def</span> <span class="nf">randcol</span><span class="p">(</span><span class="n">Nc</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; get random color </span>
 
 <span class="sd">    Parameters </span>
@@ -558,11 +609,11 @@
     <span class="k">return</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="coldict"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.coldict">[docs]</a><span class="k">def</span> <span class="nf">coldict</span><span class="p">():</span> 
-    <span class="sd">&quot;&quot;&quot; Color dictionary </span>
-<span class="sd">    html color </span>
+<div class="viewcode-block" id="coldict"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.coldict.html#pylayers.util.pyutil.coldict">[docs]</a><span class="k">def</span> <span class="nf">coldict</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; Color dictionary</span>
+<span class="sd">    html color</span>
 
-<span class="sd">    Notes </span>
+<span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 
 <span class="sd">    &#39;Link on html color&lt;http://html-color-codes.blogspot.com/&gt;&#39;_</span>
@@ -570,6 +621,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">cold</span><span class="o">=</span><span class="p">{}</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;black&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#000000&#39;</span>
+    <span class="n">cold</span><span class="p">[</span><span class="s">&#39;k&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#000000&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;grey&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#BEBEBE&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;DimGrey&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#696969&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;LightGray&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#D3D3D3&#39;</span>
@@ -766,11 +818,13 @@
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;azure3&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#C1CDCD&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;azure4&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#838B8B&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;blue&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#0000FF&#39;</span>
+    <span class="n">cold</span><span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#0000FF&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;blue1&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#0000FF&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;blue2&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#0000EE&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;blue3&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#0000CD&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;blue4&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#00008B&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;cyan&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#00FFFF&#39;</span>
+    <span class="n">cold</span><span class="p">[</span><span class="s">&#39;c&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#00FFFF&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;cyan1&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#00FFFF&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;cyan2&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#00EEEE&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;cyan3&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#00CDCD&#39;</span>
@@ -862,6 +916,7 @@
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;chartreuse3&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#66CD00&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;chartreuse4&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#458B00&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;green&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#00FF00&#39;</span>
+    <span class="n">cold</span><span class="p">[</span><span class="s">&#39;g&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#00FF00&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;green1&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#00FF00&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;green2&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#00EE00&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;green3&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#00CD00&#39;</span>
@@ -970,6 +1025,7 @@
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;pink3&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#CD919E&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;pink4&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#8B636C&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;red&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#FF0000&#39;</span>
+    <span class="n">cold</span><span class="p">[</span><span class="s">&#39;r&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#FF0000&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;red1&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#FF0000&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;red2&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#EE0000&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;red3&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#CD0000&#39;</span>
@@ -1002,6 +1058,7 @@
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;MediumPurple4&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#5D478B&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;lavender&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#E6E6FA&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;magenta&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#FF00FF&#39;</span>
+    <span class="n">cold</span><span class="p">[</span><span class="s">&#39;m&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#FF00FF&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;magenta1&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#FF00FF&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;magenta2&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#EE00EE&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;magenta3&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#CD00CD&#39;</span>
@@ -1047,7 +1104,7 @@
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;OldLace&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#FDF5E6&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;WhiteSmoke&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#F5F5F5&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;gainsboro&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#DCDCDC&#39;</span>
-    <span class="n">cold</span><span class="p">[</span><span class="s">&#39; ivory&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#FFFFF0&#39;</span>
+    <span class="n">cold</span><span class="p">[</span><span class="s">&#39;ivory&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#FFFFF0&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;ivory1&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#FFFFF0&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;ivory2&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#EEEEE0&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;ivory3&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#CDCDC1&#39;</span>
@@ -1069,6 +1126,7 @@
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;wheat3&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#CDBA96&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;wheat4&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#8B7E66&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;white&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#FFFFFF&#39;</span>
+    <span class="n">cold</span><span class="p">[</span><span class="s">&#39;w&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#FFFFFF&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;BlanchedAlmond&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#FFEBCD&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;DarkGoldenrod&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#B8860B&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;DarkGoldenrod1&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#FFB90F&#39;</span>
@@ -1110,6 +1168,7 @@
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;goldenrod4&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#8B6914&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;moccasin&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#FFE4B5&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;yellow&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#FFFF00&#39;</span>
+    <span class="n">cold</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#FFFF00&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;yellow1&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#FFFF00&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;yellow2&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#EEEE00&#39;</span>
     <span class="n">cold</span><span class="p">[</span><span class="s">&#39;yellow3&#39;</span><span class="p">]</span><span class="o">=</span>  <span class="s">&#39;#CDCD00&#39;</span>
@@ -1120,7 +1179,6 @@
 <span class="c">#    cold[&#39;red&#39;]=array([1,0,0])</span>
 <span class="c">#    cold[&#39;blue&#39;]=array([0,0,1])</span>
 <span class="c">#    cold[&#39;green&#39;]=array([0,1,0])</span>
-<span class="c">#    cold[&#39;black&#39;]=array([0,0,0])</span>
 <span class="c">#    cold[&#39;white&#39;]=array([0,0,0])</span>
 <span class="c">#    cold[&#39;maroon&#39;]=array([0.5,0,0])</span>
 <span class="c">#    cold[&#39;fuchsia&#39;]=array([1,0,1])</span>
@@ -1131,7 +1189,7 @@
 
     <span class="k">return</span> <span class="n">cold</span>
 </div>
-<div class="viewcode-block" id="createtrxfile"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.createtrxfile">[docs]</a><span class="k">def</span> <span class="nf">createtrxfile</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span><span class="n">freq</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">Fpr</span><span class="p">,</span><span class="n">Fpi</span><span class="p">,</span><span class="n">Ftr</span><span class="p">,</span><span class="n">Fti</span><span class="p">):</span>
+<div class="viewcode-block" id="createtrxfile"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.createtrxfile.html#pylayers.util.pyutil.createtrxfile">[docs]</a><span class="k">def</span> <span class="nf">createtrxfile</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span><span class="n">freq</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">Fpr</span><span class="p">,</span><span class="n">Fpi</span><span class="p">,</span><span class="n">Ftr</span><span class="p">,</span><span class="n">Fti</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create antenna trx file    </span>
 <span class="sd">    Usage:createtrxfile(filename,freq,phi,theta,Fpr,Fpi,Ftr,Fti)</span>
@@ -1143,7 +1201,7 @@
         <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%f</span><span class="se">\t</span><span class="si">%f</span><span class="se">\t</span><span class="si">%f</span><span class="se">\t</span><span class="si">%f</span><span class="se">\t</span><span class="si">%f</span><span class="se">\t</span><span class="si">%f</span><span class="se">\t</span><span class="si">%f</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">ravel</span><span class="p">(</span><span class="n">freq</span><span class="p">)[</span><span class="n">i</span><span class="p">],</span><span class="n">ravel</span><span class="p">(</span><span class="n">phi</span><span class="p">)[</span><span class="n">i</span><span class="p">],</span><span class="n">ravel</span><span class="p">(</span><span class="n">theta</span><span class="p">)[</span><span class="n">i</span><span class="p">],</span><span class="n">ravel</span><span class="p">(</span><span class="n">Fpr</span><span class="p">)[</span><span class="n">i</span><span class="p">],</span><span class="n">ravel</span><span class="p">(</span><span class="n">Fpi</span><span class="p">)[</span><span class="n">i</span><span class="p">],</span><span class="n">ravel</span><span class="p">(</span><span class="n">Ftr</span><span class="p">)[</span><span class="n">i</span><span class="p">],</span><span class="n">ravel</span><span class="p">(</span><span class="n">Fti</span><span class="p">)[</span><span class="n">i</span><span class="p">]))</span>
     <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="rgb"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.rgb">[docs]</a><span class="k">def</span> <span class="nf">rgb</span><span class="p">(</span><span class="n">valex</span><span class="p">,</span><span class="n">out</span><span class="o">=</span><span class="s">&#39;int&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="rgb"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.rgb.html#pylayers.util.pyutil.rgb">[docs]</a><span class="k">def</span> <span class="nf">rgb</span><span class="p">(</span><span class="n">valex</span><span class="p">,</span><span class="n">out</span><span class="o">=</span><span class="s">&#39;int&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">         convert a hexadecimal color into a (r,g,b) array</span>
 <span class="sd">         &gt;&gt;&gt; import pylayers.util.pyutil as pyu</span>
@@ -1161,7 +1219,7 @@
     <span class="k">return</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="nbint"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.nbint">[docs]</a><span class="k">def</span> <span class="nf">nbint</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+<div class="viewcode-block" id="nbint"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.nbint.html#pylayers.util.pyutil.nbint">[docs]</a><span class="k">def</span> <span class="nf">nbint</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        calculate the number of intervals in a sequence of integer</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1170,7 +1228,7 @@
     <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
 
 </div>
-<div class="viewcode-block" id="encodmtlb"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.encodmtlb">[docs]</a><span class="k">def</span> <span class="nf">encodmtlb</span><span class="p">(</span><span class="n">lin</span><span class="p">):</span>
+<div class="viewcode-block" id="encodmtlb"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.encodmtlb.html#pylayers.util.pyutil.encodmtlb">[docs]</a><span class="k">def</span> <span class="nf">encodmtlb</span><span class="p">(</span><span class="n">lin</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  encode python list of string in Matlab format</span>
 
 <span class="sd">    Parameters</span>
@@ -1230,7 +1288,7 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">lout</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="sqrte"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.sqrte">[docs]</a><span class="k">def</span> <span class="nf">sqrte</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
+<div class="viewcode-block" id="sqrte"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.sqrte.html#pylayers.util.pyutil.sqrte">[docs]</a><span class="k">def</span> <span class="nf">sqrte</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Evanescent SQRT for waves problems</span>
 
 <span class="sd">     .. _Sophocles J. Orfanidis - 1999-2008: http://www.ece.rutgers.edu/~orfanidi/ewa</span>
@@ -1272,7 +1330,7 @@
     <span class="n">y</span>  <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sh</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="untie"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.untie">[docs]</a><span class="k">def</span> <span class="nf">untie</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+<div class="viewcode-block" id="untie"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.untie.html#pylayers.util.pyutil.untie">[docs]</a><span class="k">def</span> <span class="nf">untie</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    Parameters</span>
@@ -1304,7 +1362,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span><span class="p">(</span><span class="bp">False</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="corrcy"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.corrcy">[docs]</a><span class="k">def</span> <span class="nf">corrcy</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+<div class="viewcode-block" id="corrcy"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.corrcy.html#pylayers.util.pyutil.corrcy">[docs]</a><span class="k">def</span> <span class="nf">corrcy</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; cyclic matching correlation</span>
 
 <span class="sd">    Parameters</span>
@@ -1354,7 +1412,7 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">tk</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="foo"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.foo">[docs]</a><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">var1</span><span class="p">,</span> <span class="n">var2</span><span class="p">,</span> <span class="n">long_var_name</span><span class="o">=</span><span class="s">&#39;hi&#39;</span><span class="p">)</span> <span class="p">:</span>
+<div class="viewcode-block" id="foo"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.foo.html#pylayers.util.pyutil.foo">[docs]</a><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">var1</span><span class="p">,</span> <span class="n">var2</span><span class="p">,</span> <span class="n">long_var_name</span><span class="o">=</span><span class="s">&#39;hi&#39;</span><span class="p">)</span> <span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;A one-line summary that does not use variable names or the</span>
 <span class="sd">    function name.</span>
 
@@ -1457,7 +1515,7 @@
     <span class="k">pass</span>
 
 </div>
-<div class="viewcode-block" id="cdf"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.cdf">[docs]</a><span class="k">def</span> <span class="nf">cdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot; &quot;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">xlabel</span><span class="o">=</span><span class="s">&quot;x&quot;</span><span class="p">,</span><span class="n">ylabel</span><span class="o">=</span><span class="s">&quot;CDF&quot;</span><span class="p">,</span><span class="n">logx</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="cdf"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.cdf.html#pylayers.util.pyutil.cdf">[docs]</a><span class="k">def</span> <span class="nf">cdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&quot; &quot;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">xlabel</span><span class="o">=</span><span class="s">&quot;x&quot;</span><span class="p">,</span><span class="n">ylabel</span><span class="o">=</span><span class="s">&quot;CDF&quot;</span><span class="p">,</span><span class="n">logx</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; plot the cumulative density function of x</span>
 
 <span class="sd">    Parameters</span>
@@ -1501,7 +1559,7 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="bitreverse"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.bitreverse">[docs]</a><span class="k">def</span> <span class="nf">bitreverse</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span><span class="n">nbit</span><span class="o">=</span><span class="mi">9</span><span class="p">):</span>
+<div class="viewcode-block" id="bitreverse"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.bitreverse.html#pylayers.util.pyutil.bitreverse">[docs]</a><span class="k">def</span> <span class="nf">bitreverse</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span><span class="n">nbit</span><span class="o">=</span><span class="mi">9</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1527,13 +1585,13 @@
     <span class="k">return</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
 
 </div>
-<div class="viewcode-block" id="timestamp"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.timestamp">[docs]</a><span class="k">def</span> <span class="nf">timestamp</span><span class="p">(</span><span class="n">now</span><span class="p">):</span>
+<div class="viewcode-block" id="timestamp"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.timestamp.html#pylayers.util.pyutil.timestamp">[docs]</a><span class="k">def</span> <span class="nf">timestamp</span><span class="p">(</span><span class="n">now</span><span class="p">):</span>
     
     <span class="n">dt</span> <span class="o">=</span> <span class="n">dat</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
     <span class="n">dn</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">dat</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">now</span><span class="p">)))</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">&#39;%Y-%m-</span><span class="si">%d</span><span class="s"> &#39;</span><span class="p">)</span><span class="o">+</span><span class="n">dn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s">&#39;:&#39;</span><span class="o">+</span><span class="n">dn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;:&#39;</span><span class="o">+</span><span class="n">dn</span><span class="p">[</span><span class="mi">2</span><span class="p">][:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span><span class="n">dn</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">:</span><span class="mi">5</span><span class="p">])</span>
 </div>
-<div class="viewcode-block" id="writemeca"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.writemeca">[docs]</a><span class="k">def</span> <span class="nf">writemeca</span><span class="p">(</span><span class="n">ID</span><span class="p">,</span><span class="n">time</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">a</span><span class="p">):</span>
+<div class="viewcode-block" id="writemeca"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.writemeca.html#pylayers.util.pyutil.writemeca">[docs]</a><span class="k">def</span> <span class="nf">writemeca</span><span class="p">(</span><span class="n">ID</span><span class="p">,</span><span class="n">time</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">a</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    write mecanic information into text file:</span>
 <span class="sd">        output/TruePosition.txt</span>
@@ -1542,42 +1600,42 @@
 
 
     <span class="c">### TruePosition</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/TruePosition.txt&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">],</span><span class="s">&#39;TruePosition.txt&#39;</span><span class="p">)):</span>
         <span class="n">entete</span> <span class="o">=</span> <span class="s">&#39;TruePositionID,NodeID, Timestamp, X,Y,Z,ReferencePointID</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/TruePosition.txt&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">],</span><span class="s">&#39;TruePosition.txt&#39;</span><span class="p">),</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
         <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">entete</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="s">&#39;1,&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ID</span><span class="p">)</span> <span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">timestamp</span><span class="p">(</span><span class="n">time</span><span class="p">))</span> <span class="o">+</span><span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;,&#39;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span><span class="s">&#39;,</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/TruePosition.txt&#39;</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+        <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">],</span><span class="s">&#39;TruePosition.txt&#39;</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">))</span>
         <span class="n">lst</span><span class="o">=</span><span class="nb">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
         <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="n">data</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">lst</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ID</span><span class="p">)</span> <span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">timestamp</span><span class="p">(</span><span class="n">time</span><span class="p">))</span> <span class="o">+</span><span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span> <span class="s">&#39;,&#39;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span><span class="s">&#39;,</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/TruePosition.txt&#39;</span><span class="p">,</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+        <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">],</span><span class="s">&#39;TruePosition.txt&#39;</span><span class="p">),</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
         <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="c">### UWBSensorMeasurements</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/UWBSensorMeasurements.txt&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">],</span><span class="s">&#39;UWBSensorMeasurements.txt&#39;</span><span class="p">)):</span>
         <span class="n">entete</span> <span class="o">=</span> <span class="s">&#39;UWBSensorMeasurementsID,NodeID, Timestamp, UWB_MagX,UWB_MagY,UWB_MagZ,UWB_AccX,UWB_AccY,UWB_AccZ,UWB_GyroX,UWB_GyroY,UWB_GyroZ</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/UWBSensorMeasurements.txt&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">],</span><span class="s">&#39;UWBSensorMeasurements.txt&#39;</span><span class="p">),</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
         <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">entete</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="s">&#39;1,&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ID</span><span class="p">)</span> <span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">timestamp</span><span class="p">(</span><span class="n">time</span><span class="p">))</span> <span class="o">+</span><span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;,&#39;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;,,&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;,,,,</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/UWBSensorMeasurements.txt&#39;</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+        <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">],</span><span class="s">&#39;UWBSensorMeasurements.txt&#39;</span><span class="p">),</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
         <span class="n">lst</span><span class="o">=</span><span class="nb">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
         <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="n">data</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">lst</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;,&#39;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ID</span><span class="p">)</span> <span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">timestamp</span><span class="p">(</span><span class="n">time</span><span class="p">))</span> <span class="o">+</span><span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;,&#39;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;,,&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;,,,,</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/UWBSensorMeasurements.txt&#39;</span><span class="p">,</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+        <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">],</span><span class="s">&#39;UWBSensorMeasurements.txt&#39;</span><span class="p">),</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
         <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 
 </div>
-<div class="viewcode-block" id="writenet"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.writenet">[docs]</a><span class="k">def</span> <span class="nf">writenet</span><span class="p">(</span><span class="n">net</span><span class="p">,</span><span class="n">t</span><span class="p">):</span>
+<div class="viewcode-block" id="writenet"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.writenet.html#pylayers.util.pyutil.writenet">[docs]</a><span class="k">def</span> <span class="nf">writenet</span><span class="p">(</span><span class="n">net</span><span class="p">,</span><span class="n">t</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    write network information into text file:</span>
 <span class="sd">        netsave/ZIGLinkMeasurements.txt</span>
@@ -1585,36 +1643,36 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">net</span><span class="o">.</span><span class="n">edges_iter</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="c">### ZIGLinkMeasurements</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/ZIGLinkMeasurements.txt&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">],</span><span class="s">&#39;ZIGLinkMeasurements.txt&#39;</span><span class="p">)):</span>
             <span class="n">entete</span> <span class="o">=</span> <span class="s">&#39;ZIGLinkMeasurementsID,NodeID, ZIG_PeerID, ZIG_RSSI, Timestamp</span><span class="se">\n</span><span class="s">&#39;</span>
-            <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/ZIGLinkMeasurements.txt&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+            <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">],</span><span class="s">&#39;ZIGLinkMeasurements.txt&#39;</span><span class="p">),</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
             <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">entete</span><span class="p">)</span>
             <span class="n">data</span> <span class="o">=</span> <span class="s">&#39;1,&#39;</span><span class="o">+</span> <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span> <span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span><span class="s">&#39;,&#39;</span> <span class="o">+</span><span class="n">timestamp</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">now</span><span class="p">())</span> <span class="o">+</span><span class="s">&#39;,</span><span class="se">\n</span><span class="s">&#39;</span>
             <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
             <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/ZIGLinkMeasurements.txt&#39;</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+            <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">],</span><span class="s">&#39;ZIGLinkMeasurements.txt&#39;</span><span class="p">),</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
             <span class="n">lst</span><span class="o">=</span><span class="nb">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
             <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="n">data</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">lst</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span> <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span> <span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span><span class="s">&#39;,&#39;</span> <span class="o">+</span><span class="n">timestamp</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">now</span><span class="p">())</span> <span class="o">+</span><span class="s">&#39;,</span><span class="se">\n</span><span class="s">&#39;</span>
-            <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/ZIGLinkMeasurements.txt&#39;</span><span class="p">,</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="p">,</span><span class="s">&#39;ZIGLinkMeasurements.txt&#39;</span><span class="p">),</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
             <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
             <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
         <span class="c">### UWBLinkMeasurements</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/UWBLinkMeasurements.txt&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">],</span><span class="s">&#39;UWBLinkMeasurements.txt&#39;</span><span class="p">)):</span>
             <span class="n">entete</span> <span class="o">=</span> <span class="s">&#39;UWBLinkMeasurementsID, NodeID, Timestamp, UWB_PeerID, UWB_Dist, UWB_BER, UWB_FER, UWB_CIR</span><span class="se">\n</span><span class="s">&#39;</span>
-            <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/UWBLinkMeasurements.txt&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+            <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">],</span><span class="s">&#39;UWBLinkMeasurements.txt&#39;</span><span class="p">),</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
             <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">entete</span><span class="p">)</span>
             <span class="n">data</span> <span class="o">=</span> <span class="s">&#39;1,&#39;</span><span class="o">+</span> <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span> <span class="n">timestamp</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">now</span><span class="p">())</span> <span class="o">+</span><span class="s">&#39;,&#39;</span> <span class="o">+</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s">&#39;d&#39;</span><span class="p">])</span> <span class="o">+</span><span class="s">&#39;,,,,</span><span class="se">\n</span><span class="s">&#39;</span>
             <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
             <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/UWBLinkMeasurements.txt&#39;</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+            <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">],</span><span class="s">&#39;UWBLinkMeasurements.txt&#39;</span><span class="p">),</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
             <span class="n">lst</span><span class="o">=</span><span class="nb">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
             <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="n">data</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">lst</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span> <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span> <span class="n">timestamp</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">now</span><span class="p">())</span> <span class="o">+</span><span class="s">&#39;,&#39;</span> <span class="o">+</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s">&#39;d&#39;</span><span class="p">])</span> <span class="o">+</span><span class="s">&#39;,,,,</span><span class="se">\n</span><span class="s">&#39;</span>
-            <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/UWBLinkMeasurements.txt&#39;</span><span class="p">,</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">],</span><span class="s">&#39;UWBLinkMeasurements.txt&#39;</span><span class="p">),</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
             <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
             <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
@@ -1637,37 +1695,37 @@
 <span class="c">#                                            e[2][&#39;d&#39;]))</span>
 
 </div>
-<div class="viewcode-block" id="writenode"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.writenode">[docs]</a><span class="k">def</span> <span class="nf">writenode</span><span class="p">(</span><span class="n">agent</span><span class="p">):</span>
+<div class="viewcode-block" id="writenode"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.writenode.html#pylayers.util.pyutil.writenode">[docs]</a><span class="k">def</span> <span class="nf">writenode</span><span class="p">(</span><span class="n">agent</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    write Nodes.txt</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/Nodes.txt&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">],</span><span class="s">&#39;Nodes.txt&#39;</span><span class="p">)):</span>
         <span class="n">entete</span> <span class="o">=</span> <span class="s">&#39;NodeID, NodeName, NodeOwner, NodeDescription, NodeOwnerID, Mobile OrAnchor, TrolleyID</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/Nodes.txt&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">],</span><span class="s">&#39;Nodes.txt&#39;</span><span class="p">),</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
         <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">entete</span><span class="p">)</span>
         <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="n">data</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">ID</span><span class="p">))</span> <span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span> <span class="n">agent</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39;,,,,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">MoA</span><span class="p">)</span> <span class="o">+</span><span class="s">&#39;,</span><span class="se">\n</span><span class="s">&#39;</span>
-    <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/Nodes.txt&#39;</span><span class="p">,</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+    <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">],</span><span class="s">&#39;Nodes.txt&#39;</span><span class="p">),</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
     <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="writeDetails"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.writeDetails">[docs]</a><span class="k">def</span> <span class="nf">writeDetails</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">description</span><span class="o">=</span><span class="s">&#39;simulation&#39;</span><span class="p">,</span> <span class="n">location</span> <span class="o">=</span><span class="s">&#39;Rennes&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="writeDetails"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.writeDetails.html#pylayers.util.pyutil.writeDetails">[docs]</a><span class="k">def</span> <span class="nf">writeDetails</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">description</span><span class="o">=</span><span class="s">&#39;simulation&#39;</span><span class="p">,</span> <span class="n">location</span> <span class="o">=</span><span class="s">&#39;Rennes&#39;</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    write MeasurementsDetails.txt</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/MeasurementsDetails.txt&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">],</span><span class="s">&#39;MeasurementsDetails.txt&#39;</span><span class="p">)):</span>
         <span class="n">entete</span> <span class="o">=</span> <span class="s">&#39;MeasurementsDetailsID, MeasurementsDate, MeasurementsDescription, MeasurementsLocation</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/MeasurementsDetails.txt&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">],</span><span class="s">&#39;MeasurementsDetails.txt&#39;</span><span class="p">),</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
         <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">entete</span><span class="p">)</span>
         <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="n">data</span> <span class="o">=</span> <span class="s">&#39;1&#39;</span> <span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span> <span class="n">timestamp</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">now</span><span class="p">())</span> <span class="o">+</span> <span class="s">&#39;, &#39;</span> <span class="o">+</span><span class="n">description</span> <span class="o">+</span> <span class="n">location</span> <span class="o">+</span><span class="s">&#39;,</span><span class="se">\n</span><span class="s">&#39;</span>
-    <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/MeasurementsDetails.txt&#39;</span><span class="p">,</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+    <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">],</span><span class="s">&#39;MeasurementsDetails.txt&#39;</span><span class="p">),</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
     <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="zipd"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.zipd">[docs]</a><span class="k">def</span> <span class="nf">zipd</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">zipfilename</span><span class="p">):</span>
+<div class="viewcode-block" id="zipd"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.zipd.html#pylayers.util.pyutil.zipd">[docs]</a><span class="k">def</span> <span class="nf">zipd</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">zipfilename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; add a folder to a zipfile</span>
 
 <span class="sd">    Parameters</span>
@@ -1689,7 +1747,7 @@
             <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">fil</span><span class="p">)[</span><span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">):]))</span>
     <span class="n">zip_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="unzipd"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.unzipd">[docs]</a><span class="k">def</span> <span class="nf">unzipd</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">zipfilename</span><span class="p">):</span>
+<div class="viewcode-block" id="unzipd"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.unzipd.html#pylayers.util.pyutil.unzipd">[docs]</a><span class="k">def</span> <span class="nf">unzipd</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">zipfilename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; unzip a zipfile to a folder</span>
 
 <span class="sd">    Parameters</span>
@@ -1705,7 +1763,7 @@
 
     <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">zip_file</span><span class="o">.</span><span class="n">namelist</span><span class="p">():</span>
         <span class="k">print</span> <span class="n">each</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">each</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">):</span> 
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">each</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">each</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\\</span><span class="s">&#39;</span><span class="p">):</span> 
             <span class="n">root</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">each</span><span class="p">)</span>
             <span class="n">directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">root</span><span class="p">))</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
@@ -1713,7 +1771,7 @@
             <span class="nb">file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span>
                 <span class="s">&#39;wb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">zip_file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">each</span><span class="p">))</span>
 </div>
-<div class="viewcode-block" id="unzipf"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.unzipf">[docs]</a><span class="k">def</span> <span class="nf">unzipf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">zipfilename</span><span class="p">):</span>
+<div class="viewcode-block" id="unzipf"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.unzipf.html#pylayers.util.pyutil.unzipf">[docs]</a><span class="k">def</span> <span class="nf">unzipf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">zipfilename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; unzip a file from zipfile to a folder</span>
 
 <span class="sd">    Parameters</span>
@@ -1728,7 +1786,7 @@
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>    
 
     <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">zip_file</span><span class="o">.</span><span class="n">namelist</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">each</span> <span class="o">==</span> <span class="n">filepath</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">each</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">):</span> 
+        <span class="k">if</span> <span class="n">each</span> <span class="o">==</span> <span class="n">filepath</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">each</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">each</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\\</span><span class="s">&#39;</span><span class="p">)):</span> 
             <span class="n">root</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">each</span><span class="p">)</span>
             <span class="n">directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">root</span><span class="p">))</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
@@ -1736,7 +1794,7 @@
             <span class="nb">file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span>
                 <span class="s">&#39;wb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">zip_file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">each</span><span class="p">))</span>
 </div>
-<div class="viewcode-block" id="rotate_line"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.rotate_line">[docs]</a><span class="k">def</span> <span class="nf">rotate_line</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">theta</span><span class="p">):</span>
+<div class="viewcode-block" id="rotate_line"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.rotate_line.html#pylayers.util.pyutil.rotate_line">[docs]</a><span class="k">def</span> <span class="nf">rotate_line</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">theta</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    rotation of a line [AB] of an angle theta with A fixed</span>
 
@@ -1759,7 +1817,7 @@
     <span class="n">Br</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">R</span><span class="p">,</span><span class="n">B</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">Br</span>
 </div>
-<div class="viewcode-block" id="extract_block_diag"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.extract_block_diag">[docs]</a><span class="k">def</span> <span class="nf">extract_block_diag</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="extract_block_diag"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.extract_block_diag.html#pylayers.util.pyutil.extract_block_diag">[docs]</a><span class="k">def</span> <span class="nf">extract_block_diag</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Extracts blocks of size M from the kth diagonal</span>
 <span class="sd">    of square matrix A, whose size must be a multiple of M.&quot;&quot;&quot;</span>
 
@@ -1783,7 +1841,7 @@
                        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">M</span><span class="p">,</span><span class="n">M</span><span class="p">)])</span>
     <span class="k">return</span> <span class="n">blocks</span>
 </div>
-<div class="viewcode-block" id="fill_block_diag"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.fill_block_diag">[docs]</a><span class="k">def</span> <span class="nf">fill_block_diag</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">blocks</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="fill_block_diag"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.fill_block_diag.html#pylayers.util.pyutil.fill_block_diag">[docs]</a><span class="k">def</span> <span class="nf">fill_block_diag</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">blocks</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;fill A with blocks of size M from the kth diagonal</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -1808,10 +1866,34 @@
     <span class="k">return</span> <span class="n">A</span>
 
 </div>
+<div class="viewcode-block" id="fill_block_diagMDA"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.fill_block_diagMDA.html#pylayers.util.pyutil.fill_block_diagMDA">[docs]</a><span class="k">def</span> <span class="nf">fill_block_diagMDA</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">blocks</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;fill A with blocks of size M from the kth diagonal</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># Check that the matrix can be block divided</span>
+    <span class="k">if</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">%</span> <span class="n">M</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">StandardError</span><span class="p">(</span><span class="s">&#39;Matrix must be square and a multiple of block size&#39;</span><span class="p">)</span>
+
+    <span class="c"># Assign indices for offset from main diagonal</span>
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">StandardError</span><span class="p">(</span><span class="s">&#39;kth diagonal does not exist in matrix&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">ro</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">co</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">M</span> 
+    <span class="k">elif</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">ro</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">M</span>
+        <span class="n">co</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ro</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">co</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">M</span><span class="p">,</span><span class="n">M</span><span class="p">):</span>
+        <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">ro</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">ro</span><span class="o">+</span><span class="n">M</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="n">co</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">co</span><span class="o">+</span><span class="n">M</span><span class="p">,</span><span class="o">...</span><span class="p">]</span><span class="o">=</span><span class="n">blocks</span><span class="p">[:,:,</span><span class="o">...</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="o">/</span><span class="n">M</span><span class="p">)]</span> 
+    <span class="k">return</span> <span class="n">A</span>
+</div>
 <span class="n">BLACK</span><span class="p">,</span> <span class="n">RED</span><span class="p">,</span> <span class="n">GREEN</span><span class="p">,</span> <span class="n">YELLOW</span><span class="p">,</span> <span class="n">BLUE</span><span class="p">,</span> <span class="n">MAGENTA</span><span class="p">,</span> <span class="n">CYAN</span><span class="p">,</span> <span class="n">WHITE</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
 
 <span class="c">#following from Python cookbook, #475186</span>
-<span class="k">def</span> <span class="nf">has_colours</span><span class="p">(</span><span class="n">stream</span><span class="p">):</span>
+<div class="viewcode-block" id="has_colours"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.has_colours.html#pylayers.util.pyutil.has_colours">[docs]</a><span class="k">def</span> <span class="nf">has_colours</span><span class="p">(</span><span class="n">stream</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="s">&quot;isatty&quot;</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">False</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">stream</span><span class="o">.</span><span class="n">isatty</span><span class="p">():</span>
@@ -1822,17 +1904,30 @@
         <span class="k">return</span> <span class="n">curses</span><span class="o">.</span><span class="n">tigetnum</span><span class="p">(</span><span class="s">&quot;colors&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span>
     <span class="k">except</span><span class="p">:</span>
         <span class="c"># guess false in case of error</span>
-        <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="bp">False</span></div>
 <span class="n">has_colours</span> <span class="o">=</span> <span class="n">has_colours</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="printout"><a class="viewcode-back" href="../../../modules/pylayers.util.pyutil.html#pylayers.util.pyutil.printout">[docs]</a><span class="k">def</span> <span class="nf">printout</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="n">WHITE</span><span class="p">):</span>
+<div class="viewcode-block" id="printout"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.printout.html#pylayers.util.pyutil.printout">[docs]</a><span class="k">def</span> <span class="nf">printout</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="n">WHITE</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">has_colours</span><span class="p">:</span>
                 <span class="n">seq</span> <span class="o">=</span> <span class="s">&quot;</span><span class="se">\x1b</span><span class="s">[1;</span><span class="si">%d</span><span class="s">m&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="mi">30</span><span class="o">+</span><span class="n">colour</span><span class="p">)</span> <span class="o">+</span> <span class="n">text</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\x1b</span><span class="s">[0m&quot;</span>
                 <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
                 <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 
+</div>
+<div class="viewcode-block" id="in_ipynb"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.pyutil.in_ipynb.html#pylayers.util.pyutil.in_ipynb">[docs]</a><span class="k">def</span> <span class="nf">in_ipynb</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    check if program is run in ipython notebook</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">cfg</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">config</span> 
+        <span class="k">if</span> <span class="n">cfg</span><span class="p">[</span><span class="s">&#39;IPKernelApp&#39;</span><span class="p">][</span><span class="s">&#39;parent_appname&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;ipython-notebook&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
 </div>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
@@ -1863,8 +1958,8 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 12, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+      Last updated on Feb 22, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];
