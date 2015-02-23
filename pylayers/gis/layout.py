@@ -839,6 +839,7 @@ class Layout(PyLayers):
             #
             nsmax  = max(self.Gs.node.keys())
             # Warning
+            # -------
             # nsmax can be different from the total number of segments
             # This means that the numerotation of segment do not need to be
             # contiguous.
@@ -851,8 +852,9 @@ class Layout(PyLayers):
 
             #self.stridess = np.array(np.zeros(nsmax+1),dtype=int)
             self.stridess = np.empty(nsmax+1,dtype=int)
+            # +1 is for discarding index 0 (unused here)  
             self.sla  = np.empty((nsmax+1+self.Nss), dtype='S20')
-            self.offset = np.empty(nsmax+self.Nss,dtype=int)
+            self.offset = np.empty(nsmax+1+self.Nss,dtype=int)
 
 
             # Storing segment normals
@@ -879,7 +881,7 @@ class Layout(PyLayers):
                         self.lsss.append(ks)
                         self.sla[index] = slabname
                         self.isss.append(index)
-                        self.offset[self.stridess[ks]+uk] = self.Gs.node[ks]['ss_offset'][uk]
+                        self.offset[index] = self.Gs.node[ks]['ss_offset'][uk]
                         index = index+1
 
         # append sub segment normal to normal
@@ -1149,7 +1151,7 @@ class Layout(PyLayers):
         self.Gs.pos = {}
         self.labels = {}
 
-        # manage ini file with latlon coordinates
+        #manage ini file with latlon coordinates
         if di['info'].has_key('format'):
             if di['info']['format']=='latlon':
                 or_coord_format = 'latlon'
@@ -4747,7 +4749,7 @@ class Layout(PyLayers):
             if convex:
                 #Make the layout convex in regard of the outddor
                 self._convex_hull()
-                # # Ensure convexity of all cycles
+                # #Ensure convexity of all cycles
                 self._convexify()
                 # re-attach new cycles
                 self.buildGt()
@@ -5259,7 +5261,7 @@ class Layout(PyLayers):
 
         """
 
-        # 1 - Find differences between the convex hull and the Layout contour
+        #1 - Find differences between the convex hull and the Layout contour
         #     The result of the difference are polygons 
         ch = self.ma.convex_hull
         P = ch.difference(self.ma)
@@ -5277,7 +5279,7 @@ class Layout(PyLayers):
             # p.coorddeter()
             uaw = np.where(p.vnodes == 0)
             for aw in uaw :
-                # 2 - non existing segments are created as airwalls
+                #2 - non existing segments are created as airwalls
                 awid = self.add_segment(p.vnodes[aw-1][0], p.vnodes[aw+1][0], name='AIR')
                 p.vnodes[aw] = awid
                 G = nx.subgraph(self.Gs,p.vnodes)
@@ -5288,11 +5290,11 @@ class Layout(PyLayers):
                 self.Gt.pos[ncy] = tuple(cy.g)
                 # WARNING
                 # recreate polygon is mandatory otherwise cycle.cycle and polygon.vnodes
-                # are shifted.
+                #are shifted.
                 self.Gt.node[ncy]['polyg'] = p#geu.Polygon(p.xy,cy.cycle)
                 self.Gt.node[ncy]['isopen'] = True
                 self.Gt.node[ncy]['indoor'] = False
-                # 3 - add link between created cycle and outdoor
+                #3 - add link between created cycle and outdoor
                 self.Gt.add_edge(ncy, 0)
                 # 4 - search and add link between the created cycle and indoor cycles
                 for k in self.Gt.nodes():
@@ -5307,21 +5309,21 @@ class Layout(PyLayers):
 
                             self.Gt.add_edge(ncy, k,segment= segment)
 
-                # 5 - Update Gs
+                #5 - Update Gs
                 for v in filter(lambda x: x>0,p.vnodes):
                     # add new ncycle to Gs for the new airwall
-                    # that new airwall always separate the new created cycle
-                    # and the outdoor cycle
+                    #that new airwall always separate the new created cycle
+                    #and the outdoor cycle
                     if v == awid :
                         self.Gs.node[awid]['ncycles']=[ncy,0]
                     # other wise update the cycles seen by segments
                     else :
                         cy = self.Gs.node[v]['ncycles'].pop()
-                        # if the pop cycle is the outdoor cycle, 
+                        #if the pop cycle is the outdoor cycle, 
                         # replace it with the new cycle
                         if cy == 0:
                             self.Gs.node[v]['ncycles'].append(ncy)
-                        # else replace old value with [pos cycle , new cycle]
+                        #else replace old value with [pos cycle , new cycle]
                         else:
                             self.Gs.node[v]['ncycles']=[cy,ncy]
                 lncy.append(ncy)
@@ -5359,7 +5361,7 @@ class Layout(PyLayers):
         sp.spatial.Delaunay
 
         """
-        # function for debug purpose
+        #function for debug purpose
         def polyplot(poly,pgs=True):
             if pgs:
                 fig,ax=self.showG('s')
@@ -5371,7 +5373,7 @@ class Layout(PyLayers):
         lacy =[]
         Gt=copy.deepcopy(self.Gt)
         for n in self.Gt.nodes():
-            # if indoor cycle
+            #if indoor cycle
             if n > 0:
 
                 ncy=max(self.Gt.nodes())
@@ -5400,7 +5402,7 @@ class Layout(PyLayers):
                             for t in tri:
                                 ts = geu.Polygon(pucs[t])
                                 # check if the new polygon is contained into
-                                # the original polygon (non guaratee by Delaunay)
+                                #the original polygon (non guaratee by Delaunay)
                                 C = self.Gt.node[n]['polyg'].contains(ts)
                                 if C:
                                     cp =ts
@@ -5408,8 +5410,8 @@ class Layout(PyLayers):
                                     uaw = np.where(cp.vnodes == 0)[0]
                                     lvn = len(cp.vnodes)
                                     for i in uaw:
-                                        # keep trace of created airwalls, because some
-                                        # of them will be destroyed in step 3.
+                                        #keep trace of created airwalls, because some
+                                        #of them will be destroyed in step 3.
                                         naw.append(self.add_segment(
                                                    cp.vnodes[np.mod(i-1,lvn)],
                                                    cp.vnodes[np.mod(i+1,lvn)]
@@ -5427,7 +5429,7 @@ class Layout(PyLayers):
                             for ip2,p2 in enumerate(polys):
                                 conv=False
                                 inter = p.intersection(p2)
-                                # if 2 triangles have a common segment
+                                #if 2 triangles have a common segment
                                 pold = p
                                 if isinstance(inter,sh.LineString):
                                     p = p + p2
@@ -5471,13 +5473,13 @@ class Layout(PyLayers):
                             ptmp.setvnodes(self)
                             ncpol.append(ptmp)
                             vnodes.extend(ptmp.vnodes)
-                        # air walls to be deleted (because origin Delaunay triangle
+                        #air walls to be deleted (because origin Delaunay triangle
                         # has been merged )
                         daw = filter(lambda x: x not in vnodes,naw)
 
                         for d in daw:
                             self.del_segment(d,verbose=False)
-                        # remove old cycle
+                        #remove old cycle
                         self.Gt.remove_node(n)
                         nbpolys=len(ncpol)
 
@@ -5497,7 +5499,7 @@ class Layout(PyLayers):
                             if not len (p.vnodes) == len(G.nodes()):
                                 # some point are counted twice during 
                                 # the "self.Gt.node[n]['polyg'].intersection(p)"
-                                # them make a unique with preserved order
+                                #them make a unique with preserved order
                                 _, idx = np.unique(p.vnodes, return_index=True)
                                 pv = p.vnodes[np.sort(idx)]
                                 pp = p.ndarray()[:,np.sort(idx)[::2]/2]
@@ -5535,11 +5537,11 @@ class Layout(PyLayers):
                                
 
 
-        # # update self.Gs.node[x]['ncycles']
+        # #update self.Gs.node[x]['ncycles']
         # self._updGsncy()
-        # # add outside cycle to Gs.node[x]['ncycles']
+        # #add outside cycle to Gs.node[x]['ncycles']
         # self._addoutcy()
-        # # update interaction list into Gt.nodes (cycles)
+        # #update interaction list into Gt.nodes (cycles)
         # self._interlist(nodelist=lacy)
 
     def buildGw(self):
@@ -6198,7 +6200,7 @@ class Layout(PyLayers):
                     pta = points[0:2,:]
                     phe = points[2:,:]
                     # add difraction points
-                    # WARNING Diffrraction points are added only if a segment isseen
+                    #WARNING Diffrraction points are added only if a segment isseen
                     # it should be the case in 99% of cases
                     
                     if len(ipoints)>0:
@@ -6235,7 +6237,7 @@ class Layout(PyLayers):
                         #    plt.show()
                         #    pdb.set_trace())
                     ########
-                    # SOMETIMES PROBA IS 0 WHEREAS SEG IS SEEN
+                    #SOMETIMES PROBA IS 0 WHEREAS SEG IS SEEN
                     ###########
                     # # keep segment with prob above a threshold
                     # isegkeep = isegments[prob>0]
@@ -6517,140 +6519,138 @@ class Layout(PyLayers):
         #         fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg,nodes=False,node_size=50,node_color='b')
 
     def showG(self, graph='r', **kwargs):
+        u""" show the different graphs
+
+        Parameters
+        ----------
+
+        graph : char
+            't' : Gt 'r' : Gr 's' : Gs 'v' : Gv  'c': Gc 'i' : Gi
+        fig : matplotlib figure
+            []
+        ax : matplotlib figure
+            []
+        show : boolean
+            False
+        nodes : boolean
+            False
+        edges : boolean
+            True
+        airwalls : boolean
+            display airwalls (False)
+        subseg: boolean
+            display subsegments (False)
+        slab : boolean
+            display color and width of slabs (False)
+        labels : boolean |list
+            display graph labels (False)
+            if list precise label of which cycle to display
+            (e.g. ['t'])
+        alphan : float
+            transparency of nodes (1.0)
+        alphae : float
+            transparency of edges (1.0)
+        width : float
+            line width (2)
+        node_color: string
+            w
+        posnode_color: string
+            positive node color (k)
+        negnode_color: string
+            negative node color (b)
+        edge_color : string
+            k
+        node_size : float
+            20
+        font_size : float
+            15,
+        nodelist : list
+            list of nodes to be displayed (all)
+        edgelist : list
+            list of edges to be displayed (all)
+        mode : string
+            'cycle' | 'none' | 'room'
+        alphacy : string
+            transparency of cycles (0.8)
+        colorcy :
+            '#abcdef'
+        linter : list
+            list of interaction for Gi
+            ['RR','TT','RT','TR','RD','DR','TD','DT','DD']
+        show0 : boolean
+            If true display connection to cycle  0 of Gt (False)
+        eded : boolean
+            True
+        ndnd : boolean
+            True
+        nded : boolean
+            True
+        width : int
+            2
+        nodelist : list
+            []
+
+
+        defaults = {'show': False,
+                    'fig': [],
+                    'ax': [],
+                    'nodes': False,
+                    'edges': True,
+                    'sllist':[],
+                    'airwalls': False,
+                    'subseg': False,
+                    'slab': False,
+                    'labels': False,
+                    'alphan': 1.0,
+                    'alphae': 1.0,
+                    'width': 2,
+                    'node_color':'w',
+                    'edge_color':'k',
+                    'node_size':20,
+                    'font_size':15,
+                    'nodelist': [],
+                    'edgelist': [],
+                    'figsize': (5,5),
+                    'mode':'nocycle',
+                    'alphacy':0.8,
+                    'colorcy':'abcdef',
+                    'linter':['RR','TT','RT','TR','RD','DR','TD','DT','DD'],
+                    'show0':False,
+                    'axis':False
+                    }
+
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.gis.layout import  *
+            >>> import matplotlib.pyplot as plt
+            >>> L = Layout('TA-Office.ini')
+            >>> L.dumpr()
+            >>> fig = plt.figure(figsize=(10,10))
+            >>> ax = fig.add_subplot(221)
+            >>> fig,ax = L.showG('s',fig=fig,ax=ax)
+            >>> tis = plt.title("Gs")
+            >>> ax = fig.add_subplot(222)
+            >>> fig,ax = L.showG('t',fig=fig,ax=ax)
+            >>> tit = plt.title("Gt")
+            >>> ax = fig.add_subplot(223)
+            >>> fig,ax = L.showG('r',fig=fig,ax=ax)
+            >>> tic = plt.title("Gr")
+            >>> ax = fig.add_subplot(224)
+            >>> fig,ax = L.showG('v',fig=fig,ax=ax)
+            >>> tiv = plt.title("Gv")
+            >>> plt.show()
+
+        See Also
+        --------
+
+        pylayers.util.graphutil.draw
+
         """
-        """
-#        """ show the different graphs
-#
-#        Parameters
-#        ----------
-#
-#        graph : char
-#            't' : Gt 'r' : Gr 's' : Gs 'v' : Gv  'c': Gc 'i' : Gi
-#        fig : matplotlib figure
-#            []
-#        ax : matplotlib figure
-#            []
-#        show : boolean
-#            False
-#        nodes : boolean
-#            False
-#        edges : boolean
-#            True
-#        airwalls : boolean
-#            display airwalls (False)
-#        subseg: boolean
-#            display subsegments (False)
-#        slab : boolean
-#            display color and width of slabs (False)
-#        labels : boolean | list
-#            display graph labels (False)
-#            if list precise label of which cycle to display
-#            (e.g. ['t'])
-#        alphan : float
-#            transparency of nodes (1.0)
-#        alphae : float
-#            transparency of edges (1.0)
-#        width : float
-#            line width (2)
-#        node_color: string
-#            w
-#        posnode_color: string
-#            positive node color (k)
-#        negnode_color: string
-#            negative node color (b)
-#        edge_color : string
-#            k
-#        node_size : float
-#            20
-#        font_size : float
-#            15,
-#        nodelist : list
-#            list of nodes to be displayed (all)
-#        edgelist : list
-#            list of edges to be displayed (all)
-#        mode : string
-#            'cycle' | 'none' | 'room'
-#        alphacy : string
-#            transparency of cycles (0.8)
-#        colorcy :
-#            '#abcdef'
-#        linter : list
-#            list of interaction for Gi
-#            ['RR','TT','RT','TR','RD','DR','TD','DT','DD']
-#        show0 : boolean
-#            If true display connection to cycle  0 of Gt (False)
-#        eded : boolean
-#            True
-#        ndnd : boolean
-#            True
-#        nded : boolean
-#            True
-#        width : int
-#            2
-#        nodelist : list
-#            []
-#
-#
-#        defaults = {'show': False,
-#                    'fig': [],
-#                    'ax': [],
-#                    'nodes': False,
-#                    'edges': True,
-#                    'sllist':[],
-#                    'airwalls': False,
-#                    'subseg': False,
-#                    'slab': False,
-#                    'labels': False,
-#                    'alphan': 1.0,
-#                    'alphae': 1.0,
-#                    'width': 2,
-#                    'node_color':'w',
-#                    'edge_color':'k',
-#                    'node_size':20,
-#                    'font_size':15,
-#                    'nodelist': [],
-#                    'edgelist': [],
-#                    'figsize': (5,5),
-#                    'mode':'nocycle',
-#                    'alphacy':0.8,
-#                    'colorcy':'abcdef',
-#                    'linter':['RR','TT','RT','TR','RD','DR','TD','DT','DD'],
-#                    'show0':False,
-#                    'axis':False
-#                    }
-#
-#
-#        Examples
-#        --------
-#
-#        .. plot::
-#            :include-source:
-#
-#            >>> from pylayers.gis.layout import  *
-#            >>> import matplotlib.pyplot as plt
-#            >>> L = Layout('TA-Office.ini')
-#            >>> L.dumpr()
-#            >>> fig = plt.figure(figsize=(10,10))
-#            >>> ax = fig.add_subplot(221)
-#            >>> fig,ax = L.showG('s',fig=fig,ax=ax)
-#            >>> tis = plt.title("Gs")
-#            >>> ax = fig.add_subplot(222)
-#            >>> fig,ax = L.showG('t',fig=fig,ax=ax)
-#            >>> tit = plt.title("Gt")
-#            >>> ax = fig.add_subplot(223)
-#            >>> fig,ax = L.showG('r',fig=fig,ax=ax)
-#            >>> tic = plt.title("Gr")
-#            >>> ax = fig.add_subplot(224)
-#            >>> fig,ax = L.showG('v',fig=fig,ax=ax)
-#            >>> tiv = plt.title("Gv")
-#            >>> plt.show()
-#
-#        See Also
-#        --------
-#
-#        pylayers.util.graphutil.draw
-#
-#        """
         defaults = {'show': False,
                     'fig': [],
                     'ax': [],
@@ -8518,7 +8518,7 @@ class Layout(PyLayers):
 
         # manage floor
         
-        # if Gt doesn't exists
+        #if Gt doesn't exists
 
         try:
             self.ma.coorddeter()

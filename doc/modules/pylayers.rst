@@ -4,6 +4,19 @@ PyLayers
 .. contents::
    :depth: 4
 
+Simulations  
+-----------
+
+.. toctree::
+   :maxdepth: 2
+
+   pylayers.simul.link
+   pylayers.simul.exploit
+   pylayers.simul.exploit_simulnet
+   pylayers.simul.radionode
+   pylayers.simul.simulnet
+   pylayers.simul.simultraj
+
 Antenna and Propagation
 -----------------------
 
@@ -141,6 +154,7 @@ Measurement Data
    :maxdepth: 2
 
    pylayers.measures.mesuwb
+   pylayers.measures.cormoran
 
 Agents and Bodies Mobility 
 --------------------------
@@ -205,19 +219,7 @@ Signals
    pylayers.signal.standard
 
 
-Simulations 
------------
 
-.. toctree::
-   :maxdepth: 2
-
-   pylayers.simul.exploit
-   pylayers.simul.exploit_simulnet
-   pylayers.simul.radionode
-   pylayers.simul.simulem
-   pylayers.simul.simulnet
-   pylayers.simul.simultraj
-   pylayers.simul.link
 
 Utility classes and functions 
 -----------------------------
