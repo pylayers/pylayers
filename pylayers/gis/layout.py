@@ -4205,7 +4205,7 @@ class Layout(PyLayers):
         fileGc = filename + 'Gc' + '.gml'
         self.Gc = nx.read_gml(fileGc)
 
-    def show_nodes(self, ndlist=[1e8], size=10, color='b', dlabels=False, font_size=15, alpha=1):
+    def show_nodes(self, ndlist=[1e8], size=10, color='b', dlabels=False, font_size=15, alpha=1,node_shape='o'):
         """ show nodes
 
         Parameters
@@ -4224,16 +4224,17 @@ class Layout(PyLayers):
         if type(ndlist) == np.ndarray:
             ndlist = list(ndlist)
         if len(ndlist) == 0:
-            ndlist.append(1e8)
+            # ndlist.append(1e8)
             dlabels = False
-        if ndlist[0] == 1e8:
+        elif ndlist[0] == 1e8:
             ndlist = self.Gs.node.keys()
         #elif ndlist[0]==1e8:
         #    ndlist  = self.Gs.node.keys()
 
         #print ndlist
         nx.draw_networkx_nodes(self.Gs, self.Gs.pos, node_color=color,
-                               node_size=size, nodelist=ndlist, alpha=alpha)
+                               node_size=size, nodelist=ndlist, alpha=alpha,
+                               node_shape=node_shape)
         if dlabels:
             dicopos = {}
             dicolab = {}
@@ -4305,7 +4306,8 @@ class Layout(PyLayers):
                     'color':'black',
                     'dnodes':False,
                     'dlabels':False,
-                    'font_size':15
+                    'font_size':15,
+                    'node_shape':'o'
                    }
 
         for key, value in defaults.items():
@@ -4322,7 +4324,6 @@ class Layout(PyLayers):
             if color=='#FFFFF0':
                 color = '#00000F'
             clrlist.append(color)
-
         ecmap = clr.ListedColormap(clrlist)
 
         U = self.Gs.edges(kwargs['edlist'])
@@ -4335,7 +4336,8 @@ class Layout(PyLayers):
                # print edlist
                # nodelist = self.ed2nd(edlist)
             self.show_nodes(ndlist=kwargs['edlist'], dlabels=kwargs['dlabels'],
-                            color='b', font_size=kwargs['font_size'])
+                            color='b', font_size=kwargs['font_size'],
+                            node_shape=kwargs['node_shape'])
         if kwargs['dnodes']:
             self.show_nodes(ndlist=kwargs['edlist'], color='b')
 
@@ -4396,6 +4398,7 @@ class Layout(PyLayers):
             self.show_segment(edlist=edlist, alpha=1,
                             width=linewidth, color=color, dnodes=dnodes,
                             dlabels=dlabels, font_size=font_size)
+
 
     def _showGi(self, **kwargs):
         """  show graph of interactions Gi
@@ -4602,7 +4605,7 @@ class Layout(PyLayers):
 
         if self.display['nodes']:
             dlabels = self.display['ndlabel']
-            self.show_nodes(ndlist, size=10, color='r', dlabels=dlabels)
+            self.show_nodes(ndlist, size=30, color='k', dlabels=dlabels,node_shape='s')
 
         slablist = self.name.keys()
         if self.display['edges']:
@@ -4696,8 +4699,8 @@ class Layout(PyLayers):
                 self._convex_hull()
                 # # Ensure convexity of all cycles
                 self._convexify()
-                # re-attach new cycles 
-                self.buildGt()
+                # # re-attach new cycles 
+                # self.buildGt()
             self.lbltg.extend('t')
 
         if 'c' in graph:
@@ -7500,7 +7503,6 @@ class Layout(PyLayers):
         #
         for n in self.Gr.nodes():
             self.Gr.node[n]['transition'] = []
-
         ltrans = self.listtransition
         ldoors = filter(lambda x:self.Gs.node[x]['name']<>'AIR',ltrans)
 

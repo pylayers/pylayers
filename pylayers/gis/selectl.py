@@ -59,11 +59,25 @@ class SelectL(object):
         self.nedge_sel = 0
         self.indp = 0
         self.state = 'Init'
+        self.statename={'Init':'Point Selection',
+                'CP':'Create Point',
+                'SP1':'Select Point 1',
+                'SP2':'Select Point 2, click again for creating segment',
+                'SS':'Select Segment',
+                'SSS':'Select Sub Segment',
+                'CPS':'Create Point On Segment',
+                'CPSS':'Create Point On Sub Segment',
+                }
         self.nsel = 0
         ax.axis(self.L.display['box'])
-        plt.title(self.state)
+        plt.title(self.statename[self.state])
         self.update_state()
 
+        # save matplotlib config
+        self.rcconf = {}
+        self.rcconf['keymap.save']= plt.rcParams['keymap.save']
+        plt.rcParams['keymap.save']=[]
+        
         self.ddoc = {'l'  : 'select activelayer',
             'i'  :' back to init state',
             'j'  :' vertical and horizontal scaling',
@@ -102,7 +116,7 @@ class SelectL(object):
 
         """
         if title=='':
-            title = self.state
+            title = self.statename[self.state]
         axis = ax.axis()
         self.L.display['clear'] = clear
         self.L.display['fontsize'] = font_size
@@ -196,7 +210,7 @@ class SelectL(object):
 
         if self.state == 'Init':
             fig,ax = self.show(fig,ax,clear=True)
-            ax.title.set_text('Init')
+            ax.title.set_text(self.statename[self.state])
             self.selected_edge1 = 0
             self.selected_pt1 = 0
             self.selected_pt2 = 0
@@ -228,7 +242,7 @@ class SelectL(object):
 
         if self.state == 'SP1':
             fig,ax = self.show(fig,ax,clear=False)
-            ax.title.set_text('SP1')
+            ax.title.set_text(self.statename[self.state])
             print 'Selected node : '+str(self.nsel)
             #ax.title.set_text(self.nsel))
             self.selected_pt1 = self.nsel
@@ -245,7 +259,7 @@ class SelectL(object):
 
         if self.state == 'SP2':
             self.p1[0].set_color('green')
-            ax.title.set_text('SP2')
+            ax.title.set_text(self.statename[self.state])
             #ax.title.set_text('Selected node : %d ' % (self.nsel))
             print 'Selected node : ' + str(self.nsel)
             self.selected_pt2 = self.nsel
@@ -258,7 +272,7 @@ class SelectL(object):
             #ax.title.set_text('SP2')
 
         if self.state == 'SS':
-            ax.title.set_text('SS')
+            ax.title.set_text(self.statename[self.state])
             try:
                 self.p1[0].set_visible(False)
             except:
@@ -291,7 +305,7 @@ class SelectL(object):
             self.L.show_nodes(ndlist=[nse], size=200, color='r', alpha=0.5)
 
         if self.state == 'SSS':
-            ax.title.set_text('SSS')
+            ax.title.set_text(self.statename[self.state])
             nse = self.selected_edge1
             segdico = self.L.Gs.node[nse]
             z  = segdico['ss_z']
@@ -302,7 +316,7 @@ class SelectL(object):
         # Create Point state
         #
         if self.state == 'CP':
-            ax.title.set_text('CP')
+            ax.title.set_text(self.statename[self.state])
             try:
                 self.segment[0].set_visible(False)
             except:
@@ -323,7 +337,7 @@ class SelectL(object):
         #
 
         if self.state == 'CPS':
-            ax.title.set_text('CPS')
+            ax.title.set_text(self.statename[self.state])
             self.selected_edge1 = self.nsel
             ta, he = self.L.Gs.neighbors(self.nsel)
             self.pta1 = np.array(self.L.Gs.pos[ta])
@@ -339,7 +353,7 @@ class SelectL(object):
                 pass
 
         if self.state == 'CPSS':
-            ax.title.set_text('CPSS')
+            ax.title.set_text(self.statename[self.state])
             self.selected_edge2 = self.nsel
             ta, he = self.L.Gs.neighbors(self.nsel)
             self.pta2 = np.array(self.L.Gs.pos[ta])
@@ -617,7 +631,7 @@ class SelectL(object):
         #
         # r : Refresh
         #
-        if self.evt == 'r':
+        if self.evt == 'r' or self.evt == 'f5':
             #plt.axis('tight')
             plt.axis(self.L.display['box'])
             fig,ax = self.show(fig,ax,clear=True)
@@ -662,6 +676,7 @@ class SelectL(object):
         # 'q' : quit interactive mode
         #
         if self.evt == 'q':
+            plt.rcParams.update(self.rcconf)
             fig.canvas.mpl_disconnect(self.L.cid1)
             fig.canvas.mpl_disconnect(self.L.cid2)
             return
@@ -669,7 +684,7 @@ class SelectL(object):
         #
         # 'x' save structure
         #
-        if self.evt == 'x':
+        if self.evt == 'x' or self.evt =='ctrl+s':
             racine, ext = os.path.splitext(self.L.filename)
             filename = racine + '.str2'
             fileini = racine + '.ini'
