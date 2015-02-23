@@ -1,7 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #
-"""
+r"""
+
+.. currentmodule:: pylayers.simul.link
 
 This module runs the electromagnetic simulation at the link level
 It stores simulated objects in `hdf5` format.
@@ -35,7 +37,7 @@ DLink init
     DLink.fill_dexist
 
 
-search in h5py file
+search in hdf5 file
 -------------------
 
 .. autosummary::
@@ -47,7 +49,7 @@ search in h5py file
     DLink.get_idx
 
 
-Modify h5py file
+Modify hdf5 file
 ----------------
 
 .. autosummary::
@@ -1089,78 +1091,77 @@ class DLink(Link):
     def eval(self,**kwargs):
         """ Evaluate the link
 
-        Parameters
-        ----------
-
-        force : list
-            Force the computation (['sig','ray','Ct','H']) AND save (replace previous computations)
-
-        si_algo : str ('old'|'new')
-            signature.run algo type
-            'old' : call propaths2
-            'new' : call procone2
-        alg : 5 | 7
-            version of run for signature
-        si_mt: boolean
-            Multuithreat version of algo version 7
-        si_progress: bollean ( False)
-            display progression bar for signatures
-        diffraction : bollean (False)
-            take into consideration diffraction points
-
-        ra_number_mirror_cf : int
-            rays.to3D number of ceil/floor reflexions
-        ra_ceil_height_meter:float,
-            ceil height
-        ra_vectorized: boolean (True)
-            if True used the (2015 new) vectorized approach to determine 2drays
-
-
-
-
-        Returns
-        -------
-
-        ak : ndarray
-            alpha_k
-        tk : ndarray
-            tau_k
-
-        Notes
-        -----
-
-        update self.ak and self.tk
-
-        self.ak : ndarray
-            alpha_k
-        self.tk : ndarray
-            tau_k
-
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> from pylayers.simul.link import *
-            >>> L=DLink(verbose=False)
-            >>> aktk = L.eval()
-
-
-        See Also
-        --------
-
-        pylayers.antprop.signature
-        pylayers.antprop.rays
-
-        Experimental
-        ------------
-        alg = 2015 | 20152 (best)
-            vectorized signature research
-        si_reverb : number of reverb in source/target cycle if alg=2015
-
         """
+#        Parameters
+#        ----------
+#
+#        force : list
+#            Force the computation (['sig','ray','Ct','H']) AND save (replace previous computations)
+#        si_algo : str ('old'|'new')
+#            signature.run algo type
+#            'old' : call propaths2
+#            'new' : call procone2
+#        alg : 5 | 7
+#            version of run for signature
+#        si_mt: boolean
+#            Multuithreat version of algo version 7
+#        si_progress: bollean ( False)
+#            display progression bar for signatures
+#        diffraction : boolean (False)
+#            takes into consideration diffraction points
+#        ra_number_mirror_cf : int
+#            rays.to3D number of ceil/floor reflexions
+#        ra_ceil_height_meter: float,
+#            ceil height
+#        ra_vectorized: boolean (True)
+#            if True used the (2015 new) vectorized approach to determine 2drays
+#
+#        """
+
+#        Returns
+#        -------
+#
+#        ak : ndarray
+#            alpha_k
+#        tk : ndarray
+#            tau_k
+#
+#        Notes
+#        -----
+#
+#        update self.ak and self.tk
+#
+#        self.ak : ndarray
+#            alpha_k
+#        self.tk : ndarray
+#            tau_k
+#
+#
+#        Examples
+#        --------
+#
+#        .. plot::
+#            :include-source:
+#
+#            >>> from pylayers.simul.link import *
+#            >>> L=DLink(verbose=False)
+#            >>> aktk = L.eval()
+#
+#
+#        See Also
+#        --------
+#
+#        pylayers.antprop.signature
+#        pylayers.antprop.rays
+#
+#        Experimental
+#        ------------
+#
+#        alg = 2015 | 20152 (best)
+#            vectorized signature research
+#        si_reverb : number of reverb in source/target cycle if alg=2015
+#
+#        """
 
         defaults={ 'output':['sig','ray','Ct','H'],
                    'si_algo':'old',

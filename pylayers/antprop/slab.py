@@ -380,15 +380,28 @@ class Interface(PyLayers):
 
         fGHz : np.arrray (nf)
         display : boolean
-        default False
+            default False
+        dB : booean
+            default True
 
         Returns
         -------
 
         Lo : np.array
-        Loss orthogonal polarization (dB)
+            Loss orthogonal polarization (dB)
         Lp : np.array
-        Loss parallel polarization (dB)
+            Loss parallel polarization (dB)
+
+        Examples
+        --------
+
+        >>> from pylayers.antprop.slab import *
+
+        See Also
+        --------
+
+        pylayers.antprop.coverage
+        pylayers.antprop.loss
 
         """
 
@@ -445,7 +458,7 @@ class Interface(PyLayers):
             >>> sl = SlabDB('matDB.ini','slabDB.ini')
             >>> mat = sl.mat
             >>> lmatname = [mat['AIR'],mat['WOOD']]
-            >>> II = MatInterface(lmat,0,fGHz,theta)
+            >>> II = MatInterface(lmatname,0,fGHz,theta)
             >>> II.RT()
             >>> fig,ax = II.plotwrt(var='a',kv=10,typ=['m'])
             >>> air = mat['AIR']
@@ -840,7 +853,16 @@ class MatDB(PyLayers,dict):
         """
         self.fileini = _fileini
         self.filemat = self.fileini.replace('.ini','.mat')
+        self.load(_fileini)
 
+    def __repr__(self):
+        st = 'Available Material\n'
+        st = st+'-------------------\n'
+        for k in self:
+            epsr  = "%.2f" % abs(self[k]['epr'])
+            sigma = "%.2f" % abs(self[k]['sigma'])
+            st = st+k+' ('+str(self[k]['index'])+')    |epsr|='+ epsr +' sigma (S/m)='+sigma+'\n'
+        return(st)
 
 
     def info(self):
@@ -939,20 +961,21 @@ class MatDB(PyLayers,dict):
         self.dass()
 
     def add(self,**kwargs):
-        """ Add a material in the DB
+        """ add a material in the DB
 
         Parameters
         ----------
 
         name : string
-        material name
+            material name
         cval : float or complex
-        epsilon or index
+            epsilon or index
         sigma : float or complex
-        permeability
+            conductivity
         mur : float
+            relative permeability
         typ : string
-        {'epsr'|'ind'|,'reim',|'THz'}
+            {'epsr'|'ind'|,'reim',|'THz'}
 
         Notes
         -----
@@ -980,8 +1003,8 @@ class MatDB(PyLayers,dict):
         >>> from pylayers.antprop.slab import *
         >>> m = MatDB()
         >>> m.load('matDB.ini')
-        >>> m.add('ConcreteJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
-        >>> m.add('GlassJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
+        >>> m.add(name='ConcreteJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
+        >>> m.add(name='GlassJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
         >>> out = m.save('Jacob.ini')
 
         """
@@ -1107,6 +1130,7 @@ class MatDB(PyLayers,dict):
             self[matname] = M
 
         # PULSRAY compatibility : save in the old .mat format
+        # Should be deprecated soon
         self.savemat(self.filemat)
 
     def loadmat(self, _filemat):
@@ -1275,12 +1299,14 @@ class MatDB(PyLayers,dict):
         fo.close()
 
 
-class Slab(dict, Interface):
-    """ Handle slab
+class Slab(dict,Interface):
+    """ Handle a Slab
 
     Summary
     -------
-    A slab is a sequence of layers which has
+
+    A Slab is a sequence of layers which each has
+
     - a given width
     - an integer index refering a given material in the material DB
 
@@ -1289,25 +1315,25 @@ class Slab(dict, Interface):
     ----------
 
     name :
-    Slab name
+        Slab name
     nbmat :
-    Number of layers
+        Number of layers
     index :
-    Slab Index
-    imat :
-    index of layers material
-    thickness :
-    thickness of layers
+        Slab Index
+    lmatname :
+        list of material name
+    lthick :
+        list of thickness of layers
     color :
-    color of slab dor display
+        color of slab dor display
     linewidth :
-    linewidth for structure display
-    mat :
-    Associated Material Database
+        linewidth for structure display
+    mat : Associated Material Database
+    
     evaluated : Boolean
 
     """
-    def __init__(self, mat, name='NEWSLAB'):
+    def __init__(self, mat=[], name='NEWSLAB'):
         """ class constructor
 
         Parameters
@@ -1318,37 +1344,73 @@ class Slab(dict, Interface):
         slab name
 
         """
+        # if not specified choose default material database
+        Interface.__init__(self)
+        if mat==[]:
+            self.mat=MatDB()
+        else:
+            self.mat=mat
         self['name'] = name
         self['index'] = 0
         self['nbmat'] = 1
         self['imat'] = (0, 0, 0, 0, 0, 0, 0, 0)
-        self['thickness'] = (10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        #self['thickness'] = (10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
         self['lthick'] = [0.1]
-        self['lmat'] = ['AIR']
+        self['lmatname'] = ['AIR']
         self['color'] = 'black'
         self['linewidth'] = 1.0
-        self.mat = mat
         self['evaluated'] = False
+        self.conv()
+
+    def __setitem__(self,key,value):
+        """ dictionnary setter
+
+        lmatname can be changed and lthick is imposed @ 5cm per layer
+        lthick   can be changed provided the number of layer is correct
+
+        """
+        if key == "lmatname":
+            nbmat = len(value)
+            for na in value:
+                if na not in self.mat:
+                    print self.mat.__repr__()
+                    raise ValueError(na+ ' not in material Database')
+            dict.__setitem__(self,"lmatname", value)
+            dict.__setitem__(self,"nbmat",nbmat)
+            dict.__setitem__(self,"lthick",[0.05]*nbmat)
+            self.conv()
+        
+        elif key == "lthick":
+            if len(value)!=self['nbmat']:
+                raise ValueError("wrong number of material layers")
+            else:
+                dict.__setitem__(self,"lthick",value)
+        else:        
+            dict.__setitem__(self,key, value)
+
 
     def __add__(self,u):
-        """ This function makes the addition between 2 slab
+        """ This function makes the addition between 2 Slabs
+
         It could be simplified once we decide not to be compatible
         with old version odf slab for PyRay. Wait until diffraction are OK.
         Problem with length of slab !!
+
         """
         U = Slab(self.mat)
-        U['lthick'] = self['lthick']+u['lthick']
+        # lmatname should be modified before lthick
         U['lmatname'] = self['lmatname']+u['lmatname']
+        U['lthick']   = self['lthick']+u['lthick']
         U['name'] = self['name']+u['name']
-        U['nbmat'] = len(U['lmatname'])
-        imat = np.zeros(8).astype(int)
-        thickness = np.zeros(8)
+        #U['nbmat'] = len(U['lmatname'])
+        #imat = np.zeros(8).astype(int)
+        #thickness = np.zeros(8)
         for i in range(len(U['lmatname'])):
             namem = U['lmatname'][i]
-            imat[i] = U.mat[namem]['index']
-            thickness[i] = U['lthick'][i] * 100 # m ->cm
-        U['imat'] = tuple(imat)
-        U['thickness'] = tuple(thickness) # cm
+            #imat[i] = U.mat[namem]['index']
+            #thickness[i] = U['lthick'][i] * 100 # m ->cm
+        #U['imat'] = tuple(imat)
+        #U['thickness'] = tuple(thickness) # cm
         U.conv()
         return(U)
 
@@ -1370,6 +1432,24 @@ class Slab(dict, Interface):
 #            st = st +'|'
 #        st = st+'\n'
 #        return(st)
+
+    def __repr__(self):
+        st = self['name']+' : '
+        st = st + reduce(lambda x,y: x+' | '+y,self['lmatname'])+ ' | '
+        st = st +str(self['lthick'])+'\n'
+        if self['evaluated']:
+                nf = len(self.fGHz)
+                nt = len(self.theta)
+                if nf > 1:
+                    st = st + "f(GHz) : " + str((self.fGHz[0], self.fGHz[-1], nf))+'\n'
+                else:
+                    st = st + "f(GHz) : " + str(self.fGHz[0])+'\n'
+
+                if nt > 1:
+                    st= st + "theta (rad) : " + str((self.theta[0], self.theta[-1], nt))+'\n'
+                else:
+                    st = st + "theta (rad) : " + str(self.theta[0])+'\n'
+        return(st)
 
     def info(self):
         """ display Slab Info
@@ -1396,7 +1476,7 @@ class Slab(dict, Interface):
 
         """
         print "------------"
-        print "name : ", self
+        print "name : ", self['name']
         print "nbmat : ", len(self['lmatname'])
         chaine = "[ "
         for name in self['lmatname']:
@@ -1406,10 +1486,9 @@ class Slab(dict, Interface):
                 print "epsrc : ", epsrc
             chaine = chaine + name + ' '
             chaine = chaine + ']'
-            print chaine
             print "index : ", self['index']
-            print "imat : ", self['imat']
-            print "thickness (cm) : ", self['thickness']
+            #print "imat : ", self['imat']
+            #print "thickness (cm) : ", self['thickness']
             print "color : ", self['color']
             print "linewidth :", self['linewidth']
             if self['evaluated']:
@@ -1432,6 +1511,8 @@ class Slab(dict, Interface):
         Warnings
         --------
 
+        Deprecated
+
         In .slab file thickness variable is expressed in cm
 
         for lthick distance are expressed in meters
@@ -1439,15 +1520,14 @@ class Slab(dict, Interface):
         """
         #m1 = self.mat['AIR']
         self['lmat'] = []
-        self['lthick'] = []
+        self['thickness'] = []
         #self.lmat.append(m1)
 
-        for i in range(self['nbmat']):
-            index_mat = self['imat'][i]
-            name_mat = self.mat.di[index_mat]
-            mi = self.mat[name_mat]
+        for matname in self['lmatname']:
+            #index_mat = self['imat'][i]
+            mi = self.mat[matname]
             self['lmat'].append(mi)
-            self['lthick'].append(self['thickness'][i] * 0.01) # cm ->m
+            self['thickness']=self['lthick']*100 # m ->cm
 
         #self.lmat.append(m1)
         #
@@ -1457,7 +1537,7 @@ class Slab(dict, Interface):
         #self.thick.append(0.0)
 
     def ev(self, fGHz=np.array([1.0]), theta=np.linspace(0, np.pi / 2, 50),compensate=False,RT='RT'):
-        """ evaluation of the slab
+        """ evaluation of the Slab
 
         Parameters
         ----------
@@ -1473,7 +1553,7 @@ class Slab(dict, Interface):
             fGHz = np.array([fGHz])
         if not isinstance(theta, np.ndarray):
             theta = np.array([theta])
-        theta_in=copy.deepcopy(theta)
+        theta_in = copy.deepcopy(theta)
 
         self.theta = theta
         self.fGHz = fGHz
@@ -1617,17 +1697,23 @@ class Slab(dict, Interface):
     def filter(self,win,theta=0):
         """ filtering waveform
 
+        Warning
+        -------
+
+        Not implemented yet
+
         Parameters
         ----------
 
-        win : waveform
+        win : Waveform
 
         Returns
         -------
 
-        wout :
+        wout : Waveform
 
         """
+        # get frequency base of the waveform
         f = win.sf.x
         self.ev(f,theta)
         wout = Wafeform()
@@ -1645,6 +1731,7 @@ class Slab(dict, Interface):
 
         Returns
         -------
+
         delayo : excess delay polarization o
         delayp : excess delay polarization p
 
@@ -1859,13 +1946,23 @@ class SlabDB(dict):
         """
 
         self.fileslab = fileslab
-        self.fileslab = self.fileslab.replace('.ini','.slab') # WARNING !!! deprecated in new verion
+        # deprecated
+        #self.fileslab = self.fileslab.replace('.ini','.slab') # WARNING !!! deprecated in new verion
         self.mat = MatDB()
         if (filemat != ''):
             self.mat.load(filemat)
         if (fileslab != ''):
             self.load(fileslab)
             self.dass()
+
+    def __repr__(self):
+        st =      "Slab file name     : " + self.fileslab+ '\n'
+        st = st + "Material file name : " +  self.mat.fileini+'\n'
+        st = st + '-----------------------------'+'\n'+'\n'
+        for i in self.keys():
+            st = st + self[i].__repr__()+'\n'
+        #    S.info()
+        return(st)    
 
     def showall(self):
         """ show all slabs
@@ -1881,14 +1978,7 @@ class SlabDB(dict):
 
         plt.show()
 
-    def info(self):
-        """ information
-        """
-        print "fileslab : ", self.fileslab
-        print "filemat : ", self.mat.filemat
-        for i in self.keys():
-            S = self[i]
-            S.info()
+
 
     def dass(self):
         """ update conversion dictionnary
@@ -1947,9 +2037,11 @@ class SlabDB(dict):
         fGHz : np.array
 
         """
+
         slab = self[name]
         slab.ev(fGHz=fGHz)
         fig,ax = slab.M.plotwrt(var='a')
+
         return fig,ax
 
     def add(self, name, lmatname, lthick, color='black'):
@@ -1962,7 +2054,7 @@ class SlabDB(dict):
         name       : string
         lmat       : list of mat name
         lthick     : list ot float
-            lthick  is in meters
+           list of layer thickness in meters
 
         Warnings
         --------
@@ -2119,6 +2211,10 @@ class SlabDB(dict):
             S['index']=eval(config.get(slabname,'index'))
             S['lthick']=eval(config.get(slabname,'lthick'))
             S['linewidth']=eval(config.get(slabname,'linewidth'))
+
+            #
+            # imat and thickness are deprecated 
+            #
             imat=[0,0,0,0,0,0,0,0]
             for i,m in enumerate(S['lmatname']):
                 imat[i]=S.mat[m]['index']
@@ -2130,106 +2226,106 @@ class SlabDB(dict):
             S['thickness']=tuple(thickness)
             S.conv()
             self[slabname] = S
-        self.savesl(self.fileslab)
+        #self.savesl(self.fileini)
 
 
 
-    def loadsl(self, _filename):
-        """ load a .slab file (PulsRay format)
+    # def loadsl(self, _filename):
+    #     """ load a .slab file (PulsRay format)
 
-        Parameters
-        ---------
+    #     Parameters
+    #     ---------
 
-        _filename
+    #     _filename
 
-        """
-        filename = pyu.getlong(_filename, pstruc['DIRSLAB'])
-        try:
-            fo = open(filename, "rb")
-        except:
-            raise NameError("Exception in load : file is unreachable")
+    #     """
+    #     filename = pyu.getlong(_filename, pstruc['DIRSLAB'])
+    #     try:
+    #         fo = open(filename, "rb")
+    #     except:
+    #         raise NameError("Exception in load : file is unreachable")
 
-        data = fo.read()
-        #
-        # decodage des donnees lues
-        #
-        data_listname = data[0:1200]
-        self.tname = data_listname.replace(
-            "\x00", "").replace("\"", "").split()
-        data_N = data[1200:1204]
-        self.N = stru.unpack('i', data_N)[0]
+    #     data = fo.read()
+    #     #
+    #     # decodage des donnees lues
+    #     #
+    #     data_listname = data[0:1200]
+    #     self.tname = data_listname.replace(
+    #         "\x00", "").replace("\"", "").split()
+    #     data_N = data[1200:1204]
+    #     self.N = stru.unpack('i', data_N)[0]
 
-        laycol = {}
-        laycol['METALIC'] = 'black'
-        laycol['ABSORBENT'] = 'honeydew2'
-        laycol['AIR'] = 'white'
-        laycol['WALL'] = 'grey20'
-        laycol['WOOD'] = 'maroon'
-        laycol['DOOR'] = 'maroon'
-        laycol['CEIL'] = 'grey20'
-        laycol['FLOOR'] = 'grey20'
-        laycol['WINDOW'] = 'blue'
-        laycol['WINDOW_GLASS'] = 'blue2'
-        laycol['3D_WINDOW_GLASS'] = 'blue3'
-        laycol['WALLS'] = 'grey20'
-        laycol['PARTITION'] = 'orchid1'
-        laycol['PILLAR'] = 'brown4'
-        laycol['METAL'] = 'black'
-        laycol['CONCRETE_15CM3D'] = 'DimGrey'
-        laycol['CONCRETE_20CM3D'] = 'SlateGray'
-        laycol['CONCRETE_7CM3D'] = 'LightGray'
-        laycol['CONCRETE_6CM3D'] = 'LightGray'
-        laycol['PLASTERBOARD_10CM'] = 'tomato'
-        laycol['PLASTERBOARD_14CM'] = 'red'
-        laycol['PLASTERBOARD_7CM'] = 'pink'
-        laycol['TATA'] = 'yellow'
-        laycol['TOTO'] = 'yellow'
+    #     laycol = {}
+    #     laycol['METALIC'] = 'black'
+    #     laycol['ABSORBENT'] = 'honeydew2'
+    #     laycol['AIR'] = 'white'
+    #     laycol['WALL'] = 'grey20'
+    #     laycol['WOOD'] = 'maroon'
+    #     laycol['DOOR'] = 'maroon'
+    #     laycol['CEIL'] = 'grey20'
+    #     laycol['FLOOR'] = 'grey20'
+    #     laycol['WINDOW'] = 'blue'
+    #     laycol['WINDOW_GLASS'] = 'blue2'
+    #     laycol['3D_WINDOW_GLASS'] = 'blue3'
+    #     laycol['WALLS'] = 'grey20'
+    #     laycol['PARTITION'] = 'orchid1'
+    #     laycol['PILLAR'] = 'brown4'
+    #     laycol['METAL'] = 'black'
+    #     laycol['CONCRETE_15CM3D'] = 'DimGrey'
+    #     laycol['CONCRETE_20CM3D'] = 'SlateGray'
+    #     laycol['CONCRETE_7CM3D'] = 'LightGray'
+    #     laycol['CONCRETE_6CM3D'] = 'LightGray'
+    #     laycol['PLASTERBOARD_10CM'] = 'tomato'
+    #     laycol['PLASTERBOARD_14CM'] = 'red'
+    #     laycol['PLASTERBOARD_7CM'] = 'pink'
+    #     laycol['TATA'] = 'yellow'
+    #     laycol['TOTO'] = 'yellow'
 
-        for i in range(self.N):
-            # Creation d'un objet slab
-            S = Slab(self.mat)
+    #     for i in range(self.N):
+    #         # Creation d'un objet slab
+    #         S = Slab(self.mat)
 
-            delta = i * 168
+    #         delta = i * 168
 
-            data_nb_mat_slab = data[1204 + delta:1208 + delta]
-            #
-            # !! Bug in PulsRay nb_mat is the same than nbmat
-            #
-            #S['nb_mat']= stru.unpack('i',data_nb_mat_slab)[0]
+    #         data_nb_mat_slab = data[1204 + delta:1208 + delta]
+    #         #
+    #         # !! Bug in PulsRay nb_mat is the same than nbmat
+    #         #
+    #         #S['nb_mat']= stru.unpack('i',data_nb_mat_slab)[0]
 
-            data_slabname = data[1208 + delta:1238 + delta]
-            name = data_slabname.replace("\x00", "")
+    #         data_slabname = data[1208 + delta:1238 + delta]
+    #         name = data_slabname.replace("\x00", "")
 
-            data_charindex = data[1238 + delta:1268 + delta]
-            charindex = data_charindex.replace("\x00", "")
-    # S['charindex']=charindex
+    #         data_charindex = data[1238 + delta:1268 + delta]
+    #         charindex = data_charindex.replace("\x00", "")
+    # # S['charindex']=charindex
 
-            data_slab_index = data[1268 + delta:1272 + delta]
-            index = stru.unpack('i', data_slab_index)[0]
-            S['index'] = index
-            data_nb_mat = data[1272 + delta:1276 + delta]
-            nbmat = stru.unpack('i', data_nb_mat)[0]
-            S['nbmat'] = nbmat
-            data_index_mat = data[1276 + delta:1308 + delta]
-            index_mat = stru.unpack('8i', data_index_mat)
-            S['imat'] = index_mat
-            data_thickness = data[1308 + delta:1372 + delta]
-            thickness = stru.unpack('8d', data_thickness)
-            epaisseur = thickness[0]
-            # en cm
-            S['thickness'] = thickness
-            # insertion du slab dans la liste
-            if name in laycol.keys():
-                S['color'] = laycol[name]
-            else:
-                S['color'] = 'black'
-            S['linewidth'] = int(np.ceil(epaisseur / 3.))
-            S['name'] = name
-            S.conv()
-            self[name] = S
+    #         data_slab_index = data[1268 + delta:1272 + delta]
+    #         index = stru.unpack('i', data_slab_index)[0]
+    #         S['index'] = index
+    #         data_nb_mat = data[1272 + delta:1276 + delta]
+    #         nbmat = stru.unpack('i', data_nb_mat)[0]
+    #         S['nbmat'] = nbmat
+    #         data_index_mat = data[1276 + delta:1308 + delta]
+    #         index_mat = stru.unpack('8i', data_index_mat)
+    #         S['imat'] = index_mat
+    #         data_thickness = data[1308 + delta:1372 + delta]
+    #         thickness = stru.unpack('8d', data_thickness)
+    #         epaisseur = thickness[0]
+    #         # en cm
+    #         S['thickness'] = thickness
+    #         # insertion du slab dans la liste
+    #         if name in laycol.keys():
+    #             S['color'] = laycol[name]
+    #         else:
+    #             S['color'] = 'black'
+    #         S['linewidth'] = int(np.ceil(epaisseur / 3.))
+    #         S['name'] = name
+    #         S.conv()
+    #         self[name] = S
 
-        fo.close()
-        self.dass()
+    #     fo.close()
+    #     self.dass()
 
     def save(self,_fileini='slabDB.ini'):
         """ save SlabDB in an ini file
@@ -2251,88 +2347,80 @@ class SlabDB(dict):
             config.set(name, 'linewidth', self[name]['linewidth'])
             config.set(name, 'lthick', self[name]['lthick'])
             config.set(name, 'index', self[name]['index'])
-            lmat=[]
-            for i in self[name]['imat']:
-                if i !=0:
-                    lmat.append(self.mat.di[i])
-                else:
-                    if lmat ==[]:
-                        lmatname=['ABSORBENT']
-                        break
-            config.set(name, 'lmatname', lmatname)
+            config.set(name, 'lmatname', self[name]['lmatname'])
 
         config.write(fd)
         fd.close()
 
-    def savesl(self, _filename):
-        """ Save a Slab database in a .slab file (PulsRay format)
+#     def savesl(self, _filename):
+#         """ Save a Slab database in a .slab file (PulsRay format)
 
-        Parameters
-        ----------
+#         Parameters
+#         ----------
 
-        _filename : string
-        shortname of slabfile
+#         _filename : string
+#         shortname of slabfile
 
-        """
+#         """
 
-        filename = pyu.getlong(_filename, pstruc['DIRSLAB'])
-        fo = open(filename, 'wb')
-        N = len(self.di)
-        tname = self.keys()
-        data_listname = ''
-        for k in range(N):
-            data_listname = data_listname + "\"" + self.di[k - 1] + "\" "
-# data_listname = string.join(tname,"\" \"")
-# data_listname = "\""+data_listname+"\""
-        L = len(data_listname)
-        # On complete avec \x00 jusqu'a 2500 valeurs
-        if L < 1200:
-            for i in range(1200 - L):
-                data_listname = data_listname + "\x00"
-        else:
-            print " out of range in save Slab - too many slabs"
+#         filename = pyu.getlong(_filename, pstruc['DIRSLAB'])
+#         fo = open(filename, 'wb')
+#         N = len(self.di)
+#         tname = self.keys()
+#         data_listname = ''
+#         for k in range(N):
+#             data_listname = data_listname + "\"" + self.di[k - 1] + "\" "
+# # data_listname = string.join(tname,"\" \"")
+# # data_listname = "\""+data_listname+"\""
+#         L = len(data_listname)
+#         # On complete avec \x00 jusqu'a 2500 valeurs
+#         if L < 1200:
+#             for i in range(1200 - L):
+#                 data_listname = data_listname + "\x00"
+#         else:
+#             print " out of range in save Slab - too many slabs"
 
-        data_N = stru.pack('i', N)
-        data = data_listname + data_N
+#         data_N = stru.pack('i', N)
+#         data = data_listname + data_N
 
-        for i in range(N):
-            ## Creation d'un dictionnaire slab
-            key = self.di[i - 1]
-            #print key
-            S = self[key]
-            data_nb_mat_slab = stru.pack('i', S['nbmat'])
-            L = len(key)
-            data_slabname = key
-            if L < 30:
-                for i in range(30 - L):
-                    data_slabname = data_slabname + "\x00"
-            else:
-                print " Slab : slabname too long maximum 30 characters !"
+#         for i in range(N):
+#             ## Creation d'un dictionnaire slab
+#             key = self.di[i - 1]
+#             #print key
+#             S = self[key]
+#             data_nb_mat_slab = stru.pack('i', S['nbmat'])
+#             L = len(key)
+#             data_slabname = key
+#             if L < 30:
+#                 for i in range(30 - L):
+#                     data_slabname = data_slabname + "\x00"
+#             else:
+#                 print " Slab : slabname too long maximum 30 characters !"
 
-            data_charindex = str(S['imat'])
-            L = len(data_charindex)
-            if L < 30:
-                for i in range(30 - L):
-                    data_charindex = data_charindex + "\x00"
-            else:
-                print " Slab : charindex too long maximum 30 characters !"
+#             data_charindex = str(S['imat'])
+#             L = len(data_charindex)
+#             if L < 30:
+#                 for i in range(30 - L):
+#                     data_charindex = data_charindex + "\x00"
+#             else:
+#                 print " Slab : charindex too long maximum 30 characters !"
 
-            data_slab_index = stru.pack('i', S['index'])
-            data_nb_mat = stru.pack('i', S['nbmat'])
+#             data_slab_index = stru.pack('i', S['index'])
+#             data_nb_mat = stru.pack('i', S['nbmat'])
 
-            data_index_mat = ""
-            for j in range(len(S['imat'])):
-                data_index_mat = data_index_mat + stru.pack('i', S['imat'][j])
+#             data_index_mat = ""
+#             for j in range(len(S['imat'])):
+#                 data_index_mat = data_index_mat + stru.pack('i', S['imat'][j])
 
-            data_thickness = ""
-            for j in range(len(S['thickness'])):
-                data_thickness = data_thickness + \
-                    stru.pack('d', S['thickness'][j])
-            data_slab = data_nb_mat + data_slabname + data_charindex + data_slab_index + data_nb_mat + data_index_mat + data_thickness
-            data = data + data_slab
+#             data_thickness = ""
+#             for j in range(len(S['thickness'])):
+#                 data_thickness = data_thickness + \
+#                     stru.pack('d', S['thickness'][j])
+#             data_slab = data_nb_mat + data_slabname + data_charindex + data_slab_index + data_nb_mat + data_index_mat + data_thickness
+#             data = data + data_slab
 
-        fo.write(data)
-        fo.close()
+#         fo.write(data)
+#         fo.close()
 
 # def savesl(self, _filename):
 # """ the short filename _filename needs to have the extension .sl

@@ -11,20 +11,34 @@ Class Signatures
     Signatures.__len__
     Signatures.num
     Signatures.info
-    Signatures.save
+    Signatures.saveh5
+    Signatures.loadh5
+    Signatures._saveh5
+    Signatures._loadh5
     Signatures.load
+    Signatures.save
     Signatures.sp
     Signatures.procone
     Signatures.propaths
+    Signatures.short_propath
     Signatures.propaths2
+    Signatures.propaths3
+    Signatures.propaths2015_2
     Signatures.procone2
     Signatures.calsig
+    Signatures.exist
+    Signatures.run2015
+    Signatures.run2015_2
+    Signatures.dido
     Signatures.run
     Signatures.run1
-    Signatures.run4
-    Signatures.run5
     Signatures.run2
     Signatures.run3
+    Signatures.run4
+    Signatures.run5
+    Signatures.run6
+    Signatures.run7
+    Signatures.run7mt
     Signatures.meta
     Signatures.lineofcycle
     Signatures.cones
@@ -32,6 +46,9 @@ Class Signatures
     Signatures.show
     Signatures.showi
     Signatures.rays
+    Signatures.raysv
+    Signatures.image
+    Signatures.image2
 
 Class Signature
 ===============
@@ -4074,7 +4091,7 @@ class Signatures(PyLayers,dict):
 
 
     def lineofcycle(self,cs=[],ct=[]):
-        """ shortest path between 2 cycle
+        """ shortest path between 2 cycles
 
         Parameters
         ----------
@@ -4876,11 +4893,8 @@ class Signatures(PyLayers,dict):
                 usigv[::2]=usigv[::2]*2
                 usigv[1::2]=usigv[1::2]*2+1
                 signatures = signatures[usigv,:]
-                
-
                 rayp_i[:2,uvalid,kinter] = pvalid.T
                 rayp_i = rayp_i[:,uvalid,:]
-                
                 # if no more rays are valid , then quit block
                 # (kinter <0 is the exit while condition)
                 if len(uvalid) > 0 :
@@ -4901,43 +4915,62 @@ class Signatures(PyLayers,dict):
 
 
     def image2(self,tx):
+        """ determine rays from images (second implementation)
+
+        Parameters
+        ----------
+
+        tx : point
+
+        """
         if len(tx) > 2:
             tx = tx[:2]
         dM={}
+        # loop on number of interactions
         for ninter in self.keys():
 
             # get segment ids of signature with ninter interactions
             seg = self[ninter][::2]
-            unegseg=np.where(seg<0)
+            # seek for diffraction
+            # negative index points are diffraction points
+            unegseg = np.where(seg<0)
             uninegseg,idx = np.unique(seg[unegseg],return_inverse=True)
             pneg = np.array([self.L.Gs.pos[x] for x in uninegseg])
-
             nsig = len(seg)
-            M=np.empty((2,nsig,ninter))
-            # determine positions of points limiting the semgments
+
+            M = np.empty((2,nsig,ninter))
+            # determine positions of points limiting the segments
             # 1 get index in L.tahe
             # 2 get associated position in L.pt
-
 
             utahe = self.L.tahe[:,self.L.tgs[seg]]
             # pt : (xycoord (2),pt indexes (2),nb_signatures,nb_interactions)
             pt = self.L.pt[:,utahe]
-            
+            #
+            # TODO Upgrading layout for handling slab offsets 
+            #
+            # uncomment those two lines when the numpy array L.norm and
+            # L.offset exist
+            #norm    = self.L.normal[:,utahe]
+            #offset  = self.L.offset[:,utahe]
+            # pt = pt + offset*norm
+
             try:
-                pt[:,0,unegseg[0],unegseg[1]]=pneg[idx].T
-                pt[:,1,unegseg[0],unegseg[1]]=pneg[idx].T
+                pt[:,0,unegseg[0],unegseg[1]] = pneg[idx].T
+                pt[:,1,unegseg[0],unegseg[1]] = pneg[idx].T
             except:
                 pass
             # pt shape =
             # 0 : (x,y) coordinates x=0,y=1
-            # 1 : 2 points (linking the semgnet) a=0,b=1
+            # 1 : 2 points (linking the segment) a=0,b=1
             # 2 : nb of found signatures/segments
-            # 3 : nb interaction
+            # 3 : nb interactions
 
             ############
-            # formula 2.61 -> 2.64 N.AMIOT thesis
+            # formula 2.61 -> 2.64 N.AMIOT PH.D thesis
             ############
             den = ((pt[0,0,:,:]-pt[0,1,:,:])**2+(pt[1,0,:,:]-pt[1,1,:,:])**2)
+            # avoiding singularity (should not be possible)
             uz = np.where(den ==0)
             den[uz] = 1.
 
@@ -4946,12 +4979,11 @@ class Signatures(PyLayers,dict):
             b= (2. / den) * (pt[0,1,:, :] - pt[0,0,:, :]) * (pt[1,0,:, :] - pt[1,1,:, :])
 
             c = (2. / den) * (pt[0,0,:, :] * (pt[1,0,:, :] - pt[1,1,:, :]) ** 2 +
-                                pt[1,0,:, :] * (pt[1,0,:, :] - pt[1,1,:, :]) *
-                                (pt[0,1,:, :] - pt[0,0,:, :]))
+                              pt[1,0,:, :] * (pt[1,0,:, :] - pt[1,1,:, :]) *
+                             (pt[0,1,:, :] - pt[0,0,:, :]))
             d = (2. / den) * (pt[1,0,:, :] * (pt[0,1,:, :] - pt[0,0,:, :]) ** 2 +
-                                pt[0,0,:, :] * (pt[1,0,:, :] - pt[
-                                    1,1,:, :]) *
-                                (pt[0,1,:, :] - pt[0,0,:, :]))
+                              pt[0,0,:, :] * (pt[1,0,:, :] - pt[1,1,:, :]) *
+                             (pt[0,1,:, :] - pt[0,0,:, :]))
             # a = ((pt[0,0,:,:]-pt[0,1,:,:])**2-(pt[1,0,:,:]-pt[1,1,:,:])**2)
             # a=a/(1.*den)
 
@@ -4965,15 +4997,10 @@ class Signatures(PyLayers,dict):
             # d= d/(1.*den)
 
             # K=np.array([[a,-b],[-b,-a]])
-            K=np.array([[a,-b],[-b,-a]])
+            K = np.array([[a,-b],[-b,-a]])
 
             # translation vector v (2.60)
             v =np.array(([c,d]))
-
-
-
-
-
 
             ityp = self[ninter][1::2]
 
@@ -4981,14 +5008,14 @@ class Signatures(PyLayers,dict):
                 # get segment ids of signature with ninter interactions
                 uT = np.where(ityp[:,n]==3)[0]
                 uR = np.where(ityp[:,n]==2)[0]
-                uD=np.where(ityp[:,n]==1)[0]
+                uD = np.where(ityp[:,n]==1)[0]
                 if n ==0:
                     p=tx[:,None]*np.ones((nsig))
                 else :
                     p=M[:,:,n-1]
                 # reflexion 0 (2.67)
                 M[:,uR,n] = np.einsum('ijk,jk->ik',K[:,:,uR,n],p[:,uR])+v[:,uR,n]
-                # trnasmission 0 (2.67)
+                # transmission 0 (2.67)
                 M[:,uT,n] = p[:,uT]
                 M[:,uD,n] = pt[:,0,uD,n]
 

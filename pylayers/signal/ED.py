@@ -8,7 +8,13 @@ from pylayers.util.project import *
 import matplotlib.pyplot as plt
 import doctest
 
+r"""
+.. currentmodule:: pylayers.signal.ED
 
+.. autosummary::
+    :toctree: generated
+
+"""
 class ED(PyLayers):
     """
     Energy Detector Class
