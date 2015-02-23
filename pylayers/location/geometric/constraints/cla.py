@@ -1266,7 +1266,7 @@ class CLA(object):
 
 
 
-            print 'cluster'
+            # print 'cluster'
             lclust = []
             dd = []
             mps = -1.0
@@ -1332,7 +1332,7 @@ class CLA(object):
 
             if HT:
 
-                print "enter in HT processing"
+                #print "enter in HT processing"
                 try:
 
                     # for now, it is supposed that all RSS share the same model
@@ -1374,7 +1374,7 @@ class CLA(object):
 
                         self.pe = np.mean(self.dlayer[l][dlindx].ctr[
                             np.unique(lclust[0])], axis=0)
-                        print "HT processing done"
+                       # print "HT processing done"
                         pestdmax = np.max(self.dlayer[l][
                             dlindx].ctr[np.unique(lclust[0])])
                         pestdmin = np.min(self.dlayer[l][
@@ -1398,8 +1398,8 @@ class CLA(object):
 
                 # if HT fail for some reasons , a classical position estimation  is performed 
                 except:
-                    print "!!!!! HT FAIL !!!!!!!"
-                    print "2 first constraint of CLA have to be TOA and others RSS in order to use HT"
+                    # print "!!!!! HT FAIL !!!!!!!"
+                    # print "2 first constraint of CLA have to be TOA and others RSS in order to use HT"
 
                     if np.sum(poids) > 0.:
                         self.pe = np.sum(poids * self.dlayer[l][dlindx]
