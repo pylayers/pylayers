@@ -4340,7 +4340,7 @@
         <span class="n">fileGc</span> <span class="o">=</span> <span class="n">filename</span> <span class="o">+</span> <span class="s">&#39;Gc&#39;</span> <span class="o">+</span> <span class="s">&#39;.gml&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Gc</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">read_gml</span><span class="p">(</span><span class="n">fileGc</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Layout.show_nodes"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.show_nodes.html#pylayers.gis.layout.Layout.show_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">show_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ndlist</span><span class="o">=</span><span class="p">[</span><span class="mf">1e8</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">dlabels</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="Layout.show_nodes"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.show_nodes.html#pylayers.gis.layout.Layout.show_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">show_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ndlist</span><span class="o">=</span><span class="p">[</span><span class="mf">1e8</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">dlabels</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">node_shape</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show nodes</span>
 
 <span class="sd">        Parameters</span>
@@ -4359,16 +4359,17 @@
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">ndlist</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
             <span class="n">ndlist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ndlist</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ndlist</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">ndlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">1e8</span><span class="p">)</span>
+            <span class="c"># ndlist.append(1e8)</span>
             <span class="n">dlabels</span> <span class="o">=</span> <span class="bp">False</span>
-        <span class="k">if</span> <span class="n">ndlist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mf">1e8</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">ndlist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mf">1e8</span><span class="p">:</span>
             <span class="n">ndlist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
         <span class="c">#elif ndlist[0]==1e8:</span>
         <span class="c">#    ndlist  = self.Gs.node.keys()</span>
 
         <span class="c">#print ndlist</span>
         <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_nodes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">node_color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
-                               <span class="n">node_size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="n">ndlist</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+                               <span class="n">node_size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="n">ndlist</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+                               <span class="n">node_shape</span><span class="o">=</span><span class="n">node_shape</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">dlabels</span><span class="p">:</span>
             <span class="n">dicopos</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="n">dicolab</span> <span class="o">=</span> <span class="p">{}</span>
@@ -4440,7 +4441,8 @@
                     <span class="s">&#39;color&#39;</span><span class="p">:</span><span class="s">&#39;black&#39;</span><span class="p">,</span>
                     <span class="s">&#39;dnodes&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
                     <span class="s">&#39;dlabels&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
-                    <span class="s">&#39;font_size&#39;</span><span class="p">:</span><span class="mi">15</span>
+                    <span class="s">&#39;font_size&#39;</span><span class="p">:</span><span class="mi">15</span><span class="p">,</span>
+                    <span class="s">&#39;node_shape&#39;</span><span class="p">:</span><span class="s">&#39;o&#39;</span>
                    <span class="p">}</span>
 
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -4457,7 +4459,6 @@
             <span class="k">if</span> <span class="n">color</span><span class="o">==</span><span class="s">&#39;#FFFFF0&#39;</span><span class="p">:</span>
                 <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;#00000F&#39;</span>
             <span class="n">clrlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
-
         <span class="n">ecmap</span> <span class="o">=</span> <span class="n">clr</span><span class="o">.</span><span class="n">ListedColormap</span><span class="p">(</span><span class="n">clrlist</span><span class="p">)</span>
 
         <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edlist&#39;</span><span class="p">])</span>
@@ -4470,7 +4471,8 @@
                <span class="c"># print edlist</span>
                <span class="c"># nodelist = self.ed2nd(edlist)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">show_nodes</span><span class="p">(</span><span class="n">ndlist</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edlist&#39;</span><span class="p">],</span> <span class="n">dlabels</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;dlabels&#39;</span><span class="p">],</span>
-                            <span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;font_size&#39;</span><span class="p">])</span>
+                            <span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;font_size&#39;</span><span class="p">],</span>
+                            <span class="n">node_shape</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;node_shape&#39;</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;dnodes&#39;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">show_nodes</span><span class="p">(</span><span class="n">ndlist</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edlist&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
 </div>
@@ -4531,6 +4533,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">show_segment</span><span class="p">(</span><span class="n">edlist</span><span class="o">=</span><span class="n">edlist</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                             <span class="n">width</span><span class="o">=</span><span class="n">linewidth</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">dnodes</span><span class="o">=</span><span class="n">dnodes</span><span class="p">,</span>
                             <span class="n">dlabels</span><span class="o">=</span><span class="n">dlabels</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="n">font_size</span><span class="p">)</span>
+
 </div>
 <div class="viewcode-block" id="Layout._showGi"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout._showGi.html#pylayers.gis.layout.Layout._showGi">[docs]</a>    <span class="k">def</span> <span class="nf">_showGi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  show graph of interactions Gi</span>
@@ -4737,7 +4740,7 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]:</span>
             <span class="n">dlabels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ndlabel&#39;</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">show_nodes</span><span class="p">(</span><span class="n">ndlist</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="n">dlabels</span><span class="o">=</span><span class="n">dlabels</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_nodes</span><span class="p">(</span><span class="n">ndlist</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span> <span class="n">dlabels</span><span class="o">=</span><span class="n">dlabels</span><span class="p">,</span><span class="n">node_shape</span><span class="o">=</span><span class="s">&#39;s&#39;</span><span class="p">)</span>
 
         <span class="n">slablist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;edges&#39;</span><span class="p">]:</span>
@@ -4830,8 +4833,9 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_convex_hull</span><span class="p">()</span>
                 <span class="c"># #Ensure convexity of all cycles</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_convexify</span><span class="p">()</span>
-                <span class="c"># re-attach new cycles</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">buildGt</span><span class="p">()</span>
+                <span class="c"># # re-attach new cycles </span>
+                <span class="c"># self.buildGt()</span>
+
             <span class="bp">self</span><span class="o">.</span><span class="n">lbltg</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="s">&#39;c&#39;</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">:</span>
@@ -7636,7 +7640,6 @@
         <span class="c">#</span>
         <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;transition&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-
         <span class="n">ltrans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">listtransition</span>
         <span class="n">ldoors</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span><span class="o">&lt;&gt;</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="n">ltrans</span><span class="p">)</span>
 
