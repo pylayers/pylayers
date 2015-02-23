@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.measures.cormoran" href="../pylayers.measures.cormoran.html" />
+    <link rel="next" title="pylayers.measures.cormoran.CorSer.plot" href="pylayers.measures.cormoran.CorSer.plot.html" />
+    <link rel="prev" title="pylayers.measures.cormoran.CorSer.devmapper" href="pylayers.measures.cormoran.CorSer.devmapper.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,16 +46,30 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.measures.cormoran.CorSer.plot.html" title="pylayers.measures.cormoran.CorSer.plot"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.measures.cormoran.CorSer.devmapper.html" title="pylayers.measures.cormoran.CorSer.devmapper"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.measures.cormoran.html" accesskey="U">pylayers.measures.cormoran</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.measures.cormoran.CorSer.devmapper.html"
+                        title="previous chapter">pylayers.measures.cormoran.CorSer.devmapper</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.measures.cormoran.CorSer.plot.html"
+                        title="next chapter">pylayers.measures.cormoran.CorSer.plot</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.measures.cormoran.CorSer.export_csv.txt"
@@ -81,6 +98,40 @@
             
   <div class="section" id="pylayers-measures-cormoran-corser-export-csv">
 <h1>pylayers.measures.cormoran.CorSer.export_csv<a class="headerlink" href="#pylayers-measures-cormoran-corser-export-csv" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.export_csv">
+<tt class="descclassname">CorSer.</tt><tt class="descname">export_csv</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/measures/cormoran.html#CorSer.export_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.export_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>export to csv devices positions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>unit</strong> : string (&#8216;mm&#8217;|&#8217;cm&#8217;|&#8217;m&#8217;),</p>
+<blockquote class="last">
+<div><blockquote>
+<div><p>unit of positions in csv(default mm)</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>tunit: string</dt>
+<dd><p class="first last">time unit in csv (default &#8216;ns&#8217;)</p>
+</dd>
+<dt>&#8216;alias&#8217;: dict</dt>
+<dd><p class="first last">dictionnary to replace name of the devices into the csv .
+example : if you want to replace a device id named &#8216;TCR:34&#8217;
+to an id = 5, you have to add an entry in the alias dictionnary as :
+alias.update({&#8216;TCR34&#8217;:5})</p>
+</dd>
+<dt>offset <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd><p class="first last">apply an offset on positions</p>
+</dd>
+</dl>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -98,17 +149,25 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.measures.cormoran.CorSer.plot.html" title="pylayers.measures.cormoran.CorSer.plot"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.measures.cormoran.CorSer.devmapper.html" title="pylayers.measures.cormoran.CorSer.devmapper"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.measures.cormoran.html" >pylayers.measures.cormoran</a> &raquo;</li> 
       </ul>
     </div>
 
     <div class="footer">
         &copy; Copyright 2015, PyLayers developer team.
-      Last updated on févr. 22, 2015.
+      Last updated on févr. 23, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

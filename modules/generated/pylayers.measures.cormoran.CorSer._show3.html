@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.measures.cormoran" href="../pylayers.measures.cormoran.html" />
+    <link rel="next" title="pylayers.measures.cormoran.CorSer._show3i" href="pylayers.measures.cormoran.CorSer._show3i.html" />
+    <link rel="prev" title="pylayers.measures.cormoran.CorSer.pltgt" href="pylayers.measures.cormoran.CorSer.pltgt.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,16 +46,30 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.measures.cormoran.CorSer._show3i.html" title="pylayers.measures.cormoran.CorSer._show3i"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.measures.cormoran.CorSer.pltgt.html" title="pylayers.measures.cormoran.CorSer.pltgt"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.measures.cormoran.html" accesskey="U">pylayers.measures.cormoran</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.measures.cormoran.CorSer.pltgt.html"
+                        title="previous chapter">pylayers.measures.cormoran.CorSer.pltgt</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.measures.cormoran.CorSer._show3i.html"
+                        title="next chapter">pylayers.measures.cormoran.CorSer._show3i</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.measures.cormoran.CorSer._show3.txt"
@@ -81,6 +98,96 @@
             
   <div class="section" id="pylayers-measures-cormoran-corser-show3">
 <h1>pylayers.measures.cormoran.CorSer._show3<a class="headerlink" href="#pylayers-measures-cormoran-corser-show3" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer._show3">
+<tt class="descclassname">CorSer.</tt><tt class="descname">_show3</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/measures/cormoran.html#CorSer._show3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer._show3" title="Permalink to this definition">¶</a></dt>
+<dd><p>mayavi 3d show of scenario</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : boolean</p>
+<blockquote>
+<div><p>display layout (True)</p>
+</div></blockquote>
+<p><strong>body :boolean</strong> :</p>
+<blockquote>
+<div><p>display bodytime(True)</p>
+</div></blockquote>
+<p><strong>bodyname</strong> : boolean</p>
+<blockquote>
+<div><p>display body name</p>
+</div></blockquote>
+<p><strong>bodytime: list</strong> :</p>
+<blockquote>
+<div><p>list of time instant where body topos has to be shown</p>
+</div></blockquote>
+<p><strong>devsize</strong> : float</p>
+<blockquote>
+<div><p>device on body size (100)</p>
+</div></blockquote>
+<p><strong>devlist</strong> : list</p>
+<blockquote>
+<div><p>list of device name to show on body</p>
+</div></blockquote>
+<p><strong>trajectory</strong> : boolean</p>
+<blockquote>
+<div><p>display trajectory  (True)</p>
+</div></blockquote>
+<p><strong>tagtraj</strong> : boolean</p>
+<blockquote>
+<div><p>tag on trajectory at the &#8216;bodytime&#8217; instants (True)</p>
+</div></blockquote>
+<p><strong>tagname</strong> : list</p>
+<blockquote>
+<div><p>name of the tagtrajs</p>
+</div></blockquote>
+<p><strong>tagpoffset</strong> : ndarray</p>
+<blockquote>
+<div><p>offset of the tag positions (nb_of_tags x 3)</p>
+</div></blockquote>
+<p><strong>fontsizetag</strong> : float</p>
+<blockquote>
+<div><p>size of the tag names</p>
+</div></blockquote>
+<p><strong>inodes</strong> : boolean</p>
+<blockquote>
+<div><p>display infrastructure nodes</p>
+</div></blockquote>
+<p><strong>inname</strong> : boolean</p>
+<blockquote>
+<div><p>display infra strucutre node name</p>
+</div></blockquote>
+<p><strong>innamesize</strong> : float,</p>
+<blockquote>
+<div><p>size of name of infrastrucutre nodes (0.1)</p>
+</div></blockquote>
+<p><strong>incolor: str</strong> :</p>
+<blockquote>
+<div><p>color of infrastructure nodes (&#8216;r&#8217;)</p>
+</div></blockquote>
+<p><strong>insize</strong> :</p>
+<blockquote>
+<div><p>size of infrastrucutre nodes (0.1)</p>
+</div></blockquote>
+<p><strong>camera</strong> : boolean</p>
+<blockquote>
+<div><p>display Vicon camera position (True)</p>
+</div></blockquote>
+<p><strong>cameracolor</strong> : str</p>
+<blockquote>
+<div><p>color of camera nodes (&#8216;b&#8217;)</p>
+</div></blockquote>
+<p><strong>camerasize</strong> : float</p>
+<blockquote class="last">
+<div><p>size of camera nodes (0.1)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -98,17 +205,25 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.measures.cormoran.CorSer._show3i.html" title="pylayers.measures.cormoran.CorSer._show3i"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.measures.cormoran.CorSer.pltgt.html" title="pylayers.measures.cormoran.CorSer.pltgt"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.measures.cormoran.html" >pylayers.measures.cormoran</a> &raquo;</li> 
       </ul>
     </div>
 
     <div class="footer">
         &copy; Copyright 2015, PyLayers developer team.
-      Last updated on févr. 22, 2015.
+      Last updated on févr. 23, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

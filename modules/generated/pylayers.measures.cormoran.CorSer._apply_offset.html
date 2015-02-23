@@ -81,6 +81,18 @@
             
   <div class="section" id="pylayers-measures-cormoran-corser-apply-offset">
 <h1>pylayers.measures.cormoran.CorSer._apply_offset<a class="headerlink" href="#pylayers-measures-cormoran-corser-apply-offset" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer._apply_offset">
+<tt class="descclassname">CorSer.</tt><tt class="descname">_apply_offset</tt><big>(</big><em>techno</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/measures/cormoran.html#CorSer._apply_offset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer._apply_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>apply offset from self.offset[self._filename][techno+&#8217;_index&#8217;]</p>
+<dl class="docutils">
+<dt>if offset &gt;0</dt>
+<dd>add np.nan at the begining</dd>
+<dt>if offset &lt;0</dt>
+<dd>first values of self.hkb will be dropped</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
@@ -108,7 +120,7 @@
 
     <div class="footer">
         &copy; Copyright 2015, PyLayers developer team.
-      Last updated on févr. 22, 2015.
+      Last updated on févr. 23, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

@@ -918,6 +918,7 @@
             <span class="c">#</span>
             <span class="n">nsmax</span>  <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
             <span class="c"># Warning</span>
+            <span class="c"># -------</span>
             <span class="c"># nsmax can be different from the total number of segments</span>
             <span class="c"># This means that the numerotation of segment do not need to be</span>
             <span class="c"># contiguous.</span>
@@ -930,8 +931,9 @@
 
             <span class="c">#self.stridess = np.array(np.zeros(nsmax+1),dtype=int)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">stridess</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nsmax</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+            <span class="c"># +1 is for discarding index 0 (unused here)  </span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sla</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">nsmax</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">Nss</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&#39;S20&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nsmax</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">Nss</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nsmax</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">Nss</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 
 
             <span class="c"># Storing segment normals</span>
@@ -958,7 +960,7 @@
                         <span class="bp">self</span><span class="o">.</span><span class="n">lsss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ks</span><span class="p">)</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">sla</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">slabname</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">isss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">offset</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">stridess</span><span class="p">[</span><span class="n">ks</span><span class="p">]</span><span class="o">+</span><span class="n">uk</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ks</span><span class="p">][</span><span class="s">&#39;ss_offset&#39;</span><span class="p">][</span><span class="n">uk</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">offset</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ks</span><span class="p">][</span><span class="s">&#39;ss_offset&#39;</span><span class="p">][</span><span class="n">uk</span><span class="p">]</span>
                         <span class="n">index</span> <span class="o">=</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span>
 
         <span class="c"># append sub segment normal to normal</span>
@@ -9075,7 +9077,7 @@
 
     <div class="footer">
         &copy; Copyright 2015, PyLayers developer team.
-      Last updated on févr. 22, 2015.
+      Last updated on févr. 23, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

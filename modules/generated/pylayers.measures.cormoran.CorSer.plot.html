@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.measures.cormoran" href="../pylayers.measures.cormoran.html" />
+    <link rel="next" title="pylayers.measures.cormoran.CorSer.pltmob" href="pylayers.measures.cormoran.CorSer.pltmob.html" />
+    <link rel="prev" title="pylayers.measures.cormoran.CorSer.export_csv" href="pylayers.measures.cormoran.CorSer.export_csv.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,16 +46,30 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.measures.cormoran.CorSer.pltmob.html" title="pylayers.measures.cormoran.CorSer.pltmob"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.measures.cormoran.CorSer.export_csv.html" title="pylayers.measures.cormoran.CorSer.export_csv"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.measures.cormoran.html" accesskey="U">pylayers.measures.cormoran</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.measures.cormoran.CorSer.export_csv.html"
+                        title="previous chapter">pylayers.measures.cormoran.CorSer.export_csv</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.measures.cormoran.CorSer.pltmob.html"
+                        title="next chapter">pylayers.measures.cormoran.CorSer.pltmob</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.measures.cormoran.CorSer.plot.txt"
@@ -81,6 +98,83 @@
             
   <div class="section" id="pylayers-measures-cormoran-corser-plot">
 <h1>pylayers.measures.cormoran.CorSer.plot<a class="headerlink" href="#pylayers-measures-cormoran-corser-plot" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.plot">
+<tt class="descclassname">CorSer.</tt><tt class="descname">plot</tt><big>(</big><em>a</em>, <em>b</em>, <em>techno=''</em>, <em>t=''</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/measures/cormoran.html#CorSer.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.plot" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : str | int</p>
+<blockquote>
+<div><p>name <a href="#id1"><span class="problematic" id="id2">|</span></a>id</p>
+</div></blockquote>
+<p><strong>b</strong> : str | int</p>
+<blockquote>
+<div><p>name <a href="#id3"><span class="problematic" id="id4">|</span></a>id</p>
+</div></blockquote>
+<p><strong>techno</strong> : str (optional)</p>
+<blockquote>
+<div><p>radio techno</p>
+</div></blockquote>
+<p><strong>t</strong> : float | list (optional)</p>
+<blockquote>
+<div><p>given time
+or [start,stop] time</p>
+</div></blockquote>
+<p><strong>color</strong> : color</p>
+<p><strong>distance</strong> : boolean (False)</p>
+<blockquote>
+<div><p>plot distance instead of value</p>
+</div></blockquote>
+<p><strong>lin</strong> : boolean (False)</p>
+<blockquote>
+<div><p>display linear value instead of dB</p>
+</div></blockquote>
+<p><strong>sqrtinv</strong> : boolean (False)</p>
+<blockquote>
+<div><p>apply : &#8220;sqrt (1/ dataset)&#8221;</p>
+</div></blockquote>
+<p><strong>xoffset</strong> : float (0)</p>
+<blockquote>
+<div><p>add an offset on x axis</p>
+</div></blockquote>
+<p><strong>yoffset</strong> :  float (1|1e3|1e6)</p>
+<blockquote>
+<div><p>add an offset on y axis</p>
+</div></blockquote>
+<p><strong>title</strong> : boolean (True)</p>
+<blockquote>
+<div><p>display title</p>
+</div></blockquote>
+<p><strong>shortlabel</strong> : boolean (True)</p>
+<blockquote>
+<div><p>enable short labelling</p>
+</div></blockquote>
+<p><strong>fontsize</strong> : int (18)</p>
+<blockquote>
+<div><p>font size</p>
+</div></blockquote>
+<p><strong>returnlines</strong> : boolean</p>
+<blockquote class="last">
+<div><p>if True return the matplotlib ploted lines</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.measures.cormoran</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">CorSer</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s">&#39;AP1&#39;</span><span class="p">,</span><span class="s">&#39;TorsoTopLeft&#39;</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s">&#39;HKB&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">pltvisi</span><span class="p">(</span><span class="s">&#39;AP1&#39;</span><span class="p">,</span><span class="s">&#39;TorsoTopLeft&#39;</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s">&#39;HKB&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#f,ax = S.pltmob(fig=f,ax=ax)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#plt.title(&#39;hatch = visibility / gray= mobility&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -98,17 +192,25 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.measures.cormoran.CorSer.pltmob.html" title="pylayers.measures.cormoran.CorSer.pltmob"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.measures.cormoran.CorSer.export_csv.html" title="pylayers.measures.cormoran.CorSer.export_csv"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.measures.cormoran.html" >pylayers.measures.cormoran</a> &raquo;</li> 
       </ul>
     </div>
 
     <div class="footer">
         &copy; Copyright 2015, PyLayers developer team.
-      Last updated on févr. 22, 2015.
+      Last updated on févr. 23, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

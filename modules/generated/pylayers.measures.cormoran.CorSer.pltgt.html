@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.measures.cormoran" href="../pylayers.measures.cormoran.html" />
+    <link rel="next" title="pylayers.measures.cormoran.CorSer._show3" href="pylayers.measures.cormoran.CorSer._show3.html" />
+    <link rel="prev" title="pylayers.measures.cormoran.CorSer.imshow" href="pylayers.measures.cormoran.CorSer.imshow.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,16 +46,30 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.measures.cormoran.CorSer._show3.html" title="pylayers.measures.cormoran.CorSer._show3"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.measures.cormoran.CorSer.imshow.html" title="pylayers.measures.cormoran.CorSer.imshow"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.measures.cormoran.html" accesskey="U">pylayers.measures.cormoran</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.measures.cormoran.CorSer.imshow.html"
+                        title="previous chapter">pylayers.measures.cormoran.CorSer.imshow</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.measures.cormoran.CorSer._show3.html"
+                        title="next chapter">pylayers.measures.cormoran.CorSer._show3</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.measures.cormoran.CorSer.pltgt.txt"
@@ -81,6 +98,59 @@
             
   <div class="section" id="pylayers-measures-cormoran-corser-pltgt">
 <h1>pylayers.measures.cormoran.CorSer.pltgt<a class="headerlink" href="#pylayers-measures-cormoran-corser-pltgt" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.pltgt">
+<tt class="descclassname">CorSer.</tt><tt class="descname">pltgt</tt><big>(</big><em>a</em>, <em>b</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/measures/cormoran.html#CorSer.pltgt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.pltgt" title="Permalink to this definition">¶</a></dt>
+<dd><p>plt ground truth</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>t0</strong> :</p>
+<p><strong>t1</strong> :</p>
+<p><strong>fig</strong> :</p>
+<p><strong>ax</strong> :</p>
+<p><strong>figsize: tuple</strong> :</p>
+<p><strong>linestyle&#8217;</strong> :</p>
+<p><strong>inverse :False,</strong> :</p>
+<blockquote>
+<div><p>display 1/distance  instead of distance</p>
+</div></blockquote>
+<p><strong>log</strong> : boolean</p>
+<blockquote>
+<div><p>display log fo distance intead of distance</p>
+</div></blockquote>
+<p><strong>gammma&#8217;:1.,</strong> :</p>
+<blockquote>
+<div><p>mulitplication factor for log : gamma*log(distance) 
+this can be used to fit RSS</p>
+</div></blockquote>
+<p><strong>mode</strong> : string</p>
+<blockquote>
+<div><p>&#8216;HKB&#8217; | &#8216;TCR&#8217; | &#8216;FULL&#8217;</p>
+</div></blockquote>
+<p><strong>visi</strong> : boolean,</p>
+<blockquote>
+<div><p>display visibility</p>
+</div></blockquote>
+<p><strong>color: string color (&#8216;k&#8217;|&#8217;m&#8217;|&#8217;g&#8217;),</strong> :</p>
+<blockquote>
+<div><p>color to display the visibility area</p>
+</div></blockquote>
+<p><strong>hatch&#8217;: strin hatch type (&#8216;//&#8217;)</strong> :</p>
+<blockquote>
+<div><p>hatch type to hatch visibility area</p>
+</div></blockquote>
+<p><strong>fontsize: int</strong> :</p>
+<blockquote class="last">
+<div><p>title fontsize</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -98,17 +168,25 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.measures.cormoran.CorSer._show3.html" title="pylayers.measures.cormoran.CorSer._show3"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.measures.cormoran.CorSer.imshow.html" title="pylayers.measures.cormoran.CorSer.imshow"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.measures.cormoran.html" >pylayers.measures.cormoran</a> &raquo;</li> 
       </ul>
     </div>
 
     <div class="footer">
         &copy; Copyright 2015, PyLayers developer team.
-      Last updated on févr. 22, 2015.
+      Last updated on févr. 23, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">
