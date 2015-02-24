@@ -6,6 +6,8 @@ import Image
 import numpy as np
 from pylayers.util import geomutil as geu
 from pylayers.util import pyutil as pyu
+import pylayers.util.plotutil as plu
+
 import matplotlib.pyplot as plt
 from pylayers.util.easygui import *
 from matplotlib.widgets import RectangleSelector
@@ -503,8 +505,13 @@ class SelectL(object):
         if self.evt=='t':
             if self.state == 'SM':
                 self.update_state()
+                fig=plt.gcf()
+                ax=plt.gca()
                 if self.selected == 'pt':
                     self.plotselptseg(self.selectseg,color='r')
+                    PP=self.L.pt[:,self.L.tahe[:,self.L.tgs[self.selectseg]]]
+                    plu.displot(PP[:,0],PP[:,1],fig=fig,ax=ax,color='r',linewidth=3,alpha=0.4)
+                    plt.draw()
                     self.selected='seg'
                 else: 
                     self.plotselptseg(self.selectpt)
@@ -1066,6 +1073,7 @@ class SelectL(object):
                 
                 self.selectpt=np.unique(self.selectpt).tolist()
                 self.selectseg=np.unique(self.selectseg).tolist()
+
             except:
                 print 'empty selection'
             print self.selectpt,self.selectseg
