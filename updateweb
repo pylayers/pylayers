@@ -9,6 +9,8 @@ cd ../3-PHY
 git add *.html 
 cd ../4-MOB
 git add *.html 
+cd ../5-SIM
+git add *.html 
 cd ../8-MISC
 git add *.html 
 cd ../../notebooks

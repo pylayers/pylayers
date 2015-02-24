@@ -1,0 +1,457 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>How to do a link siulation &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../index.html"><img src="../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/notebook/5-SIM/LinkSimulation.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="code python highlight-python"><div class="highlight"><pre>from pylayers.simul.link import *
+%pylab inline
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Populating the interactive namespace from numpy and matplotlib
+</pre></div>
+</div>
+<pre class="literal-block">
+WARNING: pylab import has clobbered these variables: ['plt', 'mlab']
+<cite>%matplotlib</cite> prevents importing * from pylab and numpy
+</pre>
+<div class="section" id="how-to-do-a-link-siulation">
+<h1>How to do a link siulation<a class="headerlink" href="#how-to-do-a-link-siulation" title="Permalink to this headline">¶</a></h1>
+<p>This section illustrates the
+<tt class="docutils literal"><span class="pre">`link</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.simul.link.html">http://pylayers.github.io/pylayers/modules/pylayers.simul.link.html</a>&gt;`__
+module. A <tt class="docutils literal"><span class="pre">Dlink</span></tt> object is a deterministic (Single Input Single
+Output) SISO link.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">DLink</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">repr</span></tt> function provides information about the default link, which
+is stored in the <tt class="docutils literal"><span class="pre">hdf5</span></tt> file. It should correspond to the default
+Layout. A link gathers various objects and information e.g + Layout file
++ Node a (first termination of the link) + position + antenna file +
+antenna rotation matrix + Node b (second termination of the link) +
+position + antenna file + antenna rotation matrix + Frequency range +
+fmin + fmax + fstep</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>filename: Links_0_defstr.ini.h5
+Link Parameters :
+------- --------
+Layout : defstr.ini
+
+Node a
+------
+position : [  766.00300113  1113.94747911     1.2       ]
+Antenna : S2R2.sh3
+Rotation matrice :
+ [[ 1.  0.  0.]
+ [ 0.  1.  0.]
+ [ 0.  0.  1.]]
+
+Node b
+------
+position : [  766.00300113  1113.94747911     1.2       ]
+Antenna : S2R2.sh3
+Rotation matrice :
+ [[ 1.  0.  0.]
+ [ 0.  1.  0.]
+ [ 0.  0.  1.]]
+
+Link evaluation information :
+-----------------------------
+distance :  0.000 m
+delay :  0.000 ns
+fmin (fGHz) : 2.0
+fmax (fGHz) : 11.0
+fstep (fGHz) : 0.05
+</pre></div>
+</div>
+<p>To evaluate a link there is the <tt class="docutils literal"><span class="pre">eval</span></tt> method. This method takes as
+argument a list of desired outputs, the type of algorithm being used,
+the ceil heigh and the number og multi reflection between ceil and
+floor.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">aktk</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="p">[],</span> <span class="n">output</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;sig&#39;</span><span class="p">,</span><span class="s">&#39;ray&#39;</span><span class="p">,</span><span class="s">&#39;Ct&#39;</span><span class="p">,</span><span class="s">&#39;H&#39;</span><span class="p">],</span>
+            <span class="n">si_algo</span><span class="o">=</span><span class="s">&#39;old&#39;</span><span class="p">,</span><span class="n">ra_ceil_height_meter</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">ra_number_mirror_cf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Signatures&#39;&gt; from 1_1_3 loaded
+Rays&#39;&gt; from 3_0_0 loaded
+Ctilde&#39;&gt; from 0_0_0 loaded
+Tchannel&#39;&gt; from 0_0_0_0_0_0_0 loaded
+</pre></div>
+</div>
+<p>The propagation channel (without antenna) can be vizualized on a ray by
+ray mode.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#L._show3()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">C</span>
+<span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/LinkSimulation_10_0.png" src="../../_images/LinkSimulation_10_0.png" />
+<p>It is possible to look at individual ray transfer function, as
+illustrated below.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">105</span><span class="p">,</span> <span class="mi">181</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">ir</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">ir</span><span class="p">,:]))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Frequency (GHz)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Level (linear)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Modulus of the ray &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; transfer function&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7f3e872b6f10&gt;
+</pre></div>
+</div>
+<img alt="../../_images/LinkSimulation_13_1.png" src="../../_images/LinkSimulation_13_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">ir</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">ir</span><span class="p">,:]))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Frequency (GHz)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Level (linear)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Modulus of the ray &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; transfer function&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7f3e856dafd0&gt;
+</pre></div>
+</div>
+<img alt="../../_images/LinkSimulation_14_1.png" src="../../_images/LinkSimulation_14_1.png" />
+<p>In the link we also have the transmission channel accounting for the
+effect of antennas and Friis factor. If the ray transfer function is
+scaled with <img class="math" src="../../_images/math/001864bf8290713a8513a9deab0da003bdbad7a2.png" alt="\frac{4\pi f}{c}"/></p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">*</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">x</span><span class="o">/</span><span class="mf">0.3</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>/home/uguen/anaconda/lib/python2.7/site-packages/numpy/core/numeric.py:462: ComplexWarning: Casting complex values to real discards the imaginary part
+  return array(a, dtype, copy=False, order=order)
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x7f3e855da790&gt;]
+</pre></div>
+</div>
+<img alt="../../_images/LinkSimulation_16_2.png" src="../../_images/LinkSimulation_16_2.png" />
+<p>Notice that in this case the frequency</p>
+<p>The infinite bandwidth channel impulse response is plotted below from
+the extrated set <img class="math" src="../../_images/math/6c50a2ac8bf54c7debfddf7795672964e8e9b2b2.png" alt="\{\alpha_k,\tau_k\}"/>.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">aktk</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">aktk</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Infinite bandwith Channel Impulse response&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;delay (ns)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;amplitude (linear scale&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7f3e85593f50&gt;
+</pre></div>
+</div>
+<img alt="../../_images/LinkSimulation_19_1.png" src="../../_images/LinkSimulation_19_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pylayers.simul.simulnet</span> <span class="kn">as</span> <span class="nn">sn</span>
+<span class="kn">import</span> <span class="nn">pylayers.simul.simultraj</span> <span class="kn">as</span> <span class="nn">st</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">=</span><span class="n">sn</span><span class="o">.</span><span class="n">Simul</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Layout graphs are loaded from /home/uguen/Bureau/P1/struc/ini
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>----------------
+TA-Office.ini
+Image(&#39;/home/uguen/Bureau/P1/struc/images/DLR4991.png&#39;)
+----------------
+
+Number of points  : 71
+Number of segments  : 94
+Number of sub segments  : 16
+Number of cycles  : 25
+Number of rooms  : 24
+degree 0 : []
+degree 1 : []
+degree 2 : 39
+degree 3 : 32
+
+xrange :(0.0, 40.0)
+yrange :(0.0, 15.0)
+
+Useful dictionnaries
+----------------
+dca {cycle : []} cycle with an airwall
+sl {slab name : slab dictionary}
+name :  {slab :seglist}
+
+Useful arrays
+----------------
+pt : numpy array of points
+normal : numpy array of normal
+offset : numpy array of offset
+tsg : get segment index in Gs from tahe
+isss :  sub-segment index above Nsmax
+tgs : get segment index in tahe from Gs
+lsss : list of segments with sub-segment
+sla : list of all slab names (Nsmax+Nss+1)
+degree : degree of nodes
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">runsimul</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.mobility.trajectory</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<p>A trajectories object is a list of trajectories. The loadh5 methods by
+default loads the file &#8216;.h5&#8217; generated by
+<tt class="docutils literal"><span class="pre">`Simulnet</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.simul.simulnet.html">http://pylayers.github.io/pylayers/modules/pylayers.simul.simulnet.html</a>&gt;`__.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">T</span><span class="o">=</span><span class="n">Trajectories</span><span class="p">()</span>
+<span class="n">T</span><span class="o">.</span><span class="n">loadh5</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">T</span>
+</pre></div>
+</div>
+<pre class="literal-block">
+Trajectories performed in Layout : TA-Office.ini
+
+Trajectory of agent John with ID 1
+----------------------------------
+t (s) : 0.00 : 0.20 : 119.80
+dtot (m) : 442.44
+Vmoy (m/s) : 3.69
+                                    x         y        vx        vy        ax  t
+1970-01-01 00:00:00         18.907750  2.528547  0.038749  0.155237  0.193744
+1970-01-01 00:00:00.200000  18.921699  2.584433  0.069748  0.279427  0.154995
+
+                                  ay      s
+t
+1970-01-01 00:00:00         0.776185  0.160
+1970-01-01 00:00:00.200000  0.620948  0.448
+
+Trajectory of agent Alex with ID 2
+----------------------------------
+t (s) : 0.00 : 0.20 : 119.80
+dtot (m) : 448.45
+Vmoy (m/s) : 3.74
+                                  x       y     vx            vy    ax  t
+1970-01-01 00:00:00         13.4680  7.4965 -0.160 -1.141434e-16 -0.80
+1970-01-01 00:00:00.200000  13.4104  7.4965 -0.288 -2.069441e-16 -0.64
+
+                                      ay      s
+t
+1970-01-01 00:00:00        -5.707171e-16  0.160
+1970-01-01 00:00:00.200000 -4.640036e-16  0.448
+
+Access point Router with ID 6
+-----------------------------
+t (s) : 0.00
+Vmoy (m/s) : 0.0
+              x  y    z  vx  vy  ax  ay  s
+t
+1970-01-01  0.5  2  2.5   0   0   0   0  0
+
+Access point Router with ID 7
+-----------------------------
+t (s) : 0.00
+Vmoy (m/s) : 0.0
+              x   y    z  vx  vy  ax  ay  s
+t
+1970-01-01  0.7  14  2.5   0   0   0   0  0
+
+Access point Router with ID 8
+-----------------------------
+t (s) : 0.00
+Vmoy (m/s) : 0.0
+             x   y    z  vx  vy  ax  ay  s
+t
+1970-01-01  39  13  2.5   0   0   0   0  0
+</pre>
+<p>A SimulTraj object is derived from a trajectory calculated previously in
+simulnet and a body agent description. The Simultraj object get the
+trajectories from the <tt class="docutils literal"><span class="pre">simultaj.ini</span></tt> file.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">St</span><span class="o">=</span><span class="n">st</span><span class="o">.</span><span class="n">Simul</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>**** Processor coding : Intel-PC
+**** Processor coding : Intel-PC
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+
+&lt;ipython-input-20-ae27233a0375&gt; in &lt;module&gt;()
+----&gt; 1 St=st.Simul(verbose=False)
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/simul/simultraj.pyc in __init__(self, source, verbose)
+    111
+    112
+--&gt; 113         self._gen_net()
+    114         self.SL = SLink()
+    115         self.DL = DLink(L=self.L,verbose=self.verbose)
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/simul/simultraj.pyc in _gen_net(self)
+    261                 D.append(
+    262                     Device(self.dpersons[p].dev[dev][&#39;name&#39;], ID=dev))
+--&gt; 263             N.add_devices(D, grp=p)
+    264         # get access point devices
+    265         for ap in self.dap:
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/network/network.pyc in add_devices(self, dev, p, grp)
+    454         for d in dev:
+    455             if d.ID in self:
+--&gt; 456                 raise AttributeError(&#39;Devices must have a different ID&#39;)
+    457
+    458
+
+
+AttributeError: Devices must have a different ID
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#St.run(t=list(np.arange(0,1,0.1)),OB=True,B2B=True,B2I=True)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#St.data</span>
+</pre></div>
+</div>
+<p>Information about the simulated network is obtained</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">St</span><span class="o">.</span><span class="n">N</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#St._show3()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#St.data.head()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#ak,tk,ek=St._loadh5(2,&#39;0_Alex&#39;,&#39;1_Alex&#39;,&#39;bluetooth-class2&#39;)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#stem(tk,ak)</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2015, PyLayers developer team.
+      Last updated on Feb 24, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>
