@@ -17,7 +17,7 @@ class SelectL(object):
     'l'  : select activelayer
     'i'  : back to init state
     'e'  : edit segment
-    't'  : translate  structure
+    'CTLR + t'  : translate  structure
     'h'  : add subsegment
     'd'  : delete subsegment
     'r'  : refresh
@@ -60,7 +60,8 @@ class SelectL(object):
         self.nedge_sel = 0
         self.indp = 0
         self.state = 'Init'
-        self.statename={'Init':'Point Selection',
+        self.evt=''
+        self.statename={'Init':'Point/Segments Selection',
                 'CP':'Create Point',
                 'SP1':'Select Point 1',
                 'SP2':'Select Point 2, click again for creating segment',
@@ -68,6 +69,7 @@ class SelectL(object):
                 'SSS':'Select Sub Segment',
                 'CPS':'Create Point On Segment',
                 'CPSS':'Create Point On Sub Segment',
+                'SM': 'Multiple Selection'
                 }
         self.nsel = 0
         ax.axis(self.L.display['box'])
@@ -76,7 +78,9 @@ class SelectL(object):
         self.shift_is_held = False
         self.ctrl_is_held = False
         self.alt_is_held = False
-        self.evt=''
+        self.selectpt=[]
+        self.selectseg=[]
+        self.selected='pt'
         # save matplotlib config
         self.rcconf = {}
         self.rcconf['keymap.save']= plt.rcParams['keymap.save']
@@ -87,7 +91,7 @@ class SelectL(object):
             'j'  :' vertical and horizontal scaling',
             'e'  :' edit segment',
             'b'  :' edit segment keyboard',
-            't'  :' translate  structure',
+            'CTRL + t'  :' translate  structure',
             'h'  :' add subsegment',
             'd'  :' delete selected object',
             'r'  :' refresh',
@@ -95,7 +99,6 @@ class SelectL(object):
             'm'  :' toggle mode (point or segment)',
             'n'  : 'toggle node label display ',
             'z'  : 'change display parameters',
-            'q'  : 'quit interactive mode',
             'x'  : 'save .str2 and .ini file',
             'w'  :' display all layers',
             'v'  :' flip layout w.r.t y axis',
@@ -128,6 +131,26 @@ class SelectL(object):
         fig,ax = self.L.showGs(fig=fig,ax=ax,axis=axis,subsegnb=True)
         return(fig,ax)
 
+
+    def plotselptseg(self,pt,color='y'):
+        """ plot selected point or segments
+
+        Parameters
+        ----------
+
+            pt : list
+            list of points or segmetns to plot
+        """
+        if len(pt)>0:
+            ax  = plt.gca()
+            pts = np.array([self.L.Gs.pos[x] for x in pt])
+            p1 = ax.plot(pts[:,0], pts[:,1], 'o', 
+                                visible=True, 
+                                color =color,
+                                ms=10,
+                                alpha=0.4)
+            plt.draw()
+
     def OnPress(self,event,verbose=True):
         """ Keyboard event handler
 
@@ -148,7 +171,7 @@ class SelectL(object):
         self.evt = event.key
         if event.key == 'shift':
             self.shift_is_held = True
-        if event.key == 'ctrl':
+        if event.key == 'control':
             self.ctrl_is_held = True
         if event.key == 'alt':
             self.alt_is_held = True
@@ -165,7 +188,7 @@ class SelectL(object):
     def OnRelease(self, event):
         if event.key == 'shift':
            self.shift_is_held = False
-        if event.key == 'ctrl':
+        if event.key == 'control':
             self.ctrl_is_held = False
         if event.key == 'alt':
             self.alt_is_held = False
@@ -236,8 +259,15 @@ class SelectL(object):
             self.selected_edge1 = 0
             self.selected_pt1 = 0
             self.selected_pt2 = 0
+            self.selectpt=[]
+            self.selectseg=[]
             try:
                 del self.pt_previous
+            except:
+                pass
+            try:
+                self.selector.set_active(False)
+                print 'inhib selector'
             except:
                 pass
             #ax.title.set_text(self.state)
@@ -387,7 +417,17 @@ class SelectL(object):
                                         'c',linewidth=3, visible=True)
 
 
-
+        if self.state == 'SM':
+            fig,ax = self.show(fig,ax,clear=True)
+            ax.title.set_text(self.statename[self.state])
+            self.selected_edge1 = 0
+            self.selected_pt1 = 0
+            self.selected_pt2 = 0
+            try:
+                del self.pt_previous
+            except:
+                pass
+            self.state='SM'
         #print self.state
         #print self.nsel
         #print self.selected_pt1
@@ -408,7 +448,7 @@ class SelectL(object):
         'j'  : vertical and horizontal scaling
         'e'  : edit segment
         'b'  : edit segment keyboard
-        't'  : translate  structure
+        'CTRL + t'  : translate  structure
         'h'  : add subsegment
         'd | Del'  : delete subsegment
         'r | F5'  : refresh
@@ -448,12 +488,27 @@ class SelectL(object):
         #
         # translation of layout (open a box)
         #
-        if self.evt == 't':
-            offx,offy = offsetbox()
-            for n in self.L.Gs.pos:
-                self.L.Gs.pos[n]=(self.L.Gs.pos[n][0]+offx,self.L.Gs.pos[n][1]+offy)
+        # if self.evt == 't' :
+        #     offx,offy = offsetbox()
+        #     for n in self.L.Gs.pos:
+        #         self.L.Gs.pos[n]=(self.L.Gs.pos[n][0]+offx,self.L.Gs.pos[n][1]+offy)
+        #     self.update_state()
+        #     return
+
+        if self.evt=='escape':
+            self.state='Init'
             self.update_state()
-            return
+            plt.draw()
+
+        if self.evt=='t':
+            if self.state == 'SM':
+                self.update_state()
+                if self.selected == 'pt':
+                    self.plotselptseg(self.selectseg,color='r')
+                    self.selected='seg'
+                else: 
+                    self.plotselptseg(self.selectpt)
+                    self.selected='pt'
 
         if self.evt == '3':
             self.L.show3()
@@ -567,6 +622,9 @@ class SelectL(object):
                 self.state = 'Init'
                 self.update_state()
                 return
+            # if self.state == 'SM':
+
+            
         #
         # "b" : enter a segment node value with keyboard
         #
@@ -636,13 +694,13 @@ class SelectL(object):
                 self.update_state()
                 return
 
-            if self.state=='Init':
+            if self.state=='SM':
                 # get boundary of the region 
                 if hasattr(self,'selectpt'):
 
                     ptlist = self.selectpt
-                    del self.selectpt
-                    del self.selectseg
+                    self.selectpt=[]
+                    self.selectseg=[]
                     self.L.del_points(ptlist)
                     self.state = 'Init'
                     self.update_state()
@@ -656,7 +714,6 @@ class SelectL(object):
         if self.evt == 'r' or self.evt == 'f5':
             #plt.axis('tight')
             plt.axis(self.L.display['box'])
-
             fig,ax = self.show(fig,ax,clear=True)
             self.state = 'Init'
             self.update_state()
@@ -665,17 +722,19 @@ class SelectL(object):
         #
         # o : Toggle overlay
         #
-        if self.evt == 'o':
-            if self.state <> 'CP':
-                if self.L.display['overlay']:
-                    self.L.display['overlay'] = False
-                    self.update_state()
-                else:
-                    self.L.display['overlay'] = True
-                    self.update_state()
-                return
+        if self.evt == 'o' and not self.ctrl_is_held:
+            self.state='Init'
+            self.update_state()
+            if self.L.display['overlay']:
+                self.L.display['overlay'] = False
+                self.update_state()
             else:
-                self.set_origin = True
+                self.L.display['overlay'] = True
+                self.update_state()
+            return
+
+        if self.evt == 'o' :
+            self.set_origin = True
 
 
         #
@@ -844,7 +903,7 @@ class SelectL(object):
         #
         # Left clic
         #
-        if (self.evt == 'lclic') and not ( self.shift_is_held or self.alt_is_held or self.ctrl_is_held ):
+        if (self.evt == 'lclic') and not (self.shift_is_held or self.alt_is_held or self.ctrl_is_held ):
             # add free node
             # or set origin
             if self.state == 'CP':
@@ -934,7 +993,7 @@ class SelectL(object):
                     self.update_state()
                     return
                 except:
-                    pass
+                    return
 
             if self.state=='SP2':
                 if self.nsel == self.selected_pt1:
@@ -970,7 +1029,6 @@ class SelectL(object):
         #
         if (self.evt == 'cclic') or (self.evt == 'lclic' and self.shift_is_held ):
             if self.state == 'CP':
-                print 'coucou'
                 try:
                     self.ptsel[1] = self.pt_previous[1]
                     self.L.add_fnod(tuple(self.ptsel))
@@ -978,7 +1036,7 @@ class SelectL(object):
                     self.update_state()
                     return
                 except:
-                    pass
+                    return
         #
         # Left clic and selected node is a point
         #
@@ -986,6 +1044,10 @@ class SelectL(object):
 
         def point_select_callback(eclick, erelease):
             'eclick and erelease are the press and release events'
+            self.update_state()
+            if not self.shift_is_held:
+                self.selectpt=[]
+                self.selectseg=[]
             x1, y1 = eclick.xdata, eclick.ydata
             x2, y2 = erelease.xdata, erelease.ydata
             print x1,x2,y1,y2
@@ -993,32 +1055,42 @@ class SelectL(object):
                 x1,x2=x2,x1
             if y1>y2:
                 y1,y2=y2,y1
-            self.selectpt, self.selectseg = self.L.get_zone([x1,x2,y1,y2])
-
-            pts = np.array([self.L.Gs.pos[x] for x in self.selectpt])
-            p1 = ax.plot(pts[:,0], pts[:,1], 'o', 
-                                visible=True, 
-                                color ='y',
-                                ms=10,
-                                alpha=0.4)
-            plt.draw()
-            toggle_selector.RS.set_active(False)
+            try:
+                selectpt,selectseg = self.L.get_zone([x1,x2,y1,y2])
+                self.selectpt.extend(selectpt)
+                self.selectseg.extend(selectseg)
+                print self.selectseg
+                self.selectseg=filter(lambda x: self.L.Gs.node[x]['connect'][0] in self.selectpt
+                                 and self.L.Gs.node[x]['connect'][1] in self.selectpt,
+                                 self.selectseg)
+                
+                self.selectpt=np.unique(self.selectpt).tolist()
+                self.selectseg=np.unique(self.selectseg).tolist()
+            except:
+                print 'empty selection'
+            print self.selectpt,self.selectseg
+            self.plotselptseg(self.selectpt)
+            self.selected='pt'
+            print self.state
+            
+                
 
         def toggle_selector(event):
             if toggle_selector.RS.active:
                 toggle_selector.RS.set_active(False)
             if not toggle_selector.RS.active:
                 toggle_selector.RS.set_active(True)
-
+        
         if self.evt == 'f1':
-            ax.title.set_text('Points Selector Tool')
-            self.state=='Init'
-            self.update_state()
+            self.state='SM'
             toggle_selector.RS = RectangleSelector(ax, point_select_callback,
-                                                   drawtype='box', useblit=True,
-                                                   button=[1,3], # don't use middle button
-                                                   minspanx=5, minspany=5,
-                                                   spancoords='pixels')
+                                               drawtype='box', useblit=True,
+                                               button=[1,3], # don't use middle button
+                                               minspanx=5, minspany=5,
+                                               spancoords='pixels')
+            self.selector = toggle_selector.RS
+            self.update_state()
+
         if self.evt == 'f2':
             print self.selectpt, self.selectseg
             # plt.connect('key_press_event', toggle_selector)

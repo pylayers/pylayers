@@ -2794,25 +2794,29 @@ class Layout(PyLayers):
         #de1v    = de1.values()
         if gui:
             data0 = choicebox('chose slab',title,self.sl.keys())
-            data1 = multenterbox('attribute for ' + data0, title, tuple(de1k[1:]), tuple(de1v[1:]))
-            d1 = data1[0].split(' ')
-            d1t = tuple((eval(d1[0]),eval(d1[1])))
-            data1[0]=d1t
-            data = [data0]+data1
-            #data = multenterbox(message, title, tuple(de1k), tuple(de1v))
-            i = 0
-            self.name[de1['name']].remove(e1)
-            for k in de1k:
-                try:
-                    self.Gs.node[e1][k] = eval(data[i])
-                except:
-                    self.Gs.node[e1][k] = data[i]
-                    if k == 'name':
-                        try:
-                            self.name[data[i]].append(e1)
-                        except:
-                            self.name[data[i]] = [e1]
-                i = i + 1
+            try:
+                data1 = multenterbox('attribute for ' + data0, title, tuple(de1k[1:]), tuple(de1v[1:]))
+                d1 = data1[0].split(' ')
+                d1t = tuple((eval(d1[0]),eval(d1[1])))
+                data1[0]=d1t
+                data = [data0]+data1
+                #data = multenterbox(message, title, tuple(de1k), tuple(de1v))
+                i = 0
+                self.name[de1['name']].remove(e1)
+                for k in de1k:
+                    try:
+                        self.Gs.node[e1][k] = eval(data[i])
+                    except:
+                        self.Gs.node[e1][k] = data[i]
+                        if k == 'name':
+                            try:
+                                self.name[data[i]].append(e1)
+                            except:
+                                self.name[data[i]] = [e1]
+                    i = i + 1
+            except:
+                # if cancel
+                pass
         else:
             data = {}
             val = '1'
