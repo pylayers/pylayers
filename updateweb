@@ -1,6 +1,12 @@
 cd $WEBSITE/html
 cd ./notebook
 git add *.html 
+cd ./notebook/1-GIS
+git add *.html 
+cd ./notebook/2-AP
+git add *.html 
+cd ./notebook/3-AP
+git add *.html 
 cd ../notebooks
 git add * 
 cd ../_images
