@@ -56,16 +56,23 @@
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Table Of Content</a><ul>
-<li><a class="reference internal" href="#non-radio-dataframes">&nbsp;Non Radio DataFrames</a><ul>
-<li><a class="reference internal" href="#plot-values">&nbsp;Plot values</a></li>
-<li><a class="reference internal" href="#plot-distance">&nbsp;Plot distance</a></li>
+<li><a class="reference internal" href="#cormoran-measurement-campaign">CORMORAN Measurement Campaign</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#motivation-for-creating-a-specific-tool">Motivation for creating a specific tool</a></li>
+<li><a class="reference internal" href="#prerequisite-installations">Prerequisite Installations</a><ul>
+<li><a class="reference internal" href="#the-corser-class">The <tt class="docutils literal"><span class="pre">CorSer</span></tt> Class</a><ul>
+<li><a class="reference internal" href="#plot-values">&nbsp;Plot values</a><ul>
+<li><a class="reference internal" href="#plot-distance">Plot distance</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#specify-time-bodytime-parameter">Specify time (<em>bodytime</em> parameter)</a></li>
 <li><a class="reference internal" href="#display-trajectory-trajectory-parameter">display trajectory (<em>trajectory</em> parameter)</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#using-pylayers-ray-tracing-with-corser-data">&nbsp;Using Pylayers Ray-tracing with CorSer data</a></li>
+<li><a class="reference internal" href="#using-pylayers-ray-tracing-with-corser-data">Using Pylayers Ray-tracing with CorSer data</a></li>
 </ul>
 
   <h3>This Page</h3>
@@ -98,12 +105,13 @@
 import  pylayers.util.mayautil as myu
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
-</pre></div>
-</div>
 <div class="highlight-python"><div class="highlight"><pre>Populating the interactive namespace from numpy and matplotlib
 </pre></div>
 </div>
+<pre class="literal-block">
+WARNING: pylab import has clobbered these variables: ['concatenate', 'random', 'mlab', 'show', 'f', 'dist', 'copy']
+<cite>%matplotlib</cite> prevents importing * from pylab and numpy
+</pre>
 <div class="section" id="table-of-content">
 <h1>Table Of Content<a class="headerlink" href="#table-of-content" title="Permalink to this headline">¶</a></h1>
 <ol class="arabic simple">
@@ -140,9 +148,10 @@ import  pylayers.util.mayautil as myu
 </ol>
 </li>
 </ol>
-<blockquote>
-<div># CORMORAN Measurement Campaign The CORMORAN measurement campaign is</div></blockquote>
-<p>the first known campaign in the WBAN context gathering :</p>
+<div class="section" id="cormoran-measurement-campaign">
+<h2>CORMORAN Measurement Campaign<a class="headerlink" href="#cormoran-measurement-campaign" title="Permalink to this headline">¶</a></h2>
+<p>The CORMORAN measurement campaign is the first known campaign in the
+WBAN context gathering :</p>
 <ul class="simple">
 <li>3 differents radio technologies (HiKoB, CEA plateform and Beespoon
 phone)</li>
@@ -156,8 +165,10 @@ motion capture (MOCAP) system.</li>
 motion capture system which allows to get a ground truth position of any
 radio device which make the radio observable values open to
 interpretation.</p>
-<blockquote>
-<div>## Motivation for creating a specific tool</div></blockquote>
+</div>
+</div>
+<div class="section" id="motivation-for-creating-a-specific-tool">
+<h1>Motivation for creating a specific tool<a class="headerlink" href="#motivation-for-creating-a-specific-tool" title="Permalink to this headline">¶</a></h1>
 <p>In order to exploit the CORMORAN measurement campaign, a dedicated tool
 has been envisaged. Regarding that one aim of the CORMORAN project
 (<a class="reference external" href="http://pylayers.github.io/pylayers/cormoran.html">http://pylayers.github.io/pylayers/cormoran.html</a>) is to provide a
@@ -179,8 +190,9 @@ different basis.</p>
 and exploitable information for the project members and more generally
 by people in the research community. The goal of such a tool is to help
 and simplify dissemination.</p>
-<blockquote>
-<div>##Prerequisite Installations</div></blockquote>
+</div>
+<div class="section" id="prerequisite-installations">
+<h1>Prerequisite Installations<a class="headerlink" href="#prerequisite-installations" title="Permalink to this headline">¶</a></h1>
 <p>Before starting using this tool, some requirements have to be satisfied.</p>
 <ol class="arabic simple">
 <li>The open source platform PyLayers ( <a class="reference external" href="http://www.pylayers.org">http://www.pylayers.org</a> ) has to
@@ -194,8 +206,8 @@ variables can be found in pylayers&#8217; INSTALL.txt</li>
 </ol>
 <p>Once those 3 steps are satisfied, the CORMORAN exploitation measure tool
 is ready to be used.</p>
-<blockquote>
-<div>##&nbsp;The CorSer Class</div></blockquote>
+<div class="section" id="the-corser-class">
+<h2>The <tt class="docutils literal"><span class="pre">CorSer</span></tt> Class<a class="headerlink" href="#the-corser-class" title="Permalink to this headline">¶</a></h2>
 <p>The exploitation of measures tool takes place as a specific class named
 CorSer (which stands for Cormoran Series). Once PyLayers has been
 installed, it is possible to directly access to the class by importing
@@ -203,15 +215,16 @@ it.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.measures.cormoran</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>   &lt;matplotlib.figure.Figure at 0x7f39eabf5fd0&gt;
+<div class="highlight-python"><div class="highlight"><pre>   WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
 
 
-### Get information on the Series Before creating the CorSer object it
+Get information on the Series
 </pre></div>
 </div>
-<p>is possible to consult the available measurements series using
-<em>cor_log()</em>. Then for each <strong>serie</strong> of a given <strong>day</strong> it is possible
-to get:</p>
+<hr class="docutils" />
+<p>Before creating the CorSer object it is possible to consult the
+available measurements series using <em>cor_log()</em>. Then for each
+<strong>serie</strong> of a given <strong>day</strong> it is possible to get:</p>
 <ul class="simple">
 <li>The involved subject(s)</li>
 <li>The radio technology</li>
@@ -711,7 +724,9 @@ to get:</p>
 
 
 
-## Load Serie As an example, serie 6 from day 11 can be loaded using<p>the following command:</p>
+Load Serie<hr class="docutils" />
+<p>As an example, serie 6 from day 11 can be loaded using the following
+command:</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">=</span><span class="n">CorSer</span><span class="p">(</span><span class="n">serie</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">day</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -748,11 +763,13 @@ obtained just by calling the object itself:</p>
 
 
 
-## Available data
-
-### Radio DataFrames
+Available data
 </pre></div>
 </div>
+<hr class="docutils" />
+<blockquote>
+<div>Radio DataFrames</div></blockquote>
+<hr class="docutils" />
 <p>Data frames are <em>Pandas</em> objects which can be interpreted as tables.</p>
 <ul class="simple">
 <li>Each line correspond a given timestamp</li>
@@ -771,160 +788,163 @@ are available:</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">hkb</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
-<div style="max-height:1000px;max-width:1500px;overflow:auto;">
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>AP1-AP2</th>
-      <th>AP1-AP3</th>
-      <th>AP1-AP4</th>
-      <th>AP1-HeadRight</th>
-      <th>AP1-TorsoTopRight</th>
-      <th>AP1-TorsoTopLeft</th>
-      <th>AP1-BackCenter</th>
-      <th>AP1-ElbowRight</th>
-      <th>AP1-ElbowLeft</th>
-      <th>AP1-HipRight</th>
-      <th>...</th>
-      <th>WristRight-WristLeft</th>
-      <th>WristRight-KneeLeft</th>
-      <th>WristRight-AnkleLeft</th>
-      <th>WristRight-AnkleRight</th>
-      <th>WristLeft-KneeLeft</th>
-      <th>WristLeft-AnkleLeft</th>
-      <th>WristLeft-AnkleRight</th>
-      <th>KneeLeft-AnkleLeft</th>
-      <th>KneeLeft-AnkleRight</th>
-      <th>AnkleLeft-AnkleRight</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0.000000</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>0.010001</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>0.020002</th>
-      <td>-60</td>
-      <td>-64</td>
-      <td>-61</td>
-      <td>-71</td>
-      <td>-81</td>
-      <td>-73</td>
-      <td>-78</td>
-      <td>-79</td>
-      <td>-84</td>
-      <td>-73</td>
-      <td>...</td>
-      <td>-64</td>
-      <td>-88</td>
-      <td>-64</td>
-      <td>-55</td>
-      <td>-63</td>
-      <td>-61</td>
-      <td>-77</td>
-      <td>-60</td>
-      <td>-84</td>
-      <td>-79</td>
-    </tr>
-    <tr>
-      <th>0.030003</th>
-      <td>-60</td>
-      <td>-64</td>
-      <td>-61</td>
-      <td>-71</td>
-      <td>-81</td>
-      <td>-73</td>
-      <td>-78</td>
-      <td>-79</td>
-      <td>-84</td>
-      <td>-73</td>
-      <td>...</td>
-      <td>-64</td>
-      <td>-88</td>
-      <td>-64</td>
-      <td>-55</td>
-      <td>-63</td>
-      <td>-61</td>
-      <td>-77</td>
-      <td>-60</td>
-      <td>-84</td>
-      <td>-79</td>
-    </tr>
-    <tr>
-      <th>0.040004</th>
-      <td>-60</td>
-      <td>-64</td>
-      <td>-61</td>
-      <td>-71</td>
-      <td>-81</td>
-      <td>-73</td>
-      <td>-78</td>
-      <td>-79</td>
-      <td>-84</td>
-      <td>-73</td>
-      <td>...</td>
-      <td>-64</td>
-      <td>-88</td>
-      <td>-64</td>
-      <td>-55</td>
-      <td>-63</td>
-      <td>-61</td>
-      <td>-77</td>
-      <td>-60</td>
-      <td>-84</td>
-      <td>-79</td>
-    </tr>
-  </tbody>
-</table>
-<p>5 rows × 120 columns</p>
-</div><div class="section" id="non-radio-dataframes">
-<h2>&nbsp;Non Radio DataFrames<a class="headerlink" href="#non-radio-dataframes" title="Permalink to this headline">¶</a></h2>
+   <div style="max-height:1000px;max-width:1500px;overflow:auto;">
+   <table border="1" class="dataframe">
+     <thead>
+       <tr style="text-align: right;">
+         <th></th>
+         <th>AP1-AP2</th>
+         <th>AP1-AP3</th>
+         <th>AP1-AP4</th>
+         <th>AP1-HeadRight</th>
+         <th>AP1-TorsoTopRight</th>
+         <th>AP1-TorsoTopLeft</th>
+         <th>AP1-BackCenter</th>
+         <th>AP1-ElbowRight</th>
+         <th>AP1-ElbowLeft</th>
+         <th>AP1-HipRight</th>
+         <th>...</th>
+         <th>WristRight-WristLeft</th>
+         <th>WristRight-KneeLeft</th>
+         <th>WristRight-AnkleLeft</th>
+         <th>WristRight-AnkleRight</th>
+         <th>WristLeft-KneeLeft</th>
+         <th>WristLeft-AnkleLeft</th>
+         <th>WristLeft-AnkleRight</th>
+         <th>KneeLeft-AnkleLeft</th>
+         <th>KneeLeft-AnkleRight</th>
+         <th>AnkleLeft-AnkleRight</th>
+       </tr>
+     </thead>
+     <tbody>
+       <tr>
+         <th>0.000000</th>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>...</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+       </tr>
+       <tr>
+         <th>0.010001</th>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>...</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+         <td>NaN</td>
+       </tr>
+       <tr>
+         <th>0.020002</th>
+         <td>-60</td>
+         <td>-64</td>
+         <td>-61</td>
+         <td>-71</td>
+         <td>-81</td>
+         <td>-73</td>
+         <td>-78</td>
+         <td>-79</td>
+         <td>-84</td>
+         <td>-73</td>
+         <td>...</td>
+         <td>-64</td>
+         <td>-88</td>
+         <td>-64</td>
+         <td>-55</td>
+         <td>-63</td>
+         <td>-61</td>
+         <td>-77</td>
+         <td>-60</td>
+         <td>-84</td>
+         <td>-79</td>
+       </tr>
+       <tr>
+         <th>0.030003</th>
+         <td>-60</td>
+         <td>-64</td>
+         <td>-61</td>
+         <td>-71</td>
+         <td>-81</td>
+         <td>-73</td>
+         <td>-78</td>
+         <td>-79</td>
+         <td>-84</td>
+         <td>-73</td>
+         <td>...</td>
+         <td>-64</td>
+         <td>-88</td>
+         <td>-64</td>
+         <td>-55</td>
+         <td>-63</td>
+         <td>-61</td>
+         <td>-77</td>
+         <td>-60</td>
+         <td>-84</td>
+         <td>-79</td>
+       </tr>
+       <tr>
+         <th>0.040004</th>
+         <td>-60</td>
+         <td>-64</td>
+         <td>-61</td>
+         <td>-71</td>
+         <td>-81</td>
+         <td>-73</td>
+         <td>-78</td>
+         <td>-79</td>
+         <td>-84</td>
+         <td>-73</td>
+         <td>...</td>
+         <td>-64</td>
+         <td>-88</td>
+         <td>-64</td>
+         <td>-55</td>
+         <td>-63</td>
+         <td>-61</td>
+         <td>-77</td>
+         <td>-60</td>
+         <td>-84</td>
+         <td>-79</td>
+       </tr>
+     </tbody>
+   </table>
+   <p>5 rows × 120 columns</p>
+   </div>
+
+
+
+Non Radio DataFrames<hr class="docutils" />
 <p>Extra data frames are also available to acces to non radio information.
 In particular, it exists :</p>
 <ul class="simple">
@@ -1201,7 +1221,8 @@ distances between the different radio links.</li>
 
 
 
-### Involved devices (*S.dev*)<p>The <em>S.dev</em> command allows to obtain the complete list of devices
+Involved devices (*S.dev*)<hr class="docutils" />
+<p>The <em>S.dev</em> command allows to obtain the complete list of devices
 involved in the serie and:</p>
 <ul class="simple">
 <li>the Name of the device used in the radio dataframe</li>
@@ -1239,9 +1260,10 @@ involved in the serie and:</p>
    --------------------------------------------------------
 
 
-## Accessing the data
+Accessing the data
 </pre></div>
 </div>
+<hr class="docutils" />
 <p>In order to help people not familiar with the Pandas query format, some
 useful methods are provided in order to extract values from radio and
 non radio dataframes.</p>
@@ -1424,8 +1446,9 @@ Pandas object by using the &#8220;*values*&#8221; method :</strong></p>
 
 
 
-### Get link value (<em>S.getlink</em>)
+Get link value (<em>S.getlink</em>)
 </pre>
+<hr class="docutils" />
 <p>The value of a link <em>a</em> and <em>b</em> at a specific time or range or time can
 be obtained by specifying:</p>
 <ul class="simple">
@@ -1468,8 +1491,9 @@ with:</p>
 
 
 
-### Get link distance (<em>S.getlinkd</em>)
+Get link distance (<em>S.getlinkd</em>)
 </pre>
+<hr class="docutils" />
 <p>The ground truth distance separating a device <em>a</em> and device <em>b</em> at a
 specific time or range or time can be obtained by specifying:</p>
 <ul class="simple">
@@ -1511,11 +1535,13 @@ with:</p>
 
 
 
-## Visualizing the Data
-
-### Native Pandas Vizualization
+Visualizing the Data
 </pre></div>
 </div>
+<hr class="docutils" />
+<blockquote>
+<div>Native Pandas Vizualization</div></blockquote>
+<hr class="docutils" />
 <p>Because radio data in CorSer are stored into Pandas objects, convenient
 vizualization method are directly available. Most of them can be found
 here : <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/visualization.html">http://pandas.pydata.org/pandas-docs/stable/visualization.html</a></p>
@@ -1536,11 +1562,12 @@ with :</p>
 <div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7f39e3a54f50&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Corser_30_1.png" src="../../_images/Corser_30_1.png" />
+<img alt="../../_images/Corser_45_1.png" src="../../_images/Corser_45_1.png" />
 <p>In addition, CorSer also provides specific plotting methods which
 includes extra features.</p>
 <blockquote>
-<div>### Plot method (S.plot)</div></blockquote>
+<div>Plot method (S.plot)</div></blockquote>
+<hr class="docutils" />
 <p>The plot function allows to display the radio values of a link. The main
 parameters are always the same:</p>
 <ul class="simple">
@@ -1565,10 +1592,9 @@ seconds and 5.2 seconds with:</p>
  &lt;matplotlib.axes.AxesSubplot at 0x7f39e3aa97d0&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/Corser_33_1.png" src="../../_images/Corser_33_1.png" />
-</div>
+<img alt="../../_images/Corser_49_1.png" src="../../_images/Corser_49_1.png" />
 <div class="section" id="plot-distance">
-<h3>&nbsp;Plot distance<a class="headerlink" href="#plot-distance" title="Permalink to this headline">¶</a></h3>
+<h4>Plot distance<a class="headerlink" href="#plot-distance" title="Permalink to this headline">¶</a></h4>
 <p>As well, it is possible to plot the distance using the <em>distance</em>
 parameter</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">],</span><span class="n">distance</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
@@ -1578,7 +1604,7 @@ parameter</p>
  &lt;matplotlib.axes.AxesSubplot at 0x7f39e38e6e90&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/Corser_35_1.png" src="../../_images/Corser_35_1.png" />
+<img alt="../../_images/Corser_52_1.png" src="../../_images/Corser_52_1.png" />
 <p>It is also possible to get the same result than with the Pandas
 procedure with the following code :</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c"># plot value</span>
@@ -1597,6 +1623,7 @@ procedure with the following code :</p>
  &lt;matplotlib.axes.AxesSubplot at 0x7f39e3799410&gt;)
 </pre></div>
 </div>
+<hr class="docutils" />
 <p>In order to go further in the radio value interpretation, it is
 convenient to have some extra information about the <strong>optical
 visibility/occultation</strong> of devices involved in a link.</p>
@@ -1615,7 +1642,8 @@ denoted <strong>NLOS</strong> wheras <strong>clear</strong> area denotes <strong
  &lt;matplotlib.axes.AxesSubplot at 0x7f39e368edd0&gt;)
 </pre></div>
 </div>
-<p>As well it is possible to determine and indcicate if the subject is
+<hr class="docutils" />
+<p>As well it is possible to determine and indicate whether the subject is
 static or not by using the plot mobility method (<em>S.pltmob</em>). The
 succession of Static and Mobile sequences are denoted <img class="math" src="../../_images/math/a2c333ee04c76b4bcd180a5cd3cf604544500130.png" alt="S_x"/> and
 <img class="math" src="../../_images/math/ebd8f49328250a78d0c8062f04a12f0a74b9d649.png" alt="M_x"/> resplectively, where <img class="math" src="../../_images/math/188c175aac0a8a9c22499336711b5d7256407254.png" alt="x"/> is an index of the sequence.</p>
@@ -1623,11 +1651,11 @@ succession of Static and Mobile sequences are denoted <img class="math" src="../
 <span class="n">S</span><span class="o">.</span><span class="n">pltmob</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f39e377de50&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7f39e35b65d0&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f194f27e2d0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7f194f021310&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/Corser_41_1.png" src="../../_images/Corser_41_1.png" />
+<img alt="../../_images/Corser_60_1.png" src="../../_images/Corser_60_1.png" />
 <p>The 2 upmentionned methods can also be used simultaneously as shown in
 the following example :</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c"># plot data in green)</span>
@@ -1638,10 +1666,11 @@ the following example :</p>
 <span class="n">S</span><span class="o">.</span><span class="n">pltmob</span><span class="p">(</span><span class="n">showvel</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">ylim</span><span class="o">=</span><span class="p">([</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="o">-</span><span class="mi">40</span><span class="p">]),</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f39e3396fd0&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7f39e33d3a10&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f194f273bd0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7f194f35ff50&gt;)
 </pre></div>
 </div>
+<hr class="docutils" />
 <p>With the help of the Mayavi Library, the CorSer class allows to display
 in 3D :</p>
 <ul class="simple">
@@ -1664,7 +1693,8 @@ scene with body(ies) and associated devices at 4 different timestamp</p>
 /home/uguen/anaconda/lib/python2.7/site-packages/traits/has_traits.py:1766: FutureWarning: comparison to <cite>None</cite> will result in an elementwise object comparison in the future.
   setattr( self, name, value )
 </pre>
-<img alt="../../_images/Corser_45_1.png" src="../../_images/Corser_45_1.png" />
+<img alt="../../_images/Corser_65_1.png" src="../../_images/Corser_65_1.png" />
+</div>
 </div>
 <div class="section" id="specify-time-bodytime-parameter">
 <h3>Specify time (<em>bodytime</em> parameter)<a class="headerlink" href="#specify-time-bodytime-parameter" title="Permalink to this headline">¶</a></h3>
@@ -1678,7 +1708,7 @@ scene with body(ies) and associated devices at 4 different timestamp</p>
 <span class="n">myu</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s">&#39;fig2&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Corser_47_0.png" src="../../_images/Corser_47_0.png" />
+<img alt="../../_images/Corser_68_0.png" src="../../_images/Corser_68_0.png" />
 </div>
 <div class="section" id="display-trajectory-trajectory-parameter">
 <h3>display trajectory (<em>trajectory</em> parameter)<a class="headerlink" href="#display-trajectory-trajectory-parameter" title="Permalink to this headline">¶</a></h3>
@@ -1688,6 +1718,7 @@ scene with body(ies) and associated devices at 4 different timestamp</p>
 <span class="n">myu</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s">&#39;fig3&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<hr class="docutils" />
 <p>The method *S._show3i()* allows to display the 3D scene with an extra
 window incluying a slider acting like a jog shuttle, to choose the
 timestamp to vizualize.</p>
@@ -1698,7 +1729,8 @@ timestamp to vizualize.</p>
 <span class="n">myu</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s">&#39;fig4&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Corser_51_0.png" src="../../_images/Corser_51_0.png" />
+<img alt="../../_images/Corser_73_0.png" src="../../_images/Corser_73_0.png" />
+<hr class="docutils" />
 <p>The visibility matrix can be displayed simultaneously to the 3D view.</p>
 <p>For that purpose a visibility/occultation matrix is computed the first
 time the vizualization is called. The following code displays the
@@ -1712,16 +1744,25 @@ tisibility matrix and associated 3D scene at the inital time
 </div>
 <div class="highlight-python"><div class="highlight"><pre>Visibility is computed only once, Please wait
 
-processing shadowing from  Nicolas
+processing shadowing from
 </pre></div>
 </div>
-<img alt="../../_images/Corser_53_1.png" src="../../_images/Corser_53_1.png" />
-<img alt="../../_images/Corser_53_2.png" src="../../_images/Corser_53_2.png" />
+<pre class="literal-block">
+/home/uguen/anaconda/lib/python2.7/site-packages/traits/has_traits.py:1766: FutureWarning: comparison to <cite>None</cite> will result in an elementwise object comparison in the future.
+  setattr( self, name, value )
+/home/uguen/anaconda/lib/python2.7/site-packages/traits/has_traits.py:1771: FutureWarning: comparison to <cite>None</cite> will result in an elementwise object comparison in the future.
+  setattr( self, name, value )
+</pre>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Nicolas</span>
+</pre></div>
+</div>
+<img alt="../../_images/Corser_76_3.png" src="../../_images/Corser_76_3.png" />
+<img alt="../../_images/Corser_76_4.png" src="../../_images/Corser_76_4.png" />
 </div>
 </div>
 </div>
 <div class="section" id="using-pylayers-ray-tracing-with-corser-data">
-<h1>&nbsp;Using Pylayers Ray-tracing with CorSer data<a class="headerlink" href="#using-pylayers-ray-tracing-with-corser-data" title="Permalink to this headline">¶</a></h1>
+<h1>Using Pylayers Ray-tracing with CorSer data<a class="headerlink" href="#using-pylayers-ray-tracing-with-corser-data" title="Permalink to this headline">¶</a></h1>
 <p>Coming soon, work in progress</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pylayers.simul.simultraj</span> <span class="kn">as</span> <span class="nn">st</span>
 </pre></div>
