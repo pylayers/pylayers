@@ -1,0 +1,774 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The class Cone &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../index.html"><img src="../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">The class Cone</a><ul>
+<li><a class="reference internal" href="#is-a-point-in-the-cone-belong-point">Is a point in the cone : belong_point()</a></li>
+<li><a class="reference internal" href="#creating-a-cone-from-2-segments-from2segs">Creating a Cone from 2 segments <tt class="docutils literal"><span class="pre">from2segs()</span></tt></a></li>
+<li><a class="reference internal" href="#conditional-graph">Conditional Graph</a><ul>
+<li><a class="reference internal" href="#benchmark-normalizing-a-vector">Benchmark normalizing a vector</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#debug">Debug</a></li>
+<li><a class="reference internal" href="#geomutil-mirror">geomutil.mirror</a></li>
+<li><a class="reference internal" href="#geometric-probability">Geometric probability</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/notebook/8-MISC/Cone.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
+<span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
+    <span class="n">styles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;../styles/custom.css&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="n">styles</span><span class="p">)</span>
+<span class="n">css_styling</span><span class="p">()</span>
+</pre></div>
+</div>
+<style>
+    @font-face {
+        font-family: "Computer Modern";
+        src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
+    }
+    div.cell{
+        width:800px;
+        margin-left:16% !important;
+        margin-right:auto;
+    }
+    h1 {
+        font-family: Helvetica, serif;
+    }
+    h4{
+        margin-top:12px;
+        margin-bottom: 3px;
+       }
+    div.text_cell_render{
+        font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+        line-height: 145%;
+        font-size: 130%;
+        width:800px;
+        margin-left:auto;
+        margin-right:auto;
+    }
+    .CodeMirror{
+            font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
+    }
+    .prompt{
+        display: None;
+    }
+    .text_cell_render h5 {
+        font-weight: 300;
+        font-size: 22pt;
+        color: #4057A1;
+        font-style: italic;
+        margin-bottom: .5em;
+        margin-top: 0.5em;
+        display: block;
+    }
+
+    .warning{
+        color: rgb( 240, 20, 20 )
+        }
+</style>
+<script>
+    MathJax.Hub.Config({
+                        TeX: {
+                           extensions: ["AMSmath.js"]
+                           },
+                tex2jax: {
+                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+                },
+                displayAlign: 'center', // Change this to 'center' to center equations.
+                "HTML-CSS": {
+                    styles: {'.MathJax_Display': {"margin": 4}}
+                }
+        });
+</script><div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.util.cone</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.util.plotutil</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<div class="section" id="the-class-cone">
+<h1>The class Cone<a class="headerlink" href="#the-class-cone" title="Permalink to this headline">¶</a></h1>
+<p>The
+<tt class="docutils literal"><span class="pre">`Cone</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.util.cone.html">http://pylayers.github.io/pylayers/modules/pylayers.util.cone.html</a>&gt;`__
+class implements different methods for handling planar cones.</p>
+<p>A planar cone is defined as : + an apex + two vectors <img class="math" src="../../_images/math/db54580d6975bb9f12fdb7149fdd7c99e3cdbe57.png" alt="\vec{v}_a"/>
+and <img class="math" src="../../_images/math/0bad42c956ad9ec58813c466253fdbe03e33e1a8.png" alt="\vec{v}_b"/> not necessarily normalized.</p>
+<p>Let create a cone.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">va</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">vb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">Cone</span><span class="p">(</span><span class="n">va</span><span class="p">,</span><span class="n">vb</span><span class="p">,</span><span class="n">apex</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">3</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>From those parameters the Cone <tt class="docutils literal"><span class="pre">__init__</span></tt> constructs 2 unitary vectors
+<img class="math" src="../../_images/math/1f59d75a7396b110ca07515a8a7fad245829600c.png" alt="\hat{u}"/> and <img class="math" src="../../_images/math/3df42ab56e6e55b7edb9134ba27d96c1a837641a.png" alt="\hat{v}"/> such that :</p>
+<ul class="simple">
+<li><img class="math" src="../../_images/math/9f90f82e042213107304ee85789bf54b9e8d8ed6.png" alt="\hat{u} \times \hat{v} = c\hat{z} \;\; \textrm{with} \;\; c &gt;0"/></li>
+</ul>
+<p>This can be interpreted as applying an anticlockwise rotation from
+<img class="math" src="../../_images/math/1f59d75a7396b110ca07515a8a7fad245829600c.png" alt="\hat{u}"/> to <img class="math" src="../../_images/math/3df42ab56e6e55b7edb9134ba27d96c1a837641a.png" alt="\hat{v}"/>.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&quot;Unitary vector u&quot;</span><span class="p">,</span><span class="n">C</span><span class="o">.</span><span class="n">u</span>
+<span class="k">print</span> <span class="s">&quot;Unitary vector v&quot;</span><span class="p">,</span><span class="n">C</span><span class="o">.</span><span class="n">v</span>
+<span class="k">print</span> <span class="s">&quot;dot(u,v)&quot;</span><span class="p">,</span><span class="n">C</span><span class="o">.</span><span class="n">dot</span>
+<span class="k">print</span> <span class="s">&quot;cross(u,v)&quot;</span><span class="p">,</span><span class="n">C</span><span class="o">.</span><span class="n">cross</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Unitary vector u [ 0.89442719  0.4472136 ]
+Unitary vector v [ 0.31622777  0.9486833 ]
+dot(u,v) 0.707106781187
+cross(u,v) 0.707106781187
+</pre></div>
+</div>
+<div class="section" id="is-a-point-in-the-cone-belong-point">
+<h2>Is a point in the cone : belong_point()<a class="headerlink" href="#is-a-point-in-the-cone-belong-point" title="Permalink to this headline">¶</a></h2>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">p</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">6000</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">belong_point</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">nb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="ow">not</span> <span class="n">x</span><span class="p">,</span><span class="n">b</span><span class="p">))</span>
+<span class="n">pr</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span><span class="n">b</span><span class="p">]</span>
+<span class="n">pb</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span><span class="n">nb</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pr</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">pr</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;.r&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pb</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">pb</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;.b&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;belong_cone method&#39;</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">)</span>
+<span class="c">#plt.axis(&#39;off&#39;)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7fdd131bb150&gt;
+</pre></div>
+</div>
+<img alt="../../_images/Cone_12_1.png" src="../../_images/Cone_12_1.png" />
+</div>
+<div class="section" id="creating-a-cone-from-2-segments-from2segs">
+<h2>Creating a Cone from 2 segments <tt class="docutils literal"><span class="pre">from2segs()</span></tt><a class="headerlink" href="#creating-a-cone-from-2-segments-from2segs" title="Permalink to this headline">¶</a></h2>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">seg0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+<span class="n">seg1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Cs</span><span class="o">=</span><span class="n">Cone</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Cs</span><span class="o">.</span><span class="n">from2segs</span><span class="p">(</span><span class="n">seg0</span><span class="p">,</span><span class="n">seg1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Cs</span><span class="o">.</span><span class="n">apex</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span> <span class="mf">1.5</span><span class="p">,</span>  <span class="mf">2.</span> <span class="p">])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Cs</span><span class="o">.</span><span class="n">seg1</span><span class="o">-</span><span class="n">seg1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+       <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Cs</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fdd1381f710&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7fdd1381fc10&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/Cone_19_1.png" src="../../_images/Cone_19_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">b</span><span class="o">=</span><span class="n">Cs</span><span class="o">.</span><span class="n">belong_point</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">pta</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">phe</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">nb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="ow">not</span> <span class="n">x</span><span class="p">,</span><span class="n">b</span><span class="p">))</span>
+<span class="n">pr</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span><span class="n">b</span><span class="p">]</span>
+<span class="n">pb</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span><span class="n">nb</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">Cs</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="c">#displot(pta[:,bs],phe[:,bs],color=&#39;k&#39;)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pr</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">pr</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;.r&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pb</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">pb</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;.b&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;equal&#39;</span><span class="p">)</span>
+<span class="c">#plt.axis(&#39;off&#39;)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">15.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">20.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/Cone_23_1.png" src="../../_images/Cone_23_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Cs</span><span class="o">.</span><span class="n">seg1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+       <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">bi</span><span class="o">=</span><span class="n">Cs</span><span class="o">.</span><span class="n">belong_point2</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre>%timeit b=Cs.belong_point(p)
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>10000 loops, best of 3: 103 µs per loop
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#nb = np.array(map(lambda x: not x,bo))</span>
+<span class="n">pr</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span><span class="n">bi</span><span class="p">]</span>
+<span class="c">#pb = p[:,bo2]</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">Cs</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pr</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">pr</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;.r&#39;</span><span class="p">)</span>
+<span class="c">#ax.plot(pb[0,:],pb[1,:],&#39;.b&#39;)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;equal&#39;</span><span class="p">)</span>
+<span class="c">#plt.axis(&#39;off&#39;)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">8.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">15.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/Cone_27_1.png" src="../../_images/Cone_27_1.png" />
+<p>The adressed problem consists in determining whether a segment lies in
+the cone or not. The condition is satisfied if not all segments
+termination are outside the cone on the same side of the cone. This is
+implemented in the method <tt class="docutils literal"><span class="pre">Cone.outside</span></tt></p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">b1</span><span class="p">,</span><span class="n">b2</span><span class="o">=</span><span class="n">Cs</span><span class="o">.</span><span class="n">outside_point</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">pr</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span><span class="n">b1</span><span class="p">]</span>
+<span class="n">pb</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span><span class="n">b2</span><span class="p">]</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">Cs</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pr</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">pr</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;.r&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pb</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">pb</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;.b&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;equal&#39;</span><span class="p">)</span>
+<span class="c">#plt.axis(&#39;off&#39;)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">15.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">20.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/Cone_30_1.png" src="../../_images/Cone_30_1.png" />
+<p>Un cone est un objet qui va servir à construire les objets <tt class="docutils literal"><span class="pre">Beams</span></tt>. Un
+<tt class="docutils literal"><span class="pre">Beam</span></tt> est un <tt class="docutils literal"><span class="pre">Cone</span></tt> qui englobe les segments d&#8217;une <tt class="docutils literal"><span class="pre">Signature</span></tt>.
+Une signature et un point donne un <tt class="docutils literal"><span class="pre">Beam</span></tt>. A un <tt class="docutils literal"><span class="pre">Beam</span></tt> est associé
+un <tt class="docutils literal"><span class="pre">Cone</span></tt> dont l&#8217;apex est une ancre virtuelle.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">pta</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">400</span><span class="p">)</span>
+<span class="n">phe</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">400</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">,</span><span class="n">phe</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fdd1315f690&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7fdd12f99090&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/Cone_33_1.png" src="../../_images/Cone_33_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Cs</span><span class="o">.</span><span class="n">seg0</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+       <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">typ</span><span class="p">,</span> <span class="n">proba</span> <span class="o">=</span> <span class="n">Cs</span><span class="o">.</span><span class="n">belong_seg</span><span class="p">(</span><span class="n">pta</span><span class="p">,</span><span class="n">phe</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">Cs</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">bs1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">typ</span><span class="o">==</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">bs2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">typ</span><span class="o">==</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">bs3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">typ</span><span class="o">==</span><span class="mi">3</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">bs4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">typ</span><span class="o">==</span><span class="mi">4</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">bs5</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">typ</span><span class="o">==</span><span class="mi">5</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">bs6</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">typ</span><span class="o">==</span><span class="mi">6</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="n">bs1</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">bs1</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;g&#39;</span><span class="p">)</span>
+<span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="n">bs2</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">bs2</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
+<span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="n">bs3</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">bs3</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
+<span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="n">bs4</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">bs4</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="n">bs5</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">bs5</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="c">#displot(pta[:,bs6],phe[:,bs6],color=&#39;m&#39;)</span>
+<span class="c">#displot(pta[:,bs],phe[:,bs],color=&#39;blue&#39;)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fdd12f89c50&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7fdd12ffa550&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/Cone_36_1.png" src="../../_images/Cone_36_1.png" />
+<p>There is different way to create a <tt class="docutils literal"><span class="pre">Cone</span></tt> either from 2 segments
+<tt class="docutils literal"><span class="pre">from2segs</span></tt> or from one point and one segment <tt class="docutils literal"><span class="pre">fromptseg</span></tt>. This
+second method is used when the field is going from a diffraction point
+to a segment.</p>
+</div>
+<div class="section" id="conditional-graph">
+<h2>Conditional Graph<a class="headerlink" href="#conditional-graph" title="Permalink to this headline">¶</a></h2>
+<p><img class="math" src="../../_images/math/f73bdbe32e898c36e2a3ccbdc51d8cd1798861e9.png" alt="\mathcal{G}_i"/> is a <tt class="docutils literal"><span class="pre">conditional</span> <span class="pre">graph</span></tt> meaning that the edge
+indicates which is the list of authorized next edge for the output. A
+ray being a sequence <img class="math" src="../../_images/math/1e88b12e8413a656088da2a3e88b6387c81e934c.png" alt="{\nu_k}"/> of nodes of <img class="math" src="../../_images/math/f73bdbe32e898c36e2a3ccbdc51d8cd1798861e9.png" alt="\mathcal{G}_i"/>.
+The cone angular sector represents the whole set and each intercepting
+segment, is a part or this whole set. This can be interpreted as a
+probability. This means that the research of rays could be done
+stochastically in a very efficient manner. This is not fully implemented
+yet.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Cb</span> <span class="o">=</span> <span class="n">Cone</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Cb</span><span class="o">.</span><span class="n">u</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span> <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">seg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]])</span>
+<span class="n">pt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Cb</span><span class="o">.</span><span class="n">fromptseg</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span><span class="n">seg</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">typ</span><span class="p">,</span><span class="n">proba</span> <span class="o">=</span> <span class="n">Cb</span><span class="o">.</span><span class="n">belong_seg</span><span class="p">(</span><span class="n">pta</span><span class="p">,</span><span class="n">phe</span><span class="p">)</span>
+<span class="n">bs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">typ</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Cb</span><span class="o">.</span><span class="n">seg1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+       <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Cb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="n">bs</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">bs</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fdd1142a190&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7fdd20a25e90&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/Cone_46_1.png" src="../../_images/Cone_46_1.png" />
+<div class="section" id="benchmark-normalizing-a-vector">
+<h3>Benchmark normalizing a vector<a class="headerlink" href="#benchmark-normalizing-a-vector" title="Permalink to this headline">¶</a></h3>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre>%timeit a/np.sqrt(np.dot(a,a))
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>100000 loops, best of 3: 5.02 µs per loop
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre>%timeit a/sp.linalg.norm(a)
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>100000 loops, best of 3: 10.7 µs per loop
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre>%timeit a/np.sqrt(np.sum(a*a,axis=0))
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>100000 loops, best of 3: 9.17 µs per loop
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="debug">
+<h2>Debug<a class="headerlink" href="#debug" title="Permalink to this headline">¶</a></h2>
+<p>This a case which where segments <tt class="docutils literal"><span class="pre">seg0</span></tt> and <tt class="docutils literal"><span class="pre">seg1</span></tt> are orthogonal</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">seg0</span> <span class="o">=</span> <span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">25.768</span><span class="p">,</span> <span class="o">-</span><span class="mf">25.822</span><span class="p">],</span>
+       <span class="p">[</span>  <span class="mf">4.28</span> <span class="p">,</span>   <span class="mf">9.925</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">seg1</span> <span class="o">=</span> <span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">26.848</span><span class="p">,</span> <span class="o">-</span><span class="mf">26.805</span><span class="p">],</span>
+       <span class="p">[</span>  <span class="mf">5.415</span><span class="p">,</span>   <span class="mf">4.515</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">cn</span> <span class="o">=</span> <span class="n">Cone</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">cn</span><span class="o">.</span><span class="n">from2segs</span><span class="p">(</span><span class="n">seg0</span><span class="p">,</span><span class="n">seg1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">pta</span> <span class="o">=</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">27.836</span><span class="p">,</span> <span class="o">-</span><span class="mf">27.833</span><span class="p">,</span> <span class="o">-</span><span class="mf">27.833</span><span class="p">,</span> <span class="o">-</span><span class="mf">27.817</span><span class="p">,</span> <span class="o">-</span><span class="mf">26.848</span><span class="p">,</span> <span class="o">-</span><span class="mf">27.774</span><span class="p">,</span> <span class="o">-</span><span class="mf">26.952</span><span class="p">,</span>
+        <span class="o">-</span><span class="mf">28.062</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">10.926</span><span class="p">,</span>  <span class="mf">10.686</span><span class="p">,</span>  <span class="mf">10.686</span><span class="p">,</span>   <span class="mf">8.956</span><span class="p">,</span>   <span class="mf">5.415</span><span class="p">,</span>   <span class="mf">4.506</span><span class="p">,</span>  <span class="mf">10.934</span><span class="p">,</span>    <span class="mf">8.954</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">phe</span> <span class="o">=</span> <span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">27.835</span><span class="p">,</span> <span class="o">-</span><span class="mf">27.835</span><span class="p">,</span> <span class="o">-</span><span class="mf">28.078</span><span class="p">,</span> <span class="o">-</span><span class="mf">27.774</span><span class="p">,</span> <span class="o">-</span><span class="mf">26.882</span><span class="p">,</span> <span class="o">-</span><span class="mf">26.805</span><span class="p">,</span> <span class="o">-</span><span class="mf">27.836</span><span class="p">,</span>
+        <span class="o">-</span><span class="mf">28.078</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">10.891</span><span class="p">,</span>  <span class="mf">10.891</span><span class="p">,</span>  <span class="mf">10.683</span><span class="p">,</span>   <span class="mf">4.506</span><span class="p">,</span>   <span class="mf">8.965</span><span class="p">,</span>   <span class="mf">4.515</span><span class="p">,</span>  <span class="mf">10.926</span><span class="p">,</span>
+         <span class="mf">10.683</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">typ</span><span class="p">,</span><span class="n">proba</span> <span class="o">=</span> <span class="n">cn</span><span class="o">.</span><span class="n">belong_seg</span><span class="p">(</span><span class="n">pta</span><span class="p">,</span><span class="n">phe</span><span class="p">)</span>
+<span class="n">bn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">typ</span><span class="o">==</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">proba</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span> <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.36658801</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.36658801</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">cn</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="n">bn</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">bn</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fdd114b7810&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7fdd12f6da90&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/Cone_62_1.png" src="../../_images/Cone_62_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">cn</span><span class="o">.</span><span class="n">apex</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">26.67458396</span><span class="p">,</span>   <span class="mf">5.23275258</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">cn</span><span class="o">.</span><span class="n">seg1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">26.805</span><span class="p">,</span> <span class="o">-</span><span class="mf">26.848</span><span class="p">],</span>
+       <span class="p">[</span>  <span class="mf">4.515</span><span class="p">,</span>   <span class="mf">5.415</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">pta</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">27.836</span><span class="p">,</span>  <span class="mf">10.926</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">27.833</span><span class="p">,</span>  <span class="mf">10.686</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">27.833</span><span class="p">,</span>  <span class="mf">10.686</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">27.817</span><span class="p">,</span>   <span class="mf">8.956</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">26.848</span><span class="p">,</span>   <span class="mf">5.415</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">27.774</span><span class="p">,</span>   <span class="mf">4.506</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">26.952</span><span class="p">,</span>  <span class="mf">10.934</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">28.062</span><span class="p">,</span>   <span class="mf">8.954</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">phe</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">27.835</span><span class="p">,</span>  <span class="mf">10.891</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">27.835</span><span class="p">,</span>  <span class="mf">10.891</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">28.078</span><span class="p">,</span>  <span class="mf">10.683</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">27.774</span><span class="p">,</span>   <span class="mf">4.506</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">26.882</span><span class="p">,</span>   <span class="mf">8.965</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">26.805</span><span class="p">,</span>   <span class="mf">4.515</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">27.836</span><span class="p">,</span>  <span class="mf">10.926</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">28.078</span><span class="p">,</span>  <span class="mf">10.683</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">pta1</span><span class="o">=</span><span class="n">pta</span><span class="p">[:,</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">phe1</span><span class="o">=</span><span class="n">phe</span><span class="p">[:,</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">cn</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">displot</span><span class="p">(</span><span class="n">pta1</span><span class="p">,</span><span class="n">phe1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fdd13004250&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7fdd112bca50&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/Cone_68_1.png" src="../../_images/Cone_68_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">pta1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">27.774</span><span class="p">],</span>
+       <span class="p">[</span>  <span class="mf">4.506</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">phe1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">26.805</span><span class="p">],</span>
+       <span class="p">[</span>  <span class="mf">4.515</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">b</span> <span class="o">=</span> <span class="n">cn</span><span class="o">.</span><span class="n">belong_seg</span><span class="p">(</span><span class="n">pta1</span><span class="p">,</span><span class="n">phe1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="geomutil-mirror">
+<h2>geomutil.mirror<a class="headerlink" href="#geomutil-mirror" title="Permalink to this headline">¶</a></h2>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">10000</span><span class="p">)</span>
+<span class="n">pa</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pb</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">M</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">mirror</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">pa</span><span class="p">,</span><span class="n">pb</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">M</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">3.14982613</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.70314403</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.15545924</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.66050496</span><span class="p">,</span>
+        <span class="o">-</span><span class="mf">3.04438101</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.44244337</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.1325281</span> <span class="p">,</span> <span class="o">-</span><span class="mf">0.58860675</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.08353195</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.32841096</span><span class="p">,</span>
+         <span class="mf">0.56330277</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.45096549</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">displot</span><span class="p">(</span><span class="n">pa</span><span class="p">,</span><span class="n">pb</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;or&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">M</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;ob&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x7fdd11192590&gt;]
+</pre></div>
+</div>
+<img alt="../../_images/Cone_75_1.png" src="../../_images/Cone_75_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">pa</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pb</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pc</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">geu</span><span class="o">.</span><span class="n">isaligned</span><span class="p">(</span><span class="n">pa</span><span class="p">,</span><span class="n">pb</span><span class="p">,</span><span class="n">pc</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span> <span class="bp">True</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="geometric-probability">
+<h2>Geometric probability<a class="headerlink" href="#geometric-probability" title="Permalink to this headline">¶</a></h2>
+<p>The idea is to add an information of the fraction of the angular sector
+which is subtended by the intercepted segment.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">Cone</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">apex</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">3</span><span class="p">]))</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
+<span class="n">pta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">phe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">5.99</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pta</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">phe</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">typ</span><span class="p">,</span><span class="n">proba</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">belong_seg</span><span class="p">(</span><span class="n">pta</span><span class="p">,</span><span class="n">phe</span><span class="p">)</span>
+<span class="n">u0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">typ</span><span class="o">==</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">u1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">typ</span><span class="o">==</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">u2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">typ</span><span class="o">==</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">u3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">typ</span><span class="o">==</span><span class="mi">3</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">u4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">typ</span><span class="o">==</span><span class="mi">4</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">u5</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">typ</span><span class="o">==</span><span class="mi">5</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">u6</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">typ</span><span class="o">==</span><span class="mi">6</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">us</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span> <span class="p">((</span><span class="n">proba</span><span class="o">&lt;</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">proba</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">))</span> <span class="p">)</span>  <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="c">#col=[&#39;r&#39;,&#39;g&#39;,&#39;b&#39;,&#39;m&#39;]</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="n">us</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">us</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<img alt="../../_images/Cone_82_0.png" src="../../_images/Cone_82_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="c">#col=[&#39;r&#39;,&#39;g&#39;,&#39;b&#39;,&#39;m&#39;]</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="n">u1</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">u1</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">pass</span>
+<span class="k">print</span> <span class="n">proba</span><span class="p">[</span><span class="n">u1</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>[ 1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.
+  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.
+  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.
+  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.]
+</pre></div>
+</div>
+<img alt="../../_images/Cone_83_1.png" src="../../_images/Cone_83_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="n">u2</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">u2</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;g&#39;</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">pass</span>
+<span class="k">print</span><span class="p">(</span><span class="n">proba</span><span class="p">[</span><span class="n">u2</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>[ 0.01595383  0.20853493  0.16270922  0.67682437  0.25094575  0.65430395
+  0.38054079  0.05819736  0.65070121  0.44711885  0.14449714  0.93895135
+  0.76452284  0.81505421  0.5228525   0.21044162  0.19170093  0.08583838
+  0.7930226   0.59950852  0.6044619   0.76683796  0.50334732  0.14642156
+  0.53695567  0.64944684  0.48164823  0.32379581  0.04102593  0.41327271
+  0.66328808  0.44656266  0.52096101  0.99336419  0.45249353]
+</pre></div>
+</div>
+<img alt="../../_images/Cone_84_1.png" src="../../_images/Cone_84_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="n">u3</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">u3</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">pass</span>
+<span class="k">print</span><span class="p">(</span><span class="n">proba</span><span class="p">[</span><span class="n">u3</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>[ 0.50811604  0.54216416  0.09200085  0.09538675  0.56183513  0.24506377
+  0.49390972  0.47864877  0.46098     0.55426894  0.71363893  0.61054289
+  0.61538553  0.36069338  0.30402059  0.16022635  0.39796474  0.7026786
+  0.68156896  0.30630409  0.32182377  0.75955318  0.98633744  0.63593433
+  0.1942956   0.95099856  0.02630538  0.84815702  0.55291478  0.55484274
+  0.81245148  0.43951992  0.66188062  0.90786209  0.16843639  0.33305348
+  0.86592537  0.54656774  0.03408855]
+</pre></div>
+</div>
+<img alt="../../_images/Cone_85_1.png" src="../../_images/Cone_85_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="n">u4</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">u4</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">pass</span>
+<span class="k">print</span><span class="p">(</span><span class="n">proba</span><span class="p">[</span><span class="n">u4</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>[ 0.36947478  0.83270738  0.65399017  0.24624756  0.76102651  0.50346752
+  0.03398412  0.74576811]
+</pre></div>
+</div>
+<img alt="../../_images/Cone_86_1.png" src="../../_images/Cone_86_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="n">u5</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">u5</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<img alt="../../_images/Cone_87_0.png" src="../../_images/Cone_87_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="n">u6</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">u6</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<img alt="../../_images/Cone_88_0.png" src="../../_images/Cone_88_0.png" />
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2015, PyLayers developer team.
+      Last updated on Feb 24, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

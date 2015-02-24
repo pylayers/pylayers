@@ -7,6 +7,10 @@ cd ../2-AP
 git add *.html 
 cd ../3-PHY
 git add *.html 
+cd ../4-MOB
+git add *.html 
+cd ../8-MISC
+git add *.html 
 cd ../../notebooks
 git add * 
 cd ../_images
