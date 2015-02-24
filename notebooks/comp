@@ -1,0 +1,6 @@
+#!/bin/bash
+ipython nbconvert TOC.ipynb --to markdown 
+cat TOC.md | sed "s/\.ipynb/\.html/" > tempf
+mv tempf TOC.md
+pandoc --number-sections <TOC.md > TOC.html 
+

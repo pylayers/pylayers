@@ -1,0 +1,327 @@
+<h1 id="description-of-the-propagation-environment"><span class="header-section-number">1</span> Description of the propagation environment</h1>
+<p>The <code>Layout</code> class contains the data structure for describing an Indoor environment. It contains data structures necessary for the graph based ray tracing implemented in PyLayers. The class is implemented in the `<code>layout.py</code> <a href="http://pylayers.github.io/pylayers/modules/pylayers.gis.layout.html">http://pylayers.github.io/pylayers/modules/pylayers.gis.layout.html</a>`__ module</p>
+<p>.. code:: python</p>
+<pre><code>from pylayers.gis.layout import *
+from IPython.display import Image
+import os
+%matplotlib inline</code></pre>
+<p>.. parsed-literal::</p>
+<pre><code>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.</code></pre>
+<h2 id="getting-the-list-of-all-available-layouts-the-ls-method"><span class="header-section-number">1.1</span> Getting the list of all available Layouts : the <code>ls()</code> method</h2>
+<p>To create a default Layout</p>
+<p>.. code:: python</p>
+<pre><code>L=Layout()</code></pre>
+<p>.. code:: python</p>
+<pre><code>L.filename</code></pre>
+<p>.. parsed-literal::</p>
+<pre><code>&#39;defstr.ini&#39;</code></pre>
+<p>The <code>ls()</code> method lists the layout file which are available in the <code>struc</code> directory of the current project.</p>
+<p>.. code:: python</p>
+<pre><code>L.ls(&#39;ini&#39;)</code></pre>
+<p>.. parsed-literal::</p>
+<pre><code>[&#39;DLR.ini&#39;,
+ &#39;DLR2.ini&#39;,
+ &#39;MOCAP-small.ini&#39;,
+ &#39;MOCAP-small2.ini&#39;,
+ &#39;MOCAP.ini&#39;,
+ &#39;MOCAPext.ini&#39;,
+ &#39;TA-Office.ini&#39;,
+ &#39;TA-OfficeAir.ini&#39;,
+ &#39;W2PTIN.ini&#39;,
+ &#39;WHERE1.ini&#39;,
+ &#39;WHERE2.ini&#39;,
+ &#39;d24.ini&#39;,
+ &#39;defstr.ini&#39;,
+ &#39;defstr3.ini&#39;,
+ &#39;homeK_vf.ini&#39;,
+ &#39;klepal.ini&#39;,
+ &#39;nicta.ini&#39;,
+ &#39;scat1.ini&#39;,
+ &#39;scat2.ini&#39;,
+ &#39;scattering.ini&#39;,
+ &#39;test.ini&#39;]</code></pre>
+<p>.. code:: python</p>
+<pre><code>L=Layout(&#39;DLR.ini&#39;)</code></pre>
+<p>.. code:: python</p>
+<pre><code>L.showG(&#39;s&#39;)</code></pre>
+<p>.. parsed-literal::</p>
+<pre><code>(&lt;matplotlib.figure.Figure at 0x2acc36c62fd0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2acc632015d0&gt;)</code></pre>
+<p>.. image:: Layout_files/Layout_10_1.png</p>
+<p>To check which are the used slabs :</p>
+<p>.. code:: python</p>
+<pre><code>Slabs = np.unique(L.sla)
+for s in Slabs: 
+    if s in L.sl:
+        print L.sl[s]
+    </code></pre>
+<p>.. parsed-literal::</p>
+<pre><code>3D_WINDOW_GLASS : GLASS | AIR | GLASS | [0.005, 0.005, 0.005]
+
+AIR : AIR | [0.02]
+
+DOOR : WOOD | [0.03]
+
+METAL : METAL | [0.1]
+
+PARTITION : PLASTER | [0.1]
+
+WALL : BRICK | [0.07]</code></pre>
+<p>.. code:: python</p>
+<pre><code>L=Layout(&#39;WHERE1.ini&#39;)
+L</code></pre>
+<p>.. parsed-literal::</p>
+<pre><code>----------------
+WHERE1.ini
+----------------
+
+Number of points  : 281
+Number of segments  : 357
+Number of sub segments  : 71
+Number of cycles  : 80
+Number of rooms  : 33
+degree 0 : [-3]
+degree 1 : [-270 -264 -236 -235 -206  -15]
+degree 2 : 143
+degree 3 : 128
+degree 4 : [-211 -177 -171]
+
+xrange :(-28.13, 31.749)
+yrange :(4.258, 16.839)
+
+Useful dictionnaries
+----------------
+dca {cycle : []} cycle with an airwall
+sl {slab name : slab dictionary}
+name :  {slab :seglist} 
+
+Useful arrays
+----------------
+pt : numpy array of points 
+normal : numpy array of normal 
+offset : numpy array of offset 
+tsg : get segment index in Gs from tahe
+isss :  sub-segment index above Nsmax
+tgs : get segment index in tahe from Gs
+lsss : list of segments with sub-segment
+sla : list of all slab names (Nsmax+Nss+1)
+degree : degree of nodes </code></pre>
+<p>This Layout is still in construction</p>
+<p>.. code:: python</p>
+<pre><code>f,a=L.showG(&#39;s&#39;,airwalls=False,figsize=(20,10))</code></pre>
+<p>.. image:: Layout_files/Layout_15_0.png</p>
+<p>.. code:: python</p>
+<pre><code>L=Layout(&#39;W2PTIN.ini&#39;)
+L</code></pre>
+<p>.. parsed-literal::</p>
+<pre><code>----------------
+W2PTIN.ini
+Image(&#39;/home/uguen/Bureau/P1/struc/images/W2PTIN.png&#39;)
+----------------
+
+Number of points  : 185
+Number of segments  : 236
+Number of sub segments  : 11
+Number of cycles  : 0
+Number of rooms  : 0
+degree 0 : [-110 -109 -108 -103]
+degree 1 : [-80]
+degree 2 : 97
+degree 3 : 81
+degree 4 : [-127  -87]
+
+xrange :(-7.578, 30.217)
+yrange :(-7.642, 30.753)
+
+Useful dictionnaries
+----------------
+sl {slab name : slab dictionary}
+name :  {slab :seglist} 
+
+Useful arrays
+----------------
+pt : numpy array of points 
+normal : numpy array of normal 
+offset : numpy array of offset 
+tsg : get segment index in Gs from tahe
+isss :  sub-segment index above Nsmax
+tgs : get segment index in tahe from Gs
+lsss : list of segments with sub-segment
+sla : list of all slab names (Nsmax+Nss+1)
+degree : degree of nodes </code></pre>
+<p>.. code:: python</p>
+<pre><code> L.showG(&#39;s&#39;)</code></pre>
+<p>.. parsed-literal::</p>
+<pre><code>(&lt;matplotlib.figure.Figure at 0x2acc638f98d0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2acc635e2510&gt;)</code></pre>
+<p>.. image:: Layout_files/Layout_17_1.png</p>
+<h2 id="the-useful-numpy-arrays-of-the-layout"><span class="header-section-number">1.2</span> The useful numpy arrays of the Layout</h2>
+<ul>
+<li>tsg : get segment index in Gs from tahe</li>
+<li>isss : sub-segment index above Nsmax</li>
+<li>tgs : get segment index in tahe from Gs</li>
+<li>lsss : list of segments with sub-segment</li>
+<li>sla : list of all slab names (Nsmax+Nss+1)</li>
+<li>degree : degree of nodes</li>
+</ul>
+<p><code>pt</code> the array of points <sub><sub><sub><sub><sub><sub><sub><sub><sub><sub>~</sub></sub></sub></sub></sub></sub></sub></sub></sub>~</sub>~~</p>
+<p>point coordinates are stored in two places :</p>
+<p>::</p>
+<pre><code>L.Gs.pos : in a dictionnary form (key is the point negative index) 
+L.pt : in a numpy array</code></pre>
+<p>.. code:: python</p>
+<pre><code>print np.shape(L.pt)
+print len(filter(lambda x: x&lt;0,L.Gs.pos))</code></pre>
+<p>.. parsed-literal::</p>
+<pre><code>(2, 185)
+185</code></pre>
+<p>This dual storage is chosen (temporarily ? ) for computational efficiency reason. The priority goes to the graph and the numpy array is calculated at the end of the edition in the <code>Layout.g2npy</code> method (graph to numpy) which is in charge of the conversion.</p>
+<p>tahe (tail-head) ~<sub><sub><sub><sub><sub><sub><sub>~</sub></sub></sub></sub></sub></sub></sub></p>
+<p><code>tahe</code> is a :math:<code>(2\times N_{s})</code> where :math:<code>N_s</code> denotes the number of segment. The first line is the tail index of the segment :math:<code>k</code> and the second line is the head of the segment :math:<code>k</code>. Where :math:<code>k</code> is the index of a given segment (starting in 0).</p>
+<p>.. code:: python</p>
+<pre><code>L.build()</code></pre>
+<p>.. code:: python</p>
+<pre><code>L.showG(&#39;s&#39;)
+nx.draw(L.Gc,L.Gc.pos)</code></pre>
+<p>.. image:: Layout_files/Layout_27_0.png</p>
+<p>.. code:: python</p>
+<pre><code>nx.draw_networkx_nodes(L.Gi,L.Gi.pos,node_color=&#39;blue&#39;,node_size=1)
+nx.draw_networkx_edges(L.Gi,L.Gi.pos,node_color=&#39;blue&#39;,node_size=1)</code></pre>
+<p>.. parsed-literal::</p>
+<pre><code>&lt;matplotlib.collections.LineCollection at 0x2acc663ceb90&gt;</code></pre>
+<p>.. image:: Layout_files/Layout_28_1.png</p>
+<h2 id="tgs-trancodage-from-graph-indexing-to-numpy-array-indexing"><span class="header-section-number">1.3</span> <code>tgs</code> : trancodage from graph indexing to numpy array indexing</h2>
+<p><code>tgs</code> is an arry with length :math:<code>N_s</code> +1. The index 0 is not used because none segment has 0 as an index.</p>
+<p>.. code:: python</p>
+<pre><code>ns = 5
+utahe = L.tgs[ns]</code></pre>
+<p>.. code:: python</p>
+<pre><code>tahe =  L.tahe[:,utahe]</code></pre>
+<p>.. code:: python</p>
+<pre><code>ptail = L.pt[:,tahe[0]]
+phead = L.pt[:,tahe[1]]</code></pre>
+<p>.. code:: python</p>
+<pre><code>print ptail</code></pre>
+<p>.. parsed-literal::</p>
+<pre><code>[ 29.785   6.822]</code></pre>
+<p>.. code:: python</p>
+<pre><code>print phead </code></pre>
+<p>.. parsed-literal::</p>
+<pre><code>[ 27.414   6.822]</code></pre>
+<p>.. code:: python</p>
+<pre><code>L.Gs.node[5]</code></pre>
+<p>.. parsed-literal::</p>
+<pre><code>{&#39;connect&#39;: [-8, -139],
+ &#39;name&#39;: &#39;PARTITION&#39;,
+ &#39;ncycles&#39;: [36, 0],
+ &#39;norm&#39;: array([ 0., -1.,  0.]),
+ &#39;offset&#39;: 0,
+ &#39;transition&#39;: False,
+ &#39;z&#39;: (0, 3.0)}</code></pre>
+<p>.. code:: python</p>
+<pre><code>print L.Gs.pos[-8]
+print L.Gs.pos[-139]</code></pre>
+<p>.. parsed-literal::</p>
+<pre><code>(29.785, 6.822)
+(27.414, 6.822)</code></pre>
+<p>.. code:: python</p>
+<pre><code>aseg = np.array([4,7,134])</code></pre>
+<p>.. code:: python</p>
+<pre><code>print np.shape(aseg)</code></pre>
+<p>.. parsed-literal::</p>
+<pre><code>(3,)</code></pre>
+<p>.. code:: python</p>
+<pre><code>pt  = L.tahe[:,L.tgs[aseg]][0,:]
+ph = L.tahe[:,L.tgs[aseg]][1,:]
+pth = np.vstack((pt,ph))</code></pre>
+<p>.. code:: python</p>
+<pre><code>np.shape(pth)</code></pre>
+<p>.. parsed-literal::</p>
+<pre><code>(2, 3)</code></pre>
+<h2 id="layout.seg2pts-a-function-for-getting-points-coordinates-from-segment-number-array"><span class="header-section-number">1.4</span> <code>Layout.seg2pts</code> a function for getting points coordinates from segment number array</h2>
+<p>.. code:: python</p>
+<pre><code>L.seg2pts(aseg)</code></pre>
+<p>.. parsed-literal::</p>
+<pre><code>array([[ 29.785,   0.044,  22.538],
+       [  6.822,  23.078,   8.711],
+       [ 29.785,  -3.754,  20.326],
+       [  8.921,  23.078,   8.693]])</code></pre>
+<p>.. code:: python</p>
+<pre><code>aseg = array(filter(lambda x: x&gt;0,L.Gs.nodes()))
+pth = L.seg2pts(aseg)</code></pre>
+<p>.. code:: python</p>
+<pre><code>from pylayers.util.plotutil import displot</code></pre>
+<p>.. code:: python</p>
+<pre><code>displot(pth[0:2,:],pth[2:,:])
+plt.axis(&#39;off&#39;)</code></pre>
+<p>.. parsed-literal::</p>
+<pre><code>(-10.0, 35.0, -10.0, 35.0)</code></pre>
+<p>.. image:: Layout_files/Layout_46_1.png</p>
+<p>.. code:: python</p>
+<pre><code>from IPython.core.display import HTML
+
+def css_styling():
+    styles = open(&quot;../styles/custom.css&quot;, &quot;r&quot;).read()
+    return HTML(styles)
+css_styling()</code></pre>
+<p>.. raw:: html</p>
+<pre><code>&lt;style&gt;
+    @font-face {
+        font-family: &quot;Computer Modern&quot;;
+        src: url(&#39;http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf&#39;);
+    }
+    div.cell{
+        width:800px;
+        margin-left:16% !important;
+        margin-right:auto;
+    }
+    h1 {
+        font-family: Helvetica, serif;
+    }
+    h4{
+        margin-top:12px;
+        margin-bottom: 3px;
+       }
+    div.text_cell_render{
+        font-family: Computer Modern, &quot;Helvetica Neue&quot;, Arial, Helvetica, Geneva, sans-serif;
+        line-height: 145%;
+        font-size: 130%;
+        width:800px;
+        margin-left:auto;
+        margin-right:auto;
+    }
+    .CodeMirror{
+            font-family: &quot;Source Code Pro&quot;, source-code-pro,Consolas, monospace;
+    }
+    .prompt{
+        display: None;
+    }
+    .text_cell_render h5 {
+        font-weight: 300;
+        font-size: 22pt;
+        color: #4057A1;
+        font-style: italic;
+        margin-bottom: .5em;
+        margin-top: 0.5em;
+        display: block;
+    }
+    
+    .warning{
+        color: rgb( 240, 20, 20 )
+        }  
+&lt;/style&gt;
+&lt;script&gt;
+    MathJax.Hub.Config({
+                        TeX: {
+                           extensions: [&quot;AMSmath.js&quot;]
+                           },
+                tex2jax: {
+                    inlineMath: [ [&#39;$&#39;,&#39;$&#39;], [&quot;\\(&quot;,&quot;\\)&quot;] ],
+                    displayMath: [ [&#39;$$&#39;,&#39;$$&#39;], [&quot;\\[&quot;,&quot;\\]&quot;] ]
+                },
+                displayAlign: &#39;center&#39;, // Change this to &#39;center&#39; to center equations.
+                &quot;HTML-CSS&quot;: {
+                    styles: {&#39;.MathJax_Display&#39;: {&quot;margin&quot;: 4}}
+                }
+        });
+&lt;/script&gt;</code></pre>

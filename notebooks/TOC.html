@@ -1,0 +1,120 @@
+<h1 id="pylayers-overview"><span class="header-section-number">1</span> PyLayers Overview</h1>
+<h2 id="geographical-information"><span class="header-section-number">1.1</span> Geographical Information</h2>
+<ul>
+<li><a href="1-GIS/Layout.html">Description of Building Layouts</a></li>
+<li><a href="1-GIS/LayoutEditor.html">Editing a Layout</a></li>
+<li><a href="1-GIS/Multisubsegments.html">Effects of changing constitutive properties of a Layout</a></li>
+<li><a href="1-GIS/Ezone.html">Handling of Geographical Data: The Earth Zone class</a></li>
+</ul>
+<h2 id="antenna-and-propagation"><span class="header-section-number">1.2</span> Antenna and Propagation</h2>
+<h3 id="antennas"><span class="header-section-number">1.2.1</span> Antennas</h3>
+<ul>
+<li><a href="2-AP/Antenna.html">Description of Antennas</a></li>
+<li><a href="2-AP/AntennaSSH.html">Scalar Spherical Harmonics Representation</a></li>
+<li><a href="2-AP/AntennaVSH.html">Vector Spherical Harmonics Representation</a></li>
+</ul>
+<h3 id="slabs-and-materials"><span class="header-section-number">1.2.2</span> Slabs and Materials</h3>
+<ul>
+<li><a href="2-AP/SlabsMaterials.html">SlabsMaterials</a></li>
+</ul>
+<h3 id="multiwall-model"><span class="header-section-number">1.2.3</span> MultiWall model</h3>
+<ul>
+<li><a href="2-AP/Coverage.html">Coverage</a></li>
+<li><a href="2-AP/MultiWall.html">MultiWall</a></li>
+</ul>
+<h3 id="signatures-and-rays"><span class="header-section-number">1.2.4</span> Signatures and Rays</h3>
+<ul>
+<li><p><a href="2-AP/Signatures.html">The Ray Signatures</a></p></li>
+<li><p><a href="2-AP/Channel.html">The transmission Channel</a></p></li>
+</ul>
+<h2 id="handling-time-domain-signals"><span class="header-section-number">1.3</span> Handling time domain signals</h2>
+<ul>
+<li><a href="3-PHY/Bsignal.html">The Bsignal Class</a></li>
+</ul>
+<h2 id="human-mobility"><span class="header-section-number">1.4</span> Human Mobility</h2>
+<ul>
+<li><a href="5-SIM/SimulNetConfig.html">Simulnet Configuation</a></li>
+<li><p><a href="4-MOB/Mobility.html">Large scale mobility <code>simulnet</code></a></p></li>
+<li><p><a href="4-MOB/Body.html">Body scale mobility</a></p></li>
+</ul>
+<h2 id="ray-tracing-simulation-examples"><span class="header-section-number">1.5</span> Ray Tracing Simulation Examples</h2>
+<ul>
+<li><a href="5-SIM/LinkSimulation.html">Link Simulations</a></li>
+<li><a href="5-SIM/DLR-WHERE2.html">DLR WHERE2 Scenario</a></li>
+<li><a href="5-SIM/PTIN.html">PTIN WHERE2 Scenario</a></li>
+<li><a href="5-SIM/WHERE1-M1.html">WHERE1 - M1 Scenario</a></li>
+<li><a href="5-SIM/Where1M1.html">WHERE1 - M1 Scenario (bis)</a></li>
+<li><a href="5-SIM/AggregatedCIR.html">Aggregated CIR</a></li>
+</ul>
+<h2 id="pylayers-classes-and-tools"><span class="header-section-number">1.6</span> PyLayers Classes and Tools</h2>
+<ul>
+<li><a href="8-MISC/Cone.html">The Cone class</a></li>
+<li><p><a href="8-MISC/Geomutil.html">Geometrical Utility Functions</a></p>
+<p>from IPython.core.display import HTML</p>
+<p>def css_styling(): styles = open(&quot;../styles/custom.css&quot;, &quot;r&quot;).read() return HTML(styles) css_styling()</p></li>
+</ul>
+<style>
+    @font-face {
+        font-family: "Computer Modern";
+        src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
+    }
+    div.cell{
+        width:800px;
+        margin-left:16% !important;
+        margin-right:auto;
+    }
+    h1 {
+        font-family: Helvetica, serif;
+    }
+    h4{
+        margin-top:12px;
+        margin-bottom: 3px;
+       }
+    div.text_cell_render{
+        font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+        line-height: 145%;
+        font-size: 130%;
+        width:800px;
+        margin-left:auto;
+        margin-right:auto;
+    }
+    .CodeMirror{
+            font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
+    }
+    .prompt{
+        display: None;
+    }
+    .text_cell_render h5 {
+        font-weight: 300;
+        font-size: 22pt;
+        color: #4057A1;
+        font-style: italic;
+        margin-bottom: .5em;
+        margin-top: 0.5em;
+        display: block;
+    }
+    
+    .warning{
+        color: rgb( 240, 20, 20 )
+        }  
+</style>
+<script>
+    MathJax.Hub.Config({
+                        TeX: {
+                           extensions: ["AMSmath.js"]
+                           },
+                tex2jax: {
+                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+                },
+                displayAlign: 'center', // Change this to 'center' to center equations.
+                "HTML-CSS": {
+                    styles: {'.MathJax_Display': {"margin": 4}}
+                }
+        });
+</script>
+
+
+
+
+
