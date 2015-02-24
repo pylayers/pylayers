@@ -1,0 +1,358 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Desciption of antennas &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../index.html"><img src="../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Desciption of antennas</a><ul>
+<li><a class="reference internal" href="#defining-antenna-gain-from-analytic-formulas">Defining Antenna gain from analytic formulas</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/notebook/2-AP/Antenna.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
+
+<span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
+    <span class="n">styles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;../styles/custom.css&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="n">styles</span><span class="p">)</span>
+<span class="n">css_styling</span><span class="p">()</span>
+</pre></div>
+</div>
+<style>
+    @font-face {
+        font-family: "Computer Modern";
+        src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
+    }
+    div.cell{
+        width:800px;
+        margin-left:16% !important;
+        margin-right:auto;
+    }
+    h1 {
+        font-family: Helvetica, serif;
+    }
+    h4{
+        margin-top:12px;
+        margin-bottom: 3px;
+       }
+    div.text_cell_render{
+        font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+        line-height: 145%;
+        font-size: 130%;
+        width:800px;
+        margin-left:auto;
+        margin-right:auto;
+    }
+    .CodeMirror{
+            font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
+    }
+    .prompt{
+        display: None;
+    }
+    .text_cell_render h5 {
+        font-weight: 300;
+        font-size: 22pt;
+        color: #4057A1;
+        font-style: italic;
+        margin-bottom: .5em;
+        margin-top: 0.5em;
+        display: block;
+    }
+
+    .warning{
+        color: rgb( 240, 20, 20 )
+        }
+</style>
+<script>
+    MathJax.Hub.Config({
+                        TeX: {
+                           extensions: ["AMSmath.js"]
+                           },
+                tex2jax: {
+                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+                },
+                displayAlign: 'center', // Change this to 'center' to center equations.
+                "HTML-CSS": {
+                    styles: {'.MathJax_Display': {"margin": 4}}
+                }
+        });
+</script><div class="section" id="desciption-of-antennas">
+<h1>Desciption of antennas<a class="headerlink" href="#desciption-of-antennas" title="Permalink to this headline">¶</a></h1>
+<p>PyLayers has a very rich set of tools for handling antenna radiation
+pattern. Antennas can be described in different manners and read from
+different specific file formats.</p>
+<p>The description goes from a simple antenna gain formula to a full
+polarization description ,compressed or not, using scalar or vector
+spherical harmonics decomposition.</p>
+<p>In the following some features of the <tt class="docutils literal"><span class="pre">Antenna</span></tt> class are illustrated.
+The <tt class="docutils literal"><span class="pre">Antenna</span></tt> class is stored in the
+<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.antprop.antenna.html">antenna.py</a>
+module which is placed in the <tt class="docutils literal"><span class="pre">antprop</span></tt> module.</p>
+<div class="code python highlight-python"><div class="highlight"><pre>from pylayers.antprop.antenna import *
+%matplotlib inline
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
+</pre></div>
+</div>
+<p>An antenna object can be loaded in specifying an existing antenna file
+name as argument of the constructor. Lets start by loading an antenna
+from a <tt class="docutils literal"><span class="pre">vsh3</span></tt> file which correspond to a vector spherical harmonics
+representation of an antenna measured in SATIMO near field chamber.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;S1R1.vsh3&#39;</span><span class="p">)</span>
+<span class="n">A</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>FileName : S1R1.vsh3
+-----------------------
+fmin : 0.80GHz
+fmax : 5.95GHz
+step : 50.00MHz
+Nf : 104
+Not evaluated
+</pre></div>
+</div>
+<p>At loading time the antenna is not evaluated. It means that there is not
+internally any instanciation of the pattern for a set of angular and
+frequency values.</p>
+<p>To list all the availble antenna files in the dedicated directory of the
+project it is possible to invoke the <tt class="docutils literal"><span class="pre">ls()</span></tt> method.</p>
+<p>Antenna files are supposed to be stored in the sub directory <tt class="docutils literal"><span class="pre">ant</span></tt> of
+the current project. The current project is located with the $BASENAME
+environment variable.</p>
+<div class="code python highlight-python"><div class="highlight"><pre>!echo $BASENAME
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>/home/uguen/Bureau/P1
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">lvsh3</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s">&#39;vsh3&#39;</span><span class="p">)</span>
+<span class="n">lssh3</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s">&#39;sh3&#39;</span><span class="p">)</span>
+<span class="n">lmat</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s">&#39;mat&#39;</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&quot;Number of antenna in .vsh3 format : &quot;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">lvsh3</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&quot;Number of antenna in .sh3 format : &quot;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">lssh3</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">lvsh3</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+<span class="k">print</span> <span class="n">lssh3</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+<span class="k">print</span> <span class="n">lmat</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Number of antenna in .vsh3 format :  66
+Number of antenna in .sh3 format :  42
+[&#39;S1R1.vsh3&#39;, &#39;S1R10.vsh3&#39;, &#39;S1R11.vsh3&#39;, &#39;S1R12.vsh3&#39;, &#39;S1R13.vsh3&#39;]
+[&#39;S17R1.sh3&#39;, &#39;S17R2m.sh3&#39;, &#39;S1R1.sh3&#39;, &#39;S1R10.sh3&#39;, &#39;S1R11.sh3&#39;]
+[]
+</pre></div>
+</div>
+<p>At that point the radiation pattern of the antenna has not yet been
+evaluated. The method to calculate the pattern is <tt class="docutils literal"><span class="pre">Fsynth()</span></tt> with the
+<tt class="docutils literal"><span class="pre">pattern</span></tt> option set to true. If the <tt class="docutils literal"><span class="pre">pattern</span></tt> option is set to
+False, the antenna is evaluated for only the specified direction. This
+mode is used in the ray tracing technique while the former is used to
+visualize the whole antenna pattern.</p>
+<p>The vector spherical coefficient are strored in <tt class="docutils literal"><span class="pre">A.C</span></tt></p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Br
+-------------
+Nf   : 104
+fmin (GHz) : 0.8
+fmax (GHz) : 5.95
+Ncoeff s3 : 72
+
+Bi
+-------------
+Nf   : 104
+fmin (GHz) : 0.8
+fmax (GHz) : 5.95
+Ncoeff s3 : 72
+
+Cr
+-------------
+Nf   : 104
+fmin (GHz) : 0.8
+fmax (GHz) : 5.95
+Ncoeff s3 : 72
+
+Ci
+-------------
+Nf   : 104
+fmin (GHz) : 0.8
+fmax (GHz) : 5.95
+Ncoeff s3 : 72
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">polar()</span></tt> method allow to superpose different pattern for a list
+of frequencies <tt class="docutils literal"><span class="pre">fGHz</span></tt> + If <tt class="docutils literal"><span class="pre">phd</span></tt> (phi in degree) is specified the
+diagram is given as a function of <img class="math" src="../../_images/math/a9cfbeb8ebee1f365919e147a79e242dcb67ee5d.png" alt="\theta"/> + If <tt class="docutils literal"><span class="pre">thd</span></tt> (theta in
+degree) is specified the diagram is given as a function of <img class="math" src="../../_images/math/10e009bdb83f96c5f47c58b34d5d4b12ef268d5b.png" alt="\phi"/></p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
+<span class="n">a1</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">f1</span><span class="p">,</span><span class="n">a1</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span><span class="n">phd</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">GmaxdB</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a1</span><span class="p">)</span>
+<span class="n">a2</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">f2</span><span class="p">,</span><span class="n">a2</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span><span class="n">thd</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span><span class="n">GmaxdB</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a2</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/Antenna_14_0.png" src="../../_images/Antenna_14_0.png" />
+<p>The vector spherical coefficients can be dispalayed as follows</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s3&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../../_images/Antenna_16_0.png" src="../../_images/Antenna_16_0.png" />
+<div class="section" id="defining-antenna-gain-from-analytic-formulas">
+<h2>Defining Antenna gain from analytic formulas<a class="headerlink" href="#defining-antenna-gain-from-analytic-formulas" title="Permalink to this headline">¶</a></h2>
+<p>An antenna can also be defined from closed-form expressions. Available
+antennas are the following + Omni + Gauss + WirePlate</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Omni&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">Fpatt</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f2e4ca2ca90&gt;,
+ &lt;matplotlib.projections.polar.PolarAxes at 0x7f2e497891d0&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/Antenna_21_1.png" src="../../_images/Antenna_21_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Gauss&#39;</span><span class="p">)</span>
+<span class="n">A</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">()</span>
+<span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f2e4920f8d0&gt;,
+ &lt;matplotlib.projections.polar.PolarAxes at 0x7f2e49209150&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/Antenna_22_1.png" src="../../_images/Antenna_22_1.png" />
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2015, PyLayers developer team.
+      Last updated on Feb 24, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

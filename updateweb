@@ -1,13 +1,13 @@
 cd $WEBSITE/html
 cd ./notebook
 git add *.html 
-cd ./notebook/1-GIS
+cd 1-GIS
 git add *.html 
-cd ./notebook/2-AP
+cd ../2-AP
 git add *.html 
-cd ./notebook/3-AP
+cd ../3-PHY
 git add *.html 
-cd ../notebooks
+cd ../../notebooks
 git add * 
 cd ../_images
 git add *
