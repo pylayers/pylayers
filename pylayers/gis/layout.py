@@ -379,6 +379,7 @@ class Layout(PyLayers):
         self.display['edges'] = True
         self.display['ednodes'] = False
         self.display['subseg'] = True
+        self.display['subsegnb'] = True
         self.display['visu'] = False
         self.display['thin'] = False
         self.display['scaled'] = True
@@ -4605,7 +4606,8 @@ class Layout(PyLayers):
                     'width': 2,
                     'fGHz' : [],
                     'show':False,
-                    'furniture':False}
+                    'furniture':False,
+                    }
 
         for k in defaults:
             if k not in kwargs:
@@ -4662,6 +4664,15 @@ class Layout(PyLayers):
         if self.display['nodes']:
             dlabels = self.display['ndlabel']
             self.show_nodes(ndlist, size=30, color='k', dlabels=dlabels,node_shape='s')
+
+        if self.display['subsegnb']:
+            seg = self.lsss
+
+            psseg = np.array([[self.Gs.pos[x][0],self.Gs.pos[x][1]] for x in seg])
+            nbsseg = np.array([len(self.Gs.node[x]['ss_name']) for x in seg],dtype='int')
+
+            [plt.text(psseg[x,0]+0.1,psseg[x,1]+0.1,str(nbsseg[x]),
+                fontdict={'size':8},ha='center') for x in range(len(seg))]
 
         slablist = self.name.keys()
         if self.display['edges']:
@@ -7777,6 +7788,7 @@ class Layout(PyLayers):
         ax  = fig.add_subplot(111)
         self.display['nodes']=True
         self.display['ednodes']=True
+        self.display['subsegnb']=True
 
         self.af = SelectL(self,fig=fig,ax=ax)
 
@@ -7786,6 +7798,8 @@ class Layout(PyLayers):
                                            self.af.OnClick)
         self.cid2 = fig.canvas.mpl_connect('key_press_event',
                                            self.af.OnPress)
+        self.cid3 = fig.canvas.mpl_connect('key_release_event',
+                                           self.af.OnRelease)
         plt.draw()
         plt.axis('tight')
         plt.show()
