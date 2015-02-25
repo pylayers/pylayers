@@ -1186,13 +1186,10 @@ class SelectL(object):
         if self.evt == 'f1':
             # avoid conflict between zoom and selection 
             fm=plt.get_current_fig_manager()
-            print fm.toolbar._active == 'PAN'
-            print fm.toolbar._active == 'ZOOM'
             if fm.toolbar._active == 'PAN':
                 fm.toolbar.pan()
             if fm.toolbar._active == 'ZOOM':
                 fm.toolbar.zoom()
-            print fm.toolbar._active
 
             self.state='SMP'
             toggle_selector.RS = RectangleSelector(ax, point_select_callback,
