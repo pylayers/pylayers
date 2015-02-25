@@ -914,8 +914,7 @@ class Scenario(object):
 
         self.CDF[fname]['leg']=['Geometric', 'Algebraic','CRB']
         self.CDF[fname]['limit']=max(max(self.err1),max(self.errLS))
-        import ipdb
-        ipdb.set_trace()
+
         if os.system('cd ./cdf/'+fname) == 512:
             os.system('mkdir ./cdf/'+fname)
         np.save('./cdf/' +fname +'/L',self.CDF[fname]['L'])

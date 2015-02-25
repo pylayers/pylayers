@@ -2163,11 +2163,11 @@ class Layout(PyLayers):
         # delete old edge ns
         self.del_segment(ns)
         # add new edge np[0] num
-        self.add_segment(nop[0], num, name=namens, z = (zminns,zmaxns))
+        self.add_segment(nop[0], num, name=namens, z = (zminns,zmaxns), offset=0)
         # add new edge num np[1]
-        self.add_segment(num, nop[1], name=namens, z = (zminns,zmaxns))
+        self.add_segment(num, nop[1], name=namens, z = (zminns,zmaxns), offset=0)
 
-    def add_segment(self, n1, n2, name='PARTITION',z=(0.0,3.0)):
+    def add_segment(self, n1, n2, name='PARTITION',z=(0.0,3.0),offset=0):
         """  add edge between node n1 and node n2
 
         Parameters
@@ -2179,6 +2179,8 @@ class Layout(PyLayers):
             layer name 'PARTITION'
         z : tuple of float
             default = (0,3.0)
+        offset : float
+            [-1,1] default (0)
 
         Returns
         -------
@@ -2238,6 +2240,8 @@ class Layout(PyLayers):
         self.Gs.add_node(num, z=z)
         self.Gs.add_node(num, norm=norm)
         self.Gs.add_node(num, transition=transition)
+        self.Gs.add_node(num, offset=offset)
+
         self.Gs.pos[num] = tuple((p1 + p2) / 2.)
         self.Gs.add_edge(n1, num)
         self.Gs.add_edge(n2, num)
@@ -2391,7 +2395,7 @@ class Layout(PyLayers):
         """ delete points in list lp
 
         Parameters
-        ----------
+        ----------add
 
         lp : list
             node list
@@ -2753,7 +2757,7 @@ class Layout(PyLayers):
                 # update Layout information
                 self.g2npy()
 
-    def edit_segment(self, e1 , gui=True):
+    def edit_segment(self, e1 , gui=True,outdata={}):
         """ edit segment
 
         Parameters
@@ -2793,6 +2797,7 @@ class Layout(PyLayers):
                     de1['transition']]
         #de1v    = de1.values()
         if gui:
+            outdata={}
             data0 = choicebox('chose slab',title,self.sl.keys())
             try:
                 data1 = multenterbox('attribute for ' + data0, title, tuple(de1k[1:]), tuple(de1v[1:]))
@@ -2806,8 +2811,10 @@ class Layout(PyLayers):
                 for k in de1k:
                     try:
                         self.Gs.node[e1][k] = eval(data[i])
+                        outdata[k]=eval(data[i])
                     except:
                         self.Gs.node[e1][k] = data[i]
+                        outdata[k]=data[i]
                         if k == 'name':
                             try:
                                 self.name[data[i]].append(e1)
@@ -2818,17 +2825,23 @@ class Layout(PyLayers):
                 # if cancel
                 pass
         else:
-            data = {}
-            val = '1'
-            while(val<>'0'):
-                clear
-                print '0 : exit'
-                for e,(k,v) in enumerate(zip(de1k,de1v)):
-                    print str(e+1)+ ' '+k+': '+  str(v)+'\n'
-                val = input('Your choice :')
-                if val<>'0':
-                    pass
-
+            if outdata=={}:
+                pass
+                # data = {}
+                # val = '1'
+                # while(val<>'0'):
+                #     clear
+                #     print '0 : exit'
+                #     for e,(k,v) in enumerate(zip(de1k,de1v)):
+                #         print str(e+1)+ ' '+k+': '+  str(v)+'\n'
+                #     val = input('Your choice :')
+                #     if val<>'0':
+                #         pass
+            else:
+                for k in de1k:
+                    if k in ['z','name','transition']:
+                        self.Gs.node[e1][k] = outdata[k]
+        return outdata
 
        
     def have_subseg(self, e1):
@@ -2883,14 +2896,16 @@ class Layout(PyLayers):
         title = 'Add a subsegment'
         data = multenterbox(message, title, ('name', 'zmin', 'zmax','offset'),
                                             (name, zmin, zmax,offset))
-
-        self.Gs.node[s1]['ss_name'] = [data[0]]
-        self.Nss += 1
-        self.chgmss(s1,ss_name=[data[0]],ss_offset=[eval(data[3])],ss_z=[(eval(data[1]),eval(data[2]))])
-        #self.Gs.node[s1]['ss_z'] = 
-        # ce is for Pulsray compatibility
-        #self.Gs.node[s1]['ss_ce'] = [ (0,0) ]
-        self.Gs.node[s1]['transition'] = transition
+        try:
+            self.Gs.node[s1]['ss_name'] = [data[0]]
+            self.Nss += 1
+            self.chgmss(s1,ss_name=[data[0]],ss_offset=[eval(data[3])],ss_z=[(eval(data[1]),eval(data[2]))])
+            #self.Gs.node[s1]['ss_z'] = 
+            # ce is for Pulsray compatibility
+            #self.Gs.node[s1]['ss_ce'] = [ (0,0) ]
+            self.Gs.node[s1]['transition'] = transition
+        except:
+            pass
 
 
     def add_window(self, s1, z):
@@ -7812,7 +7827,7 @@ class Layout(PyLayers):
         """
         """
 
-        import gtk
+        # import gtk
         from matplotlib.figure import Figure
         from matplotlib.backends.backend_gtkagg import FigureCanvasGTKAgg as FigureCanvas
         from matplotlib.backends.backend_gtkagg import NavigationToolbar2GTKAgg as NavigationToolbar
