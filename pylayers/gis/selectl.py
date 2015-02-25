@@ -68,7 +68,7 @@ class SelectL(object):
         self.indp = 0
         self.state = 'Init'
         self.evt=''
-        self.statename={'Init':'Point/Segments Selection',
+        self.statename={'Init':'Point/Segment Selection',
                 'CP':'Create Point',
                 'SP1':'Select Point 1',
                 'SP2':'Select Point 2, Click Again for Creating Segment',
@@ -79,16 +79,17 @@ class SelectL(object):
                 'SMP': 'Multiple Points Selection',
                 'SMS': 'Multiple Segments Selection'
                 }
-        self.help={'Init':'Click on Point or Segment',
-                'CP':'Create Point, +CTRL same x, +SHIFT same y',
-                'SP1':'Select Point 1, Select a 2nd point...',
+        self.help={'':'',
+                'Init':'Select Point or Segment/ F1: Multiple selection/ F2: Create Point/ CTRL+q: Quit',
+                'CP':'Create Point/ +CTRL same x/ +SHIFT same y',
+                'SP1':'Select Point/ Click another point to create segment',
                 'SP2':'Click Again for Creating Segment',
                 'SS':'e: edit segment properties, h: add a sub-segment',
                 'SSS':'Select Sub Segment',
                 'CPS':'Click again for Split Segment',
                 'CPSS':'Create Point On Sub Segment',
-                'SMP': 'Multiple Points Selection',
-                'SMS': 'Multiple Segments Selection'
+                'SMP': 't: toggle point/segment, Shift + select : add selected points, CTRL + select : remove selected points',
+                'SMS': 't: toggle point/segment, e: Edit Selected Segments Propeties'
                 }
         self.nsel = 0
         self.ax.axis(self.L.display['box'])
@@ -275,7 +276,18 @@ class SelectL(object):
     def format_coord(self,x, y):
         col = int(x+0.5)
         row = int(y+0.5)
-        return 'x=%1.4f, y=%1.4f, %s'%(x, y, self.help[self.state])
+        string = 'x=%1.4f, y=%1.4f'%(x, y)
+        try:
+            string = string + ' ' + self.L.Gs.node[self.nsel]['name']
+        except:
+            pass
+        try:
+            string = string + ' with ' +str(len(self.L.Gs.node[self.nsel]['ss_name'])) + 'subseg(s)'
+        except:
+            pass
+        string = string + ' ///' +self.help[self.state]
+        return string
+        
         # if col>=0 and col<numcols and row>=0 and row<numrows:
         #     z = X[row,col]
         #     return 'x=%1.4f, y=%1.4f, z=%1.4f'%(x, y, z)
@@ -424,6 +436,7 @@ class SelectL(object):
                 pass
             print 'lclic : free point, +CTRL same x, +SHIFT: same y'
             self.fig,self.ax=self.show(self.fig,self.ax,clear=False) 
+            self.L.g2npy()
 
         #
         # Create Point on Segment state
@@ -544,8 +557,7 @@ class SelectL(object):
 
         if self.evt=='ctrl+z':
             self.bundo=True
-            if len (self.undoGs) !=0:
-                print 'undo'
+            if len (self.undoGs) >2:
                 oGs=self.undoGs.pop(-1)
                 oGs=self.undoGs.pop(-1)
                 self.L.Gs=oGs
@@ -817,6 +829,10 @@ class SelectL(object):
             self.set_origin = True
 
 
+        if self.evt == 'f2':
+            self.state = "CP"
+            self.update_state()
+            return
         #
         # m : Toggle mode edition Point | Segment
         #
@@ -1043,6 +1059,7 @@ class SelectL(object):
                     self.nsel  = self.L.add_segment(ta, he,name=self.current_layer)
                 else:
                     print "segment ("+str(ta)+","+str(he)+") already exists"
+                self.L.g2npy()
                 self.state = 'Init'
                 self.update_state()
                 return
@@ -1167,6 +1184,16 @@ class SelectL(object):
                 toggle_selector.RS.set_active(True)
         
         if self.evt == 'f1':
+            # avoid conflict between zoom and selection 
+            fm=plt.get_current_fig_manager()
+            print fm.toolbar._active == 'PAN'
+            print fm.toolbar._active == 'ZOOM'
+            if fm.toolbar._active == 'PAN':
+                fm.toolbar.pan()
+            if fm.toolbar._active == 'ZOOM':
+                fm.toolbar.zoom()
+            print fm.toolbar._active
+
             self.state='SMP'
             toggle_selector.RS = RectangleSelector(ax, point_select_callback,
                                                drawtype='box', useblit=True,
@@ -1176,7 +1203,7 @@ class SelectL(object):
             self.selector = toggle_selector.RS
             self.update_state()
 
-        if self.evt == 'f2':
+        if self.evt == 'f9':
             print self.selectpt, self.selectseg
             #print self.selectsl
             # plt.connect('key_press_event', toggle_selector)
