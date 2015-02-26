@@ -15,7 +15,7 @@ from matplotlib.widgets import RectangleSelector
 import copy
 
 
-class SelectL(object):
+class SelectL2(object):
     """ Associates a Layout and a figure
 
     'l'  : select activelayer
@@ -491,6 +491,631 @@ class SelectL(object):
         self.fig.canvas.draw()
         return(self.fig,self.ax)
 
+    def escape(self):
+        """ self.evt==escapr
+        """
+        self.state='Init'
+        self.update_state()
+        self.fig.canvas.draw()
+
+    def undo(self):
+        """ self.evt==ctrl+z
+        """
+        self.bundo=True
+        print len(self.L.Gs)
+        if len (self.undoGs) >2:
+            oGs=self.undoGs.pop(-1)
+            oGs=self.undoGs.pop(-1)
+            self.L.Gs=oGs
+            self.L.g2npy()
+        self.update_state()
+        self.bundo=False
+
+    def toogle(self):
+        """ self.evt=='t'
+        """
+        if 'SM' in self.state:
+            self.update_state()
+            # fig=plt.gcf()
+            # ax=plt.gca()
+            if self.selected == 'pt':
+                self.plotselptseg(self.selectseg,color='r')
+                PP=self.L.pt[:,self.L.tahe[:,self.L.tgs[self.selectseg]]]
+                if PP.shape[-1]!=0:
+                    self.fig,self.ax=plu.displot(PP[:,0],PP[:,1],fig=self.fig,ax=self.ax,color='r',linewidth=3,alpha=0.4)
+                    plt.draw()
+                self.selected='seg'
+                self.state='SMS'
+            else: 
+                self.fig,self.ax= self.plotselptseg(self.selectpt)
+                self.selected='pt'
+                self.state='SMP'
+            self.ax.title.set_text(self.statename[self.state])
+            # self.update_state()
+    def show3(self):
+        """self.evt == '3'
+        """
+        self.L._show3()
+
+    def setorigin(self,parameter='O'):
+        """ self.setorgin
+
+        Parameters
+        ----------
+        parameter O|x|y
+        """
+        offx = self.ptsel[0]
+        offy = self.ptsel[1]
+        xmin,xmax,ymin,ymax = self.L.display['box']
+        if parameter=='O':
+            print offx,offy
+            self.L.display['box'] = [xmin-offx,xmax-offx,ymin-offy,ymax-offy]
+            self.set_origin=False
+            self.set_x=True
+            
+        if parameter=='x':
+            val  = eval(enterbox('enter x value'))
+            ratio = val/offx
+            self.L.display['box'] = [ratio*xmin,ratio*xmax,ymin,ymax]
+            self.set_x=False
+            self.set_y=True
+
+        if parameter=='y':
+            val  = eval(enterbox('enter y value'))
+            ratio = val/offy
+            print ratio
+            xmin,xmax,ymin,ymax = self.L.display['box']
+            self.L.display['box'] = [xmin,xmax,ratio*ymin,ratio*ymax]
+            self.set_y=False
+
+        plt.axis('tight')
+        self.fig,self.ax = self.show(self.fig,self.ax,clear=True)
+        self.update_state()
+
+
+    def choose_layers(self):
+        """        # Choose layers to visualized
+
+        self.evt == 'l':
+        """
+        listchoices = self.L.name.keys()
+        self.L.display['layers'] = multchoicebox('message',
+                                                 'titre', listchoices)
+        self.state = 'Init'
+        self.update_state()
+
+    def toggleoverlay(self):
+        """ toggle overlay
+        """
+        self.state='Init'
+        self.update_state()
+        if self.L.display['overlay']:
+            self.L.display['overlay'] = False
+            self.update_state()
+        else:
+            self.L.display['overlay'] = True
+            self.update_state()
+
+    def togglept(self):
+        """f' toggle points nodes display
+         self.evt=='f':
+        """
+        self.L.display['nodes'] = not self.L.display['nodes']
+        print self.L.display['nodes']
+        self.update_state()
+
+    def toggleseg(self):
+
+        """ toggle segment nodes dislay
+
+        self.evt=='g'
+        """
+        self.L.display['ednodes'] = not self.L.display['ednodes']
+        print self.L.display['ednodes']
+        self.update_state()
+
+    def toggledisnsl(self):
+        """ #
+        # 'n' : toggle node label display
+        #
+        if self.evt == 'n':
+        """
+        self.L.display['ndlabel'] = not self.L.display['ndlabel']
+        self.L.display['edlabel'] = not self.L.display['edlabel']
+        print self.L.display['activelayer']
+        self.fig,ax = self.show(fig=self.fig,ax=self.ax,clear=True)
+        self.fig.canvas.draw()
+
+    def inclayer(self):
+        """#
+        # '=' Increment layer
+        #
+        self.evt=='='
+        """
+        N = len(self.L.display['layerset'])
+        index = self.L.display['layerset'].index(self.L.display['activelayer'])
+        self.L.display['activelayer'] = self.L.display['layerset'][(index+1) % N]
+        self.current_layer = self.L.display['activelayer']
+        print self.current_layer
+        self.update_state()
+
+    def declayer(self):
+        """#
+        # 'i' : Back to init state 
+        #
+        if self.evt == 'i'
+        """
+        N = len(self.L.display['layerset'])
+        index = self.L.display['layerset'].index(self.L.display['activelayer'])
+        self.L.display['activelayer'] = self.L.display['layerset'][(index-1) % N]
+        self.current_layer = self.L.display['activelayer']
+        self.update_state()
+
+    
+    def egalizept(self):
+        """
+        #
+        # averaging one point coordinate along the smallest dimension
+        #(self.state == 'Init')
+        """
+        x1 = self.ax.get_xbound()
+        y1 = self.ax.get_ybound()
+        # get node list and edge list
+        ndlist, edlist = self.L.get_zone([x1[0],x1[1],y1[0],y1[1]])
+        for k,nd in enumerate(ndlist):
+            try:
+                tp = np.vstack((tp,np.array(self.L.Gs.pos[nd])))
+            except:
+                tp = np.array(self.L.Gs.pos[nd])
+        mtp = np.sum(tp,axis=0)/(k+1)
+        stp = np.sqrt(np.sum((tp-mtp)*(tp-mtp),axis=0)/(k+1))
+        # if the standard deviation is lower than 10cm
+        # averaging coordinates along the shortest axis
+        if min(stp) < 0.10:
+            ind = np.where(stp==min(stp))[0][0]
+            for nd in ndlist:
+                x = self.L.Gs.pos[nd][0]
+                y = self.L.Gs.pos[nd][1]
+                if ind ==0:
+                    self.L.Gs.pos[nd]=(mtp[0],y)
+                if ind ==1:
+                    self.L.Gs.pos[nd]=(x,mtp[1])
+            plt.axis('tight')
+            self.fig,self.ax = self.show(self.fig,self.ax,clear=True)
+            self.update_state()
+
+    def editseg(self):
+        """ edit a segment 
+        (self.state == 'SS') | (self.state =='SSS')
+        """
+        self.L.edit_segment(self.selected_edge1)
+        self.state = 'Init'
+        self.update_state()
+
+    def editpt(self):
+        """ edit point
+        if self.state == 'SP1':
+        """
+        self.L.edit_point(self.selected_pt1)
+        self.state = 'Init'
+        self.update_state()
+
+    def editmulseg(self):
+        """ edit multiple segments
+        self.state == 'SMS':
+
+        """
+        outdata=self.L.edit_segment(self.selectseg[0])
+        [self.L.edit_segment(s,outdata=outdata,gui=False) for s in self.selectseg]
+        self.update_state()
+
+    def entersegval(self):
+        """ #
+        # "b" : enter a segment node value with keyboard
+        #
+        if self.evt == 'b'
+         if self.state == 'Init':
+        """
+        self.nsel = eval(raw_input("seg number :"))
+        #self.L.edit_segment(nseg)
+        self.state='SS'
+        self.update_state()
+
+
+    def hvscaling(self):
+        """
+        #
+        # j : vertical and horizontal scaling (Init)
+        # if self.state == 'Init':
+        """
+        vscale,hscale = offsetbox(text1='Enter scaling values',
+                                  text2=('vscale','hscale'),
+                                  default=('1.0','1.0')
+                                  )
+        for n in self.L.Gs.pos:
+            self.L.Gs.pos[n]=(self.L.Gs.pos[n][0],self.L.Gs.pos[n][1]*vscale)
+        plt.axis('tight')
+        self.fig,self.ax = self.show(self.fig,self.ax,clear=True)
+        self.update_state()
+
+
+    def addsubseg(self):
+        """# Init
+        # h : #    add subsegment (SS)
+        #
+        if self.evt == 'h':
+        if self.state == 'SS':
+                """
+        result = self.L.add_subseg(self.selected_edge1,self.current_layer)
+        if result:
+            self.state = 'SSS'
+        else :
+            self.state = 'Init'
+        self.update_state()
+
+    def delpt(self):
+        """ del point
+        self.state == 'SP1':
+        """
+        self.state = 'Init'
+        self.L.del_points(self.selected_pt1)
+        self.update_state()
+
+    def delseg(self):
+        """ delete segment
+        self.state == 'SS':
+        """
+        self.L.del_segment(self.selected_edge1)
+        self.state = 'Init'
+        self.update_state()
+
+
+    def delsubseg(self):
+        """ delete subsegment
+        self.state == 'SSS':
+        """
+        self.L.del_subseg(self.selected_edge1)
+        self.state = 'Init'
+        self.update_state()
+
+
+
+    def delmulpt(self):
+        """ del multiple points
+        self.state=='SMP':
+        """
+        # get boundary of the region 
+        if hasattr(self,'selectpt'):
+
+            ptlist = self.selectpt
+            self.selectpt=[]
+            self.selectseg=[]
+            self.L.del_points(ptlist)
+            self.state = 'Init'
+            self.update_state()
+            return
+        else :
+            print 'no selected region'
+
+
+    def delmulseg(self):
+        """ del multiple segments
+        self.state=='SMS':
+        """
+        if hasattr(self,'selectseg'):
+            seglist = self.selectseg
+            self.selectpt=[]
+            self.selectseg=[]
+            self.L.del_segment(seglist)
+            self.state = 'Init'
+            self.update_state()
+            return
+        else :
+            print 'no selected region'
+
+
+    def refresh(self):
+        """ refresh display
+        """
+        #plt.axis('tight')
+        plt.axis(self.L.display['box'])
+        self.fig,self.ax = self.show(self.fig,self.ax,clear=True)
+        self.state = 'Init'
+        self.update_state()
+
+
+    def modeIni(self):
+        """#
+        # 'i' : Back to init state 
+        #
+        """
+        self.state = 'Init'
+        self.update_state()
+
+    def modeCP(self):
+        """ switch to CP mode
+
+        """            
+        self.state = "CP"
+        self.update_state()
+
+    def modeCPS(self):
+        """ switch to CPS mode
+        # create point on edge
+
+        """            
+        self.state = "CPS"
+        self.update_state()
+
+    def modeCPSS(self):
+        """ switch to CPSS mode
+        # create point on edge
+
+        """            
+        self.state = "CPSS"
+        self.update_state()
+
+    def modeSS(self):
+        """ switch to SS mode
+        """            
+        self.state = "SS"
+        self.update_state()
+
+    def modeSSS(self):
+        """ switch to SSS mode
+        """            
+        self.state = "SSS"
+        self.update_state()
+
+    def modetoggle(self):
+        """ toggle modes (CP/INIT)
+        """
+        if self.state == "Init":
+            self.state = "CP"
+        elif self.state == "CP":
+            self.state = "Init"
+        self.update_state()
+
+
+    def chgdis(self):
+        """ change display parameters
+        """
+        self.L.displaygui()
+        self.fig,self.ax = self.show(fig=self.fig,ax=self.ax,clear=True)
+
+
+    def quit(self):
+        """ ctrl+q
+        """
+        plt.rcParams.update(self.rcconf)
+        self.fig.canvas.mpl_disconnect(self.L.cid1)
+        self.fig.canvas.mpl_disconnect(self.L.cid2)
+        plt.close()
+
+    def save(self):
+        """ ctrl+s
+        """
+        racine, ext = os.path.splitext(self.L.filename)
+        filename = racine + '.str2'
+        fileini = racine + '.ini'
+
+        # Commented because ss_ce not updated 
+        #self.L.savestr2(filename)
+
+        self.L.saveini(fileini)
+        print "structure saved in ", filename
+        print "structure saved in ", fileini
+
+    def disalllay(self):
+        """ display all layers
+        self.evt == 'w'
+        """ 
+        # display all layer
+        self.L.display['activelayer'] = self.L.name.keys()
+        print self.L.display['activelayer']
+        self.fig,self.ax = self.show(fig=self.fig,ax=self.ax,clear=True)
+        return 
+
+
+    def selpt1(self):
+        """ #
+        # select point 1 : Init -> SP1
+        #
+            if self.state=='Init':
+        """
+        # yellow point 
+        self.state = 'SP1'
+        self.update_state()
+
+    def selpt2(self):
+        """ #
+        select point 2 : SP1 --> SP2
+        self.state=='SP1':
+                if self.nsel != self.selected_pt1:
+
+        """
+        # green point 
+        self.state = 'SP2'
+        self.update_state()
+
+    def unselpt(self):
+        """ unselect pt
+        if self.state=='SP2':
+
+        """
+        if self.nsel == self.selected_pt1:
+            self.p1[0].set_visible(False)
+            self.p2[0].set_visible(False)
+            self.nsel = self.selected_pt2
+            self.state = 'SP1'
+            self.update_state()
+            return
+        if self.nsel == self.selected_pt2:
+            self.p1[0].set_visible(False)
+            self.p2[0].set_visible(False)
+            self.nsel = self.selected_pt1
+            self.state = 'SP1'
+            self.update_state()
+            return
+
+
+    def createptonseg(self):
+        """
+        # Create point on selected segment orthogonaly to segment starting in
+        # selected point
+        # 
+        # Not finished 
+        #
+            if self.state=='SS':
+        """
+        # get the connection of the selected segment
+        connect = self.L.Gs.node[self.selected_edge1]['connect']
+        if (self.nsel != connect[0]) & (self.nsel != connect[1]): 
+           self.L.add_nfpe(self.nsel,self.nsel,self.selected_edge1,self.selected_edge2)
+           pass
+
+
+    def selseg(self):
+        """#
+        # Left clic and selected node is a segment
+        #
+
+        """
+        self.state = 'SS'
+        self.update_state()
+
+    def selsubseg(self):
+        """ if (self.evt == 'lclic') & (self.nsel > 0):
+           if self.state=='SS':
+        """
+        self.nsel = self.selected_edge1
+        segdico = self.L.Gs.node[self.nsel]
+        if 'ss_name' in segdico:
+            self.state = 'SSS'
+        else:
+            self.state = 'CPS'
+        self.update_state()
+
+    def creatept(self):
+        """ create point
+        self.state == 'CP'
+        lclick
+        """
+        self.L.add_fnod(tuple(self.ptsel))
+        self.pt_previous = self.ptsel
+        self.update_state()
+
+
+    def createptsamecoord(self,axis='x'):
+        """(self.evt == 'lclic' and self.ctrl_is_held ):
+            if self.state == 'CP'
+        """
+        try:
+            if axis=='x':
+                self.ptsel[0] = self.pt_previous[0]
+            elif axis=='y':
+                self.ptsel[1] = self.pt_previous[1]
+            self.L.add_fnod(tuple(self.ptsel))
+            self.pt_previous = self.ptsel
+            self.update_state()
+        except:
+            pass
+
+    def createseg(self):
+        """
+        if self.state == 'SP2'
+        """
+
+        ta = self.selected_pt1
+        he = self.selected_pt2
+
+        segexist = self.L.isseg(ta,he)
+        print segexist
+        # if segment do not already exist, create it
+        if not segexist: 
+            self.nsel  = self.L.add_segment(ta, he,name=self.current_layer)
+        else:
+            print "segment ("+str(ta)+","+str(he)+") already exists"
+        self.L.g2npy()
+        self.state = 'Init'
+        self.update_state()
+
+    def splitseg(self):
+        """ split seg into 2 seg with same length
+        """
+        pt_new = geu.ptonseg(self.pta1, self.phe1, self.ptsel)
+        pd1 = pt_new - self.pta1
+        pd2 = self.phe1 - self.pta1
+        alpha = np.sqrt(np.dot(pd1, pd1)) / np.sqrt(np.dot(pd2, pd2))
+        if (pt_new != []):
+            # calculate alpha
+            self.L.add_pons(self.selected_edge1, 1. - alpha)
+            self.current_layer = self.L.Gs.node[self.selected_edge1]['name']
+            self.state = 'Init'
+        self.update_state()
+
+
+
+    def multsel(self):
+        """ Multiple selection
+        """
+        def toggle_selector(event):
+            if toggle_selector.RS.active:
+                toggle_selector.RS.set_active(False)
+            if not toggle_selector.RS.active:
+                toggle_selector.RS.set_active(True)
+
+        self.state='SMP'
+        toggle_selector.RS = RectangleSelector(self.ax, self.point_select_callback,
+                                           drawtype='box', useblit=True,
+                                           button=[1,3], # don't use middle button
+                                           minspanx=5, minspany=5,
+                                           spancoords='pixels')
+        self.selector = toggle_selector.RS
+        self.update_state()
+
+
+    def point_select_callback(self,eclick, erelease):
+        """ Manage points selected in multiple selection mode
+        """
+        #eclick and erelease are the press and release events'
+        self.update_state()
+        if not (self.shift_is_held or self.ctrl_is_held):
+            self.selectpt=[]
+            self.selectseg=[]
+        x1, y1 = eclick.xdata, eclick.ydata
+        x2, y2 = erelease.xdata, erelease.ydata
+
+        # print x1,x2,y1,y2
+        if x1>x2:
+            x1,x2=x2,x1
+        if y1>y2:
+            y1,y2=y2,y1
+        
+        
+        # try:
+        selectpt,selectseg = self.L.get_zone([x1,x2,y1,y2])
+
+        if not self.ctrl_is_held:
+            self.selectpt.extend(selectpt)
+            self.selectseg.extend(selectseg)
+            self.selectseg=filter(lambda x: self.L.Gs.node[x]['connect'][0] in self.selectpt
+                             and self.L.Gs.node[x]['connect'][1] in self.selectpt,
+                             self.selectseg)
+
+            self.selectpt=np.unique(self.selectpt).tolist()
+            self.selectseg=np.unique(self.selectseg).tolist()
+        else: 
+            [self.selectpt.pop(self.selectpt.index(x)) for x in selectpt if x in self.selectpt]
+            [self.selectseg.pop(self.selectseg.index(x)) for x in selectseg if x in self.selectseg]
+        # except:
+        #     print 'empty selection'
+        print self.selectpt,self.selectseg
+        self.plotselptseg(self.selectpt)
+        self.selected='pt'
+        print self.state
+
+
 
     def new_state(self):
         """ layout editor state machine
@@ -552,103 +1177,59 @@ class SelectL(object):
         #     return
 
         if self.evt=='escape':
-            self.state='Init'
-            self.update_state()
-            self.fig.canvas.draw()
+            self.escape()
             return
 
 
         if self.evt=='ctrl+z':
-            self.bundo=True
-            print len(self.L.Gs)
-            if len (self.undoGs) >2:
-                oGs=self.undoGs.pop(-1)
-                oGs=self.undoGs.pop(-1)
-                self.L.Gs=oGs
-                self.L.g2npy()
-            self.update_state()
-            self.bundo=False
+            self.undo()
             return
 
         if self.evt=='t':
-            if 'SM' in self.state:
-                self.update_state()
-                # fig=plt.gcf()
-                # ax=plt.gca()
-                if self.selected == 'pt':
-                    self.plotselptseg(self.selectseg,color='r')
-                    PP=self.L.pt[:,self.L.tahe[:,self.L.tgs[self.selectseg]]]
-                    if PP.shape[-1]!=0:
-                        self.fig,self.ax=plu.displot(PP[:,0],PP[:,1],fig=self.fig,ax=self.ax,color='r',linewidth=3,alpha=0.4)
-                        plt.draw()
-                    self.selected='seg'
-                    self.state='SMS'
-                else: 
-                    self.fig,self.ax= self.plotselptseg(self.selectpt)
-                    self.selected='pt'
-                    self.state='SMP'
-                self.ax.title.set_text(self.statename[self.state])
-                # self.update_state()
+            self.toogle()
+            return
 
         if self.evt == '3':
-            self.L._show3()
+            self.show3()
             return
 
         # Choose layers to visualized
         #
         if self.evt == 'l':
-            listchoices = self.L.name.keys()
-            self.L.display['layers'] = multchoicebox('message',
-                                                     'titre', listchoices)
-            self.state = 'Init'
-            self.update_state()
+            self.choose_layers()
             return
         #
         # 'f' toggle points nodes display
         #
         if self.evt=='f':
-            self.L.display['nodes'] = not self.L.display['nodes']
-            print self.L.display['nodes']
-            self.update_state()
+            self.togglept()
             return
 
         #
         # 'g' toggle segment nodes dislay
         #
         if self.evt=='g':
-            self.L.display['ednodes'] = not self.L.display['ednodes']
-            print self.L.display['ednodes']
-            self.update_state()
+            self.toggleseg()
             return
 
         #
         # '=' Increment layer
         #
         if self.evt=='=':
-            N = len(self.L.display['layerset'])
-            index = self.L.display['layerset'].index(self.L.display['activelayer'])
-            self.L.display['activelayer'] = self.L.display['layerset'][(index+1) % N]
-            self.current_layer = self.L.display['activelayer']
-            print self.current_layer
-            self.update_state()
+            self.inclayer()
             return
 
         #
         # '=' Decrement layer
         #
         if self.evt=='$':
-            N = len(self.L.display['layerset'])
-            index = self.L.display['layerset'].index(self.L.display['activelayer'])
-            self.L.display['activelayer'] = self.L.display['layerset'][(index-1) % N]
-            self.current_layer = self.L.display['activelayer']
-            self.update_state()
+            self.declayer()
             return
         #
         # 'i' : Back to init state 
         #
         if self.evt == 'i':
-            self.state = 'Init'
-            self.update_state()
+            self.modeIni()
             return
 
         #
@@ -661,51 +1242,18 @@ class SelectL(object):
         #
         if self.evt == 'e':
             if (self.state == 'Init'):
-                #
-                # averaging one point coordinate along the smallest dimension
-                #
-                x1 = self.ax.get_xbound()
-                y1 = self.ax.get_ybound()
-                # get node list and edge list
-                ndlist, edlist = self.L.get_zone([x1[0],x1[1],y1[0],y1[1]])
-                for k,nd in enumerate(ndlist):
-                    try:
-                        tp = np.vstack((tp,np.array(self.L.Gs.pos[nd])))
-                    except:
-                        tp = np.array(self.L.Gs.pos[nd])
-                mtp = np.sum(tp,axis=0)/(k+1)
-                stp = np.sqrt(np.sum((tp-mtp)*(tp-mtp),axis=0)/(k+1))
-                # if the standard deviation is lower than 10cm
-                # averaging coordinates along the shortest axis
-                if min(stp) < 0.10:
-                    ind = np.where(stp==min(stp))[0][0]
-                    for nd in ndlist:
-                        x = self.L.Gs.pos[nd][0]
-                        y = self.L.Gs.pos[nd][1]
-                        if ind ==0:
-                            self.L.Gs.pos[nd]=(mtp[0],y)
-                        if ind ==1:
-                            self.L.Gs.pos[nd]=(x,mtp[1])
-                    plt.axis('tight')
-                    self.fig,self.ax = self.show(self.fig,self.ax,clear=True)
-                    self.update_state()
-                return()
+                self.egalizept()
+                return
 
             if (self.state == 'SS') | (self.state =='SSS'):
-                self.L.edit_segment(self.selected_edge1)
-                self.state = 'Init'
-                self.update_state()
+                self.editseg()
                 return
 
             if self.state == 'SP1':
-                self.L.edit_point(self.selected_pt1)
-                self.state = 'Init'
-                self.update_state()
+                self.editpt()
                 return
             if self.state == 'SMS':
-                outdata=self.L.edit_segment(self.selectseg[0])
-                [self.L.edit_segment(s,outdata=outdata,gui=False) for s in self.selectseg]
-                self.update_state()
+                self.editmulseg()
                 return
 
             
@@ -714,10 +1262,7 @@ class SelectL(object):
         #
         if self.evt == 'b':
             if self.state == 'Init':
-                self.nsel = eval(raw_input("seg number :"))
-                #self.L.edit_segment(nseg)
-                self.state='SS'
-                self.update_state()
+                self.entersegval()
                 return
 
         #
@@ -725,15 +1270,7 @@ class SelectL(object):
         #
         if self.evt == 'j':
             if self.state == 'Init':
-                vscale,hscale = offsetbox(text1='Enter scaling values',
-                                          text2=('vscale','hscale'),
-                                          default=('1.0','1.0')
-                                          )
-                for n in self.L.Gs.pos:
-                    self.L.Gs.pos[n]=(self.L.Gs.pos[n][0],self.L.Gs.pos[n][1]*vscale)
-                plt.axis('tight')
-                self.fig,self.ax = self.show(self.fig,self.ax,clear=True)
-                self.update_state()
+                self.hvscaling()
                 return
 
         # Init
@@ -751,108 +1288,62 @@ class SelectL(object):
 #                return()
 
             if self.state == 'SS':
-                result = self.L.add_subseg(self.selected_edge1,self.current_layer)
-                if result:
-                    self.state = 'SSS'
-                else :
-                    self.state = 'Init'
-                self.update_state()
+                self.addsubseg()
                 return
         #
         # d : delete
         #
         if self.evt == 'd' or self.evt =='delete':
             if  self.state == 'SP1':
-                self.state = 'Init'
-                self.L.del_points(self.selected_pt1)
-                self.update_state()
+                self.delpt()
                 return
 
             if self.state == 'SS':
-                self.L.del_segment(self.selected_edge1)
-                self.state = 'Init'
-                self.update_state()
+                self.delseg()
                 return
 
             if self.state == 'SSS':
-                self.L.del_subseg(self.selected_edge1)
-                self.state = 'Init'
-                self.update_state()
+                self.delsubseg()
                 return
 
             if self.state=='SMP':
-                # get boundary of the region 
-                if hasattr(self,'selectpt'):
-
-                    ptlist = self.selectpt
-                    self.selectpt=[]
-                    self.selectseg=[]
-                    self.L.del_points(ptlist)
-                    self.state = 'Init'
-                    self.update_state()
-                    return
-                else :
-                    print 'no selected region'
+               self.delmulpt()
+               return
 
             if self.state=='SMS':
-                seglist = self.selectseg
-                self.selectpt=[]
-                self.selectseg=[]
-                self.L.del_segment(seglist)
-                self.state = 'Init'
-                self.update_state()
-                return
-            else :
-                print 'no selected region'
+                self.delmulseg()
         #
         # r : Refresh
         #
         if self.evt == 'r' or self.evt == 'f5':
-            #plt.axis('tight')
-            plt.axis(self.L.display['box'])
-            self.fig,self.ax = self.show(self.fig,self.ax,clear=True)
-            self.state = 'Init'
-            self.update_state()
+            self.refresh()
             return
 
         #
         # o : Toggle overlay
         #
         if self.evt == 'o' and not self.ctrl_is_held:
-            self.state='Init'
-            self.update_state()
-            if self.L.display['overlay']:
-                self.L.display['overlay'] = False
-                self.update_state()
-            else:
-                self.L.display['overlay'] = True
-                self.update_state()
+            self.toggleoverlay()
             return
 
         if self.evt == 'o' :
-            self.set_origin = True
+            self.set_origin=True
 
 
         if self.evt == 'f2':
-            self.state = "CP"
-            self.update_state()
+            self.modeCP()
             return
         #
         # m : Toggle mode edition Point | Segment
         #
         if self.evt == 'm':
-            if self.state == "Init":
-                self.state = "CP"
-            elif self.state == "CP":
-                self.state = "Init"
-            self.update_state()
+            self.modetoggle()
             return
         #
         # 'z' : change display parameters
         #
         if self.evt == 'z':
-            self.L.displaygui()
-            self.fig,self.ax = self.show(fig=self.fig,ax=self.ax,clear=True)
+            self.chgdis()
             return
         #
         # 'q' : quit interactive mode
@@ -864,46 +1355,28 @@ class SelectL(object):
         #     return
 
         if self.evt == 'ctrl+q':
-            plt.rcParams.update(self.rcconf)
-            self.fig.canvas.mpl_disconnect(self.L.cid1)
-            self.fig.canvas.mpl_disconnect(self.L.cid2)
-            plt.close()
+            self.quit()
             return
 
         #
         # 'x' save structure
         #
         if self.evt == 'x' or self.evt =='ctrl+s':
-            racine, ext = os.path.splitext(self.L.filename)
-            filename = racine + '.str2'
-            fileini = racine + '.ini'
-
-            # Commented because ss_ce not updated 
-            #self.L.savestr2(filename)
-
-            self.L.saveini(fileini)
-            print "structure saved in ", filename
-            print "structure saved in ", fileini
+            self.save()
             return
         #
         # 'n' : toggle node label display
         #
         if self.evt == 'n':
-            self.L.display['ndlabel'] = not self.L.display['ndlabel']
-            self.L.display['edlabel'] = not self.L.display['edlabel']
-            print self.L.display['activelayer']
-            self.fig,ax = self.show(fig=self.fig,ax=self.ax,clear=True)
-            self.fig.canvas.draw()
+            self.toggledispndl()
             return
         #
         # "w" : display all layers
         #
         if self.evt == 'w':
         # display all layer
-            self.L.display['activelayer'] = self.L.name.keys()
-            print self.L.display['activelayer']
-            self.fig,self.ax = self.show(fig=self.fig,ax=self.ax,clear=True)
-            return self.fig,self.ax
+            self.disalllay()
+            return 
         #
         # Left clic and selected node is a point
         #
@@ -913,9 +1386,7 @@ class SelectL(object):
         # select point 1 : Init -> SP1
         #
             if self.state=='Init':
-                # yellow point 
-                self.state = 'SP1'
-                self.update_state()
+                self.selpt1()
                 return
         #
         # select point 2 : SP1 --> SP2
@@ -923,14 +1394,10 @@ class SelectL(object):
 
             if self.state=='SP1':
                 if self.nsel != self.selected_pt1:
-                    # green point 
-                    self.state = 'SP2'
-                    self.update_state()
+                    self.selpt2()
                     return
                 else:
-                    self.state = 'Init'
-                    # yellow point 
-                    self.update_state()
+                    self.modeIni()
                     return
         #
         # Create point on selected segment orthogonaly to segment starting in
@@ -939,30 +1406,19 @@ class SelectL(object):
         # Not finished 
         #
             if self.state=='SS':
-                # get the connection of the selected segment
-                connect = self.L.Gs.node[self.selected_edge1]['connect']
-                if (self.nsel != connect[0]) & (self.nsel != connect[1]): 
-                   self.L.add_nfpe(self.nsel,self.nsel,self.selected_edge1,self.selected_edge2)
-                   pass
-
+                self.createptonseg()
+                return
         #
         # Left clic and selected node is a segment
         #
 
         if (self.evt == 'lclic') & (self.nsel > 0):
             if self.state=='Init':
-                self.state = 'SS'
-                self.update_state()
+                self.selseg()
                 return
 
             if self.state=='SS':
-                self.nsel = self.selected_edge1
-                segdico = self.L.Gs.node[self.nsel]
-                if 'ss_name' in segdico:
-                    self.state = 'SSS'
-                else:
-                    self.state = 'CPS'
-                self.update_state()
+                self.selsubseg()
                 return
         #
         # Right clic and selected node is a point
@@ -980,25 +1436,22 @@ class SelectL(object):
 
         if (self.evt == 'rclic') & (self.nsel > 0):
             if self.state=='SS':
-                self.state = 'Init'
-                self.update_state()
+                self.modeIni()
                 return
 
             if self.state=='SSS':
-                self.state = 'SS'
-                self.update_state()
+                self.modeSS()
                 return
 
             if self.state == 'CP':
             # create point on edge
-                self.state = 'CPS'
-                self.update_state()
+                self.modeCPS()
                 return
 
             if (self.state == 'CPS') & (self.nsel!= self.selected_edge1):
             # create point on edge
-                self.state = 'CPSS'
-                self.update_state()
+                self.modeCPSS()
+                
                 return
         #
         # Left clic
@@ -1008,78 +1461,25 @@ class SelectL(object):
             # or set origin
             if self.state == 'CP':
                 if self.set_origin:
-                    offx = self.ptsel[0]
-                    offy = self.ptsel[1]
-                    print offx,offy
-                    xmin,xmax,ymin,ymax = self.L.display['box']
-                    self.L.display['box'] = [xmin-offx,xmax-offx,ymin-offy,ymax-offy]
-                    self.set_origin=False
-                    self.set_x=True
-                    plt.axis('tight')
-                    self.fig,self.ax = self.show(self.fig,self.ax,clear=True)
-                    self.update_state()
+                    self.setorigin(parameter='O')
                     return
                 if self.set_x:
-                    offx = self.ptsel[0]
-                    val  = eval(enterbox('enter x value'))
-                    ratio = val/offx
-                    print ratio
-                    xmin,xmax,ymin,ymax = self.L.display['box']
-                    self.L.display['box'] = [ratio*xmin,ratio*xmax,ymin,ymax]
-                    self.set_x=False
-                    self.set_y=True
-                    plt.axis('tight')
-                    self.fig,self.ax = self.show(self.fig,self.ax,clear=True)
-                    self.update_state()
+                    self.setorigin(parameter='x')
                     return
                 if self.set_y:
-                    offx = self.ptsel[1]
-                    val  = eval(enterbox('enter y value'))
-                    ratio = val/offx
-                    print ratio
-                    xmin,xmax,ymin,ymax = self.L.display['box']
-                    self.L.display['box'] = [xmin,xmax,ratio*ymin,ratio*ymax]
-                    self.set_y=False
-                    plt.axis('tight')
-                    self.fig,self.ax = self.show(self.fig,self.ax,clear=True)
-                    self.update_state()
+                    self.setorigin(parameter='y')
                     return
                 else:
-                    self.L.add_fnod(tuple(self.ptsel))
-                    self.pt_previous = self.ptsel
-                    self.update_state()
-
+                    self.creatept()
                 return
 
             if self.state == 'SP2':
-
-                ta = self.selected_pt1
-                he = self.selected_pt2
-
-                segexist = self.L.isseg(ta,he)
-                print segexist
-                # if segment do not already exist, create it
-                if not segexist: 
-                    self.nsel  = self.L.add_segment(ta, he,name=self.current_layer)
-                else:
-                    print "segment ("+str(ta)+","+str(he)+") already exists"
-                self.L.g2npy()
-                self.state = 'Init'
-                self.update_state()
+                self.createseg()
                 return
 
             # create point on segment
             if self.state == 'CPS':
-                pt_new = geu.ptonseg(self.pta1, self.phe1, self.ptsel)
-                pd1 = pt_new - self.pta1
-                pd2 = self.phe1 - self.pta1
-                alpha = np.sqrt(np.dot(pd1, pd1)) / np.sqrt(np.dot(pd2, pd2))
-                if (pt_new != []):
-                    # calculate alpha
-                    self.L.add_pons(self.selected_edge1, 1. - alpha)
-                    self.current_layer = self.L.Gs.node[self.selected_edge1]['name']
-                    self.state = 'Init'
-                self.update_state()
+                self.splitseg()
                 return
 
         #
@@ -1087,108 +1487,37 @@ class SelectL(object):
         #
         if (self.evt == 'rclic') or (self.evt == 'lclic' and self.ctrl_is_held ):
             if self.state == 'CP':
-                try:
-                    self.ptsel[0] = self.pt_previous[0]
-                    self.L.add_fnod(tuple(self.ptsel))
-                    self.pt_previous = self.ptsel
-                    self.update_state()
-                    return
-                except:
-                    return
+                self.createptsamecoord(axis='x')
+                return
 
             if self.state=='SP2':
-                if self.nsel == self.selected_pt1:
-                    self.p1[0].set_visible(False)
-                    self.p2[0].set_visible(False)
-                    self.nsel = self.selected_pt2
-                    self.state = 'SP1'
-                    self.update_state()
-                    return
-                if self.nsel == self.selected_pt2:
-                    self.p1[0].set_visible(False)
-                    self.p2[0].set_visible(False)
-                    self.nsel = self.selected_pt1
-                    self.state = 'SP1'
-                    self.update_state()
-                    return
+                self.unselpt()
+                return
         #
         # right click : back to SS from CPS
         #
             if self.state == 'CPS':
-                self.state = 'SS'
-                self.update_state()
+                self.modeSS()
                 return
         #
         # right click : back to CPS from CPSS
         #
             if self.state == 'CPSS':
-                self.state = 'CPS'
-                self.update_state(self.fig,self.ax)
+                self.modeCPS()
                 return
         #
         # Center Clic event
         #
         if (self.evt == 'cclic') or (self.evt == 'lclic' and self.shift_is_held ):
             if self.state == 'CP':
-                try:
-                    self.ptsel[1] = self.pt_previous[1]
-                    self.L.add_fnod(tuple(self.ptsel))
-                    self.pt_previous = self.ptsel
-                    self.update_state()
-                    return
-                except:
-                    return
+                self.createptsamecoord(axis='y')
+                return
         #
         # Left clic and selected node is a point
         #
 
 
-        def point_select_callback(eclick, erelease):
-            'eclick and erelease are the press and release events'
-            self.update_state()
-            if not (self.shift_is_held or self.ctrl_is_held):
-                self.selectpt=[]
-                self.selectseg=[]
-            x1, y1 = eclick.xdata, eclick.ydata
-            x2, y2 = erelease.xdata, erelease.ydata
 
-            # print x1,x2,y1,y2
-            if x1>x2:
-                x1,x2=x2,x1
-            if y1>y2:
-                y1,y2=y2,y1
-            
-            
-            # try:
-            selectpt,selectseg = self.L.get_zone([x1,x2,y1,y2])
-
-            if not self.ctrl_is_held:
-                self.selectpt.extend(selectpt)
-                self.selectseg.extend(selectseg)
-                self.selectseg=filter(lambda x: self.L.Gs.node[x]['connect'][0] in self.selectpt
-                                 and self.L.Gs.node[x]['connect'][1] in self.selectpt,
-                                 self.selectseg)
-
-                self.selectpt=np.unique(self.selectpt).tolist()
-                self.selectseg=np.unique(self.selectseg).tolist()
-            else: 
-                [self.selectpt.pop(self.selectpt.index(x)) for x in selectpt if x in self.selectpt]
-                [self.selectseg.pop(self.selectseg.index(x)) for x in selectseg if x in self.selectseg]
-            # except:
-            #     print 'empty selection'
-            print self.selectpt,self.selectseg
-            self.plotselptseg(self.selectpt)
-            self.selected='pt'
-            print self.state
-            
-                
-
-        def toggle_selector(event):
-            if toggle_selector.RS.active:
-                toggle_selector.RS.set_active(False)
-            if not toggle_selector.RS.active:
-                toggle_selector.RS.set_active(True)
-        
         if self.evt == 'f1':
             # avoid conflict between zoom and selection 
             # fm=plt.get_current_fig_manager()
@@ -1196,15 +1525,8 @@ class SelectL(object):
             #     fm.toolbar.pan()
             # if fm.toolbar._active == 'ZOOM':
             #     fm.toolbar.zoom()
-
-            self.state='SMP'
-            toggle_selector.RS = RectangleSelector(self.ax, point_select_callback,
-                                               drawtype='box', useblit=True,
-                                               button=[1,3], # don't use middle button
-                                               minspanx=5, minspany=5,
-                                               spancoords='pixels')
-            self.selector = toggle_selector.RS
-            self.update_state()
+            self.multsel()
+            
 
         if self.evt == 'f9':
             print self.selectpt, self.selectseg
