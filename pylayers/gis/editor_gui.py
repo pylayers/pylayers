@@ -84,7 +84,6 @@ class PropertiesWin(QDialog):    # any super class is okay
         """
         zmin = self.heightmin.text()
         zmax = self.heightmax.text()
-
         if self.transition.isChecked():
             trans = True
         else :
@@ -121,7 +120,7 @@ class AppForm(QMainWindow):
         # self.textbox.setText('1 2 3 4')
         self.on_draw()
         self.prop = PropertiesWin(slabDB=self.L.sl)
-        self.shortcuts()
+        # self.shortcuts()
 
     def save_plot(self):
         file_choices = "PNG (*.png)|*.png"
@@ -137,10 +136,11 @@ class AppForm(QMainWindow):
     def edit_properties(self):
         """ edit wall properties
         """
-
-        
-        self.prop.show()
-
+        print self.selectl.nsel,self.selectl.state 
+        if (self.selectl.state == 'SS') and (self.selectl.nsel > 0):
+            self.prop.show()
+        elif (self.selectl.state == 'SMS') and (self.selectl.selectseg!=[]):
+            self.prop.show()
     def on_about(self):
         msg = """ A demo of using PyQt with matplotlib:
         
@@ -185,7 +185,7 @@ class AppForm(QMainWindow):
         self.L.display['ednodes']=True
         self.L.display['subsegnb']=True
 
-        self.fig,self.axes = self.af.show(self.fig,self.axes,clear=True)
+        self.fig,self.axes = self.selectl.show(self.fig,self.axes,clear=True)
 
         # self.axes.text(10,10,str(self.properties.currentText()))
         
@@ -223,14 +223,14 @@ class AppForm(QMainWindow):
         # Bind the 'pick' event for clicking on one of the bars
         #
         # self.canvas.mpl_connect('pick_event', self.on_pick)
-        self.af = SelectL2(self.L,fig=self.fig,ax=self.axes)
+        self.selectl = SelectL2(self.L,fig=self.fig,ax=self.axes)
 
         self.cid1 = self.canvas.mpl_connect('button_press_event',
-                                           self.af.OnClick)
+                                           self.selectl.OnClick)
         self.cid2 = self.canvas.mpl_connect('key_press_event',
-                                           self.af.OnPress)
+                                           self.selectl.OnPress)
         self.cid3 = self.canvas.mpl_connect('key_release_event',
-                                           self.af.OnRelease)
+                                           self.selectl.OnRelease)
         self.canvas.setFocusPolicy( Qt.ClickFocus )
         self.canvas.setFocus()
 
@@ -300,10 +300,10 @@ class AppForm(QMainWindow):
         self.statusBar().addWidget(self.status_text, 1)
 
         
-    def shortcuts(self):
-        shortcut = QShortcut(self)
-        shortcut.setKey("Ctrl+D")
-        self.connect(shortcut, SIGNAL("activated()"), self.edit_properties )    # QtGui.QShortcut(QtGui.QKeySequence("Ctrl+Return"), self.myWidget, self.doSomething)
+    # def shortcuts(self):
+    #     shortcut = QShortcut(self)
+    #     shortcut.setKey("Ctrl+D")
+    #     self.connect(shortcut, SIGNAL("activated()"), self.edit_properties )    # QtGui.QShortcut(QtGui.QKeySequence("Ctrl+Return"), self.myWidget, self.doSomething)
 
     def create_menu(self):        
         self.file_menu = self.menuBar().addMenu("&File")
@@ -315,7 +315,7 @@ class AppForm(QMainWindow):
             shortcut="Ctrl+Q", tip="Close the application")
         refresh = self.create_action("&Refresh", slot=self.on_draw, 
             shortcut="F10", tip="Refresh the application")
-        # save_layout = self.create_action("&MS", slot=self.af, 
+        # save_layout = self.create_action("&MS", slot=self.selectl, 
         #      shortcut="F1", tip="Multiple Selection")
         properties= self.create_action("&Properties", slot=self.edit_properties, 
             shortcut="F9", tip="Edit Wall properties")
