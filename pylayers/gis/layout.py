@@ -2791,12 +2791,12 @@ class Layout(PyLayers):
         title = "Segment (" + str(n1) + ',' + str(n2) + ")"
         message = str(self.sl.keys())
         if 'ss_name' not in de1.keys():
-            de1k = ['name', 'z','transition']
-            de1v = [de1['name'],de1['z'],de1['transition']]
+            de1k = ['name', 'z','transition','offset']
+            de1v = [de1['name'],de1['z'],de1['transition'],de1['offset']]
         else:
-            de1k = ['name', 'z', 'ss_name', 'ss_z','transition']
+            de1k = ['name', 'z', 'ss_name', 'ss_z','transition','ss_offset']
             de1v = [de1['name'], de1['z'], de1['ss_name'], de1['ss_z'],
-                    de1['transition']]
+                    de1['transition'],de1['ss_offset']]
         #de1v    = de1.values()
         if gui:
             outdata={}
@@ -2841,9 +2841,51 @@ class Layout(PyLayers):
                 #         pass
             else:
                 for k in de1k:
-                    if k in ['z','name','transition']:
+                    if k in ['z','name','transition','offset']:
                         self.Gs.node[e1][k] = outdata[k]
         return outdata
+
+    def edit_seg(self, e1 ,data={}):
+        """ edit segment
+
+        Parameters
+        ----------
+
+        e1 : integer
+            edge number
+
+        Notes
+        -----
+
+        A segment has the following properties :
+            + name  : string
+            + z  :  tuple
+            + transition : boolean (default FALSE)
+
+        If a segment has subsegments attached the following properties are
+        added :
+            + ss_name : string
+            + ss_z : subsegment [(min height (meters),max height (meters))]
+        """
+        nebd = self.Gs.neighbors(e1)
+        n1 = nebd[0]
+        n2 = nebd[1]
+        de1 = self.Gs.node[e1]
+        if 'ss_name' not in de1.keys():
+            de1k = ['name', 'z','transition','offset']
+            de1v = [de1['name'],de1['z'],de1['transition'],de1['offset']]
+        else:
+            de1k = ['name', 'z', 'ss_name', 'ss_z','transition','ss_offset']
+            de1v = [de1['name'], de1['z'], de1['ss_name'], de1['ss_z'],
+                    de1['transition'],de1['ss_offset']]
+        #de1v    = de1.values()
+        if data=={}:
+            pass
+        else:
+            for k in de1k:
+                if k in data:
+                    self.Gs.node[e1][k] = data[k]
+        return data
 
        
     def have_subseg(self, e1):

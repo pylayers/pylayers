@@ -1093,23 +1093,23 @@ class SelectL2(object):
             y1,y2=y2,y1
         
         
-        # try:
-        selectpt,selectseg = self.L.get_zone([x1,x2,y1,y2])
+        try:
+            selectpt,selectseg = self.L.get_zone([x1,x2,y1,y2])
 
-        if not self.ctrl_is_held:
-            self.selectpt.extend(selectpt)
-            self.selectseg.extend(selectseg)
-            self.selectseg=filter(lambda x: self.L.Gs.node[x]['connect'][0] in self.selectpt
-                             and self.L.Gs.node[x]['connect'][1] in self.selectpt,
-                             self.selectseg)
+            if not self.ctrl_is_held:
+                self.selectpt.extend(selectpt)
+                self.selectseg.extend(selectseg)
+                self.selectseg=filter(lambda x: self.L.Gs.node[x]['connect'][0] in self.selectpt
+                                 and self.L.Gs.node[x]['connect'][1] in self.selectpt,
+                                 self.selectseg)
 
-            self.selectpt=np.unique(self.selectpt).tolist()
-            self.selectseg=np.unique(self.selectseg).tolist()
-        else: 
-            [self.selectpt.pop(self.selectpt.index(x)) for x in selectpt if x in self.selectpt]
-            [self.selectseg.pop(self.selectseg.index(x)) for x in selectseg if x in self.selectseg]
-        # except:
-        #     print 'empty selection'
+                self.selectpt=np.unique(self.selectpt).tolist()
+                self.selectseg=np.unique(self.selectseg).tolist()
+            else: 
+                [self.selectpt.pop(self.selectpt.index(x)) for x in selectpt if x in self.selectpt]
+                [self.selectseg.pop(self.selectseg.index(x)) for x in selectseg if x in self.selectseg]
+        except:
+            print 'empty selection'
         print self.selectpt,self.selectseg
         self.plotselptseg(self.selectpt)
         self.selected='pt'
