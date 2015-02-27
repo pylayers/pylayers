@@ -121,9 +121,9 @@ class ED(PyLayers):
         Returns
         -------
 
-        y : :math:`F2{\beta^2 F1{x}^2}`
+        y : :math:`F_2\{\beta^2 F_1\{x\}^2\}`
 
-        :math:`F{x}` means a filtering of x with filter :math:`F`
+            :math:`F{x}` means a filtering of x with filter :math:`F`
 
         """
         self.xf1 = self.filterB.filter(x.y)
