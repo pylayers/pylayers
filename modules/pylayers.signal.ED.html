@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.signal.waveform" href="pylayers.signal.waveform.html" />
+    <link rel="next" title="pylayers.signal.ED.ED.__init__" href="generated/pylayers.signal.ED.ED.__init__.html" />
     <link rel="prev" title="pylayers.signal.DF.DF.ir" href="generated/pylayers.signal.DF.DF.ir.html" /> 
   </head>
   <body>
@@ -47,7 +47,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.signal.waveform.html" title="pylayers.signal.waveform"
+          <a href="generated/pylayers.signal.ED.ED.__init__.html" title="pylayers.signal.ED.ED.__init__"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="generated/pylayers.signal.DF.DF.ir.html" title="pylayers.signal.DF.DF.ir"
@@ -63,12 +63,20 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pylayers.signal.ED</a><ul>
+<li><a class="reference internal" href="#bsignal-ed">Bsignal ED</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="generated/pylayers.signal.DF.DF.ir.html"
                         title="previous chapter">pylayers.signal.DF.DF.ir</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.signal.waveform.html"
-                        title="next chapter">pylayers.signal.waveform</a></p>
+  <p class="topless"><a href="generated/pylayers.signal.ED.ED.__init__.html"
+                        title="next chapter">pylayers.signal.ED.ED.__init__</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/modules/pylayers.signal.ED.txt"
@@ -98,7 +106,60 @@
   <div class="section" id="pylayers-signal-ed">
 <h1>pylayers.signal.ED<a class="headerlink" href="#pylayers-signal-ed" title="Permalink to this headline">¶</a></h1>
 <p>Implement an energy detector</p>
-<span class="target" id="module-pylayers.signal.ED"></span></div>
+<span class="target" id="module-pylayers.signal.ED"></span><p>&#8221;
+.. currentmodule:: pylayers.signal.ED</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+</tbody>
+</table>
+<div class="section" id="bsignal-ed">
+<h2>Bsignal ED<a class="headerlink" href="#bsignal-ed" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.__init__.html#pylayers.signal.ED.ED.__init__" title="pylayers.signal.ED.ED.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">ED.__init__</span></tt></a>(**kwargs)</td>
+<td>fs : sampling frequency</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.__repr__.html#pylayers.signal.ED.ED.__repr__" title="pylayers.signal.ED.ED.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">ED.__repr__</span></tt></a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.apply.html#pylayers.signal.ED.ED.apply" title="pylayers.signal.ED.ED.apply"><tt class="xref py py-obj docutils literal"><span class="pre">ED.apply</span></tt></a>(x)</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.moment.html#pylayers.signal.ED.ED.moment" title="pylayers.signal.ED.ED.moment"><tt class="xref py py-obj docutils literal"><span class="pre">ED.moment</span></tt></a>([typ])</td>
+<td>evaluate mean and variance of output signal y</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.pdf.html#pylayers.signal.ED.ED.pdf" title="pylayers.signal.ED.ED.pdf"><tt class="xref py py-obj docutils literal"><span class="pre">ED.pdf</span></tt></a>(E[,&nbsp;Ei])</td>
+<td>calculates decision problem densities under H0 and H1</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.errprob.html#pylayers.signal.ED.ED.errprob" title="pylayers.signal.ED.ED.errprob"><tt class="xref py py-obj docutils literal"><span class="pre">ED.errprob</span></tt></a>(E[,&nbsp;Ei,&nbsp;thresh,&nbsp;typ])</td>
+<td>calculates error probability</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.roc.html#pylayers.signal.ED.ED.roc" title="pylayers.signal.ED.ED.roc"><tt class="xref py py-obj docutils literal"><span class="pre">ED.roc</span></tt></a>(E[,&nbsp;typ])</td>
+<td>determine receiver operating curve</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.ED.ED.plot.html#pylayers.signal.ED.ED.plot" title="pylayers.signal.ED.ED.plot"><tt class="xref py py-obj docutils literal"><span class="pre">ED.plot</span></tt></a>(E)</td>
+<td>plot decision problem densities</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 
 
           </div>
@@ -116,7 +177,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.signal.waveform.html" title="pylayers.signal.waveform"
+          <a href="generated/pylayers.signal.ED.ED.__init__.html" title="pylayers.signal.ED.ED.__init__"
              >next</a> |</li>
         <li class="right" >
           <a href="generated/pylayers.signal.DF.DF.ir.html" title="pylayers.signal.DF.DF.ir"
