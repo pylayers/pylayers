@@ -78,13 +78,15 @@
             
   <h1>Source code for pylayers.signal.DF</h1><div class="highlight"><pre>
 <span class="c">#!/usr/bin/python</span>
-<span class="c"># -*- coding: latin1 -*-</span>
+<span class="c">#-*- coding:Utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">DF Class</span>
 <span class="sd">========</span>
 
 <span class="sd">This class implements a LTI digital filter</span>
+
+<span class="sd">.. currentmodule:: pylayers.signal.DF</span>
 
 <span class="sd">.. autosummary::</span>
 <span class="sd">    :toctree: generated/</span>
@@ -97,6 +99,7 @@
 <span class="sd">    DF.remez</span>
 <span class="sd">    DF.zplane</span>
 <span class="sd">    DF.ir</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">io</span>
@@ -121,6 +124,10 @@
 <div class="viewcode-block" id="DF.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.__init__.html#pylayers.signal.DF.DF.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">]),</span><span class="n">a</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">])):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">r</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">r</span>
+        <span class="k">assert</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">c</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">&lt;</span><span class="mf">1e-16</span><span class="p">)</span>
+        <span class="k">assert</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">c</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">&lt;</span><span class="mf">1e-16</span><span class="p">)</span>
 </div>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">z</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -164,6 +171,9 @@
 
     <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">df</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        extract and stack  poles and zeros</span>
+
+<span class="sd">        TODO : handling simplification</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">b1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
@@ -184,10 +194,26 @@
         <span class="n">F</span>   <span class="o">=</span> <span class="n">DF</span><span class="p">()</span>
         <span class="n">F</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">rpa1</span><span class="p">,</span><span class="n">rpa2</span><span class="p">))</span>
         <span class="n">F</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">rpb1</span><span class="p">,</span><span class="n">rpb2</span><span class="p">))</span>
+        <span class="c">#F.simplify()</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
 
 
+
+    <span class="k">def</span> <span class="nf">simplify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; simplify transfer function </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ip</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">iz</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">l</span><span class="p">,</span><span class="n">z</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">):</span>
+                <span class="n">md</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">((</span><span class="n">p</span><span class="o">-</span><span class="n">z</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">z</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">md</span><span class="o">&lt;</span><span class="n">tol</span><span class="p">:</span>
+                    <span class="n">ip</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                    <span class="n">iz</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span><span class="n">ip</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">,</span><span class="n">iz</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">flipc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -201,7 +227,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot; return a match filter</span>
+        <span class="sd">r&quot;&quot;&quot; return a match filterplt.axis([-2,2,-2,2])</span>
 
 
 <span class="sd">        if $$H(z)=\frac{1+b_1z^1+...+b_Nz^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$</span>
@@ -216,28 +242,34 @@
             <span class="n">MF</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>
             <span class="k">return</span><span class="p">(</span><span class="n">MF</span><span class="p">)</span>
 
-<div class="viewcode-block" id="DF.filter"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.filter.html#pylayers.signal.DF.DF.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">causal</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; filter x</span>
+<div class="viewcode-block" id="DF.filter"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.filter.html#pylayers.signal.DF.DF.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">causal</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; filter s</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        x : np.array</span>
+<span class="sd">        s : np.array |TUsignal</span>
 <span class="sd">            input signal</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 
-<span class="sd">        y : np.array</span>
+<span class="sd">        y : np.array | TUsignal</span>
 <span class="sd">            output signal</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="ow">is</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">y</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">s</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">causal</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">y</span>  <span class="o">=</span> <span class="n">si</span><span class="o">.</span><span class="n">lfilter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">causal</span><span class="p">:</span>
             <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="ow">is</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">:</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 </div>
     <span class="k">def</span> <span class="nf">factorize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -253,21 +285,18 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fir</span><span class="p">:</span>
             <span class="c"># selectionne les zeros interne et externe</span>
-            <span class="n">internal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">external</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">internal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">external</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">zi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="n">internal</span><span class="p">]</span>
             <span class="n">ze</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="n">external</span><span class="p">]</span>
 
-            <span class="n">pi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="n">zi</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-            <span class="n">pe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="n">ze</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">Fmin</span> <span class="o">=</span> <span class="n">DF</span><span class="p">()</span>
+            <span class="n">Fmin</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">zi</span>
 
-            <span class="n">bi</span> <span class="o">=</span> <span class="n">pi</span><span class="o">.</span><span class="n">c</span>
-            <span class="n">be</span> <span class="o">=</span> <span class="n">pe</span><span class="o">.</span><span class="n">c</span>
+            <span class="n">Fmax</span> <span class="o">=</span> <span class="n">DF</span><span class="p">()</span>
+            <span class="n">Fmax</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">ze</span>
 
-            <span class="n">F1</span> <span class="o">=</span> <span class="n">DF</span><span class="p">(</span><span class="n">b</span><span class="o">=</span><span class="n">bi</span><span class="p">)</span>
-            <span class="n">F2</span> <span class="o">=</span> <span class="n">DF</span><span class="p">(</span><span class="n">b</span><span class="o">=</span><span class="n">be</span><span class="p">)</span>
-
-            <span class="k">return</span><span class="p">(</span><span class="n">F1</span><span class="p">,</span><span class="n">F2</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">(</span><span class="n">Fmin</span><span class="p">,</span><span class="n">Fmax</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DF.order"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.order.html#pylayers.signal.DF.DF.order">[docs]</a>    <span class="k">def</span> <span class="nf">order</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Returns filter order</span>
@@ -310,6 +339,8 @@
 <span class="sd">            True</span>
 <span class="sd">        fsGHz : []</span>
 
+<span class="sd">        TODO : go until 2pi if coefficients are complex</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;display&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
@@ -319,6 +350,7 @@
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
 
         <span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">h</span><span class="p">)</span>    <span class="o">=</span> <span class="n">si</span><span class="o">.</span><span class="n">freqz</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fsGHz&#39;</span><span class="p">]</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
             <span class="n">fNGHz</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fsGHz&#39;</span><span class="p">]</span><span class="o">/</span><span class="mf">2.</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">H</span>   <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">fNGHz</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">h</span><span class="p">)</span>
@@ -349,7 +381,7 @@
 <span class="sd">        order : int</span>
 <span class="sd">            filter order</span>
 <span class="sd">        w : array_like</span>
-<span class="sd">            a scalar or length-2 sequnce (relative frequency 0&lt;1  fN &lt;=&gt; 1)</span>
+<span class="sd">            a scalar or length-2 sequence (relative frequency 0&lt;1  fN &lt;=&gt; 1)</span>
 <span class="sd">        typ : string</span>
 <span class="sd">            &#39;lowpass&#39; | &#39;highpass&#39; | &#39;bandpass&#39; | &#39;bandstop&#39;</span>
 
@@ -421,10 +453,8 @@
 <span class="sd">        ----------</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">A</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
-        <span class="n">B</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
-        <span class="n">ra</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">r</span>
-        <span class="n">rb</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">r</span>
+        <span class="n">rb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span>
+        <span class="n">ra</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span>
 
         <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">+</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">t</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">),</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
@@ -450,6 +480,7 @@
         <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">),</span><span class="n">ir</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="n">ir</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ir</span><span class="p">))</span> <span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">ir</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span>
 
 </div>
@@ -501,8 +532,8 @@
     </div>
 
     <div class="footer">
-        &copy; Copyright 2014, PyLayers developer team.
-      Last updated on déc. 02, 2014.
+        &copy; Copyright 2015, PyLayers developer team.
+      Last updated on févr. 27, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

@@ -1345,7 +1345,7 @@
 
 
 
-            <span class="k">print</span> <span class="s">&#39;cluster&#39;</span>
+            <span class="c"># print &#39;cluster&#39;</span>
             <span class="n">lclust</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">dd</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">mps</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
@@ -1411,7 +1411,7 @@
 
             <span class="k">if</span> <span class="n">HT</span><span class="p">:</span>
 
-                <span class="k">print</span> <span class="s">&quot;enter in HT processing&quot;</span>
+                <span class="c">#print &quot;enter in HT processing&quot;</span>
                 <span class="k">try</span><span class="p">:</span>
 
                     <span class="c"># for now, it is supposed that all RSS share the same model</span>
@@ -1453,7 +1453,7 @@
 
                         <span class="bp">self</span><span class="o">.</span><span class="n">pe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dlayer</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="n">dlindx</span><span class="p">]</span><span class="o">.</span><span class="n">ctr</span><span class="p">[</span>
                             <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">lclust</span><span class="p">[</span><span class="mi">0</span><span class="p">])],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-                        <span class="k">print</span> <span class="s">&quot;HT processing done&quot;</span>
+                       <span class="c"># print &quot;HT processing done&quot;</span>
                         <span class="n">pestdmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dlayer</span><span class="p">[</span><span class="n">l</span><span class="p">][</span>
                             <span class="n">dlindx</span><span class="p">]</span><span class="o">.</span><span class="n">ctr</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">lclust</span><span class="p">[</span><span class="mi">0</span><span class="p">])])</span>
                         <span class="n">pestdmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dlayer</span><span class="p">[</span><span class="n">l</span><span class="p">][</span>
@@ -1477,8 +1477,8 @@
 
                 <span class="c"># if HT fail for some reasons , a classical position estimation  is performed </span>
                 <span class="k">except</span><span class="p">:</span>
-                    <span class="k">print</span> <span class="s">&quot;!!!!! HT FAIL !!!!!!!&quot;</span>
-                    <span class="k">print</span> <span class="s">&quot;2 first constraint of CLA have to be TOA and others RSS in order to use HT&quot;</span>
+                    <span class="c"># print &quot;!!!!! HT FAIL !!!!!!!&quot;</span>
+                    <span class="c"># print &quot;2 first constraint of CLA have to be TOA and others RSS in order to use HT&quot;</span>
 
                     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">poids</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">pe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">poids</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dlayer</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="n">dlindx</span><span class="p">]</span>
@@ -1552,7 +1552,7 @@
 
     <div class="footer">
         &copy; Copyright 2015, PyLayers developer team.
-      Last updated on Feb 24, 2015.
+      Last updated on févr. 27, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">
