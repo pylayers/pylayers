@@ -2818,8 +2818,10 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">ss_name</span><span class="p">)</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">ss_z</span><span class="p">),</span><span class="s">&#39;Error incompatible size in chgmss&#39;</span>
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">ss_z</span><span class="p">)</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">ss_offset</span><span class="p">),</span><span class="s">&#39;Error incompatible size in chgmss&#39;</span>
+        <span class="k">if</span> <span class="n">ss_z</span><span class="o">!=</span><span class="p">[]:</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">ss_name</span><span class="p">)</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">ss_z</span><span class="p">),</span><span class="s">&#39;Error incompatible size in chgmss&#39;</span>
+        <span class="k">if</span> <span class="n">ss_offset</span><span class="o">!=</span><span class="p">[]:</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">ss_z</span><span class="p">)</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">ss_offset</span><span class="p">),</span><span class="s">&#39;Error incompatible size in chgmss&#39;</span>
 
         <span class="k">if</span> <span class="n">ns</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ns</span><span class="p">]</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;ss_name&#39;</span><span class="p">):</span>
@@ -2830,7 +2832,7 @@
                 <span class="k">if</span> <span class="n">ss_offset</span><span class="o">&lt;&gt;</span><span class="p">[]:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ns</span><span class="p">][</span><span class="s">&#39;ss_offset&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">ss_offset</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ns</span><span class="p">][</span><span class="s">&#39;ss_offset&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">ss_z</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ns</span><span class="p">][</span><span class="s">&#39;ss_offset&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">ss_name</span><span class="p">)</span>
 
 
                 <span class="c"># update Layout information</span>

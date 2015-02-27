@@ -1408,7 +1408,7 @@
 <span class="sd">    linewidth :</span>
 <span class="sd">        linewidth for structure display</span>
 <span class="sd">    mat : Associated Material Database</span>
-<span class="sd">    </span>
+
 <span class="sd">    evaluated : Boolean</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1426,9 +1426,9 @@
         <span class="c"># if not specified choose default material database</span>
         <span class="n">Interface</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">mat</span><span class="o">==</span><span class="p">[]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="o">=</span><span class="n">MatDB</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mat</span> <span class="o">=</span> <span class="n">MatDB</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="o">=</span><span class="n">mat</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mat</span> <span class="o">=</span> <span class="n">mat</span>
         <span class="bp">self</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="p">[</span><span class="s">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="p">[</span><span class="s">&#39;nbmat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
@@ -2283,7 +2283,8 @@
         <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">di</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">di</span><span class="p">[</span><span class="nb">eval</span><span class="p">(</span><span class="n">d</span><span class="p">)]</span><span class="o">=</span><span class="n">di</span><span class="p">[</span><span class="n">d</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">slabname</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">di</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-            <span class="n">S</span><span class="o">=</span><span class="n">Slab</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">slabname</span><span class="p">,</span><span class="n">mat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">)</span>
+            <span class="c"># warning the Slab takes the whole Material Database</span>
+            <span class="n">S</span> <span class="o">=</span> <span class="n">Slab</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">slabname</span><span class="p">,</span><span class="n">mat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">)</span>
             <span class="n">S</span><span class="p">[</span><span class="s">&#39;lmatname&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">slabname</span><span class="p">,</span><span class="s">&#39;lmatname&#39;</span><span class="p">))</span>
             <span class="n">S</span><span class="p">[</span><span class="s">&#39;nbmat&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="s">&#39;lmatname&#39;</span><span class="p">])</span>
             <span class="n">S</span><span class="p">[</span><span class="s">&#39;color&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">slabname</span><span class="p">,</span><span class="s">&#39;color&#39;</span><span class="p">)</span>
