@@ -169,7 +169,7 @@ class DF(PyLayers):
         Parameters
         ----------
 
-        s : np.array | TUsignal
+        s : np.array |TUsignal
             input signal
 
         Returns

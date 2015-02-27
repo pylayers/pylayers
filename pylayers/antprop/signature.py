@@ -4922,6 +4922,7 @@ class Signatures(PyLayers,dict):
 
         tx : point
 
+        
         """
         if len(tx) > 2:
             tx = tx[:2]
@@ -4969,15 +4970,16 @@ class Signatures(PyLayers,dict):
             ############
             # formula 2.61 -> 2.64 N.AMIOT PH.D thesis
             ############
-            den = ((pt[0,0,:,:]-pt[0,1,:,:])**2+(pt[1,0,:,:]-pt[1,1,:,:])**2)
+            sx = pt[0,1,:,:]-pt[0,0,:,:]
+            sy = pt[1,1,:,:]-pt[1,0,:,:]
+            den = sx**2+sy**2
+            # den = ((pt[0,0,:,:]-pt[0,1,:,:])**2+(pt[1,0,:,:]-pt[1,1,:,:])**2)
             # avoiding singularity (should not be possible)
-            uz = np.where(den ==0)
+            uz = np.where(den==0)
             den[uz] = 1.
 
             a = 1 - (2. / den) * (pt[1,0,:, :] - pt[1,1,:, :]) ** 2
-
             b= (2. / den) * (pt[0,1,:, :] - pt[0,0,:, :]) * (pt[1,0,:, :] - pt[1,1,:, :])
-
             c = (2. / den) * (pt[0,0,:, :] * (pt[1,0,:, :] - pt[1,1,:, :]) ** 2 +
                               pt[1,0,:, :] * (pt[1,0,:, :] - pt[1,1,:, :]) *
                              (pt[0,1,:, :] - pt[0,0,:, :]))

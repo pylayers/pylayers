@@ -1,3 +1,27 @@
+#!/usr/bin/python
+#-*- coding:Utf-8 -*-
+r""""
+.. currentmodule:: pylayers.signal.ED
+
+.. autosummary::
+    :toctree: generated
+
+Bsignal ED 
+=============
+
+.. autosummary::
+    :toctree: generated/
+
+    ED.__init__
+    ED.__repr__
+    ED.apply
+    ED.moment
+    ED.pdf
+    ED.errprob
+    ED.roc
+    ED.plot
+
+"""
 from scipy.signal import *
 import scipy.special as spe
 import scipy.stats as st
@@ -8,18 +32,12 @@ from pylayers.util.project import *
 import matplotlib.pyplot as plt
 import doctest
 
-r"""
-.. currentmodule:: pylayers.signal.ED
-
-.. autosummary::
-    :toctree: generated
-
-"""
 class ED(PyLayers):
     """
     Energy Detector Class
 
     This class implements an Energy Detector receiver
+
 
     """
     def __init__(self,**kwargs):
@@ -103,9 +121,9 @@ class ED(PyLayers):
         Returns
         -------
 
-        y : $F2{\beta^2 F1{x}^2}$
+        y : :math:`F2{\beta^2 F1{x}^2}`
 
-        F{x} means a filtering of x with filter F
+        :math:`F{x}` means a filtering of x with filter :math:`F`
 
         """
         self.xf1 = self.filterB.filter(x.y)

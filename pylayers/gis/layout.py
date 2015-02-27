@@ -7823,7 +7823,6 @@ class Layout(PyLayers):
         plt.axis('tight')
         plt.show()
 
-    def editorGtk(self):
         """
         """
 
