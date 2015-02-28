@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Handling Body Description and Mobility &mdash; PyLayers</title>
+    <title>18. Handling Body Description and Mobility &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -55,24 +55,24 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Handling Body Description and Mobility</a><ul>
-<li><a class="reference internal" href="#bodycylinder-data-structure"><tt class="docutils literal"><span class="pre">BodyCylinder</span></tt> data structure</a></li>
-<li><a class="reference internal" href="#description-of-a-body-file">Description of a body file</a></li>
-<li><a class="reference internal" href="#example-of-a-body-file">Example of a Body file</a></li>
-<li><a class="reference internal" href="#loading-a-motion-capture-file">Loading a Motion Capture File</a></li>
-<li><a class="reference internal" href="#defining-a-trajectory">Defining a trajectory</a><ul>
-<li><a class="reference internal" href="#settopos-method">settopos () method</a></li>
+<li><a class="reference internal" href="#">18. Handling Body Description and Mobility</a><ul>
+<li><a class="reference internal" href="#bodycylinder-data-structure">18.1. <tt class="docutils literal"><span class="pre">BodyCylinder</span></tt> data structure</a></li>
+<li><a class="reference internal" href="#description-of-a-body-file">18.2. Description of a body file</a></li>
+<li><a class="reference internal" href="#example-of-a-body-file">18.3. Example of a Body file</a></li>
+<li><a class="reference internal" href="#loading-a-motion-capture-file">18.4. Loading a Motion Capture File</a></li>
+<li><a class="reference internal" href="#defining-a-trajectory">18.5. Defining a trajectory</a><ul>
+<li><a class="reference internal" href="#settopos-method">18.5.1. settopos () method</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#centering-the-motion">Centering the motion</a></li>
-<li><a class="reference internal" href="#defining-a-large-scale-trajectory">Defining a large scale trajectory</a></li>
-<li><a class="reference internal" href="#trajectory">Trajectory</a></li>
-<li><a class="reference internal" href="#posvel"><tt class="docutils literal"><span class="pre">posvel()</span></tt></a></li>
-<li><a class="reference internal" href="#definition-of-several-coordinates-systems">Definition of Several Coordinates systems</a><ul>
-<li><a class="reference internal" href="#construction-of-the-cylinder-coordinate-system-ccs">Construction of the Cylinder Coordinate System (CCS)</a></li>
+<li><a class="reference internal" href="#centering-the-motion">18.6. Centering the motion</a></li>
+<li><a class="reference internal" href="#defining-a-large-scale-trajectory">18.7. Defining a large scale trajectory</a></li>
+<li><a class="reference internal" href="#trajectory">18.8. Trajectory</a></li>
+<li><a class="reference internal" href="#posvel">18.9. <tt class="docutils literal"><span class="pre">posvel()</span></tt></a></li>
+<li><a class="reference internal" href="#definition-of-several-coordinates-systems">18.10. Definition of Several Coordinates systems</a><ul>
+<li><a class="reference internal" href="#construction-of-the-cylinder-coordinate-system-ccs">18.10.1. Construction of the Cylinder Coordinate System (CCS)</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#placing-a-dcs-device-coordinate-system-on-the-cylinder">Placing a dcs (Device Coordinate System ) on the cylinder</a></li>
+<li><a class="reference internal" href="#placing-a-dcs-device-coordinate-system-on-the-cylinder">18.11. Placing a dcs (Device Coordinate System ) on the cylinder</a></li>
 </ul>
 </li>
 </ul>
@@ -104,7 +104,7 @@
           <div class="body">
             
   <div class="section" id="handling-body-description-and-mobility">
-<h1>Handling Body Description and Mobility<a class="headerlink" href="#handling-body-description-and-mobility" title="Permalink to this headline">¶</a></h1>
+<h1>18. Handling Body Description and Mobility<a class="headerlink" href="#handling-body-description-and-mobility" title="Permalink to this headline">¶</a></h1>
 <div class="code python highlight-python"><div class="highlight"><pre>from pylayers.mobility.ban.body import *
 from pylayers.mobility.trajectory import Trajectory
 from IPython.display import Image
@@ -125,7 +125,7 @@ the human motion. Two kind of files exist :</p>
 </ul>
 <p>Both type of file will be exploited in the following.</p>
 <div class="section" id="bodycylinder-data-structure">
-<h2><tt class="docutils literal"><span class="pre">BodyCylinder</span></tt> data structure<a class="headerlink" href="#bodycylinder-data-structure" title="Permalink to this headline">¶</a></h2>
+<h2>18.1. <tt class="docutils literal"><span class="pre">BodyCylinder</span></tt> data structure<a class="headerlink" href="#bodycylinder-data-structure" title="Permalink to this headline">¶</a></h2>
 <p>To ease electromagnetic simulation a simplification of the motion
 capture data structure is necessary. Generally there is a large number
 of captured points, not all of them being useful for our modeling.</p>
@@ -164,7 +164,7 @@ filename is &#8216;07_01.c3d&#8217;. The creation of a Body consists in reading 
 <img alt="../../_images/Body_10_1.png" src="../../_images/Body_10_1.png" />
 </div>
 <div class="section" id="description-of-a-body-file">
-<h2>Description of a body file<a class="headerlink" href="#description-of-a-body-file" title="Permalink to this headline">¶</a></h2>
+<h2>18.2. Description of a body file<a class="headerlink" href="#description-of-a-body-file" title="Permalink to this headline">¶</a></h2>
 <p>An example of a body file is given below. It is a file in <tt class="docutils literal"><span class="pre">ini</span></tt> format
 with 4 sections.</p>
 <ul class="simple">
@@ -199,7 +199,7 @@ cylinder device related information</p>
 </div>
 </div>
 <div class="section" id="example-of-a-body-file">
-<h2>Example of a Body file<a class="headerlink" href="#example-of-a-body-file" title="Permalink to this headline">¶</a></h2>
+<h2>18.3. Example of a Body file<a class="headerlink" href="#example-of-a-body-file" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre>[nodes]
 0 = [STRN,T10]
 1 = [CLAV,C7]
@@ -258,7 +258,7 @@ nframes = -1
 </div>
 </div>
 <div class="section" id="loading-a-motion-capture-file">
-<h2>Loading a Motion Capture File<a class="headerlink" href="#loading-a-motion-capture-file" title="Permalink to this headline">¶</a></h2>
+<h2>18.4. Loading a Motion Capture File<a class="headerlink" href="#loading-a-motion-capture-file" title="Permalink to this headline">¶</a></h2>
 <p>A <tt class="docutils literal"><span class="pre">.c3d</span></tt> motion capture file is loaded with the method <strong>``loadC3D``</strong>
 with as arguments the motion capture file and the number of frames to
 load.</p>
@@ -303,7 +303,7 @@ trajectory.</p>
 </div>
 </div>
 <div class="section" id="defining-a-trajectory">
-<h2>Defining a trajectory<a class="headerlink" href="#defining-a-trajectory" title="Permalink to this headline">¶</a></h2>
+<h2>18.5. Defining a trajectory<a class="headerlink" href="#defining-a-trajectory" title="Permalink to this headline">¶</a></h2>
 <p>A Trajectory is a class which :</p>
 <ul class="simple">
 <li>derives from a pandas <tt class="docutils literal"><span class="pre">DataFrame</span></tt></li>
@@ -415,7 +415,7 @@ trajectory.</p>
 </div>
 <img alt="../../_images/Body_29_0.png" src="../../_images/Body_29_0.png" />
 <div class="section" id="settopos-method">
-<h3>settopos () method<a class="headerlink" href="#settopos-method" title="Permalink to this headline">¶</a></h3>
+<h3>18.5.1. settopos () method<a class="headerlink" href="#settopos-method" title="Permalink to this headline">¶</a></h3>
 <p>Once the trajectory has been defined it is possible to send the body at
 the position corresponding to any time of the trajectory with the
 <strong>``settopos``</strong> method.</p>
@@ -509,7 +509,7 @@ nodes.</p>
 </div>
 </div>
 <div class="section" id="centering-the-motion">
-<h2>Centering the motion<a class="headerlink" href="#centering-the-motion" title="Permalink to this headline">¶</a></h2>
+<h2>18.6. Centering the motion<a class="headerlink" href="#centering-the-motion" title="Permalink to this headline">¶</a></h2>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">centered</span>
 </pre></div>
 </div>
@@ -632,7 +632,7 @@ Center of gravity of the centered frame [  4.44089210e-16  -1.05471187e-15   8.9
 <img alt="../../_images/Body_57_1.png" src="../../_images/Body_57_1.png" />
 </div>
 <div class="section" id="defining-a-large-scale-trajectory">
-<h2>Defining a large scale trajectory<a class="headerlink" href="#defining-a-large-scale-trajectory" title="Permalink to this headline">¶</a></h2>
+<h2>18.7. Defining a large scale trajectory<a class="headerlink" href="#defining-a-large-scale-trajectory" title="Permalink to this headline">¶</a></h2>
 <p>A large scale trajectory is defined in the <img class="math" src="../../_images/math/4827c8230a0c9c5ebfa45b20ed4da7282fd8dade.png" alt="(O,x,y)"/> plane.</p>
 <p><tt class="docutils literal"><span class="pre">traj</span></tt> is a data structure (Npt,2)</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">v</span> <span class="o">=</span> <span class="n">Vmocap</span>
@@ -747,10 +747,10 @@ Center of gravity of the centered frame [  4.44089210e-16  -1.05471187e-15   8.9
 </div><img alt="../../_images/Body_62_1.png" src="../../_images/Body_62_1.png" />
 </div>
 <div class="section" id="trajectory">
-<h2>Trajectory<a class="headerlink" href="#trajectory" title="Permalink to this headline">¶</a></h2>
+<h2>18.8. Trajectory<a class="headerlink" href="#trajectory" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="posvel">
-<h2><tt class="docutils literal"><span class="pre">posvel()</span></tt><a class="headerlink" href="#posvel" title="Permalink to this headline">¶</a></h2>
+<h2>18.9. <tt class="docutils literal"><span class="pre">posvel()</span></tt><a class="headerlink" href="#posvel" title="Permalink to this headline">¶</a></h2>
 <p>The <tt class="docutils literal"><span class="pre">posvel()</span></tt> method (position and velocity) takes as arguments the
 following parameters</p>
 <ul class="simple">
@@ -830,7 +830,7 @@ is called a <tt class="docutils literal"><span class="pre">topos</span></tt>.</p
 <img alt="../../_images/Body_73_1.png" src="../../_images/Body_73_1.png" />
 </div>
 <div class="section" id="definition-of-several-coordinates-systems">
-<h2>Definition of Several Coordinates systems<a class="headerlink" href="#definition-of-several-coordinates-systems" title="Permalink to this headline">¶</a></h2>
+<h2>18.10. Definition of Several Coordinates systems<a class="headerlink" href="#definition-of-several-coordinates-systems" title="Permalink to this headline">¶</a></h2>
 <p>Each cylinder of the <tt class="docutils literal"><span class="pre">Body</span></tt> model bears one specific coordinate
 system.</p>
 <p>One or several cylinder coordinate systems can be chosen to define the
@@ -841,7 +841,7 @@ time invariant as on the chest or the back.</p>
 <p>Those frames of references are all defined in the Global Coordinate
 System (GCS) of the scene.</p>
 <div class="section" id="construction-of-the-cylinder-coordinate-system-ccs">
-<h3>Construction of the Cylinder Coordinate System (CCS)<a class="headerlink" href="#construction-of-the-cylinder-coordinate-system-ccs" title="Permalink to this headline">¶</a></h3>
+<h3>18.10.1. Construction of the Cylinder Coordinate System (CCS)<a class="headerlink" href="#construction-of-the-cylinder-coordinate-system-ccs" title="Permalink to this headline">¶</a></h3>
 <p>The method <tt class="docutils literal"><span class="pre">setccs()</span></tt> is used to associate a Cylinder Coordinate
 System (CCS) to each cylinder of the bodyCylinder model. Notice that
 those cylinders coordinates systems are not known by the localization
@@ -897,7 +897,7 @@ CCS (Cylinder coordinates systems)</p>
 </div>
 </div>
 <div class="section" id="placing-a-dcs-device-coordinate-system-on-the-cylinder">
-<h2>Placing a dcs (Device Coordinate System ) on the cylinder<a class="headerlink" href="#placing-a-dcs-device-coordinate-system-on-the-cylinder" title="Permalink to this headline">¶</a></h2>
+<h2>18.11. Placing a dcs (Device Coordinate System ) on the cylinder<a class="headerlink" href="#placing-a-dcs-device-coordinate-system-on-the-cylinder" title="Permalink to this headline">¶</a></h2>
 <p>A DCS is refered by 4 numbers <img class="math" src="../../_images/math/cad3d8d10b7bf945cdca8a3d3c9c7dda9af352e1.png" alt="(Id,l,h,\alpha)"/></p>
 <ul class="simple">
 <li>Id : Cylinder Id</li>

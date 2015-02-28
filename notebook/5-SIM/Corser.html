@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Corser &mdash; PyLayers</title>
+    <title>19. Corser &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -55,24 +55,24 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Corser</a><ul>
-<li><a class="reference internal" href="#cormoran-measurement-campaign">CORMORAN Measurement Campaign</a></li>
+<li><a class="reference internal" href="#">19. Corser</a><ul>
+<li><a class="reference internal" href="#cormoran-measurement-campaign">19.1. CORMORAN Measurement Campaign</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#motivation-for-creating-a-specific-tool">Motivation for creating a specific tool</a></li>
-<li><a class="reference internal" href="#prerequisite-installations">Prerequisite Installations</a><ul>
-<li><a class="reference internal" href="#the-corser-class">The <tt class="docutils literal"><span class="pre">CorSer</span></tt> Class</a><ul>
-<li><a class="reference internal" href="#plot-values">&nbsp;Plot values</a><ul>
-<li><a class="reference internal" href="#plot-distance">Plot distance</a></li>
+<li><a class="reference internal" href="#motivation-for-creating-a-specific-tool">20. Motivation for creating a specific tool</a></li>
+<li><a class="reference internal" href="#prerequisite-installations">21. Prerequisite Installations</a><ul>
+<li><a class="reference internal" href="#the-corser-class">21.1. The <tt class="docutils literal"><span class="pre">CorSer</span></tt> Class</a><ul>
+<li><a class="reference internal" href="#plot-values">21.1.1. &nbsp;Plot values</a><ul>
+<li><a class="reference internal" href="#plot-distance">21.1.1.1. Plot distance</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#specify-time-bodytime-parameter">Specify time (<em>bodytime</em> parameter)</a></li>
-<li><a class="reference internal" href="#display-trajectory-trajectory-parameter">display trajectory (<em>trajectory</em> parameter)</a></li>
+<li><a class="reference internal" href="#specify-time-bodytime-parameter">21.1.2. Specify time (<em>bodytime</em> parameter)</a></li>
+<li><a class="reference internal" href="#display-trajectory-trajectory-parameter">21.1.3. display trajectory (<em>trajectory</em> parameter)</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#using-pylayers-ray-tracing-with-corser-data">Using Pylayers Ray-tracing with CorSer data</a></li>
+<li><a class="reference internal" href="#using-pylayers-ray-tracing-with-corser-data">22. Using Pylayers Ray-tracing with CorSer data</a></li>
 </ul>
 
   <h3>This Page</h3>
@@ -113,7 +113,7 @@ WARNING: pylab import has clobbered these variables: ['concatenate', 'random', '
 <cite>%matplotlib</cite> prevents importing * from pylab and numpy
 </pre>
 <div class="section" id="corser">
-<h1>Corser<a class="headerlink" href="#corser" title="Permalink to this headline">¶</a></h1>
+<h1>19. Corser<a class="headerlink" href="#corser" title="Permalink to this headline">¶</a></h1>
 <ol class="arabic simple">
 <li><a class="reference external" href="#CORMORAN">CORMORAN Measurement Campaign</a><ol class="arabic">
 <li><a class="reference external" href="#Motivation">Motivation for creating a specific tool</a></li>
@@ -149,7 +149,7 @@ WARNING: pylab import has clobbered these variables: ['concatenate', 'random', '
 </li>
 </ol>
 <div class="section" id="cormoran-measurement-campaign">
-<h2>CORMORAN Measurement Campaign<a class="headerlink" href="#cormoran-measurement-campaign" title="Permalink to this headline">¶</a></h2>
+<h2>19.1. CORMORAN Measurement Campaign<a class="headerlink" href="#cormoran-measurement-campaign" title="Permalink to this headline">¶</a></h2>
 <p>The CORMORAN measurement campaign is the first known campaign in the
 WBAN context gathering :</p>
 <ul class="simple">
@@ -168,7 +168,7 @@ interpretation.</p>
 </div>
 </div>
 <div class="section" id="motivation-for-creating-a-specific-tool">
-<h1>Motivation for creating a specific tool<a class="headerlink" href="#motivation-for-creating-a-specific-tool" title="Permalink to this headline">¶</a></h1>
+<h1>20. Motivation for creating a specific tool<a class="headerlink" href="#motivation-for-creating-a-specific-tool" title="Permalink to this headline">¶</a></h1>
 <p>In order to exploit the CORMORAN measurement campaign, a dedicated tool
 has been envisaged. Regarding that one aim of the CORMORAN project
 (<a class="reference external" href="http://pylayers.github.io/pylayers/cormoran.html">http://pylayers.github.io/pylayers/cormoran.html</a>) is to provide a
@@ -192,7 +192,7 @@ by people in the research community. The goal of such a tool is to help
 and simplify dissemination.</p>
 </div>
 <div class="section" id="prerequisite-installations">
-<h1>Prerequisite Installations<a class="headerlink" href="#prerequisite-installations" title="Permalink to this headline">¶</a></h1>
+<h1>21. Prerequisite Installations<a class="headerlink" href="#prerequisite-installations" title="Permalink to this headline">¶</a></h1>
 <p>Before starting using this tool, some requirements have to be satisfied.</p>
 <ol class="arabic simple">
 <li>The open source platform PyLayers ( <a class="reference external" href="http://www.pylayers.org">http://www.pylayers.org</a> ) has to
@@ -207,7 +207,7 @@ variables can be found in pylayers&#8217; INSTALL.txt</li>
 <p>Once those 3 steps are satisfied, the CORMORAN exploitation measure tool
 is ready to be used.</p>
 <div class="section" id="the-corser-class">
-<h2>The <tt class="docutils literal"><span class="pre">CorSer</span></tt> Class<a class="headerlink" href="#the-corser-class" title="Permalink to this headline">¶</a></h2>
+<h2>21.1. The <tt class="docutils literal"><span class="pre">CorSer</span></tt> Class<a class="headerlink" href="#the-corser-class" title="Permalink to this headline">¶</a></h2>
 <p>The exploitation of measures tool takes place as a specific class named
 CorSer (which stands for Cormoran Series). Once PyLayers has been
 installed, it is possible to directly access to the class by importing
@@ -1581,7 +1581,7 @@ given, the position for all time stamps are provided</li>
 <p>More option are availble, please refer to the docstring (<em>S.plot?</em>) for
 more information</p>
 <div class="section" id="plot-values">
-<h3>&nbsp;Plot values<a class="headerlink" href="#plot-values" title="Permalink to this headline">¶</a></h3>
+<h3>21.1.1. &nbsp;Plot values<a class="headerlink" href="#plot-values" title="Permalink to this headline">¶</a></h3>
 <p>Continuying with the same example, it is possible to plot the HKB values
 between radio node 11 (Hip Right) and node 16 (Ankle Right) , between 5
 seconds and 5.2 seconds with:</p>
@@ -1594,7 +1594,7 @@ seconds and 5.2 seconds with:</p>
 </div>
 <img alt="../../_images/Corser_49_1.png" src="../../_images/Corser_49_1.png" />
 <div class="section" id="plot-distance">
-<h4>Plot distance<a class="headerlink" href="#plot-distance" title="Permalink to this headline">¶</a></h4>
+<h4>21.1.1.1. Plot distance<a class="headerlink" href="#plot-distance" title="Permalink to this headline">¶</a></h4>
 <p>As well, it is possible to plot the distance using the <em>distance</em>
 parameter</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">],</span><span class="n">distance</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
@@ -1697,7 +1697,7 @@ scene with body(ies) and associated devices at 4 different timestamp</p>
 </div>
 </div>
 <div class="section" id="specify-time-bodytime-parameter">
-<h3>Specify time (<em>bodytime</em> parameter)<a class="headerlink" href="#specify-time-bodytime-parameter" title="Permalink to this headline">¶</a></h3>
+<h3>21.1.2. Specify time (<em>bodytime</em> parameter)<a class="headerlink" href="#specify-time-bodytime-parameter" title="Permalink to this headline">¶</a></h3>
 <p>In order to display scene at specific timestamps, the parameter
 <em>bodytime</em> can be used</p>
 <p>Example: to show the body position at <img class="math" src="../../_images/math/5f0c19d6db19fec29063261562cdfd8a11bab181.png" alt="t=0s"/>, <img class="math" src="../../_images/math/9fb50c50dc131a36232a9a3b915742759ec8c1fd.png" alt="t=30s"/> and
@@ -1711,7 +1711,7 @@ scene with body(ies) and associated devices at 4 different timestamp</p>
 <img alt="../../_images/Corser_68_0.png" src="../../_images/Corser_68_0.png" />
 </div>
 <div class="section" id="display-trajectory-trajectory-parameter">
-<h3>display trajectory (<em>trajectory</em> parameter)<a class="headerlink" href="#display-trajectory-trajectory-parameter" title="Permalink to this headline">¶</a></h3>
+<h3>21.1.3. display trajectory (<em>trajectory</em> parameter)<a class="headerlink" href="#display-trajectory-trajectory-parameter" title="Permalink to this headline">¶</a></h3>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">trajectory</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span><span class="n">bodytime</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">30.</span><span class="p">,</span><span class="mf">90.</span><span class="p">])</span>
 
 <span class="c"># the following line is only used to display in the notebook a screenshot of the mayavi window</span>
@@ -1762,7 +1762,7 @@ processing shadowing from
 </div>
 </div>
 <div class="section" id="using-pylayers-ray-tracing-with-corser-data">
-<h1>Using Pylayers Ray-tracing with CorSer data<a class="headerlink" href="#using-pylayers-ray-tracing-with-corser-data" title="Permalink to this headline">¶</a></h1>
+<h1>22. Using Pylayers Ray-tracing with CorSer data<a class="headerlink" href="#using-pylayers-ray-tracing-with-corser-data" title="Permalink to this headline">¶</a></h1>
 <p>Coming soon, work in progress</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pylayers.simul.simultraj</span> <span class="kn">as</span> <span class="nn">st</span>
 </pre></div>
@@ -1797,7 +1797,7 @@ processing shadowing from
 
     <div class="footer">
         &copy; Copyright 2015, PyLayers developer team.
-      Last updated on févr. 27, 2015.
+      Last updated on févr. 28, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">
