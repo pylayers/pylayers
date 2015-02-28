@@ -1,0 +1,1087 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Handling Body Description and Mobility &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../index.html"><img src="../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Handling Body Description and Mobility</a><ul>
+<li><a class="reference internal" href="#bodycylinder-data-structure"><tt class="docutils literal"><span class="pre">BodyCylinder</span></tt> data structure</a></li>
+<li><a class="reference internal" href="#description-of-a-body-file">Description of a body file</a></li>
+<li><a class="reference internal" href="#example-of-a-body-file">Example of a Body file</a></li>
+<li><a class="reference internal" href="#loading-a-motion-capture-file">Loading a Motion Capture File</a></li>
+<li><a class="reference internal" href="#defining-a-trajectory">Defining a trajectory</a><ul>
+<li><a class="reference internal" href="#settopos-method">settopos () method</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#centering-the-motion">Centering the motion</a></li>
+<li><a class="reference internal" href="#defining-a-large-scale-trajectory">Defining a large scale trajectory</a></li>
+<li><a class="reference internal" href="#trajectory">Trajectory</a></li>
+<li><a class="reference internal" href="#posvel"><tt class="docutils literal"><span class="pre">posvel()</span></tt></a></li>
+<li><a class="reference internal" href="#definition-of-several-coordinates-systems">Definition of Several Coordinates systems</a><ul>
+<li><a class="reference internal" href="#construction-of-the-cylinder-coordinate-system-ccs">Construction of the Cylinder Coordinate System (CCS)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#placing-a-dcs-device-coordinate-system-on-the-cylinder">Placing a dcs (Device Coordinate System ) on the cylinder</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/notebook/4-MOB/Body.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="handling-body-description-and-mobility">
+<h1>Handling Body Description and Mobility<a class="headerlink" href="#handling-body-description-and-mobility" title="Permalink to this headline">¶</a></h1>
+<div class="code python highlight-python"><div class="highlight"><pre>from pylayers.mobility.ban.body import *
+from pylayers.mobility.trajectory import Trajectory
+from IPython.display import Image
+from matplotlib.pyplot import *
+import pylayers.util.mayautil as mau
+%matplotlib inline
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
+</pre></div>
+</div>
+<p>The body mobility is imported from motion capture files. This is the
+chosen manner to achieve a high degree of realism for the modeling of
+the human motion. Two kind of files exist :</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">c3d</span></tt> files are a set of point which are evolving in time</li>
+<li><tt class="docutils literal"><span class="pre">bvh</span></tt> files are a stuctured version of the motion capture.</li>
+</ul>
+<p>Both type of file will be exploited in the following.</p>
+<div class="section" id="bodycylinder-data-structure">
+<h2><tt class="docutils literal"><span class="pre">BodyCylinder</span></tt> data structure<a class="headerlink" href="#bodycylinder-data-structure" title="Permalink to this headline">¶</a></h2>
+<p>To ease electromagnetic simulation a simplification of the motion
+capture data structure is necessary. Generally there is a large number
+of captured points, not all of them being useful for our modeling.</p>
+<p>The body model is a restriction of key body segments which are
+transformed into <img class="math" src="../../_images/math/28e003020d0ae96250b302d7d779c791f183f707.png" alt="K"/> cylinders of radius <img class="math" src="../../_images/math/c6d83f44e641552ebc20f736bbca0a9423098e78.png" alt="r_k"/>.</p>
+<p>The chosen body model is made of 11 cylinders. 4 cylinders decribing the
+two arms, 4 cylinders decribing the two legs, 2 cylinders describing the
+trunk and 1 cylinder for the head.</p>
+<p>The body cylinder model is handled by the dedicated Python class call
+<tt class="docutils literal"><span class="pre">Body</span></tt></p>
+<p>To create a void body, simply instantiate a Body object from the class</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span> <span class="o">=</span> <span class="n">Body</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>**** Processor coding : Intel-PC
+</pre></div>
+</div>
+<p>which is equivalent to :</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="n">_filebody</span><span class="o">=</span><span class="s">&#39;John.ini&#39;</span><span class="p">,</span><span class="n">_filemocap</span><span class="o">=</span><span class="s">&#39;07_01.c3d&#39;</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="s">&#39;cm&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>**** Processor coding : Intel-PC
+</pre></div>
+</div>
+<p>The default body filename is John.ini and the default motion capture
+filename is &#8216;07_01.c3d&#8217;. The creation of a Body consists in reading a
+<tt class="docutils literal"><span class="pre">_filebody</span></tt> and a <tt class="docutils literal"><span class="pre">_filemocap</span></tt></p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">_show3</span><span class="p">()</span>
+<span class="n">mau</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s">&#39;John&#39;</span><span class="p">,</span><span class="n">doc</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre class="literal-block">
+/home/uguen/anaconda/lib/python2.7/site-packages/traits/has_traits.py:1766: FutureWarning: comparison to <cite>None</cite> will result in an elementwise object comparison in the future.
+  setattr( self, name, value )
+</pre>
+<img alt="../../_images/Body_10_1.png" src="../../_images/Body_10_1.png" />
+</div>
+<div class="section" id="description-of-a-body-file">
+<h2>Description of a body file<a class="headerlink" href="#description-of-a-body-file" title="Permalink to this headline">¶</a></h2>
+<p>An example of a body file is given below. It is a file in <tt class="docutils literal"><span class="pre">ini</span></tt> format
+with 4 sections.</p>
+<ul class="simple">
+<li>[nodes]</li>
+</ul>
+<p>This section associates a node number to a c3d fils conventional node
+number</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">NodeId</span> <span class="o">=</span> <span class="n">C3DNODE</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>[cylinder]</li>
+</ul>
+<p>This section associates a cylinder Id to a dictionnary wich contains
+cylinder tail head and radius information</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">CylId</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;t&#39;</span><span class="p">,</span><span class="n">NodeId1</span><span class="p">,</span><span class="s">&#39;h&#39;</span><span class="p">,</span><span class="n">NodeId2</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="nb">float</span> <span class="p">(</span><span class="n">m</span><span class="p">),</span><span class="s">&#39;name&#39;</span><span class="p">,}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>[device]</li>
+</ul>
+<p>This section associates a device name to a dictionnary wich contains
+cylinder device related information</p>
+<div class="highlight-python"><div class="highlight"><pre>DevId = {&#39;typ&#39; : {static|mobile}
+          &#39;cyl&#39;: CylId
+          &#39;l&#39;  : length coordinate in ccs,
+          &#39;h&#39;  : height coordinate in ccs,
+          &#39;a&#39;  : angle coordinate in ccs,
+          &#39;file&#39; : antenna file ,
+          &#39;T&#39; : Rotation matrix }
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-of-a-body-file">
+<h2>Example of a Body file<a class="headerlink" href="#example-of-a-body-file" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>[nodes]
+0 = [STRN,T10]
+1 = [CLAV,C7]
+2 = [RFHD,LFHD,LBHD,RBHD]
+3 = RSHO
+4 = LSHO
+5 = [RRAD,RHUM]
+6 = [LRAD,LHUM]
+7 = [RWRA,RWRB]
+8 = [LWRA,LWRB]
+9 = [RFWT,RBWT]
+10 = [LFWT,LBWT]
+11 = [RKNE,RKNI]
+12 = [LKNE,LKNI]
+13 = RANI
+14 = LANI
+15 = [RFWT, LFWT,LBWT,RBWT]
+[cylinder]
+; sternum (STRN) - clavicle (CLAV)
+trunku = {&#39;t&#39;:0,&#39;h&#39;:1,&#39;r&#39;:0.18,&#39;i&#39;:0}
+; bottom  (BOTT) sternum (STRN)
+trunkb = {&#39;t&#39;:15,&#39;h&#39;:0,&#39;r&#39;:0.17,&#39;i&#39;:10}
+; clavicle (CLAV)  - head (RFHD)
+headu = {&#39;t&#39;:1,&#39;h&#39;:2,&#39;r&#39;:0.12,&#39;i&#39;:1}
+; right elbow (RELB)  right shoulder (RSHO)
+armr = {&#39;t&#39;:5,&#39;h&#39;:3,&#39;r&#39;:0.05,&#39;i&#39;:2}
+; left elbow (LELB)  left shoulder (LSHO)
+arml  = {&#39;t&#39;:6,&#39;h&#39;:4,&#39;r&#39;:0.05,&#39;i&#39;:3}
+; right wrist (RWRB) right elbow (RELB)
+forearmr = {&#39;t&#39;:7,&#39;h&#39;:5,&#39;r&#39;:0.05,&#39;i&#39;:4}
+; left wrist (LWRB)  left elbow (LELB)
+forearml = {&#39;t&#39;:8,&#39;h&#39;:6,&#39;r&#39;:0.05,&#39;i&#39;:5}
+; right knee (RKNE) right hip (RFWT)
+thighr = {&#39;t&#39;:11,&#39;h&#39;:9,&#39;r&#39;:0.05,&#39;i&#39;:6}
+; left knee (LKNE)  left hip (LFWT)
+thighl = {&#39;t&#39;:12,&#39;h&#39;:10,&#39;r&#39;:0.05,&#39;i&#39;:7}
+; right ankle (RANK) right knee (RKNE)
+calfr = {&#39;t&#39;:13,&#39;h&#39;:11,&#39;r&#39;:0.05,&#39;i&#39;:8}
+; left ankle (LANK) left knee (LKNE)
+calfl = {&#39;t&#39;:14,&#39;h&#39;:12,&#39;r&#39;:0.05,&#39;i&#39;:9}
+[wearable]
+file = real_suit1.ini
+[mocap]
+file = serie_017_noDEC_Real.c3d
+; unit of c3d file
+unit = mm
+; number of frame to consider. if -1 : all frames
+nframes = -1
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Bernard</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="n">_filebody</span><span class="o">=</span><span class="s">&#39;Bernard.ini&#39;</span><span class="p">,</span><span class="n">_filemocap</span><span class="o">=</span><span class="s">&#39;serie_017.c3d&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>**** Processor coding : DEC-VAX
+</pre></div>
+</div>
+</div>
+<div class="section" id="loading-a-motion-capture-file">
+<h2>Loading a Motion Capture File<a class="headerlink" href="#loading-a-motion-capture-file" title="Permalink to this headline">¶</a></h2>
+<p>A <tt class="docutils literal"><span class="pre">.c3d</span></tt> motion capture file is loaded with the method <strong>``loadC3D``</strong>
+with as arguments the motion capture file and the number of frames to
+load.</p>
+<p>The motion is represented as a sequence of frames stored in the
+<strong>``d``</strong> variable member.</p>
+<p>It is possible to get the information from the C3D header by using the
+verbose option of the <tt class="docutils literal"><span class="pre">read_c3d</span></tt> function</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Video Frame Rate</span>
+<span class="n">Vrate</span> <span class="o">=</span> <span class="mi">120</span>
+<span class="c"># Inter Frame</span>
+<span class="n">Tframe</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="mi">120</span>
+<span class="c"># select a number of frame</span>
+<span class="n">nframes</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="c"># Time duration of the whole selected frame sequence</span>
+<span class="n">Tfseq</span> <span class="o">=</span> <span class="n">Tframe</span><span class="o">*</span><span class="n">nframes</span>
+<span class="c">#</span>
+<span class="c"># load a .c3dmotion capture file</span>
+<span class="c"># this update the g.pos</span>
+<span class="c">#</span>
+<span class="c">#bc.loadC3D(filename=&#39;07_01.c3d&#39;,nframes=nframes,centered=True)</span>
+</pre></div>
+</div>
+<p>The duration of the capture is</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&quot;Duration of the motion capture sequence&quot;</span><span class="p">,</span> <span class="n">Tfseq</span><span class="p">,</span><span class="s">&quot; seconds&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Duration of the motion capture sequence 2.5  seconds
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">d</span></tt> is a MDA of shape <tt class="docutils literal"><span class="pre">(3,npoint,nframe)</span></tt>. It contains all the
+possible configurations of the body. In general it is supposed to be a
+cyclic motion as an integer number of walking steps. This allows to
+instantiate the body configuration anywhere else in space in a given
+trajectory.</p>
+<p>A specific space-time configuration of the body is called a
+<strong>``topos``</strong>.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">Bernard</span><span class="o">.</span><span class="n">d</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">11213</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="defining-a-trajectory">
+<h2>Defining a trajectory<a class="headerlink" href="#defining-a-trajectory" title="Permalink to this headline">¶</a></h2>
+<p>A Trajectory is a class which :</p>
+<ul class="simple">
+<li>derives from a pandas <tt class="docutils literal"><span class="pre">DataFrame</span></tt></li>
+<li>is a container for time,position,velocity and acceleration.</li>
+</ul>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">traj</span> <span class="o">=</span> <span class="n">Trajectory</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>To define a default trajectory :</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">t</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">generate</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">traj</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Index</span><span class="p">([</span><span class="s">u&#39;x&#39;</span><span class="p">,</span> <span class="s">u&#39;y&#39;</span><span class="p">,</span> <span class="s">u&#39;z&#39;</span><span class="p">,</span> <span class="s">u&#39;vx&#39;</span><span class="p">,</span> <span class="s">u&#39;vy&#39;</span><span class="p">,</span> <span class="s">u&#39;vz&#39;</span><span class="p">,</span> <span class="s">u&#39;ax&#39;</span><span class="p">,</span> <span class="s">u&#39;ay&#39;</span><span class="p">,</span> <span class="s">u&#39;az&#39;</span><span class="p">,</span> <span class="s">u&#39;s&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&#39;object&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">traj</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<div style="max-height:1000px;max-width:1500px;overflow:auto;">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>x</th>
+      <th>y</th>
+      <th>z</th>
+      <th>vx</th>
+      <th>vy</th>
+      <th>vz</th>
+      <th>ax</th>
+      <th>ay</th>
+      <th>az</th>
+      <th>s</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1970-01-01 00:00:00</th>
+      <td> 0.000000</td>
+      <td> 0.000000</td>
+      <td>-0.779591</td>
+      <td> 0.299813</td>
+      <td> 1</td>
+      <td> 4.267809</td>
+      <td>-0.005505</td>
+      <td> 0</td>
+      <td>-17.755143</td>
+      <td> 0.000000</td>
+    </tr>
+    <tr>
+      <th>1970-01-01 00:00:00.204082</th>
+      <td> 0.061186</td>
+      <td> 0.204082</td>
+      <td> 0.091390</td>
+      <td> 0.298689</td>
+      <td> 1</td>
+      <td> 0.644311</td>
+      <td>-0.010989</td>
+      <td> 0</td>
+      <td> -1.500064</td>
+      <td> 0.213056</td>
+    </tr>
+    <tr>
+      <th>1970-01-01 00:00:00.408163</th>
+      <td> 0.122143</td>
+      <td> 0.408163</td>
+      <td> 0.222882</td>
+      <td> 0.296446</td>
+      <td> 1</td>
+      <td> 0.338175</td>
+      <td>-0.016433</td>
+      <td> 0</td>
+      <td> 12.000857</td>
+      <td> 0.426047</td>
+    </tr>
+    <tr>
+      <th>1970-01-01 00:00:00.612245</th>
+      <td> 0.182642</td>
+      <td> 0.612245</td>
+      <td> 0.291897</td>
+      <td> 0.293093</td>
+      <td> 1</td>
+      <td> 2.787330</td>
+      <td>-0.021814</td>
+      <td> 0</td>
+      <td> -4.164700</td>
+      <td> 0.638907</td>
+    </tr>
+    <tr>
+      <th>1970-01-01 00:00:00.816327</th>
+      <td> 0.242457</td>
+      <td> 0.816327</td>
+      <td> 0.860740</td>
+      <td> 0.288641</td>
+      <td> 1</td>
+      <td> 1.937391</td>
+      <td>-0.027114</td>
+      <td> 0</td>
+      <td>-20.857234</td>
+      <td> 0.851574</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../../_images/Body_29_0.png" src="../../_images/Body_29_0.png" />
+<div class="section" id="settopos-method">
+<h3>settopos () method<a class="headerlink" href="#settopos-method" title="Permalink to this headline">¶</a></h3>
+<p>Once the trajectory has been defined it is possible to send the body at
+the position corresponding to any time of the trajectory with the
+<strong>``settopos``</strong> method.</p>
+<p>settopos takes as argument</p>
+<ul class="simple">
+<li>A trajectory</li>
+<li>A time index</li>
+</ul>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">traj</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span>
+</pre></div>
+</div>
+<pre class="literal-block">
+'Trajectory of agent MyNameIsNoBody with ID 1n--------------------------------------------nt (s) : 0.00 : 0.20 : 9.59ndtot (m) : 9.79nVmoy (m/s) : 1.02n                                   x         y         z        vx  vy  \n1970-01-01 00:00:00         0.000000  0.000000 -0.779591  0.299813   1   n1970-01-01 00:00:00.204082  0.061186  0.204082  0.091390  0.298689   1   nn                                  vz        ax  ay         az         s  n1970-01-01 00:00:00         4.267809 -0.005505   0 -17.755143  0.000000  n1970-01-01 00:00:00.204082  0.644311 -0.010989   0  -1.500064  0.213056  n'
+</pre>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">traj</span><span class="o">.</span><span class="n">tmin</span><span class="o">+</span><span class="mf">0.4</span><span class="p">,</span><span class="n">traj</span><span class="o">.</span><span class="n">tmax</span><span class="p">,</span><span class="mf">0.5</span><span class="p">):</span>
+    <span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">John</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="n">plane</span><span class="o">=</span><span class="s">&#39;yz&#39;</span><span class="p">,</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/Body_33_0.png" src="../../_images/Body_33_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>My name is : John
+
+I have a Galaxy Gear device with id #1 on the left forearm
+I have a cardio device with id #0 on the upper part of trunk
+
+@ t=0.710582010582 (frameID=85),
+My centroid position is [-7.87435024  5.23416696]
+
+filewear : suit2.ini
+filename : 07_01.c3d
+nframes : 316
+Centered : True
+Mocap Speed : 13.605 m/s
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Francois</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="n">_filebody</span><span class="o">=</span><span class="s">&#39;Francois.ini&#39;</span><span class="p">)</span>
+<span class="n">Francois</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>**** Processor coding : Intel-PC
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>My name is : Francois
+
+I have a Galaxy Gear device with id #1 on the left forearm
+I have a cardio device with id #0 on the upper part of trunk
+
+I am nowhere yet
+
+filewear : suit2.ini
+filename : 07_01.c3d
+nframes : 300
+Centered : True
+Mocap Speed : 13.656 m/s
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Francois</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">Francois</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>My name is : Francois
+
+I have a Galaxy Gear device with id #1 on the left forearm
+I have a cardio device with id #0 on the upper part of trunk
+
+@ t=0.443143812709 (frameID=53),
+My centroid position is [-11.4689352    4.97981336]
+
+filewear : suit2.ini
+filename : 07_01.c3d
+nframes : 300
+Centered : True
+Mocap Speed : 13.656 m/s
+</pre></div>
+</div>
+<ul class="simple">
+<li>3 : dimension of space</li>
+<li>16 : number of nodes</li>
+<li>300 : number of frames</li>
+</ul>
+<p>The figure below shows the projection in a vertival plane of the body
+nodes.</p>
+</div>
+</div>
+<div class="section" id="centering-the-motion">
+<h2>Centering the motion<a class="headerlink" href="#centering-the-motion" title="Permalink to this headline">¶</a></h2>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">centered</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="bp">True</span>
+</pre></div>
+</div>
+<p>In order to translate the motion in any point in space-time, a
+distinction is made between the real motion or topos and the centered
+motion capture which acts as a virtual motion.</p>
+<p>Let <img class="math" src="../../_images/math/067aa56257006c8a054bb0c9f30e2383eb528fc5.png" alt="\mathbf{p}^k"/> denotes the center of gravity of the body in
+the (O,x,y) plane</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">center</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">,</span><span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">][:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p><img class="math" src="../../_images/math/1e018ffeed15f622673016995e323f2e1df16a4e.png" alt="\mathbf{v}_g"/> is the velocity vector of the gravity center of the
+body.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">316</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">316</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">[:,</span><span class="mi">145</span><span class="p">]</span>
+<span class="k">print</span> <span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">[:,</span><span class="mi">298</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>[ 0.11498696 -0.00263353  0.        ]
+[ 0.10812351  0.00072441  0.        ]
+</pre></div>
+</div>
+<p>At that point the body structure is centered.</p>
+<p>The frame is centered in the xy plane by substracting from the
+configuration of points the projection of the body in the xy plane.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">d</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">316</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">npoints</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">16</span>
+</pre></div>
+</div>
+<p>Each frame is centered above the origin. For example for a walk motion
+the effect of the centering is just like if the body was still walking
+but not moving forward exactly in the same manner as a walk on a
+conveyor belt.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">pgc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">d</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">16</span>
+<span class="n">pg0</span> <span class="o">=</span> <span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">print</span> <span class="s">&quot;True center of gravity&quot;</span><span class="p">,</span> <span class="n">pg0</span>
+<span class="k">print</span> <span class="s">&quot;Center of gravity of the centered frame&quot;</span><span class="p">,</span><span class="n">pgc</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>True center of gravity [-17.42515686   4.93730766   0.        ]
+Center of gravity of the centered frame [  4.44089210e-16  -1.05471187e-15   8.94887349e+00]
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">316</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The current file contains 300 frames</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">tframe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">nframes</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,:])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">316</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">xg</span> <span class="o">=</span> <span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span>
+<span class="n">yg</span> <span class="o">=</span> <span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span>
+<span class="n">zg</span> <span class="o">=</span> <span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">2</span><span class="p">,:]</span>
+<span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">subplot</span><span class="p">(</span><span class="mi">311</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">tframe</span><span class="p">,</span><span class="n">xg</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;x component&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">subplot</span><span class="p">(</span><span class="mi">312</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;frame index&#39;</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;y component&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">tframe</span><span class="p">,</span><span class="n">yg</span><span class="p">)</span>
+<span class="n">subplot</span><span class="p">(</span><span class="mi">313</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;frame index&#39;</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;Motion capture centroid trajectory&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">xg</span><span class="p">,</span><span class="n">yg</span><span class="p">,</span><span class="s">&#39;.b&#39;</span><span class="p">)</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">:]</span><span class="o">-</span><span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">smocap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">d</span><span class="o">*</span><span class="n">d</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
+
+<span class="n">Vmocap</span> <span class="o">=</span> <span class="n">smocap</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">Tfseq</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;Length = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">smocap</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; V = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Vmocap</span><span class="o">*</span><span class="mf">3.6</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; km/h&#39;</span><span class="p">)</span>
+<span class="n">axis</span><span class="p">(</span><span class="s">&#39;scaled&#39;</span><span class="p">)</span>
+<span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../../_images/Body_56_0.png" src="../../_images/Body_56_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">smocap</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;evolution of curvilinear abscisse from motion capture centroid trajectory&#39;</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;frame index&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;distance (meters)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7f217a0edc90&gt;
+</pre></div>
+</div>
+<img alt="../../_images/Body_57_1.png" src="../../_images/Body_57_1.png" />
+</div>
+<div class="section" id="defining-a-large-scale-trajectory">
+<h2>Defining a large scale trajectory<a class="headerlink" href="#defining-a-large-scale-trajectory" title="Permalink to this headline">¶</a></h2>
+<p>A large scale trajectory is defined in the <img class="math" src="../../_images/math/4827c8230a0c9c5ebfa45b20ed4da7282fd8dade.png" alt="(O,x,y)"/> plane.</p>
+<p><tt class="docutils literal"><span class="pre">traj</span></tt> is a data structure (Npt,2)</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">v</span> <span class="o">=</span> <span class="n">Vmocap</span>
+<span class="k">print</span> <span class="n">v</span><span class="o">*</span><span class="mf">3.6</span><span class="p">,</span><span class="s">&quot;Kmph&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>51.5920052862 Kmph
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># time in seconds</span>
+<span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">v</span><span class="o">*</span><span class="n">time</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="p">))</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="p">))</span>
+<span class="n">traj</span> <span class="o">=</span> <span class="n">Trajectory</span><span class="p">()</span>
+<span class="n">traj</span><span class="o">.</span><span class="n">generate</span><span class="p">()</span>
+<span class="n">traj</span><span class="o">.</span><span class="n">tmax</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mf">9.591837</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">traj</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<div style="max-height:1000px;max-width:1500px;overflow:auto;">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>x</th>
+      <th>y</th>
+      <th>z</th>
+      <th>vx</th>
+      <th>vy</th>
+      <th>vz</th>
+      <th>ax</th>
+      <th>ay</th>
+      <th>az</th>
+      <th>s</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1970-01-01 00:00:00</th>
+      <td> 0.000000</td>
+      <td> 0.000000</td>
+      <td>-0.093771</td>
+      <td> 0.299813</td>
+      <td> 1</td>
+      <td>  0.765402</td>
+      <td>-0.005505</td>
+      <td> 0</td>
+      <td>-10.267125</td>
+      <td> 0.000000</td>
+    </tr>
+    <tr>
+      <th>1970-01-01 00:00:00.204082</th>
+      <td> 0.061186</td>
+      <td> 0.204082</td>
+      <td> 0.062433</td>
+      <td> 0.298689</td>
+      <td> 1</td>
+      <td> -1.329930</td>
+      <td>-0.010989</td>
+      <td> 0</td>
+      <td> 60.089719</td>
+      <td> 0.213056</td>
+    </tr>
+    <tr>
+      <th>1970-01-01 00:00:00.408163</th>
+      <td> 0.122143</td>
+      <td> 0.408163</td>
+      <td>-0.208981</td>
+      <td> 0.296446</td>
+      <td> 1</td>
+      <td> 10.933278</td>
+      <td>-0.016433</td>
+      <td> 0</td>
+      <td>-97.569371</td>
+      <td> 0.426047</td>
+    </tr>
+    <tr>
+      <th>1970-01-01 00:00:00.612245</th>
+      <td> 0.182642</td>
+      <td> 0.612245</td>
+      <td> 2.022300</td>
+      <td> 0.293093</td>
+      <td> 1</td>
+      <td> -8.978838</td>
+      <td>-0.021814</td>
+      <td> 0</td>
+      <td> 29.555173</td>
+      <td> 0.638907</td>
+    </tr>
+    <tr>
+      <th>1970-01-01 00:00:00.816327</th>
+      <td> 0.242457</td>
+      <td> 0.816327</td>
+      <td> 0.189884</td>
+      <td> 0.288641</td>
+      <td> 1</td>
+      <td> -2.947170</td>
+      <td>-0.027114</td>
+      <td> 0</td>
+      <td> 11.499492</td>
+      <td> 0.851574</td>
+    </tr>
+  </tbody>
+</table>
+</div><img alt="../../_images/Body_62_1.png" src="../../_images/Body_62_1.png" />
+</div>
+<div class="section" id="trajectory">
+<h2>Trajectory<a class="headerlink" href="#trajectory" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="posvel">
+<h2><tt class="docutils literal"><span class="pre">posvel()</span></tt><a class="headerlink" href="#posvel" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">posvel()</span></tt> method (position and velocity) takes as arguments the
+following parameters</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">traj</span></tt> a plane trajectory object.</li>
+<li><img class="math" src="../../_images/math/4a333881289d833f265fe2fef93abf0404b26d60.png" alt="t_k"/> time for evaluation of topos</li>
+<li><img class="math" src="../../_images/math/15abacad64bbb4a546704ff6083d79bc7859b877.png" alt="T_{fs}"/> duration of the periodic motion frame sequence</li>
+</ul>
+<p>and returns</p>
+<ul class="simple">
+<li>the frame index
+<img class="math" src="../../_images/math/04edfef81bdb632eefe7c3dcb0f91d3b89cb1dbe.png" alt="k_f = \lfloor \frac{t_k \pmod{T_{fs}}}{t_f} \rfloor"/></li>
+<li>the trajectory index <img class="math" src="../../_images/math/65bcb943341ec21456552a583de932fa1a7067b8.png" alt="k_t = \lfloor t_k \rfloor"/></li>
+<li>velocity unitary vector along motion capture frame
+<img class="math" src="../../_images/math/0ef715b9dc4d710fa91709fe7152686e7b540d17.png" alt="\hat{\mathbf{v}}_s = \frac{\mathbf{p}^g[k_f]-\mathbf{p}^g[k_f-1]}{|\mathbf{p}^g[k_f]-\mathbf{p}^g[k_f-1]|}"/></li>
+<li>:math:<a href="#id9"><span class="problematic" id="id10">`</span></a>hat{mathbf{w}}_s = mathbf{hat{z}} times  hat{mathbf{v}}_s `</li>
+<li>velocity unitary vector along trajectory
+<img class="math" src="../../_images/math/14d19cd770c023634baaf3255de1acb8fd9ba9b7.png" alt="\hat{\mathbf{v}}_t = \frac{\mathbf{p}^t[k_t]-\mathbf{p}^g[k_t-1]}{|\mathbf{p}^g[k_t]-\mathbf{p}^t[k_t-1]|}"/></li>
+<li>:math:<a href="#id11"><span class="problematic" id="id12">`</span></a>hat{mathbf{w}}_t = mathbf{hat{z}} times  hat{mathbf{v}}_t `</li>
+</ul>
+<p><img class="math" src="../../_images/math/50aacdafd0664e2d05bce2d24f3c311acbc6f483.png" alt="t_f = \frac{T_{fs}}{Nf}"/> is the interframe time or frame sampling
+period, it is equal to the whole duration of the motion sequence
+<img class="math" src="../../_images/math/15abacad64bbb4a546704ff6083d79bc7859b877.png" alt="T_{fs}"/> divided by the number of frames</p>
+<p><tt class="docutils literal"><span class="pre">settopos</span></tt> is a method which takes as argument :</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">traj</span></tt> a plane trajectory (Npt,2)</li>
+<li><img class="math" src="../../_images/math/4a333881289d833f265fe2fef93abf0404b26d60.png" alt="t_k"/> time for evaluation of topos</li>
+</ul>
+<p>In further version of the class, this function will be modified to avoid
+passing the whole trajectory.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>There is now a new data structure in the Body objet. This data structure
+is called a <tt class="docutils literal"><span class="pre">topos</span></tt>.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">topos</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">topos</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span>  <span class="mf">0.74198686</span><span class="p">,</span>   <span class="mf">0.76931593</span><span class="p">,</span>   <span class="mf">1.80846633</span><span class="p">,</span>   <span class="mf">2.26719915</span><span class="p">,</span>
+         <span class="o">-</span><span class="mf">0.91675363</span><span class="p">,</span>   <span class="mf">3.25586636</span><span class="p">,</span>  <span class="o">-</span><span class="mf">1.86053098</span><span class="p">,</span>   <span class="mf">3.82194596</span><span class="p">,</span>
+         <span class="o">-</span><span class="mf">2.06245933</span><span class="p">,</span>   <span class="mf">2.15021298</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.55180885</span><span class="p">,</span>   <span class="mf">2.02586803</span><span class="p">,</span>
+         <span class="o">-</span><span class="mf">0.94510502</span><span class="p">,</span>   <span class="mf">1.36586716</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.57366714</span><span class="p">,</span>   <span class="mf">0.79920206</span><span class="p">],</span>
+       <span class="p">[</span>  <span class="mf">3.75720113</span><span class="p">,</span>   <span class="mf">3.13644711</span><span class="p">,</span>   <span class="mf">2.8414143</span> <span class="p">,</span>   <span class="mf">2.20063108</span><span class="p">,</span>
+          <span class="mf">2.6901425</span> <span class="p">,</span>   <span class="mf">1.78826275</span><span class="p">,</span>   <span class="mf">3.20212316</span><span class="p">,</span>   <span class="mf">1.7696506</span> <span class="p">,</span>
+          <span class="mf">4.042258</span>  <span class="p">,</span>   <span class="mf">3.29688912</span><span class="p">,</span>   <span class="mf">3.60268634</span><span class="p">,</span>   <span class="mf">2.76571804</span><span class="p">,</span>
+          <span class="mf">3.90430304</span><span class="p">,</span>   <span class="mf">2.24259271</span><span class="p">,</span>   <span class="mf">1.0241781</span> <span class="p">,</span>   <span class="mf">3.44978773</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">12.24457275</span><span class="p">,</span>  <span class="mf">13.88075684</span><span class="p">,</span>  <span class="mf">16.00988037</span><span class="p">,</span>  <span class="mf">14.0978418</span> <span class="p">,</span>
+         <span class="mf">14.3736377</span> <span class="p">,</span>  <span class="mf">10.74208496</span><span class="p">,</span>  <span class="mf">11.07206543</span><span class="p">,</span>   <span class="mf">7.98268372</span><span class="p">,</span>
+          <span class="mf">8.47460388</span><span class="p">,</span>   <span class="mf">9.31935974</span><span class="p">,</span>   <span class="mf">9.1988916</span> <span class="p">,</span>   <span class="mf">4.30262299</span><span class="p">,</span>
+          <span class="mf">4.54000305</span><span class="p">,</span>   <span class="mf">0.44698982</span><span class="p">,</span>   <span class="mf">1.7794635</span> <span class="p">,</span>   <span class="mf">9.25912567</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">John</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="s">&#39;#87CEEB&#39;</span><span class="p">)</span>
+<span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">John</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="s">&#39;#7EC0EE&#39;</span><span class="p">)</span>
+<span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">John</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="s">&#39;#6A5ACD&#39;</span><span class="p">)</span>
+<span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">John</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="s">&#39;#7A67EE&#39;</span><span class="p">)</span>
+<span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">John</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="s">&#39;#473C8B&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f2179854c90&gt;,
+ &lt;matplotlib.axes.Axes3DSubplot at 0x7f217987dd90&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/Body_73_1.png" src="../../_images/Body_73_1.png" />
+</div>
+<div class="section" id="definition-of-several-coordinates-systems">
+<h2>Definition of Several Coordinates systems<a class="headerlink" href="#definition-of-several-coordinates-systems" title="Permalink to this headline">¶</a></h2>
+<p>Each cylinder of the <tt class="docutils literal"><span class="pre">Body</span></tt> model bears one specific coordinate
+system.</p>
+<p>One or several cylinder coordinate systems can be chosen to define the
+Body Local Coordinates System (BLCS) which is required for motion
+capture (BLCS) applications.</p>
+<p>In general, the origin will be chosen on a position which is the most
+time invariant as on the chest or the back.</p>
+<p>Those frames of references are all defined in the Global Coordinate
+System (GCS) of the scene.</p>
+<div class="section" id="construction-of-the-cylinder-coordinate-system-ccs">
+<h3>Construction of the Cylinder Coordinate System (CCS)<a class="headerlink" href="#construction-of-the-cylinder-coordinate-system-ccs" title="Permalink to this headline">¶</a></h3>
+<p>The method <tt class="docutils literal"><span class="pre">setccs()</span></tt> is used to associate a Cylinder Coordinate
+System (CCS) to each cylinder of the bodyCylinder model. Notice that
+those cylinders coordinates systems are not known by the localization
+application. The localization application will define the BLCS from the
+position of radiating devices placed on the body surface.</p>
+<p>Each basis is constructed with the function from
+<tt class="docutils literal"><span class="pre">geomutil.onbfromaxe()</span></tt> : orthonormal bases from axes. This function
+takes 2 sets of <img class="math" src="../../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> points <img class="math" src="../../_images/math/9bdd37a0dd7923e0ec534485532e96e4d4d332d8.png" alt="\mathbf{p}_{A,n}"/> and
+<img class="math" src="../../_images/math/08835458dc9d70d809798923f8b0dd0301be5cc8.png" alt="\mathbf{p}_{B,n}"/> as input and provides an orthonormal basis as
+output.</p>
+<p>3 unitary vectors are constructed :</p>
+<div class="math">
+<p><img src="../../_images/math/2524de9efc82760781e46cee8d969a7bb91a2898.png" alt="\hat{\mathbf{w}}_n = \frac{\mathbf{p}_B-\mathbf{p}_A}{| \mathbf{p}_B-\mathbf{p}_A |}"/></p>
+</div><div class="math">
+<p><img src="../../_images/math/6842832c377839770e2fbfd471a2895800458b44.png" alt="\hat{\mathbf{u}}_n = \frac{\hat{\mathbf{v}}_g - (\hat{\mathbf{v}}_g.{\hat{\mathbf{w}}_n}) \mathbf{\hat{w}}_n}{|\hat{\mathbf{v}_g} - (\hat{\mathbf{v}_g}.{\hat{\mathbf{w}}_n}) \mathbf{\hat{w}}_n|}"/></p>
+</div><div class="math">
+<p><img src="../../_images/math/c2599ac37f7b50d3e2a89dedbb4f273ebe2e4ba1.png" alt="\hat{\mathbf{v}}_n = \mathbf{\hat{w}}_n \times \mathbf{\hat{u}}_n"/></p>
+</div><p>Where <img class="math" src="../../_images/math/07cb9349fac20981cf05575d1c2b10e28d09b02d.png" alt="\hat{\mathbf{v}}_g"/> is the unit velocity vector along
+actual trajectory.</p>
+<p>The outpout of <tt class="docutils literal"><span class="pre">geomutil.onbframe</span></tt> is an MDA
+<img class="math" src="../../_images/math/b2dbf695774d2af9fa3ad59c30afa05496194c71.png" alt="(3\times n \times 3)"/> of <img class="math" src="../../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> unitary matrices aggregated
+along axis 1</p>
+<div class="math">
+<p><img src="../../_images/math/cb83eb772b450d76e29d4fadef3da133d65a7c61.png" alt="\mathbf{T}_n=[\hat{\mathbf{u}}_n, \hat{\mathbf{v}}_n, \hat{\mathbf{w}}_n]"/></p>
+</div><p>To create the CCS :</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">setccs</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">scipy.linalg</span> <span class="kn">as</span> <span class="nn">la</span>
+<span class="k">print</span> <span class="s">&quot;ccs dimensions : &quot;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">ccs</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">John</span><span class="o">.</span><span class="n">ccs</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:]</span>
+<span class="k">print</span> <span class="s">&quot;Check determinant : &quot;</span><span class="p">,</span> <span class="n">la</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">ccs</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>ccs dimensions :  (11, 3, 3)
+[[ 0.94678656  0.05306765 -0.31745715]
+ [-0.06834689  0.99696857 -0.03718026]
+ [ 0.31452173  0.05689898  0.94754345]]
+Check determinant :  1.0
+</pre></div>
+</div>
+<p>Create a Wireframe body representation from the body graph model</p>
+<p>Representation of frames associated with the cylinder</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">_show3</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>On the figure below the wireframe model is shown associated with the 11
+CCS (Cylinder coordinates systems)</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Image</span><span class="p">(</span><span class="s">&#39;CCS.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/Body_86_0.png" src="../../_images/Body_86_0.png" />
+</div>
+</div>
+<div class="section" id="placing-a-dcs-device-coordinate-system-on-the-cylinder">
+<h2>Placing a dcs (Device Coordinate System ) on the cylinder<a class="headerlink" href="#placing-a-dcs-device-coordinate-system-on-the-cylinder" title="Permalink to this headline">¶</a></h2>
+<p>A DCS is refered by 4 numbers <img class="math" src="../../_images/math/cad3d8d10b7bf945cdca8a3d3c9c7dda9af352e1.png" alt="(Id,l,h,\alpha)"/></p>
+<ul class="simple">
+<li>Id : Cylinder Id</li>
+<li>l : length along cylinder</li>
+<li>h : height above cylinder generatrix</li>
+<li>alpha : angle from front direction (degrees)</li>
+</ul>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Id</span> <span class="o">=</span> <span class="mi">4</span> <span class="c"># 4 Left Arm</span>
+<span class="n">l</span>  <span class="o">=</span> <span class="mf">0.1</span> <span class="c"># Longitudinal coordinates</span>
+<span class="n">h</span>  <span class="o">=</span> <span class="mf">0.03</span> <span class="c"># height</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="mi">45</span> <span class="c"># angle degrees</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">dcyl</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;arml&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+ <span class="s">&#39;armr&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+ <span class="s">&#39;calfl&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+ <span class="s">&#39;calfr&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+ <span class="s">&#39;forearml&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+ <span class="s">&#39;forearmr&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+ <span class="s">&#39;headu&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+ <span class="s">&#39;thighl&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+ <span class="s">&#39;thighr&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+ <span class="s">&#39;trunkb&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+ <span class="s">&#39;trunku&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Rotate Matrix around z</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">cs</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">dcyl</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;arml&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+ <span class="s">&#39;armr&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+ <span class="s">&#39;calfl&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+ <span class="s">&#39;calfr&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+ <span class="s">&#39;forearml&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+ <span class="s">&#39;forearmr&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+ <span class="s">&#39;headu&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+ <span class="s">&#39;thighl&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+ <span class="s">&#39;thighr&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+ <span class="s">&#39;trunkb&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+ <span class="s">&#39;trunku&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">show3</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">dcs</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">show3</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#Image(&#39;acs.png&#39;)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#Bernard = Body(_filebody=&#39;Bernard.ini&#39;,_filemocap=&#39;serie_017.c3d&#39;)</span>
+<span class="c">#fig1 = plt.figure(figsize=(20,15))</span>
+<span class="c">#fstart=100</span>
+<span class="c">#fend = 11000</span>
+<span class="c">#for f in range(fstart,fend,1000):</span>
+<span class="c">#    Bernard.show(color=&#39;b&#39;,plane=&#39;xy&#39;,widthfactor=50,offset=f/10,frameId=f)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#fig1 = plt.figure(figsize=(20,5))</span>
+<span class="c">#for f in range(fstart,fend,500):</span>
+<span class="c">#    Bernard.show(color=&#39;b&#39;,plane=&#39;yz&#39;,widthfactor=50,offset=f/10,frameId=f)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#Bernard.anim(Bernard)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
+
+<span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
+    <span class="n">styles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;../styles/custom.css&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="n">styles</span><span class="p">)</span>
+<span class="n">css_styling</span><span class="p">()</span>
+</pre></div>
+</div>
+<style>
+    @font-face {
+        font-family: "Computer Modern";
+        src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
+    }
+    div.cell{
+        width:800px;
+        margin-left:16% !important;
+        margin-right:auto;
+    }
+    h1 {
+        font-family: Helvetica, serif;
+    }
+    h4{
+        margin-top:12px;
+        margin-bottom: 3px;
+       }
+    div.text_cell_render{
+        font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+        line-height: 145%;
+        font-size: 130%;
+        width:800px;
+        margin-left:auto;
+        margin-right:auto;
+    }
+    .CodeMirror{
+            font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
+    }
+    .prompt{
+        display: None;
+    }
+    .text_cell_render h5 {
+        font-weight: 300;
+        font-size: 22pt;
+        color: #4057A1;
+        font-style: italic;
+        margin-bottom: .5em;
+        margin-top: 0.5em;
+        display: block;
+    }
+
+    .warning{
+        color: rgb( 240, 20, 20 )
+        }
+</style>
+<script>
+    MathJax.Hub.Config({
+                        TeX: {
+                           extensions: ["AMSmath.js"]
+                           },
+                tex2jax: {
+                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+                },
+                displayAlign: 'center', // Change this to 'center' to center equations.
+                "HTML-CSS": {
+                    styles: {'.MathJax_Display': {"margin": 4}}
+                }
+        });
+</script></div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2015, PyLayers developer team.
+      Last updated on févr. 28, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

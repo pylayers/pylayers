@@ -1,0 +1,397 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Trajectory and Network simulation &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../index.html"><img src="../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/notebook/4-MOB/Mobility.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="trajectory-and-network-simulation">
+<h1>Trajectory and Network simulation<a class="headerlink" href="#trajectory-and-network-simulation" title="Permalink to this headline">¶</a></h1>
+<div class="code python highlight-python"><div class="highlight"><pre>from IPython.display import Image, HTML, Latex, YouTubeVideo
+import numpy as np
+import pylayers.mobility.trajectory as traj
+from pylayers.mobility.ban.body import *
+from pylayers.gis.layout import *
+%matplotlib inline
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">YouTubeVideo</span><span class="p">(</span><span class="s">&#39;1Qa6xLpU5-M&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<iframe
+    width="400"
+    height=300"
+    src="https://www.youtube.com/embed/1Qa6xLpU5-M"
+    frameborder="0"
+    allowfullscreen
+></iframe><p>Trajectories can be generated using simulnet.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.simul.simulnet</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">S</span><span class="o">=</span><span class="n">Simul</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+NoOptionError                             Traceback (most recent call last)
+
+&lt;ipython-input-3-2ed46a87720e&gt; in &lt;module&gt;()
+----&gt; 1 from pylayers.simul.simulnet import *
+      2 S=Simul()
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/simul/simulnet.py in &lt;module&gt;()
+     62 import pylayers.util.pyutil as pyu
+     63
+---&gt; 64 from pylayers.network.network import Network, Node, PNetwork
+     65 from pylayers.network.communication import Gcom
+     66 from pylayers.network.show import ShowNet, ShowTable
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/network/network.py in &lt;module&gt;()
+    151 #from PyLayers.Network.Node import Node
+    152 import pylayers.util.pyutil as pyu
+--&gt; 153 from pylayers.network.emsolver import EMSolver
+    154 from pylayers.network.show import ShowNet,ShowTable
+    155 #from pylayers.util.pymysqldb import Database
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/network/emsolver.py in &lt;module&gt;()
+     42
+     43
+---&gt; 44 class EMSolver(object):
+     45     &quot;&quot;&quot; Invoque an electromagnetic solver
+     46
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/network/emsolver.py in EMSolver()
+     71     &quot;&quot;&quot;
+     72
+---&gt; 73     def __init__(self,L=Layout()):
+     74
+     75         self.config  = ConfigParser.ConfigParser()
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in __init__(self, _filename, _filematini, _fileslabini, _filefur, force)
+    331         mat.load(_filematini)
+    332
+--&gt; 333         self.sl = sb.SlabDB()
+    334         self.sl.mat = mat
+    335         self.sl.load(_fileslabini)
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/slab.pyc in __init__(self, filemat, fileslab)
+   1865             self.mat.load(filemat)
+   1866         if (fileslab != &#39;&#39;):
+-&gt; 1867             self.load(fileslab)
+   1868             self.dass()
+   1869
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/slab.pyc in load(self, _fileini)
+   2114         for slabname in self.di.values():
+   2115             S=Slab(name=slabname,mat=self.mat)
+-&gt; 2116             S[&#39;lmatname&#39;]=eval(config.get(slabname,&#39;lmatname&#39;))
+   2117             S[&#39;nbmat&#39;]=len(S[&#39;lmatname&#39;])
+   2118             S[&#39;color&#39;]=config.get(slabname,&#39;color&#39;)
+
+
+/home/uguen/anaconda/lib/python2.7/ConfigParser.pyc in get(self, section, option, raw, vars)
+    616             value = d[option]
+    617         except KeyError:
+--&gt; 618             raise NoOptionError(option, section)
+    619
+    620         if raw or value is None:
+
+
+NoOptionError: No option &#39;lmatname&#39; in section: &#39;ABSORBENT&#39;
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># set simulation duration</span>
+
+<span class="n">S</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;duration&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;100&#39;</span>
+
+<span class="n">S</span><span class="o">.</span><span class="n">meca_opt</span><span class="p">[</span><span class="s">&#39;mecanic_update_time&#39;</span><span class="p">]</span><span class="o">=</span><span class="mf">0.1</span>
+
+<span class="c"># turn on network simulation</span>
+<span class="n">S</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s">&#39;network&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># run mechanical simulation</span>
+<span class="n">S</span><span class="o">.</span><span class="n">runsimul</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>trajectories can be imported from a simulnet simulation with the
+<tt class="docutils literal"><span class="pre">importh5</span></tt> method</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.mobility.trajectory</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">str1</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;filename&#39;</span><span class="p">])</span>
+<span class="n">str2</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="c"># the save filename is composed of simulation filename and layout filename</span>
+<span class="n">save_filename</span> <span class="o">=</span> <span class="n">str1</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="n">str2</span> <span class="o">+</span><span class="s">&#39;.h5&#39;</span>
+
+<span class="n">list_traj</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">traj</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">list_traj</span>
+</pre></div>
+</div>
+<pre class="literal-block">
+Trajectories performed in Layout : TA-Office.ini
+
+Trajectory of agent John with ID 1
+----------------------------------
+t (s) : 0.00 : 0.20 : 99.00
+dtot (m) : 319.65
+Vmoy (m/s) : 3.23
+                                    x         y        vx        vy        ax  t
+1970-01-01 00:00:00         18.907750  2.528547  0.038749  0.155237  0.193744
+1970-01-01 00:00:00.200000  18.921699  2.584433  0.069748  0.279427  0.154995
+
+                                  ay      s
+t
+1970-01-01 00:00:00         0.776185  0.160
+1970-01-01 00:00:00.200000  0.620948  0.448
+
+Trajectory of agent Alex with ID 2
+----------------------------------
+t (s) : 0.00 : 0.20 : 99.80
+dtot (m) : 368.08
+Vmoy (m/s) : 3.69
+                                    x         y        vx        vy        ax  t
+1970-01-01 00:00:00         29.706510  2.528831  0.032551  0.156654  0.162753
+1970-01-01 00:00:00.200000  29.718228  2.585226  0.058591  0.281977  0.130202
+
+                                  ay      s
+t
+1970-01-01 00:00:00         0.783270  0.160
+1970-01-01 00:00:00.200000  0.626616  0.448
+
+Access point Router with ID 6
+-----------------------------
+t (s) : 0.00
+Vmoy (m/s) : 0.0
+              x  y    z  vx  vy  ax  ay  s
+t
+1970-01-01  0.5  2  2.5   0   0   0   0  0
+
+Access point Router with ID 7
+-----------------------------
+t (s) : 0.00
+Vmoy (m/s) : 0.0
+              x   y    z  vx  vy  ax  ay  s
+t
+1970-01-01  0.7  14  2.5   0   0   0   0  0
+
+Access point Router with ID 8
+-----------------------------
+t (s) : 0.00
+Vmoy (m/s) : 0.0
+             x   y    z  vx  vy  ax  ay  s
+t
+1970-01-01  39  13  2.5   0   0   0   0  0
+</pre>
+<p>The 2 following trajectories have been calculated with
+<tt class="docutils literal"><span class="pre">pylayers.simul.simulnet</span></tt></p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">t</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">traj</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
+<span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">nodes</span> <span class="ow">in</span> <span class="n">t</span><span class="p">:</span>
+    <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/Mobility_13_0.png" src="../../_images/Mobility_13_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">4989</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Simulation information
+----------------------
+Layout: TA-Office.ini
+Simulation duration: 100
+Random seed: 1
+Save simulation: True
+
+Update times
+-------------
+Mechanical update: 0.1
+Network update: 0.1
+Localization update: &#39;autonomous&#39;
+
+Agents =&gt; self.lAg[i]
+------
+Number of agents :5
+Agents IDs: [&#39;1&#39;, &#39;2&#39;, &#39;6&#39;, &#39;7&#39;, &#39;8&#39;]
+Agents names: [&#39;John&#39;, &#39;Alex&#39;, &#39;Router&#39;, &#39;Router&#39;, &#39;Router&#39;]
+Destination of chosen agents: &#39;random&#39;
+
+Network
+-------
+Nodes per wstd: {&#39;rat1&#39;: [&#39;1&#39;, &#39;8&#39;, &#39;2&#39;, &#39;7&#39;, &#39;6&#39;]}
+
+Localization
+------------
+Localization enable: False
+Postion estimation methods: [&#39;geo&#39;]
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">traj</span><span class="o">.</span><span class="n">t</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">Rss18</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;1&#39;</span><span class="p">][</span><span class="s">&#39;8&#39;</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">Rss12</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;1&#39;</span><span class="p">][</span><span class="s">&#39;2&#39;</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">Rss17</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;1&#39;</span><span class="p">][</span><span class="s">&#39;7&#39;</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">Rss16</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;1&#39;</span><span class="p">][</span><span class="s">&#39;6&#39;</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">Rss28</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;2&#39;</span><span class="p">][</span><span class="s">&#39;8&#39;</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">Rss27</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;2&#39;</span><span class="p">][</span><span class="s">&#39;7&#39;</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">Rss26</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;2&#39;</span><span class="p">][</span><span class="s">&#39;6&#39;</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss18</span><span class="p">,</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;1-8&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss12</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;1-2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss17</span><span class="p">,</span><span class="s">&#39;g&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;1-7&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss16</span><span class="p">,</span><span class="s">&#39;c&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;1-6&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss28</span><span class="p">,</span><span class="s">&#39;b--&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;2-8&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss27</span><span class="p">,</span><span class="s">&#39;g--&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;2-7&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Rss26</span><span class="p">,</span><span class="s">&#39;c--&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;2-6&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.legend.Legend at 0x7f0918928590&gt;
+</pre></div>
+</div>
+<img alt="../../_images/Mobility_17_1.png" src="../../_images/Mobility_17_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
+
+<span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
+    <span class="n">styles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;../styles/custom.css&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="n">styles</span><span class="p">)</span>
+<span class="n">css_styling</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2015, PyLayers developer team.
+      Last updated on févr. 28, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>
