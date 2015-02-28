@@ -56,7 +56,7 @@
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">PyLayers Overview</a><ul>
-<li><a class="reference internal" href="#geographical-information">Geographical Information</a></li>
+<li><a class="reference internal" href="#describing-the-geographical-information">Describing the Geographical Information</a></li>
 <li><a class="reference internal" href="#antenna-and-propagation">Antenna and Propagation</a><ul>
 <li><a class="reference internal" href="#antennas">Antennas</a></li>
 <li><a class="reference internal" href="#slabs-and-materials">Slabs and Materials</a></li>
@@ -159,11 +159,18 @@
         });
 </script><div class="section" id="pylayers-overview">
 <h1><a class="toc-backref" href="#id1">PyLayers Overview</a><a class="headerlink" href="#pylayers-overview" title="Permalink to this headline">¶</a></h1>
+<p>Pylayers is a site-specific radio channel simulator.
+It is organized in different python classes and functions.
+The basic usage is first to build a description of the radio propagation
+scene. This means :
+1. Describing a propagation environement
+2. Setting a Transmitter and a Receiver and a given standard.
+3. Producing Output for Upper Layer simulation or analysis.</p>
 <div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
 <li><a class="reference internal" href="#pylayers-overview" id="id1">PyLayers Overview</a><ul>
-<li><a class="reference internal" href="#geographical-information" id="id2">Geographical Information</a></li>
+<li><a class="reference internal" href="#describing-the-geographical-information" id="id2">Describing the Geographical Information</a></li>
 <li><a class="reference internal" href="#antenna-and-propagation" id="id3">Antenna and Propagation</a></li>
 <li><a class="reference internal" href="#handling-time-domain-signals" id="id4">Handling time domain signals</a></li>
 <li><a class="reference internal" href="#human-mobility" id="id5">Human Mobility</a></li>
@@ -173,8 +180,9 @@
 </li>
 </ul>
 </div>
-<div class="section" id="geographical-information">
-<h2><a class="toc-backref" href="#id2">Geographical Information</a><a class="headerlink" href="#geographical-information" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="describing-the-geographical-information">
+<h2><a class="toc-backref" href="#id2">Describing the Geographical Information</a><a class="headerlink" href="#describing-the-geographical-information" title="Permalink to this headline">¶</a></h2>
+<p>There is mostly two kind of situations. Indoor situations and outdoor situations.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="1-GIS/Layout.html">Description of the propagation environment</a><ul>
@@ -379,7 +387,7 @@
 
     <div class="footer">
         &copy; Copyright 2015, PyLayers developer team.
-      Last updated on févr. 27, 2015.
+      Last updated on févr. 28, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">
