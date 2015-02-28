@@ -1329,7 +1329,7 @@ class Slab(dict,Interface):
     linewidth :
         linewidth for structure display
     mat : Associated Material Database
-    
+
     evaluated : Boolean
 
     """
@@ -1347,9 +1347,9 @@ class Slab(dict,Interface):
         # if not specified choose default material database
         Interface.__init__(self)
         if mat==[]:
-            self.mat=MatDB()
+            self.mat = MatDB()
         else:
-            self.mat=mat
+            self.mat = mat
         self['name'] = name
         self['index'] = 0
         self['nbmat'] = 1
@@ -2204,7 +2204,8 @@ class SlabDB(dict):
         for d in di:
             self.di[eval(d)]=di[d]
         for slabname in self.di.values():
-            S=Slab(name=slabname,mat=self.mat)
+            # warning the Slab takes the whole Material Database
+            S = Slab(name=slabname,mat=self.mat)
             S['lmatname']=eval(config.get(slabname,'lmatname'))
             S['nbmat']=len(S['lmatname'])
             S['color']=config.get(slabname,'color')

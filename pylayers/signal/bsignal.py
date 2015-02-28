@@ -3849,7 +3849,7 @@ class FUsignal(FBsignal, Usignal):
         V  : FHsignal
 
         """
-        assert self.x[0]!=0
+        #assert self.x[0]!=0
         f = self.x
         U = self.y
         N = len(f)

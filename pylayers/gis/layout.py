@@ -2739,8 +2739,10 @@ class Layout(PyLayers):
 
         """
 
-        assert len(ss_name)==len(ss_z),'Error incompatible size in chgmss'
-        assert len(ss_z)==len(ss_offset),'Error incompatible size in chgmss'
+        if ss_z!=[]:
+            assert len(ss_name)==len(ss_z),'Error incompatible size in chgmss'
+        if ss_offset!=[]:
+            assert len(ss_z)==len(ss_offset),'Error incompatible size in chgmss'
 
         if ns in self.Gs.node.keys():
             if self.Gs.node[ns].has_key('ss_name'):
@@ -2751,7 +2753,7 @@ class Layout(PyLayers):
                 if ss_offset<>[]:
                     self.Gs.node[ns]['ss_offset']=ss_offset
                 else:
-                    self.Gs.node[ns]['ss_offset']=[0]*len(ss_z)
+                    self.Gs.node[ns]['ss_offset']=[0]*len(ss_name)
 
 
                 # update Layout information
