@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>16. Network Simulation Configuration &mdash; PyLayers</title>
+    <title>15. Network Simulation Configuration &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -55,16 +55,16 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">16. Network Simulation Configuration</a><ul>
-<li><a class="reference internal" href="#simulnet-ini">16.1. Simulnet.ini</a><ul>
-<li><a class="reference internal" href="#save-section">16.1.1. Save section</a></li>
-<li><a class="reference internal" href="#layout-section">16.1.2. Layout section</a></li>
-<li><a class="reference internal" href="#network-section">16.1.3. Network section</a></li>
+<li><a class="reference internal" href="#">15. Network Simulation Configuration</a><ul>
+<li><a class="reference internal" href="#simulnet-ini">15.1. Simulnet.ini</a><ul>
+<li><a class="reference internal" href="#save-section">15.1.1. Save section</a></li>
+<li><a class="reference internal" href="#layout-section">15.1.2. Layout section</a></li>
+<li><a class="reference internal" href="#network-section">15.1.3. Network section</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#mechanics">16.2. Mechanics</a><ul>
-<li><a class="reference internal" href="#localization-section">16.2.1. Localization section</a></li>
-<li><a class="reference internal" href="#simulation-section">16.2.2. Simulation section</a></li>
+<li><a class="reference internal" href="#mechanics">15.2. Mechanics</a><ul>
+<li><a class="reference internal" href="#localization-section">15.2.1. Localization section</a></li>
+<li><a class="reference internal" href="#simulation-section">15.2.2. Simulation section</a></li>
 </ul>
 </li>
 </ul>
@@ -169,7 +169,7 @@
 </pre></div>
 </div>
 <div class="section" id="network-simulation-configuration">
-<h1>16. Network Simulation Configuration<a class="headerlink" href="#network-simulation-configuration" title="Permalink to this headline">¶</a></h1>
+<h1>15. Network Simulation Configuration<a class="headerlink" href="#network-simulation-configuration" title="Permalink to this headline">¶</a></h1>
 <p>PyLayers is designed to provide indoor radio channel simulation for
 mobile agents.</p>
 <p>The goal is to address mobility in indoor environment heterogeneous
@@ -183,7 +183,7 @@ dynamic topology of the mobile network.</p>
 level <tt class="docutils literal"><span class="pre">PyLayers</span></tt> simulation are described.</p>
 <p>The configuration file is <tt class="docutils literal"><span class="pre">simulnet.ini</span></tt></p>
 <div class="section" id="simulnet-ini">
-<h2>16.1. Simulnet.ini<a class="headerlink" href="#simulnet-ini" title="Permalink to this headline">¶</a></h2>
+<h2>15.1. Simulnet.ini<a class="headerlink" href="#simulnet-ini" title="Permalink to this headline">¶</a></h2>
 <p>This file is assumed to be located in <tt class="docutils literal"><span class="pre">$BASENAME/ini</span></tt>. As the format
 of this file is not stable yet. Refer to the comment in the file below
 for obtaining the inforamtion about the format.</p>
@@ -291,7 +291,7 @@ verbose = False
 </pre></div>
 </div>
 <div class="section" id="save-section">
-<h3>16.1.1. Save section<a class="headerlink" href="#save-section" title="Permalink to this headline">¶</a></h3>
+<h3>15.1.1. Save section<a class="headerlink" href="#save-section" title="Permalink to this headline">¶</a></h3>
 <p>The save section handles the output files of the simulation.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Save&#39;</span><span class="p">))</span>
 </pre></div>
@@ -316,7 +316,7 @@ in <tt class="docutils literal"><span class="pre">$BASENAME/netsave</span></tt><
 </div>
 </div>
 <div class="section" id="layout-section">
-<h3>16.1.2. Layout section<a class="headerlink" href="#layout-section" title="Permalink to this headline">¶</a></h3>
+<h3>15.1.2. Layout section<a class="headerlink" href="#layout-section" title="Permalink to this headline">¶</a></h3>
 <p>This section specifies the layout parameter and spatial dimension of the
 simulation</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Layout&#39;</span><span class="p">))</span>
@@ -348,7 +348,7 @@ simulation</p>
 </div>
 </div>
 <div class="section" id="network-section">
-<h3>16.1.3. Network section<a class="headerlink" href="#network-section" title="Permalink to this headline">¶</a></h3>
+<h3>15.1.3. Network section<a class="headerlink" href="#network-section" title="Permalink to this headline">¶</a></h3>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Network&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -408,7 +408,7 @@ periodically refreshed at the <tt class="docutils literal"><span class="pre">net
 </div>
 </div>
 <div class="section" id="mechanics">
-<h2>16.2. Mechanics<a class="headerlink" href="#mechanics" title="Permalink to this headline">¶</a></h2>
+<h2>15.2. Mechanics<a class="headerlink" href="#mechanics" title="Permalink to this headline">¶</a></h2>
 <p>This section specifies agents dynamic during simulation</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Mechanics&#39;</span><span class="p">))</span>
 </pre></div>
@@ -438,7 +438,7 @@ periodically refreshed at the <tt class="docutils literal"><span class="pre">net
 </pre></div>
 </div>
 <div class="section" id="localization-section">
-<h3>16.2.1. Localization section<a class="headerlink" href="#localization-section" title="Permalink to this headline">¶</a></h3>
+<h3>15.2.1. Localization section<a class="headerlink" href="#localization-section" title="Permalink to this headline">¶</a></h3>
 <p>Setup Localization algorithms</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Localization&#39;</span><span class="p">))</span>
 </pre></div>
@@ -475,7 +475,7 @@ periodically refreshed at the <tt class="docutils literal"><span class="pre">net
 </div>
 </div>
 <div class="section" id="simulation-section">
-<h3>16.2.2. Simulation section<a class="headerlink" href="#simulation-section" title="Permalink to this headline">¶</a></h3>
+<h3>15.2.2. Simulation section<a class="headerlink" href="#simulation-section" title="Permalink to this headline">¶</a></h3>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Simulation&#39;</span><span class="p">))</span>
 </pre></div>
 </div>

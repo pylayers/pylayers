@@ -157,7 +157,173 @@ scene. This means :</p>
 </ol>
 <p>There is mostly two kind of situations. Indoor situations and outdoor situations.</p>
 <div class="toctree-wrapper compound">
-<ul class="simple">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="1-GIS/LayoutEditor.html">1. The Layout class</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="1-GIS/LayoutEditor.html#introduction">1.1. Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1-GIS/LayoutEditor.html#structure-of-a-layout">1.2. Structure of a Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1-GIS/LayoutEditor.html#subsegments">1.3. Subsegments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1-GIS/LayoutEditor.html#the-different-layout-format">1.4. The different layout format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1-GIS/LayoutEditor.html#reading-an-exiting-layout">1.5. Reading an exiting Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1-GIS/LayoutEditor.html#the-display-options-dictionnary">1.6. The display options dictionnary</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="1-GIS/LayoutEditor.html#layers">1.6.1. Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="1-GIS/LayoutEditor.html#strings">1.6.2. Strings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="1-GIS/LayoutEditor.html#sizes">1.6.3. Sizes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="1-GIS/LayoutEditor.html#booleans">1.6.4. Booleans</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="1-GIS/LayoutEditor.html#interactive-editor">1.7. Interactive editor</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="1-GIS/LayoutEditor.html#image-overlay">1.7.1. Image overlay</a></li>
+<li class="toctree-l3"><a class="reference internal" href="1-GIS/LayoutEditor.html#scaling-the-figure-overlay">1.7.2. Scaling the figure overlay</a></li>
+<li class="toctree-l3"><a class="reference internal" href="1-GIS/LayoutEditor.html#vizualisation-of-the-layout">1.7.3. Vizualisation of the layout</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2-AP/SlabsMaterials.html">2. Slabs and Materials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="2-AP/SlabsMaterials.html#defining-a-new-slab-and-a-new-material">2.1. Defining a new Slab and a new Material</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2-AP/SlabsMaterials.html#information-necessary-to-define-a-slab">2.2. Information necessary to define a Slab</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2-AP/SlabsMaterials.html#evaluation-of-a-slab">2.3. Evaluation of a Slab</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2-AP/SlabsMaterials.html#transmission-and-reflexion-coefficients">2.4. Transmission and Reflexion coefficients</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="2-AP/SlabsMaterials.html#ploting-reflection-and-transmission-coefficients">2.4.1. Ploting Reflection and Transmission Coefficients</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="2-AP/SlabsMaterials.html#evaluation-without-phase-compensation">2.5. Evaluation without phase compensation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2-AP/SlabsMaterials.html#references">2.6. References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="1-GIS/Multisubsegments.html">3. Effect of Modyfiying the Nature of Sub-Segments</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="1-GIS/Multisubsegments.html#the-different-members-of-the-link-are">3.1. The different members of the link are</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="1-GIS/Ezone.html">4. Geographical Information and the Earth Zone class : <tt class="docutils literal"><span class="pre">Ezone</span></tt></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="1-GIS/Ezone.html#zooming-in">4.1. Zooming in</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1-GIS/Ezone.html#ground-height-profile-extraction">4.2. Ground Height Profile Extraction</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2-AP/Antenna.html">5. Desciption of antennas</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="2-AP/Antenna.html#defining-antenna-gain-from-analytic-formulas">5.1. Defining Antenna gain from analytic formulas</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2-AP/AntennaVSH.html">6. Vector Spherical Harmonics Representation of Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2-AP/AntennaVSH.html#evaluation-of-vector-spherical-harmonics-coefficients">7. Evaluation of Vector Spherical Harmonics Coefficients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2-AP/Coverage.html">8. Indoor Coverage with the PyLayers Multi Wall model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2-AP/MultiWall.html">9. Multi-wall model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="2-AP/MultiWall.html#defining-a-radio-link">9.1. Defining a radio link</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2-AP/MultiWall.html#ploting-the-scene">9.2. Ploting the scene</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="2-AP/MultiWall.html#finding-the-intersection-between-the-direct-path-and-the-walls">9.2.1. Finding the intersection between the &#8220;direct&#8221; path and the walls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-AP/MultiWall.html#computing-the-multi-wall-model">9.2.2. Computing the Multi-wall model</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2-AP/MultiWall.html#coverage-class">10. Coverage class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2-AP/Signatures.html">11. Ray Signatures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2-AP/Channel.html">12. The transmission channel</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="2-AP/Channel.html#the-friis-factor">12.1. The Friis factor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2-AP/Channel.html#the-tap-method">12.2. The tap method</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="3-PHY/Bsignal.html">13. The <tt class="docutils literal"><span class="pre">Bsignal</span></tt> Class</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="3-PHY/Bsignal.html#fhsignal-for-in-cir-mode">13.1. FHsignal for in CIR mode</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="3-PHY/Noise.html">14. Modelisation of the Thermal Noise</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5-SIM/SimulNetConfig.html">15. Network Simulation Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="5-SIM/SimulNetConfig.html#simulnet-ini">15.1. Simulnet.ini</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="5-SIM/SimulNetConfig.html#save-section">15.1.1. Save section</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-SIM/SimulNetConfig.html#layout-section">15.1.2. Layout section</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-SIM/SimulNetConfig.html#network-section">15.1.3. Network section</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="5-SIM/SimulNetConfig.html#mechanics">15.2. Mechanics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="5-SIM/SimulNetConfig.html#localization-section">15.2.1. Localization section</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-SIM/SimulNetConfig.html#simulation-section">15.2.2. Simulation section</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="4-MOB/Mobility.html">16. Trajectory and Network simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4-MOB/Body.html">17. Handling Body Description and Mobility</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="4-MOB/Body.html#bodycylinder-data-structure">17.1. <tt class="docutils literal"><span class="pre">BodyCylinder</span></tt> data structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-MOB/Body.html#description-of-a-body-file">17.2. Description of a body file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-MOB/Body.html#example-of-a-body-file">17.3. Example of a Body file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-MOB/Body.html#loading-a-motion-capture-file">17.4. Loading a Motion Capture File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-MOB/Body.html#defining-a-trajectory">17.5. Defining a trajectory</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="4-MOB/Body.html#settopos-method">17.5.1. settopos () method</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="4-MOB/Body.html#centering-the-motion">17.6. Centering the motion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-MOB/Body.html#defining-a-large-scale-trajectory">17.7. Defining a large scale trajectory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-MOB/Body.html#trajectory">17.8. Trajectory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-MOB/Body.html#posvel">17.9. <tt class="docutils literal"><span class="pre">posvel()</span></tt></a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-MOB/Body.html#definition-of-several-coordinates-systems">17.10. Definition of Several Coordinates systems</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="4-MOB/Body.html#construction-of-the-cylinder-coordinate-system-ccs">17.10.1. Construction of the Cylinder Coordinate System (CCS)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="4-MOB/Body.html#placing-a-dcs-device-coordinate-system-on-the-cylinder">17.11. Placing a dcs (Device Coordinate System ) on the cylinder</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="5-SIM/Corser.html">18. Corser</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="5-SIM/Corser.html#cormoran-measurement-campaign">18.1. CORMORAN Measurement Campaign</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="5-SIM/Corser.html#motivation-for-creating-a-specific-tool">19. Motivation for creating a specific tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5-SIM/Corser.html#prerequisite-installations">20. Prerequisite Installations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="5-SIM/Corser.html#the-corser-class">20.1. The <tt class="docutils literal"><span class="pre">CorSer</span></tt> Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="5-SIM/Corser.html#plot-values">20.1.1. &nbsp;Plot values</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="5-SIM/Corser.html#plot-distance">20.1.1.1. Plot distance</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="5-SIM/Corser.html#specify-time-bodytime-parameter">20.1.2. Specify time (<em>bodytime</em> parameter)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-SIM/Corser.html#display-trajectory-trajectory-parameter">20.1.3. display trajectory (<em>trajectory</em> parameter)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="5-SIM/Corser.html#using-pylayers-ray-tracing-with-corser-data">21. Using Pylayers Ray-tracing with CorSer data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5-SIM/LinkSimulation.html">22. How to do a link siulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5-SIM/DLR-WHERE2.html">23. Example of a trajectory synthesis in DLR WHERE2 environment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="5-SIM/DLR-WHERE2.html#loading-the-layout">23.1. Loading the Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5-SIM/DLR-WHERE2.html#aggregated-cir-along-a-synthetic-trajectory-line-in-the-corridor">23.2. Aggregated CIR along a synthetic trajectory (line in the corridor)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="8-MISC/Cone.html">24. The class Cone</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="8-MISC/Cone.html#is-a-point-in-the-cone-belong-point">24.1. Is a point in the cone : belong_point()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8-MISC/Cone.html#creating-a-cone-from-2-segments-from2segs">24.2. Creating a Cone from 2 segments <tt class="docutils literal"><span class="pre">from2segs()</span></tt></a></li>
+<li class="toctree-l2"><a class="reference internal" href="8-MISC/Cone.html#conditional-graph">24.3. Conditional Graph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="8-MISC/Cone.html#benchmark-normalizing-a-vector">24.3.1. Benchmark normalizing a vector</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="8-MISC/Cone.html#debug">24.4. Debug</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8-MISC/Cone.html#geomutil-mirror">24.5. geomutil.mirror</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8-MISC/Cone.html#geometric-probability">24.6. Geometric probability</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="8-MISC/Geomutil.html">25. Class Polygon</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="8-MISC/Geomutil.html#ploting-polygons">25.1. ploting polygons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8-MISC/Geomutil.html#buildgv">25.2. <tt class="docutils literal"><span class="pre">buildGv()</span></tt></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="8-MISC/Geomutil.html#geomview-classes">26. Geomview classes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="8-MISC/Geomutil.html#geomvect-class">26.1. GeomVect class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="8-MISC/Geomutil.html#geombase">26.1.1. geomBase</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-MISC/Geomutil.html#points">26.1.2. points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-MISC/Geomutil.html#plotting-a-box">26.1.3. plotting a box</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="8-MISC/Geomutil.html#utility-functions">26.2. Utility functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="8-MISC/Geomutil.html#angledir">26.2.1. angledir</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-MISC/Geomutil.html#linet">26.2.2. linet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-MISC/Geomutil.html#dptseg-p-pt-ph">26.2.3. dptseg(p,pt,ph)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-MISC/Geomutil.html#displot">26.2.4. displot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-MISC/Geomutil.html#ptonseg-pta-phe-pt">26.2.5. ptonseg(pta,phe,pt)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-MISC/Geomutil.html#ptconvex">26.2.6. ptconvex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-MISC/Geomutil.html#intersect">26.2.7. intersect</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="8-MISC/Geomutil.html#useful-functions">26.3. Useful functions</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>

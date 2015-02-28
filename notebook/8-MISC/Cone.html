@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>25. The class Cone &mdash; PyLayers</title>
+    <title>24. The class Cone &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -55,16 +55,16 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">25. The class Cone</a><ul>
-<li><a class="reference internal" href="#is-a-point-in-the-cone-belong-point">25.1. Is a point in the cone : belong_point()</a></li>
-<li><a class="reference internal" href="#creating-a-cone-from-2-segments-from2segs">25.2. Creating a Cone from 2 segments <tt class="docutils literal"><span class="pre">from2segs()</span></tt></a></li>
-<li><a class="reference internal" href="#conditional-graph">25.3. Conditional Graph</a><ul>
-<li><a class="reference internal" href="#benchmark-normalizing-a-vector">25.3.1. Benchmark normalizing a vector</a></li>
+<li><a class="reference internal" href="#">24. The class Cone</a><ul>
+<li><a class="reference internal" href="#is-a-point-in-the-cone-belong-point">24.1. Is a point in the cone : belong_point()</a></li>
+<li><a class="reference internal" href="#creating-a-cone-from-2-segments-from2segs">24.2. Creating a Cone from 2 segments <tt class="docutils literal"><span class="pre">from2segs()</span></tt></a></li>
+<li><a class="reference internal" href="#conditional-graph">24.3. Conditional Graph</a><ul>
+<li><a class="reference internal" href="#benchmark-normalizing-a-vector">24.3.1. Benchmark normalizing a vector</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#debug">25.4. Debug</a></li>
-<li><a class="reference internal" href="#geomutil-mirror">25.5. geomutil.mirror</a></li>
-<li><a class="reference internal" href="#geometric-probability">25.6. Geometric probability</a></li>
+<li><a class="reference internal" href="#debug">24.4. Debug</a></li>
+<li><a class="reference internal" href="#geomutil-mirror">24.5. geomutil.mirror</a></li>
+<li><a class="reference internal" href="#geometric-probability">24.6. Geometric probability</a></li>
 </ul>
 </li>
 </ul>
@@ -167,7 +167,7 @@
 </pre></div>
 </div>
 <div class="section" id="the-class-cone">
-<h1>25. The class Cone<a class="headerlink" href="#the-class-cone" title="Permalink to this headline">¶</a></h1>
+<h1>24. The class Cone<a class="headerlink" href="#the-class-cone" title="Permalink to this headline">¶</a></h1>
 <p>The
 <tt class="docutils literal"><span class="pre">`Cone</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.util.cone.html">http://pylayers.github.io/pylayers/modules/pylayers.util.cone.html</a>&gt;`__
 class implements different methods for handling planar cones.</p>
@@ -199,7 +199,7 @@ cross(u,v) 0.707106781187
 </pre></div>
 </div>
 <div class="section" id="is-a-point-in-the-cone-belong-point">
-<h2>25.1. Is a point in the cone : belong_point()<a class="headerlink" href="#is-a-point-in-the-cone-belong-point" title="Permalink to this headline">¶</a></h2>
+<h2>24.1. Is a point in the cone : belong_point()<a class="headerlink" href="#is-a-point-in-the-cone-belong-point" title="Permalink to this headline">¶</a></h2>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">p</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">6000</span><span class="p">)</span>
 <span class="n">b</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">belong_point</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
 </pre></div>
@@ -225,7 +225,7 @@ cross(u,v) 0.707106781187
 <img alt="../../_images/Cone_12_1.png" src="../../_images/Cone_12_1.png" />
 </div>
 <div class="section" id="creating-a-cone-from-2-segments-from2segs">
-<h2>25.2. Creating a Cone from 2 segments <tt class="docutils literal"><span class="pre">from2segs()</span></tt><a class="headerlink" href="#creating-a-cone-from-2-segments-from2segs" title="Permalink to this headline">¶</a></h2>
+<h2>24.2. Creating a Cone from 2 segments <tt class="docutils literal"><span class="pre">from2segs()</span></tt><a class="headerlink" href="#creating-a-cone-from-2-segments-from2segs" title="Permalink to this headline">¶</a></h2>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">seg0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
 <span class="n">seg1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">]])</span>
 </pre></div>
@@ -384,7 +384,7 @@ second method is used when the field is going from a diffraction point
 to a segment.</p>
 </div>
 <div class="section" id="conditional-graph">
-<h2>25.3. Conditional Graph<a class="headerlink" href="#conditional-graph" title="Permalink to this headline">¶</a></h2>
+<h2>24.3. Conditional Graph<a class="headerlink" href="#conditional-graph" title="Permalink to this headline">¶</a></h2>
 <p><img class="math" src="../../_images/math/f73bdbe32e898c36e2a3ccbdc51d8cd1798861e9.png" alt="\mathcal{G}_i"/> is a <tt class="docutils literal"><span class="pre">conditional</span> <span class="pre">graph</span></tt> meaning that the edge
 indicates which is the list of authorized next edge for the output. A
 ray being a sequence <img class="math" src="../../_images/math/1e88b12e8413a656088da2a3e88b6387c81e934c.png" alt="{\nu_k}"/> of nodes of <img class="math" src="../../_images/math/f73bdbe32e898c36e2a3ccbdc51d8cd1798861e9.png" alt="\mathcal{G}_i"/>.
@@ -430,7 +430,7 @@ yet.</p>
 </div>
 <img alt="../../_images/Cone_46_1.png" src="../../_images/Cone_46_1.png" />
 <div class="section" id="benchmark-normalizing-a-vector">
-<h3>25.3.1. Benchmark normalizing a vector<a class="headerlink" href="#benchmark-normalizing-a-vector" title="Permalink to this headline">¶</a></h3>
+<h3>24.3.1. Benchmark normalizing a vector<a class="headerlink" href="#benchmark-normalizing-a-vector" title="Permalink to this headline">¶</a></h3>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -455,7 +455,7 @@ yet.</p>
 </div>
 </div>
 <div class="section" id="debug">
-<h2>25.4. Debug<a class="headerlink" href="#debug" title="Permalink to this headline">¶</a></h2>
+<h2>24.4. Debug<a class="headerlink" href="#debug" title="Permalink to this headline">¶</a></h2>
 <p>This a case which where segments <tt class="docutils literal"><span class="pre">seg0</span></tt> and <tt class="docutils literal"><span class="pre">seg1</span></tt> are orthogonal</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">seg0</span> <span class="o">=</span> <span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">25.768</span><span class="p">,</span> <span class="o">-</span><span class="mf">25.822</span><span class="p">],</span>
        <span class="p">[</span>  <span class="mf">4.28</span> <span class="p">,</span>   <span class="mf">9.925</span><span class="p">]])</span>
@@ -573,7 +573,7 @@ yet.</p>
 </div>
 </div>
 <div class="section" id="geomutil-mirror">
-<h2>25.5. geomutil.mirror<a class="headerlink" href="#geomutil-mirror" title="Permalink to this headline">¶</a></h2>
+<h2>24.5. geomutil.mirror<a class="headerlink" href="#geomutil-mirror" title="Permalink to this headline">¶</a></h2>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">10000</span><span class="p">)</span>
 <span class="n">pa</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">pb</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
@@ -612,7 +612,7 @@ yet.</p>
 </div>
 </div>
 <div class="section" id="geometric-probability">
-<h2>25.6. Geometric probability<a class="headerlink" href="#geometric-probability" title="Permalink to this headline">¶</a></h2>
+<h2>24.6. Geometric probability<a class="headerlink" href="#geometric-probability" title="Permalink to this headline">¶</a></h2>
 <p>The idea is to add an information of the fraction of the angular sector
 which is subtended by the intercepted segment.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>

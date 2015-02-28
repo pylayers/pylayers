@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>24. Example of a trajectory synthesis in DLR WHERE2 environment &mdash; PyLayers</title>
+    <title>23. Example of a trajectory synthesis in DLR WHERE2 environment &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -55,9 +55,9 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">24. Example of a trajectory synthesis in DLR WHERE2 environment</a><ul>
-<li><a class="reference internal" href="#loading-the-layout">24.1. Loading the Layout</a></li>
-<li><a class="reference internal" href="#aggregated-cir-along-a-synthetic-trajectory-line-in-the-corridor">24.2. Aggregated CIR along a synthetic trajectory (line in the corridor)</a></li>
+<li><a class="reference internal" href="#">23. Example of a trajectory synthesis in DLR WHERE2 environment</a><ul>
+<li><a class="reference internal" href="#loading-the-layout">23.1. Loading the Layout</a></li>
+<li><a class="reference internal" href="#aggregated-cir-along-a-synthetic-trajectory-line-in-the-corridor">23.2. Aggregated CIR along a synthetic trajectory (line in the corridor)</a></li>
 </ul>
 </li>
 </ul>
@@ -156,7 +156,7 @@
                 }
         });
 </script><div class="section" id="example-of-a-trajectory-synthesis-in-dlr-where2-environment">
-<h1>24. Example of a trajectory synthesis in DLR WHERE2 environment<a class="headerlink" href="#example-of-a-trajectory-synthesis-in-dlr-where2-environment" title="Permalink to this headline">¶</a></h1>
+<h1>23. Example of a trajectory synthesis in DLR WHERE2 environment<a class="headerlink" href="#example-of-a-trajectory-synthesis-in-dlr-where2-environment" title="Permalink to this headline">¶</a></h1>
 <p>The document describing the measurement performed in the DLR environment
 is <a class="reference external" href="http://www.kn-s.dlr.de/where2/documents/Deliverables/Deliverable-D4.4.pdf">WHERE2 Deliverable D4.4 Test and Evaluation of the Integrated System
 under Laboratory
@@ -237,7 +237,7 @@ run a full simulation and returns a list of channel impulse response.</p>
 </pre></div>
 </div>
 <div class="section" id="loading-the-layout">
-<h2>24.1. Loading the Layout<a class="headerlink" href="#loading-the-layout" title="Permalink to this headline">¶</a></h2>
+<h2>23.1. Loading the Layout<a class="headerlink" href="#loading-the-layout" title="Permalink to this headline">¶</a></h2>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
 <span class="n">filestr</span> <span class="o">=</span> <span class="s">&#39;DLR2&#39;</span>
 <span class="n">S</span><span class="o">.</span><span class="n">layout</span><span class="p">(</span><span class="n">filestr</span><span class="o">+</span><span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
@@ -414,7 +414,7 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
 </div>
 </div>
 <div class="section" id="aggregated-cir-along-a-synthetic-trajectory-line-in-the-corridor">
-<h2>24.2. Aggregated CIR along a synthetic trajectory (line in the corridor)<a class="headerlink" href="#aggregated-cir-along-a-synthetic-trajectory-line-in-the-corridor" title="Permalink to this headline">¶</a></h2>
+<h2>23.2. Aggregated CIR along a synthetic trajectory (line in the corridor)<a class="headerlink" href="#aggregated-cir-along-a-synthetic-trajectory-line-in-the-corridor" title="Permalink to this headline">¶</a></h2>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
 <span class="n">dmax</span><span class="o">=</span><span class="mi">150</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ttcir</span><span class="o">+</span><span class="mf">1e-20</span><span class="p">),</span><span class="n">vmax</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">120</span><span class="p">,</span><span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">dmax</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">69</span><span class="p">],</span><span class="n">interpolation</span><span class="o">=</span><span class="s">&#39;nearest&#39;</span><span class="p">)</span>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>26. Class Polygon &mdash; PyLayers</title>
+    <title>25. Class Polygon &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -55,29 +55,29 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">26. Class Polygon</a><ul>
-<li><a class="reference internal" href="#ploting-polygons">26.1. ploting polygons</a></li>
-<li><a class="reference internal" href="#buildgv">26.2. <tt class="docutils literal"><span class="pre">buildGv()</span></tt></a></li>
+<li><a class="reference internal" href="#">25. Class Polygon</a><ul>
+<li><a class="reference internal" href="#ploting-polygons">25.1. ploting polygons</a></li>
+<li><a class="reference internal" href="#buildgv">25.2. <tt class="docutils literal"><span class="pre">buildGv()</span></tt></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#geomview-classes">27. Geomview classes</a><ul>
-<li><a class="reference internal" href="#geomvect-class">27.1. GeomVect class</a><ul>
-<li><a class="reference internal" href="#geombase">27.1.1. geomBase</a></li>
-<li><a class="reference internal" href="#points">27.1.2. points</a></li>
-<li><a class="reference internal" href="#plotting-a-box">27.1.3. plotting a box</a></li>
+<li><a class="reference internal" href="#geomview-classes">26. Geomview classes</a><ul>
+<li><a class="reference internal" href="#geomvect-class">26.1. GeomVect class</a><ul>
+<li><a class="reference internal" href="#geombase">26.1.1. geomBase</a></li>
+<li><a class="reference internal" href="#points">26.1.2. points</a></li>
+<li><a class="reference internal" href="#plotting-a-box">26.1.3. plotting a box</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#utility-functions">27.2. Utility functions</a><ul>
-<li><a class="reference internal" href="#angledir">27.2.1. angledir</a></li>
-<li><a class="reference internal" href="#linet">27.2.2. linet</a></li>
-<li><a class="reference internal" href="#dptseg-p-pt-ph">27.2.3. dptseg(p,pt,ph)</a></li>
-<li><a class="reference internal" href="#displot">27.2.4. displot</a></li>
-<li><a class="reference internal" href="#ptonseg-pta-phe-pt">27.2.5. ptonseg(pta,phe,pt)</a></li>
-<li><a class="reference internal" href="#ptconvex">27.2.6. ptconvex</a></li>
-<li><a class="reference internal" href="#intersect">27.2.7. intersect</a></li>
+<li><a class="reference internal" href="#utility-functions">26.2. Utility functions</a><ul>
+<li><a class="reference internal" href="#angledir">26.2.1. angledir</a></li>
+<li><a class="reference internal" href="#linet">26.2.2. linet</a></li>
+<li><a class="reference internal" href="#dptseg-p-pt-ph">26.2.3. dptseg(p,pt,ph)</a></li>
+<li><a class="reference internal" href="#displot">26.2.4. displot</a></li>
+<li><a class="reference internal" href="#ptonseg-pta-phe-pt">26.2.5. ptonseg(pta,phe,pt)</a></li>
+<li><a class="reference internal" href="#ptconvex">26.2.6. ptconvex</a></li>
+<li><a class="reference internal" href="#intersect">26.2.7. intersect</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#useful-functions">27.3. Useful functions</a></li>
+<li><a class="reference internal" href="#useful-functions">26.3. Useful functions</a></li>
 </ul>
 </li>
 </ul>
@@ -186,7 +186,7 @@
 <p><tt class="docutils literal"><span class="pre">Geomutil</span></tt> is a module which gathers different geometrical functions
 used in other module of pylayers.</p>
 <div class="section" id="class-polygon">
-<h1>26. Class Polygon<a class="headerlink" href="#class-polygon" title="Permalink to this headline">¶</a></h1>
+<h1>25. Class Polygon<a class="headerlink" href="#class-polygon" title="Permalink to this headline">¶</a></h1>
 <p>This class is important because it implements the visibility graph, of a
 Polygon.</p>
 <p>The Polygon class is a subclass of the shapely polygon class. It allows
@@ -204,7 +204,7 @@ to initialize a Polygon with different object
 </pre></div>
 </div>
 <div class="section" id="ploting-polygons">
-<h2>26.1. ploting polygons<a class="headerlink" href="#ploting-polygons" title="Permalink to this headline">¶</a></h2>
+<h2>25.1. ploting polygons<a class="headerlink" href="#ploting-polygons" title="Permalink to this headline">¶</a></h2>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
@@ -217,7 +217,7 @@ to initialize a Polygon with different object
 <img alt="../../_images/Geomutil_9_0.png" src="../../_images/Geomutil_9_0.png" />
 </div>
 <div class="section" id="buildgv">
-<h2>26.2. <tt class="docutils literal"><span class="pre">buildGv()</span></tt><a class="headerlink" href="#buildgv" title="Permalink to this headline">¶</a></h2>
+<h2>25.2. <tt class="docutils literal"><span class="pre">buildGv()</span></tt><a class="headerlink" href="#buildgv" title="Permalink to this headline">¶</a></h2>
 <p>Dertermine visibility relationships in a Polygon. Returns a graph</p>
 <p>This function is used for determining visibility relationships in indoor
 environement.</p>
@@ -240,12 +240,12 @@ environement.</p>
 </div>
 </div>
 <div class="section" id="geomview-classes">
-<h1>27. Geomview classes<a class="headerlink" href="#geomview-classes" title="Permalink to this headline">¶</a></h1>
+<h1>26. Geomview classes<a class="headerlink" href="#geomview-classes" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="geomvect-class">
-<h2>27.1. GeomVect class<a class="headerlink" href="#geomvect-class" title="Permalink to this headline">¶</a></h2>
+<h2>26.1. GeomVect class<a class="headerlink" href="#geomvect-class" title="Permalink to this headline">¶</a></h2>
 <p>This class is used to interact with geomview 3D viewer.</p>
 <div class="section" id="geombase">
-<h3>27.1.1. geomBase<a class="headerlink" href="#geombase" title="Permalink to this headline">¶</a></h3>
+<h3>26.1.1. geomBase<a class="headerlink" href="#geombase" title="Permalink to this headline">¶</a></h3>
 <p>Display a base</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">v1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">v2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
@@ -258,7 +258,7 @@ environement.</p>
 </div>
 </div>
 <div class="section" id="points">
-<h3>27.1.2. points<a class="headerlink" href="#points" title="Permalink to this headline">¶</a></h3>
+<h3>26.1.2. points<a class="headerlink" href="#points" title="Permalink to this headline">¶</a></h3>
 <p>display a set of points</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">gv1</span> <span class="o">=</span> <span class="n">GeomVect</span><span class="p">(</span><span class="s">&#39;test1&#39;</span><span class="p">)</span>
 <span class="n">gv1</span><span class="o">.</span><span class="n">points</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
@@ -299,7 +299,7 @@ environement.</p>
 </div>
 </div>
 <div class="section" id="plotting-a-box">
-<h3>27.1.3. plotting a box<a class="headerlink" href="#plotting-a-box" title="Permalink to this headline">¶</a></h3>
+<h3>26.1.3. plotting a box<a class="headerlink" href="#plotting-a-box" title="Permalink to this headline">¶</a></h3>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">geo</span><span class="o">=</span><span class="n">Geomoff</span><span class="p">(</span><span class="s">&#39;test3&#39;</span><span class="p">)</span>
 <span class="n">geo</span><span class="o">.</span><span class="n">box</span><span class="p">()</span>
 </pre></div>
@@ -310,9 +310,9 @@ environement.</p>
 </div>
 </div>
 <div class="section" id="utility-functions">
-<h2>27.2. Utility functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
+<h2>26.2. Utility functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="angledir">
-<h3>27.2.1. angledir<a class="headerlink" href="#angledir" title="Permalink to this headline">¶</a></h3>
+<h3>26.2.1. angledir<a class="headerlink" href="#angledir" title="Permalink to this headline">¶</a></h3>
 <p>angledir converts a 3D vector into the 2 spherical angle <img class="math" src="../../_images/math/a9cfbeb8ebee1f365919e147a79e242dcb67ee5d.png" alt="\theta"/>,
 <img class="math" src="../../_images/math/10e009bdb83f96c5f47c58b34d5d4b12ef268d5b.png" alt="\phi"/> expressed in radians</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
@@ -327,7 +327,7 @@ environement.</p>
 </div>
 </div>
 <div class="section" id="linet">
-<h3>27.2.2. linet<a class="headerlink" href="#linet" title="Permalink to this headline">¶</a></h3>
+<h3>26.2.2. linet<a class="headerlink" href="#linet" title="Permalink to this headline">¶</a></h3>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
@@ -344,7 +344,7 @@ environement.</p>
 <img alt="../../_images/Geomutil_37_0.png" src="../../_images/Geomutil_37_0.png" />
 </div>
 <div class="section" id="dptseg-p-pt-ph">
-<h3>27.2.3. dptseg(p,pt,ph)<a class="headerlink" href="#dptseg-p-pt-ph" title="Permalink to this headline">¶</a></h3>
+<h3>26.2.3. dptseg(p,pt,ph)<a class="headerlink" href="#dptseg-p-pt-ph" title="Permalink to this headline">¶</a></h3>
 <p>this function calculates distances between a set of points and a segment</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">pt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">ph</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
@@ -360,7 +360,7 @@ environement.</p>
 </div>
 </div>
 <div class="section" id="displot">
-<h3>27.2.4. displot<a class="headerlink" href="#displot" title="Permalink to this headline">¶</a></h3>
+<h3>26.2.4. displot<a class="headerlink" href="#displot" title="Permalink to this headline">¶</a></h3>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;equal&#39;</span><span class="p">)</span>
 <span class="n">N</span>   <span class="o">=</span> <span class="mi">50</span>
@@ -372,7 +372,7 @@ environement.</p>
 <img alt="../../_images/Geomutil_43_0.png" src="../../_images/Geomutil_43_0.png" />
 </div>
 <div class="section" id="ptonseg-pta-phe-pt">
-<h3>27.2.5. ptonseg(pta,phe,pt)<a class="headerlink" href="#ptonseg-pta-phe-pt" title="Permalink to this headline">¶</a></h3>
+<h3>26.2.5. ptonseg(pta,phe,pt)<a class="headerlink" href="#ptonseg-pta-phe-pt" title="Permalink to this headline">¶</a></h3>
 <p>used in select.py</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">pta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">phe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
@@ -386,7 +386,7 @@ environement.</p>
 </div>
 </div>
 <div class="section" id="ptconvex">
-<h3>27.2.6. ptconvex<a class="headerlink" href="#ptconvex" title="Permalink to this headline">¶</a></h3>
+<h3>26.2.6. ptconvex<a class="headerlink" href="#ptconvex" title="Permalink to this headline">¶</a></h3>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">points</span>  <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">MultiPoint</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mf">3.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mf">3.2</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
 <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
 <span class="n">polyg</span>   <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
@@ -409,7 +409,7 @@ environement.</p>
 <img alt="../../_images/Geomutil_49_1.png" src="../../_images/Geomutil_49_1.png" />
 </div>
 <div class="section" id="intersect">
-<h3>27.2.7. intersect<a class="headerlink" href="#intersect" title="Permalink to this headline">¶</a></h3>
+<h3>26.2.7. intersect<a class="headerlink" href="#intersect" title="Permalink to this headline">¶</a></h3>
 <p>intersect(A,B,C,D) wether or not the N segments (AB) intersects N
 segments (CD). The intersection is tested only for the segment of same
 index in the ndarray.</p>
@@ -474,7 +474,7 @@ index in the ndarray.</p>
 </div>
 </div>
 <div class="section" id="useful-functions">
-<h2>27.3. Useful functions<a class="headerlink" href="#useful-functions" title="Permalink to this headline">¶</a></h2>
+<h2>26.3. Useful functions<a class="headerlink" href="#useful-functions" title="Permalink to this headline">¶</a></h2>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">pts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">27.835</span><span class="p">,</span>  <span class="mf">10.891</span><span class="p">])</span>
 <span class="n">phs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">27.836</span><span class="p">,</span>  <span class="mf">10.926</span><span class="p">])</span>
 
