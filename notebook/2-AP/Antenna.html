@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5. Desciption of antennas &mdash; PyLayers</title>
+    <title>Description of antennas &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -55,8 +55,9 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">5. Desciption of antennas</a><ul>
-<li><a class="reference internal" href="#defining-antenna-gain-from-analytic-formulas">5.1. Defining Antenna gain from analytic formulas</a></li>
+<li><a class="reference internal" href="#">Description of antennas</a><ul>
+<li><a class="reference internal" href="#synthesis-of-the-radiation-pattern">Synthesis of the radiation pattern</a></li>
+<li><a class="reference internal" href="#defining-antenna-gain-from-analytic-formulas">Defining Antenna gain from analytic formulas</a></li>
 </ul>
 </li>
 </ul>
@@ -87,7 +88,190 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
+  <div class="section" id="description-of-antennas">
+<h1>Description of antennas<a class="headerlink" href="#description-of-antennas" title="Permalink to this headline">¶</a></h1>
+<p>PyLayers has a very rich set of tools for handling antenna radiation
+pattern. Antennas can be described in different manners and read from
+different specific file formats.</p>
+<p>The description goes from a simple antenna gain formula to a full
+polarization description, compressed or not, using scalar or vector
+spherical harmonics decomposition.</p>
+<p>In the following, some features of the <tt class="docutils literal"><span class="pre">Antenna</span></tt> class are
+illustrated. The <tt class="docutils literal"><span class="pre">Antenna</span></tt> class is stored in the
+<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.antprop.antenna.html">antenna.py</a>
+module which is placed in the <tt class="docutils literal"><span class="pre">antprop</span></tt> module.</p>
+<div class="code python highlight-python"><div class="highlight"><pre>from pylayers.antprop.antenna import *
+%pylab inline
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Populating the interactive namespace from numpy and matplotlib
+</pre></div>
+</div>
+<pre class="literal-block">
+WARNING: pylab import has clobbered these variables: ['mlab', 'plt', 'rc']
+<cite>%matplotlib</cite> prevents importing * from pylab and numpy
+</pre>
+<p>An antenna object can be loaded in specifying an existing antenna file
+name as argument of the constructor. Lets start by loading an antenna
+from a <tt class="docutils literal"><span class="pre">vsh3</span></tt> file which correspond to a vector spherical harmonics
+representation of an antenna measured in SATIMO near field chamber.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;S1R1.vsh3&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The object antenna can show itself just by typing it&#8217;s name.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>FileName : S1R1.vsh3
+-----------------------
+fmin : 0.80GHz
+fmax : 5.95GHz
+step : 50.00MHz
+Nf : 104
+Not evaluated
+</pre></div>
+</div>
+<p>We got information about the antenna filename and the frequency band
+where is has been defined.</p>
+<p>At loading time the antenna is not evaluated. It means that there is not
+internally any instanciation of the pattern for a set of angular and
+frequency values.</p>
+<p>To list all the available antenna files in the dedicated directory of
+the project it is possible to invoke the <tt class="docutils literal"><span class="pre">ls()</span></tt> method.</p>
+<p>Antenna files should be stored in the sub-directory <tt class="docutils literal"><span class="pre">ant</span></tt> of the
+current project. The current project is located with the <tt class="docutils literal"><span class="pre">$BASENAME</span></tt>
+environment variable.</p>
+<div class="code python highlight-python"><div class="highlight"><pre>!echo $BASENAME
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>/home/uguen/Bureau/P1
+</pre></div>
+</div>
+<p>We can use the <tt class="docutils literal"><span class="pre">ls</span></tt> method to determine the number of files of
+different type</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">lvsh3</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s">&#39;vsh3&#39;</span><span class="p">)</span>
+<span class="n">lssh3</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s">&#39;sh3&#39;</span><span class="p">)</span>
+<span class="n">lmat</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s">&#39;mat&#39;</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&quot;Number of antenna in .vsh3 format : &quot;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">lvsh3</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&quot;Number of antenna in .sh3 format : &quot;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">lssh3</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">lvsh3</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+<span class="k">print</span> <span class="n">lssh3</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+<span class="k">print</span> <span class="n">lmat</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Number of antenna in .vsh3 format :  66
+Number of antenna in .sh3 format :  42
+[&#39;S1R1.vsh3&#39;, &#39;S1R10.vsh3&#39;, &#39;S1R11.vsh3&#39;, &#39;S1R12.vsh3&#39;, &#39;S1R13.vsh3&#39;]
+[&#39;S17R1.sh3&#39;, &#39;S17R2m.sh3&#39;, &#39;S1R1.sh3&#39;, &#39;S1R10.sh3&#39;, &#39;S1R11.sh3&#39;]
+[]
+</pre></div>
+</div>
+<p>As already mentionned above, at that point the radiation pattern of the
+antenna has not yet been evaluated. The method to evaluate the pattern
+is <tt class="docutils literal"><span class="pre">Fsynth()</span></tt> with the <tt class="docutils literal"><span class="pre">pattern</span></tt> option set to true. If the
+<tt class="docutils literal"><span class="pre">pattern</span></tt> option is set to False, the antenna is evaluated for only
+the specified direction. This mode is used in the ray tracing, while the
+former is used to visualize the whole antenna pattern.</p>
+<p>The vector spherical coefficient are strored in <tt class="docutils literal"><span class="pre">A.C</span></tt>. This C refers
+to the coefficients. Those coefficients are obtained thanks to the
+<a class="reference external" href="http://nldr.library.ucar.edu/repository/assets/technotes/TECH-NOTE-000-000-000-380.pdf">Spherepack
+Module</a>.</p>
+<p>Adams, J.C., and P.N. Swarztrauber, 1997: Spherepack 2.0: A Model
+Development Facility. NCAR Technical Note NCAR/TN-436+STR, DOI:
+10.5065/D6Z899CF.</p>
+<p>We are here using the same notations. See Formula 4-10- to 4-13 of the
+above reference document. Only the vector spherical analysis is done
+using the <tt class="docutils literal"><span class="pre">vha</span></tt> function <tt class="docutils literal"><span class="pre">Spherepack</span></tt>, the vector spherical
+synthesis has been numpyfied in the
+<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.antprop.spharm.html">pylayers.antprop.spharm.py</a>
+module.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Br
+-------------
+Nf   : 104
+fmin (GHz) : 0.8
+fmax (GHz) : 5.95
+Ncoeff s3 : 72
+
+Bi
+-------------
+Nf   : 104
+fmin (GHz) : 0.8
+fmax (GHz) : 5.95
+Ncoeff s3 : 72
+
+Cr
+-------------
+Nf   : 104
+fmin (GHz) : 0.8
+fmax (GHz) : 5.95
+Ncoeff s3 : 72
+
+Ci
+-------------
+Nf   : 104
+fmin (GHz) : 0.8
+fmax (GHz) : 5.95
+Ncoeff s3 : 72
+</pre></div>
+</div>
+<div class="section" id="synthesis-of-the-radiation-pattern">
+<h2>Synthesis of the radiation pattern<a class="headerlink" href="#synthesis-of-the-radiation-pattern" title="Permalink to this headline">¶</a></h2>
+<p>The radiation pattern is synthetized with the following call</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">polar()</span></tt> method allow to superpose different pattern for a list
+of frequencies <tt class="docutils literal"><span class="pre">fGHz</span></tt> + If <tt class="docutils literal"><span class="pre">phd</span></tt> (phi in degree) is specified the
+diagram is given as a function of <img class="math" src="../../_images/math/a9cfbeb8ebee1f365919e147a79e242dcb67ee5d.png" alt="\theta"/> + If <tt class="docutils literal"><span class="pre">thd</span></tt> (theta in
+degree) is specified the diagram is given as a function of <img class="math" src="../../_images/math/10e009bdb83f96c5f47c58b34d5d4b12ef268d5b.png" alt="\phi"/></p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
+<span class="n">a1</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">f1</span><span class="p">,</span><span class="n">a1</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span><span class="n">phd</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">GmaxdB</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a1</span><span class="p">)</span>
+<span class="n">a2</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">f2</span><span class="p">,</span><span class="n">a2</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span><span class="n">thd</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span><span class="n">GmaxdB</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a2</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/Antenna_19_0.png" src="../../_images/Antenna_19_0.png" />
+<p>The vector spherical coefficients can be dispalayed as follows</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s3&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../../_images/Antenna_21_0.png" src="../../_images/Antenna_21_0.png" />
+</div>
+<div class="section" id="defining-antenna-gain-from-analytic-formulas">
+<h2>Defining Antenna gain from analytic formulas<a class="headerlink" href="#defining-antenna-gain-from-analytic-formulas" title="Permalink to this headline">¶</a></h2>
+<p>An antenna can also be defined from closed-form expressions. Available
+antennas are the following + Omni + Gauss + WirePlate</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Omni&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">Fpatt</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f2e4ca2ca90&gt;,
+ &lt;matplotlib.projections.polar.PolarAxes at 0x7f2e497891d0&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/Antenna_26_1.png" src="../../_images/Antenna_26_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Gauss&#39;</span><span class="p">)</span>
+<span class="n">A</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">()</span>
+<span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f2e4920f8d0&gt;,
+ &lt;matplotlib.projections.polar.PolarAxes at 0x7f2e49209150&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/Antenna_27_1.png" src="../../_images/Antenna_27_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
 
 <span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
     <span class="n">styles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;../styles/custom.css&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
@@ -154,163 +338,7 @@
                     styles: {'.MathJax_Display': {"margin": 4}}
                 }
         });
-</script><div class="section" id="desciption-of-antennas">
-<h1>5. Desciption of antennas<a class="headerlink" href="#desciption-of-antennas" title="Permalink to this headline">¶</a></h1>
-<p>PyLayers has a very rich set of tools for handling antenna radiation
-pattern. Antennas can be described in different manners and read from
-different specific file formats.</p>
-<p>The description goes from a simple antenna gain formula to a full
-polarization description ,compressed or not, using scalar or vector
-spherical harmonics decomposition.</p>
-<p>In the following some features of the <tt class="docutils literal"><span class="pre">Antenna</span></tt> class are illustrated.
-The <tt class="docutils literal"><span class="pre">Antenna</span></tt> class is stored in the
-<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.antprop.antenna.html">antenna.py</a>
-module which is placed in the <tt class="docutils literal"><span class="pre">antprop</span></tt> module.</p>
-<div class="code python highlight-python"><div class="highlight"><pre>from pylayers.antprop.antenna import *
-%matplotlib inline
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
-</pre></div>
-</div>
-<p>An antenna object can be loaded in specifying an existing antenna file
-name as argument of the constructor. Lets start by loading an antenna
-from a <tt class="docutils literal"><span class="pre">vsh3</span></tt> file which correspond to a vector spherical harmonics
-representation of an antenna measured in SATIMO near field chamber.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;S1R1.vsh3&#39;</span><span class="p">)</span>
-<span class="n">A</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>FileName : S1R1.vsh3
------------------------
-fmin : 0.80GHz
-fmax : 5.95GHz
-step : 50.00MHz
-Nf : 104
-Not evaluated
-</pre></div>
-</div>
-<p>At loading time the antenna is not evaluated. It means that there is not
-internally any instanciation of the pattern for a set of angular and
-frequency values.</p>
-<p>To list all the availble antenna files in the dedicated directory of the
-project it is possible to invoke the <tt class="docutils literal"><span class="pre">ls()</span></tt> method.</p>
-<p>Antenna files are supposed to be stored in the sub directory <tt class="docutils literal"><span class="pre">ant</span></tt> of
-the current project. The current project is located with the $BASENAME
-environment variable.</p>
-<div class="code python highlight-python"><div class="highlight"><pre>!echo $BASENAME
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>/home/uguen/Bureau/P1
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">lvsh3</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s">&#39;vsh3&#39;</span><span class="p">)</span>
-<span class="n">lssh3</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s">&#39;sh3&#39;</span><span class="p">)</span>
-<span class="n">lmat</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s">&#39;mat&#39;</span><span class="p">)</span>
-<span class="k">print</span> <span class="s">&quot;Number of antenna in .vsh3 format : &quot;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">lvsh3</span><span class="p">)</span>
-<span class="k">print</span> <span class="s">&quot;Number of antenna in .sh3 format : &quot;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">lssh3</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">lvsh3</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
-<span class="k">print</span> <span class="n">lssh3</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
-<span class="k">print</span> <span class="n">lmat</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>Number of antenna in .vsh3 format :  66
-Number of antenna in .sh3 format :  42
-[&#39;S1R1.vsh3&#39;, &#39;S1R10.vsh3&#39;, &#39;S1R11.vsh3&#39;, &#39;S1R12.vsh3&#39;, &#39;S1R13.vsh3&#39;]
-[&#39;S17R1.sh3&#39;, &#39;S17R2m.sh3&#39;, &#39;S1R1.sh3&#39;, &#39;S1R10.sh3&#39;, &#39;S1R11.sh3&#39;]
-[]
-</pre></div>
-</div>
-<p>At that point the radiation pattern of the antenna has not yet been
-evaluated. The method to calculate the pattern is <tt class="docutils literal"><span class="pre">Fsynth()</span></tt> with the
-<tt class="docutils literal"><span class="pre">pattern</span></tt> option set to true. If the <tt class="docutils literal"><span class="pre">pattern</span></tt> option is set to
-False, the antenna is evaluated for only the specified direction. This
-mode is used in the ray tracing technique while the former is used to
-visualize the whole antenna pattern.</p>
-<p>The vector spherical coefficient are strored in <tt class="docutils literal"><span class="pre">A.C</span></tt></p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>Br
--------------
-Nf   : 104
-fmin (GHz) : 0.8
-fmax (GHz) : 5.95
-Ncoeff s3 : 72
-
-Bi
--------------
-Nf   : 104
-fmin (GHz) : 0.8
-fmax (GHz) : 5.95
-Ncoeff s3 : 72
-
-Cr
--------------
-Nf   : 104
-fmin (GHz) : 0.8
-fmax (GHz) : 5.95
-Ncoeff s3 : 72
-
-Ci
--------------
-Nf   : 104
-fmin (GHz) : 0.8
-fmax (GHz) : 5.95
-Ncoeff s3 : 72
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>The <tt class="docutils literal"><span class="pre">polar()</span></tt> method allow to superpose different pattern for a list
-of frequencies <tt class="docutils literal"><span class="pre">fGHz</span></tt> + If <tt class="docutils literal"><span class="pre">phd</span></tt> (phi in degree) is specified the
-diagram is given as a function of <img class="math" src="../../_images/math/a9cfbeb8ebee1f365919e147a79e242dcb67ee5d.png" alt="\theta"/> + If <tt class="docutils literal"><span class="pre">thd</span></tt> (theta in
-degree) is specified the diagram is given as a function of <img class="math" src="../../_images/math/10e009bdb83f96c5f47c58b34d5d4b12ef268d5b.png" alt="\phi"/></p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
-<span class="n">a1</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="n">f1</span><span class="p">,</span><span class="n">a1</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span><span class="n">phd</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">GmaxdB</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a1</span><span class="p">)</span>
-<span class="n">a2</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="n">f2</span><span class="p">,</span><span class="n">a2</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span><span class="n">thd</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span><span class="n">GmaxdB</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a2</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="../../_images/Antenna_14_0.png" src="../../_images/Antenna_14_0.png" />
-<p>The vector spherical coefficients can be dispalayed as follows</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
-<span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s3&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-</pre></div>
-</div>
-<img alt="../../_images/Antenna_16_0.png" src="../../_images/Antenna_16_0.png" />
-<div class="section" id="defining-antenna-gain-from-analytic-formulas">
-<h2>5.1. Defining Antenna gain from analytic formulas<a class="headerlink" href="#defining-antenna-gain-from-analytic-formulas" title="Permalink to this headline">¶</a></h2>
-<p>An antenna can also be defined from closed-form expressions. Available
-antennas are the following + Omni + Gauss + WirePlate</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Omni&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">Fpatt</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f2e4ca2ca90&gt;,
- &lt;matplotlib.projections.polar.PolarAxes at 0x7f2e497891d0&gt;)
-</pre></div>
-</div>
-<img alt="../../_images/Antenna_21_1.png" src="../../_images/Antenna_21_1.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Gauss&#39;</span><span class="p">)</span>
-<span class="n">A</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">()</span>
-<span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f2e4920f8d0&gt;,
- &lt;matplotlib.projections.polar.PolarAxes at 0x7f2e49209150&gt;)
-</pre></div>
-</div>
-<img alt="../../_images/Antenna_22_1.png" src="../../_images/Antenna_22_1.png" />
-</div>
+</script></div>
 </div>
 
 
