@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The Layout class &mdash; PyLayers</title>
+    <title>2. The Layout class &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -55,23 +55,23 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">The Layout class</a><ul>
-<li><a class="reference internal" href="#introduction">Introduction</a></li>
-<li><a class="reference internal" href="#structure-of-a-layout">Structure of a Layout</a></li>
-<li><a class="reference internal" href="#subsegments">Subsegments</a></li>
-<li><a class="reference internal" href="#the-different-layout-format">The different layout format</a></li>
-<li><a class="reference internal" href="#reading-an-exiting-layout">Reading an exiting Layout</a></li>
-<li><a class="reference internal" href="#the-display-options-dictionnary">The display options dictionnary</a><ul>
-<li><a class="reference internal" href="#layers">Layers</a></li>
-<li><a class="reference internal" href="#strings">Strings</a></li>
-<li><a class="reference internal" href="#sizes">Sizes</a></li>
-<li><a class="reference internal" href="#booleans">Booleans</a></li>
+<li><a class="reference internal" href="#">2. The Layout class</a><ul>
+<li><a class="reference internal" href="#introduction">2.1. Introduction</a></li>
+<li><a class="reference internal" href="#structure-of-a-layout">2.2. Structure of a Layout</a></li>
+<li><a class="reference internal" href="#subsegments">2.3. Subsegments</a></li>
+<li><a class="reference internal" href="#the-different-layout-format">2.4. The different layout format</a></li>
+<li><a class="reference internal" href="#reading-an-exiting-layout">2.5. Reading an exiting Layout</a></li>
+<li><a class="reference internal" href="#the-display-options-dictionnary">2.6. The display options dictionnary</a><ul>
+<li><a class="reference internal" href="#layers">2.6.1. Layers</a></li>
+<li><a class="reference internal" href="#strings">2.6.2. Strings</a></li>
+<li><a class="reference internal" href="#sizes">2.6.3. Sizes</a></li>
+<li><a class="reference internal" href="#booleans">2.6.4. Booleans</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#interactive-editor">Interactive editor</a><ul>
-<li><a class="reference internal" href="#image-overlay">Image overlay</a></li>
-<li><a class="reference internal" href="#scaling-the-figure-overlay">Scaling the figure overlay</a></li>
-<li><a class="reference internal" href="#vizualisation-of-the-layout">Vizualisation of the layout</a></li>
+<li><a class="reference internal" href="#interactive-editor">2.7. Interactive editor</a><ul>
+<li><a class="reference internal" href="#image-overlay">2.7.1. Image overlay</a></li>
+<li><a class="reference internal" href="#scaling-the-figure-overlay">2.7.2. Scaling the figure overlay</a></li>
+<li><a class="reference internal" href="#vizualisation-of-the-layout">2.7.3. Vizualisation of the layout</a></li>
 </ul>
 </li>
 </ul>
@@ -105,9 +105,9 @@
           <div class="body">
             
   <div class="section" id="the-layout-class">
-<h1>The Layout class<a class="headerlink" href="#the-layout-class" title="Permalink to this headline">¶</a></h1>
+<h1>2. The Layout class<a class="headerlink" href="#the-layout-class" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<h2>2.1. Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>This section explains the main features of the <strong>Layout</strong> class.</p>
 <p>A Layout is a representation of a floorplan, it is handled by the module
 <strong>pylayers.gis.layout</strong>.</p>
@@ -124,7 +124,7 @@ with the plugin <em>PicLayer</em>. This is well described in
 </ul>
 </div>
 <div class="section" id="structure-of-a-layout">
-<h2>Structure of a Layout<a class="headerlink" href="#structure-of-a-layout" title="Permalink to this headline">¶</a></h2>
+<h2>2.2. Structure of a Layout<a class="headerlink" href="#structure-of-a-layout" title="Permalink to this headline">¶</a></h2>
 <p>At first a Layout is described by a set of points (negative index) and a
 set of segments (positive index).</p>
 <p>Points and segments are nodes of the <img class="math" src="../../_images/math/9d358e50c5697373ad7cc566b95dfe19d68e9d20.png" alt="\mathcal{G}_s"/> graph.</p>
@@ -134,7 +134,7 @@ can recover partially or totally an other segment</strong>.</p>
 are exploited for further analysis.</p>
 </div>
 <div class="section" id="subsegments">
-<h2>Subsegments<a class="headerlink" href="#subsegments" title="Permalink to this headline">¶</a></h2>
+<h2>2.3. Subsegments<a class="headerlink" href="#subsegments" title="Permalink to this headline">¶</a></h2>
 <p>To describe doors and windows, the concept of <tt class="docutils literal"><span class="pre">subsegment</span></tt> is
 introduced.</p>
 <p>A <tt class="docutils literal"><span class="pre">segment</span></tt> has attributes :</p>
@@ -159,7 +159,7 @@ minimum and maximum height of associated subsegments (meters)</li>
 different from the segment index.</p>
 </div>
 <div class="section" id="the-different-layout-format">
-<h2>The different layout format<a class="headerlink" href="#the-different-layout-format" title="Permalink to this headline">¶</a></h2>
+<h2>2.4. The different layout format<a class="headerlink" href="#the-different-layout-format" title="Permalink to this headline">¶</a></h2>
 <p>The layout format has regularly evolved over time and is going to evolve
 again. Currently, the different recognized file extensions are the
 following :</p>
@@ -184,7 +184,7 @@ as the state of the current <tt class="docutils literal"><span class="pre">displ
 </div>
 </div>
 <div class="section" id="reading-an-exiting-layout">
-<h2>Reading an exiting Layout<a class="headerlink" href="#reading-an-exiting-layout" title="Permalink to this headline">¶</a></h2>
+<h2>2.5. Reading an exiting Layout<a class="headerlink" href="#reading-an-exiting-layout" title="Permalink to this headline">¶</a></h2>
 <p>To read an existing layout it is sufficient to create a Layout object
 with, as an argument, a file name with one of the recognized extension.
 All files are stored in the <tt class="docutils literal"><span class="pre">pstruc['DIRSTRUC']</span></tt> directory of the
@@ -362,7 +362,7 @@ ray signatures.</p>
 </div>
 </div>
 <div class="section" id="the-display-options-dictionnary">
-<h2>The display options dictionnary<a class="headerlink" href="#the-display-options-dictionnary" title="Permalink to this headline">¶</a></h2>
+<h2>2.6. The display options dictionnary<a class="headerlink" href="#the-display-options-dictionnary" title="Permalink to this headline">¶</a></h2>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -440,7 +440,7 @@ are exploited in <tt class="docutils literal"><span class="pre">showGs()</span><
 </pre></div>
 </div>
 <div class="section" id="layers">
-<h3>Layers<a class="headerlink" href="#layers" title="Permalink to this headline">¶</a></h3>
+<h3>2.6.1. Layers<a class="headerlink" href="#layers" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>&#8216;layer&#8217; : list , []</li>
 <li>&#8216;layerset&#8217;,list, list of available layers</li>
@@ -451,14 +451,14 @@ are exploited in <tt class="docutils literal"><span class="pre">showGs()</span><
 </ul>
 </div>
 <div class="section" id="strings">
-<h3>Strings<a class="headerlink" href="#strings" title="Permalink to this headline">¶</a></h3>
+<h3>2.6.2. Strings<a class="headerlink" href="#strings" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>&#8216;title&#8217; : str , &#8216;Init&#8217;</li>
 <li>&#8216;fileoverlay&#8217; : str , &#8216;TA-Office.png&#8217;</li>
 </ul>
 </div>
 <div class="section" id="sizes">
-<h3>Sizes<a class="headerlink" href="#sizes" title="Permalink to this headline">¶</a></h3>
+<h3>2.6.3. Sizes<a class="headerlink" href="#sizes" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>&#8216;fontsize&#8217;, float , 10</li>
 <li>&#8216;ndsize&#8217;, float , 10</li>
@@ -467,7 +467,7 @@ are exploited in <tt class="docutils literal"><span class="pre">showGs()</span><
 </ul>
 </div>
 <div class="section" id="booleans">
-<h3>Booleans<a class="headerlink" href="#booleans" title="Permalink to this headline">¶</a></h3>
+<h3>2.6.4. Booleans<a class="headerlink" href="#booleans" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>&#8216;edlabel&#8217;, boolean, False</li>
 <li>&#8216;ticksoff&#8217;,boolean, True</li>
@@ -485,7 +485,7 @@ are exploited in <tt class="docutils literal"><span class="pre">showGs()</span><
 </div>
 </div>
 <div class="section" id="interactive-editor">
-<h2>Interactive editor<a class="headerlink" href="#interactive-editor" title="Permalink to this headline">¶</a></h2>
+<h2>2.7. Interactive editor<a class="headerlink" href="#interactive-editor" title="Permalink to this headline">¶</a></h2>
 <p>The command L.editor() launches an interactive editor. The state machine
 is implemented in module <tt class="docutils literal"><span class="pre">pylayers.gis.selectl.py</span></tt>.</p>
 <p>To have an idea of all available options, look in the
@@ -516,7 +516,7 @@ solution.</p>
 <p><strong>m</strong> : to switch from one mode to an other</p>
 <p><strong>i</strong> : to return to init state</p>
 <div class="section" id="image-overlay">
-<h3>Image overlay<a class="headerlink" href="#image-overlay" title="Permalink to this headline">¶</a></h3>
+<h3>2.7.1. Image overlay<a class="headerlink" href="#image-overlay" title="Permalink to this headline">¶</a></h3>
 <p>It is useful while editing a layout to have an overlay of an image in
 order to help placing points. The image overlay can either be an url or
 a filename. In that case the file is stored in</p>
@@ -541,7 +541,7 @@ a filename. In that case the file is stored in</p>
 </div>
 </div>
 <div class="section" id="scaling-the-figure-overlay">
-<h3>Scaling the figure overlay<a class="headerlink" href="#scaling-the-figure-overlay" title="Permalink to this headline">¶</a></h3>
+<h3>2.7.2. Scaling the figure overlay<a class="headerlink" href="#scaling-the-figure-overlay" title="Permalink to this headline">¶</a></h3>
 <p>Before going further it is necessary :</p>
 <ul class="simple">
 <li>to place the global origin</li>
@@ -581,7 +581,7 @@ meters) between the two points.</li>
 </div>
 </div>
 <div class="section" id="vizualisation-of-the-layout">
-<h3>Vizualisation of the layout<a class="headerlink" href="#vizualisation-of-the-layout" title="Permalink to this headline">¶</a></h3>
+<h3>2.7.3. Vizualisation of the layout<a class="headerlink" href="#vizualisation-of-the-layout" title="Permalink to this headline">¶</a></h3>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.ini&#39;</span><span class="p">)</span>
 <span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
@@ -633,7 +633,7 @@ css_styling()
 
     <div class="footer">
         &copy; Copyright 2015, PyLayers developer team.
-      Last updated on févr. 27, 2015.
+      Last updated on févr. 28, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">
