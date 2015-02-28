@@ -185,6 +185,7 @@ using the <tt class="docutils literal"><span class="pre">vha</span></tt> functio
 synthesis has been numpyfied in the
 <a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.antprop.spharm.html">pylayers.antprop.spharm.py</a>
 module.</p>
+<p><a class="reference external" href="./AntennaVSH.rst">Description of Vector Spherical Harmonics</a></p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span>
 </pre></div>
 </div>
@@ -234,14 +235,14 @@ degree) is specified the diagram is given as a function of <img class="math" src
 <span class="n">f2</span><span class="p">,</span><span class="n">a2</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span><span class="n">thd</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span><span class="n">GmaxdB</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a2</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Antenna_19_0.png" src="../../_images/Antenna_19_0.png" />
+<img alt="../../_images/Antenna_20_0.png" src="../../_images/Antenna_20_0.png" />
 <p>The vector spherical coefficients can be dispalayed as follows</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
 <span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s3&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../../_images/Antenna_21_0.png" src="../../_images/Antenna_21_0.png" />
+<img alt="../../_images/Antenna_22_0.png" src="../../_images/Antenna_22_0.png" />
 </div>
 <div class="section" id="defining-antenna-gain-from-analytic-formulas">
 <h2>Defining Antenna gain from analytic formulas<a class="headerlink" href="#defining-antenna-gain-from-analytic-formulas" title="Permalink to this headline">¶</a></h2>
@@ -260,7 +261,7 @@ antennas are the following + Omni + Gauss + WirePlate</p>
  &lt;matplotlib.projections.polar.PolarAxes at 0x7f2e497891d0&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/Antenna_26_1.png" src="../../_images/Antenna_26_1.png" />
+<img alt="../../_images/Antenna_27_1.png" src="../../_images/Antenna_27_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Gauss&#39;</span><span class="p">)</span>
 <span class="n">A</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">()</span>
 <span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">()</span>
@@ -270,7 +271,7 @@ antennas are the following + Omni + Gauss + WirePlate</p>
  &lt;matplotlib.projections.polar.PolarAxes at 0x7f2e49209150&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/Antenna_27_1.png" src="../../_images/Antenna_27_1.png" />
+<img alt="../../_images/Antenna_28_1.png" src="../../_images/Antenna_28_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
 
 <span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
