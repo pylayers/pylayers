@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>3. Effect of Modyfiying the Nature of Sub-Segments &mdash; PyLayers</title>
+    <title>Effect of Modyfiying the Nature of Sub-Segments &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -55,8 +55,8 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">3. Effect of Modyfiying the Nature of Sub-Segments</a><ul>
-<li><a class="reference internal" href="#the-different-members-of-the-link-are">3.1. The different members of the link are</a></li>
+<li><a class="reference internal" href="#">Effect of Modyfiying the Nature of Sub-Segments</a><ul>
+<li><a class="reference internal" href="#the-different-members-of-the-link-are">The different members of the link are</a></li>
 </ul>
 </li>
 </ul>
@@ -88,7 +88,7 @@
           <div class="body">
             
   <div class="section" id="effect-of-modyfiying-the-nature-of-sub-segments">
-<h1>3. Effect of Modyfiying the Nature of Sub-Segments<a class="headerlink" href="#effect-of-modyfiying-the-nature-of-sub-segments" title="Permalink to this headline">¶</a></h1>
+<h1>Effect of Modyfiying the Nature of Sub-Segments<a class="headerlink" href="#effect-of-modyfiying-the-nature-of-sub-segments" title="Permalink to this headline">¶</a></h1>
 <div class="code python highlight-python"><div class="highlight"><pre>from pylayers.simul.link import *
 from pylayers.antprop.rays import *
 from pylayers.gis.layout import *
@@ -199,10 +199,10 @@ structure saved in  defstr3.ini
   <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
   <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
   <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
- <span class="mi">9</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+ <span class="mi">9</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span>
   <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
   <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.00639987</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.99997952</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
+  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.00639987</span><span class="p">,</span>  <span class="mf">0.99997952</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
   <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
   <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
   <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)}}</span>
@@ -260,7 +260,7 @@ fstep (fGHz) : 0.05
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_15_0.png" src="../../_images/Multisubsegments_15_0.png" />
+<img alt="../../_images/Multisubsegments_14_0.png" src="../../_images/Multisubsegments_14_0.png" />
 <p>On the figure above, we can see the Tx and Rx each placed in a different
 room appart from a wall with a subsegement placed in the middle. Then
 for evaluating the radio link, simply type:</p>
@@ -276,7 +276,7 @@ Tchannel&#39;&gt; from 0_1_0_0_0_1_1 saved
 <p>At that point the channel has been evaluated and all the data stored in
 an <tt class="docutils literal"><span class="pre">hdf5</span></tt> file</p>
 <div class="section" id="the-different-members-of-the-link-are">
-<h2>3.1. The different members of the link are<a class="headerlink" href="#the-different-members-of-the-link-are" title="Permalink to this headline">¶</a></h2>
+<h2>The different members of the link are<a class="headerlink" href="#the-different-members-of-the-link-are" title="Permalink to this headline">¶</a></h2>
 <p>The Signature of the radio channel is in <tt class="docutils literal"><span class="pre">Lk.Si</span></tt>, the 3D rays are in
 <tt class="docutils literal"><span class="pre">Lk.R</span></tt>, the propagation channel is in <tt class="docutils literal"><span class="pre">Lk.C</span></tt> and the transmission
 channel is in <tt class="docutils literal"><span class="pre">Lk.H</span></tt></p>
@@ -287,17 +287,17 @@ channel is in <tt class="docutils literal"><span class="pre">Lk.H</span></tt></p
 ----------
 1 / 1 : [0]
 2 / 6 : [1 2 3 4 5 6]
-3 / 18 : [ 7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24]
-4 / 37 : [25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49
- 50 51 52 53 54 55 56 57 58 59 60 61]
-5 / 42 : [ 62  63  64  65  66  67  68  69  70  71  72  73  74  75  76  77  78  79
-  80  81  82  83  84  85  86  87  88  89  90  91  92  93  94  95  96  97
-  98  99 100 101 102 103]
-6 / 26 : [104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121
- 122 123 124 125 126 127 128 129]
+3 / 19 : [ 7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25]
+4 / 40 : [26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50
+ 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65]
+5 / 46 : [ 66  67  68  69  70  71  72  73  74  75  76  77  78  79  80  81  82  83
+  84  85  86  87  88  89  90  91  92  93  94  95  96  97  98  99 100 101
+ 102 103 104 105 106 107 108 109 110 111]
+6 / 28 : [112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129
+ 130 131 132 133 134 135 136 137 138 139]
 -----
-ni : 581
-nl : 1292
+ni : 628
+nl : 1396
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">C</span>
@@ -305,8 +305,8 @@ nl : 1292
 </div>
 <div class="highlight-python"><div class="highlight"><pre>Ctilde
 ---------
-(130, 181)
-Nray : 130
+(140, 181)
+Nray : 140
 fmin(GHz) : 2.0
 fmax(GHz): 11.0
 Nfreq : 181
@@ -316,12 +316,12 @@ Nfreq : 181
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;l20&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_23_0.png" src="../../_images/Multisubsegments_23_0.png" />
+<img alt="../../_images/Multisubsegments_22_0.png" src="../../_images/Multisubsegments_22_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">H</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre>freq :2.0 10.0 161
-shape  :(130, 161)
+shape  :(140, 161)
 tau :26.7186992365 73.2944728109
 dist :8.01560977094 21.9883418433
 Friis factor -j c/(4 pi f) has been applied
@@ -332,18 +332,18 @@ Friis factor -j c/(4 pi f) has been applied
 <span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_25_0.png" src="../../_images/Multisubsegments_25_0.png" />
+<img alt="../../_images/Multisubsegments_24_0.png" src="../../_images/Multisubsegments_24_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">cir</span> <span class="o">=</span> <span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">cir</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">],</span><span class="n">xmin</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">xmax</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f392787d950&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x7f39275ebfd0&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2ba8c1387190&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x2ba90eb75e90&gt;]], dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_27_1.png" src="../../_images/Multisubsegments_27_1.png" />
+<img alt="../../_images/Multisubsegments_26_1.png" src="../../_images/Multisubsegments_26_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">layer</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">]</span>
 <span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="n">layer</span><span class="p">)</span>
 <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">layer</span>
@@ -363,11 +363,11 @@ Ctilde&#39;&gt; from 0_1_0 saved
 Tchannel&#39;&gt; from 0_1_0_0_0_1_1 saved
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f39272475d0&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x7f3926fbb690&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2ba90eba8d90&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x2ba90ec64490&gt;]], dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_28_2.png" src="../../_images/Multisubsegments_28_2.png" />
+<img alt="../../_images/Multisubsegments_27_2.png" src="../../_images/Multisubsegments_27_2.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">layer</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;PARTITION&#39;</span><span class="p">,</span><span class="s">&#39;PARTITION&#39;</span><span class="p">,</span><span class="s">&#39;PARTITION&#39;</span><span class="p">]</span>
 <span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="n">layer</span><span class="p">)</span>
 <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">layer</span>
@@ -387,14 +387,11 @@ Ctilde&#39;&gt; from 0_1_0 saved
 Tchannel&#39;&gt; from 0_1_0_0_0_1_1 saved
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f392b898d90&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x7f392b8988d0&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2ba90e973d90&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x2ba90e6d1190&gt;]], dtype=object))
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7f392b1aa2d0&gt;
-</pre></div>
-</div>
-<img alt="../../_images/Multisubsegments_29_3.png" src="../../_images/Multisubsegments_29_3.png" />
+<img alt="../../_images/Multisubsegments_28_2.png" src="../../_images/Multisubsegments_28_2.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">layer</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;METAL&#39;</span><span class="p">,</span><span class="s">&#39;METAL&#39;</span><span class="p">,</span><span class="s">&#39;METAL&#39;</span><span class="p">]</span>
 <span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="n">layer</span><span class="p">)</span>
 <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">layer</span>
@@ -414,11 +411,11 @@ Ctilde&#39;&gt; from 0_1_0 saved
 Tchannel&#39;&gt; from 0_1_0_0_0_1_1 saved
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f392793d690&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x7f3926fb4d10&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2ba90e84ccd0&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x2ba90f2f6090&gt;]], dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_30_2.png" src="../../_images/Multisubsegments_30_2.png" />
+<img alt="../../_images/Multisubsegments_29_2.png" src="../../_images/Multisubsegments_29_2.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c">#fig2=plt.figure()</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">cirair</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;l20&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span><span class="o">-</span><span class="mi">40</span><span class="p">])</span>
@@ -432,19 +429,17 @@ Tchannel&#39;&gt; from 0_1_0_0_0_1_1 saved
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s">&#39;metal&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.legend.Legend at 0x7f3926d68bd0&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.legend.Legend at 0x2ba9102b0d10&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_31_1.png" src="../../_images/Multisubsegments_31_1.png" />
-<img alt="../../_images/Multisubsegments_31_2.png" src="../../_images/Multisubsegments_31_2.png" />
-<img alt="../../_images/Multisubsegments_31_3.png" src="../../_images/Multisubsegments_31_3.png" />
-<div class="line-block">
-<div class="line">We have modified successively the nature of the 3 surfaces in the sub</div>
-</div>
-<p>segment placed in the sepataion partition. The first was AIR, the second
+<img alt="../../_images/Multisubsegments_30_1.png" src="../../_images/Multisubsegments_30_1.png" />
+<img alt="../../_images/Multisubsegments_30_2.png" src="../../_images/Multisubsegments_30_2.png" />
+<img alt="../../_images/Multisubsegments_30_3.png" src="../../_images/Multisubsegments_30_3.png" />
+<p>We have modified successively the nature of the 3 surfaces in the sub
+segment placed in the sepataion partition. The first was AIR, the second
 WOOD and the third METAL. As the subsegment is placed on the LOS path
-the blockage effect is clearly visible.
-| The chosen antennas were omnidirectional <tt class="docutils literal"><span class="pre">Antenna('Omni')</span></tt></p>
+the blockage effect is clearly visible. The chosen antennas were
+omnidirectional <tt class="docutils literal"><span class="pre">Antenna('Omni')</span></tt></p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
 
 <span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
@@ -540,7 +535,7 @@ the blockage effect is clearly visible.
 
     <div class="footer">
         &copy; Copyright 2015, PyLayers developer team.
-      Last updated on févr. 28, 2015.
+      Last updated on mars 01, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

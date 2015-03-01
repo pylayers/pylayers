@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>1. The Layout class &mdash; PyLayers</title>
+    <title>The Layout class &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -55,23 +55,23 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">1. The Layout class</a><ul>
-<li><a class="reference internal" href="#introduction">1.1. Introduction</a></li>
-<li><a class="reference internal" href="#structure-of-a-layout">1.2. Structure of a Layout</a></li>
-<li><a class="reference internal" href="#subsegments">1.3. Subsegments</a></li>
-<li><a class="reference internal" href="#the-different-layout-format">1.4. The different layout format</a></li>
-<li><a class="reference internal" href="#reading-an-exiting-layout">1.5. Reading an exiting Layout</a></li>
-<li><a class="reference internal" href="#the-display-options-dictionnary">1.6. The display options dictionnary</a><ul>
-<li><a class="reference internal" href="#layers">1.6.1. Layers</a></li>
-<li><a class="reference internal" href="#strings">1.6.2. Strings</a></li>
-<li><a class="reference internal" href="#sizes">1.6.3. Sizes</a></li>
-<li><a class="reference internal" href="#booleans">1.6.4. Booleans</a></li>
+<li><a class="reference internal" href="#">The Layout class</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#structure-of-a-layout">Structure of a Layout</a></li>
+<li><a class="reference internal" href="#subsegments">Subsegments</a></li>
+<li><a class="reference internal" href="#the-different-layout-format">The different layout format</a></li>
+<li><a class="reference internal" href="#reading-an-exiting-layout">Reading an exiting Layout</a></li>
+<li><a class="reference internal" href="#the-display-options-dictionnary">The display options dictionnary</a><ul>
+<li><a class="reference internal" href="#layers">Layers</a></li>
+<li><a class="reference internal" href="#strings">Strings</a></li>
+<li><a class="reference internal" href="#sizes">Sizes</a></li>
+<li><a class="reference internal" href="#booleans">Booleans</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#interactive-editor">1.7. Interactive editor</a><ul>
-<li><a class="reference internal" href="#image-overlay">1.7.1. Image overlay</a></li>
-<li><a class="reference internal" href="#scaling-the-figure-overlay">1.7.2. Scaling the figure overlay</a></li>
-<li><a class="reference internal" href="#vizualisation-of-the-layout">1.7.3. Vizualisation of the layout</a></li>
+<li><a class="reference internal" href="#interactive-editor">Interactive editor</a><ul>
+<li><a class="reference internal" href="#image-overlay">Image overlay</a></li>
+<li><a class="reference internal" href="#scaling-the-figure-overlay">Scaling the figure overlay</a></li>
+<li><a class="reference internal" href="#vizualisation-of-the-layout">Vizualisation of the layout</a></li>
 </ul>
 </li>
 </ul>
@@ -105,9 +105,9 @@
           <div class="body">
             
   <div class="section" id="the-layout-class">
-<h1>1. The Layout class<a class="headerlink" href="#the-layout-class" title="Permalink to this headline">¶</a></h1>
+<h1>The Layout class<a class="headerlink" href="#the-layout-class" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
-<h2>1.1. Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>This section explains the main features of the <strong>Layout</strong> class.</p>
 <p>A Layout is a representation of a floorplan, it is handled by the module
 <strong>pylayers.gis.layout</strong>.</p>
@@ -124,7 +124,7 @@ with the plugin <em>PicLayer</em>. This is well described in
 </ul>
 </div>
 <div class="section" id="structure-of-a-layout">
-<h2>1.2. Structure of a Layout<a class="headerlink" href="#structure-of-a-layout" title="Permalink to this headline">¶</a></h2>
+<h2>Structure of a Layout<a class="headerlink" href="#structure-of-a-layout" title="Permalink to this headline">¶</a></h2>
 <p>At first a Layout is described by a set of points (negative index) and a
 set of segments (positive index).</p>
 <p>Points and segments are nodes of the <img class="math" src="../../_images/math/9d358e50c5697373ad7cc566b95dfe19d68e9d20.png" alt="\mathcal{G}_s"/> graph.</p>
@@ -134,7 +134,7 @@ can recover partially or totally an other segment</strong>.</p>
 are exploited for further analysis.</p>
 </div>
 <div class="section" id="subsegments">
-<h2>1.3. Subsegments<a class="headerlink" href="#subsegments" title="Permalink to this headline">¶</a></h2>
+<h2>Subsegments<a class="headerlink" href="#subsegments" title="Permalink to this headline">¶</a></h2>
 <p>To describe doors and windows, the concept of <tt class="docutils literal"><span class="pre">subsegment</span></tt> is
 introduced.</p>
 <p>A <tt class="docutils literal"><span class="pre">segment</span></tt> has attributes :</p>
@@ -159,7 +159,7 @@ minimum and maximum height of associated subsegments (meters)</li>
 different from the segment index.</p>
 </div>
 <div class="section" id="the-different-layout-format">
-<h2>1.4. The different layout format<a class="headerlink" href="#the-different-layout-format" title="Permalink to this headline">¶</a></h2>
+<h2>The different layout format<a class="headerlink" href="#the-different-layout-format" title="Permalink to this headline">¶</a></h2>
 <p>The layout format has regularly evolved over time and is going to evolve
 again. Currently, the different recognized file extensions are the
 following :</p>
@@ -179,12 +179,9 @@ as the state of the current <tt class="docutils literal"><span class="pre">displ
 <div class="highlight-python"><div class="highlight"><pre>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7fd47030cbd0&gt;
-</pre></div>
-</div>
 </div>
 <div class="section" id="reading-an-exiting-layout">
-<h2>1.5. Reading an exiting Layout<a class="headerlink" href="#reading-an-exiting-layout" title="Permalink to this headline">¶</a></h2>
+<h2>Reading an exiting Layout<a class="headerlink" href="#reading-an-exiting-layout" title="Permalink to this headline">¶</a></h2>
 <p>To read an existing layout it is sufficient to create a Layout object
 with, as an argument, a file name with one of the recognized extension.
 All files are stored in the <tt class="docutils literal"><span class="pre">pstruc['DIRSTRUC']</span></tt> directory of the
@@ -292,7 +289,6 @@ in <tt class="docutils literal"><span class="pre">PyLayers</span></tt></p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../../_images/LayoutEditor_20_0.png" src="../../_images/LayoutEditor_20_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -300,30 +296,23 @@ in <tt class="docutils literal"><span class="pre">PyLayers</span></tt></p>
 filematini :  matDB.ini
 fileslabini :  slabDB.ini
 filegeom :  DLR.off
-boundaries  (758.35, 794.771, 1111.898, 1138.987)
+boundaries  (-0.505, 32.586, -8.277, 8.878)
 number of Points : 105
 number of Segments : 124
 number of Sub-Segments : 30
 Gs Nodes :  229
 Gs Edges :  248
-Gt Nodes :  21
-Gt Edges :  52
+Gt Nodes :  0
+Gt Edges :  0
 vnodes = Gt.node[Nc][&#39;cycles&#39;].cycle
 poly = Gt.node[Nc][&#39;cycle&#39;].polyg
-Gr Nodes    : 18
-Gr Edges    : 18
+Gr Nodes    : 0
+Gr Edges    : 0
 Nc  = Gr.node[nroom][&#39;cycles&#39;]
 </pre></div>
 </div>
 <p>The different graphs associated with the layout are then built</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>CRITICAL:root:segment are not connected
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>&gt; /home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py(550)from2csegs()
--&gt; self.apex = p
 </pre></div>
 </div>
 <p>The topological graph <img class="math" src="../../_images/math/81225d898fa4a260a2c7eb990cc0e37b3d34ab5f.png" alt="\mathcal{G}_t"/> or graph of non overlapping
@@ -362,7 +351,7 @@ ray signatures.</p>
 </div>
 </div>
 <div class="section" id="the-display-options-dictionnary">
-<h2>1.6. The display options dictionnary<a class="headerlink" href="#the-display-options-dictionnary" title="Permalink to this headline">¶</a></h2>
+<h2>The display options dictionnary<a class="headerlink" href="#the-display-options-dictionnary" title="Permalink to this headline">¶</a></h2>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -370,7 +359,7 @@ ray signatures.</p>
 filematini :  matDB.ini
 fileslabini :  slabDB.ini
 filegeom :  DLR.off
-boundaries  (758.35, 794.771, 1111.898, 1138.987)
+boundaries  (-0.505, 32.586, -8.277, 8.878)
 number of Points : 105
 number of Segments : 124
 number of Sub-Segments : 30
@@ -380,8 +369,8 @@ Gt Nodes :  21
 Gt Edges :  52
 vnodes = Gt.node[Nc][&#39;cycles&#39;].cycle
 poly = Gt.node[Nc][&#39;cycle&#39;].polyg
-Gr Nodes    : 16
-Gr Edges    : 16
+Gr Nodes    : 18
+Gr Edges    : 18
 Nc  = Gr.node[nroom][&#39;cycles&#39;]
 </pre></div>
 </div>
@@ -391,19 +380,19 @@ are exploited in <tt class="docutils literal"><span class="pre">showGs()</span><
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">display</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;activelayer&#39;</span><span class="p">:</span> <span class="s">&#39;WINDOW_GLASS&#39;</span><span class="p">,</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;activelayer&#39;</span><span class="p">:</span> <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
  <span class="s">&#39;alpha&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
- <span class="s">&#39;box&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">758.35</span><span class="p">,</span> <span class="mf">794.771</span><span class="p">,</span> <span class="mf">1111.898</span><span class="p">,</span> <span class="mf">1138.987</span><span class="p">),</span>
- <span class="s">&#39;clear&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+ <span class="s">&#39;box&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.505</span><span class="p">,</span> <span class="mf">32.586</span><span class="p">,</span> <span class="o">-</span><span class="mf">8.277</span><span class="p">,</span> <span class="mf">8.878</span><span class="p">),</span>
+ <span class="s">&#39;clear&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
  <span class="s">&#39;edges&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
  <span class="s">&#39;edlabel&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
  <span class="s">&#39;edlblsize&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
- <span class="s">&#39;ednodes&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
- <span class="s">&#39;fileoverlay&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
- <span class="s">&#39;fontsize&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+ <span class="s">&#39;ednodes&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+ <span class="s">&#39;fileoverlay&#39;</span><span class="p">:</span> <span class="s">&#39;DLR4991.png&#39;</span><span class="p">,</span>
+ <span class="s">&#39;fontsize&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
  <span class="s">&#39;inverse&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
  <span class="s">&#39;layer&#39;</span><span class="p">:</span> <span class="p">[],</span>
- <span class="s">&#39;layers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;WALL&#39;</span><span class="p">,</span> <span class="s">&#39;PARTITION&#39;</span><span class="p">,</span> <span class="s">&#39;AIR&#39;</span><span class="p">,</span> <span class="s">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">],</span>
+ <span class="s">&#39;layers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;WALL&#39;</span><span class="p">,</span> <span class="s">&#39;PARTITION&#39;</span><span class="p">,</span> <span class="s">&#39;AIR&#39;</span><span class="p">,</span> <span class="s">&#39;WINDOW_GLASS&#39;</span><span class="p">,</span> <span class="s">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">],</span>
  <span class="s">&#39;layerset&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;WINDOW_GLASS&#39;</span><span class="p">,</span>
   <span class="s">&#39;PLASTERBOARD_7CM&#39;</span><span class="p">,</span>
   <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
@@ -429,18 +418,19 @@ are exploited in <tt class="docutils literal"><span class="pre">showGs()</span><
  <span class="s">&#39;ndlabel&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
  <span class="s">&#39;ndlblsize&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
  <span class="s">&#39;ndsize&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
- <span class="s">&#39;nodes&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+ <span class="s">&#39;nodes&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
  <span class="s">&#39;overlay&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
  <span class="s">&#39;scaled&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
  <span class="s">&#39;subseg&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+ <span class="s">&#39;subsegnb&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
  <span class="s">&#39;thin&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
  <span class="s">&#39;ticksoff&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
- <span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+ <span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;Init&#39;</span><span class="p">,</span>
  <span class="s">&#39;visu&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">}</span>
 </pre></div>
 </div>
 <div class="section" id="layers">
-<h3>1.6.1. Layers<a class="headerlink" href="#layers" title="Permalink to this headline">¶</a></h3>
+<h3>Layers<a class="headerlink" href="#layers" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>&#8216;layer&#8217; : list , []</li>
 <li>&#8216;layerset&#8217;,list, list of available layers</li>
@@ -451,14 +441,14 @@ are exploited in <tt class="docutils literal"><span class="pre">showGs()</span><
 </ul>
 </div>
 <div class="section" id="strings">
-<h3>1.6.2. Strings<a class="headerlink" href="#strings" title="Permalink to this headline">¶</a></h3>
+<h3>Strings<a class="headerlink" href="#strings" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>&#8216;title&#8217; : str , &#8216;Init&#8217;</li>
 <li>&#8216;fileoverlay&#8217; : str , &#8216;TA-Office.png&#8217;</li>
 </ul>
 </div>
 <div class="section" id="sizes">
-<h3>1.6.3. Sizes<a class="headerlink" href="#sizes" title="Permalink to this headline">¶</a></h3>
+<h3>Sizes<a class="headerlink" href="#sizes" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>&#8216;fontsize&#8217;, float , 10</li>
 <li>&#8216;ndsize&#8217;, float , 10</li>
@@ -467,7 +457,7 @@ are exploited in <tt class="docutils literal"><span class="pre">showGs()</span><
 </ul>
 </div>
 <div class="section" id="booleans">
-<h3>1.6.4. Booleans<a class="headerlink" href="#booleans" title="Permalink to this headline">¶</a></h3>
+<h3>Booleans<a class="headerlink" href="#booleans" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>&#8216;edlabel&#8217;, boolean, False</li>
 <li>&#8216;ticksoff&#8217;,boolean, True</li>
@@ -485,7 +475,7 @@ are exploited in <tt class="docutils literal"><span class="pre">showGs()</span><
 </div>
 </div>
 <div class="section" id="interactive-editor">
-<h2>1.7. Interactive editor<a class="headerlink" href="#interactive-editor" title="Permalink to this headline">¶</a></h2>
+<h2>Interactive editor<a class="headerlink" href="#interactive-editor" title="Permalink to this headline">¶</a></h2>
 <p>The command L.editor() launches an interactive editor. The state machine
 is implemented in module <tt class="docutils literal"><span class="pre">pylayers.gis.selectl.py</span></tt>.</p>
 <p>To have an idea of all available options, look in the
@@ -500,12 +490,14 @@ the future a dedicated plugin in <tt class="docutils literal"><span class="pre">
 solution.</p>
 <p>There are two different modes of edition</p>
 <ul class="simple">
-<li>A create points mode CP<ul>
-<li>left clic : free point</li>
-<li>right clic : same x point</li>
-<li>center clic : same y point</li>
+<li>A create points mode CP</li>
 </ul>
-</li>
+<div class="highlight-python"><div class="highlight"><pre>+ left clic   : free point
++ right clic  : same x point
++ center clic : same y point
+</pre></div>
+</div>
+<ul class="simple">
 <li>A create segments mode<ul>
 <li>left clic : select point 1</li>
 <li>left clic : select point 2</li>
@@ -516,7 +508,7 @@ solution.</p>
 <p><strong>m</strong> : to switch from one mode to an other</p>
 <p><strong>i</strong> : to return to init state</p>
 <div class="section" id="image-overlay">
-<h3>1.7.1. Image overlay<a class="headerlink" href="#image-overlay" title="Permalink to this headline">¶</a></h3>
+<h3>Image overlay<a class="headerlink" href="#image-overlay" title="Permalink to this headline">¶</a></h3>
 <p>It is useful while editing a layout to have an overlay of an image in
 order to help placing points. The image overlay can either be an url or
 a filename. In that case the file is stored in</p>
@@ -535,13 +527,13 @@ a filename. In that case the file is stored in</p>
 <span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f49b9e4b450&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7f49b9aff290&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2aab2c105c50&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2aab2c128d90&gt;)
 </pre></div>
 </div>
 </div>
 <div class="section" id="scaling-the-figure-overlay">
-<h3>1.7.2. Scaling the figure overlay<a class="headerlink" href="#scaling-the-figure-overlay" title="Permalink to this headline">¶</a></h3>
+<h3>Scaling the figure overlay<a class="headerlink" href="#scaling-the-figure-overlay" title="Permalink to this headline">¶</a></h3>
 <p>Before going further it is necessary :</p>
 <ul class="simple">
 <li>to place the global origin</li>
@@ -581,7 +573,7 @@ meters) between the two points.</li>
 </div>
 </div>
 <div class="section" id="vizualisation-of-the-layout">
-<h3>1.7.3. Vizualisation of the layout<a class="headerlink" href="#vizualisation-of-the-layout" title="Permalink to this headline">¶</a></h3>
+<h3>Vizualisation of the layout<a class="headerlink" href="#vizualisation-of-the-layout" title="Permalink to this headline">¶</a></h3>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.ini&#39;</span><span class="p">)</span>
 <span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
@@ -595,15 +587,6 @@ meters) between the two points.</li>
 a segment (wall,door,window,...).</p>
 <p>The segment name is the key of the <strong>slab</strong> dictionnary.</p>
 <p><a class="reference external" href="./Multisubsegments.ipynb">Multi Subsegments</a></p>
-<div class="code python highlight-python"><div class="highlight"><pre>from IPython.core.display import HTML
-
-def css_styling():
-    styles = open(&quot;../styles/custom.css&quot;, &quot;r&quot;).read()
-    return HTML(styles)
-css_styling()
-%matplotlib inline
-</pre></div>
-</div>
 </div>
 </div>
 </div>
@@ -633,7 +616,7 @@ css_styling()
 
     <div class="footer">
         &copy; Copyright 2015, PyLayers developer team.
-      Last updated on févr. 28, 2015.
+      Last updated on mars 01, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

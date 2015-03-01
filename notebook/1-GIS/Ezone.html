@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>4. Geographical Information and the Earth Zone class : Ezone &mdash; PyLayers</title>
+    <title>Geographical Information and the Earth Zone class : Ezone &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -55,9 +55,9 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">4. Geographical Information and the Earth Zone class : <tt class="docutils literal"><span class="pre">Ezone</span></tt></a><ul>
-<li><a class="reference internal" href="#zooming-in">4.1. Zooming in</a></li>
-<li><a class="reference internal" href="#ground-height-profile-extraction">4.2. Ground Height Profile Extraction</a></li>
+<li><a class="reference internal" href="#">Geographical Information and the Earth Zone class : <tt class="docutils literal"><span class="pre">Ezone</span></tt></a><ul>
+<li><a class="reference internal" href="#zooming-in">Zooming in</a></li>
+<li><a class="reference internal" href="#ground-height-profile-extraction">Ground Height Profile Extraction</a></li>
 </ul>
 </li>
 </ul>
@@ -99,11 +99,11 @@
 </div>
 <p><a class="reference external" href="http://www.pylayers.org">http://www.pylayers.org</a></p>
 <div class="section" id="geographical-information-and-the-earth-zone-class-ezone">
-<h1>4. Geographical Information and the Earth Zone class : <tt class="docutils literal"><span class="pre">Ezone</span></tt><a class="headerlink" href="#geographical-information-and-the-earth-zone-class-ezone" title="Permalink to this headline">¶</a></h1>
+<h1>Geographical Information and the Earth Zone class : <tt class="docutils literal"><span class="pre">Ezone</span></tt><a class="headerlink" href="#geographical-information-and-the-earth-zone-class-ezone" title="Permalink to this headline">¶</a></h1>
 <p>The <tt class="docutils literal"><span class="pre">Ezone</span></tt> class handles an earth zone which corresponds to the
 <tt class="docutils literal"><span class="pre">strm</span></tt> or <tt class="docutils literal"><span class="pre">aster</span></tt> DEM data. It has the same naming convention as
-<tt class="docutils literal"><span class="pre">srtm</span></tt> files and corresponds to a portion of earth corresponding to 1°
-latitude and 1° of longitude. An <tt class="docutils literal"><span class="pre">Ezone</span></tt> is an heterogeneous dataset
+<tt class="docutils literal"><span class="pre">srtm</span></tt> files and corresponds to a portion of earth corresponding to 1
+latitude and 1 of longitude. An <tt class="docutils literal"><span class="pre">Ezone</span></tt> is an heterogeneous dataset
 stored in <tt class="docutils literal"><span class="pre">hdf5</span></tt> format. Let see an example with the file
 <tt class="docutils literal"><span class="pre">N48W002.h5</span></tt>.</p>
 <p>By default files are placed in directory <tt class="docutils literal"><span class="pre">gis/h5</span></tt> of the current
@@ -155,11 +155,11 @@ method.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">z</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s">&#39;srtm&#39;</span><span class="p">,</span><span class="n">bldg</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="mi">80</span><span class="p">,</span><span class="mi">120</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f3f4c8cc610&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7f3f4c8ccb10&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b01dcbef650&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2b01dcbef910&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/Ezone_14_1.png" src="../../_images/Ezone_14_1.png" />
+<img alt="../../_images/Ezone_15_1.png" src="../../_images/Ezone_15_1.png" />
 <p>The <tt class="docutils literal"><span class="pre">Ezone</span></tt> object has a member extent which gives
 [lonmin,lonmax,latmin,latmax]</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">z</span><span class="o">.</span><span class="n">extent</span>
@@ -186,17 +186,17 @@ method.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">z</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s">&#39;aster&#39;</span><span class="p">,</span><span class="n">bldg</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">120</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f3f4f30fdd0&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7f3f4e6e7590&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b01dae41550&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2b01dae41c10&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/Ezone_21_1.png" src="../../_images/Ezone_21_1.png" />
+<img alt="../../_images/Ezone_22_1.png" src="../../_images/Ezone_22_1.png" />
 <p>An earth zone has an attached dictionnary of buildings, which contains
 the data of all the set of building footprints of the city extracted out
 of open street map data. Below is shown an example for the city of
 Rennes in Brittany (France).</p>
 <div class="section" id="zooming-in">
-<h2>4.1. Zooming in<a class="headerlink" href="#zooming-in" title="Permalink to this headline">¶</a></h2>
+<h2>Zooming in<a class="headerlink" href="#zooming-in" title="Permalink to this headline">¶</a></h2>
 <p>For zooming into a smaller region, we define the zone to vizualize a
 given rectangular region with <tt class="docutils literal"><span class="pre">(lonmin,lonmax,latmin,latmax)</span></tt>.</p>
 <p>This region can be converted into cartesian coordinates with the
@@ -233,8 +233,8 @@ the <tt class="docutils literal"><span class="pre">show</span></tt> method for z
              <span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Ezone_27_0.png" src="../../_images/Ezone_27_0.png" />
-<img alt="../../_images/Ezone_27_1.png" src="../../_images/Ezone_27_1.png" />
+<img alt="../../_images/Ezone_29_0.png" src="../../_images/Ezone_29_0.png" />
+<img alt="../../_images/Ezone_29_1.png" src="../../_images/Ezone_29_1.png" />
 <p>The maps diplayed above are labeled in longitude (horizontal axis) and
 latitude (vertical axis) but it is also possible to label it in
 cartesian coordinates as below</p>
@@ -248,7 +248,7 @@ cartesian coordinates as below</p>
              <span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">])</span>
 </pre></div>
 </div>
-<img alt="../../_images/Ezone_30_0.png" src="../../_images/Ezone_30_0.png" />
+<img alt="../../_images/Ezone_32_0.png" src="../../_images/Ezone_32_0.png" />
 <p>Let zoom to the University of Rennes 1 campus in the North-East region
 of the city.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">extent2</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.645</span><span class="p">,</span><span class="o">-</span><span class="mf">1.62</span><span class="p">,</span><span class="mf">48.111</span><span class="p">,</span><span class="mf">48.125</span><span class="p">)</span>
@@ -269,7 +269,7 @@ of the city.</p>
              <span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">40</span><span class="p">])</span>
 </pre></div>
 </div>
-<img alt="../../_images/Ezone_33_0.png" src="../../_images/Ezone_33_0.png" />
+<img alt="../../_images/Ezone_35_0.png" src="../../_images/Ezone_35_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&#39;Beaulieu Campus&#39;</span><span class="p">,</span>
              <span class="n">extent</span><span class="o">=</span><span class="n">extent2_cart</span><span class="p">,</span>
              <span class="n">coord</span><span class="o">=</span><span class="s">&#39;cartesian&#39;</span><span class="p">,</span>
@@ -278,10 +278,10 @@ of the city.</p>
              <span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">80</span><span class="p">])</span>
 </pre></div>
 </div>
-<img alt="../../_images/Ezone_34_0.png" src="../../_images/Ezone_34_0.png" />
+<img alt="../../_images/Ezone_36_0.png" src="../../_images/Ezone_36_0.png" />
 </div>
 <div class="section" id="ground-height-profile-extraction">
-<h2>4.2. Ground Height Profile Extraction<a class="headerlink" href="#ground-height-profile-extraction" title="Permalink to this headline">¶</a></h2>
+<h2>Ground Height Profile Extraction<a class="headerlink" href="#ground-height-profile-extraction" title="Permalink to this headline">¶</a></h2>
 <p>For predicting the radio propagation, it is necessary to retrieve the
 height profile between 2 points on the earth surface. The <tt class="docutils literal"><span class="pre">profile</span></tt>
 method does a profile extraction and geometrical calculation for further
@@ -298,10 +298,10 @@ be expressed in (lon,lat) coordinates in WGS84 system.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;distance (meters)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7f3f375c2650&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b01dd9241d0&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Ezone_38_1.png" src="../../_images/Ezone_38_1.png" />
+<img alt="../../_images/Ezone_40_1.png" src="../../_images/Ezone_40_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">a</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">nu</span><span class="p">)</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">25000</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
@@ -309,10 +309,10 @@ be expressed in (lon,lat) coordinates in WGS84 system.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Distance (meters)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7f3f4875a590&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b01f0d33ad0&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Ezone_39_1.png" src="../../_images/Ezone_39_1.png" />
+<img alt="../../_images/Ezone_41_1.png" src="../../_images/Ezone_41_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">z</span>
 </pre></div>
 </div>
@@ -334,75 +334,8 @@ i-latitude  : 19 38
   DuplicatePointWarning,
 </pre></div>
 </div>
-<img alt="../../_images/Ezone_41_1.png" src="../../_images/Ezone_41_1.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
-
-<span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
-    <span class="n">styles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;../styles/custom.css&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="n">styles</span><span class="p">)</span>
-<span class="n">css_styling</span><span class="p">()</span>
-</pre></div>
+<img alt="../../_images/Ezone_43_1.png" src="../../_images/Ezone_43_1.png" />
 </div>
-<style>
-    @font-face {
-        font-family: "Computer Modern";
-        src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-    }
-    div.cell{
-        width:800px;
-        margin-left:16% !important;
-        margin-right:auto;
-    }
-    h1 {
-        font-family: Helvetica, serif;
-    }
-    h4{
-        margin-top:12px;
-        margin-bottom: 3px;
-       }
-    div.text_cell_render{
-        font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-        line-height: 145%;
-        font-size: 130%;
-        width:800px;
-        margin-left:auto;
-        margin-right:auto;
-    }
-    .CodeMirror{
-            font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-    }
-    .prompt{
-        display: None;
-    }
-    .text_cell_render h5 {
-        font-weight: 300;
-        font-size: 22pt;
-        color: #4057A1;
-        font-style: italic;
-        margin-bottom: .5em;
-        margin-top: 0.5em;
-        display: block;
-    }
-
-    .warning{
-        color: rgb( 240, 20, 20 )
-        }
-</style>
-<script>
-    MathJax.Hub.Config({
-                        TeX: {
-                           extensions: ["AMSmath.js"]
-                           },
-                tex2jax: {
-                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                },
-                displayAlign: 'center', // Change this to 'center' to center equations.
-                "HTML-CSS": {
-                    styles: {'.MathJax_Display': {"margin": 4}}
-                }
-        });
-</script></div>
 </div>
 
 
@@ -430,7 +363,7 @@ i-latitude  : 19 38
 
     <div class="footer">
         &copy; Copyright 2015, PyLayers developer team.
-      Last updated on févr. 28, 2015.
+      Last updated on mars 01, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">
