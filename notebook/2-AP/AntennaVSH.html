@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>6. Vector Spherical Harmonics Representation of Antennas &mdash; PyLayers</title>
+    <title>Vector Spherical Harmonics Representation of Antennas &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="Overview" href="../TOC.html" />
+    <link rel="next" title="Indoor Coverage with the PyLayers Multi Wall model" href="Coverage.html" />
+    <link rel="prev" title="Scalar Spherical Harmonics" href="AntennaSSH.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,11 +46,18 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="Coverage.html" title="Indoor Coverage with the PyLayers Multi Wall model"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="AntennaSSH.html" title="Scalar Spherical Harmonics"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../TOC.html" accesskey="U">Overview</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -55,10 +65,19 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">6. Vector Spherical Harmonics Representation of Antennas</a></li>
-<li><a class="reference internal" href="#evaluation-of-vector-spherical-harmonics-coefficients">7. Evaluation of Vector Spherical Harmonics Coefficients</a></li>
+<li><a class="reference internal" href="#">Vector Spherical Harmonics Representation of Antennas</a><ul>
+<li><a class="reference internal" href="#display-of-the-radiation-pattern-for-all-frequencies">Display of the radiation pattern for all frequencies</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#evaluation-of-vector-spherical-harmonics-coefficients">Evaluation of Vector Spherical Harmonics Coefficients</a></li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="AntennaSSH.html"
+                        title="previous chapter">Scalar Spherical Harmonics</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Coverage.html"
+                        title="next chapter">Indoor Coverage with the PyLayers Multi Wall model</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/notebook/2-AP/AntennaVSH.txt"
@@ -85,74 +104,7 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
-
-<span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
-    <span class="n">styles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;../styles/custom.css&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="n">styles</span><span class="p">)</span>
-<span class="n">css_styling</span><span class="p">()</span>
-</pre></div>
-</div>
-<style>
-    @font-face {
-        font-family: "Computer Modern";
-        src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-    }
-    div.cell{
-        width:800px;
-        margin-left:16% !important;
-        margin-right:auto;
-    }
-    h1 {
-        font-family: Helvetica, serif;
-    }
-    h4{
-        margin-top:12px;
-        margin-bottom: 3px;
-       }
-    div.text_cell_render{
-        font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-        line-height: 145%;
-        font-size: 130%;
-        width:800px;
-        margin-left:auto;
-        margin-right:auto;
-    }
-    .CodeMirror{
-            font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-    }
-    .prompt{
-        display: None;
-    }
-    .text_cell_render h5 {
-        font-weight: 300;
-        font-size: 22pt;
-        color: #4057A1;
-        font-style: italic;
-        margin-bottom: .5em;
-        margin-top: 0.5em;
-        display: block;
-    }
-
-    .warning{
-        color: rgb( 240, 20, 20 )
-        }
-</style>
-<script>
-    MathJax.Hub.Config({
-                        TeX: {
-                           extensions: ["AMSmath.js"]
-                           },
-                tex2jax: {
-                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                },
-                displayAlign: 'center', // Change this to 'center' to center equations.
-                "HTML-CSS": {
-                    styles: {'.MathJax_Display': {"margin": 4}}
-                }
-        });
-</script><div class="section" id="vector-spherical-harmonics-representation-of-antennas">
+  <div class="section" id="vector-spherical-harmonics-representation-of-antennas">
 <h1>Vector Spherical Harmonics Representation of Antennas<a class="headerlink" href="#vector-spherical-harmonics-representation-of-antennas" title="Permalink to this headline">¶</a></h1>
 <div class="code python highlight-python"><div class="highlight"><pre>from pylayers.antprop.antenna import *
 from pylayers.antprop.antvsh import *
@@ -186,19 +138,35 @@ in <img class="math" src="../../_images/math/da93a4433922cc997c2ea624d1828cda423
 <p>Then an electrical delay of <img class="math" src="../../_images/math/20f53356c4c104c5a34eafd0d9ad7358b59d1fbc.png" alt="4.185ns"/> is applied on the
 <img class="math" src="../../_images/math/0e31c8f84652d7ba21ff8bca08a0e4d8e14bccc5.png" alt="F_{\theta}"/></p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">I</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">[:,:,:]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">I</span><span class="p">[:,</span><span class="mi">45</span><span class="p">,:])))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">r&#39;Unwrapped phase of $F_{\theta}$ w.r.t frequency and phi for $\theta=\frac{pi}{2}$&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;f index&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fGHz</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">I</span><span class="p">[:,</span><span class="mi">45</span><span class="p">,</span><span class="mi">85</span><span class="p">])))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;f index&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x7f6579776350&gt;]
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b8cfe6c77d0&gt;
 </pre></div>
 </div>
 <img alt="../../_images/AntennaVSH_10_1.png" src="../../_images/AntennaVSH_10_1.png" />
+<img alt="../../_images/AntennaVSH_10_2.png" src="../../_images/AntennaVSH_10_2.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">tau</span><span class="o">=</span><span class="mf">4.185</span>
 <span class="n">I</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">[:,:,:]</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="mi">1j</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">fGHz</span><span class="o">*</span><span class="n">tau</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-6-6b2a5143fb58&gt; in &lt;module&gt;()
+      1 tau=4.185
+----&gt; 2 I = A.Ftheta[:,:,:]*exp(-2*1j*pi*fGHz*tau)
+
+
+NameError: name &#39;exp&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">I</span><span class="p">[:,</span><span class="mi">45</span><span class="p">,:])))</span>
@@ -209,12 +177,14 @@ in <img class="math" src="../../_images/math/da93a4433922cc997c2ea624d1828cda423
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fGHz</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">I</span><span class="p">[:,</span><span class="mi">45</span><span class="p">,</span><span class="mi">85</span><span class="p">])))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x7f657955ced0&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2b8cfb170a10&gt;]
 </pre></div>
 </div>
 <img alt="../../_images/AntennaVSH_12_1.png" src="../../_images/AntennaVSH_12_1.png" />
-<p>Display of the radiation pattern for all frequencies</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">nf</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">104</span><span class="p">):</span>
+<div class="section" id="display-of-the-radiation-pattern-for-all-frequencies">
+<h2>Display of the radiation pattern for all frequencies<a class="headerlink" href="#display-of-the-radiation-pattern-for-all-frequencies" title="Permalink to this headline">¶</a></h2>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">nf</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">104</span><span class="p">):</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">[</span><span class="n">nf</span><span class="p">,</span><span class="mi">45</span><span class="p">,:]))</span>
 </pre></div>
 </div>
@@ -246,6 +216,7 @@ Nb theta (lat) : 91
 Nb phi (lon) : 180
 No vsh coefficient calculated yet
 </pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="evaluation-of-vector-spherical-harmonics-coefficients">
@@ -311,7 +282,7 @@ NCoeff s2  : 495
 <span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s">&#39;s2&#39;</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/AntennaVSH_22_0.png" src="../../_images/AntennaVSH_22_0.png" />
+<img alt="../../_images/AntennaVSH_23_0.png" src="../../_images/AntennaVSH_23_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">s2tos3</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -356,7 +327,7 @@ Ncoeff s3 : 145
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../../_images/AntennaVSH_25_0.png" src="../../_images/AntennaVSH_25_0.png" />
+<img alt="../../_images/AntennaVSH_26_0.png" src="../../_images/AntennaVSH_26_0.png" />
 </div>
 
 
@@ -374,11 +345,18 @@ Ncoeff s3 : 145
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="Coverage.html" title="Indoor Coverage with the PyLayers Multi Wall model"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="AntennaSSH.html" title="Scalar Spherical Harmonics"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../TOC.html" >Overview</a> &raquo;</li> 
       </ul>
     </div>
 

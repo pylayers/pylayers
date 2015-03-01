@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>9. Multi-wall model &mdash; PyLayers</title>
+    <title>Multi-wall model &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="Overview" href="../TOC.html" />
+    <link rel="next" title="Ray Signatures" href="Signatures.html" />
+    <link rel="prev" title="Indoor Coverage with the PyLayers Multi Wall model" href="Coverage.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,11 +46,18 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="Signatures.html" title="Ray Signatures"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Coverage.html" title="Indoor Coverage with the PyLayers Multi Wall model"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../TOC.html" accesskey="U">Overview</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -55,18 +65,24 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">9. Multi-wall model</a><ul>
-<li><a class="reference internal" href="#defining-a-radio-link">9.1. Defining a radio link</a></li>
-<li><a class="reference internal" href="#ploting-the-scene">9.2. Ploting the scene</a><ul>
-<li><a class="reference internal" href="#finding-the-intersection-between-the-direct-path-and-the-walls">9.2.1. Finding the intersection between the &#8220;direct&#8221; path and the walls</a></li>
-<li><a class="reference internal" href="#computing-the-multi-wall-model">9.2.2. Computing the Multi-wall model</a></li>
+<li><a class="reference internal" href="#">Multi-wall model</a><ul>
+<li><a class="reference internal" href="#defining-a-radio-link">Defining a radio link</a></li>
+<li><a class="reference internal" href="#ploting-the-scene">Ploting the scene</a><ul>
+<li><a class="reference internal" href="#finding-the-intersection-between-the-direct-path-and-the-walls">Finding the intersection between the &#8220;direct&#8221; path and the walls</a></li>
+<li><a class="reference internal" href="#computing-the-multi-wall-model">Computing the Multi-wall model</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#coverage-class">10. Coverage class</a></li>
+<li><a class="reference internal" href="#coverage-class">Coverage class</a></li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Coverage.html"
+                        title="previous chapter">Indoor Coverage with the PyLayers Multi Wall model</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Signatures.html"
+                        title="next chapter">Ray Signatures</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/notebook/2-AP/MultiWall.txt"
@@ -103,16 +119,12 @@ from pylayers.gis.layout import Layout
 from pylayers.antprop.loss import *
 from pylayers.antprop.coverage import *
 from pylayers.network.model import *
-%pylab inline
+%matplotlib inline
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Populating the interactive namespace from numpy and matplotlib
+<div class="highlight-python"><div class="highlight"><pre>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
 </pre></div>
 </div>
-<pre class="literal-block">
-WARNING: pylab import has clobbered these variables: ['mlab', 'product', 'rc', 'copy', 'std']
-<cite>%matplotlib</cite> prevents importing * from pylab and numpy
-</pre>
 <p>The layout is loaded from an ini file. If the graphs are not available,
 they are built.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.ini&#39;</span><span class="p">)</span>
@@ -120,8 +132,8 @@ they are built.</p>
 </div>
 <div class="section" id="defining-a-radio-link">
 <h2>Defining a radio link<a class="headerlink" href="#defining-a-radio-link" title="Permalink to this headline">¶</a></h2>
-<p>The 2 extremities of the radio link are coordinates in <tt class="docutils literal"><span class="pre">numpy.array</span></tt>
-of transmitter and receiver.</p>
+<p>The 2 extremities of the radio link (transmitter and receiver) have
+coordinates described as 1x2 <tt class="docutils literal"><span class="pre">numpy.array</span></tt> .</p>
 <ul class="simple">
 <li>A a radio node</li>
 <li>B a radio node</li>
@@ -135,7 +147,7 @@ of transmitter and receiver.</p>
 <h2>Ploting the scene<a class="headerlink" href="#ploting-the-scene" title="Permalink to this headline">¶</a></h2>
 <p>The scene is plotted with the <tt class="docutils literal"><span class="pre">showG</span></tt> method of the Layout</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c"># figure instanciation</span>
-<span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
 <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">))</span>
 <span class="c"># plotting the Layout</span>
@@ -148,7 +160,7 @@ of transmitter and receiver.</p>
 <span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/MultiWall_9_0.png" src="../../_images/MultiWall_9_0.png" />
+<img alt="../../_images/MultiWall_11_0.png" src="../../_images/MultiWall_11_0.png" />
 <div class="section" id="finding-the-intersection-between-the-direct-path-and-the-walls">
 <h3>Finding the intersection between the &#8220;direct&#8221; path and the walls<a class="headerlink" href="#finding-the-intersection-between-the-direct-path-and-the-walls" title="Permalink to this headline">¶</a></h3>
 <p>The function <tt class="docutils literal"><span class="pre">angleonlink</span></tt> returns the list of intersected segments
@@ -157,7 +169,7 @@ segment normal.</p>
 <div class="code python highlight-python"><div class="highlight"><pre>%pdef L.angleonlink
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[0mL[0m[1;33m.[0m[0mangleonlink[0m[1;33m([0m[0mself[0m[1;33m,[0m [0mp1[0m[1;33m=[0m[0marray[0m[1;33m([0m[1;33m[[0m[1;36m0[0m[1;33m,[0m [1;36m0[0m[1;33m][0m[1;33m)[0m[1;33m,[0m [0mp2[0m[1;33m=[0m[0marray[0m[1;33m([0m[1;33m[[0m[1;36m10[0m[1;33m,[0m  [1;36m3[0m[1;33m][0m[1;33m)[0m[1;33m)[0m[1;33m[0m[0m
+<div class="highlight-python"><div class="highlight"><pre>[0mL[0m[1;33m.[0m[0mangleonlink[0m[1;33m([0m[0mp1[0m[1;33m=[0m[0marray[0m[1;33m([0m[1;33m[[0m[1;36m0[0m[1;33m,[0m [1;36m0[0m[1;33m][0m[1;33m)[0m[1;33m,[0m [0mp2[0m[1;33m=[0m[0marray[0m[1;33m([0m[1;33m[[0m[1;36m10[0m[1;33m,[0m  [1;36m3[0m[1;33m][0m[1;33m)[0m[1;33m)[0m[1;33m[0m[0m
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">data</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">angleonlink</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">)</span>
@@ -252,7 +264,7 @@ file</p>
 <span class="k">print</span> <span class="s">&#39;Coverage performed in &#39;</span><span class="p">,</span> <span class="n">t2</span><span class="o">-</span><span class="n">t1</span><span class="p">,</span> <span class="s">&#39;s&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Coverage performed in  2.84441399574 s
+<div class="highlight-python"><div class="highlight"><pre>Coverage performed in  3.12195301056 s
 </pre></div>
 </div>
 <p>For Orthogonal polarization</p>
@@ -260,14 +272,14 @@ file</p>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;pr&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig1</span><span class="p">,</span><span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/MultiWall_25_0.png" src="../../_images/MultiWall_25_0.png" />
+<img alt="../../_images/MultiWall_29_0.png" src="../../_images/MultiWall_29_0.png" />
 <p>For parallel polarization</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">(</span><span class="n">snr</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">sinr</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="n">fig1</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;pr&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig1</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/MultiWall_27_0.png" src="../../_images/MultiWall_27_0.png" />
+<img alt="../../_images/MultiWall_31_0.png" src="../../_images/MultiWall_31_0.png" />
 </div>
 
 
@@ -285,11 +297,18 @@ file</p>
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="Signatures.html" title="Ray Signatures"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Coverage.html" title="Indoor Coverage with the PyLayers Multi Wall model"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../TOC.html" >Overview</a> &raquo;</li> 
       </ul>
     </div>
 

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>12. The transmission channel &mdash; PyLayers</title>
+    <title>The transmission channel &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="Overview" href="../TOC.html" />
+    <link rel="next" title="22. How to do a link siulation" href="../5-SIM/LinkSimulation.html" />
+    <link rel="prev" title="Ray Signatures" href="Signatures.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,11 +46,18 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="../5-SIM/LinkSimulation.html" title="22. How to do a link siulation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Signatures.html" title="Ray Signatures"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../TOC.html" accesskey="U">Overview</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -55,13 +65,19 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">12. The transmission channel</a><ul>
-<li><a class="reference internal" href="#the-friis-factor">12.1. The Friis factor</a></li>
-<li><a class="reference internal" href="#the-tap-method">12.2. The tap method</a></li>
+<li><a class="reference internal" href="#">The transmission channel</a><ul>
+<li><a class="reference internal" href="#the-friis-factor">The Friis factor</a></li>
+<li><a class="reference internal" href="#the-tap-method">The tap method</a></li>
 </ul>
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Signatures.html"
+                        title="previous chapter">Ray Signatures</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../5-SIM/LinkSimulation.html"
+                        title="next chapter">22. How to do a link siulation</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/notebook/2-AP/Channel.txt"
@@ -88,7 +104,9 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="code python highlight-python"><div class="highlight"><pre>%matplotlib inline
+  <div class="section" id="the-transmission-channel">
+<h1>The transmission channel<a class="headerlink" href="#the-transmission-channel" title="Permalink to this headline">¶</a></h1>
+<div class="code python highlight-python"><div class="highlight"><pre>%matplotlib inline
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
@@ -106,11 +124,9 @@
 <div class="highlight-python"><div class="highlight"><pre>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7fd406645d90&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x2b9834cfb550&gt;
 </pre></div>
 </div>
-<div class="section" id="the-transmission-channel">
-<h1>The transmission channel<a class="headerlink" href="#the-transmission-channel" title="Permalink to this headline">¶</a></h1>
 <p>We start by constructing a propagation channel with the dedicated class
 <tt class="docutils literal"><span class="pre">DLink</span></tt>. We specify a Layout as well as the two extremities of the
 link. Antennas are also specified.</p>
@@ -163,8 +179,8 @@ propagation channel.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fd3d1959650&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7fd3d194e790&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b98353c8210&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2b9835c61e50&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/Channel_14_1.png" src="../../_images/Channel_14_1.png" />
@@ -257,30 +273,30 @@ level.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.legend.Legend at 0x7fd3d1c6f9d0&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.legend.Legend at 0x2b983540d510&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Channel_27_1.png" src="../../_images/Channel_27_1.png" />
+<img alt="../../_images/Channel_28_1.png" src="../../_images/Channel_28_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Emean</span><span class="p">),</span><span class="s">&#39;.b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;mean&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">tauk</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ak</span><span class="p">),</span><span class="s">&#39;+&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.legend.Legend at 0x7fd3d1c0f210&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.legend.Legend at 0x2b98353de550&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Channel_28_1.png" src="../../_images/Channel_28_1.png" />
+<img alt="../../_images/Channel_29_1.png" src="../../_images/Channel_29_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">CIR</span><span class="o">=</span><span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">tauk</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tauk</span><span class="p">)))</span>
 <span class="n">CIR</span><span class="o">.</span><span class="n">aggcir</span><span class="p">(</span><span class="n">ak</span><span class="p">,</span><span class="n">tauk</span><span class="p">)</span>
 <span class="n">CIR</span><span class="o">.</span><span class="n">stem</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Infinite bandwidth CIR&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7fd3d1f92d10&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b98356b3d90&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Channel_29_1.png" src="../../_images/Channel_29_1.png" />
+<img alt="../../_images/Channel_30_1.png" src="../../_images/Channel_30_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">MeanDelay</span> <span class="o">=</span> <span class="n">CIR</span><span class="o">.</span><span class="n">tau_moy</span><span class="p">()</span>
 <span class="n">DelaySpread</span> <span class="o">=</span> <span class="n">CIR</span><span class="o">.</span><span class="n">tau_rms</span><span class="p">()</span>
 <span class="k">print</span> <span class="n">MeanDelay</span><span class="p">,</span><span class="n">DelaySpread</span>
@@ -293,7 +309,7 @@ level.</p>
 <span class="n">f</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Channel_31_0.png" src="../../_images/Channel_31_0.png" />
+<img alt="../../_images/Channel_32_0.png" src="../../_images/Channel_32_0.png" />
 <p>The cut method applies an energy thresholding on the transmission
 channel.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">cut</span><span class="p">()</span>
@@ -303,7 +319,7 @@ channel.</p>
 <span class="n">f</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Channel_34_0.png" src="../../_images/Channel_34_0.png" />
+<img alt="../../_images/Channel_35_0.png" src="../../_images/Channel_35_0.png" />
 </div>
 <div class="section" id="the-tap-method">
 <h2>The tap method<a class="headerlink" href="#the-tap-method" title="Permalink to this headline">¶</a></h2>
@@ -371,15 +387,15 @@ for the first channel tap. :exit</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Frequency GHz&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7fd3d1480c50&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b9836fab250&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Channel_45_1.png" src="../../_images/Channel_45_1.png" />
+<img alt="../../_images/Channel_50_1.png" src="../../_images/Channel_50_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
 <span class="n">h</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mf">1e5</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="n">normed</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Channel_46_0.png" src="../../_images/Channel_46_0.png" />
+<img alt="../../_images/Channel_51_0.png" src="../../_images/Channel_51_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">mmax</span> <span class="o">=</span> <span class="mf">0.3</span><span class="o">*</span><span class="n">WMHz</span><span class="o">*</span><span class="mf">1e6</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">fcGHz</span><span class="o">*</span><span class="p">(</span><span class="n">Va</span><span class="o">+</span><span class="n">Vb</span><span class="p">))</span>
 <span class="n">tmaxms</span> <span class="o">=</span> <span class="mi">1000</span><span class="o">*</span><span class="n">mmax</span><span class="o">/</span><span class="p">(</span><span class="n">WMHz</span><span class="o">*</span><span class="mf">1e6</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">c</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">]),</span><span class="n">interpolation</span><span class="o">=</span><span class="s">&#39;nearest&#39;</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">tmaxms</span><span class="p">,</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
@@ -389,17 +405,17 @@ for the first channel tap. :exit</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;frequency (GHz)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7fd3ceed4ad0&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b98356d5590&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Channel_47_1.png" src="../../_images/Channel_47_1.png" />
+<img alt="../../_images/Channel_52_1.png" src="../../_images/Channel_52_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">0</span><span class="p">]))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x7fd3d1756950&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2b9836cef650&gt;]
 </pre></div>
 </div>
-<img alt="../../_images/Channel_48_1.png" src="../../_images/Channel_48_1.png" />
+<img alt="../../_images/Channel_53_1.png" src="../../_images/Channel_53_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">h</span> <span class="o">=</span> <span class="n">c</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -416,7 +432,7 @@ for the first channel tap. :exit</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">49.5</span><span class="p">,</span> <span class="mf">160.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Channel_52_1.png" src="../../_images/Channel_52_1.png" />
+<img alt="../../_images/Channel_57_1.png" src="../../_images/Channel_57_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c">#from pylayers.util.mayautil import *</span>
 <span class="c">#m=VolumeSlicer(data=abs(htap[:,0,:,:]))</span>
 <span class="c">#m.configure_traits()</span>
@@ -507,11 +523,18 @@ for the first channel tap. :exit</p>
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="../5-SIM/LinkSimulation.html" title="22. How to do a link siulation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Signatures.html" title="Ray Signatures"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../TOC.html" >Overview</a> &raquo;</li> 
       </ul>
     </div>
 

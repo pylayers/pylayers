@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>&lt;no title&gt; &mdash; PyLayers</title>
+    <title>Example of Utilisation of Coverage &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -79,10 +79,9 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="code python highlight-python"><div class="highlight"><pre>%pylab inline
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>Populating the interactive namespace from numpy and matplotlib
+  <div class="section" id="example-of-utilisation-of-coverage">
+<h1>Example of Utilisation of Coverage<a class="headerlink" href="#example-of-utilisation-of-coverage" title="Permalink to this headline">¶</a></h1>
+<div class="code python highlight-python"><div class="highlight"><pre>%matplotlib inline
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
@@ -91,7 +90,7 @@
 <div class="highlight-python"><div class="highlight"><pre>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7f0b6cc8c290&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x2acdb3c696d0&gt;
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">(</span><span class="s">&#39;cnes.ini&#39;</span><span class="p">)</span>
@@ -133,7 +132,18 @@ ny : 50
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/CNES_4_0.png" src="../../_images/CNES_4_0.png" />
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-5-308e8a4b41f8&gt; in &lt;module&gt;()
+----&gt; 1 fig=figure(figsize=(10,10))
+      2 f,a=C.L.showGs(fig=fig)
+
+
+NameError: name &#39;figure&#39; is not defined
+</pre></div>
+</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="o">.</span><span class="n">mat</span>
 </pre></div>
 </div>
@@ -209,7 +219,7 @@ ABSORBENT : ABSORBENT | [0.1]
 </pre></div>
 </div>
 <pre class="literal-block">
-array([ 'x08xccx80xc1x0bx7fx00x00x08xccx80xc1x0bx7fx00x000&quot;xc8x04',
+array(['x08lxcbdxcd*x00x00x08lxcbdxcd*x00x00xb0xc2x14x05',
        'WALL', 'WALL', 'WALL', 'WALL', 'PARTITION', 'WALL', 'WALL', 'WALL',
        'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'PARTITION', 'WALL', 'WALL',
        'PARTITION', 'WALL', 'WALL', 'WALL', 'WALL', 'PARTITION', 'WALL',
@@ -223,46 +233,47 @@ array([ 'x08xccx80xc1x0bx7fx00x00x08xccx80xc1x0bx7fx00x000&quot;xc8x04',
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
 <span class="n">a1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
 <span class="n">a2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;pr&#39;</span><span class="p">,</span><span class="n">best</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">90</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a1</span><span class="p">)</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;pr&#39;</span><span class="p">,</span><span class="n">best</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">90</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a2</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/CNES_9_0.png" src="../../_images/CNES_9_0.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<img alt="../../_images/CNES_10_0.png" src="../../_images/CNES_10_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
 <span class="n">a1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
 <span class="n">a2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;loss&#39;</span><span class="p">,</span><span class="n">best</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">90</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a1</span><span class="p">)</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;loss&#39;</span><span class="p">,</span><span class="n">best</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">90</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a2</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/CNES_10_0.png" src="../../_images/CNES_10_0.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<img alt="../../_images/CNES_11_0.png" src="../../_images/CNES_11_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
 <span class="n">a1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
 <span class="n">a2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;snr&#39;</span><span class="p">,</span><span class="n">best</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">90</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a1</span><span class="p">)</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;snr&#39;</span><span class="p">,</span><span class="n">best</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">90</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a2</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/CNES_11_0.png" src="../../_images/CNES_11_0.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<img alt="../../_images/CNES_12_0.png" src="../../_images/CNES_12_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
 <span class="n">a1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
 <span class="n">a2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;sinr&#39;</span><span class="p">,</span><span class="n">best</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">90</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a1</span><span class="p">)</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;sinr&#39;</span><span class="p">,</span><span class="n">best</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">90</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a2</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/CNES_12_0.png" src="../../_images/CNES_12_0.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<img alt="../../_images/CNES_13_0.png" src="../../_images/CNES_13_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
 <span class="n">a1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
 <span class="n">a2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;capacity&#39;</span><span class="p">,</span><span class="n">best</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a1</span><span class="p">)</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;capacity&#39;</span><span class="p">,</span><span class="n">best</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a2</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/CNES_13_0.png" src="../../_images/CNES_13_0.png" />
+<img alt="../../_images/CNES_14_0.png" src="../../_images/CNES_14_0.png" />
+</div>
 
 
           </div>
