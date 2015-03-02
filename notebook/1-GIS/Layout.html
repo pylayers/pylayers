@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Description of the propagation environment &mdash; PyLayers</title>
+    <title>1. Description of the propagation environment &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="Overview" href="../TOC.html" />
+    <link rel="next" title="2. The Layout class" href="LayoutEditor.html" />
+    <link rel="prev" title="Overview" href="../TOC.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,11 +46,18 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="LayoutEditor.html" title="2. The Layout class"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../TOC.html" title="Overview"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../TOC.html" accesskey="U">Overview</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -55,19 +65,25 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Description of the propagation environment</a><ul>
-<li><a class="reference internal" href="#getting-the-list-of-all-available-layouts-the-ls-method">Getting the list of all available Layouts : the <tt class="docutils literal"><span class="pre">ls()</span></tt> method</a></li>
-<li><a class="reference internal" href="#the-useful-numpy-arrays-of-the-layout">The useful numpy arrays of the Layout</a><ul>
-<li><a class="reference internal" href="#pt-the-array-of-points"><tt class="docutils literal"><span class="pre">pt</span></tt> the array of points</a></li>
-<li><a class="reference internal" href="#tahe-tail-head">tahe (tail-head)</a></li>
+<li><a class="reference internal" href="#">1. Description of the propagation environment</a><ul>
+<li><a class="reference internal" href="#getting-the-list-of-all-available-layouts-the-ls-method">1.1. Getting the list of all available Layouts : the <tt class="docutils literal"><span class="pre">ls()</span></tt> method</a></li>
+<li><a class="reference internal" href="#the-useful-numpy-arrays-of-the-layout">1.2. The useful numpy arrays of the Layout</a><ul>
+<li><a class="reference internal" href="#pt-the-array-of-points">1.2.1. <tt class="docutils literal"><span class="pre">pt</span></tt> the array of points</a></li>
+<li><a class="reference internal" href="#tahe-tail-head">1.2.2. tahe (tail-head)</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#tgs-trancodage-from-graph-indexing-to-numpy-array-indexing"><tt class="docutils literal"><span class="pre">tgs</span></tt> : trancodage from graph indexing to numpy array indexing</a></li>
-<li><a class="reference internal" href="#layout-seg2pts-a-function-for-getting-points-coordinates-from-segment-number-array"><tt class="docutils literal"><span class="pre">Layout.seg2pts</span></tt> a function for getting points coordinates from segment number array</a></li>
+<li><a class="reference internal" href="#tgs-trancodage-from-graph-indexing-to-numpy-array-indexing">1.3. <tt class="docutils literal"><span class="pre">tgs</span></tt> : trancodage from graph indexing to numpy array indexing</a></li>
+<li><a class="reference internal" href="#layout-seg2pts-a-function-for-getting-points-coordinates-from-segment-number-array">1.4. <tt class="docutils literal"><span class="pre">Layout.seg2pts</span></tt> a function for getting points coordinates from segment number array</a></li>
 </ul>
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../TOC.html"
+                        title="previous chapter">Overview</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="LayoutEditor.html"
+                        title="next chapter">2. The Layout class</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/notebook/1-GIS/Layout.txt"
@@ -95,7 +111,7 @@
           <div class="body">
             
   <div class="section" id="description-of-the-propagation-environment">
-<h1>Description of the propagation environment<a class="headerlink" href="#description-of-the-propagation-environment" title="Permalink to this headline">¶</a></h1>
+<h1>1. Description of the propagation environment<a class="headerlink" href="#description-of-the-propagation-environment" title="Permalink to this headline">¶</a></h1>
 <p>The <tt class="docutils literal"><span class="pre">Layout</span></tt> class contains the data structure for describing an
 Indoor environment. It contains data structures necessary for the graph
 based ray tracing implemented in PyLayers. The class is implemented in
@@ -112,7 +128,7 @@ import os
 </pre></div>
 </div>
 <div class="section" id="getting-the-list-of-all-available-layouts-the-ls-method">
-<h2>Getting the list of all available Layouts : the <tt class="docutils literal"><span class="pre">ls()</span></tt> method<a class="headerlink" href="#getting-the-list-of-all-available-layouts-the-ls-method" title="Permalink to this headline">¶</a></h2>
+<h2>1.1. Getting the list of all available Layouts : the <tt class="docutils literal"><span class="pre">ls()</span></tt> method<a class="headerlink" href="#getting-the-list-of-all-available-layouts-the-ls-method" title="Permalink to this headline">¶</a></h2>
 <p>To create a default Layout</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">()</span>
 </pre></div>
@@ -279,7 +295,7 @@ degree : degree of nodes
 <img alt="../../_images/Layout_17_1.png" src="../../_images/Layout_17_1.png" />
 </div>
 <div class="section" id="the-useful-numpy-arrays-of-the-layout">
-<h2>The useful numpy arrays of the Layout<a class="headerlink" href="#the-useful-numpy-arrays-of-the-layout" title="Permalink to this headline">¶</a></h2>
+<h2>1.2. The useful numpy arrays of the Layout<a class="headerlink" href="#the-useful-numpy-arrays-of-the-layout" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>tsg : get segment index in Gs from tahe</li>
 <li>isss : sub-segment index above Nsmax</li>
@@ -289,7 +305,7 @@ degree : degree of nodes
 <li>degree : degree of nodes</li>
 </ul>
 <div class="section" id="pt-the-array-of-points">
-<h3><tt class="docutils literal"><span class="pre">pt</span></tt> the array of points<a class="headerlink" href="#pt-the-array-of-points" title="Permalink to this headline">¶</a></h3>
+<h3>1.2.1. <tt class="docutils literal"><span class="pre">pt</span></tt> the array of points<a class="headerlink" href="#pt-the-array-of-points" title="Permalink to this headline">¶</a></h3>
 <p>point coordinates are stored in two places :</p>
 <div class="highlight-python"><div class="highlight"><pre>L.Gs.pos : in a dictionnary form (key is the point negative index)
 L.pt : in a numpy array
@@ -309,7 +325,7 @@ calculated at the end of the edition in the <tt class="docutils literal"><span c
 (graph to numpy) which is in charge of the conversion.</p>
 </div>
 <div class="section" id="tahe-tail-head">
-<h3>tahe (tail-head)<a class="headerlink" href="#tahe-tail-head" title="Permalink to this headline">¶</a></h3>
+<h3>1.2.2. tahe (tail-head)<a class="headerlink" href="#tahe-tail-head" title="Permalink to this headline">¶</a></h3>
 <p><tt class="docutils literal"><span class="pre">tahe</span></tt> is a <img class="math" src="../../_images/math/77d0fe9b1043354dbc8847094426fa1e856dd778.png" alt="(2\times N_{s})"/> where <img class="math" src="../../_images/math/f9b03df42cc4eecc1f289434c88139073ffd3847.png" alt="N_s"/> denotes the
 number of segment. The first line is the tail index of the segment
 <img class="math" src="../../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> and the second line is the head of the segment <img class="math" src="../../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>.
@@ -333,7 +349,7 @@ Where <img class="math" src="../../_images/math/e9203da50e1059455123460d4e716c9c
 </div>
 </div>
 <div class="section" id="tgs-trancodage-from-graph-indexing-to-numpy-array-indexing">
-<h2><tt class="docutils literal"><span class="pre">tgs</span></tt> : trancodage from graph indexing to numpy array indexing<a class="headerlink" href="#tgs-trancodage-from-graph-indexing-to-numpy-array-indexing" title="Permalink to this headline">¶</a></h2>
+<h2>1.3. <tt class="docutils literal"><span class="pre">tgs</span></tt> : trancodage from graph indexing to numpy array indexing<a class="headerlink" href="#tgs-trancodage-from-graph-indexing-to-numpy-array-indexing" title="Permalink to this headline">¶</a></h2>
 <p><tt class="docutils literal"><span class="pre">tgs</span></tt> is an arry with length <img class="math" src="../../_images/math/f9b03df42cc4eecc1f289434c88139073ffd3847.png" alt="N_s"/>+1. The index 0 is not used
 because none segment has 0 as an index.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">ns</span> <span class="o">=</span> <span class="mi">5</span>
@@ -401,7 +417,7 @@ because none segment has 0 as an index.</p>
 </div>
 </div>
 <div class="section" id="layout-seg2pts-a-function-for-getting-points-coordinates-from-segment-number-array">
-<h2><tt class="docutils literal"><span class="pre">Layout.seg2pts</span></tt> a function for getting points coordinates from segment number array<a class="headerlink" href="#layout-seg2pts-a-function-for-getting-points-coordinates-from-segment-number-array" title="Permalink to this headline">¶</a></h2>
+<h2>1.4. <tt class="docutils literal"><span class="pre">Layout.seg2pts</span></tt> a function for getting points coordinates from segment number array<a class="headerlink" href="#layout-seg2pts-a-function-for-getting-points-coordinates-from-segment-number-array" title="Permalink to this headline">¶</a></h2>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">seg2pts</span><span class="p">(</span><span class="n">aseg</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -444,17 +460,24 @@ because none segment has 0 as an index.</p>
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="LayoutEditor.html" title="2. The Layout class"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../TOC.html" title="Overview"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../TOC.html" >Overview</a> &raquo;</li> 
       </ul>
     </div>
 
     <div class="footer">
         &copy; Copyright 2015, PyLayers developer team.
-      Last updated on mars 01, 2015.
+      Last updated on mars 02, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

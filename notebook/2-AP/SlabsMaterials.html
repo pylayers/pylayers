@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Slabs and Materials &mdash; PyLayers</title>
+    <title>3. Slabs and Materials &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -25,8 +25,8 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../../index.html" />
     <link rel="up" title="Overview" href="../TOC.html" />
-    <link rel="next" title="Effect of Modyfiying the Nature of Sub-Segments" href="../1-GIS/Multisubsegments.html" />
-    <link rel="prev" title="The Layout class" href="../1-GIS/LayoutEditor.html" /> 
+    <link rel="next" title="4. Effect of Modyfiying the Nature of Sub-Segments" href="../1-GIS/Multisubsegments.html" />
+    <link rel="prev" title="2. The Layout class" href="../1-GIS/LayoutEditor.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -47,10 +47,10 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../1-GIS/Multisubsegments.html" title="Effect of Modyfiying the Nature of Sub-Segments"
+          <a href="../1-GIS/Multisubsegments.html" title="4. Effect of Modyfiying the Nature of Sub-Segments"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../1-GIS/LayoutEditor.html" title="The Layout class"
+          <a href="../1-GIS/LayoutEditor.html" title="2. The Layout class"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
@@ -65,26 +65,26 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Slabs and Materials</a><ul>
-<li><a class="reference internal" href="#defining-a-new-slab-and-a-new-material">Defining a new Slab and a new Material</a></li>
-<li><a class="reference internal" href="#information-necessary-to-define-a-slab">Information necessary to define a Slab</a></li>
-<li><a class="reference internal" href="#evaluation-of-a-slab">Evaluation of a Slab</a></li>
-<li><a class="reference internal" href="#transmission-and-reflexion-coefficients">Transmission and Reflexion coefficients</a><ul>
-<li><a class="reference internal" href="#ploting-reflection-and-transmission-coefficients">Ploting Reflection and Transmission Coefficients</a></li>
+<li><a class="reference internal" href="#">3. Slabs and Materials</a><ul>
+<li><a class="reference internal" href="#defining-a-new-slab-and-a-new-material">3.1. Defining a new Slab and a new Material</a></li>
+<li><a class="reference internal" href="#information-necessary-to-define-a-slab">3.2. Information necessary to define a Slab</a></li>
+<li><a class="reference internal" href="#evaluation-of-a-slab">3.3. Evaluation of a Slab</a></li>
+<li><a class="reference internal" href="#transmission-and-reflexion-coefficients">3.4. Transmission and Reflexion coefficients</a><ul>
+<li><a class="reference internal" href="#ploting-reflection-and-transmission-coefficients">3.4.1. Ploting Reflection and Transmission Coefficients</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#evaluation-without-phase-compensation">Evaluation without phase compensation</a></li>
-<li><a class="reference internal" href="#references">References</a></li>
+<li><a class="reference internal" href="#evaluation-without-phase-compensation">3.5. Evaluation without phase compensation</a></li>
+<li><a class="reference internal" href="#references">3.6. References</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="../1-GIS/LayoutEditor.html"
-                        title="previous chapter">The Layout class</a></p>
+                        title="previous chapter">2. The Layout class</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../1-GIS/Multisubsegments.html"
-                        title="next chapter">Effect of Modyfiying the Nature of Sub-Segments</a></p>
+                        title="next chapter">4. Effect of Modyfiying the Nature of Sub-Segments</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/notebook/2-AP/SlabsMaterials.txt"
@@ -112,7 +112,7 @@
           <div class="body">
             
   <div class="section" id="slabs-and-materials">
-<h1>Slabs and Materials<a class="headerlink" href="#slabs-and-materials" title="Permalink to this headline">¶</a></h1>
+<h1>3. Slabs and Materials<a class="headerlink" href="#slabs-and-materials" title="Permalink to this headline">¶</a></h1>
 <div class="code python highlight-python"><div class="highlight"><pre>%matplotlib inline
 </pre></div>
 </div>
@@ -165,7 +165,7 @@ below</p>
 </pre></div>
 </div>
 <div class="section" id="defining-a-new-slab-and-a-new-material">
-<h2>Defining a new Slab and a new Material<a class="headerlink" href="#defining-a-new-slab-and-a-new-material" title="Permalink to this headline">¶</a></h2>
+<h2>3.1. Defining a new Slab and a new Material<a class="headerlink" href="#defining-a-new-slab-and-a-new-material" title="Permalink to this headline">¶</a></h2>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;slab2&#39;</span><span class="p">,[</span><span class="s">&#39;STONE&#39;</span><span class="p">],[</span><span class="mf">0.15</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -245,7 +245,7 @@ viewvalues: D.viewvalues() -&gt; an object providing a view on D&#39;s values
 </div>
 </div>
 <div class="section" id="information-necessary-to-define-a-slab">
-<h2>Information necessary to define a Slab<a class="headerlink" href="#information-necessary-to-define-a-slab" title="Permalink to this headline">¶</a></h2>
+<h2>3.2. Information necessary to define a Slab<a class="headerlink" href="#information-necessary-to-define-a-slab" title="Permalink to this headline">¶</a></h2>
 <p>Each slab contains informations about its constitutive materials
 electromagnetic properties.</p>
 <p>Below an example for a simple slab, constituted with a single material
@@ -319,7 +319,7 @@ properties can be obtained as:</p>
 </div>
 </div>
 <div class="section" id="evaluation-of-a-slab">
-<h2>Evaluation of a Slab<a class="headerlink" href="#evaluation-of-a-slab" title="Permalink to this headline">¶</a></h2>
+<h2>3.3. Evaluation of a Slab<a class="headerlink" href="#evaluation-of-a-slab" title="Permalink to this headline">¶</a></h2>
 <p>Each Slab can be evaluated to obtain the Transmission and Reflexion
 coefficients for</p>
 <ul class="simple">
@@ -339,7 +339,7 @@ coefficients for</p>
 </div>
 </div>
 <div class="section" id="transmission-and-reflexion-coefficients">
-<h2>Transmission and Reflexion coefficients<a class="headerlink" href="#transmission-and-reflexion-coefficients" title="Permalink to this headline">¶</a></h2>
+<h2>3.4. Transmission and Reflexion coefficients<a class="headerlink" href="#transmission-and-reflexion-coefficients" title="Permalink to this headline">¶</a></h2>
 <p>Reflexion and transmission coefficient are computed for the given
 frequency range and theta range</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">ifreq</span><span class="o">=</span><span class="mi">1</span>
@@ -361,7 +361,7 @@ Transmission coefficient @ 3.01 GHz and theta= 0.1 :
 </pre></div>
 </div>
 <div class="section" id="ploting-reflection-and-transmission-coefficients">
-<h3>Ploting Reflection and Transmission Coefficients<a class="headerlink" href="#ploting-reflection-and-transmission-coefficients" title="Permalink to this headline">¶</a></h3>
+<h3>3.4.1. Ploting Reflection and Transmission Coefficients<a class="headerlink" href="#ploting-reflection-and-transmission-coefficients" title="Permalink to this headline">¶</a></h3>
 <p>The method <tt class="docutils literal"><span class="pre">plotwrt</span></tt> can plot the different calculated coefficients
 with respect to angle or frequency.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">][</span><span class="s">&#39;lthick&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="mf">0.02</span><span class="p">]</span>
@@ -458,7 +458,7 @@ with respect to angle or frequency.</p>
 </div>
 </div>
 <div class="section" id="evaluation-without-phase-compensation">
-<h2>Evaluation without phase compensation<a class="headerlink" href="#evaluation-without-phase-compensation" title="Permalink to this headline">¶</a></h2>
+<h2>3.5. Evaluation without phase compensation<a class="headerlink" href="#evaluation-without-phase-compensation" title="Permalink to this headline">¶</a></h2>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="n">theta</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -554,7 +554,7 @@ with respect to angle or frequency.</p>
 <img alt="../../_images/SlabsMaterials_65_0.png" src="../../_images/SlabsMaterials_65_0.png" />
 </div>
 <div class="section" id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<h2>3.6. References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
 <p>[1]. <a class="reference external" href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&amp;arnumber=5505315&amp;queryText%3DReflection+ant+Transmission+Properties+of+Building+Materials+in+D-Band+for+Modeling+Future+mm-Wave+Communication+Systems.QT.+Antennas+and+Propagation">Jacob, M. ; Kurner, T. ; Geise, R. ; Piesiewicz, R. &#8220;Reflection
 ant Transmission Properties of Building Materials in D-Band for Modeling
 Future mm-Wave Communication Systems&#8221; Antennas and Propagation (EuCAP),
@@ -582,10 +582,10 @@ N18</a></p>
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../1-GIS/Multisubsegments.html" title="Effect of Modyfiying the Nature of Sub-Segments"
+          <a href="../1-GIS/Multisubsegments.html" title="4. Effect of Modyfiying the Nature of Sub-Segments"
              >next</a> |</li>
         <li class="right" >
-          <a href="../1-GIS/LayoutEditor.html" title="The Layout class"
+          <a href="../1-GIS/LayoutEditor.html" title="2. The Layout class"
              >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
