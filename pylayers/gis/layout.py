@@ -2853,6 +2853,8 @@ class Layout(PyLayers):
 
         e1 : integer
             edge number
+        data : dict
+            dictionnary of value of seg or subseg
 
         Notes
         -----
@@ -2861,30 +2863,21 @@ class Layout(PyLayers):
             + name  : string
             + z  :  tuple
             + transition : boolean (default FALSE)
-
+            + offset : [-1,1]
         If a segment has subsegments attached the following properties are
         added :
-            + ss_name : string
-            + ss_z : subsegment [(min height (meters),max height (meters))]
+            + ss_name : list of string
+            + ss_z : list of subsegment e.q. [(min height (meters),max height (meters))]
+            + ss_offset : list of offset in [0,1]
         """
-        nebd = self.Gs.neighbors(e1)
-        n1 = nebd[0]
-        n2 = nebd[1]
-        de1 = self.Gs.node[e1]
-        if 'ss_name' not in de1.keys():
-            de1k = ['name', 'z','transition','offset']
-            de1v = [de1['name'],de1['z'],de1['transition'],de1['offset']]
-        else:
-            de1k = ['name', 'z', 'ss_name', 'ss_z','transition','ss_offset']
-            de1v = [de1['name'], de1['z'], de1['ss_name'], de1['ss_z'],
-                    de1['transition'],de1['ss_offset']]
+
+        
         #de1v    = de1.values()
         if data=={}:
             pass
         else:
-            for k in de1k:
-                if k in data:
-                    self.Gs.node[e1][k] = data[k]
+            for k in data:
+                self.Gs.node[e1][k] = data[k]
         return data
 
        

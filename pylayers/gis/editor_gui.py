@@ -15,15 +15,18 @@ from pylayers.gis.editor_select import SelectL2
 
 
 class SubSegWin(QDialog):    # any super class is okay
-    def __init__(self,Nss=1,zmin=0.,zmax=3.0,parent=None):
+    def __init__(self,Nss=1,zmin=0.,zmax=3.0,subsegdata={},parent=None):
         super(SubSegWin, self).__init__(parent)
         #
-        self.parent=parent.parent
+        self.gparent=parent.parent
+        # mulsti segment selection indicator
+        self.mulseg=parent.mulseg
+        # dictionnary to pass subseg data
+        self.subsegdata=subsegdata
         self.Nss=Nss
         self.zmin=zmin
         self.zmax=zmax
         self._autocalc_height_val()
-        self._init_combos()
         self._init_subseg_prop()
         self._init_layout()
 
@@ -68,7 +71,7 @@ class SubSegWin(QDialog):    # any super class is okay
 
     def _autocalc_height_val(self):
         """ split height proportionnaly to the number of subsegs
-            to be done
+            TO BE DONE
         """
         self.lma=[]
         self.lmi=[]
@@ -89,93 +92,151 @@ class SubSegWin(QDialog):    # any super class is okay
     #     print self.lma
     #     print self.lmi
 
-    def _init_combos(self):
-        self.lcomboslab = [] 
-        for ss in range(self.Nss):
-            self.lcomboslab.append(QComboBox())
-            for s in self.parent.L.sl.keys():
-                self.lcomboslab[ss].addItem(s)
-
 
     def _init_subseg_prop(self):
         self.lheightmin=[]
         self.lheightmax=[]
         self.loffset=[]
-        for ss in range(self.Nss-1,-1,-1):
+
+        self.lcomboslab = [] 
+
+        for ss in range(self.Nss):
+
+            self.lcomboslab.append(QComboBox())
+            for s in self.gparent.L.sl.keys():
+                self.lcomboslab[ss].addItem(s)
+            idx=self.lcomboslab[ss].findText(self.subsegdata['ss_name'][ss])
+            self.lcomboslab[ss].setCurrentIndex(idx)
+
+
             self.lheightmin.append(QDoubleSpinBox())
             self.lheightmin[-1].setObjectName("zmin")
             self.lheightmin[-1].setSingleStep(0.01)
-            self.lheightmin[-1].setRange(self.lmi[ss],self.lma[ss])
-            self.lheightmin[-1].setValue(self.lmi[ss])
+            self.lheightmin[-1].setRange(0.,self.gparent.L.maxheight)
+            self.lheightmin[-1].setValue(self.subsegdata['ss_z'][ss][0])
 
             self.lheightmax.append(QDoubleSpinBox())
             self.lheightmax[-1].setSingleStep(0.01)
             self.lheightmax[-1].setObjectName("zmax")
-            self.lheightmax[-1].setRange(self.lmi[ss],self.lma[ss])
-            self.lheightmax[-1].setValue(self.lma[ss])
+            self.lheightmax[-1].setRange(0.,self.gparent.L.maxheight)
+            self.lheightmax[-1].setValue(self.subsegdata['ss_z'][ss][1])
 
             self.loffset.append(QDoubleSpinBox())
             self.loffset[-1].setObjectName("offset")
             self.loffset[-1].setSingleStep(0.01)
             self.loffset[-1].setRange(-1.,1.)
-            self.loffset[-1].setValue(0.)
+            self.loffset[-1].setValue(self.subsegdata['ss_offset'][ss])
 
 
     def valide(self):
+        # self.subsegdata={}
+        # self.subsegdata['ss_name']=[]
+        # self.subsegdata['ss_z']=[]
+        # self.subsegdata['ss_offset']=[]
+        
+        # for ss in range(self.Nss):
+        #     z = (self.lheightmin[ss].value(),self.lheightmax[ss].value())
+        #     self.subsegdata['ss_name'].append(str(self.lcomboslab[ss].currentText()))
+        #     self.subsegdata['ss_z'].append(z)
+        #     self.subsegdata['ss_offset'].append(self.loffset[ss].value())
+   
+        # if not self.mulseg:
+        #     self.gparent.L.edit_seg(self.gparent.selectl.nsel,self.subsegdata)
+        # else:
+        #     [self.gparent.L.edit_seg(s,self.subsegdata) for s in self.gparent.selectl.selectseg]
         self.close()
+
     def cancel(self):
         self.close()
 
 class PropertiesWin(QDialog):    # any super class is okay
-    def __init__(self,parent=None):
+    def __init__(self,mulseg=False,parent=None):
         super(PropertiesWin, self).__init__(parent)
         # to imporve here. Probably something to inherit from parent App
         self.parent=parent
 
-        
-
         # determine if multiple segments are selected
-        self.mulseg=False
+        self.mulseg=mulseg
+
         # combo box 
-        self._init_combo()
         self._init_slab_prop()
+        self._init_subsegs()
         self._init_layout()
 
         # self.button.clicked.connect(self.create_child)
     
-    def _init_combo(self):
+
+
+    def _init_subsegs(self):
+        self.subsegdata={}
+        self.subsegdata['ss_name']=[]
+        self.subsegdata['ss_offset']=[]
+        self.subsegdata['ss_z']=[]
+
+        if self.parent.selectl.nsel in self.parent.L.lsss :
+            sub = self.parent.L.Gs.node[self.parent.selectl.nsel]
+            Nss = len(sub['ss_name']) 
+        else : Nss=0
+
+        for ss in range(Nss):
+            self.subsegdata['ss_name'].append(sub['ss_name'][ss])
+            self.subsegdata['ss_offset'].append(sub['ss_offset'][ss])
+            self.subsegdata['ss_z'].append(sub['ss_z'][ss])
+
+    def _init_slab_prop(self):
+
+        # if mulseg, default value are default
+        if self.mulseg:
+            self.segdata={}
+            self.segdata['name']=self.parent.L.sl.keys()[0]
+            self.segdata['offset']=0.0
+            self.segdata['z']=(0.0,self.parent.L.maxheight)
+            self.segdata['transition']=False
+            
+        # else : default are read from self.Gs.node[node]
+        else : 
+            self.segdata = self.parent.L.Gs.node[self.parent.selectl.nsel]
+
+
         self.comboslab = QComboBox()
         for s in self.parent.L.sl.keys():
             self.comboslab.addItem(s)
+        idx=self.comboslab.findText(self.segdata['name'])
+        self.comboslab.setCurrentIndex(idx)
 
-    def _init_slab_prop(self):
+
+
         self.heightmin = QDoubleSpinBox()       
         self.heightmin.setObjectName("zmin")
         self.heightmin.setSingleStep(0.01)
         self.heightmin.setRange(0.,800.)
+        self.heightmin.setValue(self.segdata['z'][0])
 
-        self.heightmin.setValue(0.)
 
         self.heightmax = QDoubleSpinBox()
         self.heightmax.setSingleStep(0.01)
         self.heightmax.setObjectName("zmax")
         self.heightmax.setRange(0.,800.)
-        self.heightmax.setValue(3.)
+        self.heightmax.setValue(self.segdata['z'][1])
 
         self.offset =  QDoubleSpinBox()
         self.offset.setObjectName("offset")
         self.offset.setSingleStep(0.01)
         self.offset.setRange(-1.,1.)
-        self.offset.setValue(0.)
+        self.offset.setValue(self.segdata['offset'])
 
         self.transition = QPushButton("Transition")
         self.transition.setCheckable(True)
+        self.transition.setDefault(self.segdata['transition'])
         # self.transition.setText("0")
 
         self.nbsubseg = QSpinBox()
         self.nbsubseg.setObjectName("nbsubseg")
         self.nbsubseg.setRange(0,20.)
-        self.nbsubseg.setValue(1.)
+        try:
+            self.nbsubseg.setValue(len(self.segdata['ss_name']))
+        except:
+            self.nbsubseg.setValue(0.)
 
         self.editssbutton = QPushButton("Edit Sub-Segments")
         self.editssbutton.clicked.connect(self.editsubseg)
@@ -187,8 +248,8 @@ class PropertiesWin(QDialog):    # any super class is okay
         self.transition.setMinimumWidth(5)
         
 
-        self.heightmin.setMaximumWidth(50)
-        self.heightmax.setMaximumWidth(50)
+        self.heightmin.setMaximumWidth(70)
+        self.heightmax.setMaximumWidth(70)
         self.transition.setMaximumWidth(70)
         self.nbsubseg.setMaximumWidth(50)
         self.editssbutton.setMaximumWidth(120)
@@ -249,7 +310,13 @@ class PropertiesWin(QDialog):    # any super class is okay
         if Nss>0:
             zmin=self.heightmin.value()
             zmax=self.heightmax.value()
-            self.subseg=SubSegWin(parent=self,Nss=Nss,zmin=zmin,zmax=zmax)
+            if Nss>len(self.subsegdata['ss_name']):
+                for i in range(Nss-len(self.subsegdata['ss_name'])):
+                    self.subsegdata['ss_name'].append(self.parent.L.sl.keys()[0])
+                    self.subsegdata['ss_offset'].append(0.)
+                    self.subsegdata['ss_z'].append((zmin,zmax))
+
+            self.subseg=SubSegWin(parent=self,subsegdata=self.subsegdata,Nss=Nss,zmin=zmin,zmax=zmax)
             self.subseg.show()
 
     def valide(self):
@@ -260,15 +327,30 @@ class PropertiesWin(QDialog):    # any super class is okay
             trans = True
         else :
             trans = False
-        data = {'name':str(self.comboslab.currentText()),
+        self.segdata = {'name':str(self.comboslab.currentText()),
                 'z':z,
                 'transition':trans,
                 'offset':self.offset.value()
                 }
+
+        Nss = self.nbsubseg.value()
+
+        if Nss>len(self.subsegdata['ss_name']):
+            for i in range(Nss-len(self.subsegdata['ss_name'])):
+                self.subsegdata['ss_name'].append(self.parent.L.sl.keys()[0])
+                self.subsegdata['ss_offset'].append(0.)
+                self.subsegdata['ss_z'].append((zmin,zmax))
+
+        self.segdata.update({'ss_name':self.subsegdata['ss_name'][:Nss],
+                             'ss_offset':self.subsegdata['ss_offset'][:Nss],
+                             'ss_z':self.subsegdata['ss_z'][:Nss]})
+        
+
         if not self.mulseg:
-            self.parent.L.edit_seg(self.parent.selectl.nsel,data)
+            self.parent.L.edit_seg(self.parent.selectl.nsel,self.segdata)
         else:
-            [self.parent.L.edit_seg(s,data) for s in self.parent.selectl.selectseg]
+
+            [self.parent.L.edit_seg(s,self.segdata) for s in self.parent.selectl.selectseg]
         self.close()
 
     def cancel(self):
@@ -288,7 +370,6 @@ class AppForm(QMainWindow):
         # self.create_status_bar()
         # self.textbox.setText('1 2 3 4')
         self.on_draw()
-        self.prop = PropertiesWin(parent=self)
         # self.shortcuts()
 
     def save_plot(self):
@@ -305,14 +386,18 @@ class AppForm(QMainWindow):
     def edit_properties(self):
         """ edit wall properties
         """
+        
         print self.selectl.nsel,self.selectl.state 
         if (self.selectl.state == 'SS') and (self.selectl.nsel > 0):
-            self.prop.mulseg=False
+            self.prop = PropertiesWin(parent=self,mulseg=False)
             self.prop.show()
         elif (self.selectl.state == 'SMS') and (self.selectl.selectseg!=[]):
-            self.prop.mulseg=True
+            self.prop = PropertiesWin(parent=self,mulseg=True)
             self.prop.show()
         self.selectl.modeIni()
+        self.on_draw()
+
+
     def on_about(self):
         msg = """ A demo of using PyQt with matplotlib:
         
@@ -323,20 +408,20 @@ class AppForm(QMainWindow):
          * Save the plot to a file using the File menu
          * Click on a bar to receive an informative message
         """
-        # QMessageBox.about(self, "About the demo", msg.strip())
-        self.edit_properties()
+        QMessageBox.about(self, "About the demo", msg.strip())
+        # self.edit_properties()
 
-    def on_pick(self, event):
-        # The event received here is of the type
-        # matplotlib.backend_bases.PickEvent
-        #
-        # It carries lots of information, of which we're using
-        # only a small amount here.
-        # 
-        box_points = event.artist.get_bbox().get_points()
-        msg = "You've clicked on a bar with coords:\n %s" % box_points
+    # def on_pick(self, event):
+    #     # The event received here is of the type
+    #     # matplotlib.backend_bases.PickEvent
+    #     #
+    #     # It carries lots of information, of which we're using
+    #     # only a small amount here.
+    #     # 
+    #     box_points = event.artist.get_bbox().get_points()
+    #     msg = "You've clicked on a bar with coords:\n %s" % box_points
         
-        QMessageBox.information(self, "Click!", msg)
+    #     QMessageBox.information(self, "Click!", msg)
     
 
 
@@ -479,27 +564,32 @@ class AppForm(QMainWindow):
 
     def create_menu(self):        
         self.file_menu = self.menuBar().addMenu("&File")
-        
+        self.edit_menu = self.menuBar().addMenu("&Edit")
+        self.help_menu = self.menuBar().addMenu("&Help")
         # load_file_action = self.create_action("&Save plot",
         #     shortcut="Ctrl+S", slot=self.save_plot, 
         #     tip="Save the plot")
         quit_action = self.create_action("&Quit", slot=self.close, 
             shortcut="Ctrl+Q", tip="Close the application")
+
         refresh = self.create_action("&Refresh", slot=self.on_draw, 
             shortcut="F10", tip="Refresh the application")
-        # save_layout = self.create_action("&MS", slot=self.selectl, 
-        #      shortcut="F1", tip="Multiple Selection")
         properties= self.create_action("&Properties", slot=self.edit_properties, 
             shortcut="F9", tip="Edit Wall properties")
-        self.add_actions(self.file_menu, 
-            ( quit_action,refresh,properties))
-        
-        self.help_menu = self.menuBar().addMenu("&Help")
+        # show3= self.create_action("&Properties", slot=self.edit_properties, 
+        #     shortcut="F9", tip="3D show")
 
         about_action = self.create_action("&About", 
             shortcut='F12', slot=self.on_about, 
-            tip='About the demo')
+            tip='about')
         
+
+        self.add_actions(self.file_menu, 
+            ( quit_action,))
+        
+        self.add_actions(self.edit_menu, 
+            ( refresh,properties))
+
         self.add_actions(self.help_menu, (about_action,))
 
     def add_actions(self, target, actions):
