@@ -275,6 +275,8 @@ class SelectL(object):
         self.new_state()
 
 
+
+
     def format_coord(self,x, y):
         col = int(x+0.5)
         row = int(y+0.5)

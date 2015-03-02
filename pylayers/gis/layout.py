@@ -7898,9 +7898,13 @@ class Layout(PyLayers):
 
         self.cid1 = fig.canvas.mpl_connect('button_press_event',
                                            self.af.OnClick)
-        self.cid2 = fig.canvas.mpl_connect('key_press_event',
+        self.cid2 = fig.canvas.mpl_connect('button_release_event',
+                                           self.af.OnClickRelease)
+        self.cid3 = fig.canvas.mpl_connect('motion_notify_event',
+                                           self.af.OnMotion)
+        self.cid4 = fig.canvas.mpl_connect('key_press_event',
                                            self.af.OnPress)
-        self.cid3 = fig.canvas.mpl_connect('key_release_event',
+        self.cid5 = fig.canvas.mpl_connect('key_release_event',
                                            self.af.OnRelease)
         plt.draw()
         plt.axis('tight')

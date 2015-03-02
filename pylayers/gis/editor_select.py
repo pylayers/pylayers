@@ -92,8 +92,12 @@ class SelectL2(object):
                 'SMS': 't: toggle point/segment, e: Edit Selected Segments Propeties'
                 }
         self.nsel = 0
-        self.ax.axis(self.L.display['box'])
+        box = self.L.display['box']
+        box = (box[0]-5,box[1]+5,box[2]-5,box[3]+5)
+        self.ax.axis(box)
+        
         plt.title(self.statename[self.state])
+
         self.undoGs=[]
         self.bundo=False
         self.update_state()
@@ -103,6 +107,18 @@ class SelectL2(object):
         self.selectpt=[]
         self.selectseg=[]
         self.selected='pt'
+        self.motion=False
+        def toggle_selector(self,event):
+            if toggle_selector.RS.active:
+                toggle_selector.set_active(False)
+            if not toggle_selector.RS.active:
+                toggle_selector.set_active(True)
+        toggle_selector.RS = RectangleSelector(self.ax, self.point_select_callback,
+                                               drawtype='box', useblit=True,
+                                               button=[1], # don't use middle button
+                                               minspanx=5, minspany=5,
+                                               spancoords='pixels')
+        self.selector = toggle_selector.RS
         # save matplotlib config
         self.rcconf = {}
         self.rcconf['keymap.save']= plt.rcParams['keymap.save']
@@ -166,8 +182,8 @@ class SelectL2(object):
             pt : list
             list of points or segmetns to plot
         """
+        print pt
         if len(pt)>0:
-            
             pts = np.array([self.L.Gs.pos[x] for x in pt])
             p1 = self.ax.plot(pts[:,0], pts[:,1], 'o', 
                                 visible=True, 
@@ -211,6 +227,7 @@ class SelectL2(object):
                 print "Evenement :", self.evt,self.ddoc[self.evt]
             except:
                 print self.evt+ 'N/A'
+        
         self.new_state()
 
 
@@ -221,6 +238,58 @@ class SelectL2(object):
             self.ctrl_is_held = False
         if event.key == 'alt':
             self.alt_is_held = False
+
+    # def OnClick(self, event):
+    #     """ handle OnClick event
+
+    #     Parameters
+    #     ----------
+
+    #     event :
+
+    #     See Also
+    #     --------
+
+    #     pylayers.gis.layout.Layout.ispoint
+
+    #     """
+    #     fig = self.fig#plt.gcf()
+    #     ax  = self.ax#plt.gca()
+    #     self.nsel = 0
+    #     self.ptsel = np.array([])
+    #     xmin, xmax, ymin, ymax = self.ax.axis()
+    #     #print xmin,xmax,ymin,ymax
+    #     dx = xmax - xmin
+    #     dy = ymax - ymin
+    #     dd = np.minimum(dx, dy)
+
+    #     if event.button == 1 and event.inaxes:
+    #         self.evt = 'lclic'
+    #         x = event.xdata
+    #         y = event.ydata
+    #         self.ptsel = np.array((x, y))
+    #         self.nsel = self.L.ispoint(self.ptsel, dd / 100)
+
+    #     if event.button == 2 and event.inaxes:
+    #         self.evt = 'cclic'
+    #         x = event.xdata
+    #         y = event.ydata
+    #         self.ptsel = np.array((x, y))
+    #         self.nsel = self.L.ispoint(self.ptsel, dd / 100)
+
+    #     if event.button == 3 and event.inaxes:
+    #         self.evt = 'rclic'
+    #         x = event.xdata
+    #         y = event.ydata
+    #         self.ptsel = np.array((x, y))
+    #         self.nsel = self.L.ispoint(self.ptsel, dd / 100)
+
+    #     #print "Selected point coord : ", self.ptsel
+    #     #print "Selected point number: ", self.nsel
+    #     if self.nsel > 0:
+    #         print "Selected segment : ", self.nsel
+
+    #     self.new_state()
 
     def OnClick(self, event):
         """ handle OnClick event
@@ -236,22 +305,13 @@ class SelectL2(object):
         pylayers.gis.layout.Layout.ispoint
 
         """
-        fig = self.fig#plt.gcf()
-        ax  = self.ax#plt.gca()
-        self.nsel = 0
-        self.ptsel = np.array([])
-        xmin, xmax, ymin, ymax = self.ax.axis()
-        #print xmin,xmax,ymin,ymax
-        dx = xmax - xmin
-        dy = ymax - ymin
-        dd = np.minimum(dx, dy)
-
+        # if not (self.shift_is_held or self.ctrl_is_held or self.alt_is_held):
+        #     self.update_state()
+        #     self.new_state()
         if event.button == 1 and event.inaxes:
             self.evt = 'lclic'
-            x = event.xdata
-            y = event.ydata
-            self.ptsel = np.array((x, y))
-            self.nsel = self.L.ispoint(self.ptsel, dd / 100)
+            self.motion=False
+
 
         if event.button == 2 and event.inaxes:
             self.evt = 'cclic'
@@ -272,7 +332,44 @@ class SelectL2(object):
         if self.nsel > 0:
             print "Selected segment : ", self.nsel
 
-        self.new_state()
+
+    def OnMotion(self,event):
+        if self.state !='CP':
+            if event.button == 1:
+                self.motion=True
+                self.state='SMP'
+                if not self.selector.active:
+                    self.selector.set_active(True)
+                    self.update_state()
+
+            # self.selector = toggle_selector.RS
+    def OnClickRelease(self,event):
+        fig = self.fig#plt.gcf()
+        ax  = self.ax#plt.gca()
+        self.nsel = 0
+        if not self.state == 'SMP' :
+            self.selectpt=[]
+            self.selectseg=[]
+        self.ptsel = np.array([])
+        xmin, xmax, ymin, ymax = self.ax.axis()
+        #print xmin,xmax,ymin,ymax
+        dx = xmax - xmin
+        dy = ymax - ymin
+        dd = np.minimum(dx, dy)
+        if self.evt == 'lclic' and self.motion==False:
+            x = event.xdata
+            y = event.ydata
+            self.ptsel = np.array((x, y))
+            self.nsel = self.L.ispoint(self.ptsel, dd / 10)
+            if self.nsel ==0 and self.state != 'CP':
+                self.modeIni() 
+            # self.update_state()
+            print 'here'
+            self.new_state()
+
+        if self.evt == 'lclic' and self.motion==True:
+            self.motion=False
+
 
 
     def format_coord(self,x, y):
@@ -301,6 +398,7 @@ class SelectL2(object):
         """
         # fig = plt.gcf()
         # ax = plt.gca()
+        print self.state
         if not self.bundo:
             self.undoGs.append(self.L.Gs.copy())
             if len(self.undoGs) > 50:
@@ -487,6 +585,7 @@ class SelectL2(object):
         #print self.state
         #print self.nsel
         #print self.selected_pt1
+
         #print self.selected_pt2
         self.fig.canvas.draw()
         return(self.fig,self.ax)
@@ -511,7 +610,7 @@ class SelectL2(object):
         self.update_state()
         self.bundo=False
 
-    def toogle(self):
+    def toggle(self):
         """ self.evt=='t'
         """
         if 'SM' in self.state:
@@ -692,7 +791,7 @@ class SelectL2(object):
         self.state = 'Init'
         self.update_state()
 
-    def editpt(self):
+    def editpt(self): 
         """ edit point
         if self.state == 'SP1':
         """
@@ -865,6 +964,19 @@ class SelectL2(object):
         """ switch to SSS mode
         """            
         self.state = "SSS"
+        self.update_state()
+
+
+    def modeSMS(self):
+        """ switch to SMS mode
+        """            
+        self.state = "SMS"
+        self.update_state()
+
+    def modeSMP(self):
+        """ switch to SMS mode
+        """            
+        self.state = "SMP"
         self.update_state()
 
     def modetoggle(self):
@@ -1057,7 +1169,9 @@ class SelectL2(object):
 
 
     def multsel(self):
-        """ Multiple selection
+        """ DEPRECATED 
+            DONE IN self.OnMotion 
+            Multiple selection
         """
         def toggle_selector(event):
             if toggle_selector.RS.active:
@@ -1111,10 +1225,20 @@ class SelectL2(object):
         except:
             print 'empty selection'
         print self.selectpt,self.selectseg
+
         self.plotselptseg(self.selectpt)
         self.selected='pt'
-        print self.state
 
+
+    def selallpt(self):
+        self.state = 'SMP'
+        self.update_state()
+
+        zone = self.L.display['box']
+        zone=(zone[0]-5,zone[1]+5,zone[2]-5,zone[3]+5)
+        self.selectpt,self.selectseg = self.L.get_zone(zone)
+        self.plotselptseg(self.selectpt)
+        self.selected='pt'
 
 
     def new_state(self):
@@ -1151,9 +1275,9 @@ class SelectL2(object):
         ax  = plt.gca()
         sl = self.L.sl
         cold = pyu.coldict()
-        #print "In State ",self.state
-        #print "In Event ",self.evt
-
+        print "In State ",self.state
+        print "In Event ",self.evt
+        
                 #
         # flip layout in y
         #
@@ -1186,7 +1310,7 @@ class SelectL2(object):
             return
 
         if self.evt=='t':
-            self.toogle()
+            self.toggle()
             return
 
         if self.evt == '3':
@@ -1516,16 +1640,18 @@ class SelectL2(object):
         # Left clic and selected node is a point
         #
 
+        if self.evt == 'ctrl+a':
+            self.selallpt()
+            return
 
-
-        if self.evt == 'f1':
-            # avoid conflict between zoom and selection 
-            # fm=plt.get_current_fig_manager()
-            # if fm.toolbar._active == 'PAN':
-            #     fm.toolbar.pan()
-            # if fm.toolbar._active == 'ZOOM':
-            #     fm.toolbar.zoom()
-            self.multsel()
+        # if self.evt == 'f1':
+        #     # avoid conflict between zoom and selection 
+        #     # fm=plt.get_current_fig_manager()
+        #     # if fm.toolbar._active == 'PAN':
+        #     #     fm.toolbar.pan()
+        #     # if fm.toolbar._active == 'ZOOM':
+        #     #     fm.toolbar.zoom()
+        #     self.multsel()
             
 
         if self.evt == 'f9':

@@ -154,7 +154,6 @@ class PropertiesWin(QDialog):    # any super class is okay
         super(PropertiesWin, self).__init__(parent)
         # to imporve here. Probably something to inherit from parent App
         self.parent=parent
-
         # determine if multiple segments are selected
         self.mulseg=mulseg
 
@@ -162,6 +161,8 @@ class PropertiesWin(QDialog):    # any super class is okay
         self._init_slab_prop()
         self._init_subsegs()
         self._init_layout()
+        print self.parent.selectl.selectseg
+
 
         # self.button.clicked.connect(self.create_child)
     
@@ -306,6 +307,7 @@ class PropertiesWin(QDialog):    # any super class is okay
     def editsubseg(self):
         """ open a edit subseg window
         """
+
         Nss=self.nbsubseg.value()
         if Nss>0:
             zmin=self.heightmin.value()
@@ -317,6 +319,7 @@ class PropertiesWin(QDialog):    # any super class is okay
                     self.subsegdata['ss_z'].append((zmin,zmax))
 
             self.subseg=SubSegWin(parent=self,subsegdata=self.subsegdata,Nss=Nss,zmin=zmin,zmax=zmax)
+
             self.subseg.show()
 
     def valide(self):
@@ -336,6 +339,8 @@ class PropertiesWin(QDialog):    # any super class is okay
         Nss = self.nbsubseg.value()
 
         if Nss>len(self.subsegdata['ss_name']):
+            zmin=self.heightmin.value()
+            zmax=self.heightmax.value()
             for i in range(Nss-len(self.subsegdata['ss_name'])):
                 self.subsegdata['ss_name'].append(self.parent.L.sl.keys()[0])
                 self.subsegdata['ss_offset'].append(0.)
@@ -348,9 +353,11 @@ class PropertiesWin(QDialog):    # any super class is okay
 
         if not self.mulseg:
             self.parent.L.edit_seg(self.parent.selectl.nsel,self.segdata)
+            self.parent.selectl.modeIni()
         else:
-
             [self.parent.L.edit_seg(s,self.segdata) for s in self.parent.selectl.selectseg]
+            self.parent.selectl.modeSMS()
+            self.parent.selectl.multsel()
         self.close()
 
     def cancel(self):
@@ -387,15 +394,19 @@ class AppForm(QMainWindow):
         """ edit wall properties
         """
         
-        print self.selectl.nsel,self.selectl.state 
+        
         if (self.selectl.state == 'SS') and (self.selectl.nsel > 0):
             self.prop = PropertiesWin(parent=self,mulseg=False)
             self.prop.show()
         elif (self.selectl.state == 'SMS') and (self.selectl.selectseg!=[]):
             self.prop = PropertiesWin(parent=self,mulseg=True)
             self.prop.show()
-        self.selectl.modeIni()
-        self.on_draw()
+        elif (self.selectl.state == 'SMP') and (self.selectl.selectseg!=[]):
+            self.selectl.toggle()
+            self.prop = PropertiesWin(parent=self,mulseg=True)
+            self.prop.show()
+
+        # self.on_draw()
 
 
     def on_about(self):
@@ -482,11 +493,21 @@ class AppForm(QMainWindow):
         # self.canvas.mpl_connect('pick_event', self.on_pick)
         self.selectl = SelectL2(self.L,fig=self.fig,ax=self.axes)
 
+        # self.cid1 = self.canvas.mpl_connect('button_press_event',
+        #                                    self.selectl.OnClick)
+        # self.cid2 = self.canvas.mpl_connect('key_press_event',
+        #                                    self.selectl.OnPress)
+        # self.cid3 = self.canvas.mpl_connect('key_release_event',
+        #                                    self.selectl.OnRelease)
         self.cid1 = self.canvas.mpl_connect('button_press_event',
                                            self.selectl.OnClick)
-        self.cid2 = self.canvas.mpl_connect('key_press_event',
+        self.cid2 = self.canvas.mpl_connect('button_release_event',
+                                           self.selectl.OnClickRelease)
+        self.cid3 = self.canvas.mpl_connect('motion_notify_event',
+                                           self.selectl.OnMotion)
+        self.cid4 = self.canvas.mpl_connect('key_press_event',
                                            self.selectl.OnPress)
-        self.cid3 = self.canvas.mpl_connect('key_release_event',
+        self.cid5 = self.canvas.mpl_connect('key_release_event',
                                            self.selectl.OnRelease)
         self.canvas.setFocusPolicy( Qt.ClickFocus )
         self.canvas.setFocus()
