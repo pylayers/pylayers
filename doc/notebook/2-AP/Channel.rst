@@ -1,4 +1,7 @@
 
+The transmission channel
+========================
+
 .. code:: python
 
     %matplotlib inline
@@ -23,11 +26,8 @@
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x7fd406645d90>
+    <matplotlib.figure.Figure at 0x2b9834cfb550>
 
-
-The transmission channel
-========================
 
 We start by constructing a propagation channel with the dedicated class
 ``DLink``. We specify a Layout as well as the two extremities of the
@@ -108,8 +108,8 @@ propagation channel.
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7fd3d1959650>,
-     <matplotlib.axes.AxesSubplot at 0x7fd3d194e790>)
+    (<matplotlib.figure.Figure at 0x2b98353c8210>,
+     <matplotlib.axes.AxesSubplot at 0x2b9835c61e50>)
 
 
 
@@ -248,12 +248,12 @@ level.
 
 .. parsed-literal::
 
-    <matplotlib.legend.Legend at 0x7fd3d1c6f9d0>
+    <matplotlib.legend.Legend at 0x2b983540d510>
 
 
 
 
-.. image:: Channel_files/Channel_27_1.png
+.. image:: Channel_files/Channel_28_1.png
 
 
 .. code:: python
@@ -267,12 +267,12 @@ level.
 
 .. parsed-literal::
 
-    <matplotlib.legend.Legend at 0x7fd3d1c0f210>
+    <matplotlib.legend.Legend at 0x2b98353de550>
 
 
 
 
-.. image:: Channel_files/Channel_28_1.png
+.. image:: Channel_files/Channel_29_1.png
 
 
 .. code:: python
@@ -286,12 +286,12 @@ level.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7fd3d1f92d10>
+    <matplotlib.text.Text at 0x2b98356b3d90>
 
 
 
 
-.. image:: Channel_files/Channel_29_1.png
+.. image:: Channel_files/Channel_30_1.png
 
 
 .. code:: python
@@ -311,7 +311,7 @@ level.
     f=Lk.H.show(cmap='jet',fig=f)
 
 
-.. image:: Channel_files/Channel_31_0.png
+.. image:: Channel_files/Channel_32_0.png
 
 
 The cut method applies an energy thresholding on the transmission
@@ -326,7 +326,7 @@ channel.
     f=Lk.H.show(cmap='jet',fig=f)
 
 
-.. image:: Channel_files/Channel_34_0.png
+.. image:: Channel_files/Channel_35_0.png
 
 
 The tap method
@@ -349,7 +349,7 @@ htap has 4 axes.
 
 .. code:: python
 
-    Va = 10 
+    Va = 10
     Vb = 10
     fcGHz = 4.5
     Nm = 50
@@ -428,12 +428,12 @@ for the first channel tap. :exit
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7fd3d1480c50>
+    <matplotlib.text.Text at 0x2b9836fab250>
 
 
 
 
-.. image:: Channel_files/Channel_45_1.png
+.. image:: Channel_files/Channel_50_1.png
 
 
 .. code:: python
@@ -442,7 +442,7 @@ for the first channel tap. :exit
     h = plt.hist(np.real(b[0,:,0])*1e5,40,normed=True)
 
 
-.. image:: Channel_files/Channel_46_0.png
+.. image:: Channel_files/Channel_51_0.png
 
 
 .. code:: python
@@ -459,12 +459,12 @@ for the first channel tap. :exit
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7fd3ceed4ad0>
+    <matplotlib.text.Text at 0x2b98356d5590>
 
 
 
 
-.. image:: Channel_files/Channel_47_1.png
+.. image:: Channel_files/Channel_52_1.png
 
 
 .. code:: python
@@ -475,12 +475,12 @@ for the first channel tap. :exit
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x7fd3d1756950>]
+    [<matplotlib.lines.Line2D at 0x2b9836cef650>]
 
 
 
 
-.. image:: Channel_files/Channel_48_1.png
+.. image:: Channel_files/Channel_53_1.png
 
 
 .. code:: python
@@ -506,7 +506,7 @@ for the first channel tap. :exit
 
 
 
-.. image:: Channel_files/Channel_52_1.png
+.. image:: Channel_files/Channel_57_1.png
 
 
 .. code:: python

@@ -12,3 +12,11 @@ web:
 	for i in `find . -name "*.ipyex"`;do  a=`basename $$i`;b=`dirname $$i`; cp $$i $$NOTEWEB/$$b/$${a%%.ipyex}.ipynb ; done
 	cp TOC.ipynb $$NOTEWEB
 
+conv:
+	for i in `find . -name "*.ipynb"`;\
+	do \
+		a=`basename $$i`;\
+		b=`dirname $$i`;\
+		ipymd --from notebook --to markdown --overwrite $$b/$$a;\
+	done	
+

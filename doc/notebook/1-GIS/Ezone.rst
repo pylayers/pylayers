@@ -15,8 +15,8 @@ Geographical Information and the Earth Zone class : ``Ezone``
 
 The ``Ezone`` class handles an earth zone which corresponds to the
 ``strm`` or ``aster`` DEM data. It has the same naming convention as
-``srtm`` files and corresponds to a portion of earth corresponding to 1°
-latitude and 1° of longitude. An ``Ezone`` is an heterogeneous dataset
+``srtm`` files and corresponds to a portion of earth corresponding to 1
+latitude and 1 of longitude. An ``Ezone`` is an heterogeneous dataset
 stored in ``hdf5`` format. Let see an example with the file
 ``N48W002.h5``.
 
@@ -88,13 +88,13 @@ method.
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f3f4c8cc610>,
-     <matplotlib.axes.AxesSubplot at 0x7f3f4c8ccb10>)
+    (<matplotlib.figure.Figure at 0x2b01dcbef650>,
+     <matplotlib.axes.AxesSubplot at 0x2b01dcbef910>)
 
 
 
 
-.. image:: Ezone_files/Ezone_14_1.png
+.. image:: Ezone_files/Ezone_15_1.png
 
 
 The ``Ezone`` object has a member extent which gives
@@ -149,13 +149,13 @@ The aster DEM can also be shown.
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f3f4f30fdd0>,
-     <matplotlib.axes.AxesSubplot at 0x7f3f4e6e7590>)
+    (<matplotlib.figure.Figure at 0x2b01dae41550>,
+     <matplotlib.axes.AxesSubplot at 0x2b01dae41c10>)
 
 
 
 
-.. image:: Ezone_files/Ezone_21_1.png
+.. image:: Ezone_files/Ezone_22_1.png
 
 
 An earth zone has an attached dictionnary of buildings, which contains
@@ -210,11 +210,11 @@ the ``show`` method for zooming in the map.
                  )
 
 
-.. image:: Ezone_files/Ezone_27_0.png
+.. image:: Ezone_files/Ezone_29_0.png
 
 
 
-.. image:: Ezone_files/Ezone_27_1.png
+.. image:: Ezone_files/Ezone_29_1.png
 
 
 The maps diplayed above are labeled in longitude (horizontal axis) and
@@ -233,7 +233,7 @@ cartesian coordinates as below
                  clim=[0,100])
 
 
-.. image:: Ezone_files/Ezone_30_0.png
+.. image:: Ezone_files/Ezone_32_0.png
 
 
 Let zoom to the University of Rennes 1 campus in the North-East region
@@ -262,7 +262,7 @@ of the city.
                  clim=[0,40])
 
 
-.. image:: Ezone_files/Ezone_33_0.png
+.. image:: Ezone_files/Ezone_35_0.png
 
 
 .. code:: python
@@ -275,7 +275,7 @@ of the city.
                  clim=[0,80])
 
 
-.. image:: Ezone_files/Ezone_34_0.png
+.. image:: Ezone_files/Ezone_36_0.png
 
 
 Ground Height Profile Extraction
@@ -303,12 +303,12 @@ be expressed in (lon,lat) coordinates in WGS84 system.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7f3f375c2650>
+    <matplotlib.text.Text at 0x2b01dd9241d0>
 
 
 
 
-.. image:: Ezone_files/Ezone_38_1.png
+.. image:: Ezone_files/Ezone_40_1.png
 
 
 .. code:: python
@@ -323,12 +323,12 @@ be expressed in (lon,lat) coordinates in WGS84 system.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7f3f4875a590>
+    <matplotlib.text.Text at 0x2b01f0d33ad0>
 
 
 
 
-.. image:: Ezone_files/Ezone_39_1.png
+.. image:: Ezone_files/Ezone_41_1.png
 
 
 .. code:: python
@@ -362,81 +362,5 @@ be expressed in (lon,lat) coordinates in WGS84 system.
 
 
 
-.. image:: Ezone_files/Ezone_41_1.png
-
-
-.. code:: python
-
-    from IPython.core.display import HTML
-    
-    def css_styling():
-        styles = open("../styles/custom.css", "r").read()
-        return HTML(styles)
-    css_styling()
-
-
-
-.. raw:: html
-
-    <style>
-        @font-face {
-            font-family: "Computer Modern";
-            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-        }
-        div.cell{
-            width:800px;
-            margin-left:16% !important;
-            margin-right:auto;
-        }
-        h1 {
-            font-family: Helvetica, serif;
-        }
-        h4{
-            margin-top:12px;
-            margin-bottom: 3px;
-           }
-        div.text_cell_render{
-            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-            line-height: 145%;
-            font-size: 130%;
-            width:800px;
-            margin-left:auto;
-            margin-right:auto;
-        }
-        .CodeMirror{
-                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-        }
-        .prompt{
-            display: None;
-        }
-        .text_cell_render h5 {
-            font-weight: 300;
-            font-size: 22pt;
-            color: #4057A1;
-            font-style: italic;
-            margin-bottom: .5em;
-            margin-top: 0.5em;
-            display: block;
-        }
-        
-        .warning{
-            color: rgb( 240, 20, 20 )
-            }  
-    </style>
-    <script>
-        MathJax.Hub.Config({
-                            TeX: {
-                               extensions: ["AMSmath.js"]
-                               },
-                    tex2jax: {
-                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                    },
-                    displayAlign: 'center', // Change this to 'center' to center equations.
-                    "HTML-CSS": {
-                        styles: {'.MathJax_Display': {"margin": 4}}
-                    }
-            });
-    </script>
-
+.. image:: Ezone_files/Ezone_43_1.png
 
