@@ -210,7 +210,9 @@ scene. This means :</p>
 <li>Setting a Transmitter and a Receiver and a given standard.</li>
 <li>Producing Output for Upper Layer simulation or analysis.</li>
 </ol>
-<p>There is mostly two kind of situations. Indoor situations and outdoor situations.</p>
+<p>There are mostly two kind of situation. Indoor environement situation and
+outdoor situation. For now Pylayers handles only indoor scenario.
+Outdoor and Indoor/Outdoor propagation model will be gradually added.</p>
 </div>
 <div class="section" id="radio-propagation-simulation">
 <h1><a class="toc-backref" href="#id2">Radio Propagation Simulation</a><a class="headerlink" href="#radio-propagation-simulation" title="Permalink to this headline">¶</a></h1>
@@ -333,7 +335,6 @@ scene. This means :</p>
 <li class="toctree-l2"><a class="reference internal" href="2-AP/Channel.html#the-tap-method">The tap method</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="5-SIM/LinkSimulation.html">22. How to do a link siulation</a></li>
 </ul>
 </div>
 </div>
@@ -342,20 +343,6 @@ scene. This means :</p>
 <h1><a class="toc-backref" href="#id10">Handling Agent Mobility</a><a class="headerlink" href="#handling-agent-mobility" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="5-SIM/SimulNetConfig.html">15. Network Simulation Configuration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="5-SIM/SimulNetConfig.html#simulnet-ini">15.1. Simulnet.ini</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="5-SIM/SimulNetConfig.html#save-section">15.1.1. Save section</a></li>
-<li class="toctree-l3"><a class="reference internal" href="5-SIM/SimulNetConfig.html#layout-section">15.1.2. Layout section</a></li>
-<li class="toctree-l3"><a class="reference internal" href="5-SIM/SimulNetConfig.html#network-section">15.1.3. Network section</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="5-SIM/SimulNetConfig.html#mechanics">15.2. Mechanics</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="5-SIM/SimulNetConfig.html#localization-section">15.2.1. Localization section</a></li>
-<li class="toctree-l3"><a class="reference internal" href="5-SIM/SimulNetConfig.html#simulation-section">15.2.2. Simulation section</a></li>
-</ul>
-</li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="4-MOB/Mobility.html">16. Trajectory and Network simulation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4-MOB/Body.html">17. Handling Body Description and Mobility</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="4-MOB/Body.html#bodycylinder-data-structure">17.1. <tt class="docutils literal"><span class="pre">BodyCylinder</span></tt> data structure</a></li>
@@ -383,37 +370,14 @@ scene. This means :</p>
 <div class="section" id="wireless-body-area-network-related-classes">
 <h1><a class="toc-backref" href="#id11">Wireless Body Area Network Related Classes</a><a class="headerlink" href="#wireless-body-area-network-related-classes" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="5-SIM/Corser.html">18. Corser</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="5-SIM/Corser.html#cormoran-measurement-campaign">18.1. CORMORAN Measurement Campaign</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="5-SIM/Corser.html#motivation-for-creating-a-specific-tool">19. Motivation for creating a specific tool</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5-SIM/Corser.html#prerequisite-installations">20. Prerequisite Installations</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="5-SIM/Corser.html#the-corser-class">20.1. The <tt class="docutils literal"><span class="pre">CorSer</span></tt> Class</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="5-SIM/Corser.html#plot-values">20.1.1. &nbsp;Plot values</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="5-SIM/Corser.html#plot-distance">20.1.1.1. Plot distance</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="5-SIM/Corser.html#specify-time-bodytime-parameter">20.1.2. Specify time (<em>bodytime</em> parameter)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="5-SIM/Corser.html#display-trajectory-trajectory-parameter">20.1.3. display trajectory (<em>trajectory</em> parameter)</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="5-SIM/Corser.html#using-pylayers-ray-tracing-with-corser-data">21. Using Pylayers Ray-tracing with CorSer data</a></li>
+<ul class="simple">
 </ul>
 </div>
 </div>
 <div class="section" id="some-simulation-examples">
 <h1><a class="toc-backref" href="#id12">Some Simulation Examples</a><a class="headerlink" href="#some-simulation-examples" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="5-SIM/DLR-WHERE2.html">23. Example of a trajectory synthesis in DLR WHERE2 environment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="5-SIM/DLR-WHERE2.html#loading-the-layout">23.1. Loading the Layout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="5-SIM/DLR-WHERE2.html#aggregated-cir-along-a-synthetic-trajectory-line-in-the-corridor">23.2. Aggregated CIR along a synthetic trajectory (line in the corridor)</a></li>
-</ul>
-</li>
+<ul class="simple">
 </ul>
 </div>
 </div>
@@ -498,7 +462,7 @@ scene. This means :</p>
 
     <div class="footer">
         &copy; Copyright 2015, PyLayers developer team.
-      Last updated on mars 01, 2015.
+      Last updated on mars 02, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

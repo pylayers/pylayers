@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="Overview" href="../TOC.html" />
+    <link rel="next" title="Description of antennas" href="../2-AP/Antenna.html" />
+    <link rel="prev" title="Effect of Modyfiying the Nature of Sub-Segments" href="Multisubsegments.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,11 +46,18 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="../2-AP/Antenna.html" title="Description of antennas"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Multisubsegments.html" title="Effect of Modyfiying the Nature of Sub-Segments"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../TOC.html" accesskey="U">Overview</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -62,6 +72,12 @@
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Multisubsegments.html"
+                        title="previous chapter">Effect of Modyfiying the Nature of Sub-Segments</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../2-AP/Antenna.html"
+                        title="next chapter">Description of antennas</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/notebook/1-GIS/Ezone.txt"
@@ -97,7 +113,6 @@
 <div class="code python highlight-python"><div class="highlight"><pre>%matplotlib inline
 </pre></div>
 </div>
-<p><a class="reference external" href="http://www.pylayers.org">http://www.pylayers.org</a></p>
 <div class="section" id="geographical-information-and-the-earth-zone-class-ezone">
 <h1>Geographical Information and the Earth Zone class : <tt class="docutils literal"><span class="pre">Ezone</span></tt><a class="headerlink" href="#geographical-information-and-the-earth-zone-class-ezone" title="Permalink to this headline">¶</a></h1>
 <p>The <tt class="docutils literal"><span class="pre">Ezone</span></tt> class handles an earth zone which corresponds to the
@@ -155,11 +170,11 @@ method.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">z</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s">&#39;srtm&#39;</span><span class="p">,</span><span class="n">bldg</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="mi">80</span><span class="p">,</span><span class="mi">120</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b01dcbef650&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b01dcbef910&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b8b54b6f4d0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2b8b54b6f8d0&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/Ezone_15_1.png" src="../../_images/Ezone_15_1.png" />
+<img alt="../../_images/Ezone_14_1.png" src="../../_images/Ezone_14_1.png" />
 <p>The <tt class="docutils literal"><span class="pre">Ezone</span></tt> object has a member extent which gives
 [lonmin,lonmax,latmin,latmax]</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">z</span><span class="o">.</span><span class="n">extent</span>
@@ -186,11 +201,11 @@ method.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">z</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s">&#39;aster&#39;</span><span class="p">,</span><span class="n">bldg</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">120</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b01dae41550&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b01dae41c10&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b8b52dc12d0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2b8b52dc15d0&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/Ezone_22_1.png" src="../../_images/Ezone_22_1.png" />
+<img alt="../../_images/Ezone_21_1.png" src="../../_images/Ezone_21_1.png" />
 <p>An earth zone has an attached dictionnary of buildings, which contains
 the data of all the set of building footprints of the city extracted out
 of open street map data. Below is shown an example for the city of
@@ -233,8 +248,8 @@ the <tt class="docutils literal"><span class="pre">show</span></tt> method for z
              <span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Ezone_29_0.png" src="../../_images/Ezone_29_0.png" />
-<img alt="../../_images/Ezone_29_1.png" src="../../_images/Ezone_29_1.png" />
+<img alt="../../_images/Ezone_28_0.png" src="../../_images/Ezone_28_0.png" />
+<img alt="../../_images/Ezone_28_1.png" src="../../_images/Ezone_28_1.png" />
 <p>The maps diplayed above are labeled in longitude (horizontal axis) and
 latitude (vertical axis) but it is also possible to label it in
 cartesian coordinates as below</p>
@@ -248,7 +263,7 @@ cartesian coordinates as below</p>
              <span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">])</span>
 </pre></div>
 </div>
-<img alt="../../_images/Ezone_32_0.png" src="../../_images/Ezone_32_0.png" />
+<img alt="../../_images/Ezone_31_0.png" src="../../_images/Ezone_31_0.png" />
 <p>Let zoom to the University of Rennes 1 campus in the North-East region
 of the city.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">extent2</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.645</span><span class="p">,</span><span class="o">-</span><span class="mf">1.62</span><span class="p">,</span><span class="mf">48.111</span><span class="p">,</span><span class="mf">48.125</span><span class="p">)</span>
@@ -269,7 +284,7 @@ of the city.</p>
              <span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">40</span><span class="p">])</span>
 </pre></div>
 </div>
-<img alt="../../_images/Ezone_35_0.png" src="../../_images/Ezone_35_0.png" />
+<img alt="../../_images/Ezone_34_0.png" src="../../_images/Ezone_34_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&#39;Beaulieu Campus&#39;</span><span class="p">,</span>
              <span class="n">extent</span><span class="o">=</span><span class="n">extent2_cart</span><span class="p">,</span>
              <span class="n">coord</span><span class="o">=</span><span class="s">&#39;cartesian&#39;</span><span class="p">,</span>
@@ -278,7 +293,7 @@ of the city.</p>
              <span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">80</span><span class="p">])</span>
 </pre></div>
 </div>
-<img alt="../../_images/Ezone_36_0.png" src="../../_images/Ezone_36_0.png" />
+<img alt="../../_images/Ezone_35_0.png" src="../../_images/Ezone_35_0.png" />
 </div>
 <div class="section" id="ground-height-profile-extraction">
 <h2>Ground Height Profile Extraction<a class="headerlink" href="#ground-height-profile-extraction" title="Permalink to this headline">¶</a></h2>
@@ -298,10 +313,10 @@ be expressed in (lon,lat) coordinates in WGS84 system.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;distance (meters)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b01dd9241d0&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b8b57a1b190&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Ezone_40_1.png" src="../../_images/Ezone_40_1.png" />
+<img alt="../../_images/Ezone_39_1.png" src="../../_images/Ezone_39_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">a</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">nu</span><span class="p">)</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">25000</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
@@ -309,10 +324,10 @@ be expressed in (lon,lat) coordinates in WGS84 system.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Distance (meters)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b01f0d33ad0&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b8b5516f210&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Ezone_41_1.png" src="../../_images/Ezone_41_1.png" />
+<img alt="../../_images/Ezone_40_1.png" src="../../_images/Ezone_40_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">z</span>
 </pre></div>
 </div>
@@ -334,7 +349,7 @@ i-latitude  : 19 38
   DuplicatePointWarning,
 </pre></div>
 </div>
-<img alt="../../_images/Ezone_43_1.png" src="../../_images/Ezone_43_1.png" />
+<img alt="../../_images/Ezone_42_1.png" src="../../_images/Ezone_42_1.png" />
 </div>
 </div>
 
@@ -353,17 +368,24 @@ i-latitude  : 19 38
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="../2-AP/Antenna.html" title="Description of antennas"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Multisubsegments.html" title="Effect of Modyfiying the Nature of Sub-Segments"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../TOC.html" >Overview</a> &raquo;</li> 
       </ul>
     </div>
 
     <div class="footer">
         &copy; Copyright 2015, PyLayers developer team.
-      Last updated on mars 01, 2015.
+      Last updated on mars 02, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">
