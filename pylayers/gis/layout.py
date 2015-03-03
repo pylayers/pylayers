@@ -382,6 +382,7 @@ class Layout(PyLayers):
         self.display['ednodes'] = False
         self.display['subseg'] = True
         self.display['subsegnb'] = True
+        self.display['transition'] = True
         self.display['visu'] = False
         self.display['thin'] = False
         self.display['scaled'] = True
@@ -4775,8 +4776,21 @@ class Layout(PyLayers):
                 psseg = np.array([[self.Gs.pos[x][0],self.Gs.pos[x][1]] for x in seg])
                 nbsseg = np.array([len(self.Gs.node[x]['ss_name']) for x in seg],dtype='int')
 
-                [ax.text(psseg[x,0]+0.1,psseg[x,1]+0.1,str(nbsseg[x]),
+                [ax.text(psseg[x,0]+0.2,psseg[x,1]+0.2,str(nbsseg[x]),
                     fontdict={'size':8},ha='center') for x in range(len(seg))]
+
+        if self.display['transition']:
+            segwtrans = [y for y in [x for x in self.Gs.nodes() if x>0 ]if self.Gs.node[y]['transition']]
+            posseg = np.array([self.Gs.pos[x] for x in segwtrans])
+            normseg = np.array([self.Gs.node[x]['norm'] for x in segwtrans])[:,:2]
+            b1 = (posseg-normseg/2)
+            b2 = (posseg+normseg/2)
+            [ax.annotate('', xy=b1[x], 
+                        xycoords='data',
+                        xytext=b2[x], 
+                        textcoords='data',
+                        arrowprops={'arrowstyle': '<->'}) 
+                    for x in range(len(segwtrans))]
 
         slablist = self.name.keys()
         if self.display['edges']:
@@ -7893,6 +7907,7 @@ class Layout(PyLayers):
         self.display['nodes']=True
         self.display['ednodes']=True
         self.display['subsegnb']=True
+        self.display['transition']=True
 
         self.af = SelectL2(self,fig=fig,ax=ax)
 
