@@ -503,20 +503,33 @@ class AppForm(QMainWindow):
 
 
     def on_about(self):
-        msg = """ This is the Pylayers' Stand-Alone Layout Editor (BETA)
+        msg = """ This is the PyLayers' Stand-Alone Layout Editor (BETA)
         
-         You can edit your layout using the tool.
+         This tool allow to personalize  your own building layout in terms of
+         floor plan and constitutive materials.
+         Once edited and saved, the layout can be used into the PyLayers Ray tracing tool.
 
-         F1 : select mode
+
+
+         Shortcuts:
+         ----------
+         F1 : Select mode
          F2 : New point mode
          F3 : Edit segment properties
 
+         CTRL + o : Open Layout
+         CTRL + s : Save Layout
+         CTRL + q : Quit Editor
+         escape : back to a stable state
+ 
          More hints about editing can be found in the status bar.
 
 
-         Thank you for using Pylayers
+
+         Thank you for using Pylayers and this tool
 
          The Pylayers' Dev Team
+         www.pylayers.org
 
         """
         QMessageBox.about(self, "Pylayers' Stand-Alone Layout Editor (BETA)", msg.strip())
@@ -665,10 +678,10 @@ class AppForm(QMainWindow):
         
 
         self.add_actions(self.file_menu, 
-            ( new_action,open_action,save_action,saveas_action,close_action,quit_action,))
+            ( new_action,open_action,None,save_action,saveas_action,None,close_action,quit_action,))
         
         self.add_actions(self.edit_menu, 
-            ( refresh,properties))
+            ( properties,None,refresh))
 
         self.add_actions(self.help_menu, (about_action,))
 

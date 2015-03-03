@@ -84,12 +84,12 @@ class SelectL2(object):
                 'CP':'Create Point/ +CTRL same x/ +SHIFT same y',
                 'SP1':'Select Point/ Click another point to create segment',
                 'SP2':'Click Again for Creating Segment',
-                'SS':'F9: edit segment properties',
+                'SS':'F3: edit segment properties',
                 'SSS':'Select Sub Segment',
                 'CPS':'Click again for Split Segment',
                 'CPSS':'Create Point On Sub Segment',
                 'SMP': 't: toggle point/segment, Shift + select : add selected points, CTRL + select : remove selected points',
-                'SMS': 't: toggle point/segment, F9: Edit Selected Segments Propeties'
+                'SMS': 't: toggle point/segment, F3: Edit Selected Segments Propeties'
                 }
         self.nsel = 0
         box = self.L.display['box']
@@ -325,7 +325,7 @@ class SelectL2(object):
                 y = event.ydata
             self.updatedrawpt(self.nsel,x,y)
 
-            
+
                 # self.update_state()
             # self.selector = toggle_selector.RS
 
