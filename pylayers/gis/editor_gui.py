@@ -442,7 +442,7 @@ class AppForm(QMainWindow):
             self.create_main_frame()
             self.on_draw()
             self.setWindowTitle(self.L.filename + '- Pylayers : Stand Alone Editor (Beta)')
-
+            self.resize(self.fig.canvas.width(),self.fig.canvas.height())
             print 'loaded'
         except:
             pass
@@ -631,7 +631,7 @@ class AppForm(QMainWindow):
     #     shortcut.setKey("Ctrl+D")
     #     self.connect(shortcut, SIGNAL("activated()"), self.edit_properties )    # QtGui.QShortcut(QtGui.QKeySequence("Ctrl+Return"), self.myWidget, self.doSomething)
 
-    def create_menu(self):        
+    def create_menu(self):
         self.file_menu = self.menuBar().addMenu("&File")
         self.edit_menu = self.menuBar().addMenu("&Edit")
         self.help_menu = self.menuBar().addMenu("&Help")
@@ -701,11 +701,10 @@ class AppForm(QMainWindow):
 def main():
     app = QApplication(sys.argv)
     form = AppForm()
-    form.setGeometry(100,100,300,300)
+    # form.setGeometry(100,100,300,300)
     form.show()
     app.exec_()
 
 
 if __name__ == "__main__":
-    L=Layout('TA-Office.ini')
     main()
