@@ -240,60 +240,6 @@ class SelectL2(object):
         if event.key == 'alt':
             self.alt_is_held = False
 
-    # def OnClick(self, event):
-    #     """ handle OnClick event
-
-    #     Parameters
-    #     ----------
-
-    #     event :
-
-    #     See Also
-    #     --------
-
-    #     pylayers.gis.layout.Layout.ispoint
-
-    #     """
-    #     fig = self.fig#plt.gcf()
-    #     ax  = self.ax#plt.gca()
-    #     self.nsel = 0
-    #     self.ptsel = np.array([])
-    #     xmin, xmax, ymin, ymax = self.ax.axis()
-    #     #print xmin,xmax,ymin,ymax
-    #     dx = xmax - xmin
-    #     dy = ymax - ymin
-    #     dd = np.minimum(dx, dy)
-
-    #     if event.button == 1 and event.inaxes:
-    #         self.evt = 'lclic'
-    #         x = event.xdata
-    #         y = event.ydata
-    #         self.ptsel = np.array((x, y))
-    #         self.nsel = self.L.ispoint(self.ptsel, dd / 100)
-
-    #     if event.button == 2 and event.inaxes:
-    #         self.evt = 'cclic'
-    #         x = event.xdata
-    #         y = event.ydata
-    #         self.ptsel = np.array((x, y))
-    #         self.nsel = self.L.ispoint(self.ptsel, dd / 100)
-
-    #     if event.button == 3 and event.inaxes:
-    #         self.evt = 'rclic'
-    #         x = event.xdata
-    #         y = event.ydata
-    #         self.ptsel = np.array((x, y))
-    #         self.nsel = self.L.ispoint(self.ptsel, dd / 100)
-
-    #     #print "Selected point coord : ", self.ptsel
-    #     #print "Selected point number: ", self.nsel
-    #     if self.nsel > 0:
-    #         print "Selected segment : ", self.nsel
-
-    #     self.new_state()
-
-
-
 
     def OnClick(self, event):
         """ handle OnClick event
@@ -331,7 +277,8 @@ class SelectL2(object):
             x = event.xdata
             y = event.ydata
             self.ptsel = np.array((x, y))
-            self.nsel = self.L.ispoint(self.ptsel, dd / 10)
+            self.nsel = self.L.ispoint(self.ptsel, dd / 50)
+
             if self.selected_pt1==self.nsel and self.nsel != 0 and not 'SM' in self.state :
                 self.ptmove=True
             else :
@@ -377,7 +324,6 @@ class SelectL2(object):
 
 
     def OnClickRelease(self,event):
-        print self.ptmove,not 'SM' in self.state
         if self.evt == 'lclic' and self.motion==False and not self.ptmove:
             if self.nsel ==0 and self.state != 'CP':
                 self.modeIni() 
@@ -405,7 +351,10 @@ class SelectL2(object):
             self.modeIni()
             self.new_state()
 
-
+        if self.evt=='rclic':
+            self.modeIni()
+            self.new_state()
+            
 
     def format_coord(self,x, y):
         col = int(x+0.5)
@@ -455,7 +404,7 @@ class SelectL2(object):
                 pass
             try:
                 self.selector.set_active(False)
-                print 'inhib select'
+                # print 'inhib select'
             except:
                 pass
             #ax.title.set_text(self.state)
@@ -1251,29 +1200,30 @@ class SelectL2(object):
             x1,x2=x2,x1
         if y1>y2:
             y1,y2=y2,y1
-        
-        
-        try:
-            selectpt,selectseg = self.L.get_zone([x1,x2,y1,y2])
+        if not (np.allclose(x1,x2) and np.allclose(y1,y2)) :
+            try:
+                selectpt,selectseg = self.L.get_zone([x1,x2,y1,y2])
 
-            if not self.ctrl_is_held:
-                self.selectpt.extend(selectpt)
-                self.selectseg.extend(selectseg)
-                self.selectseg=filter(lambda x: self.L.Gs.node[x]['connect'][0] in self.selectpt
-                                 and self.L.Gs.node[x]['connect'][1] in self.selectpt,
-                                 self.selectseg)
+                if not self.ctrl_is_held:
+                    self.selectpt.extend(selectpt)
+                    self.selectseg.extend(selectseg)
+                    self.selectseg=filter(lambda x: self.L.Gs.node[x]['connect'][0] in self.selectpt
+                                     and self.L.Gs.node[x]['connect'][1] in self.selectpt,
+                                     self.selectseg)
 
-                self.selectpt=np.unique(self.selectpt).tolist()
-                self.selectseg=np.unique(self.selectseg).tolist()
-            else: 
-                [self.selectpt.pop(self.selectpt.index(x)) for x in selectpt if x in self.selectpt]
-                [self.selectseg.pop(self.selectseg.index(x)) for x in selectseg if x in self.selectseg]
-        except:
-            print 'empty selection'
-        print self.selectpt,self.selectseg
+                    self.selectpt=np.unique(self.selectpt).tolist()
+                    self.selectseg=np.unique(self.selectseg).tolist()
+                else: 
+                    [self.selectpt.pop(self.selectpt.index(x)) for x in selectpt if x in self.selectpt]
+                    [self.selectseg.pop(self.selectseg.index(x)) for x in selectseg if x in self.selectseg]
+            except:
+                print 'empty selection'
 
-        self.plotselptseg(self.selectpt)
-        self.selected='pt'
+            self.plotselptseg(self.selectpt)
+            self.selected='pt'
+        else :
+            self.modeIni()
+            self.update_state()
 
 
     def selallpt(self):
@@ -1321,8 +1271,8 @@ class SelectL2(object):
         ax  = plt.gca()
         sl = self.L.sl
         cold = pyu.coldict()
-        print "In State ",self.state
-        print "In Event ",self.evt
+        # print "In State ",self.state
+        # print "In Event ",self.evt
         
                 #
         # flip layout in y
