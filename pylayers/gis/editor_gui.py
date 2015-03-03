@@ -11,7 +11,8 @@ import matplotlib.pyplot as plt
 
 from pylayers.gis.layout import *
 from pylayers.gis.editor_select import SelectL2
-
+from pylayers.util.project import *
+import pylayers.util.pyutil as pyu
 
 
 class SubSegWin(QDialog):    # any super class is okay
@@ -71,6 +72,7 @@ class SubSegWin(QDialog):    # any super class is okay
 
     def _autocalc_height_val(self):
         """ split height proportionnaly to the number of subsegs
+            when new subseg
             TO BE DONE
         """
         self.lma=[]
@@ -149,12 +151,13 @@ class SubSegWin(QDialog):    # any super class is okay
     def cancel(self):
         self.close()
 
+
 class PropertiesWin(QDialog):    # any super class is okay
     def __init__(self,mulseg=False,parent=None):
         super(PropertiesWin, self).__init__(parent)
         # to imporve here. Probably something to inherit from parent App
         self.parent=parent
-        # determine if multiple segments are selected
+        # determine if multiple se gments are selected
         self.mulseg=mulseg
 
         # combo box 
@@ -365,30 +368,120 @@ class PropertiesWin(QDialog):    # any super class is okay
         """
         self.close()
 
+
+class SaveQuitWin(QDialog):    # any super class is okay
+    def __init__(self,exit=False,parent=None):
+        super(SaveQuitWin, self).__init__(parent)
+        self.setWindowTitle('Do you want to save?')
+        self.parent=parent
+        self.exit=exit
+
+
+        buttonq=QPushButton("Close")
+        buttons=QPushButton("Save")
+        buttonc=QPushButton("Cancel")
+        buttonq.clicked.connect(self.quit)
+        buttons.clicked.connect(self.save)
+        buttonc.clicked.connect(self.cancel)
+        
+
+        hboxDial = QHBoxLayout() 
+        hboxDial.addWidget(buttonq)
+        hboxDial.addWidget(buttons)
+        hboxDial.addWidget(buttonc)
+
+
+        # create Layout
+        
+        self.setLayout(hboxDial)
+        print exit
+    def quit(self):
+        self.parent.fig.clear()
+        self.parent.fig.canvas.draw()
+        del self.parent.L
+        del self.parent.main_frame
+        if self.exit :
+            self.close()
+            self.parent.exitl()
+        self.close()
+
+    def save(self):
+        self.parent.save()
+        if self.exit:
+            self.close()
+            self.parent.exitl()
+        self.close()
+
+    def cancel(self):
+        self.close()
+
+
 class AppForm(QMainWindow):
-    def __init__(self,L, parent=None):
+    def __init__(self, parent=None):
         QMainWindow.__init__(self, parent)
         self.setWindowTitle('Pylayers : Stand Alone Editor (Beta)')
-        self.L=L
-
-        self.create_main_frame()
+        self.filename=''
         self.create_menu()
-
-        # self.create_status_bar()
-        # self.textbox.setText('1 2 3 4')
-        self.on_draw()
+        self.create_status_bar()
         # self.shortcuts()
 
-    def save_plot(self):
-        file_choices = "PNG (*.png)|*.png"
-        
-        path = unicode(QFileDialog.getSaveFileName(self, 
-                        'Save file', '', 
-                        file_choices))
-        if path:
-            self.canvas.print_figure(path, dpi=self.dpi)
-            self.statusBar().showMessage('Saved to %s' % path, 2000)
 
+    def new(self):
+        self.closel()
+        self.L=Layout('void.ini')
+        self.filename=''
+        self.create_main_frame()
+        self.on_draw()
+
+    def open(self):
+        filename = QFileDialog.getOpenFileName(self,'Open Pylayers Layout File',pyu.getlong('',pstruc['DIRINI']),'(*.ini);;(*.osm)')
+        try:
+            _filename= pyu.getshort(str(filename))
+            self.L=Layout(_filename)
+            self.filename=self.L.filename
+            self.create_main_frame()
+            self.on_draw()
+            self.setWindowTitle(self.L.filename + '- Pylayers : Stand Alone Editor (Beta)')
+
+            print 'loaded'
+        except:
+            pass
+
+    def save(self,force=False):
+
+        if self.filename == '' or force:
+            filename = QFileDialog.getSaveFileName(self, 'Save Layout', pyu.getlong('',pstruc['DIRINI']),'*.ini')
+            try:
+                _filename= pyu.getshort(str(filename))
+            except:
+                pass
+        else :
+            _filename=self.L.filename
+
+        try:
+            self.L.saveini(_filename)
+            self.L.saveosm(_filename.split('.')[0] + '.osm')
+            self.L=Layout(_filename)
+            self.filename=self.L.filename
+            self.setWindowTitle(self.L.filename + '- Pylayers : Stand Alone Editor (Beta)')
+            print 'saved'
+        except:
+            pass
+
+    def closel(self,exit=False):
+        dial_res=''
+        self.sq = SaveQuitWin(parent=self,exit=exit)
+        self.sq.show()
+
+    def exitl(self):
+        plt.rcParams.update(self.selectl.rcconf)
+        self.selectl.fig.canvas.mpl_disconnect(self.cid1)
+        self.selectl.fig.canvas.mpl_disconnect(self.cid2)
+        self.selectl.fig.canvas.mpl_disconnect(self.cid3)
+        self.selectl.fig.canvas.mpl_disconnect(self.cid4)
+        self.selectl.fig.canvas.mpl_disconnect(self.cid5)
+        self.selectl.fig.canvas.mpl_disconnect(self.cid6)
+        QApplication.quit()
 
     def edit_properties(self):
         """ edit wall properties
@@ -410,29 +503,24 @@ class AppForm(QMainWindow):
 
 
     def on_about(self):
-        msg = """ A demo of using PyQt with matplotlib:
+        msg = """ This is the Pylayers' Stand-Alone Layout Editor (BETA)
         
-         * Use the matplotlib navigation bar
-         * Add values to the text box and press Enter (or click "Draw")
-         * Show or hide the grid
-         * Drag the slider to modify the width of the bars
-         * Save the plot to a file using the File menu
-         * Click on a bar to receive an informative message
-        """
-        QMessageBox.about(self, "About the demo", msg.strip())
-        # self.edit_properties()
+         You can edit your layout using the tool.
 
-    # def on_pick(self, event):
-    #     # The event received here is of the type
-    #     # matplotlib.backend_bases.PickEvent
-    #     #
-    #     # It carries lots of information, of which we're using
-    #     # only a small amount here.
-    #     # 
-    #     box_points = event.artist.get_bbox().get_points()
-    #     msg = "You've clicked on a bar with coords:\n %s" % box_points
-        
-    #     QMessageBox.information(self, "Click!", msg)
+         F1 : select mode
+         F2 : New point mode
+         F3 : Edit segment properties
+
+         More hints about editing can be found in the status bar.
+
+
+         Thank you for using Pylayers
+
+         The Pylayers' Dev Team
+
+        """
+        QMessageBox.about(self, "Pylayers' Stand-Alone Layout Editor (BETA)", msg.strip())
+
     
 
 
@@ -454,7 +542,6 @@ class AppForm(QMainWindow):
         self.L.display['subsegnb']=True
 
         self.fig,self.axes = self.selectl.show(self.fig,self.axes,clear=True)
-
         # self.axes.text(10,10,str(self.properties.currentText()))
         
         # self.L.showGs(fig=self.fig,ax=self.axes)
@@ -468,6 +555,18 @@ class AppForm(QMainWindow):
         
         self.canvas.draw()
 
+    def on_release(self,event):
+        string=''
+        try:
+            string = string + ' ' + self.L.Gs.node[self.selectl.nsel]['name']
+        except:
+            pass
+        try:
+            string = string + ' with ' +str(len(self.L.Gs.node[self.nsel]['ss_name'])) + 'subseg(s)'
+        except:
+            pass
+        string = string +'\t'+self.selectl.help[self.selectl.state]
+        self.statusBar().showMessage(string)
     def create_main_frame(self):
         self.main_frame = QWidget()
         
@@ -476,7 +575,7 @@ class AppForm(QMainWindow):
         #
 
         self.dpi = 100
-        self.fig = Figure((5.0, 4.0), dpi=self.dpi)
+        self.fig = Figure((20.0, 30.0), dpi=self.dpi)
         self.canvas = FigureCanvas(self.fig)
         self.canvas.setParent(self.main_frame)
         
@@ -493,12 +592,6 @@ class AppForm(QMainWindow):
         # self.canvas.mpl_connect('pick_event', self.on_pick)
         self.selectl = SelectL2(self.L,fig=self.fig,ax=self.axes)
 
-        # self.cid1 = self.canvas.mpl_connect('button_press_event',
-        #                                    self.selectl.OnClick)
-        # self.cid2 = self.canvas.mpl_connect('key_press_event',
-        #                                    self.selectl.OnPress)
-        # self.cid3 = self.canvas.mpl_connect('key_release_event',
-        #                                    self.selectl.OnRelease)
         self.cid1 = self.canvas.mpl_connect('button_press_event',
                                            self.selectl.OnClick)
         self.cid2 = self.canvas.mpl_connect('button_release_event',
@@ -509,6 +602,8 @@ class AppForm(QMainWindow):
                                            self.selectl.OnPress)
         self.cid5 = self.canvas.mpl_connect('key_release_event',
                                            self.selectl.OnRelease)
+        self.cid6 = self.canvas.mpl_connect('button_release_event',
+                                           self.on_release)
         self.canvas.setFocusPolicy( Qt.ClickFocus )
         self.canvas.setFocus()
 
@@ -516,54 +611,7 @@ class AppForm(QMainWindow):
         #Create the navigation toolbar, tied to the canvas
         #
         self.mpl_toolbar = NavigationToolbar(self.canvas, self.main_frame)
-        
-        # # Other GUI controls
 
-
-
-        # # 
-        # self.properties = QComboBox()
-        # self.properties.addItem("Ubuntu")
-        # self.properties.addItem("Mandriva")
-        # self.properties.addItem("Fedora")
-        # self.properties.addItem("Red Hat")
-        # self.properties.addItem("Gentoo")
-
-        # self.properties.setMinimumWidth(200)
-        # self.connect(self.properties, SIGNAL('editingFinished ()'), self.on_draw)
-
-
-
-
-        # self.textbox = QLineEdit()
-        # self.textbox.setMinimumWidth(200)
-        # self.connect(self.textbox, SIGNAL('editingFinished ()'), self.on_draw)
-        
-        # self.draw_button = QPushButton("&Draw")
-        # self.connect(self.draw_button, SIGNAL('clicked()'), self.on_draw)
-        
-        # self.grid_cb = QCheckBox("Show &Grid")
-        # self.grid_cb.setChecked(False)
-        # self.connect(self.grid_cb, SIGNAL('stateChanged(int)'), self.on_draw)
-        
-        # slider_label = QLabel('Bar width (%):')
-        # self.slider = QSlider(Qt.Horizontal)
-        # self.slider.setRange(1, 100)
-        # self.slider.setValue(20)
-        # self.slider.setTracking(True)
-        # self.slider.setTickPosition(QSlider.TicksBothSides)
-        # self.connect(self.slider, SIGNAL('valueChanged(int)'), self.on_draw)
-        
-        # #
-        # # Layout with box sizers
-        # # 
-        # hbox = QHBoxLayout()
-        # hbox.addWidget(self.properties)
-        # hbox.setAlignment(self.properties, Qt.AlignVCenter)
-        # for w in [  self.textbox, self.draw_button, self.grid_cb,
-        #             slider_label, self.slider]:
-        #     hbox.addWidget(w)
-        #     hbox.setAlignment(w, Qt.AlignVCenter)
         
         vbox = QVBoxLayout()
         vbox.addWidget(self.canvas)
@@ -574,7 +622,7 @@ class AppForm(QMainWindow):
         self.setCentralWidget(self.main_frame)
     
     def create_status_bar(self):
-        self.status_text = QLabel("This is a demo")
+        self.status_text = QLabel("Open a Layout")
         self.statusBar().addWidget(self.status_text, 1)
 
         
@@ -590,13 +638,24 @@ class AppForm(QMainWindow):
         # load_file_action = self.create_action("&Save plot",
         #     shortcut="Ctrl+S", slot=self.save_plot, 
         #     tip="Save the plot")
-        quit_action = self.create_action("&Quit", slot=self.close, 
+        new_action = self.create_action("&New Layout", slot=self.new, 
+        shortcut="Ctrl+n", tip="new layout")
+        open_action = self.create_action("&Open", slot=self.open, 
+        shortcut="Ctrl+o", tip="Open Layout")
+        save_action = self.create_action("&Save", slot=self.save, 
+        shortcut="Ctrl+s", tip="Save Layout")
+        saveas_action = self.create_action("&Save as...", slot=lambda x=True:self.save(x), 
+        shortcut="Ctrl+Shift+s", tip="Save as")
+        # open_action = self.create_action("&Open", slot=self.open, 
+        # shortcut="Ctrl+o", tip="Open Layout")
+        close_action = self.create_action("&Close", shortcut='Ctrl+w', slot=self.closel, tip="Close Layout")
+        quit_action = self.create_action("&Quit", slot=lambda x=True:self.closel(x), 
             shortcut="Ctrl+Q", tip="Close the application")
 
         refresh = self.create_action("&Refresh", slot=self.on_draw, 
             shortcut="F10", tip="Refresh the application")
         properties= self.create_action("&Properties", slot=self.edit_properties, 
-            shortcut="F9", tip="Edit Wall properties")
+            shortcut="F3", tip="Edit Wall properties")
         # show3= self.create_action("&Properties", slot=self.edit_properties, 
         #     shortcut="F9", tip="3D show")
 
@@ -606,7 +665,7 @@ class AppForm(QMainWindow):
         
 
         self.add_actions(self.file_menu, 
-            ( quit_action,))
+            ( new_action,open_action,save_action,saveas_action,close_action,quit_action,))
         
         self.add_actions(self.edit_menu, 
             ( refresh,properties))
@@ -639,13 +698,14 @@ class AppForm(QMainWindow):
         return action
 
 
-def main(L):
+def main():
     app = QApplication(sys.argv)
-    form = AppForm(L=L)
+    form = AppForm()
+    form.setGeometry(100,100,300,300)
     form.show()
     app.exec_()
 
 
 if __name__ == "__main__":
     L=Layout('TA-Office.ini')
-    main(L)
+    main()

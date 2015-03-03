@@ -2249,6 +2249,7 @@ class Layout(PyLayers):
         self.Gs.add_edge(n2, num)
         self.Ns = self.Ns + 1
         # update slab name <-> edge number dictionnary
+        print num,name
         try:
             self.name[name].append(num)
         except:
@@ -4768,13 +4769,14 @@ class Layout(PyLayers):
             fig,ax=self.show_nodes(ndlist, size=30, color='k', dlabels=dlabels,node_shape='s',fig=fig,ax=ax)
 
         if self.display['subsegnb']:
-            seg = self.lsss
+            if hasattr(self,'lsss'):
+                seg = self.lsss
 
-            psseg = np.array([[self.Gs.pos[x][0],self.Gs.pos[x][1]] for x in seg])
-            nbsseg = np.array([len(self.Gs.node[x]['ss_name']) for x in seg],dtype='int')
+                psseg = np.array([[self.Gs.pos[x][0],self.Gs.pos[x][1]] for x in seg])
+                nbsseg = np.array([len(self.Gs.node[x]['ss_name']) for x in seg],dtype='int')
 
-            [ax.text(psseg[x,0]+0.1,psseg[x,1]+0.1,str(nbsseg[x]),
-                fontdict={'size':8},ha='center') for x in range(len(seg))]
+                [ax.text(psseg[x,0]+0.1,psseg[x,1]+0.1,str(nbsseg[x]),
+                    fontdict={'size':8},ha='center') for x in range(len(seg))]
 
         slablist = self.name.keys()
         if self.display['edges']:
