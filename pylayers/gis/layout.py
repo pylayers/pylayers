@@ -7906,6 +7906,7 @@ class Layout(PyLayers):
                                            self.af.OnPress)
         self.cid5 = fig.canvas.mpl_connect('key_release_event',
                                            self.af.OnRelease)
+
         plt.draw()
         plt.axis('tight')
         plt.show()

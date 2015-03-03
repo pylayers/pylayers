@@ -108,6 +108,7 @@ class SelectL2(object):
         self.selectseg=[]
         self.selected='pt'
         self.motion=False
+        self.ptmove=False
         def toggle_selector(self,event):
             if toggle_selector.RS.active:
                 toggle_selector.set_active(False)
@@ -173,7 +174,7 @@ class SelectL2(object):
         return(self.fig,self.ax)
 
 
-    def plotselptseg(self,pt,color='y'):
+    def plotselptseg(self,pt,color='y',alpha=0.4,ms=10):
         """ plot selected point or segments
 
         Parameters
@@ -188,8 +189,8 @@ class SelectL2(object):
             p1 = self.ax.plot(pts[:,0], pts[:,1], 'o', 
                                 visible=True, 
                                 color =color,
-                                ms=10,
-                                alpha=0.4)
+                                ms=ms,
+                                alpha=alpha)
             self.fig.canvas.draw()
 
         return self.fig,self.ax
@@ -291,6 +292,9 @@ class SelectL2(object):
 
     #     self.new_state()
 
+
+
+
     def OnClick(self, event):
         """ handle OnClick event
 
@@ -308,10 +312,31 @@ class SelectL2(object):
         # if not (self.shift_is_held or self.ctrl_is_held or self.alt_is_held):
         #     self.update_state()
         #     self.new_state()
+        fig = self.fig#plt.gcf()
+        ax  = self.ax#plt.gca()
+        self.nsel = 0
+        if not self.state == 'SMP' :
+            self.selectpt=[]
+            self.selectseg=[]
+        self.ptsel = np.array([])
+        xmin, xmax, ymin, ymax = self.ax.axis()
+        #print xmin,xmax,ymin,ymax
+        dx = xmax - xmin
+        dy = ymax - ymin
+        dd = np.minimum(dx, dy)
+
         if event.button == 1 and event.inaxes:
             self.evt = 'lclic'
             self.motion=False
-
+            x = event.xdata
+            y = event.ydata
+            self.ptsel = np.array((x, y))
+            self.nsel = self.L.ispoint(self.ptsel, dd / 10)
+            if self.selected_pt1==self.nsel and self.nsel != 0 and not 'SM' in self.state :
+                self.ptmove=True
+            else :
+                self.ptmove=False
+        
 
         if event.button == 2 and event.inaxes:
             self.evt = 'cclic'
@@ -334,41 +359,51 @@ class SelectL2(object):
 
 
     def OnMotion(self,event):
-        if self.state !='CP':
+        if self.state !='CP' and not self.ptmove:
             if event.button == 1:
                 self.motion=True
                 self.state='SMP'
                 if not self.selector.active:
                     self.selector.set_active(True)
                     self.update_state()
-
-            # self.selector = toggle_selector.RS
-    def OnClickRelease(self,event):
-        fig = self.fig#plt.gcf()
-        ax  = self.ax#plt.gca()
-        self.nsel = 0
-        if not self.state == 'SMP' :
-            self.selectpt=[]
-            self.selectseg=[]
-        self.ptsel = np.array([])
-        xmin, xmax, ymin, ymax = self.ax.axis()
-        #print xmin,xmax,ymin,ymax
-        dx = xmax - xmin
-        dy = ymax - ymin
-        dd = np.minimum(dx, dy)
-        if self.evt == 'lclic' and self.motion==False:
+                
+        elif self.state =='SP1' and self.ptmove and event.button == 1:
             x = event.xdata
             y = event.ydata
-            self.ptsel = np.array((x, y))
-            self.nsel = self.L.ispoint(self.ptsel, dd / 10)
+            self.updatedrawpt(self.nsel,x,y)
+                # self.update_state()
+            # self.selector = toggle_selector.RS
+
+
+
+    def OnClickRelease(self,event):
+        print self.ptmove,not 'SM' in self.state
+        if self.evt == 'lclic' and self.motion==False and not self.ptmove:
             if self.nsel ==0 and self.state != 'CP':
                 self.modeIni() 
             # self.update_state()
-            print 'here'
             self.new_state()
 
-        if self.evt == 'lclic' and self.motion==True:
+        if self.evt == 'lclic' and self.motion==True and not self.ptmove:
+            self.nsel=0
             self.motion=False
+
+        if self.evt == 'lclic' and self.ptmove and not 'SM' in self.state:
+            self.L.Gs.pos[self.nsel]=(event.xdata,event.ydata)
+            segs = self.L.Gs[self.nsel]
+            for s in segs:
+                n1,n2=self.L.Gs[s].keys()
+                p1 = np.array(self.L.Gs.pos[n1])
+                p2 = np.array(self.L.Gs.pos[n2])
+                p2mp1 = p2 - p1
+                t = p2mp1 / np.sqrt(np.dot(p2mp1, p2mp1))
+                norm = np.array([t[1], -t[0], 0])
+                self.L.Gs.node[s]['norm']=norm
+                self.L.Gs.pos[s]=tuple((p1 + p2) / 2.)
+            self.L.g2npy()
+            self.nsel=0
+            self.modeIni()
+            self.new_state()
 
 
 
@@ -507,7 +542,7 @@ class SelectL2(object):
                 titre = 'Select Segment : %d (%d->%d) Layer : %s' % (nse, ta, he, self.L.Gs.node[nse]['name'])
             print titre 
             #ax.title.set_text(titre)
-            self.L.show_nodes(ndlist=[nse], size=200, color='r', alpha=0.5)
+            self.L.show_nodes(ndlist=[nse], size=200, color='r', alpha=0.5,fig=self.fig,ax=self.ax)
 
         if self.state == 'SSS':
             self.ax.title.set_text(self.statename[self.state])
@@ -589,6 +624,17 @@ class SelectL2(object):
         #print self.selected_pt2
         self.fig.canvas.draw()
         return(self.fig,self.ax)
+
+    def updatedrawpt(self,pt,x,y):
+        self.L.Gs.pos[pt] = (x,y)
+        self.plotselptseg([self.nsel],alpha=1,color='k',ms=3)
+        # redraw just the current rectangle
+        # self.ax.draw_artist(ptA)
+
+        # blit just the redrawn area
+        # self.canvas.blit(self.ax.bbox)
+
+
 
     def escape(self):
         """ self.evt==escapr
