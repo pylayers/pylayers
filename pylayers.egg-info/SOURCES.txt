@@ -42,6 +42,9 @@ pylayers/gis/readHGT.py
 pylayers/gis/readvrml.py
 pylayers/gis/selectl.py
 pylayers/gis/srtm.py
+pylayers/gui/__init__.py
+pylayers/gui/editor.py
+pylayers/gui/editor_select.py
 pylayers/location/__init__.py
 pylayers/location/localization.py
 pylayers/location/locarule.py
