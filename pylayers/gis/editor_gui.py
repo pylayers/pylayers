@@ -35,10 +35,24 @@ class SubSegWin(QDialog):    # any super class is okay
     def _init_layout(self):
 
         vbox = QVBoxLayout()
+
+        # Indicate Ceil
+        hboxceil = QHBoxLayout()
+        ceillabel = QLabel('Ceil')
+        ceillabel.setStyleSheet("font: bold 14px;")
+        hboxceil.addWidget(ceillabel)
+        hboxceil.setAlignment(Qt.AlignCenter)
+        
+        vbox.addLayout(hboxceil)
+
+        vbox.addWidget(self.Hline())
+        vbox.addWidget(self.Hline())
+
+
         for ss in range(self.Nss):
             # slab
-            hboxtitle=QHBoxLayout()
-            hboxtitle.addWidget(QLabel('Sub-Segment'+str(ss+1)))
+            # hboxtitle=QHBoxLayout()
+            # hboxtitle.addWidget(QLabel('Sub-Segment'+str(ss+1)))
             hbox1 = QHBoxLayout() 
             hbox1.addWidget(self.lcomboslab[ss])
 
@@ -51,10 +65,23 @@ class SubSegWin(QDialog):    # any super class is okay
                 hboxl2.addWidget(QLabel(label[iw]))
                 hbox2.addWidget(w)
 
-            vbox.addLayout(hboxtitle)
+            # vbox.addLayout(hboxtitle)
             vbox.addLayout(hbox1)
             vbox.addLayout(hboxl2)
-            vbox.addLayout(hbox2)        
+            vbox.addLayout(hbox2)
+            if ss < self.Nss-1:
+                vbox.addWidget(self.Hline())
+
+
+        vbox.addWidget(self.Hline())
+        vbox.addWidget(self.Hline())
+        # Indicate Floor
+        hboxfloor = QHBoxLayout()
+        floorlabel = QLabel('Floor')
+        floorlabel.setStyleSheet("font: bold 14px;")
+        hboxfloor.addWidget(floorlabel)
+        hboxfloor.setAlignment(Qt.AlignCenter)
+        vbox.addLayout(hboxfloor)
 
 
 
@@ -74,6 +101,13 @@ class SubSegWin(QDialog):    # any super class is okay
         vbox.addLayout(hboxDial)
         self.setLayout(vbox)
 
+    def Hline(self):
+        """ Create  horizontal line widget
+        """
+        hline = QFrame()
+        hline.setFrameShape(QFrame.HLine)
+        hline.setFrameShadow(QFrame.Sunken)
+        return hline
     def _autocalc_height_val(self):
         """ split height proportionnaly to the number of subsegs
             when new subseg
@@ -203,33 +237,19 @@ class SubSegWin(QDialog):    # any super class is okay
         self.parent.subsegdata['ss_name']=[]
         self.parent.subsegdata['ss_z']=[]
         self.parent.subsegdata['ss_offset']=[]
-        # check z
-        zz=[]
+        
         for ss in self.sszo:
-            zz.append((self.lheightmin[ss].value(),self.lheightmax[ss].value()))
-        zz=np.array(zz)
-        uszz = np.argsort(zz[:,0])
-        szz = zz[uszz]
-        # position overla
-        uo=np.where(szz[:-1,1]>szz[1:,0])[0]
-        print self.sszo
-        if len(uo) == 0: 
-            for ss in self.sszo:
-                z = (self.lheightmin[ss].value(),self.lheightmax[ss].value())
-                self.parent.subsegdata['ss_name'].append(str(self.lcomboslab[ss].currentText()))
-                self.parent.subsegdata['ss_z'].append(z)
-                self.parent.subsegdata['ss_offset'].append(self.loffset[ss].value())
-            print self.parent.subsegdata
-            # if not self.mulseg:
-            #     self.gparent.L.edit_seg(self.gparent.selectl.nsel,self.subsegdata)
-            # else:
-            #     [self.gparent.L.edit_seg(s,self.subsegdata) for s in self.gparent.selectl.selectseg]
-            self.close()
-        else :
-            [self.lheightmax[u].setStyleSheet("color: red") for u in uo]
-            [self.lheightmin[u].setStyleSheet("color: red") for u in uo+1]
+            z = (self.lheightmin[ss].value(),self.lheightmax[ss].value())
+            self.parent.subsegdata['ss_name'].append(str(self.lcomboslab[ss].currentText()))
+            self.parent.subsegdata['ss_z'].append(z)
+            self.parent.subsegdata['ss_offset'].append(self.loffset[ss].value())
 
-
+        # if not self.mulseg:
+        #     self.gparent.L.edit_seg(self.gparent.selectl.nsel,self.subsegdata)
+        # else:
+        #     [self.gparent.L.edit_seg(s,self.subsegdata) for s in self.gparent.selectl.selectseg]
+        self.close()
+        
     def cancel(self):
         self.close()
 
