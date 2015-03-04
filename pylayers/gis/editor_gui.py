@@ -42,7 +42,7 @@ class SubSegWin(QDialog):    # any super class is okay
         ceillabel.setStyleSheet("font: bold 14px;")
         hboxceil.addWidget(ceillabel)
         hboxceil.setAlignment(Qt.AlignCenter)
-        
+
         vbox.addLayout(hboxceil)
 
         vbox.addWidget(self.Hline())
@@ -53,12 +53,12 @@ class SubSegWin(QDialog):    # any super class is okay
             # slab
             # hboxtitle=QHBoxLayout()
             # hboxtitle.addWidget(QLabel('Sub-Segment'+str(ss+1)))
-            hbox1 = QHBoxLayout() 
+            hbox1 = QHBoxLayout()
             hbox1.addWidget(self.lcomboslab[ss])
 
             # slab prop
-            hboxl2 = QHBoxLayout() 
-            hbox2 = QHBoxLayout() 
+            hboxl2 = QHBoxLayout()
+            hbox2 = QHBoxLayout()
             label=['zmin','zmax','offset','']
             for iw,w in enumerate([ self.lheightmin[ss],self.lheightmax[ss],
                                     self.loffset[ss]]):
@@ -91,7 +91,7 @@ class SubSegWin(QDialog):    # any super class is okay
         buttono.clicked.connect(self.valide)
         buttonc.clicked.connect(self.cancel)
 
-        hboxDial = QHBoxLayout() 
+        hboxDial = QHBoxLayout()
         hboxDial.addWidget(buttonc)
         hboxDial.addWidget(buttono)
 
@@ -119,7 +119,7 @@ class SubSegWin(QDialog):    # any super class is okay
             self.lma.append(self.zmax)
             self.lmi.append(self.zmin)
     #     if self.Nss >1:
-            
+
 
     #         for s in range(self.Nss):
     #             self.lma.append(((self.Nss-s)*(self.zmax))/self.Nss)
@@ -137,12 +137,12 @@ class SubSegWin(QDialog):    # any super class is okay
         self.lheightmin=[]
         self.lheightmax=[]
         self.loffset=[]
-        self.lcomboslab = [] 
+        self.lcomboslab = []
         self.lzQ=[]
 
-        # TODO 
+        # TODO
         # sort subsegments from floor to ceil
-        # add connect to impose begin of previous segment 
+        # add connect to impose begin of previous segment
         # sort subseg by height
         z = np.array(self.subsegdata['ss_z'])
         self.sszo = np.argsort(z[:,0])[::-1]
@@ -237,7 +237,7 @@ class SubSegWin(QDialog):    # any super class is okay
         self.parent.subsegdata['ss_name']=[]
         self.parent.subsegdata['ss_z']=[]
         self.parent.subsegdata['ss_offset']=[]
-        
+
         for ss in self.sszo:
             z = (self.lheightmin[ss].value(),self.lheightmax[ss].value())
             self.parent.subsegdata['ss_name'].append(str(self.lcomboslab[ss].currentText()))
@@ -249,7 +249,7 @@ class SubSegWin(QDialog):    # any super class is okay
         # else:
         #     [self.gparent.L.edit_seg(s,self.subsegdata) for s in self.gparent.selectl.selectseg]
         self.close()
-        
+
     def cancel(self):
         self.close()
 
@@ -262,7 +262,7 @@ class PropertiesWin(QDialog):    # any super class is okay
         # determine if multiple se gments are selected
         self.mulseg=mulseg
 
-        # combo box 
+        # combo box
         self._init_slab_prop()
         self._init_subsegs()
         self._init_layout()
@@ -270,7 +270,7 @@ class PropertiesWin(QDialog):    # any super class is okay
 
 
         # self.button.clicked.connect(self.create_child)
-    
+
 
 
     def _init_subsegs(self):
@@ -281,8 +281,8 @@ class PropertiesWin(QDialog):    # any super class is okay
 
         if self.parent.selectl.nsel in self.parent.L.lsss :
             sub = self.parent.L.Gs.node[self.parent.selectl.nsel]
-            Nss = len(sub['ss_name']) 
-        else : 
+            Nss = len(sub['ss_name'])
+        else :
             Nss=0
 
         for ss in range(Nss):
@@ -299,9 +299,9 @@ class PropertiesWin(QDialog):    # any super class is okay
             self.segdata['offset']=0.0
             self.segdata['z']=(0.0,self.parent.L.maxheight)
             self.segdata['transition']=False
-            
+
         # else : default are read from self.Gs.node[node]
-        else : 
+        else :
             self.segdata = self.parent.L.Gs.node[self.parent.selectl.nsel]
 
 
@@ -313,7 +313,7 @@ class PropertiesWin(QDialog):    # any super class is okay
 
 
 
-        self.heightmin = QDoubleSpinBox()       
+        self.heightmin = QDoubleSpinBox()
         self.heightmin.setObjectName("zmin")
         self.heightmin.setSingleStep(0.01)
         self.heightmin.setRange(0.,800.)
@@ -332,9 +332,9 @@ class PropertiesWin(QDialog):    # any super class is okay
         self.offset.setRange(-1.,1.)
         self.offset.setValue(self.segdata['offset'])
 
-        self.transition = QPushButton("Transition")
-        self.transition.setCheckable(True)
-        self.transition.setDefault(self.segdata['transition'])
+        self.transition = QCheckBox("Transition")
+        # self.transition.setCheckable(True)
+        self.transition.setCheckState(self.segdata['transition'])
         # self.transition.setText("0")
 
         self.nbsubseg = QSpinBox()
@@ -348,12 +348,12 @@ class PropertiesWin(QDialog):    # any super class is okay
         self.editssbutton = QPushButton("Edit Sub-Segments")
         self.editssbutton.clicked.connect(self.editsubseg)
 
-        
+
 
         self.heightmin.setMinimumWidth(5)
         self.heightmax.setMinimumWidth(5)
         self.transition.setMinimumWidth(5)
-        
+
 
         self.heightmin.setMaximumWidth(70)
         self.heightmax.setMaximumWidth(70)
@@ -364,12 +364,12 @@ class PropertiesWin(QDialog):    # any super class is okay
     def _init_layout(self):
 
         # slab
-        hbox1 = QHBoxLayout() 
+        hbox1 = QHBoxLayout()
         hbox1.addWidget(self.comboslab)
 
         # slab prop
-        hbox2 = QHBoxLayout() 
-        hboxl2 = QHBoxLayout() 
+        hbox2 = QHBoxLayout()
+        hboxl2 = QHBoxLayout()
         label=['zmin','zmax','offset','']
         for iw,w in enumerate([ self.heightmin,self.heightmax,self.offset,self.transition]):
             hboxl2.addWidget(QLabel(label[iw]))
@@ -377,8 +377,8 @@ class PropertiesWin(QDialog):    # any super class is okay
             # hbox2.setAlignment(w, Qt.AlignVCenter)
 
         # subseg prop
-        hbox3 = QHBoxLayout() 
-        hboxl3 = QHBoxLayout() 
+        hbox3 = QHBoxLayout()
+        hboxl3 = QHBoxLayout()
 
         hbox3.addWidget(self.nbsubseg)
         hbox3.addWidget(self.editssbutton)
@@ -394,7 +394,7 @@ class PropertiesWin(QDialog):    # any super class is okay
         buttono.clicked.connect(self.valide)
         buttonc.clicked.connect(self.cancel)
 
-        hboxDial = QHBoxLayout() 
+        hboxDial = QHBoxLayout()
         hboxDial.addWidget(buttonc)
         hboxDial.addWidget(buttono)
 
@@ -489,16 +489,16 @@ class SaveQuitWin(QDialog):    # any super class is okay
         buttonq.clicked.connect(self.quit)
         buttons.clicked.connect(self.save)
         buttonc.clicked.connect(self.cancel)
-        
 
-        hboxDial = QHBoxLayout() 
+
+        hboxDial = QHBoxLayout()
         hboxDial.addWidget(buttonq)
         hboxDial.addWidget(buttons)
         hboxDial.addWidget(buttonc)
 
 
         # create Layout
-        
+
         self.setLayout(hboxDial)
         print exit
     def quit(self):
@@ -592,8 +592,8 @@ class AppForm(QMainWindow):
     def edit_properties(self):
         """ edit wall properties
         """
-        
-        
+
+
         if (self.selectl.state == 'SS') and (self.selectl.nsel > 0):
             self.prop = PropertiesWin(parent=self,mulseg=False)
             self.prop.show()
@@ -610,7 +610,7 @@ class AppForm(QMainWindow):
 
     def on_about(self):
         msg = """ This is the PyLayers' Stand-Alone Layout Editor (BETA)
-        
+
          This tool allow to personalize  your own building layout in terms of
          floor plan and constitutive materials.
          Once edited and saved, the layout can be used into the PyLayers Ray tracing tool.
@@ -627,7 +627,7 @@ class AppForm(QMainWindow):
          CTRL + s : Save Layout
          CTRL + q : Quit Editor
          escape : back to a stable state
- 
+
          More hints about editing can be found in the status bar.
 
 
@@ -640,7 +640,7 @@ class AppForm(QMainWindow):
         """
         QMessageBox.about(self, "Pylayers' Stand-Alone Layout Editor (BETA)", msg.strip())
 
-    
+
 
 
 
@@ -649,12 +649,12 @@ class AppForm(QMainWindow):
         """
         # str = unicode(self.textbox.text())
         # self.data = map(int, str.split())
-        
+
         # x = range(len(self.data))
 
         # clear the axes and redraw the plot anew
         #
-        self.axes.clear()        
+        self.axes.clear()
         # self.axes.grid(self.grid_cb.isChecked())
         self.L.display['nodes']=True
         self.L.display['ednodes']=True
@@ -662,16 +662,16 @@ class AppForm(QMainWindow):
 
         self.fig,self.axes = self.selectl.show(self.fig,self.axes,clear=True)
         # self.axes.text(10,10,str(self.properties.currentText()))
-        
+
         # self.L.showGs(fig=self.fig,ax=self.axes)
         # self.axes.bar(
-        #     left=x, 
-        #     height=self.data, 
-        #     width=self.slider.value() / 100.0, 
-        #     align='center', 
+        #     left=x,
+        #     height=self.data,
+        #     width=self.slider.value() / 100.0,
+        #     align='center',
         #     alpha=0.44,
         #     picker=5)
-        
+
         self.canvas.draw()
 
     def on_release(self,event):
@@ -688,8 +688,8 @@ class AppForm(QMainWindow):
         self.statusBar().showMessage(string)
     def create_main_frame(self):
         self.main_frame = QWidget()
-        
-        # Create the mpl Figure and FigCanvas objects. 
+
+        # Create the mpl Figure and FigCanvas objects.
         # 5x4 inches, 100 dots-per-inch
         #
 
@@ -697,15 +697,15 @@ class AppForm(QMainWindow):
         self.fig = Figure((20.0, 30.0), dpi=self.dpi)
         self.canvas = FigureCanvas(self.fig)
         self.canvas.setParent(self.main_frame)
-        
-        # Since we have only one plot, we can use add_axes 
+
+        # Since we have only one plot, we can use add_axes
         # instead of add_subplot, but then the subplot
         # configuration tool in the navigation toolbar wouldn't
         # work.
         #
         self.axes = self.fig.add_subplot(111)
 
-        
+
         # Bind the 'pick' event for clicking on one of the bars
         #
         # self.canvas.mpl_connect('pick_event', self.on_pick)
@@ -726,12 +726,12 @@ class AppForm(QMainWindow):
         self.canvas.setFocusPolicy( Qt.ClickFocus )
         self.canvas.setFocus()
 
-        
+
         #Create the navigation toolbar, tied to the canvas
         #
         self.mpl_toolbar = NavigationToolbar(self.canvas, self.main_frame)
 
-        
+
         vbox = QVBoxLayout()
         vbox.addWidget(self.canvas)
         vbox.addWidget(self.mpl_toolbar)
@@ -739,12 +739,12 @@ class AppForm(QMainWindow):
 
         self.main_frame.setLayout(vbox)
         self.setCentralWidget(self.main_frame)
-    
+
     def create_status_bar(self):
         self.status_text = QLabel("Open a Layout")
         self.statusBar().addWidget(self.status_text, 1)
 
-        
+
     # def shortcuts(self):
     #     shortcut = QShortcut(self)
     #     shortcut.setKey("Ctrl+D")
@@ -755,38 +755,38 @@ class AppForm(QMainWindow):
         self.edit_menu = self.menuBar().addMenu("&Edit")
         self.help_menu = self.menuBar().addMenu("&Help")
         # load_file_action = self.create_action("&Save plot",
-        #     shortcut="Ctrl+S", slot=self.save_plot, 
+        #     shortcut="Ctrl+S", slot=self.save_plot,
         #     tip="Save the plot")
-        new_action = self.create_action("&New Layout", slot=self.new, 
+        new_action = self.create_action("&New Layout", slot=self.new,
         shortcut="Ctrl+n", tip="new layout")
-        open_action = self.create_action("&Open", slot=self.open, 
+        open_action = self.create_action("&Open", slot=self.open,
         shortcut="Ctrl+o", tip="Open Layout")
-        save_action = self.create_action("&Save", slot=self.save, 
+        save_action = self.create_action("&Save", slot=self.save,
         shortcut="Ctrl+s", tip="Save Layout")
-        saveas_action = self.create_action("&Save as...", slot=lambda x=True:self.save(x), 
+        saveas_action = self.create_action("&Save as...", slot=lambda x=True:self.save(x),
         shortcut="Ctrl+Shift+s", tip="Save as")
-        # open_action = self.create_action("&Open", slot=self.open, 
+        # open_action = self.create_action("&Open", slot=self.open,
         # shortcut="Ctrl+o", tip="Open Layout")
         close_action = self.create_action("&Close", shortcut='Ctrl+w', slot=self.closel, tip="Close Layout")
-        quit_action = self.create_action("&Quit", slot=lambda x=True:self.closel(x), 
+        quit_action = self.create_action("&Quit", slot=lambda x=True:self.closel(x),
             shortcut="Ctrl+Q", tip="Close the application")
 
-        refresh = self.create_action("&Refresh", slot=self.on_draw, 
+        refresh = self.create_action("&Refresh", slot=self.on_draw,
             shortcut="F10", tip="Refresh the application")
-        properties= self.create_action("&Properties", slot=self.edit_properties, 
+        properties= self.create_action("&Properties", slot=self.edit_properties,
             shortcut="F3", tip="Edit Wall properties")
-        # show3= self.create_action("&Properties", slot=self.edit_properties, 
+        # show3= self.create_action("&Properties", slot=self.edit_properties,
         #     shortcut="F9", tip="3D show")
 
-        about_action = self.create_action("&About", 
-            shortcut='F12', slot=self.on_about, 
+        about_action = self.create_action("&About",
+            shortcut='F12', slot=self.on_about,
             tip='about')
-        
 
-        self.add_actions(self.file_menu, 
+
+        self.add_actions(self.file_menu,
             ( new_action,open_action,None,save_action,saveas_action,None,close_action,quit_action,))
-        
-        self.add_actions(self.edit_menu, 
+
+        self.add_actions(self.edit_menu,
             ( properties,None,refresh))
 
         self.add_actions(self.help_menu, (about_action,))
@@ -798,8 +798,8 @@ class AppForm(QMainWindow):
             else:
                 target.addAction(action)
 
-    def create_action(  self, text, slot=None, shortcut=None, 
-                        icon=None, tip=None, checkable=False, 
+    def create_action(  self, text, slot=None, shortcut=None,
+                        icon=None, tip=None, checkable=False,
                         signal="triggered()"):
         action = QAction(text, self)
         if icon is not None:

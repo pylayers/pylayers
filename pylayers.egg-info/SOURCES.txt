@@ -21,7 +21,6 @@ pylayers/antprop/loss.py
 pylayers/antprop/rays.py
 pylayers/antprop/raysc.py
 pylayers/antprop/signature.py
-pylayers/antprop/signature_run2015_TMP.py
 pylayers/antprop/slab.py
 pylayers/antprop/spharm.py
 pylayers/antprop/statModel.py
@@ -30,7 +29,6 @@ pylayers/exploit/__init__.py
 pylayers/exploit/simnet.py
 pylayers/gis/__init__.py
 pylayers/gis/cycles.py
-pylayers/gis/editor.py
 pylayers/gis/editor_gui.py
 pylayers/gis/editor_select.py
 pylayers/gis/ezone.py
@@ -44,11 +42,9 @@ pylayers/gis/readHGT.py
 pylayers/gis/readvrml.py
 pylayers/gis/selectl.py
 pylayers/gis/srtm.py
-pylayers/gis/test_loc.py
 pylayers/location/__init__.py
 pylayers/location/localization.py
 pylayers/location/locarule.py
-pylayers/location/test_loc.py
 pylayers/location/algebraic/PyGraphTool.py
 pylayers/location/algebraic/PyMathTool.py
 pylayers/location/algebraic/__init__.py
@@ -80,14 +76,10 @@ pylayers/location/learning/__init__.py
 pylayers/location/learning/loclearn.py
 pylayers/measures/Hikobstart.py
 pylayers/measures/__init__.py
-pylayers/measures/analyse_mocap.py
-pylayers/measures/bodycheck.py
-pylayers/measures/check_CorSer.py
 pylayers/measures/cormoran.py
 pylayers/measures/easyRadio.py
 pylayers/measures/mesmimo.py
 pylayers/measures/mesuwb.py
-pylayers/measures/test_align.py
 pylayers/measures/switch/ni_usb_6501.py
 pylayers/measures/vna/E5072A.py
 pylayers/measures/vna/__init__.py
@@ -100,7 +92,6 @@ pylayers/mobility/ban/body.py
 pylayers/mobility/ban/c3d.py
 pylayers/mobility/ban/c3dtools.py
 pylayers/mobility/ban/dist.py
-pylayers/mobility/ban/testDeuxseg.py
 pylayers/mobility/transit/Person.py
 pylayers/mobility/transit/SteeringBehavior.py
 pylayers/mobility/transit/World.py
