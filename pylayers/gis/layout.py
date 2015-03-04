@@ -269,6 +269,8 @@ import pylayers.gis.osmparser as osm
 #from pylayers.gis import cycles as Cycls
 from pylayers.gis import cycles as cycl # new version of cycles
 from pylayers.gis.selectl import SelectL
+from pylayers.gis.editor_select import SelectL2
+
 from pylayers.util.easygui import *
 from pylayers.util.project import *
 #from   PyUtil  import *
@@ -380,6 +382,7 @@ class Layout(PyLayers):
         self.display['ednodes'] = False
         self.display['subseg'] = True
         self.display['subsegnb'] = True
+        self.display['transition'] = True
         self.display['visu'] = False
         self.display['thin'] = False
         self.display['scaled'] = True
@@ -2247,6 +2250,7 @@ class Layout(PyLayers):
         self.Gs.add_edge(n2, num)
         self.Ns = self.Ns + 1
         # update slab name <-> edge number dictionnary
+        print num,name
         try:
             self.name[name].append(num)
         except:
@@ -2760,7 +2764,7 @@ class Layout(PyLayers):
                 self.g2npy()
 
     def edit_segment(self, e1 , gui=True,outdata={}):
-        """ edit segment
+        """ edit segment WITH EasyGUI
 
         Parameters
         ----------
@@ -2791,12 +2795,12 @@ class Layout(PyLayers):
         title = "Segment (" + str(n1) + ',' + str(n2) + ")"
         message = str(self.sl.keys())
         if 'ss_name' not in de1.keys():
-            de1k = ['name', 'z','transition']
-            de1v = [de1['name'],de1['z'],de1['transition']]
+            de1k = ['name', 'z','transition','offset']
+            de1v = [de1['name'],de1['z'],de1['transition'],de1['offset']]
         else:
-            de1k = ['name', 'z', 'ss_name', 'ss_z','transition']
+            de1k = ['name', 'z', 'ss_name', 'ss_z','transition','ss_offset']
             de1v = [de1['name'], de1['z'], de1['ss_name'], de1['ss_z'],
-                    de1['transition']]
+                    de1['transition'],de1['ss_offset']]
         #de1v    = de1.values()
         if gui:
             outdata={}
@@ -2841,9 +2845,44 @@ class Layout(PyLayers):
                 #         pass
             else:
                 for k in de1k:
-                    if k in ['z','name','transition']:
+                    if k in ['z','name','transition','offset']:
                         self.Gs.node[e1][k] = outdata[k]
         return outdata
+
+    def edit_seg(self, e1 ,data={}):
+        """ edit segment
+
+        Parameters
+        ----------
+
+        e1 : integer
+            edge number
+        data : dict
+            dictionnary of value of seg or subseg
+
+        Notes
+        -----
+
+        A segment has the following properties :
+            + name  : string
+            + z  :  tuple
+            + transition : boolean (default FALSE)
+            + offset : [-1,1]
+        If a segment has subsegments attached the following properties are
+        added :
+            + ss_name : list of string
+            + ss_z : list of subsegment e.q. [(min height (meters),max height (meters))]
+            + ss_offset : list of offset in [0,1]
+        """
+
+        
+        #de1v    = de1.values()
+        if data=={}:
+            pass
+        else:
+            for k in data:
+                self.Gs.node[e1][k] = data[k]
+        return data
 
        
     def have_subseg(self, e1):
@@ -2868,6 +2907,7 @@ class Layout(PyLayers):
         if self.have_subseg(e1):
             self.Gs.node[e1].pop('ss_name')
             self.Gs.node[e1].pop('ss_z')
+            self.Gs.node[e1].pop('ss_offset')
             try:
                 self.Gs.node[e1].pop('ss_ce')
             except:
@@ -2878,7 +2918,7 @@ class Layout(PyLayers):
             print "no subseg to delete"
 
     def add_subseg(self,s1,name='DOOR',zmin=0,zmax=2.24,offset=0,transition=True):
-        """ add a subsegment on a segment
+        """ add a subsegment on a segment WITH EasyGUI
 
         Parameters
         ----------
@@ -2906,8 +2946,55 @@ class Layout(PyLayers):
             # ce is for Pulsray compatibility
             #self.Gs.node[s1]['ss_ce'] = [ (0,0) ]
             self.Gs.node[s1]['transition'] = transition
+            return True
         except:
-            pass
+            return False
+
+
+    def update_sseg(self,s1,data={}):
+        """ update subsegment(s) on a segment
+
+        Parameters
+        ----------
+
+        s1 : integer
+            edge number > 0
+        data = dict
+            dictionnary of data
+
+        """
+
+        assert len(data['ss_name'])==len(data['ss_z']),'Error incompatible size in chgmss'
+        assert len(data['ss_z'])==len(data['ss_offset']),'Error incompatible size in chgmss'
+        if s1<0:
+            return False
+
+        new_nbss = len(data['ss_name'])
+
+        try:
+            old_nbss = len(self.Gs.node[s1]['ss_name'])
+        except:
+            old_nbss = 0
+        # update the number of subsegments for self.Nss
+        deltaNss= new_nbss - old_nbss
+        print deltaNss
+        if new_nbss != 0:
+            self.Gs.node[s1]['ss_name'] = [data['ss_name']]
+            self.Nss += deltaNss
+            self.chgmss(s1,ss_name=data['ss_name'],
+                ss_offset=data['ss_offset'],
+                ss_z=data['ss_z'])
+            return True
+        else:
+            if self.Gs.node[s1].has_key('ss_name'):
+                self.Gs.node[s1].pop('ss_name')
+                self.Gs.node[s1].pop('ss_z')
+                self.Gs.node[s1].pop('ss_offset')
+                self.Nss += deltaNss
+                self.g2npy()
+                return True
+            else :
+                return True
 
 
     def add_window(self, s1, z):
@@ -4283,7 +4370,7 @@ class Layout(PyLayers):
         fileGc = filename + 'Gc' + '.gml'
         self.Gc = nx.read_gml(fileGc)
 
-    def show_nodes(self, ndlist=[1e8], size=10, color='b', dlabels=False, font_size=15, alpha=1,node_shape='o'):
+    def show_nodes(self, ndlist=[1e8], size=10, color='b', dlabels=False, font_size=15, alpha=1,node_shape='o',fig=[],ax=[]):
         """ show nodes
 
         Parameters
@@ -4299,6 +4386,11 @@ class Layout(PyLayers):
         alpha : float
             transparancy
         """
+        if fig ==[]:
+            fig = plt.figure()
+        if ax ==[]:
+            ax = fig.add_subplot(111)
+
         if type(ndlist) == np.ndarray:
             ndlist = list(ndlist)
         if len(ndlist) == 0:
@@ -4310,17 +4402,31 @@ class Layout(PyLayers):
         #    ndlist  = self.Gs.node.keys()
 
         #print ndlist
-        nx.draw_networkx_nodes(self.Gs, self.Gs.pos, node_color=color,
+        Z=nx.draw_networkx_nodes(self.Gs, self.Gs.pos, node_color=color,
                                node_size=size, nodelist=ndlist, alpha=alpha,
-                               node_shape=node_shape)
+                               node_shape=node_shape,fig=fig,ax=ax)
+        try:
+            fig=Z.figure
+            ax=Z.axes
+        except:
+            pass
         if dlabels:
             dicopos = {}
             dicolab = {}
             for n in ndlist:
                 dicopos[n] = np.array(self.Gs.pos[n])
                 dicolab[n] = self.labels[n]
-            nx.draw_networkx_labels(self.Gs, dicopos, dicolab,
-                                    font_size=font_size, font_color=color)
+            Z=nx.draw_networkx_labels(self.Gs, dicopos, dicolab,
+                                    font_size=font_size, font_color=color,fig=fig,ax=ax)
+            try:
+                fig=Z.figure
+                ax=Z.axes
+            except:
+                pass
+
+
+        return fig,ax
+
 
     def show_seg1(self, edlist=[], alpha=1, width=1, size=2, color='black', font_size=15, dlabels=False):
         """ show segment
@@ -4378,7 +4484,9 @@ class Layout(PyLayers):
 
         """
 
-        defaults = {'edlist': [],
+        defaults = { 'fig':[],
+                    'ax':[],
+                    'edlist': [],
                     'alpha':1,
                     'width':1,
                     'color':'black',
@@ -4392,6 +4500,14 @@ class Layout(PyLayers):
             if key not in kwargs:
                 kwargs[key] = value
 
+        if kwargs['fig'] ==[]:
+            fig = plt.figure()
+        else :
+            fig = kwargs['fig']
+        if kwargs['ax'] ==[]:
+            ax = fig.add_subplot(111)
+        else :
+            ax=kwargs['ax']
         clrlist = []
         cold = pyu.coldict()
 
@@ -4407,21 +4523,30 @@ class Layout(PyLayers):
         U = self.Gs.edges(kwargs['edlist'])
         ue = (np.ones(2 * len(kwargs['edlist']))).astype('int').tolist()
         if len(U) >0:
-            nx.draw_networkx_edges(self.Gs, self.Gs.pos, edgelist=U,
+            Z=nx.draw_networkx_edges(self.Gs, self.Gs.pos, edgelist=U,
                                edge_color=ue, edge_cmap=ecmap,
-                               alpha=kwargs['alpha'], width=kwargs['width'])
+                               alpha=kwargs['alpha'], width=kwargs['width'],fig=fig,ax=ax)
+            try:
+                fig=Z.figure
+                ax=Z.axes
+            except:
+                pass
+
         if kwargs['dlabels']:
                # print edlist
                # nodelist = self.ed2nd(edlist)
-            self.show_nodes(ndlist=kwargs['edlist'], dlabels=kwargs['dlabels'],
+            fig,ax=self.show_nodes(ndlist=kwargs['edlist'], dlabels=kwargs['dlabels'],
                             color='b', font_size=kwargs['font_size'],
-                            node_shape=kwargs['node_shape'])
+                            node_shape=kwargs['node_shape'],fig=fig,ax=ax)
         if kwargs['dnodes']:
-            self.show_nodes(ndlist=kwargs['edlist'], color='b')
+            fig,ax=self.show_nodes(ndlist=kwargs['edlist'], color='b',fig=fig,ax=ax)
+
+        return fig,ax
+
 
     def show_layer(self, name, edlist=[], alpha=1, width=0,
                    color='black', dnodes=False, dthin=False,
-                   dlabels=False, font_size=15,fGHz=[]):
+                   dlabels=False, font_size=15,fGHz=[],fig=[],ax=[]):
         """ show layer
 
         Parameters
@@ -4444,6 +4569,13 @@ class Layout(PyLayers):
 
 
         """
+
+        if fig ==[]:
+            fig = plt.figure()
+        if ax ==[]:
+            ax = fig.add_subplot(111)
+
+
         if edlist == []:
             edlist = self.name[name]
         else:
@@ -4453,12 +4585,12 @@ class Layout(PyLayers):
             edlist = list(np.intersect1d(a1, a2))
 
         if self.display['thin']:
-            self.show_segment(edlist=edlist,
+            fig,ax=self.show_segment(edlist=edlist,
                               alpha=1,
                               width=1,
                               color=color,
                               dlabels=dlabels,
-                              font_size=font_size)
+                              font_size=font_size,fig=fig,ax=ax)
         else:
             slab = self.sl[name]
             if width==0:
@@ -4473,10 +4605,10 @@ class Layout(PyLayers):
                 else:
                     color = 'black'
 
-            self.show_segment(edlist=edlist, alpha=1,
+            fig,ax=self.show_segment(edlist=edlist, alpha=1,
                             width=linewidth, color=color, dnodes=dnodes,
-                            dlabels=dlabels, font_size=font_size)
-
+                            dlabels=dlabels, font_size=font_size,fig=fig,ax=ax)
+        return fig,ax
 
     def _showGi(self, **kwargs):
         """  show graph of interactions Gi
@@ -4684,16 +4816,29 @@ class Layout(PyLayers):
 
         if self.display['nodes']:
             dlabels = self.display['ndlabel']
-            self.show_nodes(ndlist, size=30, color='k', dlabels=dlabels,node_shape='s')
+            fig,ax=self.show_nodes(ndlist, size=30, color='k', dlabels=dlabels,node_shape='s',fig=fig,ax=ax)
 
         if self.display['subsegnb']:
-            seg = self.lsss
+            if hasattr(self,'lsss'):
+                seg = self.lsss
+                psseg = np.array([[self.Gs.pos[x][0],self.Gs.pos[x][1]] for x in seg])
+                nbsseg = np.array([len(self.Gs.node[x]['ss_name']) for x in seg],dtype='int')
 
-            psseg = np.array([[self.Gs.pos[x][0],self.Gs.pos[x][1]] for x in seg])
-            nbsseg = np.array([len(self.Gs.node[x]['ss_name']) for x in seg],dtype='int')
+                [ax.text(psseg[x,0]+0.2,psseg[x,1]+0.2,str(nbsseg[x]),
+                    fontdict={'size':8},ha='center') for x in range(len(seg))]
 
-            [plt.text(psseg[x,0]+0.1,psseg[x,1]+0.1,str(nbsseg[x]),
-                fontdict={'size':8},ha='center') for x in range(len(seg))]
+        if self.display['transition']:
+            segwtrans = [y for y in [x for x in self.Gs.nodes() if x>0 ]if self.Gs.node[y]['transition']]
+            posseg = np.array([self.Gs.pos[x] for x in segwtrans])
+            normseg = np.array([self.Gs.node[x]['norm'] for x in segwtrans])[:,:2]
+            b1 = (posseg-normseg/2)
+            b2 = (posseg+normseg/2)
+            [ax.annotate('', xy=b1[x], 
+                        xycoords='data',
+                        xytext=b2[x], 
+                        textcoords='data',
+                        arrowprops={'arrowstyle': '<->'}) 
+                    for x in range(len(segwtrans))]
 
         slablist = self.name.keys()
         if self.display['edges']:
@@ -4703,9 +4848,9 @@ class Layout(PyLayers):
             dthin = self.display['thin']
             alpha = self.display['alpha']
             for nameslab in self.display['layers']:
-                self.show_layer(nameslab, edlist=edlist, alpha=alpha,
+                fig,ax=self.show_layer(nameslab, edlist=edlist, alpha=alpha,
                                 dthin=dthin, dnodes=dnodes, dlabels=dlabels,
-                                font_size=font_size,width=kwargs['width'],fGHz=kwargs['fGHz'])
+                                font_size=font_size,width=kwargs['width'],fGHz=kwargs['fGHz'],fig=fig,ax=ax)
 
         if self.display['subseg']:
             dico = self.subseg()
@@ -4725,7 +4870,7 @@ class Layout(PyLayers):
                     #edlist2.append(ts)
                 edlist3 = list(set(edlist2).intersection(set(edlist)))
                 #print k , color , edlist
-                self.show_segment(edlist=edlist3, color=color, alpha=1.0,width=2)
+                fig,ax=self.show_segment(edlist=edlist3, color=color, alpha=1.0,width=2,fig=fig,ax=ax)
 
         if self.display['scaled']:
             ax.axis('scaled')
@@ -4749,7 +4894,7 @@ class Layout(PyLayers):
 
         for nr in kwargs['roomlist']:
             ncy = self.Gr.node[nr]['cycle']
-            self.Gt.node[ncy]['polyg'].plot()
+            fig,ax=self.Gt.node[ncy]['polyg'].plot(fig=fig,ax=ax)
         if kwargs['axis']==[]:
             ax.axis('scaled')
         else:
@@ -7810,17 +7955,23 @@ class Layout(PyLayers):
         self.display['nodes']=True
         self.display['ednodes']=True
         self.display['subsegnb']=True
+        self.display['transition']=True
 
-        self.af = SelectL(self,fig=fig,ax=ax)
+        self.af = SelectL2(self,fig=fig,ax=ax)
 
         fig,ax = self.af.show(fig,ax,clear=True)
 
         self.cid1 = fig.canvas.mpl_connect('button_press_event',
                                            self.af.OnClick)
-        self.cid2 = fig.canvas.mpl_connect('key_press_event',
+        self.cid2 = fig.canvas.mpl_connect('button_release_event',
+                                           self.af.OnClickRelease)
+        self.cid3 = fig.canvas.mpl_connect('motion_notify_event',
+                                           self.af.OnMotion)
+        self.cid4 = fig.canvas.mpl_connect('key_press_event',
                                            self.af.OnPress)
-        self.cid3 = fig.canvas.mpl_connect('key_release_event',
+        self.cid5 = fig.canvas.mpl_connect('key_release_event',
                                            self.af.OnRelease)
+
         plt.draw()
         plt.axis('tight')
         plt.show()
