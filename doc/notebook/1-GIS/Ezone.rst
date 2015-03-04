@@ -8,8 +8,6 @@
 .. code:: python
 
     %matplotlib inline
-http://www.pylayers.org
-
 Geographical Information and the Earth Zone class : ``Ezone``
 =============================================================
 
@@ -88,13 +86,13 @@ method.
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x2b01dcbef650>,
-     <matplotlib.axes.AxesSubplot at 0x2b01dcbef910>)
+    (<matplotlib.figure.Figure at 0x2b8b54b6f4d0>,
+     <matplotlib.axes.AxesSubplot at 0x2b8b54b6f8d0>)
 
 
 
 
-.. image:: Ezone_files/Ezone_15_1.png
+.. image:: Ezone_files/Ezone_14_1.png
 
 
 The ``Ezone`` object has a member extent which gives
@@ -149,13 +147,13 @@ The aster DEM can also be shown.
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x2b01dae41550>,
-     <matplotlib.axes.AxesSubplot at 0x2b01dae41c10>)
+    (<matplotlib.figure.Figure at 0x2b8b52dc12d0>,
+     <matplotlib.axes.AxesSubplot at 0x2b8b52dc15d0>)
 
 
 
 
-.. image:: Ezone_files/Ezone_22_1.png
+.. image:: Ezone_files/Ezone_21_1.png
 
 
 An earth zone has an attached dictionnary of buildings, which contains
@@ -210,11 +208,11 @@ the ``show`` method for zooming in the map.
                  )
 
 
-.. image:: Ezone_files/Ezone_29_0.png
+.. image:: Ezone_files/Ezone_28_0.png
 
 
 
-.. image:: Ezone_files/Ezone_29_1.png
+.. image:: Ezone_files/Ezone_28_1.png
 
 
 The maps diplayed above are labeled in longitude (horizontal axis) and
@@ -233,7 +231,7 @@ cartesian coordinates as below
                  clim=[0,100])
 
 
-.. image:: Ezone_files/Ezone_32_0.png
+.. image:: Ezone_files/Ezone_31_0.png
 
 
 Let zoom to the University of Rennes 1 campus in the North-East region
@@ -262,7 +260,7 @@ of the city.
                  clim=[0,40])
 
 
-.. image:: Ezone_files/Ezone_35_0.png
+.. image:: Ezone_files/Ezone_34_0.png
 
 
 .. code:: python
@@ -275,7 +273,7 @@ of the city.
                  clim=[0,80])
 
 
-.. image:: Ezone_files/Ezone_36_0.png
+.. image:: Ezone_files/Ezone_35_0.png
 
 
 Ground Height Profile Extraction
@@ -303,12 +301,12 @@ be expressed in (lon,lat) coordinates in WGS84 system.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x2b01dd9241d0>
+    <matplotlib.text.Text at 0x2b8b57a1b190>
 
 
 
 
-.. image:: Ezone_files/Ezone_40_1.png
+.. image:: Ezone_files/Ezone_39_1.png
 
 
 .. code:: python
@@ -323,12 +321,12 @@ be expressed in (lon,lat) coordinates in WGS84 system.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x2b01f0d33ad0>
+    <matplotlib.text.Text at 0x2b8b5516f210>
 
 
 
 
-.. image:: Ezone_files/Ezone_41_1.png
+.. image:: Ezone_files/Ezone_40_1.png
 
 
 .. code:: python
@@ -362,5 +360,5 @@ be expressed in (lon,lat) coordinates in WGS84 system.
 
 
 
-.. image:: Ezone_files/Ezone_43_1.png
+.. image:: Ezone_files/Ezone_42_1.png
 
