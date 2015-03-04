@@ -2762,7 +2762,7 @@ class Layout(PyLayers):
                 self.g2npy()
 
     def edit_segment(self, e1 , gui=True,outdata={}):
-        """ edit segment
+        """ edit segment WITH EasyGUI
 
         Parameters
         ----------
@@ -2905,6 +2905,7 @@ class Layout(PyLayers):
         if self.have_subseg(e1):
             self.Gs.node[e1].pop('ss_name')
             self.Gs.node[e1].pop('ss_z')
+            self.Gs.node[e1].pop('ss_offset')
             try:
                 self.Gs.node[e1].pop('ss_ce')
             except:
@@ -2915,7 +2916,7 @@ class Layout(PyLayers):
             print "no subseg to delete"
 
     def add_subseg(self,s1,name='DOOR',zmin=0,zmax=2.24,offset=0,transition=True):
-        """ add a subsegment on a segment
+        """ add a subsegment on a segment WITH EasyGUI
 
         Parameters
         ----------
@@ -2946,6 +2947,52 @@ class Layout(PyLayers):
             return True
         except:
             return False
+
+
+    def update_sseg(self,s1,data={}):
+        """ update subsegment(s) on a segment
+
+        Parameters
+        ----------
+
+        s1 : integer
+            edge number > 0
+        data = dict
+            dictionnary of data
+
+        """
+
+        assert len(data['ss_name'])==len(data['ss_z']),'Error incompatible size in chgmss'
+        assert len(data['ss_z'])==len(data['ss_offset']),'Error incompatible size in chgmss'
+        if s1<0:
+            return False
+
+        new_nbss = len(data['ss_name'])
+
+        try:
+            old_nbss = len(self.Gs.node[s1]['ss_name'])
+        except:
+            old_nbss = 0
+        # update the number of subsegments for self.Nss
+        deltaNss= new_nbss - old_nbss
+        print deltaNss
+        if new_nbss != 0:
+            self.Gs.node[s1]['ss_name'] = [data['ss_name']]
+            self.Nss += deltaNss
+            self.chgmss(s1,ss_name=data['ss_name'],
+                ss_offset=data['ss_offset'],
+                ss_z=data['ss_z'])
+            return True
+        else:
+            if self.Gs.node[s1].has_key('ss_name'):
+                self.Gs.node[s1].pop('ss_name')
+                self.Gs.node[s1].pop('ss_z')
+                self.Gs.node[s1].pop('ss_offset')
+                self.Nss += deltaNss
+                self.g2npy()
+                return True
+            else :
+                return True
 
 
     def add_window(self, s1, z):
@@ -4772,7 +4819,6 @@ class Layout(PyLayers):
         if self.display['subsegnb']:
             if hasattr(self,'lsss'):
                 seg = self.lsss
-
                 psseg = np.array([[self.Gs.pos[x][0],self.Gs.pos[x][1]] for x in seg])
                 nbsseg = np.array([len(self.Gs.node[x]['ss_name']) for x in seg],dtype='int')
 

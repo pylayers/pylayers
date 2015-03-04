@@ -375,16 +375,20 @@ class SelectL2(object):
         col = int(x+0.5)
         row = int(y+0.5)
         string = 'x=%1.4f, y=%1.4f'%(x, y)
-        # try:
-        #     string = string + ' ' + self.L.Gs.node[self.nsel]['name']
-        # except:
-        #     pass
+        try:
+            if self.nsel != 0:
+                string = string + '\nnodeid= ' + str(self.nsel)
+            else :
+                pass
+        except:
+            pass
+        return string
         # try:
         #     string = string + ' with ' +str(len(self.L.Gs.node[self.nsel]['ss_name'])) + 'subseg(s)'
         # except:
         #     pass
         # string = string + ' ///' +self.help[self.state]
-        # return string
+        # 
         
         # if col>=0 and col<numcols and row>=0 and row<numrows:
         #     z = X[row,col]
@@ -403,7 +407,7 @@ class SelectL2(object):
             if len(self.undoGs) > 50:
                 self.undoGs.pop(0)
 
-        # self.ax.format_coord=self.format_coord
+        self.ax.format_coord=self.format_coord
 
         if self.state == 'Init':
             self.fig,self.ax = self.show(self.fig,self.ax,clear=True)

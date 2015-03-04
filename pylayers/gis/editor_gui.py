@@ -20,10 +20,11 @@ class SubSegWin(QDialog):    # any super class is okay
         super(SubSegWin, self).__init__(parent)
         #
         self.gparent=parent.parent
+        self.parent=parent
         # mulsti segment selection indicator
         self.mulseg=parent.mulseg
         # dictionnary to pass subseg data
-        self.subsegdata=subsegdata
+        self.subsegdata=parent.subsegdata
         self.Nss=Nss
         self.zmin=zmin
         self.zmax=zmax
@@ -122,7 +123,6 @@ class SubSegWin(QDialog):    # any super class is okay
             self.lheightmax[-1].setObjectName("zmax")
             self.lheightmax[-1].setRange(0.,self.gparent.L.maxheight)
             self.lheightmax[-1].setValue(self.subsegdata['ss_z'][ss][1])
-
             self.loffset.append(QDoubleSpinBox())
             self.loffset[-1].setObjectName("offset")
             self.loffset[-1].setSingleStep(0.01)
@@ -131,22 +131,34 @@ class SubSegWin(QDialog):    # any super class is okay
 
 
     def valide(self):
-        # self.subsegdata={}
-        # self.subsegdata['ss_name']=[]
-        # self.subsegdata['ss_z']=[]
-        # self.subsegdata['ss_offset']=[]
-        
+        self.parent.subsegdata={}
+        self.parent.subsegdata['ss_name']=[]
+        self.parent.subsegdata['ss_z']=[]
+        self.parent.subsegdata['ss_offset']=[]
+        # # check z
+        # zz=[]
         # for ss in range(self.Nss):
-        #     z = (self.lheightmin[ss].value(),self.lheightmax[ss].value())
-        #     self.subsegdata['ss_name'].append(str(self.lcomboslab[ss].currentText()))
-        #     self.subsegdata['ss_z'].append(z)
-        #     self.subsegdata['ss_offset'].append(self.loffset[ss].value())
-   
-        # if not self.mulseg:
-        #     self.gparent.L.edit_seg(self.gparent.selectl.nsel,self.subsegdata)
-        # else:
-        #     [self.gparent.L.edit_seg(s,self.subsegdata) for s in self.gparent.selectl.selectseg]
-        self.close()
+        #     zz.append((self.lheightmin[ss].value(),self.lheightmax[ss].value()))
+        # zz=np.array(zz)
+        # szz = np.sort(zz,axis=0)
+        # # position overla
+        # uo=np.where(szz[:-1,1]>szz[1:,0])
+        
+        if len(uo) == 0: 
+            for ss in range(self.Nss):
+                z = (self.lheightmin[ss].value(),self.lheightmax[ss].value())
+                self.parent.subsegdata['ss_name'].append(str(self.lcomboslab[ss].currentText()))
+                self.parent.subsegdata['ss_z'].append(z)
+                self.parent.subsegdata['ss_offset'].append(self.loffset[ss].value())
+
+            # if not self.mulseg:
+            #     self.gparent.L.edit_seg(self.gparent.selectl.nsel,self.subsegdata)
+            # else:
+            #     [self.gparent.L.edit_seg(s,self.subsegdata) for s in self.gparent.selectl.selectseg]
+            self.close()
+        else :
+
+
 
     def cancel(self):
         self.close()
@@ -180,7 +192,8 @@ class PropertiesWin(QDialog):    # any super class is okay
         if self.parent.selectl.nsel in self.parent.L.lsss :
             sub = self.parent.L.Gs.node[self.parent.selectl.nsel]
             Nss = len(sub['ss_name']) 
-        else : Nss=0
+        else : 
+            Nss=0
 
         for ss in range(Nss):
             self.subsegdata['ss_name'].append(sub['ss_name'][ss])
@@ -310,7 +323,7 @@ class PropertiesWin(QDialog):    # any super class is okay
     def editsubseg(self):
         """ open a edit subseg window
         """
-
+        print 'SSDATA :',self.subsegdata
         Nss=self.nbsubseg.value()
         if Nss>0:
             zmin=self.heightmin.value()
@@ -322,8 +335,8 @@ class PropertiesWin(QDialog):    # any super class is okay
                     self.subsegdata['ss_z'].append((zmin,zmax))
 
             self.subseg=SubSegWin(parent=self,subsegdata=self.subsegdata,Nss=Nss,zmin=zmin,zmax=zmax)
-
             self.subseg.show()
+
 
     def valide(self):
         """ ok click
@@ -349,16 +362,17 @@ class PropertiesWin(QDialog):    # any super class is okay
                 self.subsegdata['ss_offset'].append(0.)
                 self.subsegdata['ss_z'].append((zmin,zmax))
 
-        self.segdata.update({'ss_name':self.subsegdata['ss_name'][:Nss],
-                             'ss_offset':self.subsegdata['ss_offset'][:Nss],
-                             'ss_z':self.subsegdata['ss_z'][:Nss]})
-        
+        self.subsegdata.update({'ss_name':self.subsegdata['ss_name'][:Nss],
+                              'ss_offset':self.subsegdata['ss_offset'][:Nss],
+                              'ss_z':self.subsegdata['ss_z'][:Nss]})
 
         if not self.mulseg:
             self.parent.L.edit_seg(self.parent.selectl.nsel,self.segdata)
+            self.parent.L.update_sseg(self.parent.selectl.nsel,self.subsegdata)
             self.parent.selectl.modeIni()
         else:
             [self.parent.L.edit_seg(s,self.segdata) for s in self.parent.selectl.selectseg]
+            [self.parent.L.update_sseg(s,self.subsegdata) for s in self.parent.selectl.selectseg]
             self.parent.selectl.modeSMS()
             self.parent.selectl.multsel()
         self.close()
@@ -376,8 +390,10 @@ class SaveQuitWin(QDialog):    # any super class is okay
         self.parent=parent
         self.exit=exit
 
-
-        buttonq=QPushButton("Close")
+        if self.exit :
+            buttonq=QPushButton("Quit Editor")
+        else:
+            buttonq=QPushButton("Close Layout")
         buttons=QPushButton("Save")
         buttonc=QPushButton("Cancel")
         buttonq.clicked.connect(self.quit)
