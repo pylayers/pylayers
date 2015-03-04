@@ -50,11 +50,13 @@ class SubSegWin(QDialog):    # any super class is okay
                                     self.loffset[ss]]):
                 hboxl2.addWidget(QLabel(label[iw]))
                 hbox2.addWidget(w)
-                
+
             vbox.addLayout(hboxtitle)
             vbox.addLayout(hbox1)
             vbox.addLayout(hboxl2)
-            vbox.addLayout(hbox2)
+            vbox.addLayout(hbox2)        
+
+
 
         # validation
         buttono=QPushButton("OK")
@@ -65,6 +67,7 @@ class SubSegWin(QDialog):    # any super class is okay
         hboxDial = QHBoxLayout() 
         hboxDial.addWidget(buttonc)
         hboxDial.addWidget(buttono)
+
 
 
         # create Layout
@@ -100,25 +103,36 @@ class SubSegWin(QDialog):    # any super class is okay
         self.lheightmin=[]
         self.lheightmax=[]
         self.loffset=[]
-
         self.lcomboslab = [] 
+        self.lzQ=[]
 
-        for ss in range(self.Nss):
+        # TODO 
+        # sort subsegments from floor to ceil
+        # add connect to impose begin of previous segment 
+        # sort subseg by height
+        z = np.array(self.subsegdata['ss_z'])
+        self.sszo = np.argsort(z[:,0])[::-1]
+
+
+        for ss in self.sszo:#range(self.Nss):
 
             self.lcomboslab.append(QComboBox())
             for s in self.gparent.L.sl.keys():
-                self.lcomboslab[ss].addItem(s)
-            idx=self.lcomboslab[ss].findText(self.subsegdata['ss_name'][ss])
-            self.lcomboslab[ss].setCurrentIndex(idx)
+                self.lcomboslab[-1].addItem(s)
+            idx=self.lcomboslab[-1].findText(self.subsegdata['ss_name'][ss])
+            self.lcomboslab[-1].setCurrentIndex(idx)
 
 
             self.lheightmin.append(QDoubleSpinBox())
+            self.connect(self.lheightmin[-1], SIGNAL('valueChanged(double)'), self.color_restore)
+
             self.lheightmin[-1].setObjectName("zmin")
             self.lheightmin[-1].setSingleStep(0.01)
             self.lheightmin[-1].setRange(0.,self.gparent.L.maxheight)
             self.lheightmin[-1].setValue(self.subsegdata['ss_z'][ss][0])
 
             self.lheightmax.append(QDoubleSpinBox())
+            self.connect(self.lheightmax[-1], SIGNAL('valueChanged(double)'), self.color_restore)
             self.lheightmax[-1].setSingleStep(0.01)
             self.lheightmax[-1].setObjectName("zmax")
             self.lheightmax[-1].setRange(0.,self.gparent.L.maxheight)
@@ -129,35 +143,91 @@ class SubSegWin(QDialog):    # any super class is okay
             self.loffset[-1].setRange(-1.,1.)
             self.loffset[-1].setValue(self.subsegdata['ss_offset'][ss])
 
+            self.lzQ.append([self.lheightmin[-1],self.lheightmax[-1]])
+        for ss in self.sszo:
+            self.connect(self.lheightmin[ss], SIGNAL('valueChanged(double)'), self.force_ss_minmax)
+            self.connect(self.lheightmax[ss], SIGNAL('valueChanged(double)'), self.force_ss_minmax)
+            if self.Nss >1:
+                self.connect(self.lheightmin[ss], SIGNAL('valueChanged(double)'), self.force_minmax_previous)
+                self.connect(self.lheightmax[ss], SIGNAL('valueChanged(double)'), self.force_minmax_previous)
+
+    def color_restore(self, event):
+        """ retore black color to SpinBox
+        """
+        sender = self.sender()
+        sender.setStyleSheet("color: black")
+        # val = self.lheightmax[-1].value()
+        # print val
+
+    def force_ss_minmax(self,event):
+        """ Force sub-segment zmin < zmax
+        """
+        sender = self.sender()
+        # find sender in self.lzq
+        us = [sender in x for x in self.lzQ]
+        uline = np.where(us)[0]
+        uline=uline[0]
+        lz = self.lzQ[uline]
+
+        zmin =lz[0].value()
+        zmax =lz[1].value()
+        if zmin >= zmax:
+            self.lzQ[uline][0].setValue(zmax)
+
+    def force_minmax_previous(self,event):
+        sender = self.sender()
+        # find sender in self.lzq
+        us = [sender in x for x in self.lzQ]
+        uline = np.where(us)[0]
+        uline = uline[0]
+        lz = self.lzQ[uline]
+        # if sender is a zmin
+        if lz.index(sender) == 0:
+            # not last line
+            if uline < self.Nss-1:
+                # if subseg+1 max is higher than subseg zmin
+                # subseg+1 max = subseg zmin
+                if self.lzQ[uline][0].value() <= self.lzQ[uline+1][1].value():
+                    self.lzQ[uline+1][1].setValue(self.lzQ[uline][0].value())
+        # sender is a zmax
+        elif lz.index(sender) == 1:
+            # not first line
+            if uline >0:
+                # if subseg-1 min is lower than subseg zmax
+                # subseg-1 min = subseg zmax
+                if self.lzQ[uline][1].value() >= self.lzQ[uline-1][0].value():
+                    self.lzQ[uline-1][0].setValue(self.lzQ[uline][1].value())
 
     def valide(self):
         self.parent.subsegdata={}
         self.parent.subsegdata['ss_name']=[]
         self.parent.subsegdata['ss_z']=[]
         self.parent.subsegdata['ss_offset']=[]
-        # # check z
-        # zz=[]
-        # for ss in range(self.Nss):
-        #     zz.append((self.lheightmin[ss].value(),self.lheightmax[ss].value()))
-        # zz=np.array(zz)
-        # szz = np.sort(zz,axis=0)
-        # # position overla
-        # uo=np.where(szz[:-1,1]>szz[1:,0])
-        
+        # check z
+        zz=[]
+        for ss in self.sszo:
+            zz.append((self.lheightmin[ss].value(),self.lheightmax[ss].value()))
+        zz=np.array(zz)
+        uszz = np.argsort(zz[:,0])
+        szz = zz[uszz]
+        # position overla
+        uo=np.where(szz[:-1,1]>szz[1:,0])[0]
+        print self.sszo
         if len(uo) == 0: 
-            for ss in range(self.Nss):
+            for ss in self.sszo:
                 z = (self.lheightmin[ss].value(),self.lheightmax[ss].value())
                 self.parent.subsegdata['ss_name'].append(str(self.lcomboslab[ss].currentText()))
                 self.parent.subsegdata['ss_z'].append(z)
                 self.parent.subsegdata['ss_offset'].append(self.loffset[ss].value())
-
+            print self.parent.subsegdata
             # if not self.mulseg:
             #     self.gparent.L.edit_seg(self.gparent.selectl.nsel,self.subsegdata)
             # else:
             #     [self.gparent.L.edit_seg(s,self.subsegdata) for s in self.gparent.selectl.selectseg]
             self.close()
         else :
-
+            [self.lheightmax[u].setStyleSheet("color: red") for u in uo]
+            [self.lheightmin[u].setStyleSheet("color: red") for u in uo+1]
 
 
     def cancel(self):
