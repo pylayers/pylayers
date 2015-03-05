@@ -593,10 +593,6 @@ class NewLayout(QDialog):    # any super class is okay
         self.parent.L.boundary(xlim=lim)
         self.parent.filename=''
 
-        self.gridOn=False
-        self.gridx=1
-        self.gridy=1
-        self.setgrid()
 
         self.parent.create_main_frame()
         self.parent.on_draw()

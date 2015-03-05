@@ -348,17 +348,17 @@ class SelectL2(object):
 
 
     def OnClickRelease(self,event):
-        if self.evt == 'lclic' and self.motion==False and not self.ptmove:
+        if event.button == 1 and self.motion==False and not self.ptmove:
             if self.nsel ==0 and self.state != 'CP':
                 self.modeIni() 
             # self.update_state()
             self.new_state()
 
-        if self.evt == 'lclic' and self.motion==True and not self.ptmove:
+        if event.button == 1 and self.motion==True and not self.ptmove:
             self.nsel=0
             self.motion=False
 
-        if self.evt == 'lclic' and self.ptmove and not 'SM' in self.state:
+        if event.button == 1 and self.ptmove and not 'SM' in self.state:
             if self.shift_is_held:
                 x = self.L.Gs.pos[self.nsel][0]
             else :
@@ -616,8 +616,13 @@ class SelectL2(object):
         return(self.fig,self.ax)
 
     def updatedrawpt(self,pt,x,y):
-        self.L.Gs.pos[pt] = (x,y)
-        self.plotselptseg([pt],alpha=1,color='k',ms=3)
+        # self.L.Gs.pos[pt] = (x,y)
+        p1 = self.ax.plot(x,y, 'o', 
+                                visible=True, 
+                                color ='k',
+                                ms=3,
+                                alpha=1)
+        self.fig.canvas.draw()
         # redraw just the current rectangle
         # self.ax.draw_artist(ptA)
 
@@ -631,7 +636,7 @@ class SelectL2(object):
         self.ax.set_yticks(major_ticks_y)
         self.ax.grid(visible=True)
         self.fig.canvas.draw()
-        
+
     def togglegrid(self):
         if not self.gridOn:
             self.setgrid()
