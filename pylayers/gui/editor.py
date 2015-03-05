@@ -537,7 +537,6 @@ class NewLayout(QDialog):    # any super class is okay
 
 
     def _init_choices(self):
-        print 
         self.width = QSpinBox()
         self.width.setObjectName("width [m]")
         self.width.setRange(1, 10000)
@@ -593,8 +592,92 @@ class NewLayout(QDialog):    # any super class is okay
         lim = (0., self.width.value(), 0.,self.height.value())
         self.parent.L.boundary(xlim=lim)
         self.parent.filename=''
+
+        self.gridOn=False
+        self.gridx=1
+        self.gridy=1
+        self.setgrid()
+
         self.parent.create_main_frame()
         self.parent.on_draw()
+
+        self.close()
+
+
+    def cancel(self):
+        self.close()
+
+
+class GridSet(QDialog):    # any super class is okay
+    def __init__(self,parent=None):
+        super(GridSet, self).__init__(parent)
+        self.setWindowTitle('Set Grid')
+        self.parent=parent
+        self._init_choices()
+        self._init_layoutwin()
+
+
+
+    def _init_choices(self):
+        self.xspacing = QDoubleSpinBox()
+        self.xspacing.setObjectName("x spacing [m]")
+        self.xspacing.setRange(0, 100)
+        self.xspacing.setValue(self.parent.selectl.gridx)
+
+        self.yspacing = QDoubleSpinBox()
+        self.yspacing.setObjectName("y spacing [m]")
+        self.yspacing.setRange(0, 100)
+        self.yspacing.setValue(self.parent.selectl.gridy)
+
+    def _init_layoutwin(self):
+
+        vbox = QVBoxLayout()
+
+        # Indicate Ceil
+        hboxlabel = QHBoxLayout()
+        yspacing = QLabel('y spacing')
+        xspacing = QLabel('x spacing')
+        # ceillabel.setStyleSheet("font: bold 14px;")
+        hboxlabel.addWidget(xspacing)
+        hboxlabel.addWidget(yspacing)
+        # hboxlabel.setAlignment(Qt.AlignCenter)
+        # hboxlabel.setAlignment(Qt.AlignCenter)
+
+        vbox.addLayout(hboxlabel)
+
+        hboxlw = QHBoxLayout()
+        hboxlw.addWidget(self.xspacing)
+        hboxlw.addWidget(self.yspacing)
+
+
+        vbox.addLayout(hboxlw)
+
+        # validation 
+        buttonn=QPushButton("Ok")
+        buttonc=QPushButton("Cancel")
+        buttonn.clicked.connect(self.ok)
+        buttonc.clicked.connect(self.cancel)
+
+
+        hboxDial = QHBoxLayout()
+        hboxDial.addWidget(buttonc)
+        hboxDial.addWidget(buttonn)
+
+        vbox.addLayout(hboxDial)
+
+        # create Layout
+
+        self.setLayout(vbox)
+
+
+    def ok(self):
+        print self.xspacing.value(),self.yspacing.value()
+        self.parent.selectl.gridx = self.xspacing.value()
+        self.parent.selectl.gridy = self.yspacing.value()
+        self.parent.selectl.gridOn=True
+        if not self.parent.selectl.gridOn:
+            self.parent.selectl.setgrid()
+            self.parent.fig.canvas.draw()
         self.close()
 
 
@@ -608,9 +691,13 @@ class AppForm(QMainWindow):
         QMainWindow.__init__(self, parent)
         self.setWindowTitle('Pylayers : Stand Alone Editor (Beta)')
         self.filename=''
+
         self.create_menu()
         self.create_status_bar()
         # self.shortcuts()
+
+
+
 
 
     def new(self):
@@ -620,7 +707,8 @@ class AppForm(QMainWindow):
 
     def open(self):
         filename = QFileDialog.getOpenFileName(self,'Open Pylayers Layout File',pyu.getlong('',pstruc['DIRINI']),'(*.ini);;(*.osm)')
-        try:
+
+        if filename != '':
             _filename= pyu.getshort(str(filename))
             self.L=Layout(_filename)
             self.filename=self.L.filename
@@ -629,8 +717,8 @@ class AppForm(QMainWindow):
             self.setWindowTitle(self.L.filename + '- Pylayers : Stand Alone Editor (Beta)')
             self.resize(self.fig.canvas.width(),self.fig.canvas.height())
             print 'loaded'
-        except:
-            pass
+
+        # self.setgrid()
 
     def save(self,force=False):
 
@@ -689,6 +777,12 @@ class AppForm(QMainWindow):
 
         # self.on_draw()
 
+    def editgrid(self):
+        grid = GridSet(parent=self)
+        grid.show()
+
+    def togglegrid(self):
+        self.selectl.togglegrid()
 
     def on_about(self):
         msg = """ This is the PyLayers' Stand-Alone Layout Editor (BETA)
@@ -736,13 +830,16 @@ class AppForm(QMainWindow):
 
         # clear the axes and redraw the plot anew
         #
-        self.axes.clear()
+        # self.axes.clear()
+
         # self.axes.grid(self.grid_cb.isChecked())
         self.L.display['nodes']=True
         self.L.display['ednodes']=True
         self.L.display['subseg']=False
         self.L.display['subsegnb']=True
         self.L.display['ticksoff']=False
+
+        
         self.fig,self.axes = self.selectl.show(self.fig,self.axes,clear=True)
         # self.axes.text(10,10,str(self.properties.currentText()))
 
@@ -755,7 +852,7 @@ class AppForm(QMainWindow):
         #     alpha=0.44,
         #     picker=5)
 
-        self.canvas.draw()
+        self.fig.canvas.draw()
 
     def on_release(self,event):
         string=''
@@ -764,11 +861,23 @@ class AppForm(QMainWindow):
         except:
             pass
         try:
-            string = string + ' with ' +str(len(self.L.Gs.node[self.nsel]['ss_name'])) + 'subseg(s)'
+            string = string + ' with ' +str(len(self.L.Gs.node[self.selectl.nsel]['ss_name'])) + 'subseg(s)'
+        except:
+            pass
+        try:
+            n1,n2 = self.L.Gs[self.selectl.nsel].keys()
+            pn1 = np.array(self.L.Gs.pos[n1])
+            pn2 = np.array(self.L.Gs.pos[n2])
+            l="%.2f"%np.sqrt(np.sum((pn1-pn2)**2))
+
+            string = string + '     length= ' + l + 'm     '
         except:
             pass
         string = string +'\t'+self.selectl.help[self.selectl.state]
         self.statusBar().showMessage(string)
+
+
+
     def create_main_frame(self):
         self.main_frame = QWidget()
 
@@ -865,12 +974,18 @@ class AppForm(QMainWindow):
             shortcut='F12', slot=self.on_about,
             tip='about')
 
+        gridset_action = self.create_action("&Grid",
+            shortcut='F8', slot=self.editgrid,
+            tip='Set Grid')
+        gridtg_action = self.create_action("&Toggle Grid",
+            shortcut='F9', slot=self.togglegrid,
+            tip='toggle Grid')
 
         self.add_actions(self.file_menu,
             ( new_action,open_action,None,save_action,saveas_action,None,close_action,quit_action,))
 
         self.add_actions(self.edit_menu,
-            ( properties,None,refresh))
+            ( properties,None,gridset_action,gridtg_action,None,refresh))
 
         self.add_actions(self.help_menu, (about_action,))
 

@@ -100,15 +100,26 @@ class SelectL2(object):
 
         self.undoGs=[]
         self.bundo=False
+
+        self.gridOn=False
+        self.gridx=1.
+        self.gridy=1.
+
+
         self.update_state()
+
         self.shift_is_held = False
         self.ctrl_is_held = False
         self.alt_is_held = False
+
         self.selectpt=[]
         self.selectseg=[]
         self.selected='pt'
+
         self.motion=False
         self.ptmove=False
+
+
         def toggle_selector(self,event):
             if toggle_selector.RS.active:
                 toggle_selector.set_active(False)
@@ -171,6 +182,11 @@ class SelectL2(object):
         self.L.display['fontsize'] = font_size
         self.L.display['title'] = title
         self.fig,self.ax = self.L.showGs(fig=self.fig,ax=self.ax,axis=axis,subsegnb=True)
+        if self.gridOn:
+            self.setgrid()
+        else:
+            self.ax.grid(which='major',visible=False)
+
         return(self.fig,self.ax)
 
 
@@ -377,7 +393,7 @@ class SelectL2(object):
         string = 'x=%1.4f, y=%1.4f'%(x, y)
         try:
             if self.nsel != 0:
-                string = string + '\nnodeid= ' + str(self.nsel)
+                string = string + ' nodeid= ' + str(self.nsel)
             else :
                 pass
         except:
@@ -408,6 +424,8 @@ class SelectL2(object):
                 self.undoGs.pop(0)
 
         self.ax.format_coord=self.format_coord
+
+
 
         if self.state == 'Init':
             self.fig,self.ax = self.show(self.fig,self.ax,clear=True)
@@ -605,8 +623,23 @@ class SelectL2(object):
 
         # blit just the redrawn area
         # self.canvas.blit(self.ax.bbox)
-
-
+    def setgrid(self):
+        lim = self.ax.axis()
+        major_ticks_x = np.arange(lim[0], lim[1], self.gridx)
+        major_ticks_y = np.arange(lim[2], lim[3], self.gridy)
+        self.ax.set_xticks(major_ticks_x)
+        self.ax.set_yticks(major_ticks_y)
+        self.ax.grid(visible=True)
+        self.fig.canvas.draw()
+        
+    def togglegrid(self):
+        if not self.gridOn:
+            self.setgrid()
+            self.gridOn = True
+        elif self.gridOn:
+            self.ax.grid(visible=False)
+            self.gridOn = False
+        self.fig.canvas.draw()
 
     def escape(self):
         """ self.evt==escapr
@@ -1680,8 +1713,8 @@ class SelectL2(object):
         #     self.multsel()
             
 
-        if self.evt == 'f9':
-            print self.selectpt, self.selectseg
+        # if self.evt == 'f9':
+        #     print self.selectpt, self.selectseg
             #print self.selectsl
             # plt.connect('key_press_event', toggle_selector)
  

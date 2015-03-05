@@ -4857,7 +4857,6 @@ class Layout(PyLayers):
             except:
                 pass
         slablist = self.name.keys()
-        print self.display['layers']
         if self.display['edges']:
             dlabels = self.display['edlabel']
             font_size = self.display['fontsize']
