@@ -1168,7 +1168,8 @@ class SelectL2(object):
             self.nsel  = self.L.add_segment(ta, he,name=self.current_layer)
         else:
             print "segment ("+str(ta)+","+str(he)+") already exists"
-        self.L.g2npy()
+        if self.L.Ns > 1:
+            self.L.g2npy()
         self.state = 'Init'
         self.update_state()
 

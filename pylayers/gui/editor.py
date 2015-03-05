@@ -389,6 +389,7 @@ class PropertiesWin(QDialog):    # any super class is okay
 
 
         # validation
+
         buttono=QPushButton("OK")
         buttonc=QPushButton("Cancel")
         buttono.clicked.connect(self.valide)
@@ -502,10 +503,13 @@ class SaveQuitWin(QDialog):    # any super class is okay
         self.setLayout(hboxDial)
         print exit
     def quit(self):
-        self.parent.fig.clear()
-        self.parent.fig.canvas.draw()
-        del self.parent.L
-        del self.parent.main_frame
+        try:
+            self.parent.fig.clear()
+            self.parent.fig.canvas.draw()
+            del self.parent.L
+            del self.parent.main_frame
+        except:
+            pass
         if self.exit :
             self.close()
             self.parent.exitl()
@@ -522,6 +526,83 @@ class SaveQuitWin(QDialog):    # any super class is okay
         self.close()
 
 
+class NewLayout(QDialog):    # any super class is okay
+    def __init__(self,parent=None):
+        super(NewLayout, self).__init__(parent)
+        self.setWindowTitle('New Layout')
+        self.parent=parent
+        self._init_choices()
+        self._init_layoutwin()
+
+
+
+    def _init_choices(self):
+        print 
+        self.width = QSpinBox()
+        self.width.setObjectName("width [m]")
+        self.width.setRange(1, 10000)
+
+        self.height = QSpinBox()
+        self.height.setObjectName("height [m]")
+        self.height.setRange(1, 10000)
+
+
+    def _init_layoutwin(self):
+
+        vbox = QVBoxLayout()
+
+        # Indicate Ceil
+        hboxlabel = QHBoxLayout()
+        height = QLabel('Height')
+        width = QLabel('Width')
+        # ceillabel.setStyleSheet("font: bold 14px;")
+        hboxlabel.addWidget(height)
+        # hboxlabel.setAlignment(Qt.AlignCenter)
+        hboxlabel.addWidget(width)
+        # hboxlabel.setAlignment(Qt.AlignCenter)
+
+        vbox.addLayout(hboxlabel)
+
+        hboxlw = QHBoxLayout()
+        hboxlw.addWidget(self.height)
+        hboxlw.addWidget(self.width)
+
+
+        vbox.addLayout(hboxlw)
+
+        # validation 
+        buttonn=QPushButton("New")
+        buttonc=QPushButton("Cancel")
+        buttonn.clicked.connect(self.new)
+        buttonc.clicked.connect(self.cancel)
+
+
+        hboxDial = QHBoxLayout()
+        hboxDial.addWidget(buttonc)
+        hboxDial.addWidget(buttonn)
+
+        vbox.addLayout(hboxDial)
+
+        # create Layout
+
+        self.setLayout(vbox)
+
+
+    def new(self):
+        self.parent.L=Layout('void.ini')
+        lim = (0., self.width.value(), 0.,self.height.value())
+        self.parent.L.boundary(xlim=lim)
+        self.parent.filename=''
+        self.parent.create_main_frame()
+        self.parent.on_draw()
+        self.close()
+
+
+    def cancel(self):
+        self.close()
+
+
+
 class AppForm(QMainWindow):
     def __init__(self, parent=None):
         QMainWindow.__init__(self, parent)
@@ -533,11 +614,9 @@ class AppForm(QMainWindow):
 
 
     def new(self):
-        self.closel()
-        self.L=Layout('void.ini')
-        self.filename=''
-        self.create_main_frame()
-        self.on_draw()
+        self.newlayout=NewLayout(parent=self)
+        self.newlayout.show()
+        
 
     def open(self):
         filename = QFileDialog.getOpenFileName(self,'Open Pylayers Layout File',pyu.getlong('',pstruc['DIRINI']),'(*.ini);;(*.osm)')
@@ -580,13 +659,16 @@ class AppForm(QMainWindow):
         self.sq.show()
 
     def exitl(self):
-        plt.rcParams.update(self.selectl.rcconf)
-        self.selectl.fig.canvas.mpl_disconnect(self.cid1)
-        self.selectl.fig.canvas.mpl_disconnect(self.cid2)
-        self.selectl.fig.canvas.mpl_disconnect(self.cid3)
-        self.selectl.fig.canvas.mpl_disconnect(self.cid4)
-        self.selectl.fig.canvas.mpl_disconnect(self.cid5)
-        self.selectl.fig.canvas.mpl_disconnect(self.cid6)
+        try:
+            plt.rcParams.update(self.selectl.rcconf)
+            self.selectl.fig.canvas.mpl_disconnect(self.cid1)
+            self.selectl.fig.canvas.mpl_disconnect(self.cid2)
+            self.selectl.fig.canvas.mpl_disconnect(self.cid3)
+            self.selectl.fig.canvas.mpl_disconnect(self.cid4)
+            self.selectl.fig.canvas.mpl_disconnect(self.cid5)
+            self.selectl.fig.canvas.mpl_disconnect(self.cid6)
+        except:
+            pass
         QApplication.quit()
 
     def edit_properties(self):
@@ -658,8 +740,9 @@ class AppForm(QMainWindow):
         # self.axes.grid(self.grid_cb.isChecked())
         self.L.display['nodes']=True
         self.L.display['ednodes']=True
+        self.L.display['subseg']=False
         self.L.display['subsegnb']=True
-
+        self.L.display['ticksoff']=False
         self.fig,self.axes = self.selectl.show(self.fig,self.axes,clear=True)
         # self.axes.text(10,10,str(self.properties.currentText()))
 

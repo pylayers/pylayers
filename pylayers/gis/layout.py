@@ -976,7 +976,7 @@ class Layout(PyLayers):
                 self.Gs.add_edge(ns,nhe)
                 self.Gs.node[ns] = d
                 self.Gs.pos[ns] = tuple((np.array(self.Gs.pos[nta])+np.array(self.Gs.pos[nhe]))/2.)
-                if name not in self.display['layers']:
+                if name not in self.display['subseg']:
                     self.display['layers'].append(name)
                 self.labels[ns] = str(ns)
                 if d.has_key('ss_name'):
@@ -2873,13 +2873,29 @@ class Layout(PyLayers):
             + ss_offset : list of offset in [0,1]
         """
 
-
-        #de1v    = de1.values()
         if data=={}:
             pass
         else:
+
+            ename = self.Gs.node[e1]['name']
+            # manage self.name
+            self.name[ename].pop(self.name[ename].index(e1))
+            # manage self.display['name']
+            if len(self.name[ename]) == 0:
+                try:
+                    self.display['layers'].pop(self.display['layers'].index(ename))
+                except:
+                    pass
+
             for k in data:
                 self.Gs.node[e1][k] = data[k]
+
+
+        self.name[data['name']].append(e1)
+
+        if data['name'] not in self.display['layers']:
+            self.display['layers'].append(data['name'])
+
         return data
 
 
@@ -4826,19 +4842,22 @@ class Layout(PyLayers):
                     fontdict={'size':8},ha='center') for x in range(len(seg))]
 
         if self.display['transition']:
-            segwtrans = [y for y in [x for x in self.Gs.nodes() if x>0 ]if self.Gs.node[y]['transition']]
-            posseg = np.array([self.Gs.pos[x] for x in segwtrans])
-            normseg = np.array([self.Gs.node[x]['norm'] for x in segwtrans])[:,:2]
-            b1 = (posseg-normseg/2)
-            b2 = (posseg+normseg/2)
-            [ax.annotate('', xy=b1[x],
-                        xycoords='data',
-                        xytext=b2[x],
-                        textcoords='data',
-                        arrowprops={'arrowstyle': '<->'})
-                    for x in range(len(segwtrans))]
-
+            try:
+                segwtrans = [y for y in [x for x in self.Gs.nodes() if x>0 ]if self.Gs.node[y]['transition']]
+                posseg = np.array([self.Gs.pos[x] for x in segwtrans])
+                normseg = np.array([self.Gs.node[x]['norm'] for x in segwtrans])[:,:2]
+                b1 = (posseg-normseg/2)
+                b2 = (posseg+normseg/2)
+                [ax.annotate('', xy=b1[x],
+                            xycoords='data',
+                            xytext=b2[x],
+                            textcoords='data',
+                            arrowprops={'arrowstyle': '<->'})
+                        for x in range(len(segwtrans))]
+            except:
+                pass
         slablist = self.name.keys()
+        print self.display['layers']
         if self.display['edges']:
             dlabels = self.display['edlabel']
             font_size = self.display['fontsize']
@@ -4846,9 +4865,15 @@ class Layout(PyLayers):
             dthin = self.display['thin']
             alpha = self.display['alpha']
             for nameslab in self.display['layers']:
+                color = self.sl[nameslab]['color']
+                edlist = self.name[nameslab]
                 fig,ax=self.show_layer(nameslab, edlist=edlist, alpha=alpha,
                                 dthin=dthin, dnodes=dnodes, dlabels=dlabels,
-                                font_size=font_size,width=kwargs['width'],fGHz=kwargs['fGHz'],fig=fig,ax=ax)
+                                color =color,
+                                font_size=font_size,
+                                width=kwargs['width'],
+                                fGHz=kwargs['fGHz'],
+                                fig=fig,ax=ax)
 
         if self.display['subseg']:
             dico = self.subseg()
@@ -7954,6 +7979,7 @@ class Layout(PyLayers):
         self.display['ednodes']=True
         self.display['subsegnb']=True
         self.display['transition']=True
+        self.display['ticksoff']=True
 
         self.af = SelectL2(self,fig=fig,ax=ax)
 
@@ -9097,7 +9123,7 @@ class Layout(PyLayers):
 
         return(p_Tx, p_Rx)
 
-    def boundary(self, dx=0, dy=0):
+    def boundary(self, dx=0, dy=0,xlim=()):
         """ add a blank boundary around layout
 
         Parameters
@@ -9123,11 +9149,16 @@ class Layout(PyLayers):
             xmin = min(p[0] for p in self.Gs.pos.values())
             ymax = max(p[1] for p in self.Gs.pos.values())
             ymin = min(p[1] for p in self.Gs.pos.values())
-        else:
+        elif xlim==():
             xmin = -20.
             xmax = 20.
             ymin = -10.
             ymax = 10.
+        else:
+            xmin = xlim[0]
+            xmax = xlim[1]
+            ymin = xlim[2]
+            ymax = xlim[3]
 
         self.ax = (xmin - dx, xmax + dx, ymin - dy, ymax + dy)
         self.display['box']=self.ax
