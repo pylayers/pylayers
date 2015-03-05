@@ -146,6 +146,7 @@ import os
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;DLR.ini&#39;</span><span class="p">,</span>
  <span class="s">&#39;DLR2.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;MADRID-METIS.ini&#39;</span><span class="p">,</span>
  <span class="s">&#39;MOCAP-small.ini&#39;</span><span class="p">,</span>
  <span class="s">&#39;MOCAP-small2.ini&#39;</span><span class="p">,</span>
  <span class="s">&#39;MOCAP.ini&#39;</span><span class="p">,</span>
@@ -173,8 +174,8 @@ import os
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2af57a744710&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2af57a9a7e10&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b238dd8d150&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2b23cf7f0750&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/Layout_10_1.png" src="../../_images/Layout_10_1.png" />
@@ -240,7 +241,7 @@ degree : degree of nodes
 </pre></div>
 </div>
 <p>This Layout is still in construction</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">airwalls</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">airwalls</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
 <img alt="../../_images/Layout_15_0.png" src="../../_images/Layout_15_0.png" />
@@ -288,8 +289,8 @@ degree : degree of nodes
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2af52ec92b50&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2af57aac4510&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b23cfd3c710&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2b23cfd48bd0&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/Layout_17_1.png" src="../../_images/Layout_17_1.png" />
@@ -342,7 +343,7 @@ Where <img class="math" src="../../_images/math/e9203da50e1059455123460d4e716c9c
 <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span><span class="n">node_color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span><span class="n">node_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.collections.LineCollection at 0x2af57dcbaf10&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.collections.LineCollection at 0x2b23d2e1f710&gt;
 </pre></div>
 </div>
 <img alt="../../_images/Layout_29_1.png" src="../../_images/Layout_29_1.png" />
@@ -442,7 +443,74 @@ because none segment has 0 as an index.</p>
 </pre></div>
 </div>
 <img alt="../../_images/Layout_47_1.png" src="../../_images/Layout_47_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
+
+<span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
+    <span class="n">styles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;../styles/custom.css&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="n">styles</span><span class="p">)</span>
+<span class="n">css_styling</span><span class="p">()</span>
+</pre></div>
 </div>
+<style>
+    @font-face {
+        font-family: "Computer Modern";
+        src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
+    }
+    div.cell{
+        width:800px;
+        margin-left:16% !important;
+        margin-right:auto;
+    }
+    h1 {
+        font-family: Helvetica, serif;
+    }
+    h4{
+        margin-top:12px;
+        margin-bottom: 3px;
+       }
+    div.text_cell_render{
+        font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+        line-height: 145%;
+        font-size: 130%;
+        width:800px;
+        margin-left:auto;
+        margin-right:auto;
+    }
+    .CodeMirror{
+            font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
+    }
+    .prompt{
+        display: None;
+    }
+    .text_cell_render h5 {
+        font-weight: 300;
+        font-size: 22pt;
+        color: #4057A1;
+        font-style: italic;
+        margin-bottom: .5em;
+        margin-top: 0.5em;
+        display: block;
+    }
+
+    .warning{
+        color: rgb( 240, 20, 20 )
+        }
+</style>
+<script>
+    MathJax.Hub.Config({
+                        TeX: {
+                           extensions: ["AMSmath.js"]
+                           },
+                tex2jax: {
+                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+                },
+                displayAlign: 'center', // Change this to 'center' to center equations.
+                "HTML-CSS": {
+                    styles: {'.MathJax_Display': {"margin": 4}}
+                }
+        });
+</script></div>
 </div>
 
 
@@ -477,7 +545,7 @@ because none segment has 0 as an index.</p>
 
     <div class="footer">
         &copy; Copyright 2015, PyLayers developer team.
-      Last updated on mars 02, 2015.
+      Last updated on mars 05, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

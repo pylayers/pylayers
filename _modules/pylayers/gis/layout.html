@@ -348,6 +348,8 @@
 <span class="c">#from pylayers.gis import cycles as Cycls</span>
 <span class="kn">from</span> <span class="nn">pylayers.gis</span> <span class="kn">import</span> <span class="n">cycles</span> <span class="k">as</span> <span class="n">cycl</span> <span class="c"># new version of cycles</span>
 <span class="kn">from</span> <span class="nn">pylayers.gis.selectl</span> <span class="kn">import</span> <span class="n">SelectL</span>
+<span class="kn">from</span> <span class="nn">pylayers.gis.editor_select</span> <span class="kn">import</span> <span class="n">SelectL2</span>
+
 <span class="kn">from</span> <span class="nn">pylayers.util.easygui</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="c">#from   PyUtil  import *</span>
@@ -459,6 +461,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;subseg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;subsegnb&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;transition&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;visu&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;thin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;scaled&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
@@ -2326,6 +2329,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">n2</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ns</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="c"># update slab name &lt;-&gt; edge number dictionnary</span>
+        <span class="k">print</span> <span class="n">num</span><span class="p">,</span><span class="n">name</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
@@ -2839,7 +2843,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">g2npy</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Layout.edit_segment"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.edit_segment.html#pylayers.gis.layout.Layout.edit_segment">[docs]</a>    <span class="k">def</span> <span class="nf">edit_segment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e1</span> <span class="p">,</span> <span class="n">gui</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">outdata</span><span class="o">=</span><span class="p">{}):</span>
-        <span class="sd">&quot;&quot;&quot; edit segment</span>
+        <span class="sd">&quot;&quot;&quot; edit segment WITH EasyGUI</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2870,12 +2874,12 @@
         <span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Segment (&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n1</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n2</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;)&quot;</span>
         <span class="n">message</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="k">if</span> <span class="s">&#39;ss_name&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">de1</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">de1k</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">,</span><span class="s">&#39;transition&#39;</span><span class="p">]</span>
-            <span class="n">de1v</span> <span class="o">=</span> <span class="p">[</span><span class="n">de1</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span><span class="n">de1</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">],</span><span class="n">de1</span><span class="p">[</span><span class="s">&#39;transition&#39;</span><span class="p">]]</span>
+            <span class="n">de1k</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">,</span><span class="s">&#39;transition&#39;</span><span class="p">,</span><span class="s">&#39;offset&#39;</span><span class="p">]</span>
+            <span class="n">de1v</span> <span class="o">=</span> <span class="p">[</span><span class="n">de1</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span><span class="n">de1</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">],</span><span class="n">de1</span><span class="p">[</span><span class="s">&#39;transition&#39;</span><span class="p">],</span><span class="n">de1</span><span class="p">[</span><span class="s">&#39;offset&#39;</span><span class="p">]]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">de1k</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">,</span> <span class="s">&#39;ss_name&#39;</span><span class="p">,</span> <span class="s">&#39;ss_z&#39;</span><span class="p">,</span><span class="s">&#39;transition&#39;</span><span class="p">]</span>
+            <span class="n">de1k</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">,</span> <span class="s">&#39;ss_name&#39;</span><span class="p">,</span> <span class="s">&#39;ss_z&#39;</span><span class="p">,</span><span class="s">&#39;transition&#39;</span><span class="p">,</span><span class="s">&#39;ss_offset&#39;</span><span class="p">]</span>
             <span class="n">de1v</span> <span class="o">=</span> <span class="p">[</span><span class="n">de1</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span> <span class="n">de1</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">],</span> <span class="n">de1</span><span class="p">[</span><span class="s">&#39;ss_name&#39;</span><span class="p">],</span> <span class="n">de1</span><span class="p">[</span><span class="s">&#39;ss_z&#39;</span><span class="p">],</span>
-                    <span class="n">de1</span><span class="p">[</span><span class="s">&#39;transition&#39;</span><span class="p">]]</span>
+                    <span class="n">de1</span><span class="p">[</span><span class="s">&#39;transition&#39;</span><span class="p">],</span><span class="n">de1</span><span class="p">[</span><span class="s">&#39;ss_offset&#39;</span><span class="p">]]</span>
         <span class="c">#de1v    = de1.values()</span>
         <span class="k">if</span> <span class="n">gui</span><span class="p">:</span>
             <span class="n">outdata</span><span class="o">=</span><span class="p">{}</span>
@@ -2920,11 +2924,46 @@
                 <span class="c">#         pass</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">de1k</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">,</span><span class="s">&#39;name&#39;</span><span class="p">,</span><span class="s">&#39;transition&#39;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">,</span><span class="s">&#39;name&#39;</span><span class="p">,</span><span class="s">&#39;transition&#39;</span><span class="p">,</span><span class="s">&#39;offset&#39;</span><span class="p">]:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e1</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">outdata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">outdata</span>
+</div>
+    <span class="k">def</span> <span class="nf">edit_seg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e1</span> <span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="sd">&quot;&quot;&quot; edit segment</span>
 
-       </div>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        e1 : integer</span>
+<span class="sd">            edge number</span>
+<span class="sd">        data : dict</span>
+<span class="sd">            dictionnary of value of seg or subseg</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        A segment has the following properties :</span>
+<span class="sd">            + name  : string</span>
+<span class="sd">            + z  :  tuple</span>
+<span class="sd">            + transition : boolean (default FALSE)</span>
+<span class="sd">            + offset : [-1,1]</span>
+<span class="sd">        If a segment has subsegments attached the following properties are</span>
+<span class="sd">        added :</span>
+<span class="sd">            + ss_name : list of string</span>
+<span class="sd">            + ss_z : list of subsegment e.q. [(min height (meters),max height (meters))]</span>
+<span class="sd">            + ss_offset : list of offset in [0,1]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        
+        <span class="c">#de1v    = de1.values()</span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">==</span><span class="p">{}:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e1</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">data</span>
+
+       
 <div class="viewcode-block" id="Layout.have_subseg"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.have_subseg.html#pylayers.gis.layout.Layout.have_subseg">[docs]</a>    <span class="k">def</span> <span class="nf">have_subseg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        have_subseg</span>
@@ -2947,6 +2986,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">have_subseg</span><span class="p">(</span><span class="n">e1</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e1</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;ss_name&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e1</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;ss_z&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e1</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;ss_offset&#39;</span><span class="p">)</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e1</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;ss_ce&#39;</span><span class="p">)</span>
             <span class="k">except</span><span class="p">:</span>
@@ -2957,7 +2997,7 @@
             <span class="k">print</span> <span class="s">&quot;no subseg to delete&quot;</span>
 </div>
 <div class="viewcode-block" id="Layout.add_subseg"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.add_subseg.html#pylayers.gis.layout.Layout.add_subseg">[docs]</a>    <span class="k">def</span> <span class="nf">add_subseg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">s1</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;DOOR&#39;</span><span class="p">,</span><span class="n">zmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">zmax</span><span class="o">=</span><span class="mf">2.24</span><span class="p">,</span><span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">transition</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; add a subsegment on a segment</span>
+        <span class="sd">&quot;&quot;&quot; add a subsegment on a segment WITH EasyGUI</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2985,10 +3025,57 @@
             <span class="c"># ce is for Pulsray compatibility</span>
             <span class="c">#self.Gs.node[s1][&#39;ss_ce&#39;] = [ (0,0) ]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s1</span><span class="p">][</span><span class="s">&#39;transition&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">transition</span>
+            <span class="k">return</span> <span class="bp">True</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="k">pass</span>
+            <span class="k">return</span> <span class="bp">False</span>
 
 </div>
+    <span class="k">def</span> <span class="nf">update_sseg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">s1</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="sd">&quot;&quot;&quot; update subsegment(s) on a segment</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        s1 : integer</span>
+<span class="sd">            edge number &gt; 0</span>
+<span class="sd">        data = dict</span>
+<span class="sd">            dictionnary of data</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;ss_name&#39;</span><span class="p">])</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;ss_z&#39;</span><span class="p">]),</span><span class="s">&#39;Error incompatible size in chgmss&#39;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;ss_z&#39;</span><span class="p">])</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;ss_offset&#39;</span><span class="p">]),</span><span class="s">&#39;Error incompatible size in chgmss&#39;</span>
+        <span class="k">if</span> <span class="n">s1</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="n">new_nbss</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;ss_name&#39;</span><span class="p">])</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">old_nbss</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s1</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">])</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">old_nbss</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c"># update the number of subsegments for self.Nss</span>
+        <span class="n">deltaNss</span><span class="o">=</span> <span class="n">new_nbss</span> <span class="o">-</span> <span class="n">old_nbss</span>
+        <span class="k">print</span> <span class="n">deltaNss</span>
+        <span class="k">if</span> <span class="n">new_nbss</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s1</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;ss_name&#39;</span><span class="p">]]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Nss</span> <span class="o">+=</span> <span class="n">deltaNss</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;ss_name&#39;</span><span class="p">],</span>
+                <span class="n">ss_offset</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;ss_offset&#39;</span><span class="p">],</span>
+                <span class="n">ss_z</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;ss_z&#39;</span><span class="p">])</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s1</span><span class="p">]</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;ss_name&#39;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s1</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;ss_name&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s1</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;ss_z&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s1</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;ss_offset&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Nss</span> <span class="o">+=</span> <span class="n">deltaNss</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">g2npy</span><span class="p">()</span>
+                <span class="k">return</span> <span class="bp">True</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="k">return</span> <span class="bp">True</span>
+
+
 <div class="viewcode-block" id="Layout.add_window"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.add_window.html#pylayers.gis.layout.Layout.add_window">[docs]</a>    <span class="k">def</span> <span class="nf">add_window</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add a window on segment</span>
 
@@ -4362,7 +4449,7 @@
         <span class="n">fileGc</span> <span class="o">=</span> <span class="n">filename</span> <span class="o">+</span> <span class="s">&#39;Gc&#39;</span> <span class="o">+</span> <span class="s">&#39;.gml&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Gc</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">read_gml</span><span class="p">(</span><span class="n">fileGc</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Layout.show_nodes"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.show_nodes.html#pylayers.gis.layout.Layout.show_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">show_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ndlist</span><span class="o">=</span><span class="p">[</span><span class="mf">1e8</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">dlabels</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">node_shape</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Layout.show_nodes"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.show_nodes.html#pylayers.gis.layout.Layout.show_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">show_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ndlist</span><span class="o">=</span><span class="p">[</span><span class="mf">1e8</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">dlabels</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">node_shape</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; show nodes</span>
 
 <span class="sd">        Parameters</span>
@@ -4378,6 +4465,11 @@
 <span class="sd">        alpha : float</span>
 <span class="sd">            transparancy</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">fig</span> <span class="o">==</span><span class="p">[]:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ax</span> <span class="o">==</span><span class="p">[]:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">ndlist</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
             <span class="n">ndlist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ndlist</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ndlist</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -4389,17 +4481,31 @@
         <span class="c">#    ndlist  = self.Gs.node.keys()</span>
 
         <span class="c">#print ndlist</span>
-        <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_nodes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">node_color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+        <span class="n">Z</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_nodes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">node_color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
                                <span class="n">node_size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="n">ndlist</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
-                               <span class="n">node_shape</span><span class="o">=</span><span class="n">node_shape</span><span class="p">)</span>
+                               <span class="n">node_shape</span><span class="o">=</span><span class="n">node_shape</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">fig</span><span class="o">=</span><span class="n">Z</span><span class="o">.</span><span class="n">figure</span>
+            <span class="n">ax</span><span class="o">=</span><span class="n">Z</span><span class="o">.</span><span class="n">axes</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
         <span class="k">if</span> <span class="n">dlabels</span><span class="p">:</span>
             <span class="n">dicopos</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="n">dicolab</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">ndlist</span><span class="p">:</span>
                 <span class="n">dicopos</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
                 <span class="n">dicolab</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
-            <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_labels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span> <span class="n">dicopos</span><span class="p">,</span> <span class="n">dicolab</span><span class="p">,</span>
-                                    <span class="n">font_size</span><span class="o">=</span><span class="n">font_size</span><span class="p">,</span> <span class="n">font_color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+            <span class="n">Z</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_labels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span> <span class="n">dicopos</span><span class="p">,</span> <span class="n">dicolab</span><span class="p">,</span>
+                                    <span class="n">font_size</span><span class="o">=</span><span class="n">font_size</span><span class="p">,</span> <span class="n">font_color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">fig</span><span class="o">=</span><span class="n">Z</span><span class="o">.</span><span class="n">figure</span>
+                <span class="n">ax</span><span class="o">=</span><span class="n">Z</span><span class="o">.</span><span class="n">axes</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
+
 </div>
 <div class="viewcode-block" id="Layout.show_seg1"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.show_seg1.html#pylayers.gis.layout.Layout.show_seg1">[docs]</a>    <span class="k">def</span> <span class="nf">show_seg1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edlist</span><span class="o">=</span><span class="p">[],</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;black&#39;</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">dlabels</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show segment</span>
@@ -4457,7 +4563,9 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;edlist&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#39;fig&#39;</span><span class="p">:[],</span>
+                    <span class="s">&#39;ax&#39;</span><span class="p">:[],</span>
+                    <span class="s">&#39;edlist&#39;</span><span class="p">:</span> <span class="p">[],</span>
                     <span class="s">&#39;alpha&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
                     <span class="s">&#39;width&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
                     <span class="s">&#39;color&#39;</span><span class="p">:</span><span class="s">&#39;black&#39;</span><span class="p">,</span>
@@ -4471,6 +4579,14 @@
             <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span> <span class="o">==</span><span class="p">[]:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">]</span> <span class="o">==</span><span class="p">[]:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">ax</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">]</span>
         <span class="n">clrlist</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">cold</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">coldict</span><span class="p">()</span>
 
@@ -4486,21 +4602,30 @@
         <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edlist&#39;</span><span class="p">])</span>
         <span class="n">ue</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edlist&#39;</span><span class="p">])))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s">&#39;int&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">U</span><span class="p">)</span> <span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-            <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">edgelist</span><span class="o">=</span><span class="n">U</span><span class="p">,</span>
+            <span class="n">Z</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">edgelist</span><span class="o">=</span><span class="n">U</span><span class="p">,</span>
                                <span class="n">edge_color</span><span class="o">=</span><span class="n">ue</span><span class="p">,</span> <span class="n">edge_cmap</span><span class="o">=</span><span class="n">ecmap</span><span class="p">,</span>
-                               <span class="n">alpha</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alpha&#39;</span><span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;width&#39;</span><span class="p">])</span>
+                               <span class="n">alpha</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alpha&#39;</span><span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;width&#39;</span><span class="p">],</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">fig</span><span class="o">=</span><span class="n">Z</span><span class="o">.</span><span class="n">figure</span>
+                <span class="n">ax</span><span class="o">=</span><span class="n">Z</span><span class="o">.</span><span class="n">axes</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;dlabels&#39;</span><span class="p">]:</span>
                <span class="c"># print edlist</span>
                <span class="c"># nodelist = self.ed2nd(edlist)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">show_nodes</span><span class="p">(</span><span class="n">ndlist</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edlist&#39;</span><span class="p">],</span> <span class="n">dlabels</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;dlabels&#39;</span><span class="p">],</span>
+            <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">show_nodes</span><span class="p">(</span><span class="n">ndlist</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edlist&#39;</span><span class="p">],</span> <span class="n">dlabels</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;dlabels&#39;</span><span class="p">],</span>
                             <span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;font_size&#39;</span><span class="p">],</span>
-                            <span class="n">node_shape</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;node_shape&#39;</span><span class="p">])</span>
+                            <span class="n">node_shape</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;node_shape&#39;</span><span class="p">],</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;dnodes&#39;</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">show_nodes</span><span class="p">(</span><span class="n">ndlist</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edlist&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
+            <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">show_nodes</span><span class="p">(</span><span class="n">ndlist</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edlist&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
+
 </div>
 <div class="viewcode-block" id="Layout.show_layer"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.show_layer.html#pylayers.gis.layout.Layout.show_layer">[docs]</a>    <span class="k">def</span> <span class="nf">show_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">edlist</span><span class="o">=</span><span class="p">[],</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                    <span class="n">color</span><span class="o">=</span><span class="s">&#39;black&#39;</span><span class="p">,</span> <span class="n">dnodes</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">dthin</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-                   <span class="n">dlabels</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[]):</span>
+                   <span class="n">dlabels</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[],</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; show layer</span>
 
 <span class="sd">        Parameters</span>
@@ -4523,6 +4648,13 @@
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">fig</span> <span class="o">==</span><span class="p">[]:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ax</span> <span class="o">==</span><span class="p">[]:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+
+
         <span class="k">if</span> <span class="n">edlist</span> <span class="o">==</span> <span class="p">[]:</span>
             <span class="n">edlist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -4532,12 +4664,12 @@
             <span class="n">edlist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;thin&#39;</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">show_segment</span><span class="p">(</span><span class="n">edlist</span><span class="o">=</span><span class="n">edlist</span><span class="p">,</span>
+            <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">show_segment</span><span class="p">(</span><span class="n">edlist</span><span class="o">=</span><span class="n">edlist</span><span class="p">,</span>
                               <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                               <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                               <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
                               <span class="n">dlabels</span><span class="o">=</span><span class="n">dlabels</span><span class="p">,</span>
-                              <span class="n">font_size</span><span class="o">=</span><span class="n">font_size</span><span class="p">)</span>
+                              <span class="n">font_size</span><span class="o">=</span><span class="n">font_size</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">slab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">width</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
@@ -4552,10 +4684,10 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;black&#39;</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">show_segment</span><span class="p">(</span><span class="n">edlist</span><span class="o">=</span><span class="n">edlist</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">show_segment</span><span class="p">(</span><span class="n">edlist</span><span class="o">=</span><span class="n">edlist</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                             <span class="n">width</span><span class="o">=</span><span class="n">linewidth</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">dnodes</span><span class="o">=</span><span class="n">dnodes</span><span class="p">,</span>
-                            <span class="n">dlabels</span><span class="o">=</span><span class="n">dlabels</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="n">font_size</span><span class="p">)</span>
-
+                            <span class="n">dlabels</span><span class="o">=</span><span class="n">dlabels</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="n">font_size</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
 </div>
 <div class="viewcode-block" id="Layout._showGi"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout._showGi.html#pylayers.gis.layout.Layout._showGi">[docs]</a>    <span class="k">def</span> <span class="nf">_showGi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  show graph of interactions Gi</span>
@@ -4763,16 +4895,29 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]:</span>
             <span class="n">dlabels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ndlabel&#39;</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">show_nodes</span><span class="p">(</span><span class="n">ndlist</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span> <span class="n">dlabels</span><span class="o">=</span><span class="n">dlabels</span><span class="p">,</span><span class="n">node_shape</span><span class="o">=</span><span class="s">&#39;s&#39;</span><span class="p">)</span>
+            <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">show_nodes</span><span class="p">(</span><span class="n">ndlist</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span> <span class="n">dlabels</span><span class="o">=</span><span class="n">dlabels</span><span class="p">,</span><span class="n">node_shape</span><span class="o">=</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;subsegnb&#39;</span><span class="p">]:</span>
-            <span class="n">seg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lsss</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;lsss&#39;</span><span class="p">):</span>
+                <span class="n">seg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lsss</span>
+                <span class="n">psseg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">seg</span><span class="p">])</span>
+                <span class="n">nbsseg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">seg</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;int&#39;</span><span class="p">)</span>
 
-            <span class="n">psseg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">seg</span><span class="p">])</span>
-            <span class="n">nbsseg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">seg</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;int&#39;</span><span class="p">)</span>
+                <span class="p">[</span><span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">psseg</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mf">0.2</span><span class="p">,</span><span class="n">psseg</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mf">0.2</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">nbsseg</span><span class="p">[</span><span class="n">x</span><span class="p">]),</span>
+                    <span class="n">fontdict</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;size&#39;</span><span class="p">:</span><span class="mi">8</span><span class="p">},</span><span class="n">ha</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">seg</span><span class="p">))]</span>
 
-            <span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">psseg</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mf">0.1</span><span class="p">,</span><span class="n">psseg</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mf">0.1</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">nbsseg</span><span class="p">[</span><span class="n">x</span><span class="p">]),</span>
-                <span class="n">fontdict</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;size&#39;</span><span class="p">:</span><span class="mi">8</span><span class="p">},</span><span class="n">ha</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">seg</span><span class="p">))]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;transition&#39;</span><span class="p">]:</span>
+            <span class="n">segwtrans</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span> <span class="k">if</span> <span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span> <span class="p">]</span><span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="s">&#39;transition&#39;</span><span class="p">]]</span>
+            <span class="n">posseg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">segwtrans</span><span class="p">])</span>
+            <span class="n">normseg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s">&#39;norm&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">segwtrans</span><span class="p">])[:,:</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">b1</span> <span class="o">=</span> <span class="p">(</span><span class="n">posseg</span><span class="o">-</span><span class="n">normseg</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">b2</span> <span class="o">=</span> <span class="p">(</span><span class="n">posseg</span><span class="o">+</span><span class="n">normseg</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+            <span class="p">[</span><span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">b1</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> 
+                        <span class="n">xycoords</span><span class="o">=</span><span class="s">&#39;data&#39;</span><span class="p">,</span>
+                        <span class="n">xytext</span><span class="o">=</span><span class="n">b2</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> 
+                        <span class="n">textcoords</span><span class="o">=</span><span class="s">&#39;data&#39;</span><span class="p">,</span>
+                        <span class="n">arrowprops</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;arrowstyle&#39;</span><span class="p">:</span> <span class="s">&#39;&lt;-&gt;&#39;</span><span class="p">})</span> 
+                    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">segwtrans</span><span class="p">))]</span>
 
         <span class="n">slablist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;edges&#39;</span><span class="p">]:</span>
@@ -4782,9 +4927,9 @@
             <span class="n">dthin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;thin&#39;</span><span class="p">]</span>
             <span class="n">alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;alpha&#39;</span><span class="p">]</span>
             <span class="k">for</span> <span class="n">nameslab</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;layers&#39;</span><span class="p">]:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">show_layer</span><span class="p">(</span><span class="n">nameslab</span><span class="p">,</span> <span class="n">edlist</span><span class="o">=</span><span class="n">edlist</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+                <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">show_layer</span><span class="p">(</span><span class="n">nameslab</span><span class="p">,</span> <span class="n">edlist</span><span class="o">=</span><span class="n">edlist</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
                                 <span class="n">dthin</span><span class="o">=</span><span class="n">dthin</span><span class="p">,</span> <span class="n">dnodes</span><span class="o">=</span><span class="n">dnodes</span><span class="p">,</span> <span class="n">dlabels</span><span class="o">=</span><span class="n">dlabels</span><span class="p">,</span>
-                                <span class="n">font_size</span><span class="o">=</span><span class="n">font_size</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;width&#39;</span><span class="p">],</span><span class="n">fGHz</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fGHz&#39;</span><span class="p">])</span>
+                                <span class="n">font_size</span><span class="o">=</span><span class="n">font_size</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;width&#39;</span><span class="p">],</span><span class="n">fGHz</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fGHz&#39;</span><span class="p">],</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;subseg&#39;</span><span class="p">]:</span>
             <span class="n">dico</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subseg</span><span class="p">()</span>
@@ -4804,7 +4949,7 @@
                     <span class="c">#edlist2.append(ts)</span>
                 <span class="n">edlist3</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">edlist2</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">edlist</span><span class="p">)))</span>
                 <span class="c">#print k , color , edlist</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">show_segment</span><span class="p">(</span><span class="n">edlist</span><span class="o">=</span><span class="n">edlist3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">show_segment</span><span class="p">(</span><span class="n">edlist</span><span class="o">=</span><span class="n">edlist3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;scaled&#39;</span><span class="p">]:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;scaled&#39;</span><span class="p">)</span>
@@ -4828,7 +4973,7 @@
 
         <span class="k">for</span> <span class="n">nr</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;roomlist&#39;</span><span class="p">]:</span>
             <span class="n">ncy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">nr</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ncy</span><span class="p">][</span><span class="s">&#39;polyg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+            <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ncy</span><span class="p">][</span><span class="s">&#39;polyg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;axis&#39;</span><span class="p">]</span><span class="o">==</span><span class="p">[]:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;scaled&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -7889,17 +8034,23 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;subsegnb&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;transition&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">af</span> <span class="o">=</span> <span class="n">SelectL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">af</span> <span class="o">=</span> <span class="n">SelectL2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 
         <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">af</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">,</span><span class="n">clear</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">cid1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s">&#39;button_press_event&#39;</span><span class="p">,</span>
                                            <span class="bp">self</span><span class="o">.</span><span class="n">af</span><span class="o">.</span><span class="n">OnClick</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cid2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s">&#39;key_press_event&#39;</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cid2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s">&#39;button_release_event&#39;</span><span class="p">,</span>
+                                           <span class="bp">self</span><span class="o">.</span><span class="n">af</span><span class="o">.</span><span class="n">OnClickRelease</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cid3</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s">&#39;motion_notify_event&#39;</span><span class="p">,</span>
+                                           <span class="bp">self</span><span class="o">.</span><span class="n">af</span><span class="o">.</span><span class="n">OnMotion</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cid4</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s">&#39;key_press_event&#39;</span><span class="p">,</span>
                                            <span class="bp">self</span><span class="o">.</span><span class="n">af</span><span class="o">.</span><span class="n">OnPress</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cid3</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s">&#39;key_release_event&#39;</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cid5</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s">&#39;key_release_event&#39;</span><span class="p">,</span>
                                            <span class="bp">self</span><span class="o">.</span><span class="n">af</span><span class="o">.</span><span class="n">OnRelease</span><span class="p">)</span>
+
         <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;tight&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -9114,7 +9265,7 @@
 
     <div class="footer">
         &copy; Copyright 2015, PyLayers developer team.
-      Last updated on mars 02, 2015.
+      Last updated on mars 05, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">
