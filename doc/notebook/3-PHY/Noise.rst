@@ -35,9 +35,9 @@ density is :math:`-174dBm/Hz` and can be modified with the argument
     DSP : -174 dBm/Hz
     NF : 0 dB
     Vrms : 9.97631157484e-05 Volts
-    Variance : 1.00178020455e-08 V^2
+    Variance : 9.92227469331e-09 V^2
     Power /50 Ohms : -157.010299957 dBm
-    Power realized /50 Ohms : -156.981975587 dBm
+    Power realized /50 Ohms : -157.023587582 dBm
 
 
 
@@ -82,8 +82,8 @@ density is :math:`-174dBm/Hz` and can be modified with the argument
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f3fc45fd590>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x7f3fc45f5d10>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x2b2b0f1e4c50>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x2b2b0f26d2d0>]], dtype=object))
 
 
 

@@ -412,6 +412,7 @@ class Coverage(PyLayers):
 
     def evsinr(self):
         """ calculates sinr
+
         """
 
         na = self.na

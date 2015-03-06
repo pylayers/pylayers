@@ -54,6 +54,7 @@ The ``ls()`` method lists the layout file which are available in the
 
     ['DLR.ini',
      'DLR2.ini',
+     'MADRID-METIS.ini',
      'MOCAP-small.ini',
      'MOCAP-small2.ini',
      'MOCAP.ini',
@@ -87,8 +88,8 @@ The ``ls()`` method lists the layout file which are available in the
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x2af57a744710>,
-     <matplotlib.axes.AxesSubplot at 0x2af57a9a7e10>)
+    (<matplotlib.figure.Figure at 0x2b702902fe50>,
+     <matplotlib.axes.AxesSubplot at 0x2b7028dde750>)
 
 
 
@@ -173,7 +174,7 @@ This Layout is still in construction
 
 .. code:: python
 
-    f,a=L.showG('s',airwalls=False,figsize=(10,5))
+    f,a=L.showG('s',airwalls=False,figsize=(20,10))
 
 
 .. image:: Layout_files/Layout_15_0.png
@@ -235,8 +236,8 @@ This Layout is still in construction
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x2af52ec92b50>,
-     <matplotlib.axes.AxesSubplot at 0x2af57aac4510>)
+    (<matplotlib.figure.Figure at 0x2b7029326610>,
+     <matplotlib.axes.AxesSubplot at 0x2b7029334450>)
 
 
 
@@ -309,7 +310,7 @@ Where :math:`k` is the index of a given segment (starting in 0).
 
 .. parsed-literal::
 
-    <matplotlib.collections.LineCollection at 0x2af57dcbaf10>
+    <matplotlib.collections.LineCollection at 0x2b702c40d710>
 
 
 
@@ -421,9 +422,9 @@ because none segment has 0 as an index.
 
 .. parsed-literal::
 
-    array([[ 29.785,   0.044,  22.538],
+    array([[ 29.785,  -3.754,  22.538],
            [  6.822,  23.078,   8.711],
-           [ 29.785,  -3.754,  20.326],
+           [ 29.785,   0.044,  20.326],
            [  8.921,  23.078,   8.693]])
 
 

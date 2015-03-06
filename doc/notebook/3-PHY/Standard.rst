@@ -3,7 +3,7 @@
 
     import pylayers.signal.standard as std
 Parameters of different standards are stored in ``wstd.json`` file. The
-class which handles wireless standards is ``Ẁstandard``
+class which handles wireless standards is ``standard``
 
 .. code:: python
 
@@ -182,80 +182,5 @@ To list the available standard :
     82 :  2.483 : [2.4825,2.4835]
     83 :  2.484 : [2.4835,2.4845]
 
-
-
-
-.. code:: python
-
-    from IPython.core.display import HTML
-    def css_styling():
-        styles = open("../styles/custom.css", "r").read()
-        return HTML(styles)
-    css_styling()
-
-
-
-.. raw:: html
-
-    <style>
-        @font-face {
-            font-family: "Computer Modern";
-            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-        }
-        div.cell{
-            width:800px;
-            margin-left:16% !important;
-            margin-right:auto;
-        }
-        h1 {
-            font-family: Helvetica, serif;
-        }
-        h4{
-            margin-top:12px;
-            margin-bottom: 3px;
-           }
-        div.text_cell_render{
-            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-            line-height: 145%;
-            font-size: 130%;
-            width:800px;
-            margin-left:auto;
-            margin-right:auto;
-        }
-        .CodeMirror{
-                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-        }
-        .prompt{
-            display: None;
-        }
-        .text_cell_render h5 {
-            font-weight: 300;
-            font-size: 22pt;
-            color: #4057A1;
-            font-style: italic;
-            margin-bottom: .5em;
-            margin-top: 0.5em;
-            display: block;
-        }
-        
-        .warning{
-            color: rgb( 240, 20, 20 )
-            }  
-    </style>
-    <script>
-        MathJax.Hub.Config({
-                            TeX: {
-                               extensions: ["AMSmath.js"]
-                               },
-                    tex2jax: {
-                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                    },
-                    displayAlign: 'center', // Change this to 'center' to center equations.
-                    "HTML-CSS": {
-                        styles: {'.MathJax_Display': {"margin": 4}}
-                    }
-            });
-    </script>
 
 

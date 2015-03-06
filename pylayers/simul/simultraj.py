@@ -109,7 +109,7 @@ class Simul(PyLayers):
             cutoff=2
 
 
-        
+
         self._gen_net()
         self.SL = SLink()
         self.DL = DLink(L=self.L,verbose=self.verbose)
