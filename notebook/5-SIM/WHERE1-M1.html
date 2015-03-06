@@ -158,7 +158,7 @@ dictionnary member of the Layout object.which allows to configure the
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../../_images/WHERE1-M1_7_0.png" src="../../_images/WHERE1-M1_7_0.png" />
+<img alt="../../_images/WHERE1-M1_10_0.png" src="../../_images/WHERE1-M1_10_0.png" />
 <div class="section" id="adding-coordinates-of-transmiting-and-receiving-points">
 <h2>Adding Coordinates of Transmiting and Receiving points<a class="headerlink" href="#adding-coordinates-of-transmiting-and-receiving-points" title="Permalink to this headline">¶</a></h2>
 <p>Coordinates of transmitters and receivers for the simulation are stored
@@ -187,7 +187,7 @@ method of the Simulation object</p>
 <div class="highlight-python"><div class="highlight"><pre>Warning : no furniture file loaded
 </pre></div>
 </div>
-<img alt="../../_images/WHERE1-M1_13_1.png" src="../../_images/WHERE1-M1_13_1.png" />
+<img alt="../../_images/WHERE1-M1_16_1.png" src="../../_images/WHERE1-M1_16_1.png" />
 <p>The different object of the simulation can be accessed to get different
 information. Below i.e the number of transmitter and receiver points.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&#39;number of Tx :&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -208,7 +208,7 @@ represented below. Not all cycles are rooms.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">40.0</span><span class="p">,</span> <span class="mf">40.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">18.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/WHERE1-M1_17_1.png" src="../../_images/WHERE1-M1_17_1.png" />
+<img alt="../../_images/WHERE1-M1_20_1.png" src="../../_images/WHERE1-M1_20_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;st&#39;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
@@ -216,7 +216,7 @@ represented below. Not all cycles are rooms.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">40.0</span><span class="p">,</span> <span class="mf">40.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">18.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/WHERE1-M1_18_1.png" src="../../_images/WHERE1-M1_18_1.png" />
+<img alt="../../_images/WHERE1-M1_21_1.png" src="../../_images/WHERE1-M1_21_1.png" />
 <p>Then an existing interaction is picked up and the neighbors in the graph
 of interactions <img class="math" src="../../_images/math/f73bdbe32e898c36e2a3ccbdc51d8cd1798861e9.png" alt="\mathcal{G}_i"/> are shown</p>
 <p>Then a selected sequence of interactions is chosen and the attribute
@@ -264,8 +264,8 @@ point to cycle function.</p>
 <span class="k">print</span> <span class="s">&#39;rx point belongs to cycle &#39;</span><span class="p">,</span><span class="n">crx</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>tx point belongs to cycle  6
-rx point belongs to cycle  5
+<div class="highlight-python"><div class="highlight"><pre>tx point belongs to cycle  7
+rx point belongs to cycle  4
 </pre></div>
 </div>
 <p>Then the signature between the 2 chosen cycles can be calculated. This
@@ -279,7 +279,7 @@ number of signatures for each number of interactions.</p>
 <span class="n">DL</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;sig&#39;</span><span class="p">,</span><span class="s">&#39;ray&#39;</span><span class="p">,</span><span class="s">&#39;Ct&#39;</span><span class="p">,</span><span class="s">&#39;H&#39;</span><span class="p">],</span><span class="n">alg</span><span class="o">=</span><span class="mi">2015</span><span class="p">,</span><span class="n">si_reverb</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">ra_vectorized</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Signatures&#39;&gt; from 6_5_2 saved
+<div class="highlight-python"><div class="highlight"><pre>Signatures&#39;&gt; from 7_4_2 saved
 Rays&#39;&gt; from 2_2_0 saved
 Ctilde&#39;&gt; from 2_0_0 saved
 Tchannel&#39;&gt; from 2_0_0_0_0_0_0 saved
@@ -334,22 +334,22 @@ fstep (fGHz) : 0.05
 <span class="n">DL</span><span class="o">.</span><span class="n">Si</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b4071a406d0&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b405c11ead0&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b36a0880810&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2b368af41d50&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/WHERE1-M1_31_1.png" src="../../_images/WHERE1-M1_31_1.png" />
+<img alt="../../_images/WHERE1-M1_35_1.png" src="../../_images/WHERE1-M1_35_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Si</span><span class="o">.</span><span class="n">run5</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">algo</span><span class="o">=</span><span class="s">&#39;old&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Si</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b4071c97490&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b405bf76810&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b368aad2510&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2b368ad39c10&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/WHERE1-M1_33_1.png" src="../../_images/WHERE1-M1_33_1.png" />
+<img alt="../../_images/WHERE1-M1_37_1.png" src="../../_images/WHERE1-M1_37_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c">#Si.run4(cutoff=5)</span>
 </pre></div>
 </div>
@@ -476,7 +476,7 @@ object has a <tt class="docutils literal"><span class="pre">show</span></tt> and
  190 191 192 193 194 195 196 197 198 199 200 201 202 203 204 205 206 207
  208 209 210 211 212 213 214 215 216 217 218 219 220 221 222 223 224 225
  226 227 228 229 230]
-5 / 312 : [231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 248
+5 / 304 : [231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 248
  249 250 251 252 253 254 255 256 257 258 259 260 261 262 263 264 265 266
  267 268 269 270 271 272 273 274 275 276 277 278 279 280 281 282 283 284
  285 286 287 288 289 290 291 292 293 294 295 296 297 298 299 300 301 302
@@ -492,45 +492,40 @@ object has a <tt class="docutils literal"><span class="pre">show</span></tt> and
  465 466 467 468 469 470 471 472 473 474 475 476 477 478 479 480 481 482
  483 484 485 486 487 488 489 490 491 492 493 494 495 496 497 498 499 500
  501 502 503 504 505 506 507 508 509 510 511 512 513 514 515 516 517 518
- 519 520 521 522 523 524 525 526 527 528 529 530 531 532 533 534 535 536
- 537 538 539 540 541 542]
-6 / 320 : [543 544 545 546 547 548 549 550 551 552 553 554 555 556 557 558 559 560
- 561 562 563 564 565 566 567 568 569 570 571 572 573 574 575 576 577 578
- 579 580 581 582 583 584 585 586 587 588 589 590 591 592 593 594 595 596
- 597 598 599 600 601 602 603 604 605 606 607 608 609 610 611 612 613 614
- 615 616 617 618 619 620 621 622 623 624 625 626 627 628 629 630 631 632
- 633 634 635 636 637 638 639 640 641 642 643 644 645 646 647 648 649 650
- 651 652 653 654 655 656 657 658 659 660 661 662 663 664 665 666 667 668
- 669 670 671 672 673 674 675 676 677 678 679 680 681 682 683 684 685 686
- 687 688 689 690 691 692 693 694 695 696 697 698 699 700 701 702 703 704
- 705 706 707 708 709 710 711 712 713 714 715 716 717 718 719 720 721 722
- 723 724 725 726 727 728 729 730 731 732 733 734 735 736 737 738 739 740
- 741 742 743 744 745 746 747 748 749 750 751 752 753 754 755 756 757 758
- 759 760 761 762 763 764 765 766 767 768 769 770 771 772 773 774 775 776
- 777 778 779 780 781 782 783 784 785 786 787 788 789 790 791 792 793 794
- 795 796 797 798 799 800 801 802 803 804 805 806 807 808 809 810 811 812
- 813 814 815 816 817 818 819 820 821 822 823 824 825 826 827 828 829 830
- 831 832 833 834 835 836 837 838 839 840 841 842 843 844 845 846 847 848
- 849 850 851 852 853 854 855 856 857 858 859 860 861 862]
-7 / 180 : [ 863  864  865  866  867  868  869  870  871  872  873  874  875  876  877
-  878  879  880  881  882  883  884  885  886  887  888  889  890  891  892
-  893  894  895  896  897  898  899  900  901  902  903  904  905  906  907
-  908  909  910  911  912  913  914  915  916  917  918  919  920  921  922
-  923  924  925  926  927  928  929  930  931  932  933  934  935  936  937
-  938  939  940  941  942  943  944  945  946  947  948  949  950  951  952
-  953  954  955  956  957  958  959  960  961  962  963  964  965  966  967
-  968  969  970  971  972  973  974  975  976  977  978  979  980  981  982
-  983  984  985  986  987  988  989  990  991  992  993  994  995  996  997
-  998  999 1000 1001 1002 1003 1004 1005 1006 1007 1008 1009 1010 1011 1012
- 1013 1014 1015 1016 1017 1018 1019 1020 1021 1022 1023 1024 1025 1026 1027
- 1028 1029 1030 1031 1032 1033 1034 1035 1036 1037 1038 1039 1040 1041 1042]
-8 / 12 : [1043 1044 1045 1046 1047 1048 1049 1050 1051 1052 1053 1054]
+ 519 520 521 522 523 524 525 526 527 528 529 530 531 532 533 534]
+6 / 303 : [535 536 537 538 539 540 541 542 543 544 545 546 547 548 549 550 551 552
+ 553 554 555 556 557 558 559 560 561 562 563 564 565 566 567 568 569 570
+ 571 572 573 574 575 576 577 578 579 580 581 582 583 584 585 586 587 588
+ 589 590 591 592 593 594 595 596 597 598 599 600 601 602 603 604 605 606
+ 607 608 609 610 611 612 613 614 615 616 617 618 619 620 621 622 623 624
+ 625 626 627 628 629 630 631 632 633 634 635 636 637 638 639 640 641 642
+ 643 644 645 646 647 648 649 650 651 652 653 654 655 656 657 658 659 660
+ 661 662 663 664 665 666 667 668 669 670 671 672 673 674 675 676 677 678
+ 679 680 681 682 683 684 685 686 687 688 689 690 691 692 693 694 695 696
+ 697 698 699 700 701 702 703 704 705 706 707 708 709 710 711 712 713 714
+ 715 716 717 718 719 720 721 722 723 724 725 726 727 728 729 730 731 732
+ 733 734 735 736 737 738 739 740 741 742 743 744 745 746 747 748 749 750
+ 751 752 753 754 755 756 757 758 759 760 761 762 763 764 765 766 767 768
+ 769 770 771 772 773 774 775 776 777 778 779 780 781 782 783 784 785 786
+ 787 788 789 790 791 792 793 794 795 796 797 798 799 800 801 802 803 804
+ 805 806 807 808 809 810 811 812 813 814 815 816 817 818 819 820 821 822
+ 823 824 825 826 827 828 829 830 831 832 833 834 835 836 837]
+7 / 162 : [838 839 840 841 842 843 844 845 846 847 848 849 850 851 852 853 854 855
+ 856 857 858 859 860 861 862 863 864 865 866 867 868 869 870 871 872 873
+ 874 875 876 877 878 879 880 881 882 883 884 885 886 887 888 889 890 891
+ 892 893 894 895 896 897 898 899 900 901 902 903 904 905 906 907 908 909
+ 910 911 912 913 914 915 916 917 918 919 920 921 922 923 924 925 926 927
+ 928 929 930 931 932 933 934 935 936 937 938 939 940 941 942 943 944 945
+ 946 947 948 949 950 951 952 953 954 955 956 957 958 959 960 961 962 963
+ 964 965 966 967 968 969 970 971 972 973 974 975 976 977 978 979 980 981
+ 982 983 984 985 986 987 988 989 990 991 992 993 994 995 996 997 998 999]
+8 / 10 : [1000 1001 1002 1003 1004 1005 1006 1007 1008 1009]
 -----
-ni : 5686
-nl : 12427
+ni : 5402
+nl : 11814
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x2b40901fe350&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x2b36be91ba50&gt;
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">r2d</span>
@@ -544,12 +539,12 @@ pRx : [-18.7747  15.178    1.2   ]
 1: [[12]]
 2: [[   5   12   12 -277]
  [  12  335  333   12]]
-3: [[  13   12   12  330    5    5    5    4  140   12   12   12   12 -291
+3: [[   4   12   12  330    5    5    5   13  140   12   12   12   12 -291
   -277 -277 -277 -277 -273 -273 -273 -289]
- [  12    5 -277 -277   12   12 -277    5 -269  335   30  335  328 -277
-    12   12    5 -269    5 -277 -269 -277]
- [  30   12   12   12  335  333   12   12   30   23  335   12   24   12
-   335  333   12   30   12   12   30   12]]
+ [   5    5 -277 -277   12   12 -277   12 -269  335   30  335  328 -277
+    12   12 -269    5 -269    5 -277 -277]
+ [  12   12   12   12  335  333   12   30   30   23  335   12   24   12
+   335  333   30   12   30   12   12   12]]
 4: [[   5]
  [ 140]
  [-269]
@@ -680,7 +675,7 @@ method. By default this method scaling the channel with the Friis factor
 <span class="n">axis</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">180</span><span class="p">,</span><span class="o">-</span><span class="mi">160</span><span class="p">,</span><span class="o">-</span><span class="mi">20</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="../../_images/WHERE1-M1_57_0.png" src="../../_images/WHERE1-M1_57_0.png" />
+<img alt="../../_images/WHERE1-M1_61_0.png" src="../../_images/WHERE1-M1_61_0.png" />
 <p>The multipath doa/dod diagram can be obtained via the method
 <tt class="docutils literal"><span class="pre">`doadod</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.channel.Ctilde.doadod.html">http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.channel.Ctilde.doadod.html</a>&gt;`__.
 The colorbar corresponds to the total energy of the path.</p>
@@ -688,21 +683,21 @@ The colorbar corresponds to the total energy of the path.</p>
 <span class="n">DL</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">doadod</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">180</span><span class="p">),</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b4090225210&gt;,
- [&lt;matplotlib.axes.AxesSubplot at 0x2b40902253d0&gt;,
-  &lt;matplotlib.axes.AxesSubplot at 0x2b4090420b10&gt;])
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b36be9571d0&gt;,
+ [&lt;matplotlib.axes.AxesSubplot at 0x2b36be957110&gt;,
+  &lt;matplotlib.axes.AxesSubplot at 0x2b36beb4b5d0&gt;])
 </pre></div>
 </div>
-<img alt="../../_images/WHERE1-M1_59_1.png" src="../../_images/WHERE1-M1_59_1.png" />
+<img alt="../../_images/WHERE1-M1_63_1.png" src="../../_images/WHERE1-M1_63_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">DL</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre>Nfreq  : 181
-Nray : 1055
-shape Ctt : (1055, 181)
-shape Ctp : (1055, 181)
-shape Cpt : (1055, 181)
-shape Cpp : (1055, 181)
+Nray : 1010
+shape Ctt : (1010, 181)
+shape Ctp : (1010, 181)
+shape Cpt : (1010, 181)
+shape Cpp : (1010, 181)
 </pre></div>
 </div>
 </div>
@@ -731,7 +726,7 @@ array as it is illustrated below.</p>
 <span class="n">wav1</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../../_images/WHERE1-M1_66_0.png" src="../../_images/WHERE1-M1_66_0.png" />
+<img alt="../../_images/WHERE1-M1_70_0.png" src="../../_images/WHERE1-M1_70_0.png" />
 <p>Finally, the received UWB waveform can be synthesized in applying the
 waveform to the transmission channel.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">ro</span> <span class="o">=</span> <span class="n">sco</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav1</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
@@ -751,11 +746,11 @@ waveform to the transmission channel.</p>
 <span class="c">#plt.axis((0,180,-0.1,0.1))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b4090677550&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b36bed8ffd0&gt;
 </pre></div>
 </div>
-<img alt="../../_images/WHERE1-M1_69_1.png" src="../../_images/WHERE1-M1_69_1.png" />
-<img alt="../../_images/WHERE1-M1_69_2.png" src="../../_images/WHERE1-M1_69_2.png" />
+<img alt="../../_images/WHERE1-M1_73_1.png" src="../../_images/WHERE1-M1_73_1.png" />
+<img alt="../../_images/WHERE1-M1_73_2.png" src="../../_images/WHERE1-M1_73_2.png" />
 </div>
 </div>
 

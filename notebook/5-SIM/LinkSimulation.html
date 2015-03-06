@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>How to do a Ray Tracing simulation using DLink &mdash; PyLayers</title>
+    <title>How to do Ray Tracing simulation using DLink &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -95,15 +95,22 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="how-to-do-a-ray-tracing-simulation-using-dlink">
-<h1>How to do a Ray Tracing simulation using DLink<a class="headerlink" href="#how-to-do-a-ray-tracing-simulation-using-dlink" title="Permalink to this headline">¶</a></h1>
-<div class="code python highlight-python"><div class="highlight"><pre>from pylayers.simul.link import *
-%matplotlib inline
+  <div class="code python highlight-python"><div class="highlight"><pre>from pylayers.simul.link import *
+%pylab inline
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre>Populating the interactive namespace from numpy and matplotlib
+</pre></div>
+</div>
+<pre class="literal-block">
+WARNING: pylab import has clobbered these variables: ['plt', 'mlab']
+<cite>%matplotlib</cite> prevents importing * from pylab and numpy
+</pre>
+<div class="section" id="how-to-do-ray-tracing-simulation-using-dlink">
+<h1>How to do Ray Tracing simulation using DLink<a class="headerlink" href="#how-to-do-ray-tracing-simulation-using-dlink" title="Permalink to this headline">¶</a></h1>
 <p>This section illustrates the
 <tt class="docutils literal"><span class="pre">`link</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.simul.link.html">http://pylayers.github.io/pylayers/modules/pylayers.simul.link.html</a>&gt;`__
 module. A <tt class="docutils literal"><span class="pre">Dlink</span></tt> object is a deterministic (Single Input Single
@@ -193,7 +200,7 @@ illustrated below.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Modulus of the ray &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; transfer function&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b62e1ede110&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b2be9fbf110&gt;
 </pre></div>
 </div>
 <img alt="../../_images/LinkSimulation_13_1.png" src="../../_images/LinkSimulation_13_1.png" />
@@ -204,7 +211,7 @@ illustrated below.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Modulus of the ray &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; transfer function&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b62e1f93190&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b2bea364090&gt;
 </pre></div>
 </div>
 <img alt="../../_images/LinkSimulation_14_1.png" src="../../_images/LinkSimulation_14_1.png" />
@@ -218,7 +225,7 @@ scaled with <img class="math" src="../../_images/math/001864bf8290713a8513a9deab
   return array(a, dtype, copy=False, order=order)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2b62e2087810&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2b2bea459810&gt;]
 </pre></div>
 </div>
 <img alt="../../_images/LinkSimulation_16_2.png" src="../../_images/LinkSimulation_16_2.png" />
@@ -231,7 +238,7 @@ the extrated set <img class="math" src="../../_images/math/6c50a2ac8bf54c7debfdd
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;amplitude (linear scale&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b62e20c2450&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b2bea494590&gt;
 </pre></div>
 </div>
 <img alt="../../_images/LinkSimulation_19_1.png" src="../../_images/LinkSimulation_19_1.png" />
@@ -307,8 +314,8 @@ Trajectories performed in Layout : TA-Office.ini
 Trajectory of agent John with ID 1
 ----------------------------------
 t (s) : 0.00 : 0.20 : 119.80
-dtot (m) : 434.87
-Vmoy (m/s) : 3.63
+dtot (m) : 454.84
+Vmoy (m/s) : 3.80
                                     x         y        vx        vy        ax  t
 1970-01-01 00:00:00         18.907750  2.528547  0.038749  0.155237  0.193744
 1970-01-01 00:00:00.200000  18.921699  2.584433  0.069748  0.279427  0.154995
@@ -321,11 +328,11 @@ t
 Trajectory of agent Alex with ID 2
 ----------------------------------
 t (s) : 0.00 : 0.20 : 119.80
-dtot (m) : 451.71
-Vmoy (m/s) : 3.77
+dtot (m) : 437.65
+Vmoy (m/s) : 3.65
                                   x       y     vx            vy    ax  t
-1970-01-01 00:00:00         13.4680  7.4965 -0.160 -1.141434e-16 -0.80
-1970-01-01 00:00:00.200000  13.4104  7.4965 -0.288 -2.069441e-16 -0.64
+1970-01-01 00:00:00         13.5320  7.4965  0.160 -1.141434e-16  0.80
+1970-01-01 00:00:00.200000  13.5896  7.4965  0.288 -2.069441e-16  0.64
 
                                       ay      s
 t

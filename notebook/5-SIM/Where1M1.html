@@ -26,7 +26,7 @@
     <link rel="top" title="PyLayers" href="../../index.html" />
     <link rel="up" title="Overview" href="../TOC.html" />
     <link rel="next" title="Handling time and frequency domain signals : Bsignal Class" href="../3-PHY/Bsignal.html" />
-    <link rel="prev" title="Example of a trajectory synthesis in the DLR WHERE2 environment" href="DLR-WHERE2.html" /> 
+    <link rel="prev" title="Example of an UWB channel Ray Tracing simulation" href="WHERE1-M1.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -50,7 +50,7 @@
           <a href="../3-PHY/Bsignal.html" title="Handling time and frequency domain signals : Bsignal Class"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="DLR-WHERE2.html" title="Example of a trajectory synthesis in the DLR WHERE2 environment"
+          <a href="WHERE1-M1.html" title="Example of an UWB channel Ray Tracing simulation"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
@@ -75,8 +75,8 @@
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="DLR-WHERE2.html"
-                        title="previous chapter">Example of a trajectory synthesis in the DLR WHERE2 environment</a></p>
+  <p class="topless"><a href="WHERE1-M1.html"
+                        title="previous chapter">Example of an UWB channel Ray Tracing simulation</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../3-PHY/Bsignal.html"
                         title="next chapter">Handling time and frequency domain signals : <tt class="docutils literal"><span class="pre">Bsignal</span></tt> Class</a></p>
@@ -123,7 +123,7 @@
 <div class="highlight-python"><div class="highlight"><pre>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x2acb8031ca10&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x2b0762153a10&gt;
 </pre></div>
 </div>
 <p>The deliverable describing the FP7 WHERE1 measurement campaign M1 can be
@@ -159,20 +159,20 @@ simulation object <strong>S</strong>.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">8</span><span class="p">),</span><span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Where1M1_8_0.png" src="../../_images/Where1M1_8_0.png" />
+<img alt="../../_images/Where1M1_11_0.png" src="../../_images/Where1M1_11_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">_showGi</span><span class="p">(</span><span class="n">en</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>int0 :  (274, 55, 54)
-int1 :  (268, 51, 55)
- output  {(181, 55, 63): 0.0, (181, 55): 0.0, (269, 63, 51): 0.0}
+<div class="highlight-python"><div class="highlight"><pre>int0 :  (81, 34, 38)
+int1 :  (321, 35, 34)
+ output  {(172, 28, 35): 0.39640046932442236, (171, 33, 35): 0.39640046932442236}
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">31.123950000000001</span><span class="p">,</span> <span class="mf">34.74295</span><span class="p">,</span> <span class="mf">3.6289500000000001</span><span class="p">,</span> <span class="mf">26.157970425918187</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">31.123950000000001</span><span class="p">,</span> <span class="mf">34.74295</span><span class="p">,</span> <span class="mf">3.6289500000000001</span><span class="p">,</span> <span class="mf">26.345319224480964</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Where1M1_9_2.png" src="../../_images/Where1M1_9_2.png" />
+<img alt="../../_images/Where1M1_12_2.png" src="../../_images/Where1M1_12_2.png" />
 <p>The layout display is fully parameterized via the embedded <strong>display</strong>
 dictionnary member of the Layout object.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
@@ -182,11 +182,11 @@ dictionnary member of the Layout object.</p>
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Where1M1_11_0.png" src="../../_images/Where1M1_11_0.png" />
+<img alt="../../_images/Where1M1_14_0.png" src="../../_images/Where1M1_14_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">edges</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">((</span><span class="mi">274</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">54</span><span class="p">),</span> <span class="p">(</span><span class="mi">286</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">55</span><span class="p">))</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">((</span><span class="mi">81</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">38</span><span class="p">),</span> <span class="p">(</span><span class="mi">131</span><span class="p">,</span> <span class="mi">38</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -218,7 +218,7 @@ method of the Simulation object</p>
 <div class="highlight-python"><div class="highlight"><pre>Warning : no furniture file loaded
 </pre></div>
 </div>
-<img alt="../../_images/Where1M1_18_1.png" src="../../_images/Where1M1_18_1.png" />
+<img alt="../../_images/Where1M1_21_1.png" src="../../_images/Where1M1_21_1.png" />
 <p>Select Tx and Rx positions</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="nb">map</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
 <span class="mi">10</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">11</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">14</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">17</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">18</span><span class="p">:</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">19</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
@@ -307,10 +307,10 @@ Rxs OK
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.legend.Legend at 0x2acb853f3d10&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.legend.Legend at 0x2b07665b5d50&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Where1M1_24_1.png" src="../../_images/Where1M1_24_1.png" />
+<img alt="../../_images/Where1M1_27_1.png" src="../../_images/Where1M1_27_1.png" />
 </div>
 <div class="section" id="signatures-rays-and-radio-channel">
 <h2>Signatures, Rays and Radio Channel<a class="headerlink" href="#signatures-rays-and-radio-channel" title="Permalink to this headline">¶</a></h2>
@@ -326,8 +326,8 @@ point to cycle function.</p>
 <span class="k">print</span> <span class="s">&#39;rx point belongs to cycle &#39;</span><span class="p">,</span><span class="n">crx</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>tx point belongs to cycle  7
-rx point belongs to cycle  4
+<div class="highlight-python"><div class="highlight"><pre>tx point belongs to cycle  6
+rx point belongs to cycle  5
 </pre></div>
 </div>
 <p>Then the signature between cycle 5 and cycle 4 can be calculated. This
@@ -2372,7 +2372,7 @@ nl : 7079
 <span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../../_images/Where1M1_42_0.png" src="../../_images/Where1M1_42_0.png" />
+<img alt="../../_images/Where1M1_46_0.png" src="../../_images/Where1M1_46_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">sco</span><span class="o">.</span><span class="n">isFriis</span>
 </pre></div>
 </div>
@@ -2405,7 +2405,7 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;title&#39; is not defined
 </pre></div>
 </div>
-<img alt="../../_images/Where1M1_45_1.png" src="../../_images/Where1M1_45_1.png" />
+<img alt="../../_images/Where1M1_49_1.png" src="../../_images/Where1M1_49_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">cira</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
 <span class="n">title</span><span class="p">(</span><span class="s">&#39;received waveform with antenna&#39;</span><span class="p">)</span>
 </pre></div>
@@ -2422,7 +2422,7 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;title&#39; is not defined
 </pre></div>
 </div>
-<img alt="../../_images/Where1M1_46_1.png" src="../../_images/Where1M1_46_1.png" />
+<img alt="../../_images/Where1M1_50_1.png" src="../../_images/Where1M1_50_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c">#dchan={i:&#39;ch&#39;+str(i) for i in range(1,5)}</span>
 <span class="n">dchan</span><span class="o">=</span><span class="p">{}</span>
 <span class="n">dchan</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;ch3&#39;</span>
@@ -2464,7 +2464,7 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;title&#39; is not defined
 </pre></div>
 </div>
-<img alt="../../_images/Where1M1_48_1.png" src="../../_images/Where1M1_48_1.png" />
+<img alt="../../_images/Where1M1_52_1.png" src="../../_images/Where1M1_52_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">v</span> <span class="o">=</span> <span class="n">tx</span><span class="o">-</span><span class="n">rx</span>
 <span class="n">d</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">v</span><span class="p">))</span>
 
@@ -2680,12 +2680,12 @@ rotation matrix# [0] type: B
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">doadod</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">180</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2acb85414e10&gt;,
- [&lt;matplotlib.axes.AxesSubplot at 0x2acb84177ed0&gt;,
-  &lt;matplotlib.axes.AxesSubplot at 0x2acb843b8a10&gt;])
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b076634c510&gt;,
+ [&lt;matplotlib.axes.AxesSubplot at 0x2b0766326750&gt;,
+  &lt;matplotlib.axes.AxesSubplot at 0x2b0765f8a610&gt;])
 </pre></div>
 </div>
-<img alt="../../_images/Where1M1_52_1.png" src="../../_images/Where1M1_52_1.png" />
+<img alt="../../_images/Where1M1_56_1.png" src="../../_images/Where1M1_56_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
 
 <span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
@@ -2775,7 +2775,7 @@ rotation matrix# [0] type: B
           <a href="../3-PHY/Bsignal.html" title="Handling time and frequency domain signals : Bsignal Class"
              >next</a> |</li>
         <li class="right" >
-          <a href="DLR-WHERE2.html" title="Example of a trajectory synthesis in the DLR WHERE2 environment"
+          <a href="WHERE1-M1.html" title="Example of an UWB channel Ray Tracing simulation"
              >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>

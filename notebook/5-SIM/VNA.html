@@ -214,7 +214,7 @@ NameError: name &#39;vna&#39; is not defined
 
 NameError                                 Traceback (most recent call last)
 
-&lt;ipython-input-8-2042d72dc848&gt; in &lt;module&gt;()
+&lt;ipython-input-8-1258876c0fc8&gt; in &lt;module&gt;()
       5 com1 = &quot;FORM:DATA REAL&quot;
       6 com2 = &quot;TRIG:SING&quot;
 ----&gt; 7 vna.write(com1)
@@ -331,7 +331,7 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;res&#39; is not defined
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x2b794b6a4110&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x2b68ae087a10&gt;
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fftshift</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">fres</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])))</span>
@@ -553,7 +553,7 @@ ValueError                                Traceback (most recent call last)
       5 switch.set_io_mode(0b11111111, 0b11111111, 0b00000000)
 
 
-/home/uguen/Documents/rch/devel/pylayers/pylayers/measures/switch/ni_usb_6501.py in get_adapter(**kwargs)
+/home/uguen/Documents/rch/devel/pylayers/pylayers/measures/switch/ni_usb_6501.pyc in get_adapter(**kwargs)
      39     device = usb.core.find(idVendor=ID_VENDOR, idProduct=ID_PRODUCT, **kwargs)
      40     if not device:
 ---&gt; 41         raise ValueError(&#39;Device not found&#39;)

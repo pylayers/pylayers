@@ -26,7 +26,7 @@
     <link rel="top" title="PyLayers" href="../../index.html" />
     <link rel="up" title="Overview" href="../TOC.html" />
     <link rel="next" title="Example of a trajectory synthesis in the DLR WHERE2 environment" href="DLR-WHERE2.html" />
-    <link rel="prev" title="17. Handling Body Description and Mobility" href="../4-MOB/Body.html" /> 
+    <link rel="prev" title="Network Simulation Configuration" href="SimulNetConfig.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -50,7 +50,7 @@
           <a href="DLR-WHERE2.html" title="Example of a trajectory synthesis in the DLR WHERE2 environment"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../4-MOB/Body.html" title="17. Handling Body Description and Mobility"
+          <a href="SimulNetConfig.html" title="Network Simulation Configuration"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
@@ -72,7 +72,7 @@
 <li><a class="reference internal" href="#motivation-for-creating-a-specific-tool">Motivation for creating a specific tool</a></li>
 <li><a class="reference internal" href="#prerequisite-installations">Prerequisite Installations</a><ul>
 <li><a class="reference internal" href="#the-corser-class">The <tt class="docutils literal"><span class="pre">CorSer</span></tt> Class</a><ul>
-<li><a class="reference internal" href="#plot-values">&nbsp;Plot values</a><ul>
+<li><a class="reference internal" href="#plot-values">Plot values</a><ul>
 <li><a class="reference internal" href="#plot-distance">Plot distance</a></li>
 </ul>
 </li>
@@ -86,8 +86,8 @@
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../4-MOB/Body.html"
-                        title="previous chapter">17. Handling Body Description and Mobility</a></p>
+  <p class="topless"><a href="SimulNetConfig.html"
+                        title="previous chapter">Network Simulation Configuration</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="DLR-WHERE2.html"
                         title="next chapter">Example of a trajectory synthesis in the DLR WHERE2 environment</a></p>
@@ -171,12 +171,12 @@ phone)</li>
 <li>A precise capture of the radio device and body movement using a Vicon
 motion capture (MOCAP) system.</li>
 <li>A perfect knowledge of the capture environement</li>
-<li>58 Series with Capture or Group Navigation scenarios</li>
+<li>58 Series with capture or group navigation scenarios</li>
 </ul>
-<p>One of the main advantage of this campaign is the use of a precise
-motion capture system which allows to get a ground truth position of any
-radio device which make the radio observable values open to
-interpretation.</p>
+<p>One of the main characteristics of this measurement campaign is the use
+of a precise motion capture system which allows to get a ground truth
+position of any radio device which make the radio observable values open
+to insightful interpretation.</p>
 </div>
 </div>
 <div class="section" id="motivation-for-creating-a-specific-tool">
@@ -227,7 +227,7 @@ it.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.measures.cormoran</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>   &lt;matplotlib.figure.Figure at 0x2b907bcc0610&gt;
+<div class="highlight-python"><div class="highlight"><pre>   &lt;matplotlib.figure.Figure at 0x2aed965b3610&gt;
 
 
 Get information on the Series
@@ -1147,21 +1147,21 @@ here : <a class="reference external" href="http://pandas.pydata.org/pandas-docs/
 <p>As an example, it is possbile tthe previous obtained values and distance
 with :</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Ploting</span>
-<span class="n">ax</span><span class="o">=</span><span class="n">Values</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span> <span class="c"># plot values</span>
+<span class="n">ax</span><span class="o">=</span><span class="n">Values</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span> <span class="c">#plot values</span>
 <span class="n">l</span><span class="o">=</span><span class="n">Distances</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">secondary_y</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span> <span class="c"># plot distances on the right side</span>
 
-<span class="c">## Labelling</span>
+<span class="c">##Labelling</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span> <span class="c"># add legend box</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;RSS Values (dBm)&#39;</span><span class="p">)</span> <span class="c"># set left ylabel</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">right_ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;Distances (m)&#39;</span><span class="p">)</span> <span class="c"># set right ylabel</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;RSS Values (dBm)&#39;</span><span class="p">)</span> <span class="c">#set left ylabel</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">right_ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;Distances (m)&#39;</span><span class="p">)</span> <span class="c">#set right ylabel</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;time (s)&#39;</span><span class="p">)</span> <span class="c"># set xlabel</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">&#39;RSS and distance as a function of time&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b9082f49150&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2aed9d83e910&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Corser_45_1.png" src="../../_images/Corser_45_1.png" />
+<img alt="../../_images/Corser_75_1.png" src="../../_images/Corser_75_1.png" />
 <p>In addition, CorSer also provides specific plotting methods which
 includes extra features.</p>
 <blockquote>
@@ -1180,18 +1180,18 @@ given, the position for all time stamps are provided</li>
 <p>More option are availble, please refer to the docstring (<em>S.plot?</em>) for
 more information</p>
 <div class="section" id="plot-values">
-<h3>&nbsp;Plot values<a class="headerlink" href="#plot-values" title="Permalink to this headline">¶</a></h3>
+<h3>Plot values<a class="headerlink" href="#plot-values" title="Permalink to this headline">¶</a></h3>
 <p>Continuying with the same example, it is possible to plot the HKB values
 between radio node 11 (Hip Right) and node 16 (Ankle Right) , between 5
 seconds and 5.2 seconds with:</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b907e398990&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b9082725550&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2aed98c8b610&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2aed9d017550&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/Corser_49_1.png" src="../../_images/Corser_49_1.png" />
+<img alt="../../_images/Corser_82_1.png" src="../../_images/Corser_82_1.png" />
 <div class="section" id="plot-distance">
 <h4>Plot distance<a class="headerlink" href="#plot-distance" title="Permalink to this headline">¶</a></h4>
 <p>As well, it is possible to plot the distance using the <em>distance</em>
@@ -1199,14 +1199,14 @@ parameter</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">],</span><span class="n">distance</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b908301d8d0&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b90830c8750&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2aed98b95d50&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2aed9d9bc250&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/Corser_52_1.png" src="../../_images/Corser_52_1.png" />
+<img alt="../../_images/Corser_85_1.png" src="../../_images/Corser_85_1.png" />
 <p>It is also possible to get the same result than with the Pandas
 procedure with the following code :</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># plot value</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#plot value</span>
 <span class="n">f</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mf">5.2</span><span class="p">],</span><span class="n">color</span> <span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
 <span class="c"># create right axis</span>
@@ -1218,8 +1218,8 @@ procedure with the following code :</p>
        <span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b90831d8dd0&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b90831d8d90&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2aed9dacccd0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2aed9dacced0&gt;)
 </pre></div>
 </div>
 <hr class="docutils" />
@@ -1237,8 +1237,8 @@ denoted <strong>NLOS</strong> wheras <strong>clear</strong> area denotes <strong
 <span class="n">S</span><span class="o">.</span><span class="n">pltvisi</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b908319fa50&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b908315ce90&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2aed9dad4710&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2aed9dba62d0&gt;)
 </pre></div>
 </div>
 <hr class="docutils" />
@@ -1250,11 +1250,11 @@ succession of Static and Mobile sequences are denoted <img class="math" src="../
 <span class="n">S</span><span class="o">.</span><span class="n">pltmob</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b9083377090&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b9083043650&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2aed9dc6ca90&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2aed9dc63050&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/Corser_60_1.png" src="../../_images/Corser_60_1.png" />
+<img alt="../../_images/Corser_96_1.png" src="../../_images/Corser_96_1.png" />
 <p>The 2 upmentionned methods can also be used simultaneously as shown in
 the following example :</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c"># plot data in green)</span>
@@ -1265,8 +1265,8 @@ the following example :</p>
 <span class="n">S</span><span class="o">.</span><span class="n">pltmob</span><span class="p">(</span><span class="n">showvel</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">ylim</span><span class="o">=</span><span class="p">([</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="o">-</span><span class="mi">40</span><span class="p">]),</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b9083377b50&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b908354dbd0&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2aed9dc6c910&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2aed9de3fb50&gt;)
 </pre></div>
 </div>
 <hr class="docutils" />
@@ -1284,7 +1284,7 @@ the infrastructure.</li>
 scene with body(ies) and associated devices at 4 different timestamp</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">_show3</span><span class="p">()</span>
 
-<span class="c"># the following line is only used to display in the notebook a screenshot of the mayavi window</span>
+<span class="c">#the following line is only used to display in the notebook a screenshot of the mayavi window</span>
 <span class="n">myu</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s">&#39;fig1&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1292,7 +1292,7 @@ scene with body(ies) and associated devices at 4 different timestamp</p>
 /home/uguen/anaconda/lib/python2.7/site-packages/traits/has_traits.py:1766: FutureWarning: comparison to <cite>None</cite> will result in an elementwise object comparison in the future.
   setattr( self, name, value )
 </pre>
-<img alt="../../_images/Corser_65_1.png" src="../../_images/Corser_65_1.png" />
+<img alt="../../_images/Corser_103_1.png" src="../../_images/Corser_103_1.png" />
 </div>
 </div>
 <div class="section" id="specify-time-bodytime-parameter">
@@ -1303,17 +1303,17 @@ scene with body(ies) and associated devices at 4 different timestamp</p>
 <img class="math" src="../../_images/math/9e4b8ec42cbaa485dc628ca790465be61ab529f0.png" alt="t=90s"/>.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">bodytime</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">30.</span><span class="p">,</span><span class="mf">90.</span><span class="p">])</span>
 
-<span class="c"># the following line is only used to display in the notebook a screenshot of the mayavi window</span>
+<span class="c">#the following line is only used to display in the notebook a screenshot of the mayavi window</span>
 <span class="n">myu</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s">&#39;fig2&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Corser_68_0.png" src="../../_images/Corser_68_0.png" />
+<img alt="../../_images/Corser_107_0.png" src="../../_images/Corser_107_0.png" />
 </div>
 <div class="section" id="display-trajectory-trajectory-parameter">
 <h3>display trajectory (<em>trajectory</em> parameter)<a class="headerlink" href="#display-trajectory-trajectory-parameter" title="Permalink to this headline">¶</a></h3>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">trajectory</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span><span class="n">bodytime</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">30.</span><span class="p">,</span><span class="mf">90.</span><span class="p">])</span>
 
-<span class="c"># the following line is only used to display in the notebook a screenshot of the mayavi window</span>
+<span class="c">#the following line is only used to display in the notebook a screenshot of the mayavi window</span>
 <span class="n">myu</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s">&#39;fig3&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1322,9 +1322,9 @@ scene with body(ies) and associated devices at 4 different timestamp</p>
 window incluying a slider acting like a jog shuttle, to choose the
 timestamp to vizualize.</p>
 <p>Note : This function is note available in the notebook</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">_show3i</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">35</span><span class="p">)</span> <span class="c"># t=35 is an initialization value</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">_show3i</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">35</span><span class="p">)</span> <span class="c">#t=35 is an initialization value</span>
 
-<span class="c"># the following line is only used to display in the notebook a screenshot of the mayavi window</span>
+<span class="c">#the following line is only used to display in the notebook a screenshot of the mayavi window</span>
 <span class="n">myu</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s">&#39;fig4&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1332,7 +1332,7 @@ timestamp to vizualize.</p>
 /home/uguen/anaconda/lib/python2.7/site-packages/traits/has_traits.py:1771: FutureWarning: comparison to <cite>None</cite> will result in an elementwise object comparison in the future.
   setattr( self, name, value )
 </pre>
-<img alt="../../_images/Corser_73_1.png" src="../../_images/Corser_73_1.png" />
+<img alt="../../_images/Corser_113_1.png" src="../../_images/Corser_113_1.png" />
 <hr class="docutils" />
 <p>The visibility matrix can be displayed simultaneously to the 3D view.</p>
 <p>For that purpose a visibility/occultation matrix is computed the first
@@ -1341,7 +1341,7 @@ tisibility matrix and associated 3D scene at the inital time
 <img class="math" src="../../_images/math/8b03d53c9b6dd0c3fd8071ebcecbc08d7e89ac99.png" alt="t=35s"/></p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">imshowvisibility_i</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">35</span><span class="p">)</span>
 
-<span class="c"># the following line is only used to display in the notebook a screenshot of the mayavi window</span>
+<span class="c">#the following line is only used to display in the notebook a screenshot of the mayavi window</span>
 <span class="n">myu</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s">&#39;fig5&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1350,8 +1350,8 @@ tisibility matrix and associated 3D scene at the inital time
 processing shadowing from  Nicolas
 </pre></div>
 </div>
-<img alt="../../_images/Corser_76_1.png" src="../../_images/Corser_76_1.png" />
-<img alt="../../_images/Corser_76_2.png" src="../../_images/Corser_76_2.png" />
+<img alt="../../_images/Corser_117_1.png" src="../../_images/Corser_117_1.png" />
+<img alt="../../_images/Corser_117_2.png" src="../../_images/Corser_117_2.png" />
 </div>
 </div>
 </div>
@@ -1385,7 +1385,7 @@ processing shadowing from  Nicolas
           <a href="DLR-WHERE2.html" title="Example of a trajectory synthesis in the DLR WHERE2 environment"
              >next</a> |</li>
         <li class="right" >
-          <a href="../4-MOB/Body.html" title="17. Handling Body Description and Mobility"
+          <a href="SimulNetConfig.html" title="Network Simulation Configuration"
              >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>

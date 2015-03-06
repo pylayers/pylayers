@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../../index.html" />
     <link rel="up" title="Overview" href="../TOC.html" />
-    <link rel="next" title="WHERE1-M1 UWB measurement campaign" href="Where1M1.html" />
+    <link rel="next" title="Example of an UWB channel Ray Tracing simulation" href="WHERE1-M1.html" />
     <link rel="prev" title="Table Of Content" href="Corser.html" /> 
   </head>
   <body>
@@ -47,7 +47,7 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="Where1M1.html" title="WHERE1-M1 UWB measurement campaign"
+          <a href="WHERE1-M1.html" title="Example of an UWB channel Ray Tracing simulation"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="Corser.html" title="Table Of Content"
@@ -76,8 +76,8 @@
   <p class="topless"><a href="Corser.html"
                         title="previous chapter">Table Of Content</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="Where1M1.html"
-                        title="next chapter">WHERE1-M1 UWB measurement campaign</a></p>
+  <p class="topless"><a href="WHERE1-M1.html"
+                        title="next chapter">Example of an UWB channel Ray Tracing simulation</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/notebook/5-SIM/DLR-WHERE2.txt"
@@ -250,7 +250,7 @@ campaign.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pta</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;or&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2b3f80a48d50&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2ad520d55d50&gt;]
 </pre></div>
 </div>
 <img alt="../../_images/DLR-WHERE2_13_1.png" src="../../_images/DLR-WHERE2_13_1.png" />
@@ -273,17 +273,17 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
 <div class="highlight-python"><div class="highlight"><pre>Warning : no furniture file loaded
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b3f81003910&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b3f32440d50&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2ad520b798d0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2ad5217c5550&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/DLR-WHERE2_17_2.png" src="../../_images/DLR-WHERE2_17_2.png" />
+<img alt="../../_images/DLR-WHERE2_18_2.png" src="../../_images/DLR-WHERE2_18_2.png" />
 <p>Choosing a UWB waveform for the simulation</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;W1compensate&#39;</span><span class="p">)</span>
 <span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../../_images/DLR-WHERE2_19_0.png" src="../../_images/DLR-WHERE2_19_0.png" />
+<img alt="../../_images/DLR-WHERE2_20_0.png" src="../../_images/DLR-WHERE2_20_0.png" />
 <p>running the simulation</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c">#tcir = evalcir(S,wav,cutoff=4)</span>
 </pre></div>
@@ -336,15 +336,15 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">150.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">69.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/DLR-WHERE2_28_1.png" src="../../_images/DLR-WHERE2_28_1.png" />
+<img alt="../../_images/DLR-WHERE2_29_1.png" src="../../_images/DLR-WHERE2_29_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b3f814edf10&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x2b3f814f04d0&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2ad5217fadd0&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x2ad521802690&gt;]], dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/DLR-WHERE2_29_1.png" src="../../_images/DLR-WHERE2_29_1.png" />
+<img alt="../../_images/DLR-WHERE2_30_1.png" src="../../_images/DLR-WHERE2_30_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Delay (ns)&#39;</span><span class="p">)</span>
@@ -367,10 +367,10 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;xlabel&#39; is not defined
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x2b3f80ef9990&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x2ad521069990&gt;
 </pre></div>
 </div>
-<img alt="../../_images/DLR-WHERE2_30_2.png" src="../../_images/DLR-WHERE2_30_2.png" />
+<img alt="../../_images/DLR-WHERE2_31_2.png" src="../../_images/DLR-WHERE2_31_2.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">11</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Delay (ns)&#39;</span><span class="p">)</span>
 <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Level (V)&#39;</span><span class="p">)</span>
@@ -391,7 +391,7 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;xlabel&#39; is not defined
 </pre></div>
 </div>
-<img alt="../../_images/DLR-WHERE2_31_1.png" src="../../_images/DLR-WHERE2_31_1.png" />
+<img alt="../../_images/DLR-WHERE2_32_1.png" src="../../_images/DLR-WHERE2_32_1.png" />
 </div>
 </div>
 
@@ -411,7 +411,7 @@ NameError: name &#39;xlabel&#39; is not defined
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="Where1M1.html" title="WHERE1-M1 UWB measurement campaign"
+          <a href="WHERE1-M1.html" title="Example of an UWB channel Ray Tracing simulation"
              >next</a> |</li>
         <li class="right" >
           <a href="Corser.html" title="Table Of Content"
