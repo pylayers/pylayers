@@ -266,7 +266,6 @@ class PropertiesWin(QDialog):    # any super class is okay
         self._init_slab_prop()
         self._init_subsegs()
         self._init_layout()
-        print self.parent.selectl.selectseg
 
 
         # self.button.clicked.connect(self.create_child)
@@ -295,7 +294,7 @@ class PropertiesWin(QDialog):    # any super class is okay
         # if mulseg, default value are default
         if self.mulseg:
             self.segdata={}
-            self.segdata['name']=self.parent.L.sl.keys()[0]
+            self.segdata['name']=str(self.parent.layerselector.currentText())
             self.segdata['offset']=0.0
             self.segdata['z']=(0.0,self.parent.L.maxheight)
             self.segdata['transition']=False
@@ -717,14 +716,13 @@ class AppForm(QMainWindow):
     def save(self,force=False):
 
         if self.filename == '' or force:
-            filename = QFileDialog.getSaveFileName(self, 'Save Layout', pyu.getlong('',pstruc['DIRINI']),'*.ini')
+            filename = QFileDialog.getSaveFileName(self, 'Save Layout', pyu.getlong('',pstruc['DIRINI']),'(*.ini);;(*.osm)')
             try:
                 _filename= pyu.getshort(str(filename))
             except:
                 pass
         else :
             _filename=self.L.filename
-
         try:
             self.L.saveini(_filename)
             self.L.saveosm(_filename.split('.')[0] + '.osm')
@@ -790,6 +788,8 @@ class AppForm(QMainWindow):
             here only cursor management
         '''
         QApplication.setOverrideCursor(QCursor(Qt.CrossCursor))
+        self.L.display['activelayer']=str(self.layerselector.currentText())
+        self.selectl.current_layer=self.L.display['activelayer']
         self.selectl.modeCP()
 
 
@@ -934,11 +934,27 @@ class AppForm(QMainWindow):
         #
         self.mpl_toolbar = NavigationToolbar(self.canvas, self.main_frame)
 
+        # Active layer
+        layerbox = QHBoxLayout()
+
+        layerlabel = QLabel('Active Layer')
+        layerlabel.setStyleSheet("font: 20px;")
+        layerlabel.setAlignment(Qt.AlignCenter)
+
+        layerbox.addWidget(layerlabel)
+
+        self.layerselector=QComboBox()
+        for s in self.L.sl.keys():
+            self.layerselector.addItem(s)
+        layerbox.addWidget(self.layerselector)
+
+        
+
 
         vbox = QVBoxLayout()
+        vbox.addLayout(layerbox)
         vbox.addWidget(self.canvas)
         vbox.addWidget(self.mpl_toolbar)
-        # vbox.addLayout(hbox)
 
         self.main_frame.setLayout(vbox)
         self.setCentralWidget(self.main_frame)

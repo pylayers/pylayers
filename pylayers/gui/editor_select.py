@@ -301,14 +301,14 @@ class SelectL2(object):
                 self.ptmove=False
             
             if self.state == 'CP':
-                # line previous point mouse position
-                if self.nsel == 0:
-                    try:
-                        # old node num
-                        self.pt_previousid = self.L.ispoint(self.pt_previous, dd / 50)
-                    except:
-                        self.pt_previousid = 0
+                # if new point is created
 
+                try:
+                    # old node num
+                    self.pt_previousid = self.L.ispoint(self.pt_previous, dd / 50)
+                except:
+                    self.pt_previousid = 0
+                if self.nsel == 0:
                     # manage ctrl and shift same x/Y
                     if self.pt_previousid !=0:
                         if self.shift_is_held:
@@ -326,6 +326,12 @@ class SelectL2(object):
                         self.createseg(newpt1=self.pt_previousid,newpt2=self.pt_currentid)
                     self.lppmp = np.array([self.pt_previous,(x,y) ])
                     self.line = self.ax.plot(self.lppmp[:,0],self.lppmp[:,1],color='k')
+                else:
+                    if self.pt_previousid !=0:
+                        self.createseg(newpt1=self.pt_previousid,newpt2=self.nsel)
+                    self.nsel=0
+                    self.modeIni()
+                    self.update_state()
 
 
         if event.button == 2 and event.inaxes:
@@ -1249,18 +1255,16 @@ class SelectL2(object):
             ta = newpt1
             he = newpt2
         segexist = self.L.isseg(ta,he)
-        print ta,he
         print segexist
         # if segment do not already exist, create it
         if not segexist: 
-            if len( self.current_layer) >1:
+            if isinstance(self.current_layer,list):
                 self.current_layer = self.L.sl.keys()[0]
                 self.L.display['activelayer']=self.current_layer 
             self.nsel  = self.L.add_segment(ta, he,name=self.current_layer)
         else:
             print "segment ("+str(ta)+","+str(he)+") already exists"
         if self.L.Ns > 1:
-            print "g2npy"
             self.L.g2npy()
         if newpt1==[]:
             self.state = 'Init'
