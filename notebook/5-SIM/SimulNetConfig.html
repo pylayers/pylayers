@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>15. Network Simulation Configuration &mdash; PyLayers</title>
+    <title>Network Simulation Configuration &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="Overview" href="../TOC.html" />
+    <link rel="next" title="16. Trajectory and Network simulation" href="../4-MOB/Mobility.html" />
+    <link rel="prev" title="How to do a Ray Tracing simulation using DLink" href="LinkSimulation.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,11 +46,18 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="../4-MOB/Mobility.html" title="16. Trajectory and Network simulation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="LinkSimulation.html" title="How to do a Ray Tracing simulation using DLink"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../TOC.html" accesskey="U">Overview</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -55,22 +65,28 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">15. Network Simulation Configuration</a><ul>
-<li><a class="reference internal" href="#simulnet-ini">15.1. Simulnet.ini</a><ul>
-<li><a class="reference internal" href="#save-section">15.1.1. Save section</a></li>
-<li><a class="reference internal" href="#layout-section">15.1.2. Layout section</a></li>
-<li><a class="reference internal" href="#network-section">15.1.3. Network section</a></li>
+<li><a class="reference internal" href="#">Network Simulation Configuration</a><ul>
+<li><a class="reference internal" href="#simulnet-ini">Simulnet.ini</a><ul>
+<li><a class="reference internal" href="#save-section">Save section</a></li>
+<li><a class="reference internal" href="#layout-section">Layout section</a></li>
+<li><a class="reference internal" href="#network-section">Network section</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#mechanics">15.2. Mechanics</a><ul>
-<li><a class="reference internal" href="#localization-section">15.2.1. Localization section</a></li>
-<li><a class="reference internal" href="#simulation-section">15.2.2. Simulation section</a></li>
+<li><a class="reference internal" href="#mechanics">Mechanics</a><ul>
+<li><a class="reference internal" href="#localization-section">Localization section</a></li>
+<li><a class="reference internal" href="#simulation-section">Simulation section</a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="LinkSimulation.html"
+                        title="previous chapter">How to do a Ray Tracing simulation using DLink</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../4-MOB/Mobility.html"
+                        title="next chapter">16. Trajectory and Network simulation</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/notebook/5-SIM/SimulNetConfig.txt"
@@ -97,79 +113,12 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">FileLink</span>
-<span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
-    <span class="n">styles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;../styles/custom.css&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="n">styles</span><span class="p">)</span>
-<span class="n">css_styling</span><span class="p">()</span>
-</pre></div>
-</div>
-<style>
-    @font-face {
-        font-family: "Computer Modern";
-        src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-    }
-    div.cell{
-        width:800px;
-        margin-left:16% !important;
-        margin-right:auto;
-    }
-    h1 {
-        font-family: Helvetica, serif;
-    }
-    h4{
-        margin-top:12px;
-        margin-bottom: 3px;
-       }
-    div.text_cell_render{
-        font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-        line-height: 145%;
-        font-size: 130%;
-        width:800px;
-        margin-left:auto;
-        margin-right:auto;
-    }
-    .CodeMirror{
-            font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-    }
-    .prompt{
-        display: None;
-    }
-    .text_cell_render h5 {
-        font-weight: 300;
-        font-size: 22pt;
-        color: #4057A1;
-        font-style: italic;
-        margin-bottom: .5em;
-        margin-top: 0.5em;
-        display: block;
-    }
-
-    .warning{
-        color: rgb( 240, 20, 20 )
-        }
-</style>
-<script>
-    MathJax.Hub.Config({
-                        TeX: {
-                           extensions: ["AMSmath.js"]
-                           },
-                tex2jax: {
-                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                },
-                displayAlign: 'center', // Change this to 'center' to center equations.
-                "HTML-CSS": {
-                    styles: {'.MathJax_Display': {"margin": 4}}
-                }
-        });
-</script><div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">ConfigParser</span>
+  <div class="section" id="network-simulation-configuration">
+<h1>Network Simulation Configuration<a class="headerlink" href="#network-simulation-configuration" title="Permalink to this headline">¶</a></h1>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">ConfigParser</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
 </pre></div>
 </div>
-<div class="section" id="network-simulation-configuration">
-<h1>Network Simulation Configuration<a class="headerlink" href="#network-simulation-configuration" title="Permalink to this headline">¶</a></h1>
 <p>PyLayers is designed to provide indoor radio channel simulation for
 mobile agents.</p>
 <p>The goal is to address mobility in indoor environment heterogeneous
@@ -311,7 +260,10 @@ in <tt class="docutils literal"><span class="pre">$BASENAME/netsave</span></tt><
 <div class="code python highlight-python"><div class="highlight"><pre>!ls $BASENAME/netsave/*
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>/home/uguen/Bureau/P1/netsave/save  /home/uguen/Bureau/P1/netsave/save.mat  /home/uguen/Bureau/P1/netsave/simulnet_TA-Office.h5  /home/uguen/Bureau/P1/netsave/traj_nicta.h5
+<div class="highlight-python"><div class="highlight"><pre>/home/uguen/Bureau/P1/netsave/save
+/home/uguen/Bureau/P1/netsave/save.mat
+/home/uguen/Bureau/P1/netsave/simulnet_TA-Office.h5
+/home/uguen/Bureau/P1/netsave/traj_nicta.h5
 </pre></div>
 </div>
 </div>
@@ -457,7 +409,7 @@ periodically refreshed at the <tt class="docutils literal"><span class="pre">net
 </div>
 <p>Select localization methods :</p>
 <ul class="simple">
-<li>Algebraic : hétérogeneous localization algorithm</li>
+<li>Algebraic : htrogeneous localization algorithm</li>
 <li>Geometric : RGPA</li>
 </ul>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Localization&#39;</span><span class="p">))[</span><span class="s">&#39;method&#39;</span><span class="p">]</span>
@@ -513,7 +465,18 @@ periodically refreshed at the <tt class="docutils literal"><span class="pre">net
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">FileLink</span><span class="p">(</span><span class="s">&#39;../4-MOB/Mobility.ipynb&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<a href='../4-MOB/Mobility.ipynb' target='_blank'>../4-MOB/Mobility.ipynb</a><br></div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-28-53c5d5fd520c&gt; in &lt;module&gt;()
+----&gt; 1 FileLink(&#39;../4-MOB/Mobility.ipynb&#39;)
+
+
+NameError: name &#39;FileLink&#39; is not defined
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 
@@ -532,17 +495,24 @@ periodically refreshed at the <tt class="docutils literal"><span class="pre">net
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="../4-MOB/Mobility.html" title="16. Trajectory and Network simulation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="LinkSimulation.html" title="How to do a Ray Tracing simulation using DLink"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../TOC.html" >Overview</a> &raquo;</li> 
       </ul>
     </div>
 
     <div class="footer">
         &copy; Copyright 2015, PyLayers developer team.
-      Last updated on mars 01, 2015.
+      Last updated on mars 06, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

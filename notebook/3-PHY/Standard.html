@@ -83,7 +83,7 @@
 </pre></div>
 </div>
 <p>Parameters of different standards are stored in <tt class="docutils literal"><span class="pre">wstd.json</span></tt> file. The
-class which handles wireless standards is <tt class="docutils literal"><span class="pre">Ẁstandard</span></tt></p>
+class which handles wireless standards is <tt class="docutils literal"><span class="pre">standard</span></tt></p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">ws1</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">Wstandard</span><span class="p">(</span><span class="s">&#39;ieee80211b&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -239,73 +239,7 @@ class which handles wireless standards is <tt class="docutils literal"><span cla
 83 :  2.484 : [2.4835,2.4845]
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
-<span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
-    <span class="n">styles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;../styles/custom.css&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="n">styles</span><span class="p">)</span>
-<span class="n">css_styling</span><span class="p">()</span>
-</pre></div>
-</div>
-<style>
-    @font-face {
-        font-family: "Computer Modern";
-        src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-    }
-    div.cell{
-        width:800px;
-        margin-left:16% !important;
-        margin-right:auto;
-    }
-    h1 {
-        font-family: Helvetica, serif;
-    }
-    h4{
-        margin-top:12px;
-        margin-bottom: 3px;
-       }
-    div.text_cell_render{
-        font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-        line-height: 145%;
-        font-size: 130%;
-        width:800px;
-        margin-left:auto;
-        margin-right:auto;
-    }
-    .CodeMirror{
-            font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-    }
-    .prompt{
-        display: None;
-    }
-    .text_cell_render h5 {
-        font-weight: 300;
-        font-size: 22pt;
-        color: #4057A1;
-        font-style: italic;
-        margin-bottom: .5em;
-        margin-top: 0.5em;
-        display: block;
-    }
 
-    .warning{
-        color: rgb( 240, 20, 20 )
-        }
-</style>
-<script>
-    MathJax.Hub.Config({
-                        TeX: {
-                           extensions: ["AMSmath.js"]
-                           },
-                tex2jax: {
-                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                },
-                displayAlign: 'center', // Change this to 'center' to center equations.
-                "HTML-CSS": {
-                    styles: {'.MathJax_Display': {"margin": 4}}
-                }
-        });
-</script>
 
           </div>
         </div>
@@ -331,7 +265,7 @@ class which handles wireless standards is <tt class="docutils literal"><span cla
 
     <div class="footer">
         &copy; Copyright 2015, PyLayers developer team.
-      Last updated on mars 05, 2015.
+      Last updated on mars 06, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

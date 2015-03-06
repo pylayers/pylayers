@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>22. How to do a link siulation &mdash; PyLayers</title>
+    <title>How to do a Ray Tracing simulation using DLink &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="Overview" href="../TOC.html" />
+    <link rel="next" title="Network Simulation Configuration" href="SimulNetConfig.html" />
+    <link rel="prev" title="The transmission channel" href="../2-AP/Channel.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,16 +46,29 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="SimulNetConfig.html" title="Network Simulation Configuration"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../2-AP/Channel.html" title="The transmission channel"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../TOC.html" accesskey="U">Overview</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../2-AP/Channel.html"
+                        title="previous chapter">The transmission channel</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SimulNetConfig.html"
+                        title="next chapter">Network Simulation Configuration</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/notebook/5-SIM/LinkSimulation.txt"
@@ -79,19 +95,15 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="code python highlight-python"><div class="highlight"><pre>from pylayers.simul.link import *
-%pylab inline
+  <div class="section" id="how-to-do-a-ray-tracing-simulation-using-dlink">
+<h1>How to do a Ray Tracing simulation using DLink<a class="headerlink" href="#how-to-do-a-ray-tracing-simulation-using-dlink" title="Permalink to this headline">¶</a></h1>
+<div class="code python highlight-python"><div class="highlight"><pre>from pylayers.simul.link import *
+%matplotlib inline
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Populating the interactive namespace from numpy and matplotlib
+<div class="highlight-python"><div class="highlight"><pre>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
 </pre></div>
 </div>
-<pre class="literal-block">
-WARNING: pylab import has clobbered these variables: ['plt', 'mlab']
-<cite>%matplotlib</cite> prevents importing * from pylab and numpy
-</pre>
-<div class="section" id="how-to-do-a-link-siulation">
-<h1>How to do a link siulation<a class="headerlink" href="#how-to-do-a-link-siulation" title="Permalink to this headline">¶</a></h1>
 <p>This section illustrates the
 <tt class="docutils literal"><span class="pre">`link</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.simul.link.html">http://pylayers.github.io/pylayers/modules/pylayers.simul.link.html</a>&gt;`__
 module. A <tt class="docutils literal"><span class="pre">Dlink</span></tt> object is a deterministic (Single Input Single
@@ -181,7 +193,7 @@ illustrated below.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Modulus of the ray &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; transfer function&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7f3e872b6f10&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b62e1ede110&gt;
 </pre></div>
 </div>
 <img alt="../../_images/LinkSimulation_13_1.png" src="../../_images/LinkSimulation_13_1.png" />
@@ -192,7 +204,7 @@ illustrated below.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Modulus of the ray &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; transfer function&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7f3e856dafd0&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b62e1f93190&gt;
 </pre></div>
 </div>
 <img alt="../../_images/LinkSimulation_14_1.png" src="../../_images/LinkSimulation_14_1.png" />
@@ -206,7 +218,7 @@ scaled with <img class="math" src="../../_images/math/001864bf8290713a8513a9deab
   return array(a, dtype, copy=False, order=order)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x7f3e855da790&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2b62e2087810&gt;]
 </pre></div>
 </div>
 <img alt="../../_images/LinkSimulation_16_2.png" src="../../_images/LinkSimulation_16_2.png" />
@@ -219,7 +231,7 @@ the extrated set <img class="math" src="../../_images/math/6c50a2ac8bf54c7debfdd
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;amplitude (linear scale&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7f3e85593f50&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b62e20c2450&gt;
 </pre></div>
 </div>
 <img alt="../../_images/LinkSimulation_19_1.png" src="../../_images/LinkSimulation_19_1.png" />
@@ -243,12 +255,12 @@ Image(&#39;/home/uguen/Bureau/P1/struc/images/DLR4991.png&#39;)
 
 Number of points  : 71
 Number of segments  : 94
-Number of sub segments  : 16
+Number of sub segments  : 18
 Number of cycles  : 25
 Number of rooms  : 24
 degree 0 : []
-degree 1 : []
-degree 2 : 39
+degree 1 : [-17 -16]
+degree 2 : 37
 degree 3 : 32
 
 xrange :(0.0, 40.0)
@@ -295,8 +307,8 @@ Trajectories performed in Layout : TA-Office.ini
 Trajectory of agent John with ID 1
 ----------------------------------
 t (s) : 0.00 : 0.20 : 119.80
-dtot (m) : 442.44
-Vmoy (m/s) : 3.69
+dtot (m) : 434.87
+Vmoy (m/s) : 3.63
                                     x         y        vx        vy        ax  t
 1970-01-01 00:00:00         18.907750  2.528547  0.038749  0.155237  0.193744
 1970-01-01 00:00:00.200000  18.921699  2.584433  0.069748  0.279427  0.154995
@@ -309,8 +321,8 @@ t
 Trajectory of agent Alex with ID 2
 ----------------------------------
 t (s) : 0.00 : 0.20 : 119.80
-dtot (m) : 448.45
-Vmoy (m/s) : 3.74
+dtot (m) : 451.71
+Vmoy (m/s) : 3.77
                                   x       y     vx            vy    ax  t
 1970-01-01 00:00:00         13.4680  7.4965 -0.160 -1.141434e-16 -0.80
 1970-01-01 00:00:00.200000  13.4104  7.4965 -0.288 -2.069441e-16 -0.64
@@ -355,9 +367,10 @@ trajectories from the <tt class="docutils literal"><span class="pre">simultaj.in
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
 AttributeError                            Traceback (most recent call last)
 
-&lt;ipython-input-20-ae27233a0375&gt; in &lt;module&gt;()
+&lt;ipython-input-19-ae27233a0375&gt; in &lt;module&gt;()
 ----&gt; 1 St=st.Simul(verbose=False)
 
 
@@ -398,6 +411,17 @@ AttributeError: Devices must have a different ID
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">St</span><span class="o">.</span><span class="n">N</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-22-292f54c77c9f&gt; in &lt;module&gt;()
+----&gt; 1 St.N
+
+
+NameError: name &#39;St&#39; is not defined
+</pre></div>
+</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c">#St._show3()</span>
 </pre></div>
 </div>
@@ -427,17 +451,24 @@ AttributeError: Devices must have a different ID
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="SimulNetConfig.html" title="Network Simulation Configuration"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../2-AP/Channel.html" title="The transmission channel"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../TOC.html" >Overview</a> &raquo;</li> 
       </ul>
     </div>
 
     <div class="footer">
         &copy; Copyright 2015, PyLayers developer team.
-      Last updated on mars 01, 2015.
+      Last updated on mars 06, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

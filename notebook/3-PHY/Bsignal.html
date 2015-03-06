@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>13. The Bsignal Class &mdash; PyLayers</title>
+    <title>Handling time and frequency domain signals : Bsignal Class &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../../index.html" />
     <link rel="up" title="Overview" href="../TOC.html" />
-    <link rel="next" title="14. Modelisation of the Thermal Noise" href="Noise.html" />
+    <link rel="next" title="Modelisation of the Thermal Noise" href="Noise.html" />
     <link rel="prev" title="17. Handling Body Description and Mobility" href="../4-MOB/Body.html" /> 
   </head>
   <body>
@@ -47,7 +47,7 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="Noise.html" title="14. Modelisation of the Thermal Noise"
+          <a href="Noise.html" title="Modelisation of the Thermal Noise"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="../4-MOB/Body.html" title="17. Handling Body Description and Mobility"
@@ -65,8 +65,8 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">13. The <tt class="docutils literal"><span class="pre">Bsignal</span></tt> Class</a><ul>
-<li><a class="reference internal" href="#fhsignal-for-in-cir-mode">13.1. FHsignal for in CIR mode</a></li>
+<li><a class="reference internal" href="#">Handling time and frequency domain signals : <tt class="docutils literal"><span class="pre">Bsignal</span></tt> Class</a><ul>
+<li><a class="reference internal" href="#fhsignal-for-in-cir-mode">FHsignal for in CIR mode</a></li>
 </ul>
 </li>
 </ul>
@@ -76,7 +76,7 @@
                         title="previous chapter">17. Handling Body Description and Mobility</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="Noise.html"
-                        title="next chapter">14. Modelisation of the Thermal Noise</a></p>
+                        title="next chapter">Modelisation of the Thermal Noise</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/notebook/3-PHY/Bsignal.txt"
@@ -103,32 +103,52 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="code python highlight-python"><div class="highlight"><pre>%pylab inline
+  <div class="section" id="handling-time-and-frequency-domain-signals-bsignal-class">
+<h1>Handling time and frequency domain signals : <tt class="docutils literal"><span class="pre">Bsignal</span></tt> Class<a class="headerlink" href="#handling-time-and-frequency-domain-signals-bsignal-class" title="Permalink to this headline">¶</a></h1>
+<p>This section presents some features of the classes implemented in the
+<tt class="docutils literal"><span class="pre">`pylayers.signal.bsignal.py</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.signal.bsignal.html">http://pylayers.github.io/pylayers/modules/pylayers.signal.bsignal.html</a>&gt;`__
+module.</p>
+<div class="code python highlight-python"><div class="highlight"><pre>%matplotlib inline
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Populating the interactive namespace from numpy and matplotlib
-</pre></div>
-</div>
-<div class="section" id="the-bsignal-class">
-<h1>The <tt class="docutils literal"><span class="pre">Bsignal</span></tt> Class<a class="headerlink" href="#the-bsignal-class" title="Permalink to this headline">¶</a></h1>
-<p>The <tt class="docutils literal"><span class="pre">Bsignal</span></tt> class is a container for a signal with a base. It can
-handle time domain or frequency domain signal.</p>
+<p>The <tt class="docutils literal"><span class="pre">Bsignal</span></tt> class is a container for a signal with a base which can
+be either in time domain or frequency domain.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<p>We construct an impulse signal normalized in energy.</p>
+<p>As a first example, let construct an impulse signal normalized in
+energy. To do so there exist a specialized function :
+<tt class="docutils literal"><span class="pre">`EnImpulse</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/generated/pylayers.signal.bsignal.EnImpulse.demo.html#pylayers.signal.bsignal.EnImpulse.demo">http://pylayers.github.io/pylayers/modules/generated/pylayers.signal.bsignal.EnImpulse.demo.html#pylayers.signal.bsignal.EnImpulse.demo</a>&gt;`__</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">E</span><span class="o">=</span><span class="n">EnImpulse</span><span class="p">(</span><span class="n">fe</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span>    <span class="o">=</span> <span class="n">EnImpulse</span><span class="p">(</span><span class="n">fc</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">band</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">thresh</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">fe</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Eip1</span>  <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ESDu</span>  <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">esd</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;unilateral&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ESDb</span>  <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">esd</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;bilateral&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>    <span class="o">=</span> <span class="n">ESDu</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Eipu</span>  <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ESDu</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">df</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Eipb</span>  <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ESDb</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">df</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">erru</span>  <span class="o">=</span> <span class="n">Eip1</span><span class="o">-</span><span class="n">Eipu</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">errb</span>  <span class="o">=</span> <span class="n">Eip1</span><span class="o">-</span><span class="n">Eipb</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">Eip1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mf">100.000007743</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">E</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f64140c6d90&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x7f64140d33d0&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2ac10ceedb50&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x2ac10cef8090&gt;]], dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/Bsignal_6_1.png" src="../../_images/Bsignal_6_1.png" />
+<img alt="../../_images/Bsignal_9_1.png" src="../../_images/Bsignal_9_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">E</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -140,11 +160,11 @@ handle time domain or frequency domain signal.</p>
 <span class="n">F</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f6414023110&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x7f641402e210&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2ac10cf5b310&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x2ac10cf51050&gt;]], dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/Bsignal_9_1.png" src="../../_images/Bsignal_9_1.png" />
+<img alt="../../_images/Bsignal_12_1.png" src="../../_images/Bsignal_12_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">F</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -177,10 +197,10 @@ method</p>
 <span class="n">title</span><span class="p">(</span><span class="s">&#39;extract mode&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7f6413f0c550&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2ac10d0b6210&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Bsignal_16_1.png" src="../../_images/Bsignal_16_1.png" />
+<img alt="../../_images/Bsignal_19_1.png" src="../../_images/Bsignal_19_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">ip</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -216,11 +236,11 @@ method</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Hu</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f6413f8da50&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x7f6413f80a90&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2ac10cf71910&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x2ac10d02d350&gt;]], dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/Bsignal_24_1.png" src="../../_images/Bsignal_24_1.png" />
+<img alt="../../_images/Bsignal_27_1.png" src="../../_images/Bsignal_27_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">hu</span> <span class="o">=</span> <span class="n">Hu</span><span class="o">.</span><span class="n">ifft</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -229,11 +249,11 @@ method</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">hu</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f6413be6fd0&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x7f6413c40390&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2ac10d38b610&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x2ac10d29c1d0&gt;]], dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/Bsignal_27_1.png" src="../../_images/Bsignal_27_1.png" />
+<img alt="../../_images/Bsignal_30_1.png" src="../../_images/Bsignal_30_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">real</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">hu</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
 <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hu</span><span class="o">.</span><span class="n">y</span><span class="o">==</span><span class="nb">max</span><span class="p">(</span><span class="n">hu</span><span class="o">.</span><span class="n">y</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">tau</span> <span class="o">=</span> <span class="n">hu</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">u</span><span class="p">]</span>
@@ -250,22 +270,22 @@ method</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">H</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f6413b7fad0&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x7f6413c1e110&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2ac10d423d90&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x2ac10d3c01d0&gt;]], dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/Bsignal_30_1.png" src="../../_images/Bsignal_30_1.png" />
+<img alt="../../_images/Bsignal_33_1.png" src="../../_images/Bsignal_33_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">h</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">ifft</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">h</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f6413b14710&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x7f6413b14a10&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2ac10d4ef9d0&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x2ac10d4e4b10&gt;]], dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/Bsignal_32_1.png" src="../../_images/Bsignal_32_1.png" />
+<img alt="../../_images/Bsignal_35_1.png" src="../../_images/Bsignal_35_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">real</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
 <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">y</span><span class="o">==</span><span class="nb">max</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">y</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">tau</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">u</span><span class="p">]</span>
@@ -304,11 +324,11 @@ method</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Y</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f6413963bd0&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x7f64139cb8d0&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2ac10d5ac1d0&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x2ac10d5a24d0&gt;]], dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/Bsignal_37_1.png" src="../../_images/Bsignal_37_1.png" />
+<img alt="../../_images/Bsignal_40_1.png" src="../../_images/Bsignal_40_1.png" />
 </div>
 </div>
 
@@ -328,7 +348,7 @@ method</p>
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="Noise.html" title="14. Modelisation of the Thermal Noise"
+          <a href="Noise.html" title="Modelisation of the Thermal Noise"
              >next</a> |</li>
         <li class="right" >
           <a href="../4-MOB/Body.html" title="17. Handling Body Description and Mobility"
@@ -344,7 +364,7 @@ method</p>
 
     <div class="footer">
         &copy; Copyright 2015, PyLayers developer team.
-      Last updated on mars 05, 2015.
+      Last updated on mars 06, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

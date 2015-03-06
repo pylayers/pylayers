@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>23. Example of a trajectory synthesis in DLR WHERE2 environment &mdash; PyLayers</title>
+    <title>Example of a trajectory synthesis in the DLR WHERE2 environment &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="Overview" href="../TOC.html" />
+    <link rel="next" title="WHERE1-M1 UWB measurement campaign" href="Where1M1.html" />
+    <link rel="prev" title="Table Of Content" href="Corser.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,11 +46,18 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="Where1M1.html" title="WHERE1-M1 UWB measurement campaign"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Corser.html" title="Table Of Content"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../TOC.html" accesskey="U">Overview</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -55,13 +65,19 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">23. Example of a trajectory synthesis in DLR WHERE2 environment</a><ul>
-<li><a class="reference internal" href="#loading-the-layout">23.1. Loading the Layout</a></li>
-<li><a class="reference internal" href="#aggregated-cir-along-a-synthetic-trajectory-line-in-the-corridor">23.2. Aggregated CIR along a synthetic trajectory (line in the corridor)</a></li>
+<li><a class="reference internal" href="#">Example of a trajectory synthesis in the DLR WHERE2 environment</a><ul>
+<li><a class="reference internal" href="#loading-the-layout">Loading the Layout</a></li>
+<li><a class="reference internal" href="#aggregated-cir-along-a-synthetic-trajectory-line-in-the-corridor">Aggregated CIR along a synthetic trajectory (line in the corridor)</a></li>
 </ul>
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Corser.html"
+                        title="previous chapter">Table Of Content</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Where1M1.html"
+                        title="next chapter">WHERE1-M1 UWB measurement campaign</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/notebook/5-SIM/DLR-WHERE2.txt"
@@ -88,75 +104,8 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
-
-<span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
-    <span class="n">styles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;../styles/custom.css&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="n">styles</span><span class="p">)</span>
-<span class="n">css_styling</span><span class="p">()</span>
-</pre></div>
-</div>
-<style>
-    @font-face {
-        font-family: "Computer Modern";
-        src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-    }
-    div.cell{
-        width:800px;
-        margin-left:16% !important;
-        margin-right:auto;
-    }
-    h1 {
-        font-family: Helvetica, serif;
-    }
-    h4{
-        margin-top:12px;
-        margin-bottom: 3px;
-       }
-    div.text_cell_render{
-        font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-        line-height: 145%;
-        font-size: 130%;
-        width:800px;
-        margin-left:auto;
-        margin-right:auto;
-    }
-    .CodeMirror{
-            font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-    }
-    .prompt{
-        display: None;
-    }
-    .text_cell_render h5 {
-        font-weight: 300;
-        font-size: 22pt;
-        color: #4057A1;
-        font-style: italic;
-        margin-bottom: .5em;
-        margin-top: 0.5em;
-        display: block;
-    }
-
-    .warning{
-        color: rgb( 240, 20, 20 )
-        }
-</style>
-<script>
-    MathJax.Hub.Config({
-                        TeX: {
-                           extensions: ["AMSmath.js"]
-                           },
-                tex2jax: {
-                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                },
-                displayAlign: 'center', // Change this to 'center' to center equations.
-                "HTML-CSS": {
-                    styles: {'.MathJax_Display': {"margin": 4}}
-                }
-        });
-</script><div class="section" id="example-of-a-trajectory-synthesis-in-dlr-where2-environment">
-<h1>Example of a trajectory synthesis in DLR WHERE2 environment<a class="headerlink" href="#example-of-a-trajectory-synthesis-in-dlr-where2-environment" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="example-of-a-trajectory-synthesis-in-the-dlr-where2-environment">
+<h1>Example of a trajectory synthesis in the DLR WHERE2 environment<a class="headerlink" href="#example-of-a-trajectory-synthesis-in-the-dlr-where2-environment" title="Permalink to this headline">¶</a></h1>
 <p>The document describing the measurement performed in the DLR environment
 is <a class="reference external" href="http://www.kn-s.dlr.de/where2/documents/Deliverables/Deliverable-D4.4.pdf">WHERE2 Deliverable D4.4 Test and Evaluation of the Integrated System
 under Laboratory
@@ -248,50 +197,7 @@ run a full simulation and returns a list of channel impulse response.</p>
     <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-NoOptionError                             Traceback (most recent call last)
-
-&lt;ipython-input-4-f57e44fbc7e2&gt; in &lt;module&gt;()
-----&gt; 1 S = Simul()
-      2 filestr = &#39;DLR2&#39;
-      3 S.layout(filestr+&#39;.ini&#39;,&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)
-      4 try:
-      5     S.L.dumpr()
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/simul/simulem.pyc in __init__(self, _filesimul)
-    827         self.filemat = self.filematini.replace(&#39;.ini&#39;,&#39;.mat&#39;)
-    828         self.fileslab = self.fileslabini.replace(&#39;.ini&#39;,&#39;.slab&#39;)
---&gt; 829         self.slab=SlabDB(self.filematini, self.fileslabini)
-    830         self.filestr = &#39;defstr.str2&#39;
-    831         #
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/slab.pyc in __init__(self, filemat, fileslab)
-   1865             self.mat.load(filemat)
-   1866         if (fileslab != &#39;&#39;):
--&gt; 1867             self.load(fileslab)
-   1868             self.dass()
-   1869
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/slab.pyc in load(self, _fileini)
-   2114         for slabname in self.di.values():
-   2115             S=Slab(name=slabname,mat=self.mat)
--&gt; 2116             S[&#39;lmatname&#39;]=eval(config.get(slabname,&#39;lmatname&#39;))
-   2117             S[&#39;nbmat&#39;]=len(S[&#39;lmatname&#39;])
-   2118             S[&#39;color&#39;]=config.get(slabname,&#39;color&#39;)
-
-
-/home/uguen/anaconda/lib/python2.7/ConfigParser.pyc in get(self, section, option, raw, vars)
-    616             value = d[option]
-    617         except KeyError:
---&gt; 618             raise NoOptionError(option, section)
-    619
-    620         if raw or value is None:
-
-
-NoOptionError: No option &#39;lmatname&#39; in section: &#39;ABSORBENT&#39;
+<div class="highlight-python"><div class="highlight"><pre>new file WHERE1.str
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
@@ -301,7 +207,7 @@ NoOptionError: No option &#39;lmatname&#39; in section: &#39;ABSORBENT&#39;
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../../_images/DLR-WHERE2_8_0.png" src="../../_images/DLR-WHERE2_8_0.png" />
+<img alt="../../_images/DLR-WHERE2_7_0.png" src="../../_images/DLR-WHERE2_7_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -344,10 +250,10 @@ campaign.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pta</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;or&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x7fa7ab599dd0&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2b3f80a48d50&gt;]
 </pre></div>
 </div>
-<img alt="../../_images/DLR-WHERE2_14_1.png" src="../../_images/DLR-WHERE2_14_1.png" />
+<img alt="../../_images/DLR-WHERE2_13_1.png" src="../../_images/DLR-WHERE2_13_1.png" />
 <p>In the following a trajectory for the receiver is defined.</p>
 <p><tt class="docutils literal"><span class="pre">linevect</span></tt> function allows to define a linear trajectory from <tt class="docutils literal"><span class="pre">ptt</span></tt>
 along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.</p>
@@ -367,17 +273,17 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
 <div class="highlight-python"><div class="highlight"><pre>Warning : no furniture file loaded
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f71504c4e10&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2ac0290&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b3f81003910&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2b3f32440d50&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/DLR-WHERE2_18_2.png" src="../../_images/DLR-WHERE2_18_2.png" />
+<img alt="../../_images/DLR-WHERE2_17_2.png" src="../../_images/DLR-WHERE2_17_2.png" />
 <p>Choosing a UWB waveform for the simulation</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;W1compensate&#39;</span><span class="p">)</span>
 <span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../../_images/DLR-WHERE2_20_0.png" src="../../_images/DLR-WHERE2_20_0.png" />
+<img alt="../../_images/DLR-WHERE2_19_0.png" src="../../_images/DLR-WHERE2_19_0.png" />
 <p>running the simulation</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c">#tcir = evalcir(S,wav,cutoff=4)</span>
 </pre></div>
@@ -430,15 +336,15 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">150.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">69.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/DLR-WHERE2_29_1.png" src="../../_images/DLR-WHERE2_29_1.png" />
+<img alt="../../_images/DLR-WHERE2_28_1.png" src="../../_images/DLR-WHERE2_28_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f7118a6ded0&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x7f7118a6de90&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b3f814edf10&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x2b3f814f04d0&gt;]], dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/DLR-WHERE2_30_1.png" src="../../_images/DLR-WHERE2_30_1.png" />
+<img alt="../../_images/DLR-WHERE2_29_1.png" src="../../_images/DLR-WHERE2_29_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Delay (ns)&#39;</span><span class="p">)</span>
@@ -446,23 +352,46 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
 <span class="n">title</span><span class="p">(</span><span class="s">&#39;Received Waveform&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7f7150569810&gt;
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-18-029939bf9a94&gt; in &lt;module&gt;()
+      1 plt.figure(figsize=(10,5))
+      2 tcir[1][1].plot(typ=[&#39;v&#39;])
+----&gt; 3 xlabel(&#39;Delay (ns)&#39;)
+      4 ylabel(&#39;Level (V)&#39;)
+      5 title(&#39;Received Waveform&#39;)
+
+
+NameError: name &#39;xlabel&#39; is not defined
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7f7118749410&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x2b3f80ef9990&gt;
 </pre></div>
 </div>
-<img alt="../../_images/DLR-WHERE2_31_2.png" src="../../_images/DLR-WHERE2_31_2.png" />
+<img alt="../../_images/DLR-WHERE2_30_2.png" src="../../_images/DLR-WHERE2_30_2.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">11</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Delay (ns)&#39;</span><span class="p">)</span>
 <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Level (V)&#39;</span><span class="p">)</span>
 <span class="n">title</span><span class="p">(</span><span class="s">&#39;Received Waveform&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7f715058d090&gt;
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-19-c4ff825d50c0&gt; in &lt;module&gt;()
+      1 tcir[1][11].plot(typ=[&#39;v&#39;])
+----&gt; 2 xlabel(&#39;Delay (ns)&#39;)
+      3 ylabel(&#39;Level (V)&#39;)
+      4 title(&#39;Received Waveform&#39;)
+
+
+NameError: name &#39;xlabel&#39; is not defined
 </pre></div>
 </div>
-<img alt="../../_images/DLR-WHERE2_32_1.png" src="../../_images/DLR-WHERE2_32_1.png" />
+<img alt="../../_images/DLR-WHERE2_31_1.png" src="../../_images/DLR-WHERE2_31_1.png" />
 </div>
 </div>
 
@@ -481,17 +410,24 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="Where1M1.html" title="WHERE1-M1 UWB measurement campaign"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Corser.html" title="Table Of Content"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../TOC.html" >Overview</a> &raquo;</li> 
       </ul>
     </div>
 
     <div class="footer">
         &copy; Copyright 2015, PyLayers developer team.
-      Last updated on mars 01, 2015.
+      Last updated on mars 06, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

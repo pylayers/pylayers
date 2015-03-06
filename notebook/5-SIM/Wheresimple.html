@@ -1,0 +1,740 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WHERE1 UWB Measurement campaign M1 &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../index.html"><img src="../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/notebook/5-SIM/Wheresimple.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="where1-uwb-measurement-campaign-m1">
+<h1>WHERE1 UWB Measurement campaign M1<a class="headerlink" href="#where1-uwb-measurement-campaign-m1" title="Permalink to this headline">¶</a></h1>
+<div class="code python highlight-python"><div class="highlight"><pre>%matplotlib inline
+from pylayers.measures.mesuwb import *
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.measures.mesuwb</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">pylayers.simul.link</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.signal.waveform</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x2aefda02ec50&gt;
+</pre></div>
+</div>
+<p>First of all we load the Layout of the environment. If the Layout
+associated graphs have already been built, one can load them with the
+<tt class="docutils literal"><span class="pre">dumpr()</span></tt> method.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;WHERE1.ini&#39;</span><span class="p">)</span>
+<span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">try</span><span class="p">:</span>
+    <span class="k">del</span> <span class="n">td1</span>
+    <span class="k">del</span> <span class="n">td2</span>
+    <span class="k">del</span> <span class="n">td3</span>
+    <span class="k">del</span> <span class="n">td4</span>
+    <span class="k">del</span> <span class="n">te1</span>
+    <span class="k">del</span> <span class="n">te2</span>
+    <span class="k">del</span> <span class="n">te3</span>
+    <span class="k">del</span> <span class="n">te4</span>
+    <span class="k">del</span> <span class="n">tt1</span>
+    <span class="k">del</span> <span class="n">tt2</span>
+    <span class="k">del</span> <span class="n">tt3</span><span class="c">### Simulation section</span>
+
+    <span class="k">del</span> <span class="n">tt4</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">K</span><span class="o">=</span><span class="n">UWBMeasure</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">### Simulation section</span>
+<span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">K</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../../_images/Wheresimple_7_0.png" src="../../_images/Wheresimple_7_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">K</span><span class="o">.</span><span class="n">tau_Emax</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">72.61</span> <span class="p">],</span>
+       <span class="p">[</span> <span class="mf">29.9</span>  <span class="p">],</span>
+       <span class="p">[</span> <span class="mf">87.835</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">61.975</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">K</span><span class="o">.</span><span class="n">rx</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span>  <span class="mf">0.</span>    <span class="p">,</span>   <span class="mf">0.</span>    <span class="p">,</span>   <span class="mf">1.2</span>   <span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">12.2724</span><span class="p">,</span>   <span class="mf">7.7632</span><span class="p">,</span>   <span class="mf">1.2</span>   <span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">18.7747</span><span class="p">,</span>  <span class="mf">15.178</span> <span class="p">,</span>   <span class="mf">1.2</span>   <span class="p">],</span>
+       <span class="p">[</span> <span class="o">-</span><span class="mf">4.1418</span><span class="p">,</span>   <span class="mf">8.8603</span><span class="p">,</span>   <span class="mf">1.2</span>   <span class="p">],</span>
+       <span class="p">[</span> <span class="o">-</span><span class="mf">9.0914</span><span class="p">,</span>  <span class="mf">15.1899</span><span class="p">,</span>   <span class="mf">1.2</span>   <span class="p">]])</span>
+</pre></div>
+</div>
+<p>The code below reads data from the M1-WHERE2 measurement campaign and
+store theme in arrays.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">300</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">M</span>  <span class="o">=</span> <span class="n">UWBMeasure</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+        <span class="n">tx</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">tx</span>
+        <span class="n">D</span>  <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">rx</span><span class="o">-</span><span class="n">tx</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
+        <span class="n">D2</span> <span class="o">=</span> <span class="n">D</span><span class="o">*</span><span class="n">D</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">D2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="n">Emax</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">Emax</span><span class="p">()</span>
+        <span class="n">Etot</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">Etot</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">td1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">td1</span><span class="p">,</span><span class="n">dist</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="n">td2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">td2</span><span class="p">,</span><span class="n">dist</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">td3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">td3</span><span class="p">,</span><span class="n">dist</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="n">td4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">td4</span><span class="p">,</span><span class="n">dist</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
+
+            <span class="n">te1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">te1</span><span class="p">,</span><span class="n">Emax</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="n">te2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">te2</span><span class="p">,</span><span class="n">Emax</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">te3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">te3</span><span class="p">,</span><span class="n">Emax</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="n">te4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">te4</span><span class="p">,</span><span class="n">Emax</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
+
+            <span class="n">tt1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">tt1</span><span class="p">,</span><span class="n">Etot</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="n">tt2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">tt2</span><span class="p">,</span><span class="n">Etot</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">tt3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">tt3</span><span class="p">,</span><span class="n">Etot</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="n">tt4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">tt4</span><span class="p">,</span><span class="n">Etot</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
+            <span class="c">#tdist = np.hstack((tdist,dist))</span>
+            <span class="c">#te = np.hstack((te,Emax))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">td1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dist</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">td2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dist</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">td3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dist</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">td4</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dist</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+            <span class="n">te1</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Emax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">te2</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Emax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">te3</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Emax</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">te4</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Emax</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+            <span class="n">tt1</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Etot</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">tt2</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Etot</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">tt3</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Etot</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">tt4</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Etot</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+<p>The IR-UWB applied waweform is available in the raw data and can be
+extracted as follow</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">s</span><span class="o">=</span><span class="n">M</span><span class="o">.</span><span class="n">RAW_DATA</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">t</span><span class="o">=</span><span class="n">M</span><span class="o">.</span><span class="n">RAW_DATA</span><span class="o">.</span><span class="n">timetx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mf">1e9</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">s</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;time (ns)&#39;</span><span class="p">)</span>
+<span class="n">se</span><span class="o">=</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">s</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/Wheresimple_13_0.png" src="../../_images/Wheresimple_13_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">te</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">cs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">s</span><span class="o">*</span><span class="n">s</span><span class="p">)</span>
+<span class="n">E</span> <span class="o">=</span> <span class="n">cs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">te</span>
+<span class="n">EdB</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">E</span><span class="o">*</span><span class="mi">30</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">EdB</span>
+<span class="k">print</span> <span class="n">E</span><span class="o">*</span><span class="mi">30</span>
+<span class="n">use</span> <span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="n">E</span>
+<span class="k">print</span> <span class="n">use</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">-</span><span class="mf">10.2361907016</span>
+<span class="mf">0.0947067492189</span>
+<span class="mf">316.767286888</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">E2</span><span class="o">=</span><span class="n">se</span><span class="o">.</span><span class="n">Emax</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">E2</span><span class="o">*</span><span class="mi">30</span>
+<span class="n">E2dB</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">E2</span><span class="o">*</span><span class="mi">30</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">E2dB</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mf">0.0918920633424</span>
+<span class="o">-</span><span class="mf">10.3672199673</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">se</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2aefde014610&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x2aefde17efd0&gt;]], dtype=object))
+</pre></div>
+</div>
+<img alt="../../_images/Wheresimple_16_1.png" src="../../_images/Wheresimple_16_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">td1</span><span class="p">,</span><span class="n">te1</span><span class="o">+</span><span class="n">EdB</span><span class="p">,</span><span class="s">&#39;.r&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;Rx1&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">td2</span><span class="p">,</span><span class="n">te2</span><span class="o">+</span><span class="n">EdB</span><span class="p">,</span><span class="s">&#39;.b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;Rx2&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">td3</span><span class="p">,</span><span class="n">te3</span><span class="o">+</span><span class="n">EdB</span><span class="p">,</span><span class="s">&#39;.g&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;Rx3&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">td4</span><span class="p">,</span><span class="n">te4</span><span class="o">+</span><span class="n">EdB</span><span class="p">,</span><span class="s">&#39;.c&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;Rx4&#39;</span><span class="p">)</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="n">LFS</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="mf">32.4</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">d</span><span class="p">))</span><span class="o">-</span><span class="mi">4</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">LFS</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../../_images/Wheresimple_17_0.png" src="../../_images/Wheresimple_17_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">te1</span><span class="p">,</span><span class="n">tt1</span><span class="p">,</span><span class="s">&#39;.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2aefde07d410&gt;]
+</pre></div>
+</div>
+<img alt="../../_images/Wheresimple_18_1.png" src="../../_images/Wheresimple_18_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">M</span><span class="o">.</span><span class="n">Etot</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">67.62048799</span><span class="p">,</span> <span class="o">-</span><span class="mf">64.56362576</span><span class="p">,</span> <span class="o">-</span><span class="mf">54.22863588</span><span class="p">,</span> <span class="o">-</span><span class="mf">66.40678426</span><span class="p">]),)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#measure id</span>
+<span class="n">tx_id</span> <span class="o">=</span> <span class="mi">100</span> <span class="c">#in M.valid_index</span>
+<span class="n">rx_id</span> <span class="o">=</span> <span class="mi">3</span> <span class="c">#1,2,3,4</span>
+<span class="n">M</span><span class="o">=</span><span class="n">UWBMeasure</span><span class="p">(</span><span class="n">tx_id</span><span class="p">)</span>
+<span class="n">pylab</span>
+<span class="n">TX</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">tx</span>
+<span class="n">RX</span> <span class="o">=</span><span class="n">M</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="n">rx_id</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-17-4ac28e5e3c24&gt; in &lt;module&gt;()
+      3 rx_id = 3 #1,2,3,4
+      4 M=UWBMeasure(tx_id)
+----&gt; 5 pylab
+      6 TX = M.tx
+      7 RX =M.rx[rx_id]
+
+
+NameError: name &#39;pylab&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">TX</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-18-8df248b24f95&gt; in &lt;module&gt;()
+----&gt; 1 TX
+
+
+NameError: name &#39;TX&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">M</span><span class="o">.</span><span class="n">rx</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span>  <span class="mf">0.</span>    <span class="p">,</span>   <span class="mf">0.</span>    <span class="p">,</span>   <span class="mf">1.2</span>   <span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">12.2724</span><span class="p">,</span>   <span class="mf">7.7632</span><span class="p">,</span>   <span class="mf">1.2</span>   <span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">18.7747</span><span class="p">,</span>  <span class="mf">15.178</span> <span class="p">,</span>   <span class="mf">1.2</span>   <span class="p">],</span>
+       <span class="p">[</span> <span class="o">-</span><span class="mf">4.1418</span><span class="p">,</span>   <span class="mf">8.8603</span><span class="p">,</span>   <span class="mf">1.2</span>   <span class="p">],</span>
+       <span class="p">[</span> <span class="o">-</span><span class="mf">9.0914</span><span class="p">,</span>  <span class="mf">15.1899</span><span class="p">,</span>   <span class="mf">1.2</span>   <span class="p">]])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">TX</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">TX</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;ob&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">RX</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">RX</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;or&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;TOF = &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">TX</span><span class="o">-</span><span class="n">RX</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span><span class="o">/</span><span class="mf">0.3</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-20-9cdcd20f04e5&gt; in &lt;module&gt;()
+      1 L.showG(&#39;s&#39;,figsize=(16,8))
+----&gt; 2 plt.plot(TX[0],TX[1],&#39;ob&#39;)
+      3 plt.plot(RX[0],RX[1],&#39;or&#39;)
+      4 plt.title(&#39;TOF = &#39;+ str(np.sqrt(np.sum((TX-RX)**2))/0.3))
+
+
+NameError: name &#39;TX&#39; is not defined
+</pre></div>
+</div>
+<img alt="../../_images/Wheresimple_23_1.png" src="../../_images/Wheresimple_23_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">TX</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">RX</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">Lk</span><span class="o">.</span><span class="n">Aa</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
+<span class="n">Lk</span><span class="o">.</span><span class="n">Ab</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-21-f2580ab35359&gt; in &lt;module&gt;()
+----&gt; 1 Lk = DLink(L=L,a=TX,b=RX,cutoff=4,verbose=False)
+      2 Lk.Aa=Antenna(&#39;defant.vsh3&#39;)
+      3 Lk.Ab=Antenna(&#39;defant.vsh3&#39;)
+
+
+NameError: name &#39;TX&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ray&#39;</span><span class="p">,</span><span class="s">&#39;Ct&#39;</span><span class="p">,</span><span class="s">&#39;H&#39;</span><span class="p">],</span><span class="n">alg</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="c">#f,a = Lk.show(rays=True,labels=False)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-22-213fa5db2653&gt; in &lt;module&gt;()
+----&gt; 1 Lk.eval(force=[&#39;ray&#39;,&#39;Ct&#39;,&#39;H&#39;],alg=5)
+      2 #f,a = Lk.show(rays=True,labels=False)
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#%timeit Lk.eval(force=True,alg=7,cutoff=3)</span>
+<span class="c">#f,a = Lk.show(rays=True,labels=False)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">R</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-24-dd2218c56595&gt; in &lt;module&gt;()
+----&gt; 1 Lk.R
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#%timeit Lk.eval(force=True,alg=7,threshold=0.01)</span>
+<span class="c">#f,a = Lk.show(rays=True,labels=False)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">Si</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-26-fbcd3fa4b286&gt; in &lt;module&gt;()
+----&gt; 1 Lk.Si.keys()
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">U</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">R</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="s">&#39;sig2d&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-27-7127f05a2d76&gt; in &lt;module&gt;()
+----&gt; 1 U=Lk.R[4][&#39;sig2d&#39;][0]
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">U</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-28-c88df2aeda9a&gt; in &lt;module&gt;()
+----&gt; 1 print U.shape
+
+
+NameError: name &#39;U&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">s1</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">print</span> <span class="n">s1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-29-03b545538d6b&gt; in &lt;module&gt;()
+----&gt; 1 s1 = U[:,:,0]
+      2 print s1
+
+
+NameError: name &#39;U&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.signature</span> <span class="kn">import</span> <span class="n">Signature</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">=</span><span class="n">Signature</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-31-e7330839f958&gt; in &lt;module&gt;()
+----&gt; 1 S=Signature(s1)
+
+
+NameError: name &#39;s1&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-32-65db27307aa0&gt; in &lt;module&gt;()
+----&gt; 1 S
+
+
+NameError: name &#39;S&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">wav</span> <span class="o">=</span> <span class="n">Waveform</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;W1compensate&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../../_images/Wheresimple_37_0.png" src="../../_images/Wheresimple_37_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#ir = Lk.H.applywavB(wav.sfg)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">isFriis</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-36-7614e9090bba&gt; in &lt;module&gt;()
+----&gt; 1 Lk.H.isFriis
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">isFriis</span><span class="p">:</span>
+    <span class="n">ir</span> <span class="o">=</span> <span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">ir</span> <span class="o">=</span> <span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-37-4083ce0b2310&gt; in &lt;module&gt;()
+----&gt; 1 if Lk.H.isFriis:
+      2     ir = Lk.H.applywavB(wav.sf)
+      3 else:
+      4     ir = Lk.H.applywavB(wav.sfg)
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">los</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-38-c0cdcab44e2f&gt; in &lt;module&gt;()
+----&gt; 1 Lk.R.los
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ak</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-39-ab86c1ac1316&gt; in &lt;module&gt;()
+----&gt; 1 Lk.H.ak
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-40-a65c1ec8a0a6&gt; in &lt;module&gt;()
+----&gt; 1 Lk.H.taud
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">G</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ift</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-41-0f2260ad659d&gt; in &lt;module&gt;()
+----&gt; 1 G=Lk.H.ift()
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">M</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">ch3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">130</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">130</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/Wheresimple_45_1.png" src="../../_images/Wheresimple_45_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">M</span><span class="o">.</span><span class="n">tx</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">22.3797</span><span class="p">,</span>  <span class="mf">13.3897</span><span class="p">,</span>   <span class="mf">1.2</span>   <span class="p">])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">M</span><span class="o">.</span><span class="n">rx</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span>  <span class="mf">0.</span>    <span class="p">,</span>   <span class="mf">0.</span>    <span class="p">,</span>   <span class="mf">1.2</span>   <span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">12.2724</span><span class="p">,</span>   <span class="mf">7.7632</span><span class="p">,</span>   <span class="mf">1.2</span>   <span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">18.7747</span><span class="p">,</span>  <span class="mf">15.178</span> <span class="p">,</span>   <span class="mf">1.2</span>   <span class="p">],</span>
+       <span class="p">[</span> <span class="o">-</span><span class="mf">4.1418</span><span class="p">,</span>   <span class="mf">8.8603</span><span class="p">,</span>   <span class="mf">1.2</span>   <span class="p">],</span>
+       <span class="p">[</span> <span class="o">-</span><span class="mf">9.0914</span><span class="p">,</span>  <span class="mf">15.1899</span><span class="p">,</span>   <span class="mf">1.2</span>   <span class="p">]])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">M</span><span class="o">.</span><span class="n">tx</span><span class="o">-</span><span class="n">M</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="mi">3</span><span class="p">,:])</span><span class="o">*</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">tx</span><span class="o">-</span><span class="n">M</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="mi">3</span><span class="p">,:]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span><span class="o">/</span><span class="mf">0.3</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mf">62.639751380717335</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ak</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-46-ab86c1ac1316&gt; in &lt;module&gt;()
+----&gt; 1 Lk.H.ak
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">wav</span><span class="o">=</span><span class="n">wav</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-47-b1309bad8a92&gt; in &lt;module&gt;()
+----&gt; 1 Lk.wav=wav
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">ir</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-48-a7f16e271894&gt; in &lt;module&gt;()
+----&gt; 1 ir.plot(typ=&#39;v&#39;)
+
+
+NameError: name &#39;ir&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">ir</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-49-2c92a57a4caa&gt; in &lt;module&gt;()
+----&gt; 1 ir
+
+
+NameError: name &#39;ir&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+<span class="n">ax1</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
+<span class="n">cmd</span><span class="o">=</span><span class="s">&#39;M.tdd.ch&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rx_id</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;.plot(typ=[</span><span class="se">\&#39;</span><span class="s">v</span><span class="se">\&#39;</span><span class="s">],fig=fig,ax=ax1)&#39;</span>
+<span class="nb">eval</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">,</span><span class="n">sharex</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span><span class="n">sharey</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
+<span class="c">#Lk.chanreal.plot(typ=[&#39;v&#39;],fig=fig,ax=ax2)</span>
+<span class="n">ir</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">],</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span><span class="mi">130</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-50-956c497343fa&gt; in &lt;module&gt;()
+      5 ax2 = fig.add_subplot(212,sharex=ax1,sharey=ax1)
+      6 #Lk.chanreal.plot(typ=[&#39;v&#39;],fig=fig,ax=ax2)
+----&gt; 7 ir.plot(typ=[&#39;v&#39;],fig=fig,ax=ax2)
+      8 plt.xlim(60,130)
+
+
+NameError: name &#39;ir&#39; is not defined
+</pre></div>
+</div>
+<img alt="../../_images/Wheresimple_53_1.png" src="../../_images/Wheresimple_53_1.png" />
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2015, PyLayers developer team.
+      Last updated on mars 06, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>
