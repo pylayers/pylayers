@@ -807,8 +807,11 @@ class AppForm(QMainWindow):
          Shortcuts:
          ----------
          F1 : Select mode
-         F2 : New point mode
+         F2 : New segment with current active Layer
          F3 : Edit segment properties
+
+         g : toggle grid
+         ctrl+g : choose grid properties
 
          CTRL + o : Open Layout
          CTRL + s : Save Layout
@@ -1008,10 +1011,10 @@ class AppForm(QMainWindow):
             tip='about')
 
         gridset_action = self.create_action("&Grid",
-            shortcut='F8', slot=self.editgrid,
+            shortcut='', slot=self.editgrid,
             tip='Set Grid')
         gridtg_action = self.create_action("&Toggle Grid",
-            shortcut='F9', slot=self.togglegrid,
+            shortcut='g', slot=self.togglegrid,
             tip='toggle Grid')
 
         self.add_actions(self.file_menu,

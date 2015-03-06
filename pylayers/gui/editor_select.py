@@ -69,7 +69,7 @@ class SelectL2(object):
         self.state = 'Init'
         self.evt=''
         self.statename={'Init':'Point/Segment Selection',
-                'CP':'Create Point',
+                'CP':'Create Segments',
                 'SP1':'Select Point 1',
                 'SP2':'Select Point 2, Click Again for Creating Segment',
                 'SS':'Select Segment',
@@ -80,16 +80,16 @@ class SelectL2(object):
                 'SMS': 'Multiple Segments Selection'
                 }
         self.help={'':'',
-                'Init':'Select Point or Segment/ F1: Multiple selection/ F2: Create Point/ CTRL+q: Quit',
-                'CP':'Create Point/ +CTRL same x/ +SHIFT same y',
+                'Init':'Select Point(s) or Segment(s) F2: Create Segments/ CTRL+q: Quit',
+                'CP':'Create Segments, + CTRL same x, + SHIFT same y',
                 'SP1':'Select Point/ Click another point to create segment',
                 'SP2':'Click Again for Creating Segment',
-                'SS':'F3: edit segment properties',
+                'SS':'F3: Edit Segment(s) properties',
                 'SSS':'Select Sub Segment',
                 'CPS':'Click again for Split Segment',
                 'CPSS':'Create Point On Sub Segment',
-                'SMP': 't: toggle point/segment, Shift + select : add selected points, CTRL + select : remove selected points',
-                'SMS': 't: toggle point/segment, F3: Edit Selected Segments Propeties'
+                'SMP': 'F3: Edit Involved Segment(s) Properties, Shift + select : add selected points, CTRL + select : remove selected points, t: toggle point/segment',
+                'SMS': 'F3: Edit Selected Segment(s) Properties , t: toggle point/segment'
                 }
         self.nsel = 0
         box = self.L.display['box']
