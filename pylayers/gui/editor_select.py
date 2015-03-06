@@ -294,12 +294,39 @@ class SelectL2(object):
             y = event.ydata
             self.ptsel = np.array((x, y))
             self.nsel = self.L.ispoint(self.ptsel, dd / 50)
-
+            print self.nsel
             if self.selected_pt1==self.nsel and self.nsel != 0 and not 'SM' in self.state :
                 self.ptmove=True
             else :
                 self.ptmove=False
-        
+            
+            if self.state == 'CP':
+                # line previous point mouse position
+                if self.nsel == 0:
+                    try:
+                        # old node num
+                        self.pt_previousid = self.L.ispoint(self.pt_previous, dd / 50)
+                    except:
+                        self.pt_previousid = 0
+
+                    # manage ctrl and shift same x/Y
+                    if self.pt_previousid !=0:
+                        if self.shift_is_held:
+                            self.ptsel[0] = self.L.Gs.pos[self.pt_currentid][0]
+                        if self.ctrl_is_held:
+                            self.ptsel[1] = self.L.Gs.pos[self.pt_currentid][1]
+
+                    # create point
+                    self.pt_currentid = self.creatept()
+                    # display point
+                    self.fig,self.ax=self.L.show_nodes([self.pt_currentid], size=30, color='k', node_shape='s',fig=self.fig,ax=self.ax)
+                    self.fig.canvas.draw()
+                    # create segment
+                    if self.pt_previousid !=0:
+                        self.createseg(newpt1=self.pt_previousid,newpt2=self.pt_currentid)
+                    self.lppmp = np.array([self.pt_previous,(x,y) ])
+                    self.line = self.ax.plot(self.lppmp[:,0],self.lppmp[:,1],color='k')
+
 
         if event.button == 2 and event.inaxes:
             self.evt = 'cclic'
@@ -341,7 +368,23 @@ class SelectL2(object):
                 y = event.ydata
             self.updatedrawpt(self.nsel,x,y)
 
-
+        if self.state=='CP':
+            
+            if self.shift_is_held:
+                x = self.L.Gs.pos[self.pt_currentid][0]
+            else :
+                x = event.xdata
+            if self.ctrl_is_held:
+                y = self.L.Gs.pos[self.pt_currentid][1]
+            else :
+                y = event.ydata
+            try:
+                self.lppmp[1,:]=(x,y)
+                self.line[0].set_xdata(self.lppmp[:,0])
+                self.line[0].set_ydata(self.lppmp[:,1])
+                self.fig.canvas.draw()
+            except:
+                pass
                 # self.update_state()
             # self.selector = toggle_selector.RS
 
@@ -385,7 +428,8 @@ class SelectL2(object):
         if self.evt=='rclic':
             self.modeIni()
             self.new_state()
-            
+
+
 
     def format_coord(self,x, y):
         col = int(x+0.5)
@@ -1169,9 +1213,14 @@ class SelectL2(object):
         self.state == 'CP'
         lclick
         """
-        self.L.add_fnod(tuple(self.ptsel))
+        nnum = self.L.add_fnod(tuple(self.ptsel))
         self.pt_previous = self.ptsel
-        self.update_state()
+        try:
+            self.L.g2npy()
+        except:
+            pass
+        return nnum
+        # self.update_state()
 
 
     def createptsamecoord(self,axis='x'):
@@ -1189,14 +1238,18 @@ class SelectL2(object):
         except:
             pass
 
-    def createseg(self):
+    def createseg(self,newpt1=[],newpt2=[]):
         """
         if self.state == 'SP2'
         """
-
-        ta = self.selected_pt1
-        he = self.selected_pt2
+        if newpt1==[]:
+            ta = self.selected_pt1
+            he = self.selected_pt2
+        else :
+            ta = newpt1
+            he = newpt2
         segexist = self.L.isseg(ta,he)
+        print ta,he
         print segexist
         # if segment do not already exist, create it
         if not segexist: 
@@ -1207,9 +1260,11 @@ class SelectL2(object):
         else:
             print "segment ("+str(ta)+","+str(he)+") already exists"
         if self.L.Ns > 1:
+            print "g2npy"
             self.L.g2npy()
-        self.state = 'Init'
-        self.update_state()
+        if newpt1==[]:
+            self.state = 'Init'
+            self.update_state()
 
     def splitseg(self):
         """ split seg into 2 seg with same length
@@ -1364,9 +1419,9 @@ class SelectL2(object):
         #     self.update_state()
         #     return
 
-        if self.evt=='escape':
-            self.escape()
-            return
+        # if self.evt=='escape':
+        #     self.escape()
+        #     return
 
 
         if self.evt=='ctrl+z':
@@ -1518,7 +1573,7 @@ class SelectL2(object):
             self.set_origin=True
 
 
-        if self.evt == 'f2':
+        # if self.evt == 'f2':
             self.modeCP()
             return
         #
@@ -1657,9 +1712,9 @@ class SelectL2(object):
                 if self.set_y:
                     self.setorigin(parameter='y')
                     return
-                else:
-                    self.creatept()
-                return
+                # else:
+                    #self.creatept()
+                # return
 
             if self.state == 'SP2':
                 self.createseg()

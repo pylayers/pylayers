@@ -157,7 +157,7 @@ class SelectL(object):
         return(self.fig,self.ax)
 
 
-    def plotselptseg(self,pt,color='y'):
+    def plotselptseg(self,pt,color='y',ms=10,marker='o'):
         """ plot selected point or segments
 
         Parameters
@@ -169,7 +169,7 @@ class SelectL(object):
         if len(pt)>0:
             
             pts = np.array([self.L.Gs.pos[x] for x in pt])
-            p1 = self.ax.plot(pts[:,0], pts[:,1], 'o', 
+            p1 = self.ax.plot(pts[:,0], pts[:,1],marker=marker, 
                                 visible=True, 
                                 color =color,
                                 ms=10,

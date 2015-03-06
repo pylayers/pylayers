@@ -592,8 +592,6 @@ class NewLayout(QDialog):    # any super class is okay
         lim = (0., self.width.value(), 0.,self.height.value())
         self.parent.L.boundary(xlim=lim)
         self.parent.filename=''
-
-
         self.parent.create_main_frame()
         self.parent.on_draw()
 
@@ -690,7 +688,7 @@ class AppForm(QMainWindow):
 
         self.create_menu()
         self.create_status_bar()
-        # self.shortcuts()
+        self.shortcuts()
 
 
 
@@ -779,6 +777,23 @@ class AppForm(QMainWindow):
 
     def togglegrid(self):
         self.selectl.togglegrid()
+
+    def selectnodes(self):
+        ''' select mode, managed by selectl
+            here only cursor management
+        '''
+        QApplication.setOverrideCursor(QCursor(Qt.ArrowCursor))
+        self.selectl.escape()
+
+    def drawseg(self):
+        ''' drawseg, managed by selectl
+            here only cursor management
+        '''
+        QApplication.setOverrideCursor(QCursor(Qt.CrossCursor))
+        self.selectl.modeCP()
+
+
+
 
     def on_about(self):
         msg = """ This is the PyLayers' Stand-Alone Layout Editor (BETA)
@@ -933,10 +948,10 @@ class AppForm(QMainWindow):
         self.statusBar().addWidget(self.status_text, 1)
 
 
-    # def shortcuts(self):
-    #     shortcut = QShortcut(self)
-    #     shortcut.setKey("Ctrl+D")
-    #     self.connect(shortcut, SIGNAL("activated()"), self.edit_properties )    # QtGui.QShortcut(QtGui.QKeySequence("Ctrl+Return"), self.myWidget, self.doSomething)
+    def shortcuts(self):
+        esc = QShortcut(self)
+        esc.setKey("escape")
+        self.connect(esc, SIGNAL("activated()"), self.selectnodes) 
 
     def create_menu(self):
         self.file_menu = self.menuBar().addMenu("&File")
@@ -958,6 +973,12 @@ class AppForm(QMainWindow):
         close_action = self.create_action("&Close", shortcut='Ctrl+w', slot=self.closel, tip="Close Layout")
         quit_action = self.create_action("&Quit", slot=lambda x=True:self.closel(x),
             shortcut="Ctrl+Q", tip="Close the application")
+
+        select_action = self.create_action("&Select Nodes", slot=self.selectnodes,
+            shortcut="F1", tip="Select Nodes")
+        draw_action = self.create_action("&Draw Segments", slot=self.drawseg,
+            shortcut="F2", tip="Draw segements")
+
 
         refresh = self.create_action("&Refresh", slot=self.on_draw,
             shortcut="F10", tip="Refresh the application")
@@ -981,7 +1002,7 @@ class AppForm(QMainWindow):
             ( new_action,open_action,None,save_action,saveas_action,None,close_action,quit_action,))
 
         self.add_actions(self.edit_menu,
-            ( properties,None,gridset_action,gridtg_action,None,refresh))
+            ( select_action,draw_action,properties,None,gridset_action,gridtg_action,None,refresh))
 
         self.add_actions(self.help_menu, (about_action,))
 
