@@ -102,8 +102,10 @@ class SelectL2(object):
         self.bundo=False
 
         self.gridOn=False
-        self.gridx=1.
-        self.gridy=1.
+        self.snapgridOn=False
+
+        self.stepgridx=1.
+        self.stepgridy=1.
 
 
         self.update_state()
@@ -292,6 +294,9 @@ class SelectL2(object):
             self.motion=False
             x = event.xdata
             y = event.ydata
+            if self.snapgridOn:
+                x=self.gridx[np.where(x<=self.gridx)[0][0]]
+                y=self.gridy[np.where(y<=self.gridy)[0][0]]
             self.ptsel = np.array((x, y))
             self.nsel = self.L.ispoint(self.ptsel, dd / 50)
             print self.nsel
@@ -325,12 +330,15 @@ class SelectL2(object):
                     if self.pt_previousid !=0:
                         self.createseg(newpt1=self.pt_previousid,newpt2=self.pt_currentid)
                     self.lppmp = np.array([self.pt_previous,(x,y) ])
+                    self.background = self.fig.canvas.copy_from_bbox(self.ax.bbox)
+
                     self.line = self.ax.plot(self.lppmp[:,0],self.lppmp[:,1],color='k')
                 else:
                     if self.pt_previousid !=0:
                         self.createseg(newpt1=self.pt_previousid,newpt2=self.nsel)
                     self.nsel=0
                     self.modeIni()
+                    self.modeCP()
                     self.update_state()
 
 
@@ -384,11 +392,25 @@ class SelectL2(object):
                 y = self.L.Gs.pos[self.pt_currentid][1]
             else :
                 y = event.ydata
+
+
+
             try:
+                if self.snapgridOn:
+                    x=self.gridx[np.where(x<=self.gridx)[0][0]]
+                    y=self.gridy[np.where(y<=self.gridy)[0][0]]
                 self.lppmp[1,:]=(x,y)
+                
                 self.line[0].set_xdata(self.lppmp[:,0])
                 self.line[0].set_ydata(self.lppmp[:,1])
-                self.fig.canvas.draw()
+                self.fig.canvas.restore_region(self.background)
+                self.ax.draw_artist(self.line[0])
+
+                # line[0].axes.draw_artist(line[0])
+                self.fig.canvas.update()
+                self.fig.canvas.flush_events()
+
+                # self.fig.canvas.draw()
             except:
                 pass
                 # self.update_state()
@@ -485,6 +507,10 @@ class SelectL2(object):
             self.selected_pt2 = 0
             self.selectpt=[]
             self.selectseg=[]
+            try:
+                del self.lppmp
+            except:
+                pass
             try:
                 del self.pt_previous
             except:
@@ -672,18 +698,30 @@ class SelectL2(object):
                                 color ='k',
                                 ms=3,
                                 alpha=1)
-        self.fig.canvas.draw()
+        self.ax.draw_artist(p1[0])
+
+                # line[0].axes.draw_artist(line[0])
+        self.fig.canvas.update()
+        self.fig.canvas.flush_events()
+        # self.fig.canvas.draw()
         # redraw just the current rectangle
         # self.ax.draw_artist(ptA)
 
         # blit just the redrawn area
         # self.canvas.blit(self.ax.bbox)
+
+    def toggglesnapgrid(self):
+        if not self.snapgridOn:
+            self.snapgridOn = True
+        elif self.snapgridOn:
+            self.snapgridOn = False
+
     def setgrid(self):
         lim = self.ax.axis()
-        major_ticks_x = np.arange(lim[0], lim[1], self.gridx)
-        major_ticks_y = np.arange(lim[2], lim[3], self.gridy)
-        self.ax.set_xticks(major_ticks_x)
-        self.ax.set_yticks(major_ticks_y)
+        self.gridx = np.arange(lim[0], lim[1], self.stepgridx)
+        self.gridy = np.arange(lim[2], lim[3], self.stepgridy)
+        self.ax.set_xticks(self.gridx)
+        self.ax.set_yticks(self.gridy)
         self.ax.grid(visible=True)
         self.fig.canvas.draw()
 
@@ -713,6 +751,7 @@ class SelectL2(object):
             oGs=self.undoGs.pop(-1)
             self.L.Gs=oGs
             self.L.g2npy()
+        self.fig.canvas.draw()
         self.update_state()
         self.bundo=False
 
@@ -1540,7 +1579,7 @@ class SelectL2(object):
         #
         # d : delete
         #
-        if self.evt == 'd' or self.evt =='delete':
+        if self.evt == 'd' or self.evt =='delete' or self.evt == 'backspace':
             if  self.state == 'SP1':
                 self.delpt()
                 return

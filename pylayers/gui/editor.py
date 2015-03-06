@@ -615,12 +615,12 @@ class GridSet(QDialog):    # any super class is okay
         self.xspacing = QDoubleSpinBox()
         self.xspacing.setObjectName("x spacing [m]")
         self.xspacing.setRange(0, 100)
-        self.xspacing.setValue(self.parent.selectl.gridx)
+        self.xspacing.setValue(self.parent.selectl.stepgridx)
 
         self.yspacing = QDoubleSpinBox()
         self.yspacing.setObjectName("y spacing [m]")
         self.yspacing.setRange(0, 100)
-        self.yspacing.setValue(self.parent.selectl.gridy)
+        self.yspacing.setValue(self.parent.selectl.stepgridy)
 
     def _init_layoutwin(self):
 
@@ -665,8 +665,8 @@ class GridSet(QDialog):    # any super class is okay
 
     def ok(self):
         print self.xspacing.value(),self.yspacing.value()
-        self.parent.selectl.gridx = self.xspacing.value()
-        self.parent.selectl.gridy = self.yspacing.value()
+        self.parent.selectl.stepgridx = self.xspacing.value()
+        self.parent.selectl.stepgridy = self.yspacing.value()
         self.parent.selectl.gridOn=True
         if not self.parent.selectl.gridOn:
             self.parent.selectl.setgrid()
@@ -775,6 +775,9 @@ class AppForm(QMainWindow):
 
     def togglegrid(self):
         self.selectl.togglegrid()
+
+    def snapongrid(self):
+        self.selectl.toggglesnapgrid()
 
     def selectnodes(self):
         ''' select mode, managed by selectl
@@ -1012,16 +1015,20 @@ class AppForm(QMainWindow):
 
         gridset_action = self.create_action("&Grid",
             shortcut='', slot=self.editgrid,
-            tip='Set Grid')
+            tip='Set Grid',)
+        snapongrid_action = self.create_action("&Snap On Grid",
+            shortcut='s', slot=self.snapongrid,
+            tip='Snap on Grid',checkable=True)
+
         gridtg_action = self.create_action("&Toggle Grid",
             shortcut='g', slot=self.togglegrid,
-            tip='toggle Grid')
+            tip='toggle Grid',checkable=True)
 
         self.add_actions(self.file_menu,
             ( new_action,open_action,None,save_action,saveas_action,None,close_action,quit_action,))
 
         self.add_actions(self.edit_menu,
-            ( select_action,draw_action,properties,None,gridset_action,gridtg_action,None,refresh))
+            ( select_action,draw_action,properties,None,gridset_action,snapongrid_action,gridtg_action,None,refresh))
 
         self.add_actions(self.help_menu, (about_action,))
 
