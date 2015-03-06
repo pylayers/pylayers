@@ -294,7 +294,7 @@ class SelectL2(object):
             self.motion=False
             x = event.xdata
             y = event.ydata
-            if self.snapgridOn:
+            if self.snapgridOn and self.state == 'CP' :
                 x=self.gridx[np.where(x<=self.gridx)[0][0]]
                 y=self.gridy[np.where(y<=self.gridy)[0][0]]
             self.ptsel = np.array((x, y))
@@ -380,6 +380,9 @@ class SelectL2(object):
                 y = self.L.Gs.pos[self.nsel][1]
             else :
                 y = event.ydata
+            if self.snapgridOn:
+                x=self.gridx[np.where(x<=self.gridx)[0][0]]
+                y=self.gridy[np.where(y<=self.gridy)[0][0]]
             self.updatedrawpt(self.nsel,x,y)
 
         if self.state=='CP':
@@ -438,6 +441,9 @@ class SelectL2(object):
                 y = self.L.Gs.pos[self.nsel][1]
             else :
                 y = event.ydata
+            if self.snapgridOn:
+                x=self.gridx[np.where(x<=self.gridx)[0][0]]
+                y=self.gridy[np.where(y<=self.gridy)[0][0]]
             self.L.Gs.pos[self.nsel]=(x,y)
             segs = self.L.Gs[self.nsel]
             for s in segs:

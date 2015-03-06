@@ -539,11 +539,12 @@ class NewLayout(QDialog):    # any super class is okay
         self.width = QSpinBox()
         self.width.setObjectName("width [m]")
         self.width.setRange(1, 10000)
-
+        self.width.setValue(10)
+        
         self.height = QSpinBox()
         self.height.setObjectName("height [m]")
         self.height.setRange(1, 10000)
-
+        self.height.setValue(10)
 
     def _init_layoutwin(self):
 
