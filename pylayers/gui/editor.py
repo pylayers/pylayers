@@ -351,7 +351,7 @@ class PropertiesWin(QDialog):    # any super class is okay
 
         self.heightmin.setMinimumWidth(5)
         self.heightmax.setMinimumWidth(5)
-        self.transition.setMinimumWidth(5)
+        self.transition.setMinimumWidth(10)
 
 
         self.heightmin.setMaximumWidth(70)
@@ -540,7 +540,7 @@ class NewLayout(QDialog):    # any super class is okay
         self.width.setObjectName("width [m]")
         self.width.setRange(1, 10000)
         self.width.setValue(10)
-        
+
         self.height = QSpinBox()
         self.height.setObjectName("height [m]")
         self.height.setRange(1, 10000)
@@ -569,7 +569,7 @@ class NewLayout(QDialog):    # any super class is okay
 
         vbox.addLayout(hboxlw)
 
-        # validation 
+        # validation
         buttonn=QPushButton("New")
         buttonc=QPushButton("Cancel")
         buttonn.clicked.connect(self.new)
@@ -646,7 +646,7 @@ class GridSet(QDialog):    # any super class is okay
 
         vbox.addLayout(hboxlw)
 
-        # validation 
+        # validation
         buttonn=QPushButton("Ok")
         buttonc=QPushButton("Cancel")
         buttonn.clicked.connect(self.ok)
@@ -697,7 +697,7 @@ class AppForm(QMainWindow):
     def new(self):
         self.newlayout=NewLayout(parent=self)
         self.newlayout.show()
-        
+
 
     def open(self):
         filename = QFileDialog.getOpenFileName(self,'Open Pylayers Layout File',pyu.getlong('',pstruc['DIRINI']),'(*.ini);;(*.osm)')
@@ -780,6 +780,7 @@ class AppForm(QMainWindow):
     def snapongrid(self):
         self.selectl.toggglesnapgrid()
 
+
     def selectnodes(self):
         ''' select mode, managed by selectl
             here only cursor management
@@ -857,7 +858,7 @@ class AppForm(QMainWindow):
         self.L.display['subsegnb']=True
         self.L.display['ticksoff']=False
 
-        
+
         self.fig,self.axes = self.selectl.show(self.fig,self.axes,clear=True)
         # self.axes.text(10,10,str(self.properties.currentText()))
 
@@ -893,7 +894,6 @@ class AppForm(QMainWindow):
             pass
         string = string +'\t'+self.selectl.help[self.selectl.state]
         self.statusBar().showMessage(string)
-
 
 
     def create_main_frame(self):
@@ -955,7 +955,7 @@ class AppForm(QMainWindow):
             self.layerselector.addItem(s)
         layerbox.addWidget(self.layerselector)
 
-        
+
 
 
         vbox = QVBoxLayout()
@@ -974,7 +974,7 @@ class AppForm(QMainWindow):
     def shortcuts(self):
         esc = QShortcut(self)
         esc.setKey("escape")
-        self.connect(esc, SIGNAL("activated()"), self.selectnodes) 
+        self.connect(esc, SIGNAL("activated()"), self.selectnodes)
 
     def create_menu(self):
         self.file_menu = self.menuBar().addMenu("&File")
