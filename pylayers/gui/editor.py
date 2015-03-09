@@ -957,9 +957,10 @@ class AppForm(QMainWindow):
         #
         self.mpl_toolbar = NavigationToolbar(self.canvas, self.main_frame)
 
-        ####
+        ################################
         #### Toolbar
-        ####
+        ################################
+        # get icons path
         iconpath = os.path.join(os.environ['PYLAYERS'],'pylayers','gui','ico')
         self.toolbar = QToolBar()
         # exit
@@ -1021,25 +1022,27 @@ class AppForm(QMainWindow):
         self.toolbar.addAction(snapgridAction)
 
 
-        # Active layer
+        self.toolbar.addSeparator()
+
+        # Active layer Menu in toolbar
         layerbox = QHBoxLayout()
 
         layerlabel = QLabel('Active Layer')
-        layerlabel.setStyleSheet("font: 20px;")
+        layerlabel.setStyleSheet("font: 16px;")
         layerlabel.setAlignment(Qt.AlignCenter)
 
-        layerbox.addWidget(layerlabel)
+        self.toolbar.addWidget(layerlabel)
 
         self.layerselector=QComboBox()
         for s in self.L.sl.keys():
             self.layerselector.addItem(s)
-        layerbox.addWidget(self.layerselector)
+        self.toolbar.addWidget(self.layerselector)
 
 
 
 
         vbox = QVBoxLayout()
-        vbox.addLayout(layerbox)
+        # vbox.addLayout(layerbox)
         vbox.addWidget(self.canvas)
         vbox.addWidget(self.mpl_toolbar)
 

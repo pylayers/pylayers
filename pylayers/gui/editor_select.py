@@ -357,11 +357,11 @@ class SelectL2(object):
             if self.state=='Init':
                 # sel seg 
                 if self.nsel > 0:
-                    print 'sel seg'
+                    # print 'sel seg'
                     self.selseg()
                     return
                 elif self.nsel < 0:
-                    print 'sel pt'
+                    # print 'sel pt'
                     self.selpt1()
                     return
                 else: 
@@ -369,18 +369,18 @@ class SelectL2(object):
 
             # select a segment
             if self.state=='SS':
-                print 'sel seg'
+                # print 'sel seg'
                 if self.nsel >0:
                     if (self.nsel == self.selected_edge1):
                         self.modeCPS()
                         return
                     elif not (self.nsel == self.selected_edge1):
-                        print 'different seg'
+                        # print 'different seg'
                         self.modeIni()
                         self.selseg()
                         return
                 elif self.nsel < 0 : 
-                    print 'sel pt'
+                    # print 'sel pt'
                     self.modeIni()
                     self.selpt1()
                 else :
