@@ -379,11 +379,12 @@ class SelectL2(object):
                         self.modeIni()
                         self.selseg()
                         return
-                else : 
+                elif self.nsel < 0 : 
                     print 'sel pt'
                     self.modeIni()
                     self.selpt1()
-
+                else :
+                    self.modeIni()
             # select a point
             if self.state=='SP1':
                 if self.nsel >0:
