@@ -7950,54 +7950,54 @@ class Layout(PyLayers):
         waypoint.append((proom2[0], proom2[1]))
         return(waypoint)
 
-    def editor(self):
-        """ invoke interactive layout graphical editor
+    # def editor(self):
+    #     """ invoke interactive layout graphical editor
 
-        Notes
-        -----
+    #     Notes
+    #     -----
 
-        point edition
+    #     point edition
 
-            m  toggle point edition mode  (CP : Create Point)
+    #         m  toggle point edition mode  (CP : Create Point)
 
-                lclic same x
-                rclic same y
-                cclic free point
+    #             lclic same x
+    #             rclic same y
+    #             cclic free point
 
-        segment edition
+    #     segment edition
 
-            [0-f] - display one of the 16 first layers
-            x : save structure
-            o : toggle overlay
+    #         [0-f] - display one of the 16 first layers
+    #         x : save structure
+    #         o : toggle overlay
 
-        """
+    #     """
 
-        fig = plt.gcf()
-        ax  = fig.add_subplot(111)
-        self.display['nodes']=True
-        self.display['ednodes']=True
-        self.display['subsegnb']=True
-        self.display['transition']=True
-        self.display['ticksoff']=True
+    #     fig = plt.gcf()
+    #     ax  = fig.add_subplot(111)
+    #     self.display['nodes']=True
+    #     self.display['ednodes']=True
+    #     self.display['subsegnb']=True
+    #     self.display['transition']=True
+    #     self.display['ticksoff']=True
 
-        self.af = SelectL2(self,fig=fig,ax=ax)
+    #     self.af = SelectL2(self,fig=fig,ax=ax)
 
-        fig,ax = self.af.show(fig,ax,clear=True)
+    #     fig,ax = self.af.show(fig,ax,clear=True)
 
-        self.cid1 = fig.canvas.mpl_connect('button_press_event',
-                                           self.af.OnClick)
-        self.cid2 = fig.canvas.mpl_connect('button_release_event',
-                                           self.af.OnClickRelease)
-        self.cid3 = fig.canvas.mpl_connect('motion_notify_event',
-                                           self.af.OnMotion)
-        self.cid4 = fig.canvas.mpl_connect('key_press_event',
-                                           self.af.OnPress)
-        self.cid5 = fig.canvas.mpl_connect('key_release_event',
-                                           self.af.OnRelease)
+    #     self.cid1 = fig.canvas.mpl_connect('button_press_event',
+    #                                        self.af.OnClick)
+    #     self.cid2 = fig.canvas.mpl_connect('button_release_event',
+    #                                        self.af.OnClickRelease)
+    #     self.cid3 = fig.canvas.mpl_connect('motion_notify_event',
+    #                                        self.af.OnMotion)
+    #     self.cid4 = fig.canvas.mpl_connect('key_press_event',
+    #                                        self.af.OnPress)
+    #     self.cid5 = fig.canvas.mpl_connect('key_release_event',
+    #                                        self.af.OnRelease)
 
-        plt.draw()
-        plt.axis('tight')
-        plt.show()
+    #     plt.draw()
+    #     plt.axis('tight')
+    #     plt.show()
 
     def editorGtk(self):
         """
