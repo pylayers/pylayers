@@ -964,7 +964,7 @@ class AppForm(QMainWindow):
         self.toolbar = QToolBar()
         # exit
         exitAction = QAction(QIcon(os.path.join(iconpath,'gnome_application_exit.png')), 'Quit', self)
-        exitAction.triggered.connect(lambda x=True:self.closel(exit=x))
+        exitAction.triggered.connect(lambda x=True:self.closel(x))
         self.toolbar.addAction(exitAction)
         #open
         openAction = QAction(QIcon(os.path.join(iconpath,'gnome_folder_open.png')), 'Open', self)
@@ -997,14 +997,19 @@ class AppForm(QMainWindow):
         self.toolbar.addSeparator()
 
         # self.addAction()
+        #editgrid
+        editgridAction = QAction(QIcon(os.path.join(iconpath,'editgrid.png')), 'Edit Grid', self)
+        editgridAction.triggered.connect(self.editgrid)
+        self.toolbar.addAction(editgridAction)
+
         #grid
-        gridAction = QAction(QIcon(os.path.join(iconpath,'grid.png')), 'grid Segments', self)
+        gridAction = QAction(QIcon(os.path.join(iconpath,'grid.png')), 'Toggle Grid', self)
         gridAction.triggered.connect(self.togglegrid)
         gridAction.setCheckable(True)
         self.toolbar.addAction(gridAction)
 
         #snapgrid
-        snapgridAction = QAction(QIcon(os.path.join(iconpath,'grid_snap.png')), 'snapgrid Segments', self)
+        snapgridAction = QAction(QIcon(os.path.join(iconpath,'grid_snap.png')), 'Snap On Grid', self)
         snapgridAction.triggered.connect(self.snapongrid)
         snapgridAction.setCheckable(True)
         self.toolbar.addAction(snapgridAction)
