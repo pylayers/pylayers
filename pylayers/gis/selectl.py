@@ -157,7 +157,7 @@ class SelectL(object):
         return(self.fig,self.ax)
 
 
-    def plotselptseg(self,pt,color='y'):
+    def plotselptseg(self,pt,color='y',ms=10,marker='o'):
         """ plot selected point or segments
 
         Parameters
@@ -169,12 +169,13 @@ class SelectL(object):
         if len(pt)>0:
             
             pts = np.array([self.L.Gs.pos[x] for x in pt])
-            p1 = self.ax.plot(pts[:,0], pts[:,1], 'o', 
+            p1 = self.ax.plot(pts[:,0], pts[:,1],marker=marker, 
                                 visible=True, 
                                 color =color,
                                 ms=10,
                                 alpha=0.4)
-            plt.draw()
+            self.fig.canvas.draw()
+
         return self.fig,self.ax
 
 
@@ -193,6 +194,7 @@ class SelectL(object):
         # fig = plt.gcf()
         # ax  = plt.gca()
         # selected
+
         self.nsel = 0
         self.ptsel = np.array([])
         self.evt = event.key
@@ -271,6 +273,8 @@ class SelectL(object):
             print "Selected segment : ", self.nsel
 
         self.new_state()
+
+
 
 
     def format_coord(self,x, y):
@@ -552,18 +556,21 @@ class SelectL(object):
         if self.evt=='escape':
             self.state='Init'
             self.update_state()
-            plt.draw()
+            self.fig.canvas.draw()
+            return
 
 
         if self.evt=='ctrl+z':
             self.bundo=True
+            print len(self.L.Gs)
             if len (self.undoGs) >2:
                 oGs=self.undoGs.pop(-1)
                 oGs=self.undoGs.pop(-1)
                 self.L.Gs=oGs
                 self.L.g2npy()
-                self.update_state()
+            self.update_state()
             self.bundo=False
+            return
 
         if self.evt=='t':
             if 'SM' in self.state:
@@ -583,11 +590,10 @@ class SelectL(object):
                     self.selected='pt'
                     self.state='SMP'
                 self.ax.title.set_text(self.statename[self.state])
-                plt.draw()
                 # self.update_state()
 
         if self.evt == '3':
-            self.L.show3()
+            self.L._show3()
             return
 
         # Choose layers to visualized
@@ -1153,23 +1159,25 @@ class SelectL(object):
                 x1,x2=x2,x1
             if y1>y2:
                 y1,y2=y2,y1
-            try:
-                selectpt,selectseg = self.L.get_zone([x1,x2,y1,y2])
-                if not self.ctrl_is_held:
-                    self.selectpt.extend(selectpt)
-                    self.selectseg.extend(selectseg)
-                    # print self.selectseg
-                    self.selectseg=filter(lambda x: self.L.Gs.node[x]['connect'][0] in self.selectpt
-                                     and self.L.Gs.node[x]['connect'][1] in self.selectpt,
-                                     self.selectseg)
+            
+            
+            # try:
+            selectpt,selectseg = self.L.get_zone([x1,x2,y1,y2])
 
-                    self.selectpt=np.unique(self.selectpt).tolist()
-                    self.selectseg=np.unique(self.selectseg).tolist()
-                else: 
-                    [self.selectpt.pop(self.selectpt.index(x)) for x in selectpt if x in self.selectpt]
-                    [self.selectseg.pop(self.selectseg.index(x)) for x in selectseg if x in self.selectseg]
-            except:
-                print 'empty selection'
+            if not self.ctrl_is_held:
+                self.selectpt.extend(selectpt)
+                self.selectseg.extend(selectseg)
+                self.selectseg=filter(lambda x: self.L.Gs.node[x]['connect'][0] in self.selectpt
+                                 and self.L.Gs.node[x]['connect'][1] in self.selectpt,
+                                 self.selectseg)
+
+                self.selectpt=np.unique(self.selectpt).tolist()
+                self.selectseg=np.unique(self.selectseg).tolist()
+            else: 
+                [self.selectpt.pop(self.selectpt.index(x)) for x in selectpt if x in self.selectpt]
+                [self.selectseg.pop(self.selectseg.index(x)) for x in selectseg if x in self.selectseg]
+            # except:
+            #     print 'empty selection'
             print self.selectpt,self.selectseg
             self.plotselptseg(self.selectpt)
             self.selected='pt'
@@ -1185,14 +1193,14 @@ class SelectL(object):
         
         if self.evt == 'f1':
             # avoid conflict between zoom and selection 
-            fm=plt.get_current_fig_manager()
-            if fm.toolbar._active == 'PAN':
-                fm.toolbar.pan()
-            if fm.toolbar._active == 'ZOOM':
-                fm.toolbar.zoom()
+            # fm=plt.get_current_fig_manager()
+            # if fm.toolbar._active == 'PAN':
+            #     fm.toolbar.pan()
+            # if fm.toolbar._active == 'ZOOM':
+            #     fm.toolbar.zoom()
 
             self.state='SMP'
-            toggle_selector.RS = RectangleSelector(ax, point_select_callback,
+            toggle_selector.RS = RectangleSelector(self.ax, point_select_callback,
                                                drawtype='box', useblit=True,
                                                button=[1,3], # don't use middle button
                                                minspanx=5, minspany=5,
