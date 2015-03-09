@@ -966,6 +966,12 @@ class AppForm(QMainWindow):
         exitAction = QAction(QIcon(os.path.join(iconpath,'gnome_application_exit.png')), 'Quit', self)
         exitAction.triggered.connect(lambda x=True:self.closel(x))
         self.toolbar.addAction(exitAction)
+
+        #new
+        newAction = QAction(QIcon(os.path.join(iconpath,'gnome_document_new.png')), 'new', self)
+        newAction.triggered.connect(self.new)
+        self.toolbar.addAction(newAction)
+
         #open
         openAction = QAction(QIcon(os.path.join(iconpath,'gnome_folder_open.png')), 'Open', self)
         openAction.triggered.connect(self.open)
