@@ -80,9 +80,9 @@ class SelectL2(object):
                 'SMS': 'Multiple Segments Selection'
                 }
         self.help={'':'',
-                'Init':'Select Point(s) or Segment(s) F2: Create Segments/ CTRL+q: Quit',
+                'Init':'Select Point(s) or Segment(s) F2: Create Segments, F3: Edit Segments properties',
                 'CP':'Create Segments, + CTRL same x, + SHIFT same y',
-                'SP1':'Select Point/ Click another point to create segment',
+                'SP1':'Select Point. Move Selected Point maintaing Left Clic',
                 'SP2':'Click Again for Creating Segment',
                 'SS':'F3: Edit Segment(s) properties',
                 'SSS':'Select Sub Segment',
@@ -1685,29 +1685,33 @@ class SelectL2(object):
         #
         # select point 1 : Init -> SP1
         #
-            if self.state=='Init':
+            if self.state=='Init' :
+                self.selpt1()
+                return
+            if self.state=='SP1' or self.state=='SS':
+                self.modeIni()
                 self.selpt1()
                 return
         #
         # select point 2 : SP1 --> SP2
         #
 
-            if self.state=='SP1':
-                if self.nsel != self.selected_pt1:
-                    self.selpt2()
-                    return
-                else:
-                    self.modeIni()
-                    return
+            # if self.state=='SP1':
+            #     if self.nsel != self.selected_pt1:
+            #         self.selpt2()
+            #         return
+            #     else:
+            #         self.modeIni()
+            #         return
         #
         # Create point on selected segment orthogonaly to segment starting in
         # selected point
         #
         # Not finished
         #
-            if self.state=='SS':
-                self.createptonseg()
-                return
+            # if self.state=='SS':
+            #     self.createptonseg()
+            #     return
         #
         # Left clic and selected node is a segment
         #
@@ -1717,10 +1721,19 @@ class SelectL2(object):
                 self.selseg()
                 return
 
-            if self.state=='SS':
+            if self.state=='SS' and (self.nsel == self.selected_edge1):
                 self.selsubseg()
                 return
-        #
+
+            if self.state=='SS' and not (self.nsel == self.selected_edge1):
+                self.modeIni()
+                self.selseg()
+                return
+
+            if self.state=='SP1':
+                self.modeIni()
+                self.selseg()
+                return
         # Right clic and selected node is a point
         #
 

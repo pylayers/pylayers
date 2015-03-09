@@ -787,15 +787,21 @@ class AppForm(QMainWindow):
         '''
         QApplication.setOverrideCursor(QCursor(Qt.ArrowCursor))
         self.selectl.escape()
+        string = self.selectl.help[self.selectl.state]
+        self.statusBar().showMessage(string)
+
 
     def drawseg(self):
         ''' drawseg, managed by selectl
             here only cursor management
         '''
+
         QApplication.setOverrideCursor(QCursor(Qt.CrossCursor))
         self.L.display['activelayer']=str(self.layerselector.currentText())
         self.selectl.current_layer=self.L.display['activelayer']
         self.selectl.modeCP()
+        string = self.selectl.help[self.selectl.state]
+        self.statusBar().showMessage(string)
 
 
 
