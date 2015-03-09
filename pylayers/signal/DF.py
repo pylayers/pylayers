@@ -47,16 +47,8 @@ class DF(PyLayers):
         self.a = a
         self.z = np.poly1d(self.b).r
         self.p = np.poly1d(self.a).r
-        assert(np.abs(self.b-np.poly1d(self.z,r=True).c).all()<1e-16)
-        assert(np.abs(self.a-np.poly1d(self.p,r=True).c).all()<1e-16)
-
-    @property
-    def z(self):
-        return(self._z)
-
-    @property
-    def p(self):
-        return(self._p)
+        #assert(np.abs(self.b-np.poly1d(self.z,r=True).c).all()<1e-16)
+        #assert(np.abs(self.a-np.poly1d(self.p,r=True).c).all()<1e-16)
 
     @property
     def a(self):
@@ -79,16 +71,6 @@ class DF(PyLayers):
     def b(self,b):
         self._b = b
         self._z = np.poly1d(b).r
-
-    @p.setter
-    def p(self,p):
-        self._p = p
-        self._a = np.poly1d(p,r=True).c
-
-    @z.setter
-    def z(self,z):
-        self._z = z
-        self._b = np.poly1d(z,r=True).c
 
     def __mul__(self,df):
         """
@@ -120,7 +102,6 @@ class DF(PyLayers):
         return(F)
 
 
-
     def simplify(self,tol=1e-16):
         """ simplify transfer function 
         """
@@ -148,13 +129,13 @@ class DF(PyLayers):
         return(F)
 
     def match(self):
-        r""" return a match filterplt.axis([-2,2,-2,2])
+        r""" return a match filter
 
 
         if $$H(z)=\frac{1+b_1z^1+...+b_Nz^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$
 
         if $$H_m(z)=\frac{b_N+b_{N-1}z^1+...+z^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$
-        match
+        
         """
 
         if self.fir:
@@ -169,7 +150,7 @@ class DF(PyLayers):
         Parameters
         ----------
 
-        s : np.array | TUsignal
+        s : np.array |TUsignal
             input signal
 
         Returns
@@ -231,7 +212,7 @@ class DF(PyLayers):
         ---------
 
         var : float
-            input noise variance
+            input noise variance (default = 1)
 
         """
 
@@ -280,12 +261,12 @@ class DF(PyLayers):
             self.H   = bs.FUsignal(w/np.pi,h)
             xlabel = 'Relative frequency'
 
-        if 'fig' not in kwargs:
-            fig = plt.figure()
-        else:
-            fig = kwargs['fig']
-
+        
         if kwargs['display']:
+            if 'fig' not in kwargs:
+                fig = plt.figure()
+            else:
+                fig = kwargs['fig']
             ax1 = fig.add_subplot(211)
             self.H.plot(typ=['l20'],xlabels=[xlabel],fig=fig,ax=ax1)
             plt.grid()

@@ -144,6 +144,7 @@ class SubSegWin(QDialog):    # any super class is okay
         # sort subsegments from floor to ceil
         # add connect to impose begin of previous segment
         # sort subseg by height
+
         z = np.array(self.subsegdata['ss_z'])
         self.sszo = np.argsort(z[:,0])[::-1]
 
@@ -819,14 +820,14 @@ class AppForm(QMainWindow):
     def on_about(self):
         msg = """ This is the PyLayers' Stand-Alone Layout Editor (BETA)
 
-         This tool allow to personalize  your own building layout in terms of
-         floor plan and constitutive materials.
-         Once edited and saved, the layout can be used into the PyLayers Ray tracing tool.
+         This tool allows to edit/modyfy a building floor plan and/or constitutive materials.
+         Once saved, the layout s ready to be used with PyLayers simunlation tools.
 
 
 
          Shortcuts:
-         ----------
+         ------------
+
          F1 : Select mode
          F2 : New segment with current active Layer
          F3 : Edit segment properties

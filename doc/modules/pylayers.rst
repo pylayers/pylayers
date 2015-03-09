@@ -214,6 +214,7 @@ Signals
 
    pylayers.signal.bsignal
    pylayers.signal.DF
+   pylayers.signal.ED
    pylayers.signal.Fading
    pylayers.signal.waveform
    pylayers.signal.standard

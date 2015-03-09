@@ -1,3 +1,27 @@
+#!/usr/bin/python
+#-*- coding:Utf-8 -*-
+r""""
+.. currentmodule:: pylayers.signal.ED
+
+.. autosummary::
+    :toctree: generated
+
+Bsignal ED 
+=============
+
+.. autosummary::
+    :toctree: generated/
+
+    ED.__init__
+    ED.__repr__
+    ED.apply
+    ED.moment
+    ED.pdf
+    ED.errprob
+    ED.roc
+    ED.plot
+
+"""
 from scipy.signal import *
 import scipy.special as spe
 import scipy.stats as st
@@ -8,32 +32,36 @@ from pylayers.util.project import *
 import matplotlib.pyplot as plt
 import doctest
 
-r"""
-.. currentmodule:: pylayers.signal.ED
-
-.. autosummary::
-    :toctree: generated
-
-"""
 class ED(PyLayers):
     """
     Energy Detector Class
 
     This class implements an Energy Detector receiver
 
+
     """
     def __init__(self,**kwargs):
-        """
+        """ Constructor
+        
+        Parameters
+        ----------    
 
         fs : sampling frequency
         fc : center frequency
-        beta : scale factor
-        Tns  : time integration
-        BGHz : Bandwidth
+        beta : scale factor :math:`$\beta$`
+        Tns  : time integration in nanoseconds
+        BGHz : Bandwidth in GHz
         pfa : false alarm probability
         wt :
-        gpass:
-        gstop :
+        gpass: gain in the pass band
+        gstop : gain in the stop band
+
+        Notes
+        -----
+
+        An energy detector is determined by 2 filter a bandpass filter 
+        :math:`H_B(f)` and a lowpass filter which corresponds to the time 
+        integration over duration :math:`T` :math:`H_T(f)`
 
         """
 
@@ -83,6 +111,8 @@ class ED(PyLayers):
         #
         #
         #
+        self.BGHz = BGHz
+        self.Tns  = Tns
         self.beta  = kwargs['beta']
         self.pfa   = kwargs['pfa']
 
@@ -92,6 +122,11 @@ class ED(PyLayers):
 
         self.moment(typ='struc')
 
+    def __repr__(self):
+        st = ''
+        st = 'Filter B : '+str(self)
+
+        return(st)
     def apply(self,x):
         r"""
 
@@ -103,9 +138,9 @@ class ED(PyLayers):
         Returns
         -------
 
-        y : $F2{\beta^2 F1{x}^2}$
+        y : :math:`F_2\{\beta^2 F_1\{x\}^2\}`
 
-        F{x} means a filtering of x with filter F
+            :math:`F{x}` means a filtering of x with filter :math:`F`
 
         """
         self.xf1 = self.filterB.filter(x.y)
@@ -128,10 +163,12 @@ class ED(PyLayers):
 
         :math:`R_y(\tau)=2R_x^2(\tau)+R_x^2(0)`
 
-        This functions updates the order and scale or the ED
+        This functions updates the order and scale or the Energy Detector
 
         """
+        # filterB bandpass filter
         self.filterB.freqz(display=False)
+        # filterT time integration (=low pass filter)
         self.filterT.freqz(display=False)
         w = bs.Noise()
 
@@ -150,7 +187,7 @@ class ED(PyLayers):
             self.vary = mean(Phiy)
 
         if typ=='emp':
-            self.muy = 1
+            self.muy  = 1
             self.vary = 1
 
         self.order = (2*(self.muy)**2)/self.vary
