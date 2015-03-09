@@ -67,18 +67,16 @@ class Simul(PyLayers):
 
     A simulation requires :
 
-        A Layout
-        A Person
-        A Trajectory
+        + A Layout
+        + A Person
+        + A Trajectory
 
     or a CorSer instance
 
     """
 
-    def __init__(self, source ='simulnet_TA-Office.h5',verbose=False,):
+    def __init__(self, source ='simulnet_TA-Office.h5',verbose=False):
         """ object constructor
-
-
 
         Parameters
         ----------
@@ -109,7 +107,7 @@ class Simul(PyLayers):
             cutoff=2
 
 
-        
+
         self._gen_net()
         self.SL = SLink()
         self.DL = DLink(L=self.L,verbose=self.verbose)
@@ -227,7 +225,7 @@ class Simul(PyLayers):
             techno,ID=ap.split(':')
             if techno == 'HKB':
                 techno = 'hikob'
-            
+
 
             self.dap.update({ap: {'pos': source.din[ap]['p'],
                                   'ant': antenna.Antenna(),
@@ -307,7 +305,7 @@ class Simul(PyLayers):
 
         """
 
-        # todo in network : 
+        # todo in network :
         # take into consideration the postion and rotation of antenna and not device
         self.DL.a = self.N.node[na]['p']
         self.DL.Ta = self.N.node[na]['T']
@@ -347,9 +345,6 @@ class Simul(PyLayers):
             engagement
         """
 
-
-
-
         pa = self.N.node[na]['p']
         pb = self.N.node[nb]['p']
         dida, name = na.split('_')
@@ -375,21 +370,21 @@ class Simul(PyLayers):
         Parameters
         ----------
 
-        'OB': boolean
+        OB: boolean
             perform on body statistical link evaluation
-        'B2B':  boolean
+        B2B:  boolean
             perform body to body deterministic link evaluation
-        'B2I': boolean
+        B2I: boolean
             perform body to infrastructure deterministic link evaluation
-        'I2I':  boolean
+        I2I:  boolean
             perform infrastructure to infrastructure deterministic link eval.
-        'llink': list
+        llink: list
             list of link to be evaluated
             (if [], all link are considered)
-        'wstd': list
+        wstd: list
             list of wstd to be evaluated
             (if [], all wstd are considered)
-        't': np.array
+        t: np.array
             list of timestamp to be evaluated
             (if [], all timestamps are considered)
 
@@ -419,23 +414,26 @@ class Simul(PyLayers):
         # Check link attribute
         if llink == []:
             llink = self.N.links
-        elif not isinstance(llink, list):
-            llink = [llink]
-
+        #elif not isinstance(llink, list):
+        #    llink = [llink]
+        #
+        # Check if all selected links are in the Network
+        #
         checkl = [l in self.N.links for l in llink]
-        if sum(checkl) != len(self.N.links):
+        if sum(checkl) != len(llink):
             uwrong = np.where(np.array(checkl) is False)[0]
             raise AttributeError(str(np.array(llink)[uwrong])
-                                 + ' links does not exist in Network')
+                             + ' links does not exist in Network')
 
         # Check wstd attribute
         if wstd == []:
-            wstd = self.N.wstd.keys()
+            #wstd = self.N.wstd.keys()
+            wstd = llink.keys()
         elif not isinstance(wstd, list):
             wstd = [wstd]
 
         checkw = [w in self.N.wstd.keys() for w in wstd]
-        if sum(checkw) != len(self.N.wstd.keys()):
+        if sum(checkw) != len(wstd):
             uwrong = np.where(np.array(checkw) is False)[0]
             raise AttributeError(str(np.array(wstd)[uwrong])
                                  + ' wstd are not in Network')
@@ -473,7 +471,12 @@ class Simul(PyLayers):
         self._time = pd.to_datetime(self.time,unit='s')
 
         #
-        # Code
+        # Nested Loops
+        #
+        #  time
+        #    standard
+        #      links
+        #           evadeter &| evalstat
         #
         init = True
         for ut, t in enumerate(lt):
@@ -592,9 +595,11 @@ class Simul(PyLayers):
 
         Parameters
         ----------
+
         t : int
-            time value 
-        """ 
+            time value
+
+        """
 
         # if a bodies are involved in simulation
         if ((self.todo['OB']) or (self.todo['B2B']) or (self.todo['B2I'])):
