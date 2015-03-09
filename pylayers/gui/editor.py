@@ -594,6 +594,8 @@ class NewLayout(QDialog):    # any super class is okay
         self.parent.filename=''
         self.parent.create_main_frame()
         self.parent.on_draw()
+        self.parent.setWindowTitle(self.parent.L.filename + '- Pylayers : Stand Alone Editor (Beta)')
+        self.parent.resize(self.parent.fig.canvas.width(),self.parent.fig.canvas.height())
 
         self.close()
 
