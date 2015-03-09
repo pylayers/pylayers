@@ -100,11 +100,12 @@ class Simul(PyLayers):
         if isinstance(source,str):
             self.filetraj = source
             self.load_simul(source)
-
+            self.source = 'simul'
         elif 'pylayers' in source.__module__:
             self.filetraj = source._filename
             self.load_CorSer(source)
             cutoff=2
+            self.source = 'CorSer'
 
 
 
@@ -235,7 +236,7 @@ class Simul(PyLayers):
         self.ctime = np.nan
         self.Nag = len(B)
         self.Nap = len(source.din)
-
+        self.corser = source
     def _gen_net(self):
         """ generate Network and associated links
 
@@ -347,8 +348,12 @@ class Simul(PyLayers):
 
         pa = self.N.node[na]['p']
         pb = self.N.node[nb]['p']
-        dida, name = na.split('_')
-        didb, name = nb.split('_')
+        if self.source == 'simul':
+            dida, name = na.split('_')
+            didb, name = nb.split('_')
+        elif self.source =='CorSer':
+            bpa,absolutedida,dida,name,technoa = self.corser.devmapper(na)
+            bpb,absolutedidb,didb,name,technob = self.corser.devmapper(nb)
 
         ak, tk, eng = self.SL.onbody(self.dpersons[name], dida, didb, pa, pb)
 
@@ -394,7 +399,7 @@ class Simul(PyLayers):
                     'B2B': True,
                     'B2I': True,
                     'I2I': False,
-                    'llink': [],
+                    'llink': {},
                     'wstd': [],
                     't': np.array([]),
                     }
@@ -412,8 +417,9 @@ class Simul(PyLayers):
         self.todo.update({'OB':OB,'B2B':B2B,'B2I':B2I,'I2I':I2I})
 
         # Check link attribute
-        if llink == []:
+        if llink == {}:
             llink = self.N.links
+
         #elif not isinstance(llink, list):
         #    llink = [llink]
         #
@@ -458,18 +464,15 @@ class Simul(PyLayers):
 
         # self._traj is a copy of self.traj, which is affected by resampling.
         # it is only a temporary attribute for a given run
+        # if len(lt) > 1:
+        #     sf = 1/(1.*lt[1]-lt[0])
+        #     self._traj = self.traj.resample(sf=sf, tstart=lt[0])
 
-        if len(lt) > 1:
-            sf = 1/(1.*lt[1]-lt[0])
-            self._traj = self.traj.resample(sf=sf, tstart=lt[0])
-
-        else:
-            self._traj = self.traj.resample(sf=1.0, tstart=lt[0])
-            self._traj.time()
-
-        self.time = self._traj.t
-        self._time = pd.to_datetime(self.time,unit='s')
-
+        # else:
+        #     self._traj = self.traj.resample(sf=1.0, tstart=lt[0])
+        #     self._traj.time()
+        # self.time = self._traj.t
+        # self._time = pd.to_datetime(self.time,unit='s')
         #
         # Nested Loops
         #
@@ -478,6 +481,10 @@ class Simul(PyLayers):
         #      links
         #           evadeter &| evalstat
         #
+        print lt 
+        import ipdb
+        ipdb.set_trace()
+        self._time=lt
         init = True
         for ut, t in enumerate(lt):
             self.ctime = t
@@ -492,16 +499,16 @@ class Simul(PyLayers):
                             print 'processing: ',na, ' <-> ', nb, 'wstd: ', w
                             print '-'*30
                         eng = 0
-                        self.evaldeter(na, nb, w)
-                        if typ == 'OB':
-                            self.evalstat(na, nb)
-                            eng = self.SL.eng
-                            L = self.DL + self.SL
-                            self._ak = L.H.ak
-                            self._tk = L.H.tk
-                        else :
-                            self._ak = self.DL.H.ak
-                            self._tk = self.DL.H.tk
+                        self.evaldeter(na, nb, w,force=['H'])
+                        # if typ == 'OB':
+                        #     self.evalstat(na, nb)
+                        #     eng = self.SL.eng
+                        #     L = self.DL + self.SL
+                        #     self._ak = L.H.ak
+                        #     self._tk = L.H.tk
+                        # else :
+                        self._ak = self.DL.H.ak
+                        self._tk = self.DL.H.tk
                         df = pd.DataFrame({\
                                     'id_a': na,
                                     'id_b': nb,

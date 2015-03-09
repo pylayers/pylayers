@@ -306,6 +306,7 @@ class SelectL2(object):
                 self.ptmove=False
 
             if self.state == 'CP':
+                
                 # if new point is created
 
                 try:
@@ -314,6 +315,7 @@ class SelectL2(object):
                 except:
                     self.pt_previousid = 0
                 if self.nsel == 0:
+                    # print 'create new pt'
                     # manage ctrl and shift same x/Y
                     if self.pt_previousid !=0:
                         if self.shift_is_held:
@@ -335,19 +337,80 @@ class SelectL2(object):
                     self.line = self.ax.plot(self.lppmp[:,0],self.lppmp[:,1],color='k')
                 else:
                     if self.pt_previousid !=0:
+                        # print 'closing',
+                        savepid = self.pt_previousid
+
+                        print self.pt_previousid
                         self.createseg(newpt1=self.pt_previousid,newpt2=self.nsel)
                         self.nsel=0
                         self.modeIni()
                         self.modeCP()
-                        self.update_state()
+                        self.pt_previousid=savepid
                     else:
+                        # print 'starting from existing',
                         self.pt_previousid = self.nsel
                         self.pt_previous = self.ptsel
                         self.lppmp = np.array([self.pt_previous,(x,y) ])
                         self.background = self.fig.canvas.copy_from_bbox(self.ax.bbox)
                         self.line = self.ax.plot(self.lppmp[:,0],self.lppmp[:,1],color='k')
 
+            if self.state=='Init':
+                # sel seg 
+                if self.nsel > 0:
+                    # print 'sel seg'
+                    self.selseg()
+                    return
+                elif self.nsel < 0:
+                    # print 'sel pt'
+                    self.selpt1()
+                    return
+                else: 
+                    self.modeIni()
 
+            # select a segment
+            if self.state=='SS':
+                # print 'sel seg'
+                if self.nsel >0:
+                    if (self.nsel == self.selected_edge1):
+                        self.modeCPS()
+                        return
+                    elif not (self.nsel == self.selected_edge1):
+                        # print 'different seg'
+                        self.modeIni()
+                        self.selseg()
+                        return
+                elif self.nsel < 0 : 
+                    # print 'sel pt'
+                    self.modeIni()
+                    self.selpt1()
+                else :
+                    self.modeIni()
+            # select a point
+            if self.state=='SP1':
+                if self.nsel >0:
+                    self.modeIni()
+                    self.selseg()
+                    return
+                elif self.nsel < 0:
+                    self.modeIni()
+                    self.selpt1()
+                    return
+                else :
+                    self.modeIni()
+
+            # ready for create point on segment
+            if self.state == 'CPS':
+                self.splitseg()
+            # if self.state=='SP1':
+            #     self.modeIni()
+            #     self.selseg()
+            #     return
+
+            # free multiple select mode when click anywhere
+            if 'SM' in self.state:
+                if self.nsel==0 and not (self.shift_is_held or self.ctrl_is_held):
+                    self.modeIni()
+# 
 
 
         if event.button == 2 and event.inaxes:
@@ -372,6 +435,7 @@ class SelectL2(object):
 
     def OnMotion(self,event):
         if self.state !='CP' and not self.ptmove:
+            # print 'on motion selector'
             if event.button == 1:
                 self.motion=True
                 self.state='SMP'
@@ -380,6 +444,7 @@ class SelectL2(object):
                     self.update_state()
 
         elif self.state =='SP1' and self.ptmove and event.button == 1:
+            # print 'on motion move'
             if self.shift_is_held:
                 x = self.L.Gs.pos[self.nsel][0]
             else :
@@ -394,6 +459,7 @@ class SelectL2(object):
             self.updatedrawpt(self.nsel,x,y)
 
         if self.state=='CP':
+            # print 'on motion draw seg in editing'
 
             if self.shift_is_held:
                 x = self.L.Gs.pos[self.pt_currentid][0]
@@ -403,8 +469,6 @@ class SelectL2(object):
                 y = self.L.Gs.pos[self.pt_currentid][1]
             else :
                 y = event.ydata
-
-
 
             try:
                 if self.snapgridOn:
@@ -430,17 +494,19 @@ class SelectL2(object):
 
 
     def OnClickRelease(self,event):
-        if event.button == 1 and self.motion==False and not self.ptmove:
-            if self.nsel ==0 and self.state != 'CP':
-                self.modeIni()
-            # self.update_state()
-            self.new_state()
+        # if event.button == 1 and self.motion==False and not self.ptmove:
+        #     if self.state == 'SP1' or :
+        #         self.modeIni()
+        #     # self.update_state()
+        #         self.new_state()
 
-        if event.button == 1 and self.motion==True and not self.ptmove:
-            self.nsel=0
-            self.motion=False
+        # if event.button == 1 and self.motion==True and not self.ptmove:
+        #     self.nsel=0
+        #     self.motion=False
 
-        if event.button == 1 and self.ptmove and not 'SM' in self.state:
+
+        if event.button == 1 and self.ptmove and not ('SM' in self.state):
+            # print 'move release'
             if self.shift_is_held:
                 x = self.L.Gs.pos[self.nsel][0]
             else :
@@ -619,7 +685,7 @@ class SelectL2(object):
             print titre
             #ax.title.set_text(titre)
             self.L.show_nodes(ndlist=[nse], size=200, color='r', alpha=0.5,fig=self.fig,ax=self.ax)
-
+            print self.selected_edge1
         if self.state == 'SSS':
             self.ax.title.set_text(self.statename[self.state])
             nse = self.selected_edge1
@@ -1094,6 +1160,7 @@ class SelectL2(object):
         """ switch to CP mode
 
         """
+        self.modeIni()
         self.state = "CP"
         self.update_state()
 
@@ -1393,7 +1460,10 @@ class SelectL2(object):
                     [self.selectpt.pop(self.selectpt.index(x)) for x in selectpt if x in self.selectpt]
                     [self.selectseg.pop(self.selectseg.index(x)) for x in selectseg if x in self.selectseg]
             except:
-                print 'empty selection'
+                if len(self.selectpt) == 0:
+                    self.modeIni()
+                    self.update_state()
+                # print 'empty selection'
 
             self.plotselptseg(self.selectpt)
             self.selected='pt'
@@ -1761,7 +1831,7 @@ class SelectL2(object):
                 self.modeCPS()
                 return
 
-            if (self.state == 'CPS') & (self.nsel!= self.selected_edge1):
+            if (self.state == 'CPS') :
             # create point on edge
                 self.modeCPSS()
 
