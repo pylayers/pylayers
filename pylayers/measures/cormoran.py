@@ -162,7 +162,7 @@ from moviepy.editor import *
 from skimage import img_as_ubyte
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-
+import pylayers.mobility.ban.DeuxSeg as seg
 import pickle
 
 # Those lines handle incompatibility between mayavi and VTK
@@ -4462,7 +4462,114 @@ bernard
         df=df[cols]
 
         return df
-
+        
+    def vis_mat(self, body_list = [],techno = 'hkb', link_list = [], mocap_frameId = []):
+        
+        """Compute the visibility matrix
+        
+        Parameters
+        ----------
+        Body_list: list of Body on which the visibity is evaluated
+        link_list: list of links that the visivbilty is evaluated
+        mocap_frameId :  motion capture frame 
+        techno:  dev technology
+        """
+        
+        if body_list == []:
+            
+            body_list = self.B.values()
+        
+        if link_list == []:
+            if techno == 'hkb':
+                link_list = list(self.hkb.keys())
+            if techno == 'tcr':
+                link_list = list(self.tcr.keys())
+                
+        if mocap_frameId ==[]:
+            mocap_frameId = range(body_list[0].nframes)
+            
+        ### extract devices positions
+        dev_arr = np.array(map( lambda x : x.split('-'), link_list))
+        
+        
+        
+        dev_id0= np.array(map(lambda x:self.devmapper(x[0], techno= 'hkb'),dev_arr))[:,2]
+        dev_id1= np.array(map(lambda x:self.devmapper(x[1], techno= 'hkb'),dev_arr))[:,2]        
+        dev_id = np.array([dev_id0,dev_id1]).T
+        
+        vis = np.ndarray(shape=(len(body_list),len(mocap_frameId),len(link_list),11 ))
+        for lk in range(len(dev_id)):
+            devA  = dev_id[lk,0]
+            devB  = dev_id[lk,1]
+            posA  = self.devdf[self.devdf['id'] ==devA][['x','y', 'z']].values
+            posB  = self.devdf[self.devdf['id'] ==devB][['x','y', 'z']].values
+            for i in range(len(mocap_frameId)):
+                for bl in range(len(body_list)):
+                    inter = body_list[bl].intersectBody(A = posA[i],B=posB[i], topos = False, frameId = mocap_frameId[i], cyl =[])[:,0]
+                    vis[bl,i,lk]= inter
+                    
+                      
+        return vis
+        
+    def link_sort (self, sort_typ = 'Entropy', time_index =[],link_typ= 'onbody', 
+                    start_index = 2, nbin =50):
+        
+        
+        link_list = list(self.hkb.keys())
+        if link_typ == 'onbody':
+            link = filter( lambda x : x.split('-')[0][0:2] != 'AP'  and x.split('-')[1][0:2] != 'AP'  , link_list)
+            link_index = map(lambda x : link_list.index(x) , link)
+            
+        else:
+            link = link_list
+            link_index = map(lambda x : link_list.index(x) , link)
+            
+        if time_index == []:
+            time = np.array(self.hkb.index)[start_index:]
+            time_index =  np.arange(2,len(time)+2)
+        else:
+            time =  np.array(self.hkb.index)[time_index]
+        
+           
+        data = self.hkb.values[time_index,:][:,link_index]
+        
+        link_data =[]
+        if sort_typ == 'Entropy':
+            
+            for ilink in range(len(link)):
+                D=data.T[ilink,:]
+                H=plt.hist(D,bins= nbin)
+                p=H[0]
+                p = p/sum(p)
+                x=H[1]
+                e = -p*np.log(p)/np.log(2)
+                ep = np.nan_to_num(e)
+                s = sum(ep)*(x[1]-x[0])
+                link_data.append(s)
+                
+        if sort_typ == 'Std':
+            for ilink in range(len(link)):
+                D=data.T[ilink,:]    
+                link_data.append(D.std())
+        
+        if sort_typ == 'Corr':
+            for ilink in range(len(link)):
+                D=data.T[ilink,:]
+                lcorr = pcorr(D,D)[0:len(D)/2]
+                tlink = (np.where(lcorr >= 0.5)[0][-1])*(time[1]-time[0])
+                link_data.append(tlink)
+                
+        sort_index = np.argsort(link_data)[::-1]
+        
+        return link, link_data, sort_index 
+                
+                    
+        
+            
+            
+            
+        
+            
 
     # def get_data(self,a,b):
 

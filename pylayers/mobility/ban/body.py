@@ -60,10 +60,11 @@ from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 import pylayers.util.plotutil as plu
 import pylayers.util.geomutil as geu
-import pylayers.mobility.body.DeuxSeg as seg
+import pylayers.mobility.ban.DeuxSeg as seg
 import doctest
 import itertools as itt
 from pylayers.util.project import *
+import itertools
 try:
     from mayavi import mlab 
     from tvtk.tools import visual
@@ -150,7 +151,7 @@ class Body(PyLayers):
         #  campaign it is not required to center the body.
         #  centering makes sense only when using the topos projection
         #
-        #
+        #True
         self.cylfromc3d(centered=centered)
 
         try:
@@ -206,7 +207,7 @@ class Body(PyLayers):
         if 'pg' in dir(self):
             st = st + 'Centered : True'+'\n'
         #if 'mocapinfo' in dir(self):
-        #    st = st + str(self.mocapinfo)+'\n'
+        #    st = stTrue + str(self.mocapinfo)+'\n'
         if 'tmocap' in dir(self):
             st = st + 'Mocap Duration : ' + str(self.Tmocap)+'\n'
         if 'vmocap' in dir(self):
@@ -2057,7 +2058,7 @@ class Body(PyLayers):
         Parameters
         ----------
 
-        frameiId : int
+        frameId : int
         plane : string
             'yz' | 'xz' | 'xy'
         widthfactor : int
@@ -2102,7 +2103,7 @@ class Body(PyLayers):
             raise AttributeError('Incorrect plane')
 
         fId = kwargs['frameId']
-
+        
         for k in range(self.ncyl):
 
             kta = self.sl[k,0]
@@ -2488,9 +2489,9 @@ class Body(PyLayers):
             1 : AB intersected by cylinder
 
         """
-
-        intersect = np.zeros((self.ncyl,1))
         
+        intersect = np.zeros((self.ncyl,1))
+
         for k in range (self.ncyl):
             if k not in cyl:
                 if topos  == True:
@@ -2506,19 +2507,22 @@ class Body(PyLayers):
 
 
                 alpha, beta,dmin = seg.dmin3d(A,B,C,D)
+                alpha1 = alpha
+                beta1  = beta
                 if alpha < 0:
-                    alpha = np.zeros(alpha.shape)
+                    alpha1 = np.zeros(alpha.shape)
                 if alpha > 1 :
-                    alpha  = np.ones(alpha.shape)
+                    alpha1  = np.ones(alpha.shape)
                 if beta < 0:
-                    beta = np.zeros(beta.shape)
+                    beta1 = np.zeros(beta.shape)
                 if beta > 1:
-                    beta = np.ones(beta.shape)
-                dmin = np.sqrt(seg.dist (A,B,C,D,alpha,beta)[1])
+                    beta1 = np.ones(beta.shape)
+                dmin = np.sqrt(seg.dist (A,B,C,D,alpha1,beta1)[1])
 
-                if dmin  < self.sl[k,2]:
+                if dmin  < self.sl[k,2] and beta >0 and beta < 1 and alpha >0 and alpha < 1:  
 
-                    intersect[k]=1                   
+                    intersect[k]=1   
+        print 'FrameId = ',  frameId, 'inter = ', sum(intersect)
                  
         return intersect
         
@@ -2851,6 +2855,47 @@ class Body(PyLayers):
             """
             for k in self.dev:
                 print (k,self.dev[k]['uc3d']) 
+                
+    def body_graph_link_data(self, frameId = 0,fig = [], ax = [],
+                            llink = [('HKB:15', 'HKB:16'),('HKB:11', 'HKB:12') ],dt   = [1, 2], 
+                            color_bd='k', color_nd = 'r', color_ed = 'b', width_ed = 10,size_nd=50 ):
+                                
+        if fig == []:
+            fig = plt.figure(figsize = (12,12))
+        if ax == []:
+            ax  = fig.gca()
+        fig, ax = self.show(plane =  'xz', frameId  = frameId, dev = False, devid = False, 
+        fig = fig, ax = ax, color = color_bd)
+
+
+
+
+        G = nx.Graph()
+        ### nodes of the graph from llink
+        nodes = list(itertools.chain.from_iterable(llink))
+        #### eliminate duplicates
+        nodes = list(set(nodes))
+        G.add_nodes_from(nodes) 
+        G.add_edges_from(llink)
+
+
+        # edge attribute
+        i = 0
+        for n in G.edges_iter():
+            G.edge[n[0]][n[1]]['N']=dt[i]
+            i = i+1
+
+        # devices position 
+        a = self.rdpdf()
+        pos_list = map(lambda x:(a[a['dev_id']== x ]['dev_x'][frameId], a[a['dev_id']== x ]['dev_z'][frameId]),nodes)
+        pos = dict(zip(nodes,pos_list))
+        dic_dt = dict(zip(llink,dt))
+        print '***', dic_dt 
+        nx.draw(G, pos =pos,node_size = size_nd, node_color = color_nd, edge_color = color_ed)
+        nx.draw_networkx_edge_labels(G, pos =pos,edges_labels=dic_dt, width = width_ed)
+        
+        return fig, ax
+
 
 
 def translate(cycle, new_origin):
@@ -3251,3 +3296,6 @@ class Cylinder(object):
                 # s = np.hstack((cylrad,cylrad))
                 self._mayapts.mlab_source.set(x=X[:,0], y=X[:,1], z=X[:,2])
                 yield
+    
+    
+
