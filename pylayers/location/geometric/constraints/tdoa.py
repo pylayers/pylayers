@@ -244,7 +244,7 @@ class TDOA(Constraint):
         #print self.vcw
 #               pdb.set_trace()
         self.tdoa_box(self.vcw)
-        print 'TDOA', self.vcw
+        # print 'TDOA', self.vcw
         #self.estvol() <= TO BE DONE IN TDOA
 
     # def inclusive(self, b):

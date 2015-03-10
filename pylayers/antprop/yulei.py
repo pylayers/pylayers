@@ -25,6 +25,7 @@ def Dis(x1,y1,x2,y2,x3,y3):
     A = (y3-y2)/(x3-x2)
     B = (x3*y2-x2*y3)/(x3-x2)
 
+
     # h: distance
     # ax+by+c=0   h = |a*xo+b*yo+c|/np.sqrt(a*a+b*b)
     #
@@ -336,7 +337,8 @@ def Intersection(x1,y1,x2,y2,x3,y3,x4,y4):
                 if Xa > max(x3,x4) or Xa < min(x3,x4) or Xa > max(x1,x2) or Xa < min(x1,x2):
                     return False
                 else:
-                    return(Xa,Ya)  
+          
+                   return(Xa,Ya)  
             else:
         #  
         # y = A1*x+B1     y = A2*x+B2

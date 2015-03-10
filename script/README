@@ -1,2 +1,5 @@
 remove_output.py code is from Min Rk gist 
 https://github.com/minrk
+
+utf82ascii is used for sphinx compilation when some weird special characters
+prevent the sphinx compilation. 

@@ -1,4 +1,55 @@
-# -*- coding:Utf-8 -*-
+#!/usr/bin/python
+#-*- coding:Utf-8 -*-
+r"""
+.. currentmodule:: pylayers.util.pyutil
+
+.. autosummary::
+    :toctree: genaerated
+
+    delay
+    lt2idic
+    getlong
+    getshort
+    getdir
+    shp
+    dimcmp
+    tstincl
+    findpos
+    ininter
+    cshift
+    LegFunc
+    ExpFunc
+    InvFunc
+    PowFunc
+    randcol
+    coldict
+    createtrxfile
+    rgb
+    nbint
+    encodmtlb
+    sqrte
+    untie
+    corrcy
+    foo
+    cdf
+    bitreverse
+    timestamp
+    writemeca
+    writenet
+    writenode
+    writeDetails
+    zipd
+    unzipd
+    unzipf
+    rotate_line
+    extract_block_diag
+    fill_block_diag
+    fill_block_diagMDA
+    has_colours
+    printout
+    in_ipynb
+
+"""
 import os
 import numpy as np
 import scipy as sp

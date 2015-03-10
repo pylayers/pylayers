@@ -1595,6 +1595,7 @@ class Tchannel(bs.FUDAsignal):
         filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
         try:
             fh5=h5py.File(filename,'r')
+
             f = fh5['H/'+grpname]
 
             # keys not saved as attribute of h5py file
@@ -1602,7 +1603,11 @@ class Tchannel(bs.FUDAsignal):
 
                 if k !='isFriis':
 
-                    setattr(self,str(k),va[:])
+                    try:
+                        setattr(self,str(k),va[:])
+                    except:
+                        setattr(self,str(k),va)
+
                 else :
                     setattr(self,str(k),va)
 

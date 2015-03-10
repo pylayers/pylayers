@@ -249,6 +249,8 @@ class Cycles(nx.DiGraph):
                     cyinc1 = self.node[ninc]['cycle'] # cycle included
                     punctual,cyinc2 = cybig.split(cyinc1) # small cycle
                     if punctual:
+                        import ipdb
+                        ipdb.set_trace()
                         logging.critical("contact detected reconsider the layout description ")
                     if cyinc2 !=None: # divide again with updated big cycle
                         cybig = cyinc2
