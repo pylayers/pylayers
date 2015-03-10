@@ -399,6 +399,19 @@ class Simul(PyLayers):
             (if [], all timestamps are considered)
 
 
+        Example
+        -------
+
+            >>> from pylayers.simul.simultraj import *
+            >>> from pylayers.measures.cormoran import *
+            >>> C=CorSer()
+            >>> S=Simul(C,verbose=True)
+            >>> link={'ieee802154':[]}
+            >>> link['ieee802154'].append(S.N.links['ieee802154'][0])
+            >>> lt = [0,0.2,0.3,0.4,0.5]
+            >>> S.run(llink=link,t=lt)
+
+
         """
         defaults = {'OB': True,
                     'B2B': True,
@@ -481,10 +494,8 @@ class Simul(PyLayers):
         #
         # Code
         #
-        print lt 
-        import ipdb
-        ipdb.set_trace()
-        self._time=lt
+        lt = self.get_sim_time(lt)
+        self._time=self.get_sim_time(lt)
         init = True
         for ut, t in enumerate(lt):
             self.ctime = t
@@ -596,6 +607,34 @@ class Simul(PyLayers):
         self.data = pd.read_hdf(filenameh5,'df')
         self.data.index.name='t'
 
+    def get_sim_time(self,t):
+        """ retrieve closest time value in regard of passed t value in parmaeter
+        """
+        
+        if not isinstance(t,list) and not isinstance(t,np.ndarray):
+            return np.array([self.time[np.where(self.time <=t)[0][-1]]])
+        else :
+            return np.array([self.get_sim_time(tt) for tt in t])[:,0]
+
+
+    def get_df_from_link(self,id_a,id_b,wstd=''):
+        """ Return a restricted data frame for a specific link
+
+            Parameters
+            ----------
+
+            id_a : str
+                node id a
+            id_b: str
+                node id b
+            wstd: str
+                optionnal :wireslees standard
+        """
+        if wstd == '':
+            return self.data[(self.data['id_a']==id_a) & (self.data['id_b']==id_b)]
+        else :
+            return self.data[(self.data['id_a']==id_a) & (self.data['id_b']==id_b) & self.data['wstd']==wstd]
+
 
     def update_pos(self, t):
         """ update positions of devices and bodies for a given time index
@@ -624,6 +663,128 @@ class Simul(PyLayers):
             self.N.update_pos(dev, pos, now=t)
             self.N.update_orient(dev, orient, now=t)
         self.N.update_dis()
+
+
+    def get_value(self,**kwargs):
+        """ Retrieve any value at a specific time
+
+        Parameters
+        ----------
+
+            typ : list 
+                list of parameters to be retrieved
+                (ak | tk | R | )
+            t : list of time | time instant
+
+
+        Returns
+        -------
+
+            output: dict
+                [link_key]['t']
+                          ['ak']
+                          ...
+        """
+
+
+
+        # get time 
+        defaults = {'t': 0,
+                    'typ':['ak'],
+                    'links': [],
+                    'wstd':[],
+                    }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        output={}
+
+        # manage time
+        t =kwargs['t']
+        t=self.get_sim_time(t)
+        dt= self.time[1]-self.time[0]
+
+        # manage links
+        plinks = kwargs['links']
+        links=[]
+        if isinstance(plinks,dict):
+            for l in plinks.keys():
+                links.extend(plinks[l])
+
+        if len(links) == 0:
+            raise AttributeError('Please give valid links to get values')
+        # output['t']=[]
+        # output['time_to_simul']=[]
+        # for each requested time step
+        for tt in t :
+            # for each requested links
+            for link in links:
+                linkname=link[0]+'-'+link[1]
+                if not output.has_key(linkname):
+                    output[linkname] = {}
+                if not output[linkname].has_key('t'):
+                    output[linkname]['t'] = []
+
+
+                # restrict global dataframe self.data to the specific link
+                df = self.get_df_from_link(link[0],link[1])
+                # restrict global dataframe self.data to the specific z
+                df = df[(df.index > tt-dt) & (df.index <= tt+dt)]
+
+                if len(df) != 0:
+                    output[linkname]['t'].append(tt)
+                    if len(df)>1:
+                        print 'Warning possible issue in self.get_value'
+                    line = df.iloc[-1]
+                    # # get info of the corresponding timestamp
+                    # line = df[(df['id_a'] == link[0]) & (df['id_b'] == link[1])].iloc[-1]
+                    # if len(line) == 0:
+                    #     line = df[(df['id_b'] == link[0]) & (df['id_a'] == link[1])]
+                    #     if len(line) == 0:
+                    #         raise AttributeError('invalid link')
+
+                    # retrieve correct position and orientation given the time
+                    self.DL.a = self.N.node[link[0]]['p']
+                    self.DL.b = self.N.node[link[1]]['p']
+                    self.DL.Ta = self.N.node[link[0]]['T']
+                    self.DL.Tb = self.N.node[link[1]]['T']
+
+                    if 'ak' in kwargs['typ'] or 'tk' in kwargs['typ']:
+                        H_id = line['H_id'].decode('utf8')
+                        self.DL.load(self.DL.H,H_id)
+                        if 'ak' in kwargs['typ']:
+                            if not output[linkname].has_key('ak'):
+                                output[linkname]['ak']=[]
+                            output[linkname]['ak'].append(self.DL.H.ak)
+                        if 'tk' in kwargs['typ']:
+                            if not output[linkname].has_key('tk'):
+                                output[linkname]['tk']=[]
+                            output[linkname]['tk'].append(self.DL.H.tk)
+                        
+                    if 'R' in kwargs['typ']:
+                        if not output[linkname].has_key('R'):
+                            output[linkname]['R']=[]
+                        ray_id = line['ray_id']
+                        self.DL.load(self.DL.R,ray_id)
+                        output[linkname]['R'].append(self.DL.R)
+                # if time valuie not found in dataframe
+                else:
+                    if not output[linkname].has_key('time_to_simul'):
+                        output[linkname]['time_to_simul'] = []
+                    output[linkname]['time_to_simul'].append(tt)
+
+
+        for l in output.keys():
+            if output[l].has_key('time_to_simul'):
+                print 'link', l , 'require simulation for timestamps', output[l]['time_to_simul']
+        
+
+        return(output)
+
+
+
 
     def _show3(self, **kwargs):
         """ 3D show using Mayavi
