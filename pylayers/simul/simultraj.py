@@ -388,8 +388,8 @@ class Simul(PyLayers):
             perform body to infrastructure deterministic link evaluation
         'I2I':  boolean
             perform infrastructure to infrastructure deterministic link eval.
-        'llink': list
-            list of link to be evaluated
+        'links': dict
+            dictionnary of link to be evaluated (key is wtsd and value is a list of links)
             (if [], all link are considered)
         'wstd': list
             list of wstd to be evaluated
@@ -409,7 +409,7 @@ class Simul(PyLayers):
             >>> link={'ieee802154':[]}
             >>> link['ieee802154'].append(S.N.links['ieee802154'][0])
             >>> lt = [0,0.2,0.3,0.4,0.5]
-            >>> S.run(llink=link,t=lt)
+            >>> S.run(links=link,t=lt)
 
 
         """
@@ -417,7 +417,7 @@ class Simul(PyLayers):
                     'B2B': True,
                     'B2I': True,
                     'I2I': False,
-                    'llink': {},
+                    'links': {},
                     'wstd': [],
                     't': np.array([]),
                     }
@@ -426,7 +426,7 @@ class Simul(PyLayers):
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
-        llink = kwargs.pop('llink')
+        links = kwargs.pop('links')
         wstd = kwargs.pop('wstd')
         OB = kwargs.pop('OB')
         B2B = kwargs.pop('B2B')
@@ -435,20 +435,20 @@ class Simul(PyLayers):
         self.todo.update({'OB':OB,'B2B':B2B,'B2I':B2I,'I2I':I2I})
 
         # Check link attribute
-        if llink == {}:
-            llink = self.N.links
-        elif not isinstance(llink, dict):
-            raise AttributeError('llink is {wstd:[list of links]}, see self.N.links')
+        if links == {}:
+            links = self.N.links
+        elif not isinstance(links, dict):
+            raise AttributeError('links is {wstd:[list of links]}, see self.N.links')
 
-        for k in llink.keys():
-            checkl = [l in self.N.links[k] for l in llink[k]]
+        for k in links.keys():
+            checkl = [l in self.N.links[k] for l in links[k]]
             if len(np.where(checkl==False)[0])>0:
             # if sum(checkl) != len(self.N.links):
                 uwrong = np.where(np.array(checkl) is False)[0]
-                raise AttributeError(str(np.array(llink)[uwrong])
+                raise AttributeError(str(np.array(links)[uwrong])
                                      + ' links does not exist in Network')
 
-        wstd = llink.keys()
+        wstd = links.keys()
         # # Check wstd attribute
         # if wstd == []:
         #     wstd = self.N.wstd.keys()
@@ -500,9 +500,9 @@ class Simul(PyLayers):
         for ut, t in enumerate(lt):
             self.ctime = t
             self.update_pos(t)
-            print self.N.__repr__()
+            # print self.N.__repr__()
             for w in wstd:
-                for na, nb, typ in llink[w]:
+                for na, nb, typ in links[w]:
                     if self.todo[typ]:
                         if self.verbose:
                             print '-'*30
@@ -510,7 +510,7 @@ class Simul(PyLayers):
                             print 'processing: ',na, ' <-> ', nb, 'wstd: ', w
                             print '-'*30
                         eng = 0
-                        self.evaldeter(na, nb, w,force=['H'])
+                        self.evaldeter(na, nb, w,applywav=False)
                         # if typ == 'OB':
                         #     self.evalstat(na, nb)
                         #     eng = self.SL.eng
@@ -674,7 +674,13 @@ class Simul(PyLayers):
             typ : list 
                 list of parameters to be retrieved
                 (ak | tk | R | )
-            t : list of time | time instant
+        link: list
+            dictionnary of link to be evaluated (key is wtsd and value is a list of links)
+            (if [], all link are considered)
+        t: np.array
+            list of timestamp to be evaluated | singlr time instant
+            
+            
 
 
         Returns
@@ -691,7 +697,7 @@ class Simul(PyLayers):
         # get time 
         defaults = {'t': 0,
                     'typ':['ak'],
-                    'links': [],
+                    'links': {},
                     'wstd':[],
                     }
 
