@@ -916,7 +916,9 @@ class AppForm(QMainWindow):
     def create_main_frame(self):
 
         self.main_frame = QWidget()
+        self.create_toolbar()
         self.addToolBar(Qt.ToolBarArea(Qt.TopToolBarArea), self.toolbar)
+
 
         # Create the mpl Figure and FigCanvas objects.
         # 5x4 inches, 100 dots-per-inch
@@ -1059,17 +1061,17 @@ class AppForm(QMainWindow):
 
         #new
         newAction = QAction(QIcon(os.path.join(iconpath,'gnome_document_new.png')), 'new', self)
-        # newAction.triggered.connect(self.new)
+        newAction.triggered.connect(self.new)
         self.toolbar.addAction(newAction)
 
         #open
         openAction = QAction(QIcon(os.path.join(iconpath,'gnome_folder_open.png')), 'Open', self)
-        # openAction.triggered.connect(self.open)
+        openAction.triggered.connect(self.open)
         self.toolbar.addAction(openAction)
 
         #save
         saveAction = QAction(QIcon(os.path.join(iconpath,'gnome_document_save.png')), 'Save', self)
-        # saveAction.triggered.connect(self.save)
+        saveAction.triggered.connect(self.save)
         self.toolbar.addAction(saveAction)
 
 
