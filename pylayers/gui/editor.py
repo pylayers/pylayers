@@ -791,6 +791,18 @@ class AppForm(QMainWindow):
     def snapongrid(self):
         self.selectl.toggglesnapgrid()
 
+    def updatelayerselector(self):
+        slname={}
+        slname['name']=str(self.layerselector.currentText())
+        if self.selectl.state == 'Init':
+            if self.selectl.nsel > 0:
+
+                if (self.selectl.state == 'SS'):
+                    self.L.edit_seg(self.selectl.nsel,slname)
+        elif self.selectl.state == 'SMS' or self.selectl.state == 'SMP':
+            [self.L.edit_seg(sl,slname) for sl in self.selectl.selectseg]
+
+
 
     def selectnodes(self):
         ''' select mode, managed by selectl
@@ -911,6 +923,10 @@ class AppForm(QMainWindow):
             pass
         string = string +'\t'+self.selectl.help[self.selectl.state]
         self.statusBar().showMessage(string)
+
+        if self.selectl.nsel > 0:
+            idx=self.layerselector.findText(self.L.Gs.node[self.selectl.nsel]['name'])
+            self.layerselector.setCurrentIndex(idx)
 
 
     def create_main_frame(self):
@@ -1131,6 +1147,8 @@ class AppForm(QMainWindow):
             self.toolbar.addWidget(self.layerselector)
         except:
             pass
+        self.layerselector.activated.connect(self.updatelayerselector)
+
 
     def add_actions(self, target, actions):
         for action in actions:
