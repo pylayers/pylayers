@@ -794,9 +794,8 @@ class AppForm(QMainWindow):
     def updatelayerselector(self):
         slname={}
         slname['name']=str(self.layerselector.currentText())
-        if self.selectl.state == 'Init':
+        if self.selectl.state == 'Init' or self.selectl.state == 'SS':
             if self.selectl.nsel > 0:
-
                 if (self.selectl.state == 'SS'):
                     self.L.edit_seg(self.selectl.nsel,slname)
         elif self.selectl.state == 'SMS' or self.selectl.state == 'SMP':
