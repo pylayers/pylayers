@@ -1403,7 +1403,7 @@ class Tchannel(bs.FUDAsignal):
     doddoa()
     wavefig(w,Nray)
     rayfig(w,Nray)
-    RSSI(ufreq)
+    rssi(ufreq)
 
     See Also
     --------
@@ -1590,12 +1590,16 @@ class Tchannel(bs.FUDAsignal):
         filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
         try:
             fh5=h5py.File(filename,'r')
+
             f = fh5['H/'+grpname]
 
             # keys not saved as attribute of h5py file
             for k,va in f.items():
                 if k !='isFriis':
-                    setattr(self,str(k),va[:])
+                    try:
+                        setattr(self,str(k),va[:])
+                    except:
+                        setattr(self,str(k),va)
                 else :
                     setattr(self,str(k),va)
 
@@ -2355,7 +2359,7 @@ class Tchannel(bs.FUDAsignal):
 
         # qHk.x[0]==Wk.x[0]
 
-    def RSSI(self,ufreq=0) :
+    def rssi(self,ufreq=0) :
         """ Compute RSSI value for a frequency index
 
         Parameters
@@ -2378,8 +2382,11 @@ class Tchannel(bs.FUDAsignal):
 
         """
 
-        Tk = np.real(self.y[:, ufreq])
-        return(20*np.log(np.sum(Tk**2)))
+        Ak = np.abs(self.y[:, ufreq])
+        Pr = np.sum(Ak**2)
+        PrdB = 10*log10(Pr)
+
+        return Pr,PrdB
 
 
 if __name__ == "__main__":

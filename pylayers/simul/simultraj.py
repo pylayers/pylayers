@@ -67,18 +67,16 @@ class Simul(PyLayers):
 
     A simulation requires :
 
-        A Layout
-        A Person
-        A Trajectory
+        + A Layout
+        + A Person
+        + A Trajectory
 
     or a CorSer instance
 
     """
 
-    def __init__(self, source ='simulnet_TA-Office.h5',verbose=False,):
+    def __init__(self, source ='simulnet_TA-Office.h5',verbose=False):
         """ object constructor
-
-
 
         Parameters
         ----------
@@ -110,7 +108,7 @@ class Simul(PyLayers):
             self.source = 'CorSer'
 
 
-        
+
         self._gen_net()
         self.SL = SLink()
         self.DL = DLink(L=self.L,verbose=self.verbose)
@@ -228,7 +226,7 @@ class Simul(PyLayers):
             techno,ID=ap.split(':')
             if techno == 'HKB':
                 techno = 'hikob'
-            
+
 
             self.dap.update({ap: {'pos': source.din[ap]['p'],
                                   'ant': antenna.Antenna(),
@@ -308,7 +306,7 @@ class Simul(PyLayers):
 
         """
 
-        # todo in network : 
+        # todo in network :
         # take into consideration the postion and rotation of antenna and not device
         self.DL.a = self.N.node[na]['p']
         self.DL.Ta = self.N.node[na]['T']
@@ -348,9 +346,6 @@ class Simul(PyLayers):
             engagement
         """
 
-
-
-
         pa = self.N.node[na]['p']
         pb = self.N.node[nb]['p']
         if self.source == 'simul':
@@ -380,23 +375,36 @@ class Simul(PyLayers):
         Parameters
         ----------
 
-        'OB': boolean
+        OB: boolean
             perform on body statistical link evaluation
-        'B2B':  boolean
+        B2B:  boolean
             perform body to body deterministic link evaluation
-        'B2I': boolean
+        B2I: boolean
             perform body to infrastructure deterministic link evaluation
-        'I2I':  boolean
+        I2I:  boolean
             perform infrastructure to infrastructure deterministic link eval.
-        'llink': list
-            list of link to be evaluated
+        links: dict
+            dictionnary of link to be evaluated (key is wtsd and value is a list of links)
             (if [], all link are considered)
-        'wstd': list
+        wstd: list
             list of wstd to be evaluated
             (if [], all wstd are considered)
-        't': np.array
+        t: np.array
             list of timestamp to be evaluated
             (if [], all timestamps are considered)
+
+
+        Example
+        -------
+
+            >>> from pylayers.simul.simultraj import *
+            >>> from pylayers.measures.cormoran import *
+            >>> C=CorSer()
+            >>> S=Simul(C,verbose=True)
+            >>> link={'ieee802154':[]}
+            >>> link['ieee802154'].append(S.N.links['ieee802154'][0])
+            >>> lt = [0,0.2,0.3,0.4,0.5]
+            >>> S.run(links=link,t=lt)
 
 
         """
@@ -404,7 +412,7 @@ class Simul(PyLayers):
                     'B2B': True,
                     'B2I': True,
                     'I2I': False,
-                    'llink': {},
+                    'links': {},
                     'wstd': [],
                     't': np.array([]),
                     }
@@ -413,7 +421,7 @@ class Simul(PyLayers):
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
-        llink = kwargs.pop('llink')
+        links = kwargs.pop('links')
         wstd = kwargs.pop('wstd')
         OB = kwargs.pop('OB')
         B2B = kwargs.pop('B2B')
@@ -422,20 +430,21 @@ class Simul(PyLayers):
         self.todo.update({'OB':OB,'B2B':B2B,'B2I':B2I,'I2I':I2I})
 
         # Check link attribute
-        if llink == {}:
-            llink = self.N.links
-        elif not isinstance(llink, dict):
-            raise AttributeError('llink is {wstd:[list of links]}, see self.N.links')
 
-        for k in llink.keys():
-            checkl = [l in self.N.links[k] for l in llink[k]]
+        if links == {}:
+            links = self.N.links
+        elif not isinstance(links, dict):
+            raise AttributeError('links is {wstd:[list of links]}, see self.N.links')
+
+        for k in links.keys():
+            checkl = [l in self.N.links[k] for l in links[k]]
             if len(np.where(checkl==False)[0])>0:
             # if sum(checkl) != len(self.N.links):
                 uwrong = np.where(np.array(checkl) is False)[0]
-                raise AttributeError(str(np.array(llink)[uwrong])
+                raise AttributeError(str(np.array(links)[uwrong])
                                      + ' links does not exist in Network')
 
-        wstd = llink.keys()
+        wstd = links.keys()
         # # Check wstd attribute
         # if wstd == []:
         #     wstd = self.N.wstd.keys()
@@ -443,8 +452,7 @@ class Simul(PyLayers):
         #     wstd = [wstd]
 
         checkw = [w in self.N.wstd.keys() for w in wstd]
-        if len(np.where(checkl==False)[0])>0:
-        # if sum(checkw) != len(self.N.wstd.keys()):
+        if sum(checkw) != len(wstd):
             uwrong = np.where(np.array(checkw) is False)[0]
             raise AttributeError(str(np.array(wstd)[uwrong])
                                  + ' wstd are not in Network')
@@ -479,19 +487,22 @@ class Simul(PyLayers):
         # self.time = self._traj.t
         # self._time = pd.to_datetime(self.time,unit='s')
         #
-        # Code
+        # Nested Loops
         #
-        print lt 
-        import ipdb
-        ipdb.set_trace()
-        self._time=lt
+        #  time
+        #    standard
+        #      links
+        #           evaldeter &| evalstat
+        #
+        lt = self.get_sim_time(lt)
+        self._time=self.get_sim_time(lt)
         init = True
         for ut, t in enumerate(lt):
             self.ctime = t
             self.update_pos(t)
-            print self.N.__repr__()
+            # print self.N.__repr__()
             for w in wstd:
-                for na, nb, typ in llink[w]:
+                for na, nb, typ in links[w]:
                     if self.todo[typ]:
                         if self.verbose:
                             print '-'*30
@@ -499,7 +510,7 @@ class Simul(PyLayers):
                             print 'processing: ',na, ' <-> ', nb, 'wstd: ', w
                             print '-'*30
                         eng = 0
-                        self.evaldeter(na, nb, w,force=['H'])
+                        self.evaldeter(na, nb, w,applywav=False)
                         # if typ == 'OB':
                         #     self.evalstat(na, nb)
                         #     eng = self.SL.eng
@@ -596,15 +607,45 @@ class Simul(PyLayers):
         self.data = pd.read_hdf(filenameh5,'df')
         self.data.index.name='t'
 
+    def get_sim_time(self,t):
+        """ retrieve closest time value in regard of passed t value in parmaeter
+        """
+        
+        if not isinstance(t,list) and not isinstance(t,np.ndarray):
+            return np.array([self.time[np.where(self.time <=t)[0][-1]]])
+        else :
+            return np.array([self.get_sim_time(tt) for tt in t])[:,0]
+
+
+    def get_df_from_link(self,id_a,id_b,wstd=''):
+        """ Return a restricted data frame for a specific link
+
+            Parameters
+            ----------
+
+            id_a : str
+                node id a
+            id_b: str
+                node id b
+            wstd: str
+                optionnal :wireslees standard
+        """
+        if wstd == '':
+            return self.data[(self.data['id_a']==id_a) & (self.data['id_b']==id_b)]
+        else :
+            return self.data[(self.data['id_a']==id_a) & (self.data['id_b']==id_b) & self.data['wstd']==wstd]
+
 
     def update_pos(self, t):
         """ update positions of devices and bodies for a given time index
 
         Parameters
         ----------
+
         t : int
-            time value 
-        """ 
+            time value
+
+        """
 
         # if a bodies are involved in simulation
         if ((self.todo['OB']) or (self.todo['B2B']) or (self.todo['B2I'])):
@@ -624,6 +665,134 @@ class Simul(PyLayers):
             self.N.update_pos(dev, pos, now=t)
             self.N.update_orient(dev, orient, now=t)
         self.N.update_dis()
+
+
+    def get_value(self,**kwargs):
+        """ Retrieve any value at a specific time
+
+        Parameters
+        ----------
+
+            typ : list 
+                list of parameters to be retrieved
+                (ak | tk | R | )
+        link: list
+            dictionnary of link to be evaluated (key is wtsd and value is a list of links)
+            (if [], all link are considered)
+        t: np.array
+            list of timestamp to be evaluated | singlr time instant
+            
+            
+
+
+        Returns
+        -------
+
+            output: dict
+                [link_key]['t']
+                          ['ak']
+                          ...
+        """
+
+
+
+        # get time 
+        defaults = {'t': 0,
+                    'typ':['ak'],
+                    'links': {},
+                    'wstd':[],
+                    }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        output={}
+
+        # manage time
+        t =kwargs['t']
+        t=self.get_sim_time(t)
+        dt= self.time[1]-self.time[0]
+
+        # manage links
+        plinks = kwargs['links']
+        links=[]
+        if isinstance(plinks,dict):
+            for l in plinks.keys():
+                links.extend(plinks[l])
+
+        if len(links) == 0:
+            raise AttributeError('Please give valid links to get values')
+        # output['t']=[]
+        # output['time_to_simul']=[]
+        # for each requested time step
+        for tt in t :
+            # for each requested links
+            for link in links:
+                linkname=link[0]+'-'+link[1]
+                if not output.has_key(linkname):
+                    output[linkname] = {}
+                if not output[linkname].has_key('t'):
+                    output[linkname]['t'] = []
+
+
+                # restrict global dataframe self.data to the specific link
+                df = self.get_df_from_link(link[0],link[1])
+                # restrict global dataframe self.data to the specific z
+                df = df[(df.index > tt-dt) & (df.index <= tt+dt)]
+
+                if len(df) != 0:
+                    output[linkname]['t'].append(tt)
+                    if len(df)>1:
+                        print 'Warning possible issue in self.get_value'
+                    line = df.iloc[-1]
+                    # # get info of the corresponding timestamp
+                    # line = df[(df['id_a'] == link[0]) & (df['id_b'] == link[1])].iloc[-1]
+                    # if len(line) == 0:
+                    #     line = df[(df['id_b'] == link[0]) & (df['id_a'] == link[1])]
+                    #     if len(line) == 0:
+                    #         raise AttributeError('invalid link')
+
+                    # retrieve correct position and orientation given the time
+                    self.DL.a = self.N.node[link[0]]['p']
+                    self.DL.b = self.N.node[link[1]]['p']
+                    self.DL.Ta = self.N.node[link[0]]['T']
+                    self.DL.Tb = self.N.node[link[1]]['T']
+
+                    if 'ak' in kwargs['typ'] or 'tk' in kwargs['typ']:
+                        H_id = line['H_id'].decode('utf8')
+                        self.DL.load(self.DL.H,H_id)
+                        if 'ak' in kwargs['typ']:
+                            if not output[linkname].has_key('ak'):
+                                output[linkname]['ak']=[]
+                            output[linkname]['ak'].append(self.DL.H.ak)
+                        if 'tk' in kwargs['typ']:
+                            if not output[linkname].has_key('tk'):
+                                output[linkname]['tk']=[]
+                            output[linkname]['tk'].append(self.DL.H.tk)
+                        
+                    if 'R' in kwargs['typ']:
+                        if not output[linkname].has_key('R'):
+                            output[linkname]['R']=[]
+                        ray_id = line['ray_id']
+                        self.DL.load(self.DL.R,ray_id)
+                        output[linkname]['R'].append(self.DL.R)
+                # if time valuie not found in dataframe
+                else:
+                    if not output[linkname].has_key('time_to_simul'):
+                        output[linkname]['time_to_simul'] = []
+                    output[linkname]['time_to_simul'].append(tt)
+
+
+        for l in output.keys():
+            if output[l].has_key('time_to_simul'):
+                print 'link', l , 'require simulation for timestamps', output[l]['time_to_simul']
+        
+
+        return(output)
+
+
+
 
     def _show3(self, **kwargs):
         """ 3D show using Mayavi
