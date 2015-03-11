@@ -479,11 +479,9 @@ class Simul(PyLayers):
         #  time
         #    standard
         #      links
-        #           evadeter &| evalstat
+        #           evaldeter &| evalstat
         #
-        print lt 
-        import ipdb
-        ipdb.set_trace()
+        print lt
         self._time=lt
         init = True
         for ut, t in enumerate(lt):
