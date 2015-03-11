@@ -500,6 +500,8 @@ class Simul(PyLayers):
         lt = self.get_sim_time(lt)
         self._time=self.get_sim_time(lt)
         init = True
+        self.Ak = []
+        self.Tk = [] 
         for ut, t in enumerate(lt):
             print 'ut =', ut, 't = ', t
             self.ctime = t
@@ -525,6 +527,8 @@ class Simul(PyLayers):
                         # else :
                         self._ak = self.DL.H.ak
                         self._tk = self.DL.H.tk
+                        self.Ak.append(self._ak)
+                        self.Tk.append(self._tk)
 
                         df = pd.DataFrame({\
                                     'id_a': na,
@@ -556,18 +560,18 @@ class Simul(PyLayers):
                                               'fbminghz', 'fbmaxghz', 'fstep', 'aktk_id',
                                               'sig_id', 'ray_id', 'Ct_id', 'H_id'
                                               ],index=[self._time[ut]])
+                        
+                        #~ if not self.check_exist(df):
+                        self.data = self.data.append(df)
+                        # self._index = self._index + 1
+                        # save csv
+                        self.tocsv(ut, na, nb, w,init=init)
+                        init=False
 
-                        if not self.check_exist(df):
-                            self.data = self.data.append(df)
-                            # self._index = self._index + 1
-                            # save csv
-                            self.tocsv(ut, na, nb, w,init=init)
-                            init=False
-
-                            # save pandas self.data
-                            self.savepd()
-                            # save ak tauk
-                            self._saveh5(ut, na, nb, w)
+                        # save pandas self.data
+                        #self.savepd()
+                        # save ak tauk
+                        self._saveh5(ut, na, nb, w)
 
 
     def check_exist(self, df):
@@ -977,6 +981,7 @@ class Simul(PyLayers):
 
 
             fh5.close()
+            print 'file closed'
         except:
             fh5.close()
             raise NameError('Simultraj._saveh5: issue when writting h5py file')
