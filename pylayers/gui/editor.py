@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 import sys, os, random
+try:
+    from mayavi.sources.vtk_data_source import VTKDataSource
+    from mayavi import mlab
+except:
+    'Mayavi not installed'
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
@@ -14,6 +19,8 @@ from pylayers.gui.editor_select import SelectL2
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 import os
+
+
 
 class SubSegWin(QDialog):    # any super class is okay
     def __init__(self,Nss=1,zmin=0.,zmax=3.0,subsegdata={},parent=None):
@@ -699,6 +706,7 @@ class AppForm(QMainWindow):
 
         self.create_toolbar()
 
+        self.show3On = False
 
 
     def new(self):
@@ -790,6 +798,19 @@ class AppForm(QMainWindow):
 
     def snapongrid(self):
         self.selectl.toggglesnapgrid()
+
+    def toggleshow3(self):
+        if not self.show3On:
+            self.show3On = True
+            self.show3()
+        elif self.show3On:
+            mlab.close()
+            self.show3On = False
+
+    def show3(self):
+        if self.show3On:
+            mlab.clf()
+            self.L._show3()
 
     def updatelayerselector(self):
         slname={}
@@ -927,6 +948,9 @@ class AppForm(QMainWindow):
             idx=self.layerselector.findText(self.L.Gs.node[self.selectl.nsel]['name'])
             self.layerselector.setCurrentIndex(idx)
 
+        if self.show3On:
+            self.show3()
+
 
     def create_main_frame(self):
 
@@ -977,11 +1001,6 @@ class AppForm(QMainWindow):
         #
         self.mpl_toolbar = NavigationToolbar(self.canvas, self.main_frame)
 
-
-
-
-
-
         vbox = QVBoxLayout()
         # vbox.addLayout(layerbox)
         vbox.addWidget(self.canvas)
@@ -990,6 +1009,8 @@ class AppForm(QMainWindow):
         self.main_frame.setLayout(vbox)
 
         self.setCentralWidget(self.main_frame)
+
+
 
     def create_status_bar(self):
         self.status_text = QLabel("Open a Layout")
@@ -1001,9 +1022,14 @@ class AppForm(QMainWindow):
         esc.setKey("escape")
         self.connect(esc, SIGNAL("activated()"), self.selectnodes)
 
+
+
+
     def create_menu(self):
         self.file_menu = self.menuBar().addMenu("&File")
         self.edit_menu = self.menuBar().addMenu("&Edit")
+        self.view_menu = self.menuBar().addMenu("&View")
+
         self.help_menu = self.menuBar().addMenu("&Help")
         # load_file_action = self.create_action("&Save plot",
         #     shortcut="Ctrl+S", slot=self.save_plot,
@@ -1050,11 +1076,20 @@ class AppForm(QMainWindow):
             shortcut='g', slot=self.togglegrid,
             tip='toggle Grid',checkable=True)
 
+        view3D_action = self.create_action("&3D View",
+            shortcut='3', slot=self.toggleshow3,
+            tip='Display 3D view',checkable=True)
+
+
+
         self.add_actions(self.file_menu,
             ( new_action,open_action,None,save_action,saveas_action,None,close_action,quit_action,))
 
         self.add_actions(self.edit_menu,
             ( select_action,draw_action,properties,None,gridset_action,snapongrid_action,gridtg_action,None,refresh))
+
+        self.add_actions(self.view_menu, (view3D_action,))
+
 
         self.add_actions(self.help_menu, (about_action,))
 
@@ -1129,6 +1164,15 @@ class AppForm(QMainWindow):
 
 
         self.toolbar.addSeparator()
+        #show3D
+        show3Action = QAction(QIcon(os.path.join(iconpath,'sugar_cube.png')), '3D View', self)
+        show3Action.triggered.connect(self.toggleshow3)
+        show3Action.setCheckable(True)
+        self.toolbar.addAction(show3Action)
+
+
+        self.toolbar.addSeparator()
+
 
         # Active layer Menu in toolbar
         layerbox = QHBoxLayout()
