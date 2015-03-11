@@ -410,6 +410,12 @@ class SelectL2(object):
             if 'SM' in self.state:
                 if self.nsel==0 and not (self.shift_is_held or self.ctrl_is_held):
                     self.modeIni()
+                elif self.nsel<0 and not (self.shift_is_held or self.ctrl_is_held):
+                    self.modeIni()
+                    self.OnClick(event)
+                elif self.nsel>0 and not (self.shift_is_held or self.ctrl_is_held):
+                    self.modeIni()
+                    self.OnClick(event)
 # 
 
 
