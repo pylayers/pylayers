@@ -1406,7 +1406,7 @@ class Tchannel(bs.FUDAsignal):
     doddoa()
     wavefig(w,Nray)
     rayfig(w,Nray)
-    RSSI(ufreq)
+    rssi(ufreq)
 
     See Also
     --------
@@ -2367,7 +2367,7 @@ class Tchannel(bs.FUDAsignal):
 
         # qHk.x[0]==Wk.x[0]
 
-    def RSSI(self,ufreq=0) :
+    def rssi(self,ufreq=0) :
         """ Compute RSSI value for a frequency index
 
         Parameters
@@ -2390,8 +2390,11 @@ class Tchannel(bs.FUDAsignal):
 
         """
 
-        Tk = np.real(self.y[:, ufreq])
-        return(20*np.log(np.sum(Tk**2)))
+        Ak = np.abs(self.y[:, ufreq])
+        Pr = np.sum(Ak**2)
+        PrdB = 10*log10(Pr)
+
+        return Pr,PrdB
 
 
 if __name__ == "__main__":

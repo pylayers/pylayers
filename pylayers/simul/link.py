@@ -947,7 +947,7 @@ class DLink(Link):
         try :
             lfilename=pyu.getlong(self.filename,pstruc['DIRLNK'])
             f=h5py.File(lfilename,'r')
-            if grpname in f[key].keys():
+            if grpname.decode('utf8') in f[key].keys():
                 self.dexist[key]['exist']=True
             else :
                 self.dexist[key]['exist']=False
@@ -1095,7 +1095,8 @@ class DLink(Link):
         """
 #        Parameters
 #        ----------
-#
+#        applywav :boolean
+#           Apply waveform to H
 #        force : list
 #            Force the computation (['sig','ray','Ct','H']) AND save (replace previous computations)
 #        si_algo : str ('old'|'new')
@@ -1164,7 +1165,7 @@ class DLink(Link):
 #
 #        """
 
-        defaults={ 'output':['sig','ray','Ct','H'],
+        defaults={ 'applywav':True,
                    'si_algo':'old',
                    'si_mt':False,
                    'si_progress':False,
@@ -1306,10 +1307,11 @@ class DLink(Link):
             self.save(H,'H',self.dexist['H']['grpname'],force = kwargs['force'])
 
         self.H = H
-        if self.H.isFriis:
-            self.ir = self.H.applywavB(self.wav.sf)
-        else:
-            self.ir = self.H.applywavB(self.wav.sfg)
+        if kwargs['applywav']:
+            if self.H.isFriis:
+                self.ir = self.H.applywavB(self.wav.sf)
+            else:
+                self.ir = self.H.applywavB(self.wav.sfg)
 
         return self.H.ak, self.H.tk
         

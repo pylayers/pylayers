@@ -67,18 +67,16 @@ class Simul(PyLayers):
 
     A simulation requires :
 
-        A Layout
-        A Person
-        A Trajectory
+        + A Layout
+        + A Person
+        + A Trajectory
 
     or a CorSer instance
 
     """
 
-    def __init__(self, source ='simulnet_TA-Office.h5',verbose=False,):
+    def __init__(self, source ='simulnet_TA-Office.h5',verbose=False):
         """ object constructor
-
-
 
         Parameters
         ----------
@@ -110,7 +108,7 @@ class Simul(PyLayers):
             self.source = 'CorSer'
 
 
-        
+
         self._gen_net()
         self.SL = SLink()
         self.DL = DLink(L=self.L,verbose=self.verbose)
@@ -231,7 +229,7 @@ class Simul(PyLayers):
             techno,ID=ap.split(':')
             if techno == 'HKB':
                 techno = 'hikob'
-            
+
 
             self.dap.update({ap: {'pos': source.din[ap]['p'],
                                   'ant': antenna.Antenna(),
@@ -311,7 +309,7 @@ class Simul(PyLayers):
 
         """
 
-        # todo in network : 
+        # todo in network :
         # take into consideration the postion and rotation of antenna and not device
         self.DL.a = self.N.node[na]['p']
         self.DL.Ta = self.N.node[na]['T']
@@ -351,9 +349,6 @@ class Simul(PyLayers):
             engagement
         """
 
-
-
-
         pa = self.N.node[na]['p']
         pb = self.N.node[nb]['p']
         if self.source == 'simul':
@@ -383,21 +378,21 @@ class Simul(PyLayers):
         Parameters
         ----------
 
-        'OB': boolean
+        OB: boolean
             perform on body statistical link evaluation
-        'B2B':  boolean
+        B2B:  boolean
             perform body to body deterministic link evaluation
-        'B2I': boolean
+        B2I: boolean
             perform body to infrastructure deterministic link evaluation
-        'I2I':  boolean
+        I2I:  boolean
             perform infrastructure to infrastructure deterministic link eval.
-        'llink': list
-            list of link to be evaluated
+        links: dict
+            dictionnary of link to be evaluated (key is wtsd and value is a list of links)
             (if [], all link are considered)
-        'wstd': list
+        wstd: list
             list of wstd to be evaluated
             (if [], all wstd are considered)
-        't': np.array
+        t: np.array
             list of timestamp to be evaluated
             (if [], all timestamps are considered)
 
@@ -412,7 +407,7 @@ class Simul(PyLayers):
             >>> link={'ieee802154':[]}
             >>> link['ieee802154'].append(S.N.links['ieee802154'][0])
             >>> lt = [0,0.2,0.3,0.4,0.5]
-            >>> S.run(llink=link,t=lt)
+            >>> S.run(links=link,t=lt)
 
 
         """
@@ -420,7 +415,7 @@ class Simul(PyLayers):
                     'B2B': True,
                     'B2I': True,
                     'I2I': False,
-                    'llink': {},
+                    'links': {},
                     'wstd': [],
                     't': np.array([]),
                     }
@@ -429,7 +424,7 @@ class Simul(PyLayers):
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
-        llink = kwargs.pop('llink')
+        links = kwargs.pop('links')
         wstd = kwargs.pop('wstd')
         OB = kwargs.pop('OB')
         B2B = kwargs.pop('B2B')
@@ -438,20 +433,21 @@ class Simul(PyLayers):
         self.todo.update({'OB':OB,'B2B':B2B,'B2I':B2I,'I2I':I2I})
 
         # Check link attribute
-        if llink == {}:
-            llink = self.N.links
-        elif not isinstance(llink, dict):
-            raise AttributeError('llink is {wstd:[list of links]}, see self.N.links')
 
-        for k in llink.keys():
-            checkl = [l in self.N.links[k] for l in llink[k]]
+        if links == {}:
+            links = self.N.links
+        elif not isinstance(links, dict):
+            raise AttributeError('links is {wstd:[list of links]}, see self.N.links')
+
+        for k in links.keys():
+            checkl = [l in self.N.links[k] for l in links[k]]
             if len(np.where(checkl==False)[0])>0:
             # if sum(checkl) != len(self.N.links):
                 uwrong = np.where(np.array(checkl) is False)[0]
-                raise AttributeError(str(np.array(llink)[uwrong])
+                raise AttributeError(str(np.array(links)[uwrong])
                                      + ' links does not exist in Network')
 
-        wstd = llink.keys()
+        wstd = links.keys()
         # # Check wstd attribute
         # if wstd == []:
         #     wstd = self.N.wstd.keys()
@@ -459,8 +455,7 @@ class Simul(PyLayers):
         #     wstd = [wstd]
 
         checkw = [w in self.N.wstd.keys() for w in wstd]
-        if len(np.where(checkl==False)[0])>0:
-        # if sum(checkw) != len(self.N.wstd.keys()):
+        if sum(checkw) != len(wstd):
             uwrong = np.where(np.array(checkw) is False)[0]
             raise AttributeError(str(np.array(wstd)[uwrong])
                                  + ' wstd are not in Network')
@@ -495,7 +490,12 @@ class Simul(PyLayers):
         # self.time = self._traj.t
         # self._time = pd.to_datetime(self.time,unit='s')
         #
-        # Code
+        # Nested Loops
+        #
+        #  time
+        #    standard
+        #      links
+        #           evaldeter &| evalstat
         #
         lt = self.get_sim_time(lt)
         self._time=self.get_sim_time(lt)
@@ -506,9 +506,9 @@ class Simul(PyLayers):
             print 'ut =', ut, 't = ', t
             self.ctime = t
             self.update_pos(t)
-            print self.N.__repr__()
+            # print self.N.__repr__()
             for w in wstd:
-                for na, nb, typ in llink[w]:
+                for na, nb, typ in links[w]:
                     if self.todo[typ]:
                         if self.verbose:
                             print '-'*30
@@ -517,7 +517,8 @@ class Simul(PyLayers):
                             print '-'*30
                         eng = 0
 
-                        self.evaldeter(na, nb, w,force=['H'])
+                        self.evaldeter(na, nb, w,applywav=False)
+
                         # if typ == 'OB':
                         #     self.evalstat(na, nb)
                         #     eng = self.SL.eng
@@ -651,9 +652,11 @@ class Simul(PyLayers):
 
         Parameters
         ----------
+
         t : int
-            time value 
-        """ 
+            time value
+
+        """
 
         # if a bodies are involved in simulation
         if ((self.todo['OB']) or (self.todo['B2B']) or (self.todo['B2I'])):
@@ -684,7 +687,13 @@ class Simul(PyLayers):
             typ : list 
                 list of parameters to be retrieved
                 (ak | tk | R | )
-            t : list of time | time instant
+        link: list
+            dictionnary of link to be evaluated (key is wtsd and value is a list of links)
+            (if [], all link are considered)
+        t: np.array
+            list of timestamp to be evaluated | singlr time instant
+            
+            
 
 
         Returns
@@ -701,7 +710,7 @@ class Simul(PyLayers):
         # get time 
         defaults = {'t': 0,
                     'typ':['ak'],
-                    'links': [],
+                    'links': {},
                     'wstd':[],
                     }
 
@@ -981,7 +990,7 @@ class Simul(PyLayers):
 
 
             fh5.close()
-            print 'file closed'
+         
         except:
             fh5.close()
             raise NameError('Simultraj._saveh5: issue when writting h5py file')
