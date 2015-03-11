@@ -697,7 +697,7 @@ class AppForm(QMainWindow):
         self.create_status_bar()
         self.shortcuts()
 
-
+        self.create_toolbar()
 
 
 
@@ -914,7 +914,9 @@ class AppForm(QMainWindow):
 
 
     def create_main_frame(self):
+
         self.main_frame = QWidget()
+        self.addToolBar(Qt.ToolBarArea(Qt.TopToolBarArea), self.toolbar)
 
         # Create the mpl Figure and FigCanvas objects.
         # 5x4 inches, 100 dots-per-inch
@@ -958,86 +960,7 @@ class AppForm(QMainWindow):
         #
         self.mpl_toolbar = NavigationToolbar(self.canvas, self.main_frame)
 
-        ################################
-        #### Toolbar
-        ################################
-        # get icons path
-        iconpath = os.path.join(os.environ['PYLAYERS'],'pylayers','gui','ico')
-        self.toolbar = QToolBar()
-        # exit
-        exitAction = QAction(QIcon(os.path.join(iconpath,'gnome_application_exit.png')), 'Quit', self)
-        exitAction.triggered.connect(lambda x=True:self.closel(x))
-        self.toolbar.addAction(exitAction)
 
-        #new
-        newAction = QAction(QIcon(os.path.join(iconpath,'gnome_document_new.png')), 'new', self)
-        newAction.triggered.connect(self.new)
-        self.toolbar.addAction(newAction)
-
-        #open
-        openAction = QAction(QIcon(os.path.join(iconpath,'gnome_folder_open.png')), 'Open', self)
-        openAction.triggered.connect(self.open)
-        self.toolbar.addAction(openAction)
-
-        #save
-        saveAction = QAction(QIcon(os.path.join(iconpath,'gnome_document_save.png')), 'Save', self)
-        saveAction.triggered.connect(self.save)
-        self.toolbar.addAction(saveAction)
-
-
-        self.toolbar.addSeparator()
-
-        #select
-        selectAction = QAction(QIcon(os.path.join(iconpath,'select.png')), 'Select', self)
-        selectAction.triggered.connect(self.selectnodes)
-        self.toolbar.addAction(selectAction)
-
-        #draw
-        drawAction = QAction(QIcon(os.path.join(iconpath,'gnome_list_add.png')), 'Draw Segments', self)
-        drawAction.triggered.connect(self.drawseg)
-        self.toolbar.addAction(drawAction)
-
-        #edit
-        editAction = QAction(QIcon(os.path.join(iconpath,'gnome_accessories_text_editor.png')), 'Edit Segments', self)
-        editAction.triggered.connect(self.edit_properties)
-        self.toolbar.addAction(editAction)
-
-        self.toolbar.addSeparator()
-
-        # self.addAction()
-        #editgrid
-        editgridAction = QAction(QIcon(os.path.join(iconpath,'editgrid.png')), 'Edit Grid', self)
-        editgridAction.triggered.connect(self.editgrid)
-        self.toolbar.addAction(editgridAction)
-
-        #grid
-        gridAction = QAction(QIcon(os.path.join(iconpath,'grid.png')), 'Toggle Grid', self)
-        gridAction.triggered.connect(self.togglegrid)
-        gridAction.setCheckable(True)
-        self.toolbar.addAction(gridAction)
-
-        #snapgrid
-        snapgridAction = QAction(QIcon(os.path.join(iconpath,'grid_snap.png')), 'Snap On Grid', self)
-        snapgridAction.triggered.connect(self.snapongrid)
-        snapgridAction.setCheckable(True)
-        self.toolbar.addAction(snapgridAction)
-
-
-        self.toolbar.addSeparator()
-
-        # Active layer Menu in toolbar
-        layerbox = QHBoxLayout()
-
-        layerlabel = QLabel('Active Layer')
-        layerlabel.setStyleSheet("font: 16px;")
-        layerlabel.setAlignment(Qt.AlignCenter)
-
-        self.toolbar.addWidget(layerlabel)
-
-        self.layerselector=QComboBox()
-        for s in self.L.sl.keys():
-            self.layerselector.addItem(s)
-        self.toolbar.addWidget(self.layerselector)
 
 
 
@@ -1048,7 +971,6 @@ class AppForm(QMainWindow):
         vbox.addWidget(self.mpl_toolbar)
 
         self.main_frame.setLayout(vbox)
-        self.addToolBar(Qt.ToolBarArea(Qt.TopToolBarArea), self.toolbar)
 
         self.setCentralWidget(self.main_frame)
 
@@ -1118,6 +1040,95 @@ class AppForm(QMainWindow):
             ( select_action,draw_action,properties,None,gridset_action,snapongrid_action,gridtg_action,None,refresh))
 
         self.add_actions(self.help_menu, (about_action,))
+
+
+
+
+
+    def create_toolbar(self):
+        self.toolbar = QToolBar(self)
+        ###############################
+        ### Toolbar
+        ###############################
+        # get icons path
+        iconpath = os.path.join(os.environ['PYLAYERS'],'pylayers','gui','ico')
+        # exit
+        exitAction = QAction(QIcon(os.path.join(iconpath,'gnome_application_exit.png')), 'Quit', self)
+        # exitAction.triggered.connect(lambda x=True:self.closel(x))
+        self.toolbar.addAction(exitAction)
+
+        #new
+        newAction = QAction(QIcon(os.path.join(iconpath,'gnome_document_new.png')), 'new', self)
+        # newAction.triggered.connect(self.new)
+        self.toolbar.addAction(newAction)
+
+        #open
+        openAction = QAction(QIcon(os.path.join(iconpath,'gnome_folder_open.png')), 'Open', self)
+        # openAction.triggered.connect(self.open)
+        self.toolbar.addAction(openAction)
+
+        #save
+        saveAction = QAction(QIcon(os.path.join(iconpath,'gnome_document_save.png')), 'Save', self)
+        # saveAction.triggered.connect(self.save)
+        self.toolbar.addAction(saveAction)
+
+
+        self.toolbar.addSeparator()
+
+        #select
+        selectAction = QAction(QIcon(os.path.join(iconpath,'select.png')), 'Select', self)
+        selectAction.triggered.connect(self.selectnodes)
+        self.toolbar.addAction(selectAction)
+
+        #draw
+        drawAction = QAction(QIcon(os.path.join(iconpath,'gnome_list_add.png')), 'Draw Segments', self)
+        drawAction.triggered.connect(self.drawseg)
+        self.toolbar.addAction(drawAction)
+
+        #edit
+        editAction = QAction(QIcon(os.path.join(iconpath,'gnome_accessories_text_editor.png')), 'Edit Segments', self)
+        editAction.triggered.connect(self.edit_properties)
+        self.toolbar.addAction(editAction)
+
+        self.toolbar.addSeparator()
+
+        # self.addAction()
+        #editgrid
+        editgridAction = QAction(QIcon(os.path.join(iconpath,'editgrid.png')), 'Edit Grid', self)
+        editgridAction.triggered.connect(self.editgrid)
+        self.toolbar.addAction(editgridAction)
+
+        #grid
+        gridAction = QAction(QIcon(os.path.join(iconpath,'grid.png')), 'Toggle Grid', self)
+        gridAction.triggered.connect(self.togglegrid)
+        gridAction.setCheckable(True)
+        self.toolbar.addAction(gridAction)
+
+        #snapgrid
+        snapgridAction = QAction(QIcon(os.path.join(iconpath,'grid_snap.png')), 'Snap On Grid', self)
+        snapgridAction.triggered.connect(self.snapongrid)
+        snapgridAction.setCheckable(True)
+        self.toolbar.addAction(snapgridAction)
+
+
+        self.toolbar.addSeparator()
+
+        # Active layer Menu in toolbar
+        layerbox = QHBoxLayout()
+
+        layerlabel = QLabel('Active Layer')
+        layerlabel.setStyleSheet("font: 16px;")
+        layerlabel.setAlignment(Qt.AlignCenter)
+
+        self.toolbar.addWidget(layerlabel)
+
+        try:
+            self.layerselector=QComboBox()
+            for s in self.L.sl.keys():
+                self.layerselector.addItem(s)
+            self.toolbar.addWidget(self.layerselector)
+        except:
+            pass
 
     def add_actions(self, target, actions):
         for action in actions:
