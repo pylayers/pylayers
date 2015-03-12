@@ -2373,7 +2373,7 @@ class Tchannel(bs.FUDAsignal):
         -------
 
         RSSI: float
-        RSSI value
+        RSSI value in dB
 
         Notes
         -----
@@ -2382,11 +2382,11 @@ class Tchannel(bs.FUDAsignal):
 
         """
 
-        Ak = np.abs(self.y[:, ufreq])
-        Pr = np.sum(Ak**2)
-        PrdB = 10*log10(Pr)
+        Ak   = np.abs(self.y[:, ufreq])
+        Pr   = np.sum(Ak**2)
+        PrdB = 10*np.log10(Pr)
 
-        return Pr,PrdB
+        return PrdB
 
 
 if __name__ == "__main__":

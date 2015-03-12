@@ -280,7 +280,7 @@ class CorSer(PyLayers):
         if 'Jihad' in self.subject :
             uj = self.subject.index('Jihad')
             self.subject[uj]='Jihan'
-        
+
         if serie in self.mocap :
             self._loadbody(serie=serie,day=day)
             self._distancematrix()
@@ -291,7 +291,7 @@ class CorSer(PyLayers):
             else :
                 self.B.traj.Lfilename=copy.copy(self.L.filename)
 
-        #reference time is tmocap 
+        #reference time is tmocap
         self.tmocap = self.B[self.subject[0]].time
 
         #load offset dict
@@ -859,7 +859,7 @@ bernard
              'Eric:TooTopRight':15,'Eric:TorsoTopLeft':13,'Eric:BackCenter':16,'Eric:ShoulderLeft':14}
             #if source=='UR1':
             dirname = os.path.join(self.rootdir,'POST-TREATED','12-06-2014','HIKOB')
-         
+
         files = os.listdir(dirname)
 
         self.idHKB={}
