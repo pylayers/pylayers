@@ -763,7 +763,7 @@ class Simul(PyLayers):
                     self.DL.Ta = self.N.node[link[0]]['T']
                     self.DL.Tb = self.N.node[link[1]]['T']
 
-                    if 'ak' in kwargs['typ'] or 'tk' in kwargs['typ']:
+                    if 'ak' in kwargs['typ'] or 'tk' in kwargs['typ'] or 'rss' in kwargs['typ']:
                         H_id = line['H_id'].decode('utf8')
                         self.DL.load(self.DL.H,H_id)
                         if 'ak' in kwargs['typ']:
@@ -774,6 +774,10 @@ class Simul(PyLayers):
                             if not output[linkname].has_key('tk'):
                                 output[linkname]['tk']=[]
                             output[linkname]['tk'].append(self.DL.H.tk)
+                        if 'rss' in kwargs['typ']:
+                            if not output[linkname].has_key('rss'):
+                                output[linkname]['rss']=[]
+                            output[linkname]['rss'].append(self.DL.H.rssi())
                         
                     if 'R' in kwargs['typ']:
                         if not output[linkname].has_key('R'):

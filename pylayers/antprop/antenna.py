@@ -185,6 +185,8 @@ class Antenna(PyLayers):
         Parameters
         ----------
 
+        typ  : 'Omni','Gauss','WirePlate','3GPP'
+
         _filename : string
                     antenna file name
         directory : str
@@ -214,6 +216,7 @@ class Antenna(PyLayers):
         """
         defaults = {'directory': 'ant',
                     'nf':104,
+                    'polar':'v',
                     'source':'satimo',
                     'ntheta':90,
                     'nphi':181,
@@ -223,7 +226,13 @@ class Antenna(PyLayers):
                     't3':np.pi/6.,
                     'L':90,
                     'fmin':0.8,
-                    'fmax':5.95}
+                    'fmax':5.95,
+                    'gm': 18,
+                    'sllv':-18,
+                    'hpbwv':6.2,
+                    'hpbwh':65,
+                    'fbrh':30,
+                    'thtilt':0}
 
         for k in defaults:
             if k not in kwargs:
@@ -233,6 +242,7 @@ class Antenna(PyLayers):
         self.Nt = kwargs['ntheta']
         self.Np = kwargs['nphi']
         self.source = kwargs['source']
+        self.polar = kwargs['polar']
 
         # if typ has an extension it is a file
         if isinstance(typ,str):
@@ -302,6 +312,16 @@ class Antenna(PyLayers):
                 self.G  = pow(10.,self.GdB/10.) # gain
                 self.sqG = np.sqrt(self.G)
                 self.evaluated = False
+            elif typ == '3GPP':
+                self.sllv = kwargs['sllv']
+                self.hpbwv = kwargs['hpbwv']
+                self.hpbwh = kwargs['hpbwh']
+                self.fbrh = kwargs['fbrh']
+                self.thtilt = kwargs['thtilt']
+                self.gm = kwargs['gm']
+
+
+
             elif typ == 'ssh':
                 pass
             elif typ == 'vsh':
@@ -512,6 +532,42 @@ class Antenna(PyLayers):
                 Fat = np.dot(Fat[:,np.newaxis],np.ones(len(self.fa))[np.newaxis,:])
                 Fap = np.dot(Fap[:,np.newaxis],np.ones(len(self.fa))[np.newaxis,:])
 
+        if self.typ == '3GPP':
+            if pattern:
+                phi   = self.phi*180/np.pi-180
+                theta = self.theta*180/np.pi-90
+                GvdB = np.maximum(-12*((theta-self.thtilt)/self.hpbwv)**2,self.sllv)[:,None]
+                GhdB = (-np.minimum(12*(phi/self.hpbwh)**2,self.fbrh)+self.gm)[None,:]
+                GdB  = GhdB+GvdB
+                self.sqG = np.sqrt(10**(GdB/10.))
+                self.SqG = self.sqG[None,...]*np.ones(self.Nf)[:,None,None]
+                if self.polar=='h':
+                    Fap = self.sqG
+                    Fat = np.zeros((len(self.theta),self.Nf))
+                if self.polar=='v':
+                    Fap = np.zeros((len(self.phi),self.Nf))
+                    Fat = self.sqG
+                if self.polar=='c':
+                    Fap = (1./sqrt(2))*self.sqG
+                    Faq = (1j/sqrt(2))*self.sqG
+                self.evaluated = True
+            else:
+                phi   = self.phi*180/np.pi-180
+                theta = self.theta*180/np.pi-90
+                GvdB = np.maximum(-12*((theta-self.thtilt)/self.hpbwv)**2,self.sllv)
+                GhdB = (-np.minimum(12*(phi/self.hpbwh)**2,self.fbrh)+self.gm)
+                GdB  = GhdB+GvdB
+                self.sqG = np.sqrt(10**(GdB/10.))
+                if self.polar=='h':
+                    Fap = self.sqG
+                    Fat = np.zeros((len(self.theta),self.Nf))
+                if self.polar=='v':
+                    Fap = np.zeros((len(self.phi),self.Nf))
+                    Fat = self.sqG
+                if self.polar=='c':
+                    Fap = (1./sqrt(2))*self.sqG
+                    Faq = (1j/sqrt(2))*self.sqG
+
         if self.typ == 'WirePlate':
 
             uth1 = np.where(self.theta < self.t0)[0]
@@ -564,6 +620,8 @@ class Antenna(PyLayers):
         # TODO create 2 separate functions
         if not pattern:
             return (Fat,Fap)
+        else:
+            return (None,None)
 
 
     def loadmat(self, directory="ant"):
@@ -1890,9 +1948,10 @@ class Antenna(PyLayers):
         """
 
         if ((self.fromfile) or (self.typ=='vsh') or (self.typ=='ssh')):
-            self.Fsynth3(theta,phi,pattern)
+            Ft,Fp = self.Fsynth3(theta,phi,pattern)
         else :
-            self.Fpatt(theta,phi,pattern)
+            Ft,Fp=self.Fpatt(theta,phi,pattern)
+        return (Ft,Fp)    
 
 
     #def Fsynth1(self, theta, phi, k=0):
@@ -2398,6 +2457,27 @@ class Antenna(PyLayers):
         # TODO create 2 different functions for pattern and not pattern
         if not pattern:
             return Fth, Fph
+        else:
+            return None,None
+
+    def gain(self,th,ph,dB=True):
+        """
+        Parameters
+        ----------
+
+        th : theta angle of arrival|departure in local coordinate system 
+        ph : phi in 
+
+        """
+        if not isinstance(th,np.ndarray):
+            th=np.array([th])
+            ph=np.array([ph]) 
+        Ft,Fp = self.Fsynth(theta=th,phi=ph,pattern=False)
+        G   = Ft*np.conj(Ft)+Fp*np.conj(Fp)
+        if dB:
+            return 10*np.log10(G)
+        else:
+            return G 
 
 
     def movie_vsh(self, mode='linear'):
