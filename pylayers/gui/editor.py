@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 import sys, os, random
+try:
+    from mayavi.sources.vtk_data_source import VTKDataSource
+    from mayavi import mlab
+except:
+    'Mayavi not installed'
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
@@ -14,6 +19,9 @@ from pylayers.gui.editor_select import SelectL2
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 import os
+import sys
+
+
 
 class SubSegWin(QDialog):    # any super class is okay
     def __init__(self,Nss=1,zmin=0.,zmax=3.0,subsegdata={},parent=None):
@@ -696,9 +704,10 @@ class AppForm(QMainWindow):
         self.create_menu()
         self.create_status_bar()
         self.shortcuts()
+        if 'darwin' in sys.platform:
+            self.create_toolbar()
 
-
-
+        self.show3On = False
 
 
     def new(self):
@@ -790,6 +799,30 @@ class AppForm(QMainWindow):
 
     def snapongrid(self):
         self.selectl.toggglesnapgrid()
+
+    def toggleshow3(self):
+        if not self.show3On:
+            self.show3On = True
+            self.show3()
+        elif self.show3On:
+            mlab.close()
+            self.show3On = False
+
+    def show3(self):
+        if self.show3On:
+            mlab.clf()
+            self.L._show3()
+
+    def updatelayerselector(self):
+        slname={}
+        slname['name']=str(self.layerselector.currentText())
+        if self.selectl.state == 'Init' or self.selectl.state == 'SS':
+            if self.selectl.nsel > 0:
+                if (self.selectl.state == 'SS'):
+                    self.L.edit_seg(self.selectl.nsel,slname)
+        elif self.selectl.state == 'SMS' or self.selectl.state == 'SMP':
+            [self.L.edit_seg(sl,slname) for sl in self.selectl.selectseg]
+
 
 
     def selectnodes(self):
@@ -912,9 +945,20 @@ class AppForm(QMainWindow):
         string = string +'\t'+self.selectl.help[self.selectl.state]
         self.statusBar().showMessage(string)
 
+        if self.selectl.nsel > 0:
+            idx=self.layerselector.findText(self.L.Gs.node[self.selectl.nsel]['name'])
+            self.layerselector.setCurrentIndex(idx)
+
+        if self.show3On:
+            self.show3()
+
 
     def create_main_frame(self):
+
         self.main_frame = QWidget()
+        self.create_toolbar()
+        self.addToolBar(Qt.ToolBarArea(Qt.TopToolBarArea), self.toolbar)
+
 
         # Create the mpl Figure and FigCanvas objects.
         # 5x4 inches, 100 dots-per-inch
@@ -958,15 +1002,112 @@ class AppForm(QMainWindow):
         #
         self.mpl_toolbar = NavigationToolbar(self.canvas, self.main_frame)
 
-        ################################
-        #### Toolbar
-        ################################
+        vbox = QVBoxLayout()
+        # vbox.addLayout(layerbox)
+        vbox.addWidget(self.canvas)
+        vbox.addWidget(self.mpl_toolbar)
+
+        self.main_frame.setLayout(vbox)
+
+        self.setCentralWidget(self.main_frame)
+
+
+
+    def create_status_bar(self):
+        self.status_text = QLabel("Open a Layout")
+        self.statusBar().addWidget(self.status_text, 1)
+
+
+    def shortcuts(self):
+        esc = QShortcut(self)
+        esc.setKey("escape")
+        self.connect(esc, SIGNAL("activated()"), self.selectnodes)
+
+
+
+
+    def create_menu(self):
+        self.file_menu = self.menuBar().addMenu("&File")
+        self.edit_menu = self.menuBar().addMenu("&Edit")
+        self.view_menu = self.menuBar().addMenu("&View")
+
+        self.help_menu = self.menuBar().addMenu("&Help")
+        # load_file_action = self.create_action("&Save plot",
+        #     shortcut="Ctrl+S", slot=self.save_plot,
+        #     tip="Save the plot")
+        new_action = self.create_action("&New Layout", slot=self.new,
+        shortcut="Ctrl+n", tip="new layout")
+        open_action = self.create_action("&Open", slot=self.open,
+        shortcut="Ctrl+o", tip="Open Layout")
+        save_action = self.create_action("&Save", slot=self.save,
+        shortcut="Ctrl+s", tip="Save Layout")
+        saveas_action = self.create_action("&Save as...", slot=lambda x=True:self.save(x),
+        shortcut="Ctrl+Shift+s", tip="Save as")
+        # open_action = self.create_action("&Open", slot=self.open,
+        # shortcut="Ctrl+o", tip="Open Layout")
+        close_action = self.create_action("&Close", shortcut='Ctrl+w', slot=self.closel, tip="Close Layout")
+        quit_action = self.create_action("&Quit", slot=lambda x=True:self.closel(x),
+            shortcut="Ctrl+Q", tip="Close the application")
+
+        select_action = self.create_action("&Select Nodes", slot=self.selectnodes,
+            shortcut="F1", tip="Select Nodes")
+        draw_action = self.create_action("&Draw Segments", slot=self.drawseg,
+            shortcut="F2", tip="Draw segements")
+
+
+        refresh = self.create_action("&Refresh", slot=self.on_draw,
+            shortcut="F10", tip="Refresh the application")
+        properties= self.create_action("&Properties", slot=self.edit_properties,
+            shortcut="F3", tip="Edit Wall properties")
+        # show3= self.create_action("&Properties", slot=self.edit_properties,
+        #     shortcut="F9", tip="3D show")
+
+        about_action = self.create_action("&About",
+            shortcut='F12', slot=self.on_about,
+            tip='about')
+
+        gridset_action = self.create_action("&Grid",
+            shortcut='', slot=self.editgrid,
+            tip='Set Grid',)
+        snapongrid_action = self.create_action("&Snap On Grid",
+            shortcut='s', slot=self.snapongrid,
+            tip='Snap on Grid',checkable=True)
+
+        gridtg_action = self.create_action("&Toggle Grid",
+            shortcut='g', slot=self.togglegrid,
+            tip='toggle Grid',checkable=True)
+
+        view3D_action = self.create_action("&3D View",
+            shortcut='3', slot=self.toggleshow3,
+            tip='Display 3D view',checkable=True)
+
+
+
+        self.add_actions(self.file_menu,
+            ( new_action,open_action,None,save_action,saveas_action,None,close_action,quit_action,))
+
+        self.add_actions(self.edit_menu,
+            ( select_action,draw_action,properties,None,gridset_action,snapongrid_action,gridtg_action,None,refresh))
+
+        self.add_actions(self.view_menu, (view3D_action,))
+
+
+        self.add_actions(self.help_menu, (about_action,))
+
+
+
+
+
+    def create_toolbar(self):
+        self.toolbar = QToolBar(self)
+        ###############################
+        ### Toolbar
+        ###############################
         # get icons path
         iconpath = os.path.join(os.environ['PYLAYERS'],'pylayers','gui','ico')
-        self.toolbar = QToolBar()
         # exit
         exitAction = QAction(QIcon(os.path.join(iconpath,'gnome_application_exit.png')), 'Quit', self)
-        exitAction.triggered.connect(lambda x=True:self.closel(x))
+        # exitAction.triggered.connect(lambda x=True:self.closel(x))
         self.toolbar.addAction(exitAction)
 
         #new
@@ -1024,6 +1165,15 @@ class AppForm(QMainWindow):
 
 
         self.toolbar.addSeparator()
+        #show3D
+        show3Action = QAction(QIcon(os.path.join(iconpath,'sugar_cube.png')), '3D View', self)
+        show3Action.triggered.connect(self.toggleshow3)
+        show3Action.setCheckable(True)
+        self.toolbar.addAction(show3Action)
+
+
+        self.toolbar.addSeparator()
+
 
         # Active layer Menu in toolbar
         layerbox = QHBoxLayout()
@@ -1034,90 +1184,15 @@ class AppForm(QMainWindow):
 
         self.toolbar.addWidget(layerlabel)
 
-        self.layerselector=QComboBox()
-        for s in self.L.sl.keys():
-            self.layerselector.addItem(s)
-        self.toolbar.addWidget(self.layerselector)
+        try:
+            self.layerselector=QComboBox()
+            for s in self.L.sl.keys():
+                self.layerselector.addItem(s)
+            self.toolbar.addWidget(self.layerselector)
+        except:
+            pass
+        self.layerselector.activated.connect(self.updatelayerselector)
 
-
-
-
-        vbox = QVBoxLayout()
-        # vbox.addLayout(layerbox)
-        vbox.addWidget(self.canvas)
-        vbox.addWidget(self.mpl_toolbar)
-
-        self.main_frame.setLayout(vbox)
-        self.addToolBar(Qt.ToolBarArea(Qt.TopToolBarArea), self.toolbar)
-
-        self.setCentralWidget(self.main_frame)
-
-    def create_status_bar(self):
-        self.status_text = QLabel("Open a Layout")
-        self.statusBar().addWidget(self.status_text, 1)
-
-
-    def shortcuts(self):
-        esc = QShortcut(self)
-        esc.setKey("escape")
-        self.connect(esc, SIGNAL("activated()"), self.selectnodes)
-
-    def create_menu(self):
-        self.file_menu = self.menuBar().addMenu("&File")
-        self.edit_menu = self.menuBar().addMenu("&Edit")
-        self.help_menu = self.menuBar().addMenu("&Help")
-        # load_file_action = self.create_action("&Save plot",
-        #     shortcut="Ctrl+S", slot=self.save_plot,
-        #     tip="Save the plot")
-        new_action = self.create_action("&New Layout", slot=self.new,
-        shortcut="Ctrl+n", tip="new layout")
-        open_action = self.create_action("&Open", slot=self.open,
-        shortcut="Ctrl+o", tip="Open Layout")
-        save_action = self.create_action("&Save", slot=self.save,
-        shortcut="Ctrl+s", tip="Save Layout")
-        saveas_action = self.create_action("&Save as...", slot=lambda x=True:self.save(x),
-        shortcut="Ctrl+Shift+s", tip="Save as")
-        # open_action = self.create_action("&Open", slot=self.open,
-        # shortcut="Ctrl+o", tip="Open Layout")
-        close_action = self.create_action("&Close", shortcut='Ctrl+w', slot=self.closel, tip="Close Layout")
-        quit_action = self.create_action("&Quit", slot=lambda x=True:self.closel(x),
-            shortcut="Ctrl+Q", tip="Close the application")
-
-        select_action = self.create_action("&Select Nodes", slot=self.selectnodes,
-            shortcut="F1", tip="Select Nodes")
-        draw_action = self.create_action("&Draw Segments", slot=self.drawseg,
-            shortcut="F2", tip="Draw segements")
-
-
-        refresh = self.create_action("&Refresh", slot=self.on_draw,
-            shortcut="F10", tip="Refresh the application")
-        properties= self.create_action("&Properties", slot=self.edit_properties,
-            shortcut="F3", tip="Edit Wall properties")
-        # show3= self.create_action("&Properties", slot=self.edit_properties,
-        #     shortcut="F9", tip="3D show")
-
-        about_action = self.create_action("&About",
-            shortcut='F12', slot=self.on_about,
-            tip='about')
-
-        gridset_action = self.create_action("&Grid",
-            shortcut='', slot=self.editgrid,
-            tip='Set Grid',)
-        snapongrid_action = self.create_action("&Snap On Grid",
-            shortcut='s', slot=self.snapongrid,
-            tip='Snap on Grid',checkable=True)
-
-        gridtg_action = self.create_action("&Toggle Grid",
-            shortcut='g', slot=self.togglegrid,
-            tip='toggle Grid',checkable=True)
-
-        self.add_actions(self.file_menu,
-            ( new_action,open_action,None,save_action,saveas_action,None,close_action,quit_action,))
-
-        self.add_actions(self.edit_menu,
-            ( select_action,draw_action,properties,None,gridset_action,snapongrid_action,gridtg_action,None,refresh))
-
-        self.add_actions(self.help_menu, (about_action,))
 
     def add_actions(self, target, actions):
         for action in actions:

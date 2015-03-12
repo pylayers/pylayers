@@ -306,7 +306,7 @@ class SelectL2(object):
                 self.ptmove=False
 
             if self.state == 'CP':
-                
+
                 # if new point is created
 
                 try:
@@ -339,6 +339,7 @@ class SelectL2(object):
                     if self.pt_previousid !=0:
                         # print 'closing',
                         savepid = self.pt_previousid
+                        pt_currentid=savepid
 
                         print self.pt_previousid
                         self.createseg(newpt1=self.pt_previousid,newpt2=self.nsel)
@@ -348,6 +349,7 @@ class SelectL2(object):
                         self.pt_previousid=savepid
                     else:
                         # print 'starting from existing',
+                        pt_currentid=self.nsel
                         self.pt_previousid = self.nsel
                         self.pt_previous = self.ptsel
                         self.lppmp = np.array([self.pt_previous,(x,y) ])
@@ -355,7 +357,7 @@ class SelectL2(object):
                         self.line = self.ax.plot(self.lppmp[:,0],self.lppmp[:,1],color='k')
 
             if self.state=='Init':
-                # sel seg 
+                # sel seg
                 if self.nsel > 0:
                     # print 'sel seg'
                     self.selseg()
@@ -364,7 +366,7 @@ class SelectL2(object):
                     # print 'sel pt'
                     self.selpt1()
                     return
-                else: 
+                else:
                     self.modeIni()
 
             # select a segment
@@ -379,7 +381,7 @@ class SelectL2(object):
                         self.modeIni()
                         self.selseg()
                         return
-                elif self.nsel < 0 : 
+                elif self.nsel < 0 :
                     # print 'sel pt'
                     self.modeIni()
                     self.selpt1()
@@ -416,7 +418,7 @@ class SelectL2(object):
                 elif self.nsel>0 and not (self.shift_is_held or self.ctrl_is_held):
                     self.modeIni()
                     self.OnClick(event)
-# 
+#
 
 
         if event.button == 2 and event.inaxes:
