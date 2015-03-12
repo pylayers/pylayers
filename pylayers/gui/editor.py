@@ -19,6 +19,7 @@ from pylayers.gui.editor_select import SelectL2
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 import os
+import sys
 
 
 
@@ -703,8 +704,8 @@ class AppForm(QMainWindow):
         self.create_menu()
         self.create_status_bar()
         self.shortcuts()
-
-        self.create_toolbar()
+        if 'darwin' in sys.platform:
+            self.create_toolbar()
 
         self.show3On = False
 
