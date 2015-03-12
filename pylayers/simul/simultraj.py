@@ -500,8 +500,6 @@ class Simul(PyLayers):
         lt = self.get_sim_time(lt)
         self._time=self.get_sim_time(lt)
         init = True
-        self.Ak = []
-        self.Tk = [] 
         for ut, t in enumerate(lt):
             print 'ut =', ut, 't = ', t
             self.ctime = t
@@ -516,9 +514,7 @@ class Simul(PyLayers):
                             print 'processing: ',na, ' <-> ', nb, 'wstd: ', w
                             print '-'*30
                         eng = 0
-
                         self.evaldeter(na, nb, w,applywav=False)
-
                         # if typ == 'OB':
                         #     self.evalstat(na, nb)
                         #     eng = self.SL.eng
@@ -528,9 +524,6 @@ class Simul(PyLayers):
                         # else :
                         self._ak = self.DL.H.ak
                         self._tk = self.DL.H.tk
-                        self.Ak.append(self._ak)
-                        self.Tk.append(self._tk)
-
                         df = pd.DataFrame({\
                                     'id_a': na,
                                     'id_b': nb,
@@ -562,17 +555,17 @@ class Simul(PyLayers):
                                               'sig_id', 'ray_id', 'Ct_id', 'H_id'
                                               ],index=[self._time[ut]])
                         
-                        #~ if not self.check_exist(df):
-                        self.data = self.data.append(df)
-                        # self._index = self._index + 1
-                        # save csv
-                        self.tocsv(ut, na, nb, w,init=init)
-                        init=False
+                        if not self.check_exist(df):
+                            self.data = self.data.append(df)
+                            # self._index = self._index + 1
+                            # save csv
+                            self.tocsv(ut, na, nb, w,init=init)
+                            init=False
 
-                        # save pandas self.data
-                        #self.savepd()
-                        # save ak tauk
-                        self._saveh5(ut, na, nb, w)
+                            # save pandas self.data
+                            #self.savepd()
+                            # save ak tauk
+                            self._saveh5(ut, na, nb, w)
 
 
     def check_exist(self, df):

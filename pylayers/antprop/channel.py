@@ -1287,14 +1287,11 @@ class Ctilde(PyLayers):
         t2 = self.Cpt * Fat + self.Cpp * Fap
         alpha = t1 * Fbt + t2 * Fbp
 
-
         H = Tchannel(alpha.x, alpha.y, self.tauk, self.tang, self.rang)
         if Friis:
             H.applyFriis()
 
-
         # average w.r.t frequency
-
         H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y)/self.nfreq, axis=1)))
         H.tk = H.taud
         return(H)
@@ -1525,12 +1522,10 @@ class Tchannel(bs.FUDAsignal):
         try:
             # keys not saved as attribute of h5py file
             for k,va in f.items():
-
                 # if k != 'tau1':
                 #     setattr(self,str(k),va[:])
                 # else :
                 setattr(self,str(k),va)
-
 
             a = f.attrs['a']
             b = f.attrs['b']
@@ -1600,14 +1595,11 @@ class Tchannel(bs.FUDAsignal):
 
             # keys not saved as attribute of h5py file
             for k,va in f.items():
-
                 if k !='isFriis':
-
                     try:
                         setattr(self,str(k),va[:])
                     except:
                         setattr(self,str(k),va)
-
                 else :
                     setattr(self,str(k),va)
 
