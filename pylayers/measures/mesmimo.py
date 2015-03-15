@@ -4,7 +4,8 @@ from pylayers.gis.readvrml import *
 import numpy as np
 import matplotlib.pylab as plt
 import matplotlib.animation as animation
-import numpy.linalg as la
+import numpy.linalg as lan
+import scipy.linamg as las
 #
 # This class handles the data coming from the MIMO Channel Sounder IETR lab
 #
@@ -142,7 +143,7 @@ class MIMO(object):
         HT  = self.Hcal.y.swapaxes(0,1)
         HHT = np.einsum('ijk,jlk->ilk',H,HT)
         H3  = HHT.swapaxes(0,2)
-        g   = la.svd(H3)
+        g   = lan.svd(H3)
         return (H3,g[1])
 
 
@@ -153,18 +154,33 @@ class MIMO(object):
         ----------
 
         Pt : Transmit power in band B
+        Tp : REceiver Temperature (K) 
+
+        Returns
+        -------
+
+        C : capacity (bit/s)
 
             log_2(det(I+(Et/N0Nt)HH^{H})
         """
 
-        f  = self.Hcal.x
-        B  = f[-1]-f[0]
-        df = f[1]-f[0]
+        fGHz  = self.Hcal.x
+        BGHz  = fGHz[-1]-fGHz[0]
+        dfGHz = fGHz[1]-fGHz[0]
+        # Boltzman constant
         kB = 1.03806488e-23
+        # N0 ~ J ~ W/Hz ~ W.s
         N0 = kB*Tp
+        # Pt / df ~ J 
+        pdb.set_trace()
         HH,sv = self.transfer()
         IR  = np.eye(self.Nr)
-        C   = df*np.log(la.det(IR[None,...]+(Pt/self.Nt)*HH/(N0*df**2)))/np.log(2)
+        coeff = (Pt/self.Nt)/(N0*dfGHz*1e9)
+        M     = IR[None,...]+coeff*HH
+        detM = las.det(M)
+        logdetM = np.log(detM)/np.log(2)
+        C = dfGHz*logdetM
+        #C   = dfGHz*np.log(la.det(IR[None,...]+(Pt/self.Nt)*HH/(N0*dfGHz)))/np.log(2)
 
         return(C)
 
