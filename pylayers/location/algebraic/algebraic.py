@@ -4,9 +4,9 @@ r"""
 .. currentmodule:: pylayers.location.algebraic.algebraic
 
 .. autosummary::
-    :toctree: generated 
+    :toctree: generated
 
-"""    
+"""
 #####################################################################
 #PYLAYERS is free software: you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -346,7 +346,7 @@ class algloc(object):
                     P = P.reshape(np.shape(rn_toa[:, 0:1]))
                 else:
                     raise ValueError("Data are not sufficient to perform localization")
-                    
+
             elif toa == 0 and tdoa == 0:
                 rn_rss = self.nodes['RN_RSS']
                 rss_db = self.ldp['RSS']
@@ -748,7 +748,7 @@ class algloc(object):
                     P = P.reshape(np.shape(rn_rss[:, 0:1]))
                 else:
                     raise ValueError("Data are not sufficient to perform localization")
-                
+
 
             elif rss == 0:
                 rn_toa = self.nodes['RN_TOA']

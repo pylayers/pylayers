@@ -324,9 +324,9 @@ class Bsignal(PyLayers):
 
     x can have 1 or two axis
 
-    The first axis of x and y have the same length
+    The first axis of x the last axes of y have the same length
 
-    By construction shape(y)[1] :=len(x), len(x) takes priority in case of observed conflict
+    By construction shape(y)[-1] :=len(x), len(x) takes priority in case of observed conflict
 
     """
 
@@ -356,17 +356,18 @@ class Bsignal(PyLayers):
                 self.label.append('ax'+str(k))
         else:
             self.label=label
-        if ndim > 1:
-            shy = np.shape(self.y)
-            shx = np.shape(self.x)
-            lx  = shx[0]
-            ly  = shy[-1]
-            # last dimension of y should be equal to dimension of x
-            if (ly != 1):
-                if (ly != lx) :
-                    print "Error in Bsignal : Dimension incompatibility "
-                    print "x : ", lx
-                    print "y : ", ly
+
+        shx = np.shape(self.x)
+        shy = np.shape(self.y)
+        self.N  = shx[0]
+        ly  = shy[-1]
+        # multi axes indexation
+        self.uax = np.hstack((np.ones(ndim-1),np.r_[self.N]))
+        # last dimension of y should be equal to first dimension of x
+        if (ly != self.N) :
+            print "Error in Bsignal : Dimension incompatibility "
+            print "x : ", self.N
+            print "y : ", ly
 
 
     def __repr__(self):
@@ -581,7 +582,7 @@ class Bsignal(PyLayers):
         typ : string
             ['l10','l20','d','r','du','ru','m','re','im']
         sel  : list of ndarray()
-            data selection along selected axis, all the axis void 
+            data selection along selected axis, all the axis void
             default [[],[]]
         ik : fixed axis value default (0)
 
@@ -859,6 +860,7 @@ class Bsignal(PyLayers):
                   'xmax'  : 1e15,
                   'logx'  : False,
                   'logy'  : False,
+                  'idx'   :[0,0,0,0,0,0,0]
                  }
 
         for key, value in defaults.items():
@@ -869,6 +871,7 @@ class Bsignal(PyLayers):
         vline = kwargs['vline']
         hline = kwargs['hline']
 
+        idx = kwargs['idx']
         # filtering kwargs argument for plot function
         args ={}
         for k in kwargs:
@@ -895,10 +898,16 @@ class Bsignal(PyLayers):
         #
         # if ndim(y) > 1
         #
-        if ndim > 1:
-            yx = self.y[...,u]
+        if ndim == 4:
+            yx = self.y[idx[0],idx[1],idx[2],u]
             fig,ax = mulcplot(self.x[u],yx*conversion,**args)
-        else:
+        if ndim == 3:
+            yx = self.y[idx[0],idx[1],u]
+            fig,ax = mulcplot(self.x[u],yx*conversion,**args)
+        if ndim == 2:
+            yx = self.y[idx[0],u]
+            fig,ax = mulcplot(self.x[u],yx*conversion,**args)
+        if ndim==1:
             fig,ax = mulcplot(self.x[u],self.y[u]*conversion,**args)
         #
         # Draw vertical and horizontal lines
@@ -1622,6 +1631,15 @@ class TBsignal(Bsignal):
 
     def b2fud(self, N=300):
         r""" conversion into a FUDsignal
+
+
+        Parameters
+        ----------
+
+        N :
+
+        Notes
+        -----
 
         This method is assuming that each element of TBsignal is a delta function.
 
@@ -3413,7 +3431,7 @@ class FUsignal(FBsignal, Usignal):
     ----------
 
     x  : nd.array((1xN))
-    y  : Complex nd.array((M x N )
+    y  : Complex nd.array((... x N )
 
 
     Methods
@@ -3437,7 +3455,6 @@ class FUsignal(FBsignal, Usignal):
     def __init__(self, x=np.array([]), y=np.array([]),label=[]):
         super(FUsignal,self).__init__(x,y,label)
         self.isFriis = False
-        #FBsignal.__init__(self, x, y)
 
     def __repr__(self):
         s = FBsignal.__repr__(self)
@@ -3483,10 +3500,11 @@ class FUsignal(FBsignal, Usignal):
 
 
     def window(self, win='hamming'):
-        """ windowing of FU signal
+        """ windowing FUsignal
 
         Parameters
         ----------
+
         win : string
             window type ('hamming','blackman','hanning')
 
@@ -3502,8 +3520,7 @@ class FUsignal(FBsignal, Usignal):
             >>> x = np.arange(2,8,0.1)
             >>> y = np.ones(len(x))
             >>> U = FUsignal(x,y)
-            >>> fi = plt.figure()
-         fig,ax = U.plot()
+            >>> fig,ax = U.plot()
             >>> U.window('hamming')
             >>> fig,ax = U.plot()
 
@@ -3511,28 +3528,18 @@ class FUsignal(FBsignal, Usignal):
 
 
         """
-        Nx = len(self.x)
-        shy = np.shape(self.y)
-        if len(shy) > 1:
-            if shy[0] == Nx:
-                Ny = shy[1]
-                ind = 0
-            else:
-                Ny = shy[0]
-                ind = 1
 
         if win == 'hamming':
-            w = np.hamming(Nx)
+            w = np.hamming(self.N)
         if win == 'blackman':
-            w = np.blackman(Nx)
+            w = np.blackman(self.N)
+        if win == 'hanning':
+            w = np.hanning(self.N)
 
-        if len(shy) > 1:
-            if ind == 0:
-                w = np.outer(w, np.ones(Ny))
-            else:
-                w = np.outer(np.ones(Ny), w)
-
+        w   = w.reshape(self.uax)
         self.y = self.y * w
+
+
 
     def applyFriis(self):
         r""" apply Friis factor
@@ -3540,14 +3547,18 @@ class FUsignal(FBsignal, Usignal):
         The Friis factor is multiplied to y
 
         .. math::
-            y := \frac{c}{4 \pi f} y
+            y := \( \frac{-j c}{4 \pi f} \) y
+
+            x is frequency in GHz
 
         boolean `isFriis` is set to `True`
 
         """
+
         if not self.isFriis:
             factor = -1j*0.3/(4*np.pi*self.x)
-            self.y = self.y*factor[np.newaxis,:]
+            factor = factor.reshape(self.uax)
+            self.y = self.y*factor
             self.isFriis = True
 
 
@@ -3838,7 +3849,7 @@ class FUsignal(FBsignal, Usignal):
         V  : FHsignal
 
         """
-        assert self.x[0]!=0
+        #assert self.x[0]!=0
         f = self.x
         U = self.y
         N = len(f)
@@ -4133,6 +4144,10 @@ class FUsignal(FBsignal, Usignal):
         ax1 = fig.add_subplot(121)
         fig,ax1 = self.imshow(typ='l20',fig=fig,ax=ax1,**kwargs)
         ax2 = fig.add_subplot(122)
+        if 'vmin' in kwargs: 
+            del kwargs['vmin']
+        if 'vmax' in kwargs: 
+            del kwargs['vmax']
         fig,ax2= self.imshow(typ='d',fig=fig,ax=ax2,**kwargs)
 
         return fig,[ax1,ax2]
@@ -4203,7 +4218,7 @@ class FUsignal(FBsignal, Usignal):
         [Tse] David Tse, http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf page 26
 
         """
-        defaults = { 'fcGHz':4.5,
+        defaults = {'fcGHz':4.5,
                     'WMHz':1,
                     'Ntap':100,
                     'baseband':True}

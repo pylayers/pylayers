@@ -1276,9 +1276,13 @@ class Ctilde(PyLayers):
         # Cg2cl should be applied here
         #
 
-
+        #
+        #  C  = 2 x 2 x r x f   ? 
+        #  Fa = 2 x r x f     ?
+        #  Fb = 2 x r x f
         #t1 = self.Ctt * Fat + self.Cpt * Fap
         #t2 = self.Ctp * Fat + self.Cpp * Fap
+
         t1 = self.Ctt * Fat + self.Ctp * Fap
         t2 = self.Cpt * Fat + self.Cpp * Fap
         alpha = t1 * Fbt + t2 * Fbp
@@ -1399,7 +1403,7 @@ class Tchannel(bs.FUDAsignal):
     doddoa()
     wavefig(w,Nray)
     rayfig(w,Nray)
-    RSSI(ufreq)
+    rssi(ufreq)
 
     See Also
     --------
@@ -1586,12 +1590,16 @@ class Tchannel(bs.FUDAsignal):
         filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
         try:
             fh5=h5py.File(filename,'r')
+
             f = fh5['H/'+grpname]
 
             # keys not saved as attribute of h5py file
             for k,va in f.items():
                 if k !='isFriis':
-                    setattr(self,str(k),va[:])
+                    try:
+                        setattr(self,str(k),va[:])
+                    except:
+                        setattr(self,str(k),va)
                 else :
                     setattr(self,str(k),va)
 
@@ -1604,7 +1612,7 @@ class Tchannel(bs.FUDAsignal):
 
 
     def apply(self, W):
-        """ Apply a FUsignal W to the ScalChannel.
+        """ apply FUsignal W to the Tchannel
 
         Parameters
         ----------
@@ -1728,8 +1736,10 @@ class Tchannel(bs.FUDAsignal):
 
         """
         #
-        # return a FUDsignal
+        # return a TUsignal
         #
+        #import ipdb
+        #ipdb.set_trace()
         Y = self.apply(Wgam)
         ri = Y.ft1(Nz=500,ffts=1)
 
@@ -2349,7 +2359,7 @@ class Tchannel(bs.FUDAsignal):
 
         # qHk.x[0]==Wk.x[0]
 
-    def RSSI(self,ufreq=0) :
+    def rssi(self,ufreq=0) :
         """ Compute RSSI value for a frequency index
 
         Parameters
@@ -2363,7 +2373,7 @@ class Tchannel(bs.FUDAsignal):
         -------
 
         RSSI: float
-        RSSI value
+        RSSI value in dB
 
         Notes
         -----
@@ -2372,8 +2382,11 @@ class Tchannel(bs.FUDAsignal):
 
         """
 
-        Tk = np.real(self.y[:, ufreq])
-        return(20*np.log(np.sum(Tk**2)))
+        Ak   = np.abs(self.y[:, ufreq])
+        Pr   = np.sum(Ak**2)
+        PrdB = 10*np.log10(Pr)
+
+        return PrdB
 
 
 if __name__ == "__main__":

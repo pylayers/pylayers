@@ -164,7 +164,6 @@ class Rays(PyLayers,dict):
                 s = s+'nl : '+str(nl)+'\n'
             else:
                 s = self.__class__.__name__ + '2D\n' + '----------'+'\n'
-
                 nray = np.sum([np.shape(self[i]['sig'])[2] for i in self.keys()])
                 s = 'N2Drays : '+ str(nray) + '\n'
                 s = s + 'from '+ str(self.nb_origin_sig) + ' signatures\n'
@@ -2227,8 +2226,7 @@ class Rays(PyLayers,dict):
         else:
             return(filename)
 
-    @mlab.show
-    def _show3(self,L=[],ilist=[],rlist=[],newfig=False):
+    def _show3(self,L=[],ilist=[],rlist=[],newfig=False,**kwargs):
         """ plot 3D rays in environment using Mayavi
 
         Parameters

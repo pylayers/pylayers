@@ -42,7 +42,7 @@ import scipy as sp
 import matplotlib.pyplot as plt
 from pylayers.util import geomutil as geo
 from pylayers.util import pyutil as pyu
-from pylayers.util.project import * 
+from pylayers.util.project import *
 from descartes.patch import PolygonPatch
 import shapely.geometry as shg
 import shapely.ops as sho
@@ -673,7 +673,7 @@ class VLayout(PyLayers):
     #
     #
 
-    def show(self, num=100):
+    def show(self, num=100,fig=[],ax=[]):
         """ show entities
 
         Parameters
@@ -681,21 +681,34 @@ class VLayout(PyLayers):
         num : int
 
         """
+        if fig==[]:
+            f = plt.figure()
+        else:
+            f = fig
+        if ax ==[]:
+            a = f.add_subplot(111)
+        else:
+            a = ax
+
         if num > len(self.entity.keys()):
             group = self.entity.keys()
         else:
             group = [self.entity.keys()[num]]
+
         for g in group:
             for ID in self.entity[g]:
                 for p in self.entity[g][ID]['poly']:
-                    colrand = hex(int((2**23)*sp.rand(
-                        1))+2**20).replace('0x', '#')
-                    self.entity[g][ID]['poly'][
-                        p].plot(color=colrand, alpha=0.3)
+                    colrand = hex(int((2**23)*sp.rand(1))+2**20).replace('0x', '#')
+
+                    f,a = self.entity[g][ID]['poly'][p].plot(color=colrand,alpha=0.3,fig=f,ax=a)
         plt.axis('scaled')
+        return f,a
 
     def wallanalysis(self):
         """ walls analysis
+
+        get height
+
         """
         w = self.entity['WALL']
         dwall = {}
@@ -782,3 +795,19 @@ class VLayout(PyLayers):
 
 if __name__ == "__main__":
     doctest.testmod()
+    _filename = 'bat11DE1.wrl'
+    filename = pyu.getlong(_filename,'struc')
+    VL = VLayout()
+    VL.load(filename)
+    dwall = VL.wallanalysis()
+    for iw in dwall:
+        seg = dwall[iw]['seg']
+        thick = dwall[iw]['thickness']
+        bdoor = dwall[iw]['door']
+        x,y = seg.xy
+        if bdoor:
+            plt.plot(x,y,color='r',linewidth=thick*10,alpha=1)
+        else:
+            plt.plot(x,y,color='k',linewidth=thick*10,alpha=1)
+    plt.axis('scaled')
+

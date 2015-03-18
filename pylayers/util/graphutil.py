@@ -65,6 +65,8 @@ def draw(G,**kwargs):
                 'width': 2,
                 'node_color':'w',
                 'edge_color':'k',
+                'posnode_color':'k',
+                'negnode_color':'b',
                 'node_size': 200,
                 'width': 2,
                 'font_size': 30,
@@ -134,8 +136,15 @@ def draw(G,**kwargs):
                                node_size  = kwargs['node_size'],
                                alpha = kwargs['alphan'],ax=ax)
     if kwargs['labels']:
+        nlp = filter(lambda x: x>0, nodelist)
+        nln = filter(lambda x: x<0, nodelist)
         nx.draw_networkx_labels(G, G.pos,
-                                labels={n:n for n in nodelist},
+                                labels={n:n for n in nln},
+                                font_color=kwargs['negnode_color'],
+                                font_size=kwargs['font_size'],ax=ax)
+        nx.draw_networkx_labels(G, G.pos,
+                                labels={n:n for n in nlp},
+                                font_color=kwargs['posnode_color'],
                                 font_size=kwargs['font_size'],ax=ax)
 
     if kwargs['edges']:

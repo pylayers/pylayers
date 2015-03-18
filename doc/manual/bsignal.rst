@@ -74,35 +74,3 @@ A simulation file contains the description of an applied waveform.
     @savefig default_wav.png width=5in 
     In [8]: st.plot()
 
-
-*Construction of the VectChannel*
-
-:ref:`pylayers.antprop.channel.VectChannel`
-
-.. ipython::
-
-    In [9]: vc = S.VC(1,1)
-    
-    @savefig doadod.png width=8in
-    In [10]: vc.doadod()
-
-
-*Construction of the ScalChannel*
-
-.. ipython::
-
-    In [1]: H = vc.tran2prop()
-
-
-Tchannel object is the container for the ray transfer function 
-
-.. ipython::
-
-    In [1]: S.tx.A.info()
-
-    In [1]: plt.figure()
-
-    @savefig rayTF.png width=6in 
-    In [2]: H.plot(ix=np.arange(10))
-
-

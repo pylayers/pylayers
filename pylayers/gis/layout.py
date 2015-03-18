@@ -4,11 +4,11 @@
 
 This class handle the description of an Indoor layout
 
-.. autosummary::
-    :toctree: generated
-
 Class Layout
 ============
+
+.. autosummary::
+    :toctree: generated
 
 Utility functions
 -----------------
@@ -269,6 +269,8 @@ import pylayers.gis.osmparser as osm
 #from pylayers.gis import cycles as Cycls
 from pylayers.gis import cycles as cycl # new version of cycles
 from pylayers.gis.selectl import SelectL
+from pylayers.gui.editor_select import SelectL2
+
 from pylayers.util.easygui import *
 from pylayers.util.project import *
 #from   PyUtil  import *
@@ -379,6 +381,8 @@ class Layout(PyLayers):
         self.display['edges'] = True
         self.display['ednodes'] = False
         self.display['subseg'] = True
+        self.display['subsegnb'] = True
+        self.display['transition'] = True
         self.display['visu'] = False
         self.display['thin'] = False
         self.display['scaled'] = True
@@ -401,7 +405,7 @@ class Layout(PyLayers):
         self.load(_filename)
         self.boundary()
 
-        # If a the layout has already been built then load the built structure
+        # If the layout has already been built then load the built structure
         if not force:
             try:
                 self.dumpr()
@@ -440,6 +444,12 @@ class Layout(PyLayers):
         if hasattr(self,'name'):
             st = st + "name :  {slab :seglist} " +"\n"
         st = st + "\nUseful arrays"+"\n----------------\n"
+        if hasattr(self,'pt'):
+            st = st + "pt : numpy array of points " +"\n"
+        if hasattr(self,'normal'):
+            st = st + "normal : numpy array of normal " +"\n"
+        if hasattr(self,'offset'):
+            st = st + "offset : numpy array of offset " +"\n"
         if hasattr(self,'tsg'):
             st = st + "tsg : get segment index in Gs from tahe" +"\n"
         if hasattr(self,'isss'):
@@ -594,9 +604,9 @@ class Layout(PyLayers):
 
 
         #
-        # check if there is duplicate points or segments 
+        # check if there is duplicate points or segments
         #
-        # TODO argsort x coordinate 
+        # TODO argsort x coordinate
         #
 
 
@@ -609,7 +619,7 @@ class Layout(PyLayers):
         sd1= np.sum(d1,axis=0)
         if not sd1.all()<>0:
            lu = np.where(sd1==0)[0]
-        
+
            for u in lu:
                if ke[u]>0:
                    self.del_segment(ke[u])
@@ -685,7 +695,7 @@ class Layout(PyLayers):
         return np.setdiff1d(iseg, u)
 
     def g2npy(self):
-        """ conversion from graphs to numpy arrays 
+        """ conversion from graphs to numpy arrays
 
         Notes
         -----
@@ -826,16 +836,30 @@ class Layout(PyLayers):
             assert (scale.all()>0)
             self.normal = np.vstack((normx,normy,np.zeros(len(scale))))/scale
 
+
             #for ks in ds:
             #
             # lsss : list of subsegment
             #
             nsmax  = max(self.Gs.node.keys())
+            # Warning
+            # -------
             # nsmax can be different from the total number of segments
+            # This means that the numerotation of segment do not need to be
+            # contiguous.
+            # stridess : length is equal to nsmax+1
+            # sla is an array of string, index 0 is not used because there is
+            # no such segment number.
+            #
             self.lsss = []
             self.isss = []
-            self.stridess = np.array(np.zeros(nsmax+1),dtype=int)
-            self.sla  = np.zeros((nsmax+1+self.Nss), dtype='S20')
+
+            #self.stridess = np.array(np.zeros(nsmax+1),dtype=int)
+            self.stridess = np.empty(nsmax+1,dtype=int)
+            # +1 is for discarding index 0 (unused here)
+            self.sla  = np.empty((nsmax+1+self.Nss), dtype='S20')
+            self.offset = np.empty(nsmax+1+self.Nss,dtype=int)
+
 
             # Storing segment normals
             # Handling of subsegments
@@ -845,17 +869,30 @@ class Layout(PyLayers):
             index = nsmax+1
             for ks in useg:
                 k = self.tgs[ks]                        # index numpy
+                self.offset[k]=self.Gs.node[ks]['offset']
                 self.Gs.node[ks]['norm'] = self.normal[:,k]  # update normal
-                self.sla[ks]=self.Gs.node[ks]['name']   # update sla array
-                self.stridess[ks]=0                     # initialize stridess[ks]
+                nameslab  = self.Gs.node[ks]['name']   # update sla array
+                assert nameslab!='', "segment "+str(ks)+ " is not defined"
+                self.sla[ks] = nameslab
+                # stridess is different from 0 only for subsegments
+                self.stridess[ks] = 0                   # initialize stridess[ks]
+                #if index==155:
+                #    pdb.set_trace()
                 if self.Gs.node[ks].has_key('ss_name'): # if segment has sub segment
                     nss = len(self.Gs.node[ks]['ss_name'])  # retrieve number of sseg
                     self.stridess[ks]=index-1           # update stridess[ks] dict
-                    for slabname in self.Gs.node[ks]['ss_name']:
+                    for uk,slabname in enumerate(self.Gs.node[ks]['ss_name']):
                         self.lsss.append(ks)
                         self.sla[index] = slabname
                         self.isss.append(index)
+                        self.offset[index] = self.Gs.node[ks]['ss_offset'][uk]
                         index = index+1
+
+        # append sub segment normal to normal
+
+        normal_ss = self.normal[:,self.tgs[self.lsss]]
+        self.normal = np.hstack((self.normal,normal_ss))
+
 
         # calculate extremum of segments
         #
@@ -866,7 +903,7 @@ class Layout(PyLayers):
         # wedge < 179 (not flat)
         idiff = filter(lambda x: wedgea[x]<179,range(len(self.degree[2])))
         self.ldiff = map(lambda x : self.degree[2][x],idiff)
-        # if problem here check file format 'z' should be a string 
+        # if problem here check file format 'z' should be a string
         self.maxheight = np.max([v[1] for v in nx.get_node_attributes(self.Gs,'z').values()])
 
         self.extrseg()
@@ -939,7 +976,7 @@ class Layout(PyLayers):
                 self.Gs.add_edge(ns,nhe)
                 self.Gs.node[ns] = d
                 self.Gs.pos[ns] = tuple((np.array(self.Gs.pos[nta])+np.array(self.Gs.pos[nhe]))/2.)
-                if name not in self.display['layers']:
+                if name not in self.display['subseg']:
                     self.display['layers'].append(name)
                 self.labels[ns] = str(ns)
                 if d.has_key('ss_name'):
@@ -977,7 +1014,7 @@ class Layout(PyLayers):
         """
         fileosm = pyu.getlong(_fileosm,'struc')
         #
-        # 
+        #
         #
         lonmin = -2
         lonmax = -1
@@ -1009,7 +1046,7 @@ class Layout(PyLayers):
                 fd.write("<tag k='z' v=\""+str(d['z'])+"\" />\n")
                 fd.write("<tag k='transition' v='"+str(d['transition'])+"' />\n")
                 if d.has_key('ss_name'):
-                    ch = str(d['ss_name'])   
+                    ch = str(d['ss_name'])
                     fd.write("<tag k='ss_name' v=\""+ch+"\" />\n")
                     fd.write("<tag k='ss_z' v=\""+str(d['ss_z'])+"\" />\n")
                 fd.write("</way>\n")
@@ -1118,7 +1155,7 @@ class Layout(PyLayers):
         self.Gs.pos = {}
         self.labels = {}
 
-        # manage ini file with latlon coordinates
+        #manage ini file with latlon coordinates
         if di['info'].has_key('format'):
             if di['info']['format']=='latlon':
                 or_coord_format = 'latlon'
@@ -1128,7 +1165,7 @@ class Layout(PyLayers):
                 coords.boundary=np.hstack((np.min(np.array(coords.latlon.values()),axis=0),
                                            np.max(np.array(coords.latlon.values()),axis=0)))
                 coords.cartesian(cart=True)
-        else : 
+        else :
             or_coord_format = 'cart'
         #
         # update display section
@@ -1144,12 +1181,12 @@ class Layout(PyLayers):
         for nn in di['points']:
             nodeindex = eval(nn)
             if or_coord_format=='latlon':
-                x,y =coords.xy[nn]  
+                x,y =coords.xy[nn]
             else :
                 x,y       = eval(di['points'][nn])
-            
-                    
-            
+
+
+
             #
             # limitation of point precision is important for avoiding
             # topological problems in shapely.
@@ -1166,14 +1203,23 @@ class Layout(PyLayers):
             d = eval(di['segments'][ns])
             if d.has_key('ss_name'):
                 Nss = Nss + len(d['ss_name'])
+                ss_offset=[]
                 for n in d['ss_name']:
                     if n in self.name:
                         self.name[n].append(eval(ns))
                     else:
                         self.name[n]=[eval(ns)]
+                    ss_offset.append(0)
+                if not d.has_key('ss_offset'):
+                    d['ss_offset']=ss_offset
+
             name = d['name']
             nta = d['connect'][0]
             nhe = d['connect'][1]
+            if not d.has_key('offset'):
+                d['offset']=0
+
+
             x,y = tuple((np.array(self.Gs.pos[nta])+np.array(self.Gs.pos[nhe]))/2.)
             # round to mm
             self.Gs.pos[eval(ns)] = (round(1000*x)/1000.,round(1000*y)/1000.)
@@ -2120,11 +2166,11 @@ class Layout(PyLayers):
         # delete old edge ns
         self.del_segment(ns)
         # add new edge np[0] num
-        self.add_segment(nop[0], num, name=namens, z = (zminns,zmaxns))
+        self.add_segment(nop[0], num, name=namens, z = (zminns,zmaxns), offset=0)
         # add new edge num np[1]
-        self.add_segment(num, nop[1], name=namens, z = (zminns,zmaxns))
+        self.add_segment(num, nop[1], name=namens, z = (zminns,zmaxns), offset=0)
 
-    def add_segment(self, n1, n2, name='PARTITION',z=(0.0,3.0)):
+    def add_segment(self, n1, n2, name='PARTITION',z=(0.0,3.0),offset=0):
         """  add edge between node n1 and node n2
 
         Parameters
@@ -2136,6 +2182,8 @@ class Layout(PyLayers):
             layer name 'PARTITION'
         z : tuple of float
             default = (0,3.0)
+        offset : float
+            [-1,1] default (0)
 
         Returns
         -------
@@ -2195,11 +2243,14 @@ class Layout(PyLayers):
         self.Gs.add_node(num, z=z)
         self.Gs.add_node(num, norm=norm)
         self.Gs.add_node(num, transition=transition)
+        self.Gs.add_node(num, offset=offset)
+
         self.Gs.pos[num] = tuple((p1 + p2) / 2.)
         self.Gs.add_edge(n1, num)
         self.Gs.add_edge(n2, num)
         self.Ns = self.Ns + 1
         # update slab name <-> edge number dictionnary
+        print num,name
         try:
             self.name[name].append(num)
         except:
@@ -2348,7 +2399,7 @@ class Layout(PyLayers):
         """ delete points in list lp
 
         Parameters
-        ----------
+        ----------add
 
         lp : list
             node list
@@ -2621,7 +2672,7 @@ class Layout(PyLayers):
 
     def info_segment(self, s1):
         """ information about segment
-       
+
         Parameters
         ----------
 
@@ -2666,7 +2717,7 @@ class Layout(PyLayers):
         self.Gs.pos[np]=tuple(eval(data[0]),eval(data[1]))
 
 
-    def chgmss(self,ns,ss_name=[],ss_z=[]):
+    def chgmss(self,ns,ss_name=[],ss_z=[],ss_offset=[]):
         """ change multi subseggments properties
 
         Parameters
@@ -2680,6 +2731,8 @@ class Layout(PyLayers):
 
         ss_z : list of Nss tuple (zmin,zmax)
 
+        ss_offset : list os subsegment offsets
+
         Examples
         --------
 
@@ -2689,18 +2742,29 @@ class Layout(PyLayers):
         pylayers.gis.layout.g2npy
 
         """
+
+        if ss_z!=[]:
+            assert len(ss_name)==len(ss_z),'Error incompatible size in chgmss'
+        if ss_offset!=[]:
+            assert len(ss_z)==len(ss_offset),'Error incompatible size in chgmss'
+
         if ns in self.Gs.node.keys():
             if self.Gs.node[ns].has_key('ss_name'):
                 if ss_name<>[]:
                     self.Gs.node[ns]['ss_name']=ss_name
                 if ss_z<>[]:
                     self.Gs.node[ns]['ss_z']=ss_z
+                if ss_offset<>[]:
+                    self.Gs.node[ns]['ss_offset']=ss_offset
+                else:
+                    self.Gs.node[ns]['ss_offset']=[0]*len(ss_name)
+
 
                 # update Layout information
                 self.g2npy()
 
-    def edit_segment(self, e1 , gui=True):
-        """ edit segment
+    def edit_segment(self, e1 , gui=True,outdata={}):
+        """ edit segment WITH EasyGUI
 
         Parameters
         ----------
@@ -2731,45 +2795,112 @@ class Layout(PyLayers):
         title = "Segment (" + str(n1) + ',' + str(n2) + ")"
         message = str(self.sl.keys())
         if 'ss_name' not in de1.keys():
-            de1k = ['name', 'z','transition']
-            de1v = [de1['name'],de1['z'],de1['transition']]
+            de1k = ['name', 'z','transition','offset']
+            de1v = [de1['name'],de1['z'],de1['transition'],de1['offset']]
         else:
-            de1k = ['name', 'z', 'ss_name', 'ss_z','transition']
+            de1k = ['name', 'z', 'ss_name', 'ss_z','transition','ss_offset']
             de1v = [de1['name'], de1['z'], de1['ss_name'], de1['ss_z'],
-                    de1['transition']]
+                    de1['transition'],de1['ss_offset']]
         #de1v    = de1.values()
         if gui:
+            outdata={}
             data0 = choicebox('chose slab',title,self.sl.keys())
-            data1 = multenterbox('attribute for ' + data0, title, tuple(de1k[1:]), tuple(de1v[1:]))
-            data = [data0]+data1
-            #data = multenterbox(message, title, tuple(de1k), tuple(de1v))
-            i = 0
-            self.name[de1['name']].remove(e1)
-            for k in de1k:
-                try:
-                    self.Gs.node[e1][k] = eval(data[i])
-                except:
-                    self.Gs.node[e1][k] = data[i]
-                    if k == 'name':
-                        try:
-                            self.name[data[i]].append(e1)
-                        except:
-                            self.name[data[i]] = [e1]
-                i = i + 1
+            try:
+                data1 = multenterbox('attribute for ' + data0, title, tuple(de1k[1:]), tuple(de1v[1:]))
+                d1 = data1[0].split(' ')
+                d1t = tuple((eval(d1[0]),eval(d1[1])))
+                data1[0]=d1t
+                data = [data0]+data1
+                #data = multenterbox(message, title, tuple(de1k), tuple(de1v))
+                i = 0
+                self.name[de1['name']].remove(e1)
+                for k in de1k:
+                    try:
+                        self.Gs.node[e1][k] = eval(data[i])
+                        outdata[k]=eval(data[i])
+                    except:
+                        self.Gs.node[e1][k] = data[i]
+                        outdata[k]=data[i]
+                        if k == 'name':
+                            try:
+                                self.name[data[i]].append(e1)
+                            except:
+                                self.name[data[i]] = [e1]
+                    i = i + 1
+            except:
+                # if cancel
+                pass
         else:
-            data = {}
-            val = '1'
-            while(val<>'0'):
-                clear
-                print '0 : exit'
-                for e,(k,v) in enumerate(zip(de1k,de1v)):
-                    print str(e+1)+ ' '+k+': '+  str(v)+'\n'
-                val = input('Your choice :')
-                if val<>'0':
+            if outdata=={}:
+                pass
+                # data = {}
+                # val = '1'
+                # while(val<>'0'):
+                #     clear
+                #     print '0 : exit'
+                #     for e,(k,v) in enumerate(zip(de1k,de1v)):
+                #         print str(e+1)+ ' '+k+': '+  str(v)+'\n'
+                #     val = input('Your choice :')
+                #     if val<>'0':
+                #         pass
+            else:
+                for k in de1k:
+                    if k in ['z','name','transition','offset']:
+                        self.Gs.node[e1][k] = outdata[k]
+        return outdata
+
+    def edit_seg(self, e1 ,data={}):
+        """ edit segment
+
+        Parameters
+        ----------
+
+        e1 : integer
+            edge number
+        data : dict
+            dictionnary of value of seg or subseg
+
+        Notes
+        -----
+
+        A segment has the following properties :
+            + name  : string
+            + z  :  tuple
+            + transition : boolean (default FALSE)
+            + offset : [-1,1]
+        If a segment has subsegments attached the following properties are
+        added :
+            + ss_name : list of string
+            + ss_z : list of subsegment e.q. [(min height (meters),max height (meters))]
+            + ss_offset : list of offset in [0,1]
+        """
+
+        if data=={}:
+            pass
+        else:
+
+            ename = self.Gs.node[e1]['name']
+            # manage self.name
+            self.name[ename].pop(self.name[ename].index(e1))
+            # manage self.display['name']
+            if len(self.name[ename]) == 0:
+                try:
+                    self.display['layers'].pop(self.display['layers'].index(ename))
+                except:
                     pass
 
+            for k in data:
+                self.Gs.node[e1][k] = data[k]
 
-       
+
+        self.name[data['name']].append(e1)
+
+        if data['name'] not in self.display['layers']:
+            self.display['layers'].append(data['name'])
+
+        return data
+
+
     def have_subseg(self, e1):
         """
         have_subseg
@@ -2792,6 +2923,7 @@ class Layout(PyLayers):
         if self.have_subseg(e1):
             self.Gs.node[e1].pop('ss_name')
             self.Gs.node[e1].pop('ss_z')
+            self.Gs.node[e1].pop('ss_offset')
             try:
                 self.Gs.node[e1].pop('ss_ce')
             except:
@@ -2801,8 +2933,8 @@ class Layout(PyLayers):
         elif verbose:
             print "no subseg to delete"
 
-    def add_subseg(self,s1,name='DOOR',zmin=0,zmax=2.24):
-        """ add a subsegment on a segment
+    def add_subseg(self,s1,name='DOOR',zmin=0,zmax=2.24,offset=0,transition=True):
+        """ add a subsegment on a segment WITH EasyGUI
 
         Parameters
         ----------
@@ -2820,14 +2952,66 @@ class Layout(PyLayers):
         self.info_segment(s1)
         message = str(self.sl.keys())
         title = 'Add a subsegment'
-        data = multenterbox(message, title, ('name', 'zmin', 'zmax'),
-                                            (name, zmin, zmax))
+        data = multenterbox(message, title, ('name', 'zmin', 'zmax','offset'),
+                                            (name, zmin, zmax,offset))
+        try:
+            self.Gs.node[s1]['ss_name'] = [data[0]]
+            self.Nss += 1
+            self.chgmss(s1,ss_name=[data[0]],ss_offset=[eval(data[3])],ss_z=[(eval(data[1]),eval(data[2]))])
+            #self.Gs.node[s1]['ss_z'] =
+            # ce is for Pulsray compatibility
+            #self.Gs.node[s1]['ss_ce'] = [ (0,0) ]
+            self.Gs.node[s1]['transition'] = transition
+            return True
+        except:
+            return False
 
-        self.Gs.node[s1]['ss_name'] = [data[0]]
-        self.Gs.node[s1]['ss_z'] = [(eval(data[1]),eval(data[2]))]
-        self.Gs.node[s1]['ss_ce'] = [ (0,0) ]
-        self.Gs.node[s1]['transition'] = True
-        self.Nss += 1
+
+    def update_sseg(self,s1,data={}):
+        """ update subsegment(s) on a segment
+
+        Parameters
+        ----------
+
+        s1 : integer
+            edge number > 0
+        data = dict
+            dictionnary of data
+
+        """
+
+        assert len(data['ss_name'])==len(data['ss_z']),'Error incompatible size in chgmss'
+        assert len(data['ss_z'])==len(data['ss_offset']),'Error incompatible size in chgmss'
+        if s1<0:
+            return False
+
+        new_nbss = len(data['ss_name'])
+
+        try:
+            old_nbss = len(self.Gs.node[s1]['ss_name'])
+        except:
+            old_nbss = 0
+        # update the number of subsegments for self.Nss
+        deltaNss= new_nbss - old_nbss
+        print deltaNss
+        if new_nbss != 0:
+            self.Gs.node[s1]['ss_name'] = [data['ss_name']]
+            self.Nss += deltaNss
+            self.chgmss(s1,ss_name=data['ss_name'],
+                ss_offset=data['ss_offset'],
+                ss_z=data['ss_z'])
+            return True
+        else:
+            if self.Gs.node[s1].has_key('ss_name'):
+                self.Gs.node[s1].pop('ss_name')
+                self.Gs.node[s1].pop('ss_z')
+                self.Gs.node[s1].pop('ss_offset')
+                self.Nss += deltaNss
+                self.g2npy()
+                return True
+            else :
+                return True
+
 
     def add_window(self, s1, z):
         """ add a window on segment
@@ -3515,7 +3699,7 @@ class Layout(PyLayers):
         #>>> p2 = np.array([10,3])
         #>>> L.angleonlinkold(p1,p2)
         #(array([59, 62, 65]), array([ 1.27933953,  0.29145679,  0.29145679]))
-       
+
         Notes
         -----
 
@@ -3528,7 +3712,7 @@ class Layout(PyLayers):
         nu = np.sqrt(np.dot(u, u))
         un = u / nu
 
-       
+
         seglist = self.seginframe(p1, p2)
         # new implementation of seginframe is faster
         #
@@ -3665,7 +3849,7 @@ class Layout(PyLayers):
         >>> L = Layout('TA-Office.ini')
         >>> ptlist  = np.array([0,1])
         >>> L.segpt(ptlist)
-        array([44, 61, 62, 86])
+        array([26, 61, 62, 70])
 
         """
 
@@ -4202,7 +4386,7 @@ class Layout(PyLayers):
         fileGc = filename + 'Gc' + '.gml'
         self.Gc = nx.read_gml(fileGc)
 
-    def show_nodes(self, ndlist=[1e8], size=10, color='b', dlabels=False, font_size=15, alpha=1):
+    def show_nodes(self, ndlist=[1e8], size=10, color='b', dlabels=False, font_size=15, alpha=1,node_shape='o',fig=[],ax=[]):
         """ show nodes
 
         Parameters
@@ -4218,27 +4402,47 @@ class Layout(PyLayers):
         alpha : float
             transparancy
         """
+        if fig ==[]:
+            fig = plt.figure()
+        if ax ==[]:
+            ax = fig.add_subplot(111)
+
         if type(ndlist) == np.ndarray:
             ndlist = list(ndlist)
         if len(ndlist) == 0:
-            ndlist.append(1e8)
+            # ndlist.append(1e8)
             dlabels = False
-        if ndlist[0] == 1e8:
+        elif ndlist[0] == 1e8:
             ndlist = self.Gs.node.keys()
         #elif ndlist[0]==1e8:
         #    ndlist  = self.Gs.node.keys()
 
         #print ndlist
-        nx.draw_networkx_nodes(self.Gs, self.Gs.pos, node_color=color,
-                               node_size=size, nodelist=ndlist, alpha=alpha)
+        Z=nx.draw_networkx_nodes(self.Gs, self.Gs.pos, node_color=color,
+                               node_size=size, nodelist=ndlist, alpha=alpha,
+                               node_shape=node_shape,fig=fig,ax=ax)
+        try:
+            fig=Z.figure
+            ax=Z.axes
+        except:
+            pass
         if dlabels:
             dicopos = {}
             dicolab = {}
             for n in ndlist:
                 dicopos[n] = np.array(self.Gs.pos[n])
                 dicolab[n] = self.labels[n]
-            nx.draw_networkx_labels(self.Gs, dicopos, dicolab,
-                                    font_size=font_size, font_color=color)
+            Z=nx.draw_networkx_labels(self.Gs, dicopos, dicolab,
+                                    font_size=font_size, font_color=color,fig=fig,ax=ax)
+            try:
+                fig=Z.figure
+                ax=Z.axes
+            except:
+                pass
+
+
+        return fig,ax
+
 
     def show_seg1(self, edlist=[], alpha=1, width=1, size=2, color='black', font_size=15, dlabels=False):
         """ show segment
@@ -4296,19 +4500,30 @@ class Layout(PyLayers):
 
         """
 
-        defaults = {'edlist': [],
+        defaults = { 'fig':[],
+                    'ax':[],
+                    'edlist': [],
                     'alpha':1,
                     'width':1,
                     'color':'black',
                     'dnodes':False,
                     'dlabels':False,
-                    'font_size':15
+                    'font_size':15,
+                    'node_shape':'o'
                    }
 
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
 
+        if kwargs['fig'] ==[]:
+            fig = plt.figure()
+        else :
+            fig = kwargs['fig']
+        if kwargs['ax'] ==[]:
+            ax = fig.add_subplot(111)
+        else :
+            ax=kwargs['ax']
         clrlist = []
         cold = pyu.coldict()
 
@@ -4319,26 +4534,35 @@ class Layout(PyLayers):
             if color=='#FFFFF0':
                 color = '#00000F'
             clrlist.append(color)
-
         ecmap = clr.ListedColormap(clrlist)
 
         U = self.Gs.edges(kwargs['edlist'])
         ue = (np.ones(2 * len(kwargs['edlist']))).astype('int').tolist()
         if len(U) >0:
-            nx.draw_networkx_edges(self.Gs, self.Gs.pos, edgelist=U,
+            Z=nx.draw_networkx_edges(self.Gs, self.Gs.pos, edgelist=U,
                                edge_color=ue, edge_cmap=ecmap,
-                               alpha=kwargs['alpha'], width=kwargs['width'])
+                               alpha=kwargs['alpha'], width=kwargs['width'],fig=fig,ax=ax)
+            try:
+                fig=Z.figure
+                ax=Z.axes
+            except:
+                pass
+
         if kwargs['dlabels']:
                # print edlist
                # nodelist = self.ed2nd(edlist)
-            self.show_nodes(ndlist=kwargs['edlist'], dlabels=kwargs['dlabels'],
-                            color='b', font_size=kwargs['font_size'])
+            fig,ax=self.show_nodes(ndlist=kwargs['edlist'], dlabels=kwargs['dlabels'],
+                            color='b', font_size=kwargs['font_size'],
+                            node_shape=kwargs['node_shape'],fig=fig,ax=ax)
         if kwargs['dnodes']:
-            self.show_nodes(ndlist=kwargs['edlist'], color='b')
+            fig,ax=self.show_nodes(ndlist=kwargs['edlist'], color='b',fig=fig,ax=ax)
+
+        return fig,ax
+
 
     def show_layer(self, name, edlist=[], alpha=1, width=0,
                    color='black', dnodes=False, dthin=False,
-                   dlabels=False, font_size=15,fGHz=[]):
+                   dlabels=False, font_size=15,fGHz=[],fig=[],ax=[]):
         """ show layer
 
         Parameters
@@ -4361,6 +4585,13 @@ class Layout(PyLayers):
 
 
         """
+
+        if fig ==[]:
+            fig = plt.figure()
+        if ax ==[]:
+            ax = fig.add_subplot(111)
+
+
         if edlist == []:
             edlist = self.name[name]
         else:
@@ -4370,12 +4601,12 @@ class Layout(PyLayers):
             edlist = list(np.intersect1d(a1, a2))
 
         if self.display['thin']:
-            self.show_segment(edlist=edlist,
+            fig,ax=self.show_segment(edlist=edlist,
                               alpha=1,
                               width=1,
                               color=color,
                               dlabels=dlabels,
-                              font_size=font_size)
+                              font_size=font_size,fig=fig,ax=ax)
         else:
             slab = self.sl[name]
             if width==0:
@@ -4390,9 +4621,10 @@ class Layout(PyLayers):
                 else:
                     color = 'black'
 
-            self.show_segment(edlist=edlist, alpha=1,
+            fig,ax=self.show_segment(edlist=edlist, alpha=1,
                             width=linewidth, color=color, dnodes=dnodes,
-                            dlabels=dlabels, font_size=font_size)
+                            dlabels=dlabels, font_size=font_size,fig=fig,ax=ax)
+        return fig,ax
 
     def _showGi(self, **kwargs):
         """  show graph of interactions Gi
@@ -4543,7 +4775,8 @@ class Layout(PyLayers):
                     'width': 2,
                     'fGHz' : [],
                     'show':False,
-                    'furniture':False}
+                    'furniture':False,
+                    }
 
         for k in defaults:
             if k not in kwargs:
@@ -4599,8 +4832,32 @@ class Layout(PyLayers):
 
         if self.display['nodes']:
             dlabels = self.display['ndlabel']
-            self.show_nodes(ndlist, size=10, color='r', dlabels=dlabels)
+            fig,ax=self.show_nodes(ndlist, size=30, color='k', dlabels=dlabels,node_shape='s',fig=fig,ax=ax)
 
+        if self.display['subsegnb']:
+            if hasattr(self,'lsss'):
+                seg = self.lsss
+                psseg = np.array([[self.Gs.pos[x][0],self.Gs.pos[x][1]] for x in seg])
+                nbsseg = np.array([len(self.Gs.node[x]['ss_name']) for x in seg],dtype='int')
+
+                [ax.text(psseg[x,0]+0.2,psseg[x,1]+0.2,str(nbsseg[x]),
+                    fontdict={'size':8},ha='center') for x in range(len(seg))]
+
+        if self.display['transition']:
+            try:
+                segwtrans = [y for y in [x for x in self.Gs.nodes() if x>0 ]if self.Gs.node[y]['transition']]
+                posseg = np.array([self.Gs.pos[x] for x in segwtrans])
+                normseg = np.array([self.Gs.node[x]['norm'] for x in segwtrans])[:,:2]
+                b1 = (posseg-normseg/2)
+                b2 = (posseg+normseg/2)
+                [ax.annotate('', xy=b1[x],
+                            xycoords='data',
+                            xytext=b2[x],
+                            textcoords='data',
+                            arrowprops={'arrowstyle': '<->'})
+                        for x in range(len(segwtrans))]
+            except:
+                pass
         slablist = self.name.keys()
         if self.display['edges']:
             dlabels = self.display['edlabel']
@@ -4609,9 +4866,15 @@ class Layout(PyLayers):
             dthin = self.display['thin']
             alpha = self.display['alpha']
             for nameslab in self.display['layers']:
-                self.show_layer(nameslab, edlist=edlist, alpha=alpha,
+                color = self.sl[nameslab]['color']
+                edlist = self.name[nameslab]
+                fig,ax=self.show_layer(nameslab, edlist=edlist, alpha=alpha,
                                 dthin=dthin, dnodes=dnodes, dlabels=dlabels,
-                                font_size=font_size,width=kwargs['width'],fGHz=kwargs['fGHz'])
+                                color =color,
+                                font_size=font_size,
+                                width=kwargs['width'],
+                                fGHz=kwargs['fGHz'],
+                                fig=fig,ax=ax)
 
         if self.display['subseg']:
             dico = self.subseg()
@@ -4631,7 +4894,7 @@ class Layout(PyLayers):
                     #edlist2.append(ts)
                 edlist3 = list(set(edlist2).intersection(set(edlist)))
                 #print k , color , edlist
-                self.show_segment(edlist=edlist3, color=color, alpha=1.0,width=2)
+                fig,ax=self.show_segment(edlist=edlist3, color=color, alpha=1.0,width=2,fig=fig,ax=ax)
 
         if self.display['scaled']:
             ax.axis('scaled')
@@ -4655,7 +4918,7 @@ class Layout(PyLayers):
 
         for nr in kwargs['roomlist']:
             ncy = self.Gr.node[nr]['cycle']
-            self.Gt.node[ncy]['polyg'].plot()
+            fig,ax=self.Gt.node[ncy]['polyg'].plot(fig=fig,ax=ax)
         if kwargs['axis']==[]:
             ax.axis('scaled')
         else:
@@ -4683,7 +4946,6 @@ class Layout(PyLayers):
         """
         # list of built graphs
 
-
         if 't' in graph:
             if verbose:
                 print "Gt"
@@ -4691,10 +4953,11 @@ class Layout(PyLayers):
             if convex:
                 #Make the layout convex in regard of the outddor
                 self._convex_hull()
-                # # Ensure convexity of all cycles
+                # #Ensure convexity of all cycles
                 self._convexify()
-                # re-attach new cycles 
-                self.buildGt()
+                # # re-attach new cycles
+                # self.buildGt()
+
             self.lbltg.extend('t')
 
         if 'c' in graph:
@@ -4806,7 +5069,6 @@ class Layout(PyLayers):
         graph : string
             't' : Gt
             'r' : Gr
-            's' : Gs
             'v' : Gv
             'i' : Gi
 
@@ -4815,7 +5077,7 @@ class Layout(PyLayers):
         specified by the $BASENAME environment variable
 
         """
-        graphs=['s','t','c','v','i','r','w']
+        graphs=['t','c','v','i','r','w']
         path = os.path.join(basename,'struc','gpickle',self.filename)
         for g in graphs:
             try:
@@ -4963,7 +5225,7 @@ class Layout(PyLayers):
                 self.Gt.add_edge(k[0], k[1],segment= segment)
 
         #
-        #   6 - Update graph Gs segment with their 2 cycles  information
+        #   6 - Update graph Gs segment with their 2 cycles information
         #
         #   initialize a void list 'ncycles' for each segment of Gs
         #
@@ -5083,7 +5345,7 @@ class Layout(PyLayers):
 
         Update graph Gs segment with their 2 cycles  information
         initialize a void list 'ncycles' for each segment of Gs
-        
+
         See Also
         --------
 
@@ -5112,7 +5374,7 @@ class Layout(PyLayers):
 
     def _addoutcy(self):
         """ add outside cycle (absorbant region index 0 )
-        #   if ncycles is a list which has only one element then the adjascent 
+        #   if ncycles is a list which has only one element then the adjascent
         #   cycle is the  outside region (cycle 0)
         """
         for ns in self.Gs.node:
@@ -5122,7 +5384,7 @@ class Layout(PyLayers):
 
     def _interlist(self,nodelist=[]):
         """ Construct the list of interactions associated to each cycle
-        
+
 
         Parameters
         ----------
@@ -5135,11 +5397,11 @@ class Layout(PyLayers):
 
 
          Interaction labeling convention
-        
+
            tuple (npoint,)  : Diffraction on point npoint
            tuple (nseg,ncycle) : Reflection on nseg toward cycle ncycle
            tuple (nseg,cy0,cy1) : Transmission from cy0 to cy1 through nseg
-        
+
            At that stage the diffraction points are not included
            not enough information available. The diffraction point are not
            known yet
@@ -5151,7 +5413,7 @@ class Layout(PyLayers):
         pylayers.gis.layout._convex_hull
 
         """
-        
+
         if nodelist == []:
             nodelist = self.Gt.nodes()
         elif not isinstance(nodelist,list):
@@ -5188,14 +5450,14 @@ class Layout(PyLayers):
 
     def _convex_hull(self):
         """
-        Add air walls to the layout enveloppe in order the hull of the Layout 
+        Add air walls to the layout enveloppe in order the hull of the Layout
         to be convex.
 
         Notes
         -----
 
         This is a post processing of BuildGt
-        
+
         See Also
         --------
 
@@ -5204,8 +5466,8 @@ class Layout(PyLayers):
 
         """
 
-        # 1 - Find differences between the convex hull and the Layout contour
-        #     The result of the difference are polygons 
+        #1 - Find differences between the convex hull and the Layout contour
+        #     The result of the difference are polygons
         ch = self.ma.convex_hull
         P = ch.difference(self.ma)
         polys = []
@@ -5215,14 +5477,14 @@ class Layout(PyLayers):
                     polys.append(geu.Polygon(p))
                     polys[-1].setvnodes(self)
 
-        
+
         ncy = max(self.Gt.nodes())+1
         lncy=[]
         for p in polys:
             # p.coorddeter()
             uaw = np.where(p.vnodes == 0)
             for aw in uaw :
-                # 2 - non existing segments are created as airwalls
+                #2 - non existing segments are created as airwalls
                 awid = self.add_segment(p.vnodes[aw-1][0], p.vnodes[aw+1][0], name='AIR')
                 p.vnodes[aw] = awid
                 G = nx.subgraph(self.Gs,p.vnodes)
@@ -5233,11 +5495,11 @@ class Layout(PyLayers):
                 self.Gt.pos[ncy] = tuple(cy.g)
                 # WARNING
                 # recreate polygon is mandatory otherwise cycle.cycle and polygon.vnodes
-                # are shifted.
+                #are shifted.
                 self.Gt.node[ncy]['polyg'] = p#geu.Polygon(p.xy,cy.cycle)
                 self.Gt.node[ncy]['isopen'] = True
                 self.Gt.node[ncy]['indoor'] = False
-                # 3 - add link between created cycle and outdoor
+                #3 - add link between created cycle and outdoor
                 self.Gt.add_edge(ncy, 0)
                 # 4 - search and add link between the created cycle and indoor cycles
                 for k in self.Gt.nodes():
@@ -5252,21 +5514,21 @@ class Layout(PyLayers):
 
                             self.Gt.add_edge(ncy, k,segment= segment)
 
-                # 5 - Update Gs
+                #5 - Update Gs
                 for v in filter(lambda x: x>0,p.vnodes):
                     # add new ncycle to Gs for the new airwall
-                    # that new airwall always separate the new created cycle
-                    # and the outdoor cycle
+                    #that new airwall always separate the new created cycle
+                    #and the outdoor cycle
                     if v == awid :
                         self.Gs.node[awid]['ncycles']=[ncy,0]
                     # other wise update the cycles seen by segments
                     else :
                         cy = self.Gs.node[v]['ncycles'].pop()
-                        # if the pop cycle is the outdoor cycle, 
+                        #if the pop cycle is the outdoor cycle,
                         # replace it with the new cycle
                         if cy == 0:
                             self.Gs.node[v]['ncycles'].append(ncy)
-                        # else replace old value with [pos cycle , new cycle]
+                        #else replace old value with [pos cycle , new cycle]
                         else:
                             self.Gs.node[v]['ncycles']=[cy,ncy]
                 lncy.append(ncy)
@@ -5278,7 +5540,9 @@ class Layout(PyLayers):
 
     def _convexify(self):
         """ determine which cycles are not convex and convexify it.
-            if a cycle is tagged as non convex 
+
+            if a cycle is tagged as non convex
+
             1- find its polygon
             2- partion polygon into convex polygons (Delaunay)
             3- try to merge partioned polygon in order to obtain
@@ -5288,8 +5552,8 @@ class Layout(PyLayers):
 
         Notes
         -----
-            
-        The algorithm update the Gt nodes and edges created into self.buildGt
+
+        The algorithm updates the Gt nodes and edges created into self.buildGt
         by adding new nodes and connnections
 
         See Also
@@ -5302,18 +5566,21 @@ class Layout(PyLayers):
         sp.spatial.Delaunay
 
         """
-        # function for debug purpose
-        def polyplot(poly):
-            fig,ax=self.showG('s')
+        #function for debug purpose
+        def polyplot(poly,pgs=True):
+            if pgs:
+                fig,ax=self.showG('s')
+
             color=['r','b','g']*10
             for ip, p in enumerate(poly):
                 fig,ax = p.plot(fig=fig,ax=ax,color=color[ip],alpha =0.5)
         # lacy : list of added cycles
         lacy =[]
+        Gt=copy.deepcopy(self.Gt)
         for n in self.Gt.nodes():
-            # if indoor cycle
+            #if indoor cycle
             if n > 0:
-                
+
                 ncy=max(self.Gt.nodes())
 
                 ####
@@ -5322,23 +5589,16 @@ class Layout(PyLayers):
 
                 if not self.Gt.node[n]['polyg'].isconvex():#self.Gt.node[n]['indoor']:
                     no = self.Gt.node[n]['cycle'].cycle
-                    tcc, nn = self.Gt.node[n]['polyg'].ptconvex()
-                    # diffracting points 
-                    utconvex = np.nonzero(tcc == 1)[0]
-                    # all possible diffracting point (in and out of cycle)
-                    utsconvex = np.nonzero(abs(tcc) == 1)[0]
-                    if len(utconvex) != 0:
-                        # get points ID in the cycle
-                        uus = filter(lambda x: x<0,no)
-                        # get point convex ID
-                        uc = np.array(uus)[utconvex]
-                        ucs = np.array(uus)[utsconvex]
+                    cvex,ccve= self.Gt.node[n]['polyg'].ptconvex2()
+                    # keep all convex point (in + out) to build teh delaunay triangulation
+                    ucs= cvex+ccve
+
+                    if len(ucs) !=0:
                         pucs = array(map(lambda x: self.Gs.pos[x], ucs))
                         pucs = np.vstack((pucs,pucs[-1]))
                         ####
-                        #### 2 perform a Delaunay Partioning 
+                        #### 2 perform a Delaunay Partioning
                         ####
-
                         if len(ucs) >2:
                             trid=sp.spatial.Delaunay(pucs)
                             tri =trid.simplices
@@ -5346,30 +5606,26 @@ class Layout(PyLayers):
                             naw = []
                             for t in tri:
                                 ts = geu.Polygon(pucs[t])
-                                # check if the new polygon is contained into 
-                                # the original polygon (non guaratee by Delaunay)
-                                #U = self.Gt.node[n]['polyg'].contains(ts)
-                                U = self.Gt.node[n]['polyg'].intersection(ts)
-                                if not isinstance(U,sh.MultiPolygon):
-                                    U=[U]
-                                for p in U:
-                                    if self.Gt.node[n]['polyg'].contains(p):
-                                        cp = geu.Polygon(p)
-                                        cp.setvnodes(self)
-                                        uaw = np.where(cp.vnodes == 0)[0]
-                                        lvn = len(cp.vnodes)
-                                        for i in uaw:
-                                            # keep trace of created airwalls, because some 
-                                            # of them will be destroyed in step 3.
-                                            naw.append(self.add_segment(
-                                                       cp.vnodes[np.mod(i-1,lvn)],
-                                                       cp.vnodes[np.mod(i+1,lvn)]
-                                                       ,name='AIR'))
-                                        polys.append(cp)
-                        
+                                # check if the new polygon is contained into
+                                #the original polygon (non guaratee by Delaunay)
+                                C = self.Gt.node[n]['polyg'].contains(ts)
+                                if C:
+                                    cp =ts
+                                    cp.setvnodes(self)
+                                    uaw = np.where(cp.vnodes == 0)[0]
+                                    lvn = len(cp.vnodes)
+                                    for i in uaw:
+                                        #keep trace of created airwalls, because some
+                                        #of them will be destroyed in step 3.
+                                        naw.append(self.add_segment(
+                                                   cp.vnodes[np.mod(i-1,lvn)],
+                                                   cp.vnodes[np.mod(i+1,lvn)]
+                                                   ,name='AIR'))
+                                    polys.append(cp)
+
                         #
                         # 3. merge delaunay triangulation in order to obtain
-                        #   the larger convex polygons partioning 
+                        #   the larger convex polygons partioning
                         #
                         cpolys = []
                         nbpolys = len(polys)
@@ -5378,7 +5634,7 @@ class Layout(PyLayers):
                             for ip2,p2 in enumerate(polys):
                                 conv=False
                                 inter = p.intersection(p2)
-                                # if 2 triangles have a common segment
+                                #if 2 triangles have a common segment
                                 pold = p
                                 if isinstance(inter,sh.LineString):
                                     p = p + p2
@@ -5400,34 +5656,39 @@ class Layout(PyLayers):
                                     cpolys.append(pold)
                             if len(polys) == 0:
                                 cpolys.append(p)
-                            # polyplot(cpolys,fig=plt.gcf())
-                            # plt.draw()
-                            # import ipdb
-                            # ipdb.set_trace()
-                        ####
+
                         #### 4. ensure the correct vnode numerotaion of the polygons
                         #### and remove unecessary airwalls
 
                         # ncpol : new created polygons
                         ncpol = []
                         vnodes=[]
+
                         for p in cpolys:
                             interpoly = self.Gt.node[n]['polyg'].intersection(p)
                             if isinstance(interpoly,sh.MultiPolygon):
                                 raise AttributeError('multi polygon encountered')
                             else :
-                                ptmp = geu.Polygon(interpoly)
+                                try:
+                                    ptmp = geu.Polygon(interpoly)
+                                except:
+                                    import ipdb
+                                    ipdb.set_trace()
+
                             ptmp.setvnodes(self)
                             ncpol.append(ptmp)
                             vnodes.extend(ptmp.vnodes)
-                        # air walls to be deleted (because origin Delaunay triangle
+                        #air walls to be deleted (because origin Delaunay triangle
                         # has been merged )
                         daw = filter(lambda x: x not in vnodes,naw)
-                        [self.del_segment(d,verbose=False) for d in daw]
-                        nbpolys=len(ncpol)
-                        # remove old cycle
+
+                        for d in daw:
+                            self.del_segment(d,verbose=False)
+                        #remove old cycle
                         self.Gt.remove_node(n)
-                        # lcyid: (new) list of cycle id 
+                        nbpolys=len(ncpol)
+
+                        # lcyid: (new) list of cycle id
                         lcyid = [n] + range(ncy+1,ncy+(nbpolys))
                         lacy.extend(lcyid)
                         for ip,p in enumerate(ncpol):
@@ -5437,7 +5698,18 @@ class Layout(PyLayers):
                             lnode = p.vnodes
                             G = nx.subgraph(self.Gs,lnode)
                             G.pos = {}
+
                             G.pos.update({l: self.Gs.pos[l] for l in lnode})
+
+                            if not len (p.vnodes) == len(G.nodes()):
+                                # some point are counted twice during
+                                # the "self.Gt.node[n]['polyg'].intersection(p)"
+                                #them make a unique with preserved order
+                                _, idx = np.unique(p.vnodes, return_index=True)
+                                pv = p.vnodes[np.sort(idx)]
+                                pp = p.ndarray()[:,np.sort(idx)[::2]/2]
+                                p = geu.Polygon(p=pp,vnodes=pv)
+
                             cy  = cycl.Cycle(G,lnode=p.vnodes)
                             self.Gt.add_node(cyid,cycle=cy)
                             self.Gt.node[cyid]['polyg'] = p#geu.Polygon(p.xy,cy.cycle)
@@ -5445,36 +5717,36 @@ class Layout(PyLayers):
                             self.Gt.node[cyid]['isopen']=True
                             self.Gt.pos[cyid] = tuple(cy.g)
 
-                        
-                        for k in combinations(self.Gt.nodes(), 2):
-                            if not 0 in k:
-                                vnodes0 = np.array(self.Gt.node[k[0]]['cycle'].cycle)
-                                vnodes1 = np.array(self.Gt.node[k[1]]['cycle'].cycle)
-                                #
-                                # Connect Cycles if they share at least one segments
-                                #
-                                intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
 
-                                if len(intersection_vnodes) > 1:
-                                    segment = intersection_vnodes[np.where(intersection_vnodes>0)]
-                                    self.Gt.add_edge(k[0], k[1],segment= segment)
-                            else:
+        for k in combinations(self.Gt.nodes(), 2):
+            if not 0 in k:
+                vnodes0 = np.array(self.Gt.node[k[0]]['cycle'].cycle)
+                vnodes1 = np.array(self.Gt.node[k[1]]['cycle'].cycle)
+                #
+                # Connect Cycles if they share at least one segments
+                #
+                intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
 
-                                vnodes0 = self.Gt.node[k[0]]['polyg'].vnodes
-                                vnodes1 = self.Gt.node[k[1]]['polyg'].vnodes
-                                intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
+                if len(intersection_vnodes) > 1:
+                    segment = intersection_vnodes[np.where(intersection_vnodes>0)]
+                    self.Gt.add_edge(k[0], k[1],segment= segment)
+            else:
 
-                                if len(intersection_vnodes) > 1:
-                                    segment = intersection_vnodes[np.where(intersection_vnodes>0)]
-                                    self.Gt.add_edge(k[0], k[1],segment= segment)
-                               
-                                
+                vnodes0 = self.Gt.node[k[0]]['polyg'].vnodes
+                vnodes1 = self.Gt.node[k[1]]['polyg'].vnodes
+                intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
 
-        # # update self.Gs.node[x]['ncycles']
+                if len(intersection_vnodes) > 1:
+                    segment = intersection_vnodes[np.where(intersection_vnodes>0)]
+                    self.Gt.add_edge(k[0], k[1],segment= segment)
+
+
+
+        # #update self.Gs.node[x]['ncycles']
         # self._updGsncy()
-        # # add outside cycle to Gs.node[x]['ncycles']
+        # #add outside cycle to Gs.node[x]['ncycles']
         # self._addoutcy()
-        # # update interaction list into Gt.nodes (cycles)
+        # #update interaction list into Gt.nodes (cycles)
         # self._interlist(nodelist=lacy)
 
     def buildGw(self):
@@ -5566,7 +5838,7 @@ class Layout(PyLayers):
             # Airwalls case
             else :
 
-                pdoor = (np.array(up0)+np.array(up1)) / 2  
+                pdoor = (np.array(up0)+np.array(up1)) / 2
                 self.Gw.pos[d_id_index] = pdoor
                 self.Gw.add_edges_from([(e[0],d_id_index),(e[1],d_id_index)])
                 d_id_index = d_id_index +1
@@ -5574,7 +5846,7 @@ class Layout(PyLayers):
         self.Gw.pos.update(self.Gr.pos)
 
 #####################
-        # # SINGLE POINT SEGMENT TRANSITION 
+        # # SINGLE POINT SEGMENT TRANSITION
         # d_id = max(self.Gr.nodes())+1
         # # Add trnasistion segments in visibility
         # for e in self.Gr.edges_iter(): # iterator on Gr edges
@@ -5718,7 +5990,7 @@ class Layout(PyLayers):
 
     #     for all edges of Gr (adjascent room)
     #         if room1 and room2 have a common transition
-           
+
 
     #     """
 
@@ -5744,9 +6016,9 @@ class Layout(PyLayers):
 
     #         # middle of the common door
     #         pdoor0 = (np.array(p1) + pn[:2] * thick +\
-    #                   np.array(p2) + pn[:2] * thick) / 2  
+    #                   np.array(p2) + pn[:2] * thick) / 2
     #         pdoor1 = (np.array(p1) - pn[:2] * thick +\
-    #                   np.array(p2) - pn[:2] * thick) / 2  
+    #                   np.array(p2) - pn[:2] * thick) / 2
 
 
     #         upd0 = d_id_index
@@ -5843,6 +6115,9 @@ class Layout(PyLayers):
                 for nk in combinations(nseg, 2):
                     Gv.add_edge(nk[0],nk[1])
 
+                #
+                # Handle diffraction point
+                #
                 if isopen:
                     ndiffvalid = filter(lambda x :
                                         filter(lambda y : y in airwalls
@@ -6114,6 +6389,7 @@ class Layout(PyLayers):
                 # list all potential successors of interaction i1
                 i2 = nx.neighbors(self.Gi,i1)
                 ipoints = filter(lambda x: len(x)==1,i2)
+                pipoints = np.array([self.Gs.pos[ip[0]] for ip in ipoints]).T
                 # filter tuple (R | T)
                 #istup = filter(lambda x : type(eval(x))==tuple,i2)
                 # map first argument segment number
@@ -6128,8 +6404,21 @@ class Layout(PyLayers):
                     points = self.seg2pts(isegments)
                     pta = points[0:2,:]
                     phe = points[2:,:]
+                    # add difraction points
+                    #WARNING Diffrraction points are added only if a segment isseen
+                    # it should be the case in 99% of cases
+
+                    if len(ipoints)>0:
+                        isegments = np.hstack((isegments,np.array(ipoints)[:,0]))
+                        pta = np.hstack((pta,pipoints))
+                        phe = np.hstack((phe,pipoints))
+
                     #cn.show()
 
+                    # if i0 == (38,79) and i1 == (135,79,23):
+                    #     print i0,i1
+                    #     import ipdb
+                    #     ipdb.set_trace()
                     # i1 : interaction T
                     if len(i1)==3:
                         typ,prob = cn.belong_seg(pta,phe)
@@ -6152,10 +6441,20 @@ class Layout(PyLayers):
                         #    plu.displot(pta[:,~bs],phe[:,~bs],color='m')
                         #    plt.show()
                         #    pdb.set_trace())
+                    ########
+                    #SOMETIMES PROBA IS 0 WHEREAS SEG IS SEEN
+                    ###########
+                    # # keep segment with prob above a threshold
+                    # isegkeep = isegments[prob>0]
+                    # # dict   {numint : proba}
+                    # dsegprob = {k:v for k,v in zip(isegkeep,prob[prob>0])}
+                    ########### 4 lines are replaced by
                     # keep segment with prob above a threshold
-                    isegkeep = isegments[prob>0]
+                    utypseg = typ!=0
+                    isegkeep = isegments[utypseg]
                     # dict   {numint : proba}
-                    dsegprob = {k:v for k,v in zip(isegkeep,prob[prob>0])}
+                    dsegprob = {k:v for k,v in zip(isegkeep,prob[utypseg])}
+                    #########
                     output = filter(lambda x : x[0] in isegkeep, i2)
                     probint = map(lambda x: dsegprob[x[0]],output)
                     # dict interaction : proba
@@ -6173,16 +6472,17 @@ class Layout(PyLayers):
                 #
                 #       output of the diffraction points
                 #       exploring
-                #
+                #b
                 #          + right of ISB
                 #          + right of RSB
                 #
                 #  + using the wedge cone
                 #  + using the incident cone
                 #
+
                 output = nx.neighbors(self.Gi,(nstr1,))
                 nout = len(output)
-                probint = np.ones(nout) # temporary
+                probint = np.ones(nout) # temporarybns
                 dintprob = {k:v for k,v in zip(output,probint)}
 
 
@@ -6194,11 +6494,10 @@ class Layout(PyLayers):
         Parameters
         ----------
 
-        ncy : cycle number
+        ncy : cycle number( Project -> save proejct)
         typ : string
             if 'source' connect source cycle
             if 'target' connect target cycle
-
         """
 
         # list of interactions
@@ -6216,12 +6515,13 @@ class Layout(PyLayers):
             lT = filter(lambda x: x[1]==ncy,lT)
         if typ=='target':
             lT = filter(lambda x: x[2]==ncy,lT)
-
+        if typ=='all':
+            lT=lT
         # Finding the diffraction points
         # Diffraction points are different from indoor cycle and outdoor
         # cycles
         #
-        # TODO check wedge validity. 
+        # TODO check wedge validity.
         #
         vnodes = self.Gt.node[ncy]['polyg'].vnodes
         vpoints = filter(lambda x: x<0,vnodes)
@@ -6234,6 +6534,69 @@ class Layout(PyLayers):
                                             self.ldiffout,vpoints))
 
         return lR,lT,lD
+
+
+    def intercyGc2Gt(self,ncy,typ='source'):
+        """ return the list of interactions in Gt from a Gc cycle
+
+        Parameters
+        ----------
+
+        ncy : cycle number from Gc
+        typ : string
+            if 'source' connect source cycle
+            if 'target' connect target cycle
+
+        """
+
+        # list of interactions
+
+        lint = self.Gi.node
+        lTa=[]
+        lRa=[]
+        lDa=[]
+        if self.Gt.node[ncy].has_key('merged'):
+            cym = self.Gt.node[ncy]['merged']
+            lcy = self.Gc.node[cym]['merged']
+
+        else :
+            lcy=[ncy]
+        # lint = self.Gi.node
+        for c in lcy:
+            # list of tuple interactions (R|T)
+            lD = filter(lambda x: len(x)==1,lint)
+            lR = filter(lambda x: len(x)==2,lint)
+            lT = filter(lambda x: len(x)==3,lint)
+
+            # visible R|T source cycle is ncy
+
+            lR = filter(lambda x : x[1]==c,lR)
+            if typ=='source':
+                lT = filter(lambda x: x[1]==c,lT)
+            if typ=='target':
+                lT = filter(lambda x: x[2]==c,lT)
+
+
+            # Finding the diffraction points
+            # Diffraction points are different from indoor cycle and outdoor
+            # cycles
+            #
+            # TODO check wedge validity.
+            #
+            vnodes = self.Gt.node[ncy]['polyg'].vnodes
+            vpoints = filter(lambda x: x<0,vnodes)
+            indoor = self.Gt.node[ncy]['indoor']
+            if indoor:
+                lD = map(lambda y : (y,),filter(lambda x : x in
+                                                self.ldiffin,vpoints))
+            else:
+                lD = map(lambda y : (y,),filter(lambda x : x in
+                                                self.ldiffout,vpoints))
+            lTa.extend(lT)
+            lRa.extend(lR)
+            lDa.extend(lD)
+        return lRa,lTa,lDa
+
 
 #    def showGraph(self,**kwargs):
 #        """
@@ -6309,9 +6672,12 @@ class Layout(PyLayers):
 #            plt.show()
 
     def show(self,**kwargs):
-        """
+        """ show layout
 
         See also
+        --------
+
+        showG
 
         """
         defaults = {'show': True,
@@ -6342,23 +6708,23 @@ class Layout(PyLayers):
         segments = np.array(edges)[:,0]
         dse = {k:v for k,v in zip(segments,range(Ne))}
 
-        #pdb.set_trace()
-
         edfilt = list(np.ravel(np.array(map(lambda x : [dse[x]-1,dse[x]],segfilt))))
         # Warning edgelist is to be understood as edge of graph and not segments of layout
         fig,ax = self.showG('s',nodes=False,edgelist=edfilt)
 
         ldeg1  = list(self.degree[1])
         ldeg4  = list(self.degree[4])
-        fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg1,edges=False,nodes=True,node_size=70,node_color='r')
-        fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg4,edges=False,nodes=True,node_size=70,node_color='g')
+        fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg1,edges=kwargs['edges'],
+                   nodes=kwargs['nodes'],node_size=kwargs['node_size'],node_color='r')
+        fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg4,edges=kwargs['edges'],
+                   nodes=kwargs['nodes'],node_size=kwargs['node_size'],node_color='g')
         #     if k==1:
         #         fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg,edges=False,nodes=True,node_size=50,node_color='c')
         #     if k==4:
         #         fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg,nodes=False,node_size=50,node_color='b')
 
     def showG(self, graph='r', **kwargs):
-        """ show the different graphs
+        u""" show the different graphs
 
         Parameters
         ----------
@@ -6375,14 +6741,16 @@ class Layout(PyLayers):
             False
         edges : boolean
             True
-        airwalls : boolean 
+        airwalls : boolean
             display airwalls (False)
         subseg: boolean
             display subsegments (False)
         slab : boolean
             display color and width of slabs (False)
-        labels : boolean
+        labels : boolean |list
             display graph labels (False)
+            if list precise label of which cycle to display
+            (e.g. ['t'])
         alphan : float
             transparency of nodes (1.0)
         alphae : float
@@ -6391,15 +6759,19 @@ class Layout(PyLayers):
             line width (2)
         node_color: string
             w
+        posnode_color: string
+            positive node color (k)
+        negnode_color: string
+            negative node color (b)
         edge_color : string
             k
-        node_size : float 
+        node_size : float
             20
-        font_size : float 
+        font_size : float
             15,
-        nodelist : list 
+        nodelist : list
             list of nodes to be displayed (all)
-        edgelist : list 
+        edgelist : list
             list of edges to be displayed (all)
         mode : string
             'cycle' | 'none' | 'room'
@@ -6446,7 +6818,7 @@ class Layout(PyLayers):
                     'figsize': (5,5),
                     'mode':'nocycle',
                     'alphacy':0.8,
-                    'colorcy':'#abcdef',
+                    'colorcy':'abcdef',
                     'linter':['RR','TT','RT','TR','RD','DR','TD','DT','DD'],
                     'show0':False,
                     'axis':False
@@ -6524,6 +6896,13 @@ class Layout(PyLayers):
 
         cold = pyu.coldict()
 
+
+        if isinstance(kwargs['labels'],list):
+            labels = kwargs['labels']
+        elif kwargs['labels'] == True:
+            labels=['s','t','v','c','i','w']
+        else:
+            labels=[]
         #
         # s : structure graph
         #
@@ -6560,6 +6939,10 @@ class Layout(PyLayers):
                         kwargs['edge_color']='k'
                         kwargs['width']=1
 
+                if 's' in labels:
+                   kwargs['labels']=True
+                else:
+                   kwargs['labels']=False
                 kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
 
             kwargs['nodelist'] = nodelistbkup
@@ -6593,19 +6976,23 @@ class Layout(PyLayers):
         if 't' in graph:
             G = self.Gt
             if not kwargs['show0']:
-                # filter out the 0 cycle 
+                # filter out the 0 cycle
                 nodes = G.nodes()
                 edges = G.edges()
                 nodf = filter(lambda x : x<>0,nodes)
                 edf  = filter(lambda x: ((edges[x][0]<>0) & (edges[x][1]<>0)),np.arange(len(edges)))
                 kwargs['nodelist']=nodf
                 kwargs['edgelist']=edf
-            else : 
+            else :
                 kwargs['nodelist'] = G.nodes()
                 kwargs['edgelist'] = np.arange(len(G.edges()))
-                
+
             if kwargs['edge_color']=='':
                 kwargs['edge_color'] ='r'
+            if 't' in labels:
+                kwargs['labels']=True
+            else:
+                kwargs['labels']=False
             fig,ax = gru.draw(G,**kwargs)
             kwargs['fig']=fig
             kwargs['ax']=ax
@@ -6616,9 +7003,14 @@ class Layout(PyLayers):
             G = self.Gr
             if kwargs['edge_color']=='':
                 kwargs['edge_color'] ='g'
+
             kwargs['fig'],kwargs['ax'] = gru.draw(self.Gs,
                               nodes=False,edges=True,alphacy=1.,
                               fig=kwargs['fig'],ax=kwargs['ax'],labels=False)
+            if 'r' in labels:
+                kwargs['labels']=True
+            else:
+                kwargs['labels']=False
             fig,ax = gru.draw(G,**kwargs)
             kwargs['fig']=fig
             kwargs['ax']=ax
@@ -6644,6 +7036,11 @@ class Layout(PyLayers):
             ndnd  = filter(lambda x: (edges[x][0]<0) & (edges[x][1]<0),rle)
             nded  = filter(lambda x: (((edges[x][0]<0) & (edges[x][1]>0)) |
                                      ((edges[x][0]>0) & (edges[x][1]<0))),rle)
+            if 'v' in labels:
+                kwargs['labels']=True
+            else:
+                kwargs['labels']=False
+
             if 'ee' in kwargs['lvis']:
                 kwargs['edgelist'] = eded
                 kwargs['edge_color']='blue'
@@ -6666,7 +7063,10 @@ class Layout(PyLayers):
 
             if kwargs['edge_color']=='':
                 kwargs['edge_color'] ='k'
-
+            if 'c' in labels:
+                kwargs['labels']=True
+            else:
+                kwargs['labels']=False
             fig,ax = gru.draw(G,**kwargs)
             kwargs['fig']=fig
             kwargs['ax']=ax
@@ -6717,6 +7117,10 @@ class Layout(PyLayers):
 
             tabcol = ['b','g','r','m','c','orange','purple','maroon'][::-1]
             li = []
+            if 'i' in labels:
+                kwargs['labels']=True
+            else:
+                kwargs['labels']=False
             for inter in kwargs['linter']:
                 if len(eval(inter))>0:
                     li.append(inter)
@@ -6737,6 +7141,10 @@ class Layout(PyLayers):
             kwargs['fig'],kwargs['ax'] = gru.draw(self.Gs,
                               nodes=False,edges=True,alphacy=1.,
                               fig=kwargs['fig'],ax=kwargs['ax'],labels=False)
+            if 'w' in labels:
+                kwargs['labels']=True
+            else:
+                kwargs['labels']=False
             fig,ax = gru.draw(G,**kwargs)
             kwargs['fig']=fig
             kwargs['ax']=ax
@@ -6948,6 +7356,34 @@ class Layout(PyLayers):
 
         return (c0 & c1)
 
+
+    def ptGs2cy(self,n=-1):
+        """ Gs node to cycle
+
+        Parameters
+        ----------
+        upt : point (ndarray)
+
+        Returns
+        -------
+        ncy : cycle number
+
+        Notes
+        -----
+            If a cycle contains the Gs pointt this function returns the cycle(s) number
+        """
+        if n >0:
+            return self.Gs.node[n]['ncycles']
+        else:
+            nseg = self.Gs[n].keys()
+            cy=[]
+            for nn in nseg :
+                cy.extend(self.ptGs2cy(nn))
+            cy = np.unique(cy).tolist()
+            return cy
+
+
+
     def pt2cy(self, pt=np.array((0, 0))):
         """ point to cycle
 
@@ -7042,7 +7478,7 @@ class Layout(PyLayers):
             raise NameError(str(pt)+" is not in any room")
 
     def seg2ro(self, seg):
-        """ return room number of a point 
+        """ return room number of a point
 
         Parameters
         ----------
@@ -7195,7 +7631,7 @@ class Layout(PyLayers):
             # Probably it exists a simpler manner to obtain
             # the sequence of connected nodes
             #
-            succ =[] 
+            succ =[]
             while dn.keys()<>[]:
                 succ = succ+ dn.pop(r)
                 n = succ.pop()
@@ -7204,7 +7640,7 @@ class Layout(PyLayers):
                     cnctd.append(r)
                 else:
                     cnctd.append(n)
-                    try: 
+                    try:
                         r = succ.pop()
                         cnctd.append(r)
                     except:
@@ -7326,7 +7762,6 @@ class Layout(PyLayers):
         #
         for n in self.Gr.nodes():
             self.Gr.node[n]['transition'] = []
-
         ltrans = self.listtransition
         ldoors = filter(lambda x:self.Gs.node[x]['name']<>'AIR',ltrans)
 
@@ -7517,50 +7952,59 @@ class Layout(PyLayers):
         waypoint.append((proom2[0], proom2[1]))
         return(waypoint)
 
-    def editor(self):
-        """ invoke interactive layout graphical editor
+    # def editor(self):
+    #     """ invoke interactive layout graphical editor
 
-        Notes
-        -----
+    #     Notes
+    #     -----
 
-        point edition
+    #     point edition
 
-            m  toggle point edition mode  (CP : Create Point)
+    #         m  toggle point edition mode  (CP : Create Point)
 
-                lclic same x
-                rclic same y
-                cclic free point
+    #             lclic same x
+    #             rclic same y
+    #             cclic free point
 
-        segment edition
+    #     segment edition
 
-            [0-f] - display one of the 16 first layers
-            x : save structure
-            o : toggle overlay
+    #         [0-f] - display one of the 16 first layers
+    #         x : save structure
+    #         o : toggle overlay
+
+    #     """
+
+    #     fig = plt.gcf()
+    #     ax  = fig.add_subplot(111)
+    #     self.display['nodes']=True
+    #     self.display['ednodes']=True
+    #     self.display['subsegnb']=True
+    #     self.display['transition']=True
+    #     self.display['ticksoff']=True
+
+    #     self.af = SelectL2(self,fig=fig,ax=ax)
+
+    #     fig,ax = self.af.show(fig,ax,clear=True)
+
+    #     self.cid1 = fig.canvas.mpl_connect('button_press_event',
+    #                                        self.af.OnClick)
+    #     self.cid2 = fig.canvas.mpl_connect('button_release_event',
+    #                                        self.af.OnClickRelease)
+    #     self.cid3 = fig.canvas.mpl_connect('motion_notify_event',
+    #                                        self.af.OnMotion)
+    #     self.cid4 = fig.canvas.mpl_connect('key_press_event',
+    #                                        self.af.OnPress)
+    #     self.cid5 = fig.canvas.mpl_connect('key_release_event',
+    #                                        self.af.OnRelease)
+
+    #     plt.draw()
+    #     plt.axis('tight')
+    #     plt.show()
 
         """
-
-        fig = plt.gcf()
-        ax  = fig.add_subplot(111)
-        self.display['nodes']=True
-        self.display['ednodes']=True
-
-        self.af = SelectL(self,fig=fig,ax=ax)
-
-        fig,ax = self.af.show(fig,ax,clear=True)
-
-        self.cid1 = fig.canvas.mpl_connect('button_press_event',
-                                           self.af.OnClick)
-        self.cid2 = fig.canvas.mpl_connect('key_press_event',
-                                           self.af.OnPress)
-        plt.draw()
-        plt.axis('tight')
-        plt.show()
-
-    def editorGtk(self):
-        """
         """
 
-        import gtk
+        # import gtk
         from matplotlib.figure import Figure
         from matplotlib.backends.backend_gtkagg import FigureCanvasGTKAgg as FigureCanvas
         from matplotlib.backends.backend_gtkagg import NavigationToolbar2GTKAgg as NavigationToolbar
@@ -7729,8 +8173,8 @@ class Layout(PyLayers):
         Returns
         -------
 
-        nseg : > 0 
-        if 0 not a segment 
+        nseg : > 0
+        if 0 not a segment
 
         """
         nta = np.array(nx.neighbors(self.Gs,ta))
@@ -7784,6 +8228,11 @@ class Layout(PyLayers):
         if True the point number (<0) is returned
         else 0 is return
 
+        Returns
+        -------
+
+        pt : point number
+
         See Also
         --------
 
@@ -7801,8 +8250,12 @@ class Layout(PyLayers):
             # if all layout points are different from pt
             return(0)
         else:
-            nup = np.nonzero(nz == False)
-            return(ke[nup[0]][0])
+            nup = np.where(nz == False)[0]
+            if len(nup)==1:
+                return(ke[nup][0])
+            else :
+                mi=np.where(min(v[nup])==v[nup])[0]
+                return(ke[nup[mi]][0])
 
     def onseg(self, pt, tol=0.01):
         """ segment number from point (deprecated)
@@ -7812,7 +8265,7 @@ class Layout(PyLayers):
         Parameters
         ----------
 
-        pt  np.array(1x2) 
+        pt  np.array(1x2)
         tol = 0.01      tolerance
 
         """
@@ -7954,13 +8407,13 @@ class Layout(PyLayers):
         >>> pg = L.geomfile()
 
         """
-   
+
         # calculate center of gravity
         if centered:
             pg = np.sum(self.pt,axis=1)/np.shape(self.pt)[1]
         else:
             pg = np.array([0,0])
-       
+
         #en  = self.Ns # number of segments
         en  = len(np.where(np.array(self.Gs.node.keys())>0)[0])
         if en != self.Ns:
@@ -8090,7 +8543,7 @@ class Layout(PyLayers):
         fos.close()
         return pg
 
-    def _show3(self,centered=False,newfig=False,opacity=1.):
+    def _show3(self,centered=False,newfig=False,opacity=1.,cyid=False,**kwargs):
         """ create a .off geomview file
 
         Parameters
@@ -8102,6 +8555,8 @@ class Layout(PyLayers):
             set slab opacity
         centered : Boolean
             if True the layout is centered around its center of gravity
+        cyid : boolean
+            display cycle number
 
         Notes
         -----
@@ -8116,7 +8571,6 @@ class Layout(PyLayers):
 
             >>> from pylayers.gis.layout import *
             >>> L = Layout()
-            >>> L._show3()
 
         """
 
@@ -8281,8 +8735,8 @@ class Layout(PyLayers):
 
 
         # manage floor
-        
-        # if Gt doesn't exists
+
+        #if Gt doesn't exists
 
         try:
             self.ma.coorddeter()
@@ -8296,10 +8750,10 @@ class Layout(PyLayers):
             surff = mlab.pipeline.surface(meshf, opacity=opacity)
             mlab.pipeline.surface(mlab.pipeline.extract_edges(surff),
                                         color=(0, 0, 0), )
-            
+
         # otherwise
         except:
-            
+
             floorx= np.array((points[:,0].min(),points[:,0].max()))
             floory= np.array((points[:,1].min(),points[:,1].max()))
             zmin= np.min(points[:,2])
@@ -8327,11 +8781,28 @@ class Layout(PyLayers):
             f = mlab.gcf()
             f.scene.background=(1,1,1)
 
+        f.scene.disable_render = True
+
         surf = mlab.pipeline.surface(mesh, opacity=opacity)
         mlab.pipeline.surface(mlab.pipeline.extract_edges(surf),
                                     color=(0, 0, 0), )
         f.children[-1].name='Layout ' + self.filename
 
+        if cyid:
+            if len(self.Gt.nodes())>0:
+                pk=self.Gt.pos.keys()
+                v=np.array(self.Gt.pos.values())
+                [mlab.text3d(v[ik,0],v[ik,1],0.5,str(k)) for ik,k in enumerate(pk)]
+        # if segpt:
+
+        #     seg = dict(filter(lambda x: x[0]>0,self.Gs.pos.items()))
+        #     pt = dict(filter(lambda x: x[0]<0,self.Gs.pos.items()))
+        #     pseg = np.array(seg.values())
+        #     ppt = np.array(pt.values())
+        #     [mlab.text3d(pseg[ik,0],pseg[ik,1],0.5,str(k)) for ik,k in enumerate(seg)]
+        #     [mlab.text3d(ppt[ik,0],ppt[ik,1],3.,str(k)) for ik,k in enumerate(pt)]
+
+        f.scene.disable_render = False
 
     def show3(self, bdis=True,centered=True):
         """ geomview display of the indoor structure
@@ -8491,7 +8962,7 @@ class Layout(PyLayers):
         else:
             fig =  kwargs['fig']
             ax = kwargs['ax']
-       
+
         nth = np.array(map(lambda n: nx.neighbors(self.Gs,n),lns))
         nt = nth[:,0]
         nh = nth[:,1]
@@ -8501,8 +8972,8 @@ class Layout(PyLayers):
         # ph : 2 x Ns
         ph  = np.array(map(lambda n :
                            [self.Gs.pos[n][0],self.Gs.pos[n][1]],nh)).T
-       
-        fig,ax = plu.displot(pt,ph,fig=fig,ax=ax,color=kwargs['color'])                                
+
+        fig,ax = plu.displot(pt,ph,fig=fig,ax=ax,color=kwargs['color'])
 
         return fig,ax
     def showSig(self, sigarr, Tx=None, Rx=None, fig=plt.figure(), ax=None):
@@ -8657,7 +9128,7 @@ class Layout(PyLayers):
 
         return(p_Tx, p_Rx)
 
-    def boundary(self, dx=0, dy=0):
+    def boundary(self, dx=0, dy=0,xlim=()):
         """ add a blank boundary around layout
 
         Parameters
@@ -8683,11 +9154,16 @@ class Layout(PyLayers):
             xmin = min(p[0] for p in self.Gs.pos.values())
             ymax = max(p[1] for p in self.Gs.pos.values())
             ymin = min(p[1] for p in self.Gs.pos.values())
-        else:
+        elif xlim==():
             xmin = -20.
             xmax = 20.
             ymin = -10.
             ymax = 10.
+        else:
+            xmin = xlim[0]
+            xmax = xlim[1]
+            ymin = xlim[2]
+            ymax = xlim[3]
 
         self.ax = (xmin - dx, xmax + dx, ymin - dy, ymax + dy)
         self.display['box']=self.ax

@@ -8,6 +8,8 @@ from types import *
 from numpy import array
 import pdb
 import select
+import pylayers.signal.bsignal as bs
+from time import sleep
 """
 
 Module to drive the network analyzer E5072A
@@ -114,10 +116,15 @@ class SCPI:
         self.s.send(com)
 
     def reset(self):
+        """
+        Resets the device to known state (with *RST) and clears the error
+        log
+        """
         # reset and clear device
-        self.s.send(":SYST:FPReset\n")
-
-    #self.s.send(":STOP\n")
+        #self.s.send(":SYST:FPReset\n")
+        #self.s.send("*RST;*CLS", False)
+        self.s.send(":SYST:PRES\n")
+        #self.s.send(":STOP\n")
 
     def setntrace(self,chan=1,ntrace=2):
         """ set number of traces
@@ -167,6 +174,8 @@ class SCPI:
 
         self.s.send(com1+f1)
 
+        return(fstartGHz)
+
     def setfstop(self,fstopGHz=2.2,sens=1):
         """ frequency stop
 
@@ -182,6 +191,8 @@ class SCPI:
         f2 = str(fstopGHz)+"e9\n"
 
         self.s.send(com2+f2)
+
+        return(fstopGHz)
 
 
     def getnpoints(self,sens=1):
@@ -201,15 +212,33 @@ class SCPI:
         except socket.timeout:
             print "problem for getteing number of points"
 
+    def setnpoint(self,Npoints=201,sens=1,echo=False):
+        """Change the numbers of points
 
-    def getfreq(self,sens=1,Npoints=201):
-        tab = []
-        while len(tab)<> Npoints:
-            com2 = ":SENS"+str(sens)+":FREQ:DATA?\n"
-            self.s.send(com2)
-            tab = self.s.recv(Npoints*20).split(",")
-        freq = map(lambda x: eval(x),tab)
+        Parameters
+        --------------
+        Npoints
+        """
+
+        com = "SENS"+str(sens)+":SWE:POIN "+str(Npoints)
+        if echo:
+            print com
+        self.write(com)
+
+
+    def getfreq(self,sens=1):
+        com = ":SENS"+str(sens)+":FREQ:DATA?\n"
+        buf = self.read(com)
+        f = np.frombuffer(buf,'>f8')
+        freq = f[1:]
         return(freq)
+
+        #tab = []
+        #while len(tab)<> Npoints:
+        #    com2 = ":SENS"+str(sens)+":FREQ:DATA?\n"
+        #    self.s.send(com2)
+        #    tab = self.s.recv(Npoints*20).split(",")
+        #freq = map(lambda x: eval(x),tab)
 
 
     def getIdent(self):
@@ -235,54 +264,28 @@ class SCPI:
             return ""
         return(data)
 
-    def getdata(self,N=1,chan=1,param='S11',Np=201):
+
+    def getdata(self,chan=1,Npoints=201):
+        """  getdata
+
+        Parameters
+        ----------
+
+        chan : int
+            channel number
         """
 
-        """
 
-        TS = []
-        self.select(param,chan)
-        Npoints = self.getnpoints()
-        Npoints=201
-        print Npoints
-        self.write("FORM:DATA REAL")
-        S = np.zeros(2*201,dtype='f2')
-        for k in range(N):
-            self.write("TRIG:SING")
-            self.write('CALC'+str(chan)+':DATA:SDAT?')
-            self.s.recv_into(S,4*Np*16)
-            endS = self.ask("*OPC")
+        #self.write("TRIG:SING")
+        comm = 'CALC'+str(chan)+':DATA:SDAT?'
+        buff = ''
+        while len(buff)<>(Npoints*16+8):
+            buff = self.read(comm)
 
-            #S = np.array(map(lambda x: eval(x),S.split(',')))
-            #pdb.set_trace()
-            S = S.reshape(Npoints,2)
-            S = S[:,0]+1j*S[:,1]
-            #try:
-            #    TS = np.vstack((TS,S))
-            #except:
-            #    TS = S
-        return(S)
+        S = np.frombuffer(buff[8:Npoints*16+8],dtype='>f8')
+        Y = S.reshape(Npoints,2)
+        Y = Y[:,0]+1j*Y[:,1]
+        fGHz = self.getfreq()*1e-9
+        S21 = bs.FUsignal(x=fGHz,y=Y)
+        return S21
 
-#    def measure(self, channel):
-#
-#        self.s.send(":DIGitize CHANnel" + str(channel) + "\n")
-#        self.s.send(":WAVeform:DATA?\n")
-#
-#        try:
-#            data = ""
-#        while (not data.endswith('\n')):
-#            data += self.s.recv(1024)
-#        
-#        except socket.timeout:
-#            return None
-#
-#        data = data.split(' ')
-#        data = data[1:len(data)]
-#	
-#
-#     	data = np.array(data, dtype='S11')
-#
-#	    voltage = data.astype(np.float)
-#
-#        return voltage
-#

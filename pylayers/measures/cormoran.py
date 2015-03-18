@@ -139,7 +139,7 @@ Vizualizing processing
     CorSer.visidev2
     CorSer.__refreshshow3i
 
-     
+
 
 """
 
@@ -165,9 +165,9 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 import pickle
 
-# Those lines handle incompatibility between mayavi and VTK
-# and redirect noisy warning message into a log file
-# import vtk 
+#Those lines handle incompatibility between mayavi and VTK
+#and redirect noisy warning message into a log file
+# import vtk
 # output=vtk.vtkFileOutputWindow()
 # output.SetFileName("mayaviwarninglog.tmp")
 # vtk.vtkOutputWindow().SetInstance(output)
@@ -233,7 +233,7 @@ class CorSer(PyLayers):
             if serie in [17,18,19,20]:
                 raise AttributeError('Serie '+str(serie) + \
                                      ' has no hkb data and will not be loaded')
-        # Measures
+        #Measures
         if day==11:
             self.stcr = [1,2,3,4,10,11,12,32,33,34,35,9,17,18,19,20,25,26]
             self.shkb = [5,6,13,14,15,16,21,22,23,24,27,28,29,30,31,32,33,34,35]
@@ -265,7 +265,7 @@ class CorSer(PyLayers):
             self._filename = 'Sc' + self.scenario + '_S' + str(self.serie) + '_R' + str(self.run) + '_' + self.typ
 
 
-        # Layout
+        #Layout
         self.L= Layout('MOCAP-small2.ini')
 
 
@@ -273,14 +273,14 @@ class CorSer(PyLayers):
         self._loadinfranodes()
         self._loadcam()
 
-        # BODY & interferers
+        #BODY & interferers
         self.subject = str(self.log['Subject'].values[0]).split(' ')
-        # filter typos in  self.subject
+        #filter typos in  self.subject
         self.subject = filter(lambda x : len(x)!=0,self.subject)
         if 'Jihad' in self.subject :
             uj = self.subject.index('Jihad')
             self.subject[uj]='Jihan'
-        
+
         if serie in self.mocap :
             self._loadbody(serie=serie,day=day)
             self._distancematrix()
@@ -291,14 +291,14 @@ class CorSer(PyLayers):
             else :
                 self.B.traj.Lfilename=copy.copy(self.L.filename)
 
-        # reference time is tmocap 
+        #reference time is tmocap
         self.tmocap = self.B[self.subject[0]].time
 
-        # load offset dict
+        #load offset dict
         self.offset= self._load_offset_dict()
 
         # #######################
-        # realign Radio on mocap
+        #realign Radio on mocap
         ########################
         # 1 - Resample radio time => mocap time
         # 2 - (if available) apply offset
@@ -331,7 +331,7 @@ class CorSer(PyLayers):
             self._align_on_devdf(typ='HKB')
             print 'Align on mocap OK...',
             try:
-                self._apply_offset('HKB')
+                # self._apply_offset('HKB')
                 print 'time-offset applied OK'
             except: 
                 print 'WARNING time-offset NOT applied'
@@ -420,16 +420,16 @@ class CorSer(PyLayers):
                 dev = self.devmapper(d,'TCR')
                 print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
         print '{0:66}'.format('-'*len(title) )
-        # device per RAT per body
+        #device per RAT per body
         for b in self.B:
             if b not in self.interf:
-                # HKB per body
+                #HKB per body
                 for d in self.B[b].dev.keys():
 
                     if ('HK' in d):
                         dev = self.devmapper(d,'HKB')
                         print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
-                # bespoon
+                #bespoon
                 if ('FULL' in self.typ) or ('HKB' in self.typ):
                     print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
                 for d in self.B[b].dev.keys():
@@ -437,7 +437,7 @@ class CorSer(PyLayers):
                         dev = self.devmapper(d,'BS')
                         print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
                 # print '{0:66}'.format('-'*len(title) )
-                # TCR per body
+                #TCR per body
                 if 'FULL' in self.typ:
                     print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
                 for d in self.B[b].dev.keys():
@@ -573,7 +573,7 @@ bernard
                  })
 
         if self.day == 12:
-            # BS idem HKB:1 and HKB:2
+            #BS idem HKB:1 and HKB:2
             if ('BS'  in self.typ) or ('FULL' in self.typ):
                 self.din.update(
                 {'BS:74':{'p':mphkb[3],
@@ -814,7 +814,7 @@ bernard
 
 
         gb = bespo.groupby(['Sensor'])
-        # get device id 
+        #get device id 
         devid,idevid = np.unique(bespo['Sensor'],return_index=True)
         # get index of each group
         dgb={d:gb.get_group(d) for d in devid}
@@ -859,7 +859,7 @@ bernard
              'Eric:TooTopRight':15,'Eric:TorsoTopLeft':13,'Eric:BackCenter':16,'Eric:ShoulderLeft':14}
             #if source=='UR1':
             dirname = os.path.join(self.rootdir,'POST-TREATED','12-06-2014','HIKOB')
-         
+
         files = os.listdir(dirname)
 
         self.idHKB={}
@@ -989,7 +989,7 @@ bernard
         else:
             links=[n.split('-') for n in hname]
             links = [l for l in links if ('COORD' not in l[0]) and ('COORD' not in l[1])]
-        # mapping between device name in self.hkb and on body/in self.devdf
+        #mapping between device name in self.hkb and on body/in self.devdf
         dev_bid = [self.devmapper(k,techno=techno)[2] for k in dnode.keys()]
 
         nb_totaldev=len(np.unique(self.devdf['id'])) 
@@ -1018,7 +1018,7 @@ bernard
 
         # intersect2D matrix is 
         # d_0: nb links
-        # d_1: (cylinder number) * nb body + 1 * nb  cylinder_object
+        #d_1: (cylinder number) * nb body + 1 * nb  cylinder_object
         # d_2 : nb frame
         intersect2D = np.zeros((len(links),
                                 11*len(self.subject) + len(self.interf),
@@ -1027,7 +1027,7 @@ bernard
         usub_start=0
         usub_stop=0
         # C-D correspond to bodies segments
-        # C or D : 3 x 11 body segments x time
+        #C or D : 3 x 11 body segments x time
         # radius of cylinders are (nb_cylinder x time)
         for b in self.B:
             print 'processing shadowing from ',b
@@ -1053,7 +1053,7 @@ bernard
                 # bottom of cylinder =top with z =0
                 bottom = copy.copy(cyl.d[:,cyl.topnode,:])
                 bottom[2,:]=0.02
-                # top 3 x 1 X time
+                #top 3 x 1 X time
                 C=top[:,np.newaxis,:]
                 D=bottom[:,np.newaxis,:]
                 radius = np.concatenate((radius,cyl.radius[np.newaxis]))
@@ -1065,7 +1065,7 @@ bernard
             intersect2D[:,usub_start:usub_stop,:]=g
             # import ipdb
             # ipdb.set_trace()
-            # USEFUL Lines for debug
+            #USEFUL Lines for debug
             #########################
 
             # def plt3d(ndev=53,ncyl=0,kl=11499):
@@ -1092,7 +1092,7 @@ bernard
 
         intersect2D[uinter1[0],uinter1[1],uinter1[2]]=1
         intersect2D[uinter0[0],uinter0[1],uinter0[2]]=0
-        # # integrate the effect of all bodies by summing on axis 1
+        # #integrate the effect of all bodies by summing on axis 1
         intersect = np.sum(intersect2D,axis=1)>0
 
         if square_mda:
@@ -1187,8 +1187,8 @@ bernard
 
         fig =plt.figure(num='Jog',figsize=(5,1.5))
 
-        # set time to -10 is a trick to make appear interferers cylinder
-        # because __refreshshow3i only update the data of the cylinder.
+        #set time to -10 is a trick to make appear interferers cylinder
+        #because __refreshshow3i only update the data of the cylinder.
         # if cylinder is not present in the first _show3, they are not displayed
         # later.
         time=self.B[self.subject[0]].time
@@ -1235,7 +1235,7 @@ bernard
             sliderx.set_val(sliderx.val -10)
             fig.canvas.draw_idle()
 
-        # QUIT by pressing 'q'
+        #QUIT by pressing 'q'
         def press(event):
             if event.key == 'q':
                 mlab.close(mayafig)
@@ -1243,22 +1243,22 @@ bernard
         fig.canvas.mpl_connect('key_press_event', press)
 
 
-        # -1 frame axes
+        #-1 frame axes
         axm = plt.axes([0.2, 0.05, 0.1, 0.15])
         bm = Button(axm, '-1')
         bm.on_clicked(minus)
-                # +1 frame axes
+                #+1 frame axes
         axp = plt.axes([0.7, 0.05, 0.1, 0.15])
         bp = Button(axp, '+1')
         bp.on_clicked(plus)
 
-        # -10 frames axes
+        #-10 frames axes
         axmm = plt.axes([0.1, 0.05, 0.1, 0.15])
         bmm = Button(axmm, '-10')
         bmm.on_clicked(mminus)
 
 
-        # +10 frames axes
+        #+10 frames axes
         axpp = plt.axes([0.8, 0.05, 0.1, 0.15])
         bpp = Button(axpp, '+10')
         bpp.on_clicked(pplus)
@@ -1294,7 +1294,7 @@ bernard
                 # name
                 self.B[b]._mayaname.actors.pop()
                 self.B[b]._mayaname = mlab.text3d(self.B[b].top[0],self.B[b].top[1],self.B[b].top[2],self.B[b].name,scale=0.05,color=(1,0,0))
-                # vdict
+                #vdict
                 V = self.B[b].traj[['vx','vy','vz']].iloc[self.B[b].toposFrameId].values
 
                 self.B[b]._mayavdic.mlab_source.set(x= self.B[b].top[0],y=self.B[b].top[1],z=self.B[b].top[2],u=V[ 0],v=V[ 1],w=V[ 2])
@@ -1324,7 +1324,7 @@ bernard
 
 
         # if in_ipynb():
-        #     notebook = False # program launch in ipyhon notebook
+        #     notebook = False #program launch in ipyhon notebook
         #     from IPython.html import widgets # Widget definitions
         #     from IPython.display import display, clear_output# Used to display widgets in the notebook
         # else :
@@ -1362,8 +1362,8 @@ bernard
         plt.setp(ytickNames, rotation=0, fontsize=8)
         ims=[]
         l=ax.imshow(inter[:,:,fId],interpolation='nearest')
-        # set time to -10 is a trick to make appear interferers cylinder
-        # because __refreshshow3i only update the data of the cylinder.
+        #set time to -10 is a trick to make appear interferers cylinder
+        #because __refreshshow3i only update the data of the cylinder.
         # if cylinder is not present in the first _show3, they are not displayed
         # later.
         kwargs['bodytime']=[self.tmocap[-10]]
@@ -1435,7 +1435,7 @@ bernard
         # if not notebook:
         sliderx.on_changed(update_x)
 
-        # # QUIT by pressing 'q'
+        # #QUIT by pressing 'q'
         # def press(event):
         #     if event.key == 'q':
         #         mlab.close(mayafig)
@@ -1443,22 +1443,22 @@ bernard
         # fig.canvas.mpl_connect('key_press_event', press)
 
         # if not notebook:
-        # -1 frame axes
+        #-1 frame axes
         axm = plt.axes([0.3, 0.05, 0.1, 0.075])
         bm = Button(axm, '-1')
         bm.on_clicked(minus)
 
-        # +1 frame axes
+        #+1 frame axes
         axp = plt.axes([0.7, 0.05, 0.1, 0.075])
         bp = Button(axp, '+1')
         bp.on_clicked(plus)
 
-        # -10 frames axes
+        #-10 frames axes
         axmm = plt.axes([0.1, 0.05, 0.1, 0.075])
         bmm = Button(axmm, '-10')
         bmm.on_clicked(mminus)
 
-        # +10 frames axes
+        #+10 frames axes
         axpp = plt.axes([0.9, 0.05, 0.1, 0.075])
         bpp = Button(axpp, '+10')
         bpp.on_clicked(pplus)
@@ -2132,8 +2132,8 @@ bernard
                         valinit=0, color='#AAAAAA')
 
         slide_alpha_ax = plt.axes([0.1, 0.05, 0.8, 0.02])
-        slideralpha = Slider(slide_alpha_ax, "gt_alpha", 0, 10,
-                        valinit=5, color='#AAAAAA')
+        slideralpha = Slider(slide_alpha_ax, "gt_alpha", 0, 60,
+                        valinit=30, color='#AAAAAA')
 
         def update_x(val):
             value = int(sliderx.val)
@@ -2151,7 +2151,7 @@ bernard
             alpha = slideralpha.val
             gt[0].set_ydata(alpha*var + yoff)
             fig.canvas.draw_idle()
-        # initpurpose
+        #initpurpose
         update_y(5)
         slidery.on_changed(update_y)
         slideralpha.on_changed(update_y)
@@ -2252,7 +2252,7 @@ bernard
     #         alpha = slideralpha.val
     #         gt[0].set_ydata(alpha*var + yoff)
     #         fig.canvas.draw_idle()
-    #     # initpurpose
+    #     #initpurpose
     #     update_y(5)
     #     slidery.on_changed(update_y)
     #     slideralpha.on_changed(update_y)
@@ -2521,7 +2521,7 @@ bernard
         Parameters
         ----------
 
-        a : node name | number
+        a : node name |number
         b : node name | number
         save : bool
         """
@@ -2626,9 +2626,9 @@ bernard
         ----------
 
         a : str | int
-            name | id
+            name |id
         b : str | int
-            name | id
+            name |id
         techno : str (optional)
             radio techno
         t : float | list (optional)
@@ -2693,16 +2693,16 @@ bernard
         a,ia,bia,subja,techno=self.devmapper(a,techno)
         b,ib,bib,subjb,techno=self.devmapper(b,techno)
 
-        ### create a short labeling
+        ###create a short labeling
         if kwargs['shortlabel']:
 
             #find uppercase position
             uu =  np.nonzero([l.isupper() or l.isdigit() for l in a])[0]
-            # cretae string from list
+            #cretae string from list
             labela = ''.join([a[i] for i in uu])
 
             uu =  np.nonzero([l.isupper() or l.isdigit() for l in b])[0]
-            # cretae string from list
+            #cretae string from list
             labelb = ''.join([b[i] for i in uu])
             label = labela +'-'+labelb
 
@@ -2735,7 +2735,7 @@ bernard
             ylabel = 'distance (m)'
 
 
-        # post processing on dataframe
+        #post processing on dataframe
         if kwargs['lin']:
             df = 10**(df/10) * kwargs['yoffset']
             
@@ -2810,7 +2810,7 @@ bernard
         Parameters
         ----------
 
-        a : node name | number
+        a : node name |number
         b : node name | number
         t0 : start time
         t1 : stop time
@@ -2869,11 +2869,11 @@ bernard
 
             #find uppercase position
             uu =  np.nonzero([l.isupper() or l.isdigit() for l in a])[0]
-            # cretae string from list
+            #cretae string from list
             labela = ''.join([a[i] for i in uu])
 
             uu =  np.nonzero([l.isupper() or l.isdigit() for l in b])[0]
-            # cretae string from list
+            #cretae string from list
             labelb = ''.join([b[i] for i in uu])
 
             label = labela +'-'+labelb
@@ -2944,7 +2944,7 @@ bernard
         Parameters
         ----------
 
-        a : node name | number
+        a : node name |number
         b : node name | number
         t0 : start time
         t1 : stop time
@@ -3146,7 +3146,7 @@ bernard
 
             ax.plot(self.B[subject].time,var,label=label,**kwargs)
         #
-        # TCR | Full
+        # TCR |Full
         #
         if mode == 'TCR' or mode == 'FULL':
 
@@ -3297,7 +3297,7 @@ bernard
         elif 'TCR' in display or 'HKB' in display:
             ld = 2
 
-        # Axes management
+        #Axes management
         if kwargs['axs'] == []:
             kwargs.pop('axs')
             fig,axs = plt.subplots(nrows=ld,ncols=1,figsize=kwargs['figsize'],sharex=True)
@@ -3346,7 +3346,7 @@ bernard
             kwargs.pop('linestylehk')
 
 
-        # TCR plot
+        #TCR plot
         if 'TCR' in display or 'FULL' in display:
             if ('TCR' in self.typ.upper()) or ('FULL' in self.typ.upper()):
                 if isinstance(a,str):
@@ -3366,7 +3366,7 @@ bernard
             kwargs['colorba']=kwargs.pop('coltcr2')
             kwargs['linestyle']=kwargs.pop('linestyletcr')
             tcrlink = a+'-'+b
-            # plot only if link exist
+            #plot only if link exist
             if tcrlink in self.tcr:
                 fig,axs[cptax]=self.plttcr(a,b,**kwargs)
         else :
@@ -3379,7 +3379,7 @@ bernard
         # Ground Truth
         #
         #
-        # HKB | Full
+        # HKB |Full
         #
         if kwargs.pop('gt'):
             kwargs['color'] = kwargs.pop('colgt')
@@ -3739,18 +3739,18 @@ bernard
 
         if alias == {}:
 
-            alias={'TCR:49':4 # Nicolas TorsoLeft
-            ,'TCR:34':5 # Nicolas TorsoRight
-            ,'TCR:48':6 # Nicolas Back
-            ,'TCR:36':7 # Nicolas Shoulder
+            alias={'TCR:49':4 #Nicolas TorsoLeft
+            ,'TCR:34':5 #Nicolas TorsoRight
+            ,'TCR:48':6 #Nicolas Back
+            ,'TCR:36':7 #Nicolas Shoulder
 
             ,'TCR:2':8 # Jihad TorsoLeft
             ,'TCR:35':9 #Jihad TorsoRight
             ,'TCR:33':10 #Jihad Back
             ,'TCR:37':11 #Jihad Shoulder
 
-            ,'TCR:30':12 # Eric Torso
-            ,'TCR:25':13 # Eric Back
+            ,'TCR:30':12 #Eric Torso
+            ,'TCR:25':13 #Eric Back
             ,'TCR:26':14 # Eric Shoulder
             }
 
@@ -3760,7 +3760,7 @@ bernard
 
         ldf = df[['id','x','y','z']]
 
-        # rename devices
+        #rename devices
         if alias != {}:
             for k in alias:
                 u=ldf['id'] == k
@@ -3801,9 +3801,9 @@ bernard
         ----------
 
         a : str | int
-            name | id
+            name |id
         b : str | int
-            name | id
+            name |id
 
         oprional 
         
@@ -3846,7 +3846,7 @@ bernard
         else :
             raise AttributeError('Link between ' + str(ra) +' and ' + str(rb) + ' is not available in distdf dataframe')
 
-        # determine time
+        #determine time
         if isinstance(t,list):
             tstart = t[0]
             tstop = t[-1]
@@ -3870,9 +3870,9 @@ bernard
         ----------
 
         a : str | int
-            name | id
+            name |id
         b : str | int
-            name | id
+            name |id
 
 
         optional :
@@ -3919,9 +3919,9 @@ bernard
         ----------
 
         a : str | int
-            name | id
+            name |id
         b : str | int
-            name | id
+            name |id
 
 
         optional :
@@ -3983,7 +3983,7 @@ bernard
             df = self.tcr
 
 
-        # determine time
+        #determine time
         if isinstance(t,list):
             tstart = t[0]
             tstop = t[-1]
@@ -4006,14 +4006,14 @@ bernard
         ----------
 
         a : str | int
-            name | id
+            name |id
         techno : str
             radio techno
 
         optional :
 
         t : float | list 
-            given time | [time_start,time_stop]
+            given time |[time_start,time_stop]
 
 
         Returns
@@ -4068,7 +4068,7 @@ bernard
         ----------
 
         a : str | int
-            name | id | bodyid
+            name |id |bodyid
         techno : str
             radio techno
 
@@ -4089,7 +4089,7 @@ bernard
         """
         subject=''
 
-        # if a is a bodyid (e.g. 'HKB:16') or a body part (e.g. AnkleRight)
+        #if a is a bodyid (e.g. 'HKB:16') or a body part (e.g. AnkleRight)
         if isinstance(a,str):
             
             # case where body id is given as input 
@@ -4114,7 +4114,7 @@ bernard
                             subject = b
                             break
 
-            # case where body part (e.g. AnkleRight) is given. Here techno is mandatory
+            #case where body part (e.g. AnkleRight) is given. Here techno is mandatory
             else :
 
                 if techno == '':
@@ -4276,13 +4276,13 @@ bernard
             df = df.iloc[-offset:]
             df.index = index[0:offset]
         else :
-            # extract time values
+            #extract time values
             npahkbi = df.index.values
             step = npahkbi[1]- npahkbi[0]
             nstart = npahkbi[0]+ (step * (offset))
             df.index = pd.Index(npahkbi + nstart)
 
-            # add blank at begining
+            #add blank at begining
             df = pd.DataFrame({},columns=df.keys(),index=npahkbi[:offset])
             ndf=pd.concat([df,df])
             df=ndf
@@ -4310,9 +4310,9 @@ bernard
         # else :
         #     # new length
         #     lhkb = len(self.hkb) + (-offset)
-        #     # extract time values
+        #     #extract time values
         #     npahkbi = self.hkb.index.values
-        #     # calculate new termianl time
+        #     #calculate new termianl time
         #     step = npahkbi[1]- npahkbi[0]
         #     nstop = npahkbi[-1]+ (step * (-offset))
         #     ni = np.linspace(0,nstop,lhkb)
@@ -4329,13 +4329,13 @@ bernard
             self.hkb = self.hkb.iloc[-offset:]
             self.hkb.index = index[0:offset]
         else :
-            # extract time values
+            #extract time values
             npahkbi = self.hkb.index.values
             step = npahkbi[1]- npahkbi[0]
             nstart = npahkbi[0]+ (step * (offset))
             self.hkb.index = pd.Index(npahkbi + nstart)
 
-            # add blank at begining
+            #add blank at begining
             df = pd.DataFrame({},columns=self.hkb.keys(),index=npahkbi[:offset])
             ndf=pd.concat([df,self.hkb])
             self.hkb=ndf
@@ -4348,7 +4348,7 @@ bernard
 
         Parameters 
         ----------
-            typ : 'HKB' | 'BS'
+            typ : 'HKB' |'BS'
 
         Examples
         --------
@@ -4430,15 +4430,15 @@ bernard
         sf = (hkbdfc.index[2]-hkbdfc.index[1]).microseconds
 
         # cannot resapmple devdf directly because multiple similar index values
-        # need to resampl each groupby separately
+        #need to resampl each groupby separately
         gb = devdfc.groupby(['id'])
-        # get device id 
+        #get device id 
         devid,idevid = np.unique(devdfc['id'],return_index=True)
-        # save corresponding subject to each device
+        #save corresponding subject to each device
         subject = {devid[i]:devdfc['subject'].iloc[i] for i in idevid}
         # resample each group separatley
         dgb={d:gb.get_group(d).resample(str(sf)+'U') for d in devid}
-        # re insert subject and device id information in each resampled group
+        #re insert subject and device id information in each resampled group
         for d in dgb:
             dgb[d]['subject']=subject[d]
             dgb[d]['id']=d

@@ -555,10 +555,15 @@ class Polygon(PyLayers,shg.Polygon):
 
         """
         x,y = self.exterior.xy
-        npts = map(lambda x :
-                   L.ispoint(np.array(x),tol=0.01),zip(x[0:-1],y[0:-1]))
+        # npts = map(lambda x :
+        #            L.ispoint(np.array(x),tol=0.01),zip(x[0:-1],y[0:-1]))
+        npts = [L.ispoint(np.array(xx),tol=0.01) for xx in zip(x[0:-1],y[0:-1])]
         seg = zip(npts,np.roll(npts,-1))
-        nseg = map(lambda x : L.numseg(x[0],x[1]),seg)
+        try:
+            nseg = map(lambda x : L.numseg(x[0],x[1]),seg)
+        except:
+            import ipdb
+            ipdb.set_trace()
         vnodes = np.kron(npts,np.array([1,0]))+np.kron(nseg,np.array([0,1]))
         self.vnodes = vnodes
 
@@ -729,7 +734,7 @@ class Polygon(PyLayers,shg.Polygon):
                 alpha = kwargs['alpha'],
                 ec = kwargs['edgecolor'])
         for k in range(len(numpt)):
-            ax.text(x[k]+0.1,y[k]+0.1,numpt[k])
+            ax.text(x[k],y[k],numpt[k])
 
         if kwargs['show']:
             plt.show()
@@ -1515,6 +1520,50 @@ class Polygon(PyLayers,shg.Polygon):
                                    edge_color='green', width=2)
 
         return(fig, ax)
+
+    def ptconvex2(self):
+        """ Determine convex / concave points in the Polygon
+
+            !!! Warning !!! cvex and ccve can be switched
+            depends on the Polygon direction of travel
+        
+        Returns
+        -------
+        cvex : list of convex points
+        ccve : list of concave points
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.util.geomutil import *
+            >>> import shapely.geometry as shg
+            >>> import matplotlib.pyplot as plt
+            >>> points  = shg.MultiPoint([(0, 0), (0, 1), (3.2, 1), (3.2, 0.7), (0.4, 0.7), (0.4, 0)])
+            >>> polyg1   = Polygon(points)
+            >>> cvex,ccave   = polyg.ptconvex2() 
+            >>> points  = shg.MultiPoint([(0, 0), (0, 1), (-3.2, 1), (-3.2, 0.7), (-0.4, 0.7), (-0.4, 0)])
+            >>> polyg1   = Polygon(points)
+            >>> cvex,ccave   = polyg.ptconvex2() 
+
+        """
+        if not hasattr(self,'xy'):
+            self.coorddeter()
+        
+        pts = filter(lambda x: x<0,self.vnodes)
+        A=self.xy[:,:-1]
+        B=np.roll(A,-1)
+        C=np.roll(B,-1)
+        if self.signedarea()>0:
+            cw = ccw(C,B,A)
+        else :
+            cw = ccw(A,B,C)
+        cvex = np.array(pts)[np.roll(cw,+1)]
+        ccve = np.array(pts)[np.roll(~cw,+1)]
+        
+        return cvex.tolist(),ccve.tolist()
 
     def ptconvex(self, display=False):
         """ Return a list of booleans indicating points convexity

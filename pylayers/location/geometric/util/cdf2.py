@@ -3,7 +3,10 @@ import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
 import pdb
-import mplrc.ieee.transaction
+try:
+    import mplrc.ieee.transaction
+except:
+    pass
 from matplotlib import rcParams
 rcParams['text.usetex'] = True
 rcParams['text.latex.unicode'] = True
@@ -34,8 +37,12 @@ class CDF(object):
         self.parmsh['file'] = True
         self.filename = filename
         self.cdf = []
-
+        
         for d in self.ld:
+            try:
+                self.save=d['save']
+            except:
+                self.save=True
             bound = d['bound']
             values = d['values']
             Nv = len(values)
@@ -75,10 +82,13 @@ class CDF(object):
         ax.legend(loc='best', scatterpoints=1, numpoints=1.)
         plt.grid()
         plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
-        plt.savefig('./cdf/' + self.filename + '/' + self.filename + '.pdf',
-                    format='pdf', bbox_inches='tight', pad_inches=0)
-        plt.savefig('./cdf/' + self.filename + '/' + self.filename + '.eps',
-                    format='eps', bbox_inches='tight', pad_inches=0)
+        if self.save :
+            if os.system('cd ./cdf/'+self.filename) == 512:
+                os.system('mkdir ./cdf/'+self.filename)
+            plt.savefig('./cdf/' + self.filename + '/' + self.filename + '.pdf',
+                        format='pdf', bbox_inches='tight', pad_inches=0)
+            plt.savefig('./cdf/' + self.filename + '/' + self.filename + '.eps',
+                        format='eps', bbox_inches='tight', pad_inches=0)
 
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@ from pylayers.gis.readvrml import *
 import numpy as np
 import matplotlib.pylab as plt
 import matplotlib.animation as animation
-import scipy.linalg as la
+import numpy.linalg as la
 #
 # This class handles the data coming from the MIMO Channel Sounder IETR lab
 #
@@ -15,7 +15,7 @@ class MIMO(object):
                  Nf = 1601,
                  fminGHz = 1.8,
                  fmaxGHz =2.2,
-                 calibration=True,
+             calibration=True,
                  time=True,
                  Nz = 100,
                  Nt = 4,
@@ -65,11 +65,11 @@ class MIMO(object):
 
 
     def __repr__(self):
-        str = 'MIMO Object'+'\n'
-        str = 'Nr : '+str(self.Nr)+ '\n'
-        str = 'Nt : '+str(self.Nr)+ '\n'
-        str = 'Nf : '+str(self.Nf)+ '\n'
-        return(str)
+        st = 'MIMO Object'+'\n'
+        st = st + 'Nr : '+str(self.Nr)+ '\n'
+        st = st + 'Nt : '+str(self.Nt)+ '\n'
+        st = st + 'Nf : '+str(self.Nf)+ '\n'
+        return(st)
 
     def __sub__(self,m):
         N = MIMO()
@@ -135,27 +135,38 @@ class MIMO(object):
         del self.H
         del self.C
 
-    def capacity(self,trho=np.arange(-40,120,1)):
-        """ calculates channel Shannon capacity
+    def transfer(self):
+        """ calculate transfer matrix
+        """
+        H   = self.Hcal.y
+        HT  = self.Hcal.y.swapaxes(0,1)
+        HHT = np.einsum('ijk,jlk->ilk',H,HT)
+        H3  = HHT.swapaxes(0,2)
+        g   = la.svd(H3)
+        return (H3,g[1])
 
-        thrho : np.array (SNR)
+
+    def capacity(self,Pt=1e-3,Tp=273):
+        """ calculates deterministic channel Shannon capacity
+
+        Parameters
+        ----------
+
+        Pt : Transmit power in band B
 
             log_2(det(I+(Et/N0Nt)HH^{H})
         """
 
-        tC = np.zeros((len(trho),len(self.freq)))
+        f  = self.Hcal.x
+        B  = f[-1]-f[0]
+        df = f[1]-f[0]
+        kB = 1.03806488e-23
+        N0 = kB*Tp
+        HH,sv = self.transfer()
+        IR  = np.eye(self.Nr)
+        C   = df*np.log(la.det(IR[None,...]+(Pt/self.Nt)*HH/(N0*df**2)))/np.log(2)
 
-        for ir in range(len(trho)):
-            rho = 10**(trho[ir]/10)
-            for ik in range(len(self.freq)):
-                #pdb.set_trace()
-                H   = self.Hcal.y[:,:,ik]
-                HHH = np.dot(H,np.conj(H).T) 
-                IR  = np.eye(self.Nr)
-                tC[ir,ik] = np.log(la.det(IR+(rho/self.Nt)*HHH))/np.log(2)
-
-        self.C=tC
-
+        return(C)
 
     def mulcplot(self,mode,**kwargs):
         """
