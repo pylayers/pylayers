@@ -150,7 +150,7 @@ class MIMO(object):
             for ik in range(len(self.freq)):
                 #pdb.set_trace()
                 H   = self.Hcal.y[:,:,ik]
-                HHH = np.dot(H,np.conj(H).T) 
+                HHH = np.dot(H,np.conj(H).T)
                 IR  = np.eye(self.Nr)
                 tC[ir,ik] = np.log(la.det(IR+(rho/self.Nt)*HHH))/np.log(2)
 
