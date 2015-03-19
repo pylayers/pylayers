@@ -190,7 +190,7 @@ class MIMO(object):
 
         H   = self.Hcal.y.swapaxes(0,2)
         Hd  = np.conj(H.swapaxes(1,2))
-    
+
         # White Noise definition
         #  
         # Boltzman constant
@@ -205,11 +205,11 @@ class MIMO(object):
         # Evaluation of the transfer tensor
 
         HdH,U,S,V = self.transfer()
-        
+
         It  = np.eye(self.Nt)
 
         Ir  = np.eye(self.Nr)
-        
+
         if type(Pt)==float:
             #Ps = (Pt/Nf)/(self.Nt)
             Ps = Pt/(self.Nt)
