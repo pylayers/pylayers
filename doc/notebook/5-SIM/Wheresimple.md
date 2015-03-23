@@ -11,7 +11,6 @@
 >>> 
 >>> from pylayers.simul.link import *
 >>> from pylayers.signal.waveform import *
-WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
 ```
 
 First of all we load the Layout of the environment. If the Layout associated graphs have already been built, one can load them with the `dumpr()` method.
@@ -41,21 +40,66 @@ First of all we load the Layout of the environment. If the Layout associated gra
 ```
 
 ```python
->>> K=UWBMeasure(2)
+>>> K=UWBMeasure(5)
+```
+
+```python
+>>> K.de
+array([ 50.89106921,  28.61363359,  76.5670447 ,  60.00199265])
+```
+
+```python
+>>> K.info()
+Date_Time : [u'31-Jul-2008 08:14:48']
+Tx_height : [u'120cm']
+Tx_position : [u'P005']
+Tx :  [-26.8556  12.2822   1.2   ]
+------Tx1 ------
+delays     (ns): 50.8910692056
+range  (meters): 15.2673207617
+visibility     : NLOS2
+angular (degree)  : 2.84109909504
+LQI Meth1 10.3676202597  (dB)
+LQI Meth2 -0.0464251069027  (dB)
+------Tx2 ------
+delays     (ns): 28.6136335901
+range  (meters): 8.58409007702
+visibility     : NLOS2
+angular (degree)  : 3.48568781284
+LQI Meth1 15.5920243795  (dB)
+LQI Meth2 7.02848427115  (dB)
+------Tx3 ------
+delays     (ns): 76.5670446987
+range  (meters): 22.9701134096
+visibility     : NLOS2
+angular (degree)  : 2.99206422733
+LQI Meth1 15.8266138647  (dB)
+LQI Meth2 1.72677266474  (dB)
+------Tx4 ------
+delays     (ns): 60.0019926459
+range  (meters): 18.0005977938
+visibility     : NLOS
+angular (degree)  : 3.30383704128
+LQI Meth1 28.4222937655  (dB)
+LQI Meth2 6.01984060663  (dB)
 ```
 
 ```python
 >>> ### Simulation section
-... fig=plt.figure(figsize=(15,8))
->>> K.show()
+... fig=plt.figure(figsize=(10,5))
+>>> K.show(delay=K.de)
+```
+
+```python
+>>> K.toa_new
 ```
 
 ```python
 >>> K.tau_Emax()
-array([[ 72.61 ],
-       [ 29.9  ],
-       [ 87.835],
-       [ 61.975]])
+array([[ 52.44 ],
+       [ 37.825],
+       [ 80.03 ],
+       [ 62.935]])
 ```
 
 ```python
@@ -67,7 +111,7 @@ array([[  0.    ,   0.    ,   1.2   ],
        [ -9.0914,  15.1899,   1.2   ]])
 ```
 
-The code below reads data from the M1-WHERE2 measurement campaign and store theme in arrays.
+The code below reads data from the M1-WHERE2 measurement campaign.
 
 ```python
 >>> for k in range(300):
@@ -113,7 +157,7 @@ The code below reads data from the M1-WHERE2 measurement campaign and store them
 ...         pass
 ```
 
-The IR-UWB applied waweform is available in the raw data and can be extracted as follow
+The IR-UWB applied waweform is available in the raw data structure and can be extracted as follow. This extarction is important in order to proceeed to the ray tracing simulation with the same waveform as the one used in the measurement camapign.
 
 ```python
 >>> from pylayers.signal.bsignal import *
@@ -133,6 +177,9 @@ The IR-UWB applied waweform is available in the raw data and can be extracted as
 >>> print E*30
 >>> use =1/E
 >>> print use
+-10.2361907016
+0.0947067492189
+316.767286888
 ```
 
 ```python
@@ -140,14 +187,18 @@ The IR-UWB applied waweform is available in the raw data and can be extracted as
 >>> print E2*30
 >>> E2dB=10*np.log10(E2*30)
 >>> print E2dB
+0.0918920633424
+-10.3672199673
 ```
 
 ```python
 >>> se.plot(typ='v')
+(<matplotlib.figure.Figure at 0x7f0a2575cf90>,
+ array([[<matplotlib.axes.AxesSubplot object at 0x7f0a24c8d8d0>]], dtype=object))
 ```
 
 ```python
->>> fig = plt.figure(figsize=(18,6))
+>>> fig = plt.figure(figsize=(16,6))
 >>> ax = fig.add_subplot(111)
 >>> ax.semilogx(td1,te1+EdB,'.r',label='Rx1')
 >>> ax.semilogx(td2,te2+EdB,'.b',label='Rx2')
@@ -163,10 +214,12 @@ The IR-UWB applied waweform is available in the raw data and can be extracted as
 
 ```python
 >>> plt.plot(te1,tt1,'.')
+[<matplotlib.lines.Line2D at 0x7f0a247e1dd0>]
 ```
 
 ```python
 >>> M.Etot()
+(array([-67.62048799, -64.56362576, -54.22863588, -66.40678426]),)
 ```
 
 ```python
@@ -174,17 +227,22 @@ The IR-UWB applied waweform is available in the raw data and can be extracted as
 ... tx_id = 100 #in M.valid_index
 >>> rx_id = 3 #1,2,3,4
 >>> M=UWBMeasure(tx_id)
->>> pylab
 >>> TX = M.tx
 >>> RX =M.rx[rx_id]
 ```
 
 ```python
 >>> TX
+array([-22.3797,  13.3897,   1.2   ])
 ```
 
 ```python
 >>> M.rx
+array([[  0.    ,   0.    ,   1.2   ],
+       [-12.2724,   7.7632,   1.2   ],
+       [-18.7747,  15.178 ,   1.2   ],
+       [ -4.1418,   8.8603,   1.2   ],
+       [ -9.0914,  15.1899,   1.2   ]])
 ```
 
 ```python
@@ -417,13 +475,13 @@ array([  9.79138753e-05,   2.96104973e-04,   1.59308395e-04,
 
 ```python
 >>> ir.plot(typ='v')
-(<matplotlib.figure.Figure at 0x7f06ccd92350>,
- array([[<matplotlib.axes.AxesSubplot object at 0x7f071cdbc710>]], dtype=object))
+(<matplotlib.figure.Figure at 0x7f0a25a9e450>,
+ array([[<matplotlib.axes.AxesSubplot object at 0x7f0a26310c90>]], dtype=object))
 ```
 
 ```python
 >>> ir
-Usignal :  (9047,)  (9047,)
+Usignal :  (9047,)  (9047,) 
 ax0 : 9047
 ```
 

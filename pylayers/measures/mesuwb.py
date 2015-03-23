@@ -1747,9 +1747,15 @@ class UWBMeasure(PyLayers):
             self.valid = False
 
 
+    def _repr__(self):
+        st = st + "Date_Time :", self.Date_Time+'\n'
+        st = st + "Tx_height :", self.Tx_height+'\n'
+        st = st + "Tx_position :", self.Tx_position+'\n'
+        sr = st + "Tx : ", self.tx+'\n'
+        
     def info(self):
         print "Date_Time :", self.Date_Time
-        print "Operators : ", self.Operators
+        #print "Operators : ", self.Operators
         print "Tx_height :", self.Tx_height
         print "Tx_position :", self.Tx_position
         print "Tx : ", self.tx

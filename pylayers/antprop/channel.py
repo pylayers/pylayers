@@ -1098,7 +1098,7 @@ class Ctilde(PyLayers):
         Notes
         -----
 
-        r x f
+        r x f+
           axis 0 : ray
           axis 1 : frequency
 
