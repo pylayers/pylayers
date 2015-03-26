@@ -1,0 +1,6 @@
+#!/bin/bash
+ipymd --from markdown --to notebook --overwrite $1
+runipy ${1%%.md}.ipynb --overwrite
+ipython nbconvert ${1%%.md}.ipynb --to latex
+rm ${1i%%.md}.ipynb
+pdflatex ${1%%.md}.tex
