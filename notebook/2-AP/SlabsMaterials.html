@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,9 +7,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>3. Slabs and Materials &mdash; PyLayers</title>
+    <title>Slabs and Materials &mdash; Python 1 documentation</title>
     
-    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -23,12 +24,57 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" />
-    <link rel="up" title="Overview" href="../TOC.html" />
-    <link rel="next" title="4. Effect of Modyfiying the Nature of Sub-Segments" href="../1-GIS/Multisubsegments.html" />
-    <link rel="prev" title="2. The Layout class" href="../1-GIS/LayoutEditor.html" /> 
+    <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="Python 1 documentation" href="../../index.html" />
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
   </head>
   <body>
+
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="../../index.html">
+            <img src="../../_static/pylayers.png" alt="Logo"/>
+          </a>
+          </p><div class="navbar">
+          <ul>
+            <li><a href="../../install.html">Download</a></li>
+            <li><a href="../../user_guide.html">User Guide</a></li>
+            <li><a href="../../modules/classes.html">Reference</a></li>
+       </ul>
+
+<div class="search_form">
+
+<div id="cse" style="width: 100%;"></div>
+<script src="http://www.google.com/jsapi" type="text/javascript"></script>
+<script type="text/javascript">
+  google.load('search', '1', {language : 'en'});
+  google.setOnLoadCallback(function() {
+    var customSearchControl = new google.search.CustomSearchControl('016639176250731907682:tjtqbvtvij0');
+    customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
+    var options = new google.search.DrawOptions();
+    options.setAutoComplete(true);
+    customSearchControl.draw('cse', options);
+  }, true);
+</script>
+
+</div>
+          </div> <!-- end navbar --></div>
+    </div>
+
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
     PyLayers
 <!--
@@ -37,82 +83,67 @@
 -->
 </div>
 
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../1-GIS/Multisubsegments.html" title="4. Effect of Modyfiying the Nature of Sub-Segments"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../1-GIS/LayoutEditor.html" title="2. The Layout class"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
-        <li><a href="../../download.html">Download </a> |&nbsp; </li>
-        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
-          <li><a href="../TOC.html" accesskey="U">Overview</a> &raquo;</li> 
-      </ul>
-    </div>
+    <div class="content-wrapper">
 
       <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">3. Slabs and Materials</a><ul>
-<li><a class="reference internal" href="#defining-a-new-slab-and-a-new-material">3.1. Defining a new Slab and a new Material</a></li>
-<li><a class="reference internal" href="#information-necessary-to-define-a-slab">3.2. Information necessary to define a Slab</a></li>
-<li><a class="reference internal" href="#evaluation-of-a-slab">3.3. Evaluation of a Slab</a></li>
-<li><a class="reference internal" href="#transmission-and-reflexion-coefficients">3.4. Transmission and Reflexion coefficients</a><ul>
-<li><a class="reference internal" href="#ploting-reflection-and-transmission-coefficients">3.4.1. Ploting Reflection and Transmission Coefficients</a></li>
+	<div class="sphinxsidebarwrapper">
+	   <div class="rel rellarge">
+	     
+	<!-- rellinks[1:] is an ugly hack to avoid link to module
+	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module In...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
+	<!-- Ad a link to the 'up' page -->
+    </div>
+    <p style="text-align: center; background-color: #BFFFFF">This documentation is
+
+    for Python <strong>version 1</strong>
+    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
+    
+    <h3>Citing</h3>
+    <p>If you use the software, please consider
+    <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
+    <h3>This page</h3>
+	<ul>
+<li><a class="reference internal" href="#">Slabs and Materials</a><ul>
+<li><a class="reference internal" href="#defining-a-new-slab-and-a-new-material">Defining a new Slab and a new Material</a></li>
+<li><a class="reference internal" href="#information-necessary-to-define-a-slab">Information necessary to define a Slab</a></li>
+<li><a class="reference internal" href="#evaluation-of-a-slab">Evaluation of a Slab</a></li>
+<li><a class="reference internal" href="#transmission-and-reflexion-coefficients">Transmission and Reflexion coefficients</a><ul>
+<li><a class="reference internal" href="#ploting-reflection-and-transmission-coefficients">Ploting Reflection and Transmission Coefficients</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#evaluation-without-phase-compensation">3.5. Evaluation without phase compensation</a></li>
-<li><a class="reference internal" href="#references">3.6. References</a></li>
+<li><a class="reference internal" href="#evaluation-without-phase-compensation">Evaluation without phase compensation</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../1-GIS/LayoutEditor.html"
-                        title="previous chapter">2. The Layout class</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="../1-GIS/Multisubsegments.html"
-                        title="next chapter">4. Effect of Modyfiying the Nature of Sub-Segments</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../../_sources/notebook/2-AP/SlabsMaterials.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
+    
+    </div>
+	  </div>
 
-    <div class="document">
+
+      <div class="content">
+            
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body">
             
   <div class="section" id="slabs-and-materials">
-<h1>3. Slabs and Materials<a class="headerlink" href="#slabs-and-materials" title="Permalink to this headline">¶</a></h1>
+<h1>Slabs and Materials<a class="headerlink" href="#slabs-and-materials" title="Permalink to this headline">¶</a></h1>
 <div class="code python highlight-python"><div class="highlight"><pre>%matplotlib inline
 </pre></div>
 </div>
@@ -165,7 +196,7 @@ below</p>
 </pre></div>
 </div>
 <div class="section" id="defining-a-new-slab-and-a-new-material">
-<h2>3.1. Defining a new Slab and a new Material<a class="headerlink" href="#defining-a-new-slab-and-a-new-material" title="Permalink to this headline">¶</a></h2>
+<h2>Defining a new Slab and a new Material<a class="headerlink" href="#defining-a-new-slab-and-a-new-material" title="Permalink to this headline">¶</a></h2>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;slab2&#39;</span><span class="p">,[</span><span class="s">&#39;STONE&#39;</span><span class="p">],[</span><span class="mf">0.15</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -245,7 +276,7 @@ viewvalues: D.viewvalues() -&gt; an object providing a view on D&#39;s values
 </div>
 </div>
 <div class="section" id="information-necessary-to-define-a-slab">
-<h2>3.2. Information necessary to define a Slab<a class="headerlink" href="#information-necessary-to-define-a-slab" title="Permalink to this headline">¶</a></h2>
+<h2>Information necessary to define a Slab<a class="headerlink" href="#information-necessary-to-define-a-slab" title="Permalink to this headline">¶</a></h2>
 <p>Each slab contains informations about its constitutive materials
 electromagnetic properties.</p>
 <p>Below an example for a simple slab, constituted with a single material
@@ -319,7 +350,7 @@ properties can be obtained as:</p>
 </div>
 </div>
 <div class="section" id="evaluation-of-a-slab">
-<h2>3.3. Evaluation of a Slab<a class="headerlink" href="#evaluation-of-a-slab" title="Permalink to this headline">¶</a></h2>
+<h2>Evaluation of a Slab<a class="headerlink" href="#evaluation-of-a-slab" title="Permalink to this headline">¶</a></h2>
 <p>Each Slab can be evaluated to obtain the Transmission and Reflexion
 coefficients for</p>
 <ul class="simple">
@@ -339,7 +370,7 @@ coefficients for</p>
 </div>
 </div>
 <div class="section" id="transmission-and-reflexion-coefficients">
-<h2>3.4. Transmission and Reflexion coefficients<a class="headerlink" href="#transmission-and-reflexion-coefficients" title="Permalink to this headline">¶</a></h2>
+<h2>Transmission and Reflexion coefficients<a class="headerlink" href="#transmission-and-reflexion-coefficients" title="Permalink to this headline">¶</a></h2>
 <p>Reflexion and transmission coefficient are computed for the given
 frequency range and theta range</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">ifreq</span><span class="o">=</span><span class="mi">1</span>
@@ -361,7 +392,7 @@ Transmission coefficient @ 3.01 GHz and theta= 0.1 :
 </pre></div>
 </div>
 <div class="section" id="ploting-reflection-and-transmission-coefficients">
-<h3>3.4.1. Ploting Reflection and Transmission Coefficients<a class="headerlink" href="#ploting-reflection-and-transmission-coefficients" title="Permalink to this headline">¶</a></h3>
+<h3>Ploting Reflection and Transmission Coefficients<a class="headerlink" href="#ploting-reflection-and-transmission-coefficients" title="Permalink to this headline">¶</a></h3>
 <p>The method <tt class="docutils literal"><span class="pre">plotwrt</span></tt> can plot the different calculated coefficients
 with respect to angle or frequency.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">][</span><span class="s">&#39;lthick&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="mf">0.02</span><span class="p">]</span>
@@ -458,7 +489,7 @@ with respect to angle or frequency.</p>
 </div>
 </div>
 <div class="section" id="evaluation-without-phase-compensation">
-<h2>3.5. Evaluation without phase compensation<a class="headerlink" href="#evaluation-without-phase-compensation" title="Permalink to this headline">¶</a></h2>
+<h2>Evaluation without phase compensation<a class="headerlink" href="#evaluation-without-phase-compensation" title="Permalink to this headline">¶</a></h2>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="n">theta</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -554,7 +585,7 @@ with respect to angle or frequency.</p>
 <img alt="../../_images/SlabsMaterials_65_0.png" src="../../_images/SlabsMaterials_65_0.png" />
 </div>
 <div class="section" id="references">
-<h2>3.6. References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
 <p>[1]. <a class="reference external" href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&amp;arnumber=5505315&amp;queryText%3DReflection+ant+Transmission+Properties+of+Building+Materials+in+D-Band+for+Modeling+Future+mm-Wave+Communication+Systems.QT.+Antennas+and+Propagation">Jacob, M. ; Kurner, T. ; Geise, R. ; Piesiewicz, R. &#8220;Reflection
 ant Transmission Properties of Building Materials in D-Band for Modeling
 Future mm-Wave Communication Systems&#8221; Antennas and Propagation (EuCAP),
@@ -570,37 +601,40 @@ N18</a></p>
           </div>
         </div>
       </div>
-      <div class="clearer"></div>
+        <div class="clearer"></div>
+      </div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../1-GIS/Multisubsegments.html" title="4. Effect of Modyfiying the Nature of Sub-Segments"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../1-GIS/LayoutEditor.html" title="2. The Layout class"
-             >previous</a> |</li>
-        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
-        <li><a href="../../download.html">Download </a> |&nbsp; </li>
-        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+  
 
-          <li><a href="../TOC.html" >Overview</a> &raquo;</li> 
-      </ul>
-    </div>
 
     <div class="footer">
-        &copy; Copyright 2015, PyLayers developer team.
-      Last updated on mars 05, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+        &copy; 2015, PyLayers developer team.
+      Last updated on mars 26, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
+    <span style="padding-left: 5ex;">
+    <a href="../../_sources/notebook/2-AP/SlabsMaterials.txt"
+	    rel="nofollow">Show this page source</a>
+    </span>
     </div>
+     <div class="rel rellarge">
+    
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
+    
+     </div>
+     <script type="text/javascript">
+       $("div.buttonNext, div.buttonPrevious").hover(
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           },
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           }
+       );
+     </script>
 <script type="text/javascript">
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-34943220-1']);

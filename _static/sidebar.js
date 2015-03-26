@@ -39,12 +39,12 @@ $(function() {
 
   // margin-left of the bodywrapper and width of the sidebar
   // with the sidebar collapsed
-  var bw_margin_collapsed = '.8em';
-  var ssb_width_collapsed = '.8em';
+  var bw_margin_collapsed = '-190px';
+  var ssb_width_collapsed = '1.0em';
 
   // colors used by the current theme
   var dark_color = $('.related').css('background-color');
-  var light_color = $('.document').css('background-color');
+  var light_color = $('.footer').css('color');
 
   function sidebar_is_collapsed() {
     return sidebarwrapper.is(':not(:visible)');
@@ -75,7 +75,7 @@ $(function() {
     sidebar.css('width', ssb_width_expanded);
     sidebarwrapper.show();
     sidebarbutton.css({
-        'margin-left': ssb_width_expanded-12,
+        'margin-left': ssb_width_expanded-13,
         'height': bodywrapper.height()
     });
     sidebarbutton.find('span').text('«');
@@ -85,9 +85,9 @@ $(function() {
 
   function add_sidebar_button() {
     sidebarwrapper.css({
-        'float': 'left',
+        'float': 'left' ,
         'margin-right': '0',
-        'width': ssb_width_expanded - 28
+        'width': ssb_width_expanded - 13
     });
     // create the button
     sidebar.append(
@@ -103,14 +103,14 @@ $(function() {
 	  viewport_height = $(window).height();
     sidebarbutton.find('span').css({
         'display': 'block',
-        'margin-top': (viewport_height - sidebar.position().top - 20) / 2
+        'margin-top': (viewport_height - sidebar.position().top + 60) / 2
     });
 
     sidebarbutton.click(toggle_sidebar);
     sidebarbutton.attr('title', _('Collapse sidebar'));
     sidebarbutton.css({
-        'color': '#FFFFFF',
         'border-left': '1px solid ' + dark_color,
+	'border-top-left-radius' : '15px',
         'font-size': '1.2em',
         'cursor': 'pointer',
         'height': bodywrapper.height(),
@@ -120,10 +120,10 @@ $(function() {
 
     sidebarbutton.hover(
       function () {
-          $(this).css('background-color', dark_color);
+          $(this).css('background-color', '#D0D0D0');
       },
       function () {
-          $(this).css('background-color', light_color);
+          $(this).css('background-color', '#F0F0F0');
       }
     );
   }

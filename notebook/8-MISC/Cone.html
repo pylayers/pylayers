@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,9 +7,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>24. The class Cone &mdash; PyLayers</title>
+    <title>The class Cone &mdash; Python 1 documentation</title>
     
-    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -23,12 +24,57 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" />
-    <link rel="up" title="Overview" href="../TOC.html" />
-    <link rel="next" title="25. Class Polygon" href="Geomutil.html" />
-    <link rel="prev" title="14. Modelisation of the Thermal Noise" href="../3-PHY/Noise.html" /> 
+    <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="Python 1 documentation" href="../../index.html" />
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
   </head>
   <body>
+
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="../../index.html">
+            <img src="../../_static/pylayers.png" alt="Logo"/>
+          </a>
+          </p><div class="navbar">
+          <ul>
+            <li><a href="../../install.html">Download</a></li>
+            <li><a href="../../user_guide.html">User Guide</a></li>
+            <li><a href="../../modules/classes.html">Reference</a></li>
+       </ul>
+
+<div class="search_form">
+
+<div id="cse" style="width: 100%;"></div>
+<script src="http://www.google.com/jsapi" type="text/javascript"></script>
+<script type="text/javascript">
+  google.load('search', '1', {language : 'en'});
+  google.setOnLoadCallback(function() {
+    var customSearchControl = new google.search.CustomSearchControl('016639176250731907682:tjtqbvtvij0');
+    customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
+    var options = new google.search.DrawOptions();
+    options.setAutoComplete(true);
+    customSearchControl.draw('cse', options);
+  }, true);
+</script>
+
+</div>
+          </div> <!-- end navbar --></div>
+    </div>
+
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
     PyLayers
 <!--
@@ -37,158 +83,79 @@
 -->
 </div>
 
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="Geomutil.html" title="25. Class Polygon"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../3-PHY/Noise.html" title="14. Modelisation of the Thermal Noise"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
-        <li><a href="../../download.html">Download </a> |&nbsp; </li>
-        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
-          <li><a href="../TOC.html" accesskey="U">Overview</a> &raquo;</li> 
-      </ul>
-    </div>
+    <div class="content-wrapper">
 
       <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">24. The class Cone</a><ul>
-<li><a class="reference internal" href="#is-a-point-in-the-cone-belong-point">24.1. Is a point in the cone : belong_point()</a></li>
-<li><a class="reference internal" href="#creating-a-cone-from-2-segments-from2segs">24.2. Creating a Cone from 2 segments <tt class="docutils literal"><span class="pre">from2segs()</span></tt></a></li>
-<li><a class="reference internal" href="#conditional-graph">24.3. Conditional Graph</a><ul>
-<li><a class="reference internal" href="#benchmark-normalizing-a-vector">24.3.1. Benchmark normalizing a vector</a></li>
+	<div class="sphinxsidebarwrapper">
+	   <div class="rel rellarge">
+	     
+	<!-- rellinks[1:] is an ugly hack to avoid link to module
+	    index  -->
+	<div class="rellink">
+	<a href="../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module In...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
+	<!-- Ad a link to the 'up' page -->
+    </div>
+    <p style="text-align: center; background-color: #BFFFFF">This documentation is
+
+    for Python <strong>version 1</strong>
+    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
+    
+    <h3>Citing</h3>
+    <p>If you use the software, please consider
+    <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
+    <h3>This page</h3>
+	<ul>
+<li><a class="reference internal" href="#">The class Cone</a><ul>
+<li><a class="reference internal" href="#is-a-point-belonging-to-a-cone-belong-point">Is a point belonging to a cone ? : belong_point()</a></li>
+<li><a class="reference internal" href="#creating-a-cone-from-2-segments-from2segs">Creating a Cone from 2 segments <tt class="docutils literal"><span class="pre">from2segs()</span></tt></a></li>
+<li><a class="reference internal" href="#conditional-graph">Conditional Graph</a><ul>
+<li><a class="reference internal" href="#benchmark-normalizing-a-vector">Benchmark normalizing a vector</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#debug">24.4. Debug</a></li>
-<li><a class="reference internal" href="#geomutil-mirror">24.5. geomutil.mirror</a></li>
-<li><a class="reference internal" href="#geometric-probability">24.6. Geometric probability</a></li>
+<li><a class="reference internal" href="#debug">Debug</a></li>
+<li><a class="reference internal" href="#geomutil-mirror">geomutil.mirror</a></li>
+<li><a class="reference internal" href="#geometric-probability">Geometric probability</a></li>
 </ul>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../3-PHY/Noise.html"
-                        title="previous chapter">14. Modelisation of the Thermal Noise</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="Geomutil.html"
-                        title="next chapter">25. Class Polygon</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../../_sources/notebook/8-MISC/Cone.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
+    
+    </div>
+	  </div>
 
-    <div class="document">
+
+      <div class="content">
+            
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
-<span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
-    <span class="n">styles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;../styles/custom.css&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="n">styles</span><span class="p">)</span>
-<span class="n">css_styling</span><span class="p">()</span>
-</pre></div>
-</div>
-<style>
-    @font-face {
-        font-family: "Computer Modern";
-        src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-    }
-    div.cell{
-        width:800px;
-        margin-left:16% !important;
-        margin-right:auto;
-    }
-    h1 {
-        font-family: Helvetica, serif;
-    }
-    h4{
-        margin-top:12px;
-        margin-bottom: 3px;
-       }
-    div.text_cell_render{
-        font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-        line-height: 145%;
-        font-size: 130%;
-        width:800px;
-        margin-left:auto;
-        margin-right:auto;
-    }
-    .CodeMirror{
-            font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-    }
-    .prompt{
-        display: None;
-    }
-    .text_cell_render h5 {
-        font-weight: 300;
-        font-size: 22pt;
-        color: #4057A1;
-        font-style: italic;
-        margin-bottom: .5em;
-        margin-top: 0.5em;
-        display: block;
-    }
-
-    .warning{
-        color: rgb( 240, 20, 20 )
-        }
-</style>
-<script>
-    MathJax.Hub.Config({
-                        TeX: {
-                           extensions: ["AMSmath.js"]
-                           },
-                tex2jax: {
-                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                },
-                displayAlign: 'center', // Change this to 'center' to center equations.
-                "HTML-CSS": {
-                    styles: {'.MathJax_Display': {"margin": 4}}
-                }
-        });
-</script><div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.util.cone</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">pylayers.util.plotutil</span> <span class="kn">import</span> <span class="o">*</span>
-</pre></div>
-</div>
-<div class="section" id="the-class-cone">
+  <div class="section" id="the-class-cone">
 <h1>The class Cone<a class="headerlink" href="#the-class-cone" title="Permalink to this headline">¶</a></h1>
+<div class="code python highlight-python"><div class="highlight"><pre>from pylayers.util.cone import *
+from pylayers.util.geomutil import *
+from pylayers.util.plotutil import *
+%matplotlib inline
+</pre></div>
+</div>
 <p>The
 <tt class="docutils literal"><span class="pre">`Cone</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.util.cone.html">http://pylayers.github.io/pylayers/modules/pylayers.util.cone.html</a>&gt;`__
-class implements different methods for handling planar cones.</p>
-<p>A planar cone is defined as : + an apex + two vectors <img class="math" src="../../_images/math/db54580d6975bb9f12fdb7149fdd7c99e3cdbe57.png" alt="\vec{v}_a"/>
-and <img class="math" src="../../_images/math/0bad42c956ad9ec58813c466253fdbe03e33e1a8.png" alt="\vec{v}_b"/> not necessarily normalized.</p>
+class implements several methods for handling planar cones.</p>
+<p>A planar cone is defined as being composed of : + an apex
+<img class="math" src="../../_images/math/46bc9db8fc244ad2bbb5de57bfd7e8a595298471.png" alt="\vec{p}"/> + two vectors <img class="math" src="../../_images/math/db54580d6975bb9f12fdb7149fdd7c99e3cdbe57.png" alt="\vec{v}_a"/> and <img class="math" src="../../_images/math/0bad42c956ad9ec58813c466253fdbe03e33e1a8.png" alt="\vec{v}_b"/>
+not necessarily normalized.</p>
 <p>Let create a cone.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">va</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
 <span class="n">vb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
@@ -214,8 +181,8 @@ dot(u,v) 0.707106781187
 cross(u,v) 0.707106781187
 </pre></div>
 </div>
-<div class="section" id="is-a-point-in-the-cone-belong-point">
-<h2>Is a point in the cone : belong_point()<a class="headerlink" href="#is-a-point-in-the-cone-belong-point" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="is-a-point-belonging-to-a-cone-belong-point">
+<h2>Is a point belonging to a cone ? : belong_point()<a class="headerlink" href="#is-a-point-belonging-to-a-cone-belong-point" title="Permalink to this headline">¶</a></h2>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">p</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">6000</span><span class="p">)</span>
 <span class="n">b</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">belong_point</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
 </pre></div>
@@ -230,15 +197,15 @@ cross(u,v) 0.707106781187
 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pb</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">pb</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;.b&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;equal&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;belong_cone method&#39;</span><span class="p">)</span>
-<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">)</span>
-<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">)</span>
 <span class="c">#plt.axis(&#39;off&#39;)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7fdd131bb150&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b7e9bad8550&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Cone_12_1.png" src="../../_images/Cone_12_1.png" />
+<img alt="../../_images/Cone_13_1.png" src="../../_images/Cone_13_1.png" />
 </div>
 <div class="section" id="creating-a-cone-from-2-segments-from2segs">
 <h2>Creating a Cone from 2 segments <tt class="docutils literal"><span class="pre">from2segs()</span></tt><a class="headerlink" href="#creating-a-cone-from-2-segments-from2segs" title="Permalink to this headline">¶</a></h2>
@@ -268,11 +235,11 @@ cross(u,v) 0.707106781187
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Cs</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fdd1381f710&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7fdd1381fc10&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b7e75926a50&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2b7e9b47e590&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/Cone_19_1.png" src="../../_images/Cone_19_1.png" />
+<img alt="../../_images/Cone_20_1.png" src="../../_images/Cone_20_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">b</span><span class="o">=</span><span class="n">Cs</span><span class="o">.</span><span class="n">belong_point</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -293,10 +260,10 @@ cross(u,v) 0.707106781187
 <span class="c">#plt.axis(&#39;off&#39;)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">15.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">20.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">15.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">15.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Cone_23_1.png" src="../../_images/Cone_23_1.png" />
+<img alt="../../_images/Cone_24_1.png" src="../../_images/Cone_24_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Cs</span><span class="o">.</span><span class="n">seg1</span>
 </pre></div>
 </div>
@@ -310,7 +277,7 @@ cross(u,v) 0.707106781187
 <div class="code python highlight-python"><div class="highlight"><pre>%timeit b=Cs.belong_point(p)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>10000 loops, best of 3: 103 µs per loop
+<div class="highlight-python"><div class="highlight"><pre>10000 loops, best of 3: 109 µs per loop
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c">#nb = np.array(map(lambda x: not x,bo))</span>
@@ -326,7 +293,7 @@ cross(u,v) 0.707106781187
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">8.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">15.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Cone_27_1.png" src="../../_images/Cone_27_1.png" />
+<img alt="../../_images/Cone_28_1.png" src="../../_images/Cone_28_1.png" />
 <p>The adressed problem consists in determining whether a segment lies in
 the cone or not. The condition is satisfied if not all segments
 termination are outside the cone on the same side of the cone. This is
@@ -343,14 +310,14 @@ implemented in the method <tt class="docutils literal"><span class="pre">Cone.ou
 <span class="c">#plt.axis(&#39;off&#39;)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">15.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">20.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">15.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">15.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Cone_30_1.png" src="../../_images/Cone_30_1.png" />
-<p>Un cone est un objet qui va servir à construire les objets <tt class="docutils literal"><span class="pre">Beams</span></tt>. Un
+<img alt="../../_images/Cone_31_1.png" src="../../_images/Cone_31_1.png" />
+<p>Un cone est un objet qui va servir construire les objets <tt class="docutils literal"><span class="pre">Beams</span></tt>. Un
 <tt class="docutils literal"><span class="pre">Beam</span></tt> est un <tt class="docutils literal"><span class="pre">Cone</span></tt> qui englobe les segments d&#8217;une <tt class="docutils literal"><span class="pre">Signature</span></tt>.
-Une signature et un point donne un <tt class="docutils literal"><span class="pre">Beam</span></tt>. A un <tt class="docutils literal"><span class="pre">Beam</span></tt> est associé
-un <tt class="docutils literal"><span class="pre">Cone</span></tt> dont l&#8217;apex est une ancre virtuelle.</p>
+Une signature et un point donne un <tt class="docutils literal"><span class="pre">Beam</span></tt>. A un <tt class="docutils literal"><span class="pre">Beam</span></tt> est associ un
+<tt class="docutils literal"><span class="pre">Cone</span></tt> dont l&#8217;apex est une ancre virtuelle.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">pta</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">400</span><span class="p">)</span>
 <span class="n">phe</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">400</span><span class="p">)</span>
 </pre></div>
@@ -358,11 +325,11 @@ un <tt class="docutils literal"><span class="pre">Cone</span></tt> dont l&#8217;
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">,</span><span class="n">phe</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fdd1315f690&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7fdd12f99090&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b7e9bbbf4d0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2b7e9bccaf90&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/Cone_33_1.png" src="../../_images/Cone_33_1.png" />
+<img alt="../../_images/Cone_34_1.png" src="../../_images/Cone_34_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Cs</span><span class="o">.</span><span class="n">seg0</span>
 </pre></div>
 </div>
@@ -389,11 +356,11 @@ un <tt class="docutils literal"><span class="pre">Cone</span></tt> dont l&#8217;
 <span class="c">#displot(pta[:,bs],phe[:,bs],color=&#39;blue&#39;)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fdd12f89c50&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7fdd12ffa550&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b7e9bccae10&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2b7e9bc78ed0&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/Cone_36_1.png" src="../../_images/Cone_36_1.png" />
+<img alt="../../_images/Cone_37_1.png" src="../../_images/Cone_37_1.png" />
 <p>There is different way to create a <tt class="docutils literal"><span class="pre">Cone</span></tt> either from 2 segments
 <tt class="docutils literal"><span class="pre">from2segs</span></tt> or from one point and one segment <tt class="docutils literal"><span class="pre">fromptseg</span></tt>. This
 second method is used when the field is going from a diffraction point
@@ -440,11 +407,11 @@ yet.</p>
 <span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="n">bs</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">bs</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fdd1142a190&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7fdd20a25e90&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b7e9c62ba50&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2b7e9c5c5410&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/Cone_46_1.png" src="../../_images/Cone_46_1.png" />
+<img alt="../../_images/Cone_47_1.png" src="../../_images/Cone_47_1.png" />
 <div class="section" id="benchmark-normalizing-a-vector">
 <h3>Benchmark normalizing a vector<a class="headerlink" href="#benchmark-normalizing-a-vector" title="Permalink to this headline">¶</a></h3>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">])</span>
@@ -453,19 +420,22 @@ yet.</p>
 <div class="code python highlight-python"><div class="highlight"><pre>%timeit a/np.sqrt(np.dot(a,a))
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>100000 loops, best of 3: 5.02 µs per loop
+<div class="highlight-python"><div class="highlight"><pre>The slowest run took 11.13 times longer than the fastest. This could mean that an intermediate result is being cached
+100000 loops, best of 3: 5.4 µs per loop
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre>%timeit a/sp.linalg.norm(a)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>100000 loops, best of 3: 10.7 µs per loop
+<div class="highlight-python"><div class="highlight"><pre>The slowest run took 6.31 times longer than the fastest. This could mean that an intermediate result is being cached
+100000 loops, best of 3: 11.4 µs per loop
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre>%timeit a/np.sqrt(np.sum(a*a,axis=0))
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>100000 loops, best of 3: 9.17 µs per loop
+<div class="highlight-python"><div class="highlight"><pre>The slowest run took 5.81 times longer than the fastest. This could mean that an intermediate result is being cached
+100000 loops, best of 3: 10 µs per loop
 </pre></div>
 </div>
 </div>
@@ -477,8 +447,32 @@ yet.</p>
        <span class="p">[</span>  <span class="mf">4.28</span> <span class="p">,</span>   <span class="mf">9.925</span><span class="p">]])</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-39-1063b62b8faf&gt; in &lt;module&gt;()
+----&gt; 1 seg0 = array([[-25.768, -25.822],
+      2        [  4.28 ,   9.925]])
+
+
+NameError: name &#39;array&#39; is not defined
+</pre></div>
+</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">seg1</span> <span class="o">=</span> <span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">26.848</span><span class="p">,</span> <span class="o">-</span><span class="mf">26.805</span><span class="p">],</span>
        <span class="p">[</span>  <span class="mf">5.415</span><span class="p">,</span>   <span class="mf">4.515</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-40-95e9502a4505&gt; in &lt;module&gt;()
+----&gt; 1 seg1 = array([[-26.848, -26.805],
+      2        [  5.415,   4.515]])
+
+
+NameError: name &#39;array&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">cn</span> <span class="o">=</span> <span class="n">Cone</span><span class="p">()</span>
@@ -492,10 +486,37 @@ yet.</p>
        <span class="p">[</span> <span class="mf">10.926</span><span class="p">,</span>  <span class="mf">10.686</span><span class="p">,</span>  <span class="mf">10.686</span><span class="p">,</span>   <span class="mf">8.956</span><span class="p">,</span>   <span class="mf">5.415</span><span class="p">,</span>   <span class="mf">4.506</span><span class="p">,</span>  <span class="mf">10.934</span><span class="p">,</span>    <span class="mf">8.954</span><span class="p">]])</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-43-b197e999ada8&gt; in &lt;module&gt;()
+----&gt; 1 pta =array([[-27.836, -27.833, -27.833, -27.817, -26.848, -27.774, -26.952,
+      2         -28.062],
+      3        [ 10.926,  10.686,  10.686,   8.956,   5.415,   4.506,  10.934,    8.954]])
+
+
+NameError: name &#39;array&#39; is not defined
+</pre></div>
+</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">phe</span> <span class="o">=</span> <span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">27.835</span><span class="p">,</span> <span class="o">-</span><span class="mf">27.835</span><span class="p">,</span> <span class="o">-</span><span class="mf">28.078</span><span class="p">,</span> <span class="o">-</span><span class="mf">27.774</span><span class="p">,</span> <span class="o">-</span><span class="mf">26.882</span><span class="p">,</span> <span class="o">-</span><span class="mf">26.805</span><span class="p">,</span> <span class="o">-</span><span class="mf">27.836</span><span class="p">,</span>
         <span class="o">-</span><span class="mf">28.078</span><span class="p">],</span>
        <span class="p">[</span> <span class="mf">10.891</span><span class="p">,</span>  <span class="mf">10.891</span><span class="p">,</span>  <span class="mf">10.683</span><span class="p">,</span>   <span class="mf">4.506</span><span class="p">,</span>   <span class="mf">8.965</span><span class="p">,</span>   <span class="mf">4.515</span><span class="p">,</span>  <span class="mf">10.926</span><span class="p">,</span>
          <span class="mf">10.683</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-44-b4e3a2a92cdb&gt; in &lt;module&gt;()
+----&gt; 1 phe = array([[-27.835, -27.835, -28.078, -27.774, -26.882, -26.805, -27.836,
+      2         -28.078],
+      3        [ 10.891,  10.891,  10.683,   4.506,   8.965,   4.515,  10.926,
+      4          10.683]])
+
+
+NameError: name &#39;array&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">typ</span><span class="p">,</span><span class="n">proba</span> <span class="o">=</span> <span class="n">cn</span><span class="o">.</span><span class="n">belong_seg</span><span class="p">(</span><span class="n">pta</span><span class="p">,</span><span class="n">phe</span><span class="p">)</span>
@@ -505,58 +526,97 @@ yet.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">proba</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span> <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.36658801</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
-        <span class="mf">0.36658801</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span> <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.51645277</span><span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.01724752</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.12834388</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.98328489</span><span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.64126028</span><span class="p">,</span>  <span class="mf">0.80601937</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.60711101</span><span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.13061152</span><span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.37654316</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.48573254</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.07459957</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>
+        <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.84382463</span><span class="p">,</span>  <span class="mf">0.42148211</span><span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.12860128</span><span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.88727616</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.61624254</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.18847182</span><span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.46962126</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.70174533</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.57617797</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.81490267</span><span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.0097277</span> <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.19071273</span><span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.07068713</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>
+        <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">1.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span>  <span class="mf">0.</span>        <span class="p">])</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">cn</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 <span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="n">bn</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">bn</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fdd114b7810&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7fdd12f6da90&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b7e9bd74d10&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2b7e9bcce450&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/Cone_62_1.png" src="../../_images/Cone_62_1.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">cn</span><span class="o">.</span><span class="n">apex</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">26.67458396</span><span class="p">,</span>   <span class="mf">5.23275258</span><span class="p">])</span>
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">cn</span><span class="o">.</span><span class="n">seg1</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">26.805</span><span class="p">,</span> <span class="o">-</span><span class="mf">26.848</span><span class="p">],</span>
-       <span class="p">[</span>  <span class="mf">4.515</span><span class="p">,</span>   <span class="mf">5.415</span><span class="p">]])</span>
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">pta</span><span class="o">.</span><span class="n">T</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">27.836</span><span class="p">,</span>  <span class="mf">10.926</span><span class="p">],</span>
-       <span class="p">[</span><span class="o">-</span><span class="mf">27.833</span><span class="p">,</span>  <span class="mf">10.686</span><span class="p">],</span>
-       <span class="p">[</span><span class="o">-</span><span class="mf">27.833</span><span class="p">,</span>  <span class="mf">10.686</span><span class="p">],</span>
-       <span class="p">[</span><span class="o">-</span><span class="mf">27.817</span><span class="p">,</span>   <span class="mf">8.956</span><span class="p">],</span>
-       <span class="p">[</span><span class="o">-</span><span class="mf">26.848</span><span class="p">,</span>   <span class="mf">5.415</span><span class="p">],</span>
-       <span class="p">[</span><span class="o">-</span><span class="mf">27.774</span><span class="p">,</span>   <span class="mf">4.506</span><span class="p">],</span>
-       <span class="p">[</span><span class="o">-</span><span class="mf">26.952</span><span class="p">,</span>  <span class="mf">10.934</span><span class="p">],</span>
-       <span class="p">[</span><span class="o">-</span><span class="mf">28.062</span><span class="p">,</span>   <span class="mf">8.954</span><span class="p">]])</span>
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">phe</span><span class="o">.</span><span class="n">T</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">27.835</span><span class="p">,</span>  <span class="mf">10.891</span><span class="p">],</span>
-       <span class="p">[</span><span class="o">-</span><span class="mf">27.835</span><span class="p">,</span>  <span class="mf">10.891</span><span class="p">],</span>
-       <span class="p">[</span><span class="o">-</span><span class="mf">28.078</span><span class="p">,</span>  <span class="mf">10.683</span><span class="p">],</span>
-       <span class="p">[</span><span class="o">-</span><span class="mf">27.774</span><span class="p">,</span>   <span class="mf">4.506</span><span class="p">],</span>
-       <span class="p">[</span><span class="o">-</span><span class="mf">26.882</span><span class="p">,</span>   <span class="mf">8.965</span><span class="p">],</span>
-       <span class="p">[</span><span class="o">-</span><span class="mf">26.805</span><span class="p">,</span>   <span class="mf">4.515</span><span class="p">],</span>
-       <span class="p">[</span><span class="o">-</span><span class="mf">27.836</span><span class="p">,</span>  <span class="mf">10.926</span><span class="p">],</span>
-       <span class="p">[</span><span class="o">-</span><span class="mf">28.078</span><span class="p">,</span>  <span class="mf">10.683</span><span class="p">]])</span>
-</pre></div>
-</div>
+<img alt="../../_images/Cone_63_1.png" src="../../_images/Cone_63_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">pta1</span><span class="o">=</span><span class="n">pta</span><span class="p">[:,</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">phe1</span><span class="o">=</span><span class="n">phe</span><span class="p">[:,</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
@@ -565,25 +625,11 @@ yet.</p>
 <span class="n">displot</span><span class="p">(</span><span class="n">pta1</span><span class="p">,</span><span class="n">phe1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fdd13004250&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7fdd112bca50&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b7e9bc782d0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2b7e9c7db3d0&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/Cone_68_1.png" src="../../_images/Cone_68_1.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">pta1</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">27.774</span><span class="p">],</span>
-       <span class="p">[</span>  <span class="mf">4.506</span><span class="p">]])</span>
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">phe1</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">26.805</span><span class="p">],</span>
-       <span class="p">[</span>  <span class="mf">4.515</span><span class="p">]])</span>
-</pre></div>
-</div>
+<img alt="../../_images/Cone_65_1.png" src="../../_images/Cone_65_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">b</span> <span class="o">=</span> <span class="n">cn</span><span class="o">.</span><span class="n">belong_seg</span><span class="p">(</span><span class="n">pta1</span><span class="p">,</span><span class="n">phe1</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -599,10 +645,10 @@ yet.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">M</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">3.14982613</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.70314403</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.15545924</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.66050496</span><span class="p">,</span>
-        <span class="o">-</span><span class="mf">3.04438101</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.44244337</span><span class="p">],</span>
-       <span class="p">[</span> <span class="mf">0.1325281</span> <span class="p">,</span> <span class="o">-</span><span class="mf">0.58860675</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.08353195</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.32841096</span><span class="p">,</span>
-         <span class="mf">0.56330277</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.45096549</span><span class="p">]])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">0.98407061</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.81500137</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.50360835</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.92555712</span><span class="p">,</span>
+        <span class="o">-</span><span class="mf">1.38898374</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.69642201</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">0.46293585</span><span class="p">,</span>  <span class="mf">1.2273525</span> <span class="p">,</span> <span class="o">-</span><span class="mf">1.55776842</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span>  <span class="mf">0.19543448</span><span class="p">,</span>
+        <span class="o">-</span><span class="mf">1.1149496</span> <span class="p">,</span> <span class="o">-</span><span class="mf">0.30172968</span><span class="p">]])</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
@@ -611,10 +657,20 @@ yet.</p>
 <span class="n">plot</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">M</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;ob&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x7fdd11192590&gt;]
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-53-0829430ac458&gt; in &lt;module&gt;()
+----&gt; 1 figsize(20,20)
+      2 displot(pa,pb)
+      3 plot(p[0,:],p[1,:],&#39;or&#39;,alpha=0.2)
+      4 plot(M[0,:],M[1,:],&#39;ob&#39;,alpha=0.2)
+
+
+NameError: name &#39;figsize&#39; is not defined
 </pre></div>
 </div>
-<img alt="../../_images/Cone_75_1.png" src="../../_images/Cone_75_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">pa</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">pb</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">pc</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
@@ -660,7 +716,7 @@ which is subtended by the intercepted segment.</p>
     <span class="k">pass</span>
 </pre></div>
 </div>
-<img alt="../../_images/Cone_82_0.png" src="../../_images/Cone_82_0.png" />
+<img alt="../../_images/Cone_77_0.png" src="../../_images/Cone_77_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 <span class="c">#col=[&#39;r&#39;,&#39;g&#39;,&#39;b&#39;,&#39;m&#39;]</span>
 <span class="k">try</span><span class="p">:</span>
@@ -673,10 +729,10 @@ which is subtended by the intercepted segment.</p>
 <div class="highlight-python"><div class="highlight"><pre>[ 1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.
   1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.
   1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.
-  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.]
+  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.]
 </pre></div>
 </div>
-<img alt="../../_images/Cone_83_1.png" src="../../_images/Cone_83_1.png" />
+<img alt="../../_images/Cone_78_1.png" src="../../_images/Cone_78_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 <span class="k">try</span><span class="p">:</span>
@@ -686,15 +742,17 @@ which is subtended by the intercepted segment.</p>
 <span class="k">print</span><span class="p">(</span><span class="n">proba</span><span class="p">[</span><span class="n">u2</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[ 0.01595383  0.20853493  0.16270922  0.67682437  0.25094575  0.65430395
-  0.38054079  0.05819736  0.65070121  0.44711885  0.14449714  0.93895135
-  0.76452284  0.81505421  0.5228525   0.21044162  0.19170093  0.08583838
-  0.7930226   0.59950852  0.6044619   0.76683796  0.50334732  0.14642156
-  0.53695567  0.64944684  0.48164823  0.32379581  0.04102593  0.41327271
-  0.66328808  0.44656266  0.52096101  0.99336419  0.45249353]
+<div class="highlight-python"><div class="highlight"><pre>[ 0.35931122  0.66487653  0.80910189  0.2761296   0.5302222   0.31605905
+  0.74379588  0.15018657  0.0439594   0.18826348  0.65478869  0.93385052
+  0.56248801  0.33953615  0.48321161  0.83959321  0.57764768  0.54249469
+  0.90529419  0.95450292  0.08875145  0.10296546  0.66082788  0.35349847
+  0.56633997  0.13556597  0.09221017  0.75130472  0.84101854  0.28394335
+  0.72937929  0.175058    0.21434325  0.90355325  0.89456945  0.92610559
+  0.15410348  0.23334137  0.60070738  0.06296431  0.00264978  0.20111354
+  0.74485869  0.06285293  0.07243683  0.45004652  0.74941045  0.05868338]
 </pre></div>
 </div>
-<img alt="../../_images/Cone_84_1.png" src="../../_images/Cone_84_1.png" />
+<img alt="../../_images/Cone_79_1.png" src="../../_images/Cone_79_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="n">u3</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">u3</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
@@ -703,16 +761,14 @@ which is subtended by the intercepted segment.</p>
 <span class="k">print</span><span class="p">(</span><span class="n">proba</span><span class="p">[</span><span class="n">u3</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[ 0.50811604  0.54216416  0.09200085  0.09538675  0.56183513  0.24506377
-  0.49390972  0.47864877  0.46098     0.55426894  0.71363893  0.61054289
-  0.61538553  0.36069338  0.30402059  0.16022635  0.39796474  0.7026786
-  0.68156896  0.30630409  0.32182377  0.75955318  0.98633744  0.63593433
-  0.1942956   0.95099856  0.02630538  0.84815702  0.55291478  0.55484274
-  0.81245148  0.43951992  0.66188062  0.90786209  0.16843639  0.33305348
-  0.86592537  0.54656774  0.03408855]
+<div class="highlight-python"><div class="highlight"><pre>[ 0.23363207  0.82863008  0.23262161  0.05314741  0.68904939  0.60259803
+  0.21984     0.44048058  0.94248177  0.9621069   0.03803966  0.60541124
+  0.96234325  0.43372256  0.85988477  0.70098066  0.0031827   0.48202015
+  0.25224966  0.70601304  0.18365038  0.45407095  0.84410062  0.8145836
+  0.34256545  0.21309208  0.78909572  0.00165233  0.30628545  0.06123   ]
 </pre></div>
 </div>
-<img alt="../../_images/Cone_85_1.png" src="../../_images/Cone_85_1.png" />
+<img alt="../../_images/Cone_80_1.png" src="../../_images/Cone_80_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="n">u4</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">u4</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
@@ -721,11 +777,13 @@ which is subtended by the intercepted segment.</p>
 <span class="k">print</span><span class="p">(</span><span class="n">proba</span><span class="p">[</span><span class="n">u4</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[ 0.36947478  0.83270738  0.65399017  0.24624756  0.76102651  0.50346752
-  0.03398412  0.74576811]
+<div class="highlight-python"><div class="highlight"><pre>[ 0.8110369   0.79940319  0.07248906  0.0703959   0.97561353  0.36718292
+  0.28886207  0.42983429  0.37259248  0.95470214  0.63287892  0.18140387
+  0.11312643  0.28030864  0.33089179  0.02813643  0.78225577  0.08365481
+  0.58881765  0.53255908  0.95454359]
 </pre></div>
 </div>
-<img alt="../../_images/Cone_86_1.png" src="../../_images/Cone_86_1.png" />
+<img alt="../../_images/Cone_81_1.png" src="../../_images/Cone_81_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="n">u5</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">u5</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
@@ -733,7 +791,7 @@ which is subtended by the intercepted segment.</p>
     <span class="k">pass</span>
 </pre></div>
 </div>
-<img alt="../../_images/Cone_87_0.png" src="../../_images/Cone_87_0.png" />
+<img alt="../../_images/Cone_82_0.png" src="../../_images/Cone_82_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="n">displot</span><span class="p">(</span><span class="n">pta</span><span class="p">[:,</span><span class="n">u6</span><span class="p">],</span><span class="n">phe</span><span class="p">[:,</span><span class="n">u6</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
@@ -741,7 +799,7 @@ which is subtended by the intercepted segment.</p>
     <span class="k">pass</span>
 </pre></div>
 </div>
-<img alt="../../_images/Cone_88_0.png" src="../../_images/Cone_88_0.png" />
+<img alt="../../_images/Cone_83_0.png" src="../../_images/Cone_83_0.png" />
 </div>
 </div>
 
@@ -749,37 +807,40 @@ which is subtended by the intercepted segment.</p>
           </div>
         </div>
       </div>
-      <div class="clearer"></div>
+        <div class="clearer"></div>
+      </div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="Geomutil.html" title="25. Class Polygon"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../3-PHY/Noise.html" title="14. Modelisation of the Thermal Noise"
-             >previous</a> |</li>
-        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../TOC.html">Documentation </a> |&nbsp;</li>
-        <li><a href="../../download.html">Download </a> |&nbsp; </li>
-        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+  
 
-          <li><a href="../TOC.html" >Overview</a> &raquo;</li> 
-      </ul>
-    </div>
 
     <div class="footer">
-        &copy; Copyright 2015, PyLayers developer team.
-      Last updated on mars 05, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+        &copy; 2015, PyLayers developer team.
+      Last updated on mars 26, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
+    <span style="padding-left: 5ex;">
+    <a href="../../_sources/notebook/8-MISC/Cone.txt"
+	    rel="nofollow">Show this page source</a>
+    </span>
     </div>
+     <div class="rel rellarge">
+    
+    <div class="buttonPrevious">
+      <a href="../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
+    
+     </div>
+     <script type="text/javascript">
+       $("div.buttonNext, div.buttonPrevious").hover(
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           },
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           }
+       );
+     </script>
 <script type="text/javascript">
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-34943220-1']);
