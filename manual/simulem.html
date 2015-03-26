@@ -71,15 +71,6 @@
 </div> <!-- end navbar --></div>
     </div>
 
-<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
-    PyLayers
-<!--
-<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
-    alt="pylayers"/></a>
--->
-</div>
-
-
     <div class="content-wrapper">
 
       <div class="sphinxsidebar">
@@ -256,19 +247,9 @@ project.</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [2]: </span><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">(</span><span class="s">&#39;defstr.ini&#39;</span><span class="p">)</span>
 
 <span class="gp">In [3]: </span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
-<span class="go">---------------------------------------------------------------------------</span>
-<span class="go">KeyError                                  Traceback (most recent call last)</span>
-<span class="go">&lt;ipython-input-3-c4521b4645d7&gt; in &lt;module&gt;()</span>
-<span class="go">----&gt; 1 S.L.showGs()</span>
-
-<span class="go">/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in showGs(self, **kwargs)</span>
-<span class="go">   4829 </span>
-<span class="go">   4830         if self.display[&#39;transition&#39;]:</span>
-<span class="go">-&gt; 4831             segwtrans = [y for y in [x for x in self.Gs.nodes() if x&gt;0 ]if self.Gs.node[y][&#39;transition&#39;]]</span>
-<span class="go">   4832             posseg = np.array([self.Gs.pos[x] for x in segwtrans])</span>
-<span class="go">   4833             normseg = np.array([self.Gs.node[x][&#39;norm&#39;] for x in segwtrans])[:,:2]</span>
-
-<span class="go">KeyError: &#39;transition&#39;</span>
+<span class="gr">Out[3]: </span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x2aceaa919a10&gt;,</span>
+<span class="go"> &lt;matplotlib.axes.AxesSubplot at 0x2acecf604f90&gt;)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/DefaultLayout.png"><img alt="../_images/DefaultLayout.png" src="../_images/DefaultLayout.png" style="width: 8in;" /></a>
@@ -290,7 +271,6 @@ project.</p>
       </div>
     </div>
   
-
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
@@ -320,18 +300,5 @@ project.</p>
            }
        );
      </script>
-<script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34943220-1']);
-  _gaq.push(['_setDomainName', 'pylayers.github.io']);
-  _gaq.push(['_setAllowLinker', true]);
-  _gaq.push(['_trackPageview']);
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })(); 
-</script> 
- 
   </body>
 </html>
