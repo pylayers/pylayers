@@ -1,79 +1,6 @@
 
-.. code:: python
-
-    from IPython.core.display import HTML
-    
-    def css_styling():
-        styles = open("../styles/custom.css", "r").read()
-        return HTML(styles)
-    css_styling()
-
-
-
-.. raw:: html
-
-    <style>
-        @font-face {
-            font-family: "Computer Modern";
-            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-        }
-        div.cell{
-            width:800px;
-            margin-left:16% !important;
-            margin-right:auto;
-        }
-        h1 {
-            font-family: Helvetica, serif;
-        }
-        h4{
-            margin-top:12px;
-            margin-bottom: 3px;
-           }
-        div.text_cell_render{
-            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-            line-height: 145%;
-            font-size: 130%;
-            width:800px;
-            margin-left:auto;
-            margin-right:auto;
-        }
-        .CodeMirror{
-                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-        }
-        .prompt{
-            display: None;
-        }
-        .text_cell_render h5 {
-            font-weight: 300;
-            font-size: 22pt;
-            color: #4057A1;
-            font-style: italic;
-            margin-bottom: .5em;
-            margin-top: 0.5em;
-            display: block;
-        }
-        
-        .warning{
-            color: rgb( 240, 20, 20 )
-            }  
-    </style>
-    <script>
-        MathJax.Hub.Config({
-                            TeX: {
-                               extensions: ["AMSmath.js"]
-                               },
-                    tex2jax: {
-                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                    },
-                    displayAlign: 'center', // Change this to 'center' to center equations.
-                    "HTML-CSS": {
-                        styles: {'.MathJax_Display': {"margin": 4}}
-                    }
-            });
-    </script>
-
-
+Scalar Spherical Harmonics
+==========================
 
 .. code:: python
 
@@ -169,7 +96,7 @@ To calculate scalar spherical harmonics use method ``ssh(A,L)``
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x7f7e259c47d0>]
+    [<matplotlib.lines.Line2D at 0x2b81e3a10450>]
 
 
 
@@ -197,7 +124,7 @@ To calculate scalar spherical harmonics use method ``ssh(A,L)``
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x7f7e258c67d0>]
+    [<matplotlib.lines.Line2D at 0x2b81e3b175d0>]
 
 
 
@@ -216,7 +143,7 @@ To calculate scalar spherical harmonics use method ``ssh(A,L)``
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x7f7e25815750>]
+    [<matplotlib.lines.Line2D at 0x2b81e3be4550>]
 
 
 
@@ -253,7 +180,7 @@ To calculate scalar spherical harmonics use method ``ssh(A,L)``
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x7f7e25752d90>]
+    [<matplotlib.lines.Line2D at 0x2b81e3ca3b90>]
 
 
 
@@ -272,7 +199,7 @@ To calculate scalar spherical harmonics use method ``ssh(A,L)``
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x7f7e2569e410>]
+    [<matplotlib.lines.Line2D at 0x2b81e3d6e210>]
 
 
 
@@ -288,7 +215,7 @@ To calculate scalar spherical harmonics use method ``ssh(A,L)``
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x7f7e25569290>]
+    [<matplotlib.lines.Line2D at 0x2b81e3e3a050>]
 
 
 

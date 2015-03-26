@@ -192,7 +192,7 @@ class MIMO(object):
         Hd  = np.conj(H.swapaxes(1,2))
 
         # White Noise definition
-        #  
+        #
         # Boltzman constant
 
         kB = 1.03806488e-23
@@ -220,8 +220,7 @@ class MIMO(object):
             Pb = N0*dfGHz*1e9
             # expanding S matrix
             #Se  = S[:,:,None]*It[None,:,:]
-            # transfer matrix factorisation 
-            
+            # transfer matrix factorisation
             #PtU = np.einsum('ijk,ikl->ijl',Pt,U)
             #Q   = np.einsum('ijk,ikl->ijl',V,PtU)
             #pdb.set_trace()
@@ -231,7 +230,6 @@ class MIMO(object):
             M     = Ir[None,...] + HdQH/Pb
             # Pt / df ~ J
             # print 10*np.log10(Ps*np.real(HH[0,0,0])/Pb)
-        
         detM  = la.det(M)
         logdetM = np.real(np.log(detM)/np.log(2))
         C  = dfGHz*logdetM

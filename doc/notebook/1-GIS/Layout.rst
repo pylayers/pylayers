@@ -54,6 +54,7 @@ The ``ls()`` method lists the layout file which are available in the
 
     ['DLR.ini',
      'DLR2.ini',
+     'MADRID-METIS.ini',
      'MOCAP-small.ini',
      'MOCAP-small2.ini',
      'MOCAP.ini',
@@ -87,8 +88,8 @@ The ``ls()`` method lists the layout file which are available in the
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f4896485c90>,
-     <matplotlib.axes.AxesSubplot at 0x7f4896485c10>)
+    (<matplotlib.figure.Figure at 0x2b702902fe50>,
+     <matplotlib.axes.AxesSubplot at 0x2b7028dde750>)
 
 
 
@@ -101,22 +102,21 @@ To check which are the used slabs :
 .. code:: python
 
     Slabs = np.unique(L.sla)
-    for s in Slabs: 
+    for s in Slabs:
         if s in L.sl:
             print L.sl[s]
-        
 
 .. parsed-literal::
 
+    3D_WINDOW_GLASS : GLASS | AIR | GLASS | [0.005, 0.005, 0.005]
+    
     AIR : AIR | [0.02]
     
     DOOR : WOOD | [0.03]
     
+    METAL : METAL | [0.1]
+    
     PARTITION : PLASTER | [0.1]
-    
-    PILLAR : REINFORCED_CONCRETE | [0.3]
-    
-    PLASTERBOARD_14CM : PLASTER | [0.14]
     
     WALL : BRICK | [0.07]
     
@@ -230,14 +230,14 @@ This Layout is still in construction
 
 .. code:: python
 
-     L.showG('s')
+    L.showG('s')
 
 
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f4894b84290>,
-     <matplotlib.axes.AxesSubplot at 0x7f4896345510>)
+    (<matplotlib.figure.Figure at 0x2b7029326610>,
+     <matplotlib.axes.AxesSubplot at 0x2b7029334450>)
 
 
 
@@ -262,7 +262,7 @@ point coordinates are stored in two places :
 
 ::
 
-    L.Gs.pos : in a dictionnary form (key is the point negative index) 
+    L.Gs.pos : in a dictionnary form (key is the point negative index)
     L.pt : in a numpy array
 
 .. code:: python
@@ -298,7 +298,7 @@ Where :math:`k` is the index of a given segment (starting in 0).
     nx.draw(L.Gc,L.Gc.pos)
 
 
-.. image:: Layout_files/Layout_27_0.png
+.. image:: Layout_files/Layout_28_0.png
 
 
 .. code:: python
@@ -310,12 +310,12 @@ Where :math:`k` is the index of a given segment (starting in 0).
 
 .. parsed-literal::
 
-    <matplotlib.collections.LineCollection at 0x7f48930b8590>
+    <matplotlib.collections.LineCollection at 0x2b702c40d710>
 
 
 
 
-.. image:: Layout_files/Layout_28_1.png
+.. image:: Layout_files/Layout_29_1.png
 
 
 ``tgs`` : trancodage from graph indexing to numpy array indexing
@@ -346,7 +346,7 @@ because none segment has 0 as an index.
 
 .. code:: python
 
-    print phead 
+    print phead
 
 .. parsed-literal::
 
@@ -450,81 +450,5 @@ because none segment has 0 as an index.
 
 
 
-.. image:: Layout_files/Layout_46_1.png
-
-
-.. code:: python
-
-    from IPython.core.display import HTML
-    
-    def css_styling():
-        styles = open("../styles/custom.css", "r").read()
-        return HTML(styles)
-    css_styling()
-
-
-
-.. raw:: html
-
-    <style>
-        @font-face {
-            font-family: "Computer Modern";
-            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-        }
-        div.cell{
-            width:800px;
-            margin-left:16% !important;
-            margin-right:auto;
-        }
-        h1 {
-            font-family: Helvetica, serif;
-        }
-        h4{
-            margin-top:12px;
-            margin-bottom: 3px;
-           }
-        div.text_cell_render{
-            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-            line-height: 145%;
-            font-size: 130%;
-            width:800px;
-            margin-left:auto;
-            margin-right:auto;
-        }
-        .CodeMirror{
-                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-        }
-        .prompt{
-            display: None;
-        }
-        .text_cell_render h5 {
-            font-weight: 300;
-            font-size: 22pt;
-            color: #4057A1;
-            font-style: italic;
-            margin-bottom: .5em;
-            margin-top: 0.5em;
-            display: block;
-        }
-        
-        .warning{
-            color: rgb( 240, 20, 20 )
-            }  
-    </style>
-    <script>
-        MathJax.Hub.Config({
-                            TeX: {
-                               extensions: ["AMSmath.js"]
-                               },
-                    tex2jax: {
-                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                    },
-                    displayAlign: 'center', // Change this to 'center' to center equations.
-                    "HTML-CSS": {
-                        styles: {'.MathJax_Display': {"margin": 4}}
-                    }
-            });
-    </script>
-
+.. image:: Layout_files/Layout_47_1.png
 

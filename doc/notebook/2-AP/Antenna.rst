@@ -22,12 +22,17 @@ module which is placed in the ``antprop`` module.
 
 .. parsed-literal::
 
+    WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
+
+
+.. parsed-literal::
+
     Populating the interactive namespace from numpy and matplotlib
 
 
 .. parsed-literal::
 
-    WARNING: pylab import has clobbered these variables: ['mlab', 'plt', 'rc']
+    WARNING: pylab import has clobbered these variables: ['plt', 'mlab', 'rc']
     `%matplotlib` prevents importing * from pylab and numpy
 
 
@@ -190,7 +195,7 @@ degree) is specified the diagram is given as a function of :math:`\phi`
     f2,a2 = A.polar(fGHz=[3,4,5],thd=90,GmaxdB=5,fig=f,ax=a2)
 
 
-.. image:: Antenna_files/Antenna_20_0.png
+.. image:: Antenna_files/Antenna_26_0.png
 
 
 The vector spherical coefficients can be dispalayed as follows
@@ -202,7 +207,7 @@ The vector spherical coefficients can be dispalayed as follows
     plt.tight_layout()
 
 
-.. image:: Antenna_files/Antenna_22_0.png
+.. image:: Antenna_files/Antenna_28_0.png
 
 
 Defining Antenna gain from analytic formulas
@@ -225,13 +230,13 @@ antennas are the following + Omni + Gauss + WirePlate
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f2e4ca2ca90>,
-     <matplotlib.projections.polar.PolarAxes at 0x7f2e497891d0>)
+    (<matplotlib.figure.Figure at 0x2ad5ed0dba10>,
+     <matplotlib.projections.polar.PolarAxes at 0x2ad5edafce10>)
 
 
 
 
-.. image:: Antenna_files/Antenna_27_1.png
+.. image:: Antenna_files/Antenna_33_1.png
 
 
 .. code:: python
@@ -244,88 +249,12 @@ antennas are the following + Omni + Gauss + WirePlate
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f2e4920f8d0>,
-     <matplotlib.projections.polar.PolarAxes at 0x7f2e49209150>)
+    (<matplotlib.figure.Figure at 0x2ad5ef4a0950>,
+     <matplotlib.projections.polar.PolarAxes at 0x2ad5ef5421d0>)
 
 
 
 
-.. image:: Antenna_files/Antenna_28_1.png
-
-
-.. code:: python
-
-    from IPython.core.display import HTML
-    
-    def css_styling():
-        styles = open("../styles/custom.css", "r").read()
-        return HTML(styles)
-    css_styling()
-
-
-
-.. raw:: html
-
-    <style>
-        @font-face {
-            font-family: "Computer Modern";
-            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-        }
-        div.cell{
-            width:800px;
-            margin-left:16% !important;
-            margin-right:auto;
-        }
-        h1 {
-            font-family: Helvetica, serif;
-        }
-        h4{
-            margin-top:12px;
-            margin-bottom: 3px;
-           }
-        div.text_cell_render{
-            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-            line-height: 145%;
-            font-size: 130%;
-            width:800px;
-            margin-left:auto;
-            margin-right:auto;
-        }
-        .CodeMirror{
-                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-        }
-        .prompt{
-            display: None;
-        }
-        .text_cell_render h5 {
-            font-weight: 300;
-            font-size: 22pt;
-            color: #4057A1;
-            font-style: italic;
-            margin-bottom: .5em;
-            margin-top: 0.5em;
-            display: block;
-        }
-        
-        .warning{
-            color: rgb( 240, 20, 20 )
-            }  
-    </style>
-    <script>
-        MathJax.Hub.Config({
-                            TeX: {
-                               extensions: ["AMSmath.js"]
-                               },
-                    tex2jax: {
-                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                    },
-                    displayAlign: 'center', // Change this to 'center' to center equations.
-                    "HTML-CSS": {
-                        styles: {'.MathJax_Display': {"margin": 4}}
-                    }
-            });
-    </script>
-
+.. image:: Antenna_files/Antenna_34_1.png
 
 

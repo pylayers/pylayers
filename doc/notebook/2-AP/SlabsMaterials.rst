@@ -1,18 +1,10 @@
 
-.. code:: python
-
-    %pylab inline
-
-.. parsed-literal::
-
-    Populating the interactive namespace from numpy and matplotlib
-
-
 Slabs and Materials
 ===================
 
+.. code:: python
 
-
+    %matplotlib inline
 A slab is a set ol several layers of materials with specified thickness.
 Slabs are used to describe properties of the different constitutive
 elements of a building such as wall, windows ,...
@@ -78,28 +70,21 @@ Defining a new Slab and a new Material
 
 .. code:: python
 
-    S.mat.add(name='wall2',typ='reim',cval=2.6-0.026*1j,fGHz=4)
+    S.add('slab2',['STONE'],[0.15])
 .. code:: python
 
-    S.add('slab2',['wall2'],[0.15])
-.. code:: python
-
-    S.mat['wall2']
+    S.mat['STONE']
 
 
 
 .. parsed-literal::
 
-    {'epr': array(2.6),
-     'epr2': array(-0.026),
-     'epsr': (2.6-0.026j),
-     'fGHz': 4,
-     'index': 11,
-     'mur': 1,
-     'n': (1.6124717046742498-0.0080621569744854828j),
-     'name': 'wall2',
-     'roughness': 0,
-     'sigma': 0.0057777777777777775}
+    {'epr': (8.69999980927+0j),
+     'index': 8,
+     'mur': (1+0j),
+     'name': 'STONE',
+     'roughness': 0.0,
+     'sigma': 3.0}
 
 
 
@@ -111,7 +96,7 @@ Defining a new Slab and a new Material
 
 .. parsed-literal::
 
-    ['wall2']
+    ['STONE']
 
 
 
@@ -138,7 +123,7 @@ Defining a new Slab and a new Material
     S['slab2'].pcolor()
 
 
-.. image:: SlabsMaterials_files/SlabsMaterials_16_0.png
+.. image:: SlabsMaterials_files/SlabsMaterials_17_0.png
 
 
 .. code:: python
@@ -322,7 +307,7 @@ coefficients for
     theta = np.arange(0,np.pi/2,0.01)
     
     S['WOOD'].ev(fGHz,theta,compensate=True)
-    sR = np.shape(S['WOOD'].R) 
+    sR = np.shape(S['WOOD'].R)
     print '\nHere, slab is evaluted for',sR[0],'frequency(ies)', 'and',sR[1], 'angle(s)\n'
 
 .. parsed-literal::
@@ -345,7 +330,6 @@ frequency range and theta range
     
     print '\nReflection coefficient @',fGHz[ifreq],'GHz and theta=',theta[ithet],':\n\n R=',S['WOOD'].R[0,0]
     print '\nTransmission coefficient @',fGHz[ifreq],'GHz and theta=',theta[ithet],':\n\n T=',S['WOOD'].T[0,0],'\n'
-
 
 .. parsed-literal::
 
@@ -376,7 +360,7 @@ with respect to angle or frequency.
     f,a=S['WOOD'].plotwrt()
 
 
-.. image:: SlabsMaterials_files/SlabsMaterials_39_0.png
+.. image:: SlabsMaterials_files/SlabsMaterials_44_0.png
 
 
 .. code:: python
@@ -392,7 +376,7 @@ with respect to angle or frequency.
     fig,ax = S['3D_WINDOW_GLASS'].plotwrt(var='f',coeff='T',polar='o')
 
 
-.. image:: SlabsMaterials_files/SlabsMaterials_41_0.png
+.. image:: SlabsMaterials_files/SlabsMaterials_46_0.png
 
 
 .. code:: python
@@ -400,7 +384,7 @@ with respect to angle or frequency.
     fig,ax = S['WOOD'].plotwrt(var='a',coeff='R',polar='p')
 
 
-.. image:: SlabsMaterials_files/SlabsMaterials_42_0.png
+.. image:: SlabsMaterials_files/SlabsMaterials_47_0.png
 
 
 plot with respect to angle
@@ -414,14 +398,13 @@ plot with respect to angle
     plt.tight_layout()
 
 
-
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x7fccdabd00d0>
+    <matplotlib.figure.Figure at 0x2ac871853490>
 
 
 
-.. image:: SlabsMaterials_files/SlabsMaterials_44_1.png
+.. image:: SlabsMaterials_files/SlabsMaterials_49_1.png
 
 
 wrt to angle and frequency
@@ -434,7 +417,7 @@ wrt to angle and frequency
     S['WOOD'].pcolor()
 
 
-.. image:: SlabsMaterials_files/SlabsMaterials_46_0.png
+.. image:: SlabsMaterials_files/SlabsMaterials_51_0.png
 
 
 .. code:: python
@@ -456,11 +439,11 @@ wrt to angle and frequency
     plt.tight_layout()
 
 
-.. image:: SlabsMaterials_files/SlabsMaterials_47_0.png
+.. image:: SlabsMaterials_files/SlabsMaterials_52_0.png
 
 
 
-.. image:: SlabsMaterials_files/SlabsMaterials_47_1.png
+.. image:: SlabsMaterials_files/SlabsMaterials_52_1.png
 
 
 .. code:: python
@@ -479,13 +462,13 @@ wrt to angle and frequency
     fGHz=4
     theta = np.arange(0,np.pi/2,0.01)
     #figure(figsize=(8,8))
-    # These Tessereau page 50 
+    # These Tessereau page 50
     
     sl['AIR-5cm'].ev(fGHz,theta,compensate=True)
     sl['AIR-10cm'].ev(fGHz,theta,compensate=True)
     sl['AIR-50cm'].ev(fGHz,theta,compensate=True)
     
-    # by default var='a' and kv = 0 
+    # by default var='a' and kv = 0
     
     fig,ax = sl['AIR-5cm'].plotwrt(color='k',labels=['5cm'])
     fig,ax = sl['AIR-10cm'].plotwrt(color='k',labels=['10cm'],linestyle='dashed',fig=fig,ax=ax)
@@ -493,7 +476,7 @@ wrt to angle and frequency
     plt.tight_layout()
 
 
-.. image:: SlabsMaterials_files/SlabsMaterials_49_0.png
+.. image:: SlabsMaterials_files/SlabsMaterials_54_0.png
 
 
 Evaluation without phase compensation
@@ -502,7 +485,7 @@ Evaluation without phase compensation
 .. code:: python
 
     fGHz = np.arange(2,16,0.1)
-    theta = 0 
+    theta = 0
     
     sl['AIR-5cm'].ev(fGHz,theta,compensate=False)
     sl['AIR-10cm'].ev(fGHz,theta,compensate=False)
@@ -516,7 +499,7 @@ Evaluation without phase compensation
     sl['AIR-10cm'].ev(fGHz,theta,compensate=True)
     sl['AIR-50cm'].ev(fGHz,theta,compensate=True)
     
-    # by default var='a' and kv = 0 
+    # by default var='a' and kv = 0
     
     fig,ax = sl['AIR-5cm'].plotwrt('f',coeff='T',typ=['ru'],labels=[''],color='r',linestyle='dashdot',fig=fig,ax=ax)
     fig,ax = sl['AIR-10cm'].plotwrt('f',coeff='T',typ=['ru'],labels=[''],color='g',linestyle='dashed',fig=fig,ax=ax)
@@ -524,7 +507,7 @@ Evaluation without phase compensation
     plt.tight_layout()
 
 
-.. image:: SlabsMaterials_files/SlabsMaterials_51_0.png
+.. image:: SlabsMaterials_files/SlabsMaterials_56_0.png
 
 
 .. code:: python
@@ -549,13 +532,13 @@ Evaluation without phase compensation
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7fccdfd0fe90>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x7fccdfd1d510>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x2ac86d628c50>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x2ac86d6365d0>]], dtype=object))
 
 
 
 
-.. image:: SlabsMaterials_files/SlabsMaterials_55_1.png
+.. image:: SlabsMaterials_files/SlabsMaterials_60_1.png
 
 
 .. code:: python
@@ -571,8 +554,7 @@ Evaluation without phase compensation
     plt.tight_layout()
 
 
-
-.. image:: SlabsMaterials_files/SlabsMaterials_56_0.png
+.. image:: SlabsMaterials_files/SlabsMaterials_61_0.png
 
 
 .. code:: python
@@ -584,11 +566,9 @@ Evaluation without phase compensation
     theta = np.linspace(20,60,100)*np.pi/180
     sl['ConcreteJc'].ev(120,theta)
     fig,ax = sl['ConcreteJc'].plotwrt('a')
-    
 
 
-
-.. image:: SlabsMaterials_files/SlabsMaterials_57_0.png
+.. image:: SlabsMaterials_files/SlabsMaterials_62_0.png
 
 
 .. code:: python
@@ -600,7 +580,7 @@ Evaluation without phase compensation
     sl['DoubleGlass'].pcolor(dB=True)
 
 
-.. image:: SlabsMaterials_files/SlabsMaterials_58_0.png
+.. image:: SlabsMaterials_files/SlabsMaterials_63_0.png
 
 
 .. code:: python
@@ -613,22 +593,22 @@ Evaluation without phase compensation
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x7fccdfcee750>
+    <matplotlib.figure.Figure at 0x2ac86cdfdd10>
 
 
 
-.. image:: SlabsMaterials_files/SlabsMaterials_59_1.png
+.. image:: SlabsMaterials_files/SlabsMaterials_64_1.png
 
 
 .. code:: python
 
     freq = np.linspace(110,135,50)
     sl['DoubleGlass'].ev(freq,theta)
-    fig,ax = sl['DoubleGlass'].plotwrt('f',figsize=(10,10))  # @20°
+    fig,ax = sl['DoubleGlass'].plotwrt('f',figsize=(10,10))  # @20
     plt.tight_layout()
 
 
-.. image:: SlabsMaterials_files/SlabsMaterials_60_0.png
+.. image:: SlabsMaterials_files/SlabsMaterials_65_0.png
 
 
 References
@@ -642,4 +622,4 @@ on <http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&arnumber=5505315&query
 
 [2]. `R.Piesiewicz 'Terahertz characterization of building materials'
 Electronics .Letters Jan 2005 Vol 41
-N°18 <https://www.google.fr/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&ved=0CCwQFjAA&url=http%3A%2F%2Fwww-ece.rice.edu%2F~daniel%2Fpapers%2FnormanElecLett.pdf&ei=Tr_eUe6EG-OM0AWA0IAw&usg=AFQjCNHzt9H3RkLAtws51E9EpEgyqh-6LA&sig2=QLZlhoTJtiuHAW5Zzg_xOw&bvm=bv.48705608,d.d2k>`__
+N18 <https://www.google.fr/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&ved=0CCwQFjAA&url=http%3A%2F%2Fwww-ece.rice.edu%2F~daniel%2Fpapers%2FnormanElecLett.pdf&ei=Tr_eUe6EG-OM0AWA0IAw&usg=AFQjCNHzt9H3RkLAtws51E9EpEgyqh-6LA&sig2=QLZlhoTJtiuHAW5Zzg_xOw&bvm=bv.48705608,d.d2k>`__

@@ -38,7 +38,7 @@ electromagnetic simulation.
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x7f8bbdd5b6d0>
+    <matplotlib.figure.Figure at 0x2af06dfcc1d0>
 
 
 Generation of an Impulse of normalized energy
@@ -116,6 +116,12 @@ We choose to load a simple floor plan.
 
     S = Simul()
     S.L = Layout('defstr3.ini')
+
+.. parsed-literal::
+
+    new file WHERE1.str
+
+
 A simulation object has an ``info`` method providing a summary of
 simulation informations.
 
@@ -427,7 +433,7 @@ waveform with the channel impulse response to get the received waveform.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7f8bbd8d7f10>
+    <matplotlib.text.Text at 0x2af06e5a7e10>
 
 
 
@@ -445,7 +451,7 @@ waveform with the channel impulse response to get the received waveform.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7f8bbd967590>
+    <matplotlib.text.Text at 0x2af06e42e190>
 
 
 

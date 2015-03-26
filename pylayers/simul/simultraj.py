@@ -681,17 +681,14 @@ class Simul(PyLayers):
             (if [], all link are considered)
         t: np.array
             list of timestamp to be evaluated | singlr time instant
-            
-            
-
 
         Returns
         -------
 
-            output: dict
+        output: dict
                 [link_key]['t']
                           ['ak']
-                          ...
+                ...
         """
 
 

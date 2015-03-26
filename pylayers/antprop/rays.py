@@ -762,7 +762,7 @@ class Rays(PyLayers,dict):
             for l in d:                     # for each vertical pattern (C,F,CF,FC,....)
                 #print k,l,d[l]
                 Nint = len(d[l])            # number of additional interaction
-                #if ((k==1) & (l==5.0)):
+                #if ((k==1) & (l==5.0)):print
                 #    pdb.set_trace()
                 if Nint > 0:                # if new interaction ==> need extension
                     # a1e : extended horizontal+vertical parameterization

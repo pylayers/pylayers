@@ -171,8 +171,7 @@ class SLink(Link):
         if emp == 'forearml':
             emp = 'forearmr'
 
-        self.H.ak, self.H.tk = getchannel(
-            emplacement=emp, intersection=eng)
+        self.H.ak, self.H.tk = getchannel(emplacement=emp, intersection=eng)
         self.eng = eng
 
         return self.H.ak, self.H.tk, self.eng

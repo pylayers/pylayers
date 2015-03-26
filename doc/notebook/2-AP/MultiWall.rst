@@ -12,17 +12,11 @@ Multi-wall model
     from pylayers.antprop.loss import *
     from pylayers.antprop.coverage import *
     from pylayers.network.model import *
-    %pylab inline
+    %matplotlib inline
 
 .. parsed-literal::
 
-    Populating the interactive namespace from numpy and matplotlib
-
-
-.. parsed-literal::
-
-    WARNING: pylab import has clobbered these variables: ['mlab', 'product', 'rc', 'copy', 'std']
-    `%matplotlib` prevents importing * from pylab and numpy
+    WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
 
 
 The layout is loaded from an ini file. If the graphs are not available,
@@ -34,8 +28,8 @@ they are built.
 Defining a radio link
 ---------------------
 
-The 2 extremities of the radio link are coordinates in ``numpy.array``
-of transmitter and receiver.
+The 2 extremities of the radio link (transmitter and receiver) have
+coordinates described as 1x2 ``numpy.array`` .
 
 -  A a radio node
 
@@ -43,7 +37,7 @@ of transmitter and receiver.
 
 .. code:: python
 
-    A=np.array((4,1)) # defining transmitter position 
+    A=np.array((4,1)) # defining transmitter position
     B=np.array((30,12)) # defining receiver position
 Ploting the scene
 -----------------
@@ -53,7 +47,7 @@ The scene is plotted with the ``showG`` method of the Layout
 .. code:: python
 
     # figure instanciation
-    f = plt.figure(figsize=(25,25))
+    f = plt.figure(figsize=(10,5))
     ax = f.add_subplot(111)
     r = np.array((A,B))
     # plotting the Layout
@@ -66,7 +60,7 @@ The scene is plotted with the ``showG`` method of the Layout
     a = plt.axis('off')
 
 
-.. image:: MultiWall_files/MultiWall_9_0.png
+.. image:: MultiWall_files/MultiWall_11_0.png
 
 
 Finding the intersection between the "direct" path and the walls
@@ -82,7 +76,7 @@ segment normal.
 
 .. parsed-literal::
 
-     [0mL[0m[1;33m.[0m[0mangleonlink[0m[1;33m([0m[0mself[0m[1;33m,[0m [0mp1[0m[1;33m=[0m[0marray[0m[1;33m([0m[1;33m[[0m[1;36m0[0m[1;33m,[0m [1;36m0[0m[1;33m][0m[1;33m)[0m[1;33m,[0m [0mp2[0m[1;33m=[0m[0marray[0m[1;33m([0m[1;33m[[0m[1;36m10[0m[1;33m,[0m  [1;36m3[0m[1;33m][0m[1;33m)[0m[1;33m)[0m[1;33m[0m[0m
+     [0mL[0m[1;33m.[0m[0mangleonlink[0m[1;33m([0m[0mp1[0m[1;33m=[0m[0marray[0m[1;33m([0m[1;33m[[0m[1;36m0[0m[1;33m,[0m [1;36m0[0m[1;33m][0m[1;33m)[0m[1;33m,[0m [0mp2[0m[1;33m=[0m[0marray[0m[1;33m([0m[1;33m[[0m[1;36m10[0m[1;33m,[0m  [1;36m3[0m[1;33m][0m[1;33m)[0m[1;33m)[0m[1;33m[0m[0m
      
 
 .. code:: python
@@ -194,7 +188,7 @@ Compute the coverage
 
 .. parsed-literal::
 
-    Coverage performed in  2.84441399574 s
+    Coverage performed in  3.12195301056 s
 
 
 Coverage Map
@@ -208,7 +202,7 @@ For Orthogonal polarization
     f,a = C.show(typ='pr',fig=fig1,nodes=False)
 
 
-.. image:: MultiWall_files/MultiWall_25_0.png
+.. image:: MultiWall_files/MultiWall_29_0.png
 
 
 For parallel polarization
@@ -220,5 +214,5 @@ For parallel polarization
     f,a = C.show(typ='pr',fig=fig1)
 
 
-.. image:: MultiWall_files/MultiWall_27_0.png
+.. image:: MultiWall_files/MultiWall_31_0.png
 

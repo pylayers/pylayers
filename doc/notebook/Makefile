@@ -1,14 +1,18 @@
 all: 
-	cd 1-GIS && make all
-	cd 2-AP && make all
-	cd 3-PHY && make all
-	cd 4-MOB && make all
-	cd 5-SIM && make all
-	cd 6-NET && make all
-	cd 7-APP && make all
-	cd 8-MISC && make all
-	cd 9-PRES && make all
-web:	
-	for i in `find . -name "*.ipyex"`;do  a=`basename $$i`;b=`dirname $$i`; cp $$i $$NOTEWEB/$$b/$${a%%.ipyex}.ipynb ; done
-	cp TOC.ipynb $$NOTEWEB
+	cd 1-GIS && make rst  
+	cd 2-AP && make rst  
+	cd 3-PHY && make rst 
+	cd 4-MOB && make rst  
+	cd 5-SIM && make rst 
+	cd 7-APP && make rst
+	cd 8-MISC && make rst  
+	cd 9-PRES && make rst
+
+conv:
+	for i in `find . -name "*.ipynb"`;\
+	do \
+		a=`basename $$i`;\
+		b=`dirname $$i`;\
+		ipymd --from notebook --to markdown --overwrite $$b/$$a;\
+	done	
 

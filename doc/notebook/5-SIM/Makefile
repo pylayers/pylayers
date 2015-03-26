@@ -1,9 +1,19 @@
-SRC= $(wildcard *.ipynb)
-OBJ= $(SRC:.ipynb=.rst)
+SRC= $(wildcard *.md)
+IPYNB= $(SRC:.md=.ipynb)
+RST= $(SRC:.md=.rst)
 
-all: $(OBJ)
+clean:
+	rm *.ipynb
+	rm *.rst 
+
+ipynb: $(IPYNB) 
+
+rst: $(RST)
+
+%.ipynb: %.md
+	ipymd --from markdown --to notebook $<
 
 %.rst: %.ipynb
-	echo "Running" $<
-	runipy --pylab $<  2> /dev/null
+	runipy -o --skip-exception $<  >/dev/null 2> /dev/null
 	ipython nbconvert $< --to rst 
+	rm $<
