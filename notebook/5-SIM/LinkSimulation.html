@@ -25,6 +25,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
 <script type="text/javascript">
 
@@ -235,7 +236,7 @@ illustrated below.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Modulus of the ray &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; transfer function&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b0f8e315210&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b0683a59250&gt;
 </pre></div>
 </div>
 <img alt="../../_images/LinkSimulation_13_1.png" src="../../_images/LinkSimulation_13_1.png" />
@@ -246,7 +247,7 @@ illustrated below.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Modulus of the ray &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; transfer function&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b0f8e6ac290&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b0683df21d0&gt;
 </pre></div>
 </div>
 <img alt="../../_images/LinkSimulation_14_1.png" src="../../_images/LinkSimulation_14_1.png" />
@@ -260,7 +261,7 @@ scaled with <img class="math" src="../../_images/math/001864bf8290713a8513a9deab
   return array(a, dtype, copy=False, order=order)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2b0f8e7a2910&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2b0683ee6950&gt;]
 </pre></div>
 </div>
 <img alt="../../_images/LinkSimulation_16_2.png" src="../../_images/LinkSimulation_16_2.png" />
@@ -273,7 +274,7 @@ the extrated set <img class="math" src="../../_images/math/6c50a2ac8bf54c7debfdd
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;amplitude (linear scale&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b0f8e7dd350&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b0683f20390&gt;
 </pre></div>
 </div>
 <img alt="../../_images/LinkSimulation_19_1.png" src="../../_images/LinkSimulation_19_1.png" />
@@ -349,8 +350,8 @@ Trajectories performed in Layout : TA-Office.ini
 Trajectory of agent John with ID 1
 ----------------------------------
 t (s) : 0.00 : 0.20 : 119.80
-dtot (m) : 440.80
-Vmoy (m/s) : 3.68
+dtot (m) : 454.84
+Vmoy (m/s) : 3.80
                                     x         y        vx        vy        ax  t
 1970-01-01 00:00:00         18.907750  2.528547  0.038749  0.155237  0.193744
 1970-01-01 00:00:00.200000  18.921699  2.584433  0.069748  0.279427  0.154995
@@ -363,8 +364,8 @@ t
 Trajectory of agent Alex with ID 2
 ----------------------------------
 t (s) : 0.00 : 0.20 : 119.80
-dtot (m) : 435.74
-Vmoy (m/s) : 3.64
+dtot (m) : 437.65
+Vmoy (m/s) : 3.65
                                   x       y     vx            vy    ax  t
 1970-01-01 00:00:00         13.5320  7.4965  0.160 -1.141434e-16  0.80
 1970-01-01 00:00:00.200000  13.5896  7.4965  0.288 -2.069441e-16  0.64
@@ -417,19 +418,19 @@ AttributeError                            Traceback (most recent call last)
 
 
 /home/uguen/Documents/rch/devel/pylayers/pylayers/simul/simultraj.pyc in __init__(self, source, verbose)
+    110
     111
-    112
---&gt; 113         self._gen_net()
-    114         self.SL = SLink()
-    115         self.DL = DLink(L=self.L,verbose=self.verbose)
+--&gt; 112         self._gen_net()
+    113         self.SL = SLink()
+    114         self.DL = DLink(L=self.L,verbose=self.verbose)
 
 
 /home/uguen/Documents/rch/devel/pylayers/pylayers/simul/simultraj.pyc in _gen_net(self)
-    261                 D.append(
-    262                     Device(self.dpersons[p].dev[dev][&#39;name&#39;], ID=dev))
---&gt; 263             N.add_devices(D, grp=p)
-    264         # get access point devices
-    265         for ap in self.dap:
+    260                 D.append(
+    261                     Device(self.dpersons[p].dev[dev][&#39;name&#39;], ID=dev))
+--&gt; 262             N.add_devices(D, grp=p)
+    263         # get access point devices
+    264         for ap in self.dap:
 
 
 /home/uguen/Documents/rch/devel/pylayers/pylayers/network/network.pyc in add_devices(self, dev, p, grp)
@@ -490,7 +491,7 @@ NameError: name &#39;St&#39; is not defined
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 20, 2015.
+      Last updated on mars 26, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/5-SIM/LinkSimulation.txt"

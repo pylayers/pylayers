@@ -25,6 +25,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
 <script type="text/javascript">
 
@@ -146,7 +147,7 @@ from pylayers.measures.mesuwb import *
 <div class="highlight-python"><div class="highlight"><pre>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x2b61232c6d50&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x2af617ec4c90&gt;
 </pre></div>
 </div>
 <p>First of all we load the Layout of the environment. If the Layout
@@ -174,22 +175,71 @@ associated graphs have already been built, one can load them with the
     <span class="k">pass</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">K</span><span class="o">=</span><span class="n">UWBMeasure</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">K</span><span class="o">=</span><span class="n">UWBMeasure</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">K</span><span class="o">.</span><span class="n">de</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span> <span class="mf">50.89106921</span><span class="p">,</span>  <span class="mf">28.61363359</span><span class="p">,</span>  <span class="mf">76.5670447</span> <span class="p">,</span>  <span class="mf">60.00199265</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">K</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Date_Time : [u&#39;31-Jul-2008 08:14:48&#39;]
+Tx_height : [u&#39;120cm&#39;]
+Tx_position : [u&#39;P005&#39;]
+Tx :  [-26.8556  12.2822   1.2   ]
+------Tx1 ------
+delays     (ns): 50.8910692056
+range  (meters): 15.2673207617
+visibility     : NLOS2
+angular (degree)  : 2.84109909504
+LQI Meth1 10.3676202597  (dB)
+LQI Meth2 -0.0464251069027  (dB)
+------Tx2 ------
+delays     (ns): 28.6136335901
+range  (meters): 8.58409007702
+visibility     : NLOS2
+angular (degree)  : 3.48568781284
+LQI Meth1 15.5920243795  (dB)
+LQI Meth2 7.02848427115  (dB)
+------Tx3 ------
+delays     (ns): 76.5670446987
+range  (meters): 22.9701134096
+visibility     : NLOS2
+angular (degree)  : 2.99206422733
+LQI Meth1 15.8266138647  (dB)
+LQI Meth2 1.72677266474  (dB)
+------Tx4 ------
+delays     (ns): 60.0019926459
+range  (meters): 18.0005977938
+visibility     : NLOS
+angular (degree)  : 3.30383704128
+LQI Meth1 28.4222937655  (dB)
+LQI Meth2 6.01984060663  (dB)
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c">### Simulation section</span>
-<span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
-<span class="n">K</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">K</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">delay</span><span class="o">=</span><span class="n">K</span><span class="o">.</span><span class="n">de</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Wheresimple_7_0.png" src="../../_images/Wheresimple_7_0.png" />
+<img alt="../../_images/Wheresimple_9_0.png" src="../../_images/Wheresimple_9_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">K</span><span class="o">.</span><span class="n">toa_new</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;bound method UWBMeasure.toa_new of &lt;pylayers.measures.mesuwb.UWBMeasure object at 0x2af5f8eef750&gt;&gt;
+</pre></div>
+</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">K</span><span class="o">.</span><span class="n">tau_Emax</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">72.61</span> <span class="p">],</span>
-       <span class="p">[</span> <span class="mf">29.9</span>  <span class="p">],</span>
-       <span class="p">[</span> <span class="mf">87.835</span><span class="p">],</span>
-       <span class="p">[</span> <span class="mf">61.975</span><span class="p">]])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">52.44</span> <span class="p">],</span>
+       <span class="p">[</span> <span class="mf">37.825</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">80.03</span> <span class="p">],</span>
+       <span class="p">[</span> <span class="mf">62.935</span><span class="p">]])</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">K</span><span class="o">.</span><span class="n">rx</span><span class="p">))</span>
@@ -202,8 +252,7 @@ associated graphs have already been built, one can load them with the
        <span class="p">[</span> <span class="o">-</span><span class="mf">9.0914</span><span class="p">,</span>  <span class="mf">15.1899</span><span class="p">,</span>   <span class="mf">1.2</span>   <span class="p">]])</span>
 </pre></div>
 </div>
-<p>The code below reads data from the M1-WHERE2 measurement campaign and
-store theme in arrays.</p>
+<p>The code below reads data from the M1-WHERE2 measurement campaign.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">300</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">M</span>  <span class="o">=</span> <span class="n">UWBMeasure</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
@@ -247,8 +296,10 @@ store theme in arrays.</p>
         <span class="k">pass</span>
 </pre></div>
 </div>
-<p>The IR-UWB applied waweform is available in the raw data and can be
-extracted as follow</p>
+<p>The IR-UWB applied waweform is available in the raw data structure and
+can be extracted as follow. This extarction is important in order to
+proceeed to the ray tracing simulation with the same waveform as the one
+used in the measurement camapign.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="n">s</span><span class="o">=</span><span class="n">M</span><span class="o">.</span><span class="n">RAW_DATA</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">t</span><span class="o">=</span><span class="n">M</span><span class="o">.</span><span class="n">RAW_DATA</span><span class="o">.</span><span class="n">timetx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mf">1e9</span>
@@ -257,7 +308,7 @@ extracted as follow</p>
 <span class="n">se</span><span class="o">=</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">s</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Wheresimple_13_0.png" src="../../_images/Wheresimple_13_0.png" />
+<img alt="../../_images/Wheresimple_16_0.png" src="../../_images/Wheresimple_16_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">te</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">cs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">s</span><span class="o">*</span><span class="n">s</span><span class="p">)</span>
 <span class="n">E</span> <span class="o">=</span> <span class="n">cs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">te</span>
@@ -286,12 +337,12 @@ extracted as follow</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">se</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b61275faf50&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x2b6127bd8d10&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2af61c350bd0&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x2af61c0bd610&gt;]], dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/Wheresimple_16_1.png" src="../../_images/Wheresimple_16_1.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<img alt="../../_images/Wheresimple_19_1.png" src="../../_images/Wheresimple_19_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">td1</span><span class="p">,</span><span class="n">te1</span><span class="o">+</span><span class="n">EdB</span><span class="p">,</span><span class="s">&#39;.r&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;Rx1&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">td2</span><span class="p">,</span><span class="n">te2</span><span class="o">+</span><span class="n">EdB</span><span class="p">,</span><span class="s">&#39;.b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;Rx2&#39;</span><span class="p">)</span>
@@ -305,14 +356,14 @@ extracted as follow</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../../_images/Wheresimple_17_0.png" src="../../_images/Wheresimple_17_0.png" />
+<img alt="../../_images/Wheresimple_20_0.png" src="../../_images/Wheresimple_20_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">te1</span><span class="p">,</span><span class="n">tt1</span><span class="p">,</span><span class="s">&#39;.&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2b6127389550&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2af61be47d10&gt;]
 </pre></div>
 </div>
-<img alt="../../_images/Wheresimple_18_1.png" src="../../_images/Wheresimple_18_1.png" />
+<img alt="../../_images/Wheresimple_21_1.png" src="../../_images/Wheresimple_21_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">M</span><span class="o">.</span><span class="n">Etot</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -323,38 +374,14 @@ extracted as follow</p>
 <span class="n">tx_id</span> <span class="o">=</span> <span class="mi">100</span> <span class="c">#in M.valid_index</span>
 <span class="n">rx_id</span> <span class="o">=</span> <span class="mi">3</span> <span class="c">#1,2,3,4</span>
 <span class="n">M</span><span class="o">=</span><span class="n">UWBMeasure</span><span class="p">(</span><span class="n">tx_id</span><span class="p">)</span>
-<span class="n">pylab</span>
 <span class="n">TX</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">tx</span>
 <span class="n">RX</span> <span class="o">=</span><span class="n">M</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="n">rx_id</span><span class="p">]</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-17-4ac28e5e3c24&gt; in &lt;module&gt;()
-      3 rx_id = 3 #1,2,3,4
-      4 M=UWBMeasure(tx_id)
-----&gt; 5 pylab
-      6 TX = M.tx
-      7 RX =M.rx[rx_id]
-
-
-NameError: name &#39;pylab&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">TX</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-18-8df248b24f95&gt; in &lt;module&gt;()
-----&gt; 1 TX
-
-
-NameError: name &#39;TX&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">22.3797</span><span class="p">,</span>  <span class="mf">13.3897</span><span class="p">,</span>   <span class="mf">1.2</span>   <span class="p">])</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">M</span><span class="o">.</span><span class="n">rx</span>
@@ -373,53 +400,49 @@ NameError: name &#39;TX&#39; is not defined
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;TOF = &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">TX</span><span class="o">-</span><span class="n">RX</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span><span class="o">/</span><span class="mf">0.3</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-20-9cdcd20f04e5&gt; in &lt;module&gt;()
-      1 L.showG(&#39;s&#39;,figsize=(16,8))
-----&gt; 2 plt.plot(TX[0],TX[1],&#39;ob&#39;)
-      3 plt.plot(RX[0],RX[1],&#39;or&#39;)
-      4 plt.title(&#39;TOF = &#39;+ str(np.sqrt(np.sum((TX-RX)**2))/0.3))
-
-
-NameError: name &#39;TX&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2af61bc4b110&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Wheresimple_23_1.png" src="../../_images/Wheresimple_23_1.png" />
+<img alt="../../_images/Wheresimple_26_1.png" src="../../_images/Wheresimple_26_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">TX</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">RX</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="n">Lk</span><span class="o">.</span><span class="n">Aa</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
 <span class="n">Lk</span><span class="o">.</span><span class="n">Ab</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-21-f2580ab35359&gt; in &lt;module&gt;()
-----&gt; 1 Lk = DLink(L=L,a=TX,b=RX,cutoff=4,verbose=False)
-      2 Lk.Aa=Antenna(&#39;defant.vsh3&#39;)
-      3 Lk.Ab=Antenna(&#39;defant.vsh3&#39;)
-
-
-NameError: name &#39;TX&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ray&#39;</span><span class="p">,</span><span class="s">&#39;Ct&#39;</span><span class="p">,</span><span class="s">&#39;H&#39;</span><span class="p">],</span><span class="n">alg</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="c">#f,a = Lk.show(rays=True,labels=False)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-22-213fa5db2653&gt; in &lt;module&gt;()
-----&gt; 1 Lk.eval(force=[&#39;ray&#39;,&#39;Ct&#39;,&#39;H&#39;],alg=5)
-      2 #f,a = Lk.show(rays=True,labels=False)
-
-
-NameError: name &#39;Lk&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="n">array</span><span class="p">([</span>  <span class="mf">9.79138753e-05</span><span class="p">,</span>   <span class="mf">2.96104973e-04</span><span class="p">,</span>   <span class="mf">1.59308395e-04</span><span class="p">,</span>
+          <span class="mf">2.27580461e-05</span><span class="p">,</span>   <span class="mf">1.34574073e-04</span><span class="p">,</span>   <span class="mf">4.82827749e-04</span><span class="p">,</span>
+          <span class="mf">1.18095058e-03</span><span class="p">,</span>   <span class="mf">1.27977423e-04</span><span class="p">,</span>   <span class="mf">1.34909317e-04</span><span class="p">,</span>
+          <span class="mf">5.48270185e-05</span><span class="p">,</span>   <span class="mf">9.81119862e-05</span><span class="p">,</span>   <span class="mf">3.61269565e-04</span><span class="p">,</span>
+          <span class="mf">2.73004108e-04</span><span class="p">,</span>   <span class="mf">1.24319829e-04</span><span class="p">,</span>   <span class="mf">2.28615744e-04</span><span class="p">,</span>
+          <span class="mf">2.76183582e-04</span><span class="p">,</span>   <span class="mf">2.32071461e-04</span><span class="p">,</span>   <span class="mf">2.86885128e-04</span><span class="p">,</span>
+          <span class="mf">5.08065400e-04</span><span class="p">,</span>   <span class="mf">4.16943960e-05</span><span class="p">,</span>   <span class="mf">9.25585146e-05</span><span class="p">,</span>
+          <span class="mf">3.67562947e-05</span><span class="p">,</span>   <span class="mf">3.26755640e-05</span><span class="p">,</span>   <span class="mf">7.18843013e-05</span><span class="p">,</span>
+          <span class="mf">5.98546831e-05</span><span class="p">,</span>   <span class="mf">5.35179821e-05</span><span class="p">,</span>   <span class="mf">8.90165410e-05</span><span class="p">,</span>
+          <span class="mf">3.64178931e-04</span><span class="p">,</span>   <span class="mf">3.64157003e-04</span><span class="p">,</span>   <span class="mf">1.49754933e-04</span><span class="p">,</span>
+          <span class="mf">9.73558942e-05</span><span class="p">,</span>   <span class="mf">4.65239631e-05</span><span class="p">,</span>   <span class="mf">5.86669038e-05</span><span class="p">,</span>
+          <span class="mf">2.05936803e-04</span><span class="p">,</span>   <span class="mf">9.48731849e-05</span><span class="p">,</span>   <span class="mf">2.36321979e-04</span><span class="p">,</span>
+          <span class="mf">6.88923268e-04</span><span class="p">,</span>   <span class="mf">1.24565228e-04</span><span class="p">,</span>   <span class="mf">4.69513933e-05</span><span class="p">,</span>
+          <span class="mf">2.31194688e-05</span><span class="p">,</span>   <span class="mf">2.94412022e-05</span><span class="p">,</span>   <span class="mf">2.94227854e-05</span><span class="p">,</span>
+          <span class="mf">5.60825032e-05</span><span class="p">,</span>   <span class="mf">7.29054840e-05</span><span class="p">,</span>   <span class="mf">1.70818338e-04</span><span class="p">,</span>
+          <span class="mf">1.70818449e-04</span><span class="p">,</span>   <span class="mf">5.34747295e-05</span><span class="p">,</span>   <span class="mf">4.74216436e-05</span><span class="p">,</span>
+          <span class="mf">1.14993846e-04</span><span class="p">,</span>   <span class="mf">5.08387934e-05</span><span class="p">]),</span>
+ <span class="n">array</span><span class="p">([</span>  <span class="mf">67.6920456</span> <span class="p">,</span>   <span class="mf">67.6920456</span> <span class="p">,</span>  <span class="mf">116.7880677</span> <span class="p">,</span>  <span class="mf">116.7880677</span> <span class="p">,</span>
+          <span class="mf">68.63195952</span><span class="p">,</span>   <span class="mf">89.0838292</span> <span class="p">,</span>   <span class="mf">62.63975138</span><span class="p">,</span>   <span class="mf">69.09664151</span><span class="p">,</span>
+          <span class="mf">69.67313591</span><span class="p">,</span>   <span class="mf">70.48894853</span><span class="p">,</span>   <span class="mf">75.87644272</span><span class="p">,</span>   <span class="mf">82.1700362</span> <span class="p">,</span>
+          <span class="mf">89.4423201</span> <span class="p">,</span>   <span class="mf">89.8884232</span> <span class="p">,</span>   <span class="mf">91.14669303</span><span class="p">,</span>  <span class="mf">102.17774607</span><span class="p">,</span>
+          <span class="mf">63.14854276</span><span class="p">,</span>   <span class="mf">63.77882449</span><span class="p">,</span>   <span class="mf">64.67003199</span><span class="p">,</span>   <span class="mf">70.94146788</span><span class="p">,</span>
+          <span class="mf">71.48668315</span><span class="p">,</span>   <span class="mf">71.48668315</span><span class="p">,</span>   <span class="mf">71.5030899</span> <span class="p">,</span>   <span class="mf">76.29701541</span><span class="p">,</span>
+          <span class="mf">76.81949336</span><span class="p">,</span>   <span class="mf">82.55855407</span><span class="p">,</span>   <span class="mf">83.04164527</span><span class="p">,</span>   <span class="mf">91.30130681</span><span class="p">,</span>
+          <span class="mf">91.30130681</span><span class="p">,</span>   <span class="mf">91.49710187</span><span class="p">,</span>   <span class="mf">91.93323475</span><span class="p">,</span>  <span class="mf">102.49044732</span><span class="p">,</span>
+         <span class="mf">102.87998732</span><span class="p">,</span>  <span class="mf">115.06282092</span><span class="p">,</span>   <span class="mf">65.1629729</span> <span class="p">,</span>   <span class="mf">65.75514013</span><span class="p">,</span>
+          <span class="mf">65.75514013</span><span class="p">,</span>   <span class="mf">65.7739541</span> <span class="p">,</span>   <span class="mf">73.27135774</span><span class="p">,</span>   <span class="mf">73.27135774</span><span class="p">,</span>
+          <span class="mf">78.46804802</span><span class="p">,</span>   <span class="mf">78.46804802</span><span class="p">,</span>   <span class="mf">84.56899461</span><span class="p">,</span>   <span class="mf">84.56899461</span><span class="p">,</span>
+          <span class="mf">93.31516303</span><span class="p">,</span>   <span class="mf">93.31516303</span><span class="p">,</span>  <span class="mf">104.11672196</span><span class="p">,</span>  <span class="mf">104.11672196</span><span class="p">,</span>
+         <span class="mf">115.34059458</span><span class="p">,</span>  <span class="mf">115.68687375</span><span class="p">]))</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c">#%timeit Lk.eval(force=True,alg=7,cutoff=3)</span>
@@ -429,15 +452,16 @@ NameError: name &#39;Lk&#39; is not defined
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">R</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-24-dd2218c56595&gt; in &lt;module&gt;()
-----&gt; 1 Lk.R
-
-
-NameError: name &#39;Lk&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre>Rays3D
+----------
+8 / 4 : [0 1 2 3]
+4 / 2 : [4 5]
+5 / 10 : [ 6  7  8  9 10 11 12 13 14 15]
+6 / 18 : [16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33]
+7 / 16 : [34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49]
+-----
+ni : 310
+nl : 670
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c">#%timeit Lk.eval(force=True,alg=7,threshold=0.01)</span>
@@ -447,59 +471,24 @@ NameError: name &#39;Lk&#39; is not defined
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">Si</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-26-fbcd3fa4b286&gt; in &lt;module&gt;()
-----&gt; 1 Lk.Si.keys()
-
-
-NameError: name &#39;Lk&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">U</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">R</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="s">&#39;sig2d&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-27-7127f05a2d76&gt; in &lt;module&gt;()
-----&gt; 1 U=Lk.R[4][&#39;sig2d&#39;][0]
-
-
-NameError: name &#39;Lk&#39; is not defined
-</pre></div>
-</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">U</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-28-c88df2aeda9a&gt; in &lt;module&gt;()
-----&gt; 1 print U.shape
-
-
-NameError: name &#39;U&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">s1</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span>
 <span class="k">print</span> <span class="n">s1</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-29-03b545538d6b&gt; in &lt;module&gt;()
-----&gt; 1 s1 = U[:,:,0]
-      2 print s1
-
-
-NameError: name &#39;U&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre>[[328 335  67  73]
+ [  2   3   3   3]]
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.signature</span> <span class="kn">import</span> <span class="n">Signature</span>
@@ -508,29 +497,11 @@ NameError: name &#39;U&#39; is not defined
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">=</span><span class="n">Signature</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-31-e7330839f958&gt; in &lt;module&gt;()
-----&gt; 1 S=Signature(s1)
-
-
-NameError: name &#39;s1&#39; is not defined
-</pre></div>
-</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-32-65db27307aa0&gt; in &lt;module&gt;()
-----&gt; 1 S
-
-
-NameError: name &#39;S&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre>[328 335  67  73]
+[2 3 3 3]
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">wav</span> <span class="o">=</span> <span class="n">Waveform</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;W1compensate&#39;</span><span class="p">)</span>
@@ -539,22 +510,14 @@ NameError: name &#39;S&#39; is not defined
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../../_images/Wheresimple_37_0.png" src="../../_images/Wheresimple_37_0.png" />
+<img alt="../../_images/Wheresimple_40_0.png" src="../../_images/Wheresimple_40_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c">#ir = Lk.H.applywavB(wav.sfg)</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">isFriis</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-36-7614e9090bba&gt; in &lt;module&gt;()
-----&gt; 1 Lk.H.isFriis
-
-
-NameError: name &#39;Lk&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span class="bp">True</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">isFriis</span><span class="p">:</span>
@@ -563,74 +526,53 @@ NameError: name &#39;Lk&#39; is not defined
     <span class="n">ir</span> <span class="o">=</span> <span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-37-4083ce0b2310&gt; in &lt;module&gt;()
-----&gt; 1 if Lk.H.isFriis:
-      2     ir = Lk.H.applywavB(wav.sf)
-      3 else:
-      4     ir = Lk.H.applywavB(wav.sfg)
-
-
-NameError: name &#39;Lk&#39; is not defined
-</pre></div>
-</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">los</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-38-c0cdcab44e2f&gt; in &lt;module&gt;()
-----&gt; 1 Lk.R.los
-
-
-NameError: name &#39;Lk&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span class="bp">False</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ak</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-39-ab86c1ac1316&gt; in &lt;module&gt;()
-----&gt; 1 Lk.H.ak
-
-
-NameError: name &#39;Lk&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span>  <span class="mf">9.79138753e-05</span><span class="p">,</span>   <span class="mf">2.96104973e-04</span><span class="p">,</span>   <span class="mf">1.59308395e-04</span><span class="p">,</span>
+         <span class="mf">2.27580461e-05</span><span class="p">,</span>   <span class="mf">1.34574073e-04</span><span class="p">,</span>   <span class="mf">4.82827749e-04</span><span class="p">,</span>
+         <span class="mf">1.18095058e-03</span><span class="p">,</span>   <span class="mf">1.27977423e-04</span><span class="p">,</span>   <span class="mf">1.34909317e-04</span><span class="p">,</span>
+         <span class="mf">5.48270185e-05</span><span class="p">,</span>   <span class="mf">9.81119862e-05</span><span class="p">,</span>   <span class="mf">3.61269565e-04</span><span class="p">,</span>
+         <span class="mf">2.73004108e-04</span><span class="p">,</span>   <span class="mf">1.24319829e-04</span><span class="p">,</span>   <span class="mf">2.28615744e-04</span><span class="p">,</span>
+         <span class="mf">2.76183582e-04</span><span class="p">,</span>   <span class="mf">2.32071461e-04</span><span class="p">,</span>   <span class="mf">2.86885128e-04</span><span class="p">,</span>
+         <span class="mf">5.08065400e-04</span><span class="p">,</span>   <span class="mf">4.16943960e-05</span><span class="p">,</span>   <span class="mf">9.25585146e-05</span><span class="p">,</span>
+         <span class="mf">3.67562947e-05</span><span class="p">,</span>   <span class="mf">3.26755640e-05</span><span class="p">,</span>   <span class="mf">7.18843013e-05</span><span class="p">,</span>
+         <span class="mf">5.98546831e-05</span><span class="p">,</span>   <span class="mf">5.35179821e-05</span><span class="p">,</span>   <span class="mf">8.90165410e-05</span><span class="p">,</span>
+         <span class="mf">3.64178931e-04</span><span class="p">,</span>   <span class="mf">3.64157003e-04</span><span class="p">,</span>   <span class="mf">1.49754933e-04</span><span class="p">,</span>
+         <span class="mf">9.73558942e-05</span><span class="p">,</span>   <span class="mf">4.65239631e-05</span><span class="p">,</span>   <span class="mf">5.86669038e-05</span><span class="p">,</span>
+         <span class="mf">2.05936803e-04</span><span class="p">,</span>   <span class="mf">9.48731849e-05</span><span class="p">,</span>   <span class="mf">2.36321979e-04</span><span class="p">,</span>
+         <span class="mf">6.88923268e-04</span><span class="p">,</span>   <span class="mf">1.24565228e-04</span><span class="p">,</span>   <span class="mf">4.69513933e-05</span><span class="p">,</span>
+         <span class="mf">2.31194688e-05</span><span class="p">,</span>   <span class="mf">2.94412022e-05</span><span class="p">,</span>   <span class="mf">2.94227854e-05</span><span class="p">,</span>
+         <span class="mf">5.60825032e-05</span><span class="p">,</span>   <span class="mf">7.29054840e-05</span><span class="p">,</span>   <span class="mf">1.70818338e-04</span><span class="p">,</span>
+         <span class="mf">1.70818449e-04</span><span class="p">,</span>   <span class="mf">5.34747295e-05</span><span class="p">,</span>   <span class="mf">4.74216436e-05</span><span class="p">,</span>
+         <span class="mf">1.14993846e-04</span><span class="p">,</span>   <span class="mf">5.08387934e-05</span><span class="p">])</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-40-a65c1ec8a0a6&gt; in &lt;module&gt;()
-----&gt; 1 Lk.H.taud
-
-
-NameError: name &#39;Lk&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span>  <span class="mf">67.6920456</span> <span class="p">,</span>   <span class="mf">67.6920456</span> <span class="p">,</span>  <span class="mf">116.7880677</span> <span class="p">,</span>  <span class="mf">116.7880677</span> <span class="p">,</span>
+         <span class="mf">68.63195952</span><span class="p">,</span>   <span class="mf">89.0838292</span> <span class="p">,</span>   <span class="mf">62.63975138</span><span class="p">,</span>   <span class="mf">69.09664151</span><span class="p">,</span>
+         <span class="mf">69.67313591</span><span class="p">,</span>   <span class="mf">70.48894853</span><span class="p">,</span>   <span class="mf">75.87644272</span><span class="p">,</span>   <span class="mf">82.1700362</span> <span class="p">,</span>
+         <span class="mf">89.4423201</span> <span class="p">,</span>   <span class="mf">89.8884232</span> <span class="p">,</span>   <span class="mf">91.14669303</span><span class="p">,</span>  <span class="mf">102.17774607</span><span class="p">,</span>
+         <span class="mf">63.14854276</span><span class="p">,</span>   <span class="mf">63.77882449</span><span class="p">,</span>   <span class="mf">64.67003199</span><span class="p">,</span>   <span class="mf">70.94146788</span><span class="p">,</span>
+         <span class="mf">71.48668315</span><span class="p">,</span>   <span class="mf">71.48668315</span><span class="p">,</span>   <span class="mf">71.5030899</span> <span class="p">,</span>   <span class="mf">76.29701541</span><span class="p">,</span>
+         <span class="mf">76.81949336</span><span class="p">,</span>   <span class="mf">82.55855407</span><span class="p">,</span>   <span class="mf">83.04164527</span><span class="p">,</span>   <span class="mf">91.30130681</span><span class="p">,</span>
+         <span class="mf">91.30130681</span><span class="p">,</span>   <span class="mf">91.49710187</span><span class="p">,</span>   <span class="mf">91.93323475</span><span class="p">,</span>  <span class="mf">102.49044732</span><span class="p">,</span>
+        <span class="mf">102.87998732</span><span class="p">,</span>  <span class="mf">115.06282092</span><span class="p">,</span>   <span class="mf">65.1629729</span> <span class="p">,</span>   <span class="mf">65.75514013</span><span class="p">,</span>
+         <span class="mf">65.75514013</span><span class="p">,</span>   <span class="mf">65.7739541</span> <span class="p">,</span>   <span class="mf">73.27135774</span><span class="p">,</span>   <span class="mf">73.27135774</span><span class="p">,</span>
+         <span class="mf">78.46804802</span><span class="p">,</span>   <span class="mf">78.46804802</span><span class="p">,</span>   <span class="mf">84.56899461</span><span class="p">,</span>   <span class="mf">84.56899461</span><span class="p">,</span>
+         <span class="mf">93.31516303</span><span class="p">,</span>   <span class="mf">93.31516303</span><span class="p">,</span>  <span class="mf">104.11672196</span><span class="p">,</span>  <span class="mf">104.11672196</span><span class="p">,</span>
+        <span class="mf">115.34059458</span><span class="p">,</span>  <span class="mf">115.68687375</span><span class="p">])</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">G</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ift</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-41-0f2260ad659d&gt; in &lt;module&gt;()
-----&gt; 1 G=Lk.H.ift()
-
-
-NameError: name &#39;Lk&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">M</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">ch3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
@@ -640,7 +582,7 @@ NameError: name &#39;Lk&#39; is not defined
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">130</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Wheresimple_45_1.png" src="../../_images/Wheresimple_45_1.png" />
+<img alt="../../_images/Wheresimple_48_1.png" src="../../_images/Wheresimple_48_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">M</span><span class="o">.</span><span class="n">tx</span>
 </pre></div>
 </div>
@@ -666,57 +608,41 @@ NameError: name &#39;Lk&#39; is not defined
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ak</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-46-ab86c1ac1316&gt; in &lt;module&gt;()
-----&gt; 1 Lk.H.ak
-
-
-NameError: name &#39;Lk&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span>  <span class="mf">9.79138753e-05</span><span class="p">,</span>   <span class="mf">2.96104973e-04</span><span class="p">,</span>   <span class="mf">1.59308395e-04</span><span class="p">,</span>
+         <span class="mf">2.27580461e-05</span><span class="p">,</span>   <span class="mf">1.34574073e-04</span><span class="p">,</span>   <span class="mf">4.82827749e-04</span><span class="p">,</span>
+         <span class="mf">1.18095058e-03</span><span class="p">,</span>   <span class="mf">1.27977423e-04</span><span class="p">,</span>   <span class="mf">1.34909317e-04</span><span class="p">,</span>
+         <span class="mf">5.48270185e-05</span><span class="p">,</span>   <span class="mf">9.81119862e-05</span><span class="p">,</span>   <span class="mf">3.61269565e-04</span><span class="p">,</span>
+         <span class="mf">2.73004108e-04</span><span class="p">,</span>   <span class="mf">1.24319829e-04</span><span class="p">,</span>   <span class="mf">2.28615744e-04</span><span class="p">,</span>
+         <span class="mf">2.76183582e-04</span><span class="p">,</span>   <span class="mf">2.32071461e-04</span><span class="p">,</span>   <span class="mf">2.86885128e-04</span><span class="p">,</span>
+         <span class="mf">5.08065400e-04</span><span class="p">,</span>   <span class="mf">4.16943960e-05</span><span class="p">,</span>   <span class="mf">9.25585146e-05</span><span class="p">,</span>
+         <span class="mf">3.67562947e-05</span><span class="p">,</span>   <span class="mf">3.26755640e-05</span><span class="p">,</span>   <span class="mf">7.18843013e-05</span><span class="p">,</span>
+         <span class="mf">5.98546831e-05</span><span class="p">,</span>   <span class="mf">5.35179821e-05</span><span class="p">,</span>   <span class="mf">8.90165410e-05</span><span class="p">,</span>
+         <span class="mf">3.64178931e-04</span><span class="p">,</span>   <span class="mf">3.64157003e-04</span><span class="p">,</span>   <span class="mf">1.49754933e-04</span><span class="p">,</span>
+         <span class="mf">9.73558942e-05</span><span class="p">,</span>   <span class="mf">4.65239631e-05</span><span class="p">,</span>   <span class="mf">5.86669038e-05</span><span class="p">,</span>
+         <span class="mf">2.05936803e-04</span><span class="p">,</span>   <span class="mf">9.48731849e-05</span><span class="p">,</span>   <span class="mf">2.36321979e-04</span><span class="p">,</span>
+         <span class="mf">6.88923268e-04</span><span class="p">,</span>   <span class="mf">1.24565228e-04</span><span class="p">,</span>   <span class="mf">4.69513933e-05</span><span class="p">,</span>
+         <span class="mf">2.31194688e-05</span><span class="p">,</span>   <span class="mf">2.94412022e-05</span><span class="p">,</span>   <span class="mf">2.94227854e-05</span><span class="p">,</span>
+         <span class="mf">5.60825032e-05</span><span class="p">,</span>   <span class="mf">7.29054840e-05</span><span class="p">,</span>   <span class="mf">1.70818338e-04</span><span class="p">,</span>
+         <span class="mf">1.70818449e-04</span><span class="p">,</span>   <span class="mf">5.34747295e-05</span><span class="p">,</span>   <span class="mf">4.74216436e-05</span><span class="p">,</span>
+         <span class="mf">1.14993846e-04</span><span class="p">,</span>   <span class="mf">5.08387934e-05</span><span class="p">])</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">wav</span><span class="o">=</span><span class="n">wav</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-47-b1309bad8a92&gt; in &lt;module&gt;()
-----&gt; 1 Lk.wav=wav
-
-
-NameError: name &#39;Lk&#39; is not defined
-</pre></div>
-</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">ir</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-48-a7f16e271894&gt; in &lt;module&gt;()
-----&gt; 1 ir.plot(typ=&#39;v&#39;)
-
-
-NameError: name &#39;ir&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2af61b807210&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x2af61b807fd0&gt;]], dtype=object))
 </pre></div>
 </div>
+<img alt="../../_images/Wheresimple_54_1.png" src="../../_images/Wheresimple_54_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">ir</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-49-2c92a57a4caa&gt; in &lt;module&gt;()
-----&gt; 1 ir
-
-
-NameError: name &#39;ir&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre>Usignal :  (9047,)  (9047,)
+ax0 : 9047
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
@@ -729,21 +655,10 @@ NameError: name &#39;ir&#39; is not defined
 <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span><span class="mi">130</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-50-956c497343fa&gt; in &lt;module&gt;()
-      5 ax2 = fig.add_subplot(212,sharex=ax1,sharey=ax1)
-      6 #Lk.chanreal.plot(typ=[&#39;v&#39;],fig=fig,ax=ax2)
-----&gt; 7 ir.plot(typ=[&#39;v&#39;],fig=fig,ax=ax2)
-      8 plt.xlim(60,130)
-
-
-NameError: name &#39;ir&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">130</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Wheresimple_53_1.png" src="../../_images/Wheresimple_53_1.png" />
+<img alt="../../_images/Wheresimple_56_1.png" src="../../_images/Wheresimple_56_1.png" />
 </div>
 
 
@@ -758,7 +673,7 @@ NameError: name &#39;ir&#39; is not defined
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 20, 2015.
+      Last updated on mars 26, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/5-SIM/Wheresimple.txt"

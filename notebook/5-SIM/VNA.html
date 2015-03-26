@@ -25,6 +25,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
 <script type="text/javascript">
 
@@ -381,7 +382,7 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;res&#39; is not defined
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x2ad688ed3050&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x2adc7925f090&gt;
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fftshift</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">fres</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])))</span>
@@ -603,7 +604,7 @@ ValueError                                Traceback (most recent call last)
       5 switch.set_io_mode(0b11111111, 0b11111111, 0b00000000)
 
 
-/home/uguen/Documents/rch/devel/pylayers/pylayers/measures/switch/ni_usb_6501.pyc in get_adapter(**kwargs)
+/home/uguen/Documents/rch/devel/pylayers/pylayers/measures/switch/ni_usb_6501.py in get_adapter(**kwargs)
      39     device = usb.core.find(idVendor=ID_VENDOR, idProduct=ID_PRODUCT, **kwargs)
      40     if not device:
 ---&gt; 41         raise ValueError(&#39;Device not found&#39;)
@@ -647,7 +648,7 @@ NameError: name &#39;switch&#39; is not defined
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 20, 2015.
+      Last updated on mars 26, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/5-SIM/VNA.txt"
