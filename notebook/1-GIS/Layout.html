@@ -333,8 +333,8 @@ numpy array which are mostly used internally.</p>
 </ul>
 <div class="section" id="pt-the-array-of-points">
 <h3><tt class="docutils literal"><span class="pre">pt</span></tt> the array of points<a class="headerlink" href="#pt-the-array-of-points" title="Permalink to this headline">¶</a></h3>
-<p>The point coordinates are stored in two different places which generally
-is not a good thing. Probably this is going to evolve in future version.</p>
+<p>The point coordinates are stored in two different places (which in
+principle is a bad thing to do !).</p>
 <div class="highlight-python"><div class="highlight"><pre>L.Gs.pos : in a dictionnary form (key is the point negative index)
 L.pt : in a numpy array
 </pre></div>
@@ -361,19 +361,26 @@ Where <img class="math" src="../../_images/math/e9203da50e1059455123460d4e716c9c
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 </pre></div>
 </div>
+<p>The figure below illustrates a Layout and a surimposition of the graph
+of cycles <img class="math" src="../../_images/math/0abf127ba06052874b2d0334312c08a635791dda.png" alt="\mathcal{G}_c"/>. Those cycles are automatically
+extracted from a well defined layout. This concept of <strong>cycles</strong> is
+central in the ray determination algorithm which is implemented in
+PyLayers. Notice that the exterior region is the cycle indexed by 0. All
+the rooms which have a common frontier with the exterior cycle are here
+connected to the origin (corresponding to exterior cycle).</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">)</span>
 <span class="n">nx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gc</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gc</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Layout_31_0.png" src="../../_images/Layout_31_0.png" />
+<img alt="../../_images/Layout_32_0.png" src="../../_images/Layout_32_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_nodes</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span><span class="n">node_color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span><span class="n">node_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span><span class="n">node_color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span><span class="n">node_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.collections.LineCollection at 0x2b7a70d6a410&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.collections.LineCollection at 0x2ab10c59a850&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Layout_32_1.png" src="../../_images/Layout_32_1.png" />
+<img alt="../../_images/Layout_33_1.png" src="../../_images/Layout_33_1.png" />
 </div>
 </div>
 <div class="section" id="tgs-trancodage-from-graph-indexing-to-numpy-array-indexing">
@@ -449,9 +456,9 @@ because none segment has 0 as an index.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">seg2pts</span><span class="p">(</span><span class="n">aseg</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">29.785</span><span class="p">,</span>  <span class="o">-</span><span class="mf">3.754</span><span class="p">,</span>  <span class="mf">22.538</span><span class="p">],</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">29.785</span><span class="p">,</span>   <span class="mf">0.044</span><span class="p">,</span>  <span class="mf">22.538</span><span class="p">],</span>
        <span class="p">[</span>  <span class="mf">6.822</span><span class="p">,</span>  <span class="mf">23.078</span><span class="p">,</span>   <span class="mf">8.711</span><span class="p">],</span>
-       <span class="p">[</span> <span class="mf">29.785</span><span class="p">,</span>   <span class="mf">0.044</span><span class="p">,</span>  <span class="mf">20.326</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">29.785</span><span class="p">,</span>  <span class="o">-</span><span class="mf">3.754</span><span class="p">,</span>  <span class="mf">20.326</span><span class="p">],</span>
        <span class="p">[</span>  <span class="mf">8.921</span><span class="p">,</span>  <span class="mf">23.078</span><span class="p">,</span>   <span class="mf">8.693</span><span class="p">]])</span>
 </pre></div>
 </div>
@@ -469,7 +476,7 @@ because none segment has 0 as an index.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">35.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">35.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Layout_50_1.png" src="../../_images/Layout_50_1.png" />
+<img alt="../../_images/Layout_51_1.png" src="../../_images/Layout_51_1.png" />
 </div>
 </div>
 
