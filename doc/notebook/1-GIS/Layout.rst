@@ -7,7 +7,7 @@ Indoor environment. It contains data structures necessary for the graph
 based ray tracing implemented in PyLayers. The class is implemented in
 the
 ```layout.py`` <http://pylayers.github.io/pylayers/modules/pylayers.gis.layout.html>`__
-module
+module.
 
 .. code:: python
 
@@ -24,11 +24,13 @@ module
 Getting the list of all available Layouts : the ``ls()`` method
 ---------------------------------------------------------------
 
-To create a default Layout
+Creating a default Layout is as simple as :
 
 .. code:: python
 
     L=Layout()
+Querying the default file name as simple as :
+
 .. code:: python
 
     L.filename
@@ -41,8 +43,12 @@ To create a default Layout
 
 
 
-The ``ls()`` method lists the layout file which are available in the
-``struc`` directory of the current project.
+The ``ls()`` method lists the layout files which are available in the
+``struc`` directory of your current project which is set up via the
+$BASENAME environment variable which is crucial to be early defined in
+order PyLayers find its way to the good directories. Over the
+development process, the layout data format has evolved quite a lot, the
+most simple is an ``ini`` key-value text file.
 
 .. code:: python
 
@@ -82,19 +88,10 @@ The ``ls()`` method lists the layout file which are available in the
     L=Layout('DLR.ini')
 .. code:: python
 
-    L.showG('s')
+    f,a=L.showG('s')
 
 
-
-.. parsed-literal::
-
-    (<matplotlib.figure.Figure at 0x2b702902fe50>,
-     <matplotlib.axes.AxesSubplot at 0x2b7028dde750>)
-
-
-
-
-.. image:: Layout_files/Layout_10_1.png
+.. image:: Layout_files/Layout_11_0.png
 
 
 To check which are the used slabs :
@@ -121,6 +118,8 @@ To check which are the used slabs :
     WALL : BRICK | [0.07]
     
 
+
+Let's load an other layout
 
 .. code:: python
 
@@ -170,14 +169,14 @@ To check which are the used slabs :
 
 
 
-This Layout is still in construction
+The showG method provides many vizualization of the layout
 
 .. code:: python
 
     f,a=L.showG('s',airwalls=False,figsize=(20,10))
 
 
-.. image:: Layout_files/Layout_15_0.png
+.. image:: Layout_files/Layout_17_0.png
 
 
 .. code:: python
@@ -230,23 +229,21 @@ This Layout is still in construction
 
 .. code:: python
 
-    L.showG('s')
+    f,a = L.showG('s')
 
 
-
-.. parsed-literal::
-
-    (<matplotlib.figure.Figure at 0x2b7029326610>,
-     <matplotlib.axes.AxesSubplot at 0x2b7029334450>)
-
-
-
-
-.. image:: Layout_files/Layout_17_1.png
+.. image:: Layout_files/Layout_19_0.png
 
 
 The useful numpy arrays of the Layout
 -------------------------------------
+
+The layout data structure is a mix between graph and numpy array. numpy
+arrays are used when high performance is required while graph structure
+is convenient when dealing with different specific tasks. The tricky
+thing for the mind is to have to transcode between node index excluding
+0 and numpy array index including 0. Below are listed various useful
+numpy array which are mostly used internally.
 
 -  tsg : get segment index in Gs from tahe
 -  isss : sub-segment index above Nsmax
@@ -258,7 +255,8 @@ The useful numpy arrays of the Layout
 ``pt`` the array of points
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-point coordinates are stored in two places :
+The point coordinates are stored in two different places (which in
+principle is a bad thing to do !).
 
 ::
 
@@ -292,13 +290,21 @@ Where :math:`k` is the index of a given segment (starting in 0).
 .. code:: python
 
     L.build()
+The figure below illustrates a Layout and a surimposition of the graph
+of cycles :math:`\mathcal{G}_c`. Those cycles are automatically
+extracted from a well defined layout. This concept of **cycles** is
+central in the ray determination algorithm which is implemented in
+PyLayers. Notice that the exterior region is the cycle indexed by 0. All
+the rooms which have a common frontier with the exterior cycle are here
+connected to the origin (corresponding to exterior cycle).
+
 .. code:: python
 
-    L.showG('s')
+    f,a = L.showG('s')
     nx.draw(L.Gc,L.Gc.pos)
 
 
-.. image:: Layout_files/Layout_28_0.png
+.. image:: Layout_files/Layout_32_0.png
 
 
 .. code:: python
@@ -310,18 +316,18 @@ Where :math:`k` is the index of a given segment (starting in 0).
 
 .. parsed-literal::
 
-    <matplotlib.collections.LineCollection at 0x2b702c40d710>
+    <matplotlib.collections.LineCollection at 0x2ab10c59a850>
 
 
 
 
-.. image:: Layout_files/Layout_29_1.png
+.. image:: Layout_files/Layout_33_1.png
 
 
 ``tgs`` : trancodage from graph indexing to numpy array indexing
 ----------------------------------------------------------------
 
-``tgs`` is an arry with length :math:`N_s`\ +1. The index 0 is not used
+``tgs`` is an array with length :math:`N_s`\ +1. The index 0 is not used
 because none segment has 0 as an index.
 
 .. code:: python
@@ -422,9 +428,9 @@ because none segment has 0 as an index.
 
 .. parsed-literal::
 
-    array([[ 29.785,  -3.754,  22.538],
+    array([[ 29.785,   0.044,  22.538],
            [  6.822,  23.078,   8.711],
-           [ 29.785,   0.044,  20.326],
+           [ 29.785,  -3.754,  20.326],
            [  8.921,  23.078,   8.693]])
 
 
@@ -450,5 +456,5 @@ because none segment has 0 as an index.
 
 
 
-.. image:: Layout_files/Layout_47_1.png
+.. image:: Layout_files/Layout_51_1.png
 
