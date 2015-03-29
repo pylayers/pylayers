@@ -145,6 +145,22 @@
 <span class="sd">RadioNode Class</span>
 <span class="sd">===============</span>
 
+<span class="sd">A radio Node is a data structure which store positions of </span>
+<span class="sd">a radio node at several time step. It contains also the information </span>
+<span class="sd">about the antenna file.</span>
+
+<span class="sd">This data structure is used in DLink.  </span>
+
+<span class="sd">Members of a radionode are </span>
+
+<span class="sd">position    : 3xNt</span>
+<span class="sd">time        : 1xNt </span>
+<span class="sd">orientation : 3x3xNt</span>
+<span class="sd">typ         : &#39;tx&#39; or &#39;rx&#39;</span>
+<span class="sd">name        : string </span>
+<span class="sd">fileant     : antenna file </span>
+
+
 <span class="sd">.. autosummary::</span>
 <span class="sd">    :toctree: generated/</span>
 
@@ -300,7 +316,8 @@
             <span class="k">pass</span>
 
         <span class="c">#</span>
-        <span class="c">#print _fileant</span>
+        <span class="c"># print _fileant</span>
+        <span class="c">#</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fileant</span> <span class="o">=</span> <span class="n">_fileant</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">loadvsh</span><span class="p">()</span> <span class="c"># is it still necessary ? </span>
@@ -1134,7 +1151,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 27, 2015.
+      Last updated on mars 29, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

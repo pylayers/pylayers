@@ -28,7 +28,6 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.simul.link.DLink.eval" href="generated/pylayers.simul.link.DLink.eval.html" />
     <link rel="prev" title="PyLayers" href="pylayers.html" />
 <script type="text/javascript">
 
@@ -104,23 +103,6 @@
 	    </div>
 	
 	<div class="rellink">
-	<a href="generated/pylayers.simul.link.DLink.eval.html" title="pylayers.simul.link.DLink.eval"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.simul.l...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.simul.link.DLink.eval
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
 	<a href="../py-modindex.html" title="Python Module Index"
 	    >Modules
 	    <br>
@@ -162,6 +144,8 @@
     <h3>This page</h3>
 	<ul>
 <li><a class="reference internal" href="#">pylayers.simul.link</a><ul>
+<li><a class="reference internal" href="#link-class">Link Class</a></li>
+<li><a class="reference internal" href="#slink-class">SLink Class</a></li>
 <li><a class="reference internal" href="#dlink-class">DLink Class</a><ul>
 <li><a class="reference internal" href="#dlink-simulation">DLink simulation</a></li>
 <li><a class="reference internal" href="#dlink-init">DLink init</a></li>
@@ -188,21 +172,46 @@
 <h1>pylayers.simul.link<a class="headerlink" href="#pylayers-simul-link" title="Permalink to this headline">¶</a></h1>
 <p>This class is used for calculation of a radio channel between two points A and
 B in a Layout L</p>
-<span class="target" id="module-pylayers.simul.link"></span><p>This module runs the electromagnetic simulation at the link level.</p>
-<p>It stores simulated objects in <cite>hdf5</cite> format.</p>
+<span class="target" id="module-pylayers.simul.link"></span><p>This module runs the electromagnetic simulation at the link level.
+It stores simulated objects in <cite>hdf5</cite> format.</p>
 <p>Link is a MetaClass
 Dlink is for deterministic links 
 Slink is for statistical links.</p>
-<div class="section" id="dlink-class">
-<h2>DLink Class<a class="headerlink" href="#dlink-class" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="link-class">
+<h2>Link Class<a class="headerlink" href="#link-class" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Link.__add__</span></tt>(l)</td>
+<td>merge ak and tauk of 2 Links</td>
+</tr>
 </tbody>
 </table>
+</div>
+<div class="section" id="slink-class">
+<h2>SLink Class<a class="headerlink" href="#slink-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">SLink.onbody</span></tt>(B,&nbsp;dida,&nbsp;didb,&nbsp;a,&nbsp;b)</td>
+<td>Statistical evaluation of a on-body link</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="dlink-class">
+<h2>DLink Class<a class="headerlink" href="#dlink-class" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.simul.link</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aktk</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+</pre></div>
+</div>
 <div class="section" id="dlink-simulation">
 <h3>DLink simulation<a class="headerlink" href="#dlink-simulation" title="Permalink to this headline">¶</a></h3>
 <table border="1" class="longtable docutils">
@@ -306,7 +315,7 @@ Slink is for statistical links.</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 26, 2015.
+      Last updated on mars 29, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.simul.link.txt"
@@ -321,13 +330,8 @@ Slink is for statistical links.</p>
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="generated/pylayers.simul.link.DLink.eval.html">
-        Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
       <a href="../py-modindex.html">
-        Previous
+        Next
       </a>  
     </div>
     

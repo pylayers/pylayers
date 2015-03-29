@@ -144,8 +144,21 @@
 
 <span class="sd">This module handles antennas</span>
 <span class="sd">An antenna can be loaded from various file formats among</span>
-<span class="sd">them ( .vsh2 .vsh3 .sh2 .sh3 .mat)</span>
 
+<span class="sd">+ .vsh2 </span>
+<span class="sd">+ .vsh3 </span>
+<span class="sd">+ .sh2 </span>
+<span class="sd">+ .sh3 </span>
+<span class="sd">+ .mat</span>
+<span class="sd">+ .trx</span>
+
+<span class="sd">Examples</span>
+<span class="sd">--------</span>
+<span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">    &gt;&gt;&gt; from pylayers.antprop.antenna import *</span>
+<span class="sd">    &gt;&gt;&gt; A = Antenna(&#39;defant.trx&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; fig,ax = A.polar(fGHz=[2,3,4],phd=0)</span>
+<span class="sd">   </span>
 
 <span class="sd">Antenna Class</span>
 <span class="sd">=============</span>
@@ -3700,7 +3713,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 27, 2015.
+      Last updated on mars 29, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

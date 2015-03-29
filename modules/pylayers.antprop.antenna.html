@@ -162,14 +162,17 @@
     <h3>This page</h3>
 	<ul>
 <li><a class="reference internal" href="#">pylayers.antprop.antenna</a><ul>
-<li><a class="reference internal" href="#antenna-class">Antenna Class</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#antenna-class">Antenna Class</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#utility-functions">Utility Functions</a></li>
 <li><a class="reference internal" href="#synthesis-functions">Synthesis Functions</a></li>
 <li><a class="reference internal" href="#visualization-functions">Visualization functions</a></li>
-<li><a class="reference internal" href="#loading-and-saving">Loading and Saving</a></li>
+<li><a class="reference internal" href="#loading-and-saving">Loading and Saving</a><ul>
+<li><a class="reference internal" href="#miscellianous-functions">Miscellianous  functions</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#miscellianous-functions">Miscellianous  functions</a></li>
 </ul>
 </li>
 </ul>
@@ -188,10 +191,25 @@
   <div class="section" id="module-pylayers.antprop.antenna">
 <span id="pylayers-antprop-antenna"></span><h1>pylayers.antprop.antenna<a class="headerlink" href="#module-pylayers.antprop.antenna" title="Permalink to this headline">¶</a></h1>
 <p>This module handles antennas
-An antenna can be loaded from various file formats among
-them ( .vsh2 .vsh3 .sh2 .sh3 .mat)</p>
+An antenna can be loaded from various file formats among</p>
+<ul class="simple">
+<li>.vsh2</li>
+<li>.vsh3</li>
+<li>.sh2</li>
+<li>.sh3</li>
+<li>.mat</li>
+<li>.trx</li>
+</ul>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;defant.trx&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span><span class="n">phd</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="section" id="antenna-class">
-<h2>Antenna Class<a class="headerlink" href="#antenna-class" title="Permalink to this headline">¶</a></h2>
+<h3>Antenna Class<a class="headerlink" href="#antenna-class" title="Permalink to this headline">¶</a></h3>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -200,8 +218,10 @@ them ( .vsh2 .vsh3 .sh2 .sh3 .mat)</p>
 <tbody valign="top">
 </tbody>
 </table>
+</div>
+</div>
 <div class="section" id="utility-functions">
-<h3>Utility Functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h3>
+<h2>Utility Functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -248,7 +268,7 @@ them ( .vsh2 .vsh3 .sh2 .sh3 .mat)</p>
 </table>
 </div>
 <div class="section" id="synthesis-functions">
-<h3>Synthesis Functions<a class="headerlink" href="#synthesis-functions" title="Permalink to this headline">¶</a></h3>
+<h2>Synthesis Functions<a class="headerlink" href="#synthesis-functions" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -280,7 +300,7 @@ them ( .vsh2 .vsh3 .sh2 .sh3 .mat)</p>
 </table>
 </div>
 <div class="section" id="visualization-functions">
-<h3>Visualization functions<a class="headerlink" href="#visualization-functions" title="Permalink to this headline">¶</a></h3>
+<h2>Visualization functions<a class="headerlink" href="#visualization-functions" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -315,7 +335,7 @@ them ( .vsh2 .vsh3 .sh2 .sh3 .mat)</p>
 </table>
 </div>
 <div class="section" id="loading-and-saving">
-<h3>Loading and Saving<a class="headerlink" href="#loading-and-saving" title="Permalink to this headline">¶</a></h3>
+<h2>Loading and Saving<a class="headerlink" href="#loading-and-saving" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -357,10 +377,8 @@ them ( .vsh2 .vsh3 .sh2 .sh3 .mat)</p>
 </tr>
 </tbody>
 </table>
-</div>
-</div>
 <div class="section" id="miscellianous-functions">
-<h2>Miscellianous  functions<a class="headerlink" href="#miscellianous-functions" title="Permalink to this headline">¶</a></h2>
+<h3>Miscellianous  functions<a class="headerlink" href="#miscellianous-functions" title="Permalink to this headline">¶</a></h3>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -380,6 +398,7 @@ them ( .vsh2 .vsh3 .sh2 .sh3 .mat)</p>
 </table>
 </div>
 </div>
+</div>
 
 
           </div>
@@ -392,7 +411,7 @@ them ( .vsh2 .vsh3 .sh2 .sh3 .mat)</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 26, 2015.
+      Last updated on mars 29, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.antprop.antenna.txt"

@@ -182,6 +182,17 @@
 <span id="pylayers-simul-radionode"></span><h1>pylayers.simul.radionode<a class="headerlink" href="#module-pylayers.simul.radionode" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="radionode-class">
 <h2>RadioNode Class<a class="headerlink" href="#radionode-class" title="Permalink to this headline">¶</a></h2>
+<p>A radio Node is a data structure which store positions of 
+a radio node at several time step. It contains also the information 
+about the antenna file.</p>
+<p>This data structure is used in DLink.</p>
+<p>Members of a radionode are</p>
+<p>position    : 3xNt
+time        : 1xNt 
+orientation : 3x3xNt
+typ         : &#8216;tx&#8217; or &#8216;rx&#8217;
+name        : string 
+fileant     : antenna file</p>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -279,7 +290,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 26, 2015.
+      Last updated on mars 29, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.simul.radionode.txt"
