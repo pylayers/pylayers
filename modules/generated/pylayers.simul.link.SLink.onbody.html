@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pylayers.antprop.loss.PL0 &mdash; Python 1 documentation</title>
+    <title>pylayers.simul.link.SLink.onbody &mdash; Python 1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -27,9 +27,9 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
-    <link rel="up" title="pylayers.antprop.loss" href="../pylayers.antprop.loss.html" />
-    <link rel="next" title="pylayers.antprop.loss.PL" href="pylayers.antprop.loss.PL.html" />
-    <link rel="prev" title="pylayers.antprop.loss.cdf" href="pylayers.antprop.loss.cdf.html" />
+    <link rel="up" title="pylayers.simul.link" href="../pylayers.simul.link.html" />
+    <link rel="next" title="pylayers.simul.link.DLink.eval" href="pylayers.simul.link.DLink.eval.html" />
+    <link rel="prev" title="pylayers.simul.link.Link.__add__" href="pylayers.simul.link.Link.__add__.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -87,14 +87,14 @@
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="pylayers.antprop.loss.cdf.html" title="pylayers.antprop.loss.cdf"
+	<a href="pylayers.simul.link.Link.__add__.html" title="pylayers.simul.link.Link.__add__"
 	    accesskey="P">Previous
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.antprop...
+	    pylayers.simul.l...
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.antprop.loss.cdf
+	    pylayers.simul.link.Link.__add__
 	    </span>
 	    
 	    </a>
@@ -104,14 +104,14 @@
 	    </div>
 	
 	<div class="rellink">
-	<a href="pylayers.antprop.loss.PL.html" title="pylayers.antprop.loss.PL"
+	<a href="pylayers.simul.link.DLink.eval.html" title="pylayers.simul.link.DLink.eval"
 	    accesskey="N">Next
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.antprop...
+	    pylayers.simul.l...
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.antprop.loss.PL
+	    pylayers.simul.link.DLink.eval
 	    </span>
 	    
 	    </a>
@@ -138,14 +138,14 @@
 	&nbsp;
 	</div>
 	<div class="rellink">
-	<a href="../pylayers.antprop.loss.html" title="pylayers.antprop.loss" >
+	<a href="../pylayers.simul.link.html" title="pylayers.simul.link" >
 	Up
 	<br>
 	<span class="smallrellink">
-	pylayers.antprop...
+	pylayers.simul.l...
 	</span>
 	<span class="hiddenrellink">
-	pylayers.antprop.loss
+	pylayers.simul.link
 	</span>
 	
 	</a>
@@ -161,7 +161,7 @@
     <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">pylayers.antprop.loss.PL0</a></li>
+<li><a class="reference internal" href="#">pylayers.simul.link.SLink.onbody</a></li>
 </ul>
 
     
@@ -175,46 +175,54 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="pylayers-antprop-loss-pl0">
-<h1>pylayers.antprop.loss.PL0<a class="headerlink" href="#pylayers-antprop-loss-pl0" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="pylayers.antprop.loss.PL0">
-<tt class="descclassname">pylayers.antprop.loss.</tt><tt class="descname">PL0</tt><big>(</big><em>fGHz</em>, <em>GtdB=0</em>, <em>GrdB=0</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/loss.html#PL0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.loss.PL0" title="Permalink to this definition">¶</a></dt>
-<dd><p>Path Loss at frequency fGHZ &#64; 1m</p>
+  <div class="section" id="pylayers-simul-link-slink-onbody">
+<h1>pylayers.simul.link.SLink.onbody<a class="headerlink" href="#pylayers-simul-link-slink-onbody" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.simul.link.SLink.onbody">
+<tt class="descclassname">SLink.</tt><tt class="descname">onbody</tt><big>(</big><em>B</em>, <em>dida</em>, <em>didb</em>, <em>a</em>, <em>b</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/simul/link.html#SLink.onbody"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.SLink.onbody" title="Permalink to this definition">¶</a></dt>
+<dd><p>Statistical evaluation of a on-body link</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fGHz: float</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>B</strong> : Body</p>
 <blockquote>
-<div><p>frequency GHz</p>
+<div><p>Body object on which devices are held</p>
 </div></blockquote>
-<p><strong>GtdB: float</strong> :</p>
+<p><strong>dida: int</strong> :</p>
 <blockquote>
-<div><p>transmitting antenna gain dB (default 0 dB)</p>
+<div><p>device a id number on body</p>
 </div></blockquote>
-<p><strong>GrdB: float</strong> :</p>
+<p><strong>didb: int</strong> :</p>
 <blockquote>
-<div><p>receiving antenna gain dB (default 0 dB)</p>
+<div><p>device b id number on body</p>
+</div></blockquote>
+<p><strong>a</strong> : nd array</p>
+<blockquote>
+<div><p>position of device a</p>
+</div></blockquote>
+<p><strong>b</strong> : nd array</p>
+<blockquote>
+<div><p>position of device b</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>PL0</strong> : float</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(ak, tk, eng )</strong> :</p>
+<p><strong>ak</strong> : ndarray</p>
+<blockquote>
+<div><p>alpha_k</p>
+</div></blockquote>
+<p><strong>tk</strong> : ndarray</p>
 <blockquote class="last">
-<div><p>path &#64; 1m</p>
+<div><p>tau_k</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Notes</p>
-<div class="math">
-<p><img src="../../_images/math/0a9355cc8bba099988c9676edad573df9a5140c4.png" alt="PL_0 = -20 log_{10}(\frac{\lambda}{4\pi}) - GtdB -GrdB"/></p>
-</div><p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span>  <span class="o">=</span> <span class="mf">2.4</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">PL</span> <span class="o">=</span> <span class="n">PL0</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="p">(</span><span class="n">PL</span><span class="o">&lt;</span><span class="mi">41</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">PL</span><span class="o">&gt;</span><span class="mi">40</span><span class="p">),</span><span class="s">&quot;something wrong&quot;</span>
-</pre></div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.mobility.ban.body</span></tt></p>
 </div>
 </dd></dl>
 
@@ -234,19 +242,19 @@
       Last updated on mars 29, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.antprop.loss.PL0.txt"
+    <a href="../../_sources/modules/generated/pylayers.simul.link.SLink.onbody.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel">
     
     <div class="buttonPrevious">
-      <a href="pylayers.antprop.loss.cdf.html">
+      <a href="pylayers.simul.link.Link.__add__.html">
         Previous
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="pylayers.antprop.loss.PL.html">
+      <a href="pylayers.simul.link.DLink.eval.html">
         Next
       </a>  
     </div>
