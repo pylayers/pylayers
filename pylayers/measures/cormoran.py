@@ -1727,6 +1727,8 @@ bernard
             device on body size (100)
         devlist : list
             list of device name to show on body
+        pattern : boolean
+            display devices pattern
 
         trajectory : boolean
             display trajectory  (True)
@@ -1772,6 +1774,7 @@ bernard
                      'pattern':False,
                      'devsize':100,
                      'devlist':[],
+                     'pattern':False,
                      'inodes' : True,
                      'inname' : True,
                      'innamesize' : 0.1,
@@ -1826,13 +1829,14 @@ bernard
             for ki, i in enumerate(time):
                 for ib,b in enumerate(subject):
                     self.B[b].settopos(t=i,cs=True)
-                    self.B[b]._show3(ccs=True,cylinder=False)
-                    #self.B[b]._show3(dev=True,
-                                   # name = kwargs['bodyname'],
-                                  #  devlist=kwargs['devlist'],
-                                   # devsize=kwargs['devsize'],
-                                   # pattern=kwargs['pattern'],
-                                   # tube_sides=12)
+
+                    self.B[b]._show3(dev=True,
+                                    name = kwargs['bodyname'],
+                                    devlist=kwargs['devlist'],
+                                    devsize=kwargs['devsize'],
+                                    tube_sides=12,
+                                    pattern=kwargs['pattern'])
+
                     if kwargs['tagtraj']:
                         X=self.B[b].traj[['x','y','z']].values[self.B[b].toposFrameId]
                         if kwargs['tagpoffset']==[]:

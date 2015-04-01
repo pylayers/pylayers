@@ -4,6 +4,24 @@ import numpy as np
 
 def getchannel(emplacement = 'trunku',intersection = 1):
     """ get channel
+
+    Parameters
+    ----------
+
+    emplacement : 'trunku' | 'thighr' | 'forearm' | 'calfr'
+    intersection : 1 = LOS 0 : NLOS
+
+    Returns
+    -------
+
+    alphak : np.array
+    tauk   : np.array
+
+    Notes
+    -----
+
+    See : "Delay Dispersion of the On-Body Channel" (Raffaele Derrico, Laurent Ouvry)
+
     """
 
 
@@ -20,6 +38,7 @@ def getchannel(emplacement = 'trunku',intersection = 1):
                 'trans':{'gamma':40.5,'gamma0':2.2,'k':23,'lambda-1':2.37,'sigma':4.61},
                 'nlos':{'gamma':55,'gamma0':1.4,'k':32,'lambda-1':2.21,'sigma':4.65}}
        }
+
     g0 = {'trunku':{'mu0':-52.62,'sigma0':4.35},
         'thighr':{'mu0':-63.30,'sigma0':2.31},
         'forearmr':{'mu0':-59.96,'sigma0':3.28},
@@ -33,13 +52,13 @@ def getchannel(emplacement = 'trunku',intersection = 1):
         condition = 'los'
 
     if emplacement == 'trunku':
-                condition = 'los'
+        condition = 'los'
 
     #number of paths
     K = pdp[emplacement][condition]['k']
 
     #delay
-    Lambda = 1/pdp[emplacement][condition]['lambda-1']
+    Lambda = 1./pdp[emplacement][condition]['lambda-1']
 
     Tk = st.expon(0,Lambda)
     sampleTk = Tk.rvs(K)
@@ -71,7 +90,7 @@ def getchannel(emplacement = 'trunku',intersection = 1):
 
     alphak = intersection*alphak
 
-    return alphak, tauk
+    return alphak,tauk
 
 
 

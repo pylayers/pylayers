@@ -231,8 +231,8 @@ class Wstandard(dict):
             for k in np.sort(self.chan.keys()):
                 st = st + str(k) +' :  '+  self.chan[k].__repr__()
         except:
-            print 'No standard loaded. \
-                   check available standards with ls() method'
+            st = 'No standard loaded \n'
+            st =  st+'Check available standards with ls() method \n'
 
         return(st)
 

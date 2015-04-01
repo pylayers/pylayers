@@ -47,6 +47,7 @@ Channel
 .. toctree::
    :maxdepth: 1
 
+   pylayers.antprop.loss
    pylayers.antprop.channel
    pylayers.antprop.channelc
    pylayers.antprop.coeffModel

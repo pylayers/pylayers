@@ -239,7 +239,8 @@ class DF(PyLayers):
 
         display : boolean
             True
-        fsGHz : []
+        fsGHz : float
+            if set to 0 (relative frequency)
 
         TODO : go until 2pi if coefficients are complex
 

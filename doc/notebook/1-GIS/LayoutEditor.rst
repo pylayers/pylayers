@@ -90,12 +90,6 @@ following :
     WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
 
 
-
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x7fd47030cbd0>
-
-
 Reading an exiting Layout
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -165,11 +159,10 @@ The structure of the ``.osm`` file is shown below
 
 .. code:: python
 
-    %%bash 
+    %%bash
     
         cd $BASENAME/struc
         ls *.osm
-
 
 .. parsed-literal::
 
@@ -180,7 +173,7 @@ The structure of the ``.osm`` file is shown below
 
 .. code:: python
 
-    %%bash 
+    %%bash
         cd $BASENAME/struc
         head DLR.osm
         echo '---'
@@ -226,11 +219,6 @@ To read a new layout in osm format :
 .. code:: python
 
     fig,ax=L.showGs()
-
-
-.. image:: LayoutEditor_files/LayoutEditor_20_0.png
-
-
 .. code:: python
 
     L.info()
@@ -241,18 +229,18 @@ To read a new layout in osm format :
     filematini :  matDB.ini
     fileslabini :  slabDB.ini
     filegeom :  DLR.off
-    boundaries  (758.35, 794.771, 1111.898, 1138.987)
+    boundaries  (-0.505, 32.586, -8.277, 8.878)
     number of Points : 105
     number of Segments : 124
     number of Sub-Segments : 30
     Gs Nodes :  229
     Gs Edges :  248
-    Gt Nodes :  21
-    Gt Edges :  52
+    Gt Nodes :  0
+    Gt Edges :  0
     vnodes = Gt.node[Nc]['cycles'].cycle 
     poly = Gt.node[Nc]['cycle'].polyg 
-    Gr Nodes    : 18
-    Gr Edges    : 18
+    Gr Nodes    : 0
+    Gr Edges    : 0
     Nc  = Gr.node[nroom]['cycles']  
 
 
@@ -261,18 +249,6 @@ The different graphs associated with the layout are then built
 .. code:: python
 
     L.build()
-
-.. parsed-literal::
-
-    CRITICAL:root:segment are not connected
-
-
-.. parsed-literal::
-
-    > /home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py(550)from2csegs()
-    -> self.apex = p
-
-
 The topological graph :math:`\mathcal{G}_t` or graph of non overlapping
 cycles.
 
@@ -325,7 +301,7 @@ The display options dictionnary
     filematini :  matDB.ini
     fileslabini :  slabDB.ini
     filegeom :  DLR.off
-    boundaries  (758.35, 794.771, 1111.898, 1138.987)
+    boundaries  (-0.505, 32.586, -8.277, 8.878)
     number of Points : 105
     number of Segments : 124
     number of Sub-Segments : 30
@@ -335,8 +311,8 @@ The display options dictionnary
     Gt Edges :  52
     vnodes = Gt.node[Nc]['cycles'].cycle 
     poly = Gt.node[Nc]['cycle'].polyg 
-    Gr Nodes    : 16
-    Gr Edges    : 16
+    Gr Nodes    : 18
+    Gr Edges    : 18
     Nc  = Gr.node[nroom]['cycles']  
 
 
@@ -352,19 +328,19 @@ are exploited in ``showGs()`` vizualisation method.
 
 .. parsed-literal::
 
-    {'activelayer': 'WINDOW_GLASS',
+    {'activelayer': 'WALL',
      'alpha': 0.5,
-     'box': (758.35, 794.771, 1111.898, 1138.987),
-     'clear': False,
+     'box': (-0.505, 32.586, -8.277, 8.878),
+     'clear': True,
      'edges': True,
      'edlabel': False,
      'edlblsize': 20,
-     'ednodes': False,
-     'fileoverlay': '',
-     'fontsize': 20,
+     'ednodes': True,
+     'fileoverlay': 'DLR4991.png',
+     'fontsize': 10,
      'inverse': False,
      'layer': [],
-     'layers': ['WALL', 'PARTITION', 'AIR', '3D_WINDOW_GLASS'],
+     'layers': ['WALL', 'PARTITION', 'AIR', 'WINDOW_GLASS', '3D_WINDOW_GLASS'],
      'layerset': ['WINDOW_GLASS',
       'PLASTERBOARD_7CM',
       'WALL',
@@ -390,13 +366,14 @@ are exploited in ``showGs()`` vizualisation method.
      'ndlabel': False,
      'ndlblsize': 20,
      'ndsize': 10,
-     'nodes': False,
+     'nodes': True,
      'overlay': False,
      'scaled': True,
      'subseg': True,
+     'subsegnb': True,
      'thin': False,
      'ticksoff': True,
-     'title': '',
+     'title': 'Init',
      'visu': False}
 
 
@@ -465,9 +442,11 @@ There are two different modes of edition
 
 -  A create points mode CP
 
-   -  left clic : free point
-   -  right clic : same x point
-   -  center clic : same y point
+::
+
+    + left clic   : free point
+    + right clic  : same x point
+    + center clic : same y point
 
 -  A create segments mode
 
@@ -506,8 +485,8 @@ a filename. In that case the file is stored in
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f49b9e4b450>,
-     <matplotlib.axes.AxesSubplot at 0x7f49b9aff290>)
+    (<matplotlib.figure.Figure at 0x2aab2c105c50>,
+     <matplotlib.axes.AxesSubplot at 0x2aab2c128d90>)
 
 
 
@@ -539,7 +518,7 @@ At that stage, it is possible to start creating points
 
 ::
 
-        'b'  : selct a segment 
+        'b'  : selct a segment
         'l'  : select activelayer
         'i'  : back to init state
         'e'  : edit segment
@@ -573,13 +552,3 @@ a segment (wall,door,window,...).
 The segment name is the key of the **slab** dictionnary.
 
 `Multi Subsegments <./Multisubsegments.ipynb>`__
-
-.. code:: python
-
-    from IPython.core.display import HTML
-    
-    def css_styling():
-        styles = open("../styles/custom.css", "r").read()
-        return HTML(styles)
-    css_styling()
-    %matplotlib inline

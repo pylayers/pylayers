@@ -5,8 +5,21 @@
 
 This module handles antennas
 An antenna can be loaded from various file formats among
-them ( .vsh2 .vsh3 .sh2 .sh3 .mat)
 
++ .vsh2 
++ .vsh3 
++ .sh2 
++ .sh3 
++ .mat
++ .trx
+
+Examples
+--------
+    >>> import matplotlib.pyplot as plt
+    >>> from pylayers.antprop.antenna import *
+    >>> A = Antenna('defant.trx')
+    >>> fig,ax = A.polar(fGHz=[2,3,4],phd=0)
+   
 
 Antenna Class
 =============
@@ -366,7 +379,10 @@ class Antenna(PyLayers):
         if 'fa' in self.__dict__:
             st = st + "fmin : %4.2f" % (self.fa[0]) + "GHz\n"
             st = st + "fmax : %4.2f" % (self.fa[-1]) + "GHz\n"
-            st = st + "step : %4.2f" % (1000*(self.fa[1]-self.fa[0])) + "MHz\n"
+            try:
+                st = st + "step : %4.2f" % (1000*(self.fa[1]-self.fa[0])) + "MHz\n"
+            except:
+                st = st + "step : None\n"
             st = st + "Nf : %d" % (len(self.fa)) +"\n"
 
 
