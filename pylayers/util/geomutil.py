@@ -4222,9 +4222,9 @@ def dmin3d(a,b,c,d):
 #     return V 
 
 
-def gram_schmid(Vini,force_direct=True): 
+def gram_schmidt(Vini,force_direct=True): 
     """ 
-    Gram-Schmid orthonormalization of a set of `M` vectors, in-place. 
+    Gram-Schmidt orthonormalization of a set of `M` vectors, in-place. 
 
     Parameters 
     ---------- 

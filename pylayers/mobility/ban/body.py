@@ -547,7 +547,7 @@ class Body(PyLayers):
             # ipdb.set_trace()
 
             vccs=np.concatenate((ca[:,np.newaxis,:],vccs),axis=1)
-            self._ccs[self.dcyl[k],:,:,:]=geu.gram_schmid(vccs)
+            self._ccs[self.dcyl[k],:,:,:]=geu.gram_schmidt(vccs)
 
 
 
@@ -2008,7 +2008,6 @@ class Body(PyLayers):
                 if not self.dant.has_key(key):
                     self.dant[key]=ant.Antenna(self.dev[key]['file'])
                     self.dant[key].Fsynth()
-                    print "nonr"
 
                 U = self.dcs[key]
                 V = self.dant[key].SqG[kwargs['k'],:,:]
