@@ -3415,7 +3415,7 @@ bernard
         #
 
 
-    def showlink(self,a,b,technoa='HKB',technob='HKB',iframe=0,style='*b'):
+    def showlink(self,a,b,technoa='',technob='',t=10,freq=-1):
         """ show link configuation for a given frame
 
         Parameters
@@ -3429,55 +3429,149 @@ bernard
             default 'HKB'|'TCR'|'BS'
         technob
             default 'HKB'|'TCR'|'BS'
-        iframe
-        style
 
         """
         # display nodes
-        A,B = self.getlinkp(a,b,technoa=technoa,technob=technob)
-        A=A.values
-        B=B.values
+
         a,ia,ba,subjecta,technoa = self.devmapper(a,technoa)
         b,ib,bb,subjectb,technob = self.devmapper(b,technob)
+        pa = self.getdevp(a,techno=technoa,t=t).values
+        pb = self.getdevp(b,techno=technob,t=t).values
 
-        if A.ndim==2:
-            plt.plot(A[iframe,0],A[iframe,1],'ob')
-            plt.text(A[iframe,0],A[iframe,1],a)
-        else:
-            plt.plot(A[0],A[1],'or')
-            #plt.text(A[0],A[1],a)
 
-        if B.ndim==2:
-            plt.plot(B[iframe,0],B[iframe,1],style)
-            plt.text(B[iframe,0]+0.1,B[iframe,1]+0.1,b)
-        else:
-            plt.plot(B[0],B[1],'ob')
-            plt.text(B[0],B[1],b)
-        plt.xlim(-6,6)
-        plt.ylim(-5,5)
-        # display body
+        if len(pa.shape) >1:
+            pa=pa[0]
+        if len(pb.shape) >1:
+            pb=pb[0]
+        plt.plot(pa[0],pa[1],'ob')
+        plt.plot(pb[0],pb[1],'or')
+        plt.text(pa[0],pa[1],ba)
+        plt.text(pb[0],pb[1],bb)
 
-        #pc = self.B.d[:,2,iframe] + self.B.pg[:,iframe].T
-        pc0 = self.B[subjecta].d[:,0,iframe] + self.B[subjecta].pg[:,iframe].T
-        pc1 = self.B[subjecta].d[:,1,iframe] + self.B[subjecta].pg[:,iframe].T
-        pc15 = self.B[subjecta].d[:,15,iframe] + self.B[subjecta].pg[:,iframe].T
-        #plt.plot(pc0[0],pc0[1],'og')
-        #plt.text(pc0[0]+0.1,pc0[1],str(iframe))
-        #plt.plot(pc1[0],pc1[1],'og')
-        #plt.plot(pc15[0],pc15[1],'og')
-        #ci00   = plt.Circle((pc0[0],pc0[1]),self.B[subjecta].sl[0,2],color='green',alpha=0.6)
-        #ci01   = plt.Circle((pc1[0],pc1[1]),self.B[subjecta].sl[0,2],color='green',alpha=0.1)
-        #ci100 = plt.Circle((pc0[0],pc0[1]),self.B[subjecta].sl[10,2],color='red',alpha=0.1)
-        ci1015 = plt.Circle((pc15[0],pc15[1]),self.B[subjecta].sl[10,2],color='green',alpha=0.5)
-        plt.axis('equal')
-        ax = plt.gca()
-        ax.add_patch(ci1015)
-        #ax.add_patch(ci01)
-        #ax.add_patch(ci100)
-        #ax.add_patch(ci1015)
-        #its = self.B[subjecta].intersectBody(A[iframe,:],B[iframe,:],topos=False,frameId=iframe)
-        #x.set_title('frameId :'+str(iframe)+' '+str(its.T))
 
+
+        if subjecta != '':
+            self.B[subjecta].settopos(t=t)
+            self.B[subjecta].dev[ba]['ant'].Fsynth()
+            xa,ya,z,sa,v = self.B[subjecta].dev[ba]['ant']._computemesh(po=pa,T=self.B[subjecta].acs[ba],minr=0.01,maxr=0.1)
+            plt.plot(xa[:,10],ya[:,10])
+        if subjectb != '':
+            self.B[subjectb].settopos(t=t)
+            self.B[subjectb].dev[bb]['ant'].Fsynth()
+            xb,yb,z,sb,v = self.B[subjectb].dev[bb]['ant']._computemesh(po=pb,T=self.B[subjectb].acs[bb],minr=0.01 ,maxr=0.1)
+            plt.plot(xb[:,10],yb[:,10])
+
+        # if A.ndim==2:
+        #     plt.plot(A[iframe,0],A[iframe,1],'ob')
+        #     plt.text(A[iframe,0],A[iframe,1],a)
+        # else:
+        #     plt.plot(A[0],A[1],'or')
+        #     #plt.text(A[0],A[1],a)
+
+        # if B.ndim==2:
+        #     plt.plot(B[iframe,0],B[iframe,1],style)
+        #     plt.text(B[iframe,0]+0.1,B[iframe,1]+0.1,b)
+        # else:
+        #     plt.plot(B[0],B[1],'ob')
+        #     plt.text(B[0],B[1],b)
+        # plt.xlim(-6,6)
+        # plt.ylim(-5,5)
+
+
+        # self.B[subjecta].settopos(t=t)
+        # self.B[subjectb].settopos(t=t)
+
+        # 
+
+        
+        # # display body
+
+        # #pc = self.B.d[:,2,iframe] + self.B.pg[:,iframe].T
+        # pc0 = self.B[subjecta].d[:,0,iframe] + self.B[subjecta].pg[:,iframe].T
+        # pc1 = self.B[subjecta].d[:,1,iframe] + self.B[subjecta].pg[:,iframe].T
+        # pc15 = self.B[subjecta].d[:,15,iframe] + self.B[subjecta].pg[:,iframe].T
+        # #plt.plot(pc0[0],pc0[1],'og')
+        # #plt.text(pc0[0]+0.1,pc0[1],str(iframe))
+        # #plt.plot(pc1[0],pc1[1],'og')
+        # #plt.plot(pc15[0],pc15[1],'og')
+        # #ci00   = plt.Circle((pc0[0],pc0[1]),self.B[subjecta].sl[0,2],color='green',alpha=0.6)
+        # #ci01   = plt.Circle((pc1[0],pc1[1]),self.B[subjecta].sl[0,2],color='green',alpha=0.1)
+        # #ci100 = plt.Circle((pc0[0],pc0[1]),self.B[subjecta].sl[10,2],color='red',alpha=0.1)
+        # ci1015 = plt.Circle((pc15[0],pc15[1]),self.B[subjecta].sl[10,2],color='green',alpha=0.5)
+        # plt.axis('equal')
+        # ax = plt.gca()
+        # ax.add_patch(ci1015)
+        # #ax.add_patch(ci01)
+        # #ax.add_patch(ci100)
+        # #ax.add_patch(ci1015)
+        # #its = self.B[subjecta].intersectBody(A[iframe,:],B[iframe,:],topos=False,frameId=iframe)
+        # #x.set_title('frameId :'+str(iframe)+' '+str(its.T))
+        
+
+
+    # def showlink(self,a,b,technoa='HKB',technob='HKB',iframe=0,style='*b'):
+    #     """ show link configuation for a given frame
+
+    #     Parameters
+    #     ----------
+
+    #     a : int 
+    #         link index 
+    #     b : int 
+    #         link index
+    #     technoa : string 
+    #         default 'HKB'|'TCR'|'BS'
+    #     technob
+    #         default 'HKB'|'TCR'|'BS'
+    #     iframe
+    #     style
+
+    #     """
+    #     # display nodes
+    #     A,B = self.getlinkp(a,b,technoa=technoa,technob=technob)
+    #     A=A.values
+    #     B=B.values
+    #     a,ia,ba,subjecta,technoa = self.devmapper(a,technoa)
+    #     b,ib,bb,subjectb,technob = self.devmapper(b,technob)
+
+    #     if A.ndim==2:
+    #         plt.plot(A[iframe,0],A[iframe,1],'ob')
+    #         plt.text(A[iframe,0],A[iframe,1],a)
+    #     else:
+    #         plt.plot(A[0],A[1],'or')
+    #         #plt.text(A[0],A[1],a)
+
+    #     if B.ndim==2:
+    #         plt.plot(B[iframe,0],B[iframe,1],style)
+    #         plt.text(B[iframe,0]+0.1,B[iframe,1]+0.1,b)
+    #     else:
+    #         plt.plot(B[0],B[1],'ob')
+    #         plt.text(B[0],B[1],b)
+    #     plt.xlim(-6,6)
+    #     plt.ylim(-5,5)
+    #     # display body
+
+    #     #pc = self.B.d[:,2,iframe] + self.B.pg[:,iframe].T
+    #     pc0 = self.B[subjecta].d[:,0,iframe] + self.B[subjecta].pg[:,iframe].T
+    #     pc1 = self.B[subjecta].d[:,1,iframe] + self.B[subjecta].pg[:,iframe].T
+    #     pc15 = self.B[subjecta].d[:,15,iframe] + self.B[subjecta].pg[:,iframe].T
+    #     #plt.plot(pc0[0],pc0[1],'og')
+    #     #plt.text(pc0[0]+0.1,pc0[1],str(iframe))
+    #     #plt.plot(pc1[0],pc1[1],'og')
+    #     #plt.plot(pc15[0],pc15[1],'og')
+    #     #ci00   = plt.Circle((pc0[0],pc0[1]),self.B[subjecta].sl[0,2],color='green',alpha=0.6)
+    #     #ci01   = plt.Circle((pc1[0],pc1[1]),self.B[subjecta].sl[0,2],color='green',alpha=0.1)
+    #     #ci100 = plt.Circle((pc0[0],pc0[1]),self.B[subjecta].sl[10,2],color='red',alpha=0.1)
+    #     ci1015 = plt.Circle((pc15[0],pc15[1]),self.B[subjecta].sl[10,2],color='green',alpha=0.5)
+    #     plt.axis('equal')
+    #     ax = plt.gca()
+    #     ax.add_patch(ci1015)
+    #     #ax.add_patch(ci01)
+    #     #ax.add_patch(ci100)
+    #     #ax.add_patch(ci1015)
+    #     #its = self.B[subjecta].intersectBody(A[iframe,:],B[iframe,:],topos=False,frameId=iframe)
+    #     #x.set_title('frameId :'+str(iframe)+' '+str(its.T))
+    #     x,y,z,s,v = self.B[subjecta].dev[ba]['ant']._computemesh(po=A[iframe],T=)
 
     def visidev(self,a,b,technoa='HKB',technob='HKB',dsf=10):
         """ get link visibility status
