@@ -4225,12 +4225,20 @@ def qrdecomp(V):
     """ 
     Gram-Schmid orthonormalization of a set of `Nv` vectors, in-place. 
     using qr decomp
+
     Parameters 
-    ---------- 
+    ----------
+
     V : array, shape (3,Nv,nf) 
 
-    Notes
-    -----
+    Returns
+    -------
+
+    V : array, 
+
+
+    References
+    ----------
 
     from http://numpy-discussion.10968.n7.nabble.com/Efficient-orthogonalisation-with-scipy-numpy-td23635.html
 
@@ -4238,12 +4246,13 @@ def qrdecomp(V):
     # XXX: speed can be improved by using routines from scipy.lib.blas 
     # XXX: maybe there's an orthonormalization routine in LAPACK, too, 
     #      apart from QR. too lazy to check... 
+
     import copy
     nn = np.linalg.norm(V,axis=(1))
     for i in range(3):
         V[i,:,:]=V[i,:,:]/nn 
     lv = np.shape(V)[2]
-    V2=copy.deepcopy(V)
+    V2 = copy.deepcopy(V)
     for k in xrange(lv): 
         V[:,:,k],R = np.linalg.qr(V[:,:,k])
     # check where the vector along cylinder axis is colinear with the 1st basis axis

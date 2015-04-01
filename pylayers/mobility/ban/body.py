@@ -537,13 +537,14 @@ class Body(PyLayers):
             # 2.1 determine their positions
             # pccs = position of cylinder coordinates system (Nframe x Npts x 3)
             # determine associated vetors
+
             pccs = self._f[:,uccs,:]
 
             # vccs = vectors of cylinder coordinates system (Nframe x 3 x 3)
             vccs = self.d[:,kta,np.newaxis,:] - pccs[:,np.newaxis:,:].T
 
             # vccs = pccs[:,0,np.newaxis,:]-pccs[:,1:,:]
-            vccs=np.concatenate((ca[:,np.newaxis,:],vccs),axis=1)
+            vccs = np.concatenate((ca[:,np.newaxis,:],vccs),axis=1)
             self._ccs[self.dcyl[k],:,:,:]=geu.qrdecomp(vccs)
 
 
@@ -2011,6 +2012,8 @@ class Body(PyLayers):
 
 
 
+        Todo 
+        
         """
 
         defaults = {'frameId' : 0,
