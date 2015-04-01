@@ -456,7 +456,7 @@ class Body(PyLayers):
                 raise AttributeError(self.name +' is not in the MOCAP file :' +filename)
 
 
-            # in case of multiple body into the mocap file, 
+            # in case of multiple body into the mocap file,
             # mocap is restricted to nodes belonging to a single body.
             # the body is automatically selected by using the self.name
             # 
@@ -464,7 +464,7 @@ class Body(PyLayers):
             self._f =self._f[:,up,:]
             self._s=[s for s in self._s if self.name in s ]
             self._p=[p for p in self._p if self.name in p ]
-            
+
 
 
 
@@ -539,6 +539,7 @@ class Body(PyLayers):
             # 2.1 determine their positions
             # pccs = position of cylinder coordinates system (Nframe x Npts x 3)
             # determine associated vetors
+
             pccs = self._f[:,uccs,:]
 
             # vccs = vectors of cylinder coordinates system (3 x 2(Npt) x Nframe)
@@ -2046,6 +2047,8 @@ class Body(PyLayers):
 
 
 
+        Todo 
+        
         """
 
         defaults = {'frameId' : 0,

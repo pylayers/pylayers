@@ -5,8 +5,21 @@
 
 This module handles antennas
 An antenna can be loaded from various file formats among
-them ( .vsh2 .vsh3 .sh2 .sh3 .mat)
 
++ .vsh2 
++ .vsh3 
++ .sh2 
++ .sh3 
++ .mat
++ .trx
+
+Examples
+--------
+    >>> import matplotlib.pyplot as plt
+    >>> from pylayers.antprop.antenna import *
+    >>> A = Antenna('defant.trx')
+    >>> fig,ax = A.polar(fGHz=[2,3,4],phd=0)
+   
 
 Antenna Class
 =============

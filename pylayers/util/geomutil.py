@@ -4222,13 +4222,14 @@ def dmin3d(a,b,c,d):
 #     return V 
 
 
-def gram_schmidt(Vini,force_direct=True): 
-    """ 
+def gram_schmidt(Vini,force_direct=True):
+    """
     Gram-Schmidt orthonormalization of a set of `M` vectors, in-place. 
 
-    Parameters 
-    ---------- 
-     Vini : array, 
+    Parameters
+    ----------
+
+     Vini : array,
         shape (3,Nv,nf)  where number of vectors Nv = 3 and nf is an integer
     force_direct : boolean
         force basis to be direct (det>0)
@@ -4244,7 +4245,7 @@ def gram_schmidt(Vini,force_direct=True):
     >>> VG = geu.gram_schmid(V)
     """
 
-    
+
     # check direct basis
     if force_direct:
         per=permutations((0,1,2),3)
@@ -4278,24 +4279,32 @@ def gram_schmidt(Vini,force_direct=True):
 
     if force_direct:
         # assert det >0
-        assert len(np.where(np.linalg.det(np.rollaxis(V,2))<0)[0]) ==0 
+        assert len(np.where(np.linalg.det(np.rollaxis(V,2))<0)[0]) ==0
     # assert det != 0
-    assert len(np.where(np.linalg.det(np.rollaxis(V,2))==0.)[0]) ==0  
+    assert len(np.where(np.linalg.det(np.rollaxis(V,2))==0.)[0]) ==0
     return V
 
 
 
-def qrdecomp(V): 
-    """ 
-    Gram-Schmid orthonormalization of a set of `Nv` vectors, in-place. 
+def qrdecomp(V):
+    """
+    Gram-Schmid orthonormalization of a set of `Nv` vectors, in-place.
     using qr decomp
-    Parameters 
-    ---------- 
-    V : array, 
+
+    Parameters
+    ----------
+
+    V : array,
         shape (3,Nv,nf)  where number of vectors Nv = 3 and nf is an integer
 
-    Notes
-    -----
+    Returns
+    -------
+
+    V : array,
+
+
+    References
+    ----------
 
     from http://numpy-discussion.10968.n7.nabble.com/Efficient-orthogonalisation-with-scipy-numpy-td23635.html
 
@@ -4310,20 +4319,21 @@ def qrdecomp(V):
     >>> W = geu.qrdecomp(V)
     >>> assert np.allclose(abs(np.linalg.det(W[:,:,0])),1.0)
 
-    """ 
-    # XXX: speed can be improved by using routines from scipy.lib.blas 
-    # XXX: maybe there's an orthonormalization routine in LAPACK, too, 
-    #      apart from QR. too lazy to check... 
+    """
+    #  speed can be improved by using routines from scipy.lib.blas
+    #  maybe there's an orthonormalization routine in LAPACK, too,
+    #      apart from QR. too lazy to check...
+
     import copy
     # nn = np.linalg.norm(V,axis=(0))
 
     # # for i in range(3):
-    # #     V[i,:,:]=V[i,:,:]/nn 
+    # #     V[i,:,:]=V[i,:,:]/nn
 
     # V=V/nn
     lv = np.shape(V)[2]
-    V2=copy.deepcopy(V)
-    for k in xrange(lv): 
+    V2 = copy.deepcopy(V)
+    for k in xrange(lv):
         V[:,:,k],R = np.linalg.qr(V[:,:,k])
     # check where the vector along cylinder axis is colinear with the 1st basis axis
     # col = np.einsum('ij,ij->j',V[:,0,:],V2[:,0,:])
@@ -4333,7 +4343,7 @@ def qrdecomp(V):
     # V[:,:,ucol]=-V[:,:,ucol]
     import ipdb
     ipdb.set_trace()
-    return V 
+    return V
 
 
 

@@ -201,6 +201,15 @@ class Simul(PyLayers):
         self.traj = traj
 
     def load_CorSer(self,source):
+        """
+
+        Parameters
+        ----------
+
+        source :
+            name of simulation file to be loaded
+
+        """
 
         if isinstance(source.B,Body):
             B=[source.B]
@@ -237,6 +246,7 @@ class Simul(PyLayers):
         self.Nag = len(B)
         self.Nap = len(source.din)
         self.corser = source
+
     def _gen_net(self):
         """ generate Network and associated links
 
@@ -263,7 +273,10 @@ class Simul(PyLayers):
                 D[-1].ant['A1']['name'] = self.dpersons[p].dev[dev]['file']
                 D[-1].ant['antenna']= self.dpersons[p].dev[dev]['ant']
             N.add_devices(D, grp=p)
+        #
         # get access point devices
+        #
+        #
         for ap in self.dap:
             D = Device(self.dap[ap]['name'], ID=ap)
             D.ant['antenna']= antenna.Antenna(D.ant['A1']['name'])

@@ -847,6 +847,13 @@ class Bsignal(PyLayers):
         logy  : boolean
             default False
 
+        Returns
+        -------
+
+        fig 
+        ax : np.array of axes
+
+
         """
 
         defaults = {'iy'  :  -1,
