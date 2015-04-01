@@ -4242,6 +4242,7 @@ def qrdecomp(V):
     nn = np.linalg.norm(V,axis=(1))
     for i in range(3):
         V[i,:,:]=V[i,:,:]/nn 
+    #~ V=V/nn    
     lv = np.shape(V)[2]
     V2=copy.deepcopy(V)
     for k in xrange(lv): 

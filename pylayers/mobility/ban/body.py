@@ -138,7 +138,7 @@ class Body(PyLayers):
         self._multi_subject_mocap=multi_subject_mocap
 
         # extract name from _filebody
-
+   
         self.name = _filebody.replace('.ini','')
         di = self.load(_filebody,_filemocap,unit,_filewear)
         # if _filemocap != []:
@@ -154,11 +154,11 @@ class Body(PyLayers):
         #True
         self.cylfromc3d(centered=centered)
 
-        try:
-            self.ccsfromc3d(di)
-            self.mocapccs=True
-        except:
-            self.mocapccs=False
+        #~ try:
+        self.ccsfromc3d(di)
+        self.mocapccs=True
+        #~ except:
+            #~ self.mocapccs=False
 
         if isinstance(traj,tr.Trajectory):
             self.traj=traj
@@ -423,7 +423,7 @@ class Body(PyLayers):
                 self.dev[d]['uc3d'] = np.where(bd)[0]
 
 
-
+        self.di=di
         return(di)
 
 
@@ -518,6 +518,7 @@ class Body(PyLayers):
 
         self._dmn={n:un for un,n in enumerate(self._mocanodes)}
         self._ccs=np.empty((11,3,3,self.nframes))
+        
 
         for k,v in config['ccs'].items():
 
@@ -535,20 +536,27 @@ class Body(PyLayers):
             khe = self.sl[upart,1].astype(int)
             # 1.3 create cylinder axis vector
             ca = self.d[:,kta,:]-self.d[:,khe,:]
-
             # 2 . create 2 extra vectors
             # 2.1 determine their positions
             # pccs = position of cylinder coordinates system (Nframe x Npts x 3)
             # determine associated vetors
             pccs = self._f[:,uccs,:]
 
-            # vccs = vectors of cylinder coordinates system (Nframe x 3 x 3)
-            vccs = self.d[:,kta,np.newaxis,:] - pccs[:,np.newaxis:,:].T
+            # vccs = vectors of cylinder coordinates system ( 3 x 3 x Nframe)
+            vccs = (self.d[:,kta,np.newaxis,:]+self.d[:,khe,np.newaxis,:])/2. - pccs[:,:,:].T
+            #~ vccs = self.d[:,kta,np.newaxis,:] - pccs[:,:,:].T
+            
+            vect = (self._f[:,9,:]-self._f[:,50,:]).T
+            vccs1 = vect[:,np.newaxis,:]
 
             # vccs = pccs[:,0,np.newaxis,:]-pccs[:,1:,:]
             vccs=np.concatenate((ca[:,np.newaxis,:],vccs),axis=1)
+            import ipdb 
+            ipdb.set_trace() 
+        
             self._ccs[self.dcyl[k],:,:,:]=geu.qrdecomp(vccs)
-
+            self.mocapccs=True
+            
 
     def cylfromc3d(self,centered = False):
         """ Create cylinders from C3D file
@@ -1998,11 +2006,11 @@ class Body(PyLayers):
 
 
 
-            ax = phe-pta
-            cc = (pta+phe)/2.
-            l = np.sqrt(np.sum(ax**2))
-            cyl = visual.Cylinder(pos=(pta[0],pta[1],pta[2]),
-                       axis=(ax[0],ax[1],ax[2]), radius=cylrad*kwargs['widthfactor'],length=l)
+            #~ ax = phe-pta
+            #~ cc = (pta+phe)/2.
+            #~ l = np.sqrt(np.sum(ax**2))
+            #~ cyl = visual.Cylinder(pos=(pta[0],pta[1],pta[2]),
+                       #~ axis=(ax[0],ax[1],ax[2]), radius=cylrad*kwargs['widthfactor'],length=l)
 
 
             if kwargs['ccs']: 
@@ -2024,23 +2032,27 @@ class Body(PyLayers):
         if kwargs['pattern']:
             self.setacs()
             for key in self.dcs.keys():
-                Ant =  ant.Antenna(self.dev[key]['file'])
+                #~ Ant =  ant.Antenna(self.dev[key]['file'])
+#~ 
+                #~ if not hasattr(Ant,'SqG'):
+                    #~ Ant.Fsynth()
 
-                if not hasattr(Ant,'SqG'):
-                    Ant.Fsynth()
-
+                #~ U = self.dcs[key]
+                #~ V = Ant.SqG[kwargs['k'],:,:]
+                #~ T = self.acs[key]
                 U = self.dcs[key]
-                V = Ant.SqG[kwargs['k'],:,:]
-                T = self.acs[key]
+                pt = U[:,0]
+                pte  = np.repeat(pt[:,np.newaxis],3,axis=1)
+                mlab.quiver3d(pte[0],pte[1],pte[2],self.acs[key][0,:],self.acs[key][1,:],self.acs[key][2,:],scale_factor=2e2*self._unit)
 
-                Ant._show3(po=U[:,0],
-                           T=T,
-                           ilog=False,
-                           minr=0.01,
-                           maxr=0.2,
-                           newfig=False,
-                           title=False,
-                           colorbar=False)
+                #~ Ant._show3(po=U[:,0],
+                           #~ T=T,
+                           #~ ilog=True,
+                           #~ minr=0.01,
+                           #~ maxr=0.1,
+                           #~ newfig=False,
+                           #~ title=False,
+                           #~ colorbar=False)
 
         if kwargs['save']:
             fig = mlab.gcf()
@@ -2376,6 +2388,7 @@ class Body(PyLayers):
             bodylist.append('{<'+_filevelo+'.vect}\n')
 
         return(bodylist)
+
 
 
     def setccs(self,frameId=0,topos=False):

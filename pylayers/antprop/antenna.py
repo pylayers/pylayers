@@ -216,7 +216,7 @@ class Antenna(PyLayers):
         """
         defaults = {'directory': 'ant',
                     'nf':104,
-                    'polar':'v',
+                    'pol':'c',
                     'source':'satimo',
                     'ntheta':90,
                     'nphi':181,
@@ -225,8 +225,8 @@ class Antenna(PyLayers):
                     'p3':np.pi/6.,
                     't3':np.pi/6.,
                     'L':90,
-                    'fmin':0.8,
-                    'fmax':5.95,
+                    'fmin':2,
+                    'fmax':10,
                     'gm': 18,
                     'sllv':-18,
                     'hpbwv':6.2,
@@ -242,7 +242,9 @@ class Antenna(PyLayers):
         self.Nt = kwargs['ntheta']
         self.Np = kwargs['nphi']
         self.source = kwargs['source']
-        self.polar = kwargs['polar']
+        self.pol = kwargs['pol']
+        self.fmin = kwargs['fmin']
+        self.fmax = kwargs['fmax']
 
         # if typ has an extension it is a file
         if isinstance(typ,str):
@@ -499,7 +501,7 @@ class Antenna(PyLayers):
 
         assert not self.fromfile , 'Error : this is not a pattern antenna'
 
-        self.fa = np.linspace(2,10,self.Nf)
+        self.fa = np.linspace(self.fmin,self.fmax,self.Nf)
 
 
         if (th == []) and (ph == []):
@@ -541,15 +543,15 @@ class Antenna(PyLayers):
                 GdB  = GhdB+GvdB
                 self.sqG = np.sqrt(10**(GdB/10.))
                 self.SqG = self.sqG[None,...]*np.ones(self.Nf)[:,None,None]
-                if self.polar=='h':
-                    Fap = self.sqG
-                    Fat = np.zeros((len(self.theta),self.Nf))
-                if self.polar=='v':
-                    Fap = np.zeros((len(self.phi),self.Nf))
-                    Fat = self.sqG
-                if self.polar=='c':
-                    Fap = (1./sqrt(2))*self.sqG
-                    Faq = (1j/sqrt(2))*self.sqG
+                if self.pol=='h':
+                    Fap = self.SqG
+                    Fat = np.zeros((self.Nf,len(self.theta),len(self.phi)))
+                if self.pol=='v':
+                    Fap = np.zeros((self.Nf,len(self.theta),len(self.phi)))
+                    Fat = self.SqG
+                if self.pol=='c':
+                    Fap = (1./np.sqrt(2))*self.SqG
+                    Fat = (1j/np.sqrt(2))*self.SqG                    
                 self.evaluated = True
             else:
                 phi   = self.phi*180/np.pi-180
@@ -558,15 +560,16 @@ class Antenna(PyLayers):
                 GhdB = (-np.minimum(12*(phi/self.hpbwh)**2,self.fbrh)+self.gm)
                 GdB  = GhdB+GvdB
                 self.sqG = np.sqrt(10**(GdB/10.))
-                if self.polar=='h':
+                if self.pol=='h':
                     Fap = self.sqG
                     Fat = np.zeros((len(self.theta),self.Nf))
-                if self.polar=='v':
+                if self.pol=='v':
                     Fap = np.zeros((len(self.phi),self.Nf))
                     Fat = self.sqG
-                if self.polar=='c':
+                if self.pol=='c':
                     Fap = (1./sqrt(2))*self.sqG
-                    Faq = (1j/sqrt(2))*self.sqG
+                    Fat = (1j/sqrt(2))*self.sqG
+                   
 
         if self.typ == 'WirePlate':
 

@@ -1170,7 +1170,7 @@ class DLink(Link):
                    'si_mt':False,
                    'si_progress':False,
                    'diffraction':False,
-                   'ra_vectorized':True,
+                   'ra_vectorized':False,
                    'ra_ceil_height_meter':3,
                    'ra_number_mirror_cf':1,
                    'force':[],
@@ -1267,6 +1267,7 @@ class DLink(Link):
             self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])
 
         self.R = R
+        
 
         if self.R.nray == 0:
             raise NameError('No rays have been found. Try to re-run the simulation with a higher S.cutoff ')
@@ -1312,7 +1313,8 @@ class DLink(Link):
                 self.ir = self.H.applywavB(self.wav.sf)
             else:
                 self.ir = self.H.applywavB(self.wav.sfg)
-
+        plt.plot(H.tk,H.ak)
+        
         return self.H.ak, self.H.tk
         
  

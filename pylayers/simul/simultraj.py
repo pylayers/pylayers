@@ -108,7 +108,7 @@ class Simul(PyLayers):
             self.source = 'CorSer'
 
 
-
+        
         self._gen_net()
         self.SL = SLink()
         self.DL = DLink(L=self.L,verbose=self.verbose)
@@ -201,6 +201,7 @@ class Simul(PyLayers):
         self.Nap = len(self.dap.keys())
         self.traj = traj
 
+
     def load_CorSer(self,source):
 
 
@@ -265,7 +266,7 @@ class Simul(PyLayers):
             N.add_devices(D, grp=p)
         # get access point devices
         for ap in self.dap:
-            D = Device(self.dap[ap]['name'], ID=ap)
+            D = Device(self.dap[ap]['name'], ID=ap)            
             N.add_devices(D, grp='ap', p=self.dap[ap]['pos'])
         # create Network
         N.create()
@@ -321,7 +322,7 @@ class Simul(PyLayers):
             minb = self.N.node[na]['wstd'][wstd]['fbminghz']
             maxb = self.N.node[na]['wstd'][wstd]['fbmaxghz']
             self.DL.fGHz = np.linspace(minb, maxb, nf)
-        a, t = self.DL.eval(**kwargs)
+        a, t = self.DL.eval(**kwargs)        
 
         return a, t
 
@@ -514,7 +515,8 @@ class Simul(PyLayers):
                             print 'processing: ',na, ' <-> ', nb, 'wstd: ', w
                             print '-'*30
                         eng = 0
-                        self.evaldeter(na, nb, w,applywav=False)
+                        #self.evaldeter(na, nb, w,applywav=False)
+                        self.evaldeter(na, nb, w,applywav=False, force =['Ct','H'])
                         # if typ == 'OB':
                         #     self.evalstat(na, nb)
                         #     eng = self.SL.eng
