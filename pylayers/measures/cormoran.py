@@ -1516,7 +1516,7 @@ bernard
 
 
     def _computedistdf(self):
-        """Compute the ditance dataframe from distance matrix
+        """Compute the distance dataframe from distance matrix
         """
 
         if ('HK' in self.typ) or ('FULL' in self.typ):
@@ -1738,11 +1738,11 @@ bernard
         inname : boolean
             display infra strucutre node name
         innamesize : float,
-            size of name of infrastrucutre nodes (0.1)
+            size of name of infrastructure nodes (0.1)
         incolor: str
             color of infrastructure nodes ('r')
         insize
-            size of infrastrucutre nodes (0.1)
+            size of infrastructure nodes (0.1)
 
 
         camera : boolean
@@ -1752,6 +1752,11 @@ bernard
         camerasize  : float
             size of camera nodes (0.1)
 
+        Examples
+        --------
+            
+            >>> S  = Corser(6)
+            >>> S._show3()
 
 
 
@@ -3416,10 +3421,14 @@ bernard
         Parameters
         ----------
 
-        a
-        b
-        technoa
+        a : int 
+            link index 
+        b : int 
+            link index
+        technoa : string 
+            default 'HKB'|'TCR'|'BS'
         technob
+            default 'HKB'|'TCR'|'BS'
         iframe
         style
 
