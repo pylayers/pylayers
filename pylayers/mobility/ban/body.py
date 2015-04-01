@@ -352,6 +352,8 @@ class Body(PyLayers):
                     self.dev[section][option]=eval(devconf.get(section,option))
                 except:
                     self.dev[section][option]=devconf.get(section,option)
+                if option == 'file':
+                    self.dev[section]['ant']=ant.Antenna(self.dev[section]['file'])
 
 
         try:
@@ -2003,18 +2005,15 @@ class Body(PyLayers):
 
         if kwargs['pattern']:
             self.setacs()
-            if not hasattr(self,'dant'):
-                self.dant ={}
+            
             for key in self.dcs.keys():
-                if not self.dant.has_key(key):
-                    self.dant[key]=ant.Antenna(self.dev[key]['file'])
-                    self.dant[key].Fsynth()
-
+                if not hasattr(self.dev[key]['ant'],'SqG'):
+                    self.dev[key]['ant'].Fsynth()
                 U = self.dcs[key]
-                V = self.dant[key].SqG[kwargs['k'],:,:]
+                V = self.dev[key]['ant'].SqG[kwargs['k'],:,:]
                 T = self.acs[key]
 
-                self.dant[key]._show3(po=U[:,0],
+                self.dev[key]['ant']._show3(po=U[:,0],
                            T=T,
                            ilog=False,
                            minr=0.01,
