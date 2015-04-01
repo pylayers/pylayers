@@ -177,7 +177,7 @@ import shapely.geometry as shg
 import shapely.ops as sho
 from   descartes.patch import PolygonPatch
 from   shapely.wkt import loads
-from   itertools import combinations
+from   itertools import combinations,permutations
 
 
 COLOR = {
@@ -4221,36 +4221,118 @@ def dmin3d(a,b,c,d):
 #             V[:,j] -= np.vdot(V[:,j], V[:,k]) * V[:,k] 
 #     return V 
 
+
+def gram_schmid(Vini,force_direct=True): 
+    """ 
+    Gram-Schmid orthonormalization of a set of `M` vectors, in-place. 
+
+    Parameters 
+    ---------- 
+     Vini : array, 
+        shape (3,Nv,nf)  where number of vectors Nv = 3 and nf is an integer
+    force_direct : boolean
+        force basis to be direct (det>0)
+
+    Example
+    -------
+
+    >>> import pylayers.util.geomutil as geu
+    >>> import numpy as np
+    >>> Nv = 3
+    >>> Nframes = 10
+    >>> V = np.random.rand(3,Nv,Nframes)
+    >>> VG = geu.gram_schmid(V)
+    """
+
+    
+    # check direct basis
+    if force_direct:
+        per=permutations((0,1,2),3)
+        for p in per:
+            P = np.vstack((Vini[:,p[0],0],Vini[:,p[1],0],Vini[:,p[2],0]))
+            if np.linalg.det(P) >0 :
+                Vini = Vini[:,p,:]
+                break
+
+    v0=Vini[:,0,:]
+    v1=Vini[:,1,:]
+    v2=Vini[:,2,:]
+
+    n0 = np.linalg.norm(v0,axis=0)
+    vn0=v0/n0
+
+    pv10 = np.einsum('ij,ij->j',v1,vn0)
+    v1p = v1 - pv10*vn0
+    nv1 =  np.linalg.norm(v1p,axis=0)
+    vn1 = v1p/nv1
+
+
+    pv20 = np.einsum('ij,ij->j',v2,vn0)
+    pv21 = np.einsum('ij,ij->j',v2,vn1)
+
+    v2p = v2 - pv20*vn0 - pv21*vn1
+    nv2 =  np.linalg.norm(v2p,axis=0)
+    vn2 = v2p/nv2
+
+    V= np.hstack((vn0[:,None,:],vn1[:,None,:],vn2[:,None,:]))
+
+    if force_direct:
+        # assert det >0
+        assert len(np.where(np.linalg.det(np.rollaxis(V,2))<0)[0]) ==0 
+    # assert det != 0
+    assert len(np.where(np.linalg.det(np.rollaxis(V,2))==0.)[0]) ==0  
+    return V
+
+
+
 def qrdecomp(V): 
     """ 
     Gram-Schmid orthonormalization of a set of `Nv` vectors, in-place. 
     using qr decomp
     Parameters 
     ---------- 
-    V : array, shape (3,Nv,nf) 
+    V : array, 
+        shape (3,Nv,nf)  where number of vectors Nv = 3 and nf is an integer
 
     Notes
     -----
 
     from http://numpy-discussion.10968.n7.nabble.com/Efficient-orthogonalisation-with-scipy-numpy-td23635.html
 
+    Example
+    -------
+    >>> import numpy as np
+    >>> import pylayers.util.geomutil as geu
+    >>> u=np.random.rand(3,1,10)
+    >>> v=np.random.rand(3,1,10)
+    >>> w=np.random.rand(3,1,10)
+    >>> V = np.hstack((u,v,w))
+    >>> W = geu.qrdecomp(V)
+    >>> assert np.allclose(abs(np.linalg.det(W[:,:,0])),1.0)
+
     """ 
     # XXX: speed can be improved by using routines from scipy.lib.blas 
     # XXX: maybe there's an orthonormalization routine in LAPACK, too, 
     #      apart from QR. too lazy to check... 
     import copy
-    nn = np.linalg.norm(V,axis=(1))
-    for i in range(3):
-        V[i,:,:]=V[i,:,:]/nn 
+    # nn = np.linalg.norm(V,axis=(0))
+
+    # # for i in range(3):
+    # #     V[i,:,:]=V[i,:,:]/nn 
+
+    # V=V/nn
     lv = np.shape(V)[2]
     V2=copy.deepcopy(V)
     for k in xrange(lv): 
         V[:,:,k],R = np.linalg.qr(V[:,:,k])
     # check where the vector along cylinder axis is colinear with the 1st basis axis
-    col = np.einsum('ij,ij->j',V[:,0,:],V2[:,0,:])
-    ucol = np.where(col < 0)
-    V[:,:,ucol]=-V[:,:,ucol]
-
+    # col = np.einsum('ij,ij->j',V[:,0,:],V2[:,0,:])
+    # ucol = np.where(col < 0)
+    # import ipdb
+    # ipdb.set_trace()
+    # V[:,:,ucol]=-V[:,:,ucol]
+    import ipdb
+    ipdb.set_trace()
     return V 
 
 
