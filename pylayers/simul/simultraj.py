@@ -273,14 +273,21 @@ class Simul(PyLayers):
             for dev in self.dpersons[p].dev:
                 D.append(
                     Device(self.dpersons[p].dev[dev]['name'], ID=dev))
+
+                D[-1].ant['A1']['name'] = self.dpersons[p].dev[dev]['file']
+                D[-1].ant['antenna']= self.dpersons[p].dev[dev]['ant']
             N.add_devices(D, grp=p)
         #
         # get access point devices
         #
         #
         for ap in self.dap:
-            D = Device(self.dap[ap]['name'], ID=ap)            
+
+            D = Device(self.dap[ap]['name'], ID=ap)
+            D.ant['antenna']= antenna.Antenna(D.ant['A1']['name'])
+
             N.add_devices(D, grp='ap', p=self.dap[ap]['pos'])
+            
         # create Network
         N.create()
         self.N = N
@@ -325,8 +332,11 @@ class Simul(PyLayers):
 
         # todo in network :
         # take into consideration the postion and rotation of antenna and not device
+        self.DL.Aa = self.N.node[na]['ant']['antenna']
         self.DL.a = self.N.node[na]['p']
         self.DL.Ta = self.N.node[na]['T']
+
+        self.DL.Ab = self.N.node[nb]['ant']['antenna']
         self.DL.b = self.N.node[nb]['p']
         self.DL.Tb = self.N.node[nb]['T']
         if fmode == 'center':
@@ -335,7 +345,10 @@ class Simul(PyLayers):
             minb = self.N.node[na]['wstd'][wstd]['fbminghz']
             maxb = self.N.node[na]['wstd'][wstd]['fbmaxghz']
             self.DL.fGHz = np.linspace(minb, maxb, nf)
-        a, t = self.DL.eval(**kwargs)        
+
+
+        a, t = self.DL.eval(**kwargs)
+
 
         return a, t
 
