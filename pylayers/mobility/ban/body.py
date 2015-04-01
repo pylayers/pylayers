@@ -154,11 +154,11 @@ class Body(PyLayers):
         #True
         self.cylfromc3d(centered=centered)
 
-        #~ try:
-        self.ccsfromc3d(di)
-        self.mocapccs=True
-        #~ except:
-            #~ self.mocapccs=False
+        try:
+            self.ccsfromc3d(di)
+            self.mocapccs=True
+        except:
+            self.mocapccs=False
 
         if isinstance(traj,tr.Trajectory):
             self.traj=traj
