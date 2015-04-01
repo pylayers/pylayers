@@ -2002,24 +2002,27 @@ class Body(PyLayers):
 
         if kwargs['pattern']:
             self.setacs()
+            if not hasattr(self,'dant'):
+                self.dant ={}
             for key in self.dcs.keys():
-                Ant =  ant.Antenna(self.dev[key]['file'])
-
-                if not hasattr(Ant,'SqG'):
-                    Ant.Fsynth()
+                if not self.dant.has_key(key):
+                    self.dant[key]=ant.Antenna(self.dev[key]['file'])
+                    self.dant[key].Fsynth()
+                    print "nonr"
 
                 U = self.dcs[key]
-                V = Ant.SqG[kwargs['k'],:,:]
+                V = self.dant[key].SqG[kwargs['k'],:,:]
                 T = self.acs[key]
 
-                Ant._show3(po=U[:,0],
+                self.dant[key]._show3(po=U[:,0],
                            T=T,
                            ilog=False,
                            minr=0.01,
                            maxr=0.2,
                            newfig=False,
                            title=False,
-                           colorbar=False)
+                           colorbar=False,
+                           )
         if kwargs['save']:
             fig = mlab.gcf()
             mlab.savefig('Body.png',figure=fig)
