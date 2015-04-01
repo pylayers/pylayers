@@ -454,7 +454,7 @@ class Body(PyLayers):
                 raise AttributeError(self.name +' is not in the MOCAP file :' +filename)
 
 
-            # in case of multiple body into the mocap file, 
+            # in case of multiple body into the mocap file,
             # mocap is restricted to nodes belonging to a single body.
             # the body is automatically selected by using the self.name
             # 
@@ -462,7 +462,7 @@ class Body(PyLayers):
             self._f =self._f[:,up,:]
             self._s=[s for s in self._s if self.name in s ]
             self._p=[p for p in self._p if self.name in p ]
-            
+
 
 
 
@@ -515,9 +515,9 @@ class Body(PyLayers):
 
         self._dmn={n:un for un,n in enumerate(self._mocanodes)}
         self._ccs=np.empty((11,3,3,self.nframes))
+        # T10 5 strn 7
 
         for k,v in config['ccs'].items():
-
             # clean bracket and coma
             vc = v.split('[')[1].split(']')[0].split(',')
             # get position in uc3d of marker
@@ -540,13 +540,28 @@ class Body(PyLayers):
 
             pccs = self._f[:,uccs,:]
 
-            # vccs = vectors of cylinder coordinates system (Nframe x 3 x 3)
-            vccs = self.d[:,kta,np.newaxis,:] - pccs[:,np.newaxis:,:].T
-
+            # vccs = vectors of cylinder coordinates system (3 x 2(Npt) x Nframe)
+            vccs = self.d[:,kta,np.newaxis,:] - pccs[:,:,:].T
             # vccs = pccs[:,0,np.newaxis,:]-pccs[:,1:,:]
-            vccs = np.concatenate((ca[:,np.newaxis,:],vccs),axis=1)
-            self._ccs[self.dcyl[k],:,:,:]=geu.qrdecomp(vccs)
+            # vccs = vectors of cylinder coordinates system (3 x 3(Npt) x Nframe)
+            # import ipdb
+            # ipdb.set_trace()
 
+            vccs=np.concatenate((ca[:,np.newaxis,:],vccs),axis=1)
+            self._ccs[self.dcyl[k],:,:,:]=geu.gram_schmidt(vccs)
+
+
+
+
+            # check ccs continuity
+            #~ W=self._ccs[self.dcyl[k],:,:,:]
+            #~ W1=W[:,:,:-1]
+            #~ W2=W[:,:,1:]
+            #~ W1r=np.rollaxis(W1,2)
+            #~ W2r=np.rollaxis(W2,2) 
+            #~ W2ri=np.linalg.inv(W2r)
+            #~ R=np.einsum('ijk,ikl->ijl',W1r,W2ri)
+            #~ assert len(np.where(np.linalg.det(R)<1e-9)[0]) <1
 
     def cylfromc3d(self,centered = False):
         """ Create cylinders from C3D file
@@ -946,6 +961,12 @@ class Body(PyLayers):
         # vt = traj[kt+1,1:] - traj[kt,1:]
 
         return(kf,kt,vsn,wsn,vtn,wtn)
+
+    def time2frame(self,t):
+        return np.where(self.time<=15)[0][-1]
+
+    def frame2time(self,f):
+        return self.time[f]
 
     def settopos(self,traj=[],t=0,cs=True,treadmill=False,p0=np.array(([0.,0.]))):
         """ translate the body on a time stamped trajectory
@@ -1814,6 +1835,7 @@ class Body(PyLayers):
                     'devtyp':[],
                     'k':0,
                     'save':False,
+                    'mocanodes':False,
                     'returnfig':False}
 
         for k in defaults:
@@ -1873,6 +1895,18 @@ class Body(PyLayers):
         # partnames = [self.name +' ' +self.idcyl[k] for k in range(self.ncyl)]
         # [f.children[k].__setattr__('name', partnames[k]+str(k))
         #  for k in range(self.ncyl)]
+
+        if kwargs['mocanodes']:
+            center = self.pg[:,fId]
+            X=self._f[fId,:,:].T
+            mlab.points3d(X[0,:],X[1,:], X[2,:], 
+                          scale_factor=20*self._unit, 
+                          resolution=10)
+            [mlab.text3d(X[0,i],
+                                 X[1,i],
+                                 X[2,i],self._p[i].split(':')[1],
+                                        scale=0.01,
+                                        color=(1,0,0)) for i in range(len(self._p)) ]
 
         if kwargs['name']:
             uupper = np.where(X[2]==X[2].max())[0]
@@ -1969,24 +2003,26 @@ class Body(PyLayers):
 
         if kwargs['pattern']:
             self.setacs()
+            if not hasattr(self,'dant'):
+                self.dant ={}
             for key in self.dcs.keys():
-                Ant =  ant.Antenna(self.dev[key]['file'])
-
-                if not hasattr(Ant,'SqG'):
-                    Ant.Fsynth()
+                if not self.dant.has_key(key):
+                    self.dant[key]=ant.Antenna(self.dev[key]['file'])
+                    self.dant[key].Fsynth()
 
                 U = self.dcs[key]
-                V = Ant.SqG[kwargs['k'],:,:]
+                V = self.dant[key].SqG[kwargs['k'],:,:]
                 T = self.acs[key]
 
-                Ant._show3(po=U[:,0],
+                self.dant[key]._show3(po=U[:,0],
                            T=T,
                            ilog=False,
                            minr=0.01,
                            maxr=0.2,
                            newfig=False,
                            title=False,
-                           colorbar=False)
+                           colorbar=False,
+                           )
         if kwargs['save']:
             fig = mlab.gcf()
             mlab.savefig('Body.png',figure=fig)
