@@ -232,6 +232,38 @@ def dist(A,B,C,D,alpha,beta):
     g =np.einsum('ijk...,ijk...->jk...',X-Y,X-Y)
 
     return(f,g)
+    
+def dmin3d_old(A,B,C,D):
+    """
+     dmin3d evaluate the minimal distance between 2 set of segments 
+      
+     this should be vectorized 
+      
+      A : (3xN) initial point segment 1
+      B   (3xN) end point segment 1
+      C   (3xN) starting point segment 2
+      D   (3xN) end point segment 2  
+    """
+    
+    AC=C-A
+    CD=D-C
+    BA=A-B
+    
+    u0 = np.dot(AC,AC)
+    u4 = np.dot(BA,BA)
+    u5 = np.dot(CD,CD)
+    u1 = np.dot(BA,AC)
+    u2 = np.dot(CD,AC)
+    u3 = np.dot(CD,BA) 
+    
+       
+    den   = u4*u5-u3*u3
+    alpha = (u2*u3-u1*u5)/(1.*den)
+    beta  = (u1*u3-u2*u4)/(1.*den)
+    dmin = np.sqrt(u0 + 2*(alpha*u1+beta*u2+alpha*beta*u3)+alpha*alpha*u4+ beta*beta*u5) 
+    #~ print ' dmin**2 ', u0 + 2*(alpha*u1+beta*u2+alpha*beta*u3)+alpha*alpha*u4+ beta*beta*u5
+    #~ print 'dmin', dmin
+    return(alpha,beta,dmin)
 
 def dmin3d(A,B,C,D):
     """

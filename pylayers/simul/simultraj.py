@@ -108,7 +108,7 @@ class Simul(PyLayers):
             self.source = 'CorSer'
 
 
-
+        
         self._gen_net()
         self.SL = SLink()
         self.DL = DLink(L=self.L,verbose=self.verbose)
@@ -181,6 +181,7 @@ class Simul(PyLayers):
 
         # resample trajectory
         for ut, t in enumerate(traj):
+            
             if t.typ == 'ag':
                 person = Body(t.name + '.ini')
                 tt = t.time()
@@ -200,6 +201,7 @@ class Simul(PyLayers):
         self.Nap = len(self.dap.keys())
         self.traj = traj
 
+
     def load_CorSer(self,source):
         """
 
@@ -211,18 +213,20 @@ class Simul(PyLayers):
 
         """
 
-        if isinstance(source.B,Body):
-            B=[source.B]
-        elif isinstance(source.B,list):
-            B=source.B
-        elif isinstance(source.B,dict):
+
+        if isinstance(source.B.values(),Body):
+            B=[source.B.values()]
+        elif isinstance(source.B.values(),list):
+
             B=source.B.values()
         else:
             raise AttributeError('CorSer.B must be a list or a Body')
 
         self.L=source.L
         self.traj = tr.Trajectories()
+
         self.traj.Lfilename=self.L.filename
+
 
         for b in B:
             self.dpersons.update({b.name: b})
@@ -278,8 +282,10 @@ class Simul(PyLayers):
         #
         #
         for ap in self.dap:
+
             D = Device(self.dap[ap]['name'], ID=ap)
             D.ant['antenna']= antenna.Antenna(D.ant['A1']['name'])
+
             N.add_devices(D, grp='ap', p=self.dap[ap]['pos'])
             
         # create Network
@@ -340,7 +346,9 @@ class Simul(PyLayers):
             maxb = self.N.node[na]['wstd'][wstd]['fbmaxghz']
             self.DL.fGHz = np.linspace(minb, maxb, nf)
 
+
         a, t = self.DL.eval(**kwargs)
+
 
         return a, t
 
@@ -520,6 +528,7 @@ class Simul(PyLayers):
         self._time=self.get_sim_time(lt)
         init = True
         for ut, t in enumerate(lt):
+            print 'ut =', ut, 't = ', t
             self.ctime = t
             self.update_pos(t)
             # print self.N.__repr__()
@@ -532,7 +541,8 @@ class Simul(PyLayers):
                             print 'processing: ',na, ' <-> ', nb, 'wstd: ', w
                             print '-'*30
                         eng = 0
-                        self.evaldeter(na, nb, w,applywav=False)
+                        #self.evaldeter(na, nb, w,applywav=False)
+                        self.evaldeter(na, nb, w,applywav=False, force =['Ct','H'])
                         # if typ == 'OB':
                         #     self.evalstat(na, nb)
                         #     eng = self.SL.eng
@@ -572,7 +582,7 @@ class Simul(PyLayers):
                                               'fbminghz', 'fbmaxghz', 'fstep', 'aktk_id',
                                               'sig_id', 'ray_id', 'Ct_id', 'H_id'
                                               ],index=[self._time[ut]])
-
+                        
                         if not self.check_exist(df):
                             self.data = self.data.append(df)
                             # self._index = self._index + 1
@@ -581,7 +591,7 @@ class Simul(PyLayers):
                             init=False
 
                             # save pandas self.data
-                            self.savepd()
+                            #self.savepd()
                             # save ak tauk
                             self._saveh5(ut, na, nb, w)
 
@@ -1002,6 +1012,7 @@ class Simul(PyLayers):
 
 
             fh5.close()
+         
         except:
             fh5.close()
             raise NameError('Simultraj._saveh5: issue when writting h5py file')

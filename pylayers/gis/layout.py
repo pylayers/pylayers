@@ -265,7 +265,7 @@ from pylayers.util import cone
 
 # Handle furnitures
 import pylayers.gis.furniture as fur
-import pylayers.gis.osmparser as osm
+#import pylayers.gis.osmparser as osm
 #from pylayers.gis import cycles as Cycls
 from pylayers.gis import cycles as cycl # new version of cycles
 from pylayers.gis.selectl import SelectL
@@ -4953,7 +4953,9 @@ class Layout(PyLayers):
             if convex:
                 #Make the layout convex in regard of the outddor
                 self._convex_hull()
+
                 # #Ensure convexity of all cycles
+
                 self._convexify()
                 # # re-attach new cycles
                 # self.buildGt()
@@ -5466,8 +5468,10 @@ class Layout(PyLayers):
 
         """
 
+
         #1 - Find differences between the convex hull and the Layout contour
         #     The result of the difference are polygons
+
         ch = self.ma.convex_hull
         P = ch.difference(self.ma)
         polys = []
@@ -5484,7 +5488,9 @@ class Layout(PyLayers):
             # p.coorddeter()
             uaw = np.where(p.vnodes == 0)
             for aw in uaw :
+
                 #2 - non existing segments are created as airwalls
+
                 awid = self.add_segment(p.vnodes[aw-1][0], p.vnodes[aw+1][0], name='AIR')
                 p.vnodes[aw] = awid
                 G = nx.subgraph(self.Gs,p.vnodes)
@@ -5495,11 +5501,13 @@ class Layout(PyLayers):
                 self.Gt.pos[ncy] = tuple(cy.g)
                 # WARNING
                 # recreate polygon is mandatory otherwise cycle.cycle and polygon.vnodes
+
                 #are shifted.
                 self.Gt.node[ncy]['polyg'] = p#geu.Polygon(p.xy,cy.cycle)
                 self.Gt.node[ncy]['isopen'] = True
                 self.Gt.node[ncy]['indoor'] = False
                 #3 - add link between created cycle and outdoor
+
                 self.Gt.add_edge(ncy, 0)
                 # 4 - search and add link between the created cycle and indoor cycles
                 for k in self.Gt.nodes():
@@ -5514,21 +5522,25 @@ class Layout(PyLayers):
 
                             self.Gt.add_edge(ncy, k,segment= segment)
 
+
                 #5 - Update Gs
                 for v in filter(lambda x: x>0,p.vnodes):
                     # add new ncycle to Gs for the new airwall
                     #that new airwall always separate the new created cycle
                     #and the outdoor cycle
+
                     if v == awid :
                         self.Gs.node[awid]['ncycles']=[ncy,0]
                     # other wise update the cycles seen by segments
                     else :
                         cy = self.Gs.node[v]['ncycles'].pop()
+
                         #if the pop cycle is the outdoor cycle,
                         # replace it with the new cycle
                         if cy == 0:
                             self.Gs.node[v]['ncycles'].append(ncy)
                         #else replace old value with [pos cycle , new cycle]
+
                         else:
                             self.Gs.node[v]['ncycles']=[cy,ncy]
                 lncy.append(ncy)
@@ -5566,10 +5578,12 @@ class Layout(PyLayers):
         sp.spatial.Delaunay
 
         """
+
         #function for debug purpose
         def polyplot(poly,pgs=True):
             if pgs:
                 fig,ax=self.showG('s')
+
 
             color=['r','b','g']*10
             for ip, p in enumerate(poly):
@@ -5578,7 +5592,9 @@ class Layout(PyLayers):
         lacy =[]
         Gt=copy.deepcopy(self.Gt)
         for n in self.Gt.nodes():
+
             #if indoor cycle
+
             if n > 0:
 
                 ncy=max(self.Gt.nodes())
@@ -5589,11 +5605,13 @@ class Layout(PyLayers):
 
                 if not self.Gt.node[n]['polyg'].isconvex():#self.Gt.node[n]['indoor']:
                     no = self.Gt.node[n]['cycle'].cycle
+
                     cvex,ccve= self.Gt.node[n]['polyg'].ptconvex2()
                     # keep all convex point (in + out) to build teh delaunay triangulation
                     ucs= cvex+ccve
 
                     if len(ucs) !=0:
+
                         pucs = array(map(lambda x: self.Gs.pos[x], ucs))
                         pucs = np.vstack((pucs,pucs[-1]))
                         ####
@@ -5606,7 +5624,9 @@ class Layout(PyLayers):
                             naw = []
                             for t in tri:
                                 ts = geu.Polygon(pucs[t])
+                                
                                 # check if the new polygon is contained into
+
                                 #the original polygon (non guaratee by Delaunay)
                                 C = self.Gt.node[n]['polyg'].contains(ts)
                                 if C:
@@ -5623,6 +5643,7 @@ class Layout(PyLayers):
                                                    ,name='AIR'))
                                     polys.append(cp)
 
+
                         #
                         # 3. merge delaunay triangulation in order to obtain
                         #   the larger convex polygons partioning
@@ -5634,7 +5655,9 @@ class Layout(PyLayers):
                             for ip2,p2 in enumerate(polys):
                                 conv=False
                                 inter = p.intersection(p2)
+
                                 #if 2 triangles have a common segment
+
                                 pold = p
                                 if isinstance(inter,sh.LineString):
                                     p = p + p2
@@ -5678,6 +5701,7 @@ class Layout(PyLayers):
                             ptmp.setvnodes(self)
                             ncpol.append(ptmp)
                             vnodes.extend(ptmp.vnodes)
+
                         #air walls to be deleted (because origin Delaunay triangle
                         # has been merged )
                         daw = filter(lambda x: x not in vnodes,naw)
@@ -5685,6 +5709,7 @@ class Layout(PyLayers):
                         for d in daw:
                             self.del_segment(d,verbose=False)
                         #remove old cycle
+
                         self.Gt.remove_node(n)
                         nbpolys=len(ncpol)
 
@@ -5747,6 +5772,7 @@ class Layout(PyLayers):
         # #add outside cycle to Gs.node[x]['ncycles']
         # self._addoutcy()
         # #update interaction list into Gt.nodes (cycles)
+
         # self._interlist(nodelist=lacy)
 
     def buildGw(self):
@@ -7085,6 +7111,9 @@ class Layout(PyLayers):
             #
 
             edges = G.edges()
+            
+            if kwargs['edgelist'] != []:
+                edges = kwargs['edgelist']
 
             rle = range(len(edges))
 
@@ -8735,6 +8764,7 @@ class Layout(PyLayers):
 
 
         # manage floor
+
 
         #if Gt doesn't exists
 

@@ -45,8 +45,10 @@ def getchannel(emplacement = 'trunku',intersection = 1):
         'calfr':{'mu0':-62.93,'sigma0':1.69},
         }
 
-    condition = 'nlos'
-    if intersection == 1:
+
+    condition ='nlos'
+    if intersection ==1:
+
         condition = 'los'
 
     if emplacement == 'trunku':

@@ -366,7 +366,9 @@ class SSHCoeff(PyLayers):
         Ey = np.sum(np.abs(self.Cy.s2) ** 2, axis=0)
         Ez = np.sum(np.abs(self.Cz.s2) ** 2, axis=0)
 
+
         # calculates total Energy
+
         E = Ex + Ey + Ez
 
         ind = np.nonzero(E > (E.max() * threshold))[0]
@@ -406,7 +408,58 @@ class SSHCoeff(PyLayers):
         self.Cz.ind3 = Cz.ind3
         self.Cz.s3 = Cz.s3
         self.Cz.k2 = Cz.k2
-
+    
+    def energy(self,
+               comp ='m',
+               l =  0, 
+               m = 0,
+               axis ='level',
+               ifreq = 0,
+               bfreq = False):
+        
+        """calculates energy
+        
+        Parameters
+        ----------
+        comp : string 
+                define the component energy to be calculated
+                comp ={'x':cx comp , 'y': cy comp, 'z': cz comp, 'm': modulus}
+        l = int
+            level
+        m : int
+            mode
+        axis  = string
+                define the axis to calculate the energy 
+                axis = {'level', 'mode','total'}
+        ifreq : int
+                frequency index 
+                if ifreq < 0 : the enrgy is calculated for all frequencies 
+        bfreq: boolean
+                If True : the Energy is averaged over the frequency (if ifreq <0)       
+        
+        Return
+        ------
+        E : float or numpy array
+            Energy 
+        
+        Notes
+        -----
+        """
+        
+        if comp == 'x':
+            E = self.Cx.energy(l = l, m=m, axis =axis,ifreq = ifreq,bfreq =bfreq)
+        else:
+            if comp == 'y':
+                E = self.Cy.energy(l = l, m=m, axis =axis,ifreq = ifreq,bfreq =bfreq)
+            else:
+                if comp == 'z':
+                    E = self.Cz.energy(l = l, m=m, axis =axis,ifreq = ifreq,bfreq =bfreq)
+                else:
+                    E = self.Cx.energy(l = l, m=m, axis =axis,ifreq = ifreq,bfreq =bfreq)+ self.Cy.energy(l = l, m=m, axis =axis,ifreq = ifreq,bfreq =bfreq) + self.Cz.energy(l = l, m=m, axis =axis,ifreq = ifreq,bfreq =bfreq)
+                
+        
+                   
+        return E
 
 class SCoeff(PyLayers):
     """ Scalar Spherical Harmonics Coefficient
@@ -712,6 +765,117 @@ class SCoeff(PyLayers):
             if yl:
                 plt.ylabel('Integrated Module of coeff')
 
+    def lmreshape(self,
+                  ifreq = -1):
+        
+        """ level and mode reshaping
+
+        Parameters
+        ----------
+        ifreq : int 
+                frequency index, if ifreq == 1, the reshaping taks is done for 
+                all frequencies 
+                
+                
+        Returns
+        -------
+        coeff_lm : numpy array shape = (Nfreq,(1+L),(1+2*L))
+                
+        
+        Notes 
+        -----
+        This reshaping task is done for coefficient typ = s2
+        the coefficient shape = (Nfrequency, (1+L)**2) where L is the 
+        maximum Level 
+        
+        """
+        
+        
+        
+        sh = self.s2.shape
+        L = int(np.sqrt(sh[1]) - 1) # maximum level extraction
+         
+        if ifreq > 0:
+            coeff = self.s2[ifreq].reshape((1,sh[1]))
+            coeff_lm = np.zeros(shape = (1,1+L, 1+2*L), dtype = complex )
+        else :
+            coeff = self.s2
+            coeff_lm = np.zeros(shape = (sh[0],1+L, 1+2*L), dtype = complex )
+
+        for m in range(0,1+L):
+            im = m*(2*L+3-m)/2
+            coeff_lm[:,m:L+1,L+m] = coeff[:,im:im +L+1-m]
+
+        for m in range(1,L):
+            im = m*(2*L+3-m)/2
+            bind = (1+L)*(L+2)/2 + im-L-1
+            coeff_lm[:,m:L+1,L-m]= coeff[:,bind: bind + L-m+1]
+
+        return coeff_lm
+
+    def energy(self,
+               l =  0, 
+               m = 0,
+               axis ='level',
+               ifreq = 0,
+               bfreq = False):
+        
+        """calculates energy
+        
+        Parameters
+        ----------
+       
+        l = int
+            level
+        m : int
+            mode
+        axis  = string
+                define the axis to calculate the energy 
+                axis = {'level', 'mode','total'}
+        ifreq : int
+                frequency index 
+                if ifreq < 0 : the enrgy is calculated for all frequencies 
+        bfreq: boolean
+                If True : the Energy is averaged over the frequency (if ifreq <0)       
+        
+        Return
+        ------
+        E : float or numpy array
+            Energy 
+        
+        Notes
+        -----
+        """
+        clm = self.lmreshape(ifreq = ifreq)
+        sh = clm.shape
+        L =int(sh[1]-1)        
+        if axis  == 'level':
+            if bfreq == False:
+                E = np.sum(np.abs(clm[:,l,:])**2,axis= 1)
+            else:
+                E = np.average(np.sum(np.abs(clm[:,l,:])**2,axis= 1))
+        
+            
+        else:
+            if axis == 'mode':
+                if bfreq == False:
+                    E = np.sum(np.abs(clm[:,:,L+m])**2,axis= 1)
+                else:
+                    E = np.average(np.sum(np.abs(clm[:,:,L+m])**2,axis= 1))
+                
+                
+            else:
+                if bfreq == False:
+                    E = np.sum(np.sum(np.abs(clm[:,:,:])**2,axis= 1),axis =1)
+                else:
+                    E = np.average(np.sum(np.sum(np.abs(clm[:,:,:])**2,axis= 1), axis= 1))   
+        
+                   
+        return E
+        
+        
+        
+        
     def show(self,
              typ='s1',
              k = 0,

@@ -1782,6 +1782,7 @@ class TUsignal(TBsignal, Usignal):
         print 'ymax :', self.y.max()
 
 
+
     def awgn(self,PSDdBmpHz=-174,snr=0,seed=1,typ='psd',R=50):
         """ add a white Gaussian noise
 
@@ -1830,6 +1831,7 @@ class TUsignal(TBsignal, Usignal):
         sn.x = self.x
 
         return sn
+
 
     def fft(self, shift=False):
         """  forward fast Fourier transform

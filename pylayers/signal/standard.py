@@ -302,6 +302,7 @@ class Wstandard(dict):
         band : int /float/string
             'bandnb' : band number
             'fghz' : frequency
+
             'bandname' : band name
 
         info : string ('max'|'min'|'step')

@@ -64,8 +64,9 @@ import pylayers.mobility.ban.DeuxSeg as seg
 import doctest
 import itertools as itt
 from pylayers.util.project import *
+import itertools
 try:
-    from mayavi import mlab
+    from mayavi import mlab 
     from tvtk.tools import visual
 
 except:
@@ -137,7 +138,7 @@ class Body(PyLayers):
         self._multi_subject_mocap=multi_subject_mocap
 
         # extract name from _filebody
-
+   
         self.name = _filebody.replace('.ini','')
         di = self.load(_filebody,_filemocap,unit,_filewear)
         # if _filemocap != []:
@@ -150,7 +151,7 @@ class Body(PyLayers):
         #  campaign it is not required to center the body.
         #  centering makes sense only when using the topos projection
         #
-        #
+        #True
         self.cylfromc3d(centered=centered)
 
         try:
@@ -206,7 +207,7 @@ class Body(PyLayers):
         if 'pg' in dir(self):
             st = st + 'Centered : True'+'\n'
         #if 'mocapinfo' in dir(self):
-        #    st = st + str(self.mocapinfo)+'\n'
+        #    st = stTrue + str(self.mocapinfo)+'\n'
         if 'tmocap' in dir(self):
             st = st + 'Mocap Duration : ' + str(self.Tmocap)+'\n'
         if 'vmocap' in dir(self):
@@ -246,6 +247,7 @@ class Body(PyLayers):
             self.name = os.path.splitext(ne)[0]
         else :
             filebody = pyu.getlong(_filebody,pstruc['DIRBODY'])
+
         if not os.path.isfile(filebody):
             raise NameError(_filebody + ' cannot be found in'
                              + filebody)
@@ -291,10 +293,9 @@ class Body(PyLayers):
 
         self.ncyl = len(di['cylinder'].values())
 
+
         self.idcyl={}
         [self.idcyl.update({v:k}) for k,v in self.dcyl.items()]
-
-
 
         # if a mocap file is given in the config file
 
@@ -310,10 +311,12 @@ class Body(PyLayers):
         #
         # update devices dict from wearable file
         #
+
         try :
             del self.dev
         except:
             pass
+
         self.dev={}
 
 
@@ -422,7 +425,7 @@ class Body(PyLayers):
                 self.dev[d]['uc3d'] = np.where(bd)[0]
 
 
-
+        self.di=di
         return(di)
 
 
@@ -517,7 +520,9 @@ class Body(PyLayers):
 
         self._dmn={n:un for un,n in enumerate(self._mocanodes)}
         self._ccs=np.empty((11,3,3,self.nframes))
+
         # T10 5 strn 7
+
 
         for k,v in config['ccs'].items():
             # clean bracket and coma
@@ -534,13 +539,14 @@ class Body(PyLayers):
             khe = self.sl[upart,1].astype(int)
             # 1.3 create cylinder axis vector
             ca = self.d[:,kta,:]-self.d[:,khe,:]
-
             # 2 . create 2 extra vectors
             # 2.1 determine their positions
             # pccs = position of cylinder coordinates system (Nframe x Npts x 3)
             # determine associated vetors
 
+
             pccs = self._f[:,uccs,:]
+
 
             # vccs = vectors of cylinder coordinates system (3 x 2(Npt) x Nframe)
             vccs = self.d[:,kta,np.newaxis,:] - pccs[:,:,:].T
@@ -550,6 +556,7 @@ class Body(PyLayers):
             # ipdb.set_trace()
 
             vccs=np.concatenate((ca[:,np.newaxis,:],vccs),axis=1)
+
             self._ccs[self.dcyl[k],:,:,:]=geu.gram_schmidt(vccs)
 
 
@@ -564,6 +571,7 @@ class Body(PyLayers):
             #~ W2ri=np.linalg.inv(W2r)
             #~ R=np.einsum('ijk,ikl->ijl',W1r,W2ri)
             #~ assert len(np.where(np.linalg.det(R)<1e-9)[0]) <1
+
 
     def cylfromc3d(self,centered = False):
         """ Create cylinders from C3D file
@@ -876,6 +884,7 @@ class Body(PyLayers):
         wsn : planar vector orthogonal to vsn
         vtn : normalized speed vector along motion trajectory (target)
         wtn : planar vector orthogonal to wtn
+        alpha : parameter >= 0 df = smax <=1 df=0
 
         Notes
         -----
@@ -918,7 +927,7 @@ class Body(PyLayers):
         df = sk - ks*smax  # covered distance into the sequence
 
         kf = np.where(self.smocap>=df)[0][0]
-
+        alpha = (smax-df)/smax
         #tf = self.Tmocap/(1.0*self.nframes) # frame body time sampling period
         #timetraj = traj.time()
         #tt = timetraj[1]-timetraj[0]        # trajectory time sampling period
@@ -950,7 +959,7 @@ class Body(PyLayers):
         #
         # vt : speed vector along trajectory
         #
-
+        
         vt = np.array([traj['vx'][kt],traj['vy'][kt]])
         nvt = np.sqrt(np.dot(vt,vt))
         if nvt != 0:
@@ -962,7 +971,14 @@ class Body(PyLayers):
         # vt = traj[kt+1,1:] - traj[kt,1:]
         # vt = traj[kt+1,1:] - traj[kt,1:]
 
-        return(kf,kt,vsn,wsn,vtn,wtn)
+        return(kf,kt,vsn,wsn,vtn,wtn,alpha)
+
+
+
+
+    
+
+
 
     def time2frame(self,t):
         return np.where(self.time<=15)[0][-1]
@@ -971,6 +987,7 @@ class Body(PyLayers):
         return self.time[f]
 
     def settopos(self,traj=[],t=0,cs=True,treadmill=False,p0=np.array(([0.,0.]))):
+
         """ translate the body on a time stamped trajectory
 
         Parameters
@@ -996,7 +1013,7 @@ class Body(PyLayers):
 
             >>> import numpy as np
             >>> import pylayers.mobility.trajectory as tr
-            >>> import pylayers.mobility.ban.body as body
+            >>> import pylayers.mobility.body.body as body
             >>> import matplotlib.pyplot as plt
             >>> time = np.arange(0,10,0.1)
             >>> v = 4000/3600.
@@ -1032,15 +1049,15 @@ class Body(PyLayers):
         # pta : target translation
         # ptb = pta+vtn : a point in the direction of trajectory
         #
-        # kt : trajectory integer index
-        # kf : frame integer index
+
 
 
         if not isinstance(traj,tr.Trajectory):
             traj = self.traj
 
 
-        kf,kt,vsn,wsn,vtn,wtn = self.posvel(traj,t)
+        kf,kt,vsn,wsn,vtn,wtn,alpha= self.posvel(traj,t)
+        self.toposFrameId = kf
         if self.mocap_loop:
 
             psa = np.array([0,0])
@@ -1052,6 +1069,7 @@ class Body(PyLayers):
                 pta = np.hstack((traj['x'].values[kt],traj['y'].values[kt]))
             ptb = pta + vtn
             ptc = pta + wtn
+
 
             self.centroid = pta
 
@@ -1065,10 +1083,17 @@ class Body(PyLayers):
             A[0:-1,0:-1] = a
             B[0:-1,:] = b
 
+            self.topos = (np.dot(A,alpha*self.d[:,:,kf]+(1-alpha)*self.d[:,:,kf])+B)
             #
             # TOPOS = A d + B     d == BODY at kf frame
             #
-            self.topos = (np.dot(A,self.d[:,:,kf])+B)
+            #self.topos = (np.dot(A,self.d[:,:,kf])+B)
+                
+
+                #
+                # TOPOS = A d + B     d == BODY at kf frame
+                #
+                #self.topos = (np.dot(A,self.d[:,:,kf])+B)
         else :
 
             self.topos = self.d[:,:,kf]
@@ -1085,6 +1110,36 @@ class Body(PyLayers):
         # if asked for calculation of coordinates systems
 
 
+        if cs:
+            self.setcs(topos=True)
+                
+    def settopos2(self,traj=[],t=0,cs=True):
+        
+        if not isinstance(traj,tr.Trajectory):
+                traj = self.traj
+
+        # t should be in the trajectory time range
+        assert ((t>=traj.tmin) & (t<=traj.tmax)),'posvel: t not in trajectory time range'          
+        kt  = int(np.floor((t-traj.tmin)/traj.ts))
+        kf = kt
+        
+
+        self.toposFrameId = kf
+       
+        self.topos = self.d[:,:,kf]
+        
+        vt = np.array([traj['vx'][kt],traj['vy'][kt]])
+        nvt = np.sqrt(np.dot(vt,vt))
+        if nvt != 0:
+            vtn = vt/nvt
+        else :
+            vtn=vt
+        self.vtopos = np.hstack((vtn,np.array([0])))[:,np.newaxis]
+        kta = self.sl[:,0].astype(int)
+        khe = self.sl[:,1].astype(int)
+        self._pta = np.array([self.topos[0, kta], self.topos[1, kta], self.topos[2, kta]])
+        self._phe = np.array([self.topos[0, khe], self.topos[1, khe], self.topos[2, khe]])
+        # if asked for calculation of coordinates systems
         if cs:
             self.setcs(topos=True)
 
@@ -1116,7 +1171,7 @@ class Body(PyLayers):
         self.setacs()
 
 
-    def setdcs(self, topos = True, frameId =0):
+    def setdcs(self, topos = False, frameId =0):
         """ set device coordinate system (dcs) from a topos
 
         This method evaluates the set of all dcs.
@@ -1146,7 +1201,7 @@ class Body(PyLayers):
 
             >>> import numpy as np
             >>> import pylayers.mobility.trajectory as tr
-            >>> import pylayers.mobility.ban.body as body
+            >>> import pylayers.mobility.body.body as body
             >>> import matplotlib.pyplot as plt
             >>> time = np.arange(0,10,0.1)
             >>> v = 4000/3600.
@@ -1292,6 +1347,7 @@ class Body(PyLayers):
                 self.acs[dev]  = np.dot(Rbg,Rab)
             else :
                 self.acs[dev]  = self.dev[dev]['TTT']
+
 
 
 
@@ -1465,6 +1521,7 @@ class Body(PyLayers):
 
         plt.tight_layout()
         return fig,ax
+
 
     def movie(self,**kwargs):
         """ creates a geomview movie
@@ -1766,7 +1823,9 @@ class Body(PyLayers):
             number of sides of polygone to approximate cylinder
         opacity : float (1)
             set body opacity
+
         ccs : boolean
+
             show ccs if True
 
         Devices 
@@ -1816,7 +1875,8 @@ class Body(PyLayers):
             >>> traj = Trajectory()
             >>> traj.generate()
             >>> b.settopos(traj,t=3,cs=True)
-            #>>> b._show3(topos=True,pattern=True)
+            >>> b._show3(topos=True,pattern=True)
+
 
         """
         defaults = {'iframe' : 0,
@@ -1826,9 +1886,15 @@ class Body(PyLayers):
                     'tube_sides' : 6,
                     'opacity':1,
                     'pattern':False,
+
+                    'lccs':[],
+
                     'dev':False,
+
                     'devlist':[],
+
                     'ccs':False,
+
                     'dcs':False,
                     'devcolor':'green',
                     'devid':False,
@@ -1840,6 +1906,7 @@ class Body(PyLayers):
                     'mocanodes':False,
                     'returnfig':False}
 
+
         for k in defaults:
             if k not in kwargs:
                 kwargs[k] = defaults[k]
@@ -1849,13 +1916,12 @@ class Body(PyLayers):
             if k not in defaults:
                 args[k] = kwargs[k]
 
-        f = mlab.gcf()
-        #visual.set_viewer(f)
-        #f.scene.background=(1,1,1)
+        visual.set_viewer(mlab.gcf())
 
 
         fId = kwargs['iframe']
 
+        f = mlab.gcf()
 
         cold = pyu.coldict()
         colhex = cold[self.color]
@@ -1975,26 +2041,23 @@ class Body(PyLayers):
 
 
 
-        # for k in range(self.ncyl):
-
-        #     kta = int(self.sl[k,0])
-        #     khe = int(self.sl[k,1])
-        #     cylrad = self.sl[k,2]
-        #     if kwargs['topos']:
-        #         pta =  np.array([self.topos[0, kta], self.topos[1, kta], self.topos[2, kta]])
-        #         phe =  np.array([self.topos[0, khe], self.topos[1, khe], self.topos[2, khe]])
-        #     else:
-        #         pta =  np.array([self.d[0, kta, fId], self.d[1, kta, fId], self.d[2, kta, fId]])
-        #         phe =  np.array([self.d[0, khe, fId], self.d[1, khe, fId], self.d[2, khe, fId]])
 
 
-            # cyl = visual.Cylinder(pos=(pta[0],pta[1],pta[2]),axis=(ax[0],ax[1],ax[2]), radius=cylrad*kwargs['widthfactor'],length=l)
-            # mlab.pipeline.surface(cyl.polydata,color=body_color)
-            # f.children[-1].name=self.name +' ' +self.idcyl[k]            
+            #~ ax = phe-pta
+            #~ cc = (pta+phe)/2.
+            #~ l = np.sqrt(np.sum(ax**2))
+            #~ cyl = visual.Cylinder(pos=(pta[0],pta[1],pta[2]),
+                       #~ axis=(ax[0],ax[1],ax[2]), radius=cylrad*kwargs['widthfactor'],length=l)
 
-            #
 
-            #
+            if kwargs['ccs']: 
+                if k in kwargs['lccs']:
+                    pt = pta+cylrad*kwargs['widthfactor']*self.ccs[k,:,0]
+                    pte  = np.repeat(pt[:,np.newaxis],3,axis=1)
+                    mlab.quiver3d(pte[0],pte[1],pte[2],self.ccs[k,0],self.ccs[k,1],self.ccs[k,2],scale_factor=0.2)
+        
+
+
         if kwargs['dcs']:
             for key in self.dcs.keys():
                 U = self.dcs[key]
@@ -2007,8 +2070,10 @@ class Body(PyLayers):
             self.setacs()
             
             for key in self.dcs.keys():
+
                 if not hasattr(self.dev[key]['ant'],'SqG'):
                     self.dev[key]['ant'].Fsynth()
+
                 U = self.dcs[key]
                 V = self.dev[key]['ant'].SqG[kwargs['k'],:,:]
                 T = self.acs[key]
@@ -2022,12 +2087,15 @@ class Body(PyLayers):
                            title=False,
                            colorbar=False,
                            )
+
         if kwargs['save']:
             fig = mlab.gcf()
             mlab.savefig('Body.png',figure=fig)
 
+
         if kwargs['returnfig']:
             return fig
+
 
 
     def show(self,**kwargs):
@@ -2036,7 +2104,7 @@ class Body(PyLayers):
         Parameters
         ----------
 
-        frameiId : int
+        frameId : int
         plane : string
             'yz' | 'xz' | 'xy'
         widthfactor : int
@@ -2083,7 +2151,7 @@ class Body(PyLayers):
             raise AttributeError('Incorrect plane')
 
         fId = kwargs['frameId']
-
+        
         for k in range(self.ncyl):
 
             kta = self.sl[k,0]
@@ -2103,6 +2171,7 @@ class Body(PyLayers):
             if 'dcs' in dir(self):
                 pdev = np.array(self.getdevp(self.dev.keys()))
                 ax.plot(pdev[:,ax1]+offset[0],pdev[:,ax2]+offset[1],'og')
+
             else :
                 iudev = [(i,self.dev[i]['uc3d'][0]) for i in self.dev]
                 udev = [i[1] for i in iudev]
@@ -2121,6 +2190,7 @@ class Body(PyLayers):
                 #ax.plot(self._f[fId,udev,1]+offset[0]-center[1],self._f[fId,udev,2]+offset[1]-center[0],'or')
 
         plt.axis('scaled')
+
         return(fig,ax)
 
 
@@ -2321,6 +2391,7 @@ class Body(PyLayers):
                 _filepatt = kwargs['tag']+'patt-'+key
                 geo = geu.Geomoff(_filepatt)
                 V = Ant.SqG[kwargs['k'],:,:]
+                
                 #T = U[:,1:]
                 #Rab = self.dev[key]['T']
                 #T = np.vstack((U[:,1+DT[0]],U[:,1+DT[1]],U[:,1+DT[2]]))
@@ -2353,6 +2424,7 @@ class Body(PyLayers):
             bodylist.append('{<'+_filevelo+'.vect}\n')
 
         return(bodylist)
+
 
 
     def setccs(self,frameId=0,topos=False):
@@ -2466,15 +2538,14 @@ class Body(PyLayers):
             1 : AB intersected by cylinder
 
         """
-
+        
         intersect = np.zeros((self.ncyl,1))
-        mu = np.zeros((self.ncyl,1))
-        lmd = 0.075
+
         for k in range (self.ncyl):
             if k not in cyl:
                 if topos  == True:
-                    kta  = self.sl[k,0]
-                    khe  = self.sl[k,1]
+                    kta  = int(self.sl[k,0])
+                    khe  = int(self.sl[k,1])
                     C = self.topos[:,kta]
                     D = self.topos[:,khe]
                 else:
@@ -2485,31 +2556,27 @@ class Body(PyLayers):
 
 
                 alpha, beta,dmin = seg.dmin3d(A,B,C,D)
+                alpha1 = alpha
+                beta1  = beta
                 if alpha < 0:
-                    alpha = np.zeros(alpha.shape)
+                    alpha1 = np.zeros(alpha.shape)
                 if alpha > 1 :
-                    alpha  = np.ones(alpha.shape)
+                    alpha1  = np.ones(alpha.shape)
                 if beta < 0:
-                    beta = np.zeros(beta.shape)
+                    beta1 = np.zeros(beta.shape)
                 if beta > 1:
-                    beta = np.ones(beta.shape)
-                dmin = np.sqrt(seg.dist (A,B,C,D,alpha,beta)[1])
+                    beta1 = np.ones(beta.shape)
+                dmin = np.sqrt(seg.dist (A,B,C,D,alpha1,beta1)[1])
 
-                if dmin  < self.sl[k,2]:
-                    intersect[k]=1
-                    break
+                if dmin  < self.sl[k,2] and beta >0 and beta < 1 and alpha >0 and alpha < 1:  
 
-                # if 0 < alpha < 1 and 0 < beta < 1 :
-                #     #print 'dmin = ', dmin
-                #     #print 'r = ', self.sl[k,2]
-                #     dAB = np.sqrt(sum((A-B)**2))
-                #     if alpha <> 0:
-                #         mu[k] =(dmin-self.sl[k,2])*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))
-
+                    intersect[k]=1   
+        print 'FrameId = ',  frameId, 'inter = ', sum(intersect)
+                 
         return intersect
-
-    def intersectBody3(self,A,B, topos = True, frameId = 0):
-        """ intersect body new version
+        
+    def intersectBody2(self,A,B, topos = True, frameId = 0):
+        """
 
         Parameters
         ----------
@@ -2523,6 +2590,71 @@ class Body(PyLayers):
         Returns
         -------
 
+                    intersect[k]=1
+                    break
+
+                # if 0 < alpha < 1 and 0 < beta < 1 :
+                #     #print 'dmin = ', dmin
+                #     #print 'r = ', self.sl[k,2]
+                #     dAB = np.sqrt(sum((A-B)**2))
+                #     if alpha <> 0:
+                #         mu[k] =(dmin-self.sl[k,2])*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))
+
+
+        intersect : np.array (,ncyl)
+            O : AB not intersected by cylinder
+            1 : AB intersected by cylinder
+
+        """
+
+        intersect = 0
+
+        for k in [0]:        
+
+            if topos  == True:
+                kta  = int(self.sl[k,0])
+                khe  = int(self.sl[k,1])
+                C = self.topos[:,kta]
+                D = self.topos[:,khe]
+            else:
+                kta  = self.sl[k,0]
+                khe  = self.sl[k,1]
+                C = self.d[:,kta,frameId]
+                D = self.d[:,khe,frameId]
+
+            alpha, beta,dmin = seg.dmin3d(A,B,C,D)
+            if alpha < 0:
+                alpha = 0
+            if alpha > 1 :
+                alpha  = 1
+            if beta < 0:
+                beta = 0
+            if beta > 1:
+                beta = 1
+            dmin = np.sqrt(seg.dist (A,B,C,D,alpha,beta)[1])
+
+            if dmin  < self.sl[k,2]:
+                intersect=1         
+             
+        return intersect
+        
+ 
+    def intersectBody3(self,A,B, topos = True, frameId = 0):
+        """ intersect body new version
+
+        Parameters
+        ----------
+
+        A
+        B
+        topos
+        frameId
+        cyl
+
+
+        Returns
+        -------
+
         intersect : np.array (,ncyl)
             O : AB not intersected by cylinder
             1 : AB intersected by cylinder
@@ -2532,7 +2664,7 @@ class Body(PyLayers):
         loss_dB = 0 # in dB
         loss_lin  =1/10**(loss_dB/10.0)
 
-        for k in [10]:        
+        for k in [0]:        
 
             if topos  == True:
                 kta  = int(self.sl[k,0])
@@ -2565,8 +2697,10 @@ class Body(PyLayers):
             loss2_dB = 0 
 
 
+            
 
             if dmin < self.sl[k,2]:
+
 
                 """
                 in this case intersection is True
@@ -2574,10 +2708,13 @@ class Body(PyLayers):
                 #pdb.set_trace()
                 dAB = np.sqrt(sum((A-B)**2))
                 #nu1 =(self.sl[k,2]-dmin)*np.sqrt((2/lmd)*dAB*abs(alpha)*abs(1-alpha)))
+
                 nu1 =(self.sl[k,2]-dmin)*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))*0.05
                 nu2 =(dmin+self.sl[k,2])*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))*0.05
 
-                if -0.7 < nu1 :
+
+              
+                if -0.7 < nu1 : 
 
                     loss1_dB = 6.9 + 20*np.log10(np.sqrt((nu1-0.1)**2+1)+nu1-0.1)
                 else :
@@ -2592,7 +2729,83 @@ class Body(PyLayers):
 
                 loss_lin  =1.0/10**(loss_dB/10.0)
 
-        return loss_lin#, loss_dB, loss1_dB, loss2_dB
+              
+        return loss_lin
+        
+        
+    def intersectBody4(self,A,B, topos = True, frameId = 0):
+        """
+
+        Parameters
+        ----------
+
+        A
+        B
+        topos
+        frameId
+        cyl
+
+
+        Returns
+        -------
+
+        intersect : np.array (,ncyl)
+            O : AB not intersected by cylinder
+            1 : AB intersected by cylinder
+
+        """
+
+        loss_dB = 0 # in dB
+        
+
+        for k in [0]:        
+
+            if topos  == True:
+                kta  = int(self.sl[k,0])
+                khe  = int(self.sl[k,1])
+                C = self.topos[:,kta]
+                D = self.topos[:,khe]
+            else:
+                kta  = self.sl[k,0]
+                khe  = self.sl[k,1]
+                C = self.d[:,kta,frameId]
+                D = self.d[:,khe,frameId]
+
+            alpha, beta,dmin = seg.dmin3d(A,B,C,D)
+            if alpha < 0:
+                alpha = 0
+            if alpha > 1 :
+                alpha  = 1
+            if beta < 0:
+                beta = 0
+            if beta > 1:
+                beta = 1
+            dmin = np.sqrt(seg.dist (A,B,C,D,alpha,beta)[1])
+            
+            diff = 0.9*self.sl[k,2] - dmin
+            
+            if dmin < self.sl[k,2] and diff > 0:
+                
+
+                """
+                in this case intersection is True
+                                
+                """
+                
+                
+                a = (-3+10)/(0-self.sl[k,2])
+                b = -3
+                
+                loss_dB = a*diff + b               
+                
+        
+        #print 'diff = ', diff , 'loss_sB = ', loss_dB
+        
+        loss_lin  =10**(loss_dB/10.0)
+          
+        return loss_lin
+
+
 
     def body_link(self, topos = True,frameId = 0):
         """ body link
@@ -2691,6 +2904,47 @@ class Body(PyLayers):
             """
             for k in self.dev:
                 print (k,self.dev[k]['uc3d']) 
+                
+    def body_graph_link_data(self, frameId = 0,fig = [], ax = [],
+                            llink = [('HKB:15', 'HKB:16'),('HKB:11', 'HKB:12') ],dt   = [1, 2], 
+                            color_bd='k', color_nd = 'r', color_ed = 'b', width_ed = 10,size_nd=50 ):
+                                
+        if fig == []:
+            fig = plt.figure(figsize = (12,12))
+        if ax == []:
+            ax  = fig.gca()
+        fig, ax = self.show(plane =  'xz', frameId  = frameId, dev = False, devid = False, 
+        fig = fig, ax = ax, color = color_bd)
+
+
+
+
+        G = nx.Graph()
+        ### nodes of the graph from llink
+        nodes = list(itertools.chain.from_iterable(llink))
+        #### eliminate duplicates
+        nodes = list(set(nodes))
+        G.add_nodes_from(nodes) 
+        G.add_edges_from(llink)
+
+
+        # edge attribute
+        i = 0
+        for n in G.edges_iter():
+            G.edge[n[0]][n[1]]['N']=dt[i]
+            i = i+1
+
+        # devices position 
+        a = self.rdpdf()
+        pos_list = map(lambda x:(a[a['dev_id']== x ]['dev_x'][frameId], a[a['dev_id']== x ]['dev_z'][frameId]),nodes)
+        pos = dict(zip(nodes,pos_list))
+        dic_dt = dict(zip(llink,dt))
+        print '***', dic_dt 
+        nx.draw(G, pos =pos,node_size = size_nd, node_color = color_nd, edge_color = color_ed)
+        nx.draw_networkx_edge_labels(G, pos =pos,edges_labels=dic_dt, width = width_ed)
+        
+        return fig, ax
+
 
 
 def translate(cycle, new_origin):
@@ -2748,6 +3002,7 @@ def rotation(cycle, alpha=np.pi/2):
     cycle_rot = translate(cycle_rot, cycle[:, 0, 0])
 
     return cycle_rot
+
 
 def Global_Trajectory(cycle, traj):
     """ global trajectory
@@ -3090,3 +3345,4 @@ class Cylinder(object):
                 # s = np.hstack((cylrad,cylrad))
                 self._mayapts.mlab_source.set(x=X[:,0], y=X[:,1], z=X[:,2])
                 yield
+

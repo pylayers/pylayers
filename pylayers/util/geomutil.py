@@ -4325,6 +4325,7 @@ def qrdecomp(V):
     #      apart from QR. too lazy to check...
 
     import copy
+
     # nn = np.linalg.norm(V,axis=(0))
 
     # # for i in range(3):

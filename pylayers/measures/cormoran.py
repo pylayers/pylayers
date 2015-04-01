@@ -162,7 +162,7 @@ from moviepy.editor import *
 from skimage import img_as_ubyte
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-
+import pylayers.mobility.ban.DeuxSeg as seg
 import pickle
 
 #Those lines handle incompatibility between mayavi and VTK
@@ -214,6 +214,7 @@ class CorSer(PyLayers):
 
     def __init__(self,serie=6,day=11,source='CITI'):
 
+
         try:
             self.rootdir = os.environ['CORMORAN']
         except:
@@ -221,6 +222,7 @@ class CorSer(PyLayers):
                             pointing to the data')
 
         # infos
+
         self.serie = serie
         self.day = day
         self.loadlog()
@@ -635,6 +637,7 @@ bernard
                              centered=False,
                              multi_subject_mocap=multi_subject,
                              color=color[us])})
+            
 
         if self.serie in self.mocapinterf:
             self.interf = ['Anis_Cylindre:',
@@ -745,11 +748,13 @@ bernard
         files = os.listdir(dirname)
         if serie != '':
             try:
+
                 self._fileTCR = filter(lambda x : '_S'+str(serie)+'_' in x ,files)[0]
+
             except:
                 self._fileTCR = filter(lambda x : '_s'+str(serie)+'_' in x ,files)[0]
             tt = self._fileTCR.split('_')
-            self.scenario=tt[0].replace('Sc','')
+            self.scenario=tt[0].replace('qSc','')
             self.run = tt[2].replace('R','')
             self.typ = tt[3].replace('.csv','').upper()
             self.video = 'NA'
@@ -762,8 +767,10 @@ bernard
         filename = os.path.join(dirname,self._fileTCR)
         dtTCR = pd.read_csv(filename)
         tcr={}
+
         for k in dTCRni:
             for l in dTCRni:
+
                 if k!=l:
                     d = dtTCR[((dtTCR['ida']==k) & (dtTCR['idb']==l))]
                     d.drop_duplicates('time',inplace=True)
@@ -773,6 +780,7 @@ bernard
                     d = d[d['time']!=-1]
                     d.index = d['time']
                     del d['time']
+
                     if len(d)!=0:
                         sr = pd.Series(d['dist']/1000,index=d.index)
                         tcr[dTCRni[k]+'-'+dTCRni[l]]= sr
@@ -781,7 +789,8 @@ bernard
         self.tcr = pd.DataFrame(tcr)
         self.tcr = self.tcr.fillna(0)
         ts = 75366400./1e9
-        t = np.array(self.tcr.index)*ts
+        t = np.array(self.tcr.index)*ts   
+            
         t = t-t[0]
         self.tcr.index = t
         self.ttcr=self.tcr.index
@@ -1767,6 +1776,7 @@ bernard
                      'subject':[],
                      'interf':True,
                      'trajectory' :False,
+                     'pattern':False,
                      'devsize':100,
                      'devlist':[],
                      'pattern':False,
@@ -1824,12 +1834,14 @@ bernard
             for ki, i in enumerate(time):
                 for ib,b in enumerate(subject):
                     self.B[b].settopos(t=i,cs=True)
+
                     self.B[b]._show3(dev=True,
                                     name = kwargs['bodyname'],
                                     devlist=kwargs['devlist'],
                                     devsize=kwargs['devsize'],
                                     tube_sides=12,
                                     pattern=kwargs['pattern'])
+
                     if kwargs['tagtraj']:
                         X=self.B[b].traj[['x','y','z']].values[self.B[b].toposFrameId]
                         if kwargs['tagpoffset']==[]:
@@ -4561,7 +4573,114 @@ bernard
         df=df[cols]
 
         return df
-
+        
+    def vis_mat(self, body_list = [],techno = 'hkb', link_list = [], mocap_frameId = []):
+        
+        """Compute the visibility matrix
+        
+        Parameters
+        ----------
+        Body_list: list of Body on which the visibity is evaluated
+        link_list: list of links that the visivbilty is evaluated
+        mocap_frameId :  motion capture frame 
+        techno:  dev technology
+        """
+        
+        if body_list == []:
+            
+            body_list = self.B.values()
+        
+        if link_list == []:
+            if techno == 'hkb':
+                link_list = list(self.hkb.keys())
+            if techno == 'tcr':
+                link_list = list(self.tcr.keys())
+                
+        if mocap_frameId ==[]:
+            mocap_frameId = range(body_list[0].nframes)
+            
+        ### extract devices positions
+        dev_arr = np.array(map( lambda x : x.split('-'), link_list))
+        
+        
+        
+        dev_id0= np.array(map(lambda x:self.devmapper(x[0], techno= 'hkb'),dev_arr))[:,2]
+        dev_id1= np.array(map(lambda x:self.devmapper(x[1], techno= 'hkb'),dev_arr))[:,2]        
+        dev_id = np.array([dev_id0,dev_id1]).T
+        
+        vis = np.ndarray(shape=(len(body_list),len(mocap_frameId),len(link_list),11 ))
+        for lk in range(len(dev_id)):
+            devA  = dev_id[lk,0]
+            devB  = dev_id[lk,1]
+            posA  = self.devdf[self.devdf['id'] ==devA][['x','y', 'z']].values
+            posB  = self.devdf[self.devdf['id'] ==devB][['x','y', 'z']].values
+            for i in range(len(mocap_frameId)):
+                for bl in range(len(body_list)):
+                    inter = body_list[bl].intersectBody(A = posA[i],B=posB[i], topos = False, frameId = mocap_frameId[i], cyl =[])[:,0]
+                    vis[bl,i,lk]= inter
+                    
+                      
+        return vis
+        
+    def link_sort (self, sort_typ = 'Entropy', time_index =[],link_typ= 'onbody', 
+                    start_index = 2, nbin =50):
+        
+        
+        link_list = list(self.hkb.keys())
+        if link_typ == 'onbody':
+            link = filter( lambda x : x.split('-')[0][0:2] != 'AP'  and x.split('-')[1][0:2] != 'AP'  , link_list)
+            link_index = map(lambda x : link_list.index(x) , link)
+            
+        else:
+            link = link_list
+            link_index = map(lambda x : link_list.index(x) , link)
+            
+        if time_index == []:
+            time = np.array(self.hkb.index)[start_index:]
+            time_index =  np.arange(2,len(time)+2)
+        else:
+            time =  np.array(self.hkb.index)[time_index]
+        
+           
+        data = self.hkb.values[time_index,:][:,link_index]
+        
+        link_data =[]
+        if sort_typ == 'Entropy':
+            
+            for ilink in range(len(link)):
+                D=data.T[ilink,:]
+                H=plt.hist(D,bins= nbin)
+                p=H[0]
+                p = p/sum(p)
+                x=H[1]
+                e = -p*np.log(p)/np.log(2)
+                ep = np.nan_to_num(e)
+                s = sum(ep)*(x[1]-x[0])
+                link_data.append(s)
+                
+        if sort_typ == 'Std':
+            for ilink in range(len(link)):
+                D=data.T[ilink,:]    
+                link_data.append(D.std())
+        
+        if sort_typ == 'Corr':
+            for ilink in range(len(link)):
+                D=data.T[ilink,:]
+                lcorr = pcorr(D,D)[0:len(D)/2]
+                tlink = (np.where(lcorr >= 0.5)[0][-1])*(time[1]-time[0])
+                link_data.append(tlink)
+                
+        sort_index = np.argsort(link_data)[::-1]
+        
+        return link, link_data, sort_index 
+                
+                    
+        
+            
+            
+            
+        
+            
 
     # def get_data(self,a,b):
 

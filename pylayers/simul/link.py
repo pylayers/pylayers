@@ -433,6 +433,7 @@ class DLink(Link):
             self.a = a
             # self.ca = self.L.pt2cy(self.a)
 
+
         if len(self.b)==0:
             self.cb = 1
             # self.b = self.L.cy2pt(self.cb)
@@ -1229,7 +1230,9 @@ class DLink(Link):
         ############
         Si = Signatures(self.L,self.ca,self.cb,cutoff=kwargs['cutoff'])
 
+
         if (self.dexist['sig']['exist'] and not ('sig' in kwargs['force'])):
+
             self.load(Si,self.dexist['sig']['grpname'])
 
         else :
@@ -1278,6 +1281,7 @@ class DLink(Link):
         else :
             # perform computation ...
             # ... with vetorized ray evaluation approach
+            
             if kwargs['ra_vectorized']:
                 r2d = Si.raysv(self.a,self.b)
             # ... or with original and slow approach ( to be removed in a near future)
@@ -1289,6 +1293,7 @@ class DLink(Link):
             self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])
 
         self.R = R
+        
 
         if self.R.nray == 0:
             raise NameError('No rays have been found. Try to re-run the simulation with a higher S.cutoff ')
@@ -1334,8 +1339,11 @@ class DLink(Link):
                 self.ir = self.H.applywavB(self.wav.sf)
             else:
                 self.ir = self.H.applywavB(self.wav.sfg)
-
+        plt.plot(H.tk,H.ak)
+        
         return self.H.ak, self.H.tk
+        
+ 
 
     def show(self,**kwargs):
         """ show the link

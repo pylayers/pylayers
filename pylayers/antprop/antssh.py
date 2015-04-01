@@ -237,36 +237,47 @@ def ssh(A,L= 20,dsf=1):
         mdab = min(nth, nph / 2)
 
     ndab = nth
-
+    
 
     Etheta  =  A.Ftheta[:,::dsf,::dsf]
     Ephi    =  A.Fphi [:,::dsf,::dsf]
 
     # compute the spherical harmonics fucntions at the order L
+    
     Y,ssh_index  = SSHFunc(L,th,ph)
     # Compute the pseudo inverse of Y
     Ypinv = sp.linalg.pinv(Y)
 
     # convert the field from spherical to cartesian coordinates system
-    Ex, Ey,Ez =SphereToCart (th, ph, Etheta, Ephi, True)
-    #
+    Ex, Ey,Ez =SphereToCart (th, ph, Etheta, Ephi, bfreq = True)
+        
     Ex = Ex.reshape((nf,nth*nph))
     Ey = Ey.reshape((nf,nth*nph))
-    Ez = Ez.reshape((nf,nth*nph))
-    #pdb.set_trace()
+    Ez = Ez.reshape((nf,nth*nph))    
+    
     cx  =  np.dot(Ex,Ypinv)
     cy  =  np.dot(Ey,Ypinv)
     cz  =  np.dot(Ez,Ypinv)
     lmax = L
-
-    Cx = SCoeff(typ='s2', fmin=A.fa[0], fmax=A.fa[-1],lmax = lmax, data=cx,ind =ssh_index)
-    Cy = SCoeff(typ='s2', fmin=A.fa[0], fmax=A.fa[-1],lmax = lmax, data=cy,ind =ssh_index)
-    Cz = SCoeff(typ='s2', fmin=A.fa[0], fmax=A.fa[-1],lmax = lmax, data=cz,ind =ssh_index)
-
+    
+   
+    
+    if type(A.fa) == float:
+        fmin = A.fa
+        fmax = A.fa
+    else:
+        fmin = A.fa[0]
+        fmax = A.fa[-1]
+        
+    
+    Cx = SCoeff(typ='s2', fmin=fmin, fmax=fmax,lmax = lmax, data=cx,ind =ssh_index)
+    Cy = SCoeff(typ='s2', fmin=fmin, fmax=fmax,lmax = lmax, data=cy,ind =ssh_index)
+    Cz = SCoeff(typ='s2', fmin=fmin, fmax=fmax,lmax = lmax, data=cz,ind =ssh_index)
+    
     A.S = SSHCoeff(Cx,Cy,Cz)
 
 
-    return(A)
+    return A
 
 
 if (__name__=="__main__"):

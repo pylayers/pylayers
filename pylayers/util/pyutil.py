@@ -1849,6 +1849,16 @@ def in_ipynb():
             return False
     except NameError:
         return False
+        
+def pcorr(x, y):
+    """Periodic correlation, implemented using the FFT.
+
+    x and y must be real sequences with the same length.
+    """
+    N  = len(x)
+    xn = (x-np.mean(x))/x.std()
+    yn = (y-np.mean(y))/y.std()
+    return (np.fft.ifft(np.fft.fft(xn) * np.fft.fft(yn).conj()).real)/(1.*N)
 
 if __name__ == "__main__":
     doctest.testmod()

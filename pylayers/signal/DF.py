@@ -274,6 +274,7 @@ class DF(PyLayers):
             ax2 = fig.add_subplot(212)
             self.H.plot(typ=['d'],xlabels=[xlabel],fig=fig,ax=ax2)
             plt.grid()
+
         #show()
     def butter(self,order=5,w=0.25,typ='low'):
         """ Butterwoth digital filter design
