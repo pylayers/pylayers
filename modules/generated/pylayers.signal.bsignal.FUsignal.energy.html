@@ -179,7 +179,7 @@
 <h1>pylayers.signal.bsignal.FUsignal.energy<a class="headerlink" href="#pylayers-signal-bsignal-fusignal-energy" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.signal.bsignal.FUsignal.energy">
-<tt class="descclassname">FUsignal.</tt><tt class="descname">energy</tt><big>(</big><em>axis=0</em>, <em>Friis=False</em>, <em>mode='mean'</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#FUsignal.energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.energy" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">FUsignal.</tt><tt class="descname">energy</tt><big>(</big><em>axis=0</em>, <em>Friis=False</em>, <em>mode='mean'</em><big>)</big><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.energy" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculate energy along given axis</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -197,14 +197,14 @@
 </table>
 <p class="rubric">Notes</p>
 <p>If Friis is true energy is multiplied by</p>
-<p><img class="math" src="../../_images/math/e615be2837a893d713299a4d3bf91286182a5ed6.png" alt="\frac{-j*c}{4 pi fGHz}"/></p>
+<p><img src="../../_images/mathmpl/math-a8688641f0.png" style="position: relative; bottom: -13px"/></p>
 <p>axis = 0 is ray axis</p>
 <p>if mode == &#8216;mean&#8217;</p>
-<p><img class="math" src="../../_images/math/6dc72c152198acb4daac3db2e9e8ce538359d730.png" alt="E=\frac{1}{K} \sum_k |y_k|^2"/></p>
+<p><img src="../../_images/mathmpl/math-f96214335a.png" style="position: relative; bottom: -20px"/></p>
 <p>if mode == &#8216;integ&#8217;</p>
-<p><img class="math" src="../../_images/math/b77dea919c1b96ecbdca87939e267cfad792f75d.png" alt="E=\delta_x \sum_k |y_k|^2"/></p>
+<p><img src="../../_images/mathmpl/math-efdb524b88.png" style="position: relative; bottom: -20px"/></p>
 <p>if mode == &#8216;center&#8217;</p>
-<p><img class="math" src="../../_images/math/fc3fd2c21a6528ad629236a57f606ac6ce3824cc.png" alt="E= |y_{K/2}|^2"/></p>
+<p><img src="../../_images/mathmpl/math-b6cecbac0e.png" style="position: relative; bottom: -10px"/></p>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">EnImpulse</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">En1</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
@@ -226,8 +226,8 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 26, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on avril 02, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.signal.bsignal.FUsignal.energy.txt"
 	    rel="nofollow">Show this page source</a>

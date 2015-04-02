@@ -145,7 +145,7 @@ from pylayers.util.plotutil import *
 <tt class="docutils literal"><span class="pre">`Cone</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.util.cone.html">http://pylayers.github.io/pylayers/modules/pylayers.util.cone.html</a>&gt;`__
 class implements several methods for handling planar cones.</p>
 <p>A planar cone is defined as being composed of : + an apex
-<img class="math" src="../../_images/math/46bc9db8fc244ad2bbb5de57bfd7e8a595298471.png" alt="\vec{p}"/> + two vectors <img class="math" src="../../_images/math/db54580d6975bb9f12fdb7149fdd7c99e3cdbe57.png" alt="\vec{v}_a"/> and <img class="math" src="../../_images/math/0bad42c956ad9ec58813c466253fdbe03e33e1a8.png" alt="\vec{v}_b"/>
+<img src="../../_images/mathmpl/math-a7f83b41e6.png" style="position: relative; bottom: -7px"/> + two vectors <img src="../../_images/mathmpl/math-7f74f2117c.png" style="position: relative; bottom: -7px"/> and <img src="../../_images/mathmpl/math-bc8d915143.png" style="position: relative; bottom: -7px"/>
 not necessarily normalized.</p>
 <p>Let create a cone.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">va</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
@@ -154,12 +154,12 @@ not necessarily normalized.</p>
 </pre></div>
 </div>
 <p>From those parameters the Cone <tt class="docutils literal"><span class="pre">__init__</span></tt> constructs 2 unitary vectors
-<img class="math" src="../../_images/math/1f59d75a7396b110ca07515a8a7fad245829600c.png" alt="\hat{u}"/> and <img class="math" src="../../_images/math/3df42ab56e6e55b7edb9134ba27d96c1a837641a.png" alt="\hat{v}"/> such that :</p>
+<img src="../../_images/mathmpl/math-45a9cb8a6a.png" style="position: relative; bottom: -3px"/> and <img src="../../_images/mathmpl/math-7e4d2cc386.png" style="position: relative; bottom: -3px"/> such that :</p>
 <ul class="simple">
-<li><img class="math" src="../../_images/math/9f90f82e042213107304ee85789bf54b9e8d8ed6.png" alt="\hat{u} \times \hat{v} = c\hat{z} \;\; \textrm{with} \;\; c &gt;0"/></li>
+<li><img src="../../_images/mathmpl/math-8360c8b6ef.png" /></li>
 </ul>
 <p>This can be interpreted as applying an anticlockwise rotation from
-<img class="math" src="../../_images/math/1f59d75a7396b110ca07515a8a7fad245829600c.png" alt="\hat{u}"/> to <img class="math" src="../../_images/math/3df42ab56e6e55b7edb9134ba27d96c1a837641a.png" alt="\hat{v}"/>.</p>
+<img src="../../_images/mathmpl/math-45a9cb8a6a.png" style="position: relative; bottom: -3px"/> to <img src="../../_images/mathmpl/math-7e4d2cc386.png" style="position: relative; bottom: -3px"/>.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&quot;Unitary vector u&quot;</span><span class="p">,</span><span class="n">C</span><span class="o">.</span><span class="n">u</span>
 <span class="k">print</span> <span class="s">&quot;Unitary vector v&quot;</span><span class="p">,</span><span class="n">C</span><span class="o">.</span><span class="n">v</span>
 <span class="k">print</span> <span class="s">&quot;dot(u,v)&quot;</span><span class="p">,</span><span class="n">C</span><span class="o">.</span><span class="n">dot</span>
@@ -359,9 +359,9 @@ to a segment.</p>
 </div>
 <div class="section" id="conditional-graph">
 <h2>Conditional Graph<a class="headerlink" href="#conditional-graph" title="Permalink to this headline">¶</a></h2>
-<p><img class="math" src="../../_images/math/f73bdbe32e898c36e2a3ccbdc51d8cd1798861e9.png" alt="\mathcal{G}_i"/> is a <tt class="docutils literal"><span class="pre">conditional</span> <span class="pre">graph</span></tt> meaning that the edge
+<p><img src="../../_images/mathmpl/math-4c79050f98.png" style="position: relative; bottom: -7px"/> is a <tt class="docutils literal"><span class="pre">conditional</span> <span class="pre">graph</span></tt> meaning that the edge
 indicates which is the list of authorized next edge for the output. A
-ray being a sequence <img class="math" src="../../_images/math/1e88b12e8413a656088da2a3e88b6387c81e934c.png" alt="{\nu_k}"/> of nodes of <img class="math" src="../../_images/math/f73bdbe32e898c36e2a3ccbdc51d8cd1798861e9.png" alt="\mathcal{G}_i"/>.
+ray being a sequence <img src="../../_images/mathmpl/math-5d7b3f6d20.png" style="position: relative; bottom: -7px"/> of nodes of <img src="../../_images/mathmpl/math-4c79050f98.png" style="position: relative; bottom: -7px"/>.
 The cone angular sector represents the whole set and each intercepting
 segment, is a part or this whole set. This can be interpreted as a
 probability. This means that the research of rays could be done
@@ -805,8 +805,8 @@ which is subtended by the intercepted segment.</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 26, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on avril 02, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/8-MISC/Cone.txt"
 	    rel="nofollow">Show this page source</a>

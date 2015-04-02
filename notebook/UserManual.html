@@ -470,8 +470,8 @@ evaluated. For a shape 3 pattern the method to calculate the pattern is
 </div>
 <p>The <tt class="docutils literal"><span class="pre">polar()</span></tt> method allows to superpose different pattern for a list o
 frequecies <tt class="docutils literal"><span class="pre">fGHz</span></tt> + If <tt class="docutils literal"><span class="pre">phd</span></tt> is precised the diagram is given as a
-function of <img class="math" src="../_images/math/a9cfbeb8ebee1f365919e147a79e242dcb67ee5d.png" alt="\theta"/> + If <tt class="docutils literal"><span class="pre">thd</span></tt> is precised the diagram is given
-as a function of <img class="math" src="../_images/math/10e009bdb83f96c5f47c58b34d5d4b12ef268d5b.png" alt="\phi"/></p>
+function of <img src="../_images/mathmpl/math-5dc8912759.png" style="position: relative; bottom: -3px"/> + If <tt class="docutils literal"><span class="pre">thd</span></tt> is precised the diagram is given
+as a function of <img src="../_images/mathmpl/math-e22cc525ec.png" style="position: relative; bottom: -7px"/></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
 <span class="n">a1</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">f1</span><span class="p">,</span><span class="n">a1</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span><span class="n">phd</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">GmaxdB</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a1</span><span class="p">)</span>
@@ -721,10 +721,10 @@ Ncoeff s3 : 32
 <span class="c">#A = Antenna(&#39;trx1&#39;,&#39;UWB_CEA.trx&#39;)</span>
 </pre></div>
 </div>
-<p>The shape of the <img class="math" src="../_images/math/25ec171b8cd2533076b18a6196dd5f139999b5bb.png" alt="F_{\phi}"/> functions indicates :</p>
+<p>The shape of the <img src="../_images/mathmpl/math-d026c61aa2.png" style="position: relative; bottom: -10px"/> functions indicates :</p>
 <ul class="simple">
-<li><img class="math" src="../_images/math/a002bf44d9dd6a26e70c61d3c743e28ecb09799d.png" alt="N_f= 104"/></li>
-<li><img class="math" src="../_images/math/76bc0ee53b05a44ab3a61a38b6d86fedeca2dae8.png" alt="N_{\theta} = 91"/></li>
+<li><img src="../_images/mathmpl/math-4bc7f0f356.png" style="position: relative; bottom: -10px"/></li>
+<li><img src="../_images/mathmpl/math-1858bfe838.png" style="position: relative; bottom: -7px"/></li>
 <li>:math:<a href="#id1"><span class="problematic" id="id2">`</span></a>N_{phi} = 180 `</li>
 </ul>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
@@ -734,14 +734,14 @@ Ncoeff s3 : 32
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">104</span><span class="p">,</span> <span class="mi">91</span><span class="p">,</span> <span class="mi">180</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The frequency ramp is converted in <img class="math" src="../_images/math/75ff9e3612d49cb2c7909cde17452a307348fe5f.png" alt="GHz"/>. In practice we always
-handles frequency expressed in <img class="math" src="../_images/math/75ff9e3612d49cb2c7909cde17452a307348fe5f.png" alt="GHz"/> and delays expressed in
-<img class="math" src="../_images/math/da93a4433922cc997c2ea624d1828cda4232ec10.png" alt="ns"/></p>
+<p>The frequency ramp is converted in <img src="../_images/mathmpl/math-d0b9a6e023.png" style="position: relative; bottom: -3px"/>. In practice we always
+handles frequency expressed in <img src="../_images/mathmpl/math-d0b9a6e023.png" style="position: relative; bottom: -3px"/> and delays expressed in
+<img src="../_images/mathmpl/math-2af81ea4e1.png" style="position: relative; bottom: -3px"/></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">fa</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">104</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mf">1e9</span>
 </pre></div>
 </div>
-<p>Then an electrical delay of <img class="math" src="../_images/math/20f53356c4c104c5a34eafd0d9ad7358b59d1fbc.png" alt="4.185ns"/> is applied on the
-<img class="math" src="../_images/math/0e31c8f84652d7ba21ff8bca08a0e4d8e14bccc5.png" alt="F_{\theta}"/></p>
+<p>Then an electrical delay of <img src="../_images/mathmpl/math-1ab8cb242a.png" style="position: relative; bottom: -3px"/> is applied on the
+<img src="../_images/mathmpl/math-c0d5dfcc3f.png" style="position: relative; bottom: -7px"/></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">tau</span><span class="o">=</span><span class="mf">4.185</span>
 <span class="n">I</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">[:,:,:]</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="mi">1j</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">fGHz</span><span class="o">*</span><span class="n">tau</span><span class="p">)</span>
 </pre></div>
@@ -1060,7 +1060,7 @@ properties can be obtained as:</p>
 coefficients for</p>
 <ul class="simple">
 <li>a given frequency range</li>
-<li>a given incidence angle range (<img class="math" src="../_images/math/c8ecea85ef2986cea055fbac1cc3ee95d1ca2537.png" alt="0\le\theta&lt;\frac{\pi}{2}"/>)</li>
+<li>a given incidence angle range (<img src="../_images/mathmpl/math-583b4bed9e.png" />)</li>
 </ul>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
 <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
@@ -1286,7 +1286,7 @@ with the plugin <em>PicLayer</em>. This is well described in
 <h2>6.1. Structure of a Layout<a class="headerlink" href="#structure-of-a-layout" title="Permalink to this headline">¶</a></h2>
 <p>A Layout is firstly described by a set of points (negative index) and a
 set of segments (positive index).</p>
-<p>Both points and segments are nodes of the <img class="math" src="../_images/math/9d358e50c5697373ad7cc566b95dfe19d68e9d20.png" alt="\mathcal{G}_s"/> graph.</p>
+<p>Both points and segments are nodes of the <img src="../_images/mathmpl/math-8d9bbde6dd.png" style="position: relative; bottom: -7px"/> graph.</p>
 <p>It is required to respect a strict non overlapping rule. <strong>No segments
 can recover partially or totally an other segment</strong>.</p>
 <p>This rule allows to capture topological relations of the network which
@@ -1462,14 +1462,14 @@ Nc  = Gr.node[nroom][&#39;cycles&#39;]
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The topological graph <img class="math" src="../_images/math/81225d898fa4a260a2c7eb990cc0e37b3d34ab5f.png" alt="\mathcal{G}_t"/> or graph of non overlapping
+<p>The topological graph <img src="../_images/mathmpl/math-3604bc74d1.png" style="position: relative; bottom: -7px"/> or graph of non overlapping
 cycles.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span>
 <span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="./GIS-editor_files/GIS-editor_25_0.png" src="./GIS-editor_files/GIS-editor_25_0.png" />
-<p>The graph of room <img class="math" src="../_images/math/7adf94bbad41196d6e46a083c8fa572339f33f2f.png" alt="\mathcal{G}_r"/>. Two rooms which share at least
+<p>The graph of room <img src="../_images/mathmpl/math-ba7f66fdf0.png" style="position: relative; bottom: -7px"/>. Two rooms which share at least
 a wall are connected. Two rooms which share only a corner (punctual
 connection) are not connected</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
@@ -1477,7 +1477,7 @@ connection) are not connected</p>
 </pre></div>
 </div>
 <img alt="./GIS-editor_files/GIS-editor_27_0.png" src="./GIS-editor_files/GIS-editor_27_0.png" />
-<p>The graph of waypath <img class="math" src="../_images/math/a7abe4ad210aa755e26fe5019ee06b8dee65bd62.png" alt="\mathcal{G}_w"/>. This graph is used for agent
+<p>The graph of waypath <img src="../_images/mathmpl/math-4c02c53444.png" style="position: relative; bottom: -7px"/>. This graph is used for agent
 mobility. This allows to determine the shortest path between 2 rooms.
 This information could be included in the osm file. This is not the case
 yet</p>
@@ -1486,13 +1486,13 @@ yet</p>
 </pre></div>
 </div>
 <img alt="./GIS-editor_files/GIS-editor_29_0.png" src="./GIS-editor_files/GIS-editor_29_0.png" />
-<p>The graph of visibility <img class="math" src="../_images/math/2019da1c9a58643ae395b7177603bf14a9346d5a.png" alt="\mathcal{G_v}"/></p>
+<p>The graph of visibility <img src="../_images/mathmpl/math-d3189f9945.png" style="position: relative; bottom: -13px"/></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
 <span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="./GIS-editor_files/GIS-editor_31_0.png" src="./GIS-editor_files/GIS-editor_31_0.png" />
-<p>The graph of interactions <img class="math" src="../_images/math/f73bdbe32e898c36e2a3ccbdc51d8cd1798861e9.png" alt="\mathcal{G}_i"/> used to determine the
+<p>The graph of interactions <img src="../_images/mathmpl/math-4c79050f98.png" style="position: relative; bottom: -7px"/> used to determine the
 ray signatures.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
@@ -1684,8 +1684,8 @@ meters) between the two points.</li>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="./GIS-editor_files/GIS-editor_59_0.png"><img alt="./GIS-editor_files/GIS-editor_59_0.png" src="./GIS-editor_files/GIS-editor_59_0.png" /></a>
-<p>Each node of <img class="math" src="../_images/math/9d358e50c5697373ad7cc566b95dfe19d68e9d20.png" alt="\mathcal{G}_s"/> with a negative index is a point.</p>
-<p>Each node of <img class="math" src="../_images/math/9d358e50c5697373ad7cc566b95dfe19d68e9d20.png" alt="\mathcal{G}_s"/> with a positive index corresponds to
+<p>Each node of <img src="../_images/mathmpl/math-8d9bbde6dd.png" style="position: relative; bottom: -7px"/> with a negative index is a point.</p>
+<p>Each node of <img src="../_images/mathmpl/math-8d9bbde6dd.png" style="position: relative; bottom: -7px"/> with a positive index corresponds to
 a segment (wall,door,window,...).</p>
 <p>The segment name is the key of the <strong>slab</strong> dictionnary.</p>
 <p><a class="reference external" href="MultiSubsegments.ipynb">Multi Subsegments</a></p>
@@ -1720,7 +1720,7 @@ attribute of the subsegment can be changed with the method <tt class="docutils l
 structure saved in  defstr3.ini
 </pre></div>
 </div>
-<p>The <img class="math" src="../_images/math/9d358e50c5697373ad7cc566b95dfe19d68e9d20.png" alt="\mathcal{G}_s"/> graph dictionnary has the following structure</p>
+<p>The <img src="../_images/mathmpl/math-8d9bbde6dd.png" style="position: relative; bottom: -7px"/> graph dictionnary has the following structure</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span>
 </pre></div>
 </div>
@@ -2394,12 +2394,12 @@ electromagnetic simulation.</p>
 <p>One possible manner to define an energy normalized short UWB pulse is
 as follows using <tt class="docutils literal"><span class="pre">bsignal.EnImpulse</span></tt> function.</p>
 <p>The default waveform is a gaussian windowing of a sine wave of frequency
-<img class="math" src="../_images/math/95dca2acb17190fe4abb62b64ba7d7f8f7a7c4a1.png" alt="f_c"/>. The normalization term depends on the exponential scaling
-factor <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd78a148a10e8.png" alt="\tau"/>.</p>
-<p><img class="math" src="../_images/math/f8c9e4a5086b54ee44a0a1fe273d411209fdd85f.png" alt="p(t)= \sqrt{\frac{2\sqrt{2}}{\tau\sqrt{\pi}}} \cos(2\pi f_c t) e^{-(\frac{t}{\tau})^2}"/></p>
-<p><img class="math" src="../_images/math/bfb0ffe4c8088040feab4e798714f8b9a6329e41.png" alt="\tau = \frac{2}{B\pi}\sqrt{\frac{\gamma_{dB}\ln{10}}{20}}"/></p>
-<p>where <img class="math" src="../_images/math/83956e92fcc80dee17fce864543216939a3c9da7.png" alt="B"/> is the desired bandwidth defined at <img class="math" src="../_images/math/188795ebfe88db0394a818814d3f11796cf7c8e1.png" alt="\gamma_{dB}"/>
-below the spectrum maximum and <img class="math" src="../_images/math/95dca2acb17190fe4abb62b64ba7d7f8f7a7c4a1.png" alt="f_c"/> is the central frequency of
+<img src="../_images/mathmpl/math-e5c4897d65.png" style="position: relative; bottom: -7px"/>. The normalization term depends on the exponential scaling
+factor <img src="../_images/mathmpl/math-f970af607c.png" style="position: relative; bottom: -3px"/>.</p>
+<p><img src="../_images/mathmpl/math-37b287b3bf.png" style="position: relative; bottom: -12px"/></p>
+<p><img src="../_images/mathmpl/math-a1202c7aca.png" style="position: relative; bottom: -11px"/></p>
+<p>where <img src="../_images/mathmpl/math-957afab571.png" style="position: relative; bottom: -3px"/> is the desired bandwidth defined at <img src="../_images/mathmpl/math-7b431e1910.png" style="position: relative; bottom: -7px"/>
+below the spectrum maximum and <img src="../_images/mathmpl/math-e5c4897d65.png" style="position: relative; bottom: -7px"/> is the central frequency of
 the pulse.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fc</span>     <span class="o">=</span> <span class="mi">4</span>
 <span class="n">band</span>   <span class="o">=</span> <span class="mi">2</span>
@@ -2736,7 +2736,7 @@ chararcteristics</li>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Evaluate the propagation channel <img class="math" src="../_images/math/7fed00592d88a5822533d0da9b1d49ba438495cf.png" alt="\tilde{\mathbf{C}}"/>. Here the
+<p>Evaluate the propagation channel <img src="../_images/mathmpl/math-c2b5c6f441.png" style="position: relative; bottom: -3px"/>. Here the
 meaning of tilde is that the complex value of the channel do not include
 the phase term due to delay along the ray.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span> <span class="o">=</span> <span class="n">r3d</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
@@ -2752,7 +2752,7 @@ the phase term due to delay along the ray.</p>
 <div class="section" id="construction-of-the-transmission-channel">
 <h2>7.6. Construction of the transmission channel<a class="headerlink" href="#construction-of-the-transmission-channel" title="Permalink to this headline">¶</a></h2>
 <p>The transmission channel is obtained from the combination of the
-propagation channel <img class="math" src="../_images/math/7fed00592d88a5822533d0da9b1d49ba438495cf.png" alt="\tilde{\mathbf{C}}"/> and the vector antenna
+propagation channel <img src="../_images/mathmpl/math-c2b5c6f441.png" style="position: relative; bottom: -3px"/> and the vector antenna
 pattern at both side of the radio link. This operation is implemented in
 the <tt class="docutils literal"><span class="pre">prop2tran</span></tt> method of the <tt class="docutils literal"><span class="pre">Ctilde</span></tt> class.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">sc</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">()</span>
@@ -2828,8 +2828,8 @@ waveform with the channel impulse response to get the received waveform.</p>
 <h2>7.8. Hermitian symetry enforcment<a class="headerlink" href="#hermitian-symetry-enforcment" title="Permalink to this headline">¶</a></h2>
 <p>If the number of point for the transmission channel and the waveform
 were the same the mathematical operation is an Hadamard-Shur product
-between <img class="math" src="../_images/math/b9ba21151f0486a8aefcd00ceb7fc544a392fe87.png" alt="\mathbf{Y}"/> and <img class="math" src="../_images/math/ca91977bed6ab8abdd8a746b43d45990814104c3.png" alt="\mathbf{W}"/>.</p>
-<p><img class="math" src="../_images/math/488d42ed0bffda1e62ae523f4ae48840e784ee14.png" alt="\mathbf{Y} = \mathbf{S} \odot \mathbf{W}"/></p>
+between <img src="../_images/mathmpl/math-c7217de4b7.png" style="position: relative; bottom: -3px"/> and <img src="../_images/mathmpl/math-9b5e528324.png" style="position: relative; bottom: -3px"/>.</p>
+<p><img src="../_images/mathmpl/math-50aab38b79.png" style="position: relative; bottom: -4px"/></p>
 <p>In practice this is what is done after a resampling of the time base
 with a reinterpolated time step.</p>
 <p>The process which consists in going from time domain to frequency domain
@@ -2859,7 +2859,7 @@ sorted.</p>
 </pre></div>
 </div>
 <img alt="./PHY-signal_files/PHY-signal_61_0.png" src="./PHY-signal_files/PHY-signal_61_0.png" />
-<p>Direction of arrival <img class="math" src="../_images/math/c829c5487ab14d5d372685e546553269bfa74177.png" alt="(\theta_r,\phi_r)"/> in radians</p>
+<p>Direction of arrival <img src="../_images/mathmpl/math-69ee887da1.png" style="position: relative; bottom: -8px"/> in radians</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&quot;doa = &quot;</span><span class="p">,</span> <span class="n">doa</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">10</span><span class="p">,:]</span>
 </pre></div>
 </div>
@@ -2991,7 +2991,7 @@ dictionnary member of the Layout object.which allows to configure the
 in <strong>.ini</strong> files. Transmitter and Receiver are instances of the class
 RadioNode which offers different methods for specifying nodes positions.
 The stucture of this <strong>.ini</strong> file presented below. The node Id is
-associated with the 3 coordinates <img class="math" src="../_images/math/975c0f20e558a0b09286b055b142fe433bb84f93.png" alt="x,y,z"/> separated by white
+associated with the 3 coordinates <img src="../_images/mathmpl/math-aaef4cabe9.png" style="position: relative; bottom: -7px"/> separated by white
 spaces.</p>
 <div class="highlight-python"><div class="highlight"><pre>[coordinates]
 1 = -12.2724 7.76319999993 1.2
@@ -3469,7 +3469,7 @@ dictionnary member of the Layout object.</p>
 perform are stotred in <strong>.ini</strong> files. Transmitter and Receiver are
 instances of the class <tt class="docutils literal"><span class="pre">RadioNode</span></tt> which offers different methods for
 specifying nodes positions. The stucture of this <strong>.ini</strong> file presented
-below. The node Id is associated with the 3 coordinates <img class="math" src="../_images/math/975c0f20e558a0b09286b055b142fe433bb84f93.png" alt="x,y,z"/>
+below. The node Id is associated with the 3 coordinates <img src="../_images/mathmpl/math-aaef4cabe9.png" style="position: relative; bottom: -7px"/>
 separated by white spaces.</p>
 <div class="highlight-python"><div class="highlight"><pre>[coordinates]
 1 = -12.2724 7.76319999993 1.2
@@ -4222,7 +4222,7 @@ the human motion. Two kind of files exist :</p>
 capture data structure is necessary. Generally there is a large number
 of captured points, not all of them being useful for the modeling.</p>
 <p>The body model is a restriction of key body segments which are
-transformed into <img class="math" src="../_images/math/28e003020d0ae96250b302d7d779c791f183f707.png" alt="K"/> cylinders of radius <img class="math" src="../_images/math/c6d83f44e641552ebc20f736bbca0a9423098e78.png" alt="r_k"/>.</p>
+transformed into <img src="../_images/mathmpl/math-b43c97c188.png" style="position: relative; bottom: -3px"/> cylinders of radius <img src="../_images/mathmpl/math-32ed7041d6.png" style="position: relative; bottom: -7px"/>.</p>
 <p>The chosen body model is made of 11 cylinders. 4 cylinders decribing the
 two arms, 4 cylinders decribing the two legs, 2 cylinders describing the
 trunk and 1 cylinder for the head.</p>
@@ -4574,12 +4574,12 @@ nodes.</p>
 <p>In order to translate the motion in any point in space-time, a
 distinction is made between the real motion or topos and the centered
 motion capture which acts as a virtual motion.</p>
-<p>Let <img class="math" src="../_images/math/067aa56257006c8a054bb0c9f30e2383eb528fc5.png" alt="\mathbf{p}^k"/> denotes the center of gravity of the body in
+<p>Let <img src="../_images/mathmpl/math-a17f99bd79.png" style="position: relative; bottom: -7px"/> denotes the center of gravity of the body in
 the (O,x,y) plane</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">,</span><span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">][:,</span><span class="n">newaxis</span><span class="p">]))</span>
 </pre></div>
 </div>
-<p><img class="math" src="../_images/math/1e018ffeed15f622673016995e323f2e1df16a4e.png" alt="\mathbf{v}_g"/> is the velocity vector of the gravity center of the
+<p><img src="../_images/mathmpl/math-d9d9cee03b.png" style="position: relative; bottom: -10px"/> is the velocity vector of the gravity center of the
 body.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">)</span>
@@ -4685,7 +4685,7 @@ Center of gravity of the centered frame [  3.74700271e-16   1.38777878e-17   8.9
 </div>
 <div class="section" id="defining-a-large-scale-trajectory">
 <h3>10.1.6. Defining a large scale trajectory<a class="headerlink" href="#defining-a-large-scale-trajectory" title="Permalink to this headline">¶</a></h3>
-<p>A large scale trajectory is defined in the <img class="math" src="../_images/math/4827c8230a0c9c5ebfa45b20ed4da7282fd8dade.png" alt="(O,x,y)"/> plane.</p>
+<p>A large scale trajectory is defined in the <img src="../_images/mathmpl/math-7578f948ac.png" style="position: relative; bottom: -8px"/> plane.</p>
 <p><tt class="docutils literal"><span class="pre">traj</span></tt> is a data structure (Npt,2)</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">v</span> <span class="o">=</span> <span class="n">Vmocap</span>
 <span class="k">print</span> <span class="n">v</span><span class="o">*</span><span class="mf">3.6</span><span class="p">,</span><span class="s">&quot;Kmph&quot;</span>
@@ -4809,28 +4809,28 @@ Center of gravity of the centered frame [  3.74700271e-16   1.38777878e-17   8.9
 following parameters</p>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">traj</span></tt> a plane trajectory object.</li>
-<li><img class="math" src="../_images/math/4a333881289d833f265fe2fef93abf0404b26d60.png" alt="t_k"/> time for evaluation of topos</li>
-<li><img class="math" src="../_images/math/15abacad64bbb4a546704ff6083d79bc7859b877.png" alt="T_{fs}"/> duration of the periodic motion frame sequence</li>
+<li><img src="../_images/mathmpl/math-2970bf83e5.png" style="position: relative; bottom: -7px"/> time for evaluation of topos</li>
+<li><img src="../_images/mathmpl/math-69fdbd409a.png" style="position: relative; bottom: -10px"/> duration of the periodic motion frame sequence</li>
 </ul>
 <p>and returns</p>
 <ul class="simple">
 <li>the frame index
-<img class="math" src="../_images/math/04edfef81bdb632eefe7c3dcb0f91d3b89cb1dbe.png" alt="k_f = \lfloor \frac{t_k \pmod{T_{fs}}}{t_f} \rfloor"/></li>
-<li>the trajectory index <img class="math" src="../_images/math/65bcb943341ec21456552a583de932fa1a7067b8.png" alt="k_t = \lfloor t_k \rfloor"/></li>
+<img src="../_images/mathmpl/math-fa8df6427f.png" /></li>
+<li>the trajectory index <img src="../_images/mathmpl/math-bd16204c95.png" style="position: relative; bottom: -7px"/></li>
 <li>velocity unitary vector along motion capture frame
-<img class="math" src="../_images/math/0ef715b9dc4d710fa91709fe7152686e7b540d17.png" alt="\hat{\mathbf{v}}_s = \frac{\mathbf{p}^g[k_f]-\mathbf{p}^g[k_f-1]}{|\mathbf{p}^g[k_f]-\mathbf{p}^g[k_f-1]|}"/></li>
+<img src="../_images/mathmpl/math-3925c359b0.png" style="position: relative; bottom: -17px"/></li>
 <li>:math:<a href="#id5"><span class="problematic" id="id6">`</span></a>hat{mathbf{w}}_s = mathbf{hat{z}} times  hat{mathbf{v}}_s `</li>
 <li>velocity unitary vector along trajectory
-<img class="math" src="../_images/math/14d19cd770c023634baaf3255de1acb8fd9ba9b7.png" alt="\hat{\mathbf{v}}_t = \frac{\mathbf{p}^t[k_t]-\mathbf{p}^g[k_t-1]}{|\mathbf{p}^g[k_t]-\mathbf{p}^t[k_t-1]|}"/></li>
+<img src="../_images/mathmpl/math-bbc160cffd.png" style="position: relative; bottom: -17px"/></li>
 <li>:math:<a href="#id7"><span class="problematic" id="id8">`</span></a>hat{mathbf{w}}_t = mathbf{hat{z}} times  hat{mathbf{v}}_t `</li>
 </ul>
-<p><img class="math" src="../_images/math/50aacdafd0664e2d05bce2d24f3c311acbc6f483.png" alt="t_f = \frac{T_{fs}}{Nf}"/> is the interframe time or frame sampling
+<p><img src="../_images/mathmpl/math-c68c18ac15.png" style="position: relative; bottom: -13px"/> is the interframe time or frame sampling
 period, it is equal to the whole duration of the motion sequence
-<img class="math" src="../_images/math/15abacad64bbb4a546704ff6083d79bc7859b877.png" alt="T_{fs}"/> divided by the number of frames</p>
+<img src="../_images/mathmpl/math-69fdbd409a.png" style="position: relative; bottom: -10px"/> divided by the number of frames</p>
 <p><tt class="docutils literal"><span class="pre">settopos</span></tt> is a method which takes as argument :</p>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">traj</span></tt> a plane trajectory (Npt,2)</li>
-<li><img class="math" src="../_images/math/4a333881289d833f265fe2fef93abf0404b26d60.png" alt="t_k"/> time for evaluation of topos</li>
+<li><img src="../_images/mathmpl/math-2970bf83e5.png" style="position: relative; bottom: -7px"/> time for evaluation of topos</li>
 </ul>
 <p>In futher version of the project, this function will be modified to be
 able to avoid passing the whole trajectory.</p>
@@ -4899,24 +4899,16 @@ application. The localization application will define the BLCS from the
 position of radiating devices placed on the body surface.</p>
 <p>Each basis is constructed with the function from
 <tt class="docutils literal"><span class="pre">geomutil.onbfromaxe()</span></tt> : orthonormal bases from axes. This function
-takes 2 sets of <img class="math" src="../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> points <img class="math" src="../_images/math/9bdd37a0dd7923e0ec534485532e96e4d4d332d8.png" alt="\mathbf{p}_{A,n}"/> and
-<img class="math" src="../_images/math/08835458dc9d70d809798923f8b0dd0301be5cc8.png" alt="\mathbf{p}_{B,n}"/> as input and provides an orthonormal basis as
+takes 2 sets of <img src="../_images/mathmpl/math-e7b31363a1.png" style="position: relative; bottom: -3px"/> points <img src="../_images/mathmpl/math-2014ddb223.png" style="position: relative; bottom: -10px"/> and
+<img src="../_images/mathmpl/math-04e6380741.png" style="position: relative; bottom: -10px"/> as input and provides an orthonormal basis as
 output.</p>
 <p>3 unitary vectors are constructed :</p>
-<div class="math">
-<p><img src="../_images/math/2524de9efc82760781e46cee8d969a7bb91a2898.png" alt="\hat{\mathbf{w}}_n = \frac{\mathbf{p}_B-\mathbf{p}_A}{| \mathbf{p}_B-\mathbf{p}_A |}"/></p>
-</div><div class="math">
-<p><img src="../_images/math/6842832c377839770e2fbfd471a2895800458b44.png" alt="\hat{\mathbf{u}}_n = \frac{\hat{\mathbf{v}}_g - (\hat{\mathbf{v}}_g.{\hat{\mathbf{w}}_n}) \mathbf{\hat{w}}_n}{|\hat{\mathbf{v}_g} - (\hat{\mathbf{v}_g}.{\hat{\mathbf{w}}_n}) \mathbf{\hat{w}}_n|}"/></p>
-</div><div class="math">
-<p><img src="../_images/math/c2599ac37f7b50d3e2a89dedbb4f273ebe2e4ba1.png" alt="\hat{\mathbf{v}}_n = \mathbf{\hat{w}}_n \times \mathbf{\hat{u}}_n"/></p>
-</div><p>Where <img class="math" src="../_images/math/07cb9349fac20981cf05575d1c2b10e28d09b02d.png" alt="\hat{\mathbf{v}}_g"/> is the unit velocity vector along
+<img src="../_images/mathmpl/math-0cf2836a48.png" class="center" /><img src="../_images/mathmpl/math-2d89adcbdc.png" class="center" /><img src="../_images/mathmpl/math-a83fa5bdd7.png" class="center" /><p>Where <img src="../_images/mathmpl/math-9ebaf25e76.png" style="position: relative; bottom: -10px"/> is the unit velocity vector along
 actual trajectory.</p>
 <p>The outpout of <tt class="docutils literal"><span class="pre">geomutil.onbframe</span></tt> is an MDA
-<img class="math" src="../_images/math/b2dbf695774d2af9fa3ad59c30afa05496194c71.png" alt="(3\times n \times 3)"/> of <img class="math" src="../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> unitary matrices aggregated
+<img src="../_images/mathmpl/math-6d67c54727.png" style="position: relative; bottom: -8px"/> of <img src="../_images/mathmpl/math-e7b31363a1.png" style="position: relative; bottom: -3px"/> unitary matrices aggregated
 along axis 1</p>
-<div class="math">
-<p><img src="../_images/math/cb83eb772b450d76e29d4fadef3da133d65a7c61.png" alt="\mathbf{T}_n=[\hat{\mathbf{u}}_n, \hat{\mathbf{v}}_n, \hat{\mathbf{w}}_n]"/></p>
-</div><p>To create the CCS :</p>
+<img src="../_images/mathmpl/math-7a3bcb860d.png" class="center" /><p>To create the CCS :</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">setccs</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -4947,7 +4939,7 @@ CCS (Cylinder coordinates systems)</p>
 </div>
 <div class="section" id="placing-a-dcs-device-coordinate-system-on-the-cylinder">
 <h3>10.2.3. Placing a dcs (Device Coordinate System ) on the cylinder<a class="headerlink" href="#placing-a-dcs-device-coordinate-system-on-the-cylinder" title="Permalink to this headline">¶</a></h3>
-<p>A DCS is refered by 4 numbers <img class="math" src="../_images/math/cad3d8d10b7bf945cdca8a3d3c9c7dda9af352e1.png" alt="(Id,l,h,\alpha)"/></p>
+<p>A DCS is refered by 4 numbers <img src="../_images/mathmpl/math-d859882232.png" style="position: relative; bottom: -8px"/></p>
 <ul class="simple">
 <li>Id : Cylinder Id</li>
 <li>l : length along cylinder</li>
@@ -5215,7 +5207,7 @@ blue</p>
 </pre></div>
 </div>
 <img alt="./LOC-rgpa_files/LOC-rgpa_5_1.png" src="./LOC-rgpa_files/LOC-rgpa_5_1.png" />
-<p>The euclidian distance betwenn blind node <img class="math" src="../_images/math/3eca8557203e86160952e1c0f735f7417f3285b1.png" alt="p"/> and anchors ans the
+<p>The euclidian distance betwenn blind node <img src="../_images/mathmpl/math-fb97a8c47a.png" style="position: relative; bottom: -7px"/> and anchors ans the
 corresponding Time of flight are evaluated.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">d1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt1</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 <span class="n">d2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt2</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
@@ -5283,7 +5275,7 @@ the geometric constraints of a considered scenario.</p>
 <li>type : TOA / RSS</li>
 <li>p : Position of the origin of the constraint</li>
 <li>value : power ( RSS ) / time in ns ( TOA)</li>
-<li>std : standard deviation <img class="math" src="../_images/math/93c29bfedc993de115781b4fbb7e3a8b9e8d6b51.png" alt="\sigma^2"/> of value</li>
+<li>std : standard deviation <img src="../_images/mathmpl/math-54bf156f7e.png" style="position: relative; bottom: -3px"/> of value</li>
 <li>runable : does the constraint has a position p ?</li>
 <li>obsolete : does the value has been obtained recently ?</li>
 <li>usuable : runbale AND NOT obsolete</li>
@@ -5880,8 +5872,8 @@ environement.</p>
 <h2>16.2. Utility functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="angledir">
 <h3>16.2.1. angledir<a class="headerlink" href="#angledir" title="Permalink to this headline">¶</a></h3>
-<p>angledir converts a 3D vector into the 2 spherical angle <img class="math" src="../_images/math/a9cfbeb8ebee1f365919e147a79e242dcb67ee5d.png" alt="\theta"/>,
-<img class="math" src="../_images/math/10e009bdb83f96c5f47c58b34d5d4b12ef268d5b.png" alt="\phi"/> expressed in radians</p>
+<p>angledir converts a 3D vector into the 2 spherical angle <img src="../_images/mathmpl/math-5dc8912759.png" style="position: relative; bottom: -3px"/>,
+<img src="../_images/mathmpl/math-e22cc525ec.png" style="position: relative; bottom: -7px"/> expressed in radians</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
 <span class="n">angledir</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">*</span><span class="mi">180</span><span class="o">/</span><span class="n">pi</span>
 </pre></div>
@@ -6093,8 +6085,8 @@ index in the ndarray.</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 30, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on avril 02, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/./UserManual.txt"
 	    rel="nofollow">Show this page source</a>

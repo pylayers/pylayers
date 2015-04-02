@@ -244,7 +244,7 @@ illustrated below.</p>
 <img alt="../../_images/LinkSimulation_14_1.png" src="../../_images/LinkSimulation_14_1.png" />
 <p>In the link we also have the transmission channel accounting for the
 effect of antennas and Friis factor. If the ray transfer function is
-scaled with <img class="math" src="../../_images/math/001864bf8290713a8513a9deab0da003bdbad7a2.png" alt="\frac{4\pi f}{c}"/></p>
+scaled with <img src="../../_images/mathmpl/math-2568d81340.png" style="position: relative; bottom: -7px"/></p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">*</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">x</span><span class="o">/</span><span class="mf">0.3</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -258,7 +258,7 @@ scaled with <img class="math" src="../../_images/math/001864bf8290713a8513a9deab
 <img alt="../../_images/LinkSimulation_16_2.png" src="../../_images/LinkSimulation_16_2.png" />
 <p>Notice that in this case the frequency</p>
 <p>The infinite bandwidth channel impulse response is plotted below from
-the extrated set <img class="math" src="../../_images/math/6c50a2ac8bf54c7debfddf7795672964e8e9b2b2.png" alt="\{\alpha_k,\tau_k\}"/>.</p>
+the extrated set <img src="../../_images/mathmpl/math-4187fb41bb.png" style="position: relative; bottom: -7px"/>.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">aktk</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">aktk</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Infinite bandwith Channel Impulse response&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;delay (ns)&#39;</span><span class="p">)</span>
@@ -481,8 +481,8 @@ NameError: name &#39;St&#39; is not defined
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 26, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on avril 02, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/5-SIM/LinkSimulation.txt"
 	    rel="nofollow">Show this page source</a>

@@ -140,10 +140,10 @@ from pylayers.antprop.antvsh import *
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;S2R2.mat&#39;</span><span class="p">,</span><span class="n">directory</span><span class="o">=</span><span class="s">&#39;ant/UWBAN/Matfile&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The shape of the <img class="math" src="../../_images/math/25ec171b8cd2533076b18a6196dd5f139999b5bb.png" alt="F_{\phi}"/> functions indicates :</p>
+<p>The shape of the <img src="../../_images/mathmpl/math-d026c61aa2.png" style="position: relative; bottom: -10px"/> functions indicates :</p>
 <ul class="simple">
-<li><img class="math" src="../../_images/math/a002bf44d9dd6a26e70c61d3c743e28ecb09799d.png" alt="N_f= 104"/></li>
-<li><img class="math" src="../../_images/math/76bc0ee53b05a44ab3a61a38b6d86fedeca2dae8.png" alt="N_{\theta} = 91"/></li>
+<li><img src="../../_images/mathmpl/math-4bc7f0f356.png" style="position: relative; bottom: -10px"/></li>
+<li><img src="../../_images/mathmpl/math-1858bfe838.png" style="position: relative; bottom: -7px"/></li>
 <li>:math:<a href="#id1"><span class="problematic" id="id2">`</span></a>N_{phi} = 180 `</li>
 </ul>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Fphi</span><span class="p">)</span>
@@ -152,13 +152,13 @@ from pylayers.antprop.antvsh import *
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">104</span><span class="p">,</span> <span class="mi">91</span><span class="p">,</span> <span class="mi">180</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The frequency array is expressed in <img class="math" src="../../_images/math/75ff9e3612d49cb2c7909cde17452a307348fe5f.png" alt="GHz"/> and delays are expressed
-in <img class="math" src="../../_images/math/da93a4433922cc997c2ea624d1828cda4232ec10.png" alt="ns"/></p>
+<p>The frequency array is expressed in <img src="../../_images/mathmpl/math-d0b9a6e023.png" style="position: relative; bottom: -3px"/> and delays are expressed
+in <img src="../../_images/mathmpl/math-2af81ea4e1.png" style="position: relative; bottom: -3px"/></p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fGHz</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">fa</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">104</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Then an electrical delay of <img class="math" src="../../_images/math/20f53356c4c104c5a34eafd0d9ad7358b59d1fbc.png" alt="4.185ns"/> is applied on the
-<img class="math" src="../../_images/math/0e31c8f84652d7ba21ff8bca08a0e4d8e14bccc5.png" alt="F_{\theta}"/></p>
+<p>Then an electrical delay of <img src="../../_images/mathmpl/math-1ab8cb242a.png" style="position: relative; bottom: -3px"/> is applied on the
+<img src="../../_images/mathmpl/math-c0d5dfcc3f.png" style="position: relative; bottom: -7px"/></p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">I</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">[:,:,:]</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">I</span><span class="p">[:,</span><span class="mi">45</span><span class="p">,:])))</span>
@@ -363,8 +363,8 @@ Ncoeff s3 : 145
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 26, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on avril 02, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/2-AP/AntennaVSH.txt"
 	    rel="nofollow">Show this page source</a>

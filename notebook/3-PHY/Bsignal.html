@@ -241,11 +241,7 @@ method</p>
 <div class="section" id="fhsignal-for-in-cir-mode">
 <h2>FHsignal for in CIR mode<a class="headerlink" href="#fhsignal-for-in-cir-mode" title="Permalink to this headline">¶</a></h2>
 <p>We create a Fusignal which corresponds to the signal</p>
-<div class="math">
-<p><img src="../../_images/math/60ad7b7eb483d4d97e383d103284a388b370b106.png" alt="X_u(f) = \alpha e^{-2j\pi f \tau}"/></p>
-</div><div class="math">
-<p><img src="../../_images/math/91b96f2e702cf0fce36d50045f16bfd2f847729c.png" alt="f\in [f_{min},f_{max}]"/></p>
-</div><div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+<img src="../../_images/mathmpl/math-1b7ffcc130.png" class="center" /><img src="../../_images/mathmpl/math-68d5044302.png" class="center" /><div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="mi">1j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">f</span><span class="o">*</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 <span class="n">Hu</span> <span class="o">=</span> <span class="n">FUsignal</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
@@ -267,7 +263,7 @@ method</p>
 </pre></div>
 </div>
 <p>The inverse Fourier transform allows to recover perfectly the amplitude
-<img class="math" src="../../_images/math/ad59b6e24a4a00ac621801f8d7513d68be654ab5.png" alt="\alpha"/> and the delay <img class="math" src="../../_images/math/d9e99c35d3632bb156b7aca0e93cd78a148a10e8.png" alt="\tau"/> of the channel</p>
+<img src="../../_images/mathmpl/math-5149852f08.png" style="position: relative; bottom: -3px"/> and the delay <img src="../../_images/mathmpl/math-f970af607c.png" style="position: relative; bottom: -3px"/> of the channel</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">hu</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -365,8 +361,8 @@ method</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 26, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on avril 02, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/3-PHY/Bsignal.txt"
 	    rel="nofollow">Show this page source</a>

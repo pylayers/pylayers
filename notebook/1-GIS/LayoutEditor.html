@@ -165,7 +165,7 @@ with the plugin <em>PicLayer</em>. This is well described in
 <h2>Structure of a Layout<a class="headerlink" href="#structure-of-a-layout" title="Permalink to this headline">¶</a></h2>
 <p>At first a Layout is described by a set of points (negative index) and a
 set of segments (positive index).</p>
-<p>Points and segments are nodes of the <img class="math" src="../../_images/math/9d358e50c5697373ad7cc566b95dfe19d68e9d20.png" alt="\mathcal{G}_s"/> graph.</p>
+<p>Points and segments are nodes of the <img src="../../_images/mathmpl/math-8d9bbde6dd.png" style="position: relative; bottom: -7px"/> graph.</p>
 <p>It is required to respect a strict non overlapping rule. <strong>No segments
 can recover partially or totally an other segment</strong>.</p>
 <p>This rule allows to capture topological relations of the network which
@@ -353,20 +353,20 @@ Nc  = Gr.node[nroom][&#39;cycles&#39;]
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The topological graph <img class="math" src="../../_images/math/81225d898fa4a260a2c7eb990cc0e37b3d34ab5f.png" alt="\mathcal{G}_t"/> or graph of non overlapping
+<p>The topological graph <img src="../../_images/mathmpl/math-3604bc74d1.png" style="position: relative; bottom: -7px"/> or graph of non overlapping
 cycles.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span>
 <span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The graph of room <img class="math" src="../../_images/math/7adf94bbad41196d6e46a083c8fa572339f33f2f.png" alt="\mathcal{G}_r"/>. Two rooms which share at least
+<p>The graph of room <img src="../../_images/mathmpl/math-ba7f66fdf0.png" style="position: relative; bottom: -7px"/>. Two rooms which share at least
 a wall are connected. Two rooms which share only a corner (punctual
 connection) are not connected</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
 <span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The graph of waypath <img class="math" src="../../_images/math/a7abe4ad210aa755e26fe5019ee06b8dee65bd62.png" alt="\mathcal{G}_w"/>. This graph is used for agent
+<p>The graph of waypath <img src="../../_images/mathmpl/math-4c02c53444.png" style="position: relative; bottom: -7px"/>. This graph is used for agent
 mobility. This allows to determine the shortest path between 2 rooms.
 This information could be included in the osm file. This is not the case
 yet</p>
@@ -374,12 +374,12 @@ yet</p>
 <span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The graph of visibility <img class="math" src="../../_images/math/2019da1c9a58643ae395b7177603bf14a9346d5a.png" alt="\mathcal{G_v}"/></p>
+<p>The graph of visibility <img src="../../_images/mathmpl/math-d3189f9945.png" style="position: relative; bottom: -13px"/></p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
 <span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The graph of interactions <img class="math" src="../../_images/math/f73bdbe32e898c36e2a3ccbdc51d8cd1798861e9.png" alt="\mathcal{G}_i"/> used to determine the
+<p>The graph of interactions <img src="../../_images/mathmpl/math-4c79050f98.png" style="position: relative; bottom: -7px"/> used to determine the
 ray signatures.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
@@ -620,8 +620,8 @@ meters) between the two points.</li>
 <span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Each node of <img class="math" src="../../_images/math/9d358e50c5697373ad7cc566b95dfe19d68e9d20.png" alt="\mathcal{G}_s"/> with a negative index is a point.</p>
-<p>Each node of <img class="math" src="../../_images/math/9d358e50c5697373ad7cc566b95dfe19d68e9d20.png" alt="\mathcal{G}_s"/> with a positive index corresponds to
+<p>Each node of <img src="../../_images/mathmpl/math-8d9bbde6dd.png" style="position: relative; bottom: -7px"/> with a negative index is a point.</p>
+<p>Each node of <img src="../../_images/mathmpl/math-8d9bbde6dd.png" style="position: relative; bottom: -7px"/> with a positive index corresponds to
 a segment (wall,door,window,...).</p>
 <p>The segment name is the key of the <strong>slab</strong> dictionnary.</p>
 <p><a class="reference external" href="./Multisubsegments.ipynb">Multi Subsegments</a></p>
@@ -640,8 +640,8 @@ a segment (wall,door,window,...).</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 26, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on avril 02, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/1-GIS/LayoutEditor.txt"
 	    rel="nofollow">Show this page source</a>

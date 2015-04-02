@@ -167,12 +167,12 @@ electromagnetic simulation.</p>
 <p>One possible manner to define an energy normalized short UWB impulse is
 as follows using <tt class="docutils literal"><span class="pre">bsignal.EnImpulse</span></tt> function.</p>
 <p>The default waveform is a gaussian windowing of a sine wave of frequency
-<img class="math" src="../../_images/math/95dca2acb17190fe4abb62b64ba7d7f8f7a7c4a1.png" alt="f_c"/>. The normalization term depends on the exponential scaling
-factor <img class="math" src="../../_images/math/d9e99c35d3632bb156b7aca0e93cd78a148a10e8.png" alt="\tau"/>.</p>
-<p><img class="math" src="../../_images/math/d1adbfc8509ab884fe792a4c9cb13f13dbc28fd0.png" alt="p(t)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}} \cos(2\pi f_c t) e^{-(\frac{t}{\tau})^2}"/></p>
-<p><img class="math" src="../../_images/math/bfb0ffe4c8088040feab4e798714f8b9a6329e41.png" alt="\tau = \frac{2}{B\pi}\sqrt{\frac{\gamma_{dB}\ln{10}}{20}}"/></p>
-<p>where <img class="math" src="../../_images/math/83956e92fcc80dee17fce864543216939a3c9da7.png" alt="B"/> is the desired bandwidth defined at <img class="math" src="../../_images/math/188795ebfe88db0394a818814d3f11796cf7c8e1.png" alt="\gamma_{dB}"/>
-below the spectrum maximum and <img class="math" src="../../_images/math/95dca2acb17190fe4abb62b64ba7d7f8f7a7c4a1.png" alt="f_c"/> is the central frequency of
+<img src="../../_images/mathmpl/math-e5c4897d65.png" style="position: relative; bottom: -7px"/>. The normalization term depends on the exponential scaling
+factor <img src="../../_images/mathmpl/math-f970af607c.png" style="position: relative; bottom: -3px"/>.</p>
+<p><img src="../../_images/mathmpl/math-2c117aeff6.png" style="position: relative; bottom: -12px"/></p>
+<p><img src="../../_images/mathmpl/math-a1202c7aca.png" style="position: relative; bottom: -11px"/></p>
+<p>where <img src="../../_images/mathmpl/math-957afab571.png" style="position: relative; bottom: -3px"/> is the desired bandwidth defined at <img src="../../_images/mathmpl/math-7b431e1910.png" style="position: relative; bottom: -7px"/>
+below the spectrum maximum and <img src="../../_images/mathmpl/math-e5c4897d65.png" style="position: relative; bottom: -7px"/> is the central frequency of
 the pulse.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fc</span>     <span class="o">=</span> <span class="mi">4</span>
 <span class="n">band</span>   <span class="o">=</span> <span class="mi">2</span>
@@ -398,7 +398,7 @@ chararcteristics</li>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Evaluate the propagation channel <img class="math" src="../../_images/math/7fed00592d88a5822533d0da9b1d49ba438495cf.png" alt="\tilde{\mathbf{C}}"/>. Here the
+<p>Evaluate the propagation channel <img src="../../_images/mathmpl/math-c2b5c6f441.png" style="position: relative; bottom: -3px"/>. Here the
 meaning of tilde is that the complex value of the channel do not include
 the phase term due to delay along the ray.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span> <span class="o">=</span> <span class="n">r3d</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
@@ -408,7 +408,7 @@ the phase term due to delay along the ray.</p>
 <div class="section" id="construction-of-the-transmission-channel">
 <h1>Construction of the transmission channel<a class="headerlink" href="#construction-of-the-transmission-channel" title="Permalink to this headline">¶</a></h1>
 <p>The transmission channel is obtained from the combination of the
-propagation channel <img class="math" src="../../_images/math/7fed00592d88a5822533d0da9b1d49ba438495cf.png" alt="\tilde{\mathbf{C}}"/> and the vector antenna
+propagation channel <img src="../../_images/mathmpl/math-c2b5c6f441.png" style="position: relative; bottom: -3px"/> and the vector antenna
 pattern at both side of the radio link. This operation is implemented in
 the <tt class="docutils literal"><span class="pre">prop2tran</span></tt> method of the <tt class="docutils literal"><span class="pre">Ctilde</span></tt> class.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">sc</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">()</span>
@@ -483,8 +483,8 @@ waveform with the channel impulse response to get the received waveform.</p>
 <h1>Hermitian symetry enforcment<a class="headerlink" href="#hermitian-symetry-enforcment" title="Permalink to this headline">¶</a></h1>
 <p>If the number of point for the transmission channel and the waveform
 were the same the mathematical operation is an Hadamrd-Shur product
-between <img class="math" src="../../_images/math/b9ba21151f0486a8aefcd00ceb7fc544a392fe87.png" alt="\mathbf{Y}"/> and <img class="math" src="../../_images/math/ca91977bed6ab8abdd8a746b43d45990814104c3.png" alt="\mathbf{W}"/>.</p>
-<p><img class="math" src="../../_images/math/488d42ed0bffda1e62ae523f4ae48840e784ee14.png" alt="\mathbf{Y} = \mathbf{S} \odot \mathbf{W}"/></p>
+between <img src="../../_images/mathmpl/math-c7217de4b7.png" style="position: relative; bottom: -3px"/> and <img src="../../_images/mathmpl/math-9b5e528324.png" style="position: relative; bottom: -3px"/>.</p>
+<p><img src="../../_images/mathmpl/math-50aab38b79.png" style="position: relative; bottom: -4px"/></p>
 <p>In practice this is what is done after a resampling of the time base
 with a reinterpolated time step.</p>
 <p>The process which consists in going from time domain to frequency domain
@@ -514,7 +514,7 @@ sorted.</p>
 </pre></div>
 </div>
 <img alt="../../_images/Signal_59_0.png" src="../../_images/Signal_59_0.png" />
-<p>Direction of arrival <img class="math" src="../../_images/math/c829c5487ab14d5d372685e546553269bfa74177.png" alt="(\theta_r,\phi_r)"/> in radians</p>
+<p>Direction of arrival <img src="../../_images/mathmpl/math-69ee887da1.png" style="position: relative; bottom: -8px"/> in radians</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&quot;doa = &quot;</span><span class="p">,</span> <span class="n">doa</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">10</span><span class="p">,:]</span>
 </pre></div>
 </div>
@@ -562,8 +562,8 @@ sorted.</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 26, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on avril 02, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/3-PHY/Signal.txt"
 	    rel="nofollow">Show this page source</a>

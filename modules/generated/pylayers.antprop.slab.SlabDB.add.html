@@ -179,7 +179,7 @@
 <h1>pylayers.antprop.slab.SlabDB.add<a class="headerlink" href="#pylayers-antprop-slab-slabdb-add" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.antprop.slab.SlabDB.add">
-<tt class="descclassname">SlabDB.</tt><tt class="descname">add</tt><big>(</big><em>name</em>, <em>lmatname</em>, <em>lthick</em>, <em>color='black'</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/slab.html#SlabDB.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB.add" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SlabDB.</tt><tt class="descname">add</tt><big>(</big><em>name</em>, <em>lmatname</em>, <em>lthick</em>, <em>color='black'</em><big>)</big><a class="headerlink" href="#pylayers.antprop.slab.SlabDB.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>add a slab in dB</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -231,12 +231,10 @@ EUCAP 2010</p>
 <p>Exemple from paper <a class="reference external" href="http://ieeexplore.ieee.org/xpl/login.jsp?tp=&amp;arnumber=4554974&amp;url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D4554974">&#8220;[Kiani2007] Glass Characterization for Designing
 Frequency Selective Surfaces to Improve Transmission through Energy saving
 glass windows  Kiani 2007&#8221;</a>
-The surface impedance is <img class="math" src="../../_images/math/1cc1f717f12cb2d8b9d8f1ab350c9092e3d32f4e.png" alt="R = 4 \Omega"/>, the thicknesss is <img class="math" src="../../_images/math/e7fd625f68aa1f65c98c6a274218ada86615fe07.png" alt="d = 100 nm"/></p>
+The surface impedance is <img src="../../_images/mathmpl/math-735c9213fb.png" style="position: relative; bottom: -3px"/>, the thicknesss is <img src="../../_images/mathmpl/math-0c787664e9.png" style="position: relative; bottom: -3px"/></p>
 <p><a class="reference external" href="http://www.pilkington.com/spectrum2/default.aspx?country_code=FR">Pilkington Spectrum OnLine applet</a></p>
 <p><a class="reference external" href="http://lup.lub.lu.se/luur/download?func=downloadFile&amp;recordOId=530536&amp;fileOId=624944">Design of Energy Saving Windows with high Transmission at 900MHz and 1800 MHz</a></p>
-<div class="math">
-<p><img src="../../_images/math/a12f398e710ecba953916c4436acda5a39e0275e.png" alt="\sigma =  \frac{1}{Rd} = 2.5 10^{6} S/m"/></p>
-</div><div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
+<img src="../../_images/mathmpl/math-ba540a2a10.png" class="center" /><div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="n">sl</span> <span class="o">=</span> <span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
@@ -266,8 +264,8 @@ The surface impedance is <img class="math" src="../../_images/math/1cc1f717f12cb
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 26, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on avril 02, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.antprop.slab.SlabDB.add.txt"
 	    rel="nofollow">Show this page source</a>

@@ -168,7 +168,7 @@ the human motion. Two kind of files exist :</p>
 capture data structure is necessary. Generally there is a large number
 of captured points, not all of them being useful for our modeling.</p>
 <p>The body model is a restriction of key body segments which are
-transformed into <img class="math" src="../../_images/math/28e003020d0ae96250b302d7d779c791f183f707.png" alt="K"/> cylinders of radius <img class="math" src="../../_images/math/c6d83f44e641552ebc20f736bbca0a9423098e78.png" alt="r_k"/>.</p>
+transformed into <img src="../../_images/mathmpl/math-b43c97c188.png" style="position: relative; bottom: -3px"/> cylinders of radius <img src="../../_images/mathmpl/math-32ed7041d6.png" style="position: relative; bottom: -7px"/>.</p>
 <p>The chosen body model is made of 11 cylinders. 4 cylinders decribing the
 two arms, 4 cylinders decribing the two legs, 2 cylinders describing the
 trunk and 1 cylinder for the head.</p>
@@ -557,7 +557,7 @@ nodes.</p>
 <p>In order to translate the motion in any point in space-time, a
 distinction is made between the real motion or topos and the centered
 motion capture which acts as a virtual motion.</p>
-<p>Let <img class="math" src="../../_images/math/067aa56257006c8a054bb0c9f30e2383eb528fc5.png" alt="\mathbf{p}^k"/> denotes the center of gravity of the body in
+<p>Let <img src="../../_images/mathmpl/math-a17f99bd79.png" style="position: relative; bottom: -7px"/> denotes the center of gravity of the body in
 the (O,x,y) plane</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">center</span><span class="p">()</span>
 </pre></div>
@@ -565,7 +565,7 @@ the (O,x,y) plane</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">,</span><span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">][:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]))</span>
 </pre></div>
 </div>
-<p><img class="math" src="../../_images/math/1e018ffeed15f622673016995e323f2e1df16a4e.png" alt="\mathbf{v}_g"/> is the velocity vector of the gravity center of the
+<p><img src="../../_images/mathmpl/math-d9d9cee03b.png" style="position: relative; bottom: -10px"/> is the velocity vector of the gravity center of the
 body.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">)</span>
@@ -671,7 +671,7 @@ Center of gravity of the centered frame [  4.44089210e-16  -1.05471187e-15   8.9
 </div>
 <div class="section" id="defining-a-large-scale-trajectory">
 <h2>Defining a large scale trajectory<a class="headerlink" href="#defining-a-large-scale-trajectory" title="Permalink to this headline">¶</a></h2>
-<p>A large scale trajectory is defined in the <img class="math" src="../../_images/math/4827c8230a0c9c5ebfa45b20ed4da7282fd8dade.png" alt="(O,x,y)"/> plane.</p>
+<p>A large scale trajectory is defined in the <img src="../../_images/mathmpl/math-7578f948ac.png" style="position: relative; bottom: -8px"/> plane.</p>
 <p><tt class="docutils literal"><span class="pre">traj</span></tt> is a data structure (Npt,2)</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">v</span> <span class="o">=</span> <span class="n">Vmocap</span>
 <span class="k">print</span> <span class="n">v</span><span class="o">*</span><span class="mf">3.6</span><span class="p">,</span><span class="s">&quot;Kmph&quot;</span>
@@ -793,28 +793,28 @@ Center of gravity of the centered frame [  4.44089210e-16  -1.05471187e-15   8.9
 following parameters</p>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">traj</span></tt> a plane trajectory object.</li>
-<li><img class="math" src="../../_images/math/4a333881289d833f265fe2fef93abf0404b26d60.png" alt="t_k"/> time for evaluation of topos</li>
-<li><img class="math" src="../../_images/math/15abacad64bbb4a546704ff6083d79bc7859b877.png" alt="T_{fs}"/> duration of the periodic motion frame sequence</li>
+<li><img src="../../_images/mathmpl/math-2970bf83e5.png" style="position: relative; bottom: -7px"/> time for evaluation of topos</li>
+<li><img src="../../_images/mathmpl/math-69fdbd409a.png" style="position: relative; bottom: -10px"/> duration of the periodic motion frame sequence</li>
 </ul>
 <p>and returns</p>
 <ul class="simple">
 <li>the frame index
-<img class="math" src="../../_images/math/04edfef81bdb632eefe7c3dcb0f91d3b89cb1dbe.png" alt="k_f = \lfloor \frac{t_k \pmod{T_{fs}}}{t_f} \rfloor"/></li>
-<li>the trajectory index <img class="math" src="../../_images/math/65bcb943341ec21456552a583de932fa1a7067b8.png" alt="k_t = \lfloor t_k \rfloor"/></li>
+<img src="../../_images/mathmpl/math-fa8df6427f.png" /></li>
+<li>the trajectory index <img src="../../_images/mathmpl/math-bd16204c95.png" style="position: relative; bottom: -7px"/></li>
 <li>velocity unitary vector along motion capture frame
-<img class="math" src="../../_images/math/0ef715b9dc4d710fa91709fe7152686e7b540d17.png" alt="\hat{\mathbf{v}}_s = \frac{\mathbf{p}^g[k_f]-\mathbf{p}^g[k_f-1]}{|\mathbf{p}^g[k_f]-\mathbf{p}^g[k_f-1]|}"/></li>
+<img src="../../_images/mathmpl/math-3925c359b0.png" style="position: relative; bottom: -17px"/></li>
 <li>:math:<a href="#id9"><span class="problematic" id="id10">`</span></a>hat{mathbf{w}}_s = mathbf{hat{z}} times  hat{mathbf{v}}_s `</li>
 <li>velocity unitary vector along trajectory
-<img class="math" src="../../_images/math/14d19cd770c023634baaf3255de1acb8fd9ba9b7.png" alt="\hat{\mathbf{v}}_t = \frac{\mathbf{p}^t[k_t]-\mathbf{p}^g[k_t-1]}{|\mathbf{p}^g[k_t]-\mathbf{p}^t[k_t-1]|}"/></li>
+<img src="../../_images/mathmpl/math-bbc160cffd.png" style="position: relative; bottom: -17px"/></li>
 <li>:math:<a href="#id11"><span class="problematic" id="id12">`</span></a>hat{mathbf{w}}_t = mathbf{hat{z}} times  hat{mathbf{v}}_t `</li>
 </ul>
-<p><img class="math" src="../../_images/math/50aacdafd0664e2d05bce2d24f3c311acbc6f483.png" alt="t_f = \frac{T_{fs}}{Nf}"/> is the interframe time or frame sampling
+<p><img src="../../_images/mathmpl/math-c68c18ac15.png" style="position: relative; bottom: -13px"/> is the interframe time or frame sampling
 period, it is equal to the whole duration of the motion sequence
-<img class="math" src="../../_images/math/15abacad64bbb4a546704ff6083d79bc7859b877.png" alt="T_{fs}"/> divided by the number of frames</p>
+<img src="../../_images/mathmpl/math-69fdbd409a.png" style="position: relative; bottom: -10px"/> divided by the number of frames</p>
 <p><tt class="docutils literal"><span class="pre">settopos</span></tt> is a method which takes as argument :</p>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">traj</span></tt> a plane trajectory (Npt,2)</li>
-<li><img class="math" src="../../_images/math/4a333881289d833f265fe2fef93abf0404b26d60.png" alt="t_k"/> time for evaluation of topos</li>
+<li><img src="../../_images/mathmpl/math-2970bf83e5.png" style="position: relative; bottom: -7px"/> time for evaluation of topos</li>
 </ul>
 <p>In further version of the class, this function will be modified to avoid
 passing the whole trajectory.</p>
@@ -887,24 +887,16 @@ application. The localization application will define the BLCS from the
 position of radiating devices placed on the body surface.</p>
 <p>Each basis is constructed with the function from
 <tt class="docutils literal"><span class="pre">geomutil.onbfromaxe()</span></tt> : orthonormal bases from axes. This function
-takes 2 sets of <img class="math" src="../../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> points <img class="math" src="../../_images/math/9bdd37a0dd7923e0ec534485532e96e4d4d332d8.png" alt="\mathbf{p}_{A,n}"/> and
-<img class="math" src="../../_images/math/08835458dc9d70d809798923f8b0dd0301be5cc8.png" alt="\mathbf{p}_{B,n}"/> as input and provides an orthonormal basis as
+takes 2 sets of <img src="../../_images/mathmpl/math-e7b31363a1.png" style="position: relative; bottom: -3px"/> points <img src="../../_images/mathmpl/math-2014ddb223.png" style="position: relative; bottom: -10px"/> and
+<img src="../../_images/mathmpl/math-04e6380741.png" style="position: relative; bottom: -10px"/> as input and provides an orthonormal basis as
 output.</p>
 <p>3 unitary vectors are constructed :</p>
-<div class="math">
-<p><img src="../../_images/math/2524de9efc82760781e46cee8d969a7bb91a2898.png" alt="\hat{\mathbf{w}}_n = \frac{\mathbf{p}_B-\mathbf{p}_A}{| \mathbf{p}_B-\mathbf{p}_A |}"/></p>
-</div><div class="math">
-<p><img src="../../_images/math/6842832c377839770e2fbfd471a2895800458b44.png" alt="\hat{\mathbf{u}}_n = \frac{\hat{\mathbf{v}}_g - (\hat{\mathbf{v}}_g.{\hat{\mathbf{w}}_n}) \mathbf{\hat{w}}_n}{|\hat{\mathbf{v}_g} - (\hat{\mathbf{v}_g}.{\hat{\mathbf{w}}_n}) \mathbf{\hat{w}}_n|}"/></p>
-</div><div class="math">
-<p><img src="../../_images/math/c2599ac37f7b50d3e2a89dedbb4f273ebe2e4ba1.png" alt="\hat{\mathbf{v}}_n = \mathbf{\hat{w}}_n \times \mathbf{\hat{u}}_n"/></p>
-</div><p>Where <img class="math" src="../../_images/math/07cb9349fac20981cf05575d1c2b10e28d09b02d.png" alt="\hat{\mathbf{v}}_g"/> is the unit velocity vector along
+<img src="../../_images/mathmpl/math-0cf2836a48.png" class="center" /><img src="../../_images/mathmpl/math-2d89adcbdc.png" class="center" /><img src="../../_images/mathmpl/math-a83fa5bdd7.png" class="center" /><p>Where <img src="../../_images/mathmpl/math-9ebaf25e76.png" style="position: relative; bottom: -10px"/> is the unit velocity vector along
 actual trajectory.</p>
 <p>The outpout of <tt class="docutils literal"><span class="pre">geomutil.onbframe</span></tt> is an MDA
-<img class="math" src="../../_images/math/b2dbf695774d2af9fa3ad59c30afa05496194c71.png" alt="(3\times n \times 3)"/> of <img class="math" src="../../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> unitary matrices aggregated
+<img src="../../_images/mathmpl/math-6d67c54727.png" style="position: relative; bottom: -8px"/> of <img src="../../_images/mathmpl/math-e7b31363a1.png" style="position: relative; bottom: -3px"/> unitary matrices aggregated
 along axis 1</p>
-<div class="math">
-<p><img src="../../_images/math/cb83eb772b450d76e29d4fadef3da133d65a7c61.png" alt="\mathbf{T}_n=[\hat{\mathbf{u}}_n, \hat{\mathbf{v}}_n, \hat{\mathbf{w}}_n]"/></p>
-</div><p>To create the CCS :</p>
+<img src="../../_images/mathmpl/math-7a3bcb860d.png" class="center" /><p>To create the CCS :</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">setccs</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -936,7 +928,7 @@ CCS (Cylinder coordinates systems)</p>
 </div>
 <div class="section" id="placing-a-dcs-device-coordinate-system-on-the-cylinder">
 <h2>Placing a dcs (Device Coordinate System ) on the cylinder<a class="headerlink" href="#placing-a-dcs-device-coordinate-system-on-the-cylinder" title="Permalink to this headline">¶</a></h2>
-<p>A DCS is refered by 4 numbers <img class="math" src="../../_images/math/cad3d8d10b7bf945cdca8a3d3c9c7dda9af352e1.png" alt="(Id,l,h,\alpha)"/></p>
+<p>A DCS is refered by 4 numbers <img src="../../_images/mathmpl/math-d859882232.png" style="position: relative; bottom: -8px"/></p>
 <ul class="simple">
 <li>Id : Cylinder Id</li>
 <li>l : length along cylinder</li>
@@ -1091,8 +1083,8 @@ CCS (Cylinder coordinates systems)</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 26, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on avril 02, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/4-MOB/Body.txt"
 	    rel="nofollow">Show this page source</a>
