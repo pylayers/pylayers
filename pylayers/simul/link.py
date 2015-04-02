@@ -596,11 +596,18 @@ class DLink(Link):
 
     @fGHz.setter
     def fGHz(self,freq):
+        if not isinstance(freq,np.ndarray):
+            freq=np.array([freq])
         self._fGHz = freq
-        self.fmin = freq[0]
-        self.fmax = freq[-1]
-        self.fstep = freq[1]-freq[0]
 
+        if len(freq)>1:
+            self.fmin = freq[0]
+            self.fmax = freq[-1]
+            self.fstep = freq[1]-freq[0]
+        else:
+            self.fmin = freq
+            self.fmax = freq
+            self.step = 0
 
     @wav.setter
     def wav(self,waveform):

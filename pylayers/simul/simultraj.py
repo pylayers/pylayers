@@ -296,7 +296,7 @@ class Simul(PyLayers):
         fig, ax = self.N.show(fig=fig, ax=ax)
         return fig, ax
 
-    def evaldeter(self, na, nb, wstd, fmode='band', nf=10,**kwargs):
+    def evaldeter(self, na, nb, wstd, fmode='center', nf=10,**kwargs):
         """ deterministic evaluation of a link
 
         Parameters

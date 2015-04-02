@@ -3450,7 +3450,7 @@ bernard
         #
 
 
-    def showlink(self,a,b,technoa='',technob='',t=10,freq=-1):
+    def showlink(self,a,b,technoa='',technob='',**kwargs):
         """ show link configuation for a given frame
 
         Parameters
@@ -3464,38 +3464,77 @@ bernard
             default 'HKB'|'TCR'|'BS'
         technob
             default 'HKB'|'TCR'|'BS'
+        phi : float
+            elevation in rad
 
         """
+
+        defaults = { 'fig':[],
+                     'ax':[],
+                     't':0,
+                     'phi':np.pi/2.
+                    }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        if kwargs['fig'] == []:
+            fig=plt.figure()
+        else :
+            fig = kwargs['fig']
+
+        if kwargs['ax'] == []:
+            ax=fig.add_subplot(111)
+        else :
+            ax = kwargs['ax']
+
         # display nodes
 
         a,ia,ba,subjecta,technoa = self.devmapper(a,technoa)
         b,ib,bb,subjectb,technob = self.devmapper(b,technob)
-        pa = self.getdevp(a,techno=technoa,t=t).values
-        pb = self.getdevp(b,techno=technob,t=t).values
+        pa = self.getdevp(a,techno=technoa,t=kwargs['t']).values
+        pb = self.getdevp(b,techno=technob,t=kwargs['t']).values
 
 
         if len(pa.shape) >1:
             pa=pa[0]
         if len(pb.shape) >1:
             pb=pb[0]
-        plt.plot(pa[0],pa[1],'ob')
-        plt.plot(pb[0],pb[1],'or')
-        plt.text(pa[0],pa[1],ba)
-        plt.text(pb[0],pb[1],bb)
+        ax.plot(pa[0],pa[1],'ob')
+        ax.plot(pb[0],pb[1],'or')
+        ax.text(pa[0],pa[1],ba)
+        ax.text(pb[0],pb[1],bb)
 
 
 
         if subjecta != '':
-            self.B[subjecta].settopos(t=t)
+            self.B[subjecta].settopos(t=kwargs['t'])
             self.B[subjecta].dev[ba]['ant'].Fsynth()
             xa,ya,z,sa,v = self.B[subjecta].dev[ba]['ant']._computemesh(po=pa,T=self.B[subjecta].acs[ba],minr=0.01,maxr=0.1)
-            plt.plot(xa[:,10],ya[:,10])
+            p2 = np.where(self.B[subjectb].dev[ba]['ant'].phi<=kwargs['phi'])[0][-1]
+            ax.plot(xa[:,p2],ya[:,p2])
+            print p2
+        else: 
+            self.din[ba]['ant'].Fsynth()
+            xa,ya,z,sa,v = self.din[ba]['ant']._computemesh(po=self.din[ba]['p'],T=self.din[ba]['T'],minr=0.01,maxr=0.1)
+            p2 = np.where(self.din[ba]['ant'].phi<=kwargs['phi'])[0][-1]
+            ax.plot(xa[:,p2],ya[:,p2])
+            print p2
         if subjectb != '':
-            self.B[subjectb].settopos(t=t)
+            self.B[subjectb].settopos(t=kwargs['t'])
             self.B[subjectb].dev[bb]['ant'].Fsynth()
             xb,yb,z,sb,v = self.B[subjectb].dev[bb]['ant']._computemesh(po=pb,T=self.B[subjectb].acs[bb],minr=0.01 ,maxr=0.1)
-            plt.plot(xb[:,10],yb[:,10])
-
+            p2 = np.where(self.B[subjectb].dev[bb]['ant'].phi<=kwargs['phi'])[0][-1]
+            ax.plot(xb[:,p2],yb[:,p2])
+            print p2
+        else: 
+            self.din[bb]['ant'].Fsynth()
+            xb,yb,z,sb,v = self.din[bb]['ant']._computemesh(po=self.din[bb]['p'],T=self.din[bb]['T'],minr=0.01,maxr=0.1)
+            p2 = np.where(self.din[bb]['ant'].phi<=kwargs['phi'])[0][-1]
+            ax.plot(xb[:,p2],yb[:,p2])
+            print p2
+        plt.axis('equal')
         # if A.ndim==2:
         #     plt.plot(A[iframe,0],A[iframe,1],'ob')
         #     plt.text(A[iframe,0],A[iframe,1],a)
