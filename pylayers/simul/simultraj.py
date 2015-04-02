@@ -170,7 +170,9 @@ class Simul(PyLayers):
 
         """
         self.filetraj = source
-
+        if not os.path.isfile(source):
+            raise AttributeError('Trajectory file'+source+'has not been found.\
+             Please make sure you have run a simulnet simulation before runining simultraj.')
 
         # get the trajectory
         traj = tr.Trajectories()
@@ -238,7 +240,8 @@ class Simul(PyLayers):
 
 
             self.dap.update({ap: {'pos': source.din[ap]['p'],
-                                  'ant': antenna.Antenna(),
+                                  'ant': source.din[ap]['ant'],
+                                  'T': source.din[ap]['T'],
                                   'name': techno
                                         }
                                  })
@@ -279,9 +282,9 @@ class Simul(PyLayers):
         #
         for ap in self.dap:
             D = Device(self.dap[ap]['name'], ID=ap)
-            D.ant['antenna']= antenna.Antenna(D.ant['A1']['name'])
+            D.ant['antenna']= self.dap[ap]['ant']
             N.add_devices(D, grp='ap', p=self.dap[ap]['pos'])
-            
+            N.update_orient(ap, self.dap[ap]['T'], now=0.)
         # create Network
         N.create()
         self.N = N
@@ -326,6 +329,7 @@ class Simul(PyLayers):
 
         # todo in network :
         # take into consideration the postion and rotation of antenna and not device
+
         self.DL.Aa = self.N.node[na]['ant']['antenna']
         self.DL.a = self.N.node[na]['p']
         self.DL.Ta = self.N.node[na]['T']

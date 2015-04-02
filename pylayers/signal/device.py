@@ -133,10 +133,12 @@ class Device(object):
         s = s + '\n\nAntennas' + '\n'
         s = s + '========' + '\n'
         for k in self.ant:
-            s = s + str(self.ant[k]['name']) + '\n'
-            s = s + '-'*len(k) + '\n'
-            s = s + 'Antenna Relative position on device: \n' + str(self.ant[k]['p']) + '\n'
-            s = s + 'Antenna Rotation Matrice on device: \n' + str(self.ant[k]['T']) + '\n\n'
+            if k != 'T' and k != 'antenna':
+
+                s = s + str(self.ant[k]['name']) + '\n'
+                s = s + '-'*len(k) + '\n'
+                s = s + 'Antenna Relative position on device: \n' + str(self.ant[k]['p']) + '\n'
+                s = s + 'Antenna Rotation Matrice on device: \n' + str(self.ant[k]['T']) + '\n\n'
 
         return s
 

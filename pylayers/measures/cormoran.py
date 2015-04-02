@@ -155,6 +155,8 @@ from pylayers.util.pyutil import *
 import  pylayers.util.mayautil as myu
 from pylayers.mobility.ban.body import *
 from pylayers.gis.layout import *
+import pylayers.antprop.antenna as antenna
+
 from matplotlib.widgets import Slider, CheckButtons, Button, Cursor
 from pylayers.signal.DF import *
 
@@ -519,8 +521,16 @@ bernard
         """
 
         filename = os.path.join(self.rootdir,'RAW','11-06-2014','MOCAP','scene.c3d')
+
         print "\nload infrastructure node position:",
         a,self.infraname,pts,i = c3d.ReadC3d(filename)
+
+
+
+
+        
+
+
 
         pts = pts/1000.
         mpts = np.mean(pts,axis=0)
@@ -531,44 +541,45 @@ bernard
 
             self.din.update(
                 {'HKB:1':{'p':mphkb[3],
-                          'T':np.eye(3),
+                          # 'T':np.eye(3),
                           's3off':0.},
 
                  'HKB:2':{'p':mphkb[2],
-                          'T': np.array([[-0.44807362,  0.89399666,  0.],
-                                         [-0.89399666, -0.44807362,  0.],
-                                         [ 0.,0.,1.        ]]),
+                          # 'T': np.array([[-0.44807362,  0.89399666,  0.],
+                          #                [-0.89399666, -0.44807362,  0.],
+                          #                [ 0.,0.,1.        ]]),
                           's3off':0.}      ,
                  'HKB:3':{'p':mphkb[1],
-                          'T':array([[-0.59846007, -0.80115264,  0.],
-                                     [ 0.80115264, -0.59846007,  0.],
-                                     [ 0.,0.,  1.]]),
+                          # 'T':array([[-0.59846007, -0.80115264,  0.],
+                          #            [ 0.80115264, -0.59846007,  0.],
+                          #            [ 0.,0.,  1.]]),
                           's3off':0.},
                  'HKB:4':{'p':mphkb[0],
-                          'T':array([[-0.44807362, -0.89399666,  0.],
-                                     [ 0.89399666, -0.44807362,  0.],
-                                     [ 0.,0.,  1.]]),
+                          # 'T':array([[-0.44807362, -0.89399666,  0.],
+                          #            [ 0.89399666, -0.44807362,  0.],
+                          #            [ 0.,0.,  1.]]),
                           's3off':0.}
                  })
+
 
         if ('TCR' in self.typ) or ('FULL' in self.typ):
             self.din.update({'TCR:32':{'p':mpts[9],
                                        'T':np.eye(3),
                                        's3off':0.1},
                  'TCR:24':{'p':mpts[6],
-                           'T': np.array([[-0.44807362,  0.89399666,  0.],
-                                         [-0.89399666, -0.44807362,  0.],
-                                         [ 0.,0.,1.        ]]),
+                           # 'T': np.array([[-0.44807362,  0.89399666,  0.],
+                           #               [-0.89399666, -0.44807362,  0.],
+                           #               [ 0.,0.,1.        ]]),
                            's3off':0.1},
                  'TCR:27':{'p':mpts[3],
-                           'T':array([[-0.59846007, -0.80115264,  0.],
-                                     [ 0.80115264, -0.59846007,  0.],
-                                     [ 0.,0.,  1.]]),
+                           # 'T':array([[-0.59846007, -0.80115264,  0.],
+                           #           [ 0.80115264, -0.59846007,  0.],
+                           #           [ 0.,0.,  1.]]),
                            's3off':0.1},
                  'TCR:28':{'p':mpts[0],
-                           'T':array([[-0.44807362, -0.89399666,  0.],
-                                     [ 0.89399666, -0.44807362,  0.],
-                                     [ 0.,0.,  1.]]),
+                           # 'T':array([[-0.44807362, -0.89399666,  0.],
+                           #           [ 0.89399666, -0.44807362,  0.],
+                           #           [ 0.,0.,  1.]]),
                            's3off':0.1}
                  })
 
@@ -577,16 +588,26 @@ bernard
             if ('BS'  in self.typ) or ('FULL' in self.typ):
                 self.din.update(
                 {'BS:74':{'p':mphkb[3],
-                          'T':np.eye(3),
+                          # 'T':np.eye(3),
                           's3off':-0.2},
                  'BS:157':{'p':mphkb[2],
-                          'T': np.array([[-0.44807362,  0.89399666,  0.],
-                                         [-0.89399666, -0.44807362,  0.],
-                                         [ 0.,0.,1.        ]]),
+                          # 'T': np.array([[-0.44807362,  0.89399666,  0.],
+                          #                [-0.89399666, -0.44807362,  0.],
+                          #                [ 0.,0.,1.        ]]),
                           's3off':-0.2}      ,
                  })
 
+        # load extra  information frmo inifile (antenna, rotation matrix,...)
 
+        inifile = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','BodyandWear','AccesPoints.ini')
+        config = ConfigParser.ConfigParser()
+        config.read(inifile)
+        
+        for d in self.din:
+            self.din[d]['antname']=config.get(d,'file')
+            self.din[d]['ant']=antenna.Antenna(config.get(d,'file'))
+            self.din[d]['T']=eval(config.get(d,'t'))
+            self.din[d]['comment']=config.get(d,'comment')
         # self.pts= np.empty((12,3))
         # self.pts[:,0]= -mpts[:,1]
         # self.pts[:,1]= mpts[:,0]
@@ -1807,6 +1828,20 @@ bernard
         if kwargs['inodes']:
             X= np.array([v[i][1]['p'] for i in range(len(v))])
             mlab.points3d(X[:,0],X[:,1], X[:,2],scale_factor=kwargs['insize'],color=in_color)
+            if kwargs['pattern']:
+                for i in range(len(v)):
+                    if not hasattr(self.din[v[i][0]]['ant'],'SqG'):
+                        self.din[v[i][0]]['ant'].Fsynth()
+                    self.din[v[i][0]]['ant']._show3(po=v[i][1]['p'],
+                           T=self.din[v[i][0]]['T'],
+                           ilog=False,
+                           minr=0.01,
+                           maxr=0.2,
+                           newfig=False,
+                           title=False,
+                           colorbar=False,
+                           )
+
         if kwargs['inname']:
             [mlab.text3d(v[i][1]['p'][0],
                         v[i][1]['p'][1],
