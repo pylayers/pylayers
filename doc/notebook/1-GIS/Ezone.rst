@@ -5,6 +5,7 @@
     from pylayers.gis.gisutil import ent,ext2qt
     import matplotlib.pyplot as plt
     import numpy as np
+
 .. code:: python
 
     %matplotlib inline
@@ -43,6 +44,7 @@ invoqued as :
 .. code:: python
 
     z = ez.Ezone('N48W002')
+
 In this initial phase no data is loaded yet, to load all the data
 gathered for this ``Ezone`` in an existing HDF5 file let invoque the
 ``loadh5`` method.
@@ -78,6 +80,7 @@ method.
 .. code:: python
 
     ltiles = ext2qt(z.extent,z.lL0)
+
 .. code:: python
 
     z.show(source='srtm',bldg=False,height=True,clim=[80,120])
@@ -329,7 +332,7 @@ be expressed in (lon,lat) coordinates in WGS84 system.
 .. image:: Ezone_files/Ezone_40_1.png
 
 
-.. code:: python
+. code:: python
 
     z
 

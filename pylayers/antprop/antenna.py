@@ -229,7 +229,7 @@ class Antenna(PyLayers):
         """
         defaults = {'directory': 'ant',
                     'nf':104,
-                    'polar':'v',
+                    'pol':'v',
                     'source':'satimo',
                     'ntheta':90,
                     'nphi':181,
@@ -255,7 +255,7 @@ class Antenna(PyLayers):
         self.Nt = kwargs['ntheta']
         self.Np = kwargs['nphi']
         self.source = kwargs['source']
-        self.polar = kwargs['polar']
+        self.pol = kwargs['pol']
 
         # if typ has an extension it is a file
         if isinstance(typ,str):
@@ -557,13 +557,13 @@ class Antenna(PyLayers):
                 GdB  = GhdB+GvdB
                 self.sqG = np.sqrt(10**(GdB/10.))
                 self.SqG = self.sqG[None,...]*np.ones(self.Nf)[:,None,None]
-                if self.polar=='h':
+                if self.pol=='h':
                     Fap = self.sqG
                     Fat = np.zeros((len(self.theta),self.Nf))
-                if self.polar=='v':
+                if self.pol=='v':
                     Fap = np.zeros((len(self.phi),self.Nf))
                     Fat = self.sqG
-                if self.polar=='c':
+                if self.pol=='c':
                     Fap = (1./sqrt(2))*self.sqG
                     Faq = (1j/sqrt(2))*self.sqG
                 self.evaluated = True
@@ -574,13 +574,13 @@ class Antenna(PyLayers):
                 GhdB = (-np.minimum(12*(phi/self.hpbwh)**2,self.fbrh)+self.gm)
                 GdB  = GhdB+GvdB
                 self.sqG = np.sqrt(10**(GdB/10.))
-                if self.polar=='h':
+                if self.pol=='h':
                     Fap = self.sqG
                     Fat = np.zeros((len(self.theta),self.Nf))
-                if self.polar=='v':
+                if self.pol=='v':
                     Fap = np.zeros((len(self.phi),self.Nf))
                     Fat = self.sqG
-                if self.polar=='c':
+                if self.pol=='c':
                     Fap = (1./sqrt(2))*self.sqG
                     Faq = (1j/sqrt(2))*self.sqG
 
@@ -1533,11 +1533,30 @@ class Antenna(PyLayers):
     def _computemesh(self,**kwargs):
         """ compute mesh from theta phi
 
+        Parameters
+        ----------
+
+        fGHz : np.array() 
+            default [] : takes center frequency fa[len(fa)/2]
+        po   : np.array()
+            location point of the antenna
+        T    : np.array
+            rotation matrix
+        minr : float    
+            minimum radius in meter 
+        maxr : float 
+            maximum radius in meter  
+        tag : string 
+        ilog : boolean 
+        title : boolean 
+
+
         Returns
         -------
 
         (x, y, z, k)
-        x , y z value in carteisan axis
+        
+        x , y , z values in cartesian axis
         k frequency point evaluated
 
         """
@@ -1548,8 +1567,7 @@ class Antenna(PyLayers):
                      'maxr' : 1 ,
                      'tag' : 'Pat',
                      'ilog' : False,
-                     'title':True,
-                     'ilog':False
+                     'title':True
                      }
 
 
@@ -1581,13 +1599,16 @@ class Antenna(PyLayers):
         if r.max() != r.min():
             u = (r - r.min()) /(r.max() - r.min())
         else : u = r
+        
         r = minr + (maxr-minr) * u
 
         x = r * np.sin(th) * np.cos(phi) 
         y = r * np.sin(th) * np.sin(phi) 
         z = r * np.cos(th) 
 
-        p = np.concatenate((x[...,np.newaxis],y[...,np.newaxis],z[...,np.newaxis]),axis=2)
+        p = np.concatenate((x[...,np.newaxis],
+                            y[...,np.newaxis],
+                            z[...,np.newaxis]),axis=2)
         #
         # antenna cs -> glogal cs
         # q : Nt x Np x 3

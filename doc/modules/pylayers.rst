@@ -7,13 +7,18 @@ PyLayers
 Simulations  
 -----------
 
+In this section are described the different high level module 
+in charge of the different simulations. 
+
++ Dlink is for the deterministic simulation 
+
+
 .. toctree::
    :maxdepth: 2
 
    pylayers.simul.link
    pylayers.simul.exploit
    pylayers.simul.exploit_simulnet
-   pylayers.simul.radionode
    pylayers.simul.simulnet
    pylayers.simul.simultraj
 
@@ -207,16 +212,16 @@ Networks
    pylayers.network.show
    pylayers.network.wsn
 
-Signals
--------
+Physical Layer
+--------------
 
 .. toctree::
    :maxdepth: 2
 
+   pylayers.simul.radionode
    pylayers.signal.bsignal
    pylayers.signal.DF
    pylayers.signal.ED
-   pylayers.signal.Fading
    pylayers.signal.waveform
    pylayers.signal.standard
 

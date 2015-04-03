@@ -25,8 +25,8 @@ Run simulation and data exploitation
     Simul.evalstat
     Simul.show
 
-Internal configuration
-----------------------
+Loading and Saving
+------------------
 
 .. autosummary::
     :toctree: generated/
@@ -82,8 +82,10 @@ class Simul(PyLayers):
         ----------
 
         source : string
-            h5 trajectory
+            h5 trajectory file default simulnet_TA-Office.h5
+
         verbose : boolean
+
 
         """
 
@@ -115,6 +117,7 @@ class Simul(PyLayers):
         self.DL.cutoff=cutoff
 
         self.filename = 'simultraj_' + self.filetraj
+
         self.data = pd.DataFrame(columns=['id_a', 'id_b',
                                           'x_a', 'y_a', 'z_a',
                                           'x_b', 'y_b', 'z_b',
@@ -123,13 +126,16 @@ class Simul(PyLayers):
                                           'fbminghz', 'fbmaxghz', 'fstep', 'aktk_id',
                                           'sig_id', 'ray_id', 'Ct_id', 'H_id'
                                           ])
+
         self.data.index.name='t'
         self._filecsv = self.filename.split('.')[0] + '.csv'
         self.todo = {'OB': True,
                     'B2B': True,
                     'B2I': True,
                     'I2I': False}
+
         filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
+
         if os.path.exists(filenameh5) :
             self.loadpd()
         self.settime(0.)
@@ -263,7 +269,9 @@ class Simul(PyLayers):
         """
 
         N = Network()
+        #
         # get devices on bodies
+        #
         for p in self.dpersons:
             D = []
             for dev in self.dpersons[p].dev:
@@ -276,12 +284,11 @@ class Simul(PyLayers):
         #
         # get access point devices
         #
-        #
         for ap in self.dap:
             D = Device(self.dap[ap]['name'], ID=ap)
             D.ant['antenna']= antenna.Antenna(D.ant['A1']['name'])
             N.add_devices(D, grp='ap', p=self.dap[ap]['pos'])
-            
+
         # create Network
         N.create()
         self.N = N
@@ -333,6 +340,10 @@ class Simul(PyLayers):
         self.DL.Ab = self.N.node[nb]['ant']['antenna']
         self.DL.b = self.N.node[nb]['p']
         self.DL.Tb = self.N.node[nb]['T']
+
+        #
+        # Choose frequency band
+        #
         if fmode == 'center':
             self.DL.fGHz = self.N.node[na]['wstd'][wstd]['fcghz']
         else:
