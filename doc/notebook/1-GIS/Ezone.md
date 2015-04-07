@@ -21,7 +21,7 @@ By default files are placed in directory `gis/h5` of the current project tree.
 The command h5ls allows to see the hierarchical structure of the file
 
 ```python
->>> !h5ls $BASENAME/gis/h5/N48W002.h5
+>>> !h5ls $BASENAME/gis/h5/N48W002.h5ls
 /home/mbalde/Pylayers_project/gis/h5/N48W002.h5: unable to open file
 ```
 
