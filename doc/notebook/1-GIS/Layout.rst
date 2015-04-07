@@ -316,7 +316,7 @@ connected to the origin (corresponding to exterior cycle).
 
 .. parsed-literal::
 
-    <matplotlib.collections.LineCollection at 0x2ab10c59a850>
+    <matplotlib.collections.LineCollection at 0x2b56ecea3250>
 
 
 
@@ -428,9 +428,9 @@ because none segment has 0 as an index.
 
 .. parsed-literal::
 
-    array([[ 29.785,   0.044,  22.538],
+    array([[ 29.785,  -3.754,  22.538],
            [  6.822,  23.078,   8.711],
-           [ 29.785,  -3.754,  20.326],
+           [ 29.785,   0.044,  20.326],
            [  8.921,  23.078,   8.693]])
 
 

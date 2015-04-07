@@ -345,7 +345,10 @@ class CorSer(PyLayers):
 
     def __repr__(self):
         st = ''
-        st = st + 'Filename: ' + self._filename + '\n'
+        st = st + 'filename : ' + self._filename + '\n'
+        st = st + 'filewear : ' + self.filewear + '\n'
+        st = st + 'filebody : ' + self.filebody + '\n'
+        st = st + 'filemocap : ' + self.filemocap + '\n'
         st = st + 'Day : '+ str(self.day)+'/06/2014'+'\n'
         st = st + 'Serie : '+ str(self.serie)+'\n'
         st = st + 'Scenario : '+str(self.scenario)+'\n'
@@ -684,6 +687,13 @@ bernard
 
     def _loadbody(self,day=11,serie=''):
         """ load log file
+
+        Parameters
+        ----------
+
+        day :
+        serie :
+
         """
         self.B={}
         color=['LightBlue','YellowGreen','PaleVioletRed','white','white','white','white','white','white','white']
@@ -692,22 +702,23 @@ bernard
             print "\nload ",subject, " body:",
             seriestr = str(self.serie).zfill(3)
             if day == 11:
-                filemocap = os.path.join(self.rootdir,'RAW',str(self.day)+'-06-2014','MOCAP','serie_'+seriestr+'.c3d')
+                self.filemocap = os.path.join(self.rootdir,'RAW',str(self.day)+'-06-2014','MOCAP','serie_'+seriestr+'.c3d')
             elif day == 12:
-                filemocap = os.path.join(self.rootdir,'RAW',str(self.day)+'-06-2014','MOCAP','Nav_serie_'+seriestr+'.c3d')
+                self.filemocap = os.path.join(self.rootdir,'RAW',str(self.day)+'-06-2014','MOCAP','Nav_serie_'+seriestr+'.c3d')
             baw = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','BodyandWear')
             if subject =='Jihad':
                 subject ='Jihan'
-            filebody = os.path.join(baw, subject + '.ini')
-            filewear = os.path.join(baw,subject + '_'  +str(self.day)+'-06-2014_' + self.typ + '.ini')
+
+            self.filebody = os.path.join(baw, subject + '.ini')
+            self.filewear = os.path.join(baw,subject + '_'  +str(self.day)+'-06-2014_' + self.typ + '.ini')
 
             if len(self.subject) >1 or self.mocapinterf:
                 multi_subject=True
             else:
                 multi_subject=False
-            self.B.update({subject:Body(_filebody=filebody,
-                             _filemocap=filemocap,unit = 'mm', loop=False,
-                             _filewear=filewear,
+            self.B.update({subject:Body(_filebody=self.filebody,
+                             _filemocap=self.filemocap,unit = 'mm', loop=False,
+                             _filewear=self.filewear,
                              centered=False,
                              multi_subject_mocap=multi_subject,
                              color=color[us])})
@@ -724,7 +735,7 @@ bernard
                     print "load ",i, " interfering body:",
 
                     self.B.update({i:Cylinder(name=i,
-                                              _filemocap=filemocap,
+                                              _filemocap=self.filemocap,
                                               unit = 'mm',
                                               color = color[ui])})
                     intertmp.append(i)
@@ -865,7 +876,16 @@ bernard
     def _loadBS(self,day=11,serie='',scenario='20',run=1):
         """ load BeSpoon data
 
+        Parameters
+        ----------
+
+        day : int
+        serie : string
+        scenario : string
+        run : int
+
         """
+
         if day == 11:
             self.dBS = {'WristRight':157,'AnkleRight':74,'HandRight':0}
         elif day == 12:
@@ -1015,7 +1035,7 @@ bernard
             ------
 
             if square_mda = True
-            
+
             intersection : (ndevice x nbdevice x nb_timestamp)
                 matrice of intersection (1 if link is cut 0 otherwise)
             links : (nbdevice)
@@ -1379,7 +1399,7 @@ bernard
     def imshowvisibility_i(self,techno='HKB',t=0,**kwargs):
         """  imshow visibility mda interactive
 
-        Parameters 
+        Parameters
         ----------
 
         inter : (nb link x nb link x timestamps)
@@ -1387,7 +1407,7 @@ bernard
         time : intial time (s)
 
 
-        Example 
+        Example
         -------
 
         >>> from pylayers.measures.cormoran import *
@@ -1830,7 +1850,7 @@ bernard
 
         Examples
         --------
-            
+
             >>> S  = Corser(6)
             >>> S._show3()
 
@@ -2025,7 +2045,7 @@ bernard
         return fig,(ax1,ax2)
 
     def _load_offset_dict(self):
-        
+
         path = os.path.join(os.environ['CORMORAN'],'POST-TREATED')
         d = pickle.load( open( os.path.join(path,'offset_dictionnary.bin'), "rb" ) )
 
@@ -2037,7 +2057,7 @@ bernard
         d = pickle.dump( d, open( os.path.join(path,'offset_dictionnary.bin'), "wb" ) )
 
     def _save_data_off_dict(self,filename,typ,value):
-        """ save 
+        """ save
                 - a given "value" of an for,
                 - a serie/run "filename",
                 - of a given typ (video|hkb|tcr|...)
@@ -3557,6 +3577,7 @@ bernard
         if subjecta != '':
             self.B[subjecta].settopos(t=kwargs['t'])
             self.B[subjecta].dev[ba]['ant'].Fsynth()
+<<<<<<< HEAD
             xa,ya,z,sa,v = self.B[subjecta].dev[ba]['ant']._computemesh(po=pa,T=self.B[subjecta].acs[ba],minr=0.01,maxr=0.1,ilog=False)
             p2 = np.where(self.B[subjecta].dev[ba]['ant'].phi<=kwargs['phi'])[0][-1]
             ax.plot(xa[:,p2],ya[:,p2])
@@ -3614,6 +3635,26 @@ bernard
         fig,ax=self.showpattern(a=b,techno=technob,fig=fig,ax=ax)
 
         plt.axis('equal')
+=======
+            xa,ya,z,sa,v = self.B[subjecta].dev[ba]['ant']._computemesh(po=pa,T=self.B[subjecta].acs[ba],minr=0.1,maxr=1.8)
+            plt.plot(xa[:,10],ya[:,10])
+        if subjectb != '':
+            self.B[subjectb].settopos(t=t)
+            self.B[subjectb].dev[bb]['ant'].Fsynth()
+            xb,yb,z,sb,v = self.B[subjectb].dev[bb]['ant']._computemesh(po=pb,T=self.B[subjectb].acs[bb],minr=0.1 ,maxr=1.8)
+            plt.plot(xb[:,10],yb[:,10])
+
+        p1 = self.din['HKB:1']['p']
+        p2 = self.din['HKB:2']['p']
+        p3 = self.din['HKB:3']['p']
+        p4 = self.din['HKB:4']['p']
+        plt.plot(p1[0],p1[1],'og')
+        plt.plot(p2[0],p2[1],'ob')
+        plt.plot(p3[0],p3[1],'or')
+        plt.plot(p4[0],p4[1],'ok')
+        plt.axis('equal')
+        
+>>>>>>> ad640717e0ee79bee8435dd25f3282a7d09f45f1
         # if A.ndim==2:
         #     plt.plot(A[iframe,0],A[iframe,1],'ob')
         #     plt.text(A[iframe,0],A[iframe,1],a)

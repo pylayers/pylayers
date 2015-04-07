@@ -850,7 +850,7 @@ class Bsignal(PyLayers):
         Returns
         -------
 
-        fig 
+        fig : figure
         ax : np.array of axes
 
 
@@ -921,7 +921,7 @@ class Bsignal(PyLayers):
         #
         # To be added in mulcplot
         #
-
+    
         tcolor = ['red', 'green', 'green', 'green', 'black', 'black', 'black']
         nl,nc = np.shape(ax)
         for l in range(nl):
