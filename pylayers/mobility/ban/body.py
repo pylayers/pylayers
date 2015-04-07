@@ -185,10 +185,12 @@ class Body(PyLayers):
                     st = st+'on the upper part of '
                 if side=='b':
                     st = st+'on the lower part of '
-                st = st + str(self.dev[k]['cyl'])[0:-1]+'\n'
+                st = st + str(self.dev[k]['cyl'])[0:-1]
+                st = st + ' witn antenna '+ str(self.dev[k]['file'])+'\n'
             else :
                 st = st + 'I have a '+self.dev[k]['name']+' device with id #'+k+' on '+\
-                            self.dev[k]['radiomarkname']+'\n'
+                            self.dev[k]['radiomarkname']+'\t'+\
+                            '-> Antenna '+ str(self.dev[k]['file']).split('.')[0]+'\n'
 
 
 

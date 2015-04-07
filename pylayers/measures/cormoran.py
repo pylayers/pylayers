@@ -448,6 +448,61 @@ class CorSer(PyLayers):
                         print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
                 print '{0:66}'.format('-'*len(title) )
 
+    @property
+    def ant(self):
+        """ display device techno, id , id on body, body owner,...
+        """
+        
+        title = '{0:21} | {1:7} | {2:8} | {3:10} '.format('Name in Dataframe', 'Real Id', 'Body Id', 'Subject')
+        print title + '\n' + '='*len(title) 
+        # access points HKB
+        for d in self.din:
+            if ('HK' in d) :
+                dev = self.devmapper(d,'HKB')
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+        if 'FULL' in self.typ:
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+        for d in self.din:
+            if ('BS' in d) :
+                dev = self.devmapper(d,'BS')
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+        if 'FULL' in self.typ:
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+
+        # access points TCR
+        for d in self.din:
+            if ('TCR' in d)  :
+                dev = self.devmapper(d,'TCR')
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+        print '{0:66}'.format('-'*len(title) )
+        #device per RAT per body
+        for b in self.B:
+            if b not in self.interf:
+                #HKB per body
+                for d in self.B[b].dev.keys():
+
+                    if ('HK' in d):
+                        dev = self.devmapper(d,'HKB')
+                        print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+                #bespoon
+                if ('FULL' in self.typ) or ('HKB' in self.typ):
+                    print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+                for d in self.B[b].dev.keys():
+                    if ('BS' in d):
+                        dev = self.devmapper(d,'BS')
+                        print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+                # print '{0:66}'.format('-'*len(title) )
+                #TCR per body
+                if 'FULL' in self.typ:
+                    print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+                for d in self.B[b].dev.keys():
+                    if ('TCR' in d):
+                        dev = self.devmapper(d,'TCR')
+                        print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+                print '{0:66}'.format('-'*len(title) )
+
+
+
     def _loadcam(self):
 
         self.cam = np.array([
@@ -3450,29 +3505,28 @@ bernard
         #
 
 
-    def showlink(self,a,b,technoa='',technob='',**kwargs):
-        """ show link configuation for a given frame
+    def showpattern(self,a,techno='',**kwargs):
+        """ show pattern configuation for a given link and frame
 
         Parameters
         ----------
 
         a : int 
             link index 
-        b : int 
-            link index
         technoa : string 
             default 'HKB'|'TCR'|'BS'
         technob
             default 'HKB'|'TCR'|'BS'
         phi : float
-            elevation in rad
+            antenna elevation in rad
 
         """
 
         defaults = { 'fig':[],
                      'ax':[],
                      't':0,
-                     'phi':np.pi/2.
+                     'phi':np.pi,
+                     'ap':False
                     }
 
         for k in defaults:
@@ -3491,49 +3545,74 @@ bernard
 
         # display nodes
 
-        a,ia,ba,subjecta,technoa = self.devmapper(a,technoa)
-        b,ib,bb,subjectb,technob = self.devmapper(b,technob)
-        pa = self.getdevp(a,techno=technoa,t=kwargs['t']).values
-        pb = self.getdevp(b,techno=technob,t=kwargs['t']).values
+        a,ia,ba,subjecta,techno = self.devmapper(a,techno)
+        pa = self.getdevp(a,techno=techno,t=kwargs['t']).values
 
 
         if len(pa.shape) >1:
             pa=pa[0]
-        if len(pb.shape) >1:
-            pb=pb[0]
         ax.plot(pa[0],pa[1],'ob')
-        ax.plot(pb[0],pb[1],'or')
         ax.text(pa[0],pa[1],ba)
-        ax.text(pb[0],pb[1],bb)
-
-
 
         if subjecta != '':
             self.B[subjecta].settopos(t=kwargs['t'])
             self.B[subjecta].dev[ba]['ant'].Fsynth()
-            xa,ya,z,sa,v = self.B[subjecta].dev[ba]['ant']._computemesh(po=pa,T=self.B[subjecta].acs[ba],minr=0.01,maxr=0.1)
-            p2 = np.where(self.B[subjectb].dev[ba]['ant'].phi<=kwargs['phi'])[0][-1]
+            xa,ya,z,sa,v = self.B[subjecta].dev[ba]['ant']._computemesh(po=pa,T=self.B[subjecta].acs[ba],minr=0.01,maxr=0.1,ilog=False)
+            p2 = np.where(self.B[subjecta].dev[ba]['ant'].phi<=kwargs['phi'])[0][-1]
             ax.plot(xa[:,p2],ya[:,p2])
-            print p2
         else: 
             self.din[ba]['ant'].Fsynth()
-            xa,ya,z,sa,v = self.din[ba]['ant']._computemesh(po=self.din[ba]['p'],T=self.din[ba]['T'],minr=0.01,maxr=0.1)
+            xa,ya,z,sa,v = self.din[ba]['ant']._computemesh(po=self.din[ba]['p'],T=self.din[ba]['T'],minr=0.01,maxr=0.1,ilog=False)
             p2 = np.where(self.din[ba]['ant'].phi<=kwargs['phi'])[0][-1]
             ax.plot(xa[:,p2],ya[:,p2])
-            print p2
-        if subjectb != '':
-            self.B[subjectb].settopos(t=kwargs['t'])
-            self.B[subjectb].dev[bb]['ant'].Fsynth()
-            xb,yb,z,sb,v = self.B[subjectb].dev[bb]['ant']._computemesh(po=pb,T=self.B[subjectb].acs[bb],minr=0.01 ,maxr=0.1)
-            p2 = np.where(self.B[subjectb].dev[bb]['ant'].phi<=kwargs['phi'])[0][-1]
-            ax.plot(xb[:,p2],yb[:,p2])
-            print p2
-        else: 
-            self.din[bb]['ant'].Fsynth()
-            xb,yb,z,sb,v = self.din[bb]['ant']._computemesh(po=self.din[bb]['p'],T=self.din[bb]['T'],minr=0.01,maxr=0.1)
-            p2 = np.where(self.din[bb]['ant'].phi<=kwargs['phi'])[0][-1]
-            ax.plot(xb[:,p2],yb[:,p2])
-            print p2
+        
+        return fig,ax
+
+    def showlink(self,a,b,technoa='',technob='',**kwargs):
+        """ show link configuation for a given frame
+
+        Parameters
+        ----------
+
+        a : int 
+            link index 
+        b : int 
+            link index
+        technoa : string 
+            default 'HKB'|'TCR'|'BS'
+        technob
+            default 'HKB'|'TCR'|'BS'
+        phi : float
+            antenna elevation in rad
+
+        """
+
+        defaults = { 'fig':[],
+                     'ax':[],
+                     't':0,
+                     'phi':np.pi/2.,
+                     'ap':False
+                    }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        if kwargs['fig'] == []:
+            fig=plt.figure()
+        else :
+            fig = kwargs['fig']
+
+        if kwargs['ax'] == []:
+            ax=fig.add_subplot(111)
+        else :
+            ax = kwargs['ax']
+
+        # display nodes
+
+        fig,ax=self.showpattern(a=a,techno=technoa,fig=fig,ax=ax)
+        fig,ax=self.showpattern(a=b,techno=technob,fig=fig,ax=ax)
+
         plt.axis('equal')
         # if A.ndim==2:
         #     plt.plot(A[iframe,0],A[iframe,1],'ob')
@@ -3583,69 +3662,6 @@ bernard
         
 
 
-    # def showlink(self,a,b,technoa='HKB',technob='HKB',iframe=0,style='*b'):
-    #     """ show link configuation for a given frame
-
-    #     Parameters
-    #     ----------
-
-    #     a : int 
-    #         link index 
-    #     b : int 
-    #         link index
-    #     technoa : string 
-    #         default 'HKB'|'TCR'|'BS'
-    #     technob
-    #         default 'HKB'|'TCR'|'BS'
-    #     iframe
-    #     style
-
-    #     """
-    #     # display nodes
-    #     A,B = self.getlinkp(a,b,technoa=technoa,technob=technob)
-    #     A=A.values
-    #     B=B.values
-    #     a,ia,ba,subjecta,technoa = self.devmapper(a,technoa)
-    #     b,ib,bb,subjectb,technob = self.devmapper(b,technob)
-
-    #     if A.ndim==2:
-    #         plt.plot(A[iframe,0],A[iframe,1],'ob')
-    #         plt.text(A[iframe,0],A[iframe,1],a)
-    #     else:
-    #         plt.plot(A[0],A[1],'or')
-    #         #plt.text(A[0],A[1],a)
-
-    #     if B.ndim==2:
-    #         plt.plot(B[iframe,0],B[iframe,1],style)
-    #         plt.text(B[iframe,0]+0.1,B[iframe,1]+0.1,b)
-    #     else:
-    #         plt.plot(B[0],B[1],'ob')
-    #         plt.text(B[0],B[1],b)
-    #     plt.xlim(-6,6)
-    #     plt.ylim(-5,5)
-    #     # display body
-
-    #     #pc = self.B.d[:,2,iframe] + self.B.pg[:,iframe].T
-    #     pc0 = self.B[subjecta].d[:,0,iframe] + self.B[subjecta].pg[:,iframe].T
-    #     pc1 = self.B[subjecta].d[:,1,iframe] + self.B[subjecta].pg[:,iframe].T
-    #     pc15 = self.B[subjecta].d[:,15,iframe] + self.B[subjecta].pg[:,iframe].T
-    #     #plt.plot(pc0[0],pc0[1],'og')
-    #     #plt.text(pc0[0]+0.1,pc0[1],str(iframe))
-    #     #plt.plot(pc1[0],pc1[1],'og')
-    #     #plt.plot(pc15[0],pc15[1],'og')
-    #     #ci00   = plt.Circle((pc0[0],pc0[1]),self.B[subjecta].sl[0,2],color='green',alpha=0.6)
-    #     #ci01   = plt.Circle((pc1[0],pc1[1]),self.B[subjecta].sl[0,2],color='green',alpha=0.1)
-    #     #ci100 = plt.Circle((pc0[0],pc0[1]),self.B[subjecta].sl[10,2],color='red',alpha=0.1)
-    #     ci1015 = plt.Circle((pc15[0],pc15[1]),self.B[subjecta].sl[10,2],color='green',alpha=0.5)
-    #     plt.axis('equal')
-    #     ax = plt.gca()
-    #     ax.add_patch(ci1015)
-    #     #ax.add_patch(ci01)
-    #     #ax.add_patch(ci100)
-    #     #ax.add_patch(ci1015)
-    #     #its = self.B[subjecta].intersectBody(A[iframe,:],B[iframe,:],topos=False,frameId=iframe)
-    #     #x.set_title('frameId :'+str(iframe)+' '+str(its.T))
-    #     x,y,z,s,v = self.B[subjecta].dev[ba]['ant']._computemesh(po=A[iframe],T=)
 
     def visidev(self,a,b,technoa='HKB',technob='HKB',dsf=10):
         """ get link visibility status
