@@ -1892,6 +1892,9 @@ class TUsignal(TBsignal, Usignal):
         S.y = S.y * te
         return(S)
 
+    def idealf(self,fcGHz,BGHz):
+        pass
+
     def filter(self, order=4, wp=0.3, ws=0.4, ftype='butter'):
         """ signal filtering
 
@@ -4995,9 +4998,9 @@ class Noise(TUsignal):
                  ti=0,
                  tf = 100,
                  fsGHz = 50,
-                 PSDdBmpHz=-174,
-                 NF=0,
-                 R=50, seed=1):
+                 PSDdBmpHz = -174,
+                 NF = 0,
+                 R = 50, seed=1):
         """ object constructor
 
         Parameters
@@ -5108,12 +5111,15 @@ class Noise(TUsignal):
 
 
     def eval(self):
-        """ noise evaluation
+        r""" noise evaluation
+
+        $$N_0 = 4 \times 10^{-21}$$
+
         """
-        p = self._PSDdBmpHz + self._NF
-        pmW = 10 ** (p / 10.)  # DSP : dBm/Hz -> mW/Hz
-        pW = pmW / 1e3         # DSP : mw/Hz  -> W/Hz
-        self.PW = pW * (self._fsGHz * 1e9)   # Power : p * Bandwith Hz
+        e  = self._PSDdBmpHz + self._NF
+        emJ = 10 ** (e / 10.)  # DSP : dBm/Hz -> mW/Hz
+        eJ = emJ / 1e3         # DSP : mw/Hz  -> W/Hz
+        self.PW = eJ * (self._fsGHz * 1e9)   # Power : p * Bandwith Hz
         self.vrms = np.sqrt(self._R*self.PW)
         self.x = np.arange(self.ti, self.tf, self.tsns)
         N = len(self.x)
@@ -5121,6 +5127,7 @@ class Noise(TUsignal):
         self.y   = n
         self.var = np.var(n)
         self.Pr  = self.var/self._R
+        self.Er  = self.Pr/(self._fsGHz*1e9)
 
     def __repr__(self):
         st = ''
@@ -5128,12 +5135,15 @@ class Noise(TUsignal):
         st = st+ 'ti  : '+ str(self.ti)+'ns \n'
         st = st+ 'tf  : '+ str(self.tf)+'ns \n'
         st = st+ 'ts  : '+ str(self.tsns)+'ns \n'
+        st = st+ 'N   : '+ str(len(self.x))+'\n'
         st = st + '-------------\n'
         st = st+ 'DSP : ' + str(self.PSDdBmpHz)+ ' dBm/Hz\n'
-        st = st+ 'NF : ' + str(self.NF)+ ' dB\n'
+        st = st+ '    : ' + str(10**(self.PSDdBmpHz/10.)*1e-3)+ ' Joules\n'
+        st = st + '-------------\n'
+        st = st+ 'Noise Figure : ' + str(self.NF)+ ' dB\n'
         st = st+ 'Vrms : '+ str(self.vrms)+ ' Volts\n'
         st = st+ 'Variance : '+ str(self.var)+ ' V^2\n'
-        st = st+ 'Power /'+str(self.R)+' Ohms : '+ str(10*np.log10(self.PW)-60)+ ' dBm\n'
+        st = st+ 'Power (dBm) /'+str(self.R)+' Ohms : '+ str(10*np.log10(self.PW)-60)+ ' dBm\n'
         st = st+ 'Power realized /'+str(self.R)+' Ohms : '+ str(10*np.log10(self.Pr)-60)+ ' dBm\n'
         return(st)
 

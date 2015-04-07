@@ -190,9 +190,9 @@ class MIMO(object):
 
         H   = self.Hcal.y.swapaxes(0,2)
         Hd  = np.conj(H.swapaxes(1,2))
-    
+
         # White Noise definition
-        #  
+        #
         # Boltzman constant
 
         kB = 1.03806488e-23
@@ -205,11 +205,11 @@ class MIMO(object):
         # Evaluation of the transfer tensor
 
         HdH,U,S,V = self.transfer()
-        
+
         It  = np.eye(self.Nt)
 
         Ir  = np.eye(self.Nr)
-        
+
         if type(Pt)==float:
             #Ps = (Pt/Nf)/(self.Nt)
             Ps = Pt/(self.Nt)
@@ -220,8 +220,7 @@ class MIMO(object):
             Pb = N0*dfGHz*1e9
             # expanding S matrix
             #Se  = S[:,:,None]*It[None,:,:]
-            # transfer matrix factorisation 
-            
+            # transfer matrix factorisation
             #PtU = np.einsum('ijk,ikl->ijl',Pt,U)
             #Q   = np.einsum('ijk,ikl->ijl',V,PtU)
             #pdb.set_trace()
@@ -231,7 +230,6 @@ class MIMO(object):
             M     = Ir[None,...] + HdQH/Pb
             # Pt / df ~ J
             # print 10*np.log10(Ps*np.real(HH[0,0,0])/Pb)
-        
         detM  = la.det(M)
         logdetM = np.real(np.log(detM)/np.log(2))
         C  = dfGHz*logdetM

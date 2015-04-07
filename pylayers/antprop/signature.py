@@ -4583,14 +4583,16 @@ class Signatures(PyLayers,dict):
                     seg = polyctx.intersection(TxD)
                     validtx = seg.almost_equals(TxD,decimal=4)
                     if not validtx:
-                        print ns0
+                        pass
+                        #print "Signature.rays": ns0
 
                 if (nse<0):
                     pD = self.L.Gs.pos[nse]
                     DRx = shg.LineString(((pD[0], pD[1]), (prx[0], prx[1])))
                     validrx = polyctx.contains(DRx)
                     if not validrx:
-                        print nse
+                        pass
+                        #print nse
 
                 if validtx & validrx:
                     #    print sig

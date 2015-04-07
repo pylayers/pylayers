@@ -1,28 +1,49 @@
 
+Handling time and frequency domain signals : ``Bsignal`` Class
+==============================================================
+
+This section presents some features of the classes implemented in the
+```pylayers.signal.bsignal.py`` <http://pylayers.github.io/pylayers/modules/pylayers.signal.bsignal.html>`__
+module.
+
 .. code:: python
 
-    %pylab inline
-
-.. parsed-literal::
-
-    Populating the interactive namespace from numpy and matplotlib
-
-
-The ``Bsignal`` Class
-=====================
-
-The ``Bsignal`` class is a container for a signal with a base. It can
-handle time domain or frequency domain signal.
+    %matplotlib inline
+The ``Bsignal`` class is a container for a signal with a base which can
+be either in time domain or frequency domain.
 
 .. code:: python
 
     from pylayers.signal.bsignal import *
     from matplotlib.pyplot import *
-We construct an impulse signal normalized in energy.
+As a first example, let construct an impulse signal normalized in
+energy. To do so there exist a specialized function :
+```EnImpulse`` <http://pylayers.github.io/pylayers/modules/generated/pylayers.signal.bsignal.EnImpulse.demo.html#pylayers.signal.bsignal.EnImpulse.demo>`__
 
 .. code:: python
 
     E=EnImpulse(fe=40)
+.. code:: python
+
+    >>> from pylayers.signal.bsignal import *
+    >>> ip    = EnImpulse(fc=4,band=3,thresh=10,fe=100)
+    >>> Eip1  = ip.energy()
+    >>> ESDu  = ip.esd(mode='unilateral')
+    >>> ESDb  = ip.esd(mode='bilateral')
+    >>> df    = ESDu.dx()
+    >>> Eipu  = sum(ESDu.y)*df
+    >>> Eipb  = sum(ESDb.y)*df
+    >>> erru  = Eip1-Eipu
+    >>> errb  = Eip1-Eipb
+.. code:: python
+
+    print Eip1
+
+.. parsed-literal::
+
+    100.000007743
+
+
 .. code:: python
 
     E.plot(typ='v')
@@ -31,13 +52,13 @@ We construct an impulse signal normalized in energy.
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f64140c6d90>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x7f64140d33d0>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x2ac10ceedb50>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x2ac10cef8090>]], dtype=object))
 
 
 
 
-.. image:: Bsignal_files/Bsignal_6_1.png
+.. image:: Bsignal_files/Bsignal_9_1.png
 
 
 .. code:: python
@@ -63,13 +84,13 @@ The Fourier transform of this signal has the hermitian Symmetry.
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f6414023110>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x7f641402e210>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x2ac10cf5b310>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x2ac10cf51050>]], dtype=object))
 
 
 
 
-.. image:: Bsignal_files/Bsignal_9_1.png
+.. image:: Bsignal_files/Bsignal_12_1.png
 
 
 .. code:: python
@@ -119,12 +140,12 @@ method
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7f6413f0c550>
+    <matplotlib.text.Text at 0x2ac10d0b6210>
 
 
 
 
-.. image:: Bsignal_files/Bsignal_16_1.png
+.. image:: Bsignal_files/Bsignal_19_1.png
 
 
 .. code:: python
@@ -186,13 +207,13 @@ We create a Fusignal which corresponds to the signal
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f6413f8da50>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x7f6413f80a90>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x2ac10cf71910>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x2ac10d02d350>]], dtype=object))
 
 
 
 
-.. image:: Bsignal_files/Bsignal_24_1.png
+.. image:: Bsignal_files/Bsignal_27_1.png
 
 
 .. code:: python
@@ -209,13 +230,13 @@ The inverse Fourier transform allows to recover perfectly the amplitude
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f6413be6fd0>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x7f6413c40390>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x2ac10d38b610>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x2ac10d29c1d0>]], dtype=object))
 
 
 
 
-.. image:: Bsignal_files/Bsignal_27_1.png
+.. image:: Bsignal_files/Bsignal_30_1.png
 
 
 .. code:: python
@@ -242,13 +263,13 @@ The inverse Fourier transform allows to recover perfectly the amplitude
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f6413b7fad0>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x7f6413c1e110>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x2ac10d423d90>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x2ac10d3c01d0>]], dtype=object))
 
 
 
 
-.. image:: Bsignal_files/Bsignal_30_1.png
+.. image:: Bsignal_files/Bsignal_33_1.png
 
 
 .. code:: python
@@ -262,13 +283,13 @@ The inverse Fourier transform allows to recover perfectly the amplitude
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f6413b14710>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x7f6413b14a10>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x2ac10d4ef9d0>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x2ac10d4e4b10>]], dtype=object))
 
 
 
 
-.. image:: Bsignal_files/Bsignal_32_1.png
+.. image:: Bsignal_files/Bsignal_35_1.png
 
 
 .. code:: python
@@ -331,11 +352,11 @@ The inverse Fourier transform allows to recover perfectly the amplitude
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f6413963bd0>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x7f64139cb8d0>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x2ac10d5ac1d0>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x2ac10d5a24d0>]], dtype=object))
 
 
 
 
-.. image:: Bsignal_files/Bsignal_37_1.png
+.. image:: Bsignal_files/Bsignal_40_1.png
 

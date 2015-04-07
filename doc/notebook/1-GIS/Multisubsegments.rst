@@ -9,9 +9,9 @@ Effect of Modyfiying the Nature of Sub-Segments
     from pylayers.gis.layout import *
     from pylayers.antprop.signature import *
     import pylayers.signal.bsignal as bs
-    import pylayers.signal.waveform as wvf 
+    import pylayers.signal.waveform as wvf
     from pylayers.simul.simulem import *
-    import matplotlib.pyplot as plt 
+    import matplotlib.pyplot as plt
     %matplotlib inline
 
 .. parsed-literal::
@@ -131,15 +131,13 @@ The :math:`\mathcal{G}_s` graph dictionnary has the following structure
       'offset': 0,
       'transition': False,
       'z': (0.0, 3.0)},
-     9: {'connect': [-2, -1],
+     9: {'connect': [-1, -2],
       'name': 'WALL',
       'ncycles': [2, 0],
-      'norm': array([ 0.00639987, -0.99997952,  0.        ]),
+      'norm': array([-0.00639987,  0.99997952,  0.        ]),
       'offset': 0,
       'transition': False,
       'z': (0.0, 3.0)}}
-
-
 
 
 
@@ -208,7 +206,7 @@ We define now two points which are the termination of a radio link.
     f,a=Lk.show()
 
 
-.. image:: Multisubsegments_files/Multisubsegments_15_0.png
+.. image:: Multisubsegments_files/Multisubsegments_14_0.png
 
 
 On the figure above, we can see the Tx and Rx each placed in a different
@@ -249,17 +247,17 @@ channel is in ``Lk.H``
     ----------
     1 / 1 : [0]
     2 / 6 : [1 2 3 4 5 6]
-    3 / 18 : [ 7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24]
-    4 / 37 : [25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49
-     50 51 52 53 54 55 56 57 58 59 60 61]
-    5 / 42 : [ 62  63  64  65  66  67  68  69  70  71  72  73  74  75  76  77  78  79
-      80  81  82  83  84  85  86  87  88  89  90  91  92  93  94  95  96  97
-      98  99 100 101 102 103]
-    6 / 26 : [104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121
-     122 123 124 125 126 127 128 129]
+    3 / 19 : [ 7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25]
+    4 / 40 : [26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50
+     51 52 53 54 55 56 57 58 59 60 61 62 63 64 65]
+    5 / 46 : [ 66  67  68  69  70  71  72  73  74  75  76  77  78  79  80  81  82  83
+      84  85  86  87  88  89  90  91  92  93  94  95  96  97  98  99 100 101
+     102 103 104 105 106 107 108 109 110 111]
+    6 / 28 : [112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129
+     130 131 132 133 134 135 136 137 138 139]
     -----
-    ni : 581
-    nl : 1292
+    ni : 628
+    nl : 1396
 
 
 
@@ -274,8 +272,8 @@ channel is in ``Lk.H``
 
     Ctilde
     ---------
-    (130, 181)
-    Nray : 130
+    (140, 181)
+    Nray : 140
     fmin(GHz) : 2.0
     fmax(GHz): 11.0
     Nfreq : 181
@@ -288,7 +286,7 @@ channel is in ``Lk.H``
     f,a=Lk.C.show(cmap='jet',fig=f,typ='l20')
 
 
-.. image:: Multisubsegments_files/Multisubsegments_23_0.png
+.. image:: Multisubsegments_files/Multisubsegments_22_0.png
 
 
 .. code:: python
@@ -300,7 +298,7 @@ channel is in ``Lk.H``
 .. parsed-literal::
 
     freq :2.0 10.0 161
-    shape  :(130, 161)
+    shape  :(140, 161)
     tau :26.7186992365 73.2944728109
     dist :8.01560977094 21.9883418433
     Friis factor -j c/(4 pi f) has been applied
@@ -314,7 +312,7 @@ channel is in ``Lk.H``
     wav.show()
 
 
-.. image:: Multisubsegments_files/Multisubsegments_25_0.png
+.. image:: Multisubsegments_files/Multisubsegments_24_0.png
 
 
 .. code:: python
@@ -328,13 +326,13 @@ channel is in ``Lk.H``
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f392787d950>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x7f39275ebfd0>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x2ba8c1387190>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x2ba90eb75e90>]], dtype=object))
 
 
 
 
-.. image:: Multisubsegments_files/Multisubsegments_27_1.png
+.. image:: Multisubsegments_files/Multisubsegments_26_1.png
 
 
 .. code:: python
@@ -363,13 +361,13 @@ channel is in ``Lk.H``
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f39272475d0>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x7f3926fbb690>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x2ba90eba8d90>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x2ba90ec64490>]], dtype=object))
 
 
 
 
-.. image:: Multisubsegments_files/Multisubsegments_28_2.png
+.. image:: Multisubsegments_files/Multisubsegments_27_2.png
 
 
 .. code:: python
@@ -398,19 +396,13 @@ channel is in ``Lk.H``
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f392b898d90>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x7f392b8988d0>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x2ba90e973d90>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x2ba90e6d1190>]], dtype=object))
 
 
 
 
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x7f392b1aa2d0>
-
-
-
-.. image:: Multisubsegments_files/Multisubsegments_29_3.png
+.. image:: Multisubsegments_files/Multisubsegments_28_2.png
 
 
 .. code:: python
@@ -439,13 +431,13 @@ channel is in ``Lk.H``
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f392793d690>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x7f3926fb4d10>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x2ba90e84ccd0>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x2ba90f2f6090>]], dtype=object))
 
 
 
 
-.. image:: Multisubsegments_files/Multisubsegments_30_2.png
+.. image:: Multisubsegments_files/Multisubsegments_29_2.png
 
 
 .. code:: python
@@ -466,27 +458,27 @@ channel is in ``Lk.H``
 
 .. parsed-literal::
 
-    <matplotlib.legend.Legend at 0x7f3926d68bd0>
+    <matplotlib.legend.Legend at 0x2ba9102b0d10>
 
 
 
 
-.. image:: Multisubsegments_files/Multisubsegments_31_1.png
+.. image:: Multisubsegments_files/Multisubsegments_30_1.png
 
 
 
-.. image:: Multisubsegments_files/Multisubsegments_31_2.png
+.. image:: Multisubsegments_files/Multisubsegments_30_2.png
 
 
 
-.. image:: Multisubsegments_files/Multisubsegments_31_3.png
+.. image:: Multisubsegments_files/Multisubsegments_30_3.png
 
 
-| We have modified successively the nature of the 3 surfaces in the sub
+We have modified successively the nature of the 3 surfaces in the sub
 segment placed in the sepataion partition. The first was AIR, the second
 WOOD and the third METAL. As the subsegment is placed on the LOS path
-the blockage effect is clearly visible.
-| The chosen antennas were omnidirectional ``Antenna('Omni')``
+the blockage effect is clearly visible. The chosen antennas were
+omnidirectional ``Antenna('Omni')``
 
 .. code:: python
 

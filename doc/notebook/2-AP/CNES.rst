@@ -1,13 +1,10 @@
 
+Example of Utilisation of Coverage
+==================================
+
 .. code:: python
 
-    %pylab inline
-
-.. parsed-literal::
-
-    Populating the interactive namespace from numpy and matplotlib
-
-
+    %matplotlib inline
 .. code:: python
 
     from pylayers.antprop.coverage import *
@@ -20,7 +17,7 @@
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x7f0b6cc8c290>
+    <matplotlib.figure.Figure at 0x2acdb3c696d0>
 
 
 .. code:: python
@@ -69,8 +66,19 @@
     fig=figure(figsize=(10,10))
     f,a=C.L.showGs(fig=fig)
 
+::
 
-.. image:: CNES_files/CNES_4_0.png
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-5-308e8a4b41f8> in <module>()
+    ----> 1 fig=figure(figsize=(10,10))
+          2 f,a=C.L.showGs(fig=fig)
+
+
+    NameError: name 'figure' is not defined
 
 
 .. code:: python
@@ -167,7 +175,7 @@
 
 .. parsed-literal::
 
-    array([ '\x08\xcc\x80\xc1\x0b\x7f\x00\x00\x08\xcc\x80\xc1\x0b\x7f\x00\x000"\xc8\x04',
+    array(['\x08l\xcbd\xcd*\x00\x00\x08l\xcbd\xcd*\x00\x00\xb0\xc2\x14\x05',
            'WALL', 'WALL', 'WALL', 'WALL', 'PARTITION', 'WALL', 'WALL', 'WALL',
            'WALL', 'WALL', 'WALL', 'WALL', 'WALL', 'PARTITION', 'WALL', 'WALL',
            'PARTITION', 'WALL', 'WALL', 'WALL', 'WALL', 'PARTITION', 'WALL',
@@ -185,23 +193,11 @@
     C.cover()
 .. code:: python
 
-    fig=plt.figure(figsize=(16,8))
+    fig=plt.figure(figsize=(14,8))
     a1 = fig.add_subplot(121)
     a2 = fig.add_subplot(122)
     f,a = C.show(typ='pr',best=False,polar='o',vmin=-90,fig=fig,ax=a1)
     f,a = C.show(typ='pr',best=False,polar='p',vmin=-90,fig=fig,ax=a2)
-
-
-.. image:: CNES_files/CNES_9_0.png
-
-
-.. code:: python
-
-    fig=plt.figure(figsize=(16,8))
-    a1 = fig.add_subplot(121)
-    a2 = fig.add_subplot(122)
-    f,a = C.show(typ='loss',best=False,polar='o',vmin=-90,fig=fig,ax=a1)
-    f,a = C.show(typ='loss',best=False,polar='p',vmin=-90,fig=fig,ax=a2)
 
 
 .. image:: CNES_files/CNES_10_0.png
@@ -209,11 +205,11 @@
 
 .. code:: python
 
-    fig=plt.figure(figsize=(16,8))
+    fig=plt.figure(figsize=(14,8))
     a1 = fig.add_subplot(121)
     a2 = fig.add_subplot(122)
-    f,a = C.show(typ='snr',best=False,polar='o',vmin=-90,fig=fig,ax=a1)
-    f,a = C.show(typ='snr',best=False,polar='p',vmin=-90,fig=fig,ax=a2)
+    f,a = C.show(typ='loss',best=False,polar='o',vmin=-90,fig=fig,ax=a1)
+    f,a = C.show(typ='loss',best=False,polar='p',vmin=-90,fig=fig,ax=a2)
 
 
 .. image:: CNES_files/CNES_11_0.png
@@ -221,11 +217,11 @@
 
 .. code:: python
 
-    fig=plt.figure(figsize=(16,8))
+    fig=plt.figure(figsize=(14,8))
     a1 = fig.add_subplot(121)
     a2 = fig.add_subplot(122)
-    f,a = C.show(typ='sinr',best=False,polar='o',vmin=-90,fig=fig,ax=a1)
-    f,a = C.show(typ='sinr',best=False,polar='p',vmin=-90,fig=fig,ax=a2)
+    f,a = C.show(typ='snr',best=False,polar='o',vmin=-90,fig=fig,ax=a1)
+    f,a = C.show(typ='snr',best=False,polar='p',vmin=-90,fig=fig,ax=a2)
 
 
 .. image:: CNES_files/CNES_12_0.png
@@ -233,13 +229,25 @@
 
 .. code:: python
 
-    fig=plt.figure(figsize=(16,8))
+    fig=plt.figure(figsize=(14,8))
+    a1 = fig.add_subplot(121)
+    a2 = fig.add_subplot(122)
+    f,a = C.show(typ='sinr',best=False,polar='o',vmin=-90,fig=fig,ax=a1)
+    f,a = C.show(typ='sinr',best=False,polar='p',vmin=-90,fig=fig,ax=a2)
+
+
+.. image:: CNES_files/CNES_13_0.png
+
+
+.. code:: python
+
+    fig=plt.figure(figsize=(14,8))
     a1 = fig.add_subplot(121)
     a2 = fig.add_subplot(122)
     f,a = C.show(typ='capacity',best=False,polar='o',vmin=0,fig=fig,ax=a1)
     f,a = C.show(typ='capacity',best=False,polar='p',vmin=0,fig=fig,ax=a2)
 
 
-.. image:: CNES_files/CNES_13_0.png
+.. image:: CNES_files/CNES_14_0.png
 
 

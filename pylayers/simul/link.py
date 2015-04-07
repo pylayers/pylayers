@@ -5,8 +5,13 @@ r"""
 
 .. currentmodule:: pylayers.simul.link
 
-This module runs the electromagnetic simulation at the link level
+This module runs the electromagnetic simulation at the link level.
+
 It stores simulated objects in `hdf5` format.
+
+Link is a MetaClass
+Dlink is for deterministic links 
+Slink is for statistical links. 
 
 DLink Class
 ==========
@@ -132,7 +137,7 @@ class SLink(Link):
         ----------
 
         B : Body
-            Body object on which devices belong to
+            Body object on which devices are held
         dida: int
             device a id number on body
         didb: int
@@ -171,8 +176,7 @@ class SLink(Link):
         if emp == 'forearml':
             emp = 'forearmr'
 
-        self.H.ak, self.H.tk = getchannel(
-            emplacement=emp, intersection=eng)
+        self.H.ak, self.H.tk = getchannel(emplacement=emp, intersection=eng)
         self.eng = eng
 
         return self.H.ak, self.H.tk, self.eng
@@ -352,6 +356,7 @@ class DLink(Link):
         ###########
         # init ant
         ###########
+
         self.tx = RadioNode(name = '',
                             typ = 'tx',
                             _fileini = 'radiotx.ini',
@@ -368,6 +373,7 @@ class DLink(Link):
         ##############
         #### init save
         ###############
+
         self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5'
         filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
         # check if save file alreasdy exists
@@ -865,7 +871,9 @@ class DLink(Link):
 
         Update the key grpname of self.dexist[key] dictionnary,
         where key  = 'sig'|'ray'|'Ct'|'H'
+
         """
+        
         ############
         # Signatures
         ############
@@ -1032,6 +1040,7 @@ class DLink(Link):
         ----
 
         Add a tolerance on the rotation angle (T_map)
+      
         """
 
         lfilename=pyu.getlong(self.filename,pstruc['DIRLNK'])

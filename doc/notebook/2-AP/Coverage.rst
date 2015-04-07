@@ -77,18 +77,23 @@ The ini file contains 5 sections.
 
 -  [grid] section
 
-   This section precises the size of the grid. By default the grid is
-   placed over the whole region of the Layout. A selected region can
-   also be defined whith the ``boundary`` list
+::
+
+    This section precises the size of the grid. By default the grid is placed over the whole region of the Layout.
+    A selected region can also be defined whith the `boundary` list
 
 -  [layout] section
 
-   The name of the layout file (filename = )
+::
+
+    The name of the layout file (filename = )
 
 -  [ap] section
 
-   A dictionnary of access points precising the standard, the used
-   channel, the emitted power and the position of the access point.
+::
+
+       A dictionnary of access points precising the standard, the used channel, the emitted power and the position
+       of the access point.
 
 -  [show] section
 
@@ -191,11 +196,11 @@ method
     tic = time.time()
     C.cover()
     toc = time.time()
-    print "Execution time : %2.3f " % (toc-tic) 
+    print "Execution time : %2.3f " % (toc-tic)
 
 .. parsed-literal::
 
-    Execution time : 2.880 
+    Execution time : 3.260 
 
 
 Let display the current Layout with hidding nodes.
@@ -210,7 +215,7 @@ Let display the current Layout with hidding nodes.
     f,a = C.show(fig=fig)
 
 
-.. image:: Coverage_files/Coverage_15_0.png
+.. image:: Coverage_files/Coverage_27_0.png
 
 
 The shadowing map coverage results can be displayed by invoquing various
@@ -222,7 +227,7 @@ functions.
     f,a=C.show(fig=fig,typ='pr')
 
 
-.. image:: Coverage_files/Coverage_17_0.png
+.. image:: Coverage_files/Coverage_29_0.png
 
 
 .. code:: python
@@ -231,7 +236,7 @@ functions.
     f,a=C.show(fig=fig,typ='pr',f=4)
 
 
-.. image:: Coverage_files/Coverage_18_0.png
+.. image:: Coverage_files/Coverage_30_0.png
 
 
 .. code:: python
@@ -240,7 +245,7 @@ functions.
     f,a=C.show(fig=fig,typ='pr',f=10)
 
 
-.. image:: Coverage_files/Coverage_19_0.png
+.. image:: Coverage_files/Coverage_31_0.png
 
 
 .. code:: python
@@ -249,7 +254,7 @@ functions.
     f,a=C.show(fig=fig,typ='best',f=1)
 
 
-.. image:: Coverage_files/Coverage_20_0.png
+.. image:: Coverage_files/Coverage_32_0.png
 
 
 .. code:: python
@@ -258,7 +263,7 @@ functions.
     f,a=C.show(fig=fig,typ='best',f=10)
 
 
-.. image:: Coverage_files/Coverage_21_0.png
+.. image:: Coverage_files/Coverage_33_0.png
 
 
 .. code:: python
@@ -270,13 +275,13 @@ functions.
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f58c9a66a50>,
-     <matplotlib.axes.AxesSubplot at 0x7f58cb7a4710>)
+    (<matplotlib.figure.Figure at 0x2ba982341b50>,
+     <matplotlib.axes.AxesSubplot at 0x2ba933f21050>)
 
 
 
 
-.. image:: Coverage_files/Coverage_22_1.png
+.. image:: Coverage_files/Coverage_34_1.png
 
 
 As you have noticed the calculation has been done for all the center
@@ -291,19 +296,26 @@ Let's consider an other standard
     C2.cover()
 .. code:: python
 
+    fig=figure(figsize=(10,5))
     C2.show(ftyp='pr')
 
 
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f58c9a0fa50>,
-     <matplotlib.axes.AxesSubplot at 0x7f58c9459590>)
+    (<matplotlib.figure.Figure at 0x2ba982fd78d0>,
+     <matplotlib.axes.AxesSubplot at 0x2ba98307f910>)
 
 
 
 
-.. image:: Coverage_files/Coverage_26_1.png
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x2ba982fd7d50>
+
+
+
+.. image:: Coverage_files/Coverage_38_2.png
 
 
 .. code:: python
@@ -327,13 +339,13 @@ Let's consider an other standard
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f58c95295d0>,
-     <matplotlib.axes.AxesSubplot at 0x7f58c9529d90>)
+    (<matplotlib.figure.Figure at 0x2ba983827d90>,
+     <matplotlib.axes.AxesSubplot at 0x2ba98284d110>)
 
 
 
 
-.. image:: Coverage_files/Coverage_28_1.png
+.. image:: Coverage_files/Coverage_40_1.png
 
 
 All simulated quantities are stored in linear scale.

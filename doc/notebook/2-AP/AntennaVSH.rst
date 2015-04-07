@@ -1,80 +1,4 @@
 
-.. code:: python
-
-    from IPython.core.display import HTML
-    
-    def css_styling():
-        styles = open("../styles/custom.css", "r").read()
-        return HTML(styles)
-    css_styling()
-
-
-
-.. raw:: html
-
-    <style>
-        @font-face {
-            font-family: "Computer Modern";
-            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-        }
-        div.cell{
-            width:800px;
-            margin-left:16% !important;
-            margin-right:auto;
-        }
-        h1 {
-            font-family: Helvetica, serif;
-        }
-        h4{
-            margin-top:12px;
-            margin-bottom: 3px;
-           }
-        div.text_cell_render{
-            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-            line-height: 145%;
-            font-size: 130%;
-            width:800px;
-            margin-left:auto;
-            margin-right:auto;
-        }
-        .CodeMirror{
-                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-        }
-        .prompt{
-            display: None;
-        }
-        .text_cell_render h5 {
-            font-weight: 300;
-            font-size: 22pt;
-            color: #4057A1;
-            font-style: italic;
-            margin-bottom: .5em;
-            margin-top: 0.5em;
-            display: block;
-        }
-        
-        .warning{
-            color: rgb( 240, 20, 20 )
-            }  
-    </style>
-    <script>
-        MathJax.Hub.Config({
-                            TeX: {
-                               extensions: ["AMSmath.js"]
-                               },
-                    tex2jax: {
-                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                    },
-                    displayAlign: 'center', // Change this to 'center' to center equations.
-                    "HTML-CSS": {
-                        styles: {'.MathJax_Display': {"margin": 4}}
-                    }
-            });
-    </script>
-
-
-
 Vector Spherical Harmonics Representation of Antennas
 =====================================================
 
@@ -124,17 +48,20 @@ Then an electrical delay of :math:`4.185ns` is applied on the
 .. code:: python
 
     I = A.Ftheta[:,:,:]
+    plt.figure(figsize=(10,8))
     plt.imshow(np.unwrap(np.angle(I[:,45,:])))
     plt.title(r'Unwrapped phase of $F_{\theta}$ w.r.t frequency and phi for $\theta=\frac{pi}{2}$')
     plt.ylabel('f index')
     plt.colorbar()
+    plt.figure()
     plt.plot(fGHz[:,0,0],np.unwrap(np.angle(I[:,45,85])))
+    plt.xlabel('f index')
 
 
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x7f6579776350>]
+    <matplotlib.text.Text at 0x2b8cfe6c77d0>
 
 
 
@@ -142,10 +69,30 @@ Then an electrical delay of :math:`4.185ns` is applied on the
 .. image:: AntennaVSH_files/AntennaVSH_10_1.png
 
 
+
+.. image:: AntennaVSH_files/AntennaVSH_10_2.png
+
+
 .. code:: python
 
     tau=4.185
     I = A.Ftheta[:,:,:]*exp(-2*1j*pi*fGHz*tau)
+
+::
+
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-6-6b2a5143fb58> in <module>()
+          1 tau=4.185
+    ----> 2 I = A.Ftheta[:,:,:]*exp(-2*1j*pi*fGHz*tau)
+    
+
+    NameError: name 'exp' is not defined
+
+
 .. code:: python
 
     plt.imshow(np.unwrap(np.angle(I[:,45,:])))
@@ -159,7 +106,7 @@ Then an electrical delay of :math:`4.185ns` is applied on the
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x7f657955ced0>]
+    [<matplotlib.lines.Line2D at 0x2b8cfb170a10>]
 
 
 
@@ -168,9 +115,11 @@ Then an electrical delay of :math:`4.185ns` is applied on the
 
 
 Display of the radiation pattern for all frequencies
+''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 .. code:: python
 
+    plt.figure(figsize=(10,10))
     for nf in range(104):
         plt.polar(A.phi,abs(A.Ftheta[nf,45,:]))
 
@@ -288,7 +237,7 @@ At that stage we compute the Vector Spherical Harmonics coefficients
     A.C.show('s2',k=300)
 
 
-.. image:: AntennaVSH_files/AntennaVSH_22_0.png
+.. image:: AntennaVSH_files/AntennaVSH_23_0.png
 
 
 .. code:: python
@@ -343,6 +292,6 @@ At that stage we compute the Vector Spherical Harmonics coefficients
     plt.tight_layout()
 
 
-.. image:: AntennaVSH_files/AntennaVSH_25_0.png
+.. image:: AntennaVSH_files/AntennaVSH_26_0.png
 
 
