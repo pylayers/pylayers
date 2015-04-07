@@ -291,11 +291,7 @@ class Simul(PyLayers):
             D = Device(self.dap[ap]['name'], ID=ap)
             D.ant['antenna']= self.dap[ap]['ant']
             N.add_devices(D, grp='ap', p=self.dap[ap]['pos'])
-<<<<<<< HEAD
             N.update_orient(ap, self.dap[ap]['T'], now=0.)
-=======
-
->>>>>>> ad640717e0ee79bee8435dd25f3282a7d09f45f1
         # create Network
         N.create()
         self.N = N

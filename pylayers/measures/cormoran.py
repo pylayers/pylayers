@@ -3577,7 +3577,6 @@ bernard
         if subjecta != '':
             self.B[subjecta].settopos(t=kwargs['t'])
             self.B[subjecta].dev[ba]['ant'].Fsynth()
-<<<<<<< HEAD
             xa,ya,z,sa,v = self.B[subjecta].dev[ba]['ant']._computemesh(po=pa,T=self.B[subjecta].acs[ba],minr=0.01,maxr=0.1,ilog=False)
             p2 = np.where(self.B[subjecta].dev[ba]['ant'].phi<=kwargs['phi'])[0][-1]
             ax.plot(xa[:,p2],ya[:,p2])
@@ -3635,14 +3634,7 @@ bernard
         fig,ax=self.showpattern(a=b,techno=technob,fig=fig,ax=ax)
 
         plt.axis('equal')
-=======
-            xa,ya,z,sa,v = self.B[subjecta].dev[ba]['ant']._computemesh(po=pa,T=self.B[subjecta].acs[ba],minr=0.1,maxr=1.8)
-            plt.plot(xa[:,10],ya[:,10])
-        if subjectb != '':
-            self.B[subjectb].settopos(t=t)
-            self.B[subjectb].dev[bb]['ant'].Fsynth()
-            xb,yb,z,sb,v = self.B[subjectb].dev[bb]['ant']._computemesh(po=pb,T=self.B[subjectb].acs[bb],minr=0.1 ,maxr=1.8)
-            plt.plot(xb[:,10],yb[:,10])
+
 
         p1 = self.din['HKB:1']['p']
         p2 = self.din['HKB:2']['p']
@@ -3654,7 +3646,6 @@ bernard
         plt.plot(p4[0],p4[1],'ok')
         plt.axis('equal')
         
->>>>>>> ad640717e0ee79bee8435dd25f3282a7d09f45f1
         # if A.ndim==2:
         #     plt.plot(A[iframe,0],A[iframe,1],'ob')
         #     plt.text(A[iframe,0],A[iframe,1],a)
