@@ -6,6 +6,22 @@
 RadioNode Class
 ===============
 
+A radio Node is a data structure which store positions of 
+a radio node at several time step. It contains also the information 
+about the antenna file.
+
+This data structure is used in DLink.  
+
+Members of a radionode are 
+
+position    : 3xNt
+time        : 1xNt 
+orientation : 3x3xNt
+typ         : 'tx' or 'rx'
+name        : string 
+fileant     : antenna file 
+
+
 .. autosummary::
     :toctree: generated/
 
@@ -161,7 +177,8 @@ class RadioNode(object):
             pass
 
         #
-        #print _fileant
+        # print _fileant
+        #
         self.fileant = _fileant
         try:
             self.loadvsh() # is it still necessary ? 
@@ -853,17 +870,24 @@ class RadioNode(object):
 #                        fi_spa.write(chaine)
 #                fi_spa.close()
 
-    def show(self, num = [], fig=[], ax =[],linewidth=1,marker='-',color='b'):
+    def show(self, num = [], fig=[], ax =[],size=5,marker='o',color='b'):
         """ Display RadioNode position in the 2D strucure
+
+        Parameters
+        ----------
+
+
         """
         if num ==[]:
             num = np.arange(np.shape(self.position)[1])
+        
         x = self.position[0, num]
         y = self.position[1, num]
+
         if ax == []:
             fig = plt.gcf()
             ax = fig.gca()
-        ax.plot(x, y,marker=marker,color=color,linewidth=linewidth)
+        ax.scatter(x, y,s=size,c=color,linewidth=0)
         return fig,ax
 
     def show3(self, _filestr='DLR.off'):

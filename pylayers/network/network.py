@@ -343,7 +343,7 @@ class Network(PyLayers,nx.MultiDiGraph):
         if not self.isPN:
             s = 'Network information\n*******************\n'
             s = s + 'number of nodes: ' + str(len(self.nodes())) +'\n'
-            title = '{0:7} | {1:15} |{2:7} | {3:4} | {4:17} | {5:10} '.format('ID', 'name', 'group', 'type', 'position (x,y,z)','wstd')
+            title = '{0:7} | {1:15} |{2:7} | {3:4} | {4:17} | {5:10} |  {6:10} '.format('ID', 'name', 'group', 'type', 'position (x,y,z)','antenna', 'wstd')
             s = s + title + '\n' + '-'*len(title) + '\n'
             subnet = self.SubNet.keys()
             for sn in subnet:
@@ -354,10 +354,14 @@ class Network(PyLayers,nx.MultiDiGraph):
                         wstd = self.node[n]['wstd'].keys()
                     except:
                         wstd = self.node[n]['wstd']
-                    s = s + '{0:7} | {1:15} |{2:7} | {3:4} | {4:5.2f} {5:5.2f} {6:5.2f} | {7:10} '\
+                    try:
+                        ant = self.node[n]['ant']['antenna']._filename.split('.')[0]
+                    except:
+                        ant=''
+                    s = s + '{0:7} | {1:15} |{2:7} | {3:4} | {4:5.2f} {5:5.2f} {6:5.2f} | {7:10} | {8:10} '\
                     .format(self.node[n]['ID'][:7], self.node[n]['name'][:15],
                     self.node[n]['grp'][:7], self.node[n]['typ'][:4], self.node[n]['p'][0],
-                    self.node[n]['p'][1],self.node[n]['p'][2],wstd[:10]) + '\n'
+                    self.node[n]['p'][1],self.node[n]['p'][2],ant,wstd[:10]) + '\n'
 
     #             try:
     #                 s = s + 'node ID: ' + str(self.node[n]['ID']) + '\n'
@@ -770,8 +774,9 @@ class Network(PyLayers,nx.MultiDiGraph):
     def _connect(self):
         """ connect nodes
 
-        This method 
-        1) Connect all nodes from the network sharing the same wstd 
+        This method
+
+        1) Connect all nodes from the network sharing the same wstd
         2) Create the associated SubNetworks
         3) Create lists of links : self.links and self.relinks
 
@@ -799,6 +804,7 @@ class Network(PyLayers,nx.MultiDiGraph):
         -----
 
         Fill self.links and self.relinks
+
         """
 
         for wstd in self.wstd.keys():
@@ -851,11 +857,11 @@ class Network(PyLayers,nx.MultiDiGraph):
                     # if e0['grp'] == e1['grp']:
                     self.update_edges({'typ': 'I2I'}, n, e)
                         # print str(e0['ID']),str(e1['ID']),'I2I'
-                else:    
+                else:
                     self.update_edges({'typ': 'B2I'}, n, e)
 
     def _get_grp(self):
-        """ 
+        """
             get group of the nodes of a network
 
         """
@@ -971,9 +977,6 @@ class Network(PyLayers,nx.MultiDiGraph):
             * _get_grp()
             * _connect()
             * _init_PN
-            
-
-
 
         """
 

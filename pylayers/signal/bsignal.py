@@ -847,6 +847,13 @@ class Bsignal(PyLayers):
         logy  : boolean
             default False
 
+        Returns
+        -------
+
+        fig : figure
+        ax : np.array of axes
+
+
         """
 
         defaults = {'iy'  :  -1,
@@ -914,7 +921,7 @@ class Bsignal(PyLayers):
         #
         # To be added in mulcplot
         #
-
+    
         tcolor = ['red', 'green', 'green', 'green', 'black', 'black', 'black']
         nl,nc = np.shape(ax)
         for l in range(nl):

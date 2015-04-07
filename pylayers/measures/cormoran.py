@@ -155,6 +155,8 @@ from pylayers.util.pyutil import *
 import  pylayers.util.mayautil as myu
 from pylayers.mobility.ban.body import *
 from pylayers.gis.layout import *
+import pylayers.antprop.antenna as antenna
+
 from matplotlib.widgets import Slider, CheckButtons, Button, Cursor
 from pylayers.signal.DF import *
 
@@ -343,7 +345,10 @@ class CorSer(PyLayers):
 
     def __repr__(self):
         st = ''
-        st = st + 'Filename: ' + self._filename + '\n'
+        st = st + 'filename : ' + self._filename + '\n'
+        st = st + 'filewear : ' + self.filewear + '\n'
+        st = st + 'filebody : ' + self.filebody + '\n'
+        st = st + 'filemocap : ' + self.filemocap + '\n'
         st = st + 'Day : '+ str(self.day)+'/06/2014'+'\n'
         st = st + 'Serie : '+ str(self.serie)+'\n'
         st = st + 'Scenario : '+str(self.scenario)+'\n'
@@ -446,6 +451,61 @@ class CorSer(PyLayers):
                         print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
                 print '{0:66}'.format('-'*len(title) )
 
+    @property
+    def ant(self):
+        """ display device techno, id , id on body, body owner,...
+        """
+        
+        title = '{0:21} | {1:7} | {2:8} | {3:10} '.format('Name in Dataframe', 'Real Id', 'Body Id', 'Subject')
+        print title + '\n' + '='*len(title) 
+        # access points HKB
+        for d in self.din:
+            if ('HK' in d) :
+                dev = self.devmapper(d,'HKB')
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+        if 'FULL' in self.typ:
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+        for d in self.din:
+            if ('BS' in d) :
+                dev = self.devmapper(d,'BS')
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+        if 'FULL' in self.typ:
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+
+        # access points TCR
+        for d in self.din:
+            if ('TCR' in d)  :
+                dev = self.devmapper(d,'TCR')
+                print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+        print '{0:66}'.format('-'*len(title) )
+        #device per RAT per body
+        for b in self.B:
+            if b not in self.interf:
+                #HKB per body
+                for d in self.B[b].dev.keys():
+
+                    if ('HK' in d):
+                        dev = self.devmapper(d,'HKB')
+                        print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+                #bespoon
+                if ('FULL' in self.typ) or ('HKB' in self.typ):
+                    print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+                for d in self.B[b].dev.keys():
+                    if ('BS' in d):
+                        dev = self.devmapper(d,'BS')
+                        print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+                # print '{0:66}'.format('-'*len(title) )
+                #TCR per body
+                if 'FULL' in self.typ:
+                    print '{0:21} | {1:7} | {2:8} | {3:10} '.format('','','','')
+                for d in self.B[b].dev.keys():
+                    if ('TCR' in d):
+                        dev = self.devmapper(d,'TCR')
+                        print '{0:21} | {1:7} | {2:8} | {3:10} '.format(dev[0],dev[1],dev[2],dev[3])
+                print '{0:66}'.format('-'*len(title) )
+
+
+
     def _loadcam(self):
 
         self.cam = np.array([
@@ -519,8 +579,16 @@ bernard
         """
 
         filename = os.path.join(self.rootdir,'RAW','11-06-2014','MOCAP','scene.c3d')
+
         print "\nload infrastructure node position:",
         a,self.infraname,pts,i = c3d.ReadC3d(filename)
+
+
+
+
+        
+
+
 
         pts = pts/1000.
         mpts = np.mean(pts,axis=0)
@@ -531,44 +599,45 @@ bernard
 
             self.din.update(
                 {'HKB:1':{'p':mphkb[3],
-                          'T':np.eye(3),
+                          # 'T':np.eye(3),
                           's3off':0.},
 
                  'HKB:2':{'p':mphkb[2],
-                          'T': np.array([[-0.44807362,  0.89399666,  0.],
-                                         [-0.89399666, -0.44807362,  0.],
-                                         [ 0.,0.,1.        ]]),
+                          # 'T': np.array([[-0.44807362,  0.89399666,  0.],
+                          #                [-0.89399666, -0.44807362,  0.],
+                          #                [ 0.,0.,1.        ]]),
                           's3off':0.}      ,
                  'HKB:3':{'p':mphkb[1],
-                          'T':array([[-0.59846007, -0.80115264,  0.],
-                                     [ 0.80115264, -0.59846007,  0.],
-                                     [ 0.,0.,  1.]]),
+                          # 'T':array([[-0.59846007, -0.80115264,  0.],
+                          #            [ 0.80115264, -0.59846007,  0.],
+                          #            [ 0.,0.,  1.]]),
                           's3off':0.},
                  'HKB:4':{'p':mphkb[0],
-                          'T':array([[-0.44807362, -0.89399666,  0.],
-                                     [ 0.89399666, -0.44807362,  0.],
-                                     [ 0.,0.,  1.]]),
+                          # 'T':array([[-0.44807362, -0.89399666,  0.],
+                          #            [ 0.89399666, -0.44807362,  0.],
+                          #            [ 0.,0.,  1.]]),
                           's3off':0.}
                  })
+
 
         if ('TCR' in self.typ) or ('FULL' in self.typ):
             self.din.update({'TCR:32':{'p':mpts[9],
                                        'T':np.eye(3),
                                        's3off':0.1},
                  'TCR:24':{'p':mpts[6],
-                           'T': np.array([[-0.44807362,  0.89399666,  0.],
-                                         [-0.89399666, -0.44807362,  0.],
-                                         [ 0.,0.,1.        ]]),
+                           # 'T': np.array([[-0.44807362,  0.89399666,  0.],
+                           #               [-0.89399666, -0.44807362,  0.],
+                           #               [ 0.,0.,1.        ]]),
                            's3off':0.1},
                  'TCR:27':{'p':mpts[3],
-                           'T':array([[-0.59846007, -0.80115264,  0.],
-                                     [ 0.80115264, -0.59846007,  0.],
-                                     [ 0.,0.,  1.]]),
+                           # 'T':array([[-0.59846007, -0.80115264,  0.],
+                           #           [ 0.80115264, -0.59846007,  0.],
+                           #           [ 0.,0.,  1.]]),
                            's3off':0.1},
                  'TCR:28':{'p':mpts[0],
-                           'T':array([[-0.44807362, -0.89399666,  0.],
-                                     [ 0.89399666, -0.44807362,  0.],
-                                     [ 0.,0.,  1.]]),
+                           # 'T':array([[-0.44807362, -0.89399666,  0.],
+                           #           [ 0.89399666, -0.44807362,  0.],
+                           #           [ 0.,0.,  1.]]),
                            's3off':0.1}
                  })
 
@@ -577,16 +646,26 @@ bernard
             if ('BS'  in self.typ) or ('FULL' in self.typ):
                 self.din.update(
                 {'BS:74':{'p':mphkb[3],
-                          'T':np.eye(3),
+                          # 'T':np.eye(3),
                           's3off':-0.2},
                  'BS:157':{'p':mphkb[2],
-                          'T': np.array([[-0.44807362,  0.89399666,  0.],
-                                         [-0.89399666, -0.44807362,  0.],
-                                         [ 0.,0.,1.        ]]),
+                          # 'T': np.array([[-0.44807362,  0.89399666,  0.],
+                          #                [-0.89399666, -0.44807362,  0.],
+                          #                [ 0.,0.,1.        ]]),
                           's3off':-0.2}      ,
                  })
 
+        # load extra  information frmo inifile (antenna, rotation matrix,...)
 
+        inifile = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','BodyandWear','AccesPoints.ini')
+        config = ConfigParser.ConfigParser()
+        config.read(inifile)
+        
+        for d in self.din:
+            self.din[d]['antname']=config.get(d,'file')
+            self.din[d]['ant']=antenna.Antenna(config.get(d,'file'))
+            self.din[d]['T']=eval(config.get(d,'t'))
+            self.din[d]['comment']=config.get(d,'comment')
         # self.pts= np.empty((12,3))
         # self.pts[:,0]= -mpts[:,1]
         # self.pts[:,1]= mpts[:,0]
@@ -608,6 +687,13 @@ bernard
 
     def _loadbody(self,day=11,serie=''):
         """ load log file
+
+        Parameters
+        ----------
+
+        day :
+        serie :
+
         """
         self.B={}
         color=['LightBlue','YellowGreen','PaleVioletRed','white','white','white','white','white','white','white']
@@ -616,22 +702,23 @@ bernard
             print "\nload ",subject, " body:",
             seriestr = str(self.serie).zfill(3)
             if day == 11:
-                filemocap = os.path.join(self.rootdir,'RAW',str(self.day)+'-06-2014','MOCAP','serie_'+seriestr+'.c3d')
+                self.filemocap = os.path.join(self.rootdir,'RAW',str(self.day)+'-06-2014','MOCAP','serie_'+seriestr+'.c3d')
             elif day == 12:
-                filemocap = os.path.join(self.rootdir,'RAW',str(self.day)+'-06-2014','MOCAP','Nav_serie_'+seriestr+'.c3d')
+                self.filemocap = os.path.join(self.rootdir,'RAW',str(self.day)+'-06-2014','MOCAP','Nav_serie_'+seriestr+'.c3d')
             baw = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','BodyandWear')
             if subject =='Jihad':
                 subject ='Jihan'
-            filebody = os.path.join(baw, subject + '.ini')
-            filewear = os.path.join(baw,subject + '_'  +str(self.day)+'-06-2014_' + self.typ + '.ini')
+
+            self.filebody = os.path.join(baw, subject + '.ini')
+            self.filewear = os.path.join(baw,subject + '_'  +str(self.day)+'-06-2014_' + self.typ + '.ini')
 
             if len(self.subject) >1 or self.mocapinterf:
                 multi_subject=True
             else:
                 multi_subject=False
-            self.B.update({subject:Body(_filebody=filebody,
-                             _filemocap=filemocap,unit = 'mm', loop=False,
-                             _filewear=filewear,
+            self.B.update({subject:Body(_filebody=self.filebody,
+                             _filemocap=self.filemocap,unit = 'mm', loop=False,
+                             _filewear=self.filewear,
                              centered=False,
                              multi_subject_mocap=multi_subject,
                              color=color[us])})
@@ -648,7 +735,7 @@ bernard
                     print "load ",i, " interfering body:",
 
                     self.B.update({i:Cylinder(name=i,
-                                              _filemocap=filemocap,
+                                              _filemocap=self.filemocap,
                                               unit = 'mm',
                                               color = color[ui])})
                     intertmp.append(i)
@@ -789,7 +876,16 @@ bernard
     def _loadBS(self,day=11,serie='',scenario='20',run=1):
         """ load BeSpoon data
 
+        Parameters
+        ----------
+
+        day : int
+        serie : string
+        scenario : string
+        run : int
+
         """
+
         if day == 11:
             self.dBS = {'WristRight':157,'AnkleRight':74,'HandRight':0}
         elif day == 12:
@@ -939,7 +1035,7 @@ bernard
             ------
 
             if square_mda = True
-            
+
             intersection : (ndevice x nbdevice x nb_timestamp)
                 matrice of intersection (1 if link is cut 0 otherwise)
             links : (nbdevice)
@@ -1303,7 +1399,7 @@ bernard
     def imshowvisibility_i(self,techno='HKB',t=0,**kwargs):
         """  imshow visibility mda interactive
 
-        Parameters 
+        Parameters
         ----------
 
         inter : (nb link x nb link x timestamps)
@@ -1311,7 +1407,7 @@ bernard
         time : intial time (s)
 
 
-        Example 
+        Example
         -------
 
         >>> from pylayers.measures.cormoran import *
@@ -1516,7 +1612,7 @@ bernard
 
 
     def _computedistdf(self):
-        """Compute the ditance dataframe from distance matrix
+        """Compute the distance dataframe from distance matrix
         """
 
         if ('HK' in self.typ) or ('FULL' in self.typ):
@@ -1718,6 +1814,8 @@ bernard
             device on body size (100)
         devlist : list
             list of device name to show on body
+        pattern : boolean
+            display devices pattern
 
         trajectory : boolean
             display trajectory  (True)
@@ -1736,11 +1834,11 @@ bernard
         inname : boolean
             display infra strucutre node name
         innamesize : float,
-            size of name of infrastrucutre nodes (0.1)
+            size of name of infrastructure nodes (0.1)
         incolor: str
             color of infrastructure nodes ('r')
         insize
-            size of infrastrucutre nodes (0.1)
+            size of infrastructure nodes (0.1)
 
 
         camera : boolean
@@ -1750,6 +1848,11 @@ bernard
         camerasize  : float
             size of camera nodes (0.1)
 
+        Examples
+        --------
+
+            >>> S  = Corser(6)
+            >>> S._show3()
 
 
 
@@ -1762,6 +1865,7 @@ bernard
                      'trajectory' :False,
                      'devsize':100,
                      'devlist':[],
+                     'pattern':False,
                      'inodes' : True,
                      'inname' : True,
                      'innamesize' : 0.1,
@@ -1799,6 +1903,20 @@ bernard
         if kwargs['inodes']:
             X= np.array([v[i][1]['p'] for i in range(len(v))])
             mlab.points3d(X[:,0],X[:,1], X[:,2],scale_factor=kwargs['insize'],color=in_color)
+            if kwargs['pattern']:
+                for i in range(len(v)):
+                    if not hasattr(self.din[v[i][0]]['ant'],'SqG'):
+                        self.din[v[i][0]]['ant'].Fsynth()
+                    self.din[v[i][0]]['ant']._show3(po=v[i][1]['p'],
+                           T=self.din[v[i][0]]['T'],
+                           ilog=False,
+                           minr=0.01,
+                           maxr=0.2,
+                           newfig=False,
+                           title=False,
+                           colorbar=False,
+                           )
+
         if kwargs['inname']:
             [mlab.text3d(v[i][1]['p'][0],
                         v[i][1]['p'][1],
@@ -1820,7 +1938,8 @@ bernard
                                     name = kwargs['bodyname'],
                                     devlist=kwargs['devlist'],
                                     devsize=kwargs['devsize'],
-                                    tube_sides=12)
+                                    tube_sides=12,
+                                    pattern=kwargs['pattern'])
                     if kwargs['tagtraj']:
                         X=self.B[b].traj[['x','y','z']].values[self.B[b].toposFrameId]
                         if kwargs['tagpoffset']==[]:
@@ -1926,7 +2045,7 @@ bernard
         return fig,(ax1,ax2)
 
     def _load_offset_dict(self):
-        
+
         path = os.path.join(os.environ['CORMORAN'],'POST-TREATED')
         d = pickle.load( open( os.path.join(path,'offset_dictionnary.bin'), "rb" ) )
 
@@ -1938,7 +2057,7 @@ bernard
         d = pickle.dump( d, open( os.path.join(path,'offset_dictionnary.bin'), "wb" ) )
 
     def _save_data_off_dict(self,filename,typ,value):
-        """ save 
+        """ save
                 - a given "value" of an for,
                 - a serie/run "filename",
                 - of a given typ (video|hkb|tcr|...)
@@ -3406,64 +3525,174 @@ bernard
         #
 
 
-    def showlink(self,a,b,technoa='HKB',technob='HKB',iframe=0,style='*b'):
+    def showpattern(self,a,techno='',**kwargs):
+        """ show pattern configuation for a given link and frame
+
+        Parameters
+        ----------
+
+        a : int 
+            link index 
+        technoa : string 
+            default 'HKB'|'TCR'|'BS'
+        technob
+            default 'HKB'|'TCR'|'BS'
+        phi : float
+            antenna elevation in rad
+
+        """
+
+        defaults = { 'fig':[],
+                     'ax':[],
+                     't':0,
+                     'phi':np.pi,
+                     'ap':False
+                    }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        if kwargs['fig'] == []:
+            fig=plt.figure()
+        else :
+            fig = kwargs['fig']
+
+        if kwargs['ax'] == []:
+            ax=fig.add_subplot(111)
+        else :
+            ax = kwargs['ax']
+
+        # display nodes
+
+        a,ia,ba,subjecta,techno = self.devmapper(a,techno)
+        pa = self.getdevp(a,techno=techno,t=kwargs['t']).values
+
+
+        if len(pa.shape) >1:
+            pa=pa[0]
+        ax.plot(pa[0],pa[1],'ob')
+        ax.text(pa[0],pa[1],ba)
+
+        if subjecta != '':
+            self.B[subjecta].settopos(t=kwargs['t'])
+            self.B[subjecta].dev[ba]['ant'].Fsynth()
+            xa,ya,z,sa,v = self.B[subjecta].dev[ba]['ant']._computemesh(po=pa,T=self.B[subjecta].acs[ba],minr=0.01,maxr=0.1,ilog=False)
+            p2 = np.where(self.B[subjecta].dev[ba]['ant'].phi<=kwargs['phi'])[0][-1]
+            ax.plot(xa[:,p2],ya[:,p2])
+        else: 
+            self.din[ba]['ant'].Fsynth()
+            xa,ya,z,sa,v = self.din[ba]['ant']._computemesh(po=self.din[ba]['p'],T=self.din[ba]['T'],minr=0.01,maxr=0.1,ilog=False)
+            p2 = np.where(self.din[ba]['ant'].phi<=kwargs['phi'])[0][-1]
+            ax.plot(xa[:,p2],ya[:,p2])
+        
+        return fig,ax
+
+    def showlink(self,a,b,technoa='',technob='',**kwargs):
         """ show link configuation for a given frame
 
         Parameters
         ----------
 
-        a
-        b
-        technoa
+        a : int 
+            link index 
+        b : int 
+            link index
+        technoa : string 
+            default 'HKB'|'TCR'|'BS'
         technob
-        iframe
-        style
+            default 'HKB'|'TCR'|'BS'
+        phi : float
+            antenna elevation in rad
 
         """
+
+        defaults = { 'fig':[],
+                     'ax':[],
+                     't':0,
+                     'phi':np.pi/2.,
+                     'ap':False
+                    }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        if kwargs['fig'] == []:
+            fig=plt.figure()
+        else :
+            fig = kwargs['fig']
+
+        if kwargs['ax'] == []:
+            ax=fig.add_subplot(111)
+        else :
+            ax = kwargs['ax']
+
         # display nodes
-        A,B = self.getlinkp(a,b,technoa=technoa,technob=technob)
-        A=A.values
-        B=B.values
-        a,ia,ba,subjecta,technoa = self.devmapper(a,technoa)
-        b,ib,bb,subjectb,technob = self.devmapper(b,technob)
 
-        if A.ndim==2:
-            plt.plot(A[iframe,0],A[iframe,1],'ob')
-            plt.text(A[iframe,0],A[iframe,1],a)
-        else:
-            plt.plot(A[0],A[1],'or')
-            #plt.text(A[0],A[1],a)
+        fig,ax=self.showpattern(a=a,techno=technoa,fig=fig,ax=ax)
+        fig,ax=self.showpattern(a=b,techno=technob,fig=fig,ax=ax)
 
-        if B.ndim==2:
-            plt.plot(B[iframe,0],B[iframe,1],style)
-            plt.text(B[iframe,0]+0.1,B[iframe,1]+0.1,b)
-        else:
-            plt.plot(B[0],B[1],'ob')
-            plt.text(B[0],B[1],b)
-        plt.xlim(-6,6)
-        plt.ylim(-5,5)
-        # display body
-
-        #pc = self.B.d[:,2,iframe] + self.B.pg[:,iframe].T
-        pc0 = self.B[subjecta].d[:,0,iframe] + self.B[subjecta].pg[:,iframe].T
-        pc1 = self.B[subjecta].d[:,1,iframe] + self.B[subjecta].pg[:,iframe].T
-        pc15 = self.B[subjecta].d[:,15,iframe] + self.B[subjecta].pg[:,iframe].T
-        #plt.plot(pc0[0],pc0[1],'og')
-        #plt.text(pc0[0]+0.1,pc0[1],str(iframe))
-        #plt.plot(pc1[0],pc1[1],'og')
-        #plt.plot(pc15[0],pc15[1],'og')
-        #ci00   = plt.Circle((pc0[0],pc0[1]),self.B[subjecta].sl[0,2],color='green',alpha=0.6)
-        #ci01   = plt.Circle((pc1[0],pc1[1]),self.B[subjecta].sl[0,2],color='green',alpha=0.1)
-        #ci100 = plt.Circle((pc0[0],pc0[1]),self.B[subjecta].sl[10,2],color='red',alpha=0.1)
-        ci1015 = plt.Circle((pc15[0],pc15[1]),self.B[subjecta].sl[10,2],color='green',alpha=0.5)
         plt.axis('equal')
-        ax = plt.gca()
-        ax.add_patch(ci1015)
-        #ax.add_patch(ci01)
-        #ax.add_patch(ci100)
-        #ax.add_patch(ci1015)
-        #its = self.B[subjecta].intersectBody(A[iframe,:],B[iframe,:],topos=False,frameId=iframe)
-        #x.set_title('frameId :'+str(iframe)+' '+str(its.T))
+
+
+        p1 = self.din['HKB:1']['p']
+        p2 = self.din['HKB:2']['p']
+        p3 = self.din['HKB:3']['p']
+        p4 = self.din['HKB:4']['p']
+        plt.plot(p1[0],p1[1],'og')
+        plt.plot(p2[0],p2[1],'ob')
+        plt.plot(p3[0],p3[1],'or')
+        plt.plot(p4[0],p4[1],'ok')
+        plt.axis('equal')
+        
+        # if A.ndim==2:
+        #     plt.plot(A[iframe,0],A[iframe,1],'ob')
+        #     plt.text(A[iframe,0],A[iframe,1],a)
+        # else:
+        #     plt.plot(A[0],A[1],'or')
+        #     #plt.text(A[0],A[1],a)
+
+        # if B.ndim==2:
+        #     plt.plot(B[iframe,0],B[iframe,1],style)
+        #     plt.text(B[iframe,0]+0.1,B[iframe,1]+0.1,b)
+        # else:
+        #     plt.plot(B[0],B[1],'ob')
+        #     plt.text(B[0],B[1],b)
+        # plt.xlim(-6,6)
+        # plt.ylim(-5,5)
+
+
+        # self.B[subjecta].settopos(t=t)
+        # self.B[subjectb].settopos(t=t)
+
+        # 
+
+        
+        # # display body
+
+        # #pc = self.B.d[:,2,iframe] + self.B.pg[:,iframe].T
+        # pc0 = self.B[subjecta].d[:,0,iframe] + self.B[subjecta].pg[:,iframe].T
+        # pc1 = self.B[subjecta].d[:,1,iframe] + self.B[subjecta].pg[:,iframe].T
+        # pc15 = self.B[subjecta].d[:,15,iframe] + self.B[subjecta].pg[:,iframe].T
+        # #plt.plot(pc0[0],pc0[1],'og')
+        # #plt.text(pc0[0]+0.1,pc0[1],str(iframe))
+        # #plt.plot(pc1[0],pc1[1],'og')
+        # #plt.plot(pc15[0],pc15[1],'og')
+        # #ci00   = plt.Circle((pc0[0],pc0[1]),self.B[subjecta].sl[0,2],color='green',alpha=0.6)
+        # #ci01   = plt.Circle((pc1[0],pc1[1]),self.B[subjecta].sl[0,2],color='green',alpha=0.1)
+        # #ci100 = plt.Circle((pc0[0],pc0[1]),self.B[subjecta].sl[10,2],color='red',alpha=0.1)
+        # ci1015 = plt.Circle((pc15[0],pc15[1]),self.B[subjecta].sl[10,2],color='green',alpha=0.5)
+        # plt.axis('equal')
+        # ax = plt.gca()
+        # ax.add_patch(ci1015)
+        # #ax.add_patch(ci01)
+        # #ax.add_patch(ci100)
+        # #ax.add_patch(ci1015)
+        # #its = self.B[subjecta].intersectBody(A[iframe,:],B[iframe,:],topos=False,frameId=iframe)
+        # #x.set_title('frameId :'+str(iframe)+' '+str(its.T))
+        
+
 
 
     def visidev(self,a,b,technoa='HKB',technob='HKB',dsf=10):

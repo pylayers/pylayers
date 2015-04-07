@@ -1277,12 +1277,11 @@ class Ctilde(PyLayers):
         #
 
         #
-        #  C  = 2 x 2 x r x f   ? 
-        #  Fa = 2 x r x f     ?
+        #  C  = 2 x 2 x r x f
+        #  Fa = 2 x r x f
         #  Fb = 2 x r x f
         #t1 = self.Ctt * Fat + self.Cpt * Fap
         #t2 = self.Ctp * Fat + self.Cpp * Fap
-
         t1 = self.Ctt * Fat + self.Ctp * Fap
         t2 = self.Cpt * Fat + self.Cpp * Fap
         alpha = t1 * Fbt + t2 * Fbp

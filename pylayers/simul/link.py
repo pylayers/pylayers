@@ -6,19 +6,34 @@ r"""
 .. currentmodule:: pylayers.simul.link
 
 This module runs the electromagnetic simulation at the link level.
-
 It stores simulated objects in `hdf5` format.
 
 Link is a MetaClass
-Dlink is for deterministic links 
-Slink is for statistical links. 
+Dlink is for deterministic links
+Slink is for statistical links.
 
-DLink Class
-==========
+Link Class
+===========
 
 .. autosummary::
     :toctree: generated/
 
+    Link.__add__
+
+SLink Class
+===========
+
+.. autosummary::
+    :toctree: generated/
+
+    SLink.onbody
+
+DLink Class
+===========
+
+>>> from pylayers.simul.link import *
+>>> L = DLink(verbose=False)
+>>> aktk = L.eval()
 
 DLink simulation
 ----------------
@@ -105,13 +120,14 @@ import pdb
 
 class Link(object):
     def __init__(self):
-        """ Link evaluation class
+        """ Link evaluation metaclass
+
         """
         self.H = Tchannel()
 
 
     def __add__(self,l):
-        """ merge ak tauk of 2 Links
+        """ merge ak and tauk of 2 Links
         """
         L  = Link()
         tk = np.hstack((self.H.tk,l.H.tk))
@@ -580,11 +596,18 @@ class DLink(Link):
 
     @fGHz.setter
     def fGHz(self,freq):
+        if not isinstance(freq,np.ndarray):
+            freq=np.array([freq])
         self._fGHz = freq
-        self.fmin = freq[0]
-        self.fmax = freq[-1]
-        self.fstep = freq[1]-freq[0]
 
+        if len(freq)>1:
+            self.fmin = freq[0]
+            self.fmax = freq[-1]
+            self.fstep = freq[1]-freq[0]
+        else:
+            self.fmin = freq
+            self.fmax = freq
+            self.step = 0
 
     @wav.setter
     def wav(self,waveform):
@@ -759,17 +782,18 @@ class DLink(Link):
             for a given key (dataframe/group)
 
         Parameters
-        -----------
+        ----------
 
         key : string
 
         array : np.ndarray
 
-        Returns:
+        Returns
         -------
 
         idx : int
             indice of last element of the array of key
+
         """
         try :
             lfilename=pyu.getlong(self.filename,pstruc['DIRLNK'])

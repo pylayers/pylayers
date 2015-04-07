@@ -25,8 +25,8 @@ Run simulation and data exploitation
     Simul.evalstat
     Simul.show
 
-Internal configuration
-----------------------
+Loading and Saving
+------------------
 
 .. autosummary::
     :toctree: generated/
@@ -82,8 +82,10 @@ class Simul(PyLayers):
         ----------
 
         source : string
-            h5 trajectory
+            h5 trajectory file default simulnet_TA-Office.h5
+
         verbose : boolean
+
 
         """
 
@@ -115,6 +117,7 @@ class Simul(PyLayers):
         self.DL.cutoff=cutoff
 
         self.filename = 'simultraj_' + self.filetraj
+
         self.data = pd.DataFrame(columns=['id_a', 'id_b',
                                           'x_a', 'y_a', 'z_a',
                                           'x_b', 'y_b', 'z_b',
@@ -123,13 +126,16 @@ class Simul(PyLayers):
                                           'fbminghz', 'fbmaxghz', 'fstep', 'aktk_id',
                                           'sig_id', 'ray_id', 'Ct_id', 'H_id'
                                           ])
+
         self.data.index.name='t'
         self._filecsv = self.filename.split('.')[0] + '.csv'
         self.todo = {'OB': True,
                     'B2B': True,
                     'B2I': True,
                     'I2I': False}
+
         filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
+
         if os.path.exists(filenameh5) :
             self.loadpd()
         self.settime(0.)
@@ -170,7 +176,9 @@ class Simul(PyLayers):
 
         """
         self.filetraj = source
-
+        if not os.path.isfile(source):
+            raise AttributeError('Trajectory file'+source+'has not been found.\
+             Please make sure you have run a simulnet simulation before runining simultraj.')
 
         # get the trajectory
         traj = tr.Trajectories()
@@ -201,6 +209,15 @@ class Simul(PyLayers):
         self.traj = traj
 
     def load_CorSer(self,source):
+        """
+
+        Parameters
+        ----------
+
+        source :
+            name of simulation file to be loaded
+
+        """
 
         if isinstance(source.B,Body):
             B=[source.B]
@@ -229,7 +246,8 @@ class Simul(PyLayers):
 
 
             self.dap.update({ap: {'pos': source.din[ap]['p'],
-                                  'ant': antenna.Antenna(),
+                                  'ant': source.din[ap]['ant'],
+                                  'T': source.din[ap]['T'],
                                   'name': techno
                                         }
                                  })
@@ -237,6 +255,7 @@ class Simul(PyLayers):
         self.Nag = len(B)
         self.Nap = len(source.din)
         self.corser = source
+
     def _gen_net(self):
         """ generate Network and associated links
 
@@ -253,17 +272,26 @@ class Simul(PyLayers):
         """
 
         N = Network()
+        #
         # get devices on bodies
+        #
         for p in self.dpersons:
             D = []
             for dev in self.dpersons[p].dev:
                 D.append(
                     Device(self.dpersons[p].dev[dev]['name'], ID=dev))
+
+                D[-1].ant['A1']['name'] = self.dpersons[p].dev[dev]['file']
+                D[-1].ant['antenna']= self.dpersons[p].dev[dev]['ant']
             N.add_devices(D, grp=p)
+        #
         # get access point devices
+        #
         for ap in self.dap:
             D = Device(self.dap[ap]['name'], ID=ap)
+            D.ant['antenna']= self.dap[ap]['ant']
             N.add_devices(D, grp='ap', p=self.dap[ap]['pos'])
+            N.update_orient(ap, self.dap[ap]['T'], now=0.)
         # create Network
         N.create()
         self.N = N
@@ -275,7 +303,7 @@ class Simul(PyLayers):
         fig, ax = self.N.show(fig=fig, ax=ax)
         return fig, ax
 
-    def evaldeter(self, na, nb, wstd, fmode='band', nf=10,**kwargs):
+    def evaldeter(self, na, nb, wstd, fmode='center', nf=10,**kwargs):
         """ deterministic evaluation of a link
 
         Parameters
@@ -308,16 +336,25 @@ class Simul(PyLayers):
 
         # todo in network :
         # take into consideration the postion and rotation of antenna and not device
+
+        self.DL.Aa = self.N.node[na]['ant']['antenna']
         self.DL.a = self.N.node[na]['p']
         self.DL.Ta = self.N.node[na]['T']
+
+        self.DL.Ab = self.N.node[nb]['ant']['antenna']
         self.DL.b = self.N.node[nb]['p']
         self.DL.Tb = self.N.node[nb]['T']
+
+        #
+        # Choose frequency band
+        #
         if fmode == 'center':
             self.DL.fGHz = self.N.node[na]['wstd'][wstd]['fcghz']
         else:
             minb = self.N.node[na]['wstd'][wstd]['fbminghz']
             maxb = self.N.node[na]['wstd'][wstd]['fbmaxghz']
             self.DL.fGHz = np.linspace(minb, maxb, nf)
+
         a, t = self.DL.eval(**kwargs)
 
         return a, t
