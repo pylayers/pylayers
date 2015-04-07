@@ -142,7 +142,7 @@ class Trajectories(PyLayers,list):
         if os.path.exists(filename):
             fil = pd.HDFStore(filename)
         else:
-            raise NameError(filename + ' not founded')
+            raise NameError(filename + ' not found')
         if not append:
             [self.pop(0) for i in range(len(self))]
         for k in fil.keys():

@@ -343,7 +343,7 @@ class Network(PyLayers,nx.MultiDiGraph):
         if not self.isPN:
             s = 'Network information\n*******************\n'
             s = s + 'number of nodes: ' + str(len(self.nodes())) +'\n'
-            title = '{0:7} | {1:15} |{2:7} | {3:4} | {4:17} | {5:10} '.format('ID', 'name', 'group', 'type', 'position (x,y,z)','wstd')
+            title = '{0:7} | {1:15} |{2:7} | {3:4} | {4:17} | {5:10} |  {6:10} '.format('ID', 'name', 'group', 'type', 'position (x,y,z)','antenna', 'wstd')
             s = s + title + '\n' + '-'*len(title) + '\n'
             subnet = self.SubNet.keys()
             for sn in subnet:
@@ -354,10 +354,14 @@ class Network(PyLayers,nx.MultiDiGraph):
                         wstd = self.node[n]['wstd'].keys()
                     except:
                         wstd = self.node[n]['wstd']
-                    s = s + '{0:7} | {1:15} |{2:7} | {3:4} | {4:5.2f} {5:5.2f} {6:5.2f} | {7:10} '\
+                    try:
+                        ant = self.node[n]['ant']['antenna']._filename.split('.')[0]
+                    except:
+                        ant=''
+                    s = s + '{0:7} | {1:15} |{2:7} | {3:4} | {4:5.2f} {5:5.2f} {6:5.2f} | {7:10} | {8:10} '\
                     .format(self.node[n]['ID'][:7], self.node[n]['name'][:15],
                     self.node[n]['grp'][:7], self.node[n]['typ'][:4], self.node[n]['p'][0],
-                    self.node[n]['p'][1],self.node[n]['p'][2],wstd[:10]) + '\n'
+                    self.node[n]['p'][1],self.node[n]['p'][2],ant,wstd[:10]) + '\n'
 
     #             try:
     #                 s = s + 'node ID: ' + str(self.node[n]['ID']) + '\n'
