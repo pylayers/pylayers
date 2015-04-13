@@ -3545,7 +3545,7 @@ bernard
         defaults = { 'fig':[],
                      'ax':[],
                      't':0,
-                     'phi':np.pi,
+                     'phi':np.pi/2.,
                      'ap':False
                     }
 
@@ -3579,7 +3579,10 @@ bernard
             self.B[subjecta].dev[ba]['ant'].Fsynth()
             xa,ya,z,sa,v = self.B[subjecta].dev[ba]['ant']._computemesh(po=pa,T=self.B[subjecta].acs[ba],minr=0.01,maxr=0.1,ilog=False)
             p2 = np.where(self.B[subjecta].dev[ba]['ant'].phi<=kwargs['phi'])[0][-1]
-            ax.plot(xa[:,p2],ya[:,p2])
+
+            # ax.plot(xa[:,p2],ya[:,p2])
+            ax.plot(xa[p2,:],ya[p2,:])
+
         else: 
             self.din[ba]['ant'].Fsynth()
             xa,ya,z,sa,v = self.din[ba]['ant']._computemesh(po=self.din[ba]['p'],T=self.din[ba]['T'],minr=0.01,maxr=0.1,ilog=False)

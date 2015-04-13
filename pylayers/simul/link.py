@@ -1334,7 +1334,6 @@ class DLink(Link):
             #T channel
             H = C.prop2tran(a=self.Aa,b=self.Ab,Friis=True)
             self.save(H,'H',self.dexist['H']['grpname'],force = kwargs['force'])
-
         self.H = H
         if kwargs['applywav']:
             if self.H.isFriis:

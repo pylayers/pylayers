@@ -329,7 +329,6 @@ class Ctilde(PyLayers):
         """
 
         filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
-
         try:
             fh5=h5py.File(filename,'r')
             f = fh5['Ct/'+grpname]
@@ -341,7 +340,6 @@ class Ctilde(PyLayers):
 
             self.Tt = f['Tt'][:]
             self.Tr = f['Tr'][:]
-
             Ctt = f['Ctt_y'][:]
             Cpp = f['Cpp_y'][:]
             Ctp = f['Ctp_y'][:]
@@ -1188,7 +1186,7 @@ class Ctilde(PyLayers):
         self.Ctp.y = self.Ctp.y[u,:]
         self.Cpt.y = self.Cpt.y[u,:]
 
-    def prop2tran(self,a='theta',b='theta',Ta=[],Tb=[],Friis=True):
+    def prop2tran(self,a='theta',b='theta',Ta=[],Tb=[],Friis=True,debug=True):
         r""" transform propagation channel into transmission channel
 
         Parameters
@@ -1282,17 +1280,28 @@ class Ctilde(PyLayers):
         #  Fb = 2 x r x f
         #t1 = self.Ctt * Fat + self.Cpt * Fap
         #t2 = self.Ctp * Fat + self.Cpp * Fap
+
         t1 = self.Ctt * Fat + self.Ctp * Fap
         t2 = self.Cpt * Fat + self.Cpp * Fap
         alpha = t1 * Fbt + t2 * Fbp
 
+        
+
         H = Tchannel(alpha.x, alpha.y, self.tauk, self.tang, self.rang)
+
+        if debug :
+            H.Gat=10*np.log10(np.sum(Fat.y*np.conj(Fat.y),axis=1)/len(Fat.x))
+            H.Gap=10*np.log10(np.sum(Fap.y*np.conj(Fap.y),axis=1)/len(Fap.x))
+            H.Gbt=10*np.log10(np.sum(Fbt.y*np.conj(Fbt.y),axis=1)/len(Fbt.x))
+            H.Gbp=10*np.log10(np.sum(Fbp.y*np.conj(Fbp.y),axis=1)/len(Fbp.x))
+
         if Friis:
             H.applyFriis()
 
         # average w.r.t frequency
         H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y)/self.nfreq, axis=1)))
         H.tk = H.taud
+
         return(H)
 
     def _vec2scal(self):
@@ -1560,6 +1569,7 @@ class Tchannel(bs.FUDAsignal):
         # try/except to avoid loosing the h5 file if
         # read/write error
         try:
+
             fh5=h5py.File(filename,'a')
             if not grpname in fh5['H'].keys():
                 fh5['H'].create_group(grpname)
@@ -1575,7 +1585,7 @@ class Tchannel(bs.FUDAsignal):
             raise NameError('Channel Tchannel: issue when writting h5py file')
 
     def _loadh5(self,filenameh5,grpname):
-        """ Load Ctilde object in hdf5 format compliant with Link Class
+        """ Load H object in hdf5 format compliant with Link Class
 
         Parameters
         ----------
@@ -1601,7 +1611,6 @@ class Tchannel(bs.FUDAsignal):
                         setattr(self,str(k),va)
                 else :
                     setattr(self,str(k),va)
-
             fh5.close()
             self.__init__(self.x, self.y, self.taud, self.dod, self.doa)
 
