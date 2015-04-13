@@ -626,7 +626,8 @@ class Simul(PyLayers):
             False otherwise
 
         """
-        self.data[(self.data.index == df.index) & (self.data['id_a'] == df['id_a'].values[0]) & (self.data['id_b'] == df['id_b'].values[0]) & (self.data['wstd'] == df['wstd'].values[0])]=df
+        
+        self.data[(self.data.index == df.index) & (self.data['id_a'] == df['id_a'].values[0]) & (self.data['id_b'] == df['id_b'].values[0]) & (self.data['wstd'] == df['wstd'].values[0])]=df.values
 
 
 
