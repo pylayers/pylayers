@@ -856,9 +856,13 @@ class Simul(PyLayers):
                             output[linkname]['C']=[]
                         Ct_id = line['Ct_id']
                         self.DL.load(self.DL.C,Ct_id)
+
                         if kwargs['angles']:
+                            self.DL.C.islocal=False
                             self.DL.C.locbas(Tt=self.DL.Ta, Tr=self.DL.Tb)
-                        # H = self.DL.C.prop2tran(a=self.DL.Aa,b=self.DL.Ab,Friis=True)
+
+
+                            
                         #T channel
                         
                         output[linkname]['C'].append(copy.deepcopy(self.DL.C))

@@ -788,7 +788,6 @@ class Ctilde(PyLayers):
         # get frequency axes
 
         fGHz = self.fGHz
-
         # if rot matrices are passed
         if (Tt != []) & (Tr != []):
             if self.islocal:
@@ -1220,7 +1219,6 @@ class Ctilde(PyLayers):
         nfreq = self.nfreq
         nray  = self.nray
         sh = np.shape(self.Ctt.y)
-
         if type(a) == str:
 
             if a == 'theta':
