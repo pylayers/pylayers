@@ -605,6 +605,7 @@ class Simul(PyLayers):
                             self.savepd()
                             # save ak tauk
                             self._saveh5(ut, na, nb, w)
+
                         elif self.check_exist(df) and kwargs['replace_data']:
                             self.replace_data(df)
                             self.savepd()
@@ -765,6 +766,7 @@ class Simul(PyLayers):
                     'typ':['ak'],
                     'links': {},
                     'wstd':[],
+                    'angles':False
                     }
 
         for k in defaults:
@@ -818,10 +820,14 @@ class Simul(PyLayers):
                     #         raise AttributeError('invalid link')
 
                     # retrieve correct position and orientation given the time
-                    # self.update_pos(t=tt)
-                    # self.DL.a = self.N.node[link[0]]['p']
-                    # self.DL.b = self.N.node[link[1]]['p']
-
+                    self.update_pos(t=tt)
+                    self.DL.a = self.N.node[link[0]]['p']
+                    self.DL.b = self.N.node[link[1]]['p']
+                    self.DL.Ta = self.N.node[link[0]]['T']
+                    self.DL.Tb = self.N.node[link[1]]['T']
+                    # self.DL.Aa = self.N.node[link[0]]['ant']['antenna']
+                    # self.DL.Ab = self.N.node[link[1]]['ant']['antenna']
+                    
                     if 'ak' in kwargs['typ'] or 'tk' in kwargs['typ'] or 'rss' in kwargs['typ']:
                         H_id = line['H_id'].decode('utf8')
                         self.DL.load(self.DL.H,H_id)
@@ -850,6 +856,11 @@ class Simul(PyLayers):
                             output[linkname]['C']=[]
                         Ct_id = line['Ct_id']
                         self.DL.load(self.DL.C,Ct_id)
+                        if kwargs['angles']:
+                            self.DL.C.locbas(Tt=self.DL.Ta, Tr=self.DL.Tb)
+                        # H = self.DL.C.prop2tran(a=self.DL.Aa,b=self.DL.Ab,Friis=True)
+                        #T channel
+                        
                         output[linkname]['C'].append(copy.deepcopy(self.DL.C))
 
 
