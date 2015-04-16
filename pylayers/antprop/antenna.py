@@ -1413,6 +1413,7 @@ class Antenna(PyLayers):
         dphi = self.phi[1]-self.phi[0]
         for f in kwargs['fGHz']:
             ik = np.where(abs(self.fa-f)<fstep)[0][0]
+            #ik=0
             chaine = 'f = %3.2f GHz' %(self.fa[ik])
             # all theta
             if 'phd' in kwargs:
@@ -1945,7 +1946,7 @@ class Antenna(PyLayers):
             #self.Fphi = EFph.reshape(sh[0], sh[1], sh[2])
         else:
             raise Warning('antenna has not been evaluated')
-
+            
 
     def Fsynth(self,theta=[],phi=[],pattern=True,typ='vsh'):
         """ Perform Antenna synthesis
