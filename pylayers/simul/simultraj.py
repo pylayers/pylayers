@@ -303,7 +303,7 @@ class Simul(PyLayers):
         fig, ax = self.N.show(fig=fig, ax=ax)
         return fig, ax
 
-    def evaldeter(self, na, nb, wstd, fmode='center', nf=10,**kwargs):
+    def evaldeter(self, na, nb, wstd, fmode='band', nf=10,**kwargs):
         """ deterministic evaluation of a link
 
         Parameters
@@ -354,7 +354,6 @@ class Simul(PyLayers):
             minb = self.N.node[na]['wstd'][wstd]['fbminghz']
             maxb = self.N.node[na]['wstd'][wstd]['fbmaxghz']
             self.DL.fGHz = np.linspace(minb, maxb, nf)
-
         a, t = self.DL.eval(**kwargs)
 
         return a, t
@@ -429,6 +428,9 @@ class Simul(PyLayers):
         t: np.array
             list of timestamp to be evaluated
             (if [], all timestamps are considered)
+        replace_data: boolean (True)
+            if True , reference id of all already simulated link will be erased
+                and replace by new simulation id 
 
 
         Example
@@ -452,12 +454,15 @@ class Simul(PyLayers):
                     'links': {},
                     'wstd': [],
                     't': np.array([]),
+                    'DLkwargs':{},
+                    'replace_data':True,
                     }
 
         for k in defaults:
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
+        DLkwargs = kwargs.pop('DLkwargs')
         links = kwargs.pop('links')
         wstd = kwargs.pop('wstd')
         OB = kwargs.pop('OB')
@@ -465,6 +470,7 @@ class Simul(PyLayers):
         B2I = kwargs.pop('B2I')
         I2I = kwargs.pop('I2I')
         self.todo.update({'OB':OB,'B2B':B2B,'B2I':B2I,'I2I':I2I})
+
 
         # Check link attribute
 
@@ -547,7 +553,7 @@ class Simul(PyLayers):
                             print 'processing: ',na, ' <-> ', nb, 'wstd: ', w
                             print '-'*30
                         eng = 0
-                        self.evaldeter(na, nb, w,applywav=False)
+                        self.evaldeter(na, nb, w,applywav=False,**DLkwargs)
                         # if typ == 'OB':
                         #     self.evalstat(na, nb)
                         #     eng = self.SL.eng
@@ -588,17 +594,42 @@ class Simul(PyLayers):
                                               'sig_id', 'ray_id', 'Ct_id', 'H_id'
                                               ],index=[self._time[ut]])
 
-                        if not self.check_exist(df):
+                        if not self.check_exist(df) :
                             self.data = self.data.append(df)
                             # self._index = self._index + 1
                             # save csv
-                            self.tocsv(ut, na, nb, w,init=init)
+                            # self.tocsv(ut, na, nb, w,init=init)
                             init=False
 
                             # save pandas self.data
                             self.savepd()
                             # save ak tauk
                             self._saveh5(ut, na, nb, w)
+
+                        elif self.check_exist(df) and kwargs['replace_data']:
+                            self.replace_data(df)
+                            self.savepd()
+                            # save ak tauk
+                            self._saveh5(ut, na, nb, w)
+
+    def replace_data(self, df):
+        """check if a dataframe df already exists in self.data
+
+        Parameters
+        ----------
+        df : pd.DataFrame
+
+        Returns
+        -------
+
+        boolean
+            True if already exists
+            False otherwise
+
+        """
+        
+        self.data[(self.data.index == df.index) & (self.data['id_a'] == df['id_a'].values[0]) & (self.data['id_b'] == df['id_b'].values[0]) & (self.data['wstd'] == df['wstd'].values[0])]=df.values
+
 
 
     def check_exist(self, df):
@@ -618,8 +649,8 @@ class Simul(PyLayers):
         """
         # check init case 
         if not len(self.data.index) == 0:
-            ud = self.data[(self.data.index == df.index) & (self.data['id_a'] == df['id_a'].values[0]) & (self.data['id_b'] == df['id_b'].values[0]) & (self.data['wstd'] == df['wstd'].values[0])]
 
+            ud = self.data[(self.data.index == df.index) & (self.data['id_a'] == df['id_a'].values[0]) & (self.data['id_b'] == df['id_b'].values[0]) & (self.data['wstd'] == df['wstd'].values[0])]
             if len(ud) == 0:
                 return False
             else :
@@ -712,7 +743,7 @@ class Simul(PyLayers):
 
             typ : list 
                 list of parameters to be retrieved
-                (ak | tk | R | )
+                (ak | tk | R | C)
         link: list
             dictionnary of link to be evaluated (key is wtsd and value is a list of links)
             (if [], all link are considered)
@@ -735,6 +766,7 @@ class Simul(PyLayers):
                     'typ':['ak'],
                     'links': {},
                     'wstd':[],
+                    'angles':False
                     }
 
         for k in defaults:
@@ -788,33 +820,60 @@ class Simul(PyLayers):
                     #         raise AttributeError('invalid link')
 
                     # retrieve correct position and orientation given the time
+                    self.update_pos(t=tt)
                     self.DL.a = self.N.node[link[0]]['p']
                     self.DL.b = self.N.node[link[1]]['p']
                     self.DL.Ta = self.N.node[link[0]]['T']
                     self.DL.Tb = self.N.node[link[1]]['T']
-
+                    # self.DL.Aa = self.N.node[link[0]]['ant']['antenna']
+                    # self.DL.Ab = self.N.node[link[1]]['ant']['antenna']
+                    
                     if 'ak' in kwargs['typ'] or 'tk' in kwargs['typ'] or 'rss' in kwargs['typ']:
                         H_id = line['H_id'].decode('utf8')
                         self.DL.load(self.DL.H,H_id)
                         if 'ak' in kwargs['typ']:
                             if not output[linkname].has_key('ak'):
                                 output[linkname]['ak']=[]
-                            output[linkname]['ak'].append(self.DL.H.ak)
+                            output[linkname]['ak'].append(copy.deepcopy(self.DL.H.ak))
                         if 'tk' in kwargs['typ']:
                             if not output[linkname].has_key('tk'):
                                 output[linkname]['tk']=[]
-                            output[linkname]['tk'].append(self.DL.H.tk)
+                            output[linkname]['tk'].append(copy.deepcopy(self.DL.H.tk))
                         if 'rss' in kwargs['typ']:
                             if not output[linkname].has_key('rss'):
                                 output[linkname]['rss']=[]
-                            output[linkname]['rss'].append(self.DL.H.rssi())
+                            output[linkname]['rss'].append(copy.deepcopy(self.DL.H.rssi()))
                         
                     if 'R' in kwargs['typ']:
                         if not output[linkname].has_key('R'):
                             output[linkname]['R']=[]
                         ray_id = line['ray_id']
                         self.DL.load(self.DL.R,ray_id)
-                        output[linkname]['R'].append(self.DL.R)
+                        output[linkname]['R'].append(copy.deepcopy(self.DL.R))
+
+                    if 'C' in kwargs['typ']:
+                        if not output[linkname].has_key('C'):
+                            output[linkname]['C']=[]
+                        Ct_id = line['Ct_id']
+                        self.DL.load(self.DL.C,Ct_id)
+
+                        if kwargs['angles']:
+                            self.DL.C.islocal=False
+                            self.DL.C.locbas(Tt=self.DL.Ta, Tr=self.DL.Tb)
+
+
+                            
+                        #T channel
+                        
+                        output[linkname]['C'].append(copy.deepcopy(self.DL.C))
+
+
+                    if 'H' in kwargs['typ']:
+                        if not output[linkname].has_key('H'):
+                            output[linkname]['H']=[]
+                        H_id = line['H_id']
+                        self.DL.load(self.DL.H,H_id)
+                        output[linkname]['H'].append(copy.deepcopy(self.DL.H))
                 # if time valuie not found in dataframe
                 else:
                     if not output[linkname].has_key('time_to_simul'):
