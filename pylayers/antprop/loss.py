@@ -413,7 +413,7 @@ def PL(fGHz,pts,p,n=2.0,dB=True):
     return(PL)
 
 def Losst(L,fGHz,p1,p2,dB=True):
-    """  calculate Losses between links p1  p2
+    """  calculate Losses between links p1 p2
 
     Parameters
     ----------
@@ -528,14 +528,14 @@ def Losst(L,fGHz,p1,p2,dB=True):
     return(LossWallo,LossWallp,EdWallo,EdWallp)
 
 def Loss0(S,rx,ry,f,p):
-    """ calculate Loss through Layers theta=0 deg
+    """ calculate Loss through Layers for theta=0 deg
 
     Parameters
     ----------
 
-    S : Simulation object
-    rx:
-    ry:
+    S  : Simulation object
+    rx : extremity of link 
+    ry : extremity of link 
     fGHz : float
         frequency GHz
     p :
@@ -549,14 +549,14 @@ def Loss0(S,rx,ry,f,p):
     for x in rx:
         j   = 0
         for y in ry:
-            L = 0
+            Loss = 0
             pxy = np.array([x,y])
-            seglist,theta = S.L.angleonlinkold(p,pxy)
+            seglist,theta = L.angleonlinkold(p,pxy)
             for k in seglist:
-                name = S.L.name[k]
-                lk = S.sl[name].loss0(f)
-                L  = L + lk[0]
-            Lw[i,j] = L
+                name = L.name[k]
+                lk = L.sl[name].loss0(f)
+                Loss  = Loss + lk[0]
+            Lw[i,j] = Loss
             j = j+1
         i = i+1
     return(Lw)
