@@ -127,19 +127,19 @@
 <blockquote>
 <div><p>A Multi wall model accounts only for the attenuation along the
 direct path between Tx and Rx.</p>
-<p>This approach do not provide any information about delay spread or
-multi paths but it can nevertheless be useful in different context
-as optimization of an indoor radio network. The MultiWall approach
-provides a fast indication about the propagation losses.</p>
-<p>A ray tracing approach is much more precise, but also is much more
-time consuming and depending on the purpose, it could be relevant to
+<p>This approach do not provide information about delay spread or multi
+paths but it can nevertheless be useful in different contexts, as
+i.e optimization of an indoor radio network. The MultiWall approach
+provides a fast rough indication about the propagation losses.</p>
+<p>A ray tracing approach is much more accurate, but also is much more
+time consuming and depending on the purpose, it is relevant to
 proceed with a simpler and faster site-specific approach as the
 Multiwall model.</p>
 <p><strong>``PyLayers``</strong> provides a multiwall module which heavily relies on
 the core class <strong>``Slab``</strong>. Notice that, the same core <strong>``Slab``</strong>
 module is used for Ray tracing and MultiWall model approaches.</p>
 </div></blockquote>
-<p>Let see, how it works. First let&#8217;s import the <tt class="docutils literal"><span class="pre">coverage</span></tt> module. And
+<p>Let&#8217;s see, how it works. First let&#8217;s import the <tt class="docutils literal"><span class="pre">coverage</span></tt> module. And
 the <tt class="docutils literal"><span class="pre">time</span></tt> module for performance evaluation.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">time</span>
@@ -185,26 +185,13 @@ show = True
 </div>
 <p>The ini file contains 5 sections.</p>
 <ul class="simple">
-<li>[grid] section</li>
-</ul>
-<div class="highlight-python"><div class="highlight"><pre>This section precises the size of the grid. By default the grid is placed over the whole region of the Layout.
-A selected region can also be defined whith the `boundary` list
-</pre></div>
-</div>
-<ul class="simple">
-<li>[layout] section</li>
-</ul>
-<div class="highlight-python"><div class="highlight"><pre>The name of the layout file (filename = )
-</pre></div>
-</div>
-<ul class="simple">
-<li>[ap] section</li>
-</ul>
-<div class="highlight-python"><div class="highlight"><pre>A dictionnary of access points precising the standard, the used channel, the emitted power and the position
-of the access point.
-</pre></div>
-</div>
-<ul class="simple">
+<li>[grid] section This section precises the size of the grid. By default
+the grid is placed over the whole region of the Layout. A selected
+region can also be defined whith the <tt class="docutils literal"><span class="pre">boundary</span></tt> list</li>
+<li>[layout] section The name of the layout file (filename = )</li>
+<li>[ap] section A dictionnary of access points precising the standard,
+the used channel, the emitted power and the position of the access
+point.</li>
 <li>[show] section</li>
 </ul>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Create a Coverage object from coverag.ini file</span>
@@ -291,7 +278,7 @@ method</p>
 <span class="k">print</span> <span class="s">&quot;Execution time : </span><span class="si">%2.3f</span><span class="s"> &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">toc</span><span class="o">-</span><span class="n">tic</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Execution time : 3.260
+<div class="highlight-python"><div class="highlight"><pre>Execution time : 3.455
 </pre></div>
 </div>
 <p>Let display the current Layout with hidding nodes.</p>
@@ -303,43 +290,43 @@ C.L.display[&#39;ednodes&#39;]=False
 f,a = C.show(fig=fig)
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_27_0.png" src="../../_images/Coverage_27_0.png" />
+<img alt="../../_images/Coverage_22_0.png" src="../../_images/Coverage_22_0.png" />
 <p>The shadowing map coverage results can be displayed by invoquing various
 functions.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;pr&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_29_0.png" src="../../_images/Coverage_29_0.png" />
+<img alt="../../_images/Coverage_24_0.png" src="../../_images/Coverage_24_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;pr&#39;</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_30_0.png" src="../../_images/Coverage_30_0.png" />
+<img alt="../../_images/Coverage_25_0.png" src="../../_images/Coverage_25_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;pr&#39;</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_31_0.png" src="../../_images/Coverage_31_0.png" />
+<img alt="../../_images/Coverage_26_0.png" src="../../_images/Coverage_26_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;best&#39;</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_32_0.png" src="../../_images/Coverage_32_0.png" />
+<img alt="../../_images/Coverage_27_0.png" src="../../_images/Coverage_27_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;best&#39;</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_33_0.png" src="../../_images/Coverage_33_0.png" />
+<img alt="../../_images/Coverage_28_0.png" src="../../_images/Coverage_28_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;sinr&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2ba982341b50&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2ba933f21050&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b637669cf90&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2b637669c310&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_34_1.png" src="../../_images/Coverage_34_1.png" />
+<img alt="../../_images/Coverage_29_1.png" src="../../_images/Coverage_29_1.png" />
 <p>As you have noticed the calculation has been done for all the center
 frequencies of the selected standard. This is done in prevision of
 further channel optimizations.</p>
@@ -352,14 +339,14 @@ further channel optimizations.</p>
 <span class="n">C2</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">ftyp</span><span class="o">=</span><span class="s">&#39;pr&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2ba982fd78d0&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2ba98307f910&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b63776b93d0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2b6376b7f650&gt;)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x2ba982fd7d50&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x2b63776b9850&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_38_2.png" src="../../_images/Coverage_38_2.png" />
+<img alt="../../_images/Coverage_33_2.png" src="../../_images/Coverage_33_2.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">snro</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
@@ -370,11 +357,11 @@ further channel optimizations.</p>
 <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;capacity&#39;</span><span class="p">,</span><span class="n">dB</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2ba983827d90&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2ba98284d110&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b63776a4250&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2b637759c150&gt;)
 </pre></div>
 </div>
-<img alt="../../_images/Coverage_40_1.png" src="../../_images/Coverage_40_1.png" />
+<img alt="../../_images/Coverage_35_1.png" src="../../_images/Coverage_35_1.png" />
 <p>All simulated quantities are stored in linear scale.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">C2</span><span class="o">.</span><span class="n">Lwo</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
@@ -401,7 +388,7 @@ further channel optimizations.</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on avril 02, 2015.
+      Last updated on avril 20, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/2-AP/Coverage.txt"
