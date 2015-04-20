@@ -27,6 +27,9 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
+    <link rel="up" title="pylayers.measures.cormoran" href="../pylayers.measures.cormoran.html" />
+    <link rel="next" title="pylayers.measures.cormoran.CorSer.offset_setter" href="pylayers.measures.cormoran.CorSer.offset_setter.html" />
+    <link rel="prev" title="pylayers.measures.cormoran.CorSer.vlc" href="pylayers.measures.cormoran.CorSer.vlc.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -79,10 +82,44 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	   <div class="rel rellarge">
-	     
+	  <div class="rel">
+	   
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
+	<div class="rellink">
+	<a href="pylayers.measures.cormoran.CorSer.vlc.html" title="pylayers.measures.cormoran.CorSer.vlc"
+	    accesskey="P">Previous
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.measure...
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.measures.cormoran.CorSer.vlc
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="pylayers.measures.cormoran.CorSer.offset_setter.html" title="pylayers.measures.cormoran.CorSer.offset_setter"
+	    accesskey="N">Next
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.measure...
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.measures.cormoran.CorSer.offset_setter
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
 	<div class="rellink">
 	<a href="../../py-modindex.html" title="Python Module Index"
 	    >Modules
@@ -97,6 +134,22 @@
 	    </a>
 	</div>
 	<!-- Ad a link to the 'up' page -->
+	<div class="spacer">
+	&nbsp;
+	</div>
+	<div class="rellink">
+	<a href="../pylayers.measures.cormoran.html" title="pylayers.measures.cormoran" >
+	Up
+	<br>
+	<span class="smallrellink">
+	pylayers.measure...
+	</span>
+	<span class="hiddenrellink">
+	pylayers.measures.cormoran
+	</span>
+	
+	</a>
+	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -124,6 +177,32 @@
             
   <div class="section" id="pylayers-measures-cormoran-corser-align">
 <h1>pylayers.measures.cormoran.CorSer.align<a class="headerlink" href="#pylayers-measures-cormoran-corser-align" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.measures.cormoran.CorSer.align">
+<tt class="descclassname">CorSer.</tt><tt class="descname">align</tt><big>(</big><em>devdf</em>, <em>hkbdf</em><big>)</big><a class="headerlink" href="#pylayers.measures.cormoran.CorSer.align" title="Permalink to this definition">¶</a></dt>
+<dd><p>DEPRECATED align time of 2 data frames:</p>
+<p>the time delta of the second data frame is applyied on the first one
+(e.g. time for devdf donwsampled by hkb data frame time)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>devdf</strong> : device dataframe</p>
+<p class="last"><strong>hkbdf</strong> : hkbdataframe</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.measures.cormoran</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">=</span><span class="n">CorSer</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">devdf</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">devdf</span><span class="p">[</span><span class="n">S</span><span class="o">.</span><span class="n">devdf</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;HKB:15&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hkbdf</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">hkb</span><span class="p">[</span><span class="s">&#39;AP1-AnkleLeft&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">devdf2</span><span class="p">,</span><span class="n">hkbdf2</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">align</span><span class="p">(</span><span class="n">devdf</span><span class="p">,</span><span class="n">hkbdf</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -144,8 +223,18 @@
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel rellarge">
+     <div class="rel">
     
+    <div class="buttonPrevious">
+      <a href="pylayers.measures.cormoran.CorSer.vlc.html">
+        Previous
+      </a>  
+    </div>
+    <div class="buttonNext">
+      <a href="pylayers.measures.cormoran.CorSer.offset_setter.html">
+        Next
+      </a>  
+    </div>
     <div class="buttonPrevious">
       <a href="../../py-modindex.html">
         Previous
