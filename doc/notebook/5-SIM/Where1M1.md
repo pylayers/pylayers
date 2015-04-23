@@ -53,10 +53,10 @@ new file WHERE1.str
 ```python
 >>> S.L._showGi(en=17)
 >>> plt.axis('off')
-int0 :  (220, 58, 61)
-int1 :  (216, 61)
- output  {(223, 61): 4.631245566616953e-05, (189, 61): 0.52059781654978099, (213, 61): 0.99999999999997502, (222, 61): 0.42854915043759029, (207, 61, 60): 0.015898410593098666, (213, 61, 59): 0.99999999999997502, (207, 61): 0.015898410593098666, (223, 61, 57): 4.631245566616953e-05, (205, 61): 0.074214608852340755, (189, 61, 70): 0.52059781654978099, (205, 61, 60): 0.074214608852340755}
-(-31.123950000000001, 34.74295, 3.6289500000000001, 24.594305147086835)
+int0 :  (81, 34, 38)
+int1 :  (120, 38, 37)
+ output  {(129, 37, 39): 0.41574782790169362, (125, 39, 38): 0.99999999999998146, (127, 37): 5.3091135732287613e-08, (127, 37, 41): 5.3091135732287613e-08, (117, 41, 38): 5.3091135732287613e-08, (129, 37): 0.41574782790169362, (126, 37): 0.58425217209829539, (126, 37, 45): 0.58425217209829539}
+(-31.123950000000001, 34.74295, 0.34508915054064992, 17.468049999999998)
 ```
 
 The layout display is fully parameterized via the embedded **display** dictionnary member of the Layout object.
@@ -71,7 +71,7 @@ The layout display is fully parameterized via the embedded **display** dictionna
 
 ```python
 >>> S.L.Gi.edges()[0]
-((274, 55, 54), (286, 52, 55))
+((81, 34, 38), (131, 38))
 ```
 
 ## Adding coordinates of transmiting and receiving points
@@ -150,8 +150,8 @@ Select Tx and Rx positions
 ```python
 >>> print 'number of Tx :',len(S.tx.points.keys())
 >>> print 'number of rx :',len(S.rx.points.keys())
-number of Tx : 2
-number of rx : 350
+number of Tx : 302
+number of rx : 4
 ```
 
 Choose measurement points
@@ -202,8 +202,8 @@ point coordinates. This is done thanks to the **pt2cy**, point to cycle function
 >>> crx=S.L.pt2cy(rx)
 >>> print 'tx point belongs to cycle ',ctx
 >>> print 'rx point belongs to cycle ',crx
-tx point belongs to cycle  7
-rx point belongs to cycle  4
+tx point belongs to cycle  6
+rx point belongs to cycle  5
 ```
 
 Then the signature between 2 given cycle can be calculated. This is done by instantiating a Signature object with a given layout and the 2 cycle number.
@@ -227,8 +227,8 @@ The representaion of a signature objet
 ```python
 >>> fig = plt.figure(figsize=(10,10))
 >>> r2d.show(L=S.L,fig=fig)
-(<matplotlib.figure.Figure at 0x7f876d481ad0>,
- <matplotlib.axes.AxesSubplot at 0x7f876cd4b850>)
+(<matplotlib.figure.Figure at 0x7f161ad3c850>,
+ <matplotlib.axes.AxesSubplot at 0x7f161ad3c750>)
 ```
 
 ```python
@@ -407,4 +407,8 @@ rotation matrix# [0] type: B
 
 ```python
 >>> f,a=Ct.doadod(phi=(-180,180),cmap='copper')
+```
+
+```python
+
 ```

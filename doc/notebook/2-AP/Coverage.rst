@@ -5,13 +5,13 @@ Indoor Coverage with the PyLayers Multi Wall model
     A Multi wall model accounts only for the attenuation along the
     direct path between Tx and Rx.
 
-    This approach do not provide any information about delay spread or
-    multi paths but it can nevertheless be useful in different context
-    as optimization of an indoor radio network. The MultiWall approach
-    provides a fast indication about the propagation losses.
+    This approach do not provide information about delay spread or multi
+    paths but it can nevertheless be useful in different contexts, as
+    i.e optimization of an indoor radio network. The MultiWall approach
+    provides a fast rough indication about the propagation losses.
 
-    A ray tracing approach is much more precise, but also is much more
-    time consuming and depending on the purpose, it could be relevant to
+    A ray tracing approach is much more accurate, but also is much more
+    time consuming and depending on the purpose, it is relevant to
     proceed with a simpler and faster site-specific approach as the
     Multiwall model.
 
@@ -19,7 +19,7 @@ Indoor Coverage with the PyLayers Multi Wall model
     the core class **``Slab``**. Notice that, the same core **``Slab``**
     module is used for Ray tracing and MultiWall model approaches.
 
-Let see, how it works. First let's import the ``coverage`` module. And
+Let's see, how it works. First let's import the ``coverage`` module. And
 the ``time`` module for performance evaluation.
 
 .. code:: python
@@ -75,25 +75,13 @@ Below is an example such a configuration file.
 
 The ini file contains 5 sections.
 
--  [grid] section
-
-::
-
-    This section precises the size of the grid. By default the grid is placed over the whole region of the Layout.
-    A selected region can also be defined whith the `boundary` list
-
--  [layout] section
-
-::
-
-    The name of the layout file (filename = )
-
--  [ap] section
-
-::
-
-       A dictionnary of access points precising the standard, the used channel, the emitted power and the position
-       of the access point.
+-  [grid] section This section precises the size of the grid. By default
+   the grid is placed over the whole region of the Layout. A selected
+   region can also be defined whith the ``boundary`` list
+-  [layout] section The name of the layout file (filename = )
+-  [ap] section A dictionnary of access points precising the standard,
+   the used channel, the emitted power and the position of the access
+   point.
 
 -  [show] section
 
@@ -200,7 +188,7 @@ method
 
 .. parsed-literal::
 
-    Execution time : 3.260 
+    Execution time : 3.455 
 
 
 Let display the current Layout with hidding nodes.
@@ -215,7 +203,7 @@ Let display the current Layout with hidding nodes.
     f,a = C.show(fig=fig)
 
 
-.. image:: Coverage_files/Coverage_27_0.png
+.. image:: Coverage_files/Coverage_22_0.png
 
 
 The shadowing map coverage results can be displayed by invoquing various
@@ -227,7 +215,7 @@ functions.
     f,a=C.show(fig=fig,typ='pr')
 
 
-.. image:: Coverage_files/Coverage_29_0.png
+.. image:: Coverage_files/Coverage_24_0.png
 
 
 .. code:: python
@@ -236,7 +224,7 @@ functions.
     f,a=C.show(fig=fig,typ='pr',f=4)
 
 
-.. image:: Coverage_files/Coverage_30_0.png
+.. image:: Coverage_files/Coverage_25_0.png
 
 
 .. code:: python
@@ -245,7 +233,7 @@ functions.
     f,a=C.show(fig=fig,typ='pr',f=10)
 
 
-.. image:: Coverage_files/Coverage_31_0.png
+.. image:: Coverage_files/Coverage_26_0.png
 
 
 .. code:: python
@@ -254,7 +242,7 @@ functions.
     f,a=C.show(fig=fig,typ='best',f=1)
 
 
-.. image:: Coverage_files/Coverage_32_0.png
+.. image:: Coverage_files/Coverage_27_0.png
 
 
 .. code:: python
@@ -263,7 +251,7 @@ functions.
     f,a=C.show(fig=fig,typ='best',f=10)
 
 
-.. image:: Coverage_files/Coverage_33_0.png
+.. image:: Coverage_files/Coverage_28_0.png
 
 
 .. code:: python
@@ -275,13 +263,13 @@ functions.
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x2ba982341b50>,
-     <matplotlib.axes.AxesSubplot at 0x2ba933f21050>)
+    (<matplotlib.figure.Figure at 0x2b637669cf90>,
+     <matplotlib.axes.AxesSubplot at 0x2b637669c310>)
 
 
 
 
-.. image:: Coverage_files/Coverage_34_1.png
+.. image:: Coverage_files/Coverage_29_1.png
 
 
 As you have noticed the calculation has been done for all the center
@@ -303,19 +291,19 @@ Let's consider an other standard
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x2ba982fd78d0>,
-     <matplotlib.axes.AxesSubplot at 0x2ba98307f910>)
+    (<matplotlib.figure.Figure at 0x2b63776b93d0>,
+     <matplotlib.axes.AxesSubplot at 0x2b6376b7f650>)
 
 
 
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x2ba982fd7d50>
+    <matplotlib.figure.Figure at 0x2b63776b9850>
 
 
 
-.. image:: Coverage_files/Coverage_38_2.png
+.. image:: Coverage_files/Coverage_33_2.png
 
 
 .. code:: python
@@ -339,13 +327,13 @@ Let's consider an other standard
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x2ba983827d90>,
-     <matplotlib.axes.AxesSubplot at 0x2ba98284d110>)
+    (<matplotlib.figure.Figure at 0x2b63776a4250>,
+     <matplotlib.axes.AxesSubplot at 0x2b637759c150>)
 
 
 
 
-.. image:: Coverage_files/Coverage_40_1.png
+.. image:: Coverage_files/Coverage_35_1.png
 
 
 All simulated quantities are stored in linear scale.

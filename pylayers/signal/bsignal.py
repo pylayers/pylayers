@@ -2578,7 +2578,7 @@ class TUsignal(TBsignal, Usignal):
             u = np.nonzero(self.y > thre)[0]
             v = nbint(u)
             h = np.nonzero(u > n)[0]
-            g = delete(u, h)
+            g = np.delete(u, h)
             vl = nbint(g) - 1
 
             THRE = np.hstack((THRE, thre))
@@ -2597,7 +2597,8 @@ class TUsignal(TBsignal, Usignal):
         plt.show()
 
     def toa_new(self):
-        """ calculate time of arrival (new method) 
+        """ estimate time of arrival (new method)
+
         """
         t = self.x
         Max = max(self.y)
@@ -2616,12 +2617,12 @@ class TUsignal(TBsignal, Usignal):
 
             u = np.nonzero(self.y > thre)[0]
             hr = np.nonzero(u > n)[0]
-            g = delete(u, hr)
+            g = np.delete(u, hr)
 
             if nmax >= 6000:
             #set the fenetre=6000*0.005=30ns
                 hl = np.nonzero(g < nmax - 6000)[0]
-                u = delete(g, hl)
+                u = np.delete(g, hl)
             else:
                 u = g
 
@@ -2634,7 +2635,7 @@ class TUsignal(TBsignal, Usignal):
                 d = 0
                 n = u[0]
                 N = np.hstack((N, n))
-                print N
+                #print N
 
             thre = thre - step
             if thre < 0:
@@ -2674,12 +2675,12 @@ class TUsignal(TBsignal, Usignal):
 
             u = np.nonzero(self.y > thre)[0]
             hr = np.nonzero(u > n)[0]
-            g = delete(u, hr)
+            g = np.delete(u, hr)
 
             if nmax >= 6000:
             #set the fenetre=6000*0.005=30ns
                 hl = np.nonzero(g < nmax - 6000)[0]
-                u = delete(g, hl)
+                u = np.delete(g, hl)
             else:
                 u = g
 
