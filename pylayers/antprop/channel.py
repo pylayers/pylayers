@@ -2,56 +2,14 @@
 """
 .. currentmodule:: pylayers.antprop.channel
 
-.. autosummary::
-    :toctree: generated/
+.. automodule::
+    :members:
 
-Ctilde class
-============
+.. autoclass:: Ctilde
+    :members:
 
-.. autosummary::
-    :toctree: generated/
-
-    Ctilde.__init__
-    Ctilde.__repr__
-    Ctilde.info
-    Ctilde.choose
-    Ctilde.saveh5
-    Ctilde.loadh5
-    Ctilde.load
-    Ctilde.mobility
-    Ctilde.doadod
-    Ctilde.locbas
-    Ctilde.Cg2Cl
-    Ctilde.show
-    Ctilde.plotd
-    Ctilde.check_reciprocity
-    Ctilde.energy
-    Ctilde.sort
-    Ctilde.prop2tran
-    Ctilde.PLoss
-
-Tchannel Class
-==============
-
-.. autosummary::
-    :toctree: generated/
-
-    Tchannel.__init__
-    Tchannel.__repr__
-    Tchannel.apply
-    Tchannel.chantap
-    Tchannel.applywavA
-    Tchannel.applywavB
-    Tchannel.applywavC
-    Tchannel.plotd
-    Tchannel.plotad
-    Tchannel.doadod
-    Tchannel.energy
-    Tchannel.wavefig
-    Tchannel.rayfig
-    Tchannel.RSSI
-    Tchannel.saveh5
-    Tchannel.loadh5
+.. autoclass:: Tchannel
+    :members:
 
 """
 import doctest
@@ -529,7 +487,8 @@ class Ctilde(PyLayers):
         Parameters
         ----------
 
-        d: 'doa' | 'dod'
+        d: string
+            'doa' | 'dod'
             display direction of departure | arrival
         fig : plt.figure
         ax : plt.axis
@@ -1430,19 +1389,22 @@ class Tchannel(bs.FUDAsignal):
         ----------
 
         fGHz  :  1 x nfreq
-        alpha :  channel amplitude (nray x nfreq)
-        tau   :  delay (1 x nray)
+            frequency GHz
+        alpha :  nray x nfreq
+            path amplitude
+        tau   :  1 x nray
+            path delay (ns)
         dod   :  direction of departure (nray x 2)
-        doa   :  direction of arrival  (nray x 2)
+        doa   :  direction of arrival   (nray x 2)
 
         """
         super(Tchannel,self).__init__(fGHz, alpha, tau, dod, doa)
 
     def __repr__(self):
         st = ''
-        st = st + 'freq :'+str(self.x[0])+' '+str(self.x[-1])+' '+str(len(self.x))+"\n"
-        st = st + 'shape  :'+str(np.shape(self.y))+"\n"
-        st = st + 'tau :'+str(min(self.taud))+' '+str(max(self.taud))+"\n"
+        st = st + 'freq : '+str(self.x[0])+' '+str(self.x[-1])+' '+str(len(self.x))+"\n"
+        st = st + 'shape  : '+str(np.shape(self.y))+"\n"
+        st = st + 'tau (min, max) : '+str(min(self.taud))+' '+str(max(self.taud))+"\n"
         st = st + 'dist :'+str(min(0.3*self.taud))+' '+str(max(0.3*self.taud))+"\n"
         if self.isFriis:
             st = st + 'Friis factor -j c/(4 pi f) has been applied'
@@ -1457,7 +1419,7 @@ class Tchannel(bs.FUDAsignal):
 
         Lfilename  : string
             Layout filename
-        idx : int
+        Tilde
             file identifier number
         a : np.ndarray
             postion of point a (transmitter)
@@ -1475,7 +1437,7 @@ class Tchannel(bs.FUDAsignal):
 
         f=h5py.File(filenameh5,'w')
 
-        # try/except to avoid loosing the h5 file if 
+        # try/except to avoid loosing the h5 file if
         # read/write error
         try:
             f.attrs['a']=a
@@ -1841,7 +1803,8 @@ class Tchannel(bs.FUDAsignal):
         normalize = kwargs.pop('normalize')
         mode =kwargs.pop('mode')
         title =kwargs.pop('title')
-
+        xa = kwargs.pop('xa')
+        xb = kwargs.pop('xb')
         if fig == []:
             fig = plt.figure()
 

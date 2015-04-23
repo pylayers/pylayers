@@ -135,43 +135,38 @@ class MIMO(object):
         del self.H
         del self.C
 
+
     def transfer(self):
         """ calculate transfer matrix
 
         Returns
         -------
 
-        HdH : Hermitian transfer matrix 
+        HdH : Hermitian transfer matrix
         U   : Unitary tensor
-        S   : Singular values
+        L   : Singular values
         V   : = Ud (in that case because HdH Hermitian)
 
-        HdH = U S V 
-
-        Notes
-        -----
-
-        TODO : consider using eig instead
+        HdH = U L U^{\dagger}
 
         """
+
         H   = self.Hcal.y
         Hd  = np.conj(self.Hcal.y.swapaxes(0,1))
         HdH = np.einsum('ijk,jlk->ilk',Hd,H)
         HdH  = HdH.swapaxes(0,2)
         U,S,V  = la.svd(HdH)
+
         return (HdH,U,S,V)
 
-
-    def capacity(self,Pt=1e-3,Tp=273):
-        """ calculates deterministic MIMO channel capacity
+    def Bcapacity(self,Pt=1e-3,Tp=273):
+        """ calculates BLAST deterministic MIMO channel capacity
 
         Parameters
         ----------
 
-        Pt : float or ndarray
-            if float : no CSI , the total power is assumed uniformaly distributed over
-            the whole bandwidth
-            if ndarray (Nf,t,t) : CSI :  Power profile Total Power is the sum of
+        Pt : float
+            the total power is assumed uniformaly distributed over the whole bandwidth
         Tp : Receiver Temperature (K)
 
         Returns
@@ -179,7 +174,7 @@ class MIMO(object):
 
         C : capacity (bit/s)
 
-            log_2(det(I+(Et/N0Nt)HH^{H})
+            log_2(det(I+(Et/(N0Nt))HH^{H})
 
         """
 
@@ -188,12 +183,9 @@ class MIMO(object):
         BGHz  = fGHz[-1]-fGHz[0]
         dfGHz = fGHz[1]-fGHz[0]
 
-        H   = self.Hcal.y.swapaxes(0,2)
-        Hd  = np.conj(H.swapaxes(1,2))
-
         # White Noise definition
         #
-        # Boltzman constant
+        # Boltzman constantf    = len(fGHz)
 
         kB = 1.03806488e-23
 
@@ -210,32 +202,106 @@ class MIMO(object):
 
         Ir  = np.eye(self.Nr)
 
-        if type(Pt)==float:
-            #Ps = (Pt/Nf)/(self.Nt)
-            Ps = Pt/(self.Nt)
-            Pb = N0*BGHz*1e9
-            coeff = Ps/Pb
-            M     = It[None,...] + coeff*HdH
-        else:
-            Pb = N0*dfGHz*1e9
-            # expanding S matrix
-            #Se  = S[:,:,None]*It[None,:,:]
-            # transfer matrix factorisation
-            #PtU = np.einsum('ijk,ikl->ijl',Pt,U)
-            #Q   = np.einsum('ijk,ikl->ijl',V,PtU)
-            #pdb.set_trace()
-            QH  = np.einsum('ijk,ikl->ijl',Q,H)
-            #UPS = np.einsum('ijk,ikl->ijl',UP,Se)
-            HdQH = np.einsum('ijk,ikl->ijl',Hd,QH)
-            M     = Ir[None,...] + HdQH/Pb
-            # Pt / df ~ J
-            # print 10*np.log10(Ps*np.real(HH[0,0,0])/Pb)
+        #Ps = (Pt/Nf)/(self.Nt)
+        Ps = Pt/(self.Nt)
+        Pb = N0*BGHz*1e9
+        coeff = Ps/Pb
+        M     = It[None,...] + coeff*HdH
         detM  = la.det(M)
         logdetM = np.real(np.log(detM)/np.log(2))
-        C  = dfGHz*logdetM
+        C1  = dfGHz*logdetM
+        C2  = dfGHz*np.sum(np.log(1+(Ps/Pb)*S)/np.log(2),axis=1)
+        return(M,detM,logdetM,C1,C2,S)
+
+    def WFcapacity(self,Pt=1e-3,Tp=273):
+        """ calculates deterministic MIMO channel capacity
+
+        Parameters
+        ----------
+
+        Pt :  the total power to be distributed over the different spatial
+            channels using water filling
+        Tp : Receiver Temperature (K)
+
+        Returns
+        -------
+
+        C : capacity (bit/s)
+
+            log_2(det(It + HH^{H})
+
+        """
+
+        fGHz  = self.Hcal.x
+        Nf    = len(fGHz)
+        BGHz  = fGHz[-1]-fGHz[0]
+        dfGHz = fGHz[1]-fGHz[0]
+
+        Hp  = self.Hcal.y.swapaxes(1,2)
+        H   = Hp.swapaxes(0,1)
+        Hd  = np.conj(H.swapaxes(1,2))
+
+        # White Noise definition
+        #
+        # Boltzman constant
+
+        kB = 1.03806488e-23
+
+        # N0 ~ J ~ W/Hz ~ W.s
+
+        N0 = kB*Tp
+
+
+        # Evaluation of the transfer tensor
+
+        HdH,U,ld,V = self.transfer()
+
+        It  = np.eye(self.Nt)
+
+        Ir  = np.eye(self.Nr)
+
+        pb = N0*dfGHz*1e9*np.ones((self.Nf,self.Nt))
+        pt = Pt/((self.Nf-1)*self.Nt)
+        mu = pt
+        Q0 = np.maximum(0,mu-pb/ld)
+        u  = np.where(Q0>0)[0]
+        Nnz1  = len(u)
+        
+        Peff = np.sum(Q0)
+        deltamu = pt/100.
+        while np.abs(Peff-Pt)>1e-16:
+            mu = mu + deltamu
+            Q = np.maximum(0,mu-pb/ld)
+            Peff = np.sum(Q)
+            #print "mu , Peff : ",mu,Peff
+            if Peff>Pt:
+                mu = mu - deltamu
+                deltamu = deltamu/2.
+        #print Peff
+        v  = np.where(Q>0)[0]
+        Nnz2  = len(v)
+        #print self.Nf*self.Nt-Nnz1,self.Nf*self.Nt-Nnz2
+        #Qoptn = Qopt/pb
+        Qn   = Q/pb
+        #Qn_e = Qn[:,:,None]*It[None,:,:]
+        #pb_e = pb[:,:,None]*It[None,:,:]
+        #print "Q : ",Qn_e.shape
+        #print "Hd : ",Hd.shape
+        #print "H : ",H.shape
+        # k :frequency (i.e 1601)
+        #QHd  = np.einsum('kij,kil->kil',Qn_e,Hd)
+        #QHdH = np.einsum('kil,klj->kij',QHd,H)
+        #print "QHdH : ",QHdH.shape
+        #M = It[None,...] + QHdH
+        # Pt / df ~ J
+        # print 10*np.log10(Ps*np.real(HH[0,0,0])/Pb)
+        #detM  = la.det(M)
+        #logdetM = np.real(np.log(detM)/np.log(2))
+        #C1  = dfGHz*logdetM
+        C2  = dfGHz*np.sum(np.log(1+(Qn)*ld)/np.log(2),axis=1)
         #C   = dfGHz*np.log(la.det(IR[None,...]+(Pt/self.Nt)*HH/(N0*dfGHz)))/np.log(2)
 
-        return(M,detM,logdetM,C,S)
+        return(C2,Q)
 
     def mulcplot(self,mode,**kwargs):
         """

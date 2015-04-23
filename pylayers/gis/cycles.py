@@ -460,7 +460,7 @@ class Cycle(object):
         # H room Height
 
         S  = abs(self.area)
-        P  = 0 
+        P  = 0
         for k in lseg:
             npt = L.Gs.node[k]['connect']
             slname = L.Gs.node[k]['name']
@@ -497,14 +497,14 @@ class Cycle(object):
                 S2.append(H*Lseg)
                 AS2.append(H*Lseg*Abs)
         V = S*H
-        A = P*H+2*S      
+        A = P*H+2*S
         sfloor = L.sl['FLOOR']
         sceil = L.sl['CEIL']
         Lofloor,Lpfloor = sfloor.loss0(fGHz)
         Loceil,Lpceil = sceil.loss0(fGHz)
         etaFloor = S*10**(-Lofloor[0]/10.)
         etaCeil  = S*10**(-Loceil[0]/10.)
-        eta = (sum(AS1)+sum(AS2)+etaFloor+etaCeil)/A  
+        eta = (sum(AS1)+sum(AS2)+etaFloor+etaCeil)/A
         tau = 4*V/(0.3*A*eta)
         return(V,A,eta,tau)
 
