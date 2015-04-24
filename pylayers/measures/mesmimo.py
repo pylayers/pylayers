@@ -79,11 +79,12 @@ class MIMO(object):
         N.Hcal = self.Hcal - m.Hcal
         return(N)
 
-    def loadraw(self,nT=1):
-        """ load a MIMO NrxNt raw data sounder file
+    def loadraw(self):
+        """ load a MIMO Nr x Nt raw data sounder file
 
-            The sounder output file is a 2 columns ASCII csv file
-            Module (dB) ;  Angle (Degree)
+    
+        The sounder output file is a 2 columns ASCII csv file
+        Module (dB) ;  Angle (Degree)
 
         """
 
