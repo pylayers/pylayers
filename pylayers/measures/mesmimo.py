@@ -1,3 +1,5 @@
+#!/usr/bin/python
+#-*- coding:Utf-8 -*-
 from pylayers.signal.bsignal import *
 from pylayers.util.project import *
 from pylayers.gis.readvrml import *
@@ -53,7 +55,7 @@ class MIMO(object):
         if _filename <> '':
             self.filename = mesdir+rep+_filename
             # load file
-            self.loadraw(self.Nt)
+            self.loadraw()
             if calibration:
                 self.calibration()
                 if time:
@@ -143,8 +145,9 @@ class MIMO(object):
         """
 
         HdH,U,S,V = self.transfer()
-        self.rg = np.sqrt(trace(HdH)/(self.Nt*self.Nr))
-        self.Hcal = self.Hcal/self.rg
+        HdH = HdH.swapaxes(0,2)
+        self.rg = np.real(np.sqrt(np.trace(HdH)/(self.Nt*self.Nr)))
+        self.Hcal.y = self.Hcal.y/self.rg
         self.normalize=True
 
 
@@ -164,10 +167,17 @@ class MIMO(object):
 
         """
 
+        # H  : nr x nt x nf
         H   = self.Hcal.y
+        # Hd : nt x nr x nf 
         Hd  = np.conj(self.Hcal.y.swapaxes(0,1))
+        # HdH : nt x nt x nf
         HdH = np.einsum('ijk,jlk->ilk',Hd,H)
+        # HdH : nf x nt x nt 
         HdH  = HdH.swapaxes(0,2)
+        # U   : nf x nt x nt 
+        # S   : nf x nt
+        # V   : nf x nt x nt 
         U,S,V  = la.svd(HdH)
 
         return (HdH,U,S,V)
@@ -226,6 +236,55 @@ class MIMO(object):
         #return(M,detM,logdetM,C1,C2,S)
         return(CB)
 
+    def Scapacity(self,Pt=1e-3,Tp=273):
+        """ equivalent SISO capacity 
+        """
+        pass
+
+    def BFcapacity(self,Pt=1e-3,Tp=273):
+        """ calculates the capacity in putting all the power on the more important 
+        mode 
+        """
+        fGHz  = self.Hcal.x
+        Nf    = len(fGHz)
+        BGHz  = fGHz[-1]-fGHz[0]
+        dfGHz = fGHz[1]-fGHz[0]
+
+        Hp  = self.Hcal.y.swapaxes(1,2)
+        H   = Hp.swapaxes(0,1)
+        Hd  = np.conj(H.swapaxes(1,2))
+
+        # White Noise definition
+        #
+        # Boltzman constant
+
+        kB = 1.03806488e-23
+
+        # N0 ~ J ~ W/Hz ~ W.s
+
+        N0 = kB*Tp
+
+        # Evaluation of the transfer tensor
+
+        HdH,U,ld,V = self.transfer()
+
+        It  = np.eye(self.Nt)
+
+        Ir  = np.eye(self.Nr)
+
+        pb = N0*dfGHz*1e9*np.ones((self.Nf,self.Nt))
+        pt = Pt/((self.Nf-1))*np.array([1,0,0,0])[None,:]
+        #print pt.shape
+        Qn   = pt/pb
+        #print Qn
+        #print Qn.shape
+
+        Cbf  = dfGHz*np.sum(np.log(1+(Qn)*ld)/np.log(2),axis=1)
+        #C   = dfGHz*np.log(la.det(IR[None,...]+(Pt/self.Nt)*HH/(N0*dfGHz)))/np.log(2)
+
+        return(Cbf,Qn)
+
+
     def WFcapacity(self,Pt=1e-3,Tp=273):
         """ calculates deterministic MIMO channel capacity
 
@@ -273,6 +332,9 @@ class MIMO(object):
 
         Ir  = np.eye(self.Nr)
 
+        #
+        # Iterative implementation of Water Filling Power allocation
+        #
         pb = N0*dfGHz*1e9*np.ones((self.Nf,self.Nt))
         pt = Pt/((self.Nf-1)*self.Nt)
         mu = pt
