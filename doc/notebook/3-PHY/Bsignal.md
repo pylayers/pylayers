@@ -34,14 +34,18 @@ As a first example, let construct an impulse signal normalized in energy. To do 
 
 ```python
 >>> print Eip1
+100.000007743
 ```
 
 ```python
 >>> E.plot(typ='v')
+(<matplotlib.figure.Figure at 0x7f209264ead0>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f209265e350>]], dtype=object))
 ```
 
 ```python
 >>> E.energy()
+40.000003097054716
 ```
 
 The Fourier transform of this signal has the hermitian Symmetry.
@@ -49,10 +53,13 @@ The Fourier transform of this signal has the hermitian Symmetry.
 ```python
 >>> F = E.fft()
 >>> F.plot(typ='m')
+(<matplotlib.figure.Figure at 0x7f20925fb610>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f2092418990>]], dtype=object))
 ```
 
 ```python
 >>> F.y[0]
+(0.00029728997658457938+0j)
 ```
 
 We then extract the non redundant part of the signal with the `ft` method
@@ -68,6 +75,8 @@ We then extract the non redundant part of the signal with the `ft` method
 ```python
 >>> print GH.y[1]
 >>> print GH.y[-1]
+(-0.0014441784194-4.88037298122e-05j)
+(-0.0014441784194+4.88037298122e-05j)
 ```
 
 ```python
@@ -84,17 +93,17 @@ We then extract the non redundant part of the signal with the `ft` method
 
 ```python
 >>> ip.energy()
+40.000003097054773
 ```
 
 ```python
 >>> ip2.energy()
+401.35111446263471
 ```
 
 ```python
 >>> Y=E.esd()
 ```
-
-
 
 FHsignal for in CIR mode
 ------------------------
@@ -111,10 +120,13 @@ $$f\in [f_{min},f_{max}]$$
 >>> N = len(f)
 >>> Hu = FUsignal(f,y)
 >>> print N
+800
 ```
 
 ```python
 >>> Hu.plot(typ='m')
+(<matplotlib.figure.Figure at 0x7f20924d1c10>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f209256d2d0>]], dtype=object))
 ```
 
 ```python
@@ -126,6 +138,8 @@ of the channel
 
 ```python
 >>> hu.plot(typ='m')
+(<matplotlib.figure.Figure at 0x7f20921f8b50>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f20921dc510>]], dtype=object))
 ```
 
 ```python
@@ -134,6 +148,7 @@ of the channel
 >>> tau = hu.x[u]
 >>> alpha = abs(hu.y[u])
 >>> print alpha,tau
+[ 2.] [ 3.00375469]
 ```
 
 ```python
@@ -142,6 +157,8 @@ of the channel
 
 ```python
 >>> H.plot(typ='m')
+(<matplotlib.figure.Figure at 0x7f20921a3e50>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f2092418dd0>]], dtype=object))
 ```
 
 ```python
@@ -150,6 +167,8 @@ of the channel
 
 ```python
 >>> h.plot(typ='v')
+(<matplotlib.figure.Figure at 0x7f2092055cd0>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f209204c5d0>]], dtype=object))
 ```
 
 ```python
@@ -158,16 +177,25 @@ of the channel
 >>> tau = h.x[u]
 >>> alpha = abs(h.y[u])
 >>> print alpha,tau
+[ 1.97995425] [-46.97864607]
 ```
 
 ```python
 >>> fft.ifft(H.y)
+array([ -1.93565190e-15 -1.70240923e-19j,
+         2.62295322e-04 -3.27871407e-19j,
+         8.73458329e-04 -4.09839258e-20j, ...,
+        -1.06670199e-04 +2.90350482e-19j,
+        -8.69428086e-04 -1.58117458e-18j,  -5.31550980e-05 -2.71727936e-20j])
 ```
 
 ```python
 >>> print H.y[203]
 >>> print H.y[-203]
 >>> len(H.y)
+(0.116169256529-0.0459946624208j)
+(0.116169256529+0.0459946624208j)
+2201
 ```
 
 ```python
@@ -176,4 +204,30 @@ of the channel
 
 ```python
 >>> Y.plot(typ='m')
+(<matplotlib.figure.Figure at 0x7f2092000bd0>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f2091feb950>]], dtype=object))
+```
+
+```python
+
+```
+
+```python
+
+```
+
+```python
+
+```
+
+```python
+
+```
+
+```python
+
+```
+
+```python
+
 ```
