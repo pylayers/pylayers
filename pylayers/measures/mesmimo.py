@@ -137,6 +137,18 @@ class MIMO(object):
         del self.C
 
 
+    def normalize(self):
+        """ Normalization of H
+
+        """
+
+        HdH,U,S,V = self.transfer()
+        self.rg = np.sqrt(trace(HdH)/(self.Nt*self.Nr))
+        self.Hcal = self.Hcal/self.rg
+        self.normalize=True
+
+
+
     def transfer(self):
         """ calculate transfer matrix
 
@@ -200,19 +212,19 @@ class MIMO(object):
         HdH,U,S,V = self.transfer()
 
         It  = np.eye(self.Nt)
-
         Ir  = np.eye(self.Nr)
 
         #Ps = (Pt/Nf)/(self.Nt)
         Ps = Pt/(self.Nt)
         Pb = N0*BGHz*1e9
-        coeff = Ps/Pb
-        M     = It[None,...] + coeff*HdH
-        detM  = la.det(M)
-        logdetM = np.real(np.log(detM)/np.log(2))
-        C1  = dfGHz*logdetM
-        C2  = dfGHz*np.sum(np.log(1+(Ps/Pb)*S)/np.log(2),axis=1)
-        return(M,detM,logdetM,C1,C2,S)
+        #coeff = Ps/Pb
+        #M     = It[None,...] + coeff*HdH
+        #detM  = la.det(M)
+        #logdetM = np.real(np.log(detM)/np.log(2))
+        #C1  = dfGHz*logdetM
+        CB  = dfGHz*np.sum(np.log(1+(Ps/Pb)*S)/np.log(2),axis=1)
+        #return(M,detM,logdetM,C1,C2,S)
+        return(CB)
 
     def WFcapacity(self,Pt=1e-3,Tp=273):
         """ calculates deterministic MIMO channel capacity
@@ -299,10 +311,10 @@ class MIMO(object):
         #detM  = la.det(M)
         #logdetM = np.real(np.log(detM)/np.log(2))
         #C1  = dfGHz*logdetM
-        C2  = dfGHz*np.sum(np.log(1+(Qn)*ld)/np.log(2),axis=1)
+        Cwf  = dfGHz*np.sum(np.log(1+(Qn)*ld)/np.log(2),axis=1)
         #C   = dfGHz*np.log(la.det(IR[None,...]+(Pt/self.Nt)*HH/(N0*dfGHz)))/np.log(2)
 
-        return(C2,Q)
+        return(Cwf,Q)
 
     def mulcplot(self,mode,**kwargs):
         """

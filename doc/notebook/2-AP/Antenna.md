@@ -16,7 +16,7 @@ WARNING: pylab import has clobbered these variables: ['plt', 'mlab', 'rc']
 `%matplotlib` prevents importing * from pylab and numpy
 ```
 
-An antenna object can be loaded in specifying an existing antenna file name as argument of the constructor. Lets start by loading an antenna from a `vsh3` file which correspond to a vector spherical harmonics representation of an antenna measured in SATIMO near field chamber.
+An antenna object can not be loaded in specifying an existing antenna file name as argument of the constructor. Lets start by loading an antenna from a `vsh3` file which correspond to a vector spherical harmonics representation of an antenna measured in SATIMO near field chamber.
 
 ```python
 >>> A = Antenna('S1R1.vsh3')
