@@ -9,7 +9,6 @@
 >>> %matplotlib inline
 ```
 
-
 # Geographical Information and the Earth Zone class : `Ezone`
 
 The `Ezone` class handles an earth zone which corresponds to the `strm` or `aster` DEM data. It has the same naming convention as `srtm` files
@@ -22,10 +21,8 @@ By default files are placed in directory `gis/h5` of the current project tree.
 The command h5ls allows to see the hierarchical structure of the file
 
 ```python
->>> !h5ls $BASENAME/gis/h5/N48W002.h5
-bldg                     Group
-dem                      Group
-extent                   Dataset {4}
+>>> !h5ls $BASENAME/gis/h5/N48W002.h5ls
+/home/mbalde/Pylayers_project/gis/h5/N48W002.h5: unable to open file
 ```
 
 Invoquing an earth zone requires to specify the tile prefix with the same
@@ -45,15 +42,6 @@ In this initial phase no data is loaded yet, to load all the data gathered for t
 
 ```python
 >>> z
-N48W002
---------
-[-2 -1 48 49]
-latlon : [ 0.000 73676.623 cartesian :0.000 111194.358 ]
-
-Buildings 
---------- 
-i-longitude : 64 96
-i-latitude  : 19 38
 ```
 
 This object contains the srtm DEM data, the aster data and a filtration of the `open street map` database selecting only the ways with `building` attribute. Let's have a look to the data with the `show` method.
@@ -211,8 +199,8 @@ N48W002
 [-2 -1 48 49]
 latlon : [ 0.000 73676.623 cartesian :0.000 111194.358 ]
 
-Buildings 
---------- 
+Buildings
+---------
 i-longitude : 64 96
 i-latitude  : 19 38
 ```

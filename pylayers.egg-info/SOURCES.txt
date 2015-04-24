@@ -42,9 +42,12 @@ pylayers/gis/readHGT.py
 pylayers/gis/readvrml.py
 pylayers/gis/selectl.py
 pylayers/gis/srtm.py
+<<<<<<< HEAD
+=======
 pylayers/gui/__init__.py
 pylayers/gui/editor.py
 pylayers/gui/editor_select.py
+>>>>>>> cc70b6b452d451411c368fe6aee01c5b00ca02a2
 pylayers/location/__init__.py
 pylayers/location/localization.py
 pylayers/location/locarule.py
@@ -71,7 +74,10 @@ pylayers/location/geometric/constraints/tdoa.py
 pylayers/location/geometric/constraints/toa.py
 pylayers/location/geometric/util/__init__.py
 pylayers/location/geometric/util/boxn.py
+<<<<<<< HEAD
+=======
 pylayers/location/geometric/util/cdf2.py
+>>>>>>> cc70b6b452d451411c368fe6aee01c5b00ca02a2
 pylayers/location/geometric/util/geomview.py
 pylayers/location/geometric/util/model.py
 pylayers/location/geometric/util/scene.py
@@ -81,11 +87,27 @@ pylayers/measures/Hikobstart.py
 pylayers/measures/__init__.py
 pylayers/measures/cormoran.py
 pylayers/measures/easyRadio.py
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+pylayers/measures/figurepatch.py
+pylayers/measures/gpsstation.py
+>>>>>>> 5e49d622f16b69de2ad4716c1fa7d14013fa62ec
+pylayers/measures/mesmimo.py
+pylayers/measures/mesuwb.py
+<<<<<<< HEAD
+=======
+pylayers/measures/test_cormoran.py
+pylayers/measures/switch/__init__.py
+pylayers/measures/switch/ni_usb_6501.py
+>>>>>>> 5e49d622f16b69de2ad4716c1fa7d14013fa62ec
+=======
 pylayers/measures/mesmimo.py
 pylayers/measures/mesuwb.py
 pylayers/measures/switch/ni_usb_6501.py
 pylayers/measures/vna/E5072A.py
 pylayers/measures/vna/__init__.py
+>>>>>>> cc70b6b452d451411c368fe6aee01c5b00ca02a2
 pylayers/mobility/__init__.py
 pylayers/mobility/agent.py
 pylayers/mobility/trajectory.py
@@ -110,7 +132,6 @@ pylayers/network/prioritydict.py
 pylayers/network/show.py
 pylayers/network/wsn.py
 pylayers/signal/DF.py
-pylayers/signal/ED.py
 pylayers/signal/__init__.py
 pylayers/signal/baseband.py
 pylayers/signal/bsignal.py
