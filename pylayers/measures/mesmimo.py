@@ -182,20 +182,21 @@ class MIMO(object):
 
         return (HdH,U,S,V)
 
-    def Bcapacity(self,Pt=1e-3,Tp=273):
+    def Bcapacity(self,Pt=np.array([1e-3]),Tp=273):
         """ calculates BLAST deterministic MIMO channel capacity
 
         Parameters
         ----------
 
-        Pt : float
+        Pt : np.array
             the total power is assumed uniformaly distributed over the whole bandwidth
         Tp : Receiver Temperature (K)
 
         Returns
         -------
 
-        C : capacity (bit/s)
+        C   : spectral efficiency (bit/s/Hz)
+        rho : SNR 
 
             log_2(det(I+(Et/(N0Nt))HH^{H})
 
@@ -227,21 +228,22 @@ class MIMO(object):
         #Ps = (Pt/Nf)/(self.Nt)
         Ps = Pt/(self.Nt)
         Pb = N0*BGHz*1e9
+        rho = (Ps[None,None,:]/Pb)*S[:,:,None]
         #coeff = Ps/Pb
         #M     = It[None,...] + coeff*HdH
         #detM  = la.det(M)
         #logdetM = np.real(np.log(detM)/np.log(2))
         #C1  = dfGHz*logdetM
-        CB  = dfGHz*np.sum(np.log(1+(Ps/Pb)*S)/np.log(2),axis=1)
+        CB  = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=1)
         #return(M,detM,logdetM,C1,C2,S)
-        return(CB)
+        return(rho,CB)
 
     def Scapacity(self,Pt=1e-3,Tp=273):
         """ equivalent SISO capacity 
         """
         pass
 
-    def BFcapacity(self,Pt=1e-3,Tp=273):
+    def BFcapacity(self,Pt=np.array([1e-3]),Tp=273):
         """ calculates the capacity in putting all the power on the more important 
         mode 
         """
@@ -276,16 +278,17 @@ class MIMO(object):
         pt = Pt/((self.Nf-1))*np.array([1,0,0,0])[None,:]
         #print pt.shape
         Qn   = pt/pb
+        rho  = Qn*ld
         #print Qn
         #print Qn.shape
 
-        Cbf  = dfGHz*np.sum(np.log(1+(Qn)*ld)/np.log(2),axis=1)
+        Cbf  = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=1)
         #C   = dfGHz*np.log(la.det(IR[None,...]+(Pt/self.Nt)*HH/(N0*dfGHz)))/np.log(2)
 
         return(Cbf,Qn)
 
 
-    def WFcapacity(self,Pt=1e-3,Tp=273):
+    def WFcapacity(self,Pt=np.array([1e-3]),Tp=273):
         """ calculates deterministic MIMO channel capacity
 
         Parameters
@@ -299,6 +302,7 @@ class MIMO(object):
         -------
 
         C : capacity (bit/s)
+        rho : SNR (in linear scale) 
 
             log_2(det(It + HH^{H})
 
@@ -309,9 +313,9 @@ class MIMO(object):
         BGHz  = fGHz[-1]-fGHz[0]
         dfGHz = fGHz[1]-fGHz[0]
 
-        Hp  = self.Hcal.y.swapaxes(1,2)
-        H   = Hp.swapaxes(0,1)
-        Hd  = np.conj(H.swapaxes(1,2))
+        Hp = self.Hcal.y.swapaxes(1,2)
+        H  = Hp.swapaxes(0,1)
+        Hd = np.conj(H.swapaxes(1,2))
 
         # White Noise definition
         #
@@ -328,36 +332,37 @@ class MIMO(object):
 
         HdH,U,ld,V = self.transfer()
 
-        It  = np.eye(self.Nt)
+        It = np.eye(self.Nt)
 
-        Ir  = np.eye(self.Nr)
+        Ir = np.eye(self.Nr)
 
         #
-        # Iterative implementation of Water Filling Power allocation
+        # Iterative implementation of Water Filling algorithm 
         #
         pb = N0*dfGHz*1e9*np.ones((self.Nf,self.Nt))
-        pt = Pt/((self.Nf-1)*self.Nt)
+        pt = Pt[None,None,:]/((self.Nf-1)*self.Nt)
         mu = pt
-        Q0 = np.maximum(0,mu-pb/ld)
+        Q0 = np.maximum(0,mu-pb[:,:,None]/ld[:,:,None])
         u  = np.where(Q0>0)[0]
-        Nnz1  = len(u)
-        
-        Peff = np.sum(Q0)
-        deltamu = pt/100.
-        while np.abs(Peff-Pt)>1e-16:
+        #Nnz1  = len(u)
+    
+        Peff = np.sum(np.sum(Q0,axis=0),axis=0)
+        deltamu = pt
+        while (np.abs(Peff-Pt)>1e-16).any():
             mu = mu + deltamu
-            Q = np.maximum(0,mu-pb/ld)
-            Peff = np.sum(Q)
+            Q = np.maximum(0,mu-pb[:,:,None]/ld[:,:,None])
+            Peff = np.sum(np.sum(Q,axis=0),axis=0)
             #print "mu , Peff : ",mu,Peff
-            if Peff>Pt:
-                mu = mu - deltamu
-                deltamu = deltamu/2.
+            usup = np.where(Peff>Pt)[0]
+            mu[:,:,usup] = mu[:,:,usup]- deltamu[:,:,usup]
+            deltamu[:,:,usup] = deltamu[:,:,usup]/2.
         #print Peff
-        v  = np.where(Q>0)[0]
-        Nnz2  = len(v)
+        #v  = np.where(Q>0)[0]
+        #Nnz2  = len(v)
         #print self.Nf*self.Nt-Nnz1,self.Nf*self.Nt-Nnz2
         #Qoptn = Qopt/pb
-        Qn   = Q/pb
+        Qn   = Q/pb[:,:,None]
+        rho  = Qn*ld[:,:,None]
         #Qn_e = Qn[:,:,None]*It[None,:,:]
         #pb_e = pb[:,:,None]*It[None,:,:]
         #print "Q : ",Qn_e.shape
@@ -373,10 +378,10 @@ class MIMO(object):
         #detM  = la.det(M)
         #logdetM = np.real(np.log(detM)/np.log(2))
         #C1  = dfGHz*logdetM
-        Cwf  = dfGHz*np.sum(np.log(1+(Qn)*ld)/np.log(2),axis=1)
+        Cwf  = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=1)
         #C   = dfGHz*np.log(la.det(IR[None,...]+(Pt/self.Nt)*HH/(N0*dfGHz)))/np.log(2)
 
-        return(Cwf,Q)
+        return(rho,Cwf)
 
     def mulcplot(self,mode,**kwargs):
         """
