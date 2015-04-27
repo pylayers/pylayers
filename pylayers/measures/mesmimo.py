@@ -269,7 +269,6 @@ class MIMO(object):
         HdH,U,ld,V = self.transfer()
 
         It  = np.eye(self.Nt)
-
         Ir  = np.eye(self.Nr)
 
         pb = N0*dfGHz*1e9*np.ones((self.Nf,self.Nt))
@@ -329,7 +328,6 @@ class MIMO(object):
         HdH,U,ld,V = self.transfer()
 
         It  = np.eye(self.Nt)
-
         Ir  = np.eye(self.Nr)
 
         #
@@ -376,7 +374,7 @@ class MIMO(object):
         Cwf  = dfGHz*np.sum(np.log(1+(Qn)*ld)/np.log(2),axis=1)
         #C   = dfGHz*np.log(la.det(IR[None,...]+(Pt/self.Nt)*HH/(N0*dfGHz)))/np.log(2)
 
-        return(Cwf,Q)
+        return(Cwf,Q,Qn)
 
     def mulcplot(self,mode,**kwargs):
         """
