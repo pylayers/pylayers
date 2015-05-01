@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pylayers.signal.bsignal.TUsignal.Ewin &mdash; Python 1 documentation</title>
+    <title>pylayers.signal.DF.DF.simplify &mdash; Python 1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -27,9 +27,9 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
-    <link rel="up" title="pylayers.signal.bsignal" href="../pylayers.signal.bsignal.html" />
-    <link rel="next" title="pylayers.signal.bsignal.TUsignal.Etot" href="pylayers.signal.bsignal.TUsignal.Etot.html" />
-    <link rel="prev" title="pylayers.signal.bsignal.TUsignal.Etau0" href="pylayers.signal.bsignal.TUsignal.Etau0.html" />
+    <link rel="up" title="pylayers.signal.DF" href="../pylayers.signal.DF.html" />
+    <link rel="next" title="pylayers.signal.DF.DF.flipc" href="pylayers.signal.DF.DF.flipc.html" />
+    <link rel="prev" title="pylayers.signal.DF.DF.order" href="pylayers.signal.DF.DF.order.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -87,14 +87,14 @@
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="pylayers.signal.bsignal.TUsignal.Etau0.html" title="pylayers.signal.bsignal.TUsignal.Etau0"
+	<a href="pylayers.signal.DF.DF.order.html" title="pylayers.signal.DF.DF.order"
 	    accesskey="P">Previous
 	    <br>
 	    <span class="smallrellink">
 	    pylayers.signal....
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.signal.bsignal.TUsignal.Etau0
+	    pylayers.signal.DF.DF.order
 	    </span>
 	    
 	    </a>
@@ -104,14 +104,14 @@
 	    </div>
 	
 	<div class="rellink">
-	<a href="pylayers.signal.bsignal.TUsignal.Etot.html" title="pylayers.signal.bsignal.TUsignal.Etot"
+	<a href="pylayers.signal.DF.DF.flipc.html" title="pylayers.signal.DF.DF.flipc"
 	    accesskey="N">Next
 	    <br>
 	    <span class="smallrellink">
 	    pylayers.signal....
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.signal.bsignal.TUsignal.Etot
+	    pylayers.signal.DF.DF.flipc
 	    </span>
 	    
 	    </a>
@@ -138,14 +138,14 @@
 	&nbsp;
 	</div>
 	<div class="rellink">
-	<a href="../pylayers.signal.bsignal.html" title="pylayers.signal.bsignal" >
+	<a href="../pylayers.signal.DF.html" title="pylayers.signal.DF" >
 	Up
 	<br>
 	<span class="smallrellink">
 	pylayers.signal....
 	</span>
 	<span class="hiddenrellink">
-	pylayers.signal.bsignal
+	pylayers.signal.DF
 	</span>
 	
 	</a>
@@ -161,7 +161,7 @@
     <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">pylayers.signal.bsignal.TUsignal.Ewin</a></li>
+<li><a class="reference internal" href="#">pylayers.signal.DF.DF.simplify</a></li>
 </ul>
 
     
@@ -175,20 +175,20 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="pylayers-signal-bsignal-tusignal-ewin">
-<h1>pylayers.signal.bsignal.TUsignal.Ewin<a class="headerlink" href="#pylayers-signal-bsignal-tusignal-ewin" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pylayers-signal-df-df-simplify">
+<h1>pylayers.signal.DF.DF.simplify<a class="headerlink" href="#pylayers-signal-df-df-simplify" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
-<dt id="pylayers.signal.bsignal.TUsignal.Ewin">
-<tt class="descclassname">TUsignal.</tt><tt class="descname">Ewin</tt><big>(</big><em>tau</em>, <em>Tint=1</em>, <em>sym=0.25</em>, <em>dB=False</em><big>)</big><a class="headerlink" href="#pylayers.signal.bsignal.TUsignal.Ewin" title="Permalink to this definition">¶</a></dt>
-<dd><p>integrate energy around delay tau</p>
+<dt id="pylayers.signal.DF.DF.simplify">
+<tt class="descclassname">DF.</tt><tt class="descname">simplify</tt><big>(</big><em>tol=1e-16</em><big>)</big><a class="headerlink" href="#pylayers.signal.DF.DF.simplify" title="Permalink to this definition">¶</a></dt>
+<dd><p>simplify transfer function</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tau</strong> : (ns)            (0)</p>
-<p><strong>Tint</strong> : Integration time (ns)   (1) include the system error</p>
-<p><strong>sym</strong> : symetrie factor 0.5 = symetric (0.25)</p>
-<p class="last"><strong>dB</strong> : logscale indicator (True)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tol</strong> : float</p>
+<blockquote class="last">
+<div><p>tolerance for simplification</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -211,19 +211,19 @@
       Last updated on mai 01, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
-    <a href="../../_sources/modules/generated/pylayers.signal.bsignal.TUsignal.Ewin.txt"
+    <a href="../../_sources/modules/generated/pylayers.signal.DF.DF.simplify.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
      <div class="rel">
     
     <div class="buttonPrevious">
-      <a href="pylayers.signal.bsignal.TUsignal.Etau0.html">
+      <a href="pylayers.signal.DF.DF.order.html">
         Previous
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="pylayers.signal.bsignal.TUsignal.Etot.html">
+      <a href="pylayers.signal.DF.DF.flipc.html">
         Next
       </a>  
     </div>
