@@ -1601,6 +1601,19 @@ class TBsignal(Bsignal):
 
         return(fig,ax)
 
+    def integ(self,Tns,Tsns=50):
+        """ integtation of alphak tauk
+
+        Used in en energy detector for IEEE 802.15.6 standard
+        """
+        u1 = np.where(self.x<(self.x[0]+Tns))[0]
+        u2 = np.where((self.x<(self.x[0]+Tsns+Tns)) &
+                      (self.x>=(self.x[0]+Tsns)))[0]
+        Hp = np.sum((self.y[u1])**2)
+        Hi = np.sum((self.y[u2])**2)
+
+        return(Hp,Hi)
+
     def energy(self):
         """ return energy
         """
@@ -1715,7 +1728,7 @@ class TBsignal(Bsignal):
         U = TUsignal(xn, yn)
 
         return U
-
+    
 
 class TUsignal(TBsignal, Usignal):
     """ Uniform signal in Time domain

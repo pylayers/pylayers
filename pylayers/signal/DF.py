@@ -14,8 +14,13 @@ This class implements a LTI digital filter
 
     DF.__init__
     DF.filter
-    DF.order
+    DF.simplify
+    DF.flipc
     DF.freqz
+    DF.factorize
+    DF.wnxcorr
+    DF.match
+    DF.butter
     DF.ellip_bp
     DF.remez
     DF.zplane
@@ -45,8 +50,8 @@ class DF(PyLayers):
     def __init__(self,b=np.array([1]),a=np.array([1])):
         self.b = b
         self.a = a
-        self.z = np.poly1d(self.b).r
-        self.p = np.poly1d(self.a).r
+        #self.z = np.poly1d(self.b).r
+        #self.p = np.poly1d(self.a).r
         #assert(np.abs(self.b-np.poly1d(self.z,r=True).c).all()<1e-16)
         #assert(np.abs(self.a-np.poly1d(self.p,r=True).c).all()<1e-16)
 
@@ -57,6 +62,14 @@ class DF(PyLayers):
     @property
     def b(self):
         return(self._b)
+
+    @property
+    def z(self):
+        return(self._z)
+
+    @property
+    def p(self):
+        return(self._p)
 
     @a.setter
     def a(self,a):
@@ -72,6 +85,27 @@ class DF(PyLayers):
         self._b = b
         self._z = np.poly1d(b).r
 
+    @z.setter
+    def z(self,z):
+        self._z = z
+        self._b = np.poly1d(z,r=True).c
+
+    @p.setter
+    def p(self,p):
+        self._p = p
+        self._a = np.poly1d(p,r=True).c
+
+    def update(self):
+        self.a =  np.poly1d(self.p,r=True).c
+        self.b =  np.poly1d(self.z,r=True).c
+
+    def __repr__(self):
+        st = ''
+        st = st + 'b : '+str(self.b)+'\n'
+        st = st + 'a : '+str(self.a)+'\n'
+        st = st + 'z : '+str(self.z)+'\n'
+        st = st + 'p : '+str(self.p)+'\n'
+        return(st)
     def __mul__(self,df):
         """
         extract and stack  poles and zeros
@@ -97,13 +131,20 @@ class DF(PyLayers):
         F   = DF()
         F.p = np.hstack((rpa1,rpa2))
         F.z = np.hstack((rpb1,rpb2))
-        #F.simplify()
+        
+        F.simplify()
 
         return(F)
 
 
     def simplify(self,tol=1e-16):
         """ simplify transfer function 
+
+        Parameters
+        ----------
+        tol : float 
+            tolerance for simplification 
+
         """
         ip = []
         iz = []
@@ -126,6 +167,7 @@ class DF(PyLayers):
         F = DF()
         F.a = self.a[::-1]
         F.b = self.b[::-1]
+        F.update()
         return(F)
 
     def match(self):
@@ -142,6 +184,8 @@ class DF(PyLayers):
             MF = DF()
             MF.b = np.conj(self.b[::-1])
             MF.a = self.a
+            MF.z = np.poly1d(MF.b).r
+            MF.p = np.poly1d(MF.a).r
             return(MF)
 
     def filter(self,s,causal=True):
@@ -200,10 +244,7 @@ class DF(PyLayers):
 
             return(Fmin,Fmax)
 
-    def order(self):
-        """ Returns filter order
-        """
-        return self.order
+
 
     def wnxcorr(self,**kwargs):
         """ filtered noise output autocorrelation
@@ -242,8 +283,6 @@ class DF(PyLayers):
         fsGHz : float
             if set to 0 (relative frequency)
 
-        TODO : go until 2pi if coefficients are complex
-
         """
 
         defaults = {'display':True,
@@ -274,6 +313,7 @@ class DF(PyLayers):
             ax2 = fig.add_subplot(212)
             self.H.plot(typ=['d'],xlabels=[xlabel],fig=fig,ax=ax2)
             plt.grid()
+
         #show()
     def butter(self,order=5,w=0.25,typ='low'):
         """ Butterwoth digital filter design
@@ -291,9 +331,9 @@ class DF(PyLayers):
         Examples
         --------
 
-         >>> from pylayers.signal.bsignal import *
+         >>> from pylayers.signal.DF import *
          >>> flt = DF()
-         >>> flt.butter()
+         >>> flt.butter(order=3,w=0.25,typ='low')
          >>> flt.freqz()
 
         """
@@ -349,7 +389,7 @@ class DF(PyLayers):
         self.a = array([1])
         self.b = remez(numtaps, bands, desired, weight=None, Hz=1, type='bandpass', maxiter=25, grid_density=16)
 
-    def zplane(self):
+    def zplane(self,title='',fontsize=18):
         """ Display filter in the complex plane
 
         Parameters
@@ -364,7 +404,19 @@ class DF(PyLayers):
 
         plt.plot(np.real(ra),np.imag(ra),'x',color='r')
         plt.plot(np.real(rb),np.imag(rb),'o',color='b')
-        plt.axis('equal')
+        M1 = -10000
+        M2 = -10000
+        if len(ra)>0:
+            M1 = np.max([np.abs(np.real(ra)),
+                    np.abs(np.imag(ra)),
+                   ])
+        if len(rb)>0:
+            M2 = np.max([np.abs(np.real(rb)),
+                         np.abs(np.imag(rb)),
+                   ])
+        M = 1.6*max(1.2,M1,M2)
+        plt.axis([-M,M,-0.7*M,0.7*M])
+        plt.title(title,fontsize=fontsize)
         plt.show()
 
     def ir(self,N=100,show=False):

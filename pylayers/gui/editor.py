@@ -393,9 +393,6 @@ class PropertiesWin(QDialog):    # any super class is okay
         hboxl3.addWidget(QLabel('Number of \nSub-segments'))
 
 
-
-
-
         # validation
 
         buttono=QPushButton("OK")
@@ -602,6 +599,9 @@ class NewLayout(QDialog):    # any super class is okay
 
     def new(self):
         self.parent.L=Layout('void.ini')
+        self.parent.L.display['overlay']=True
+        self.parent.L.display['fileoverlay']='reverb.png'
+        self.parent.L.display['inverse']=True
         lim = (0., self.width.value(), 0.,self.height.value())
         self.parent.L.boundary(xlim=lim)
         self.parent.filename=''
@@ -745,7 +745,7 @@ class AppForm(QMainWindow):
             QApplication.setOverrideCursor(QCursor(Qt.BusyCursor))
             self.L.saveini(_filename)
             self.L.saveosm(_filename.split('.')[0] + '.osm')
-            self.L=Layout(_filename)
+            self.L = Layout(_filename)
             self.filename=self.L.filename
             self.setWindowTitle(self.L.filename + '- Pylayers : Stand Alone Editor (Beta)')
             QApplication.setOverrideCursor(oldCursor)

@@ -604,13 +604,15 @@ class Simul(PyLayers):
                             # save pandas self.data
                             self.savepd()
                             # save ak tauk
-                            self._saveh5(ut, na, nb, w)
+                            # alphak tauk are already stored in H
+                            #self._saveh5(ut, na, nb, w)
 
                         elif self.check_exist(df) and kwargs['replace_data']:
                             self.replace_data(df)
                             self.savepd()
                             # save ak tauk
-                            self._saveh5(ut, na, nb, w)
+                            # alphak tauk are already stored in H
+                            #self._saveh5(ut, na, nb, w)
 
     def replace_data(self, df):
         """check if a dataframe df already exists in self.data
@@ -977,13 +979,6 @@ class Simul(PyLayers):
                 self.dpersons[p]._show3(newfig=False,
                                         topos=True,
                                         pattern=kwargs['ant'])
-
-
-
-
-
-
-
 
     # def _saveh5_init(self):
     #     """ initialization of the h5py file

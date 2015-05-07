@@ -8,7 +8,7 @@
 #import xml.dom.minidom
 from HTMLParser import HTMLParser
 import ftplib
-import urllib2 
+import urllib2
 import re
 import pickle
 import os.path
@@ -42,7 +42,7 @@ class WrongTileError(Exception):
             self.tile_lat, self.tile_lon, self.req_lat, self.req_lon)
 
 class InvalidTileError(Exception):
-    """Raised when the SRTM tile file contains invalid data.""" 
+    """Raised when the SRTM tile file contains invalid data."""
     def __init__(self, lat, lon):
         Exception.__init__()
         self.lat = lat
@@ -377,5 +377,5 @@ class parseHTMLDirectoryListing(HTMLParser):
 if __name__ == '__main__':
     downloader = SRTMDownloader()
     downloader.loadFileList()
-    tile = downloader.getTile(48,2)
-#    print tile.getAltitudeFromLatLon(49.1234, 12.56789)
+    tile = downloader.getTile(48,3)
+    #tile.getAltitudeFromLatLon(49.1234, 12.56789)

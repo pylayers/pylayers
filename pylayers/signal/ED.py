@@ -6,8 +6,8 @@ r""""
 .. autosummary::
     :toctree: generated
 
-Bsignal ED 
-=============
+Bsignal ED
+==========
 
 .. autosummary::
     :toctree: generated/
@@ -42,9 +42,9 @@ class ED(PyLayers):
     """
     def __init__(self,**kwargs):
         """ Constructor
-        
+
         Parameters
-        ----------    
+        ----------
 
         fs : sampling frequency
         fc : center frequency
