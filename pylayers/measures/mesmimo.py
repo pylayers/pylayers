@@ -228,6 +228,7 @@ class MIMO(object):
         #Ps = (Pt/Nf)/(self.Nt)
         Ps = Pt/(self.Nt)
         Pb = N0*BGHz*1e9
+        #rho = (Ps[None,None,:]/Pb)*S[:,:,None]
         rho = (Ps[None,None,:]/Pb)*S[:,:,None]
         #coeff = Ps/Pb
         #M     = It[None,...] + coeff*HdH
@@ -283,8 +284,8 @@ class MIMO(object):
 
         Cbf  = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=1)
         #C   = dfGHz*np.log(la.det(IR[None,...]+(Pt/self.Nt)*HH/(N0*dfGHz)))/np.log(2)
-
         return(Cbf,Qn)
+        
 
 
     def WFcapacity(self,Pt=np.array([1e-3]),Tp=273):
@@ -331,14 +332,10 @@ class MIMO(object):
 
         HdH,U,ld,V = self.transfer()
 
-<<<<<<< HEAD
-        It  = np.eye(self.Nt)
-        Ir  = np.eye(self.Nr)
-=======
-        It = np.eye(self.Nt)
 
+        It = np.eye(self.Nt)
         Ir = np.eye(self.Nr)
->>>>>>> 895248a6b0f1dd3ee5f13c898fb1d3ab135602ce
+
 
         #
         # Iterative implementation of Water Filling algorithm 
@@ -385,11 +382,10 @@ class MIMO(object):
         Cwf  = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=1)
         #C   = dfGHz*np.log(la.det(IR[None,...]+(Pt/self.Nt)*HH/(N0*dfGHz)))/np.log(2)
 
-<<<<<<< HEAD
+
         return(Cwf,Q,Qn)
-=======
-        return(rho,Cwf)
->>>>>>> 895248a6b0f1dd3ee5f13c898fb1d3ab135602ce
+        #return(rho,Cwf)
+
 
     def mulcplot(self,mode,**kwargs):
         """
