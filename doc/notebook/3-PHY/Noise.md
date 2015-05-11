@@ -15,6 +15,20 @@ The representation of the noise object provides information about default values
 
 ```python
 >>> w
+Sampling frequency : 50 GHz
+ti  : 0ns 
+tf  : 100ns 
+ts  : 0.02ns 
+N   : 5000
+-------------
+DSP : -174 dBm/Hz
+    : 3.98107170553e-21 Joules
+-------------
+Noise Figure : 0 dB
+Vrms : 9.97631157484e-05 Volts
+Variance : 9.81692234355e-09 V^2
+Power (dBm) /50 Ohms : -157.010299957 dBm
+Power realized /50 Ohms : -157.069946488 dBm
 ```
 
 ```python
@@ -23,6 +37,8 @@ The representation of the noise object provides information about default values
 
 ```python
 >>> w.psd()
+FUsignal :  (2500,)  (2500,) 
+Frequency (GHz) : 2500
 ```
 
 ```python
@@ -36,18 +52,24 @@ The representation of the noise object provides information about default values
 
 ```python
 >>> w.plot(typ='v')
+(<matplotlib.figure.Figure at 0x7ff520fd5c90>,
+ array([[<matplotlib.axes.AxesSubplot object at 0x7ff520fcd750>]], dtype=object))
 ```
 
 ```python
->>> ip=EnImpulse(fe=100)
+>>> ip=EnImpulse(fc=4.4928,band=0.4992,fe=100)
 ```
 
 ```python
 >>> fig = plt.figure(figsize=(10,10))
 >>> for k,snr in enumerate(range(30,-30,-10)):
 ...     a = fig.add_subplot(3,2,k+1)
-...     ipn=ip.awgn(snr=snr,typ='snr')
+...     ipn,n=ip.awgn(snr=snr,typ='snr')
 ...     ipn.plot(typ='v',fig=fig,ax=a)
 ...     a.set_title('SNR :'+str(snr)+' dB')
 >>> plt.tight_layout()
+```
+
+```python
+
 ```

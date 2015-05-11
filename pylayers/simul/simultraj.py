@@ -433,8 +433,8 @@ class Simul(PyLayers):
                 and replace by new simulation id 
 
 
-        Example
-        -------
+        Examples
+        --------
 
             >>> from pylayers.simul.simultraj import *
             >>> from pylayers.measures.cormoran import *
@@ -678,9 +678,9 @@ class Simul(PyLayers):
         self.data.index.name='t'
 
     def get_sim_time(self,t):
-        """ retrieve closest time value in regard of passed t value in parmaeter
+        """ retrieve closest time value in regard of passed t value in parameter
         """
-        
+
         if not isinstance(t,list) and not isinstance(t,np.ndarray):
             return np.array([self.time[np.where(self.time <=t)[0][-1]]])
         else :

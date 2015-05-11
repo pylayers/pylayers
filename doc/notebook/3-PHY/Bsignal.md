@@ -20,32 +20,19 @@ As a first example, let construct an impulse signal normalized in energy. To do 
 ```
 
 ```python
->>> >>> from pylayers.signal.bsignal import *
->>> >>> ip    = EnImpulse(fc=4,band=3,thresh=10,fe=100)
->>> >>> Eip1  = ip.energy()
->>> >>> ESDu  = ip.esd(mode='unilateral')
->>> >>> ESDb  = ip.esd(mode='bilateral')
->>> >>> df    = ESDu.dx()
->>> >>> Eipu  = sum(ESDu.y)*df
->>> >>> Eipb  = sum(ESDb.y)*df
->>> >>> erru  = Eip1-Eipu
->>> >>> errb  = Eip1-Eipb
-```
-
-```python
->>> print Eip1
-100.000007743
+>>> print E.energy()
+1.00000007743
 ```
 
 ```python
 >>> E.plot(typ='v')
-(<matplotlib.figure.Figure at 0x7f209264ead0>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f209265e350>]], dtype=object))
+(<matplotlib.figure.Figure at 0x7fafd88941d0>,
+ array([[<matplotlib.axes.AxesSubplot object at 0x7fafe8e2c310>]], dtype=object))
 ```
 
 ```python
 >>> E.energy()
-40.000003097054716
+1.0000000774263644
 ```
 
 The Fourier transform of this signal has the hermitian Symmetry.
@@ -53,8 +40,8 @@ The Fourier transform of this signal has the hermitian Symmetry.
 ```python
 >>> F = E.fft()
 >>> F.plot(typ='m')
-(<matplotlib.figure.Figure at 0x7f20925fb610>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f2092418990>]], dtype=object))
+(<matplotlib.figure.Figure at 0x7fafd7a46d10>,
+ array([[<matplotlib.axes.AxesSubplot object at 0x7fafd79f3f50>]], dtype=object))
 ```
 
 ```python
@@ -93,12 +80,12 @@ We then extract the non redundant part of the signal with the `ft` method
 
 ```python
 >>> ip.energy()
-40.000003097054773
+1.000000077426366
 ```
 
 ```python
 >>> ip2.energy()
-401.35111446263471
+3.1847827342171051
 ```
 
 ```python
@@ -125,8 +112,8 @@ $$f\in [f_{min},f_{max}]$$
 
 ```python
 >>> Hu.plot(typ='m')
-(<matplotlib.figure.Figure at 0x7f20924d1c10>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f209256d2d0>]], dtype=object))
+(<matplotlib.figure.Figure at 0x7fafd7b98690>,
+ array([[<matplotlib.axes.AxesSubplot object at 0x7fafd7e3d250>]], dtype=object))
 ```
 
 ```python
@@ -138,8 +125,8 @@ of the channel
 
 ```python
 >>> hu.plot(typ='m')
-(<matplotlib.figure.Figure at 0x7f20921f8b50>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f20921dc510>]], dtype=object))
+(<matplotlib.figure.Figure at 0x7fafd7ddac10>,
+ array([[<matplotlib.axes.AxesSubplot object at 0x7fafd7db4bd0>]], dtype=object))
 ```
 
 ```python
@@ -157,8 +144,8 @@ of the channel
 
 ```python
 >>> H.plot(typ='m')
-(<matplotlib.figure.Figure at 0x7f20921a3e50>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f2092418dd0>]], dtype=object))
+(<matplotlib.figure.Figure at 0x7fafd7cf3b10>,
+ array([[<matplotlib.axes.AxesSubplot object at 0x7fafd7cf3110>]], dtype=object))
 ```
 
 ```python
@@ -167,8 +154,8 @@ of the channel
 
 ```python
 >>> h.plot(typ='v')
-(<matplotlib.figure.Figure at 0x7f2092055cd0>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f209204c5d0>]], dtype=object))
+(<matplotlib.figure.Figure at 0x7fafd7afaf90>,
+ array([[<matplotlib.axes.AxesSubplot object at 0x7fafd7af0f50>]], dtype=object))
 ```
 
 ```python
@@ -204,30 +191,6 @@ array([ -1.93565190e-15 -1.70240923e-19j,
 
 ```python
 >>> Y.plot(typ='m')
-(<matplotlib.figure.Figure at 0x7f2092000bd0>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f2091feb950>]], dtype=object))
-```
-
-```python
-
-```
-
-```python
-
-```
-
-```python
-
-```
-
-```python
-
-```
-
-```python
-
-```
-
-```python
-
+(<matplotlib.figure.Figure at 0x7fafd7937d90>,
+ array([[<matplotlib.axes.AxesSubplot object at 0x7fafd792fc50>]], dtype=object))
 ```
