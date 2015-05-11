@@ -242,6 +242,7 @@ class MIMO(object):
     def Scapacity(self,Pt=1e-3,Tp=273):
         """ equivalent SISO capacity 
         """
+        
         pass
 
     def BFcapacity(self,Pt=np.array([1e-3]),Tp=273):

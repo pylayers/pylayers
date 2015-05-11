@@ -583,13 +583,6 @@ bernard
         print "\nload infrastructure node position:",
         a,self.infraname,pts,i = c3d.ReadC3d(filename)
 
-
-
-
-        
-
-
-
         pts = pts/1000.
         mpts = np.mean(pts,axis=0)
         self.din={}
@@ -655,12 +648,12 @@ bernard
                           's3off':-0.2}      ,
                  })
 
-        # load extra  information frmo inifile (antenna, rotation matrix,...)
+        # load extra  information from inifile (antenna, rotation matrix,...)
 
         inifile = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','BodyandWear','AccesPoints.ini')
         config = ConfigParser.ConfigParser()
         config.read(inifile)
-        
+
         for d in self.din:
             self.din[d]['antname']=config.get(d,'file')
             self.din[d]['ant']=antenna.Antenna(config.get(d,'file'))

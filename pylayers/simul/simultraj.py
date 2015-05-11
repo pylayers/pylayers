@@ -73,6 +73,16 @@ class Simul(PyLayers):
 
     or a CorSer instance
 
+    Methods
+    -------
+
+    load_simul : load configuration file 
+    load_Corser : load a Corser file 
+    _gen_net : generate network and asociated links
+    show : show layout and network 
+    evaldeter : run simulation over time 
+
+
     """
 
     def __init__(self, source ='simulnet_TA-Office.h5',verbose=False):
@@ -85,6 +95,11 @@ class Simul(PyLayers):
             h5 trajectory file default simulnet_TA-Office.h5
 
         verbose : boolean
+
+        Notes
+        -----
+
+        The simultraj has a dataframe
 
 
         """
@@ -116,18 +131,22 @@ class Simul(PyLayers):
         self.DL = DLink(L=self.L,verbose=self.verbose)
         self.DL.cutoff=cutoff
 
-        self.filename = 'simultraj_' + self.filetraj
+        self.filename = 'simultraj_' + self.filetraj + '.h5'
 
-        self.data = pd.DataFrame(columns=['id_a', 'id_b',
-                                          'x_a', 'y_a', 'z_a',
-                                          'x_b', 'y_b', 'z_b',
-                                          'd', 'eng', 'typ',
-                                          'wstd', 'fcghz',
-                                          'fbminghz', 'fbmaxghz', 'fstep', 'aktk_id',
-                                          'sig_id', 'ray_id', 'Ct_id', 'H_id'
-                                          ])
+        # data is a panda container which is initialized 
+        #
+        # We do not save all the simulation in a DataFRame anymore
+        #
+        #self.data = pd.DataFrame(columns=['id_a', 'id_b',
+        #                                  'x_a', 'y_a', 'z_a',
+        #                                  'x_b', 'y_b', 'z_b',
+        #                                  'd', 'eng', 'typ',
+        #                                  'wstd', 'fcghz',
+        #                                  'fbminghz', 'fbmaxghz', 'fstep', 'aktk_id',
+        #                                  'sig_id', 'ray_id', 'Ct_id', 'H_id'
+        #                                  ])
 
-        self.data.index.name='t'
+        #self.data.index.name='t'
         self._filecsv = self.filename.split('.')[0] + '.csv'
         self.todo = {'OB': True,
                     'B2B': True,
@@ -433,8 +452,8 @@ class Simul(PyLayers):
                 and replace by new simulation id 
 
 
-        Example
-        -------
+        Examples
+        --------
 
             >>> from pylayers.simul.simultraj import *
             >>> from pylayers.measures.cormoran import *
@@ -511,11 +530,11 @@ class Simul(PyLayers):
         else :
             lt = kwargs['t']
 
-        if len(lt) == 0:
-            lt = self.time
+        #if len(lt) == 0:
+        #    lt = self.time
         # check time attribute
-        if not lt[0] >= self._tmin and\
-               lt[-1] <= self._tmax:
+        if (lt[0] < self._tmin) or\
+           (lt[1] > self._tmax) :
                raise AttributeError('Requested time range not available')
 
         # self._traj is a copy of self.traj, which is affected by resampling.
@@ -537,15 +556,34 @@ class Simul(PyLayers):
         #      links
         #           evaldeter &| evalstat
         #
-        lt = self.get_sim_time(lt)
-        self._time=self.get_sim_time(lt)
+        #lt = self.get_sim_time(lt)
+        #self._time=self.get_sim_time(lt)
+
         init = True
-        for ut, t in enumerate(lt):
+        tmin = lt[0]
+        tmax = lt[1]
+        Nt   = int(2**lt[2])
+        torder = np.linspace(tmin,tmax,Nt)
+        itrev  = np.hstack((np.r_[0],np.r_[pyu.bitreverse(Nt,int(lt[2]))]))
+        trev   = torder[itrev]
+        ## Start to loop over time
+        ##   ut : counter
+        ##   t  : time value (s)
+        #for ut, t in enumerate(lt):
+        for ut  in itrev:
+            t  = torder[ut]
             self.ctime = t
+            # update spatial configuration of the scene for time t
             self.update_pos(t)
             # print self.N.__repr__()
+            ## Start to loop over available Wireless standard 
+            ##
             for w in wstd:
+                ## Start to loop over the chosen links stored in links  
+                ##
                 for na, nb, typ in links[w]:
+                    # If type of link is valid (Body 2 Body,...) 
+                    #
                     if self.todo[typ]:
                         if self.verbose:
                             print '-'*30
@@ -553,6 +591,9 @@ class Simul(PyLayers):
                             print 'processing: ',na, ' <-> ', nb, 'wstd: ', w
                             print '-'*30
                         eng = 0
+                        #
+                        # Invoque deterministic simulation of the link 
+                        #
                         self.evaldeter(na, nb, w,applywav=False,**DLkwargs)
                         # if typ == 'OB':
                         #     self.evalstat(na, nb)
@@ -561,8 +602,13 @@ class Simul(PyLayers):
                         #     self._ak = L.H.ak
                         #     self._tk = L.H.tk
                         # else :
+
+                        # Get alphak an tauk
                         self._ak = self.DL.H.ak
                         self._tk = self.DL.H.tk
+                        aktk_id = str(ut) + '_' + na + '_' + nb + '_' + w
+                        while len(aktk_id)<30:
+                            aktk_id = aktk_id + ' '
                         df = pd.DataFrame({\
                                     'id_a': na,
                                     'id_b': nb,
@@ -580,7 +626,7 @@ class Simul(PyLayers):
                                     'fbminghz': self.DL.fmin,
                                     'fbmaxghz': self.DL.fmax,
                                     'fstep': self.DL.fstep,
-                                    'aktk_id': str(ut) + '_' + na + '_' + nb + '_' + w,
+                                    'aktk_id':aktk_id,
                                     'sig_id': self.DL.dexist['sig']['grpname'],
                                     'ray_id': self.DL.dexist['ray']['grpname'],
                                     'Ct_id': self.DL.dexist['Ct']['grpname'],
@@ -592,25 +638,27 @@ class Simul(PyLayers):
                                               'wstd', 'fcghz',
                                               'fbminghz', 'fbmaxghz', 'fstep', 'aktk_id',
                                               'sig_id', 'ray_id', 'Ct_id', 'H_id'
-                                              ],index=[self._time[ut]])
+                                              ],index= [t])  #self._time[ut]])
 
-                        if not self.check_exist(df) :
-                            self.data = self.data.append(df)
-                            # self._index = self._index + 1
-                            # save csv
-                            # self.tocsv(ut, na, nb, w,init=init)
-                            init=False
+                        #if not self.check_exist(df) :
+                        #    self.data = self.data.append(df)
+                        #    # self._index = self._index + 1
+                        #    # save csv
+                        #    # self.tocsv(ut, na, nb, w,init=init)
+                        #    init=False
 
                             # save pandas self.data
-                            self.savepd()
+                        self.savepd(df)
                             # save ak tauk
-                            self._saveh5(ut, na, nb, w)
+                            # alphak tauk are already stored in H
+                            #self._saveh5(ut, na, nb, w)
 
-                        elif self.check_exist(df) and kwargs['replace_data']:
-                            self.replace_data(df)
-                            self.savepd()
+                        #elif self.check_exist(df) and kwargs['replace_data']:
+                        #    self.replace_data(df)
+                        #    self.savepd()
                             # save ak tauk
-                            self._saveh5(ut, na, nb, w)
+                            # alphak tauk are already stored in H
+                            #self._saveh5(ut, na, nb, w)
 
     def replace_data(self, df):
         """check if a dataframe df already exists in self.data
@@ -628,7 +676,10 @@ class Simul(PyLayers):
 
         """
         
-        self.data[(self.data.index == df.index) & (self.data['id_a'] == df['id_a'].values[0]) & (self.data['id_b'] == df['id_b'].values[0]) & (self.data['wstd'] == df['wstd'].values[0])]=df.values
+        self.data[(self.data.index == df.index) & 
+                  (self.data['id_a'] == df['id_a'].values[0]) & 
+                  (self.data['id_b'] == df['id_b'].values[0]) &
+                  (self.data['wstd'] == df['wstd'].values[0])]=df.values
 
 
 
@@ -650,7 +701,11 @@ class Simul(PyLayers):
         # check init case 
         if not len(self.data.index) == 0:
 
-            ud = self.data[(self.data.index == df.index) & (self.data['id_a'] == df['id_a'].values[0]) & (self.data['id_b'] == df['id_b'].values[0]) & (self.data['wstd'] == df['wstd'].values[0])]
+            ud = self.data[(self.data.index == df.index) & 
+                           (self.data['id_a'] == df['id_a'].values[0]) & 
+                           (self.data['id_b'] == df['id_b'].values[0]) & 
+                           (self.data['wstd'] == df['wstd'].values[0])]
+
             if len(ud) == 0:
                 return False
             else :
@@ -659,26 +714,39 @@ class Simul(PyLayers):
             return False
 
 
-    def savepd(self):
+    def savepd(self,df):
         """ save data information of a simulation
+
+        Parameters
+        ----------
+
+        df : one index data
+
+        Notes
+        -----
+
+
         """
         filenameh5 = pyu.getlong(self.filename, pstruc['DIRLNK'])
-        store = pd.HDFStore(filenameh5,'a')
-        self.data=self.data.sort()
-        store['df'] = self.data
+        store = pd.HDFStore(filenameh5)
+        #self.data=self.data.sort()
+        store.append('df',df)
         store.close()
 
     def loadpd(self):
         """ load data from previous simulations
         """
         filenameh5 = pyu.getlong(self.filename, pstruc['DIRLNK'])
-        self.data = pd.read_hdf(filenameh5,'df')
+        store = pd.HDFStore(filenameh5)
+        #self.data = pd.read_hdf(filenameh5,'df')
+        self.data = store.get('df')
         self.data.index.name='t'
+        self.data = self.data.sort()
 
     def get_sim_time(self,t):
-        """ retrieve closest time value in regard of passed t value in parmaeter
+        """ retrieve closest time value in regard of passed t value in parameter
         """
-        
+
         if not isinstance(t,list) and not isinstance(t,np.ndarray):
             return np.array([self.time[np.where(self.time <=t)[0][-1]]])
         else :
@@ -699,9 +767,12 @@ class Simul(PyLayers):
                 optionnal :wireslees standard
         """
         if wstd == '':
-            return self.data[(self.data['id_a']==id_a) & (self.data['id_b']==id_b)]
+            return self.data[(self.data['id_a']==id_a) &
+                             (self.data['id_b']==id_b)]
         else :
-            return self.data[(self.data['id_a']==id_a) & (self.data['id_b']==id_b) & self.data['wstd']==wstd]
+            return self.data[(self.data['id_a']==id_a) &
+                             (self.data['id_b']==id_b) &
+                             self.data['wstd']==wstd]
 
 
     def update_pos(self, t):
@@ -741,7 +812,7 @@ class Simul(PyLayers):
         Parameters
         ----------
 
-            typ : list 
+        typ : list
                 list of parameters to be retrieved
                 (ak | tk | R | C)
         link: list
@@ -761,7 +832,7 @@ class Simul(PyLayers):
 
 
 
-        # get time 
+        # get time
         defaults = {'t': 0,
                     'typ':['ak'],
                     'links': {},
@@ -777,8 +848,8 @@ class Simul(PyLayers):
 
         # manage time
         t =kwargs['t']
-        t=self.get_sim_time(t)
-        dt= self.time[1]-self.time[0]
+        t =self.get_sim_time(t)
+        dt = self.time[1]-self.time[0]
 
         # manage links
         plinks = kwargs['links']
@@ -827,9 +898,10 @@ class Simul(PyLayers):
                     self.DL.Tb = self.N.node[link[1]]['T']
                     # self.DL.Aa = self.N.node[link[0]]['ant']['antenna']
                     # self.DL.Ab = self.N.node[link[1]]['ant']['antenna']
-                    
+
                     if 'ak' in kwargs['typ'] or 'tk' in kwargs['typ'] or 'rss' in kwargs['typ']:
                         H_id = line['H_id'].decode('utf8')
+                        # load the proper link
                         self.DL.load(self.DL.H,H_id)
                         if 'ak' in kwargs['typ']:
                             if not output[linkname].has_key('ak'):
@@ -843,7 +915,7 @@ class Simul(PyLayers):
                             if not output[linkname].has_key('rss'):
                                 output[linkname]['rss']=[]
                             output[linkname]['rss'].append(copy.deepcopy(self.DL.H.rssi()))
-                        
+
                     if 'R' in kwargs['typ']:
                         if not output[linkname].has_key('R'):
                             output[linkname]['R']=[]
@@ -862,9 +934,9 @@ class Simul(PyLayers):
                             self.DL.C.locbas(Tt=self.DL.Ta, Tr=self.DL.Tb)
 
 
-                            
+
                         #T channel
-                        
+
                         output[linkname]['C'].append(copy.deepcopy(self.DL.C))
 
 
@@ -884,7 +956,7 @@ class Simul(PyLayers):
         for l in output.keys():
             if output[l].has_key('time_to_simul'):
                 print 'link', l , 'require simulation for timestamps', output[l]['time_to_simul']
-        
+
 
         return(output)
 
@@ -977,13 +1049,6 @@ class Simul(PyLayers):
                 self.dpersons[p]._show3(newfig=False,
                                         topos=True,
                                         pattern=kwargs['ant'])
-
-
-
-
-
-
-
 
     # def _saveh5_init(self):
     #     """ initialization of the h5py file

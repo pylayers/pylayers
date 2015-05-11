@@ -6,8 +6,8 @@ r""""
 .. autosummary::
     :toctree: generated
 
-Bsignal ED 
-=============
+Energy Detector
+===============
 
 .. autosummary::
     :toctree: generated/
@@ -21,9 +21,22 @@ Bsignal ED
     ED.roc
     ED.plot
 
+References
+----------
+
+    Cite the relevant literature, e.g. [1]_.  You may also cite these
+    references in the notes section above.
+
+.. [1] O. McNoleg, "The integration of GIS, remote sensing,
+       expert systems and adaptive co-kriging for environmental habitat
+       modelling of the Highland Haggis using object-oriented, fuzzy-logic
+       and neural-network techniques," Computers & Geosciences, vol. 22,
+       pp. 585-588, 1996.
+
 """
 from scipy.signal import *
 import scipy.special as spe
+import pandas as pd
 import scipy.stats as st
 from pylab import *
 from pylayers.signal.DF import *
@@ -42,9 +55,9 @@ class ED(PyLayers):
     """
     def __init__(self,**kwargs):
         """ Constructor
-        
+
         Parameters
-        ----------    
+        ----------
 
         fs : sampling frequency
         fc : center frequency
@@ -68,9 +81,8 @@ class ED(PyLayers):
         """
 
         defaults = {'fsGHz':50,
-                    'fcGHz':4,
-                    'BGHz':3,
-                    'Tns':10,
+                    'fcGHz':4.4928,
+                    'Tns':64,
                     'pfa':0.01,
                     'beta':1,
                     'wt':0.01,
@@ -92,52 +104,59 @@ class ED(PyLayers):
         #
         # Filter B : Input Band Pass Filter
         #
-        ts  = 1./self.fsGHz
-        fN  = self.fsGHz/2.
-        w1  = (self.fcGHz-BGHz/2.)/fN
-        w2  = (self.fcGHz+BGHz/2.)/fN
-        wp  = [w1,w2]
-        ws  = [w1-wt,w2+wt]
+        # Elliptic filter
+        #
+        
+        self.ts  = 1./self.fsGHz
+        #fN  = self.fsGHz/2.
+        #w1  = (self.fcGHz-BGHz/2.)/fN
+        #w2  = (self.fcGHz+BGHz/2.)/fN
+        #wp  = [w1,w2]
+        #ws  = [w1-wt,w2+wt]
 
-        self.filterB  = DF()
-        self.filterB.ellip_bp(wp,ws,kwargs['gpass'],kwargs['gstop'])
+        #self.filterB  = DF()
+        #self.filterB.ellip_bp(wp,ws,kwargs['gpass'],kwargs['gstop'])
         #self.filterB.butter(order=6,w=wp,typ='bandpass')
 
         #
         # Filter T : Time Averaging Filter (Integrator)  (Tns => N samples)
         #
 
-        N  = np.ceil(Tns/ts)
-        b  = (Tns*1e-9/N)*ones(N)
-        self.NfilterT = len(b)
-        a  = array([1])
-        self.filterT = DF(b,a)
+        self.N  = np.ceil(Tns/self.ts)
+        #b  = (Tns*1e-9/self.N)*ones(self.N)
+        #self.NfilterT = len(b)
+        #a  = array([1])
+        #self.filterT = DF(b,a)
 
         #
         #
         #
+
         self.BGHz  = BGHz
         self.Tns   = Tns
         self.beta  = kwargs['beta']
         self.pfa   = kwargs['pfa']
         self.NF    = kwargs['NF']
 
+        self.update()
+
+    def update(self):
         #
         # calculates ED moments, order and scale
         #
-
         # self.moment(typ='struc')
-        # kB = 1,3806488 × 10-23 
+        # kB = 1,3806488 × 10-23
         kB = 1.3806488e-23
         # TB : Noise temperature
         TB  = 290*10**(self.NF/10.)
-        N0  = kB*TB
+        self.N0  = kB*TB
         self.order = 2*self.BGHz*self.Tns
-        self.muy   = self.order*N0
-        self.vary  = 4*self.BGHz*self.Tns*N0**2
+        self.muy   = self.order*self.N0
+        self.vary  = 4*self.BGHz*self.Tns*self.N0**2
         self.scale = np.sqrt(self.vary/(2*self.order))
 
     def __repr__(self):
+        self.update()
         st = 'Energy Detector'+'\n'
         st = st+'---------------'+'\n\n'
         st = st+'Center frequency : '+str(self.fcGHz)+' GHz\n'
@@ -145,20 +164,21 @@ class ED(PyLayers):
         st = st+'Integration Time : '+str(self.Tns)+' ns \n'
         st = st+'Resistance : '+str(self.R)+' Ohms\n'
         st = st+'Mean (y) : '+str(self.muy/1e-9)+' nJ \n'
-        st = st+'Std(y) : '+str(np.sqrt(self.vary)/1e-9)+' nJ \n'
+        st = st+'Std (y) : '+str(np.sqrt(self.vary)/1e-9)+' nJ \n'
         st = st+'Order (df) : '+str(self.order)+'  \n'
         st = st+'Scale : '+str(self.scale)+'  \n'
         st = st+'2BT : '+str(2*self.BGHz*self.Tns)+' \n'
 
         return(st)
 
-    def apply(self,x,typ='ideal'):
+    def apply(self,s,typ='ideal'):
         r"""
 
         Parameters
         ----------
 
-        x : input signal
+        s : input signal
+        typ : 'real' | 'ideal'
 
         Returns
         -------
@@ -169,26 +189,30 @@ class ED(PyLayers):
 
         """
         if typ=='real':
-            # B filtering 
-            self.xf1 = self.filterB.filter(x.y)
-            # quadrator and scaling 
-            self.xq  = ((self.beta)**2)*(self.xf1*self.xf1)/self.R
-            # T filtering
-            self.y        = bs.TUsignal(x.x,self.filterT.filter(self.xq))
-        
+            # B filtering
+            self.xf1 = self.filterB.filter(s.y)
+
         if typ=='ideal':
             # B filtering  --> FH signal
-            X   = x.fft()
-            self.gate = np.zeros(len(x.x))
-            u1 = np.where((x.x>(self.fcGHz-self.BGHz/2.)) & (x.x<(self.fcGHz+self.BGHz/2)))[0]
-            u2 = np.where((x.x>(self.fsGHz-self.fcGHz-self.BGHz/2.)) & (x.x<(self.fsGHz-self.fcGHz+self.BGHz/2)))[0]
+            S = s.fft()
+            self.gate = np.zeros(len(S.x))
+            self.gate[0]=1
+            u1 = np.where((S.x>(self.fcGHz-self.BGHz/2.)) &
+                          (S.x<(self.fcGHz+self.BGHz/2.)))[0]
+            u2 = np.where((S.x>(self.fsGHz-self.fcGHz-self.BGHz/2.)) &
+                          (S.x<(self.fsGHz-self.fcGHz+self.BGHz/2.)))[0]
             self.gate[u1] = 1
             self.gate[u2] = 1
-            X.y = X.y*self.gate
-            self.y = X.ifft()
+            S.y  = S.y*self.gate
+            self.xf1 = S.ifft().y
 
-            #self.xq  = ((self.beta)**2)*(self.xf1*self.xf1)/self.R
-            #self.y        = bs.TUsignal(x.x,self.filterT.filter(self.xq))
+        # quadrator and scaling
+        self.xq  = ((self.beta)**2)*(self.xf1*self.xf1)/self.R
+        # T filtering
+        #xfq = self.filterT.filter(self.xq)
+        xfq = pd.rolling_mean(self.xq,self.N)*self.N*1e-9*self.ts
+        self.y = bs.TUsignal(s.x[self.N:],xfq[self.N:])
+
         return(self.y)
 
     def moment(self,typ='struc'):
@@ -209,6 +233,7 @@ class ED(PyLayers):
         This function updates the order and scale or the Energy Detector
 
         """
+        self.update()
         # filterB bandpass filter
         self.filterB.freqz(display=False)
         # filterT time integration (=low pass filter)
@@ -223,7 +248,7 @@ class ED(PyLayers):
             self.Rx = self.RB*self.RB*2
             # Power of xq
             RB0= self.RB.y[0]
-            # 
+            #
             self.Rx.y = self.Rx.y+RB0**2
 
             Phix = np.real(fft.fft(self.Rx.y))
@@ -280,7 +305,7 @@ class ED(PyLayers):
                            scale=self.scale,
                            nc=(E+Ei)/(self.scale))
 
-    def errprob(self,E,Ei=0,thresh=0,typ='thresh'):
+    def errprob(self,E,Ei=0,thresh=2e-9,typ='thresh'):
         """ calculates error probability
 
         Parameters
@@ -346,7 +371,7 @@ class ED(PyLayers):
         ----------
 
         E : float
-            value of energy
+            value of signal energy
 
         """
 
@@ -360,13 +385,13 @@ class ED(PyLayers):
         plt.plot(e,p1,'r',linewidth=4)
 
     def roc(self,E,typ='thresh'):
-        """ determine receiver operating curve
+        """ determines receiver operating curve
 
         Parameters
         ----------
 
         E   : float
-            Energy
+            Energy (J)
         typ : string
             'thresh' | 'both' | 'scale'
 
@@ -383,6 +408,16 @@ class ED(PyLayers):
         -----
 
         Iterate on energy from 0 to 10*E
+
+        Examples
+        --------
+
+        ... plot:
+            include-source:
+
+            >>> from pylayers.signal.ED import *
+            >>> EnDet = ED(BHGz=0.5,Tns=20)
+
 
         """
 

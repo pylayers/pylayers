@@ -1601,10 +1601,20 @@ class TBsignal(Bsignal):
 
         return(fig,ax)
 
-    def energy(self):
-        """ return energy
+    def integ(self,Tns,Tsns=50):
+        """ integtation of alphak tauk
+
+        used energy detector for IEEE 802.15.6 standard
+
+
         """
-        return(sum(self.y*np.conj(self.y)))
+        u1 = np.where(self.x<(self.x[0]+Tns))[0]
+        u2 = np.where((self.x<(self.x[0]+Tsns+Tns)) &
+                      (self.x>=(self.x[0]+Tsns)))[0]
+        Hp = np.sum((self.y[u1])**2)
+        Hi = np.sum((self.y[u2])**2)
+
+        return(Hp,Hi)
 
     def translate(self, tau):
         """  translate signal by tau
@@ -1796,6 +1806,7 @@ class TUsignal(TBsignal, Usignal):
 
         Returns
         -------
+
         n
         sn
 
@@ -1818,18 +1829,16 @@ class TUsignal(TBsignal, Usignal):
             PSDdBmpHz = 10*np.log10(pmWpHz)
 
         n = Noise(ti = ti,
-                   tf = tf+tsns,
-                   fsGHz = fsGHz,
-                   PSDdBmpHz = PSDdBmpHz,
-                   R = R,
-                   seed = seed)
+                  tf = tf+tsns,
+                  fsGHz = fsGHz,
+                  PSDdBmpHz = PSDdBmpHz,
+                  R = R,
+                  seed = seed)
 
-
-        sn = TUsignal()
-        sn.y = self.y + n.y
+        sn.y = self.y + n.y[0:len(self.x)]
         sn.x = self.x
 
-        return sn
+        return sn,n
 
     def fft(self, shift=False):
         """  forward fast Fourier transform
