@@ -682,7 +682,7 @@ class DLink(Link):
                                 except:
                                     pass
     def reset_config(self):
-        """ reset configuration when new layout loaded
+        """ reset configuration when a new layout is loaded
         """
         try:
             self.L.dumpr()
@@ -849,7 +849,7 @@ class DLink(Link):
             (Signatures|Rays|Ctilde|Tchannel)
         key : string
             key of the h5py file
-        grpname : string
+        gpname : string
             groupe name of the h5py file
         """
 
