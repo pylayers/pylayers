@@ -84,7 +84,7 @@ class MIMO(object):
     def loadraw(self):
         """ load a MIMO Nr x Nt raw data sounder file
 
-    
+
         The sounder output file is a 2 columns ASCII csv file
         Module (dB) ;  Angle (Degree)
 
@@ -196,7 +196,7 @@ class MIMO(object):
         -------
 
         C   : spectral efficiency (bit/s/Hz)
-        rho : SNR 
+        rho : SNR
 
             log_2(det(I+(Et/(N0Nt))HH^{H})
 
@@ -241,14 +241,17 @@ class MIMO(object):
         return(rho,CB)
 
     def Scapacity(self,Pt=1e-3,Tp=273):
-        """ equivalent SISO capacity 
+        """ equivalent SISO capacity
         """
-        
+
         pass
 
     def BFcapacity(self,Pt=np.array([1e-3]),Tp=273):
         """ calculates the capacity in putting all the power on the more important 
-        mode 
+
+        Parameters
+        ----------
+        mode
         """
         fGHz  = self.Hcal.x
         Nf    = len(fGHz)
@@ -346,7 +349,7 @@ class MIMO(object):
         Q0 = np.maximum(0,mu-pb[:,:,None]/ld[:,:,None])
         u  = np.where(Q0>0)[0]
         #Nnz1  = len(u)
-    
+
         Peff = np.sum(np.sum(Q0,axis=0),axis=0)
         deltamu = pt
         while (np.abs(Peff-Pt)>1e-16).any():

@@ -3581,6 +3581,27 @@ class FUsignal(FBsignal, Usignal):
             self.y = self.y*factor
             self.isFriis = True
 
+    def capacity(self,Pt,T=290,mode='blast'):
+        """  calculates channel Shannon capacity (no csi)
+
+        Returns
+        -------
+
+        C : Channel capacity (bit/s)
+
+        """
+        kB = 1.3806488e-23
+        N0 = kB*T
+        dfGHz = self.x[1]-self.x[0]
+        BGHz  = self.x[-1]-self.x[0]
+        Pb = N0*BGHz*1e9
+        H2 = self.y*np.conj(self.y)
+        snr = Pt[:,None]*H2[None,:]/Pb
+        c  = np.log(1+snr)/np.log(2)
+        C   = np.sum(c,axis=1)*dfGHz
+        SNR = np.sum(snr,axis=1)*dfGHz
+
+        return(C,SNR)
 
     def get(self, k):
         """
@@ -5409,7 +5430,7 @@ def test():
 if __name__ == "__main__":
     pass
     #plt.ion()
-    #doctest.testmod()
+    doctest.testmod()
     #ip1 = EnImpulse(fc=4.493,band=0.499,thresh=3,fe=40)
     #ip2 = EnImpulse(fc=4.493,band=0.499,thresh=3,fe=40)
     #ip2.translate(1.123)
