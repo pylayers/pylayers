@@ -188,7 +188,7 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.cor_log.html#pylayers.measures.cormoran.cor_log" title="pylayers.measures.cormoran.cor_log"><tt class="xref py py-obj docutils literal"><span class="pre">cor_log</span></tt></a>([short])</td>
-<td></td>
+<td>display cormoran measurement campaign logfile</td>
 </tr>
 </tbody>
 </table>
@@ -213,19 +213,19 @@
 <td>load TCR data</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._load_offset_dict.html#pylayers.measures.cormoran.CorSer._load_offset_dict" title="pylayers.measures.cormoran.CorSer._load_offset_dict"><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._load_offset_dict</span></tt></a>()</td>
-<td></td>
+<td>load offset_dictionnary.bin</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._loadbody.html#pylayers.measures.cormoran.CorSer._loadbody" title="pylayers.measures.cormoran.CorSer._loadbody"><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._loadbody</span></tt></a>([day,&nbsp;serie])</td>
 <td>load log file</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._loadcam.html#pylayers.measures.cormoran.CorSer._loadcam" title="pylayers.measures.cormoran.CorSer._loadcam"><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._loadcam</span></tt></a>()</td>
-<td></td>
+<td>load camera position</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._loadhkb.html#pylayers.measures.cormoran.CorSer._loadhkb" title="pylayers.measures.cormoran.CorSer._loadhkb"><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._loadhkb</span></tt></a>([day,&nbsp;serie,&nbsp;scenario,&nbsp;run,&nbsp;...])</td>
-<td></td>
+<td>load hkb measurement data</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._loadinfranodes.html#pylayers.measures.cormoran.CorSer._loadinfranodes" title="pylayers.measures.cormoran.CorSer._loadinfranodes"><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._loadinfranodes</span></tt></a>()</td>
-<td>load infrastrucutre nodes</td>
+<td>load infrastructure nodes</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.loadlog.html#pylayers.measures.cormoran.CorSer.loadlog" title="pylayers.measures.cormoran.CorSer.loadlog"><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.loadlog</span></tt></a>()</td>
 <td>load in self.log the log of current serie</td>
@@ -333,7 +333,10 @@
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.imshow.html#pylayers.measures.cormoran.CorSer.imshow" title="pylayers.measures.cormoran.CorSer.imshow"><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.imshow</span></tt></a>([time,&nbsp;kind])</td>
 <td>DEPRECATED</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.pltgt.html#pylayers.measures.cormoran.CorSer.pltgt" title="pylayers.measures.cormoran.CorSer.pltgt"><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.pltgt</span></tt></a>(a,&nbsp;b,&nbsp;**kwargs)</td>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">Corser.showlink</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.pltgt.html#pylayers.measures.cormoran.CorSer.pltgt" title="pylayers.measures.cormoran.CorSer.pltgt"><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.pltgt</span></tt></a>(a,&nbsp;b,&nbsp;**kwargs)</td>
 <td>plt ground truth</td>
 </tr>
 </tbody>
@@ -377,7 +380,7 @@
 <td>single snapshot plot</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.snapshots.html#pylayers.measures.cormoran.CorSer.snapshots" title="pylayers.measures.cormoran.CorSer.snapshots"><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.snapshots</span></tt></a>([t0,&nbsp;t1,&nbsp;offset])</td>
-<td></td>
+<td>take snapshots</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.vlc.html#pylayers.measures.cormoran.CorSer.vlc" title="pylayers.measures.cormoran.CorSer.vlc"><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.vlc</span></tt></a>()</td>
 <td>play video of the associated serie</td>
@@ -440,7 +443,7 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.compute_visibility.html#pylayers.measures.cormoran.CorSer.compute_visibility" title="pylayers.measures.cormoran.CorSer.compute_visibility"><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.compute_visibility</span></tt></a>([techno,&nbsp;...])</td>
-<td>determine visibility of links of a givcen techno</td>
+<td>determine visibility of links for a given techno</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._computedevpdf.html#pylayers.measures.cormoran.CorSer._computedevpdf" title="pylayers.measures.cormoran.CorSer._computedevpdf"><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._computedevpdf</span></tt></a>()</td>
 <td>create a timestamped data frame</td>
@@ -492,7 +495,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mai 01, 2015.
+      Last updated on mai 13, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.measures.cormoran.txt"

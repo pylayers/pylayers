@@ -180,14 +180,14 @@
 <dl class="method">
 <dt id="pylayers.signal.ED.ED.roc">
 <tt class="descclassname">ED.</tt><tt class="descname">roc</tt><big>(</big><em>E</em>, <em>typ='thresh'</em><big>)</big><a class="headerlink" href="#pylayers.signal.ED.ED.roc" title="Permalink to this definition">¶</a></dt>
-<dd><p>determine receiver operating curve</p>
+<dd><p>determines receiver operating curve</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>E</strong> : float</p>
 <blockquote>
-<div><p>Energy</p>
+<div><p>Energy (J)</p>
 </div></blockquote>
 <p><strong>typ</strong> : string</p>
 <blockquote>
@@ -204,6 +204,16 @@
 </table>
 <p class="rubric">Notes</p>
 <p>Iterate on energy from 0 to 10*E</p>
+<p class="rubric">Examples</p>
+<dl class="docutils">
+<dt>... plot:</dt>
+<dd><p class="first">include-source:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.signal.ED</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">EnDet</span> <span class="o">=</span> <span class="n">ED</span><span class="p">(</span><span class="n">BHGz</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">Tns</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -219,7 +229,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mai 01, 2015.
+      Last updated on mai 13, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.signal.ED.ED.roc.txt"
