@@ -236,6 +236,7 @@ class MIMO(object):
         #logdetM = np.real(np.log(detM)/np.log(2))
         #C1  = dfGHz*logdetM
         CB  = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=1)
+        #CB  = dfGHz*np.sum(np.log(1+rho)/np.log(2))
         #return(M,detM,logdetM,C1,C2,S)
         return(rho,CB)
 
@@ -332,8 +333,6 @@ class MIMO(object):
         # Evaluation of the transfer tensor
 
         HdH,U,ld,V = self.transfer()
-
-
         It = np.eye(self.Nt)
         Ir = np.eye(self.Nr)
 
@@ -384,8 +383,8 @@ class MIMO(object):
         #C   = dfGHz*np.log(la.det(IR[None,...]+(Pt/self.Nt)*HH/(N0*dfGHz)))/np.log(2)
 
 
-        return(Cwf,Q,Qn)
-        #return(rho,Cwf)
+        #return(Cwf,Q,Qn)
+        return(rho,Cwf)
 
 
     def mulcplot(self,mode,**kwargs):
