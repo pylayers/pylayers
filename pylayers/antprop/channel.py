@@ -96,6 +96,9 @@ class Ctilde(PyLayers):
 
     def choose(self):
         """ Choose a field file in tud directory
+
+        DEPRECATED 
+        
         """
         import tkFileDialog as FD
         filefield = FD.askopenfilename(filetypes=[("Files field  ", "*.field"),
@@ -2352,7 +2355,9 @@ class Tchannel(bs.FUDAsignal):
         """
 
         Ak   = np.abs(self.y[:, ufreq])
-        Pr   = np.sum(Ak**2)
+        tauk = np.abs(self.x[:, ufreq])
+        rssiN   = np.sum(Ak**2)
+        rssiF   = np.sum(Aa,)
         PrdB = 10*np.log10(Pr)
 
         return PrdB

@@ -1218,14 +1218,14 @@ class Network(PyLayers,nx.MultiDiGraph):
         Parameters
         ----------
 
-        wstd : specify a wstd to display node position. If None, all wstd are displayed    
-        
-        Returns 
-        ------
+        wstd : specify a wstd to display node position. If None, all wstd are displayed
+
+        Returns
+        -------
 
         dictionnary :     key     : node ID
         value     : np.array node position
-        
+
 
         """
         if wstd == None:
@@ -1239,8 +1239,7 @@ class Network(PyLayers,nx.MultiDiGraph):
 
 
     def haspe(self,n):
-        """
-            Test if a node has an estimated point  pe key
+        """ Test if a node has an estimated point  pe key
 
         Parameters
         ----------
@@ -1302,19 +1301,19 @@ class Network(PyLayers,nx.MultiDiGraph):
 
 
 
-    
-        """ 
+    def show(self,**kwargs):
+        """
         Show the network
 
-        Parameters 
+        Parameters
         ----------
 
         wstd     : specify a wstd to display. If None, all wstd are displayed
         legend     : Bool. Toggle display edge legend
-        ion     : interactive mode for matplotlib 
-        info    : plot information on edges 
-        fig     : plt.figure() to plot 
-        ax      : plt.figure.ax to plot 
+        ion     : interactive mode for matplotlib
+        info    : plot information on edges
+        fig     : plt.figure() to plot
+        ax      : plt.figure.ax to plot
         name    : figure name
 
 
@@ -1338,9 +1337,9 @@ class Network(PyLayers,nx.MultiDiGraph):
 
         else :
             if isinstance(wstd,list):
-                rloop = wstd    
+                rloop = wstd
             elif isinstance(wstd,str) :
-                rloop=[wstd]    
+                rloop=[wstd]
             else :
                 raise AttributeError('Arg must be a string or a string list')
 
@@ -1412,7 +1411,7 @@ class Network(PyLayers,nx.MultiDiGraph):
                 [jj.remove() for jj in self.coll_plot['edge'][0] if jj != None]
                 [jj.remove() for jj in self.coll_plot['label'][0]]
             except:
-                pass 
+                pass
             plt.draw()
             self.coll_plot['node'][0]=self.coll_plot['node'][1]
             self.coll_plot['edge'][0]=self.coll_plot['edge'][1]
@@ -1444,14 +1443,14 @@ class Network(PyLayers,nx.MultiDiGraph):
 
         else :
             if isinstance(wstd,list):
-                rloop = wstd    
+                rloop = wstd
             elif isinstance(wstd,str) :
-                rloop=[wstd]    
+                rloop=[wstd]
             else :
                 raise AttributeError('Arg must be a string or a string list')
 
         for ii,rl in enumerate(rloop):
-            
+
             pos = self.get_pos(rl)
             posv = pos.values()
             mp = dict(zip(pos.keys(),range(len(pos.keys()))))
@@ -1472,10 +1471,10 @@ class Network(PyLayers,nx.MultiDiGraph):
     def csv_save(self,filename,S):
         """ save node positions into csv file
 
-        Parameters 
+        Parameters
         ----------
 
-        filename : string 
+        filename : string
                    name of the csv file
         S        : Simulation
                    Scipy.Simulation object
@@ -1640,7 +1639,7 @@ class Network(PyLayers,nx.MultiDiGraph):
 
 #        Attributes:
 #        ----------
-#        
+#
 #        S        : Simulation
 #                   Scipy.Simulation object
 

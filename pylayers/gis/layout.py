@@ -6712,12 +6712,31 @@ class Layout(PyLayers):
         # Warning edgelist is to be understood as edge of graph and not segments of layout
         fig,ax = self.showG('s',nodes=False,edgelist=edfilt)
 
-        ldeg1  = list(self.degree[1])
-        ldeg4  = list(self.degree[4])
-        fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg1,edges=kwargs['edges'],
-                   nodes=kwargs['nodes'],node_size=kwargs['node_size'],node_color='r')
-        fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg4,edges=kwargs['edges'],
-                   nodes=kwargs['nodes'],node_size=kwargs['node_size'],node_color='g')
+        # display degree 1 nodes
+        if 1 in self.degree:
+            ldeg1  = list(self.degree[1])
+            print ldeg1
+            fig,ax = self.showG('s',
+                fig=fig,
+                ax=ax,
+                nodelist=ldeg1,
+                edges=kwargs['edges'],
+                nodes=kwargs['nodes'],
+                node_size=kwargs['node_size'],
+                node_color='r')
+
+        # display degree 4 nodes 
+        if 4 in self.degree:
+            ldeg4  = list(self.degree[4])
+            fig,ax = self.showG('s',
+                fig=fig,
+                ax=ax,
+                nodelist=ldeg4,
+                edges=kwargs['edges'],
+                nodes=kwargs['nodes'],
+                node_size=kwargs['node_size'],
+                node_color='g')
+
         #     if k==1:
         #         fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg,edges=False,nodes=True,node_size=50,node_color='c')
         #     if k==4:

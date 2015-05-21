@@ -65,6 +65,7 @@ CorSer visualization tools
     CorSer.animhkb
     CorSer.animhkbAP
     CorSer.imshow
+    Corser.showlink
     CorSer.pltgt
 
 
@@ -176,6 +177,15 @@ import pickle
 
 
 def cor_log(short=True):
+    """ display cormoran measurement campaign logfile
+
+    Examples
+    --------
+
+    >>> from pylayers.measures.cormoran import *
+    >>> cor_log(short=True)
+
+    """
     filelog = os.path.join(os.environ['CORMORAN'],'RAW','Doc','MeasurementLog.csv')
     log = pd.read_csv(filelog)
     if short :
@@ -189,17 +199,18 @@ def cor_log(short=True):
 
 
 def time2npa(lt):
-
-    """ pd.datetime.time to numpy array
+    """ convert pd.datetime.time to numpy array
 
     Parameters
     ----------
 
-    lt : pd.datetime.time 
+    lt : pd.datetime.time
 
-    Return
-    ------
+    Returns
+    -------
+
     ta : numpy array
+        time in seconds
 
     """
     ta = (lt.microsecond*1e-6+
@@ -299,7 +310,7 @@ class CorSer(PyLayers):
         #load offset dict
         self.offset= self._load_offset_dict()
 
-        # #######################
+        ########################
         #realign Radio on mocap
         ########################
         # 1 - Resample radio time => mocap time
@@ -402,7 +413,7 @@ class CorSer(PyLayers):
     def dev(self):
         """ display device techno, id , id on body, body owner,...
         """
-        
+
         title = '{0:21} | {1:7} | {2:8} | {3:10} '.format('Name in Dataframe', 'Real Id', 'Body Id', 'Subject')
         print title + '\n' + '='*len(title) 
         # access points HKB
@@ -455,7 +466,7 @@ class CorSer(PyLayers):
     def ant(self):
         """ display device techno, id , id on body, body owner,...
         """
-        
+
         title = '{0:21} | {1:7} | {2:8} | {3:10} '.format('Name in Dataframe', 'Real Id', 'Body Id', 'Subject')
         print title + '\n' + '='*len(title) 
         # access points HKB
@@ -507,6 +518,14 @@ class CorSer(PyLayers):
 
 
     def _loadcam(self):
+        """ load camera position 
+
+        Returns
+        -------
+
+        update self.cam
+
+        """
 
         self.cam = np.array([
             [-6502.16643961174,5440.97951452912,2296.44437108561],
@@ -528,7 +547,7 @@ class CorSer(PyLayers):
 
 
     def _loadinfranodes(self):
-        """ load infrastrucutre nodes
+        """ load infrastructure nodes
 
 
 
@@ -911,7 +930,7 @@ bernard
         for i in dgb:
             ind = dgb[i].index/1e3
             dti = pd.to_datetime(ind,unit='s')
-            npai=time2npa(dti)
+            npai = time2npa(dti)
             npai = npai - npai[0]
             dgb[i].index=pd.Index(npai)
             lgb.append(pd.DataFrame(dgb[i]['d'].values,columns=[self.idBS[0]+'-'+self.idBS[i]],index=dgb[74].index))
@@ -930,6 +949,23 @@ bernard
 
 
     def _loadhkb(self,day=11,serie='',scenario='20',run=1,source='CITI'):
+        """ load hkb measurement data
+
+        Parameters
+        ----------
+
+        day : string
+        serie : string
+        scenario : string
+        run : int
+        source : 'string'
+
+        Returns
+        -------
+
+        update self.hkb
+
+        """
 
         if day == 11:
             if serie == 5:
@@ -1006,15 +1042,15 @@ bernard
         self.hkb = self.hkb[self.hkb!=0]
 
     def compute_visibility(self,techno='HKB',square_mda=True,all_links=True):
-        """ determine visibility of links of a givcen techno
+        """ determine visibility of links for a given techno
 
 
             Parameters
             ----------
 
             techno  string
-                select the given radio technology of the nodes ( to determine 
-                    the visi matrix)
+                select the given radio technology of the nodes to determine
+                    the visibility matrix
 
             square_mda  boolean
                 select ouput format
@@ -1723,6 +1759,22 @@ bernard
 
     def snapshot(self,t0=0,offset=15.5,title=True,save=False,fig=[],ax=[],figsize=(10,10)):
         """ single snapshot plot
+
+        Parameters
+        ----------
+
+        t0: float
+        offset : float
+        title : boolean
+        save : boolean
+        fig
+        ax
+        figsize : tuple
+
+        Examples
+        --------
+
+
         """
 
         if fig ==[]:
@@ -1756,7 +1808,14 @@ bernard
 
 
     def snapshots(self,t0=0,t1=10,offset=15.5):
-        """
+        """ take snapshots 
+
+        Parameters
+        ----------
+
+        t0 : float
+        t1 : float
+
         """
 
         if self.offset[self._filename].has_key('video_sec'):
@@ -2037,7 +2096,50 @@ bernard
         #        cpt = cpt + 1
         return fig,(ax1,ax2)
 
+    def lk2nd(self,lk):
+        """ transcode a lk from Id to real name
+
+        Parameters
+        ----------
+
+        lk : string
+
+        Examples
+        --------
+
+            >>> C=Corser(6)
+            >>> lk = 'HKB:15-HKB:7'
+            >>> C.lk2nd(lk)
+        """
+        u = lk.replace('HKB:','').split('-')
+        v = map(lambda x : self.idHKB[int(x)],u)
+        return(v)
+
     def _load_offset_dict(self):
+        """ load offset_dictionnary.bin
+
+        Returns
+        -------
+
+        d : dict
+
+        {'Sc20_S5_R1_HKBS': {'hkb_index': -148, 'video_sec': 32.622087273809527},
+        'Sc20_S6_R2_HKBS': {'bs_index': -124, 'hkb_index': -157},
+        'Sc21a_S13_R1_HKBS': {'hkb_index': 537},
+        'Sc21a_S14_R2_HKBS': {'hkb_index': 752},
+        'Sc21a_S15_R3_HKBS': {'hkb_index': 438},
+        'Sc21a_S16_R4_HKBS': {'hkb_index': 224},
+        'Sc21b_S21_R1_HKBS': {'hkb_index': 368},
+        'Sc21b_S22_R2_HKBS': {'hkb_index': -333},
+        'Sc21b_S23_R3_HKBS': {'hkb_index': 136},
+        'Sc22a_S9_R1_Full': {'hkb_index': 678}}
+
+        Notes
+        -----
+
+        This is used for synchtronization purpose
+
+        """
 
         path = os.path.join(os.environ['CORMORAN'],'POST-TREATED')
         d = pickle.load( open( os.path.join(path,'offset_dictionnary.bin'), "rb" ) )
@@ -2916,7 +3018,7 @@ bernard
             return fig,ax,lines
 
 
-    def plthkb(self,a,b,techno='',**kwargs):
+    def plthkb(self,a,b,techno='HKB',**kwargs):
         """
         DEPRECATED
         Parameters
@@ -2976,7 +3078,7 @@ bernard
 
         a,ia,bia,subja,technoa=self.devmapper(a,techno)
         b,ib,bib,subjb,technob=self.devmapper(b,techno)
-        
+
         if kwargs['shortlabel']:
 
             #find uppercase position
@@ -3518,21 +3620,27 @@ bernard
         #
 
 
-    def showpattern(self,a,techno='',**kwargs):
+    def showpattern(self,a,techno='HKB',**kwargs):
         """ show pattern configuation for a given link and frame
 
         Parameters
         ----------
 
-        a : int 
-            link index 
-        technoa : string 
-            default 'HKB'|'TCR'|'BS'
+        a : int
+            link index
+        technoa : string
+            'HKB'|'TCR'|'BS'
         technob
             default 'HKB'|'TCR'|'BS'
         phi : float
             antenna elevation in rad
-
+        fig :
+        ax  :
+        t   : float
+        phi : float
+            pi/2
+        ap  : boolean
+            
         """
 
         defaults = { 'fig':[],
@@ -3557,7 +3665,9 @@ bernard
             ax = kwargs['ax']
 
         # display nodes
-
+        #
+        #
+        #
         a,ia,ba,subjecta,techno = self.devmapper(a,techno)
         pa = self.getdevp(a,techno=techno,t=kwargs['t']).values
 
@@ -3576,23 +3686,23 @@ bernard
             # ax.plot(xa[:,p2],ya[:,p2])
             ax.plot(xa[p2,:],ya[p2,:])
 
-        else: 
+        else:
             self.din[ba]['ant'].Fsynth()
             xa,ya,z,sa,v = self.din[ba]['ant']._computemesh(po=self.din[ba]['p'],T=self.din[ba]['T'],minr=0.01,maxr=0.1,ilog=False)
             p2 = np.where(self.din[ba]['ant'].phi<=kwargs['phi'])[0][-1]
             ax.plot(xa[:,p2],ya[:,p2])
-        
+
         return fig,ax
 
-    def showlink(self,a,b,technoa='',technob='',**kwargs):
+    def showlink(self,a='AP1',b='BackCenter',technoa='HKB',technob='HKB',**kwargs):
         """ show link configuation for a given frame
 
         Parameters
         ----------
 
-        a : int 
-            link index 
-        b : int 
+        a : int
+            link index
+        b : int
             link index
         technoa : string 
             default 'HKB'|'TCR'|'BS'
@@ -4298,8 +4408,8 @@ bernard
             radio techno
 
 
-        Return
-        ------
+        Returns
+        -------
 
         a : string
             dev name
