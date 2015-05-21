@@ -2354,13 +2354,15 @@ class Tchannel(bs.FUDAsignal):
 
         """
 
-        Ak   = np.abs(self.y[:, ufreq])
-        tauk = np.abs(self.x[:, ufreq])
-        rssiN   = np.sum(Ak**2)
-        rssiF   = np.sum(Aa,)
-        PrdB = 10*np.log10(Pr)
+        Ak   = self.y[:, ufreq]
+        #tauk = np.abs(self.x[:, ufreq])
+        Pr   = np.sum(Ak*np.conj(Ak))
+        Prp  = np.sum(Ak)*np.conj(np.sum(Ak))
+        #rssiF   = np.sum(Ak*exp(-2*1j*,)
+        PrdB  = 10*np.log10(Pr)
+        PrpdB = 10*np.log10(Prp)
 
-        return PrdB
+        return PrdB,PrpdB
 
 
 if __name__ == "__main__":
