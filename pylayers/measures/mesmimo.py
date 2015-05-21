@@ -151,6 +151,40 @@ class MIMO(object):
         self.normalize=True
 
 
+    def svd(self):
+        """ singular value decomposition of matrix H
+
+        Parameters
+        ----------
+
+        The native H matrix is currently (nr x nt x nf ). For applying a
+        broadcasted svd a reshaping in (nf x nr x nt ) is required.
+        In the future,  it would be a good thing to define the MIMO matrix as
+
+        nf x na x nb structure from the begining
+
+        or
+
+        ns x nf x na x nb
+
+        Returns
+        -------
+
+        U  : nf x nr x nr
+        D  : nf x min(nr,nt)
+        Vh : nf x nt x nt
+
+        """
+        # H  : nr x nt x nf
+        H  = self.Hcal.y
+        # H1  : nf x nt x nr
+        H1 = H.swapaxes(0,2)
+        # H2  : nf x nr x nt
+        H2 = H1.swapaxes(1,2)
+        U,D,Vh = la.svd(H2)
+        return(U,D,Vh)
+
+
 
     def transfer(self):
         """ calculate transfer matrix
@@ -158,10 +192,10 @@ class MIMO(object):
         Returns
         -------
 
-        HdH : Hermitian transfer matrix
-        U   : Unitary tensor
-        L   : Singular values
-        V   : = Ud (in that case because HdH Hermitian)
+        HdH : Hermitian transfer matrix  (nf x nt x nt )
+        U   : Unitary tensor  (nf x nt x nt )
+        S   : Singular values (nf x nt)
+        V   : = Ud (in that case because HdH Hermitian)  (nf x nt x nt)
 
         HdH = U L U^{\dagger}
 
@@ -169,15 +203,15 @@ class MIMO(object):
 
         # H  : nr x nt x nf
         H   = self.Hcal.y
-        # Hd : nt x nr x nf 
+        # Hd : nt x nr x nf
         Hd  = np.conj(self.Hcal.y.swapaxes(0,1))
         # HdH : nt x nt x nf
         HdH = np.einsum('ijk,jlk->ilk',Hd,H)
-        # HdH : nf x nt x nt 
+        # HdH : nf x nt x nt
         HdH  = HdH.swapaxes(0,2)
-        # U   : nf x nt x nt 
+        # U   : nf x nt x nt
         # S   : nf x nt
-        # V   : nf x nt x nt 
+        # V   : nf x nt x nt
         U,S,V  = la.svd(HdH)
 
         return (HdH,U,S,V)
@@ -222,21 +256,48 @@ class MIMO(object):
 
         HdH,U,S,V = self.transfer()
 
+        # singular value decomposition of channel tensor (broadcasted along frequency axis)
+
+        Us,D,Vsh = self.svd()
+
+        # Vsh : nf x nt x nt
+
         It  = np.eye(self.Nt)
         Ir  = np.eye(self.Nr)
 
         #Ps = (Pt/Nf)/(self.Nt)
-        Ps = Pt/(self.Nt)
-        Pb = N0*BGHz*1e9
-        rho = (Ps[None,None,:]/Pb)*S[:,:,None]
+        Ps  = Pt/(self.Nt)
+        Ps1 = Pt/(self.Nt*self.Nf)
+
+        # equi amplitude vector (nf,nt,1)
+        wu  = np.sqrt(Ps[None,None,None,:]*np.ones((self.Nf,self.Nt))[:,:,None,None]/self.Nf)
+        # spatial subchanel weights (nf,nt,1)
+        Vshwu = np.einsum('kijp,kjlp->kilp',Vsh[:,:,:,None],wu)
+        # nf x nt x 1 x power
+        Ps2   = Vshwu*np.conj(Vshwu)
+
+        Pb  = N0*BGHz*1e9
+
+        Pb2 = N0*dfGHz*1e9*np.ones((self.Nf,self.Nt))
+
+
+        # rho : nf x nt x power
+        S2 = np.real(D[:,:,None]*np.conj(D[:,:,None]))
+        #
+        rho  = (Ps[None,None,:]/Pb)*S[:,:,None]
+        rho1 = (Ps1[None,None,:]/Pb2[:,:,None])*S[:,:,None]
+        rho2 = (Ps2[:,:,0,:]/Pb2[:,:,None])*S2
+        #pdb.set_trace()
         #coeff = Ps/Pb
         #M     = It[None,...] + coeff*HdH
         #detM  = la.det(M)
         #logdetM = np.real(np.log(detM)/np.log(2))
         #C1  = dfGHz*logdetM
-        CB  = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=1)
+        CB   = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=1)
+        CB1  = dfGHz*np.sum(np.log(1+rho1)/np.log(2),axis=1)
+        CB2  = dfGHz*np.sum(np.log(1+rho2)/np.log(2),axis=1)
         #return(M,detM,logdetM,C1,C2,S)
-        return(rho,CB)
+        return(rho,CB,CB1,CB2)
 
     def Scapacity(self,Pt=1e-3,Tp=273):
         """ equivalent SISO capacity

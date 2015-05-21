@@ -815,10 +815,10 @@ class Simul(PyLayers):
         typ : list
                 list of parameters to be retrieved
                 (ak | tk | R | C)
-        link: list
+        links: list
             dictionnary of link to be evaluated (key is wtsd and value is a list of links)
             (if [], all link are considered)
-        t: np.array
+        t: int or np.array
             list of timestamp to be evaluated | singlr time instant
 
         Returns
