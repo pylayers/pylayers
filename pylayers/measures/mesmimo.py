@@ -151,7 +151,7 @@ class MIMO(object):
         self.normalize=True
 
 
-
+    
     def transfer(self):
         """ calculate transfer matrix
 
@@ -228,7 +228,6 @@ class MIMO(object):
         #Ps = (Pt/Nf)/(self.Nt)
         Ps = Pt/(self.Nt)
         Pb = N0*BGHz*1e9
-        #rho = (Ps[None,None,:]/Pb)*S[:,:,None]
         rho = (Ps[None,None,:]/Pb)*S[:,:,None]
         #coeff = Ps/Pb
         #M     = It[None,...] + coeff*HdH
