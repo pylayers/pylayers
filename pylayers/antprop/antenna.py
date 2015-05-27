@@ -1359,7 +1359,7 @@ class Antenna(PyLayers):
 
         dtr = np.pi/180.
 
-        defaults = {'fGHz' : np.array([4]),
+        defaults = {'fGHz' : [],
                     'dyn' : 8 ,
                     'phd' : 0,
                     'legend':True,
@@ -1411,7 +1411,11 @@ class Antenna(PyLayers):
         #dphi = self.phi[0,1]-self.phi[0,0]
         dtheta = self.theta[1]-self.theta[0]
         dphi = self.phi[1]-self.phi[0]
-        for f in kwargs['fGHz']:
+        if kwargs['fGHz']==[]:
+            lfreq = [self.fa[0]]
+        else:
+            lfreq = kwargs['fGHz']
+        for f in lfreq:
             ik = np.where(abs(self.fa-f)<fstep)[0][0]
             #ik=0
             chaine = 'f = %3.2f GHz' %(self.fa[ik])
