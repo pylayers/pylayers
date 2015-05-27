@@ -806,8 +806,9 @@ class Simul(PyLayers):
         self.N.update_dis()
 
 
+
     def get_value(self,**kwargs):
-        """ Retrieve any value at a specific time
+        """ Retrieve any value at a specific time from a simultraj
 
         Parameters
         ----------
@@ -960,6 +961,127 @@ class Simul(PyLayers):
 
         return(output)
 
+
+    def get_link(self,**kwargs):
+        """ Retrieve a Link specific time from a simultraj
+
+        Parameters
+        ----------
+
+        typ : list
+                list of parameters to be retrieved
+                (ak | tk | R | C)
+        links: list
+            dictionnary of link to be evaluated (key is wtsd and value is a list of links)
+            (if [], all link are considered)
+        t: int or np.array
+            list of timestamp to be evaluated | singlr time instant
+
+        Returns
+        -------
+
+        DL : DLink
+
+        Examples
+        --------
+
+        >>> from pylayers.simul.simultraj import *
+        >>> from pylayers.measures.cormoran import *
+        >>> C=CorSer(serie=6i,day=11)
+        >>> S = Simul(C,verb ose=False)
+        >>> S.get_link(typ=['R','C','H'])
+                ...
+        """
+
+
+
+        # get time
+        defaults = {'t': 0,
+                    'typ':['ak'],
+                    'links': {},
+                    'wstd':[],
+                    'angles':False
+                    }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        output={}
+
+        # manage time
+        t = kwargs['t']
+        t = self.get_sim_time(t)
+        dt = self.time[1]-self.time[0]
+
+        # manage links
+        plinks = kwargs['links']
+        links=[]
+        if isinstance(plinks,dict):
+            for l in plinks.keys():
+                links.extend(plinks[l])
+
+        if len(links) == 0:
+            raise AttributeError('Please give valid links to get values')
+        # output['t']=[]
+        # output['time_to_simul']=[]
+        # for each requested time step
+        for tt in t :
+            # for each requested links
+            for link in links:
+                linkname=link[0]+'-'+link[1]
+                if not output.has_key(linkname):
+                    output[linkname] = {}
+                if not output[linkname].has_key('t'):
+                    output[linkname]['t'] = []
+
+
+                # restrict global dataframe self.data to the specific link
+                df = self.get_df_from_link(link[0],link[1])
+                # restrict global dataframe self.data to the specific z
+                df = df[(df.index > tt-dt) & (df.index <= tt+dt)]
+
+                if len(df) != 0:
+                    output[linkname]['t'].append(tt)
+                    if len(df)>1:
+                        print 'Warning possible issue in self.get_link'
+                    line = df.iloc[-1]
+                    # # get info of the corresponding timestamp
+                    # line = df[(df['id_a'] == link[0]) & (df['id_b'] == link[1])].iloc[-1]
+                    # if len(line) == 0:
+                    #     line = df[(df['id_b'] == link[0]) & (df['id_a'] == link[1])]
+                    #     if len(line) == 0:
+                    #         raise AttributeError('invalid link')
+
+                    # retrieve correct position and orientation given the time
+                    self.update_pos(t=tt)
+                    self.DL.a = self.N.node[link[0]]['p']
+                    self.DL.b = self.N.node[link[1]]['p']
+                    self.DL.Ta = self.N.node[link[0]]['T']
+                    self.DL.Tb = self.N.node[link[1]]['T']
+                    # self.DL.Aa = self.N.node[link[0]]['ant']['antenna']
+                    # self.DL.Ab = self.N.node[link[1]]['ant']['antenna']
+
+                    #H_id = line['H_id'].decode('utf8')
+                    #self.DL.load(self.DL.H,H_id)
+
+                    if 'R' in kwargs['typ']:
+                        ray_id = line['ray_id']
+                        self.DL.load(self.DL.R,ray_id)
+
+                    if 'C' in kwargs['typ']:
+                        Ct_id = line['Ct_id']
+                        self.DL.load(self.DL.C,Ct_id)
+
+                        if kwargs['angles']:
+                            self.DL.C.islocal=False
+                            self.DL.C.locbas(Tt=self.DL.Ta, Tr=self.DL.Tb)
+
+                    if 'H' in kwargs['typ']:
+                        H_id = line['H_id']
+                        self.DL.load(self.DL.H,H_id)
+
+        return(self.DL)
 
 
 

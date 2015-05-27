@@ -425,7 +425,7 @@ class DLink(Link):
         else:
             if len(kwargs['a']) ==2:
                 a=np.r_[kwargs['a'],1.0]
-            else: 
+            else:
                 a=kwargs['a']
             self.a = a
             # self.ca = self.L.pt2cy(self.a)
@@ -644,6 +644,9 @@ class DLink(Link):
         s = s + 'fmax (fGHz) : ' + str(self.fGHz[-1]) +'\n'
         s = s + 'fstep (fGHz) : ' + str(self.fGHz[1]-self.fGHz[0]) +'\n'
         s = s + 'Nf : ' + str(len(self.fGHz)) +'\n '
+        d =  np.sqrt(np.sum((self.a-self.b)**2)) 
+        fc = (self.fGHz[-1]+self.fGHz[0])/2.
+        L  = 32.4+20*np.log(d)+20*np.log10(fcGHz)
         return s
 
 
@@ -879,6 +882,9 @@ class DLink(Link):
         grpname : string
             groupe name of the h5py file
 
+        Examples
+        --------
+
 
         """
 
@@ -897,7 +903,7 @@ class DLink(Link):
         where key  = 'sig'|'ray'|'Ct'|'H'
 
         """
-        
+
         ############
         # Signatures
         ############
@@ -1064,7 +1070,7 @@ class DLink(Link):
         ----
 
         Add a tolerance on the rotation angle (T_map)
-      
+
         """
 
         lfilename=pyu.getlong(self.filename,pstruc['DIRLNK'])
@@ -1139,7 +1145,7 @@ class DLink(Link):
         alg : 5 | 7
             version of run for signature
         si_mt: boolean
-            Multuithreat version of algo version 7
+            Multi thread version of algo version 7
         si_progress: bollean ( False)
             display progression bar for signatures
         diffraction : boolean (False)
@@ -1333,7 +1339,7 @@ class DLink(Link):
             # Ctilde antenna
             Cl=C.locbas(Tt=self.Ta, Tr=self.Tb)
             #T channel
-            H = C.prop2tran(a=self.Aa,b=self.Ab,Friis=True)
+            H = C.prop2tran(a=self.Aa,b=self.Ab,Friis=True,debug=True)
             self.save(H,'H',self.dexist['H']['grpname'],force = kwargs['force'])
         self.H = H
         if kwargs['applywav']:
