@@ -2,6 +2,7 @@
 #-*- coding:Utf-8 -*-
 from serial import Serial
 import pdb
+import binascii
 
 class StepMotor(object):
     svar = {'BU':'Buffer Usage',
@@ -28,11 +29,12 @@ class StepMotor(object):
             'SN':'Serial Number',
             'ST':'Status of indexing',
             'UF':'User Program Fault status',
-            
+
            }
-           
+
+
     def __init__(self,port):
-        self.ser = Serial(port = port, baudrate=9600, timeout = 0.5)
+        self.ser = Serial(port = port, baudrate=9600, timeout = 1)
 
 
     def com(self,axe,name,rg=''):
@@ -42,7 +44,8 @@ class StepMotor(object):
             cst = str(axe)+name+'\r\n'
 
         self.ser.write(cst)
-        st = self.ser.read(100).replace(cst,'')
+
+        st = self.ser.readlines()
         return(st)
 
     def close(self):
@@ -71,5 +74,5 @@ if __name__=="__main__":
     #sm.fromfile('AY')
     st = sm.com(1,'ON')
     st = sm.com(1,'LIMITS',(0,1,1))
-    st = sm.com(1,'1D-8000')
+    st = sm.com(1,'1D-4000')
     st = sm.com(1,'G')
