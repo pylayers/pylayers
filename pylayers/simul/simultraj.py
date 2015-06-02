@@ -33,6 +33,34 @@ Loading and Saving
 
     Simul._saveh5
     Simul._loadh5
+    Simul.savepd
+    Simul.loadpd
+
+Extraction 
+----------
+
+.. autosummary::
+    :toctree: generated/
+
+    Simul.get_link
+    Simul.get_value
+
+Miscellanous
+------------
+
+.. autosummary::
+    :toctree: generated/
+
+    Simul.setttime
+    Simul.replace_data
+    Simul.check_exist
+    Simul.get_df_from_link
+    Simul.update_pos
+
+See Also
+--------
+
+pylayers.simul.link
 
 
 """
@@ -576,10 +604,10 @@ class Simul(PyLayers):
             # update spatial configuration of the scene for time t
             self.update_pos(t)
             # print self.N.__repr__()
-            ## Start to loop over available Wireless standard 
+            ## Start to loop over available Wireless standard
             ##
             for w in wstd:
-                ## Start to loop over the chosen links stored in links  
+                ## Start to loop over the chosen links stored in links
                 ##
                 for na, nb, typ in links[w]:
                     # If type of link is valid (Body 2 Body,...) 
@@ -808,7 +836,7 @@ class Simul(PyLayers):
 
 
     def get_value(self,**kwargs):
-        """ Retrieve any value at a specific time from a simultraj
+        """ retrieve output parameter at a specific time 
 
         Parameters
         ----------
@@ -845,11 +873,12 @@ class Simul(PyLayers):
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
+        # allocate an empty dictionnary for wanted selected output
         output={}
 
-        # manage time
-        t =kwargs['t']
-        t =self.get_sim_time(t)
+        # manage time t can be a list or a float
+        t = kwargs['t']
+        t = self.get_sim_time(t)
         dt = self.time[1]-self.time[0]
 
         # manage links
@@ -872,7 +901,6 @@ class Simul(PyLayers):
                     output[linkname] = {}
                 if not output[linkname].has_key('t'):
                     output[linkname]['t'] = []
-
 
                 # restrict global dataframe self.data to the specific link
                 df = self.get_df_from_link(link[0],link[1])
@@ -897,25 +925,31 @@ class Simul(PyLayers):
                     self.DL.b = self.N.node[link[1]]['p']
                     self.DL.Ta = self.N.node[link[0]]['T']
                     self.DL.Tb = self.N.node[link[1]]['T']
-                    # self.DL.Aa = self.N.node[link[0]]['ant']['antenna']
-                    # self.DL.Ab = self.N.node[link[1]]['ant']['antenna']
+                    self.DL.Aa = self.N.node[link[0]]['ant']['antenna']
+                    self.DL.Ab = self.N.node[link[1]]['ant']['antenna']
+                    # get the antenna index
+                    uAa_opt, uAa = self.DL.get_idx('A_map',self.DL.Aa._filename)
+                    uAb_opt, uAb = self.DL.get_idx('A_map',self.DL.Ab._filename)
 
                     if 'ak' in kwargs['typ'] or 'tk' in kwargs['typ'] or 'rss' in kwargs['typ']:
                         H_id = line['H_id'].decode('utf8')
                         # load the proper link
-                        self.DL.load(self.DL.H,H_id)
-                        if 'ak' in kwargs['typ']:
-                            if not output[linkname].has_key('ak'):
-                                output[linkname]['ak']=[]
-                            output[linkname]['ak'].append(copy.deepcopy(self.DL.H.ak))
-                        if 'tk' in kwargs['typ']:
-                            if not output[linkname].has_key('tk'):
-                                output[linkname]['tk']=[]
-                            output[linkname]['tk'].append(copy.deepcopy(self.DL.H.tk))
-                        if 'rss' in kwargs['typ']:
-                            if not output[linkname].has_key('rss'):
-                                output[linkname]['rss']=[]
-                            output[linkname]['rss'].append(copy.deepcopy(self.DL.H.rssi()))
+                       
+                        lid = H_id.split('_')
+                        if (lid[5]==str(uAa))&(lid[6]==str(uAb)):
+                            self.DL.load(self.DL.H,H_id)
+                            if 'ak' in kwargs['typ']:
+                                if not output[linkname].has_key('ak'):
+                                    output[linkname]['ak']=[]
+                                output[linkname]['ak'].append(copy.deepcopy(self.DL.H.ak))
+                            if 'tk' in kwargs['typ']:
+                                if not output[linkname].has_key('tk'):
+                                    output[linkname]['tk']=[]
+                                output[linkname]['tk'].append(copy.deepcopy(self.DL.H.tk))
+                            if 'rss' in kwargs['typ']:
+                                if not output[linkname].has_key('rss'):
+                                    output[linkname]['rss']=[]
+                                output[linkname]['rss'].append(copy.deepcopy(self.DL.H.rssi()))
 
                     if 'R' in kwargs['typ']:
                         if not output[linkname].has_key('R'):
@@ -933,11 +967,7 @@ class Simul(PyLayers):
                         if kwargs['angles']:
                             self.DL.C.islocal=False
                             self.DL.C.locbas(Tt=self.DL.Ta, Tr=self.DL.Tb)
-
-
-
                         #T channel
-
                         output[linkname]['C'].append(copy.deepcopy(self.DL.C))
 
 
@@ -945,8 +975,10 @@ class Simul(PyLayers):
                         if not output[linkname].has_key('H'):
                             output[linkname]['H']=[]
                         H_id = line['H_id']
-                        self.DL.load(self.DL.H,H_id)
-                        output[linkname]['H'].append(copy.deepcopy(self.DL.H))
+                        lid = H_id.split('_')
+                        if (lid[5]==str(uAa))&(lid[6]==str(uAb)):
+                            self.DL.load(self.DL.H,H_id)
+                            output[linkname]['H'].append(copy.deepcopy(self.DL.H))
                 # if time valuie not found in dataframe
                 else:
                     if not output[linkname].has_key('time_to_simul'):
@@ -963,7 +995,7 @@ class Simul(PyLayers):
 
 
     def get_link(self,**kwargs):
-        """ Retrieve a Link specific time from a simultraj
+        """ retrieve a Link specific time from a simultraj
 
         Parameters
         ----------
@@ -989,7 +1021,7 @@ class Simul(PyLayers):
         >>> from pylayers.measures.cormoran import *
         >>> C=CorSer(serie=6i,day=11)
         >>> S = Simul(C,verb ose=False)
-        >>> S.get_link(typ=['R','C','H'])
+        >>> DL = S.get_link(typ=['R','C','H'])
                 ...
         """
 
@@ -1059,8 +1091,8 @@ class Simul(PyLayers):
                     self.DL.b = self.N.node[link[1]]['p']
                     self.DL.Ta = self.N.node[link[0]]['T']
                     self.DL.Tb = self.N.node[link[1]]['T']
-                    # self.DL.Aa = self.N.node[link[0]]['ant']['antenna']
-                    # self.DL.Ab = self.N.node[link[1]]['ant']['antenna']
+                    #self.DL.Aa = self.N.node[link[0]]['ant']['antenna']
+                    #self.DL.Ab = self.N.node[link[1]]['ant']['antenna']
 
                     #H_id = line['H_id'].decode('utf8')
                     #self.DL.load(self.DL.H,H_id)

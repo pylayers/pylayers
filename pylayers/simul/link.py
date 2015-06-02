@@ -910,6 +910,7 @@ class DLink(Link):
 
         array = np.array(([self.ca,self.cb,self.cutoff]))
         ua_opt, ua = self.get_idx('c_map',array)
+
         grpname = str(self.ca) + '_' +str(self.cb) + '_' + str(self.cutoff)
         self.dexist['sig']['grpname']=grpname
 
@@ -925,6 +926,7 @@ class DLink(Link):
         # check existence of self.b in h5py file
         ub_opt, ub = self.get_idx('p_map',self.b)
         # Write in h5py if no prior a-b link
+
         grpname = str(self.cutoff) + '_' + str(ua) + '_' +str(ub)
         self.dexist['ray']['grpname']=grpname
 
@@ -1376,11 +1378,11 @@ class DLink(Link):
         col : string
             'cmap'
         width : float
-        alpha : float 
-        dB    : boolean 
+        alpha : float
+        dB    : boolean
             default False
-        dyn : float 
-            dynamic in dB     
+        dyn : float
+            dynamic in dB
 
         Examples
         --------
