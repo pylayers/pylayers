@@ -151,9 +151,6 @@ class MIMO(object):
         self.normalize=True
 
 
-<<<<<<< HEAD
-    
-=======
     def svd(self):
         """ singular value decomposition of matrix H
 
@@ -188,8 +185,6 @@ class MIMO(object):
         return(U,D,Vh)
 
 
-
->>>>>>> bb7f0a6fd19f64a38aa7048334d1f06646f49470
     def transfer(self):
         """ calculate transfer matrix
 
@@ -297,14 +292,12 @@ class MIMO(object):
         #detM  = la.det(M)
         #logdetM = np.real(np.log(detM)/np.log(2))
         #C1  = dfGHz*logdetM
-<<<<<<< HEAD
+
         CB  = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=1)
         #CB  = dfGHz*np.sum(np.log(1+rho)/np.log(2))
-=======
         CB   = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=1)
         CB1  = dfGHz*np.sum(np.log(1+rho1)/np.log(2),axis=1)
         CB2  = dfGHz*np.sum(np.log(1+rho2)/np.log(2),axis=1)
->>>>>>> bb7f0a6fd19f64a38aa7048334d1f06646f49470
         #return(M,detM,logdetM,C1,C2,S)
         return(rho,CB,CB1,CB2)
 
