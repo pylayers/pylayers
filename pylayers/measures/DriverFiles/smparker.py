@@ -30,6 +30,7 @@ class StepMotor(object):
             'UF':'User Program Fault status',
             
            }
+           
     def __init__(self,port):
         self.ser = Serial(port = port, baudrate=9600, timeout = 0.5)
 
