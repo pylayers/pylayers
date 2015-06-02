@@ -5,29 +5,29 @@ import pdb
 
 class StepMotor(object):
     svar = {'BU':'Buffer Usage',
-            'CQ':'Command queuing'
-            'DF':'Drive Fault status'
-            'EI':'Encoder Input'
-            'EO':'Encoder signal output'
-            'EP':'Encoder Position'
-            'ER':'Feedback encoder resolution'
-            'EX':'Coms response Style & echo control'
-            'IN':'IN'
-            'IP':'In position flag'
-            'IT':'IN position Time'
-            'MC':'Motor current'
-            'MR':'Motor resolution'
-            'MS':'Motor Standby current'
-            'MV':'Moving'
-            'PA':'Position Absolute'
-            'PE':'Position Error'
-            'PI':'Position Incremental'
-            'RB':'Ready/Busy flag'
-            'RM':'Registration Move'
-            'RV':'Revision software'
-            'SN':'Serial Number'
-            'ST':'Status of indexing'
-            'UF':'User Program Fault status'
+            'CQ':'Command queuing',
+            'DF':'Drive Fault status',
+            'EI':'Encoder Input',
+            'EO':'Encoder signal output',
+            'EP':'Encoder Position',
+            'ER':'Feedback encoder resolution',
+            'EX':'Coms response Style & echo control',
+            'IN':'Inputs',
+            'IP':'In position flag',
+            'IT':'IN position Time',
+            'MC':'Motor current',
+            'MR':'Motor resolution',
+            'MS':'Motor Standby current',
+            'MV':'Moving',
+            'PA':'Position Absolute',
+            'PE':'Position Error',
+            'PI':'Position Incremental',
+            'RB':'Ready/Busy flag',
+            'RM':'Registration Move',
+            'RV':'Revision software',
+            'SN':'Serial Number',
+            'ST':'Status of indexing',
+            'UF':'User Program Fault status',
             
            }
     def __init__(self,port):
