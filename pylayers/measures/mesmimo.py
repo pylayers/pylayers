@@ -185,7 +185,6 @@ class MIMO(object):
         return(U,D,Vh)
 
 
-
     def transfer(self):
         """ calculate transfer matrix
 
@@ -293,6 +292,9 @@ class MIMO(object):
         #detM  = la.det(M)
         #logdetM = np.real(np.log(detM)/np.log(2))
         #C1  = dfGHz*logdetM
+
+        CB  = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=1)
+        #CB  = dfGHz*np.sum(np.log(1+rho)/np.log(2))
         CB   = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=1)
         CB1  = dfGHz*np.sum(np.log(1+rho1)/np.log(2),axis=1)
         CB2  = dfGHz*np.sum(np.log(1+rho2)/np.log(2),axis=1)
@@ -336,7 +338,6 @@ class MIMO(object):
         HdH,U,ld,V = self.transfer()
 
         It  = np.eye(self.Nt)
-
         Ir  = np.eye(self.Nr)
 
         pb = N0*dfGHz*1e9*np.ones((self.Nf,self.Nt))
@@ -349,8 +350,8 @@ class MIMO(object):
 
         Cbf  = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=1)
         #C   = dfGHz*np.log(la.det(IR[None,...]+(Pt/self.Nt)*HH/(N0*dfGHz)))/np.log(2)
-
         return(Cbf,Qn)
+        
 
 
     def WFcapacity(self,Pt=np.array([1e-3]),Tp=273):
@@ -396,10 +397,9 @@ class MIMO(object):
         # Evaluation of the transfer tensor
 
         HdH,U,ld,V = self.transfer()
-
         It = np.eye(self.Nt)
-
         Ir = np.eye(self.Nr)
+
 
         #
         # Iterative implementation of Water Filling algorithm 
@@ -446,7 +446,10 @@ class MIMO(object):
         Cwf  = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=1)
         #C   = dfGHz*np.log(la.det(IR[None,...]+(Pt/self.Nt)*HH/(N0*dfGHz)))/np.log(2)
 
+
+        #return(Cwf,Q,Qn)
         return(rho,Cwf)
+
 
     def mulcplot(self,mode,**kwargs):
         """
