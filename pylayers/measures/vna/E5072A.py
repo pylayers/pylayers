@@ -9,6 +9,7 @@ from numpy import array
 import pdb
 import select
 import pylayers.signal.bsignal as bs
+from pylayers.signal.channel import *
 from time import sleep
 """
 
@@ -59,7 +60,9 @@ class SCPI:
             else:
                 raise e
 
-
+    def close(self):
+        self.s.close()
+        
     def _read(self):
         if self.s is None: raise IOError('disconnected')
         buf = bytearray()
@@ -289,3 +292,49 @@ class SCPI:
         S21 = bs.FUsignal(x=fGHz,y=Y)
         return S21
 
+if __name__=='__main__':
+    vna = SCPI("129.20.33.201",verbose=False)
+    ident = vna.getIdent()
+    print "Talking to : ",ident
+    vna.write("FORM:DATA REAL")
+    vna.select(param='S21',chan=1)
+    vna.write(":SENS1:SWE:POIN 1201")
+    vna.write("DISP:WIND1:TRAC1:Y:SCAL:AUTO")
+    vna.s.send(":SENS1:SWE:POIN?\n")
+    Npoints = eval(vna.s.recv(56).replace('\n',''))
+    print "Npoints : ",Npoints
+    # set fmin fmax
+    vna.write(":SENS1:FREQ:STAR 1.8e9")
+    vna.write(":SENS1:FREQ:STOP 2.2e9")
+
+    #get frequency range
+    com = ":SENS1:FREQ:DATA?\n"
+
+    vna.write("TRIG:SING")
+
+    time.sleep(1)
+    com1 = ":CALC1:DATA:SDAT?\n"
+    #u = np.arange(0,Npoints)*2
+    #v = np.arange(0,Npoints)*2+1
+    N = 1
+    fGHz = np.linspace(1.8,2.2,1201)
+    H = FUchannel(fGHz)
+    for k in range(N):
+        B = vna.read(com1)
+        S = np.frombuffer(B[0:Npoints*16],dtype='>f8')
+        H.load(S)
+        #S21 = S[u]+1j*S[v]
+        #try:
+        #    res=np.vstack((res,S21.T))
+        #except:
+        #    res=S21.T
+#
+#
+#    tab = vna.read(com)
+#    f = np.frombuffer(tab,'>f8')
+#    freq = f[1:]
+#    plt.plot(freq)
+    vna.close()
+    #plt.imshow(abs(res))
+    #plt.axis('tight')
+    #plt.show()
