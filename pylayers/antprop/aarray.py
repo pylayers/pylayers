@@ -9,8 +9,8 @@ r"""
 This module handles antenna arrays
 
 """
-class AntSet(object):
-    """ Antenna Set
+class Array(object):
+    """ Array class
     """
 
     def __init__(self):
@@ -18,8 +18,13 @@ class AntSet(object):
                     'A'    : []
                    }
 
-class AntArray(AntSet,Antenna):
+class ULArray(Array):
+    """ Uniform Linear Array
     """
+    pass
+
+class AntArray(Array,Antenna):
+    """ Anenna Array
     """
 
     def __init__(self,**kwargs):
