@@ -1,4 +1,4 @@
-    #!/usr/bin/python
+#!/usr/bin/python
 #-*- coding:Utf-8 -*-
 from serial import Serial
 import pdb
