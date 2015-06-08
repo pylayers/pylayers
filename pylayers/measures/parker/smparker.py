@@ -2,7 +2,6 @@
 #-*- coding:Utf-8 -*-
 from serial import Serial
 import pdb
-import binascii
 import matplotlib as plt
 
 
@@ -97,14 +96,14 @@ class Axes(object):
     ddrvflt={}
     ddrvflt[1]='Composite Fault'
     ddrvflt[2]='Output stage over curent'
-    ddrvflt[3]='Output stage over curent'
-    ddrvflt[4]='Output stage over curent'
-    ddrvflt[5]='Output stage over curent'
-    ddrvflt[6]='Output stage over curent'
-    ddrvflt[7]='Output stage over curent'
-    ddrvflt[8]='Output stage over curent'
+    ddrvflt[3]='Supply rail failure'
+    ddrvflt[4]='Ambient over temperature'
+    ddrvflt[5]='Drive over temperature'
+    ddrvflt[6]='Configuration error'
+    ddrvflt[7]='Motor high voltage rail failure'
+    ddrvflt[8]='Output fault'
 
-    def __init__(self,_id,name,ser,scale=12820,typ='t'):
+    def __init__(self,_id,name,ser,scale=12800,typ='t'):
         """
         _id  : axes id
         name : axes name
@@ -121,7 +120,7 @@ class Axes(object):
                        0,0,0,0,
                        0,0,0,0,
                        0,0,0,0]
-        self.usrdflt = [0,0,0,0,
+        self.usrflt = [0,0,0,0,
                        0,0,0,0,
                        0,0,0,0,
                        0,0,0,0,
@@ -161,22 +160,37 @@ class Axes(object):
         return(st)
 
     def com(self,name,rg=''):
+        """enables send command to driver
+        """
+        #if rg!='':
         if rg!='':
+            #cst = str(self._id)+name+str(rg)+'\r\n'
             cst = str(self._id)+name+str(rg)+'\r\n'
+        #else:
         else:
+            #cst = str(self._id)+name+'\r\n'
             cst = str(self._id)+name+'\r\n'
 
+        #self.ser.write(cst)
         self.ser.write(cst)
         st = self.ser.readlines()
+        #st = self.ser.readlines()
+        #errUF = self.reg('UF')
+        #errST = self.reg('ST')
         return(st)
 
     def home(self):
-        if axis!=[]:
+        """ enables back home 
+        """
+        #if axis!=[]:
+        if str(self._id)!=[]:
             cstr = 'HOME1(-,1,-15,100,2)'
         else:
             cstr = 'HOME1(-,1,-15,100,2)'
-        self.com2(cstr)
-        self.com2('GH')
+        self.com(cstr)
+        self.com('GH')
+        #self.com2(cstr)
+        #self.com2('GH')
         err = self.reg('UF')
         return(err)
 
@@ -238,11 +252,11 @@ class Axes(object):
                 if typ=='UF':
                     self.usrflt[k*4+l] = val
                     if val:
-                        print Axes.dusrdflt[k*4+l+1]
+                        print Axes.dusrflt[k*4+l+1]
                 if typ=='DF':
                     self.drvflt[k*4+l] = val
                     if val:
-                        print Axes.drvflt[k*4+l+1]
+                        print Axes.ddrvflt[k*4+l+1]
 
 
     def close(self):
@@ -268,7 +282,7 @@ class Scanner(Axes):
         self.ser = Serial(port = port, baudrate=9600, timeout = 1)
         self.a  = ['',Axes(1,'x',self.ser),
                        Axes(2,'y',self.ser),
-                       Axes(3,'rot',self.ser) ] #self.a4  = Axes(4,'z')
+                       Axes(3,'rot',self.ser)] #self.a4  = Axes(4,'z',self.ser)
 
 
 
