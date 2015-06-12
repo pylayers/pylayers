@@ -231,7 +231,10 @@ class Axes(object):
         self.lprofile=[]
 
 
-
+    def __repr__(self):
+        st = 'st'
+        st = st+str(self._id)
+        return(st)
     def show(self):
         """
         """
@@ -241,6 +244,20 @@ class Axes(object):
         #self.ser.write(str(self._id)+com+'\r\n')
         #st = self.ser.readlines()
         #return(st)
+
+    def getvar(self,lvar=[]):
+        """
+        Parameters
+        ----------
+        lvar : list of variables 
+
+        """
+        if lvar == []:
+            lvar = Axes.svar.keys()
+        for var in lvar:
+            st = self.com('R('+var+')')
+            print Axes.svar[var],st[1]
+
 
     def com(self,name,rg='',verbose=False):
         if rg!='':
@@ -255,18 +272,83 @@ class Axes(object):
 
 
    
-    def home(self):
+    def home(self,cmd='get',**kwargs):
         """ enables back home
+
+        Parameters
+        ----------
+
+        cmd  : 'get','set','go'
+
         """
-        #if axis!=[]:
-        if str(self._id)!=[]:
-            cstr = 'HOME1(-,1,-15,100,2)'
-        else:
-            cstr = 'HOME1(-,1,-15,100,2)'
-        self.com(cstr)
-        self.com('GH')
-        err = self.reg('UF')
-        return(err)
+        defaults = {'mode':0,
+                    'vel':10,
+                    'acc':10,
+                    'edg':'+',
+                    'typ':0,
+                    'armed':1
+        }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+        if cmd=='get':
+            st = self.com('HOME')
+            ans = st[1].split(' ')
+            
+            if '1' in ans[0]:
+                print "armed, "
+            else:
+                print "not armed, "
+            if '-' in ans[1]:
+                print "reference edge is negative, "
+            else:
+                print "reference edge is positive, "
+            if '1' in ans[2]:
+                print "home switch normally closed 1, "
+            else:
+                print "home switch normally open 0 (default),  "
+
+            if '+' in ans[3]:
+                print 'velocity : +',eval(ans[3].split('V+')[1]), "rps"
+                #print ", "
+            else:
+                print 'velocity : -',eval(ans[3].split('V-')[1]), "rps"
+
+            print 'acceleraton : ',eval(ans[4].split('A')[1]), "rps²"
+            
+            if '0' in ans[5]:
+                print 'Mode 0: Motor in the active window of the switch(default)'
+            if '1' in ans[5]:
+                print 'Mode 1: Motor in the position to the edge + or -'
+            if '2' in ans[5]:
+                print 'Mode 2: Improve homing repeatability'
+            
+        if cmd=='set':
+
+            if kwargs['vel']>0:
+                vel = '+'+str(kwargs['vel'])
+            else:
+                vel = '-'+str(kwargs['vel'])
+
+
+            cstr = 'HOME'+str(kwargs['armed'])+\
+                          '('+kwargs['edg']+','+\
+                          str(kwargs['typ'])+','+\
+                          vel+','+\
+                          str(kwargs['acc'])+','+\
+                          str(kwargs['mode'])+')'
+
+            self.com(cstr)
+
+        if cmd=='go':
+            cstr = 'HOME1'
+            self.com(cstr)
+            cstr = 'ARM1'
+            self.com(cstr)
+            cstr = 'GH'
+            self.com(cstr)
 
     def add_profile(self,aa,ad,d,v,vs):
         """  Add new profile to list
@@ -464,7 +546,7 @@ class Scanner(Axes):
 
 
 if __name__=="__main__":
-    s = Scanner('/dev/ttyUSB0')
+    s = Scanner('/dev/ttyUSB2')
     #s = Scanner('/dev/ttyUSB1')
     #sm.fromfile('prog1')
     #sm.fromfile('AY')
