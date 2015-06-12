@@ -9,6 +9,7 @@ from numpy import array
 import pdb
 import select
 import pylayers.signal.bsignal as bs
+import pylayers.signal.channel as ch 
 from time import sleep
 """
 
@@ -25,6 +26,16 @@ class SCPI:
     _timeout = 0.150
 
     def __init__(self,host,port=PORT,timeout=None,verbose=True):
+        """
+        Parameters
+        ----------
+
+        host : ip address
+        port : port
+        timeout: float
+        verbose : boolean
+
+        """
         try:
             self.host = host
             self._verbose = verbose
@@ -59,6 +70,10 @@ class SCPI:
             else:
                 raise e
 
+    def close(self):
+        """ close socket
+        """
+        self.s.close()
 
     def _read(self):
         if self.s is None: raise IOError('disconnected')
@@ -128,6 +143,7 @@ class SCPI:
 
     def setntrace(self,chan=1,ntrace=2):
         """ set number of traces
+
         Parameters
         ----------
 
@@ -158,41 +174,26 @@ class SCPI:
         com ="DISP:WIND"+str(win)+":TRAC"+str(tr)+":Y:SCAL:AUTO"
         self.write(com)
 
-    def setfstar(self,fstartGHz=1.8,sens=1):
+    def setf(self,startGHz=1.8,stopGHz=2.2,sens=1):
         """ frequency start
 
         Parameters
         ----------
 
-        fstartGHz : float
-        fstop : float
+        startGHz : float
+        stopGHz : float
 
         """
         com1 = ":SENS"+str(sens)+":FREQ:START "
-
-        f1 = str(fstartGHz)+"e9\n"
-
-        self.s.send(com1+f1)
-
-        return(fstartGHz)
-
-    def setfstop(self,fstopGHz=2.2,sens=1):
-        """ frequency stop
-
-        Parameters
-        ----------
-
-        fstartGHz : float
-        fstop : float
-
-        """
         com2 = ":SENS"+str(sens)+":FREQ:STOP "
 
-        f2 = str(fstopGHz)+"e9\n"
+        f1 = str(startGHz)+"e9\n"
+        f2 = str(stopGHz)+"e9\n"
 
+        self.s.send(com1+f1)
+        time.sleep(1)
         self.s.send(com2+f2)
 
-        return(fstopGHz)
 
 
     def getnpoints(self,sens=1):
@@ -213,7 +214,7 @@ class SCPI:
             print "problem for getteing number of points"
 
     def setnpoint(self,Npoints=201,sens=1,echo=False):
-        """Change the numbers of points
+        """Change the number of points
 
         Parameters
         --------------
@@ -227,11 +228,18 @@ class SCPI:
 
 
     def getfreq(self,sens=1):
+        """
+        Returns
+        -------
+
+        fGHz : np.array
+        """
         com = ":SENS"+str(sens)+":FREQ:DATA?\n"
         buf = self.read(com)
         f = np.frombuffer(buf,'>f8')
         freq = f[1:]
-        return(freq)
+        fGHz = freq/1e9
+        return(fGHz)
 
         #tab = []
         #while len(tab)<> Npoints:
@@ -285,7 +293,58 @@ class SCPI:
         S = np.frombuffer(buff[8:Npoints*16+8],dtype='>f8')
         Y = S.reshape(Npoints,2)
         Y = Y[:,0]+1j*Y[:,1]
-        fGHz = self.getfreq()*1e-9
-        S21 = bs.FUsignal(x=fGHz,y=Y)
+        fGHz = self.getfreq()
+        S21 = ch.FUchannel(x=fGHz,y=Y)
         return S21
 
+if __name__=='__main__':
+    vna = SCPI("129.20.33.201",verbose=False)
+    ident = vna.getIdent()
+    Npoints = 1201
+    print "Talking to : ",ident
+    vna.write("FORM:DATA REAL")
+    vna.select(param='S21',chan=1)
+    vna.setnpoint(Npoints=Npoints)
+
+    #vna.write(":SENS1:SWE:POIN 1201")
+    #vna.write("DISP:WIND1:TRAC1:Y:SCAL:AUTO")
+    #vna.s.send(":SENS1:SWE:POIN?\n")
+    #Npoints = eval(vna.s.recv(56).replace('\n',''))
+    print "Npoints : ",Npoints
+    # set fmin fmax
+    vna.setf(startGHz=1.8,stopGHz=2.2)
+    #vna.write(":SENS1:FREQ:STAR 1.8e9")
+    #vna.write(":SENS1:FREQ:STOP 2.2e9")
+
+    #get frequency range
+    com = ":SENS1:FREQ:DATA?\n"
+
+    #vna.write("TRIG:SING")
+
+    time.sleep(1)
+    com1 = ":CALC1:DATA:SDAT?\n"
+    #u = np.arange(0,Npoints)*2
+    #v = np.arange(0,Npoints)*2+1
+    N = 1
+    fGHz = np.linspace(1.8,2.2,Npoints)
+    S21 = vna.getdata(Npoints=Npoints)
+    #H = FUchannel(fGHz)
+    #for k in range(N):
+    #    B = vna.read(com1)
+    #    S = np.frombuffer(B[0:Npoints*16],dtype='>f8')
+    #    H.load(S)
+        #S21 = S[u]+1j*S[v]
+        #try:
+        #    res=np.vstack((res,S21.T))
+        #except:
+        #    res=S21.T
+#
+#
+    tab = vna.read(com)
+    f = np.frombuffer(tab,'>f8')
+    freq = f[1:]
+#    plt.plot(freq)
+    vna.close()
+    #plt.imshow(abs(res))
+    #plt.axis('tight')
+    #plt.show()

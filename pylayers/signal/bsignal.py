@@ -343,7 +343,7 @@ class Bsignal(PyLayers):
             values  (...,Nx)
             the number of dimensions of y is arbitrary.
             the last dimension of y must be the primary axis
-
+        label : list of labels
 
         """
         self.x = x
@@ -376,8 +376,8 @@ class Bsignal(PyLayers):
                             str(np.shape(self.x)),
                             str(np.shape(self.y)))
 
-        for k in range(self.y.ndim):
-            st = st + '\n' +self.label[k]+ ' : ' + str(self.y.shape[k])
+        #for k in range(self.y.ndim):
+        #    st = st + '\n' +self.label[k]+ ' : ' + str(self.y.shape[k])
 
         return(st)
 
@@ -3818,7 +3818,7 @@ class FUsignal(FBsignal, Usignal):
         return(U)
 
     def dftresamp(self, df_new):
-        """ non finished 
+        """ non finished
 
         Parameters
         ----------
