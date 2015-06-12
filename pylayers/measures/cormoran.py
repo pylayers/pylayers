@@ -698,7 +698,7 @@ bernard
 
 
     def _loadbody(self,day=11,serie=''):
-        """ load log file
+        """ load mocap file
 
         Parameters
         ----------
@@ -717,10 +717,17 @@ bernard
                 self.filemocap = os.path.join(self.rootdir,'RAW',str(self.day)+'-06-2014','MOCAP','serie_'+seriestr+'.c3d')
             elif day == 12:
                 self.filemocap = os.path.join(self.rootdir,'RAW',str(self.day)+'-06-2014','MOCAP','Nav_serie_'+seriestr+'.c3d')
+
+            # body and wear directory
             baw = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','BodyandWear')
             if subject =='Jihad':
                 subject ='Jihan'
 
+
+            #
+            # Load body cylinder description : "Subject.ini"
+            # Load wearable deviace description (contains antenna filename) :
+            #
             self.filebody = os.path.join(baw, subject + '.ini')
             self.filewear = os.path.join(baw,subject + '_'  +str(self.day)+'-06-2014_' + self.typ + '.ini')
 
@@ -763,7 +770,7 @@ bernard
     def _loadTCR(self,day=11,serie='',scenario='20',run=1):
         """ load TCR data
 
-        """  
+        """
 
         #
         # TNET : (NodeId,MAC)
@@ -2137,7 +2144,7 @@ bernard
         Notes
         -----
 
-        This is used for synchtronization purpose
+        This is used for synchronization purpose
 
         """
 

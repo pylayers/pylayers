@@ -1,4 +1,4 @@
-# -*- coding:Utf-8 -*-
+# -*t coding:Utf-8 -*-
 """
 .. currentmodule:: pylayers.antprop.channel
 
@@ -1282,11 +1282,11 @@ maicher
         H = Tchannel(alpha.x, alpha.y, self.tauk, self.tang, self.rang)
 
         if debug :
-            H.alpha=alpha
-            H.Fat=Fat
-            H.Fap=Fap
-            H.Fbt=Fbt
-            H.Fbp=Fbp
+            H.alpha=alpha.y
+            H.Fat=Fat.y
+            H.Fap=Fap.y
+            H.Fbt=Fbt.y
+            H.Fbp=Fbp.y
             H.Gat=10*np.log10(np.sum(Fat.y*np.conj(Fat.y),axis=1)/len(Fat.x))
             H.Gap=10*np.log10(np.sum(Fap.y*np.conj(Fap.y),axis=1)/len(Fap.x))
             H.Gbt=10*np.log10(np.sum(Fbt.y*np.conj(Fbt.y),axis=1)/len(Fbt.x))
@@ -1579,6 +1579,7 @@ class Tchannel(bs.FUDAsignal):
             f=fh5['H/'+grpname]
 
             for k,va in self.__dict__.items():
+                #print k,va
                 f.create_dataset(k,shape = np.shape(va),data=va)
             fh5.close()
         except:
@@ -2393,10 +2394,9 @@ class Tchannel(bs.FUDAsignal):
         """
 
         Ak   = self.y[:, ufreq]
-        #tauk = np.abs(self.x[:, ufreq])
         Pr   = np.sum(Ak*np.conj(Ak))
-        Prp  = np.sum(Ak)*np.conj(np.sum(Ak))
-        #rssiF   = np.sum(Ak*exp(-2*1j*,)
+        akp   = Ak*np.exp(-2*1j*np.pi*self.x[ufreq]*self.tk)
+        Prp   = np.abs(np.sum(akp))**2
         PrdB  = 10*np.log10(Pr)
         PrpdB = 10*np.log10(Prp)
 

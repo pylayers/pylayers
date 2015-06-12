@@ -326,7 +326,7 @@ class Body(PyLayers):
             if not os.path.exists(devfilename):
                 raise AttributeError('the wareable file '+di['wearable']['file']+
                                  ' cannot be found in $BASENAME/'+pstruc['DIRWEAR'])
-        else : 
+        else :
             # check if local or global path
             if ('/' or '\\') in _filewear:
                 devfilename = _filewear

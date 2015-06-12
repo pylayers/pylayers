@@ -23,6 +23,11 @@ class ULArray(Array):
     """
     pass
 
+class ULArray(Array):
+    """ Uniform Linear Array
+    """
+    pass
+
 class AntArray(Array,Antenna):
     """ Anenna Array
     """

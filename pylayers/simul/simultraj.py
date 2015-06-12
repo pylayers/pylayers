@@ -36,7 +36,7 @@ Loading and Saving
     Simul.savepd
     Simul.loadpd
 
-Extraction 
+Extraction
 ----------
 
 .. autosummary::
@@ -475,9 +475,11 @@ class Simul(PyLayers):
         t: np.array
             list of timestamp to be evaluated
             (if [], all timestamps are considered)
+        tbr : boolean
+            time in bit reverse order (tmin,tmax,N) Npoints=2**N
         replace_data: boolean (True)
             if True , reference id of all already simulated link will be erased
-                and replace by new simulation id 
+                and replace by new simulation id
 
 
         Examples
@@ -501,6 +503,7 @@ class Simul(PyLayers):
                     'links': {},
                     'wstd': [],
                     't': np.array([]),
+                    'btr':True,
                     'DLkwargs':{},
                     'replace_data':True,
                     }
@@ -561,9 +564,10 @@ class Simul(PyLayers):
         #if len(lt) == 0:
         #    lt = self.time
         # check time attribute
-        if (lt[0] < self._tmin) or\
-           (lt[1] > self._tmax) :
-               raise AttributeError('Requested time range not available')
+        if kwargs['btr']:
+            if (lt[0] < self._tmin) or\
+               (lt[1] > self._tmax) :
+                raise AttributeError('Requested time range not available')
 
         # self._traj is a copy of self.traj, which is affected by resampling.
         # it is only a temporary attribute for a given run
@@ -588,18 +592,23 @@ class Simul(PyLayers):
         #self._time=self.get_sim_time(lt)
 
         init = True
-        tmin = lt[0]
-        tmax = lt[1]
-        Nt   = int(2**lt[2])
-        torder = np.linspace(tmin,tmax,Nt)
-        itrev  = np.hstack((np.r_[0],np.r_[pyu.bitreverse(Nt,int(lt[2]))]))
-        trev   = torder[itrev]
+        if kwargs['btr']:
+            tmin = lt[0]
+            tmax = lt[1]
+            Nt   = int(2**lt[2])
+            ta   = np.linspace(tmin,tmax,Nt)
+            it   = np.hstack((np.r_[0],np.r_[pyu.bitreverse(Nt,int(lt[2]))]))
+            #trev = t[it]
+        else:
+            ta = kwargs['t']
+            it = range(len(ta))
+
         ## Start to loop over time
         ##   ut : counter
         ##   t  : time value (s)
         #for ut, t in enumerate(lt):
-        for ut  in itrev:
-            t  = torder[ut]
+        for ks,ut in enumerate(it):
+            t  = ta[ut]
             self.ctime = t
             # update spatial configuration of the scene for time t
             self.update_pos(t)
@@ -610,17 +619,18 @@ class Simul(PyLayers):
                 ## Start to loop over the chosen links stored in links
                 ##
                 for na, nb, typ in links[w]:
-                    # If type of link is valid (Body 2 Body,...) 
+                    # If type of link is valid (Body 2 Body,...)
                     #
                     if self.todo[typ]:
                         if self.verbose:
                             print '-'*30
-                            print 'time:', t, '/',  lt[-1] ,' time idx:', ut, '/',len(lt)
+                            print 'time:', t, '/',  lt[-1] ,' time idx:', ut,
+                            '/',len(ta),'/',ks
                             print 'processing: ',na, ' <-> ', nb, 'wstd: ', w
                             print '-'*30
                         eng = 0
                         #
-                        # Invoque deterministic simulation of the link 
+                        # Invoque deterministic simulation of the link
                         #
                         self.evaldeter(na, nb, w,applywav=False,**DLkwargs)
                         # if typ == 'OB':
@@ -635,10 +645,11 @@ class Simul(PyLayers):
                         self._ak = self.DL.H.ak
                         self._tk = self.DL.H.tk
                         aktk_id = str(ut) + '_' + na + '_' + nb + '_' + w
-                        while len(aktk_id)<30:
+                        # this is a dangerous way to proceed ! 
+                        # the id as a finite number of characters
+                        while len(aktk_id)<40:
                             aktk_id = aktk_id + ' '
-                        df = pd.DataFrame({\
-                                    'id_a': na,
+                        df = pd.DataFrame({ 'id_a': na,
                                     'id_b': nb,
                                     'x_a': self.N.node[na]['p'][0],
                                     'y_a': self.N.node[na]['p'][1],
@@ -668,25 +679,7 @@ class Simul(PyLayers):
                                               'sig_id', 'ray_id', 'Ct_id', 'H_id'
                                               ],index= [t])  #self._time[ut]])
 
-                        #if not self.check_exist(df) :
-                        #    self.data = self.data.append(df)
-                        #    # self._index = self._index + 1
-                        #    # save csv
-                        #    # self.tocsv(ut, na, nb, w,init=init)
-                        #    init=False
-
-                            # save pandas self.data
                         self.savepd(df)
-                            # save ak tauk
-                            # alphak tauk are already stored in H
-                            #self._saveh5(ut, na, nb, w)
-
-                        #elif self.check_exist(df) and kwargs['replace_data']:
-                        #    self.replace_data(df)
-                        #    self.savepd()
-                            # save ak tauk
-                            # alphak tauk are already stored in H
-                            #self._saveh5(ut, na, nb, w)
 
     def replace_data(self, df):
         """check if a dataframe df already exists in self.data
@@ -703,9 +696,8 @@ class Simul(PyLayers):
             False otherwise
 
         """
-        
-        self.data[(self.data.index == df.index) & 
-                  (self.data['id_a'] == df['id_a'].values[0]) & 
+        self.data[(self.data.index == df.index) &
+                  (self.data['id_a'] == df['id_a'].values[0]) &
                   (self.data['id_b'] == df['id_b'].values[0]) &
                   (self.data['wstd'] == df['wstd'].values[0])]=df.values
 
@@ -836,14 +828,14 @@ class Simul(PyLayers):
 
 
     def get_value(self,**kwargs):
-        """ retrieve output parameter at a specific time 
+        """ retrieve output parameter at a specific time
 
         Parameters
         ----------
 
         typ : list
                 list of parameters to be retrieved
-                (ak | tk | R | C)
+                (R | C | H | ak | tk | rss )
         links: list
             dictionnary of link to be evaluated (key is wtsd and value is a list of links)
             (if [], all link are considered)
@@ -920,36 +912,39 @@ class Simul(PyLayers):
                     #         raise AttributeError('invalid link')
 
                     # retrieve correct position and orientation given the time
-                    self.update_pos(t=tt)
-                    self.DL.a = self.N.node[link[0]]['p']
-                    self.DL.b = self.N.node[link[1]]['p']
-                    self.DL.Ta = self.N.node[link[0]]['T']
-                    self.DL.Tb = self.N.node[link[1]]['T']
-                    self.DL.Aa = self.N.node[link[0]]['ant']['antenna']
-                    self.DL.Ab = self.N.node[link[1]]['ant']['antenna']
+                    #self.update_pos(t=tt)
+                    # antennas positions
+                    #self.DL.a = self.N.node[link[0]]['p']
+                    #self.DL.b = self.N.node[link[1]]['p']
+                    # antennas orientation
+                    #self.DL.Ta = self.N.node[link[0]]['T']
+                    #self.DL.Tb = self.N.node[link[1]]['T']
+                    # antennas object
+                    #self.DL.Aa = self.N.node[link[0]]['ant']['antenna']
+                    #self.DL.Ab = self.N.node[link[1]]['ant']['antenna']
                     # get the antenna index
-                    uAa_opt, uAa = self.DL.get_idx('A_map',self.DL.Aa._filename)
-                    uAb_opt, uAb = self.DL.get_idx('A_map',self.DL.Ab._filename)
+                    #uAa_opt, uAa = self.DL.get_idx('A_map',self.DL.Aa._filename)
+                    #uAb_opt, uAb = self.DL.get_idx('A_map',self.DL.Ab._filename)
 
                     if 'ak' in kwargs['typ'] or 'tk' in kwargs['typ'] or 'rss' in kwargs['typ']:
                         H_id = line['H_id'].decode('utf8')
                         # load the proper link
-                       
+                        # parse index
                         lid = H_id.split('_')
-                        if (lid[5]==str(uAa))&(lid[6]==str(uAb)):
-                            self.DL.load(self.DL.H,H_id)
-                            if 'ak' in kwargs['typ']:
-                                if not output[linkname].has_key('ak'):
-                                    output[linkname]['ak']=[]
-                                output[linkname]['ak'].append(copy.deepcopy(self.DL.H.ak))
-                            if 'tk' in kwargs['typ']:
-                                if not output[linkname].has_key('tk'):
-                                    output[linkname]['tk']=[]
-                                output[linkname]['tk'].append(copy.deepcopy(self.DL.H.tk))
-                            if 'rss' in kwargs['typ']:
-                                if not output[linkname].has_key('rss'):
-                                    output[linkname]['rss']=[]
-                                output[linkname]['rss'].append(copy.deepcopy(self.DL.H.rssi()))
+                        #if (lid[5]==str(uAa))&(lid[6]==str(uAb)):
+                        self.DL.load(self.DL.H,H_id)
+                        if 'ak' in kwargs['typ']:
+                            if not output[linkname].has_key('ak'):
+                                output[linkname]['ak']=[]
+                            output[linkname]['ak'].append(copy.deepcopy(self.DL.H.ak))
+                        if 'tk' in kwargs['typ']:
+                            if not output[linkname].has_key('tk'):
+                                output[linkname]['tk']=[]
+                            output[linkname]['tk'].append(copy.deepcopy(self.DL.H.tk))
+                        if 'rss' in kwargs['typ']:
+                            if not output[linkname].has_key('rss'):
+                                output[linkname]['rss']=[]
+                            output[linkname]['rss'].append(copy.deepcopy(self.DL.H.rssi()))
 
                     if 'R' in kwargs['typ']:
                         if not output[linkname].has_key('R'):
@@ -976,10 +971,11 @@ class Simul(PyLayers):
                             output[linkname]['H']=[]
                         H_id = line['H_id']
                         lid = H_id.split('_')
-                        if (lid[5]==str(uAa))&(lid[6]==str(uAb)):
-                            self.DL.load(self.DL.H,H_id)
-                            output[linkname]['H'].append(copy.deepcopy(self.DL.H))
-                # if time valuie not found in dataframe
+                        #if (lid[5]==str(uAa))&(lid[6]==str(uAb)):
+                        self.DL.load(self.DL.H,H_id)
+                        output[linkname]['H'].append(copy.deepcopy(self.DL.H))
+
+                # if time value not found in dataframe
                 else:
                     if not output[linkname].has_key('time_to_simul'):
                         output[linkname]['time_to_simul'] = []
