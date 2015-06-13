@@ -2483,42 +2483,42 @@ class FUsignal(FBsignal, Usignal):
         s = FBsignal.__repr__(self)
         return(s)
 
-    def __add__(self, u):
-        L = self.align(u)
-        u1 = L[0]
-        u2 = L[1]
-        U = FUsignal(u1.x, u1.y + u2.y)
-        #U =FUsignal(self.x,self.y+u.y)
-        return(U)
+    # def __add__(self, u):
+    #     L = self.align(u)
+    #     u1 = L[0]
+    #     u2 = L[1]
+    #     U = FUsignal(u1.x, u1.y + u2.y)
+    #     #U =FUsignal(self.x,self.y+u.y)
+    #     return(U)
 
-    def __sub__(self, u):
-        L = self.align(u)
-        u1 = L[0]
-        u2 = L[1]
-        U = FUsignal(u1.x, u1.y - u2.y)
-        #U =FUsignal(self.x,self.y-u.y)
-        return(U)
+    # def __sub__(self, u):
+    #     L = self.align(u)
+    #     u1 = L[0]
+    #     u2 = L[1]
+    #     U = FUsignal(u1.x, u1.y - u2.y)
+    #     #U =FUsignal(self.x,self.y-u.y)
+    #     return(U)
 
-    def __mul__(self, u):
-        L = self.align(u)
-        u1 = L[0]
-        u2 = L[1]
-        #
-        # Normalisation 19/05/2009
-        Df = u1.x[1] - u1.x[0]
-        U = FUsignal(u1.x, u1.y * u2.y)
-        #rint shape(self.x)
-        #rint shape(self.y)
-        #rint shape(u.y)
-        # =FUsignal(self.x,self.y*u.y)
-        return(U)
+    # def __mul__(self, u):
+    #     L = self.align(u)
+    #     u1 = L[0]
+    #     u2 = L[1]
+    #     #
+    #     # Normalisation 19/05/2009
+    #     Df = u1.x[1] - u1.x[0]
+    #     U = FUsignal(u1.x, u1.y * u2.y)
+    #     #rint shape(self.x)
+    #     #rint shape(self.y)
+    #     #rint shape(u.y)
+    #     # =FUsignal(self.x,self.y*u.y)
+    #     return(U)
 
-    def __div__(self, u):
-        L = self.align(u)
-        u1 = L[0]
-        u2 = L[1]
-        U = FUsignal(u1.x, u1.y / u2.y)
-        return(U)
+    # def __div__(self, u):
+    #     L = self.align(u)
+    #     u1 = L[0]
+    #     u2 = L[1]
+    #     U = FUsignal(u1.x, u1.y / u2.y)
+    #     return(U)
 
 
 
