@@ -326,7 +326,7 @@ class Body(PyLayers):
             if not os.path.exists(devfilename):
                 raise AttributeError('the wareable file '+di['wearable']['file']+
                                  ' cannot be found in $BASENAME/'+pstruc['DIRWEAR'])
-        else : 
+        else :
             # check if local or global path
             if ('/' or '\\') in _filewear:
                 devfilename = _filewear
@@ -1752,14 +1752,13 @@ class Body(PyLayers):
         Parameters
         ----------
 
-
-
         name : boolean (False)
             display body name
 
 
-        Cylinders 
+        Cylinders
         ---------
+
         cylinder : boolean (True)
             dispaly body cylinder
         widthfactor : float
@@ -1886,7 +1885,7 @@ class Body(PyLayers):
             tube.filter.vary_radius = 'vary_radius_by_absolute_scalar'
             mlab.pipeline.surface(tube, color=body_color,opacity=kwargs['opacity'])
             f.children[-1].__setattr__('name',self.name )
-                
+
         # ax = phe-pta
         # l = np.sqrt(np.sum((ax**2), axis=0))
         # cyl = [visual.Cylinder(pos=(pta[0, i],pta[1, i],pta[2, i]),
@@ -1921,15 +1920,15 @@ class Body(PyLayers):
             dev_color = tuple(pyu.rgb(colhex)/255.)
 
             if kwargs['devlist'] == []:
-                dev = self.dev.keys()
+                devlist = self.dev.keys()
             else :
-                dev = [d  for d in self.dev if d in kwargs['devlist']]
+                devlist = [d  for d in self.dev if d in kwargs['devlist']]
 
 
             if 'dcs' in dir(self):
-                X=np.array(self.getdevp(dev)).T
+                X=np.array(self.getdevp(devlist)).T
             else:
-                udev = [self.dev[i]['uc3d'][0] for i in dev]
+                udev = [self.dev[i]['uc3d'][0] for i in devlist]
 
                 center = self.pg[:,fId]
                 X=self._f[fId,udev,:].T-center[:,np.newaxis]
@@ -1940,13 +1939,13 @@ class Body(PyLayers):
                           color = dev_color,
                           opacity=kwargs['devopacity'])
             nodename = self.dev.keys()
-            
+
             if kwargs['devid']:
 
                 if kwargs['devtyp']== []:
                     udt = np.arange(len(nodename))
                 else:
-                    devtyp = np.unique([self.dev[x]['name'] for x in dev])
+                    devtyp = np.unique([self.dev[x]['name'] for x in devlist])
                     ln =[filter(lambda x: d in x,nodename) for d in devtyp]
                     udev = [[nodename.index(n) for n in ln[i]] for i in range(len(ln))]
 
@@ -1962,7 +1961,7 @@ class Body(PyLayers):
 
         if kwargs['ccs']:
             # to be improved
-            
+
             col=np.linspace(0,1,11)[:,np.newaxis]*np.ones((11,3))
             col[:,0]=0
 
@@ -2007,8 +2006,8 @@ class Body(PyLayers):
 
         if kwargs['pattern']:
             self.setacs()
-            
-            for key in self.dcs.keys():
+
+            for key in devlist:
                 if not hasattr(self.dev[key]['ant'],'SqG'):
                     self.dev[key]['ant'].Fsynth()
                 U = self.dcs[key]

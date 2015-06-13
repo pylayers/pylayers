@@ -386,16 +386,13 @@ class DLink(Link):
                             )
 
 
-        ##############
-        #### init save
-        ###############
 
         self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5'
         filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
         # check if save file alreasdy exists
         if not os.path.exists(filenameh5) or force:
             print 'Links save file for ' + self.L.filename + ' does not exist.'
-            print 'It is beeing created. You\'ll see that message only once per Layout'
+            print 'Creating file. You\'ll see this message only once per Layout'
             self.save_init(filenameh5)
 
         # dictionnary data exists
@@ -434,7 +431,10 @@ class DLink(Link):
             # self.ca = self.L.pt2cy(self.a)
 
         if len(self.b)==0:
-            self.cb = 1
+            if len(self.L.Gt.node)>2:
+                self.cb = 2
+            else:
+                self.cb = 1
             # self.b = self.L.cy2pt(self.cb)
         else:
             if len(kwargs['b']) ==2:
@@ -642,8 +642,11 @@ class DLink(Link):
         #s = s + 'Frequency range :  \n'
         s = s + 'fmin (fGHz) : ' + str(self.fGHz[0]) +'\n'
         s = s + 'fmax (fGHz) : ' + str(self.fGHz[-1]) +'\n'
-        s = s + 'fstep (fGHz) : ' + str(self.fGHz[1]-self.fGHz[0]) +'\n '
-
+        s = s + 'fstep (fGHz) : ' + str(self.fGHz[1]-self.fGHz[0]) +'\n'
+        s = s + 'Nf : ' + str(len(self.fGHz)) +'\n '
+        d =  np.sqrt(np.sum((self.a-self.b)**2)) 
+        fc = (self.fGHz[-1]+self.fGHz[0])/2.
+        L  = 32.4+20*np.log(d)+20*np.log10(fcGHz)
         return s
 
 
@@ -879,6 +882,9 @@ class DLink(Link):
         grpname : string
             groupe name of the h5py file
 
+        Examples
+        --------
+
 
         """
 
@@ -897,13 +903,14 @@ class DLink(Link):
         where key  = 'sig'|'ray'|'Ct'|'H'
 
         """
-        
+
         ############
         # Signatures
         ############
 
         array = np.array(([self.ca,self.cb,self.cutoff]))
         ua_opt, ua = self.get_idx('c_map',array)
+
         grpname = str(self.ca) + '_' +str(self.cb) + '_' + str(self.cutoff)
         self.dexist['sig']['grpname']=grpname
 
@@ -919,6 +926,7 @@ class DLink(Link):
         # check existence of self.b in h5py file
         ub_opt, ub = self.get_idx('p_map',self.b)
         # Write in h5py if no prior a-b link
+
         grpname = str(self.cutoff) + '_' + str(ua) + '_' +str(ub)
         self.dexist['ray']['grpname']=grpname
 
@@ -1064,7 +1072,7 @@ class DLink(Link):
         ----
 
         Add a tolerance on the rotation angle (T_map)
-      
+
         """
 
         lfilename=pyu.getlong(self.filename,pstruc['DIRLNK'])
@@ -1124,78 +1132,78 @@ class DLink(Link):
     def eval(self,**kwargs):
         """ Evaluate the link
 
-        """
-#        Parameters
-#        ----------
-#        applywav :boolean
-#           Apply waveform to H
-#        force : list
-#            Force the computation (['sig','ray','Ct','H']) AND save (replace previous computations)
-#        si_algo : str ('old'|'new')
-#            signature.run algo type
-#            'old' : call propaths2
-#            'new' : call procone2
-#        alg : 5 | 7
-#            version of run for signature
-#        si_mt: boolean
-#            Multuithreat version of algo version 7
-#        si_progress: bollean ( False)
-#            display progression bar for signatures
-#        diffraction : boolean (False)
-#            takes into consideration diffraction points
-#        ra_number_mirror_cf : int
-#            rays.to3D number of ceil/floor reflexions
-#        ra_ceil_height_meter: float,
-#            ceil height
-#        ra_vectorized: boolean (True)
-#            if True used the (2015 new) vectorized approach to determine 2drays
-#
-#        """
 
-#        Returns
-#        -------
-#
-#        ak : ndarray
-#            alpha_k
-#        tk : ndarray
-#            tau_k
-#
-#        Notes
-#        -----
-#
-#        update self.ak and self.tk
-#
-#        self.ak : ndarray
-#            alpha_k
-#        self.tk : ndarray
-#            tau_k
-#
-#
-#        Examples
-#        --------
-#
-#        .. plot::
-#            :include-source:
-#
-#            >>> from pylayers.simul.link import *
-#            >>> L=DLink(verbose=False)
-#            >>> aktk = L.eval()
-#
-#
-#        See Also
-#        --------
-#
-#        pylayers.antprop.signature
-#        pylayers.antprop.rays
-#
-#        Experimental
-#        ------------
-#
-#        alg = 2015 | 20152 (best)
-#            vectorized signature research
-#        si_reverb : number of reverb in source/target cycle if alg=2015
-#
-#        """
+        Parameters
+        ----------
+
+        applywav :boolean
+         Apply waveform to H
+        force : list
+            Force the computation (['sig','ray','Ct','H']) AND save (replace previous computations)
+        si_algo : str ('old'|'new')
+            signature.run algo type
+            'old' : call propaths2
+            'new' : call procone2
+        alg : 5 | 7
+            version of run for signature
+        si_mt: boolean
+            Multi thread version of algo version 7
+        si_progress: bollean ( False)
+            display progression bar for signatures
+        diffraction : boolean (False)
+            takes into consideration diffraction points
+        ra_number_mirror_cf : int
+            rays.to3D number of ceil/floor reflexions
+        ra_ceil_height_meter: float,
+            ceil height
+        ra_vectorized: boolean (True)
+            if True used the (2015 new) vectorized approach to determine 2drays
+
+
+        Returns
+        -------
+
+        ak : ndarray
+            alpha_k
+        tk : ndarray
+            tau_k
+
+        Notes
+        -----
+
+        update self.ak and self.tk
+
+        self.ak : ndarray
+            alpha_k
+        self.tk : ndarray
+            tau_k
+
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.simul.link import *
+            >>> L=DLink(verbose=False)
+            >>> aktk = L.eval()
+
+
+        See Also
+        --------
+
+        pylayers.antprop.signature
+        pylayers.antprop.rays
+
+        Experimental
+        ------------
+
+        alg = 2015 | 20152 (best)
+            vectorized signature research
+        si_reverb : number of reverb in source/target cycle if alg=2015
+
+        """
 
         defaults={ 'applywav':True,
                    'si_algo':'old',
@@ -1210,6 +1218,7 @@ class DLink(Link):
                    'si_reverb':4,
                    'threshold':0.1,
                    }
+
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key]=value
@@ -1234,6 +1243,7 @@ class DLink(Link):
         ############
         # Signatures
         ############
+
         Si = Signatures(self.L,self.ca,self.cb,cutoff=kwargs['cutoff'])
 
         if (self.dexist['sig']['exist'] and not ('sig' in kwargs['force'])):
@@ -1277,6 +1287,7 @@ class DLink(Link):
         ############
         # Rays
         ############
+
         R = Rays(self.a,self.b)
 
         if self.dexist['ray']['exist'] and not ('ray' in kwargs['force']):
@@ -1300,11 +1311,10 @@ class DLink(Link):
         if self.R.nray == 0:
             raise NameError('No rays have been found. Try to re-run the simulation with a higher S.cutoff ')
 
-
-
         ############
         # Ctilde
         ############
+
         C=Ctilde()
 
         if self.dexist['Ct']['exist'] and not ('Ct' in kwargs['force']):
@@ -1322,17 +1332,16 @@ class DLink(Link):
         ############
         # H
         ############
+
         H = Tchannel()
 
         if self.dexist['H']['exist'] and not ('H' in kwargs['force']):
             self.load(H,self.dexist['H']['grpname'])
-
-
         else :
             # Ctilde antenna
             Cl=C.locbas(Tt=self.Ta, Tr=self.Tb)
             #T channel
-            H = C.prop2tran(a=self.Aa,b=self.Ab,Friis=True)
+            H = C.prop2tran(a=self.Aa,b=self.Ab,Friis=True,debug=True)
             self.save(H,'H',self.dexist['H']['grpname'],force = kwargs['force'])
         self.H = H
         if kwargs['applywav']:
@@ -1366,12 +1375,21 @@ class DLink(Link):
             enabling edge label (useful for signature identification)
         pol : string
             'tt','pp','tp','pt','co','cross',tot'
+        col : string
+            'cmap'
+        width : float
+        alpha : float
+        dB    : boolean
+            default False
+        dyn : float
+            dynamic in dB
 
         Examples
         --------
 
         >>> from pylayers.simul.link import *
         >>> L=Link()
+        >>> L.show(ray=True,dB=True)
 
         """
 
@@ -1383,7 +1401,7 @@ class DLink(Link):
                    'figsize':(20,10),
                    'fontsize':20,
                    'rays':False,
-                   'cmap':plt.cm.jet,
+                   'cmap':plt.cm.hot,
                    'pol':'tot',
                    'col':'k',
                    'width':1,
@@ -1456,9 +1474,11 @@ class DLink(Link):
                     if kwargs['col']=='cmap':
                         col = clm(RayEnergy)
                         width = RayEnergy
-                        alpha = RayEnergy
+                        alpha = 1
+                        #alpha = RayEnergy
                     else:
                         col = kwargs['col']
+                    
                         width = kwargs['width']
                         alpha = kwargs['alpha']
 

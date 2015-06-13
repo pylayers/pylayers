@@ -33,6 +33,34 @@ Loading and Saving
 
     Simul._saveh5
     Simul._loadh5
+    Simul.savepd
+    Simul.loadpd
+
+Extraction
+----------
+
+.. autosummary::
+    :toctree: generated/
+
+    Simul.get_link
+    Simul.get_value
+
+Miscellanous
+------------
+
+.. autosummary::
+    :toctree: generated/
+
+    Simul.setttime
+    Simul.replace_data
+    Simul.check_exist
+    Simul.get_df_from_link
+    Simul.update_pos
+
+See Also
+--------
+
+pylayers.simul.link
 
 
 """
@@ -447,9 +475,11 @@ class Simul(PyLayers):
         t: np.array
             list of timestamp to be evaluated
             (if [], all timestamps are considered)
+        tbr : boolean
+            time in bit reverse order (tmin,tmax,N) Npoints=2**N
         replace_data: boolean (True)
             if True , reference id of all already simulated link will be erased
-                and replace by new simulation id 
+                and replace by new simulation id
 
 
         Examples
@@ -473,6 +503,7 @@ class Simul(PyLayers):
                     'links': {},
                     'wstd': [],
                     't': np.array([]),
+                    'btr':True,
                     'DLkwargs':{},
                     'replace_data':True,
                     }
@@ -533,9 +564,10 @@ class Simul(PyLayers):
         #if len(lt) == 0:
         #    lt = self.time
         # check time attribute
-        if (lt[0] < self._tmin) or\
-           (lt[1] > self._tmax) :
-               raise AttributeError('Requested time range not available')
+        if kwargs['btr']:
+            if (lt[0] < self._tmin) or\
+               (lt[1] > self._tmax) :
+                raise AttributeError('Requested time range not available')
 
         # self._traj is a copy of self.traj, which is affected by resampling.
         # it is only a temporary attribute for a given run
@@ -560,39 +592,45 @@ class Simul(PyLayers):
         #self._time=self.get_sim_time(lt)
 
         init = True
-        tmin = lt[0]
-        tmax = lt[1]
-        Nt   = int(2**lt[2])
-        torder = np.linspace(tmin,tmax,Nt)
-        itrev  = np.hstack((np.r_[0],np.r_[pyu.bitreverse(Nt,int(lt[2]))]))
-        trev   = torder[itrev]
+        if kwargs['btr']:
+            tmin = lt[0]
+            tmax = lt[1]
+            Nt   = int(2**lt[2])
+            ta   = np.linspace(tmin,tmax,Nt)
+            it   = np.hstack((np.r_[0],np.r_[pyu.bitreverse(Nt,int(lt[2]))]))
+            #trev = t[it]
+        else:
+            ta = kwargs['t']
+            it = range(len(ta))
+
         ## Start to loop over time
         ##   ut : counter
         ##   t  : time value (s)
         #for ut, t in enumerate(lt):
-        for ut  in itrev:
-            t  = torder[ut]
+        for ks,ut in enumerate(it):
+            t  = ta[ut]
             self.ctime = t
             # update spatial configuration of the scene for time t
             self.update_pos(t)
             # print self.N.__repr__()
-            ## Start to loop over available Wireless standard 
+            ## Start to loop over available Wireless standard
             ##
             for w in wstd:
-                ## Start to loop over the chosen links stored in links  
+                ## Start to loop over the chosen links stored in links
                 ##
                 for na, nb, typ in links[w]:
-                    # If type of link is valid (Body 2 Body,...) 
+                    # If type of link is valid (Body 2 Body,...)
                     #
                     if self.todo[typ]:
                         if self.verbose:
                             print '-'*30
-                            print 'time:', t, '/',  lt[-1] ,' time idx:', ut, '/',len(lt)
+                            print 'time:', t, '/',  lt[-1] ,' time idx:', ut,
+                            '/',len(ta),'/',ks
                             print 'processing: ',na, ' <-> ', nb, 'wstd: ', w
                             print '-'*30
                         eng = 0
                         #
-                        # Invoque deterministic simulation of the link 
+                        # Invoque deterministic simulation of the link
                         #
                         self.evaldeter(na, nb, w,applywav=False,**DLkwargs)
                         # if typ == 'OB':
@@ -607,10 +645,11 @@ class Simul(PyLayers):
                         self._ak = self.DL.H.ak
                         self._tk = self.DL.H.tk
                         aktk_id = str(ut) + '_' + na + '_' + nb + '_' + w
-                        while len(aktk_id)<30:
+                        # this is a dangerous way to proceed ! 
+                        # the id as a finite number of characters
+                        while len(aktk_id)<40:
                             aktk_id = aktk_id + ' '
-                        df = pd.DataFrame({\
-                                    'id_a': na,
+                        df = pd.DataFrame({ 'id_a': na,
                                     'id_b': nb,
                                     'x_a': self.N.node[na]['p'][0],
                                     'y_a': self.N.node[na]['p'][1],
@@ -640,25 +679,7 @@ class Simul(PyLayers):
                                               'sig_id', 'ray_id', 'Ct_id', 'H_id'
                                               ],index= [t])  #self._time[ut]])
 
-                        #if not self.check_exist(df) :
-                        #    self.data = self.data.append(df)
-                        #    # self._index = self._index + 1
-                        #    # save csv
-                        #    # self.tocsv(ut, na, nb, w,init=init)
-                        #    init=False
-
-                            # save pandas self.data
                         self.savepd(df)
-                            # save ak tauk
-                            # alphak tauk are already stored in H
-                            #self._saveh5(ut, na, nb, w)
-
-                        #elif self.check_exist(df) and kwargs['replace_data']:
-                        #    self.replace_data(df)
-                        #    self.savepd()
-                            # save ak tauk
-                            # alphak tauk are already stored in H
-                            #self._saveh5(ut, na, nb, w)
 
     def replace_data(self, df):
         """check if a dataframe df already exists in self.data
@@ -675,9 +696,8 @@ class Simul(PyLayers):
             False otherwise
 
         """
-        
-        self.data[(self.data.index == df.index) & 
-                  (self.data['id_a'] == df['id_a'].values[0]) & 
+        self.data[(self.data.index == df.index) &
+                  (self.data['id_a'] == df['id_a'].values[0]) &
                   (self.data['id_b'] == df['id_b'].values[0]) &
                   (self.data['wstd'] == df['wstd'].values[0])]=df.values
 
@@ -806,19 +826,20 @@ class Simul(PyLayers):
         self.N.update_dis()
 
 
+
     def get_value(self,**kwargs):
-        """ Retrieve any value at a specific time
+        """ retrieve output parameter at a specific time
 
         Parameters
         ----------
 
         typ : list
                 list of parameters to be retrieved
-                (ak | tk | R | C)
-        link: list
+                (R | C | H | ak | tk | rss )
+        links: list
             dictionnary of link to be evaluated (key is wtsd and value is a list of links)
             (if [], all link are considered)
-        t: np.array
+        t: int or np.array
             list of timestamp to be evaluated | singlr time instant
 
         Returns
@@ -844,11 +865,181 @@ class Simul(PyLayers):
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
+        # allocate an empty dictionnary for wanted selected output
+        output={}
+
+        # manage time t can be a list or a float
+        t = kwargs['t']
+        t = self.get_sim_time(t)
+        dt = self.time[1]-self.time[0]
+
+        # manage links
+        plinks = kwargs['links']
+        links=[]
+        if isinstance(plinks,dict):
+            for l in plinks.keys():
+                links.extend(plinks[l])
+
+        if len(links) == 0:
+            raise AttributeError('Please give valid links to get values')
+        # output['t']=[]
+        # output['time_to_simul']=[]
+        # for each requested time step
+        for tt in t :
+            # for each requested links
+            for link in links:
+                linkname=link[0]+'-'+link[1]
+                if not output.has_key(linkname):
+                    output[linkname] = {}
+                if not output[linkname].has_key('t'):
+                    output[linkname]['t'] = []
+
+                # restrict global dataframe self.data to the specific link
+                df = self.get_df_from_link(link[0],link[1])
+                # restrict global dataframe self.data to the specific z
+                df = df[(df.index > tt-dt) & (df.index <= tt+dt)]
+
+                if len(df) != 0:
+                    output[linkname]['t'].append(tt)
+                    if len(df)>1:
+                        print 'Warning possible issue in self.get_value'
+                    line = df.iloc[-1]
+                    # # get info of the corresponding timestamp
+                    # line = df[(df['id_a'] == link[0]) & (df['id_b'] == link[1])].iloc[-1]
+                    # if len(line) == 0:
+                    #     line = df[(df['id_b'] == link[0]) & (df['id_a'] == link[1])]
+                    #     if len(line) == 0:
+                    #         raise AttributeError('invalid link')
+
+                    # retrieve correct position and orientation given the time
+                    #self.update_pos(t=tt)
+                    # antennas positions
+                    #self.DL.a = self.N.node[link[0]]['p']
+                    #self.DL.b = self.N.node[link[1]]['p']
+                    # antennas orientation
+                    #self.DL.Ta = self.N.node[link[0]]['T']
+                    #self.DL.Tb = self.N.node[link[1]]['T']
+                    # antennas object
+                    #self.DL.Aa = self.N.node[link[0]]['ant']['antenna']
+                    #self.DL.Ab = self.N.node[link[1]]['ant']['antenna']
+                    # get the antenna index
+                    #uAa_opt, uAa = self.DL.get_idx('A_map',self.DL.Aa._filename)
+                    #uAb_opt, uAb = self.DL.get_idx('A_map',self.DL.Ab._filename)
+
+                    if 'ak' in kwargs['typ'] or 'tk' in kwargs['typ'] or 'rss' in kwargs['typ']:
+                        H_id = line['H_id'].decode('utf8')
+                        # load the proper link
+                        # parse index
+                        lid = H_id.split('_')
+                        #if (lid[5]==str(uAa))&(lid[6]==str(uAb)):
+                        self.DL.load(self.DL.H,H_id)
+                        if 'ak' in kwargs['typ']:
+                            if not output[linkname].has_key('ak'):
+                                output[linkname]['ak']=[]
+                            output[linkname]['ak'].append(copy.deepcopy(self.DL.H.ak))
+                        if 'tk' in kwargs['typ']:
+                            if not output[linkname].has_key('tk'):
+                                output[linkname]['tk']=[]
+                            output[linkname]['tk'].append(copy.deepcopy(self.DL.H.tk))
+                        if 'rss' in kwargs['typ']:
+                            if not output[linkname].has_key('rss'):
+                                output[linkname]['rss']=[]
+                            output[linkname]['rss'].append(copy.deepcopy(self.DL.H.rssi()))
+
+                    if 'R' in kwargs['typ']:
+                        if not output[linkname].has_key('R'):
+                            output[linkname]['R']=[]
+                        ray_id = line['ray_id']
+                        self.DL.load(self.DL.R,ray_id)
+                        output[linkname]['R'].append(copy.deepcopy(self.DL.R))
+
+                    if 'C' in kwargs['typ']:
+                        if not output[linkname].has_key('C'):
+                            output[linkname]['C']=[]
+                        Ct_id = line['Ct_id']
+                        self.DL.load(self.DL.C,Ct_id)
+
+                        if kwargs['angles']:
+                            self.DL.C.islocal=False
+                            self.DL.C.locbas(Tt=self.DL.Ta, Tr=self.DL.Tb)
+                        #T channel
+                        output[linkname]['C'].append(copy.deepcopy(self.DL.C))
+
+
+                    if 'H' in kwargs['typ']:
+                        if not output[linkname].has_key('H'):
+                            output[linkname]['H']=[]
+                        H_id = line['H_id']
+                        lid = H_id.split('_')
+                        #if (lid[5]==str(uAa))&(lid[6]==str(uAb)):
+                        self.DL.load(self.DL.H,H_id)
+                        output[linkname]['H'].append(copy.deepcopy(self.DL.H))
+
+                # if time value not found in dataframe
+                else:
+                    if not output[linkname].has_key('time_to_simul'):
+                        output[linkname]['time_to_simul'] = []
+                    output[linkname]['time_to_simul'].append(tt)
+
+
+        for l in output.keys():
+            if output[l].has_key('time_to_simul'):
+                print 'link', l , 'require simulation for timestamps', output[l]['time_to_simul']
+
+
+        return(output)
+
+
+    def get_link(self,**kwargs):
+        """ retrieve a Link specific time from a simultraj
+
+        Parameters
+        ----------
+
+        typ : list
+                list of parameters to be retrieved
+                (ak | tk | R | C)
+        links: list
+            dictionnary of link to be evaluated (key is wtsd and value is a list of links)
+            (if [], all link are considered)
+        t: int or np.array
+            list of timestamp to be evaluated | singlr time instant
+
+        Returns
+        -------
+
+        DL : DLink
+
+        Examples
+        --------
+
+        >>> from pylayers.simul.simultraj import *
+        >>> from pylayers.measures.cormoran import *
+        >>> C=CorSer(serie=6i,day=11)
+        >>> S = Simul(C,verb ose=False)
+        >>> DL = S.get_link(typ=['R','C','H'])
+                ...
+        """
+
+
+
+        # get time
+        defaults = {'t': 0,
+                    'typ':['ak'],
+                    'links': {},
+                    'wstd':[],
+                    'angles':False
+                    }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
         output={}
 
         # manage time
-        t =kwargs['t']
-        t =self.get_sim_time(t)
+        t = kwargs['t']
+        t = self.get_sim_time(t)
         dt = self.time[1]-self.time[0]
 
         # manage links
@@ -881,7 +1072,7 @@ class Simul(PyLayers):
                 if len(df) != 0:
                     output[linkname]['t'].append(tt)
                     if len(df)>1:
-                        print 'Warning possible issue in self.get_value'
+                        print 'Warning possible issue in self.get_link'
                     line = df.iloc[-1]
                     # # get info of the corresponding timestamp
                     # line = df[(df['id_a'] == link[0]) & (df['id_b'] == link[1])].iloc[-1]
@@ -896,36 +1087,17 @@ class Simul(PyLayers):
                     self.DL.b = self.N.node[link[1]]['p']
                     self.DL.Ta = self.N.node[link[0]]['T']
                     self.DL.Tb = self.N.node[link[1]]['T']
-                    # self.DL.Aa = self.N.node[link[0]]['ant']['antenna']
-                    # self.DL.Ab = self.N.node[link[1]]['ant']['antenna']
+                    #self.DL.Aa = self.N.node[link[0]]['ant']['antenna']
+                    #self.DL.Ab = self.N.node[link[1]]['ant']['antenna']
 
-                    if 'ak' in kwargs['typ'] or 'tk' in kwargs['typ'] or 'rss' in kwargs['typ']:
-                        H_id = line['H_id'].decode('utf8')
-                        # load the proper link
-                        self.DL.load(self.DL.H,H_id)
-                        if 'ak' in kwargs['typ']:
-                            if not output[linkname].has_key('ak'):
-                                output[linkname]['ak']=[]
-                            output[linkname]['ak'].append(copy.deepcopy(self.DL.H.ak))
-                        if 'tk' in kwargs['typ']:
-                            if not output[linkname].has_key('tk'):
-                                output[linkname]['tk']=[]
-                            output[linkname]['tk'].append(copy.deepcopy(self.DL.H.tk))
-                        if 'rss' in kwargs['typ']:
-                            if not output[linkname].has_key('rss'):
-                                output[linkname]['rss']=[]
-                            output[linkname]['rss'].append(copy.deepcopy(self.DL.H.rssi()))
+                    #H_id = line['H_id'].decode('utf8')
+                    #self.DL.load(self.DL.H,H_id)
 
                     if 'R' in kwargs['typ']:
-                        if not output[linkname].has_key('R'):
-                            output[linkname]['R']=[]
                         ray_id = line['ray_id']
                         self.DL.load(self.DL.R,ray_id)
-                        output[linkname]['R'].append(copy.deepcopy(self.DL.R))
 
                     if 'C' in kwargs['typ']:
-                        if not output[linkname].has_key('C'):
-                            output[linkname]['C']=[]
                         Ct_id = line['Ct_id']
                         self.DL.load(self.DL.C,Ct_id)
 
@@ -933,33 +1105,11 @@ class Simul(PyLayers):
                             self.DL.C.islocal=False
                             self.DL.C.locbas(Tt=self.DL.Ta, Tr=self.DL.Tb)
 
-
-
-                        #T channel
-
-                        output[linkname]['C'].append(copy.deepcopy(self.DL.C))
-
-
                     if 'H' in kwargs['typ']:
-                        if not output[linkname].has_key('H'):
-                            output[linkname]['H']=[]
                         H_id = line['H_id']
                         self.DL.load(self.DL.H,H_id)
-                        output[linkname]['H'].append(copy.deepcopy(self.DL.H))
-                # if time valuie not found in dataframe
-                else:
-                    if not output[linkname].has_key('time_to_simul'):
-                        output[linkname]['time_to_simul'] = []
-                    output[linkname]['time_to_simul'].append(tt)
 
-
-        for l in output.keys():
-            if output[l].has_key('time_to_simul'):
-                print 'link', l , 'require simulation for timestamps', output[l]['time_to_simul']
-
-
-        return(output)
-
+        return(self.DL)
 
 
 
