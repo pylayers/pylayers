@@ -26,23 +26,23 @@ class Profile(object):
         vs      : vstart (rps)
         spr     : steps per round
 
-        """ 
+        """
 
         N           = 100
         self.dstep  = dstep
         #self.dround = dstep/(1.0*spr)
         #self.T      = self.dround/(1.0*v)
-        
+
         self.droundtri = dstep/(1.0*spr)
         self.Ttri      = self.droundtri/(1.0*vtri)
-        
+
         #assert(0<aa<accmax)
         #assert(0<v<vmax)
         #assert(0<d<dmax)
 
         #self.cmd = 'PROFILE'+str(num)+'('+str(aa)+','+str(ad)+','+str(dstep)+','+str(v)+','+str(vs)+')'
         self.cmd = 'PROFILE'+str(num)+'('+str(aa)+','+str(ad)+','+str(dstep)+','+str(vtri)+','+str(vs)+')'
-        
+
         #self.t     = np.linspace(0,self.T,N)
         #self.v     = v*np.ones(N)
         #self.v1    = self.t*aa
@@ -55,20 +55,20 @@ class Profile(object):
         #self.v[u2] = -self.t[u2]*ad+(v+ad*t2)
         #self.dr    = np.cumsum(self.v)*(self.t[1]-self.t[0])
         #self.ds    = self.dr*spr
-        
+
         #PROFILE MODELE TRIANGLE
         self.ttri   = np.linspace(0,self.Ttri,N)
         self.vtri   = vtri*np.ones(N)
-        
+
         self.vtri1  = self.ttri*aa
         #self.vtri2  = self.ttri*ad
-        
+
         ttri1       = vtri/(1.0*aa)
         #ttri2       = -vtri/(1.0*ad)
 
         utri1 = np.where(self.ttri<ttri1)[0]
         utri2 = np.where(self.ttri>=ttri1)[0]
-        
+
         self.vtri[utri1]   = self.ttri[utri1]*aa
         #self.vtri[utri2]   = self.ttri[utri2]*ad
         self.vtri[utri2]   = self.ttri[utri1]*ad
@@ -76,8 +76,8 @@ class Profile(object):
 
         self.droundtri  = np.cumsum(self.vtri)*(self.ttri[1]-self.ttri[0])
         self.dstri      = self.droundtri*spr
-        
-        
+
+
 
     def duration(self):
         """
@@ -106,8 +106,6 @@ class Profile(object):
         plt.title('Evoltion of velocity over distance')
         plt.legend()
         plt.show()
-
-    
 
 class Axes(object):
     svar  = {'BU':'Buffer Usage',
@@ -271,7 +269,7 @@ class Axes(object):
         return(st)
 
 
-   
+
     def home(self,cmd='get',**kwargs):
         """ enables back home
 
@@ -296,7 +294,7 @@ class Axes(object):
         if cmd=='get':
             st = self.com('HOME')
             ans = st[1].split(' ')
-            
+
             if '1' in ans[0]:
                 print "armed, "
             else:
@@ -317,14 +315,14 @@ class Axes(object):
                 print 'velocity : -',eval(ans[3].split('V-')[1]), "rps"
 
             print 'acceleraton : ',eval(ans[4].split('A')[1]), "rps²"
-            
+
             if '0' in ans[5]:
                 print 'Mode 0: Motor in the active window of the switch(default)'
             if '1' in ans[5]:
                 print 'Mode 1: Motor in the position to the edge + or -'
             if '2' in ans[5]:
                 print 'Mode 2: Improve homing repeatability'
-            
+
         if cmd=='set':
 
             if kwargs['vel']>0:
@@ -546,7 +544,8 @@ class Scanner(Axes):
 
 
 if __name__=="__main__":
-    s = Scanner('/dev/ttyUSB2')
+    pass
+    #s = Scanner('/dev/ttyUSB2')
     #s = Scanner('/dev/ttyUSB1')
     #sm.fromfile('prog1')
     #sm.fromfile('AY')

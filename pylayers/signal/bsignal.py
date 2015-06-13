@@ -381,6 +381,20 @@ class Bsignal(PyLayers):
 
         return(st)
 
+    def mean(self):
+        """ mean value of the signal
+        """
+        S = type(self)()
+        S.x = self.x
+        S.y = np.mean(self.y,axis=0)
+        return(S)
+
+
+    def append(self,bs):
+        """ append bs to Bsignal
+        """
+        assert((self.x==bs.x).all())
+        self.y = np.vstack((self.y,bs.y))
 
     def extract(self,u):
         r""" extract a subset of signal from index
@@ -1048,19 +1062,23 @@ class Usignal(Bsignal):
         return(U)
 
     def __sub__(self, u):
-
+        pdb.set_trace()
         t = type(u).__name__
         if ((t == 'int') | (t == 'float')):
             U = Usignal(self.x, self.y - u)
-        else:
-            assert  (u.y.ndim == 1) | (u.y.shape[0]==1)
-            L = self.align(u)
+        if type(u)==type(self):
+            assert (u.x.shape==self.x.shape)
+            assert (u.y.shape[0]==1)|(u.y.shape[0]==self.y.shape[0])
+            assert (u.y.ndim == 1) | (u.y.shape[0]==1)
+            #L = self.align(u)
             #u1 = L[0]
             #u2 = L[1]
-            val = L.y[0:-1,:] - L.y[-1,:]
-            if ((val.ndim>1) & (val.shape[0]==1)):
-                val = val.reshape(val.shape[1])
-            U = Usignal(L.x,val)
+            #val = L.y[0:-1,:] - L.y[-1,:]
+            #if ((val.ndim>1) & (val.shape[0]==1)):
+            #    val = val.reshape(val.shape[1])
+            U = type(self)()
+            U.x = self.x 
+            U.y = self.y-u.y
             #U = Usignal(u1.x, u1.y - u2.y)
         return(U)
 
@@ -3470,7 +3488,8 @@ class FUsignal(FBsignal, Usignal):
     plotdB   : plot modulus in dB
     get      : get k th ray
     tap      : calculates channel taps
-
+    window   : 
+    
     """
     def __init__(self, x=np.array([]), y=np.array([]),label=[]):
         super(FUsignal,self).__init__(x,y,label)
@@ -3581,27 +3600,7 @@ class FUsignal(FBsignal, Usignal):
             self.y = self.y*factor
             self.isFriis = True
 
-    def capacity(self,Pt,T=290,mode='blast'):
-        """  calculates channel Shannon capacity (no csi)
-
-        Returns
-        -------
-
-        C : Channel capacity (bit/s)
-
-        """
-        kB = 1.3806488e-23
-        N0 = kB*T
-        dfGHz = self.x[1]-self.x[0]
-        BGHz  = self.x[-1]-self.x[0]
-        Pb = N0*BGHz*1e9
-        H2 = self.y*np.conj(self.y)
-        snr = Pt[:,None]*H2[None,:]/Pb
-        c  = np.log(1+snr)/np.log(2)
-        C   = np.sum(c,axis=1)*dfGHz
-        SNR = np.sum(snr,axis=1)*dfGHz
-
-        return(C,SNR)
+    
 
     def get(self, k):
         """

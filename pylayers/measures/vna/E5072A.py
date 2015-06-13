@@ -325,11 +325,17 @@ if __name__=='__main__':
     com1 = ":CALC1:DATA:SDAT?\n"
     #u = np.arange(0,Npoints)*2
     #v = np.arange(0,Npoints)*2+1
-    N = 1
+    N = 1000
     fGHz = np.linspace(1.8,2.2,Npoints)
-    S21 = vna.getdata(Npoints=Npoints)
+    lt = []
+    for k in range(N):
+        S = vna.getdata(Npoints=Npoints)
+        lt.append(time.time())
+        try:
+            S21.append(S)
+        except:
+            S21=S
     #H = FUchannel(fGHz)
-    #for k in range(N):
     #    B = vna.read(com1)
     #    S = np.frombuffer(B[0:Npoints*16],dtype='>f8')
     #    H.load(S)
