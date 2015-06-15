@@ -11,8 +11,7 @@ class Profile(object):
     vmax = 10
     dmax = 1500
 
-    def __init__(self,num,aa,ad,dstep,vtri,vs=0,spr=4000):
-    #def __init__(self,num,aa,ad,dstep,v,vs=0,spr=4000):
+    def __init__(self,**kwargs):
         """
 
         Parameters
@@ -27,56 +26,50 @@ class Profile(object):
         spr     : steps per round
 
         """
+        defaults = {'num': 1,
+                    'aa': 10,
+                    'ad': 10,
+                    'dstep': 1000,
+                    'v': 30,
+                    'vs': 0,
+                    'spr': 4000,
+                    'N':100}
 
-        N           = 100
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+        num = kwargs['num']
+        aa = kwargs['aa']
+        ad = kwargs['ad']
+        dstep = kwargs['dstep']
+        v  = kwargs['v']
+        vs = kwargs['vs']
+        spr = kwargs['spr']
+        N = kwargs['N']
+
         self.dstep  = dstep
-        #self.dround = dstep/(1.0*spr)
-        #self.T      = self.dround/(1.0*v)
+        self.dround = dstep/(1.0*spr)
+        self.T = self.dround/(1.0*v)
 
-        self.droundtri = dstep/(1.0*spr)
-        self.Ttri      = self.droundtri/(1.0*vtri)
-
-        #assert(0<aa<accmax)
+        #assert(0<accmax)
         #assert(0<v<vmax)
         #assert(0<d<dmax)
 
-        #self.cmd = 'PROFILE'+str(num)+'('+str(aa)+','+str(ad)+','+str(dstep)+','+str(v)+','+str(vs)+')'
-        self.cmd = 'PROFILE'+str(num)+'('+str(aa)+','+str(ad)+','+str(dstep)+','+str(vtri)+','+str(vs)+')'
+        self.cmd = 'PROFILE'+str(num)+'('+str(aa)+','+str(ad)+','+str(dstep)+','+str(v)+','+str(vs)+')'
 
-        #self.t     = np.linspace(0,self.T,N)
-        #self.v     = v*np.ones(N)
-        #self.v1    = self.t*aa
-        #self.v2    = self.t*ad
-        #t1         = v/(1.0*aa)
-        #t2         = self.T-v/(1.0*ad)
-        #u1         = np.where(self.t<t1)[0]
-        #u2         = np.where(self.t>=t2)[0]
-        #self.v[u1] = self.t[u1]*aa
-        #self.v[u2] = -self.t[u2]*ad+(v+ad*t2)
-        #self.dr    = np.cumsum(self.v)*(self.t[1]-self.t[0])
-        #self.ds    = self.dr*spr
-
-        #PROFILE MODELE TRIANGLE
-        self.ttri   = np.linspace(0,self.Ttri,N)
-        self.vtri   = vtri*np.ones(N)
-
-        self.vtri1  = self.ttri*aa
-        #self.vtri2  = self.ttri*ad
-
-        ttri1       = vtri/(1.0*aa)
-        #ttri2       = -vtri/(1.0*ad)
-
-        utri1 = np.where(self.ttri<ttri1)[0]
-        utri2 = np.where(self.ttri>=ttri1)[0]
-
-        self.vtri[utri1]   = self.ttri[utri1]*aa
-        #self.vtri[utri2]   = self.ttri[utri2]*ad
-        self.vtri[utri2]   = self.ttri[utri1]*ad
-
-
-        self.droundtri  = np.cumsum(self.vtri)*(self.ttri[1]-self.ttri[0])
-        self.dstri      = self.droundtri*spr
-
+        self.t = np.linspace(0,self.T,N)
+        self.v = v*np.ones(N)
+        self.v1 = self.t*aa
+        self.v2 = self.t*ad
+        t1         = v/(1.0*aa)
+        t2         = self.T-v/(1.0*ad)
+        u1         = np.where(self.t<t1)[0]
+        u2         = np.where(self.t>=t2)[0]
+        self.v[u1] = self.t[u1]*aa
+        self.v[u2] = -self.t[u2]*ad+(v+ad*t2)
+        self.dr    = np.cumsum(self.v)*(self.t[1]-self.t[0])
+        self.ds    = self.dr*spr
 
 
     def duration(self):
@@ -93,17 +86,15 @@ class Profile(object):
         P1.show()
         """
         plt.subplot(211)
-        #plt.plot(self.t,self.v)
-        plt.plot(self.ttri,self.vtri)
+        plt.plot(self.t,self.v)
         plt.xlabel('time (s)')
         plt.ylabel('Velocity (rev/s)')
-        plt.title('Evoltion of velocity over time')
+        plt.title('Evolution of velocity over time')
         plt.subplot(212)
-        #plt.plot(self.ds,self.v)
-        plt.plot(self.dstri,self.vtri)
+        plt.plot(self.t,self.ds)
         plt.xlabel('distance(rev)')
         plt.ylabel('Velocity (rev/s)')
-        plt.title('Evoltion of velocity over distance')
+        plt.title('Evolution of velocity over distance')
         plt.legend()
         plt.show()
 
@@ -262,7 +253,17 @@ class Axes(object):
             cst = str(self._id)+name+str(rg)+'\r\n'
         else:
             cst = str(self._id)+name+'\r\n'
-        if verbose:
+        if verbose:defaults = {'mode':0,
+                    'vel':10,
+                    'acc':10,
+                    'edg':'+',
+                    'typ':0,
+                    'armed':1
+        }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
             print cst
         self.ser.write(cst)
         st = self.ser.readlines()
@@ -458,7 +459,7 @@ class Axes(object):
         com = self.com(scom1)
         com = self.com('G')
         #com = self.com(scom1,verbose=True)
-        #scom2 = 'G'
+        #scom2 = 'G'es
         #com = self.com(scom2,verbose=True)
         #print "distance parcourue : ", var+str('cm')  
            
@@ -539,7 +540,8 @@ class Scanner(Axes):
                       Axes(2,'y',self.ser,scale=22800),
                       Axes(3,'rot',self.ser,scale=2111.1111111111113,typ='r')] #self.a4  = Axes(4,'z',self.ser,typ='r') 
 
-
+    def home(self):
+        pass
 
 
 
