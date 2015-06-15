@@ -313,6 +313,7 @@ import scipy.io as ios
 from scipy.signal import cspline1d, cspline1d_eval, iirfilter, iirdesign, lfilter, firwin , correlate
 #from sklearn import mixture
 import scipy.stats as st
+import seaborn as sns
 
 
 class Bsignal(PyLayers):
@@ -349,6 +350,9 @@ class Bsignal(PyLayers):
         self.x = x
         self.y = y
         ndim = self.y.ndim
+        if ndim==1:
+            self.y=self.y.reshape((1,len(self.y)))
+            ndim = 2
         # default naming of the axix
         if label==[]:
             self.label=[]
@@ -385,10 +389,35 @@ class Bsignal(PyLayers):
         """ mean value of the signal
         """
         S = type(self)()
+        S.__dict__=self.__dict__
         S.x = self.x
-        S.y = np.mean(self.y,axis=0)
+        S.y = np.mean(self.y,axis=0)[None,:]
         return(S)
 
+    def min(self):
+        """ min value of the signal (module if complex)
+        """
+        S = type(self)()
+        S.__dict__=self.__dict__
+        S.x = self.x
+        if np.iscomplex(self.y).any():
+            S.y = np.min(np.abs(self.y),axis=0)[None,:]
+        else:
+            S.y = np.min(self.y,axis=0)[None,:]
+        return(S)
+
+    def max(self):
+        """ max value of the signal (module if complex)
+        """
+        S = type(self)()
+        S.__dict__=self.__dict__
+        S.x = self.x
+        if np.iscomplex(self.y).any():
+            S.y = np.max(np.abs(self.y),axis=0)[None,:]
+        else:
+            S.y = np.max(self.y,axis=0)[None,:]
+
+        return(S)
 
     def append(self,bs):
         """ append bs to Bsignal
@@ -489,6 +518,9 @@ class Bsignal(PyLayers):
         d = ios.loadmat(filename)
         self.x = d['x'][0,:]
         self.y = d['y']
+        if self.y.ndim==1:
+            self.y = self.y[None,:]
+        self.N = len(self.x)
 
     def setx(self, x):
         r""" setx : set x vector
@@ -763,7 +795,7 @@ class Bsignal(PyLayers):
         >>> F = FUsignal(f,y)
 
         """
-
+        sns.set_style("whitegrid")
         defaults = {'interpolation':'none',
                     'cmap':plt.cm.BrBG,
                     'aspect':'auto',
@@ -830,7 +862,7 @@ class Bsignal(PyLayers):
             plt.axis('auto')
             fig.tight_layout()
 
-            return fig,ax
+            return fig, ax
 
     def plot(self, **kwargs):
         r""" plot signal
@@ -1049,27 +1081,31 @@ class Usignal(Bsignal):
         t = type(u).__name__
         if ((t == 'int') | (t == 'float')):
             U = Usignal(self.x, self.y + u)
-        else:
-            assert (u.y.ndim == 1) | (u.y.shape[0]==1)
-            L = self.align(u)
-            #u1 = L[0]
-            #u2 = L[1]
-            val = L.y[0:-1,:] + L.y[-1,:]
-            # handle one dimensional array
-            if ((val.ndim>1) & (val.shape[0]==1)):
-                val = val.reshape(val.shape[1])
-            U = Usignal(L.x, val)
+        if type(u)==type(self):
+            assert (u.x.shape==self.x.shape)
+            assert (u.y.ndim == 2)  ,"y has not ndim=2"
+            assert (u.y.shape[0]==1)|(u.y.shape[1]==self.y.shape[1])
+            U = type(self)()
+            U.x = self.x 
+            U.y = self.y+u.y
+            # L = self.align(u)
+            # #u1 = L[0]
+            # #u2 = L[1]
+            # val = L.y[0:-1,:] + L.y[-1,:]
+            # # handle one dimensional array
+            # if ((val.ndim>1) & (val.shape[0]==1)):
+            #     val = val.reshape(val.shape[1])
+            # U = Usignal(L.x, val)
         return(U)
 
     def __sub__(self, u):
-        pdb.set_trace()
         t = type(u).__name__
         if ((t == 'int') | (t == 'float')):
             U = Usignal(self.x, self.y - u)
         if type(u)==type(self):
             assert (u.x.shape==self.x.shape)
-            assert (u.y.shape[0]==1)|(u.y.shape[0]==self.y.shape[0])
-            assert (u.y.ndim == 1) | (u.y.shape[0]==1)
+            assert (u.y.ndim == 2)  ,"y has not ndim=2"
+            assert (u.y.shape[0]==1)|(u.y.shape[1]==self.y.shape[1])
             #L = self.align(u)
             #u1 = L[0]
             #u2 = L[1]
@@ -1086,16 +1122,21 @@ class Usignal(Bsignal):
         t = type(u).__name__
         if ((t == 'int') | (t == 'float') | (t== 'float64') ):
             U = Usignal(self.x, self.y * u)
-        else:
-            assert  (u.y.ndim == 1) | (u.y.shape[0]==1)
-            L = self.align(u)
-            #u1 = L[0]
-            #u2 = L[1]
-            #U = Usignal(u1.x, u1.y * u2.y)
-            val = L.y[0:-1,:] * L.y[-1,:]
-            if ((val.ndim>1) & (val.shape[0]==1)):
-                val = val.reshape(val.shape[1])
-            U = Usignal(L.x, val)
+        if type(u)==type(self):
+            assert (u.x.shape==self.x.shape)
+            assert (u.y.ndim == 2)  ,"y has not ndim=2"
+            assert (u.y.shape[0]==1)|(u.y.shape[1]==self.y.shape[1])
+            U = type(self)()
+            U.x = self.x 
+            U.y = self.y*u.y
+            # L = self.align(u)
+            # #u1 = L[0]
+            # #u2 = L[1]
+            # #U = Usignal(u1.x, u1.y * u2.y)
+            # val = L.y[0:-1,:] * L.y[-1,:]
+            # if ((val.ndim>1) & (val.shape[0]==1)):
+            #     val = val.reshape(val.shape[1])
+            # U = Usignal(L.x, val)
         return(U)
 
     def setx(self, start, stop, dx):
@@ -1532,6 +1573,43 @@ class Usignal(Bsignal):
             self.x = self.x[u[0]]
             self.y = self.y[u[0]]
 
+    def window(self, win='hamming'):
+        """ windowing Usignal
+        Parameters
+        ----------
+
+        win : string
+            window type ('hamming','blackman','hanning')
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> import numpy as np
+            >>> import matplotlib.pyplot as plt
+            >>> from pylayers.signal.bsignal import *
+            >>> x = np.arange(2,8,0.1)
+            >>> y = np.ones(len(x))
+            >>> U = Usignal(x,y)
+            >>> fig,ax = U.plot()
+            >>> U.window('hamming')
+            >>> fig,ax = U.plot()
+
+
+        """
+        if win=='rect':
+            exit
+        if win == 'hamming':
+            w = np.hamming(len(self.x))[None,:]
+        if win == 'blackman':
+            w = np.blackman(len(self.x))[None,:]
+        if win == 'hanning':
+            w = np.hanning(len(self.x))[None,:]
+        self.windowed = True
+        self.y = self.y * w
+
 class TBsignal(Bsignal):
     """  Based signal in Time domain
 
@@ -1554,6 +1632,11 @@ class TBsignal(Bsignal):
 
         unit1 : actual unit of data
         unit2 : unit for display
+        dist : boolean
+        xmin : float
+        xmax : float
+        logx : boolean
+        logy :boolean
 
         Examples
         --------
@@ -1694,7 +1777,7 @@ class TBsignal(Bsignal):
         f = np.linspace(fmax/(1.0*N),fmax,N)
         z = np.sum(self.y[:,None]*np.exp(-2*1j*f[None,:]*np.pi*self.x[:,None]),axis=0)
         H = FUDsignal(f,z,taud=self.x)
-        return(H)
+        return H
 
     def b2tu(self, N):
         """ conversion into a TUsignal
@@ -1746,7 +1829,7 @@ class TBsignal(Bsignal):
 
 
 class TUsignal(TBsignal, Usignal):
-    """ Uniform signal in Time domain
+    """ Uniform signal in time domain
 
     This class inheritates from TBsignal and Usignal
 
@@ -2522,45 +2605,7 @@ class FUsignal(FBsignal, Usignal):
 
 
 
-    def window(self, win='hamming'):
-        """ windowing FUsignal
 
-        Parameters
-        ----------
-
-        win : string
-            window type ('hamming','blackman','hanning')
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> import numpy as np
-            >>> import matplotlib.pyplot as plt
-            >>> from pylayers.signal.bsignal import *
-            >>> x = np.arange(2,8,0.1)
-            >>> y = np.ones(len(x))
-            >>> U = FUsignal(x,y)
-            >>> fig,ax = U.plot()
-            >>> U.window('hamming')
-            >>> fig,ax = U.plot()
-
-
-
-
-        """
-
-        if win == 'hamming':
-            w = np.hamming(self.N)
-        if win == 'blackman':
-            w = np.blackman(self.N)
-        if win == 'hanning':
-            w = np.hanning(self.N)
-
-        w   = w.reshape(self.uax)
-        self.y = self.y * w
 
 
 
@@ -3648,6 +3693,9 @@ class EnImpulse(TUsignal):
 
         """
         pass
+
+
+
 
 class MaskImpulse(TUsignal):
     """

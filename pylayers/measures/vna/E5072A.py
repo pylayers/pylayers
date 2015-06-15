@@ -325,7 +325,7 @@ if __name__=='__main__':
     com1 = ":CALC1:DATA:SDAT?\n"
     #u = np.arange(0,Npoints)*2
     #v = np.arange(0,Npoints)*2+1
-    N = 1000
+    N = 100
     fGHz = np.linspace(1.8,2.2,Npoints)
     lt = []
     for k in range(N):
