@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 
 class Profile(object):
     accmax = 200
-    vmax = 10
-    dmax = 1500
+    vmax   = 10
+    dmax   = 1500
 
     def __init__(self,**kwargs):
         """
@@ -27,10 +27,10 @@ class Profile(object):
 
         """
         defaults = {'num': 1,
-                    'aa': 10,
-                    'ad': 10,
-                    'dstep': 1000,
-                    'v': 30,
+                    'aa': 200,
+                    'ad': 200,
+                    'dstep': 12800,
+                    'v': 15,
                     'vs': 0,
                     'spr': 4000,
                     'N':100}
@@ -39,18 +39,18 @@ class Profile(object):
             if k not in kwargs:
                 kwargs[k]=defaults[k]
 
-        num = kwargs['num']
-        aa = kwargs['aa']
-        ad = kwargs['ad']
+        num   = kwargs['num']
+        aa    = kwargs['aa']
+        ad    = kwargs['ad']
         dstep = kwargs['dstep']
-        v  = kwargs['v']
-        vs = kwargs['vs']
-        spr = kwargs['spr']
-        N = kwargs['N']
+        v     = kwargs['v']
+        vs    = kwargs['vs']
+        spr   = kwargs['spr']
+        N     = kwargs['N']
 
         self.dstep  = dstep
         self.dround = dstep/(1.0*spr)
-        self.T = self.dround/(1.0*v)
+        self.T      = self.dround/(1.0*v)
 
         #assert(0<accmax)
         #assert(0<v<vmax)
@@ -58,10 +58,10 @@ class Profile(object):
 
         self.cmd = 'PROFILE'+str(num)+'('+str(aa)+','+str(ad)+','+str(dstep)+','+str(v)+','+str(vs)+')'
 
-        self.t = np.linspace(0,self.T,N)
-        self.v = v*np.ones(N)
-        self.v1 = self.t*aa
-        self.v2 = self.t*ad
+        self.t     = np.linspace(0,self.T,N)
+        self.v     = v*np.ones(N)
+        self.v1    = self.t*aa
+        self.v2    = self.t*ad
         t1         = v/(1.0*aa)
         t2         = self.T-v/(1.0*ad)
         u1         = np.where(self.t<t1)[0]
@@ -82,7 +82,7 @@ class Profile(object):
 
         Examples
         --------
-        P1=Profile(1,200,200,15000,15,0)
+        P1=Profile(1,200,200,12800,15,0)
         P1.show()
         """
         plt.subplot(211)
@@ -99,32 +99,31 @@ class Profile(object):
         plt.show()
 
 class Axes(object):
-    svar  = {'BU':'Buffer Usage',
+    svar  = {'BU':'Buffer usage',
             'CQ':'Command queuing',
-            'DF':'Drive Fault status',
-            'EI':'Encoder Input',
+            'DF':'Drive fault status',
+            'EI':'Encoder input',
             'EO':'Encoder signal output',
-            'EP':'Encoder Position',
+            'EP':'Encoder position',
             'ER':'Feedback encoder resolution',
-            'EX':'Coms response Style & echo control',
+            'EX':'Coms response style & echo control',
             'IN':'Inputs',
             'IP':'In position flag',
-            'IT':'IN position Time',
+            'IT':'In position time',
             'MC':'Motor current',
             'MR':'Motor resolution',
-            'MS':'Motor Standby current',
+            'MS':'Motor standby current',
             'MV':'Moving',
-            'PA':'Position Absolute',
-            'PE':'Position Error',
-            'PI':'Position Incremental',
+            'PA':'Position absolute',
+            'PE':'Position error',
+            'PI':'Position incremental',
             'RB':'Ready/Busy flag',
             'RM':'Registration Move',
             'RV':'Revision software',
-            'SN':'Serial Number',
+            'SN':'Serial number',
             'ST':'Status of indexing',
             'UF':'User Program Fault status'
-           }
-
+            }
 
     dstatus = {}
     dstatus[1]='command processing paused'
@@ -176,7 +175,8 @@ class Axes(object):
     ddrvflt[6]='Configuration error'
     ddrvflt[7]='Motor high voltage rail failure'
     ddrvflt[8]='Output fault'
-
+    
+    
     def __init__(self,_id,name,ser,scale=12800,typ='t'):
         """
         _id  : axes id
@@ -224,6 +224,7 @@ class Axes(object):
         st = 'st'
         st = st+str(self._id)
         return(st)
+
     def show(self):
         """
         """
@@ -235,17 +236,26 @@ class Axes(object):
         #return(st)
 
     def getvar(self,lvar=[]):
-        """
+        """Allows get state of variables 
+
         Parameters
         ----------
-        lvar : list of variables 
+        lvar : list of variables
+
+        Examples
+        --------
+        s.a[1].getvar('PA')  #Get Position absolute 
 
         """
         if lvar == []:
             lvar = Axes.svar.keys()
-        for var in lvar:
+        else:
+            var = lvar
             st = self.com('R('+var+')')
             print Axes.svar[var],st[1]
+        #for var in lvar:
+            #st = self.com('R('+var+')')
+            #print Axes.svar[var],st[1]
 
 
     def com(self,name,rg='',verbose=False):
@@ -253,40 +263,94 @@ class Axes(object):
             cst = str(self._id)+name+str(rg)+'\r\n'
         else:
             cst = str(self._id)+name+'\r\n'
-        if verbose:defaults = {'mode':0,
-                    'vel':10,
-                    'acc':10,
-                    'edg':'+',
-                    'typ':0,
-                    'armed':1
-        }
-
-        for k in defaults:
-            if k not in kwargs:
-                kwargs[k]=defaults[k]
             print cst
         self.ser.write(cst)
         st = self.ser.readlines()
         return(st)
 
 
+    def limits(self,cmd='get',**kwargs):
+        """Give state and set up limits
 
-    def home(self,cmd='get',**kwargs):
-        """ enables back home
+        Parameters
+        ----------
+
+        cmd  :  'get', 'set'
+
+        """
+
+        defaults = {'mask':0,
+                    'typ':1,
+                    'mode':1,
+                    'LD':200
+        }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults
+
+        mask = kwargs['mask']
+        typ  = kwargs['typ']
+        mode = kwargs['mode']
+        LD   = kwargs['LD']
+
+        if cmd=='get':
+            st = self.com('LIMITS')
+            ans = st[1].split(' ')
+
+            if '0' in ans[0]:
+                print "Enable limits (default setting), "
+            if '1' in ans[0]:
+                print "Disable limit +, "
+            if '2' in ans[0]:
+                print "Disable limit -, "
+            if '3' in ans[0]:
+                print "Disable limit + & -, "
+
+            if '0' in ans[1]:
+                print "Limits normally closed (default setting), "
+            else:
+                print "Limits normally open, "
+
+            if '0' in ans[2]:
+                print "Stop motion when a limit is hit and abort the program (default setting), "
+            else:
+                print "Stop motion when a limit is hit but continue the program, "
+
+            print 'decceleraton : ',eval(ans[3].split('D')[1]), "rps²"
+
+    
+        if cmd=='set':
+            cstr = 'LIMITS'+'('+str(mask)+','+str(typ)+','+str(mode)+','+str(LD)+')'
+            self.com(cstr)
+                          
+        
+    def home(self,cmd='get',lvar=[],**kwargs):
+        """ Enables back home
 
         Parameters
         ----------
 
         cmd  : 'get','set','go'
 
+        Examples
+        --------
+        
+        get : s.a[1].home()   #Get informations about the status of HOME
+
+        set : s.a[1].home('set')  #For example Print 1HOME1(+,0,+10,10,0)
+
+        go : s.a[1].home('go')    #Back Home  (material)
+
         """
+ 
         defaults = {'mode':0,
                     'vel':10,
                     'acc':10,
                     'edg':'+',
                     'typ':0,
                     'armed':1
-        }
+                }
 
         for k in defaults:
             if k not in kwargs:
@@ -311,7 +375,6 @@ class Axes(object):
 
             if '+' in ans[3]:
                 print 'velocity : +',eval(ans[3].split('V+')[1]), "rps"
-                #print ", "
             else:
                 print 'velocity : -',eval(ans[3].split('V-')[1]), "rps"
 
@@ -338,7 +401,6 @@ class Axes(object):
                           vel+','+\
                           str(kwargs['acc'])+','+\
                           str(kwargs['mode'])+')'
-
             self.com(cstr)
 
         if cmd=='go':
@@ -348,14 +410,37 @@ class Axes(object):
             self.com(cstr)
             cstr = 'GH'
             self.com(cstr)
+        
+        #if lvar == []:
+            #lvar = Axes.svar.keys()
+        #else:
+            #var = lvar['PA']
+        #if cmd=='go':
+            #if lvar <0:
+                #cstr = 'HOME1'
+                #self.com(cstr)
+                #cstr = 'ARM1'
+                #self.com(cstr)
+                #cstr = 'GH'
+                #self.com(cstr)
+            #else:
+                #cstr = 'HOME1'
+                #self.com(cstr)
+                #cstr = 'ARM1'
+                #self.com(cstr)
+                #cstr = 'H-'
+                #self.com(cstr)
+                #cstr = 'G'
+                #self.com(cstr)
 
     def add_profile(self,aa,ad,d,v,vs):
         """  Add new profile to list
         """
         npro = len(self.lprofile)
+        print npro
         if len(self.lprofile<8):
             prof = Profile(npro+1,aa,ad,d,v,vs)
-            # update profile
+            #update profile
             self.com(prof.cmd)
             self.lprofile.append(prof)
         
@@ -390,13 +475,9 @@ class Axes(object):
         Examples
         --------
 
-        sm.mvpro(1,1)  # axis 1 , profile 1
+        s.a[1].mvpro(1,1)  # axis 1 , profile 1
         """
 
-        #com = 'USE('+str(id_pro)+')'
-        #self.com(com)
-        #self.com('G')
-        
         com = 'USE('+str(id_pro)+')'
         self.com(com)
         self.com('G')
@@ -462,58 +543,7 @@ class Axes(object):
         #scom2 = 'G'es
         #com = self.com(scom2,verbose=True)
         #print "distance parcourue : ", var+str('cm')  
-           
-    def mvhome(self):
-        """Enables going home (last position where it was)
-        """
-        #pass
-        #nstep = int(var*self.scale)
-        #scom1 = 'D'+str(nstep)
-        scom2 = 'H'
-        scom3 = 'G'
-        
-        #com = self.com(scom1,verbose=True)
-        com = self.com(scom2,verbose=True)
-        com = self.com(scom3,verbose=True)
-        
-    def homeor(self):
-        """Back to material origin
-        """
-        
-        scom0 = 'HOME'+ str(self._id)
-        scom1 = 'ARM'+ str(self._id)
-        com = self.com(scom0)
-        com = self.com(scom1)
-        com = self.com('GH')
-        
-         
-
-    def homing(self,typ=''):
-        """Set up PA
-        """
-        pass
-
-        #dstatus[13]='-ve limit seen during last move'
-        #dstatus[14]='+ve limit seen during last move'
-        #while Axes.dstatus[13]!= 1:
-        #lire le buffer
-        #buf = self.com('R','('+typ+')')
-        #buf = buf[1]
-        #buf = buf.replace('*','').replace('\r\n','').split('_')
-        #print buf
-        #if Axes.dstatus[13]== 0:
-            #if Axes.dstatus[14]== 1:
-                #scom1 = 'D-793600'
-                #scom2 = 'G'
-                #com   = self.com('D-793600',verbose=True)
-                #com   = self.com('GH',verbose=True)
-                #com   = self.com('R(PA)',verbose=True)
-            #if :
-        #else:
-            #com   = self.com('R(PA)',verbose=True)
-
-                         
-        
+               
     def close(self):
         self.ser.close()
 
@@ -528,14 +558,14 @@ class Axes(object):
             self.ser.write(li)
         st = self.ser.read(100)
         #while self.ser.inWaiting()>0:
-        #    st += self.ser.read(10)
+        #st += self.ser.read(10)
         #self.ser.close()
         return(st)
-    #def translation(self,axis,offset):
+    
 
-class Scanner(Axes):
+class Scanner(Axes,Profile):
     def __init__(self,port):
-        self.ser = Serial(port = port, baudrate=9600, timeout = 1)
+        self.ser = Serial(port = port, baudrate=9600, timeout = 0.5)
         self.a  = ['',Axes(1,'x',self.ser,scale=12800),
                       Axes(2,'y',self.ser,scale=22800),
                       Axes(3,'rot',self.ser,scale=2111.1111111111113,typ='r')] #self.a4  = Axes(4,'z',self.ser,typ='r') 
@@ -546,7 +576,8 @@ class Scanner(Axes):
 
 
 if __name__=="__main__":
-    pass
+    #pass
+    s = Scanner('/dev/ttyUSB0')
     #s = Scanner('/dev/ttyUSB2')
     #s = Scanner('/dev/ttyUSB1')
     #sm.fromfile('prog1')
