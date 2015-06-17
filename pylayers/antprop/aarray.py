@@ -23,13 +23,13 @@ class ULArray(Array):
     """
     pass
 
-class ULArray(Array):
-    """ Uniform Linear Array
+class UCArray(Array):
+    """ Uniform Circular Array
     """
     pass
 
 class AntArray(Array,Antenna):
-    """ Anenna Array
+    """ Class Antenna which inherits Array and Antenna classes
     """
 
     def __init__(self,**kwargs):
