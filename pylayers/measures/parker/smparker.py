@@ -4,12 +4,13 @@ from serial import Serial
 import pdb
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 class Profile(object):
-    accmax = 200
-    vmax = 10
-    dmax = 1500
+    Accmax = 200
+    Vmax = 10
+    Dmax = 1500
 
     def __init__(self,**kwargs):
         """
@@ -17,20 +18,21 @@ class Profile(object):
         Parameters
         ----------
 
-        num     : profile number 
+        num     : profile number
         aa      : aceleration (rps2)
         ad      : deceleration (rps2)
         dstep   : distance (step)
-        v       : vmax (rps)
+        vmax    : vmax (rps)
         vs      : vstart (rps)
         spr     : steps per round
 
         """
+
         defaults = {'num': 1,
-                    'aa': 10,
-                    'ad': 10,
-                    'dstep': 1000,
-                    'v': 30,
+                    'aa': 200,
+                    'ad': 200,
+                    'dstep': 12800,
+                    'vmax': 15,
                     'vs': 0,
                     'spr': 4000,
                     'N':100}
@@ -39,38 +41,68 @@ class Profile(object):
             if k not in kwargs:
                 kwargs[k]=defaults[k]
 
-        num = kwargs['num']
-        aa = kwargs['aa']
-        ad = kwargs['ad']
-        dstep = kwargs['dstep']
-        v  = kwargs['v']
-        vs = kwargs['vs']
-        spr = kwargs['spr']
-        N = kwargs['N']
+        self.num = kwargs['num']
+        self.aa = kwargs['aa']
+        self.ad = kwargs['ad']
+        self.dstep = kwargs['dstep']
+        self.vmax = kwargs['vmax']
+        self.vs = kwargs['vs']
+        self.spr = kwargs['spr']
+        self.N = kwargs['N']
 
-        self.dstep  = dstep
-        self.dround = dstep/(1.0*spr)
-        self.T = self.dround/(1.0*v)
+        #
+        # spr   : steps per revolution
+        # dstep : number of steps
+        # drev  : number of revolutions
+        #
+
+        self.drev = self.dstep/(1.0*self.spr)
+        self.T = (self.drev+self.vmax**2/self.aa)/(1.0*self.vmax)
 
         #assert(0<accmax)
         #assert(0<v<vmax)
         #assert(0<d<dmax)
 
-        self.cmd = 'PROFILE'+str(num)+'('+str(aa)+','+str(ad)+','+str(dstep)+','+str(v)+','+str(vs)+')'
+        self.cmd = 'PROFILE'+str(self.num)+\
+                '('+str(self.aa)+','+str(self.ad)+\
+                ','+str(self.dstep)+','+str(self.vmax)+\
+                ','+str(self.vs)+')'
 
-        self.t = np.linspace(0,self.T,N)
-        self.v = v*np.ones(N)
-        self.v1 = self.t*aa
-        self.v2 = self.t*ad
-        t1         = v/(1.0*aa)
-        t2         = self.T-v/(1.0*ad)
-        u1         = np.where(self.t<t1)[0]
-        u2         = np.where(self.t>=t2)[0]
-        self.v[u1] = self.t[u1]*aa
-        self.v[u2] = -self.t[u2]*ad+(v+ad*t2)
-        self.dr    = np.cumsum(self.v)*(self.t[1]-self.t[0])
-        self.ds    = self.dr*spr
+        self.t = np.linspace(0,self.T,self.N)
+        self.v = self.vmax*np.ones(self.N)
+        self.v1 = self.t*self.aa
+        self.v2 = self.t*self.ad
 
+        #
+        # t1 : end of acceleration phase
+        # t2 : begining of deceleration phase
+        #
+        t1 = self.vmax/(1.0*self.aa)
+        t2 = self.T-self.vmax/(1.0*self.ad)
+
+        u1 = np.where(self.t<t1)[0]
+        u2 = np.where(self.t>=t2)[0]
+
+        self.v[u1] = self.t[u1]*self.aa
+        self.v[u2] = -self.t[u2]*self.ad+(self.vmax+self.ad*t2)
+        #
+        # dr : distance in number of revolutions
+        # ds : distance in number of steps
+        #
+        self.dr = np.cumsum(self.v)*(self.t[1]-self.t[0])
+        self.ds = self.dr*self.spr
+
+    def __repr__(self):
+        st = ''
+        st = st + 'num : '+ str(self.num) + '\n'
+        st = st + 'acceleration  : '+ str(self.aa) + '\n'
+        st = st + 'deceleration  : '+ str(self.ad) + '\n'
+        st = st + 'dstep : '+ str(self.dstep) + '/'+ str(self.ds[-1]) + '\n'
+        st = st + 'maximum velocity : '+ str(self.vmax) + '\n'
+        st = st + 'starting velocity : '+ str(self.vs) + '\n'
+        st = st + 'spr : '+ str(self.spr) + '\n'
+        st = st + 'N  : '+ str(self.N) + '\n'
+        return(st)
 
     def duration(self):
         """
@@ -82,19 +114,21 @@ class Profile(object):
 
         Examples
         --------
+
         P1=Profile(1,200,200,15000,15,0)
         P1.show()
+
         """
         plt.subplot(211)
         plt.plot(self.t,self.v)
         plt.xlabel('time (s)')
         plt.ylabel('Velocity (rev/s)')
-        plt.title('Evolution of velocity over time')
+        plt.title('Evolution of velocity w.r.t time')
         plt.subplot(212)
         plt.plot(self.t,self.ds)
-        plt.xlabel('distance(rev)')
-        plt.ylabel('Velocity (rev/s)')
-        plt.title('Evolution of velocity over distance')
+        plt.xlabel('time (s)')
+        plt.ylabel('distance (step)')
+        plt.title('Evolution of distance w.r.t time')
         plt.legend()
         plt.show()
 
@@ -224,6 +258,7 @@ class Axes(object):
         st = 'st'
         st = st+str(self._id)
         return(st)
+
     def show(self):
         """
         """
@@ -238,7 +273,8 @@ class Axes(object):
         """
         Parameters
         ----------
-        lvar : list of variables 
+
+        lvar : list of variables
 
         """
         if lvar == []:
@@ -248,22 +284,19 @@ class Axes(object):
             print Axes.svar[var],st[1]
 
 
-    def com(self,name,rg='',verbose=False):
-        if rg!='':
-            cst = str(self._id)+name+str(rg)+'\r\n'
-        else:
-            cst = str(self._id)+name+'\r\n'
-        if verbose:defaults = {'mode':0,
-                    'vel':10,
-                    'acc':10,
-                    'edg':'+',
-                    'typ':0,
-                    'armed':1
-        }
+    def com(self,command='R(SN)',verbose=False):
+        """ send command to serial port
 
-        for k in defaults:
-            if k not in kwargs:
-                kwargs[k]=defaults[k]
+        Parameters
+        ----------
+
+        prefix : str command prefix
+        arg :  command argument
+        verbose :
+
+        """
+        cst = str(self._id) + command + '\r\n'
+        if verbose:
             print cst
         self.ser.write(cst)
         st = self.ser.readlines()
@@ -349,21 +382,59 @@ class Axes(object):
             cstr = 'GH'
             self.com(cstr)
 
-    def add_profile(self,aa,ad,d,v,vs):
-        """  Add new profile to list
+    def del_profile(self,index=1):
+        """ delete profile
+
+        Parameters
+        ----------
+
+        index : int
+
         """
-        npro = len(self.lprofile)
-        if len(self.lprofile<8):
-            prof = Profile(npro+1,aa,ad,d,v,vs)
+        self.lprofile.pop(index-1)
+
+    def add_profile(self,**kwargs):
+        """  add a new profile to lprofile
+
+        Parameters
+        ----------
+
+        num     : profile number
+        aa      : aceleration (rps2)
+        ad      : deceleration (rps2)
+        dstep   : distance (step)
+        v       : vmax (rps)
+        vs      : vstart (rps)
+        spr     : steps per round
+
+        """
+        defaults = {'num': 0,
+                    'aa': 200,
+                    'ad': 200,
+                    'dstep': 12800,
+                    'v': 15,
+                    'vs': 0,
+                    'spr': 4000,
+                    'N':100}
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+        num = len(self.lprofile)
+        kwargs['num']=num+1
+        if len(self.lprofile)<8:
+            prof = Profile(**kwargs)
             # update profile
-            self.com(prof.cmd)
             self.lprofile.append(prof)
-        
+            # send command 
+            # self.com(prof.cmd)
+
     def set_profile(self,num):
         """
         """
         assert(num<=len(self.lprofile)),"profile number not defined" 
-        self.com(str(self._id)+'USE'+str(num))   
+        self.com(str(self._id)+'USE'+str(num))
 
     def reset(self):
         """ reset axis
@@ -462,31 +533,17 @@ class Axes(object):
         #scom2 = 'G'es
         #com = self.com(scom2,verbose=True)
         #print "distance parcourue : ", var+str('cm')  
-           
-    def mvhome(self):
-        """Enables going home (last position where it was)
-        """
-        #pass
-        #nstep = int(var*self.scale)
-        #scom1 = 'D'+str(nstep)
-        scom2 = 'H'
-        scom3 = 'G'
-        
         #com = self.com(scom1,verbose=True)
         com = self.com(scom2,verbose=True)
         com = self.com(scom3,verbose=True)
-        
     def homeor(self):
         """Back to material origin
         """
-        
         scom0 = 'HOME'+ str(self._id)
         scom1 = 'ARM'+ str(self._id)
         com = self.com(scom0)
         com = self.com(scom1)
         com = self.com('GH')
-        
-         
 
     def homing(self,typ=''):
         """Set up PA
@@ -512,8 +569,6 @@ class Axes(object):
         #else:
             #com   = self.com('R(PA)',verbose=True)
 
-                         
-        
     def close(self):
         self.ser.close()
 
@@ -533,12 +588,12 @@ class Axes(object):
         return(st)
     #def translation(self,axis,offset):
 
-class Scanner(Axes):
+class Scanner(object):
     def __init__(self,port):
         self.ser = Serial(port = port, baudrate=9600, timeout = 1)
         self.a  = ['',Axes(1,'x',self.ser,scale=12800),
                       Axes(2,'y',self.ser,scale=22800),
-                      Axes(3,'rot',self.ser,scale=2111.1111111111113,typ='r')] #self.a4  = Axes(4,'z',self.ser,typ='r') 
+                      Axes(3,'rot',self.ser,scale=2111.1111111111113,typ='r')] #self.a4  = Axes(4,'z',self.ser,typ='r')
 
     def home(self):
         pass

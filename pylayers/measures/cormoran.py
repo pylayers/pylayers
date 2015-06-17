@@ -3,7 +3,7 @@
 
 """
 
-This module help to the CORMORAN measurement campaign exploitation
+This module handles CORMORAN measurement data
 
 CorSer Class
 ============
@@ -140,7 +140,13 @@ Vizualizing processing
     CorSer.visidev2
     CorSer.__refreshshow3i
 
+Notes
+-----
 
+Useful members
+
+distdf : distance between radio nodes (122 columns)
+devdf  : device data frame
 
 """
 
@@ -179,6 +185,12 @@ import pickle
 def cor_log(short=True):
     """ display cormoran measurement campaign logfile
 
+    Parameters
+    ----------
+
+    short : boolean
+        enable short version
+
     Examples
     --------
 
@@ -186,6 +198,7 @@ def cor_log(short=True):
     >>> cor_log(short=True)
 
     """
+
     filelog = os.path.join(os.environ['CORMORAN'],'RAW','Doc','MeasurementLog.csv')
     log = pd.read_csv(filelog)
     if short :
@@ -221,11 +234,33 @@ def time2npa(lt):
 
 
 class CorSer(PyLayers):
-    """ Hikob data handling from CORMORAN measurement campaign 11/06/2014
+    """ Handle CORMORAN measurement data
 
+    Hikob data handling from CORMORAN measurement campaign
+
+    11/06/2014
+        single subject (Bernard and Nicolas)
+
+    12/06/2014
+        several subject (Jihad, Eric , Nicolas)
     """
 
     def __init__(self,serie=6,day=11,source='CITI'):
+        """
+        Parameters
+        ----------
+
+        serie : int
+        day : int
+        source : string
+
+        Notes
+        -----
+
+        The environment variable CORMORAN is indicating the location of data directory
+
+        """
+        assert (day in [11,12]),"wrong day"
 
         try:
             self.rootdir = os.environ['CORMORAN']
@@ -600,21 +635,21 @@ bernard
         filename = os.path.join(self.rootdir,'RAW','11-06-2014','MOCAP','scene.c3d')
 
         print "\nload infrastructure node position:",
-        a,self.infraname,pts,i = c3d.ReadC3d(filename)
+        a, self.infraname, pts, i = c3d.ReadC3d(filename)
 
         pts = pts/1000.
-        mpts = np.mean(pts,axis=0)
+        mpts = np.mean(pts, axis=0)
         self.din={}
         if ('HK'  in self.typ) or ('FULL' in self.typ):
-            uhkb = np.array([[1,2],[4,5],[7,8],[10,11]])
-            mphkb = np.mean(mpts[uhkb],axis=1)
+            uhkb = np.array([[1,2], [4,5], [7,8], [10,11]])
+            mphkb = np.mean(mpts[uhkb], axis=1)
 
             self.din.update(
-                {'HKB:1':{'p':mphkb[3],
-                          # 'T':np.eye(3),
-                          's3off':0.},
+                {'HKB:1':{'p' : mphkb[3],
+                          # 'T' : np.eye(3),
+                          's3off' : 0.},
 
-                 'HKB:2':{'p':mphkb[2],
+                 'HKB:2':{'p' : mphkb[2],
                           # 'T': np.array([[-0.44807362,  0.89399666,  0.],
                           #                [-0.89399666, -0.44807362,  0.],
                           #                [ 0.,0.,1.        ]]),
@@ -687,7 +722,7 @@ bernard
 
 
     def loadlog(self):
-        """ load in self.log the log of current serie
+        """ load in self.log the log of the current serie
             from MeasurementLog.csv
         """
 
@@ -698,7 +733,7 @@ bernard
 
 
     def _loadbody(self,day=11,serie=''):
-        """ load mocap file
+        """ load motion capture file
 
         Parameters
         ----------
@@ -707,6 +742,7 @@ bernard
         serie :
 
         """
+        assert day in [11,12],"wrong day in _loadbody"
         self.B={}
         color=['LightBlue','YellowGreen','PaleVioletRed','white','white','white','white','white','white','white']
 
@@ -769,6 +805,14 @@ bernard
 
     def _loadTCR(self,day=11,serie='',scenario='20',run=1):
         """ load TCR data
+
+        Parameters
+        ----------
+
+        day :
+        serie :
+        scenario :
+        run :
 
         """
 
@@ -3349,7 +3393,7 @@ bernard
                 ibhk = b
                 b = self.idHKB[b]
 
-            var = self.getlink(iahk,ibhk,'HKB',mode='dist').values
+            var = self.getlink(iahk,ibhk,'HKB').values
             if inverse:
                 var = 1./(var)
                 ax.set_ylabel(u'$m^{-2}$',fontsize=fontsize)
@@ -3383,7 +3427,7 @@ bernard
                 ibtcr = b
                 b = self.idTCR[b]
 
-            var = self.getlink(iatcr,ibtcr,'TCR',mode='dist').values
+            var = self.getlink(iatcr,ibtcr,'TCR').values
 
             if inverse:
                 var = 1./(var)**2
@@ -3437,6 +3481,7 @@ bernard
         t1 : float
             time stop
         colhk: plt.color
+
             color of hk curve
         colhk2:plt.color
             color of hk curve2 ( if recirpocal)
