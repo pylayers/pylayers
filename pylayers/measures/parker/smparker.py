@@ -57,7 +57,8 @@ class Profile(object):
         #
 
         self.drev = self.dstep/(1.0*self.spr)
-        self.T = (self.drev+self.vmax**2/self.aa)/(1.0*self.vmax)
+        #self.T = (self.drev+self.vmax**2/self.aa)/(1.0*self.vmax)
+        self.T = (self.drev+0.5*self.vmax**2/self.aa+0.5*self.vmax**2/self.ad)/(1.0*self.vmax)
 
         #assert(0<accmax)
         #assert(0<v<vmax)
@@ -410,7 +411,7 @@ class Axes(object):
         """
         defaults = {'num': 0,
                     'aa': 200,
-                    'ad': 200,
+                    'ad': 100,
                     'dstep': 12800,
                     'v': 15,
                     'vs': 0,
@@ -591,14 +592,43 @@ class Axes(object):
 class Scanner(object):
     def __init__(self,port):
         self.ser = Serial(port = port, baudrate=9600, timeout = 1)
+        self.p = np.array([0,0])
         self.a  = ['',Axes(1,'x',self.ser,scale=12800),
                       Axes(2,'y',self.ser,scale=22800),
                       Axes(3,'rot',self.ser,scale=2111.1111111111113,typ='r')] #self.a4  = Axes(4,'z',self.ser,typ='r')
 
-    def home(self):
+    def set_origin():
+        """
+        """
         pass
 
+    def home(self):
+        for k in range(1,len(self.a)):
+            self.a[k].home()
 
+    def mv(pt=np.r[0,0,0],a):
+        """ move to target point
+
+        Parameters
+        ----------
+
+        pt : target position
+        at : target angle
+
+        """
+
+        # Ou suis-je ?
+        # Ou dois-je aller : p1
+        # Comment y aller
+        #   + fabriquer les profils
+        #   + Appliquer les profils
+
+    def array(A):
+        """ implement an Array
+
+
+        """
+        pass
 
 if __name__=="__main__":
     pass
