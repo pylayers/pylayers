@@ -2483,10 +2483,22 @@ class Layout(PyLayers):
         mask.setvnodes(self)
         return(mask)
 
-    def scale(self,alpha):
+    def scale(self,alpha=1):
+        """ scale the layout
+        alpha : scaling factor
+
+        Returns
+        -------
+
+        Ls : Layout
+            scaled layout
         """
-        """
-        pass
+        Ls =copy.deepcopy(self)
+        Gs = Ls.Gs
+        Gs.pos = dict(zip(Gs.pos.keys(),tuple(np.array(Gs.pos.values())*alpha)))
+        Ls.Gs = Gs
+        Ls.g2npy()
+        return Ls
 
     def translate(self,vec):
         """ translate layout
