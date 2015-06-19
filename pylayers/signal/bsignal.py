@@ -574,7 +574,7 @@ class Bsignal(PyLayers):
             >>> import matplotlib.pyplot as plt
             >>> si = Bsignal()
             >>> si.x= np.arange(100)
-            >>> si.y= np.arange(100)
+            >>> si.y= np.arange(100)[None,:]
             >>> f,a = si.stem()
 
         """
@@ -967,7 +967,7 @@ class Bsignal(PyLayers):
         #
         # To be added in mulcplot
         #
-    
+
         tcolor = ['red', 'green', 'green', 'green', 'black', 'black', 'black']
         nl,nc = np.shape(ax)
         for l in range(nl):
@@ -1290,7 +1290,6 @@ class Usignal(Bsignal):
             U = FUDsignal(x_new, y_new, self.taud)
 
         #if 'U' not in locals():
-            #pdb.set_trace()
         return(U)
 
     def align(self, u2):
@@ -1408,7 +1407,6 @@ class Usignal(Bsignal):
                 x = u1.x
                 indx = np.nonzero((x >= u2_start) & (x <= u2_stop))[0]
                 U2 = Usignal(x, np.zeros((N2,len(x))))
-                #pdb.set_trace()
                 U2.y[:,indx] = u2.y[:, 0:np.shape(indx)[0]]
 
             if (b2i & b2f):
@@ -2083,7 +2081,7 @@ class TUsignal(TBsignal, Usignal):
 
         """
         te = self.dx()
-        Y = self.fft()
+        Y  = self.fft()
         #YY  = (te*te)*abs(Y.y)**2
         YY = abs(Y.y) ** 2
         O = FHsignal(Y.x, YY)
@@ -3006,7 +3004,6 @@ class FUsignal(FBsignal, Usignal):
             zl = np.zeros(Nl)
             zlm1 = np.zeros(Nl-1)
 
-        #pdb.set_trace()
         if  Nz > 0:
             if ndim > 1:
                 zh = np.zeros([nline, Nz])
@@ -3324,6 +3321,9 @@ class FHsignal(FUsignal):
     """
     FHsignal : Hermitian uniform signal in Frequency domain
 
+    Methods
+    -------
+
     ifft  : inverse Fourier transform --> TUsignal
     unrex : unredundant extraction    --> FUsignal
 
@@ -3410,12 +3410,14 @@ class FHsignal(FUsignal):
 
         """
         N = len(self.x)
+        # even case
         if np.mod(N, 2) == 0:
             xu = self.x[1:(N + 2) / 2]
-            yu = self.y[1:(N + 2) / 2]
+            yu = self.y[:,1:(N + 2) / 2]
+        # odd case
         else:
             xu = self.x[1:(N + 1) / 2]
-            yu = self.y[1:(N + 1) / 2]
+            yu = self.y[:,1:(N + 1) / 2]
 
         O = FUsignal(xu, yu)
 
@@ -3655,7 +3657,22 @@ class EnImpulse(TUsignal):
 
 
     """
-    def __init__(self, x=np.array([]), fc=4, band=3, thresh=10, fe=20):
+    def __init__(self,, fc=4, band=3, thresh=10, fe=20):
+        """
+
+        Parameters
+        ----------
+
+        fcGHz : float
+        WGHz :
+        threshdB
+        feGHz :
+        """
+        defaults = {fcGHz : 4,
+                    WGHz : 3,
+                    threshdB : 10,
+                    feGHz : 20
+                   }
         TUsignal.__init__(self)
         Tp = (2 / (band * np.pi)) * np.sqrt(abs(thresh) * np.log(10) /20.)
         coeff = np.sqrt(2 * np.sqrt(2)/ (Tp * np.sqrt(np.pi)))
@@ -3670,7 +3687,7 @@ class EnImpulse(TUsignal):
 
         y = coeff * np.exp(-(x / Tp) ** 2) * np.cos(2 * np.pi * fc * x)
         self.x = x
-        self.y = y
+        self.y = y[None,:]
         self.Tp = Tp
         self.fc = fc
 
@@ -3693,8 +3710,6 @@ class EnImpulse(TUsignal):
 
         """
         pass
-
-
 
 
 class MaskImpulse(TUsignal):
