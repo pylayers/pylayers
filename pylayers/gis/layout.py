@@ -312,7 +312,7 @@ class Layout(PyLayers):
     .. autosummary::
 
     """
-    def __init__(self,_filename='defstr.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur='',force=False):
+    def __init__(self,_filename='defstr.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur='',force=False,check=True):
         """ object constructor
 
         Parameters
@@ -403,6 +403,9 @@ class Layout(PyLayers):
             self.name[k] = []
 
         self.load(_filename)
+        # check layout integrity (default)
+        if check:
+            self.check()
         self.boundary()
 
         # If the layout has already been built then load the built structure
@@ -593,8 +596,8 @@ class Layout(PyLayers):
         if (degmin<=1):
             deg0 = filter(lambda x: nx.degree(self.Gs,x)==0,upnt)
             deg1 = filter(lambda x: nx.degree(self.Gs,x)==1,upnt)
-            print "degree 0 ",deg0
-            print "degree 1 ",deg1
+            assert (len(deg0)==0), "It exists degree 0 points :  %r" % deg0
+            assert (len(deg1)==0), "It exists degree 1 points : %r" % deg1
 
         self.deg={}
         for deg in range(degmax+1):
@@ -2483,7 +2486,7 @@ class Layout(PyLayers):
         mask.setvnodes(self)
         return(mask)
 
-    def scale(self,alpha=1):
+    def scale(self,alpha=[1,1,1]):
         """ scale the layout
         alpha : scaling factor
 
@@ -2493,10 +2496,26 @@ class Layout(PyLayers):
         Ls : Layout
             scaled layout
         """
-        Ls =copy.deepcopy(self)
+        Ls = copy.deepcopy(self)
         Gs = Ls.Gs
-        Gs.pos = dict(zip(Gs.pos.keys(),tuple(np.array(Gs.pos.values())*alpha)))
-        Ls.Gs = Gs
+        #
+        # scaling x & y
+        #
+        x = np.array(Gs.pos.values())[:,0]*alpha[0]
+        y = np.array(Gs.pos.values())[:,1]*alpha[1]
+        xy = np.vstack((x,y)).T
+        Ls.Gs.pos = dict(zip(Gs.pos.keys(),tuple(xy)))
+        #
+        # scaling z
+        #
+        nseg = filter(lambda x : x>0, Gs.nodes())
+        for k in nseg:
+            Ls.Gs.node[k]['z'] = np.array(Ls.Gs.node[k]['z'])*alpha[2]
+        for k in Ls.lsss:
+            Ls.Gs.node[k]['ss_z'] = np.array(Ls.Gs.node[k]['ss_z'])*alpha[2]
+        #
+        # updating numpy array from graph
+        #
         Ls.g2npy()
         return Ls
 
