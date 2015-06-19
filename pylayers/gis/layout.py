@@ -296,7 +296,7 @@ class Layout(PyLayers):
 
     Gs     : Structure graph
     Gt     : Topological graph  (indicates topological relationships between rooms)
-    Gr     : Graph of room
+    Gr     : Graph of rooms
     Gv     : Graph of visibility
     Gc     : Connection graph (indicates visbility relationships)
     Nnode  : Number of nodes of Gs
@@ -437,7 +437,7 @@ class Layout(PyLayers):
         st = st + "\n"
         st = st + "xrange :"+ str(self.ax[0:2])+"\n"
         st = st + "yrange :"+ str(self.ax[2:])+"\n"
-        st = st + "\nUseful dictionnaries"+"\n----------------\n"
+        st = st + "\nUseful dictionnaries" + "\n----------------\n"
         if hasattr(self,'dca'):
             st = st + "dca {cycle : []} cycle with an airwall" +"\n"
         if hasattr(self,'di'):
@@ -469,6 +469,40 @@ class Layout(PyLayers):
             st = st + "degree : degree of nodes " +"\n"
 
         return(st)
+
+    def scale(self,alpha=[1,1,1]):
+        """ scale the layout
+        alpha : scaling factor
+
+        Returns
+        -------
+
+        Ls : Layout
+            scaled layout
+
+        """
+        Ls = copy.deepcopy(self)
+        Gs = Ls.Gs
+        #
+        # scaling x & y
+        #
+        x = np.array(Gs.pos.values())[:,0]*alpha[0]
+        y = np.array(Gs.pos.values())[:,1]*alpha[1]
+        xy = np.vstack((x,y)).T
+        Ls.Gs.pos = dict(zip(Gs.pos.keys(),tuple(xy)))
+        #
+        # scaling z
+        #
+        nseg = filter(lambda x : x>0, Gs.nodes())
+        for k in nseg:
+            Ls.Gs.node[k]['z'] = np.array(Ls.Gs.node[k]['z'])*alpha[2]
+        for k in Ls.lsss:
+            Ls.Gs.node[k]['ss_z'] = np.array(Ls.Gs.node[k]['ss_z'])*alpha[2]
+        #
+        # updating numpy array from graph
+        #
+        Ls.g2npy()
+        return Ls
 
     def ls(self, typ='ini'):
         """ list the available file in dirstruc
@@ -2486,38 +2520,6 @@ class Layout(PyLayers):
         mask.setvnodes(self)
         return(mask)
 
-    def scale(self,alpha=[1,1,1]):
-        """ scale the layout
-        alpha : scaling factor
-
-        Returns
-        -------
-
-        Ls : Layout
-            scaled layout
-        """
-        Ls = copy.deepcopy(self)
-        Gs = Ls.Gs
-        #
-        # scaling x & y
-        #
-        x = np.array(Gs.pos.values())[:,0]*alpha[0]
-        y = np.array(Gs.pos.values())[:,1]*alpha[1]
-        xy = np.vstack((x,y)).T
-        Ls.Gs.pos = dict(zip(Gs.pos.keys(),tuple(xy)))
-        #
-        # scaling z
-        #
-        nseg = filter(lambda x : x>0, Gs.nodes())
-        for k in nseg:
-            Ls.Gs.node[k]['z'] = np.array(Ls.Gs.node[k]['z'])*alpha[2]
-        for k in Ls.lsss:
-            Ls.Gs.node[k]['ss_z'] = np.array(Ls.Gs.node[k]['ss_z'])*alpha[2]
-        #
-        # updating numpy array from graph
-        #
-        Ls.g2npy()
-        return Ls
 
     def translate(self,vec):
         """ translate layout
