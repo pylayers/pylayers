@@ -570,6 +570,47 @@ class Layout(PyLayers):
         self.Gc = nx.Graph()
         self.Gm = nx.Graph()
 
+    def offset_index(self,offp=0,offs=0):
+        """ offset points and segment index
+
+        Parameters
+        ----------
+        offp : offset points
+        offs : offset segments
+
+        """
+        assert(offs>=0)
+        assert(offp>=0)
+        newpoint = dict( (k-offp,v) for k,v in self.Gs.node.items() if k <0)
+        newseg =   dict( (k+offs,v) for k,v in self.Gs.node.items() if k > 0)
+        newpoint.update(newseg)
+        self.Gs.node = newpoint
+
+        newppoint = dict( (k-offp,v) for k,v in self.Gs.pos.items() if k <0)
+        newpseg =   dict( (k+offs,v) for k,v in self.Gs.pos.items() if k > 0)
+        newppoint.update(newpseg)
+        self.Gs.pos =  newppoint
+
+        # adjascence list of segments
+        ladjs = [self.Gs.adj[k] for k in self.Gs.adj.keys() if k > 0 ]
+        # adjascence list of points
+        ladjp = [self.Gs.adj[k] for k in self.Gs.adj.keys() if k < 0 ]
+
+        nladjs = map(lambda x: dict((k-offp,v) for k,v in x.items()),ladjs)
+        nladjp = map(lambda x: dict((k+offs,v) for k,v in x.items()),ladjp)
+
+        lpt  = [k-offp for k in self.Gs.adj.keys() if k <0 ]
+        lseg = [k+offs for k in self.Gs.adj.keys() if k >0 ]
+
+        dpt  = dict(zip(lpt,nladjp))
+        dseg = dict(zip(lseg,nladjs))
+        dseg.update(dpt)
+        self.Gs.adj =  dseg
+        #pdb.set_trace()
+        #dict(zip(self.Gs.keys(),))
+        #self.Gs.adj = newapoint
+
+
     def check(self,level=0):
         """ Check Layout consistency
 
@@ -751,7 +792,6 @@ class Layout(PyLayers):
 
 
         nodes = self.Gs.nodes()
-
         # nodes include points and segments
 
         #segment index
