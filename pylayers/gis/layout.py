@@ -399,6 +399,9 @@ class Layout(PyLayers):
         self.display['box'] = (-50,50,-50,50)
         self.name = {}
 
+
+        self.zmin = 0
+
         for k in self.sl.keys():
             self.name[k] = []
 
@@ -470,9 +473,26 @@ class Layout(PyLayers):
 
         return(st)
 
-    def scale(self,alpha=[1,1,1]):
-        """ scale the layout
-        alpha : scaling factor
+    def __add__(self, other):
+        Ls = copy.deepcopy(self)
+        if type(other)==np.ndarray:
+            for k in Ls.Gs.pos:
+                Ls.Gs.pos[k]=Ls.Gs.pos[k]+other[0:2]
+        else:
+            offp = -min(Ls.Gs.nodes())
+            offs = max(Ls.Gs.nodes())
+            other.offset_index(offp=offp,offs=offs)
+            Ls.Gs.node.update(other.Gs.node)
+            Ls.Gs.edge.update(other.Gs.edge)
+            Ls.Gs.adj.update(other.Gs.adj)
+            Ls.Gs.pos.update(other.Gs.pos)
+        return(Ls)
+
+
+    def __mul__(self,alpha):
+        """ scale the layout 
+
+        other : scaling factor (np.array or int or float)
 
         Returns
         -------
@@ -483,24 +503,39 @@ class Layout(PyLayers):
         """
         Ls = copy.deepcopy(self)
         Gs = Ls.Gs
+        if type(alpha) != np.ndarray:
+            assert((type(alpha) == float) or (type(alpha) == int)), " not float"
+            alpha=np.array([alpha, alpha, alpha])
+        else:
+            assert(len(alpha)==3), " not 3D"
         #
         # scaling x & y
         #
-        x = np.array(Gs.pos.values())[:,0]*alpha[0]
-        y = np.array(Gs.pos.values())[:,1]*alpha[1]
+        x = np.array(Gs.pos.values())[:,0]
+        xc = np.mean(x)
+        x = (x-xc)*alpha[0] + xc
+
+        y = np.array(Gs.pos.values())[:,1]
+        yc = np.mean(y)
+        y = (y-yc)*alpha[1] + yc
+
         xy = np.vstack((x,y)).T
         Ls.Gs.pos = dict(zip(Gs.pos.keys(),tuple(xy)))
+
         #
         # scaling z
         #
+
         nseg = filter(lambda x : x>0, Gs.nodes())
         for k in nseg:
-            Ls.Gs.node[k]['z'] = np.array(Ls.Gs.node[k]['z'])*alpha[2]
-        for k in Ls.lsss:
-            Ls.Gs.node[k]['ss_z'] = np.array(Ls.Gs.node[k]['ss_z'])*alpha[2]
+            Ls.Gs.node[k]['z'] = tuple((np.array(Ls.Gs.node[k]['z'])-self.zmin)*alpha[2]+self.zmin)
+            if Ls.Gs.node[k].has_key('ss_z'):
+                Ls.Gs.node[k]['ss_z'] = list((np.array(Ls.Gs.node[k]['ss_z'])-self.zmin)*alpha[2]+self.zmin)
+
         #
         # updating numpy array from graph
         #
+
         Ls.g2npy()
         return Ls
 
@@ -579,10 +614,11 @@ class Layout(PyLayers):
         offs : offset segments
 
         """
-        assert(offs>=0)
-        assert(offp>=0)
+
         newpoint = dict( (k-offp,v) for k,v in self.Gs.node.items() if k <0)
+        assert (np.array(newpoint.keys())<0).all()
         newseg =   dict( (k+offs,v) for k,v in self.Gs.node.items() if k > 0)
+        assert (np.array(newseg.keys())>0).all()
         newpoint.update(newseg)
         self.Gs.node = newpoint
 
@@ -606,6 +642,7 @@ class Layout(PyLayers):
         dseg = dict(zip(lseg,nladjs))
         dseg.update(dpt)
         self.Gs.adj =  dseg
+        self.Gs.edge = dseg
         #pdb.set_trace()
         #dict(zip(self.Gs.keys(),))
         #self.Gs.adj = newapoint

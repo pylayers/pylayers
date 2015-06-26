@@ -159,7 +159,7 @@ import numpy.ma as ma
 import scipy.io as io
 from pylayers.util.project import *
 from pylayers.util.pyutil import *
-import  pylayers.util.mayautil as myu
+#import  pylayers.util.mayautil as myu
 from pylayers.mobility.ban.body import *
 from pylayers.gis.layout import *
 import pylayers.antprop.antenna as antenna
@@ -376,6 +376,7 @@ class CorSer(PyLayers):
 
         if ('HK' in self.typ) or ('FULL' in self.typ):
             print '\nHKB data frame index:', 
+            pdb.set_trace()
             self._align_on_devdf(typ='HKB')
             print 'Align on mocap OK...',
             try:
@@ -1293,14 +1294,15 @@ bernard
         """  imshow visibility mda
 
 
-        Parameters 
+        Parameters
         ----------
+
         techno : (HKB|TCR)
         t : float
             time in second
 
-        Example 
-        -------
+        Examples
+        --------
 
         >>> from pylayers.measures.cormoran import *
         >>> import matplotlib.pyplot as plt
@@ -4729,7 +4731,6 @@ bernard
             self.thkb = self.hkb.index
 
     def _align_on_devdf(self,typ=''):
-
         """ align hkb or bs time on device data frame ( devdf) time index
             In place (a.k.a. replace old self.hkb by the resampled one)
 
