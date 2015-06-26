@@ -208,9 +208,6 @@ def cor_log(short=True):
     else:
         return log
 
-
-
-
 def time2npa(lt):
     """ convert pd.datetime.time to numpy array
 
@@ -231,7 +228,6 @@ def time2npa(lt):
     lt.minute*60+
     lt.hour*3600)
     return(ta)
-
 
 class CorSer(PyLayers):
     """ Handle CORMORAN measurement data
@@ -358,7 +354,7 @@ class CorSer(PyLayers):
             try:
                 self._apply_offset('BS')
                 print 'time-offset applied OK'
-            except: 
+            except:
                 print 'WARNING time-offset NOT applied'
                 print ('No BS offset not yet set => use self.offset_setter ')
 
@@ -369,19 +365,19 @@ class CorSer(PyLayers):
             try:
                 self._apply_offset('TCR')
                 print 'time-offset applied OK'
-            except: 
+            except:
                 print 'WARNING time-offset NOT applied'
                 print ('No TCR offset not yet set => use self.offset_setter')
 
 
         if ('HK' in self.typ) or ('FULL' in self.typ):
-            print '\nHKB data frame index:', 
+            print '\nHKB data frame index:',
             self._align_on_devdf(typ='HKB')
             print 'Align on mocap OK...',
             try:
                 # self._apply_offset('HKB')
                 print 'time-offset applied OK'
-            except: 
+            except:
                 print 'WARNING time-offset NOT applied'
                 print ('No HKB offset not yet set => use self.offset_setter')
 
@@ -583,7 +579,6 @@ class CorSer(PyLayers):
 
     def _loadinfranodes(self):
         """ load infrastructure nodes
-
 
 
 nico
@@ -4729,13 +4724,14 @@ bernard
             self.thkb = self.hkb.index
 
     def _align_on_devdf(self,typ=''):
-
         """ align hkb or bs time on device data frame ( devdf) time index
-            In place (a.k.a. replace old self.hkb by the resampled one)
+
+        In place (a.k.a. replace old self.hkb by the resampled one)
 
         Parameters 
         ----------
-            typ : 'HKB' |'BS'
+
+        typp : 'HKB' |'BS'
 
         Examples
         --------
@@ -4754,10 +4750,13 @@ bernard
             idf = self.bespo
         elif typ == 'TCR':
             idf = self.tcr
+
+        # mocap time
         mocapindex = pd.to_datetime(self.tmocap,unit='s')
+        # radio time
         idf.index = pd.to_datetime(idf.index,unit='s')
 
-
+        
         sf = (mocapindex[2]-mocapindex[1]).microseconds
         df = idf.resample(str(sf)+'U',fill_method='ffill')
 
