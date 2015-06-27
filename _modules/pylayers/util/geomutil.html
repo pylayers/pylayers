@@ -316,7 +316,7 @@
 <span class="kn">import</span> <span class="nn">shapely.ops</span> <span class="kn">as</span> <span class="nn">sho</span>
 <span class="kn">from</span>   <span class="nn">descartes.patch</span> <span class="kn">import</span> <span class="n">PolygonPatch</span>
 <span class="kn">from</span>   <span class="nn">shapely.wkt</span> <span class="kn">import</span> <span class="n">loads</span>
-<span class="kn">from</span>   <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">combinations</span>
+<span class="kn">from</span>   <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">combinations</span><span class="p">,</span><span class="n">permutations</span>
 
 
 <span class="n">COLOR</span> <span class="o">=</span> <span class="p">{</span>
@@ -4359,38 +4359,130 @@
 <span class="c">#         for j in xrange(k+1, n): </span>
 <span class="c">#             V[:,j] -= np.vdot(V[:,j], V[:,k]) * V[:,k] </span>
 <span class="c">#     return V </span>
-</div>
-<span class="k">def</span> <span class="nf">qrdecomp</span><span class="p">(</span><span class="n">V</span><span class="p">):</span> 
-    <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">    Gram-Schmid orthonormalization of a set of `Nv` vectors, in-place. </span>
-<span class="sd">    using qr decomp</span>
-<span class="sd">    Parameters </span>
-<span class="sd">    ---------- </span>
-<span class="sd">    V : array, shape (3,Nv,nf) </span>
 
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
+</div>
+<span class="k">def</span> <span class="nf">gram_schmidt</span><span class="p">(</span><span class="n">Vini</span><span class="p">,</span><span class="n">force_direct</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gram-Schmidt orthonormalization of a set of `M` vectors, in-place. </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">     Vini : array,</span>
+<span class="sd">        shape (3,Nv,nf)  where number of vectors Nv = 3 and nf is an integer</span>
+<span class="sd">    force_direct : boolean</span>
+<span class="sd">        force basis to be direct (det&gt;0)</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &gt;&gt;&gt; import pylayers.util.geomutil as geu</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; Nv = 3</span>
+<span class="sd">    &gt;&gt;&gt; Nframes = 10</span>
+<span class="sd">    &gt;&gt;&gt; V = np.random.rand(3,Nv,Nframes)</span>
+<span class="sd">    &gt;&gt;&gt; VG = geu.gram_schmid(V)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+    <span class="c"># check direct basis</span>
+    <span class="k">if</span> <span class="n">force_direct</span><span class="p">:</span>
+        <span class="n">per</span><span class="o">=</span><span class="n">permutations</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="mi">3</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">per</span><span class="p">:</span>
+            <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">Vini</span><span class="p">[:,</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">],</span><span class="n">Vini</span><span class="p">[:,</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">0</span><span class="p">],</span><span class="n">Vini</span><span class="p">[:,</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">P</span><span class="p">)</span> <span class="o">&gt;</span><span class="mi">0</span> <span class="p">:</span>
+                <span class="n">Vini</span> <span class="o">=</span> <span class="n">Vini</span><span class="p">[:,</span><span class="n">p</span><span class="p">,:]</span>
+                <span class="k">break</span>
+
+    <span class="n">v0</span><span class="o">=</span><span class="n">Vini</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,:]</span>
+    <span class="n">v1</span><span class="o">=</span><span class="n">Vini</span><span class="p">[:,</span><span class="mi">1</span><span class="p">,:]</span>
+    <span class="n">v2</span><span class="o">=</span><span class="n">Vini</span><span class="p">[:,</span><span class="mi">2</span><span class="p">,:]</span>
+
+    <span class="n">n0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">v0</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">vn0</span><span class="o">=</span><span class="n">v0</span><span class="o">/</span><span class="n">n0</span>
+
+    <span class="n">pv10</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">&#39;ij,ij-&gt;j&#39;</span><span class="p">,</span><span class="n">v1</span><span class="p">,</span><span class="n">vn0</span><span class="p">)</span>
+    <span class="n">v1p</span> <span class="o">=</span> <span class="n">v1</span> <span class="o">-</span> <span class="n">pv10</span><span class="o">*</span><span class="n">vn0</span>
+    <span class="n">nv1</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">v1p</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">vn1</span> <span class="o">=</span> <span class="n">v1p</span><span class="o">/</span><span class="n">nv1</span>
+
+
+    <span class="n">pv20</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">&#39;ij,ij-&gt;j&#39;</span><span class="p">,</span><span class="n">v2</span><span class="p">,</span><span class="n">vn0</span><span class="p">)</span>
+    <span class="n">pv21</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">&#39;ij,ij-&gt;j&#39;</span><span class="p">,</span><span class="n">v2</span><span class="p">,</span><span class="n">vn1</span><span class="p">)</span>
+
+    <span class="n">v2p</span> <span class="o">=</span> <span class="n">v2</span> <span class="o">-</span> <span class="n">pv20</span><span class="o">*</span><span class="n">vn0</span> <span class="o">-</span> <span class="n">pv21</span><span class="o">*</span><span class="n">vn1</span>
+    <span class="n">nv2</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">v2p</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">vn2</span> <span class="o">=</span> <span class="n">v2p</span><span class="o">/</span><span class="n">nv2</span>
+
+    <span class="n">V</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">vn0</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:],</span><span class="n">vn1</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:],</span><span class="n">vn2</span><span class="p">[:,</span><span class="bp">None</span><span class="p">,:]))</span>
+
+    <span class="k">if</span> <span class="n">force_direct</span><span class="p">:</span>
+        <span class="c"># assert det &gt;0</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rollaxis</span><span class="p">(</span><span class="n">V</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span><span class="mi">0</span>
+    <span class="c"># assert det != 0</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rollaxis</span><span class="p">(</span><span class="n">V</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span><span class="o">==</span><span class="mf">0.</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span><span class="mi">0</span>
+    <span class="k">return</span> <span class="n">V</span>
+
+
+
+<span class="k">def</span> <span class="nf">qrdecomp</span><span class="p">(</span><span class="n">V</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gram-Schmid orthonormalization of a set of `Nv` vectors, in-place.</span>
+<span class="sd">    using qr decomp</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    V : array,</span>
+<span class="sd">        shape (3,Nv,nf)  where number of vectors Nv = 3 and nf is an integer</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    V : array,</span>
+
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
 
 <span class="sd">    from http://numpy-discussion.10968.n7.nabble.com/Efficient-orthogonalisation-with-scipy-numpy-td23635.html</span>
 
-<span class="sd">    &quot;&quot;&quot;</span> 
-    <span class="c"># XXX: speed can be improved by using routines from scipy.lib.blas </span>
-    <span class="c"># XXX: maybe there&#39;s an orthonormalization routine in LAPACK, too, </span>
-    <span class="c">#      apart from QR. too lazy to check... </span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; import pylayers.util.geomutil as geu</span>
+<span class="sd">    &gt;&gt;&gt; u=np.random.rand(3,1,10)</span>
+<span class="sd">    &gt;&gt;&gt; v=np.random.rand(3,1,10)</span>
+<span class="sd">    &gt;&gt;&gt; w=np.random.rand(3,1,10)</span>
+<span class="sd">    &gt;&gt;&gt; V = np.hstack((u,v,w))</span>
+<span class="sd">    &gt;&gt;&gt; W = geu.qrdecomp(V)</span>
+<span class="sd">    &gt;&gt;&gt; assert np.allclose(abs(np.linalg.det(W[:,:,0])),1.0)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c">#  speed can be improved by using routines from scipy.lib.blas</span>
+    <span class="c">#  maybe there&#39;s an orthonormalization routine in LAPACK, too,</span>
+    <span class="c">#      apart from QR. too lazy to check...</span>
+
     <span class="kn">import</span> <span class="nn">copy</span>
-    <span class="n">nn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">V</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
-        <span class="n">V</span><span class="p">[</span><span class="n">i</span><span class="p">,:,:]</span><span class="o">=</span><span class="n">V</span><span class="p">[</span><span class="n">i</span><span class="p">,:,:]</span><span class="o">/</span><span class="n">nn</span> 
+    <span class="c"># nn = np.linalg.norm(V,axis=(0))</span>
+
+    <span class="c"># # for i in range(3):</span>
+    <span class="c"># #     V[i,:,:]=V[i,:,:]/nn</span>
+
+    <span class="c"># V=V/nn</span>
     <span class="n">lv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">V</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
-    <span class="n">V2</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">lv</span><span class="p">):</span> 
+    <span class="n">V2</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">lv</span><span class="p">):</span>
         <span class="n">V</span><span class="p">[:,:,</span><span class="n">k</span><span class="p">],</span><span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">qr</span><span class="p">(</span><span class="n">V</span><span class="p">[:,:,</span><span class="n">k</span><span class="p">])</span>
     <span class="c"># check where the vector along cylinder axis is colinear with the 1st basis axis</span>
-    <span class="n">col</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">&#39;ij,ij-&gt;j&#39;</span><span class="p">,</span><span class="n">V</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,:],</span><span class="n">V2</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,:])</span>
-    <span class="n">ucol</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">col</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">V</span><span class="p">[:,:,</span><span class="n">ucol</span><span class="p">]</span><span class="o">=-</span><span class="n">V</span><span class="p">[:,:,</span><span class="n">ucol</span><span class="p">]</span>
-
-    <span class="k">return</span> <span class="n">V</span> 
+    <span class="c"># col = np.einsum(&#39;ij,ij-&gt;j&#39;,V[:,0,:],V2[:,0,:])</span>
+    <span class="c"># ucol = np.where(col &lt; 0)</span>
+    <span class="c"># import ipdb</span>
+    <span class="c"># ipdb.set_trace()</span>
+    <span class="c"># V[:,:,ucol]=-V[:,:,ucol]</span>
+    <span class="kn">import</span> <span class="nn">ipdb</span>
+    <span class="n">ipdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">V</span>
 
 
 
@@ -4409,8 +4501,8 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 30, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on juin 27, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
     

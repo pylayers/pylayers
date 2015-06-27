@@ -1873,8 +1873,8 @@
         <span class="c"># lcil = nx.dijkstra_path(G,source,target)</span>
         <span class="c"># llcil=len(lcil)</span>
 
-        <span class="c"># 2 determine input signatures for each cycles</span>
-        <span class="c"># di key = [input seg, input room, output seg, output room]</span>
+        <span class="c">#2 determine input signatures for each cycles</span>
+        <span class="c">#di key = [input seg, input room, output seg, output room]</span>
         <span class="n">di</span><span class="o">=</span><span class="p">{}</span>
         <span class="c"># number of points and seg of layout</span>
         <span class="n">NGs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Ns</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Np</span>
@@ -1888,7 +1888,7 @@
         <span class="k">for</span> <span class="n">icy</span><span class="p">,</span><span class="n">cy</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lcil</span><span class="p">):</span>
 
             <span class="n">vinT</span><span class="o">=</span><span class="p">[]</span>
-            <span class="c"># valid &#39;out&#39; interatcion</span>
+            <span class="c">#valid &#39;out&#39; interatcion</span>
             <span class="n">voutT</span><span class="o">=</span><span class="p">[]</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">cy</span><span class="p">]</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;merged&#39;</span><span class="p">):</span>
                 <span class="n">cym</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">cy</span><span class="p">][</span><span class="s">&#39;merged&#39;</span><span class="p">]</span>
@@ -1913,7 +1913,7 @@
 
                 <span class="n">kdi0</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">voutT</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">voutT</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">voutT</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
 
-                <span class="c"># for each reverb/diffract interaction,</span>
+                <span class="c">#for each reverb/diffract interaction,</span>
                 <span class="c"># inside 1st cycle, search the output interactions</span>
 
                 <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">voutT</span><span class="p">:</span>
@@ -1927,7 +1927,7 @@
                 <span class="c"># ipdb.set_trace()</span>
             <span class="k">elif</span> <span class="p">(</span><span class="n">icy</span> <span class="o">&gt;=</span><span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">icy</span> <span class="o">&lt;</span><span class="n">llcil</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
 
-                <span class="c"># valid &#39;in&#39; interatcion</span>
+                <span class="c">#valid &#39;in&#39; interatcion</span>
 
                 <span class="c"># select input signatures in regard of selected</span>
                 <span class="n">inR</span><span class="p">,</span><span class="n">inT</span><span class="p">,</span><span class="n">inD</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">intercyGc2Gt</span><span class="p">(</span><span class="n">cy</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;target&#39;</span><span class="p">)</span>
@@ -1942,7 +1942,7 @@
                     <span class="n">voutT</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">fcy</span><span class="p">)</span>
 
                 <span class="c"># for each (identified interesting ) input interactions of the cycle</span>
-                <span class="c"># find all path to each (identified interesting) output interactions</span>
+                <span class="c">#find all path to each (identified interesting) output interactions</span>
 
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">vinT</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">voutT</span><span class="p">:</span>
@@ -1962,10 +1962,10 @@
                     <span class="n">vinT</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span> <span class="n">fcy</span><span class="p">)</span>
                 <span class="n">voutT</span> <span class="o">=</span> <span class="n">inR</span> <span class="o">+</span> <span class="n">inD</span>
                 <span class="n">kdif</span> <span class="o">=</span> <span class="p">(</span><span class="n">vinT</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">vinT</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">vinT</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
-                <span class="c"># keep trace of last segments</span>
+                <span class="c">#keep trace of last segments</span>
                 <span class="n">sinf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">vinT</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vinT</span><span class="p">))])</span>
                 <span class="c"># for each (identified interesting ) input interactions,</span>
-                <span class="c"># find path to each reverb/diffract interaction of last cycle</span>
+                <span class="c">#find path to each reverb/diffract interaction of last cycle</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">vinT</span><span class="p">:</span>
                     <span class="n">io</span><span class="o">=</span><span class="p">{}</span>
                     <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">voutT</span><span class="p">:</span>
@@ -1977,12 +1977,12 @@
                 <span class="c"># dni[i[0],i[1],i[2],0,0,0] = ino</span>
 
 
-        <span class="c"># dictionnary of interactions id keys</span>
+        <span class="c">#dictionnary of interactions id keys</span>
         <span class="c"># interaction id key are build as tuple Transmission inter in ,</span>
         <span class="c"># Transmission interaction id input ,  Transmission interaction id output</span>
         <span class="c"># e.g. (34, 13, 12, 36, 12, 11).</span>
-        <span class="c"># (0,0,0,X,X,X) stands for all interactions from the source</span>
-        <span class="c"># (X,X,X,0,0,0) stands for all interactions from the target</span>
+        <span class="c">#(0,0,0,X,X,X) stands for all interactions from the source</span>
+        <span class="c">#(X,X,X,0,0,0) stands for all interactions from the target</span>
         <span class="n">kdi</span> <span class="o">=</span> <span class="n">di</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 
         <span class="c"># Create 2 arrays with</span>
@@ -1995,7 +1995,7 @@
         <span class="n">out</span><span class="o">=</span><span class="p">[]</span>
         <span class="n">lsig</span><span class="o">=</span><span class="p">{}</span>
 
-        <span class="c"># initialize loop on the 1st interaction id(0,0,0,X,X,X)</span>
+        <span class="c">#initialize loop on the 1st interaction id(0,0,0,X,X,X)</span>
 
         <span class="c"># uinit = np.unique(np.where(adi[:,:3]==0)[0])</span>
         <span class="n">uinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">adi</span><span class="p">[:,:</span><span class="mi">3</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="mi">3</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -2041,7 +2041,7 @@
                 <span class="c"># ipdb.set_trace()</span>
                 <span class="c"># us=us[keep]</span>
                 <span class="k">for</span> <span class="n">uus</span> <span class="ow">in</span> <span class="n">us</span><span class="p">:</span>
-                    <span class="c"># 1st input interactions to all identified a outputs</span>
+                    <span class="c">#1st input interactions to all identified a outputs</span>
                     <span class="k">try</span><span class="p">:</span>
                         <span class="n">lsig</span><span class="o">=</span><span class="n">dsigio</span><span class="p">[</span><span class="n">kdi</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">3</span><span class="p">:]]</span>
                     <span class="k">except</span><span class="p">:</span>
@@ -2050,7 +2050,7 @@
                     <span class="n">sigio</span><span class="o">=</span><span class="p">{}</span>
                     <span class="c"># loop on input interactions</span>
                     <span class="k">for</span> <span class="n">ki</span> <span class="ow">in</span> <span class="n">lsig</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                        <span class="c"># loop on output interactions</span>
+                        <span class="c">#loop on output interactions</span>
                         <span class="k">for</span> <span class="n">ko</span> <span class="ow">in</span> <span class="n">di</span><span class="p">[</span><span class="n">kdi</span><span class="p">[</span><span class="n">uus</span><span class="p">]]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
 
                             <span class="c"># remove impossible signature in terms of cones</span>
@@ -2133,7 +2133,7 @@
 
 
         <span class="n">sig</span><span class="o">=</span><span class="n">dsigiosave</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)]</span>
-        <span class="c"># reshaping to be compliant with signatures format</span>
+        <span class="c">#reshaping to be compliant with signatures format</span>
         <span class="n">sig2</span><span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">sig</span><span class="p">[</span><span class="n">x</span><span class="p">],</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sig</span><span class="p">}</span>
         <span class="n">sig2</span><span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">sig2</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">sig2</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]),</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sig2</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">sig2</span><span class="p">)</span>
@@ -2193,8 +2193,8 @@
         <span class="n">lcil</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">cycleinline</span><span class="p">(</span><span class="n">source</span><span class="p">,</span><span class="n">target</span><span class="p">)</span>
         <span class="n">llcil</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">lcil</span><span class="p">)</span>
 
-        <span class="c"># # approach 2</span>
-        <span class="c"># # 2.1- make a shortest path from source to target cycles</span>
+        <span class="c"># #approach 2</span>
+        <span class="c"># #2.1- make a shortest path from source to target cycles</span>
         <span class="c"># G=nx.Graph(self.L.Gt)</span>
         <span class="c"># G.remove_node(0)</span>
         <span class="c"># lcil = nx.dijkstra_path(G,source,target)</span>
@@ -2203,17 +2203,17 @@
         <span class="c"># # 2.2- for all cycle in the shortest path, find cycle intersected</span>
         <span class="c"># for ll in range(llcil-1) :</span>
         <span class="c">#     nlcil.extend(self.L.cycleinline(lcil[ll],lcil[ll+1])[:-1])</span>
-        <span class="c"># # add target exclued in the loop above</span>
+        <span class="c"># #add target exclued in the loop above</span>
         <span class="c"># nlcil.extend([target])</span>
         <span class="c"># lcil = nlcil</span>
         <span class="n">llcil</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">lcil</span><span class="p">)</span>
 
-        <span class="c"># 2 determine input signatures for each cycles</span>
-        <span class="c"># di key = [input seg, input room, output seg, output room]</span>
+        <span class="c">#2 determine input signatures for each cycles</span>
+        <span class="c">#di key = [input seg, input room, output seg, output room]</span>
         <span class="n">di</span><span class="o">=</span><span class="p">{}</span>
         <span class="c"># number of points and seg of layout</span>
         <span class="n">allpt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">tgs</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">ldiffin</span> <span class="p">))</span>
-        <span class="c"># mapping segemnts</span>
+        <span class="c">#mapping segemnts</span>
         <span class="n">segmapp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">tgs</span>
         <span class="c"># mapping diffraction</span>
         <span class="n">diffmapp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="o">-</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">ldiffin</span><span class="p">)),</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;int16&#39;</span><span class="p">)</span>
@@ -2256,9 +2256,9 @@
             <span class="n">D</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
             <span class="n">ddin</span><span class="o">=</span><span class="p">{}</span>
             <span class="n">ddout</span><span class="o">=</span><span class="p">{}</span>
-            <span class="c"># outgoing diffraction</span>
+            <span class="c">#outgoing diffraction</span>
             <span class="n">outD</span><span class="o">=</span><span class="p">[]</span>
-            <span class="c"># ingoing diffraction</span>
+            <span class="c">#ingoing diffraction</span>
             <span class="n">inD</span><span class="o">=</span><span class="p">[]</span>
             <span class="c"># inside cycle diffraction</span>
             <span class="n">insideD</span><span class="o">=</span><span class="p">[]</span>
@@ -2267,7 +2267,7 @@
                 <span class="n">dcy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">ptGs2cy</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
                 <span class="c"># keep only current cycle and its merged neighbords in Gc</span>
                 <span class="n">dcy</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">lcy</span><span class="p">,</span><span class="n">dcy</span><span class="p">)</span>
-                <span class="c"># remove the current cycle</span>
+                <span class="c">#remove the current cycle</span>
                 <span class="n">dcy</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">!=</span> <span class="n">cy</span><span class="p">,</span><span class="n">dcy</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">len</span> <span class="p">(</span><span class="n">dcy</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="n">outD</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">d</span><span class="p">,))</span>
@@ -2286,7 +2286,7 @@
         <span class="k">for</span> <span class="n">icy</span><span class="p">,</span><span class="n">cy</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lcil</span><span class="p">):</span>
 
             <span class="n">vinT</span><span class="o">=</span><span class="p">[]</span>
-            <span class="c"># valid &#39;out&#39; interatcion</span>
+            <span class="c">#valid &#39;out&#39; interatcion</span>
             <span class="n">voutT</span><span class="o">=</span><span class="p">[]</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">cy</span><span class="p">]</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;merged&#39;</span><span class="p">):</span>
                 <span class="n">cym</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">cy</span><span class="p">][</span><span class="s">&#39;merged&#39;</span><span class="p">]</span>
@@ -2309,11 +2309,11 @@
                 <span class="n">insideD</span><span class="p">,</span><span class="n">inD</span><span class="p">,</span><span class="n">outD</span><span class="p">,</span><span class="n">ddin</span><span class="p">,</span><span class="n">ddout</span><span class="o">=</span><span class="n">dido</span><span class="p">(</span><span class="n">cy</span><span class="p">,</span><span class="n">lcy</span><span class="p">)</span>
 
 
-                <span class="c"># outgoing inter</span>
+                <span class="c">#outgoing inter</span>
                 <span class="n">vout</span><span class="o">=</span><span class="n">voutT</span><span class="o">+</span><span class="n">outD</span>
-                <span class="c"># inside inter</span>
+                <span class="c">#inside inter</span>
                 <span class="n">insideRD</span> <span class="o">=</span> <span class="n">insideR</span> <span class="o">+</span> <span class="n">insideD</span>
-                <span class="c"># for each reverb/diffract interaction,</span>
+                <span class="c">#for each reverb/diffract interaction,</span>
                 <span class="c"># inside 1st cycle, search the output interactions</span>
 
                 <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">vout</span><span class="p">:</span>
@@ -2331,7 +2331,7 @@
 
             <span class="k">elif</span> <span class="p">(</span><span class="n">icy</span> <span class="o">&gt;=</span><span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">icy</span> <span class="o">&lt;</span><span class="n">llcil</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
 
-                <span class="c"># valid &#39;in&#39; interatcion</span>
+                <span class="c">#valid &#39;in&#39; interatcion</span>
 
                 <span class="c"># select input signatures in regard of selected</span>
                 <span class="n">insideR</span><span class="p">,</span><span class="n">inT</span><span class="p">,</span><span class="n">D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">intercy</span><span class="p">(</span><span class="n">cy</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;target&#39;</span><span class="p">)</span>
@@ -2347,7 +2347,7 @@
                     <span class="n">fcy</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">cycle</span> <span class="o">==</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">outT</span><span class="p">)</span>
                     <span class="n">voutT</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">fcy</span><span class="p">)</span>
 
-                <span class="c"># forbiden interactions</span>
+                <span class="c">#forbiden interactions</span>
 
                 <span class="n">dfi</span><span class="o">=</span><span class="p">{}</span>
 
@@ -2357,12 +2357,12 @@
                     <span class="k">except</span><span class="p">:</span>
                         <span class="n">dfi</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="p">[</span><span class="n">ii</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 
-                <span class="c"># incoming Transmission and diffraction</span>
+                <span class="c">#incoming Transmission and diffraction</span>
                 <span class="n">vin</span> <span class="o">=</span> <span class="n">vinT</span> <span class="o">+</span> <span class="n">inD</span>
-                <span class="c"># outgoing Transmission and diffraction</span>
+                <span class="c">#outgoing Transmission and diffraction</span>
                 <span class="n">vout</span> <span class="o">=</span> <span class="n">voutT</span> <span class="o">+</span> <span class="n">outD</span>
                 <span class="c"># for each (identified interesting ) input interactions of the cycle</span>
-                <span class="c"># find all path to each (identified interesting) output interactions</span>
+                <span class="c">#find all path to each (identified interesting) output interactions</span>
                 
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">vin</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">vout</span><span class="p">:</span>
@@ -2415,7 +2415,7 @@
                 <span class="n">vin</span> <span class="o">=</span> <span class="n">vinT</span> <span class="o">+</span> <span class="n">inD</span>
 
                 <span class="c"># for each (identified interesting ) input interactions,</span>
-                <span class="c"># find path to each reverb/diffract interaction of last cycle</span>
+                <span class="c">#find path to each reverb/diffract interaction of last cycle</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">vin</span><span class="p">:</span>
                     <span class="n">io</span><span class="o">=</span><span class="p">{}</span>
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -2433,12 +2433,12 @@
                             <span class="n">di</span><span class="p">[</span><span class="n">ii</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">ii</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">ii</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)],</span><span class="n">ndmin</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
                 <span class="c"># dni[i[0],i[1],i[2],0,0,0] = ino</span>
 
-        <span class="c"># dictionnary of interactions id keys</span>
+        <span class="c">#dictionnary of interactions id keys</span>
         <span class="c"># interaction id key are build as tuple Transmission inter in ,</span>
         <span class="c"># Transmission interaction id input ,  Transmission interaction id output</span>
         <span class="c"># e.g. (34, 13, 12, 36, 12, 11).</span>
-        <span class="c"># (0,0,0,X,X,X) stands for all interactions from the source</span>
-        <span class="c"># (X,X,X,0,0,0) stands for all interactions from the target</span>
+        <span class="c">#(0,0,0,X,X,X) stands for all interactions from the source</span>
+        <span class="c">#(X,X,X,0,0,0) stands for all interactions from the target</span>
         <span class="n">kdi</span> <span class="o">=</span> <span class="n">di</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
         <span class="c"># Create 2 arrays with</span>
         <span class="c"># input and output interactions id respectively</span>
@@ -2448,7 +2448,7 @@
         <span class="n">out</span><span class="o">=</span><span class="p">[]</span>
         <span class="n">lsig</span><span class="o">=</span><span class="p">{}</span>
 
-        <span class="c"># initialize loop on the 1st interaction id(0,0,0,X,X,X)</span>
+        <span class="c">#initialize loop on the 1st interaction id(0,0,0,X,X,X)</span>
 
         <span class="c"># uinit = np.unique(np.where(adi[:,:3]==0)[0])</span>
         <span class="n">uinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">adi</span><span class="p">[:,:</span><span class="mi">3</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="mi">3</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -2485,13 +2485,13 @@
 
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">oldout</span><span class="p">:</span>
 
-                <span class="c"># if not last loop, </span>
-                <span class="c"># find all the output interaction with a given in interaction (adi[k])</span>
+                <span class="c">#if not last loop, </span>
+                <span class="c">#find all the output interaction with a given in interaction (adi[k])</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">lastloop</span><span class="p">:</span>
                     <span class="n">us</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">adii</span><span class="o">-</span><span class="n">adio</span><span class="p">[</span><span class="n">k</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="mi">0</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
                     <span class="n">keep</span><span class="o">=</span><span class="p">[]</span>
                     <span class="c"># remove output interaction already visited</span>
-                    <span class="c"># for lightned computation</span>
+                    <span class="c">#for lightned computation</span>
                     <span class="k">for</span> <span class="n">iuus</span><span class="p">,</span><span class="n">uus</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">us</span><span class="p">)</span> <span class="p">:</span>
                         <span class="k">if</span> <span class="ow">not</span> <span class="n">uus</span> <span class="ow">in</span> <span class="n">outall</span> <span class="p">:</span>
                             <span class="k">if</span> <span class="n">adi</span><span class="p">[</span><span class="n">uus</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">lastloop</span><span class="p">:</span>
@@ -2513,7 +2513,7 @@
                     <span class="n">sigio</span><span class="o">=</span><span class="p">{}</span>
                     <span class="c"># loop on input interactions</span>
                     <span class="k">for</span> <span class="n">ki</span> <span class="ow">in</span> <span class="n">lsig</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                        <span class="c"># loop on output interactions</span>
+                        <span class="c">#loop on output interactions</span>
                         <span class="k">for</span> <span class="n">ko</span> <span class="ow">in</span> <span class="n">di</span><span class="p">[</span><span class="n">kdi</span><span class="p">[</span><span class="n">uus</span><span class="p">]]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                           <span class="c"># remove impossible signature in terms of cones</span>
                             <span class="n">lin</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lsig</span><span class="p">[</span><span class="n">ki</span><span class="p">])</span>
@@ -2571,8 +2571,8 @@
             <span class="k">if</span> <span class="n">lcil</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="n">lcil</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
                 <span class="n">lastloop</span><span class="o">=</span><span class="bp">True</span>
 
-            <span class="c"># filtering for avoiding computing extra </span>
-            <span class="c"># interaction in/out couples</span>
+            <span class="c">#filtering for avoiding computing extra </span>
+            <span class="c">#interaction in/out couples</span>
             <span class="n">bo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">adi</span><span class="p">)),</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;bool&#39;</span><span class="p">)</span>
             <span class="n">tmp</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">adi</span><span class="p">)),</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;bool&#39;</span><span class="p">)</span>
             <span class="c"># input cycle interaction must be in the already visited list of cycles (lcil)</span>
@@ -2589,7 +2589,7 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span> <span class="o">|</span> <span class="p">(</span><span class="n">adi</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
             <span class="n">bo</span> <span class="o">=</span> <span class="n">bo</span> <span class="o">&amp;</span> <span class="n">tmp</span>
-            <span class="c"># consider only insteraction from the current cycle</span>
+            <span class="c">#consider only insteraction from the current cycle</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">lastloop</span><span class="p">:</span>
                 <span class="n">bo</span> <span class="o">=</span> <span class="n">bo</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">adi</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">==</span><span class="n">lcil</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">adi</span><span class="p">[:,</span><span class="mi">4</span><span class="p">]</span><span class="o">==</span><span class="n">lcil</span><span class="p">[</span><span class="n">idx</span><span class="p">]))</span>
             <span class="n">oldout</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">bo</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
@@ -2597,7 +2597,7 @@
 
 
         <span class="n">sig</span><span class="o">=</span><span class="n">dsigiosave</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)]</span>
-        <span class="c"># reshaping to be compliant with signatures format</span>
+        <span class="c">#reshaping to be compliant with signatures format</span>
         <span class="n">sig2</span><span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">sig</span><span class="p">[</span><span class="n">x</span><span class="p">],</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sig</span><span class="p">}</span>
         <span class="n">sig2</span><span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">sig2</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">sig2</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]),</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sig2</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sig2</span><span class="p">[</span><span class="n">x</span><span class="p">])</span><span class="o">&gt;</span><span class="mi">0</span> <span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">sig2</span><span class="p">)</span>
@@ -4877,8 +4877,8 @@
         <span class="c"># loop on number of interactions</span>
         <span class="k">for</span> <span class="n">ninter</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">signatures</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">ninter</span><span class="p">])</span>
-            <span class="c"># get segment ids of signature with 4 interactions</span>
-            <span class="c"># get segment ids of signature with ninter interactions</span>
+            <span class="c">#get segment ids of signature with 4 interactions</span>
+            <span class="c">#get segment ids of signature with ninter interactions</span>
             <span class="n">seg</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">ninter</span><span class="p">][::</span><span class="mi">2</span><span class="p">]</span>
             <span class="n">unegseg</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">seg</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">uninegseg</span><span class="p">,</span><span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">seg</span><span class="p">[</span><span class="n">unegseg</span><span class="p">],</span><span class="n">return_inverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -4887,7 +4887,7 @@
             <span class="n">nsig</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seg</span><span class="p">)</span>
 
             <span class="c"># determine positions of points limiting the semgments</span>
-            <span class="c"># 1 get index in L.tahe</span>
+            <span class="c">#1 get index in L.tahe</span>
             <span class="c"># 2 get associated position in L.pt</span>
 
 
@@ -4896,7 +4896,7 @@
             <span class="n">pt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt</span><span class="p">[:,</span><span class="n">utahe</span><span class="p">]</span>
             
 
-            <span class="c">#### WARNING BIG TRICK HERE :</span>
+            <span class="c">####WARNING BIG TRICK HERE :</span>
             <span class="c">#### pa and pb are not set as the same value </span>
             <span class="c">#### to avoid a singular matrixnext.</span>
             <span class="c">#### set pa =-pb has no incidence but avoid complex and vain code </span>
@@ -4909,18 +4909,18 @@
             <span class="c"># pt shape =</span>
             <span class="c"># 0 : (x,y) coordinates x=0,y=1</span>
             <span class="c"># 1 : 2 points (linking the semgnet) a=0,b=1</span>
-            <span class="c"># 2 : nb of found signatures/segments</span>
+            <span class="c">#2 : nb of found signatures/segments</span>
             <span class="c"># 3 : nb interaction</span>
             <span class="c">#shape =</span>
             <span class="c"># 0 : (x,y) coordinates x=0,y=1</span>
             <span class="c"># 1 : 2 points (linking the semgnet) a=0,b=1</span>
-            <span class="c"># 2 : nb of found signatures/segments</span>
+            <span class="c">#2 : nb of found signatures/segments</span>
             <span class="c"># 3 : nb interaction</span>
             <span class="c"># how to do this into a while loop</span>
             <span class="n">p</span><span class="o">=</span><span class="n">rx</span>
 
             <span class="c"># creating W matrix required in eq (2.70) thesis Nicolas AMIOT</span>
-            <span class="c"># Warning W is rolled after and becomes (nsig,4,4)</span>
+            <span class="c">#Warning W is rolled after and becomes (nsig,4,4)</span>
             <span class="n">W</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="n">nsig</span><span class="p">))</span>
             <span class="n">I</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nsig</span><span class="p">))</span>
             <span class="n">W</span><span class="p">[:</span><span class="mi">2</span><span class="p">,:</span><span class="mi">2</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">I</span>
@@ -4939,7 +4939,7 @@
             <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-2</span>
             <span class="n">rayp_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="n">nsig</span><span class="p">,</span><span class="n">ninter</span><span class="p">))</span>
             <span class="c"># rayp_i[:2,:,-1]=rx[:,None]</span>
-            <span class="c"># backtrace process</span>
+            <span class="c">#backtrace process</span>
             <span class="c"># if ninter == 6:</span>
             <span class="c">#     print np.where(((signatures[:,0]==42) &amp;(signatures[:,1]==-277) &amp; (signatures[:,2]==135) &amp; (signatures[:,3]==21) &amp; (signatures[:,4]==46) &amp; (signatures[:,5]==319)))</span>
             <span class="c">#     import ipdb</span>
@@ -4947,7 +4947,7 @@
 
             <span class="k">while</span> <span class="n">kinter</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
 
-                <span class="c"># Initilization, using the Tx position</span>
+                <span class="c">#Initilization, using the Tx position</span>
                 <span class="k">if</span> <span class="n">kinter</span> <span class="o">==</span> <span class="n">ninter</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
                     <span class="n">p_min_m</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">-</span><span class="n">Mr</span><span class="p">[</span><span class="n">ninter</span><span class="p">][:,:,</span><span class="n">kinter</span><span class="p">]</span>
                 <span class="k">else</span> <span class="p">:</span>
@@ -4984,7 +4984,7 @@
                 <span class="n">Mr</span><span class="p">[</span><span class="n">ninter</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">Mr</span><span class="p">[</span><span class="n">ninter</span><span class="p">],</span><span class="n">invalid_sig</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
                 <span class="n">rayp_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">rayp_i</span><span class="p">,</span><span class="n">invalid_sig</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-                <span class="c"># remove signatures</span>
+                <span class="c">#remove signatures</span>
 
                 <span class="n">usig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">invalid_sig</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">2</span><span class="p">)</span>
                 <span class="n">usig</span><span class="p">[::</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">usig</span><span class="p">[::</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span>
@@ -4997,12 +4997,12 @@
 
                 <span class="n">psolved</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">W</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
 
-                <span class="c"># valid ray is : 0 &lt; \alpha &lt; 1 and 0&lt; \beta &lt; 1</span>
+                <span class="c">#valid ray is : 0 &lt; \alpha &lt; 1 and 0&lt; \beta &lt; 1</span>
 
                 <span class="c"># alpha</span>
                 <span class="n">uvalidA</span><span class="o">=</span> <span class="n">psolved</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span><span class="mf">0.</span>
                 <span class="n">uvalidB</span><span class="o">=</span> <span class="n">psolved</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">1.</span>
-                <span class="c"># beta</span>
+                <span class="c">#beta</span>
                 <span class="n">uvalidC</span><span class="o">=</span> <span class="n">psolved</span><span class="p">[:,</span><span class="mi">3</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">epsilon</span>
                 <span class="n">uvalidD</span><span class="o">=</span> <span class="n">psolved</span><span class="p">[:,</span><span class="mi">3</span><span class="p">]</span> <span class="o">&lt;=</span><span class="mf">1.</span><span class="o">-</span><span class="n">epsilon</span>
                 <span class="n">valid</span> <span class="o">=</span> <span class="n">uvalidA</span> <span class="o">&amp;</span> <span class="n">uvalidB</span> <span class="o">&amp;</span> <span class="n">uvalidC</span> <span class="o">&amp;</span> <span class="n">uvalidD</span>
@@ -5011,9 +5011,9 @@
                 <span class="n">uvalid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">valid</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
                 <span class="c"># re-add correct position of diffraction interations</span>
-                <span class="c"># indeed diffraction point should not been solved with linalg, </span>
+                <span class="c">#indeed diffraction point should not been solved with linalg, </span>
                 <span class="c"># but by setting pa=-pb, no singular matrix appear</span>
-                <span class="c"># and diffraction points can be re-add thereafter.</span>
+                <span class="c">#and diffraction points can be re-add thereafter.</span>
                 <span class="n">psolved</span><span class="p">[</span><span class="n">uuD</span><span class="p">,:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">ptr</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="n">uuD</span><span class="p">,</span><span class="n">kinter</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
 
                 <span class="n">pvalid</span> <span class="o">=</span> <span class="n">psolved</span><span class="p">[</span><span class="n">uvalid</span><span class="p">,:</span><span class="mi">2</span><span class="p">]</span>
@@ -5036,7 +5036,7 @@
                 <span class="n">signatures</span> <span class="o">=</span> <span class="n">signatures</span><span class="p">[</span><span class="n">usigv</span><span class="p">,:]</span>
                 <span class="n">rayp_i</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span><span class="n">uvalid</span><span class="p">,</span><span class="n">kinter</span><span class="p">]</span> <span class="o">=</span> <span class="n">pvalid</span><span class="o">.</span><span class="n">T</span>
                 <span class="n">rayp_i</span> <span class="o">=</span> <span class="n">rayp_i</span><span class="p">[:,</span><span class="n">uvalid</span><span class="p">,:]</span>
-                <span class="c"># if no more rays are valid , then quit block</span>
+                <span class="c">#if no more rays are valid , then quit block</span>
                 <span class="c"># (kinter &lt;0 is the exit while condition)</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">uvalid</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">:</span>
                     <span class="n">kinter</span><span class="o">=</span><span class="n">kinter</span><span class="o">-</span><span class="mi">1</span>
@@ -5071,7 +5071,7 @@
         <span class="c"># loop on number of interactions</span>
         <span class="k">for</span> <span class="n">ninter</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
 
-            <span class="c"># get segment ids of signature with ninter interactions</span>
+            <span class="c">#get segment ids of signature with ninter interactions</span>
             <span class="n">seg</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">ninter</span><span class="p">][::</span><span class="mi">2</span><span class="p">]</span>
             <span class="c"># seek for diffraction</span>
             <span class="c"># negative index points are diffraction points</span>
@@ -5082,7 +5082,7 @@
 
             <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="n">nsig</span><span class="p">,</span><span class="n">ninter</span><span class="p">))</span>
             <span class="c"># determine positions of points limiting the segments</span>
-            <span class="c"># 1 get index in L.tahe</span>
+            <span class="c">#1 get index in L.tahe</span>
             <span class="c"># 2 get associated position in L.pt</span>
 
             <span class="n">utahe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">tahe</span><span class="p">[:,</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">tgs</span><span class="p">[</span><span class="n">seg</span><span class="p">]]</span>
@@ -5105,11 +5105,11 @@
             <span class="c"># pt shape =</span>
             <span class="c"># 0 : (x,y) coordinates x=0,y=1</span>
             <span class="c"># 1 : 2 points (linking the segment) a=0,b=1</span>
-            <span class="c"># 2 : nb of found signatures/segments</span>
+            <span class="c">#2 : nb of found signatures/segments</span>
             <span class="c"># 3 : nb interactions</span>
 
             <span class="c">############</span>
-            <span class="c"># formula 2.61 -&gt; 2.64 N.AMIOT PH.D thesis</span>
+            <span class="c">#formula 2.61 -&gt; 2.64 N.AMIOT PH.D thesis</span>
             <span class="c">############</span>
             <span class="n">sx</span> <span class="o">=</span> <span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,:,:]</span><span class="o">-</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:,:]</span>
             <span class="n">sy</span> <span class="o">=</span> <span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,:,:]</span><span class="o">-</span><span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,:,:]</span>
@@ -5148,7 +5148,7 @@
             <span class="n">ityp</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">ninter</span><span class="p">][</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span>
 
             <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">ninter</span><span class="p">):</span>
-                <span class="c"># get segment ids of signature with ninter interactions</span>
+                <span class="c">#get segment ids of signature with ninter interactions</span>
                 <span class="n">uT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ityp</span><span class="p">[:,</span><span class="n">n</span><span class="p">]</span><span class="o">==</span><span class="mi">3</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">uR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ityp</span><span class="p">[:,</span><span class="n">n</span><span class="p">]</span><span class="o">==</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">uD</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ityp</span><span class="p">[:,</span><span class="n">n</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -5156,9 +5156,9 @@
                     <span class="n">p</span><span class="o">=</span><span class="n">tx</span><span class="p">[:,</span><span class="bp">None</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nsig</span><span class="p">))</span>
                 <span class="k">else</span> <span class="p">:</span>
                     <span class="n">p</span><span class="o">=</span><span class="n">M</span><span class="p">[:,:,</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-                <span class="c"># reflexion 0 (2.67)</span>
+                <span class="c">#reflexion 0 (2.67)</span>
                 <span class="n">M</span><span class="p">[:,</span><span class="n">uR</span><span class="p">,</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">&#39;ijk,jk-&gt;ik&#39;</span><span class="p">,</span><span class="n">K</span><span class="p">[:,:,</span><span class="n">uR</span><span class="p">,</span><span class="n">n</span><span class="p">],</span><span class="n">p</span><span class="p">[:,</span><span class="n">uR</span><span class="p">])</span><span class="o">+</span><span class="n">v</span><span class="p">[:,</span><span class="n">uR</span><span class="p">,</span><span class="n">n</span><span class="p">]</span>
-                <span class="c"># transmission 0 (2.67)</span>
+                <span class="c">#transmission 0 (2.67)</span>
                 <span class="n">M</span><span class="p">[:,</span><span class="n">uT</span><span class="p">,</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span><span class="n">uT</span><span class="p">]</span>
                 <span class="n">M</span><span class="p">[:,</span><span class="n">uD</span><span class="p">,</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">pt</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="n">uD</span><span class="p">,</span><span class="n">n</span><span class="p">]</span>
 
@@ -5210,14 +5210,14 @@
 
         <span class="n">dM</span><span class="o">=</span><span class="p">{}</span>
         <span class="k">for</span> <span class="n">ninter</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="c"># get segment ids of signature with ninter interactions</span>
+            <span class="c">#get segment ids of signature with ninter interactions</span>
             <span class="n">seg</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">ninter</span><span class="p">][::</span><span class="mi">2</span><span class="p">]</span>
             <span class="n">nsig</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seg</span><span class="p">)</span>
             <span class="c"># determine positions of points limiting the semgments</span>
-            <span class="c"># 1 get index in L.tahe</span>
+            <span class="c">#1 get index in L.tahe</span>
             <span class="c"># 2 get associated position in L.pt</span>
 
-            <span class="c"># utahe (2 pt indexes,nb_signatures,nb_interactions)</span>
+            <span class="c">#utahe (2 pt indexes,nb_signatures,nb_interactions)</span>
 
             <span class="n">utahe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">tahe</span><span class="p">[:,</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">tgs</span><span class="p">[</span><span class="n">seg</span><span class="p">]]</span>
 
@@ -5229,11 +5229,11 @@
             <span class="c"># pt shape =</span>
             <span class="c"># 0 : (x,y) coordinates x=0,y=1</span>
             <span class="c"># 1 : 2 points (linking the semgnet) a=0,b=1</span>
-            <span class="c"># 2 : nb of found signatures/segments</span>
+            <span class="c">#2 : nb of found signatures/segments</span>
             <span class="c"># 3 : nb interaction</span>
 
             <span class="c">############</span>
-            <span class="c"># formula 2.61 -&gt; 2.64 N.AMIOT thesis</span>
+            <span class="c">#formula 2.61 -&gt; 2.64 N.AMIOT thesis</span>
             <span class="c">############</span>
             <span class="n">den</span> <span class="o">=</span> <span class="p">((</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:,:]</span><span class="o">-</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,:,:])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,:,:]</span><span class="o">-</span><span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,:,:])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
             <span class="n">uz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">den</span> <span class="o">==</span><span class="mi">0</span><span class="p">)</span>
@@ -5263,13 +5263,13 @@
             <span class="c"># d= 2*(pt[0,0,:,:]*(pt[1,0,:,:]-pt[1,1,:,:])*(pt[0,1,:,:]-pt[0,0,:,:])+pt[1,0,:,:]*(pt[0,1,:,:]-pt[0,0,:,:])**2)</span>
             <span class="c"># d= d/(1.*den)</span>
 
-            <span class="c"># get segment ids of signature with ninter interactions</span>
+            <span class="c">#get segment ids of signature with ninter interactions</span>
             <span class="n">ityp</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">ninter</span><span class="p">][</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span>
             <span class="n">uT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ityp</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:]</span><span class="o">==</span><span class="mi">3</span><span class="p">)</span>
             <span class="n">uR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ityp</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:]</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span>
             <span class="n">uD</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ityp</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:]</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
 
-            <span class="c"># create matrix AM which is used to create marix A from eq. 2.65</span>
+            <span class="c">#create matrix AM which is used to create marix A from eq. 2.65</span>
             <span class="n">AM</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">ninter</span><span class="p">)[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nsig</span><span class="p">)</span>
 
             <span class="c"># Reflexion MAtrix K (2.59)</span>
@@ -5278,7 +5278,7 @@
             <span class="n">v</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">]))</span>
 
             <span class="c">############</span>
-            <span class="c"># Create matrix A (2.66) which is fill by blocks</span>
+            <span class="c">#Create matrix A (2.66) which is fill by blocks</span>
             <span class="c">############</span>
 
 
@@ -5300,18 +5300,18 @@
             <span class="c"># 2. repeat is created because to each signature/interaction correspond a 2x1 column. Repeat allow to have the correct size to fill y</span>
             <span class="c"># 3. fill the 1st line of y to take into consideration that difference.</span>
 
-            <span class="c"># y is the 2nd memeber from from (2.65) and will be filled following (2.67)</span>
+            <span class="c">#y is the 2nd memeber from from (2.65) and will be filled following (2.67)</span>
             <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">ninter</span><span class="p">,</span><span class="n">nsig</span><span class="p">))</span>
 
             <span class="c">#######</span>
             <span class="c"># Determine where y has to be filed with R|T|D</span>
             <span class="c">#####</span>
-            <span class="c"># find the position where there is T|R|D. non continuous =&gt; need mask array</span>
+            <span class="c">#find the position where there is T|R|D. non continuous =&gt; need mask array</span>
             <span class="n">uTf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ityp</span><span class="o">==</span><span class="mi">3</span><span class="p">)</span>
             <span class="n">uRf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ityp</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span>
             <span class="n">uDf</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ityp</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
 
-            <span class="c"># postiion in signature &lt;=&gt; 2 lines in y . need to repeat to get the correct size</span>
+            <span class="c">#postiion in signature &lt;=&gt; 2 lines in y . need to repeat to get the correct size</span>
             <span class="n">uRy2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">uRf</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">2</span><span class="p">)</span>
             <span class="n">uRy1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">uRf</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">2</span><span class="p">)</span>
             <span class="n">uRy1</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">uRy1</span>
@@ -5328,7 +5328,7 @@
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">pass</span>
                 <span class="c">#uT1mr = np.repeat(uT1m.mask,2,axis=1).T</span>
-                <span class="c"># nothing to do. shoould be a zero vector , already initialized by y</span>
+                <span class="c">#nothing to do. shoould be a zero vector , already initialized by y</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="k">pass</span> <span class="c">#print &#39;no T&#39;</span>
             <span class="k">try</span><span class="p">:</span>
@@ -5346,24 +5346,24 @@
             <span class="n">uR0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ityp</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">uD0</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ityp</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
-            <span class="c"># reflexion 0 (2.67)</span>
+            <span class="c">#reflexion 0 (2.67)</span>
             <span class="n">r0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">&#39;ijk,j-&gt;ik&#39;</span><span class="p">,</span><span class="n">K</span><span class="p">[:,:,</span><span class="n">uR0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">tx</span><span class="p">)</span><span class="o">+</span><span class="n">v</span><span class="p">[:,</span><span class="n">uR0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-            <span class="c"># trnasmission 0 (2.67)</span>
+            <span class="c">#trnasmission 0 (2.67)</span>
             <span class="n">t0</span> <span class="o">=</span> <span class="n">tx</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">uT0</span><span class="p">))</span>
-            <span class="c"># diff 0 (2.67)</span>
+            <span class="c">#diff 0 (2.67)</span>
             <span class="n">d0</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">uD0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-            <span class="c"># first line</span>
+            <span class="c">#first line</span>
             <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="n">uR0</span><span class="p">]</span><span class="o">=</span><span class="n">r0</span>
             <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="n">uT0</span><span class="p">]</span><span class="o">=</span><span class="n">t0</span>
             <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="n">uD0</span><span class="p">]</span><span class="o">=</span><span class="n">d0</span>
 
-            <span class="c"># reshape for compliant size with linalg</span>
+            <span class="c">#reshape for compliant size with linalg</span>
             <span class="n">A</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">rollaxis</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">rollaxis</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
             <span class="n">leA</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
             <span class="n">res</span><span class="o">=</span><span class="mi">0</span>
-            <span class="c"># trick for memory usage</span>
+            <span class="c">#trick for memory usage</span>
             <span class="k">if</span> <span class="n">leA</span> <span class="o">&gt;</span> <span class="mf">1e4</span><span class="p">:</span>
                 <span class="n">nsp</span> <span class="o">=</span> <span class="n">nb_split</span><span class="p">(</span><span class="n">leA</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">nsp</span> <span class="o">!=</span> <span class="n">leA</span><span class="p">:</span>
@@ -6262,8 +6262,8 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 30, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on juin 27, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
     

@@ -281,7 +281,7 @@
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
             <span class="n">fil</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">HDFStore</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s">&#39; not founded&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s">&#39; not found&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">append</span><span class="p">:</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">))]</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">fil</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -1085,8 +1085,8 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 30, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on juin 27, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
     

@@ -482,7 +482,7 @@
 <span class="sd">            values  (...,Nx)</span>
 <span class="sd">            the number of dimensions of y is arbitrary.</span>
 <span class="sd">            the last dimension of y must be the primary axis</span>
-
+<span class="sd">        label : list of labels</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
@@ -515,12 +515,26 @@
                             <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)),</span>
                             <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)))</span>
 
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">ndim</span><span class="p">):</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">+</span> <span class="s">&#39; : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+        <span class="c">#for k in range(self.y.ndim):</span>
+        <span class="c">#    st = st + &#39;\n&#39; +self.label[k]+ &#39; : &#39; + str(self.y.shape[k])</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
-
 </div>
+    <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; mean value of the signal</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)()</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">bs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; append bs to Bsignal</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">==</span><span class="n">bs</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">bs</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+
 <div class="viewcode-block" id="Bsignal.extract"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.extract.html#pylayers.signal.bsignal.Bsignal.extract">[docs]</a>    <span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">u</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot; extract a subset of signal from index</span>
 
@@ -986,6 +1000,13 @@
 <span class="sd">        logy  : boolean</span>
 <span class="sd">            default False</span>
 
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        fig : figure</span>
+<span class="sd">        ax : np.array of axes</span>
+
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;iy&#39;</span>  <span class="p">:</span>  <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
@@ -1053,7 +1074,7 @@
         <span class="c">#</span>
         <span class="c"># To be added in mulcplot</span>
         <span class="c">#</span>
-
+    
         <span class="n">tcolor</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="s">&#39;green&#39;</span><span class="p">,</span> <span class="s">&#39;green&#39;</span><span class="p">,</span> <span class="s">&#39;green&#39;</span><span class="p">,</span> <span class="s">&#39;black&#39;</span><span class="p">,</span> <span class="s">&#39;black&#39;</span><span class="p">,</span> <span class="s">&#39;black&#39;</span><span class="p">]</span>
         <span class="n">nl</span><span class="p">,</span><span class="n">nc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nl</span><span class="p">):</span>
@@ -1180,19 +1201,23 @@
         <span class="k">return</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Usignal.__sub__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Usignal.__sub__.html#pylayers.signal.bsignal.Usignal.__sub__">[docs]</a>    <span class="k">def</span> <span class="nf">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
-
+        <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
         <span class="n">t</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span>
         <span class="k">if</span> <span class="p">((</span><span class="n">t</span> <span class="o">==</span> <span class="s">&#39;int&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="s">&#39;float&#39;</span><span class="p">)):</span>
             <span class="n">U</span> <span class="o">=</span> <span class="n">Usignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">u</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">assert</span>  <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
-            <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">align</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">==</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">assert</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
+            <span class="c">#L = self.align(u)</span>
             <span class="c">#u1 = L[0]</span>
             <span class="c">#u2 = L[1]</span>
-            <span class="n">val</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,:]</span> <span class="o">-</span> <span class="n">L</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,:]</span>
-            <span class="k">if</span> <span class="p">((</span><span class="n">val</span><span class="o">.</span><span class="n">ndim</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)):</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-            <span class="n">U</span> <span class="o">=</span> <span class="n">Usignal</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">val</span><span class="p">)</span>
+            <span class="c">#val = L.y[0:-1,:] - L.y[-1,:]</span>
+            <span class="c">#if ((val.ndim&gt;1) &amp; (val.shape[0]==1)):</span>
+            <span class="c">#    val = val.reshape(val.shape[1])</span>
+            <span class="n">U</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)()</span>
+            <span class="n">U</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> 
+            <span class="n">U</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">-</span><span class="n">u</span><span class="o">.</span><span class="n">y</span>
             <span class="c">#U = Usignal(u1.x, u1.y - u2.y)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
 </div>
@@ -1733,10 +1758,20 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; return energy</span>
+    <span class="k">def</span> <span class="nf">integ</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Tns</span><span class="p">,</span><span class="n">Tsns</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; integtation of alphak tauk</span>
+
+<span class="sd">        used energy detector for IEEE 802.15.6 standard</span>
+
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)))</span>
+        <span class="n">u1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">&lt;</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">Tns</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">u2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">&lt;</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">Tsns</span><span class="o">+</span><span class="n">Tns</span><span class="p">))</span> <span class="o">&amp;</span>
+                      <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">&gt;=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">Tsns</span><span class="p">)))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">Hp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">Hi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u2</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="n">Hp</span><span class="p">,</span><span class="n">Hi</span><span class="p">)</span>
 
 <div class="viewcode-block" id="TBsignal.translate"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.TBsignal.translate.html#pylayers.signal.bsignal.TBsignal.translate">[docs]</a>    <span class="k">def</span> <span class="nf">translate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  translate signal by tau</span>
@@ -1928,6 +1963,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+
 <span class="sd">        n</span>
 <span class="sd">        sn</span>
 
@@ -1950,18 +1986,16 @@
             <span class="n">PSDdBmpHz</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pmWpHz</span><span class="p">)</span>
 
         <span class="n">n</span> <span class="o">=</span> <span class="n">Noise</span><span class="p">(</span><span class="n">ti</span> <span class="o">=</span> <span class="n">ti</span><span class="p">,</span>
-                   <span class="n">tf</span> <span class="o">=</span> <span class="n">tf</span><span class="o">+</span><span class="n">tsns</span><span class="p">,</span>
-                   <span class="n">fsGHz</span> <span class="o">=</span> <span class="n">fsGHz</span><span class="p">,</span>
-                   <span class="n">PSDdBmpHz</span> <span class="o">=</span> <span class="n">PSDdBmpHz</span><span class="p">,</span>
-                   <span class="n">R</span> <span class="o">=</span> <span class="n">R</span><span class="p">,</span>
-                   <span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span><span class="p">)</span>
+                  <span class="n">tf</span> <span class="o">=</span> <span class="n">tf</span><span class="o">+</span><span class="n">tsns</span><span class="p">,</span>
+                  <span class="n">fsGHz</span> <span class="o">=</span> <span class="n">fsGHz</span><span class="p">,</span>
+                  <span class="n">PSDdBmpHz</span> <span class="o">=</span> <span class="n">PSDdBmpHz</span><span class="p">,</span>
+                  <span class="n">R</span> <span class="o">=</span> <span class="n">R</span><span class="p">,</span>
+                  <span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span><span class="p">)</span>
 
-
-        <span class="n">sn</span> <span class="o">=</span> <span class="n">TUsignal</span><span class="p">()</span>
-        <span class="n">sn</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">n</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">sn</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">n</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)]</span>
         <span class="n">sn</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
 
-        <span class="k">return</span> <span class="n">sn</span>
+        <span class="k">return</span> <span class="n">sn</span><span class="p">,</span><span class="n">n</span>
 
 <div class="viewcode-block" id="TUsignal.fft"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.TUsignal.fft.html#pylayers.signal.bsignal.TUsignal.fft">[docs]</a>    <span class="k">def</span> <span class="nf">fft</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  forward fast Fourier transform</span>
@@ -2710,7 +2744,7 @@
             <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">thre</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">v</span> <span class="o">=</span> <span class="n">nbint</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
             <span class="n">h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">u</span> <span class="o">&gt;</span> <span class="n">n</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">g</span> <span class="o">=</span> <span class="n">delete</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
             <span class="n">vl</span> <span class="o">=</span> <span class="n">nbint</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
 
             <span class="n">THRE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">THRE</span><span class="p">,</span> <span class="n">thre</span><span class="p">))</span>
@@ -2729,7 +2763,8 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="TUsignal.toa_new"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.TUsignal.toa_new.html#pylayers.signal.bsignal.TUsignal.toa_new">[docs]</a>    <span class="k">def</span> <span class="nf">toa_new</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; calculate time of arrival (new method) </span>
+        <span class="sd">&quot;&quot;&quot; estimate time of arrival (new method)</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
         <span class="n">Max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
@@ -2748,12 +2783,12 @@
 
             <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">thre</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">hr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">u</span> <span class="o">&gt;</span> <span class="n">n</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">g</span> <span class="o">=</span> <span class="n">delete</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">hr</span><span class="p">)</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">hr</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">nmax</span> <span class="o">&gt;=</span> <span class="mi">6000</span><span class="p">:</span>
             <span class="c">#set the fenetre=6000*0.005=30ns</span>
                 <span class="n">hl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">g</span> <span class="o">&lt;</span> <span class="n">nmax</span> <span class="o">-</span> <span class="mi">6000</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">u</span> <span class="o">=</span> <span class="n">delete</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">hl</span><span class="p">)</span>
+                <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">hl</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">u</span> <span class="o">=</span> <span class="n">g</span>
 
@@ -2766,7 +2801,7 @@
                 <span class="n">d</span> <span class="o">=</span> <span class="mi">0</span>
                 <span class="n">n</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
-                <span class="k">print</span> <span class="n">N</span>
+                <span class="c">#print N</span>
 
             <span class="n">thre</span> <span class="o">=</span> <span class="n">thre</span> <span class="o">-</span> <span class="n">step</span>
             <span class="k">if</span> <span class="n">thre</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -2806,12 +2841,12 @@
 
             <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">thre</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">hr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">u</span> <span class="o">&gt;</span> <span class="n">n</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">g</span> <span class="o">=</span> <span class="n">delete</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">hr</span><span class="p">)</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">hr</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">nmax</span> <span class="o">&gt;=</span> <span class="mi">6000</span><span class="p">:</span>
             <span class="c">#set the fenetre=6000*0.005=30ns</span>
                 <span class="n">hl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">g</span> <span class="o">&lt;</span> <span class="n">nmax</span> <span class="o">-</span> <span class="mi">6000</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">u</span> <span class="o">=</span> <span class="n">delete</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">hl</span><span class="p">)</span>
+                <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">hl</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">u</span> <span class="o">=</span> <span class="n">g</span>
 
@@ -3592,7 +3627,8 @@
 <span class="sd">    plotdB   : plot modulus in dB</span>
 <span class="sd">    get      : get k th ray</span>
 <span class="sd">    tap      : calculates channel taps</span>
-
+<span class="sd">    window   : </span>
+<span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="FUsignal.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.__init__.html#pylayers.signal.bsignal.FUsignal.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span><span class="n">label</span><span class="o">=</span><span class="p">[]):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">FUsignal</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">label</span><span class="p">)</span>
@@ -3703,6 +3739,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">factor</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">isFriis</span> <span class="o">=</span> <span class="bp">True</span>
 
+    
 </div>
 <div class="viewcode-block" id="FUsignal.get"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.get.html#pylayers.signal.bsignal.FUsignal.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -3919,7 +3956,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="FUsignal.dftresamp"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.dftresamp.html#pylayers.signal.bsignal.FUsignal.dftresamp">[docs]</a>    <span class="k">def</span> <span class="nf">dftresamp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_new</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; non finished </span>
+        <span class="sd">&quot;&quot;&quot; non finished</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -5531,7 +5568,7 @@
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="k">pass</span>
     <span class="c">#plt.ion()</span>
-    <span class="c">#doctest.testmod()</span>
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
     <span class="c">#ip1 = EnImpulse(fc=4.493,band=0.499,thresh=3,fe=40)</span>
     <span class="c">#ip2 = EnImpulse(fc=4.493,band=0.499,thresh=3,fe=40)</span>
     <span class="c">#ip2.translate(1.123)</span>
@@ -5601,8 +5638,8 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 30, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on juin 27, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
     

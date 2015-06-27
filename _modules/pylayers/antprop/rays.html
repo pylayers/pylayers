@@ -974,19 +974,19 @@
                     <span class="c"># new ceil or floor point. The case of successive ceil or</span>
                     <span class="c"># floor reflexion make</span>
                     <span class="c">#</span>
-                    <span class="c"># Tous les points prÃ©cÃ©dents qui ne sont pas des Ceils ou</span>
+                    <span class="c"># Tous les points prcdents qui ne sont pas des Ceils ou</span>
                     <span class="c"># des floors et tous les points suivants qui ne sont pas</span>
-                    <span class="c"># des points de rÃ©flexion ceil ou floor</span>
+                    <span class="c"># des points de rflexion ceil ou floor</span>
                     <span class="c">#</span>
                     <span class="c"># Afin de tenir compte du rayon et du groupe d&#39;interaction</span>
-                    <span class="c"># concernÃ©, il faut passer un tuple qui concatÃ¨ne la valeur</span>
+                    <span class="c"># concern, il faut passer un tuple qui concatne la valeur</span>
                     <span class="c"># de l&#39;indice d&#39;interaction floor ou ceil et l&#39;indice de</span>
-                    <span class="c"># rayons du groupe associÃ© (d&#39;ou le zip)</span>
+                    <span class="c"># rayons du groupe associ (d&#39;ou le zip)</span>
                     <span class="c">#</span>
-                    <span class="c"># Cette sÃ©quence d&#39;instruction fixe le bug #133</span>
+                    <span class="c"># Cette squence d&#39;instruction fixe le bug #133</span>
                     <span class="c">#</span>
-                    <span class="c"># AntÃ©rieurement il y avait une hypothÃ¨se de succession</span>
-                    <span class="c"># immediate d&#39;un point 2D renseignÃ©.</span>
+                    <span class="c"># Antrieurement il y avait une hypothse de succession</span>
+                    <span class="c"># immediate d&#39;un point 2D renseign.</span>
                     <span class="c">#</span>
                     <span class="k">try</span><span class="p">:</span>
                         <span class="n">iintm_f</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span> <span class="p">(</span><span class="n">siges</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">&lt;&gt;</span><span class="mi">4</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">siges</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">&lt;&gt;</span><span class="mi">5</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="nb">zip</span><span class="p">(</span><span class="n">iint_f</span><span class="p">,</span><span class="n">iray_f</span><span class="p">))</span>
@@ -1499,15 +1499,15 @@
                         
 
                         <span class="n">uu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span><span class="o">.</span><span class="n">T</span>
-                        <span class="c">#Â determine which interaction and rays </span>
-                        <span class="c">#Â present the colinearity issue</span>
+                        <span class="c">#determine which interaction and rays </span>
+                        <span class="c">#present the colinearity issue</span>
                         <span class="n">uvv</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">vn</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">uu</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">uu</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]])</span><span class="o">&gt;</span><span class="mf">0.99</span>
                         <span class="c"># uv : nbi x nbr colinear index</span>
                         <span class="n">uv</span> <span class="o">=</span> <span class="n">uu</span><span class="p">[</span><span class="n">uvv</span><span class="p">]</span>
                         <span class="c"># uh : nbi x nbr anti-colinear index</span>
                         <span class="n">uh</span> <span class="o">=</span> <span class="n">uu</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">uvv</span><span class="p">)]</span>
                         <span class="k">try</span><span class="p">:</span>
-                            <span class="c">#Â fiw w for colinear index</span>
+                            <span class="c">#fiw w for colinear index</span>
                             <span class="n">w</span><span class="p">[:,</span><span class="n">uv</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">uv</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]))[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
                             <span class="c"># update normal</span>
                             <span class="n">nw</span><span class="p">[</span><span class="n">uv</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">uv</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> \
@@ -2613,8 +2613,8 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 30, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on juin 27, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
     

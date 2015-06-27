@@ -482,7 +482,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">isPN</span><span class="p">:</span>
             <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;Network information</span><span class="se">\n</span><span class="s">*******************</span><span class="se">\n</span><span class="s">&#39;</span>
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;number of nodes: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">()))</span> <span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-            <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;{0:7} | {1:15} |{2:7} | {3:4} | {4:17} | {5:10} &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s">&#39;ID&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;group&#39;</span><span class="p">,</span> <span class="s">&#39;type&#39;</span><span class="p">,</span> <span class="s">&#39;position (x,y,z)&#39;</span><span class="p">,</span><span class="s">&#39;wstd&#39;</span><span class="p">)</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;{0:7} | {1:15} |{2:7} | {3:4} | {4:17} | {5:10} |  {6:10} &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s">&#39;ID&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;group&#39;</span><span class="p">,</span> <span class="s">&#39;type&#39;</span><span class="p">,</span> <span class="s">&#39;position (x,y,z)&#39;</span><span class="p">,</span><span class="s">&#39;antenna&#39;</span><span class="p">,</span> <span class="s">&#39;wstd&#39;</span><span class="p">)</span>
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="n">title</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> <span class="s">&#39;-&#39;</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">title</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
             <span class="n">subnet</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">sn</span> <span class="ow">in</span> <span class="n">subnet</span><span class="p">:</span>
@@ -493,10 +493,14 @@
                         <span class="n">wstd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;wstd&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
                     <span class="k">except</span><span class="p">:</span>
                         <span class="n">wstd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;wstd&#39;</span><span class="p">]</span>
-                    <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;{0:7} | {1:15} |{2:7} | {3:4} | {4:5.2f} {5:5.2f} {6:5.2f} | {7:10} &#39;</span>\
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">ant</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;ant&#39;</span><span class="p">][</span><span class="s">&#39;antenna&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">_filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="n">ant</span><span class="o">=</span><span class="s">&#39;&#39;</span>
+                    <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;{0:7} | {1:15} |{2:7} | {3:4} | {4:5.2f} {5:5.2f} {6:5.2f} | {7:10} | {8:10} &#39;</span>\
                     <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;ID&#39;</span><span class="p">][:</span><span class="mi">7</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">][:</span><span class="mi">15</span><span class="p">],</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;grp&#39;</span><span class="p">][:</span><span class="mi">7</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;typ&#39;</span><span class="p">][:</span><span class="mi">4</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;p&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;p&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;p&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span><span class="n">wstd</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;p&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;p&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span><span class="n">ant</span><span class="p">,</span><span class="n">wstd</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
 
     <span class="c">#             try:</span>
     <span class="c">#                 s = s + &#39;node ID: &#39; + str(self.node[n][&#39;ID&#39;]) + &#39;\n&#39;</span>
@@ -909,8 +913,9 @@
 <div class="viewcode-block" id="Network._connect"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network._connect.html#pylayers.network.network.Network._connect">[docs]</a>    <span class="k">def</span> <span class="nf">_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; connect nodes</span>
 
-<span class="sd">        This method </span>
-<span class="sd">        1) Connect all nodes from the network sharing the same wstd </span>
+<span class="sd">        This method</span>
+
+<span class="sd">        1) Connect all nodes from the network sharing the same wstd</span>
 <span class="sd">        2) Create the associated SubNetworks</span>
 <span class="sd">        3) Create lists of links : self.links and self.relinks</span>
 
@@ -938,6 +943,7 @@
 <span class="sd">        -----</span>
 
 <span class="sd">        Fill self.links and self.relinks</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">for</span> <span class="n">wstd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wstd</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -990,11 +996,11 @@
                     <span class="c"># if e0[&#39;grp&#39;] == e1[&#39;grp&#39;]:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">update_edges</span><span class="p">({</span><span class="s">&#39;typ&#39;</span><span class="p">:</span> <span class="s">&#39;I2I&#39;</span><span class="p">},</span> <span class="n">n</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
                         <span class="c"># print str(e0[&#39;ID&#39;]),str(e1[&#39;ID&#39;]),&#39;I2I&#39;</span>
-                <span class="k">else</span><span class="p">:</span>    
+                <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">update_edges</span><span class="p">({</span><span class="s">&#39;typ&#39;</span><span class="p">:</span> <span class="s">&#39;B2I&#39;</span><span class="p">},</span> <span class="n">n</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Network._get_grp"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network._get_grp.html#pylayers.network.network.Network._get_grp">[docs]</a>    <span class="k">def</span> <span class="nf">_get_grp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; </span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            get group of the nodes of a network</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1110,9 +1116,6 @@
 <span class="sd">            * _get_grp()</span>
 <span class="sd">            * _connect()</span>
 <span class="sd">            * _init_PN</span>
-<span class="sd">            </span>
-
-
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1354,14 +1357,14 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        wstd : specify a wstd to display node position. If None, all wstd are displayed    </span>
-<span class="sd">        </span>
-<span class="sd">        Returns </span>
-<span class="sd">        ------</span>
+<span class="sd">        wstd : specify a wstd to display node position. If None, all wstd are displayed</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
 
 <span class="sd">        dictionnary :     key     : node ID</span>
 <span class="sd">        value     : np.array node position</span>
-<span class="sd">        </span>
+
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">wstd</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
@@ -1375,8 +1378,7 @@
 
 </div>
 <div class="viewcode-block" id="Network.haspe"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.haspe.html#pylayers.network.network.Network.haspe">[docs]</a>    <span class="k">def</span> <span class="nf">haspe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Test if a node has an estimated point  pe key</span>
+        <span class="sd">&quot;&quot;&quot; Test if a node has an estimated point  pe key</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1437,20 +1439,20 @@
 
 
 
-
-    
-        <span class="sd">&quot;&quot;&quot; </span>
+</div>
+<div class="viewcode-block" id="Network.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.show.html#pylayers.network.network.Network.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Show the network</span>
 
-<span class="sd">        Parameters </span>
+<span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
 <span class="sd">        wstd     : specify a wstd to display. If None, all wstd are displayed</span>
 <span class="sd">        legend     : Bool. Toggle display edge legend</span>
-<span class="sd">        ion     : interactive mode for matplotlib </span>
-<span class="sd">        info    : plot information on edges </span>
-<span class="sd">        fig     : plt.figure() to plot </span>
-<span class="sd">        ax      : plt.figure.ax to plot </span>
+<span class="sd">        ion     : interactive mode for matplotlib</span>
+<span class="sd">        info    : plot information on edges</span>
+<span class="sd">        fig     : plt.figure() to plot</span>
+<span class="sd">        ax      : plt.figure.ax to plot</span>
 <span class="sd">        name    : figure name</span>
 
 
@@ -1474,9 +1476,9 @@
 
         <span class="k">else</span> <span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wstd</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
-                <span class="n">rloop</span> <span class="o">=</span> <span class="n">wstd</span>    
+                <span class="n">rloop</span> <span class="o">=</span> <span class="n">wstd</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wstd</span><span class="p">,</span><span class="nb">str</span><span class="p">)</span> <span class="p">:</span>
-                <span class="n">rloop</span><span class="o">=</span><span class="p">[</span><span class="n">wstd</span><span class="p">]</span>    
+                <span class="n">rloop</span><span class="o">=</span><span class="p">[</span><span class="n">wstd</span><span class="p">]</span>
             <span class="k">else</span> <span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;Arg must be a string or a string list&#39;</span><span class="p">)</span>
 
@@ -1548,7 +1550,7 @@
                 <span class="p">[</span><span class="n">jj</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span> <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coll_plot</span><span class="p">[</span><span class="s">&#39;edge&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">jj</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">]</span>
                 <span class="p">[</span><span class="n">jj</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span> <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coll_plot</span><span class="p">[</span><span class="s">&#39;label&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
             <span class="k">except</span><span class="p">:</span>
-                <span class="k">pass</span> 
+                <span class="k">pass</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">coll_plot</span><span class="p">[</span><span class="s">&#39;node&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">coll_plot</span><span class="p">[</span><span class="s">&#39;node&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">coll_plot</span><span class="p">[</span><span class="s">&#39;edge&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">coll_plot</span><span class="p">[</span><span class="s">&#39;edge&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
@@ -1580,14 +1582,14 @@
 
         <span class="k">else</span> <span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wstd</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
-                <span class="n">rloop</span> <span class="o">=</span> <span class="n">wstd</span>    
+                <span class="n">rloop</span> <span class="o">=</span> <span class="n">wstd</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wstd</span><span class="p">,</span><span class="nb">str</span><span class="p">)</span> <span class="p">:</span>
-                <span class="n">rloop</span><span class="o">=</span><span class="p">[</span><span class="n">wstd</span><span class="p">]</span>    
+                <span class="n">rloop</span><span class="o">=</span><span class="p">[</span><span class="n">wstd</span><span class="p">]</span>
             <span class="k">else</span> <span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;Arg must be a string or a string list&#39;</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">ii</span><span class="p">,</span><span class="n">rl</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rloop</span><span class="p">):</span>
-            
+
             <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pos</span><span class="p">(</span><span class="n">rl</span><span class="p">)</span>
             <span class="n">posv</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
             <span class="n">mp</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">keys</span><span class="p">()))))</span>
@@ -1608,10 +1610,10 @@
 <div class="viewcode-block" id="Network.csv_save"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.csv_save.html#pylayers.network.network.Network.csv_save">[docs]</a>    <span class="k">def</span> <span class="nf">csv_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="p">,</span><span class="n">S</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save node positions into csv file</span>
 
-<span class="sd">        Parameters </span>
+<span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        filename : string </span>
+<span class="sd">        filename : string</span>
 <span class="sd">                   name of the csv file</span>
 <span class="sd">        S        : Simulation</span>
 <span class="sd">                   Scipy.Simulation object</span>
@@ -1776,7 +1778,7 @@
 
 <span class="c">#        Attributes:</span>
 <span class="c">#        ----------</span>
-<span class="c">#        </span>
+<span class="c">#</span>
 <span class="c">#        S        : Simulation</span>
 <span class="c">#                   Scipy.Simulation object</span>
 
@@ -2223,8 +2225,8 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 30, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on juin 27, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
     

@@ -435,7 +435,7 @@
 
 <span class="sd">    Gs     : Structure graph</span>
 <span class="sd">    Gt     : Topological graph  (indicates topological relationships between rooms)</span>
-<span class="sd">    Gr     : Graph of room</span>
+<span class="sd">    Gr     : Graph of rooms</span>
 <span class="sd">    Gv     : Graph of visibility</span>
 <span class="sd">    Gc     : Connection graph (indicates visbility relationships)</span>
 <span class="sd">    Nnode  : Number of nodes of Gs</span>
@@ -451,7 +451,7 @@
 <span class="sd">    .. autosummary::</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Layout.__init__"><a class="viewcode-back" href="../../../modules/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_filename</span><span class="o">=</span><span class="s">&#39;defstr.ini&#39;</span><span class="p">,</span><span class="n">_filematini</span><span class="o">=</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="n">_fileslabini</span><span class="o">=</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">,</span><span class="n">_filefur</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Layout.__init__"><a class="viewcode-back" href="../../../modules/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_filename</span><span class="o">=</span><span class="s">&#39;defstr.ini&#39;</span><span class="p">,</span><span class="n">_filematini</span><span class="o">=</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="n">_fileslabini</span><span class="o">=</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">,</span><span class="n">_filefur</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">check</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; object constructor</span>
 
 <span class="sd">        Parameters</span>
@@ -538,10 +538,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;box&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="p">{}</span>
 
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">zmin</span> <span class="o">=</span> <span class="mi">0</span>
+
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">_filename</span><span class="p">)</span>
+        <span class="c"># check layout integrity (default)</span>
+        <span class="k">if</span> <span class="n">check</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="p">()</span>
 
         <span class="c"># If the layout has already been built then load the built structure</span>
@@ -573,7 +579,7 @@
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;xrange :&quot;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;yrange :&quot;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">Useful dictionnaries&quot;</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">----------------</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">Useful dictionnaries&quot;</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">----------------</span><span class="se">\n</span><span class="s">&quot;</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;dca&#39;</span><span class="p">):</span>
             <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;dca {cycle : []} cycle with an airwall&quot;</span> <span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;di&#39;</span><span class="p">):</span>
@@ -606,6 +612,76 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
 </div>
+    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="n">Ls</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="o">==</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">Ls</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">:</span>
+                <span class="n">Ls</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">Ls</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">+</span><span class="n">other</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">offp</span> <span class="o">=</span> <span class="o">-</span><span class="nb">min</span><span class="p">(</span><span class="n">Ls</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+            <span class="n">offs</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">Ls</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+            <span class="n">other</span><span class="o">.</span><span class="n">offset_index</span><span class="p">(</span><span class="n">offp</span><span class="o">=</span><span class="n">offp</span><span class="p">,</span><span class="n">offs</span><span class="o">=</span><span class="n">offs</span><span class="p">)</span>
+            <span class="n">Ls</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">)</span>
+            <span class="n">Ls</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">edge</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">edge</span><span class="p">)</span>
+            <span class="n">Ls</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">adj</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">adj</span><span class="p">)</span>
+            <span class="n">Ls</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+            <span class="n">Ls</span><span class="o">.</span><span class="n">Np</span> <span class="o">=</span> <span class="n">Ls</span><span class="o">.</span><span class="n">Np</span><span class="o">+</span><span class="n">other</span><span class="o">.</span><span class="n">Np</span>
+            <span class="n">Ls</span><span class="o">.</span><span class="n">Ns</span> <span class="o">=</span> <span class="n">Ls</span><span class="o">.</span><span class="n">Ns</span><span class="o">+</span><span class="n">other</span><span class="o">.</span><span class="n">Ns</span>
+            <span class="n">Ls</span><span class="o">.</span><span class="n">Nss</span> <span class="o">=</span> <span class="n">Ls</span><span class="o">.</span><span class="n">Nss</span><span class="o">+</span><span class="n">other</span><span class="o">.</span><span class="n">Nss</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="n">Ls</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">alpha</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; scale the layout </span>
+
+<span class="sd">        other : scaling factor (np.array or int or float)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        Ls : Layout</span>
+<span class="sd">            scaled layout</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Ls</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">Gs</span> <span class="o">=</span> <span class="n">Ls</span><span class="o">.</span><span class="n">Gs</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+            <span class="k">assert</span><span class="p">((</span><span class="nb">type</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span> <span class="o">==</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span><span class="p">)),</span> <span class="s">&quot; not float&quot;</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">alpha</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">alpha</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span><span class="o">==</span><span class="mi">3</span><span class="p">),</span> <span class="s">&quot; not 3D&quot;</span>
+        <span class="c">#</span>
+        <span class="c"># scaling x &amp; y</span>
+        <span class="c">#</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">values</span><span class="p">())[:,</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">xc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">xc</span><span class="p">)</span><span class="o">*</span><span class="n">alpha</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">xc</span>
+
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">values</span><span class="p">())[:,</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">yc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="o">-</span><span class="n">yc</span><span class="p">)</span><span class="o">*</span><span class="n">alpha</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">yc</span>
+
+        <span class="n">xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">Ls</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="nb">tuple</span><span class="p">(</span><span class="n">xy</span><span class="p">)))</span>
+
+        <span class="c">#</span>
+        <span class="c"># scaling z</span>
+        <span class="c">#</span>
+
+        <span class="n">nseg</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">,</span> <span class="n">Gs</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">nseg</span><span class="p">:</span>
+            <span class="n">Ls</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;z&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Ls</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;z&#39;</span><span class="p">])</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">zmin</span><span class="p">)</span><span class="o">*</span><span class="n">alpha</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">zmin</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">Ls</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;ss_z&#39;</span><span class="p">):</span>
+                <span class="n">Ls</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;ss_z&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Ls</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;ss_z&#39;</span><span class="p">])</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">zmin</span><span class="p">)</span><span class="o">*</span><span class="n">alpha</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">zmin</span><span class="p">)</span>
+
+        <span class="c">#</span>
+        <span class="c"># updating numpy array from graph</span>
+        <span class="c">#</span>
+
+        <span class="n">Ls</span><span class="o">.</span><span class="n">g2npy</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">Ls</span>
+
 <div class="viewcode-block" id="Layout.ls"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.ls.html#pylayers.gis.layout.Layout.ls">[docs]</a>    <span class="k">def</span> <span class="nf">ls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;ini&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; list the available file in dirstruc</span>
 
@@ -672,6 +748,49 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Gc</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Gm</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
 </div>
+    <span class="k">def</span> <span class="nf">offset_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">offp</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">offs</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; offset points and segment index</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        offp : offset points</span>
+<span class="sd">        offs : offset segments</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">newpoint</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span> <span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="n">offp</span><span class="p">,</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">newpoint</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">newseg</span> <span class="o">=</span>   <span class="nb">dict</span><span class="p">(</span> <span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="n">offs</span><span class="p">,</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">newseg</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">newpoint</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">newseg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">newpoint</span>
+
+        <span class="n">newppoint</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span> <span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="n">offp</span><span class="p">,</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">newpseg</span> <span class="o">=</span>   <span class="nb">dict</span><span class="p">(</span> <span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="n">offs</span><span class="p">,</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">newppoint</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">newpseg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span>  <span class="n">newppoint</span>
+
+        <span class="c"># adjascence list of segments</span>
+        <span class="n">ladjs</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">adj</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">adj</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">]</span>
+        <span class="c"># adjascence list of points</span>
+        <span class="n">ladjp</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">adj</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">adj</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">]</span>
+
+        <span class="n">nladjs</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">dict</span><span class="p">((</span><span class="n">k</span><span class="o">-</span><span class="n">offp</span><span class="p">,</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span><span class="n">ladjs</span><span class="p">)</span>
+        <span class="n">nladjp</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">dict</span><span class="p">((</span><span class="n">k</span><span class="o">+</span><span class="n">offs</span><span class="p">,</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span><span class="n">ladjp</span><span class="p">)</span>
+
+        <span class="n">lpt</span>  <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="n">offp</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">adj</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;</span><span class="mi">0</span> <span class="p">]</span>
+        <span class="n">lseg</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="n">offs</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">adj</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span><span class="mi">0</span> <span class="p">]</span>
+
+        <span class="n">dpt</span>  <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">lpt</span><span class="p">,</span><span class="n">nladjp</span><span class="p">))</span>
+        <span class="n">dseg</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">lseg</span><span class="p">,</span><span class="n">nladjs</span><span class="p">))</span>
+        <span class="n">dseg</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dpt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">adj</span> <span class="o">=</span>  <span class="n">dseg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">edge</span> <span class="o">=</span> <span class="n">dseg</span>
+        <span class="c">#pdb.set_trace()</span>
+        <span class="c">#dict(zip(self.Gs.keys(),))</span>
+        <span class="c">#self.Gs.adj = newapoint</span>
+
+
 <div class="viewcode-block" id="Layout.check"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.check.html#pylayers.gis.layout.Layout.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Check Layout consistency</span>
 
@@ -732,8 +851,8 @@
         <span class="k">if</span> <span class="p">(</span><span class="n">degmin</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">):</span>
             <span class="n">deg0</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">degree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span><span class="n">x</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span><span class="n">upnt</span><span class="p">)</span>
             <span class="n">deg1</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">degree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span><span class="n">x</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">,</span><span class="n">upnt</span><span class="p">)</span>
-            <span class="k">print</span> <span class="s">&quot;degree 0 &quot;</span><span class="p">,</span><span class="n">deg0</span>
-            <span class="k">print</span> <span class="s">&quot;degree 1 &quot;</span><span class="p">,</span><span class="n">deg1</span>
+            <span class="k">assert</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">deg0</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">),</span> <span class="s">&quot;It exists degree 0 points :  </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">deg0</span>
+            <span class="k">assert</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">deg1</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">),</span> <span class="s">&quot;It exists degree 1 points : </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">deg1</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">deg</span><span class="o">=</span><span class="p">{}</span>
         <span class="k">for</span> <span class="n">deg</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">degmax</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
@@ -853,7 +972,6 @@
 
 
         <span class="n">nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
-
         <span class="c"># nodes include points and segments</span>
 
         <span class="c">#segment index</span>
@@ -2611,21 +2729,37 @@
 </div>
     <span class="k">def</span> <span class="nf">mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  returns the polygonal mask of the building</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        mask : geu.Polygon</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        This function assumes graph Gt has been generated</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">p</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;polyg&#39;</span><span class="p">]</span>
+        <span class="c"># takes the 1st cycle polygon</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;polyg&#39;</span><span class="p">]</span>
+        <span class="c"># get the exterior of the polygon</span>
         <span class="n">ps</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">exterior</span><span class="p">)</span>
+        <span class="c"># make the union of the exterior of all the cycles</span>
+        <span class="c">#</span>
+        <span class="c"># cycle : -1 exterior</span>
+        <span class="c">#          0 ??</span>
+        <span class="c">#</span>
+
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">:</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">k</span><span class="o">!=</span><span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">k</span><span class="o">!=-</span><span class="mi">1</span><span class="p">):</span>
                 <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;polyg&#39;</span><span class="p">]</span>
                 <span class="n">ps</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">exterior</span><span class="p">))</span>
+
         <span class="n">mask</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
         <span class="n">mask</span><span class="o">.</span><span class="n">setvnodes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">alpha</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">pass</span>
 
 <div class="viewcode-block" id="Layout.translate"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.translate.html#pylayers.gis.layout.Layout.translate">[docs]</a>    <span class="k">def</span> <span class="nf">translate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">vec</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; translate layout</span>
@@ -2967,7 +3101,7 @@
                                 <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="n">e1</span><span class="p">]</span>
                     <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
             <span class="k">except</span><span class="p">:</span>
-                <span class="c"># if cancel</span>
+                <span class="c">#if cancel</span>
                 <span class="k">pass</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">outdata</span><span class="o">==</span><span class="p">{}:</span>
@@ -5683,9 +5817,9 @@
 <span class="sd">            if a cycle is tagged as non convex</span>
 
 <span class="sd">            1- find its polygon</span>
-<span class="sd">            2- partion polygon into convex polygons (Delaunay)</span>
-<span class="sd">            3- try to merge partioned polygon in order to obtain</span>
-<span class="sd">               the minimal number of convex polygon</span>
+<span class="sd">            2- partition polygon into convex polygons (Delaunay)</span>
+<span class="sd">            3- try to merge partitioned polygons in order to obtain</span>
+<span class="sd">               the minimal number of convex polygons</span>
 <span class="sd">            4- re-number/re-create Gt by creating  new &#39;convex&#39; cycles</span>
 <span class="sd">               from those convex polygons</span>
 
@@ -6851,12 +6985,31 @@
         <span class="c"># Warning edgelist is to be understood as edge of graph and not segments of layout</span>
         <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">edgelist</span><span class="o">=</span><span class="n">edfilt</span><span class="p">)</span>
 
-        <span class="n">ldeg1</span>  <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-        <span class="n">ldeg4</span>  <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
-        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">nodelist</span><span class="o">=</span><span class="n">ldeg1</span><span class="p">,</span><span class="n">edges</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edges&#39;</span><span class="p">],</span>
-                   <span class="n">nodes</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">],</span><span class="n">node_size</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;node_size&#39;</span><span class="p">],</span><span class="n">node_color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
-        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">nodelist</span><span class="o">=</span><span class="n">ldeg4</span><span class="p">,</span><span class="n">edges</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edges&#39;</span><span class="p">],</span>
-                   <span class="n">nodes</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">],</span><span class="n">node_size</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;node_size&#39;</span><span class="p">],</span><span class="n">node_color</span><span class="o">=</span><span class="s">&#39;g&#39;</span><span class="p">)</span>
+        <span class="c"># display degree 1 nodes</span>
+        <span class="k">if</span> <span class="mi">1</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">:</span>
+            <span class="n">ldeg1</span>  <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">print</span> <span class="n">ldeg1</span>
+            <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span>
+                <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span>
+                <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                <span class="n">nodelist</span><span class="o">=</span><span class="n">ldeg1</span><span class="p">,</span>
+                <span class="n">edges</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edges&#39;</span><span class="p">],</span>
+                <span class="n">nodes</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">],</span>
+                <span class="n">node_size</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;node_size&#39;</span><span class="p">],</span>
+                <span class="n">node_color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+
+        <span class="c"># display degree 4 nodes </span>
+        <span class="k">if</span> <span class="mi">4</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">:</span>
+            <span class="n">ldeg4</span>  <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+            <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span>
+                <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span>
+                <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                <span class="n">nodelist</span><span class="o">=</span><span class="n">ldeg4</span><span class="p">,</span>
+                <span class="n">edges</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edges&#39;</span><span class="p">],</span>
+                <span class="n">nodes</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">],</span>
+                <span class="n">node_size</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;node_size&#39;</span><span class="p">],</span>
+                <span class="n">node_color</span><span class="o">=</span><span class="s">&#39;g&#39;</span><span class="p">)</span>
+
         <span class="c">#     if k==1:</span>
         <span class="c">#         fig,ax = self.showG(&#39;s&#39;,fig=fig,ax=ax,nodelist=ldeg,edges=False,nodes=True,node_size=50,node_color=&#39;c&#39;)</span>
         <span class="c">#     if k==4:</span>
@@ -8090,97 +8243,98 @@
         <span class="n">proom2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nroom2</span><span class="p">]</span>
         <span class="n">waypoint</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">proom2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">proom2</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
         <span class="k">return</span><span class="p">(</span><span class="n">waypoint</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Layout.editor"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.editor.html#pylayers.gis.layout.Layout.editor">[docs]</a>    <span class="k">def</span> <span class="nf">editor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+         <span class="sd">&quot;&quot;&quot; invoke interactive layout graphical editor</span>
 
-    <span class="c"># def editor(self):</span>
-    <span class="c">#     &quot;&quot;&quot; invoke interactive layout graphical editor</span>
+<span class="sd">         Notes</span>
+<span class="sd">         -----</span>
 
-    <span class="c">#     Notes</span>
-    <span class="c">#     -----</span>
+<span class="sd">         point edition</span>
 
-    <span class="c">#     point edition</span>
+<span class="sd">             m  toggle point edition mode  (CP : Create Point)</span>
 
-    <span class="c">#         m  toggle point edition mode  (CP : Create Point)</span>
+<span class="sd">                 lclic same x</span>
+<span class="sd">                 rclic same y</span>
+<span class="sd">                 cclic free point</span>
 
-    <span class="c">#             lclic same x</span>
-    <span class="c">#             rclic same y</span>
-    <span class="c">#             cclic free point</span>
+<span class="sd">         segment edition</span>
 
-    <span class="c">#     segment edition</span>
+<span class="sd">             [0-f] - display one of the 16 first layers</span>
+<span class="sd">             x : save structure</span>
+<span class="sd">             o : toggle overlay</span>
 
-    <span class="c">#         [0-f] - display one of the 16 first layers</span>
-    <span class="c">#         x : save structure</span>
-    <span class="c">#         o : toggle overlay</span>
+<span class="sd">         &quot;&quot;&quot;</span>
 
-    <span class="c">#     &quot;&quot;&quot;</span>
+         <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
+         <span class="n">ax</span>  <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;subsegnb&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;transition&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ticksoff&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
 
-    <span class="c">#     fig = plt.gcf()</span>
-    <span class="c">#     ax  = fig.add_subplot(111)</span>
-    <span class="c">#     self.display[&#39;nodes&#39;]=True</span>
-    <span class="c">#     self.display[&#39;ednodes&#39;]=True</span>
-    <span class="c">#     self.display[&#39;subsegnb&#39;]=True</span>
-    <span class="c">#     self.display[&#39;transition&#39;]=True</span>
-    <span class="c">#     self.display[&#39;ticksoff&#39;]=True</span>
+         <span class="c">#self.af = SelectL2(self,fig=fig,ax=ax)</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">af</span> <span class="o">=</span> <span class="n">SelectL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 
-    <span class="c">#     self.af = SelectL2(self,fig=fig,ax=ax)</span>
+         <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">af</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">,</span><span class="n">clear</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
-    <span class="c">#     fig,ax = self.af.show(fig,ax,clear=True)</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">cid1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s">&#39;button_press_event&#39;</span><span class="p">,</span>
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">af</span><span class="o">.</span><span class="n">OnClick</span><span class="p">)</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">cid2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s">&#39;button_release_event&#39;</span><span class="p">,</span>
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">af</span><span class="o">.</span><span class="n">OnClickRelease</span><span class="p">)</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">cid3</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s">&#39;motion_notify_event&#39;</span><span class="p">,</span>
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">af</span><span class="o">.</span><span class="n">OnMotion</span><span class="p">)</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">cid4</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s">&#39;key_press_event&#39;</span><span class="p">,</span>
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">af</span><span class="o">.</span><span class="n">OnPress</span><span class="p">)</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">cid5</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s">&#39;key_release_event&#39;</span><span class="p">,</span>
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">af</span><span class="o">.</span><span class="n">OnRelease</span><span class="p">)</span>
 
-    <span class="c">#     self.cid1 = fig.canvas.mpl_connect(&#39;button_press_event&#39;,</span>
-    <span class="c">#                                        self.af.OnClick)</span>
-    <span class="c">#     self.cid2 = fig.canvas.mpl_connect(&#39;button_release_event&#39;,</span>
-    <span class="c">#                                        self.af.OnClickRelease)</span>
-    <span class="c">#     self.cid3 = fig.canvas.mpl_connect(&#39;motion_notify_event&#39;,</span>
-    <span class="c">#                                        self.af.OnMotion)</span>
-    <span class="c">#     self.cid4 = fig.canvas.mpl_connect(&#39;key_press_event&#39;,</span>
-    <span class="c">#                                        self.af.OnPress)</span>
-    <span class="c">#     self.cid5 = fig.canvas.mpl_connect(&#39;key_release_event&#39;,</span>
-    <span class="c">#                                        self.af.OnRelease)</span>
+         <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+         <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;tight&#39;</span><span class="p">)</span>
+         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
-    <span class="c">#     plt.draw()</span>
-    <span class="c">#     plt.axis(&#39;tight&#39;)</span>
-    <span class="c">#     plt.show()</span>
-
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c"># import gtk</span>
-        <span class="kn">from</span> <span class="nn">matplotlib.figure</span> <span class="kn">import</span> <span class="n">Figure</span>
-        <span class="kn">from</span> <span class="nn">matplotlib.backends.backend_gtkagg</span> <span class="kn">import</span> <span class="n">FigureCanvasGTKAgg</span> <span class="k">as</span> <span class="n">FigureCanvas</span>
-        <span class="kn">from</span> <span class="nn">matplotlib.backends.backend_gtkagg</span> <span class="kn">import</span> <span class="n">NavigationToolbar2GTKAgg</span> <span class="k">as</span> <span class="n">NavigationToolbar</span>
-        <span class="kn">from</span> <span class="nn">matplotlib.backend_bases</span> <span class="kn">import</span> <span class="n">key_press_handler</span>
-
-        <span class="n">win</span> <span class="o">=</span> <span class="n">gtk</span><span class="o">.</span><span class="n">Window</span><span class="p">()</span>
-        <span class="n">win</span><span class="o">.</span><span class="n">show_all</span><span class="p">()</span>
-
-
-        <span class="n">win</span> <span class="o">=</span> <span class="n">gtk</span><span class="o">.</span><span class="n">Window</span><span class="p">()</span>
-        <span class="n">win</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s">&quot;destroy&quot;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">gtk</span><span class="o">.</span><span class="n">main_quit</span><span class="p">())</span>
-        <span class="n">win</span><span class="o">.</span><span class="n">set_default_size</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span><span class="mi">300</span><span class="p">)</span>
-        <span class="n">win</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">&quot;Embedding in GTK&quot;</span><span class="p">)</span>
-
-        <span class="n">vbox</span> <span class="o">=</span> <span class="n">gtk</span><span class="o">.</span><span class="n">VBox</span><span class="p">()</span>
-        <span class="n">win</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">vbox</span><span class="p">)</span>
-
-        <span class="n">fig</span> <span class="o">=</span> <span class="n">Figure</span><span class="p">()</span>
-        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
-
-        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-
-        <span class="n">canvas</span> <span class="o">=</span> <span class="n">FigureCanvas</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>  <span class="c"># a gtk.DrawingArea</span>
-        <span class="n">canvas</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-        <span class="n">vbox</span><span class="o">.</span><span class="n">pack_start</span><span class="p">(</span><span class="n">canvas</span><span class="p">)</span>
-        <span class="n">toolbar</span> <span class="o">=</span> <span class="n">NavigationToolbar</span><span class="p">(</span><span class="n">canvas</span><span class="p">,</span> <span class="n">win</span><span class="p">)</span>
-        <span class="n">vbox</span><span class="o">.</span><span class="n">pack_start</span><span class="p">(</span><span class="n">toolbar</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-
-
-        <span class="k">def</span> <span class="nf">on_key_event</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
-            <span class="k">print</span><span class="p">(</span><span class="s">&#39;you pressed </span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span><span class="n">event</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
-            <span class="n">key_press_handler</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">canvas</span><span class="p">,</span> <span class="n">toolbar</span><span class="p">)</span>
-
-        <span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s">&#39;key_press_event&#39;</span><span class="p">,</span> <span class="n">on_key_event</span><span class="p">)</span>
-
-        <span class="n">win</span><span class="o">.</span><span class="n">show_all</span><span class="p">()</span>
-        <span class="n">gtk</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+<span class="c">#        &quot;&quot;&quot;</span>
+<span class="c">#        &quot;&quot;&quot;</span>
+<span class="c">#</span>
+<span class="c">#        # import gtk</span>
+<span class="c">#        from matplotlib.figure import Figure</span>
+<span class="c">#        from matplotlib.backends.backend_gtkagg import FigureCanvasGTKAgg as FigureCanvas</span>
+<span class="c">#        from matplotlib.backends.backend_gtkagg import NavigationToolbar2GTKAgg as NavigationToolbar</span>
+<span class="c">#        from matplotlib.backend_bases import key_press_handler</span>
+<span class="c">#</span>
+<span class="c">#        win = gtk.Window()</span>
+<span class="c">#        win.show_all()</span>
+<span class="c">#</span>
+<span class="c">#</span>
+<span class="c">#        win = gtk.Window()</span>
+<span class="c">#        win.connect(&quot;destroy&quot;, lambda x: gtk.main_quit())</span>
+<span class="c">#        win.set_default_size(400,300)</span>
+<span class="c">#        win.set_title(&quot;Embedding in GTK&quot;)</span>
+<span class="c">#</span>
+<span class="c">#        vbox = gtk.VBox()</span>
+<span class="c">#        win.add(vbox)</span>
+<span class="c">#</span>
+<span class="c">#        fig = Figure()</span>
+<span class="c">#        ax = fig.add_subplot(111)</span>
+<span class="c">#</span>
+<span class="c">#        fig,ax = self.showG(&#39;s&#39;,fig=fig,ax=ax)</span>
+<span class="c">#</span>
+<span class="c">#        canvas = FigureCanvas(fig)  # a gtk.DrawingArea</span>
+<span class="c">#        canvas.show()</span>
+<span class="c">#        vbox.pack_start(canvas)</span>
+<span class="c">#        toolbar = NavigationToolbar(canvas, win)</span>
+<span class="c">#        vbox.pack_start(toolbar, False, False)</span>
+<span class="c">#</span>
+<span class="c">#</span>
+<span class="c">#        def on_key_event(event):</span>
+<span class="c">#            print(&#39;you pressed %s&#39;%event.key)</span>
+<span class="c">#            key_press_handler(event, canvas, toolbar)</span>
+<span class="c">#</span>
+<span class="c">#        canvas.mpl_connect(&#39;key_press_event&#39;, on_key_event)</span>
+<span class="c">#</span>
+<span class="c">#        win.show_all()</span>
+<span class="c">#        gtk.main()</span>
 </div>
 <div class="viewcode-block" id="Layout.editorTk"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.editorTk.html#pylayers.gis.layout.Layout.editorTk">[docs]</a>    <span class="k">def</span> <span class="nf">editorTk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; invoke interactive layout graphical editor</span>
@@ -9345,8 +9499,8 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 30, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on juin 27, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
     

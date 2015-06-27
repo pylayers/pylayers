@@ -1064,7 +1064,7 @@
 <span class="c">#                    axis[i] = 1</span>
 
 <span class="c">#                    try:</span>
-<span class="c">#                        # divisé par 2 pour pouvoir aveir les index  de cluster comme les centre des box</span>
+<span class="c">#                        # divis par 2 pour pouvoir aveir les index  de cluster comme les centre des box</span>
 <span class="c">#                        clust.append(np.nonzero(uni[gidx[0]] &lt; self.dlayer[l]</span>
 <span class="c">#                                                [dlindx].bd[:, i])[0] / 2)</span>
 <span class="c">#                        clust.append(np.nonzero(uni[gidx[0]] &gt; self.dlayer[l]</span>
@@ -1449,7 +1449,7 @@
                     <span class="n">lclust</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">clusters</span><span class="p">)</span>
                     <span class="n">pc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dlayer</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="n">dlindx</span><span class="p">]</span><span class="o">.</span><span class="n">ctr</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">clusters</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">clusters</span><span class="p">))</span>
                     <span class="n">lpc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pc</span><span class="p">)</span>
-                    <span class="c"># verifier que les contraintes utilisées sont les bonne ( ce n&#39;est pas le cas)</span>
+                    <span class="c"># verifier que les contraintes utilises sont les bonne ( ce n&#39;est pas le cas)</span>
                     <span class="c"># ne marche que si 2 constriantes genere le cluster ( a robustifier)   </span>
                     <span class="n">pu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">usable</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
                     <span class="c"># try:</span>
@@ -1597,8 +1597,8 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 30, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on juin 27, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
     

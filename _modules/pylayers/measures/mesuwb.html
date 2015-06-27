@@ -1214,9 +1214,9 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">pl</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]]),</span> <span class="n">display</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-             <span class="n">titre</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Rx1&#39;</span><span class="p">,</span> <span class="s">&#39;Rx2&#39;</span><span class="p">,</span> <span class="s">&#39;Rx3&#39;</span><span class="p">,</span> <span class="s">&#39;Rx4&#39;</span><span class="p">],</span> <span class="n">col</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;k&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;g&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">],</span>
-             <span class="n">xmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">NC</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">delay</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]]),</span> <span class="n">display</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+             <span class="n">title</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Rx1&#39;</span><span class="p">,</span> <span class="s">&#39;Rx2&#39;</span><span class="p">,</span> <span class="s">&#39;Rx3&#39;</span><span class="p">,</span> <span class="s">&#39;Rx4&#39;</span><span class="p">],</span> <span class="n">col</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;k&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;g&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">],</span>
+             <span class="n">xmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show the 4 Impulse Radio Impulse responses</span>
 
 <span class="sd">        Parameters</span>
@@ -1244,76 +1244,35 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
-        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">get_axes</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">NC</span> <span class="o">==</span> <span class="mi">2</span><span class="p">):</span>
-            <span class="n">createfig</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">if</span> <span class="n">fig</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">createfig</span> <span class="o">=</span> <span class="bp">False</span>
-
-        <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
-            <span class="n">N</span> <span class="o">=</span> <span class="mi">4</span>
-            <span class="n">M</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">N</span> <span class="o">=</span> <span class="mi">5</span>
-            <span class="n">M</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">fig</span>
+        
         <span class="c">#plt.axis([0,200,-2,2])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">zlr</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ch2</span><span class="o">.</span><span class="n">zlr</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ch3</span><span class="o">.</span><span class="n">zlr</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ch4</span><span class="o">.</span><span class="n">zlr</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">createfig</span><span class="p">:</span>
-            <span class="n">sp1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">NC</span><span class="p">,</span> <span class="n">NC</span> <span class="o">+</span> <span class="n">C</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">N</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-            <span class="n">sp1</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">sp1</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vline</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">delay</span><span class="p">[</span><span class="mi">0</span><span class="p">]]),</span><span class="n">ax</span><span class="o">=</span><span class="n">sp1</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="n">typ</span><span class="p">)</span>
-        <span class="c">#              showlabel=[False, True], unit1=&#39;V&#39;, unit2=&#39;mV&#39;, ax=sp1)</span>
-        <span class="c">#self.ch1.plot(col=col[0],unit1=&#39;V&#39;,unit2=&#39;mV&#39;,ax=sp1,logx=False,logy=False)</span>
-        <span class="c">#plt.show()</span>
-        <span class="c">#axis([0,200,-2,2])</span>
-        <span class="c">#&quot;sp1.add_title(titre[0])</span>
-        <span class="k">if</span> <span class="n">createfig</span><span class="p">:</span>
-            <span class="n">sp2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">NC</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">NC</span> <span class="o">+</span> <span class="n">C</span><span class="p">,</span><span class="n">sharex</span><span class="o">=</span><span class="n">sp1</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">N</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-            <span class="n">sp2</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">sp2</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ch2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">vline</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">delay</span><span class="p">[</span><span class="mi">1</span><span class="p">]]),</span><span class="n">ax</span><span class="o">=</span><span class="n">sp2</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="n">typ</span><span class="p">)</span>
-        <span class="c">#              showlabel=[False, True], unit1=&#39;V&#39;, unit2=&#39;mV&#39;, ax=sp2)</span>
-        <span class="c">#self.ch2.plot(col=col[1],unit1=&#39;V&#39;,unit2=&#39;mV&#39;,ax=sp2,logx=False,logy=False)</span>
-        <span class="c">#plt.show()</span>
-        <span class="c">#plt.axis([0,200,-2,2])</span>
-        <span class="c">#plt.title(titre[1])</span>
-        <span class="k">if</span> <span class="n">createfig</span><span class="p">:</span>
-            <span class="n">sp3</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">NC</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">NC</span> <span class="o">+</span> <span class="n">C</span><span class="p">,</span><span class="n">sharex</span><span class="o">=</span><span class="n">sp1</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">N</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-            <span class="n">sp3</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">sp3</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ch3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">col</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">vline</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">delay</span><span class="p">[</span><span class="mi">2</span><span class="p">]]),</span><span class="n">ax</span><span class="o">=</span><span class="n">sp3</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="n">typ</span><span class="p">)</span>
-        <span class="c">#              showlabel=[False, True], unit1=&#39;V&#39;, unit2=&#39;mV&#39;, ax=sp3)</span>
-        <span class="c">#self.ch3.plot(col=col[2],unit1=&#39;V&#39;,unit2=&#39;mV&#39;,ax=sp3,logx=False,logy=False)</span>
-        <span class="c">#plt.show()</span>
-        <span class="c">#plt.title(titre[2])</span>
-        <span class="k">if</span> <span class="n">createfig</span><span class="p">:</span>
-            <span class="n">sp4</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">NC</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">NC</span> <span class="o">+</span> <span class="n">C</span><span class="p">,</span><span class="n">sharex</span><span class="o">=</span><span class="n">sp1</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">N</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-            <span class="n">sp4</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">sp4</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ch4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">col</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">vline</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">delay</span><span class="p">[</span><span class="mi">3</span><span class="p">]]),</span> <span class="n">ax</span><span class="o">=</span><span class="n">sp4</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="n">typ</span><span class="p">)</span>
-        <span class="c">#              showlabel=[True, True], unit1=&#39;V&#39;, unit2=&#39;mV&#39;, ax=sp4)</span>
-        <span class="c">#self.ch4.plot(col=col[3],unit1=&#39;V&#39;,unit2=&#39;mV&#39;,ax=sp4,logx=False,logy=False)</span>
-        <span class="c">#plt.show()</span>
-        <span class="c">#plt.axis([0,200,-2,2])</span>
-        <span class="c">#plt.title(titre[3])</span>
+        
+        <span class="n">a1</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vline</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">delay</span><span class="p">[</span><span class="mi">0</span><span class="p">]]),</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a1</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="n">typ</span><span class="p">,</span><span class="n">unit2</span><span class="o">=</span><span class="s">&#39;mV&#39;</span><span class="p">)</span>
+        <span class="n">a1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">a2</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span><span class="n">sharex</span><span class="o">=</span><span class="n">a1</span><span class="p">)</span>
+        <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ch2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">vline</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">delay</span><span class="p">[</span><span class="mi">1</span><span class="p">]]),</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a2</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="n">typ</span><span class="p">,</span><span class="n">unit2</span><span class="o">=</span><span class="s">&#39;mV&#39;</span><span class="p">)</span>
+        <span class="n">a2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">a3</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span><span class="n">sharex</span><span class="o">=</span><span class="n">a1</span><span class="p">)</span>
+        <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ch3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">col</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">vline</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">delay</span><span class="p">[</span><span class="mi">2</span><span class="p">]]),</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a3</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="n">typ</span><span class="p">,</span><span class="n">unit2</span><span class="o">=</span><span class="s">&#39;mV&#39;</span><span class="p">)</span>
+        <span class="n">a3</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">a4</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span><span class="n">sharex</span><span class="o">=</span><span class="n">a1</span><span class="p">)</span>
+        <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ch4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">col</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">vline</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">delay</span><span class="p">[</span><span class="mi">3</span><span class="p">]]),</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">a4</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="n">typ</span><span class="p">,</span><span class="n">unit2</span><span class="o">=</span><span class="s">&#39;mV&#39;</span><span class="p">)</span>
+        <span class="n">a4</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        
         <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">f</span><span class="p">,</span><span class="n">a4</span>
 
 <div class="viewcode-block" id="Tdd.show_span"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.Tdd.show_span.html#pylayers.measures.mesuwb.Tdd.show_span">[docs]</a>    <span class="k">def</span> <span class="nf">show_span</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">wide</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])):</span>
         <span class="sd">&quot;&quot;&quot; show span</span>
@@ -1886,11 +1845,13 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">valid</span> <span class="o">=</span> <span class="bp">False</span>
 
 </div>
-    <span class="k">def</span> <span class="nf">_repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;Date_Time :&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Date_Time</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;Tx_height :&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Tx_height</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;Tx_position :&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Tx_position</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">sr</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;Tx : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;Date_Time : &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Date_Time</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;Tx_height : &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Tx_height</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;Tx_position :&quot;</span> <span class="o">+</span>  <span class="bp">self</span><span class="o">.</span><span class="n">Tx_position</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;Tx : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
         
 <div class="viewcode-block" id="UWBMeasure.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.info.html#pylayers.measures.mesuwb.UWBMeasure.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">print</span> <span class="s">&quot;Date_Time :&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Date_Time</span>
@@ -1917,8 +1878,8 @@
                 <span class="k">print</span> <span class="s">&quot;LQI Meth1&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">LQI</span><span class="p">[</span><span class="s">&#39;Method1_CH4&#39;</span><span class="p">],</span> <span class="s">&quot; (dB)&quot;</span>
                 <span class="k">print</span> <span class="s">&quot;LQI Meth2&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">LQI</span><span class="p">[</span><span class="s">&#39;Method2_CH4&#39;</span><span class="p">],</span> <span class="s">&quot; (dB)&quot;</span>
 </div>
-    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]]),</span> <span class="n">display</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-             <span class="n">col</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;k&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;g&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">],</span> <span class="n">xmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">NC</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">delay</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]]),</span><span class="n">display</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+            <span class="n">col</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;k&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;g&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">],</span><span class="n">xmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">NC</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show measurement in time domain</span>
 
 <span class="sd">        Parameters</span>
@@ -1939,17 +1900,26 @@
 <span class="sd">            optional</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">titre</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">delay</span><span class="p">,</span>
-                      <span class="n">display</span><span class="o">=</span><span class="n">display</span><span class="p">,</span>
-                      <span class="n">titre</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Rx1 &#39;</span> <span class="o">+</span> <span class="s">&#39;Tx&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ntx</span><span class="p">),</span>
-                             <span class="s">&#39;Rx2&#39;</span><span class="p">,</span> <span class="s">&#39;Rx3&#39;</span><span class="p">,</span> <span class="s">&#39;Rx4&#39;</span><span class="p">],</span>
-                      <span class="n">col</span><span class="o">=</span><span class="n">col</span><span class="p">,</span>
+        
+        <span class="k">if</span> <span class="n">fig</span> <span class="o">==</span><span class="p">[]:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
+
+        <span class="n">title</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">tit</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Rx 1 : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="mi">1</span><span class="p">,:])</span><span class="o">+</span><span class="s">&#39; Tx &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ntx</span><span class="p">)</span><span class="o">+</span> <span class="s">&#39;: &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">),</span>
+               <span class="s">&#39;Rx 2 : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="mi">2</span><span class="p">,:]),</span>
+               <span class="s">&#39;Rx 3 : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="mi">3</span><span class="p">,:]),</span>
+               <span class="s">&#39;Rx 4 : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="mi">4</span><span class="p">,:])</span>
+               <span class="p">]</span>
+
+        <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span>
+                      <span class="n">display</span> <span class="o">=</span> <span class="n">display</span><span class="p">,</span>
+                      <span class="n">title</span> <span class="o">=</span> <span class="n">tit</span><span class="p">,</span>
+                      <span class="n">col</span> <span class="o">=</span> <span class="n">col</span><span class="p">,</span>
                       <span class="n">xmin</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span>
                       <span class="n">xmax</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span>
-                      <span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span>
-                      <span class="n">NC</span><span class="o">=</span><span class="n">NC</span><span class="p">,</span>
-                     <span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
+                      <span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">,</span>
+                      <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">,</span><span class="n">a</span>
 
 <div class="viewcode-block" id="UWBMeasure.Epercent"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.Epercent.html#pylayers.measures.mesuwb.UWBMeasure.Epercent">[docs]</a>    <span class="k">def</span> <span class="nf">Epercent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
@@ -2041,8 +2011,15 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">toa</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">toa</span>
 </div>
-<div class="viewcode-block" id="UWBMeasure.toa_max"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.toa_max.html#pylayers.measures.mesuwb.UWBMeasure.toa_max">[docs]</a>    <span class="k">def</span> <span class="nf">toa_max</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="UWBMeasure.toa_max"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.toa_max.html#pylayers.measures.mesuwb.UWBMeasure.toa_max">[docs]</a>    <span class="k">def</span> <span class="nf">toa_max</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; descendant threshold based toa estimation</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        n : integer </span>
+<span class="sd">            (default 6)</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">toa1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">toa_max</span><span class="p">(</span><span class="n">nint</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
@@ -2052,11 +2029,20 @@
 
         <span class="n">toa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">toa1</span><span class="p">,</span> <span class="n">toa2</span><span class="p">,</span> <span class="n">toa3</span><span class="p">,</span> <span class="n">toa4</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">toa</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">delay</span><span class="o">=</span><span class="n">toa</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">toa</span>
 </div>
 <div class="viewcode-block" id="UWBMeasure.toa_th"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.toa_th.html#pylayers.measures.mesuwb.UWBMeasure.toa_th">[docs]</a>    <span class="k">def</span> <span class="nf">toa_th</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; threshold based toa estimation using energy peak</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        r : float </span>
+<span class="sd">            threshold los</span>
+<span class="sd">        k : float </span>
+<span class="sd">            threshold nlos</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">toa1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">toa_th</span><span class="p">(</span><span class="n">visibility</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">thlos</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">thnlos</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
@@ -2070,24 +2056,17 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">toa</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">toa</span>
 
-    <span class="c">#def toa_th(self,display=False):</span>
 
-        <span class="c">#&quot;&quot;&quot;</span>
-        <span class="c">#threshold based toa estimation using energy pic</span>
-        <span class="c">#&quot;&quot;&quot;</span>
-
-        <span class="c">#toa1  = self.tdd.ch1.toa_th_tmtm()</span>
-        <span class="c">#toa2  = self.tdd.ch2.toa_th_tmtm()</span>
-        <span class="c">#toa3  = self.tdd.ch3.toa_th_tmtm()</span>
-         <span class="c">#toa4  = self.tdd.ch4.toa_th_tmtm()</span>
-
-        <span class="c">#toa   = np.array([toa1,toa2,toa3,toa4])</span>
-                <span class="c">#if display ==True:</span>
-            <span class="c">#self.tdd.show(toa)</span>
-        <span class="c">#return toa</span>
 </div>
 <div class="viewcode-block" id="UWBMeasure.toa_cum"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.toa_cum.html#pylayers.measures.mesuwb.UWBMeasure.toa_cum">[docs]</a>    <span class="k">def</span> <span class="nf">toa_cum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; threshold based toa estimation using cumulative energy</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        n : int </span>
+<span class="sd">        display : boolean </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">toa1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">toa_cum</span><span class="p">(</span><span class="n">th</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
@@ -2100,21 +2079,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">toa</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">toa</span>
 
-    <span class="c">#def toa_cum(self,display=False):</span>
-        <span class="c">#&quot;&quot;&quot;</span>
-        <span class="c">#threshold based toa estimation using cumulative energy</span>
-        <span class="c">#&quot;&quot;&quot;</span>
-
-        <span class="c">#toa1 = self.tdd.ch1.toa_cum_tmt()</span>
-        <span class="c">#toa2 = self.tdd.ch2.toa_cum_tmt()</span>
-        <span class="c">#toa3 = self.tdd.ch3.toa_cum_tmt()</span>
-        <span class="c">#toa4 = self.tdd.ch4.toa_cum_tmt()</span>
-
-        <span class="c">#toa  =  np.array([toa1,toa2,toa3,toa4])</span>
-        <span class="c">#if display:</span>
-            <span class="c">#self.tdd.show(toa)</span>
-        <span class="c">#return toa</span>
-</div>
+    </div>
 <div class="viewcode-block" id="UWBMeasure.taumax"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.taumax.html#pylayers.measures.mesuwb.UWBMeasure.taumax">[docs]</a>    <span class="k">def</span> <span class="nf">taumax</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
@@ -2466,8 +2431,8 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mars 30, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on juin 27, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
     
