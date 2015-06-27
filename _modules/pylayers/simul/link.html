@@ -1,0 +1,1756 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.simul.link &mdash; Python 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/sidebar.js"></script>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="top" title="Python 1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </head>
+  <body>
+
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="../../../index.html">
+            <img src="../../../_static/pylayers.png" alt="Logo"/>
+          </a>
+          </p><div class="navbar">
+          <ul>
+            <li><a href="../../../download.html">Download</a></li>
+            <li><a href="../../../notebook/TOC.html">User Guide</a></li>
+            <li><a href="../../../modules/pylayers.html">Reference</a></li>
+       </ul>
+
+<div class="search_form">
+
+<div id="cse" style="width: 100%;"></div>
+<script src="http://www.google.com/jsapi" type="text/javascript"></script>
+<script type="text/javascript">
+  google.load('search', '1', {language : 'en'});
+  google.setOnLoadCallback(function() {
+    var customSearchControl = new google.search.CustomSearchControl('016639176250731907682:tjtqbvtvij0');
+    customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
+    var options = new google.search.DrawOptions();
+    options.setAutoComplete(true);
+    customSearchControl.draw('cse', options);
+  }, true);
+</script>
+
+</div>
+</div> <!-- end navbar --></div>
+    </div>
+
+    <div class="content-wrapper">
+
+      <div class="sphinxsidebar">
+	<div class="sphinxsidebarwrapper">
+	  <div class="rel">
+	   
+	<!-- rellinks[1:] is an ugly hack to avoid link to module
+	    index  -->
+	<div class="rellink">
+	<a href="../../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module In...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
+	<!-- Ad a link to the 'up' page -->
+	<div class="spacer">
+	&nbsp;
+	</div>
+	<div class="rellink">
+	<a href="../../index.html" title="Module code" >
+	Up
+	<br>
+	<span class="smallrellink">
+	Module code
+	</span>
+	<span class="hiddenrellink">
+	Module code
+	</span>
+	
+	</a>
+	</div>
+    </div>
+    <p style="text-align: center; background-color: #BFFFFF">This documentation is
+
+    for Python <strong>version 1</strong>
+    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
+    
+    <h3>Citing</h3>
+    <p>If you use the software, please consider
+    <a href="../../../about.html#citing-pylayers">citing pylayers</a>.</p>
+    <h3>This page</h3>
+	
+    
+    </div>
+	  </div>
+
+
+      <div class="content">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.simul.link</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/python</span>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="c">#</span>
+<span class="sd">r&quot;&quot;&quot;</span>
+
+<span class="sd">.. currentmodule:: pylayers.simul.link</span>
+
+<span class="sd">This module runs the electromagnetic simulation at the link level.</span>
+<span class="sd">It stores simulated objects in `hdf5` format.</span>
+
+<span class="sd">Link is a MetaClass</span>
+<span class="sd">Dlink is for deterministic links</span>
+<span class="sd">Slink is for statistical links.</span>
+
+<span class="sd">Link Class</span>
+<span class="sd">===========</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    Link.__add__</span>
+
+<span class="sd">SLink Class</span>
+<span class="sd">===========</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    SLink.onbody</span>
+
+<span class="sd">DLink Class</span>
+<span class="sd">===========</span>
+
+<span class="sd">&gt;&gt;&gt; from pylayers.simul.link import *</span>
+<span class="sd">&gt;&gt;&gt; L = DLink(verbose=False)</span>
+<span class="sd">&gt;&gt;&gt; aktk = L.eval()</span>
+
+<span class="sd">DLink simulation</span>
+<span class="sd">----------------</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    DLink.eval</span>
+<span class="sd">    DLink._show3</span>
+
+
+<span class="sd">DLink init</span>
+<span class="sd">----------</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    DLink.__init__</span>
+<span class="sd">    DLink.__repr__</span>
+<span class="sd">    DLink.reset_config</span>
+<span class="sd">    DLink.fill_dexist</span>
+
+
+<span class="sd">search in hdf5 file</span>
+<span class="sd">-------------------</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    DLink.checkh5</span>
+<span class="sd">    DLink.array_exist</span>
+<span class="sd">    DLink.get_grpname</span>
+<span class="sd">    DLink.get_idx</span>
+
+
+<span class="sd">Modify hdf5 file</span>
+<span class="sd">----------------</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+
+<span class="sd">    DLink.save_init</span>
+<span class="sd">    DLink.save</span>
+<span class="sd">    DLink.load</span>
+<span class="sd">    DLink.stack</span>
+<span class="sd">    DLink._delete</span>
+
+
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">tvtk.api</span> <span class="kn">import</span> <span class="n">tvtk</span>
+    <span class="kn">from</span> <span class="nn">mayavi.sources.vtk_data_source</span> <span class="kn">import</span> <span class="n">VTKDataSource</span>
+    <span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&#39;Layout:Mayavi is not installed&#39;</span>
+<span class="kn">import</span> <span class="nn">doctest</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pylayers.signal.waveform</span> <span class="kn">as</span> <span class="nn">wvf</span>
+
+<span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
+<span class="kn">from</span> <span class="nn">pylayers.simul.radionode</span> <span class="kn">import</span> <span class="n">RadioNode</span>
+<span class="c"># Handle Layout</span>
+<span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
+<span class="c"># Handle Antenna</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="n">Antenna</span>
+
+<span class="c"># Handle Signauture</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.signature</span> <span class="kn">import</span> <span class="n">Signatures</span>
+<span class="c"># Handle Rays</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="n">Rays</span>
+<span class="c"># Handle VectChannel and ScalChannel</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.channel</span> <span class="kn">import</span> <span class="n">Ctilde</span><span class="p">,</span> <span class="n">Tchannel</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.statModel</span> <span class="kn">import</span> <span class="n">getchannel</span>
+
+<span class="kn">import</span> <span class="nn">h5py</span>
+<span class="kn">import</span> <span class="nn">pdb</span>
+
+
+
+<span class="k">class</span> <span class="nc">Link</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Link evaluation metaclass</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="n">Tchannel</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="Link.__add__"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.Link.__add__.html#pylayers.simul.link.Link.__add__">[docs]</a>    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">l</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; merge ak and tauk of 2 Links</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">L</span>  <span class="o">=</span> <span class="n">Link</span><span class="p">()</span>
+        <span class="n">tk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">tk</span><span class="p">,</span><span class="n">l</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">tk</span><span class="p">))</span>
+        <span class="n">ak</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ak</span><span class="p">,</span><span class="n">l</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ak</span><span class="p">))</span>
+        <span class="n">us</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">tk</span><span class="p">)</span>
+        <span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ak</span> <span class="o">=</span> <span class="n">ak</span><span class="p">[</span><span class="n">us</span><span class="p">]</span>
+        <span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">tk</span> <span class="o">=</span> <span class="n">tk</span><span class="p">[</span><span class="n">us</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">L</span>
+
+</div>
+<span class="k">class</span> <span class="nc">SLink</span><span class="p">(</span><span class="n">Link</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Statistical Link evaluation class</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SLink</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="SLink.onbody"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.SLink.onbody.html#pylayers.simul.link.SLink.onbody">[docs]</a>    <span class="k">def</span> <span class="nf">onbody</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">dida</span><span class="p">,</span> <span class="n">didb</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Statistical evaluation of a on-body link</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        B : Body</span>
+<span class="sd">            Body object on which devices are held</span>
+<span class="sd">        dida: int</span>
+<span class="sd">            device a id number on body</span>
+<span class="sd">        didb: int</span>
+<span class="sd">            device b id number on body</span>
+<span class="sd">        a : nd array</span>
+<span class="sd">            position of device a</span>
+<span class="sd">        b : nd array</span>
+<span class="sd">            position of device b</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        (ak, tk, eng )</span>
+
+<span class="sd">        ak : ndarray</span>
+<span class="sd">            alpha_k</span>
+<span class="sd">        tk : ndarray</span>
+<span class="sd">            tau_k</span>
+
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        pylayers.mobility.ban.body</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># inter to be replace by engaement</span>
+        <span class="n">eng</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">intersectBody3</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">empa</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">dev</span><span class="p">[</span><span class="n">dida</span><span class="p">][</span><span class="s">&#39;cyl&#39;</span><span class="p">]</span>
+        <span class="n">empb</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">dev</span><span class="p">[</span><span class="n">didb</span><span class="p">][</span><span class="s">&#39;cyl&#39;</span><span class="p">]</span>
+
+        <span class="n">emp</span> <span class="o">=</span> <span class="n">empa</span>
+        <span class="k">if</span> <span class="n">empa</span> <span class="o">==</span> <span class="s">&#39;trunkb&#39;</span><span class="p">:</span>
+            <span class="n">emp</span> <span class="o">=</span> <span class="n">empb</span>
+        <span class="k">if</span> <span class="n">emp</span> <span class="o">==</span> <span class="s">&#39;forearml&#39;</span><span class="p">:</span>
+            <span class="n">emp</span> <span class="o">=</span> <span class="s">&#39;forearmr&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ak</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">tk</span> <span class="o">=</span> <span class="n">getchannel</span><span class="p">(</span><span class="n">emplacement</span><span class="o">=</span><span class="n">emp</span><span class="p">,</span> <span class="n">intersection</span><span class="o">=</span><span class="n">eng</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eng</span> <span class="o">=</span> <span class="n">eng</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ak</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">tk</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span>
+
+
+</div>
+<span class="k">class</span> <span class="nc">DLink</span><span class="p">(</span><span class="n">Link</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DLink.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.__init__.html#pylayers.simul.link.DLink.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; deterministic link evaluation</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        L : Layout</span>
+<span class="sd">            Layout to be used</span>
+<span class="sd">        a : np.ndarray (3,)</span>
+<span class="sd">            position of a device dev_a</span>
+<span class="sd">        b : np.ndarray (3,)</span>
+<span class="sd">            position of a device dev_b</span>
+<span class="sd">        Aa : Antenna</span>
+<span class="sd">            Antenna of device dev_a</span>
+<span class="sd">        Ab : Antenna</span>
+<span class="sd">            Antenna of device dev_b</span>
+<span class="sd">        Ta : np.ndarray (3,3)</span>
+<span class="sd">            Rotation matrice of Antenna of device dev_a relative to global Layout scene</span>
+<span class="sd">        Tb : np.ndarray (3,3)</span>
+<span class="sd">            Rotation matrice of Antenna of device dev_b relative to global Layout scene</span>
+<span class="sd">        fGHz : np.ndarray (Nptf,)</span>
+<span class="sd">            frequency range of Nptf points used for evaluation of channel</span>
+<span class="sd">        wav : Waveform</span>
+<span class="sd">            Waveform to be applied on the channel</span>
+<span class="sd">        save_idx : int</span>
+<span class="sd">            number to identify the h5 file generated</span>
+
+<span class="sd">        Advanced (change only if you really know what you do !)</span>
+
+<span class="sd">        save_opt : list ([&#39;sig&#39;,&#39;ray&#39;,&#39;Ct&#39;,&#39;H&#39;])</span>
+<span class="sd">            information to be saved in the Links h5 file. Should never be Modified !</span>
+
+<span class="sd">        force_create : Boolean (False)</span>
+<span class="sd">            forcecreating the h5py file (if already exist, will be erased)</span>
+
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        All simulations are stored into a unique file in your &lt;PyProject&gt;/output directory</span>
+<span class="sd">        using the following convention:</span>
+
+<span class="sd">        Links_&lt;save_idx&gt;_&lt;LayoutFilename&gt;.h5</span>
+
+<span class="sd">        where</span>
+<span class="sd">            &lt;save_idx&gt; is an integer number to distinguish different links simulations</span>
+<span class="sd">        and &lt;LayoutFilename&gt; is the Layout used for the link simulation.</span>
+
+
+
+<span class="sd">        Dataset organisation:</span>
+
+<span class="sd">        Links_&lt;idx&gt;_&lt;Layout_name&gt;.h5</span>
+<span class="sd">            |</span>
+<span class="sd">            |/sig/si_ID#0/</span>
+<span class="sd">            |    /si_ID#1/</span>
+<span class="sd">            |    ...</span>
+<span class="sd">            |</span>
+<span class="sd">            |/ray/ray_ID#0/</span>
+<span class="sd">            |    /ray_ID#1/</span>
+<span class="sd">            |    ...</span>
+<span class="sd">            |</span>
+<span class="sd">            |/Ct/Ct_ID#0/</span>
+<span class="sd">            |   /Ct_ID#1/</span>
+<span class="sd">            |    ...</span>
+<span class="sd">            |</span>
+<span class="sd">            |/H/H_ID#0/</span>
+<span class="sd">            |  /H_ID#1/</span>
+<span class="sd">            |    ...</span>
+<span class="sd">            |</span>
+<span class="sd">            |</span>
+<span class="sd">            |p_map</span>
+<span class="sd">            |c_map</span>
+<span class="sd">            |f_map</span>
+<span class="sd">            |A_map</span>
+<span class="sd">            |T_map</span>
+
+
+
+<span class="sd">        Roots Dataset :</span>
+
+<span class="sd">        c_map : Cycles (Nc x 3)</span>
+<span class="sd">        p_map : Positions (Np x 3)</span>
+<span class="sd">        f_map : Frequency (Nf x 3)</span>
+<span class="sd">        T_map : Rotation matrices (Nt x 3)</span>
+<span class="sd">        A_map : Antenna name (Na x 3)</span>
+
+<span class="sd">        Groups and subgroups:</span>
+
+
+<span class="sd">            Signature identifier (si_ID#N):</span>
+<span class="sd">                ca_cb_cutoff</span>
+
+<span class="sd">            Ray identifier (ray_ID#N):</span>
+<span class="sd">                cutoff_ua_ub</span>
+
+<span class="sd">            Ctilde identifier (Ct_ID#N):</span>
+<span class="sd">                ua_ub_uf</span>
+
+<span class="sd">            H identifier (H_ID#N):</span>
+<span class="sd">                ua_ub_uf_uTa_uTb_uAa_uAb</span>
+
+<span class="sd">            with</span>
+<span class="sd">            ca : cycle number of a</span>
+<span class="sd">            cb : cycle number of b</span>
+<span class="sd">            cutoff : signature.run cutoff</span>
+<span class="sd">            ua : indice of a position in &#39;p_map&#39; position dataset</span>
+<span class="sd">            ub : indice of a position in &#39;p_map&#39; position dataset</span>
+<span class="sd">            uf : indice of freq position in &#39;f_map&#39; frequency dataset</span>
+<span class="sd">            uTa : indice of a position in &#39;T_map&#39; Rotation dataset</span>
+<span class="sd">            uTb : indice of b position in &#39;T_map&#39; Rotation dataset</span>
+<span class="sd">            uAa : indice of a position in &#39;A_map&#39; Antenna name dataset</span>
+<span class="sd">            uAb : indice of b position in &#39;A_map&#39; Antenna name dataset</span>
+
+
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        &gt;&gt;&gt; from pylayers.simul.link import *</span>
+<span class="sd">        &gt;&gt;&gt; L = DLink(verbose=False)</span>
+<span class="sd">        &gt;&gt;&gt; aktk = L.eval()</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">DLink</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+
+        <span class="n">defaults</span><span class="o">=</span><span class="p">{</span> <span class="s">&#39;L&#39;</span><span class="p">:</span><span class="n">Layout</span><span class="p">(),</span>
+                   <span class="s">&#39;a&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span>
+                   <span class="s">&#39;b&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span>
+                   <span class="s">&#39;Aa&#39;</span><span class="p">:</span><span class="n">Antenna</span><span class="p">(),</span>
+                   <span class="s">&#39;Ab&#39;</span><span class="p">:</span><span class="n">Antenna</span><span class="p">(),</span>
+                   <span class="s">&#39;Ta&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+                   <span class="s">&#39;Tb&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+                   <span class="s">&#39;fGHz&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">181</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+                   <span class="s">&#39;wav&#39;</span><span class="p">:</span><span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(),</span>
+                   <span class="s">&#39;cutoff&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span>
+                   <span class="s">&#39;save_opt&#39;</span><span class="p">:[</span><span class="s">&#39;sig&#39;</span><span class="p">,</span><span class="s">&#39;ray&#39;</span><span class="p">,</span><span class="s">&#39;Ct&#39;</span><span class="p">,</span><span class="s">&#39;H&#39;</span><span class="p">],</span>
+                   <span class="s">&#39;save_idx&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+                   <span class="s">&#39;force_create&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
+                   <span class="s">&#39;verbose&#39;</span><span class="p">:</span><span class="bp">True</span>
+                <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ca</span><span class="o">=-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cb</span><span class="o">=-</span><span class="mi">1</span>
+        <span class="n">specset</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="s">&#39;Aa&#39;</span><span class="p">,</span><span class="s">&#39;Ab&#39;</span><span class="p">,</span><span class="s">&#39;Ta&#39;</span><span class="p">,</span><span class="s">&#39;Tb&#39;</span><span class="p">,</span><span class="s">&#39;L&#39;</span><span class="p">,</span><span class="s">&#39;fGHz&#39;</span><span class="p">,</span><span class="s">&#39;wav&#39;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">specset</span> <span class="p">:</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;_&#39;</span><span class="o">+</span><span class="n">key</span><span class="p">,</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">else</span> <span class="p">:</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">specset</span> <span class="p">:</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;_&#39;</span><span class="o">+</span><span class="n">key</span><span class="p">,</span><span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                <span class="k">else</span> <span class="p">:</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+
+
+        <span class="n">force</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">force_create</span>
+        <span class="nb">delattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;force_create&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Lname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_L</span><span class="o">.</span><span class="n">filename</span>
+
+
+        <span class="c">###########</span>
+        <span class="c"># init ant</span>
+        <span class="c">###########</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+                            <span class="n">typ</span> <span class="o">=</span> <span class="s">&#39;tx&#39;</span><span class="p">,</span>
+                            <span class="n">_fileini</span> <span class="o">=</span> <span class="s">&#39;radiotx.ini&#39;</span><span class="p">,</span>
+                            <span class="n">_fileant</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="o">.</span><span class="n">_filename</span>
+                            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+                            <span class="n">typ</span> <span class="o">=</span> <span class="s">&#39;rx&#39;</span><span class="p">,</span>
+                            <span class="n">_fileini</span> <span class="o">=</span> <span class="s">&#39;radiorx.ini&#39;</span><span class="p">,</span>
+                            <span class="n">_fileant</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="o">.</span><span class="n">_filename</span><span class="p">,</span>
+                            <span class="p">)</span>
+
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="s">&#39;Links_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_idx</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Lname</span> <span class="o">+</span> <span class="s">&#39;.h5&#39;</span>
+        <span class="n">filenameh5</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLNK&#39;</span><span class="p">])</span>
+        <span class="c"># check if save file alreasdy exists</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">)</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;Links save file for &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s">&#39; does not exist.&#39;</span>
+            <span class="k">print</span> <span class="s">&#39;Creating file. You</span><span class="se">\&#39;</span><span class="s">ll see this message only once per Layout&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save_init</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">)</span>
+
+        <span class="c"># dictionnary data exists</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;sig&#39;</span><span class="p">:{</span><span class="s">&#39;exist&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span><span class="s">&#39;grpname&#39;</span><span class="p">:</span><span class="s">&#39;&#39;</span><span class="p">},</span>
+                     <span class="s">&#39;ray&#39;</span><span class="p">:{</span><span class="s">&#39;exist&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span><span class="s">&#39;grpname&#39;</span><span class="p">:</span><span class="s">&#39;&#39;</span><span class="p">},</span>
+                     <span class="s">&#39;Ct&#39;</span><span class="p">:{</span><span class="s">&#39;exist&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span><span class="s">&#39;grpname&#39;</span><span class="p">:</span><span class="s">&#39;&#39;</span><span class="p">},</span>
+                     <span class="s">&#39;H&#39;</span><span class="p">:{</span><span class="s">&#39;exist&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span><span class="s">&#39;grpname&#39;</span><span class="p">:</span><span class="s">&#39;&#39;</span><span class="p">}</span>
+                    <span class="p">}</span>
+
+
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;This is the first time the Layout is used. Graphs have to be built. Please Wait&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
+        <span class="c">#self.L.build()</span>
+
+        <span class="c">###########</span>
+        <span class="c"># init pos &amp; cycles</span>
+        <span class="c">#</span>
+        <span class="c"># If a and b are not specified</span>
+        <span class="c">#  they are chosen as center of gravity of cycle 0</span>
+        <span class="c">#</span>
+        <span class="c">###########</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ca</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="c"># self.a = self.L.cy2pt(self.ca)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">])</span> <span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+                <span class="n">a</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">],</span><span class="mf">1.0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">a</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
+            <span class="c"># self.ca = self.L.pt2cy(self.a)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cb</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cb</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="c"># self.b = self.L.cy2pt(self.cb)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">])</span> <span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+                <span class="n">b</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">],</span><span class="mf">1.0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">b</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
+            <span class="c"># self.cb = self.L.pt2cy(self.b)</span>
+
+
+        <span class="c">###########</span>
+        <span class="c"># init freq</span>
+        <span class="c">###########</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fstep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Si</span> <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ca</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">cb</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">Rays</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="n">Ctilde</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="n">Tchannel</span><span class="p">()</span>
+
+
+</div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">Lname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Lname</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">L</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_L</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_a</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">b</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_b</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">ca</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ca</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">Aa</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Aa</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">Ab</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Ab</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">Ta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Ta</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">Tb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Tb</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">fGHz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fGHz</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">wav</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wav</span>
+
+    <span class="nd">@L.setter</span>
+    <span class="k">def</span> <span class="nf">L</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">):</span>
+        <span class="c"># change layout and build/load</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_L</span> <span class="o">=</span> <span class="n">L</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_config</span><span class="p">()</span>
+
+    <span class="nd">@Lname.setter</span>
+    <span class="k">def</span> <span class="nf">Lname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Lname</span><span class="p">):</span>
+        <span class="c"># change layout and build/load</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="n">Lname</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Lname</span> <span class="o">=</span> <span class="n">Lname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_config</span><span class="p">()</span>
+
+    <span class="nd">@a.setter</span>
+    <span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">position</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">ptin</span><span class="p">(</span><span class="n">position</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">NameError</span> <span class="p">(</span><span class="s">&#39;Warning : point a is not inside the Layout&#39;</span><span class="p">)</span>
+            <span class="c"># raise NameError (&#39;Warning : point a is not inside the Layout&#39;)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">position</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">ca</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ca</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_a</span> <span class="o">=</span> <span class="n">position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
+
+    <span class="nd">@b.setter</span>
+    <span class="k">def</span> <span class="nf">b</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">position</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">ptin</span><span class="p">(</span><span class="n">position</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">NameError</span> <span class="p">(</span><span class="s">&#39;Warning : point b is not inside the Layout&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">position</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">cb</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_b</span> <span class="o">=</span> <span class="n">position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
+
+    <span class="nd">@ca.setter</span>
+    <span class="k">def</span> <span class="nf">ca</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cycle</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cycle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">NameError</span> <span class="p">(</span><span class="s">&#39;cycle ca is not inside Gt&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ca</span> <span class="o">=</span> <span class="n">cycle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">cy2pt</span><span class="p">(</span><span class="n">cycle</span><span class="p">)</span>
+
+    <span class="nd">@cb.setter</span>
+    <span class="k">def</span> <span class="nf">cb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cycle</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cycle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">NameError</span> <span class="p">(</span><span class="s">&#39;cycle cb is not inside Gt&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cb</span> <span class="o">=</span> <span class="n">cycle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">cy2pt</span><span class="p">(</span><span class="n">cycle</span><span class="p">)</span>
+
+    <span class="nd">@Aa.setter</span>
+    <span class="k">def</span> <span class="nf">Aa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Ant</span><span class="p">):</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>
+        <span class="n">rot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+                            <span class="n">typ</span> <span class="o">=</span> <span class="s">&#39;tx&#39;</span><span class="p">,</span>
+                            <span class="n">_fileini</span> <span class="o">=</span> <span class="s">&#39;radiotx.ini&#39;</span><span class="p">,</span>
+                            <span class="n">_fileant</span> <span class="o">=</span> <span class="n">Ant</span><span class="o">.</span><span class="n">_filename</span>
+                            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Aa</span> <span class="o">=</span> <span class="n">Ant</span>
+        <span class="c">#to be removed when radionode will be updated</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ta</span> <span class="o">=</span> <span class="n">rot</span>
+
+
+    <span class="nd">@Ab.setter</span>
+    <span class="k">def</span> <span class="nf">Ab</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Ant</span><span class="p">):</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
+        <span class="n">rot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Tb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+                            <span class="n">typ</span> <span class="o">=</span> <span class="s">&#39;rx&#39;</span><span class="p">,</span>
+                            <span class="n">_fileini</span> <span class="o">=</span> <span class="s">&#39;radiorx.ini&#39;</span><span class="p">,</span>
+                            <span class="n">_fileant</span> <span class="o">=</span> <span class="n">Ant</span><span class="o">.</span><span class="n">_filename</span><span class="p">,</span>
+                            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Ab</span> <span class="o">=</span> <span class="n">Ant</span>
+        <span class="c">#to be removed when radionode will be updated</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Tb</span> <span class="o">=</span> <span class="n">rot</span>
+
+    <span class="nd">@Ta.setter</span>
+    <span class="k">def</span> <span class="nf">Ta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">orientation</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Ta</span> <span class="o">=</span> <span class="n">orientation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">orientation</span> <span class="o">=</span> <span class="n">orientation</span>
+
+    <span class="nd">@Tb.setter</span>
+    <span class="k">def</span> <span class="nf">Tb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">orientation</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Tb</span> <span class="o">=</span> <span class="n">orientation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">orientation</span> <span class="o">=</span> <span class="n">orientation</span>
+
+    <span class="nd">@fGHz.setter</span>
+    <span class="k">def</span> <span class="nf">fGHz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">freq</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">freq</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">freq</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fGHz</span> <span class="o">=</span> <span class="n">freq</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fmin</span> <span class="o">=</span> <span class="n">freq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fmax</span> <span class="o">=</span> <span class="n">freq</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fstep</span> <span class="o">=</span> <span class="n">freq</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">freq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fmin</span> <span class="o">=</span> <span class="n">freq</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fmax</span> <span class="o">=</span> <span class="n">freq</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">step</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="nd">@wav.setter</span>
+    <span class="k">def</span> <span class="nf">wav</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">waveform</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_wav</span> <span class="o">=</span> <span class="n">waveform</span>
+        <span class="k">if</span> <span class="s">&#39;H&#39;</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">chanreal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="DLink.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.__repr__.html#pylayers.simul.link.DLink.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; __repr__</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;filename: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Link Parameters :</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;------- --------</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Layout : &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lname</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Node a   </span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;------  </span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;position : &#39;</span> <span class="o">+</span> <span class="nb">str</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Antenna : &#39;</span> <span class="o">+</span> <span class="nb">str</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="o">.</span><span class="n">_filename</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Rotation matrice : </span><span class="se">\n</span><span class="s"> &#39;</span> <span class="o">+</span> <span class="nb">str</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ta</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Node b   </span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;------  </span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;position : &#39;</span> <span class="o">+</span> <span class="nb">str</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Antenna : &#39;</span> <span class="o">+</span> <span class="nb">str</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="o">.</span><span class="n">_filename</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Rotation matrice : </span><span class="se">\n</span><span class="s"> &#39;</span> <span class="o">+</span> <span class="nb">str</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Tb</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Link evaluation information : </span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;----------------------------- </span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;distance : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%6.3f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)))</span> <span class="o">+</span> <span class="s">&#39; m </span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;delay : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%6.3f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span><span class="o">/</span><span class="mf">0.3</span><span class="p">))</span> <span class="o">+</span> <span class="s">&#39; ns</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="c">#s = s + &#39;Frequency range :  \n&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;fmin (fGHz) : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;fmax (fGHz) : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;fstep (fGHz) : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Nf : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">))</span> <span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s"> &#39;</span>
+        <span class="n">d</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span> 
+        <span class="n">fc</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="mf">2.</span>
+        <span class="n">L</span>  <span class="o">=</span> <span class="mf">32.4</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fcGHz</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s</span>
+
+
+</div>
+    <span class="k">def</span> <span class="nf">help</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">letter</span><span class="o">=</span><span class="s">&#39;az&#39;</span><span class="p">,</span><span class="n">mod</span><span class="o">=</span><span class="s">&#39;meth&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; help</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        txt : string</span>
+<span class="sd">            &#39;members&#39; | &#39;methods&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">members</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="n">lmeth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="nb">dir</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">mod</span><span class="o">==</span><span class="s">&#39;memb&#39;</span><span class="p">:</span>
+            <span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">mod</span><span class="o">==</span><span class="s">&#39;meth&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">lmeth</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">s</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">members</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="s">&#39;_&#39;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">letter</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">letter</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">&amp;</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;</span><span class="n">letter</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                                <span class="k">try</span><span class="p">:</span>
+                                    <span class="n">doc</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s">&#39;self.&#39;</span><span class="o">+</span><span class="n">s</span><span class="o">+</span><span class="s">&#39;.__doc__&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+                                    <span class="k">print</span> <span class="n">s</span><span class="o">+</span><span class="s">&#39;: &#39;</span><span class="o">+</span> <span class="n">doc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                                <span class="k">except</span><span class="p">:</span>
+                                    <span class="k">pass</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="n">letter</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                                <span class="k">try</span><span class="p">:</span>
+                                    <span class="n">doc</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s">&#39;self.&#39;</span><span class="o">+</span><span class="n">s</span><span class="o">+</span><span class="s">&#39;.__doc__&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+                                    <span class="k">print</span> <span class="n">s</span><span class="o">+</span><span class="s">&#39;: &#39;</span><span class="o">+</span> <span class="n">doc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                                <span class="k">except</span><span class="p">:</span>
+                                    <span class="k">pass</span>
+<div class="viewcode-block" id="DLink.reset_config"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.reset_config.html#pylayers.simul.link.DLink.reset_config">[docs]</a>    <span class="k">def</span> <span class="nf">reset_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; reset configuration when a new layout is loaded</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ca</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cb</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="c"># self.a = self.L.cy2pt(self.ca)</span>
+        <span class="c"># self.b = self.L.cy2pt(self.cb)</span>
+
+        <span class="c"># change h5py file if layout changed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="s">&#39;Links_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_idx</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Lname</span> <span class="o">+</span> <span class="s">&#39;.h5&#39;</span>
+        <span class="n">filenameh5</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLNK&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">)</span> <span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;Links save file for &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s">&#39; does not exist.&#39;</span>
+            <span class="k">print</span> <span class="s">&#39;It is beeing created. You</span><span class="se">\&#39;</span><span class="s">ll see that message only once per Layout&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save_init</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">)</span>
+
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">delattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;Si&#39;</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">delattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;R&#39;</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">delattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;C&#39;</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">delattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;H&#39;</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+</div>
+<div class="viewcode-block" id="DLink.checkh5"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.checkh5.html#pylayers.simul.link.DLink.checkh5">[docs]</a>    <span class="k">def</span> <span class="nf">checkh5</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; check existence of previous simulation run with the same parameters.</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        update self.dexist dictionnary</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># get identifier groupname in h5py file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_grpname</span><span class="p">()</span>
+        <span class="c"># check if grpnamee exist in the h5py file</span>
+        <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fill_dexist</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">])</span>   <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">]</span>
+
+
+</div>
+<div class="viewcode-block" id="DLink.save_init"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.save_init.html#pylayers.simul.link.DLink.save_init">[docs]</a>    <span class="k">def</span> <span class="nf">save_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename_long</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; initialize save Link</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+
+<span class="sd">        filename_long : str</span>
+<span class="sd">            complete path and filename</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+
+        <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename_long</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="c"># try/except to avoid loosing the h5 file if</span>
+        <span class="c"># read/write error</span>
+
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s">&#39;sig&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s">&#39;ray&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s">&#39;Ct&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s">&#39;H&#39;</span><span class="p">)</span>
+            <span class="c"># mapping point a</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;p_map&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;float64&#39;</span><span class="p">)</span>
+            <span class="c"># mapping cycles</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;c_map&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;int&#39;</span><span class="p">)</span>
+            <span class="c"># mapping (fmin,fmax,fstep)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;f_map&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;float64&#39;</span><span class="p">)</span>
+            <span class="c"># mapping Antenna name</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;A_map&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="s">&quot;S10&quot;</span><span class="p">)</span>
+            <span class="c"># mapping rotation matrices Antenna</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;T_map&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;float64&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Links: issue when initializing h5py file&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="DLink.stack"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.stack.html#pylayers.simul.link.DLink.stack">[docs]</a>    <span class="k">def</span> <span class="nf">stack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">array</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; stack new array in h5py file</span>
+<span class="sd">            for a given key (dataframe/group)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        key : string</span>
+
+<span class="sd">        array : np.ndarray</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        idx : int</span>
+<span class="sd">            indice of last element of the array of key</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span> <span class="p">:</span>
+            <span class="n">lfilename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLNK&#39;</span><span class="p">])</span>
+            <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">lfilename</span><span class="p">,</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s">&#39;T_map&#39;</span><span class="p">:</span>
+                <span class="n">sc</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+                <span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="n">sc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">sc</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                <span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">,:]</span><span class="o">=</span><span class="n">array</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sc</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+                <span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="n">sc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">sc</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">sc</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+                <span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">,:,:]</span><span class="o">=</span><span class="n">array</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">sc</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Link stack: issue during stacking&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="DLink._delete"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink._delete.html#pylayers.simul.link.DLink._delete">[docs]</a>    <span class="k">def</span> <span class="nf">_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Delete a key and associated data into h5py file</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        key : string</span>
+<span class="sd">            key of the h5py file</span>
+<span class="sd">        grpname : string</span>
+<span class="sd">            groupe name of the h5py file</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lfilename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLNK&#39;</span><span class="p">])</span>
+        <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">lfilename</span><span class="p">,</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+        <span class="c"># try/except to avoid loosing the h5 file if</span>
+        <span class="c"># read/write error</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">grpname</span><span class="p">]</span>
+            <span class="c"># print &#39;delete &#39;,key , &#39; in &#39;, grpname</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Link._delete: issue when deleting in h5py file&#39;</span><span class="p">)</span>
+
+
+</div>
+<div class="viewcode-block" id="DLink.save"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.save.html#pylayers.simul.link.DLink.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">obj</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">grpname</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Save a given object in the correct group</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        obj : Object</span>
+<span class="sd">            (Signatures|Rays|Ctilde|Tchannel)</span>
+<span class="sd">        key : string</span>
+<span class="sd">            key of the h5py file</span>
+<span class="sd">        gpname : string</span>
+<span class="sd">            groupe name of the h5py file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">force</span> <span class="p">:</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">_saveh5</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="n">grpname</span><span class="p">)</span>
+        <span class="c"># if save is forced, previous existing data are removed and</span>
+        <span class="c"># replaced by new ones.</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;exist&#39;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_delete</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">grpname</span><span class="p">)</span>
+
+            <span class="n">obj</span><span class="o">.</span><span class="n">_saveh5</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="n">grpname</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
+            <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">__class__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39; from &#39;</span><span class="o">+</span> <span class="n">grpname</span> <span class="o">+</span> <span class="s">&#39; saved&#39;</span>
+
+</div>
+<div class="viewcode-block" id="DLink.load"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.load.html#pylayers.simul.link.DLink.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">obj</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Load a given object in the correct grp</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        obj : Object</span>
+<span class="sd">            (Signatures|Rays|Ctilde|Tchannel)</span>
+<span class="sd">        grpname : string</span>
+<span class="sd">            groupe name of the h5py file</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">obj</span><span class="o">.</span><span class="n">_loadh5</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="n">grpname</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
+            <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">__class__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39; from &#39;</span><span class="o">+</span> <span class="n">grpname</span> <span class="o">+</span> <span class="s">&#39; loaded&#39;</span>
+
+</div>
+<div class="viewcode-block" id="DLink.get_grpname"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.get_grpname.html#pylayers.simul.link.DLink.get_grpname">[docs]</a>    <span class="k">def</span> <span class="nf">get_grpname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Determine the data group name for the given configuration</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        Update the key grpname of self.dexist[key] dictionnary,</span>
+<span class="sd">        where key  = &#39;sig&#39;|&#39;ray&#39;|&#39;Ct&#39;|&#39;H&#39;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c">############</span>
+        <span class="c"># Signatures</span>
+        <span class="c">############</span>
+
+        <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="bp">self</span><span class="o">.</span><span class="n">ca</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">cb</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">]))</span>
+        <span class="n">ua_opt</span><span class="p">,</span> <span class="n">ua</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;c_map&#39;</span><span class="p">,</span><span class="n">array</span><span class="p">)</span>
+
+        <span class="n">grpname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ca</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cb</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;sig&#39;</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">grpname</span>
+
+
+
+        <span class="c">############</span>
+        <span class="c"># Rays</span>
+        <span class="c">#############</span>
+
+        <span class="c"># check existence of self.a in h5py file</span>
+
+        <span class="n">ua_opt</span><span class="p">,</span> <span class="n">ua</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;p_map&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+        <span class="c"># check existence of self.b in h5py file</span>
+        <span class="n">ub_opt</span><span class="p">,</span> <span class="n">ub</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;p_map&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+        <span class="c"># Write in h5py if no prior a-b link</span>
+
+        <span class="n">grpname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ua</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ub</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;ray&#39;</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">grpname</span>
+
+
+
+        <span class="c">############</span>
+        <span class="c"># Ctilde</span>
+        <span class="c">#############</span>
+
+        <span class="c"># check existence of frequency in h5py file</span>
+        <span class="n">farray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="bp">self</span><span class="o">.</span><span class="n">fmin</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">fmax</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">fstep</span><span class="p">]))</span>
+        <span class="n">uf_opt</span><span class="p">,</span> <span class="n">uf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;f_map&#39;</span><span class="p">,</span><span class="n">farray</span><span class="p">)</span>
+
+        <span class="n">grpname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">ua</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ub</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">uf</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;Ct&#39;</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grpname</span>
+
+        <span class="c">############</span>
+        <span class="c"># H</span>
+        <span class="c">#############</span>
+
+
+        <span class="c"># check existence of Rot a (Ta) in h5py file</span>
+        <span class="n">uTa_opt</span><span class="p">,</span> <span class="n">uTa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;T_map&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Ta</span><span class="p">)</span>
+        <span class="c"># check existence of Rot b (Tb) in h5py file</span>
+        <span class="n">uTb_opt</span><span class="p">,</span> <span class="n">uTb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;T_map&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Tb</span><span class="p">)</span>
+        <span class="c"># check existence of Antenna a (Aa) in h5py file</span>
+        <span class="n">uAa_opt</span><span class="p">,</span> <span class="n">uAa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;A_map&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="o">.</span><span class="n">_filename</span><span class="p">)</span>
+        <span class="c"># check existence of Antenna b (Ab) in h5py file</span>
+        <span class="n">uAb_opt</span><span class="p">,</span> <span class="n">uAb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;A_map&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="o">.</span><span class="n">_filename</span><span class="p">)</span>
+
+
+        <span class="n">grpname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">ua</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ub</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">uf</span><span class="p">)</span> <span class="o">+</span> \
+                  <span class="s">&#39;_&#39;</span>  <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">uTa</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">uTb</span><span class="p">)</span> <span class="o">+</span> \
+                  <span class="s">&#39;_&#39;</span>  <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">uAa</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">uAb</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;H&#39;</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">grpname</span>
+
+</div>
+<div class="viewcode-block" id="DLink.fill_dexist"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.fill_dexist.html#pylayers.simul.link.DLink.fill_dexist">[docs]</a>    <span class="k">def</span> <span class="nf">fill_dexist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check if the key&#39;s data with a given groupname</span>
+<span class="sd">            already exists in the h5py file</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        key: string</span>
+<span class="sd">            key of the h5py group</span>
+<span class="sd">        grpname : string</span>
+<span class="sd">            groupe name of the h5py file</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        update the key grpname of self.dexist[key] dictionnary</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span> <span class="p">:</span>
+            <span class="n">lfilename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLNK&#39;</span><span class="p">])</span>
+            <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">lfilename</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">grpname</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf8&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;exist&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;exist&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Link exist: issue during stacking&#39;</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="DLink.get_idx"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.get_idx.html#pylayers.simul.link.DLink.get_idx">[docs]</a>    <span class="k">def</span> <span class="nf">get_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">array</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; try to get the index of the requested array in the group key</span>
+<span class="sd">            of the hdf5 file.</span>
+<span class="sd">            If array doesn&#39;t exist, the hdf5file[key] array is stacked</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        key: string</span>
+<span class="sd">            key of the h5py group</span>
+<span class="sd">        array : np.ndarray</span>
+<span class="sd">            array type to check existency</span>
+<span class="sd">        tol : np.float64</span>
+<span class="sd">            tolerance (in meter for key == &#39;p_map&#39;)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        (u_opt, u): tuple</span>
+
+<span class="sd">        u : np.ndarray</span>
+<span class="sd">            the index in the array of the file[key] group</span>
+<span class="sd">        u_opt : string (&#39;r&#39;|&#39;s&#39;)</span>
+<span class="sd">            return &#39;r&#39; if array has been read into h5py file</span>
+<span class="sd">            return &#39;s&#39; if array has been stacked into the array of group key</span>
+
+
+
+<span class="sd">        See Also:</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        Links.array_exist</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">umap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">array_exist</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">array</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">)</span>
+        <span class="n">lu</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">umap</span><span class="p">)</span>
+        <span class="c"># if exists take the existing one</span>
+        <span class="c"># otherwise value is created</span>
+        <span class="k">if</span> <span class="n">lu</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">umap</span>
+            <span class="n">u_opt</span><span class="o">=</span><span class="s">&#39;r&#39;</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">array</span><span class="p">)</span>
+            <span class="n">u_opt</span><span class="o">=</span><span class="s">&#39;s&#39;</span>
+        <span class="k">return</span> <span class="n">u_opt</span><span class="p">,</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+</div>
+<div class="viewcode-block" id="DLink.array_exist"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.array_exist.html#pylayers.simul.link.DLink.array_exist">[docs]</a>    <span class="k">def</span> <span class="nf">array_exist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">array</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span> <span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; check if an array of a given key (h5py group)</span>
+<span class="sd">            has already been stored into the h5py file</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        key: string</span>
+<span class="sd">            key of the h5py group</span>
+<span class="sd">        array : np.ndarray</span>
+<span class="sd">            array type to check existency</span>
+<span class="sd">        tol : np.float64</span>
+<span class="sd">            tolerance (in meter for key == &#39;p_map&#39;)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        (ua)</span>
+
+<span class="sd">        ua : np.ndarray</span>
+<span class="sd">            the indice in the array of the file[key] group</span>
+<span class="sd">            if the array is emtpy, value doesn&#39;t exist</span>
+
+<span class="sd">        TODO</span>
+<span class="sd">        ----</span>
+
+<span class="sd">        Add a tolerance on the rotation angle (T_map)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">lfilename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLNK&#39;</span><span class="p">])</span>
+        <span class="k">try</span> <span class="p">:</span>
+            <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">lfilename</span><span class="p">,</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="n">fa</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="o">...</span><span class="p">]</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Link check_exist: issue during reading&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&#39;c_map&#39;</span><span class="p">:</span>
+            <span class="n">eq</span> <span class="o">=</span> <span class="n">array</span> <span class="o">==</span> <span class="n">fa</span>
+            <span class="c"># sum eq = 3 means cy0,cy1 and cutoff are the same in fa and array</span>
+            <span class="n">ua</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">eq</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="mi">3</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&#39;p_map&#39;</span><span class="p">:</span>
+
+            <span class="n">da</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">array</span><span class="o">-</span><span class="n">fa</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+            <span class="c"># indice points candidate in db for a</span>
+
+            <span class="n">ua</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">da</span><span class="o">&lt;</span><span class="n">tol</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&#39;f_map&#39;</span><span class="p">:</span>
+            <span class="c"># fmin_h5 &lt; fmin_rqst</span>
+            <span class="n">ufmi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">fa</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;=</span><span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">lufmi</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ufmi</span><span class="p">)</span>
+            <span class="c"># fmax_h5 &gt; fmax_rqst</span>
+            <span class="n">ufma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">fa</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">array</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">lufma</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ufma</span><span class="p">)</span>
+            <span class="c"># fstep_h5 &lt; fstep_rqst</span>
+            <span class="n">ufst</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">fa</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">&lt;=</span><span class="n">array</span><span class="p">[</span><span class="mi">2</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">lufst</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ufst</span><span class="p">)</span>
+            <span class="c"># if fmin, fmax or fstep</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">lufmi</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">lufma</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">lufst</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
+                <span class="n">ua</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="c"># find comon lines of fmin and fmax</span>
+                <span class="n">ufmima</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">ufmi</span><span class="p">,</span><span class="n">ufma</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="c"># find comon lines of fmin, fmax and fstep</span>
+                <span class="n">ua</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">ufmima</span><span class="p">,</span><span class="n">ufst</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&#39;A_map&#39;</span><span class="p">:</span>
+            <span class="n">ua</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">fa</span><span class="o">==</span><span class="n">array</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&#39;T_map&#39;</span><span class="p">:</span>
+            <span class="n">eq</span> <span class="o">=</span> <span class="n">array</span> <span class="o">==</span> <span class="n">fa</span>
+            <span class="n">seq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">eq</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">ua</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">seq</span><span class="o">==</span><span class="mi">9</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Link.array_exist : invalid key&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ua</span>
+
+</div>
+<div class="viewcode-block" id="DLink.eval"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.eval.html#pylayers.simul.link.DLink.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Evaluate the link</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        applywav :boolean</span>
+<span class="sd">         Apply waveform to H</span>
+<span class="sd">        force : list</span>
+<span class="sd">            Force the computation ([&#39;sig&#39;,&#39;ray&#39;,&#39;Ct&#39;,&#39;H&#39;]) AND save (replace previous computations)</span>
+<span class="sd">        si_algo : str (&#39;old&#39;|&#39;new&#39;)</span>
+<span class="sd">            signature.run algo type</span>
+<span class="sd">            &#39;old&#39; : call propaths2</span>
+<span class="sd">            &#39;new&#39; : call procone2</span>
+<span class="sd">        alg : 5|7</span>
+<span class="sd">            version of run for signature</span>
+<span class="sd">        si_mt: boolean</span>
+<span class="sd">            Multi thread version of algo version 7</span>
+<span class="sd">        si_progress: bollean ( False)</span>
+<span class="sd">            display progression bar for signatures</span>
+<span class="sd">        diffraction : boolean (False)</span>
+<span class="sd">            takes into consideration diffraction points</span>
+<span class="sd">        ra_number_mirror_cf : int</span>
+<span class="sd">            rays.to3D number of ceil/floor reflexions</span>
+<span class="sd">        ra_ceil_height_meter: float,</span>
+<span class="sd">            ceil height</span>
+<span class="sd">        ra_vectorized: boolean (True)</span>
+<span class="sd">            if True used the (2015 new) vectorized approach to determine 2drays</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        ak : ndarray</span>
+<span class="sd">            alpha_k</span>
+<span class="sd">        tk : ndarray</span>
+<span class="sd">            tau_k</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        update self.ak and self.tk</span>
+
+<span class="sd">        self.ak : ndarray</span>
+<span class="sd">            alpha_k</span>
+<span class="sd">        self.tk : ndarray</span>
+<span class="sd">            tau_k</span>
+
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. plot::</span>
+<span class="sd">            :include-source:</span>
+
+<span class="sd">            &gt;&gt;&gt; from pylayers.simul.link import *</span>
+<span class="sd">            &gt;&gt;&gt; L=DLink(verbose=False)</span>
+<span class="sd">            &gt;&gt;&gt; aktk = L.eval()</span>
+
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        pylayers.antprop.signature</span>
+<span class="sd">        pylayers.antprop.rays</span>
+
+<span class="sd">        Experimental</span>
+<span class="sd">        ------------</span>
+
+<span class="sd">        alg = 2015 | 20152 (best)</span>
+<span class="sd">            vectorized signature research</span>
+<span class="sd">        si_reverb : number of reverb in source/target cycle if alg=2015</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">defaults</span><span class="o">=</span><span class="p">{</span> <span class="s">&#39;applywav&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                   <span class="s">&#39;si_algo&#39;</span><span class="p">:</span><span class="s">&#39;old&#39;</span><span class="p">,</span>
+                   <span class="s">&#39;si_mt&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
+                   <span class="s">&#39;si_progress&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
+                   <span class="s">&#39;diffraction&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
+                   <span class="s">&#39;ra_vectorized&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
+                   <span class="s">&#39;ra_ceil_height_meter&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span>
+                   <span class="s">&#39;ra_number_mirror_cf&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+                   <span class="s">&#39;force&#39;</span><span class="p">:[],</span>
+                   <span class="s">&#39;alg&#39;</span><span class="p">:</span><span class="mi">7</span><span class="p">,</span>
+                   <span class="s">&#39;si_reverb&#39;</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span>
+                   <span class="s">&#39;threshold&#39;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span>
+                   <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">=</span><span class="n">value</span>
+
+
+        <span class="k">if</span> <span class="s">&#39;cutoff&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s">&#39;force&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">],</span><span class="nb">list</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">True</span> <span class="p">:</span>
+                    <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;sig&#39;</span><span class="p">,</span><span class="s">&#39;ray&#39;</span><span class="p">,</span><span class="s">&#39;Ct&#39;</span><span class="p">,</span><span class="s">&#39;H&#39;</span><span class="p">]</span>
+                <span class="k">else</span> <span class="p">:</span>
+                    <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c"># must be placed after all the init !!!!</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">checkh5</span><span class="p">()</span>
+
+
+        <span class="c">############</span>
+        <span class="c"># Signatures</span>
+        <span class="c">############</span>
+
+        <span class="n">Si</span> <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ca</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">cb</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;sig&#39;</span><span class="p">][</span><span class="s">&#39;exist&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="s">&#39;sig&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">])):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">Si</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;sig&#39;</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">])</span>
+
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alg&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">2015</span><span class="p">:</span>
+                <span class="n">TMP</span><span class="o">=</span><span class="n">Si</span><span class="o">.</span><span class="n">run2015</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">],</span>
+                        <span class="n">cutoffbound</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_reverb&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alg&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">20152</span><span class="p">:</span>
+                <span class="n">TMP</span><span class="o">=</span><span class="n">Si</span><span class="o">.</span><span class="n">run2015_2</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">],</span>
+                        <span class="n">cutoffbound</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_reverb&#39;</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alg&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">5</span><span class="p">:</span>
+                <span class="n">Si</span><span class="o">.</span><span class="n">run5</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">],</span>
+                        <span class="n">algo</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_algo&#39;</span><span class="p">],</span>
+                        <span class="n">diffraction</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;diffraction&#39;</span><span class="p">],</span>
+                        <span class="n">progress</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_progress&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alg&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">7</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_mt&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">7</span><span class="p">:</span>
+                    <span class="n">Si</span><span class="o">.</span><span class="n">run7mt</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">],</span>
+                        <span class="n">algo</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_algo&#39;</span><span class="p">],</span>
+                        <span class="n">diffraction</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;diffraction&#39;</span><span class="p">],</span>
+                        <span class="n">threshold</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;threshold&#39;</span><span class="p">],</span>
+                        <span class="n">progress</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_progress&#39;</span><span class="p">])</span>
+                <span class="k">else</span> <span class="p">:</span>
+                    <span class="n">Si</span><span class="o">.</span><span class="n">run7</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">],</span>
+                        <span class="n">algo</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_algo&#39;</span><span class="p">],</span>
+                        <span class="n">diffraction</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;diffraction&#39;</span><span class="p">],</span>
+                        <span class="n">threshold</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;threshold&#39;</span><span class="p">],</span>
+                        <span class="n">progress</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_progress&#39;</span><span class="p">])</span>
+
+            <span class="c">#Si.run6(diffraction=kwargs[&#39;diffraction&#39;])</span>
+            <span class="c"># save sig</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">Si</span><span class="p">,</span><span class="s">&#39;sig&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;sig&#39;</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">],</span><span class="n">force</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Si</span> <span class="o">=</span> <span class="n">Si</span>
+
+
+
+        <span class="c">############</span>
+        <span class="c"># Rays</span>
+        <span class="c">############</span>
+
+        <span class="n">R</span> <span class="o">=</span> <span class="n">Rays</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;ray&#39;</span><span class="p">][</span><span class="s">&#39;exist&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="s">&#39;ray&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">]):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">R</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;ray&#39;</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">])</span>
+
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="c"># perform computation ...</span>
+            <span class="c"># ... with vetorized ray evaluation approach</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ra_vectorized&#39;</span><span class="p">]:</span>
+                <span class="n">r2d</span> <span class="o">=</span> <span class="n">Si</span><span class="o">.</span><span class="n">raysv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+            <span class="c"># ... or with original and slow approach ( to be removed in a near future)</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="n">r2d</span> <span class="o">=</span> <span class="n">Si</span><span class="o">.</span><span class="n">rays</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+            <span class="n">R</span> <span class="o">=</span> <span class="n">r2d</span><span class="o">.</span><span class="n">to3D</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">H</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">maxheight</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ra_number_mirror_cf&#39;</span><span class="p">])</span>
+            <span class="n">R</span><span class="o">.</span><span class="n">locbas</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+            <span class="c"># ...and save</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">R</span><span class="p">,</span><span class="s">&#39;ray&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;ray&#39;</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">],</span><span class="n">force</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">R</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">nray</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;No rays have been found. Try to re-run the simulation with a higher S.cutoff &#39;</span><span class="p">)</span>
+
+        <span class="c">############</span>
+        <span class="c"># Ctilde</span>
+        <span class="c">############</span>
+
+        <span class="n">C</span><span class="o">=</span><span class="n">Ctilde</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;Ct&#39;</span><span class="p">][</span><span class="s">&#39;exist&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="s">&#39;Ct&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">]):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">C</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;Ct&#39;</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">])</span>
+
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">R</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+            <span class="c"># Ctilde...</span>
+            <span class="n">C</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+            <span class="c"># ...save Ct</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">C</span><span class="p">,</span><span class="s">&#39;Ct&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;Ct&#39;</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">],</span><span class="n">force</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="n">C</span>
+
+        <span class="c">############</span>
+        <span class="c"># H</span>
+        <span class="c">############</span>
+
+        <span class="n">H</span> <span class="o">=</span> <span class="n">Tchannel</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;H&#39;</span><span class="p">][</span><span class="s">&#39;exist&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="s">&#39;H&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">]):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">H</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;H&#39;</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">])</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="c"># Ctilde antenna</span>
+            <span class="n">Cl</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">locbas</span><span class="p">(</span><span class="n">Tt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Ta</span><span class="p">,</span> <span class="n">Tr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Tb</span><span class="p">)</span>
+            <span class="c">#T channel</span>
+            <span class="n">H</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">debug</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">H</span><span class="p">,</span><span class="s">&#39;H&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;H&#39;</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">],</span><span class="n">force</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="n">H</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;applywav&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">isFriis</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ak</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">tk</span>
+</div>
+    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; show the link</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        s   : int</span>
+<span class="sd">        ca  : string</span>
+<span class="sd">            color a</span>
+<span class="sd">        cb  : string</span>
+<span class="sd">            color b</span>
+<span class="sd">        alpha : int</span>
+<span class="sd">        figsize : tuple</span>
+<span class="sd">            (20,10)</span>
+<span class="sd">        fontsize : int</span>
+<span class="sd">            20</span>
+<span class="sd">        rays : boolean</span>
+<span class="sd">            False</span>
+<span class="sd">        cmap : colormap</span>
+<span class="sd">        labels : boolean</span>
+<span class="sd">            enabling edge label (useful for signature identification)</span>
+<span class="sd">        pol : string</span>
+<span class="sd">            &#39;tt&#39;,&#39;pp&#39;,&#39;tp&#39;,&#39;pt&#39;,&#39;co&#39;,&#39;cross&#39;,tot&#39;</span>
+<span class="sd">        col : string</span>
+<span class="sd">            &#39;cmap&#39;</span>
+<span class="sd">        width : float</span>
+<span class="sd">        alpha : float</span>
+<span class="sd">        dB    : boolean</span>
+<span class="sd">            default False</span>
+<span class="sd">        dyn : float</span>
+<span class="sd">            dynamic in dB</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        &gt;&gt;&gt; from pylayers.simul.link import *</span>
+<span class="sd">        &gt;&gt;&gt; L=Link()</span>
+<span class="sd">        &gt;&gt;&gt; L.show(ray=True,dB=True)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">defaults</span> <span class="o">=</span><span class="p">{</span><span class="s">&#39;s&#39;</span><span class="p">:</span><span class="mi">80</span><span class="p">,</span>
+                   <span class="s">&#39;ca&#39;</span><span class="p">:</span><span class="s">&#39;b&#39;</span><span class="p">,</span>
+                   <span class="s">&#39;cb&#39;</span><span class="p">:</span><span class="s">&#39;r&#39;</span><span class="p">,</span>
+                   <span class="s">&#39;alpha&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+                   <span class="s">&#39;i&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+                   <span class="s">&#39;figsize&#39;</span><span class="p">:(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>
+                   <span class="s">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span>
+                   <span class="s">&#39;rays&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
+                   <span class="s">&#39;cmap&#39;</span><span class="p">:</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">hot</span><span class="p">,</span>
+                   <span class="s">&#39;pol&#39;</span><span class="p">:</span><span class="s">&#39;tot&#39;</span><span class="p">,</span>
+                   <span class="s">&#39;col&#39;</span><span class="p">:</span><span class="s">&#39;k&#39;</span><span class="p">,</span>
+                   <span class="s">&#39;width&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+                   <span class="s">&#39;alpha&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+                   <span class="s">&#39;col&#39;</span><span class="p">:</span><span class="s">&#39;k&#39;</span><span class="p">,</span>
+                   <span class="s">&#39;dB&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
+                   <span class="s">&#39;labels&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
+                   <span class="s">&#39;dyn&#39;</span><span class="p">:</span><span class="mi">70</span><span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">=</span><span class="n">defaults</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="c">#</span>
+        <span class="c"># Layout</span>
+        <span class="c">#</span>
+        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;figsize&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;labels&#39;</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+        <span class="c">#</span>
+        <span class="c"># Point A</span>
+        <span class="c">#</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ca&#39;</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;s&#39;</span><span class="p">],</span>
+                   <span class="n">alpha</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alpha&#39;</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mf">0.1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mf">0.1</span><span class="p">,</span><span class="s">&#39;A&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fontsize&#39;</span><span class="p">])</span>
+        <span class="c">#</span>
+        <span class="c"># Point B</span>
+        <span class="c">#</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cb&#39;</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;s&#39;</span><span class="p">],</span>
+                   <span class="n">alpha</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alpha&#39;</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mf">0.1</span><span class="p">,</span><span class="s">&#39;B&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fontsize&#39;</span><span class="p">])</span>
+        <span class="c">#</span>
+        <span class="c"># Rays</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;rays&#39;</span><span class="p">]:</span>
+            <span class="n">ECtt</span><span class="p">,</span><span class="n">ECpp</span><span class="p">,</span><span class="n">ECtp</span><span class="p">,</span><span class="n">ECpt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;tt&#39;</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">ECtt</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;pp&#39;</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">ECpp</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;tp&#39;</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">ECtp</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;pt&#39;</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">ECpt</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;tot&#39;</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">ECtt</span><span class="o">+</span><span class="n">ECpp</span><span class="o">+</span><span class="n">ECpt</span><span class="o">+</span><span class="n">ECtp</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;co&#39;</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">ECtt</span><span class="o">+</span><span class="n">ECpp</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;pol&#39;</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;cross&#39;</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">ECtp</span><span class="o">+</span><span class="n">ECpt</span>
+
+            <span class="n">clm</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cmap&#39;</span><span class="p">]</span>
+            <span class="c">#</span>
+            <span class="c"># Select group of interactions</span>
+            <span class="c">#</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;i&#39;</span><span class="p">]</span><span class="o">==-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">li</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">li</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;i&#39;</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">i</span>  <span class="ow">in</span> <span class="n">li</span><span class="p">:</span>
+                <span class="n">lr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;rayidx&#39;</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lr</span><span class="p">)):</span>
+                    <span class="n">ir</span> <span class="o">=</span> <span class="n">lr</span><span class="p">[</span><span class="n">r</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;dB&#39;</span><span class="p">]:</span>
+                        <span class="n">RayEnergy</span><span class="o">=</span><span class="nb">max</span><span class="p">((</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="n">ir</span><span class="p">]</span><span class="o">/</span><span class="n">val</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="o">+</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;dyn&#39;</span><span class="p">]),</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;dyn&#39;</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">RayEnergy</span><span class="o">=</span><span class="n">val</span><span class="p">[</span><span class="n">ir</span><span class="p">]</span><span class="o">/</span><span class="n">val</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;col&#39;</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;cmap&#39;</span><span class="p">:</span>
+                        <span class="n">col</span> <span class="o">=</span> <span class="n">clm</span><span class="p">(</span><span class="n">RayEnergy</span><span class="p">)</span>
+                        <span class="n">width</span> <span class="o">=</span> <span class="n">RayEnergy</span>
+                        <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span>
+                        <span class="c">#alpha = RayEnergy</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">col</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;col&#39;</span><span class="p">]</span>
+                    
+                        <span class="n">width</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;width&#39;</span><span class="p">]</span>
+                        <span class="n">alpha</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alpha&#39;</span><span class="p">]</span>
+
+                    <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="p">,</span>
+                                   <span class="n">colray</span><span class="o">=</span><span class="n">col</span><span class="p">,</span>
+                                   <span class="n">widthray</span><span class="o">=</span><span class="n">width</span><span class="p">,</span>
+                                   <span class="n">alpharay</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+                                   <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                                   <span class="n">layout</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                                   <span class="n">points</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
+
+<div class="viewcode-block" id="DLink._show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink._show3.html#pylayers.simul.link.DLink._show3">[docs]</a>    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rays</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">lay</span><span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">ant</span><span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">newfig</span><span class="o">=</span> <span class="bp">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; display the simulation scene using Mayavi</span>
+<span class="sd">            using Mayavi</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        rays: Ray3d object :</span>
+<span class="sd">            display the rays of the simulation</span>
+<span class="sd">        newfig : boolean (default : False)</span>
+<span class="sd">        kwargs of Rays.show3()</span>
+
+
+<span class="sd">        see also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        pylayers.gis.layout</span>
+<span class="sd">        pylayers.antprop.antenna</span>
+<span class="sd">        pylayers.antprop.rays</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+
+<span class="sd">            &gt;&gt;&gt; from pylayers.simul.link import *</span>
+<span class="sd">            &gt;&gt;&gt; L=DLink(verbose=False)</span>
+<span class="sd">            &gt;&gt;&gt; aktk = L.eval()</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">newfig</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">=</span><span class="n">mlab</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="s">&#39;centered&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">centered</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;centered&#39;</span><span class="p">]</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">centered</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="k">if</span> <span class="n">centered</span><span class="p">:</span>
+            <span class="n">pg</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">))</span>
+            <span class="n">pg</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pg</span>
+
+
+        <span class="k">if</span> <span class="n">centered</span> <span class="p">:</span>
+            <span class="n">ptx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span><span class="o">-</span><span class="n">pg</span>
+            <span class="n">prx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span><span class="o">-</span><span class="n">pg</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">ptx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span>
+            <span class="n">prx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span>
+
+
+
+        <span class="k">if</span> <span class="n">ant</span> <span class="p">:</span>
+            <span class="n">Atx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span>
+            <span class="n">Arx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">A</span>
+            <span class="n">Ttx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">orientation</span>
+            <span class="n">Trx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">orientation</span>
+
+            <span class="c"># evaluate antenna if required</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">Atx</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
+                <span class="n">Atx</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">Atx</span><span class="o">.</span><span class="n">SqG</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="p">:</span>
+                <span class="n">Atx</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">Arx</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
+                <span class="n">Arx</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">Arx</span><span class="o">.</span><span class="n">SqG</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="p">:</span>
+                <span class="n">Arx</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">()</span>
+            <span class="n">Atx</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">T</span><span class="o">=</span><span class="n">Ttx</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">po</span><span class="o">=</span><span class="n">ptx</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">colorbar</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">Arx</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">T</span><span class="o">=</span><span class="n">Trx</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">po</span><span class="o">=</span><span class="n">prx</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">colorbar</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">lay</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">opacity</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="n">centered</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+        <span class="k">if</span> <span class="n">rays</span> <span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&#39;Rays not computed yet&#39;</span>
+</div>
+<span class="k">if</span> <span class="p">(</span><span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">):</span>
+    <span class="c">#plt.ion()</span>
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+  
+
+    <div class="footer">
+        &copy; 2015, PyLayers developer team.
+      Last updated on juin 27, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+    </div>
+     <div class="rel">
+    
+    <div class="buttonPrevious">
+      <a href="../../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
+    
+     </div>
+     <script type="text/javascript">
+       $("div.buttonNext, div.buttonPrevious").hover(
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           },
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           }
+       );
+     </script>
+  </body>
+</html>

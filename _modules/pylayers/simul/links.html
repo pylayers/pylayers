@@ -1,0 +1,2549 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.simul.links &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../../index.html"><img src="../../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.simul.links</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/python</span>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="c">#</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. currentmodule:: pylayers.simul.links</span>
+
+
+<span class="sd">This module run the electromagnetic simulation at the link level</span>
+<span class="sd">It handles the storage of simulated object in `hdf5` format.</span>
+
+<span class="sd">Links Class</span>
+<span class="sd">============</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    Links.__init__</span>
+<span class="sd">    Links.updcfg</span>
+<span class="sd">    Links.save_init</span>
+<span class="sd">    Links.stack</span>
+<span class="sd">    Links.save</span>
+<span class="sd">    Links.get_idx</span>
+<span class="sd">    Links.array_exist</span>
+<span class="sd">    Links.eval</span>
+<span class="sd">    Links._show3</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">doctest</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">getopt</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">Tkinter</span><span class="o">,</span> <span class="nn">tkFileDialog</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">ConfigParser</span>
+<span class="kn">import</span> <span class="nn">pdb</span>
+<span class="kn">import</span> <span class="nn">cPickle</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
+<span class="kn">import</span> <span class="nn">scipy.io</span> <span class="kn">as</span> <span class="nn">spio</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">struct</span> <span class="kn">as</span> <span class="nn">stru</span>
+<span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
+<span class="kn">import</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">as</span> <span class="nn">geu</span>
+<span class="kn">import</span> <span class="nn">pylayers.util.plotutil</span> <span class="kn">as</span> <span class="nn">plu</span>
+<span class="kn">import</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">as</span> <span class="nn">bs</span>
+
+<span class="kn">import</span> <span class="nn">pylayers.signal.waveform</span> <span class="kn">as</span> <span class="nn">wvf</span>
+
+<span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">pylayers.simul.radionode</span> <span class="kn">import</span> <span class="n">RadioNode</span>
+<span class="c"># Handle Layout</span>
+<span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
+<span class="c"># Handle Antenna</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="n">Antenna</span>
+
+<span class="c"># Handle Signauture</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.signature</span> <span class="kn">import</span> <span class="n">Signatures</span>
+<span class="c"># Handle Rays</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="n">Rays</span>
+<span class="c"># Handle VectChannel and ScalChannel</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.channel</span> <span class="kn">import</span> <span class="n">Ctilde</span><span class="p">,</span><span class="n">Tchannel</span>
+<span class="c">#from   Channel import *</span>
+<span class="kn">import</span> <span class="nn">h5py</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">tvtk.api</span> <span class="kn">import</span> <span class="n">tvtk</span>
+    <span class="kn">from</span> <span class="nn">mayavi.sources.vtk_data_source</span> <span class="kn">import</span> <span class="n">VTKDataSource</span>
+    <span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&#39;Layout:Mayavi is not installed&#39;</span>
+<span class="kn">import</span> <span class="nn">pdb</span>
+
+
+
+
+<span class="k">class</span> <span class="nc">Links</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Links Simulation Class</span>
+
+<span class="sd">    All simulation are stored into a unique file in your &lt;PyProject&gt;/output directory</span>
+<span class="sd">    using the following convention:</span>
+
+<span class="sd">    Links_&lt;save_idx&gt;_&lt;LayoutFilename&gt;.h5</span>
+
+<span class="sd">    where </span>
+<span class="sd">        &lt;save_idx&gt; is a integer number to be able to discriminate different links simulations </span>
+<span class="sd">    and &lt;LayoutFilename&gt; is the Layout used for the link simulation.</span>
+<span class="sd">    </span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+
+<span class="sd">    Dataset organisation:</span>
+
+<span class="sd">    Links_&lt;idx&gt;_&lt;Layout_name&gt;.h5</span>
+<span class="sd">        |</span>
+<span class="sd">        |/sig/si_ID#0/</span>
+<span class="sd">        |    /si_ID#1/</span>
+<span class="sd">        |    ...</span>
+<span class="sd">        |</span>
+<span class="sd">        |/ray/ray_ID#0/</span>
+<span class="sd">        |    /ray_ID#1/</span>
+<span class="sd">        |    ...</span>
+<span class="sd">        |</span>
+<span class="sd">        |/Ct/Ct_ID#0/</span>
+<span class="sd">        |   /Ct_ID#1/</span>
+<span class="sd">        |    ...</span>
+<span class="sd">        |</span>
+<span class="sd">        |/H/H_ID#0/</span>
+<span class="sd">        |  /H_ID#1/</span>
+<span class="sd">        |    ...</span>
+<span class="sd">        |</span>
+<span class="sd">        |</span>
+<span class="sd">        |p_map</span>
+<span class="sd">        |c_map</span>
+<span class="sd">        |f_map</span>
+<span class="sd">        |A_map</span>
+<span class="sd">        |T_map</span>
+
+
+
+<span class="sd">    Roots Dataset :</span>
+
+<span class="sd">    c_map : Cycles (Nc x 3) </span>
+<span class="sd">    p_map : Positions (Np x 3) </span>
+<span class="sd">    f_map : Frequency (Nf x 3) </span>
+<span class="sd">    T_map : Rotation matrices (Nt x 3)</span>
+<span class="sd">    A_map : Antenna name (Na x 3) </span>
+
+<span class="sd">    Groups and subgroups:</span>
+
+<span class="sd">     </span>
+<span class="sd">        Signature identifier (si_ID#N):</span>
+<span class="sd">            ca_cb_cutoff</span>
+
+<span class="sd">        Ray identifier (ray_ID#N):</span>
+<span class="sd">            ua_ub</span>
+
+<span class="sd">        Ctilde identifier (Ct_ID#N):</span>
+<span class="sd">            ua_ub_uf</span>
+
+<span class="sd">        H identifier (H_ID#N):</span>
+<span class="sd">            ua_ub_uf_uTa_uTb_uAa_uAb</span>
+
+<span class="sd">        with </span>
+<span class="sd">        ca : cycle number of a </span>
+<span class="sd">        cb : cycle number of b</span>
+<span class="sd">        cutoff : signature.run cutoff</span>
+<span class="sd">        ua : indice of a position in &#39;p_map&#39; position dataset</span>
+<span class="sd">        ub : indice of a position in &#39;p_map&#39; position dataset</span>
+<span class="sd">        uf : indice of freq position in &#39;f_map&#39; frequency dataset</span>
+<span class="sd">        uTa : indice of a position in &#39;T_map&#39; Rotation dataset</span>
+<span class="sd">        uTb : indice of b position in &#39;T_map&#39; Rotation dataset</span>
+<span class="sd">        uAa : indice of a position in &#39;A_map&#39; Antenna name dataset</span>
+<span class="sd">        uAb : indice of b position in &#39;A_map&#39; Antenna name dataset</span>
+
+
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    Basic</span>
+
+<span class="sd">    L : Layout</span>
+<span class="sd">        Layout to be used</span>
+<span class="sd">    a : np.ndarray (3,)</span>
+<span class="sd">        position of a device dev_a </span>
+<span class="sd">    b : np.ndarray (3,)</span>
+<span class="sd">        position of a device dev_b  </span>
+<span class="sd">    Aa : Antenna</span>
+<span class="sd">        Antenna of device dev_a  </span>
+<span class="sd">    Ab : Antenna</span>
+<span class="sd">        Antenna of device dev_b </span>
+<span class="sd">    Ta : np.ndarray (3,3)</span>
+<span class="sd">        Rotation matrice of Antenna of device dev_a relative to global Layout scene</span>
+<span class="sd">    Tb : np.ndarray (3,3)</span>
+<span class="sd">        Rotation matrice of Antenna of device dev_b relative to global Layout scene</span>
+<span class="sd">    fGHz : np.ndarray (Nptf,)</span>
+<span class="sd">        frequency range of Nptf poitns used for evaluation of channel in GHz</span>
+<span class="sd">    wav : Waform </span>
+<span class="sd">        Waveform to be applied on the channel</span>
+
+
+<span class="sd">    Advanced (change only if you really know what you do !) </span>
+
+<span class="sd">    save_opt : list ([&#39;sig&#39;,&#39;ray&#39;,&#39;Ct&#39;,&#39;H&#39;])</span>
+<span class="sd">        information to be saved in the Links h5 file</span>
+<span class="sd">    save_idx : int</span>
+<span class="sd">        number to differenciate the h5 file generated</span>
+<span class="sd">    force_create : Boolean (False)</span>
+<span class="sd">        forcecreating the h5py file (if already exist, will be erased)</span>
+
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Links.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.links.Links.__init__.html#pylayers.simul.links.Links.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="n">defaults</span><span class="o">=</span><span class="p">{</span> <span class="s">&#39;L&#39;</span><span class="p">:</span><span class="n">Layout</span><span class="p">(),</span>
+                   <span class="s">&#39;a&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span>
+                   <span class="s">&#39;b&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span>
+                   <span class="s">&#39;Aa&#39;</span><span class="p">:</span><span class="n">Antenna</span><span class="p">(),</span>
+                   <span class="s">&#39;Ab&#39;</span><span class="p">:</span><span class="n">Antenna</span><span class="p">(),</span>
+                   <span class="s">&#39;Ta&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+                   <span class="s">&#39;Tb&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+                   <span class="s">&#39;fGHz&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">181</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+                   <span class="s">&#39;wav&#39;</span><span class="p">:</span><span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(),</span>
+                   <span class="s">&#39;save_opt&#39;</span><span class="p">:[</span><span class="s">&#39;sig&#39;</span><span class="p">,</span><span class="s">&#39;ray&#39;</span><span class="p">,</span><span class="s">&#39;Ct&#39;</span><span class="p">,</span><span class="s">&#39;H&#39;</span><span class="p">],</span>
+                   <span class="s">&#39;save_idx&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+                   <span class="s">&#39;force_create&#39;</span><span class="p">:</span><span class="bp">False</span>
+                <span class="p">}</span>
+
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+
+        <span class="n">force</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">force_create</span>
+        <span class="nb">delattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;force_create&#39;</span><span class="p">)</span> 
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+                            <span class="n">typ</span> <span class="o">=</span> <span class="s">&#39;tx&#39;</span><span class="p">,</span>
+                            <span class="n">_fileini</span> <span class="o">=</span> <span class="s">&#39;radiotx.ini&#39;</span><span class="p">,</span>
+                            <span class="n">_fileant</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="o">.</span><span class="n">_filename</span>
+                            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+                            <span class="n">typ</span> <span class="o">=</span> <span class="s">&#39;rx&#39;</span><span class="p">,</span>
+                            <span class="n">_fileini</span> <span class="o">=</span> <span class="s">&#39;radiorx.ini&#39;</span><span class="p">,</span>
+                            <span class="n">_fileant</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="o">.</span><span class="n">_filename</span><span class="p">,</span>
+                            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="s">&#39;Links_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_idx</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;.h5&#39;</span>   
+  
+        <span class="n">filenameh5</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLNK&#39;</span><span class="p">])</span>
+        <span class="c"># check if save file alreasdy exists</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">)</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;Links save file for &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s">&#39; does not exist.&#39;</span>
+            <span class="k">print</span> <span class="s">&#39;It is beeing created. You</span><span class="se">\&#39;</span><span class="s">ll see that message only once per Layout&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save_init</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">updcfg</span><span class="p">()</span>
+
+        
+    
+</div>
+<div class="viewcode-block" id="Links.updcfg"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.links.Links.updcfg.html#pylayers.simul.links.Links.updcfg">[docs]</a>    <span class="k">def</span> <span class="nf">updcfg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; update configuration</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;This is the first time the Layout is used. Graphs have to be build. Please Wait&#39;</span><span class="p">)</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">cy2pt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">cy2pt</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ca</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fstep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c"># update radio node</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>  
+        <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">orientation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ta</span>  
+        <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">orientation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Tb</span>  
+        <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Aa</span>  
+        <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ab</span>  
+</div>
+<div class="viewcode-block" id="Links.save_init"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.links.Links.save_init.html#pylayers.simul.links.Links.save_init">[docs]</a>    <span class="k">def</span> <span class="nf">save_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename_long</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; initilaize save Link</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+
+
+<span class="sd">        filename_long : str</span>
+<span class="sd">            complete path and filename </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+
+        <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename_long</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="c"># try/except to avoid loosing the h5 file if </span>
+        <span class="c"># read/write error</span>
+
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s">&#39;sig&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s">&#39;ray&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s">&#39;Ct&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s">&#39;H&#39;</span><span class="p">)</span>
+            <span class="c"># mapping point a </span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;p_map&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;float64&#39;</span><span class="p">)</span>
+            <span class="c"># mapping cycles  </span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;c_map&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;int&#39;</span><span class="p">)</span>
+            <span class="c"># mapping (fmin,fmax,fstep)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;f_map&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;float64&#39;</span><span class="p">)</span>
+            <span class="c"># mapping Antenna name</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;A_map&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="s">&quot;S10&quot;</span><span class="p">)</span>
+            <span class="c"># mapping rotation matrices Antenna</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;T_map&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;float64&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Links: issue when initializing h5py file&#39;</span><span class="p">)</span>
+
+
+</div>
+<div class="viewcode-block" id="Links.stack"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.links.Links.stack.html#pylayers.simul.links.Links.stack">[docs]</a>    <span class="k">def</span> <span class="nf">stack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">array</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; stack new array in h5py file </span>
+<span class="sd">            for a given key (dataframe/group)</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+
+<span class="sd">        key : string</span>
+
+<span class="sd">        array : np.ndarray</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        idx : int</span>
+<span class="sd">            indice of last element of the array of key</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span> <span class="p">:</span> 
+            <span class="n">lfilename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLNK&#39;</span><span class="p">])</span>
+            <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">lfilename</span><span class="p">,</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s">&#39;T_map&#39;</span><span class="p">:</span>
+                <span class="n">sc</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+                <span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="n">sc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">sc</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                <span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">,:]</span><span class="o">=</span><span class="n">array</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sc</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+                <span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="n">sc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">sc</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">sc</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+                <span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">,:,:]</span><span class="o">=</span><span class="n">array</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">sc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Link stack: issue during stacking&#39;</span><span class="p">)</span>
+
+
+</div>
+<div class="viewcode-block" id="Links.save"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.links.Links.save.html#pylayers.simul.links.Links.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">obj</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Save data</span>
+<span class="sd">            </span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        obj : Object (Signatures|Rays|Ctilde|Tchannel)</span>
+<span class="sd">        </span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="n">Signatures</span><span class="p">):</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="bp">self</span><span class="o">.</span><span class="n">ca</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">cb</span><span class="p">,</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">]]))</span>
+            <span class="n">umap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">array_exist</span><span class="p">(</span><span class="s">&#39;c_map&#39;</span><span class="p">,</span><span class="n">array</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">umap</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="s">&#39;c_map&#39;</span><span class="p">,</span><span class="n">array</span><span class="p">)</span>
+                <span class="n">grpname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ca</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cb</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">])</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">_saveh5</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="n">grpname</span><span class="p">)</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="k">print</span> <span class="s">&#39;sig already exists&#39;</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="n">Rays</span><span class="p">):</span>
+            <span class="c">##############</span>
+            <span class="c"># check existence of self.a in h5py file</span>
+            <span class="c">##############</span>
+            <span class="n">lua</span><span class="p">,</span> <span class="n">ua</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;p_map&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+            <span class="c">##############</span>
+            <span class="c"># check existence of self.b in h5py file</span>
+            <span class="c">##############</span>
+            <span class="n">lub</span><span class="p">,</span> <span class="n">ub</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;p_map&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+            <span class="c">##############</span>
+            <span class="c"># Write in h5py if no prior a-b link</span>
+            <span class="c">##############</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">lua</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>  <span class="ow">and</span> <span class="p">(</span><span class="n">lub</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="k">print</span> <span class="s">&#39;Ray already exists&#39;</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="n">grpname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">ua</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ub</span><span class="p">)</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">_saveh5</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="n">grpname</span><span class="p">)</span>
+                
+
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="n">Ctilde</span><span class="p">):</span>
+            <span class="c">##############</span>
+            <span class="c"># check existence of self.a in h5py file</span>
+            <span class="c">##############</span>
+            <span class="n">lua</span><span class="p">,</span> <span class="n">ua</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;p_map&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+
+            <span class="c">##############</span>
+            <span class="c"># check existence of self.b in h5py file</span>
+            <span class="c">##############</span>
+            <span class="n">lub</span><span class="p">,</span> <span class="n">ub</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;p_map&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+            <span class="c">##############</span>
+            <span class="c"># check existence of frequency in h5py file</span>
+            <span class="c">##############</span>
+            <span class="n">farray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="bp">self</span><span class="o">.</span><span class="n">fmin</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">fmax</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">fstep</span><span class="p">]))</span>
+            <span class="n">luf</span><span class="p">,</span> <span class="n">uf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;f_map&#39;</span><span class="p">,</span><span class="n">farray</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">lua</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>  <span class="ow">and</span> <span class="p">(</span><span class="n">lub</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">luf</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="k">print</span> <span class="s">&#39;Ctilde already exists&#39;</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="n">grpname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">ua</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ub</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">uf</span><span class="p">)</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">_saveh5</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="n">grpname</span><span class="p">)</span>
+
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="n">Tchannel</span><span class="p">):</span>
+            <span class="c">##############</span>
+            <span class="c"># check existence of self.a in h5py file</span>
+            <span class="c">##############</span>
+            <span class="n">lua</span><span class="p">,</span> <span class="n">ua</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;p_map&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+            <span class="c">##############</span>
+            <span class="c"># check existence of self.b in h5py file</span>
+            <span class="c">##############</span>
+            <span class="n">lub</span><span class="p">,</span> <span class="n">ub</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;p_map&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+            <span class="c">##############</span>
+            <span class="c"># check existence of frequency in h5py file</span>
+            <span class="c">##############</span>
+            <span class="n">farray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="bp">self</span><span class="o">.</span><span class="n">fmin</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">fmax</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">fstep</span><span class="p">]))</span>
+            <span class="n">luf</span><span class="p">,</span> <span class="n">uf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;f_map&#39;</span><span class="p">,</span><span class="n">farray</span><span class="p">)</span>
+            <span class="c">##############</span>
+            <span class="c"># check existence of Rot a (Ta) in h5py file</span>
+            <span class="c">##############</span>
+            <span class="n">luTa</span><span class="p">,</span> <span class="n">uTa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;T_map&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Ta</span><span class="p">)</span>
+            <span class="c">##############</span>
+            <span class="c"># check existence of Rot b (Tb) in h5py file</span>
+            <span class="c">##############</span>
+            <span class="n">luTb</span><span class="p">,</span> <span class="n">uTb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;T_map&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Tb</span><span class="p">)</span>
+            <span class="c">##############</span>
+            <span class="c"># check existence of Antenna a (Aa) in h5py file</span>
+            <span class="c">##############</span>
+            <span class="n">luAa</span><span class="p">,</span> <span class="n">uAa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;A_map&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="o">.</span><span class="n">_filename</span><span class="p">)</span>
+            <span class="c">##############</span>
+            <span class="c"># check existence of Antenna b (Ab) in h5py file</span>
+            <span class="c">##############</span>
+            <span class="n">luAb</span><span class="p">,</span> <span class="n">uAb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;A_map&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="o">.</span><span class="n">_filename</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">lua</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>  <span class="ow">and</span> <span class="p">(</span><span class="n">lub</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">luf</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">luTa</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> \
+               <span class="ow">and</span> <span class="p">(</span><span class="n">luTb</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">luAa</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">luAb</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="k">print</span> <span class="s">&#39;H already exists&#39;</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="n">grpname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">ua</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ub</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">uf</span><span class="p">)</span> <span class="o">+</span> \
+                          <span class="s">&#39;_&#39;</span>  <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">uTa</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">uTb</span><span class="p">)</span> <span class="o">+</span> \
+                          <span class="s">&#39;_&#39;</span>  <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">uAa</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">uAb</span><span class="p">)</span> 
+                <span class="n">obj</span><span class="o">.</span><span class="n">_saveh5</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="n">grpname</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Links.get_idx"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.links.Links.get_idx.html#pylayers.simul.links.Links.get_idx">[docs]</a>    <span class="k">def</span> <span class="nf">get_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">array</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; try to get the index of the requested array in the group key</span>
+<span class="sd">            of the h5py file.</span>
+<span class="sd">            If array doesn&#39;t exist, the h5pyfile[key] array is stacked</span>
+
+<span class="sd">     </span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        </span>
+<span class="sd">        key: string </span>
+<span class="sd">            key of the h5py group</span>
+<span class="sd">        array : np.ndarray</span>
+<span class="sd">            array type to check existency</span>
+<span class="sd">        tol : np.float64</span>
+<span class="sd">            tolerance (in meter for key == &#39;p_map&#39;)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        (lu, u): tuple </span>
+
+<span class="sd">        u : np.ndarray</span>
+<span class="sd">            the index in the array of the file[key] group</span>
+<span class="sd">        lu : int :</span>
+<span class="sd">            length of u</span>
+<span class="sd">        </span>
+<span class="sd">            </span>
+
+<span class="sd">        See Also:</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        Links.array_exist</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">umap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">array_exist</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">array</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">)</span>
+        <span class="n">lu</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">umap</span><span class="p">)</span>
+        <span class="c"># if exists take the existing one</span>
+        <span class="c"># otherwise value is created</span>
+        <span class="k">if</span> <span class="n">lu</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span> 
+            <span class="n">u</span> <span class="o">=</span> <span class="n">umap</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">array</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">lu</span><span class="p">,</span><span class="n">u</span>
+
+</div>
+<div class="viewcode-block" id="Links.array_exist"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.links.Links.array_exist.html#pylayers.simul.links.Links.array_exist">[docs]</a>    <span class="k">def</span> <span class="nf">array_exist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">array</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span> <span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; check if an array of a given key (h5py group) </span>
+<span class="sd">            has already been stored into the h5py file</span>
+<span class="sd">        </span>
+<span class="sd">    </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">    </span>
+<span class="sd">        key: string </span>
+<span class="sd">            key of the h5py group</span>
+<span class="sd">        array : np.ndarray</span>
+<span class="sd">            array type to check existency</span>
+<span class="sd">        tol : np.float64</span>
+<span class="sd">            tolerance (in meter for key == &#39;p_map&#39;)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        (ua)</span>
+
+<span class="sd">        ua : np.ndarray</span>
+<span class="sd">            the indice in the array of the file[key] group</span>
+<span class="sd">            if the array is emtpy, value doesn&#39;t exist</span>
+
+<span class="sd">        TODO</span>
+<span class="sd">        ----</span>
+
+<span class="sd">        Add a tolerance on the rotation angle (T_map)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">lfilename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLNK&#39;</span><span class="p">])</span>
+        <span class="k">try</span> <span class="p">:</span> 
+            <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">lfilename</span><span class="p">,</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="n">fa</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="o">...</span><span class="p">]</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Link check_exist: issue during reading&#39;</span><span class="p">)</span>    
+
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&#39;c_map&#39;</span><span class="p">:</span>
+            <span class="n">eq</span> <span class="o">=</span> <span class="n">array</span> <span class="o">==</span> <span class="n">fa</span>
+            <span class="c"># sum eq = 3 means cy0,cy1 and cutoff are the same in fa and array</span>
+            <span class="n">ua</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">eq</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="mi">3</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>     
+
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&#39;p_map&#39;</span><span class="p">:</span>
+            <span class="n">da</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">array</span><span class="o">-</span><span class="n">fa</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+            <span class="c"># indice points candidate in db for a</span>
+            <span class="n">ua</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">da</span><span class="o">&lt;</span><span class="n">tol</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>     
+
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&#39;f_map&#39;</span><span class="p">:</span>
+            <span class="c"># fmin_h5 &lt; fmin_rqst</span>
+            <span class="n">ufmi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">fa</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;=</span><span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">lufmi</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ufmi</span><span class="p">)</span>
+            <span class="c"># fmax_h5 &gt; fmax_rqst</span>
+            <span class="n">ufma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">fa</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">array</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">lufma</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ufma</span><span class="p">)</span>
+            <span class="c"># fstep_h5 &lt; fstep_rqst</span>
+            <span class="n">ufst</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">fa</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">&lt;=</span><span class="n">array</span><span class="p">[</span><span class="mi">2</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">lufst</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ufst</span><span class="p">)</span>
+            <span class="c"># if fmin, fmax or fstep </span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">lufmi</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">lufma</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">lufst</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
+                <span class="n">ua</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span> 
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="c"># find comon lines of fmin and fmax</span>
+                <span class="n">ufmima</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">ufmi</span><span class="p">,</span><span class="n">ufma</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="c"># find comon lines of fmin, fmax and fstep</span>
+                <span class="n">ua</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">ufmima</span><span class="p">,</span><span class="n">ufst</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&#39;A_map&#39;</span><span class="p">:</span>
+            <span class="n">ua</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">fa</span><span class="o">==</span><span class="n">array</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&#39;T_map&#39;</span><span class="p">:</span>
+            <span class="n">eq</span> <span class="o">=</span> <span class="n">array</span> <span class="o">==</span> <span class="n">fa</span>
+            <span class="n">seq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">eq</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">ua</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">seq</span><span class="o">==</span><span class="mi">9</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Link.array_exist : invalid key&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ua</span>
+</div>
+<div class="viewcode-block" id="Links.eval"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.links.Links.eval.html#pylayers.simul.links.Links.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Evaluate the link</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        si.cutoff : int</span>
+<span class="sd">            siganture.run cutoff</span>
+<span class="sd">        si.algo : str (&#39;old&#39;|&#39;new&#39;)</span>
+<span class="sd">            siganture.run algo type</span>
+<span class="sd">        ra.ceil_height_meter : int</span>
+<span class="sd">            rays.to3D ceil height in mteres</span>
+<span class="sd">        ra.number_mirror_cf : int</span>
+<span class="sd">            rays.to3D number of ceil/floor reflexions</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        pylayers.antprop.signature</span>
+<span class="sd">        pylayers.antprop.rays</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">defaults</span><span class="o">=</span><span class="p">{</span> <span class="s">&#39;output&#39;</span><span class="p">:[</span><span class="s">&#39;sig&#39;</span><span class="p">,</span><span class="s">&#39;ray&#39;</span><span class="p">,</span><span class="s">&#39;Ct&#39;</span><span class="p">,</span><span class="s">&#39;H&#39;</span><span class="p">],</span>
+                   <span class="s">&#39;si.cutoff&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span>
+                   <span class="s">&#39;si.algo&#39;</span><span class="p">:</span><span class="s">&#39;old&#39;</span><span class="p">,</span>
+                   <span class="s">&#39;ra.ceil_height_meter&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span>
+                   <span class="s">&#39;ra.number_mirror_cf&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+                   <span class="p">}</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">=</span><span class="n">value</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">updcfg</span><span class="p">()</span>
+
+        <span class="c"># </span>
+        <span class="c"># todo = kwargs[&#39;output&#39;]</span>
+        <span class="c"># dexists = self.check_exists(todo)</span>
+
+
+        <span class="c">#signatures</span>
+
+        <span class="n">Si</span><span class="o">=</span><span class="n">Signatures</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ca</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">cb</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si.cutoff&#39;</span><span class="p">])</span>
+        <span class="n">Si</span><span class="o">.</span><span class="n">run5</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si.cutoff&#39;</span><span class="p">],</span><span class="n">algo</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si.algo&#39;</span><span class="p">])</span>
+        <span class="c"># save sig</span>
+        <span class="n">Si</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">Si</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si.cutoff&#39;</span><span class="p">])</span>
+        
+        <span class="c">#rays</span>
+        <span class="n">r2d</span> <span class="o">=</span> <span class="n">Si</span><span class="o">.</span><span class="n">rays</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">r3d</span> <span class="o">=</span> <span class="n">r2d</span><span class="o">.</span><span class="n">to3D</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">H</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ra.ceil_height_meter&#39;</span><span class="p">],</span> <span class="n">N</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ra.number_mirror_cf&#39;</span><span class="p">])</span>
+        <span class="n">r3d</span><span class="o">.</span><span class="n">locbas</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+        <span class="c"># save ray</span>
+        <span class="n">r3d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">r3d</span><span class="p">)</span>
+        <span class="n">r3d</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+        <span class="c">#Ctilde</span>
+        <span class="n">C</span><span class="o">=</span><span class="n">r3d</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+        <span class="c"># save Ct</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+        <span class="c"># Ctilde antenna</span>
+        <span class="n">Cl</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">locbas</span><span class="p">(</span><span class="n">Tt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Ta</span><span class="p">,</span> <span class="n">Tr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Tb</span><span class="p">)</span>
+        <span class="c">#T channel</span>
+        <span class="n">H</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="p">)</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+        
+
+</div>
+<div class="viewcode-block" id="Links._show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.links.Links._show3.html#pylayers.simul.links.Links._show3">[docs]</a>    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rays</span><span class="o">=</span><span class="p">[],</span><span class="n">newfig</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; display of the simulation configuration</span>
+<span class="sd">            using Mayavi</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        rays: Ray3d object :</span>
+<span class="sd">            display the rays of the simulation</span>
+<span class="sd">        newfig : boolean (default : False)</span>
+<span class="sd">        kwargs of Rays.show3()</span>
+
+
+<span class="sd">        see also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        pylayers.gis.layout</span>
+<span class="sd">        pylayers.antprop.antenna</span>
+<span class="sd">        pylayers.antprop.rays</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="s">&#39;centered&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">centered</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;centered&#39;</span><span class="p">]</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">centered</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="k">if</span> <span class="n">centered</span><span class="p">:</span>
+            <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+            <span class="n">pg</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">))</span>
+            <span class="n">pg</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pg</span>
+
+
+        <span class="n">Atx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span>
+        <span class="n">Arx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">A</span>
+        <span class="n">Ttx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">orientation</span>
+        <span class="n">Trx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">orientation</span>
+
+        <span class="k">if</span> <span class="n">centered</span> <span class="p">:</span>
+            <span class="n">ptx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span><span class="o">-</span><span class="n">pg</span>
+            <span class="n">prx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span><span class="o">-</span><span class="n">pg</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">ptx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span>
+            <span class="n">prx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">opacity</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="n">centered</span><span class="p">)</span>
+        <span class="n">Atx</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">T</span><span class="o">=</span><span class="n">Ttx</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">po</span><span class="o">=</span><span class="n">ptx</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">colorbar</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">Arx</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">T</span><span class="o">=</span><span class="n">Trx</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">po</span><span class="o">=</span><span class="n">prx</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">colorbar</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rays</span> <span class="o">!=</span> <span class="p">[]:</span>
+            <span class="n">rays</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="c"># def save(self):</span>
+    <span class="c">#     &quot;&quot;&quot; save simulation file</span>
+
+    <span class="c">#     Simulation files are .ini files which are saved in a dedicated</span>
+    <span class="c">#     directory basename/ini in the Project tree</span>
+
+    <span class="c">#     &quot;&quot;&quot;</span>
+    <span class="c">#     filesimul = pyu.getlong(self.filesimul, &quot;ini&quot;)</span>
+    <span class="c">#     fd = open(filesimul, &quot;w&quot;)</span>
+    <span class="c">#     # getting current spa file if any</span>
+    <span class="c">#     try:</span>
+    <span class="c">#         self.config.set(&quot;files&quot;, &quot;tx&quot;, self.tx.fileini)</span>
+    <span class="c">#     except:</span>
+    <span class="c">#         pass</span>
+    <span class="c">#     try:</span>
+    <span class="c">#         self.config.set(&quot;files&quot;, &quot;rx&quot;, self.rx.fileini)</span>
+    <span class="c">#     except:</span>
+    <span class="c">#         pass</span>
+    <span class="c">#     self.config.write(fd)</span>
+    <span class="c">#     fd.close()</span>
+    <span class="c">#     # save tx</span>
+    <span class="c">#     self.tx.save()</span>
+    <span class="c">#     # save rx</span>
+    <span class="c">#     self.rx.save()</span>
+    <span class="c">#     # save slab and mat file</span>
+    <span class="c">#     # --</span>
+    <span class="c">#     # self.slab.save(self.fileslabini)</span>
+    <span class="c">#     # self.slab.mat.save(self.filematini)</span>
+    <span class="c">#     # --</span>
+    <span class="c">#     # fix bug #189</span>
+    <span class="c">#     #   slab is a member of S.L not of S anymore</span>
+    <span class="c">#     #   mat is a member of S.L.sl not of S.slab</span>
+    <span class="c">#     try:</span>
+    <span class="c">#         self.L.sl.save(self.fileslabini)</span>
+    <span class="c">#     except:</span>
+    <span class="c">#         pass</span>
+    <span class="c">#     try:</span>
+    <span class="c">#         self.L.sl.mat.save(self.filematini)</span>
+    <span class="c">#     except:</span>
+    <span class="c">#         pass</span>
+
+<span class="c">#    def saveold(self):</span>
+<span class="c">#        &quot;&quot;&quot; save simulation file</span>
+
+<span class="c">#        &quot;&quot;&quot;</span>
+<span class="c">#        filesimul = pyu.getlong(self.filesimul, &quot;ini&quot;)</span>
+<span class="c">#        fd = open(filesimul, &quot;w&quot;)</span>
+<span class="c">#        config = ConfigParser.ConfigParser()</span>
+
+<span class="c">#        #</span>
+<span class="c">#        # files section</span>
+<span class="c">#        #</span>
+<span class="c">#        #config.add_section(&quot;files&quot;)</span>
+<span class="c">#        self.config.set(&quot;files&quot;, &quot;conf&quot;, self.fileconf)</span>
+<span class="c">#        self.config.set(&quot;files&quot;, &quot;struc&quot;, self.filestr)</span>
+<span class="c">#        self.config.set(&quot;files&quot;, &quot;slab&quot;, self.fileslab)</span>
+<span class="c">#        self.config.set(&quot;files&quot;, &quot;mat&quot;, self.filemat)</span>
+
+<span class="c">#        try:</span>
+<span class="c">#            self.config.set(&quot;files&quot;, &quot;tx&quot;, self.tx.filespa)</span>
+<span class="c">#        except:</span>
+<span class="c">#            pass</span>
+<span class="c">#        try:</span>
+<span class="c">#            self.config.set(&quot;files&quot;, &quot;rx&quot;, self.rx.filespa)</span>
+<span class="c">#        except:</span>
+<span class="c">#            pass</span>
+<span class="c">#        try:</span>
+<span class="c">#            self.config.set(&quot;files&quot;, &quot;txant&quot;, self.tx.fileant)</span>
+<span class="c">#        except:</span>
+<span class="c">#            pass</span>
+<span class="c">#        try:</span>
+<span class="c">#            self.config.set(&quot;files&quot;, &quot;rxant&quot;, self.rx.fileant)</span>
+<span class="c">#        except:</span>
+<span class="c">#            pass</span>
+<span class="c">#        self.config.set(&quot;files&quot;, &quot;patra&quot;, self.filepatra)</span>
+<span class="c">#        self.config.set(&quot;files&quot;, &quot;palch&quot;, self.filepalch)</span>
+<span class="c">#        self.palch.save()</span>
+<span class="c">#        self.patra.save()</span>
+
+<span class="c">#        #</span>
+<span class="c">#        # tud section</span>
+<span class="c">#        #</span>
+
+<span class="c">#        self.config.set(&quot;tud&quot;, &quot;purc&quot;, self.patud.purc)</span>
+<span class="c">#        self.config.set(&quot;tud&quot;, &quot;nrmax&quot;, self.patud.nrmax)</span>
+<span class="c">#        self.config.set(&quot;tud&quot;, &quot;num&quot;, self.patud.num)</span>
+
+<span class="c">#        #</span>
+<span class="c">#        # frequency section</span>
+<span class="c">#        #</span>
+<span class="c">#        self.config.set(&quot;frequency&quot;, &quot;fghzmin&quot;, self.freq[0])</span>
+<span class="c">#        self.config.set(&quot;frequency&quot;, &quot;fghzmax&quot;, self.freq[-1])</span>
+<span class="c">#        self.config.set(&quot;frequency&quot;, &quot;Nf&quot;, len(self.freq))</span>
+
+<span class="c">#        #</span>
+<span class="c">#        # output section</span>
+<span class="c">#        #</span>
+<span class="c">#        #filelch exists</span>
+<span class="c">#        if self.progress &gt; 0:</span>
+<span class="c">#            #config.add_section(&quot;output&quot;)</span>
+<span class="c">#            for k in range(len(self.filelch)):</span>
+<span class="c">#                _fileout = &quot;out&quot; + &quot;???&quot;</span>
+<span class="c">#                filename = self.filelch[k]</span>
+<span class="c">#                self.config.set(&quot;launch&quot;, str(k + 1), filename)</span>
+
+<span class="c">#        # filetra exists</span>
+<span class="c">#        for k in range(len(self.filelch)):</span>
+<span class="c">#            if self.progress &gt; 1:</span>
+<span class="c">#                #self.config.add_section(&quot;trace&quot;)</span>
+<span class="c">#                for l in arange(len(self.filetra[k])):</span>
+<span class="c">#                    filename = self.filetra[k][l]</span>
+<span class="c">#                    self.config.set(&quot;trace&quot;, &quot;rx&quot; + str(l + 1), filename)</span>
+
+<span class="c">#        # .tang exists</span>
+<span class="c">#        # .rang exists</span>
+<span class="c">#        # .tud exists</span>
+<span class="c">#            if self.progress &gt; 2:</span>
+<span class="c">#                #config.add_section(&quot;tud&quot;)</span>
+<span class="c">#                #config.add_section(&quot;tang&quot;)</span>
+<span class="c">#                #config.add_section(&quot;rang&quot;)</span>
+
+<span class="c">#                for l in arange(len(self.filetud[k])):</span>
+<span class="c">#                    ftud = self.filetud[k][l]</span>
+<span class="c">#                    self.config.set(&quot;tud&quot;, &quot;rx&quot; + str(l + 1), ftud)</span>
+
+<span class="c">#                for l in arange(len(self.filetang[k])):</span>
+<span class="c">#                    ftang = self.filetang[k][l]</span>
+<span class="c">#                    self.config.set(&quot;tang&quot;, &quot;rx&quot; + str(l + 1), ftang)</span>
+
+<span class="c">#                for l in arange(len(self.filerang[k])):</span>
+<span class="c">#                    frang = self.filerang[k][l]</span>
+<span class="c">#                    self.config.set(&quot;rang&quot;, &quot;rx&quot; + str(l + 1), frang)</span>
+
+<span class="c">#        # .field exist</span>
+<span class="c">#        # .tauk exist</span>
+<span class="c">#            if self.progress &gt; 3:</span>
+<span class="c">#                #config.add_section(&quot;tauk&quot;)</span>
+<span class="c">#                #config.add_section(&quot;field&quot;)</span>
+<span class="c">#                for l in arange(len(self.filetud[k])):</span>
+<span class="c">#                    ftauk = self.filetud[k][l]</span>
+<span class="c">#                    self.config.set(&quot;tauk&quot;, &quot;rx&quot; + str(l + 1), ftauk)</span>
+
+<span class="c">#                for l in arange(len(self.filefield[k])):</span>
+<span class="c">#                    ffield = self.filefield[k][l]</span>
+<span class="c">#                    self.config.set(&quot;field&quot;, &quot;rx&quot; + str(l + 1), ffield)</span>
+
+<span class="c">#        self.config.write(fd)</span>
+<span class="c">#        fd.close()</span>
+
+<span class="c">#     def save_project(self):</span>
+<span class="c">#         &quot;&quot;&quot; save Simulation files in a zipfile</span>
+
+<span class="c">#         Simulation files are .ini files which are saved in a dedicated</span>
+<span class="c">#         directory basename/ini in the Project tree</span>
+
+<span class="c">#         &quot;&quot;&quot;</span>
+<span class="c">#         root = Tkinter.Tk()</span>
+<span class="c">#         zipfileName = tkFileDialog.asksaveasfilename(parent=root,</span>
+<span class="c">#                             filetypes = [(&quot;zipped file&quot;,&quot;zip&quot;)] ,</span>
+<span class="c">#                             title=&quot;Save Project&quot;,</span>
+<span class="c">#                             )</span>
+<span class="c">#         pyu.zipd(basename,zipfileName)</span>
+<span class="c">#         root.withdraw()</span>
+<span class="c">#         print &quot;Current project saved in&quot;, zipfileName</span>
+
+<span class="c">#     def load_project(self):</span>
+<span class="c">#         &quot;&quot;&quot; load Simulation files from a zipfile</span>
+
+<span class="c">#         Simulation files are .ini files which are saved in a dedicated</span>
+<span class="c">#         directory basename/ini in the Project tree</span>
+
+<span class="c">#         &quot;&quot;&quot;</span>
+<span class="c">#         root = Tkinter.Tk()</span>
+<span class="c">#         zipfileName= tkFileDialog.askopenfile(parent=root,</span>
+<span class="c">#                                             mode=&#39;rb&#39;,</span>
+<span class="c">#                                             title=&#39;Choose a project&#39;)</span>
+<span class="c">#         dirname = tkFileDialog.askdirectory(parent=root,</span>
+<span class="c">#                                     initialdir=basename,</span>
+<span class="c">#                                     title=&#39;Please select a directory&#39;,</span>
+<span class="c">#                                     mustexist=0)</span>
+<span class="c">#         pyu.unzipd(dirname,zipfileName)</span>
+<span class="c">#         root.withdraw()</span>
+<span class="c">#         print &quot;Current project loaded in&quot;, dirname</span>
+
+<span class="c">#     def choose(self):</span>
+<span class="c">#         &quot;&quot;&quot;</span>
+<span class="c">#             Choose a simulation file in simuldir</span>
+
+<span class="c">#         &quot;&quot;&quot;</span>
+<span class="c">#         import tkFileDialog as FD</span>
+<span class="c">#         fichsimul = FD.askopenfilename(filetypes=[(&quot;Fichiers simul &quot;,</span>
+<span class="c">#                                                    &quot;*.simul&quot;),</span>
+<span class="c">#                                                   (&quot;All&quot;, &quot;*&quot;)],</span>
+<span class="c">#                                        title=&quot;Please choose a simulation file&quot;,</span>
+<span class="c">#                                        initialdir=simuldir)</span>
+<span class="c">#         self.filesimul = pyu.getshort(fichsimul)</span>
+<span class="c">#         self.load()</span>
+
+<span class="c">#     def load(self, _filesimul):</span>
+<span class="c">#         &quot;&quot;&quot; load a simulation configuration file</span>
+
+<span class="c">#          each transmiter simulation results in the creation of an .ini file</span>
+<span class="c">#          with the following sections</span>
+<span class="c">#          related to the results obtained for different receivers</span>
+
+<span class="c">#         Parameters</span>
+<span class="c">#         ----------</span>
+
+<span class="c">#         _filesimul   : file in the simul directory of the Project</span>
+
+<span class="c">#         &quot;&quot;&quot;</span>
+
+<span class="c">#         self.filesimul = _filesimul</span>
+<span class="c">#         filesimul = pyu.getlong(self.filesimul, &quot;ini&quot;)</span>
+
+<span class="c">#         self.config.read(filesimul)</span>
+
+<span class="c">#         sections = self.config.sections()</span>
+<span class="c">#         try:</span>
+<span class="c">#             _filetx = self.config.get(&quot;files&quot;, &quot;tx&quot;)</span>
+<span class="c">#         except:</span>
+<span class="c">#             raise NameError(&#39;Error in section tx from &#39;+ _filesimul)</span>
+
+<span class="c">#         try:</span>
+<span class="c">#             _filerx = self.config.get(&quot;files&quot;, &quot;rx&quot;)</span>
+<span class="c">#         except:</span>
+<span class="c">#             raise NameError(&#39;Error in section rx from &#39;+ _filesimul)</span>
+
+
+<span class="c">#         try:</span>
+<span class="c">#             _fileanttx = self.config.get(&quot;files&quot;, &quot;txant&quot;)</span>
+<span class="c">#         except:</span>
+<span class="c">#             raise NameError(&#39;Error in section txant from &#39;+ _filesimul)</span>
+
+<span class="c">#         try:</span>
+<span class="c">#            _fileantrx = self.config.get(&quot;files&quot;, &quot;rxant&quot;)</span>
+<span class="c">#         except:</span>
+<span class="c">#             raise NameError(&#39;Error in section rxant from &#39;+ _filesimul)</span>
+
+<span class="c">#         try:</span>
+<span class="c">#             self.filestr = self.config.get(&quot;files&quot;, &quot;struc&quot;)</span>
+<span class="c">#             # force .str extension</span>
+<span class="c">#             f,e = self.filestr.split[&#39;.&#39;]</span>
+<span class="c">#             self.filestr = f+&#39;.str&#39;</span>
+<span class="c">#             print self.filestr</span>
+<span class="c">#         except:</span>
+<span class="c">#             raise NameError(&#39;Error in section struc from &#39;+ _filesimul)</span>
+
+<span class="c">#         try:</span>
+<span class="c">#             self.tx = RadioNode(name = &#39;&#39;,</span>
+<span class="c">#                                 typ = &#39;tx&#39;,</span>
+<span class="c">#                                 _fileini = _filetx,</span>
+<span class="c">#                                 _fileant = _fileanttx,</span>
+<span class="c">#                                 _filestr = self.filestr)</span>
+
+<span class="c">#             self.rx = RadioNode(name = &#39;&#39;,</span>
+<span class="c">#                                 typ = &#39;rx&#39;,</span>
+<span class="c">#                                 _fileini = _filerx,</span>
+<span class="c">#                                 _fileant = _fileantrx,</span>
+<span class="c">#                                 _filestr = self.filestr)</span>
+<span class="c">#         except:</span>
+<span class="c">#             raise NameError(&#39;Error during Radionode load&#39;)</span>
+<span class="c"># #</span>
+<span class="c"># # Launching and Tracing parameters</span>
+<span class="c"># #</span>
+
+<span class="c">#         try:</span>
+<span class="c">#             self.palch = Palch(self.config.get(&quot;files&quot;, &quot;palch&quot;))</span>
+<span class="c">#             self.filepalch = self.config.get(&quot;files&quot;, &quot;palch&quot;)</span>
+<span class="c">#         except:</span>
+<span class="c">#             raise NameError(&#39;Error in section palch from &#39;+ _filesimul)</span>
+
+<span class="c">#         try:</span>
+<span class="c">#             self.patra = Patra(self.config.get(&quot;files&quot;, &quot;patra&quot;))</span>
+<span class="c">#             self.filepatra = self.config.get(&quot;files&quot;, &quot;patra&quot;)</span>
+<span class="c">#         except:</span>
+<span class="c">#             raise NameError(&#39;Error in section patra from &#39;+ _filesimul)</span>
+<span class="c">#         #_outfilename = &quot;out&quot;+self.ntx+&quot;.ini&quot;</span>
+<span class="c">#         #self.outfilename = pyu.getlong(_outfilename,&quot;simul&quot;)</span>
+<span class="c"># #  Load Simulation Mat File</span>
+<span class="c"># #</span>
+<span class="c">#         self.filematini = self.config.get(&quot;files&quot;, &quot;mat&quot;)</span>
+<span class="c">#         self.mat = MatDB()</span>
+<span class="c">#         self.mat.load(self.filematini)</span>
+<span class="c"># #</span>
+<span class="c"># #  Load Simulation Slab File</span>
+<span class="c"># #</span>
+<span class="c">#         try:</span>
+<span class="c">#             self.fileslabini = self.config.get(&quot;files&quot;, &quot;slab&quot;)</span>
+<span class="c">#             self.sl = SlabDB()</span>
+<span class="c">#             self.sl.mat = self.mat</span>
+<span class="c">#             self.sl.load(self.fileslabini)</span>
+<span class="c">#         except:</span>
+<span class="c">#             raise NameError(&#39;Slab load error&#39;)</span>
+<span class="c"># #</span>
+<span class="c"># # Load layout from .str or .str2 file</span>
+<span class="c"># #</span>
+<span class="c">#         try:</span>
+<span class="c">#             self.L = Layout(self.filestr,self.filematini, self.fileslabini)</span>
+<span class="c"># #            self.L.load(self.filestr)</span>
+<span class="c">#         except:</span>
+<span class="c">#             raise NameError(&#39;Layout load error&#39;)</span>
+
+<span class="c">#         try:</span>
+<span class="c">#             self.patud.nrmax = self.config.get(&quot;tud&quot;, &quot;nrmax&quot;)</span>
+<span class="c">#             self.patud.num = self.config.get(&quot;tud&quot;, &quot;num&quot;)</span>
+<span class="c">#             self.patud.purc = self.config.get(&quot;tud&quot;, &quot;purc&quot;)</span>
+<span class="c">#         except:</span>
+<span class="c">#             pass</span>
+
+<span class="c"># #</span>
+<span class="c"># # Frequency base</span>
+<span class="c"># #</span>
+<span class="c">#         if &quot;frequency&quot; in sections:</span>
+<span class="c">#             try:</span>
+<span class="c">#                 self.fGHz = np.linspace(float(self.config.getfloat(&quot;frequency&quot;, &quot;fghzmin&quot;)),</span>
+<span class="c">#                                         float(self.config.getfloat(&quot;frequency&quot;, &quot;fghzmax&quot;)),</span>
+<span class="c">#                                         int(self.config.getint(&quot;frequency&quot;, &quot;nf&quot;)),</span>
+<span class="c">#                                         endpoint=True)</span>
+<span class="c">#             except:</span>
+<span class="c">#                 raise NameError(&#39;Error in section frequency from &#39;+ _filesimul)</span>
+<span class="c">#             # update .freq file in tud directory</span>
+
+<span class="c">#             filefreq = pyu.getlong(self.filefreq, pstruc[&#39;DIRTUD&#39;])</span>
+<span class="c">#             fd = open(filefreq, &quot;w&quot;)</span>
+<span class="c">#             chaine = self.config.get(&quot;frequency&quot;, &quot;fghzmin&quot;) + &#39; &#39; + \</span>
+<span class="c">#                 self.config.get(&quot;frequency&quot;, &quot;fghzmax&quot;) + &#39; &#39; + \</span>
+<span class="c">#                 self.config.get(&quot;frequency&quot;, &quot;nf&quot;)</span>
+<span class="c">#             fd.write(chaine)</span>
+<span class="c">#             fd.close</span>
+<span class="c"># #</span>
+<span class="c"># # Simulation Progress</span>
+<span class="c"># #</span>
+<span class="c">#         self.output = {}</span>
+<span class="c">#         if &quot;output&quot; in sections:</span>
+<span class="c">#             for itx in self.config.options(&quot;output&quot;):</span>
+<span class="c">#                 _filename  =  self.config.get(&quot;output&quot;, itx)</span>
+<span class="c">#                 self.dout[int(itx)] = _filename</span>
+<span class="c">#                 filename = pyu.getlong(_filename, &quot;output&quot;)</span>
+<span class="c">#                 output = ConfigParser.ConfigParser()</span>
+<span class="c">#                 output.read(filename)</span>
+<span class="c">#                 secout = output.sections()</span>
+<span class="c">#                 self.dtra[int(itx)] = {}</span>
+<span class="c">#                 self.dtud[int(itx)] = {}</span>
+<span class="c">#                 self.dtang[int(itx)] = {}</span>
+<span class="c">#                 self.drang[int(itx)] = {}</span>
+<span class="c">#                 self.dtauk[int(itx)] = {}</span>
+<span class="c">#                 self.dfield[int(itx)] = {}</span>
+<span class="c">#                 self.dcir[int(itx)] = {}</span>
+<span class="c">#                 if &quot;launch&quot; in secout:</span>
+<span class="c">#                     self.progress = 1</span>
+<span class="c">#                     keys_launch = output.options(&quot;launch&quot;)</span>
+<span class="c">#                     for kl in keys_launch:</span>
+<span class="c">#                         self.dlch[int(kl)] = output.get(&quot;launch&quot;, kl)</span>
+<span class="c">#                 if &quot;trace&quot; in secout:</span>
+<span class="c">#                     self.progress = 2</span>
+<span class="c">#                     keys_tra = output.options(&quot;trace&quot;)</span>
+<span class="c">#                     for kt in keys_tra:</span>
+<span class="c">#                         self.dtra[int(itx)][int(kt)] = output.get(&quot;trace&quot;, kt)</span>
+
+<span class="c">#                 if &quot;tang&quot; in secout:</span>
+<span class="c">#                     self.progress = 3</span>
+<span class="c">#                     keys_tang = output.options(&quot;tang&quot;)</span>
+<span class="c">#                     for kt in keys_tang:</span>
+<span class="c">#                         self.dtang[int(itx)][int(kt)] = output.get(&quot;tang&quot;, kt)</span>
+<span class="c">#                         self.drang[int(itx)][int(kt)] = output.get(&quot;rang&quot;, kt)</span>
+<span class="c">#                         self.dtud[int(itx)][int(kt)] = output.get(&quot;tud&quot;, kt)</span>
+<span class="c">#                 if &quot;field&quot; in secout:</span>
+<span class="c">#                     self.progress = 4</span>
+<span class="c">#                     keys_field = output.options(&quot;field&quot;)</span>
+<span class="c">#                     for kt in keys_field:</span>
+<span class="c">#                         self.dfield[int(itx)][int(kt)] = output.get(</span>
+<span class="c">#                             &quot;field&quot;, kt)</span>
+<span class="c">#                         self.dtauk[int(itx)][int(kt)] = output.get(&quot;tauk&quot;, kt)</span>
+<span class="c">#                 if &quot;cir&quot; in secout:</span>
+<span class="c">#                     self.progress = 5</span>
+<span class="c">#                     keys_cir = output.options(&quot;cir&quot;)</span>
+<span class="c">#                     for kt in keys_cir:</span>
+<span class="c">#                         self.dcir[int(itx)][int(kt)] = output.get(&quot;cir&quot;, kt)</span>
+
+<span class="c">#                 self.output[int(itx)] = output</span>
+<span class="c">#         #</span>
+<span class="c">#         # Waveform section</span>
+<span class="c">#         #</span>
+<span class="c">#         self.wav = wvf.Waveform()</span>
+<span class="c">#         self.wav.read(self.config)</span>
+
+<span class="c">#     def layout(self, _filestruc, _filematini=&#39;matDB.ini&#39;, _fileslabini=&#39;slabDB.ini&#39;):</span>
+<span class="c">#         &quot;&quot;&quot; load a layout in the simulation oject</span>
+
+<span class="c">#         Parameters</span>
+<span class="c">#         ----------</span>
+
+<span class="c">#         _filestruc : string</span>
+<span class="c">#             short file name of the Layout object</span>
+<span class="c">#         _filematini   : string</span>
+<span class="c">#             short file name of the Mat object  (default matDB.ini)</span>
+<span class="c">#         _fileslab  : string</span>
+<span class="c">#             short file name of the Slab object (default slabDB.ini)</span>
+
+<span class="c">#         Examples</span>
+<span class="c">#         --------</span>
+
+<span class="c">#         &gt;&gt;&gt; from pylayers.simul.simulem import *</span>
+<span class="c">#         &gt;&gt;&gt; S = Simul()</span>
+<span class="c">#         &gt;&gt;&gt; S.layout(&#39;defstr.str&#39;)</span>
+
+<span class="c">#         &quot;&quot;&quot;</span>
+<span class="c">#         self.filestr = _filestruc</span>
+<span class="c">#         self.filematini = _filematini</span>
+<span class="c">#         self.fileslabini = _fileslabini</span>
+
+<span class="c">#         self.L = Layout(_filestruc,_filematini, _fileslabini)</span>
+<span class="c">#         # update config</span>
+<span class="c">#         self.config.set(&quot;files&quot;, &quot;struc&quot;, self.filestr)</span>
+<span class="c">#         self.config.set(&quot;files&quot;, &quot;slab&quot;, self.fileslabini)</span>
+<span class="c">#         self.config.set(&quot;files&quot;, &quot;mat&quot;, self.filematini)</span>
+<span class="c">#         self.save()</span>
+
+<span class="c">#     def show(self, itx=[-1], irx=[-1], furniture=True, s=8, c=&#39;b&#39;, traj=False, num=False,fig=[],ax=[]):</span>
+<span class="c">#         &quot;&quot;&quot; show simulation</span>
+
+<span class="c">#             Parameters</span>
+<span class="c">#             -----------</span>
+<span class="c">#             itx        : list of tx indexes</span>
+<span class="c">#             irx        : list of rx indexes</span>
+<span class="c">#             furniture  : boolean for METALIC furniture display</span>
+<span class="c">#             s          : scale fir scatter plot  (default 8)</span>
+<span class="c">#             c          : color for scatter plot  (default &#39;b&#39;)</span>
+<span class="c">#             traj       : boolean  (def False)</span>
+<span class="c">#             num        : boolean  (def False)</span>
+<span class="c">#                 display a number</span>
+
+
+<span class="c">#             Examples</span>
+<span class="c">#             --------</span>
+<span class="c">#             &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="c">#             &gt;&gt;&gt; from pylayers.simul.simulem import *</span>
+<span class="c">#             &gt;&gt;&gt; S = Simul()</span>
+<span class="c">#             &gt;&gt;&gt; S.load(&#39;w1.ini&#39;)</span>
+<span class="c">#             &gt;&gt;&gt; S.L.loadfur(&#39;FurW1.ini&#39;)</span>
+<span class="c">#             &gt;&gt;&gt; S.show()</span>
+<span class="c">#             &gt;&gt;&gt; plt.show()</span>
+
+
+
+<span class="c">#         &quot;&quot;&quot;</span>
+<span class="c">#         if type(itx) == int:</span>
+<span class="c">#             itx = [itx]</span>
+<span class="c">#         if type(irx) == int:</span>
+<span class="c">#             irx = [irx]</span>
+
+
+<span class="c">#         if fig ==[]:</span>
+<span class="c">#             fig = plt.gcf()</span>
+<span class="c">#         if ax==[]:</span>
+<span class="c">#             ax = fig.gca()</span>
+
+<span class="c">#         #self.L.display[&#39;scaled&#39;]=False</span>
+<span class="c">#         fig,ax=self.L.showGs(fig=fig,ax=ax, show=False)</span>
+<span class="c">#         #</span>
+<span class="c">#         if furniture:</span>
+<span class="c">#             if &#39;lfur&#39; in self.L.__dict__:</span>
+<span class="c">#                 for fur in self.L.lfur:</span>
+<span class="c">#                     if fur.Matname == &#39;METAL&#39;:</span>
+<span class="c">#                         fur.show(fig, ax)</span>
+<span class="c">#             else:</span>
+<span class="c">#                 print &quot;Warning : no furniture file loaded&quot;</span>
+
+<span class="c">#         if irx[0] == -1:</span>
+<span class="c">#             ax.scatter(self.rx.position[0,:],</span>
+<span class="c">#                        self.rx.position[1,:], c=&#39;b&#39;, s=s, alpha=0.5)</span>
+<span class="c">#             #ax.scatter(self.rx.position[0,0],self.rx.position[0,1],c=&#39;k&#39;,s=s,linewidth=0)</span>
+<span class="c">#             #ax.scatter(self.rx.position[1,0],self.rx.position[1,1],c=&#39;b&#39;,s=s,linewidth=0)</span>
+<span class="c">#             #ax.scatter(self.rx.position[2,0],self.rx.position[2,1],c=&#39;g&#39;,s=s,linewidth=0)</span>
+<span class="c">#             #ax.scatter(self.rx.position[3,0],self.rx.position[3,1],c=&#39;c&#39;,s=s,linewidth=0)</span>
+<span class="c">#         else:</span>
+<span class="c">#             for k in irx:</span>
+<span class="c">#                 ax.scatter(self.rx.position[0,k - 1],</span>
+<span class="c">#                            self.rx.position[1,k - 1], c=&#39;b&#39;, s=s, alpha=0.5)</span>
+<span class="c">#                 if num:</span>
+<span class="c">#                     ax.text(self.rx.position[0,k - 1],</span>
+<span class="c">#                             self.rx.position[1,k - 1],</span>
+<span class="c">#                             str(k), color=&#39;blue&#39;)</span>
+
+<span class="c">#         if itx[0] == -1:</span>
+<span class="c">#             ax.scatter(self.tx.position[0,:],</span>
+<span class="c">#                        self.tx.position[1,:], c=&#39;r&#39;, s=s)</span>
+<span class="c">#             if num:</span>
+<span class="c">#                 for k in range(302):</span>
+<span class="c">#                     ax.text(self.tx.position[0,k - 1],</span>
+<span class="c">#                             self.tx.position[1,k - 1],</span>
+<span class="c">#                             str(k), color=&#39;black&#39;)</span>
+<span class="c">#         else:</span>
+<span class="c">#             if traj:</span>
+<span class="c">#                 cpt = 1</span>
+<span class="c">#             for k in itx:</span>
+<span class="c">#                 ax.scatter(self.tx.position[0,k - 1],</span>
+<span class="c">#                            self.tx.position[1,k - 1],</span>
+<span class="c">#                            c=c, s=s, linewidth=0)</span>
+<span class="c">#                 if num:</span>
+<span class="c">#                     if traj:</span>
+<span class="c">#                         ax.text(self.tx.position[0,k - 1],</span>
+<span class="c">#                                 self.tx.position[1,k - 1],</span>
+<span class="c">#                                 str(cpt), color=&#39;black&#39;)</span>
+<span class="c">#                         cpt = cpt + 1</span>
+<span class="c">#                     else:</span>
+<span class="c">#                         ax.text(self.tx.position[0,k - 1],</span>
+<span class="c">#                                 self.tx.position[1,k - 1],</span>
+<span class="c">#                                 str(k), color=&#39;black&#39;)</span>
+
+<span class="c">#         return (fig,ax)</span>
+<span class="c">#         #for k in range(self.tx.N):</span>
+<span class="c">#         #    ax.text(self.tx.position[0,k],self.tx.position[1,k],str(k+1),color=&#39;black&#39;)</span>
+<span class="c">#         #    ax.scatter(self.tx.position[0,:],self.tx.position[0,:],</span>
+
+<span class="c">#         #for k in range(self.rx.N):</span>
+<span class="c">#         #   ax.text(self.rx.position[0,k],self.rx.position[1,k],str(k),color=&#39;black&#39;)</span>
+
+<span class="c">#     def PL(self, itx):</span>
+<span class="c">#         &quot;&quot;&quot; plot Path Loss</span>
+
+<span class="c">#         itx</span>
+<span class="c">#         &quot;&quot;&quot;</span>
+<span class="c">#         td = []</span>
+<span class="c">#         tEa = []</span>
+<span class="c">#         tEo = []</span>
+<span class="c">#         for irx in self.dcir[itx].keys():</span>
+<span class="c">#             d = self.delay(itx, irx) * 0.3</span>
+<span class="c">#             cira, ciro = self.loadcir(itx, irx)</span>
+<span class="c">#             Ea = cira.energy()[0]</span>
+<span class="c">#             Eo = ciro.energy()[0]</span>
+<span class="c">#             td.append(d)</span>
+<span class="c">#             tEa.append(Ea)</span>
+<span class="c">#             tEo.append(Eo)</span>
+
+<span class="c">#         plt.semilogx(td, 10 * np.log10(tEa), &#39;xr&#39;)</span>
+<span class="c">#         plt.semilogx(td, 10 * np.log10(tEo), &#39;xb&#39;)</span>
+<span class="c">#         plt.show()</span>
+<span class="c">#         return td, tEa, tEo</span>
+
+<span class="c">#     def evalcir(self,cutoff=4,algo=&#39;new&#39;):</span>
+<span class="c">#         &quot;&quot;&quot;</span>
+<span class="c">#         Parameters</span>
+<span class="c">#         ----------</span>
+
+<span class="c">#         S </span>
+<span class="c">#         tx</span>
+<span class="c">#         rx</span>
+<span class="c">#         wav</span>
+<span class="c">#         cutoff</span>
+
+<span class="c">#         &quot;&quot;&quot;</span>
+
+<span class="c">#         crxp =-1</span>
+<span class="c">#         ctxp =-1</span>
+<span class="c">#         tcir = {}</span>
+<span class="c">#         tx = self.tx.position </span>
+<span class="c">#         Ntx = len(tx[0])</span>
+<span class="c">#         rx = self.rx.position</span>
+<span class="c">#         Nrx = len(rx[0])</span>
+
+<span class="c">#         #for kt in range(1,Ntx-1):</span>
+<span class="c">#         #print kt+1</span>
+<span class="c">#         kt=0</span>
+<span class="c">#         tcir[kt] = {}</span>
+<span class="c">#         t = np.array([self.tx.position[0,kt],self.tx.position[1,kt],self.tx.position[2,kt]])</span>
+<span class="c">#         for kr in range(Nrx):</span>
+<span class="c">#             if (np.mod(kr,10)==0):</span>
+<span class="c">#                 print kr+1</span>
+<span class="c">#             r = np.array([self.rx.position[0,kr],self.rx.position[1,kr],self.rx.position[2,kr]])</span>
+<span class="c">#             ctx = self.L.pt2cy(t)</span>
+<span class="c">#             crx = self.L.pt2cy(r)</span>
+<span class="c">#             if (ctx&lt;&gt;ctxp)|(crx&lt;&gt;crxp):</span>
+<span class="c">#                 Si  = signature.Signatures(self.L,ctx,crx)</span>
+<span class="c">#                 ctxp = ctx</span>
+<span class="c">#                 crxp = crx</span>
+<span class="c">#                 Si.run4(cutoff=cutoff,algo=algo)</span>
+<span class="c">#             r2d = Si.rays(t,r)</span>
+<span class="c">#             #r2d.show(S.L)</span>
+
+<span class="c">#             r3d = r2d.to3D(self.L)</span>
+<span class="c">#             r3d.locbas(self.L)</span>
+<span class="c">#             r3d.fillinter(self.L)   </span>
+<span class="c">#             Ct  = r3d.eval(self.fGHz)</span>
+<span class="c">#             sca = Ct.prop2tran(self.tx.A,self.rx.A)</span>
+<span class="c">#             cir = sca.applywavB(self.wav.sfg)</span>
+<span class="c">#             tcir[kt][kr] = cir</span>
+<span class="c">#         return(tcir)</span>
+
+<span class="c">#     def loadcir(self, itx, irx):</span>
+<span class="c">#         &quot;&quot;&quot;</span>
+<span class="c">#         Parameters</span>
+<span class="c">#         ----------</span>
+<span class="c">#         itx : Tx index</span>
+<span class="c">#         irx : Rx index</span>
+
+<span class="c">#         Returns</span>
+<span class="c">#         -------</span>
+
+<span class="c">#         cir(itx,irx)</span>
+<span class="c">#         &quot;&quot;&quot;</span>
+<span class="c">#         _filecir = self.dcir[itx][irx] + &#39;.mat&#39;</span>
+<span class="c">#         ext = str(itx)</span>
+<span class="c">#         if len(ext) == 1:</span>
+<span class="c">#             ext = &#39;00&#39; + ext</span>
+<span class="c">#         if len(ext) == 2:</span>
+<span class="c">#             ext = &#39;0&#39; + ext</span>
+
+<span class="c">#         filecir = pyu.getlong(_filecir, pstruc[&#39;DIRCIR&#39;]+&#39;/Tx&#39; + ext)</span>
+<span class="c">#         D = spio.loadmat(filecir)</span>
+
+<span class="c">#         kxa = &#39;ta&#39; + str(irx)</span>
+<span class="c">#         kya = &#39;cira&#39; + str(irx)</span>
+
+<span class="c">#         kxo = &#39;to&#39; + str(irx)</span>
+<span class="c">#         kyo = &#39;ciro&#39; + str(irx)</span>
+
+<span class="c">#         cira = bs.TUsignal(D[kxa], D[kya][:, 0])</span>
+<span class="c">#         ciro = bs.TUsignal(D[kxo], D[kyo][:, 0])</span>
+
+<span class="c">#         return(cira, ciro)</span>
+
+<span class="c">#     def pltcir(self, itx=1, irx=1, mode=&#39;linear&#39;, noise=False, color=&#39;b&#39;,format=&#39;a&#39;,fig=[],ax=[]):</span>
+<span class="c">#         &quot;&quot;&quot; plot Channel Impulse Response</span>
+
+<span class="c">#         Parameters</span>
+<span class="c">#         ----------</span>
+<span class="c">#         itx : Tx index</span>
+<span class="c">#         irx : Rx index</span>
+<span class="c">#         mode : str</span>
+<span class="c">#             {&#39;linear&#39;,&#39;dB&#39;}</span>
+<span class="c">#             noise : boolean</span>
+<span class="c">#         color : string</span>
+<span class="c">#             default &#39;b&#39;</span>
+
+<span class="c">#         &gt;&gt;&gt; from pylayers.simul.simulem import *</span>
+<span class="c">#         &gt;&gt;&gt; S = Simul()</span>
+<span class="c">#         &gt;&gt;&gt; S.load(&#39;where2.ini&#39;)</span>
+<span class="c">#         &gt;&gt;&gt; S.run(1,1)</span>
+<span class="c">#         &gt;&gt;&gt; S.pltcir(1,1,mode=&#39;linear&#39;,noise=False,color=&#39;k&#39;)</span>
+
+<span class="c">#         &quot;&quot;&quot;</span>
+
+<span class="c">#         if fig ==[]:</span>
+<span class="c">#             fig = plt.gcf()</span>
+<span class="c">#         #if ax==[]:</span>
+<span class="c">#         #    ax = fig.gca()</span>
+
+<span class="c">#         _filecir = self.dcir[itx][irx] + &#39;.mat&#39;</span>
+<span class="c">#         filecir = pyu.getlong(_filecir, pstruc[&#39;DIRCIR&#39;]+&#39;/Tx&#39; + str(&#39;%0.3d&#39; % itx))</span>
+<span class="c">#         D = spio.loadmat(filecir)</span>
+<span class="c">#         ax = fig.add_subplot(&#39;211&#39;)</span>
+
+<span class="c">#         fig,ax=self.show(itx, irx,fig=fig,ax=ax)</span>
+<span class="c">#         ax=fig.add_subplot(&#39;212&#39;)</span>
+<span class="c">#         if &#39;a&#39; in format :</span>
+<span class="c">#             kxa = &#39;t&#39;</span>
+<span class="c">#             kya = &#39;cir&#39;</span>
+<span class="c">#             ta = D[kxa]</span>
+<span class="c">#             Tobs = ta[-1] - ta[0]</span>
+<span class="c">#             te = ta[1] - ta[0]</span>
+<span class="c">#             if noise:</span>
+<span class="c">#                 na = bs.Noise(Tobs + te, 1. / te)</span>
+<span class="c">#                 naf = na.gating(4.493, 0.5)</span>
+<span class="c">#             cira = bs.TUsignal(ta, D[kya][:, 0])</span>
+
+
+<span class="c">#         if &#39;o&#39; in format:</span>
+<span class="c">#             kxo = &#39;to&#39; + str(irx)</span>
+<span class="c">#             kyo = &#39;ciro&#39; + str(irx)</span>
+<span class="c">#             to = D[kxo]</span>
+<span class="c">#             Tobs = to[-1] - to[0]</span>
+<span class="c">#             te = to[1] - to[0]</span>
+<span class="c">#             if noise:</span>
+<span class="c">#                 no = bs.Noise(Tobs + te, 1. / te)</span>
+<span class="c">#                 nof = no.gating(4.493, 0.5)</span>
+<span class="c">#             ciro = bs.TUsignal(to, D[kyo][:, 0])</span>
+
+<span class="c">#         if mode == &#39;linear&#39;:</span>
+<span class="c">#             #plt.plot(ta,naf.y,color=&#39;k&#39;,label=&#39;Noise&#39;)</span>
+<span class="c">#             plt.plot(ta, D[kya], label=&#39;Rx &#39; + str(irx), color=color)</span>
+<span class="c">#             plt.xlabel(&#39;Time (ns)&#39;)</span>
+
+<span class="c">#             &#39;&#39;&#39;if noise:</span>
+<span class="c">#                 naf.plot(col=&#39;k&#39;)</span>
+<span class="c">#             cira.plot(col=color)&#39;&#39;&#39;</span>
+<span class="c">#         else:</span>
+<span class="c">#             &#39;&#39;&#39;if noise:</span>
+<span class="c">#                 naf.plotdB(col=&#39;k&#39;)</span>
+<span class="c">#             cira.plotdB()&#39;&#39;&#39;</span>
+<span class="c">#             plt.plot(ta, 20 * np.log10(abs(D[kya])), label=&#39;Rx &#39; + str(irx), color=color)</span>
+<span class="c">#             plt.xlabel(&#39;Time (ns)&#39;)</span>
+<span class="c"># #        plt.legend()</span>
+<span class="c">#         plt.show()</span>
+<span class="c">#         #plt.savefig(&#39;Tx&#39;+str(itx),format=pdf,dpi=300)</span>
+
+<span class="c">#     def scatter(self, itx, irx, values,</span>
+<span class="c">#                 cmap=plt.cm.gray,</span>
+<span class="c">#                 s=30,</span>
+<span class="c">#                 spl=221,</span>
+<span class="c">#                 title=&#39;&#39;,</span>
+<span class="c">#                 vaxis=((-30, 10, 2, 18)),</span>
+<span class="c">#                 vmin=0,</span>
+<span class="c">#                 vmax=1,</span>
+<span class="c">#                 colbool=False,</span>
+<span class="c">#                 cblabel=&#39;dB&#39;):</span>
+<span class="c">#         &quot;&quot;&quot;</span>
+<span class="c">#             Parameters</span>
+<span class="c">#             ----------</span>
+<span class="c">#             itx</span>
+<span class="c">#             irx</span>
+<span class="c">#             values</span>
+<span class="c">#             cmap</span>
+<span class="c">#             s</span>
+<span class="c">#             spl</span>
+<span class="c">#             title</span>
+<span class="c">#             vaxis</span>
+<span class="c">#             vmin</span>
+<span class="c">#             vmax</span>
+<span class="c">#             colbool</span>
+<span class="c">#             clabel</span>
+
+<span class="c">#         &quot;&quot;&quot;</span>
+<span class="c">#         fig = plt.gcf()</span>
+<span class="c">#         ax = fig.add_subplot(spl)</span>
+<span class="c">#         xtx = self.tx.position[itx, 0]</span>
+<span class="c">#         ytx = self.tx.position[itx, 1]</span>
+<span class="c">#         xrx = self.rx.position[irx, 0]</span>
+<span class="c">#         yrx = self.rx.position[irx, 1]</span>
+<span class="c">#         self.L.display[&#39;title&#39;] = title</span>
+<span class="c">#         self.L.showGs(ax)</span>
+<span class="c">#         for furk in siradel.siradel_furniture.keys():</span>
+<span class="c">#             fur = siradel.siradel_furniture[furk]</span>
+<span class="c">#             if fur.Matname == &#39;METAL&#39;:</span>
+<span class="c">#                 fur.show(fig, ax)</span>
+
+<span class="c">#         #self.show(furniture=True)</span>
+<span class="c">#         plt.axis(vaxis)</span>
+<span class="c">#         b1 = ax.scatter(xtx, ytx, s=s, c=values, cmap=cmap,</span>
+<span class="c">#                         linewidths=0, vmin=vmin, vmax=vmax)</span>
+<span class="c">#         ax.scatter(xrx, yrx, s=30, c=&#39;b&#39;, linewidths=0)</span>
+<span class="c">#         if colbool:</span>
+<span class="c">#             cb = colorbar(b1)</span>
+<span class="c">#             cb.set_label(cblabel, fontsize=14)</span>
+<span class="c">#         return(b1)</span>
+
+<span class="c">#     def info(self, itx=[], irx=[]):</span>
+<span class="c">#         &quot;&quot;&quot; display simulation information</span>
+
+<span class="c">#          Parameters</span>
+<span class="c">#          ----------</span>
+<span class="c">#          itx : Tx index</span>
+<span class="c">#          irx : Rx index</span>
+
+<span class="c">#         &quot;&quot;&quot;</span>
+<span class="c">#         print self.filesimul</span>
+<span class="c">#         print &#39;------------------------------------------&#39;</span>
+<span class="c">#         try:</span>
+<span class="c">#             print &quot;Layout Info : \n&quot;, self.L.info()</span>
+<span class="c">#         except:</span>
+<span class="c">#             print &quot;provide a Layout in the simulation : S.L &quot;</span>
+<span class="c">#             print &quot;&gt;&gt;&gt; S.layout(filename.str) &quot;</span>
+<span class="c">#             print &quot;or &quot;</span>
+<span class="c">#             print &quot;&gt;&gt;&gt; S.layout(filename.str2 &quot;</span>
+<span class="c">#             print &quot;or &quot;</span>
+<span class="c">#             print &quot;&gt;&gt;&gt; S.layout(filename.str,filematini,filematini) &quot;</span>
+<span class="c">#             print &quot;default files exists for filematini and fileslabini &quot;</span>
+
+<span class="c">#             return</span>
+<span class="c">#         try:</span>
+<span class="c">#             print &quot;Tx Info :\n&quot;, self.tx.info()</span>
+<span class="c">#         except:</span>
+<span class="c">#             print &quot;provide a tx in the simulation : S.tx &quot;</span>
+<span class="c">#             return</span>
+<span class="c">#         try:</span>
+<span class="c">#             print &quot;Rx Info :\n&quot;, self.rx.info()</span>
+<span class="c">#         except:</span>
+<span class="c">#             print &quot;provide a rx in the simulation : S.rx &quot;</span>
+<span class="c">#             return</span>
+
+<span class="c">#         #    print &quot;Tx : &quot;,self.tx.points[itx]</span>
+<span class="c">#             print &quot;Rx : &quot;, self.rx.points[itx]</span>
+<span class="c">#             print &quot;Delay (ns) :&quot;, self.delay(itx, irx)</span>
+<span class="c">#             print &quot;Distance (m) :&quot;, 0.3 / self.delay(itx, irx)</span>
+<span class="c">#             print &quot;&quot;</span>
+<span class="c">#             if itx in self.dlch.keys():</span>
+<span class="c">#                 print &quot;-----&quot;</span>
+<span class="c">#                 print &quot;Launching &quot;</span>
+<span class="c">#                 print &quot;-----&quot;</span>
+<span class="c">#                 print &quot; &quot;, self.dlch[itx]</span>
+<span class="c">#             if irx in self.dtra[itx].keys():</span>
+<span class="c">#                 print &quot;-----&quot;</span>
+<span class="c">#                 print &quot;Tracing &quot;</span>
+<span class="c">#                 print &quot;-----&quot;</span>
+<span class="c">#                 print &quot; &quot;, self.dtra[itx][irx]</span>
+<span class="c">#                 gr = GrRay3D()</span>
+<span class="c">#                 gr.load(self.dtra[itx][irx], self.L)</span>
+<span class="c">#                 gr.info()</span>
+<span class="c">#             if irx in self.dtud[itx].keys():</span>
+<span class="c">#                 print &quot;-----&quot;</span>
+<span class="c">#                 print &quot;Tud parameters &quot;</span>
+<span class="c">#                 print &quot;-----&quot;</span>
+<span class="c">#                 print &quot; &quot;, self.dtud[itx][irx]</span>
+<span class="c">#                 print &quot; &quot;, self.dtang[itx][irx]</span>
+<span class="c">#                 print &quot; &quot;, self.drang[itx][irx]</span>
+<span class="c">#                 gt = GrRay3D.GrRayTud()</span>
+<span class="c">#                 gt.load(self.dtud[itx][irx],</span>
+<span class="c">#                         self.dtang[itx][irx],</span>
+<span class="c">#                         self.drang[itx][irx], self.sl)</span>
+<span class="c">#             if irx in self.dtauk[itx].keys():</span>
+<span class="c">#                 print self.dtauk[itx][irx]</span>
+<span class="c">#                 print self.dfield[itx][irx]</span>
+<span class="c">#                 VC = self.VC(itx, irx)</span>
+<span class="c">#             if irx in self.dcir[itx].keys():</span>
+<span class="c">#                 print self.dcir[itx][irx]</span>
+
+<span class="c">#     def info2(self):</span>
+<span class="c">#         for i, j in enumerate(self.__dict__.keys()):</span>
+<span class="c">#             print j, &#39;:&#39;, self.__dict__.values()[i]</span>
+
+<span class="c">#     def filtray(self, itx, irx, tau0, tau1, col=&#39;b&#39;):</span>
+<span class="c">#         &quot;&quot;&quot; filter rays</span>
+
+<span class="c">#         Parameters</span>
+<span class="c">#         ----------</span>
+<span class="c">#         itx :</span>
+<span class="c">#         irx :</span>
+<span class="c">#         tau0 :</span>
+<span class="c">#         tau1 :</span>
+<span class="c">#         col :</span>
+
+<span class="c">#         Display ray and nstr</span>
+<span class="c">#         &quot;&quot;&quot;</span>
+<span class="c">#         gr = GrRay3D()</span>
+<span class="c">#         gr.load(self.dtra[itx][irx], self.L)</span>
+<span class="c">#         self.L.display[&#39;Thin&#39;] = True</span>
+<span class="c">#         self.L.display[&#39;Node&#39;] = False</span>
+<span class="c">#         self.L.display[&#39;NodeNum&#39;] = False</span>
+<span class="c">#         self.L.display[&#39;EdgeNum&#39;] = False</span>
+<span class="c">#         plt.axis(&#39;scaled&#39;)</span>
+<span class="c">#         #self.L.show(fig,ax,nodelist,seglist)</span>
+<span class="c">#         self.L.showGs()</span>
+<span class="c">#         delays = gr.delay()</span>
+<span class="c">#         rayset = np.nonzero((delays &gt;= tau0) &amp; (delays &lt;= tau1))[0]</span>
+<span class="c">#         fig = plt.gcf()</span>
+<span class="c">#         ax = fig.get_axes()[0]</span>
+<span class="c">#         gr.show(ax, rayset, col=col, node=False)</span>
+<span class="c">#         plt.title(&#39;Tx&#39; + str(itx) + &#39;-Rx&#39; + str(irx) + &#39; : &#39; + str(</span>
+<span class="c">#             tau0) + &#39; &lt; tau &lt; &#39; + str(tau1))</span>
+
+<span class="c">#     def showray(self, itx, irx, iray=np.array([]), fig=[], ax=[]):</span>
+<span class="c">#         &quot;&quot;&quot; show layout and rays for a radio link</span>
+
+<span class="c">#         Parameters</span>
+<span class="c">#         ----------</span>
+<span class="c">#         itx  : tx index</span>
+<span class="c">#         irx  : rx index</span>
+<span class="c">#         iray : list of rays to be displayed ndarray</span>
+
+
+<span class="c">#         &quot;&quot;&quot;</span>
+
+<span class="c">#         #if ax==[]:</span>
+<span class="c">#         #    fig = plt.figure()</span>
+<span class="c">#         #    ax  = fig.add_subplot(&#39;111&#39;)</span>
+
+<span class="c">#         gr = GrRay3D()</span>
+<span class="c">#         gr.load(self.dtra[itx][irx], self.L)</span>
+<span class="c">#         if len(iray == 1):</span>
+<span class="c">#             ray = gr.ray3d[iray[0]]</span>
+<span class="c">#             nstr = ray.nstr[1:-1]</span>
+<span class="c">#             uneg = np.nonzero(nstr &lt; 0)</span>
+<span class="c">#             upos = np.nonzero((nstr &gt; 0) &amp; (nstr &lt;= self.L.Ne))</span>
+<span class="c">#             uceil = np.nonzero(nstr == self.L.Ne + 1)</span>
+<span class="c">#             ufloor = np.nonzero(nstr == self.L.Ne + 2)</span>
+<span class="c">#         #seglist  = nstr[upos[0]]-1</span>
+<span class="c">#         #nodelist = -nstr[uneg[0]]-1</span>
+<span class="c">#         #seglist2 = S.L.segpt(nodelist)</span>
+<span class="c">#         self.L.display[&#39;Thin&#39;] = True</span>
+<span class="c">#         self.L.display[&#39;Node&#39;] = False</span>
+<span class="c">#         self.L.display[&#39;NodeNum&#39;] = False</span>
+<span class="c">#         self.L.display[&#39;EdgeNum&#39;] = False</span>
+<span class="c">#         #self.L.show(fig,ax)</span>
+<span class="c">#         #print ray.nn</span>
+<span class="c">#         #print len(ray.nstr)</span>
+<span class="c">#         #print ray.nstr</span>
+<span class="c">#         #print nodelist</span>
+<span class="c">#         #print seglist</span>
+<span class="c">#         #print seglist2</span>
+<span class="c">#         #seglist = hstack((seglist,seglist2))</span>
+<span class="c">#         self.L.display[&#39;Node&#39;] = False</span>
+<span class="c">#         self.L.display[&#39;Thin&#39;] = False</span>
+<span class="c">#         self.L.display[&#39;NodeNum&#39;] = True</span>
+<span class="c">#         self.L.display[&#39;EdgeNum&#39;] = True</span>
+<span class="c">#         plt.axis(&#39;scaled&#39;)</span>
+<span class="c">#         #self.L.show(fig,ax,nodelist,seglist)</span>
+<span class="c">#         fig, ax = self.L.showGs(show=False)</span>
+<span class="c">#         gr.show(ax, iray, col=&#39;b&#39;, node=False)</span>
+
+<span class="c">#         if len(iray) == 1:</span>
+<span class="c">#             plt.title(str(nstr))</span>
+<span class="c">#         else:</span>
+<span class="c">#             plt.title(&#39;Tx&#39; + str(itx) + &#39;-Rx&#39; + str(irx) +</span>
+<span class="c">#                       &#39; &#39; + str(min(iray)) + &#39; &#39; + str(max(iray)))</span>
+
+<span class="c">#     def show3l(self, itx, irx):</span>
+<span class="c">#         &quot;&quot;&quot; geomview display of a specific link</span>
+
+<span class="c">#         g = S.show3l(itx,irx)</span>
+
+<span class="c">#         Parameters</span>
+<span class="c">#         ----------</span>
+<span class="c">#         itx</span>
+<span class="c">#             transmitter index</span>
+<span class="c">#         irx</span>
+<span class="c">#             receiver index</span>
+
+<span class="c">#         &quot;&quot;&quot;</span>
+<span class="c">#         filetra = self.dtra[itx][irx]</span>
+<span class="c">#         gr = GrRay3D()</span>
+<span class="c">#         gr.load(filetra, self.L)</span>
+<span class="c">#         gr.show3()</span>
+
+<span class="c">#         return(gr)</span>
+
+
+
+    <span class="c"># def show3(self,rays=[],**kwargs):</span>
+    <span class="c">#     &quot;&quot;&quot; geomview display of the simulation configuration</span>
+
+    <span class="c">#     Parameters</span>
+    <span class="c">#     ----------</span>
+
+    <span class="c">#     centered : boolean</span>
+    <span class="c">#         center the scene if True</span>
+    <span class="c">#     bdis  : boolean</span>
+    <span class="c">#         display local basis</span>
+
+    <span class="c">#     &quot;&quot;&quot;</span>
+    <span class="c">#     try:</span>
+    <span class="c">#         self.tx.save()</span>
+    <span class="c">#     except:</span>
+    <span class="c">#         print(&#39;tx set is no defined&#39;)</span>
+    <span class="c">#     try:</span>
+    <span class="c">#         self.rx.save()</span>
+    <span class="c">#     except:</span>
+    <span class="c">#         print(&#39;rx set is no defined&#39;)</span>
+    <span class="c">#     _filename = self.filesimul.replace(&#39;.ini&#39;, &#39;.off&#39;)</span>
+    <span class="c">#     filename = pyu.getlong(_filename, pstruc[&#39;DIRGEOM&#39;])</span>
+    <span class="c">#     fo = open(filename, &quot;w&quot;)</span>
+    <span class="c">#     fo.write(&quot;LIST\n&quot;)</span>
+    <span class="c">#     try:</span>
+    <span class="c">#         sttx = &quot;{&lt;&quot; + self.tx.filegeom + &quot;}\n&quot;</span>
+    <span class="c">#     except:</span>
+    <span class="c">#         sttx = &quot;\n&quot;</span>
+    <span class="c">#     try:</span>
+    <span class="c">#         strx = &quot;{&lt;&quot; + self.rx.filegeom + &quot;}\n&quot;</span>
+    <span class="c">#     except:</span>
+    <span class="c">#         strx = &quot;\n&quot;</span>
+    <span class="c">#     try:</span>
+    <span class="c">#         stst = &quot;{&lt;&quot; + self.L.filegeom + &quot;}\n&quot;</span>
+    <span class="c">#     except:</span>
+    <span class="c">#         stst = &quot;\n&quot;</span>
+    <span class="c">#     fo.write(sttx)</span>
+    <span class="c">#     fo.write(strx)</span>
+    <span class="c">#     fo.write(stst)</span>
+    <span class="c">#     fo.write(&quot;{&lt;/usr/share/geomview/geom/xyz.vect}\n&quot;)</span>
+    <span class="c">#     if rays !=[]:</span>
+    <span class="c">#         kwargs[&#39;bdis&#39;]=False</span>
+    <span class="c">#         kwargs[&#39;L&#39;]=self.L</span>
+    <span class="c">#         kwargs[&#39;centered&#39;]=False</span>
+    <span class="c">#         fo.write(&quot;{&lt;&quot; + rays.show3(**kwargs) + &quot;}&quot;)</span>
+
+    <span class="c">#     fo.close()</span>
+
+
+    <span class="c">#     command = &quot;geomview -nopanel -b 1 1 1 &quot; + filename + &quot; 2&gt;/dev/null &amp;&quot;</span>
+    <span class="c">#     os.system(command)</span>
+
+    <span class="c"># def freq(self, GUI=False):</span>
+    <span class="c">#     &quot;&quot;&quot;</span>
+    <span class="c">#         return the frequency base from the content of filefreq</span>
+
+    <span class="c">#     Parameters</span>
+    <span class="c">#     ----------</span>
+    <span class="c">#     GUI</span>
+    <span class="c">#         Boolean</span>
+
+
+    <span class="c">#     &quot;&quot;&quot;</span>
+    <span class="c">#     filefreq = self.filefreq</span>
+    <span class="c">#     filefreq = pyu.getlong(filefreq, pstruc[&#39;DIRTUD&#39;])</span>
+    <span class="c">#     fo = open(filefreq)</span>
+    <span class="c">#     l = fo.readline().split()</span>
+    <span class="c">#     fmin = eval(l[0])</span>
+    <span class="c">#     fmax = eval(l[1])</span>
+    <span class="c">#     Nf = eval(l[2])</span>
+    <span class="c">#     fo.close()</span>
+    <span class="c">#     if GUI:</span>
+    <span class="c">#         val = multenterbox(&#39;Enter frequency (GHz)&#39;, &#39;&#39;,</span>
+    <span class="c">#                            (&#39;start&#39;, &#39;stop&#39;, &#39;N&#39;),</span>
+    <span class="c">#                            (str(fmin), str(fmax), str(Nf)))</span>
+    <span class="c">#         fmin = eval(val[0])</span>
+    <span class="c">#         fmax = eval(val[1])</span>
+    <span class="c">#         Nf = eval(val[2])</span>
+    <span class="c">#         fo = open(filefreq, &#39;w&#39;)</span>
+    <span class="c">#         data = val[0] + &#39; &#39; + val[1] + &#39; &#39; + val[2] + &#39;\n&#39;</span>
+    <span class="c">#         fo.write(data)</span>
+    <span class="c">#         fo.close()</span>
+
+    <span class="c">#     fGHz = np.linspace(fmin, fmax, Nf, endpoint=True)</span>
+    <span class="c">#     return(fGHz)</span>
+
+    <span class="c"># def getlaunch(self, k=1):</span>
+    <span class="c">#     &quot;&quot;&quot;</span>
+    <span class="c">#      get the kth launch</span>
+
+    <span class="c">#     Parameters</span>
+    <span class="c">#     ----------</span>
+    <span class="c">#     k :  int</span>
+    <span class="c">#         launching index (default 1)</span>
+
+    <span class="c">#     Launching index starts at 1</span>
+
+    <span class="c">#     &quot;&quot;&quot;</span>
+    <span class="c">#     if k in self.dlch.keys():</span>
+    <span class="c">#         filename = self.dlch[k]</span>
+    <span class="c">#         L = Launch()</span>
+    <span class="c">#         L.load(filename)</span>
+    <span class="c">#         return(L)</span>
+    <span class="c">#     else:</span>
+    <span class="c">#         print(&quot;Tx not available&quot;)</span>
+
+    <span class="c"># def gettra(self, itx, irx):</span>
+    <span class="c">#     &quot;&quot;&quot;</span>
+    <span class="c">#      Gtra = S.gettra(itx,irx)</span>
+    <span class="c">#     &quot;&quot;&quot;</span>
+    <span class="c">#     if (itx &lt; self.tx.N) &amp; (irx &lt; self.rx.N):</span>
+    <span class="c">#         Gtra = GrRay3D()</span>
+    <span class="c">#         Gtra.load(self.filetra[itx][irx], self.indoor)</span>
+    <span class="c">#         return Gtra</span>
+    <span class="c">#     else:</span>
+    <span class="c">#         print &quot;gettra warning : wrong tx or rx index&quot;</span>
+
+    <span class="c"># def gettud(self, itx, irx):</span>
+    <span class="c">#     &quot;&quot;&quot;</span>
+    <span class="c">#      Gtud = S.gettud(itx,irx)</span>
+    <span class="c">#     &quot;&quot;&quot;</span>
+    <span class="c">#     if (itx &lt; self.tx.N) &amp; (irx &lt; self.rx.N):</span>
+    <span class="c">#         Gtud = GrRayTud()</span>
+    <span class="c">#         Gtud.load(self.filetud[itx][irx], self.sl)</span>
+    <span class="c">#         return Gtud</span>
+    <span class="c">#     else:</span>
+    <span class="c">#         print &quot;gettud warning : wrong tx or rx index&quot;</span>
+    <span class="c"># #def gettud(self,k,l):</span>
+    <span class="c"># #def getfield(self,k,l):</span>
+
+    <span class="c"># def launching(self, itx=1,verbose=False):</span>
+    <span class="c">#     &quot;&quot;&quot; start the launching program and get the results files</span>
+
+    <span class="c">#     Parameters</span>
+    <span class="c">#     ----------</span>
+    <span class="c">#     itx : int</span>
+    <span class="c">#         transmiter index</span>
+
+    <span class="c">#     &quot;&quot;&quot;</span>
+
+    <span class="c">#     filestr = os.path.splitext(self.filestr)[0] + &#39;.str&#39;</span>
+
+    <span class="c">#     if not os.path.exists(pyu.getlong(filestr,pstruc[&#39;DIRSTRUC&#39;])):</span>
+    <span class="c">#         chaine = &#39;newstruc -str2 &#39; + filestr +&#39;2 &#39; + filestr + &#39; -conf &#39; + basename +&#39;/&#39;+self.fileconf</span>
+    <span class="c">#         os.system(chaine)</span>
+
+
+    <span class="c">#     chaine = &quot;launching -str  &quot; + self.filestr + \</span>
+    <span class="c">#         &quot; -slab &quot; + self.fileslab + \</span>
+    <span class="c">#         &quot; -palch &quot; + self.filepalch + \</span>
+    <span class="c">#         &quot; -spa &quot; + self.tx.filespa + \</span>
+    <span class="c">#         &quot; -conf &quot; + basename + &#39;/&#39; + self.fileconf</span>
+
+    <span class="c">#     if verbose:</span>
+    <span class="c">#         print chaine</span>
+
+    <span class="c">#     self.claunching.append(chaine)</span>
+    <span class="c">#     os.system(chaine)</span>
+    <span class="c">#     aux = os.popen(chaine, &quot;r&quot;)</span>
+    <span class="c">#     recup = aux.read()</span>
+    <span class="c">#     aux.close()</span>
+    <span class="c">#     if verbose:</span>
+    <span class="c">#         print recup</span>
+
+    <span class="c">#     self.recup = recup</span>
+    <span class="c">#     aux = recup.splitlines()</span>
+    <span class="c">#     len_aux = recup.count(&quot;\n&quot;)</span>
+
+    <span class="c">#     filelch = []</span>
+    <span class="c">#     for i in range(len_aux):</span>
+    <span class="c">#         if aux[i].find(&quot;filelchout&quot;) != -1:</span>
+    <span class="c">#             aux[i] = aux[i].replace(&#39;filelchout : &#39;, &#39;&#39;)</span>
+    <span class="c">#             fshort = pyu.getshort(aux[i])</span>
+    <span class="c">#             filelch.append(fshort)</span>
+    <span class="c">#             self.dlch[itx] = fshort</span>
+
+    <span class="c">#     self.filelch = filelch</span>
+    <span class="c">#     self.progress = 1</span>
+    <span class="c">#     self.nTx = len(self.filelch)</span>
+    <span class="c">#     self.dtra[itx] = {}</span>
+    <span class="c">#     self.dtud[itx] = {}</span>
+    <span class="c">#     self.dtang[itx] = {}</span>
+    <span class="c">#     self.drang[itx] = {}</span>
+    <span class="c">#     self.dtauk[itx] = {}</span>
+    <span class="c">#     self.dfield[itx] = {}</span>
+    <span class="c">#     self.dcir[itx] = {}</span>
+    <span class="c">#     # create a configuration file for Tx itx</span>
+    <span class="c">#     self.output[itx] = ConfigParser.ConfigParser()</span>
+    <span class="c">#     self.output[itx].add_section(&quot;launch&quot;)</span>
+    <span class="c">#     self.output[itx].add_section(&quot;trace&quot;)</span>
+    <span class="c">#     self.output[itx].add_section(&quot;tud&quot;)</span>
+    <span class="c">#     self.output[itx].add_section(&quot;rang&quot;)</span>
+    <span class="c">#     self.output[itx].add_section(&quot;tang&quot;)</span>
+    <span class="c">#     self.output[itx].add_section(&quot;field&quot;)</span>
+    <span class="c">#     self.output[itx].add_section(&quot;tauk&quot;)</span>
+    <span class="c">#     self.output[itx].set(&quot;launch&quot;, str(itx), self.dlch[itx])</span>
+    <span class="c">#     #</span>
+    <span class="c">#     # append output filename in section output</span>
+    <span class="c">#     #</span>
+    <span class="c">#     _outfilename = self.filesimul.replace(&#39;.ini&#39;, &#39;&#39;) + str(itx) + &quot;.ini&quot;</span>
+    <span class="c">#     self.dout[itx] = _outfilename</span>
+    <span class="c">#     outfilename = pyu.getlong(_outfilename, pstruc[&#39;DIRLCH&#39;])</span>
+    <span class="c">#     self.config.set(&quot;output&quot;, str(itx), self.dout[itx])</span>
+
+    <span class="c">#     fd = open(outfilename, &quot;w&quot;)</span>
+    <span class="c">#     self.output[itx].write(fd)</span>
+    <span class="c">#     fd.close()</span>
+
+    <span class="c">#     filesimul = pyu.getlong(self.filesimul,&#39;ini&#39;)</span>
+    <span class="c">#     fd = open(filesimul, &quot;w&quot;)</span>
+    <span class="c">#     self.config.write(fd)</span>
+    <span class="c">#     fd.close()</span>
+
+    <span class="c"># def tracing(self, itx, irx,verbose=False):</span>
+    <span class="c">#     &quot;&quot;&quot; exec tracing</span>
+
+    <span class="c">#     Parameters</span>
+    <span class="c">#     ----------</span>
+    <span class="c">#     itx  : tx index</span>
+    <span class="c">#     irx  : rx index</span>
+
+    <span class="c">#     Notes</span>
+    <span class="c">#     -----</span>
+    <span class="c">#     This function should not be used for more than one rx.</span>
+    <span class="c">#     .. todo extend properly this function in order to handle properly</span>
+    <span class="c">#         multi-nodes in irx. The problem is to keep the association</span>
+    <span class="c">#         between the index number of the rx in the ini file and the </span>
+    <span class="c">#         rx in dtra. </span>
+
+    <span class="c">#     &quot;&quot;&quot;</span>
+    <span class="c">#     #</span>
+    <span class="c">#     # Verify </span>
+    <span class="c">#     #</span>
+    <span class="c">#     if (self.progress &gt;= 1):</span>
+    <span class="c">#         chaine = &quot;tracing -lch &quot; + self.dlch[itx] + \</span>
+    <span class="c">#             &quot; -patra &quot; + self.filepatra + \</span>
+    <span class="c">#             &quot;  -spa &quot; + self.rx.filespa + \</span>
+    <span class="c">#             &quot; -conf &quot; + basename + &#39;/&#39; + self.fileconf</span>
+    <span class="c">#         if verbose:</span>
+    <span class="c">#             print chaine</span>
+    <span class="c">#         self.ctracing.append(chaine)</span>
+    <span class="c">#         aux = os.popen(chaine, &quot;r&quot;)</span>
+    <span class="c">#         recup = aux.read()</span>
+    <span class="c">#         #if verbose:</span>
+    <span class="c">#             #print recup</span>
+    <span class="c">#         aux.close()</span>
+    <span class="c">#         self.recup = recup</span>
+    <span class="c">#         aux = recup.splitlines()</span>
+    <span class="c">#         len_aux = recup.count(&quot;\n&quot;)</span>
+    <span class="c">#         #</span>
+    <span class="c">#         # set list of .tra files empty </span>
+    <span class="c">#         #filetra = []</span>
+    <span class="c">#         #for i in range(len_aux):</span>
+    <span class="c">#         #    if aux[i].find(&quot;filetraout&quot;) != -1:</span>
+    <span class="c">#         #        aux[i] = aux[i].replace(&#39;filetraout : &#39;, &#39;&#39;)</span>
+    <span class="c">#         #        filetra.append(pyu.getshort(aux[i]))</span>
+    <span class="c">#         #</span>
+    <span class="c">#         # Warning : this is a bad fix  </span>
+    <span class="c">#         #</span>
+    <span class="c">#         #for filename in filetra:</span>
+    <span class="c">#         for i in range(len_aux):</span>
+    <span class="c">#             if aux[i].find(&quot;filetraout&quot;) != -1:</span>
+    <span class="c">#                 aux[i] = aux[i].replace(&#39;filetraout : &#39;, &#39;&#39;)</span>
+    <span class="c">#                 self.dtra[itx][irx] = pyu.getshort(aux[i])</span>
+
+    <span class="c">#         #if verbose:</span>
+    <span class="c">#             #print filetra</span>
+    <span class="c">#         #self.filetra.insert(ntx,filetra)</span>
+    <span class="c">#         self.progress = 2</span>
+    <span class="c">#     else:</span>
+    <span class="c">#         print &quot;No launching available&quot;</span>
+
+    <span class="c">#     _outfilename = self.config.get(&#39;output&#39;, str(itx))</span>
+    <span class="c">#     outfilename = pyu.getlong(_outfilename, pstruc[&#39;DIRLCH&#39;])</span>
+    <span class="c">#     if irx in self.dtra[itx].keys():</span>
+    <span class="c">#         self.output[itx].set(&quot;trace&quot;, str(irx), self.dtra[itx][irx])</span>
+    <span class="c">#         fd = open(outfilename, &quot;w&quot;)</span>
+    <span class="c">#         self.output[itx].write(fd)</span>
+    <span class="c">#         fd.close()</span>
+
+    <span class="c"># def tratotud(self, itx, irx,verbose=False):</span>
+    <span class="c">#     &quot;&quot;&quot; convert tracing in .tud</span>
+
+    <span class="c">#     Parameters</span>
+    <span class="c">#     ----------</span>
+
+    <span class="c">#      itx : integer</span>
+    <span class="c">#         transmitter index</span>
+    <span class="c">#      irx : integer</span>
+    <span class="c">#         receiver index</span>
+
+    <span class="c">#     &quot;&quot;&quot;</span>
+    <span class="c">#     #</span>
+    <span class="c">#     # .. todo:: take value from the simulation class</span>
+    <span class="c">#     #</span>
+    <span class="c">#     nrmin = self.config.get(&quot;tud&quot;, &quot;nrmax&quot;)</span>
+    <span class="c">#     num = self.config.get(&quot;tud&quot;, &quot;num&quot;)</span>
+    <span class="c">#     purc = self.config.get(&quot;tud&quot;, &quot;purc&quot;)</span>
+    <span class="c">#     chaine = &quot;tratotud -tra &quot; + self.dtra[itx][irx] + \</span>
+    <span class="c">#         &quot; -min &quot; + nrmin + \</span>
+    <span class="c">#         &quot; -purc &quot; + purc + \</span>
+    <span class="c">#         &quot; -num &quot; + num +  \</span>
+    <span class="c">#         &quot; -conf &quot; + basename + &#39;/&#39; + self.fileconf</span>
+    <span class="c">#     print &#39;DEBUG &#39;+chaine</span>
+    <span class="c">#     self.ctratotud.append(chaine)</span>
+    <span class="c">#     if verbose:</span>
+    <span class="c">#         print chaine</span>
+    <span class="c">#     aux = os.popen(chaine, &quot;r&quot;)</span>
+    <span class="c">#     os.system(&#39;echo $?&#39;)</span>
+    <span class="c">#     recup = aux.read()</span>
+    <span class="c">#     aux.close()</span>
+    <span class="c">#     aux = recup.splitlines()</span>
+    <span class="c">#     if verbose:</span>
+    <span class="c">#         print aux</span>
+    <span class="c">#     len_aux = recup.count(&quot;\n&quot;)</span>
+    <span class="c">#     for i in range(len_aux):</span>
+    <span class="c">#         if aux[i].find(&quot;filetudout&quot;) != -1:</span>
+    <span class="c">#             aux[i] = aux[i].replace(&#39;filetudout : &#39;, &#39;&#39;)</span>
+    <span class="c">#             filename = pyu.getshort(aux[i])</span>
+    <span class="c">#             # fix</span>
+    <span class="c">#             #filename = rename(filename,itx,irx,&#39;output&#39;)</span>
+    <span class="c">#             if verbose:</span>
+    <span class="c">#                 print filename</span>
+    <span class="c">#             self.dtud[itx][irx] = filename</span>
+    <span class="c">#         elif aux[i].find(&quot;filetangout&quot;) != -1:</span>
+    <span class="c">#             aux[i] = aux[i].replace(&#39;filetangout : &#39;, &#39;&#39;)</span>
+    <span class="c">#             filename = pyu.getshort(aux[i])</span>
+    <span class="c">#             # fix</span>
+    <span class="c">#             #filename = rename(filename,itx,irx,&#39;output&#39;)</span>
+    <span class="c">#             if verbose:</span>
+    <span class="c">#                 print filename</span>
+    <span class="c">#             self.dtang[itx][irx] = filename</span>
+    <span class="c">#         elif aux[i].find(&quot;filerangout&quot;) != -1:</span>
+    <span class="c">#             aux[i] = aux[i].replace(&#39;filerangout : &#39;, &#39;&#39;)</span>
+    <span class="c">#             filename = pyu.getshort(aux[i])</span>
+    <span class="c">#             # fix</span>
+    <span class="c">#             #filename = rename(filename,itx,irx,&#39;output&#39;)</span>
+    <span class="c">#             if verbose:</span>
+    <span class="c">#                 print filename</span>
+    <span class="c">#             self.drang[itx][irx] = filename</span>
+
+    <span class="c">#     _outfilename = self.config.get(&#39;output&#39;, str(itx))</span>
+    <span class="c">#     outfilename = pyu.getlong(_outfilename, pstruc[&#39;DIRLCH&#39;])</span>
+    <span class="c">#     if irx in self.dtud[itx].keys():</span>
+    <span class="c">#         self.output[itx].set(&quot;tud&quot;, str(irx), self.dtud[itx][irx])</span>
+    <span class="c">#     if irx in self.dtang[itx].keys():</span>
+    <span class="c">#         self.output[itx].set(&quot;tang&quot;, str(irx), self.dtang[itx][irx])</span>
+    <span class="c">#     if irx in self.drang[itx].keys():</span>
+    <span class="c">#         self.output[itx].set(&quot;rang&quot;, str(irx), self.drang[itx][irx])</span>
+    <span class="c">#     fd = open(outfilename, &quot;w&quot;)</span>
+    <span class="c">#     try:</span>
+    <span class="c">#         self.output[itx].write(fd)</span>
+    <span class="c">#     except:</span>
+    <span class="c">#         raise NameError(&#39;error writing output ini file&#39;)</span>
+    <span class="c">#     fd.close()</span>
+
+
+    <span class="c"># def field(self, itx, irx,verbose=False):</span>
+    <span class="c">#     &quot;&quot;&quot; field calculation for Tx Rx using evalfield command</span>
+
+    <span class="c">#     Parameters</span>
+    <span class="c">#     ----------</span>
+
+    <span class="c">#     ntx : integer</span>
+    <span class="c">#              launching index</span>
+    <span class="c">#     nrx : integer</span>
+    <span class="c">#              tracing index</span>
+    <span class="c">#     verbose : Boolean</span>
+            
+
+    <span class="c">#     &quot;&quot;&quot;</span>
+    <span class="c">#     chaine = &quot;evalfield -tud &quot; + self.dtud[itx][irx] + \</span>
+    <span class="c">#              &quot; -slab &quot; + self.fileslab + \</span>
+    <span class="c">#              &quot; -mat &quot; + self.filemat + \</span>
+    <span class="c">#              &quot; -freq &quot; + self.filefreq + \</span>
+    <span class="c">#              &quot; -conf &quot; + basename + &#39;/&#39; + self.fileconf</span>
+
+    <span class="c">#     self.cfield.append(chaine)</span>
+    <span class="c">#     if verbose:</span>
+    <span class="c">#         print chaine</span>
+    <span class="c">#     os.system(chaine)</span>
+    <span class="c">#     aux = os.popen(chaine, &quot;r&quot;)</span>
+    <span class="c">#     recup = aux.read()</span>
+    <span class="c">#     aux.close()</span>
+    <span class="c">#     aux = recup.splitlines()</span>
+    <span class="c">#     len_aux = recup.count(&quot;\n&quot;)</span>
+    <span class="c">#     for i in range(len_aux):</span>
+    <span class="c">#         if aux[i].find(&quot;filefieldout&quot;) != -1:</span>
+    <span class="c">#             aux[i] = aux[i].replace(&#39;filefieldout : &#39;, &#39;&#39;)</span>
+    <span class="c">#             filename = pyu.getshort(aux[i]).replace(&#39; &#39;, &#39;&#39;)</span>
+    <span class="c">#             # fix</span>
+    <span class="c">#             # filename = rename(filename,itx,irx,&#39;output&#39;)</span>
+    <span class="c">#             self.dfield[itx][irx] = filename</span>
+    <span class="c">#         elif aux[i].find(&quot;filetaukout&quot;) != -1:</span>
+    <span class="c">#             aux[i] = aux[i].replace(&#39;filetaukout : &#39;, &#39;&#39;)</span>
+    <span class="c">#             filename = pyu.getshort(aux[i]).replace(&#39; &#39;, &#39;&#39;)</span>
+    <span class="c">#             # fix</span>
+    <span class="c">#             # filename = rename(filename,itx,irx,&#39;output&#39;)</span>
+    <span class="c">#             self.dtauk[itx][irx] = filename</span>
+    <span class="c">#     _outfilename = self.config.get(&#39;output&#39;, str(itx))</span>
+    <span class="c">#     outfilename = pyu.getlong(_outfilename, pstruc[&#39;DIRLCH&#39;])</span>
+    <span class="c">#     if irx in self.dtauk[itx].keys():</span>
+    <span class="c">#         self.output[itx].set(&quot;tauk&quot;, str(irx), self.dtauk[itx][irx])</span>
+    <span class="c">#     if irx in self.dfield[itx].keys():</span>
+    <span class="c">#         self.output[itx].set(&quot;field&quot;, str(irx), self.dfield[itx][irx])</span>
+    <span class="c">#     fd = open(outfilename, &quot;w&quot;)</span>
+    <span class="c">#     try:</span>
+    <span class="c">#         self.output[itx].write(fd)</span>
+    <span class="c">#     except:</span>
+    <span class="c">#         raise NameError(&#39;error writing output ini file&#39;)</span>
+    <span class="c">#     fd.close()</span>
+
+
+    <span class="c"># def run2(self, link, cirforce=True,verbose=False,cutoff=4):</span>
+    <span class="c">#     &quot;&quot;&quot; run the simulation for 1 tx and a set of rx</span>
+
+    <span class="c">#         Parameters</span>
+    <span class="c">#         ----------</span>
+
+    <span class="c">#         itx      : tx index</span>
+    <span class="c">#         srx      : list of rx index</span>
+    <span class="c">#         cirforce : boolean</span>
+
+    <span class="c">#         Warnings</span>
+    <span class="c">#         --------</span>
+
+    <span class="c">#         index point start with 1</span>
+
+    <span class="c">#         Example</span>
+    <span class="c">#         -------</span>
+
+    <span class="c">#         &gt;&gt;&gt; from pylayers.simul.simulem import *</span>
+    <span class="c">#         &gt;&gt;&gt; itx = 1</span>
+    <span class="c">#         &gt;&gt;&gt; srx = [1,2,3]</span>
+    <span class="c">#         &gt;&gt;&gt; S   = Simul()</span>
+    <span class="c">#         &gt;&gt;&gt; S.load(&#39;where2.ini&#39;)</span>
+    <span class="c">#         &gt;&gt;&gt; out = S.run(itx,srx)</span>
+
+
+    <span class="c">#     &quot;&quot;&quot;</span>
+
+    <span class="c">#     prefix = self.filesimul.replace(&#39;.ini&#39;, &#39;&#39;) </span>
+    <span class="c">#     #</span>
+    <span class="c">#     #</span>
+    <span class="c">#     #</span>
+    <span class="c">#     lsig = []</span>
+    <span class="c">#     for k,il  in enumerate(link):</span>
+    <span class="c">#         tx = self.tx.points[il[0]]</span>
+    <span class="c">#         rx = self.rx.points[il[1]]</span>
+
+    <span class="c">#         ctx = S.L.pt2cy(tx)</span>
+    <span class="c">#         crx = S.L.pt2cy(rx)</span>
+            
+    <span class="c">#         _filecir = prefix +&#39;-cir-&#39;+str(k)+&#39;-&#39;+str(link)+&#39;-&#39;+str((ctx,crx))</span>
+    <span class="c">#         D = {}</span>
+    <span class="c">#         D[&#39;Tx&#39;] = tx</span>
+    <span class="c">#         D[&#39;Rx&#39;] = rx</span>
+
+    <span class="c">#         if (ctx,crx) not in lsig:</span>
+    <span class="c">#             Si  = signature.Signatures(S.L,ctx,crx)</span>
+    <span class="c">#             #</span>
+    <span class="c">#             # Change the run number depending on</span>
+    <span class="c">#             # the algorithm used for signature determination</span>
+    <span class="c">#             #</span>
+    <span class="c">#             Si.run4(cutoff=cutoff)</span>
+    <span class="c">#             # keep track and save signature</span>
+    <span class="c">#             _filesir = prefix + &#39;-sig-&#39;+str((ctx,crx))</span>
+    <span class="c">#             fd = open(filesig,&#39;w&#39;)</span>
+    <span class="c">#             pickle.dump(Si,filesig)</span>
+    <span class="c">#             fd.close()</span>
+    <span class="c">#             lsig.appeng((ctx,crx))</span>
+    <span class="c">#             Si.dump(S.L,(ctx,crx))</span>
+
+
+
+    <span class="c">#         r2d = Si.rays(tx,rx)</span>
+    <span class="c">#         r2d.show(S.L)</span>
+    
+    <span class="c">#         r3d = r2d.to3D()</span>
+    <span class="c">#         r3d.locbas(S.L)</span>
+    <span class="c">#         r3d.fillinter(S.L)</span>
+
+    <span class="c">#         Ct  = r3d.eval(S.freq)</span>
+    <span class="c">#         sco = Ct.prop2tran(a=&#39;theta&#39;,b=&#39;phi&#39;)</span>
+    <span class="c">#         sca = Ct.prop2tran(a=S.tx.A,b=S.rx.A)</span>
+
+    <span class="c">#         ciro = sco.applywavB(self.wav.sfg)</span>
+    <span class="c">#         cira = sca.applywavB(self.wav.sfg)</span>
+
+    <span class="c">#         D[&#39;to&#39;] = ciro.x</span>
+    <span class="c">#         D[&#39;ciro&#39;] = ciro.y</span>
+    <span class="c">#         D[&#39;t&#39;] = cira.x</span>
+    <span class="c">#         D[&#39;cir&#39;] = cira.y</span>
+
+    <span class="c">#         filename = pyu.getlong(_filename, cirdir)</span>
+    <span class="c">#         spio.savemat(filename, D)</span>
+            
+    <span class="c"># def run(self, itx, srx=[], cirforce=True,verbose=False):</span>
+    <span class="c">#     &quot;&quot;&quot; run the simulation for 1 tx and a set of rx</span>
+
+    <span class="c">#         Parameters</span>
+    <span class="c">#         ----------</span>
+
+    <span class="c">#         itx      : tx index</span>
+    <span class="c">#         srx      : list of rx index</span>
+    <span class="c">#         cirforce : boolean</span>
+
+    <span class="c">#         Warnings</span>
+    <span class="c">#         --------</span>
+
+    <span class="c">#         index point start with 1</span>
+
+    <span class="c">#         Example</span>
+    <span class="c">#         -------</span>
+
+    <span class="c">#         &gt;&gt;&gt; from pylayers.simul.simulem import *</span>
+    <span class="c">#         &gt;&gt;&gt; itx = 1</span>
+    <span class="c">#         &gt;&gt;&gt; srx = [1,2,3]</span>
+    <span class="c">#         &gt;&gt;&gt; S   = Simul()</span>
+    <span class="c">#         &gt;&gt;&gt; S.load(&#39;where2.ini&#39;)</span>
+    <span class="c">#         &gt;&gt;&gt; out = S.run(itx,srx)</span>
+
+
+    <span class="c">#     &quot;&quot;&quot;</span>
+
+    <span class="c">#     self.updcfg()</span>
+    <span class="c">#     #t0 = time.clock()</span>
+    <span class="c">#     if type(srx) == int:</span>
+    <span class="c">#         srx = [srx]</span>
+
+    <span class="c">#     if srx == []:</span>
+    <span class="c">#         srx = self.rx.points.keys()</span>
+
+    <span class="c">#     if itx not in self.dlch.keys():</span>
+    <span class="c">#         # launching itx does not exist</span>
+    <span class="c">#         self.tx.filespa = &#39;tx&#39; + str(itx) + &#39;.spa&#39;</span>
+    <span class="c">#         point = self.tx.points[itx]</span>
+    <span class="c">#         spafile(self.tx.filespa, point, pstruc[&#39;DIRLCH&#39;])</span>
+    <span class="c">#         if verbose:</span>
+    <span class="c">#             print &quot;---------------&quot;</span>
+    <span class="c">#             print &quot;Start Launching Tx : &quot; + str(itx)</span>
+    <span class="c">#             print &quot;---------------&quot;</span>
+    <span class="c">#         self.launching(itx)</span>
+
+    <span class="c">#     #</span>
+    <span class="c">#     # Loop over a set of rx</span>
+    <span class="c">#     #</span>
+    <span class="c">#     #pdb.set_trace()</span>
+    <span class="c">#     for irx in srx:</span>
+    <span class="c">#         tracingabort = False</span>
+    <span class="c">#         if irx not in self.dtra[itx].keys():</span>
+    <span class="c">#             self.rx.filespa = &#39;rx&#39; + str(irx) + &#39;.spa&#39;</span>
+    <span class="c">#             point = self.rx.points[irx]</span>
+    <span class="c">#             spafile(self.rx.filespa, point, pstruc[&#39;DIRTRA&#39;])</span>
+    <span class="c">#             if verbose:</span>
+    <span class="c">#                 print &quot;--------------------&quot;</span>
+    <span class="c">#                 print &quot;Start tracing  Rx : &quot; + str(irx)</span>
+    <span class="c">#                 print &quot;--------------------&quot;</span>
+    <span class="c">#             tracingabort = self.tracing(itx, irx,verbose)</span>
+
+    <span class="c">#         if not tracingabort:</span>
+    <span class="c">#             if irx not in self.dtud[itx].keys():</span>
+    <span class="c">#                 if verbose:</span>
+    <span class="c">#                     print &quot;---------------&quot;</span>
+    <span class="c">#                     print &quot;Start tratotud &quot;, irx</span>
+    <span class="c">#                     print &quot;---------------&quot;</span>
+
+    <span class="c">#                 self.tratotud(itx, irx,verbose)</span>
+    <span class="c">#             if irx not in self.dfield[itx].keys():</span>
+    <span class="c">#                 if verbose:</span>
+    <span class="c">#                     print &quot;---------------&quot;</span>
+    <span class="c">#                     print &quot;Start field  &quot;, irx</span>
+    <span class="c">#                     print &quot;---------------&quot;</span>
+    <span class="c">#                 self.field(itx, irx,verbose)</span>
+
+    <span class="c">#             if ((irx not in self.dcir[itx].keys()) | cirforce):</span>
+    <span class="c">#                 if verbose:</span>
+    <span class="c">#                     print &quot;---------------&quot;</span>
+    <span class="c">#                     print &quot;Start cir      &quot;, irx</span>
+    <span class="c">#                     print &quot;---------------&quot;</span>
+    <span class="c">#                 if &quot;waveform&quot; in self.config.sections():</span>
+    <span class="c">#                     par = self.config.items(&quot;waveform&quot;)</span>
+    <span class="c">#                     self.wparam = {}</span>
+    <span class="c">#                     for k in range(len(par)):</span>
+    <span class="c">#                         key = par[k][0]</span>
+    <span class="c">#                         val = par[k][1]</span>
+    <span class="c">#                         if key == &quot;band&quot;:</span>
+    <span class="c">#                             self.wparam[key] = float(val)</span>
+    <span class="c">#                         if key == &quot;fcGHz&quot;:</span>
+    <span class="c">#                             self.wparam[key] = float(val)</span>
+    <span class="c">#                         if key == &quot;feGHz&quot;:</span>
+    <span class="c">#                             self.wparam[key] = float(val)</span>
+    <span class="c">#                         if key == &quot;threshdB&quot;:</span>
+    <span class="c">#                             self.wparam[key] = float(val)</span>
+    <span class="c">#                         if key == &quot;twns&quot;:</span>
+    <span class="c">#                             self.wparam[key] = float(val)</span>
+    <span class="c">#                         if key == &quot;typ&quot;:</span>
+    <span class="c">#                             self.wparam[key] = val</span>
+
+    <span class="c">#                     self.wav = wvf.Waveform(**self.wparam)</span>
+    <span class="c">#                     alpha = np.sqrt(1. / 30.0)</span>
+    <span class="c">#                     print &quot;run debug &quot;,itx,irx</span>
+    <span class="c">#                     self.cir([itx], [irx],</span>
+    <span class="c">#                              store_level=16 + 8 + 4 + 2 + 1, alpha=alpha)</span>
+    <span class="c">#                 else:</span>
+    <span class="c">#                     raise(&quot;Error no waveform in the config file &quot;)</span>
+    <span class="c">#                     return(False)</span>
+
+    <span class="c">#     return(True)</span>
+    <span class="c"># def gt(self, itx, irx):</span>
+    <span class="c">#     &quot;&quot;&quot; gtud</span>
+    <span class="c">#     &quot;&quot;&quot;</span>
+    <span class="c">#     gt = GrRayTud()</span>
+    <span class="c">#     filetud = self.dtud[itx][irx]</span>
+    <span class="c">#     filetang = self.dtang[itx][irx]</span>
+    <span class="c">#     filerang = self.drang[itx][irx]</span>
+    <span class="c">#     gt.load(filetud, filetang, filerang, self.sl)</span>
+    <span class="c">#     return(gt)</span>
+
+    <span class="c"># def delay(self, itx, irx):</span>
+    <span class="c">#     &quot;&quot;&quot;</span>
+    <span class="c">#         calculate LOS link delay</span>
+
+    <span class="c">#         Parameters</span>
+    <span class="c">#         ----------</span>
+
+    <span class="c">#         itx</span>
+    <span class="c">#         irx</span>
+
+    <span class="c">#     &quot;&quot;&quot;</span>
+    <span class="c">#     tx = self.tx.points[itx]</span>
+    <span class="c">#     rx = self.rx.points[irx]</span>
+    <span class="c">#     df = tx - rx</span>
+    <span class="c">#     dist = np.sqrt(np.dot(df, df))</span>
+    <span class="c">#     return(dist / 0.3)</span>
+
+    <span class="c"># def gr(self, itx, irx):</span>
+    <span class="c">#     &quot;&quot;&quot;</span>
+    <span class="c">#        return a  cluster or fays from link itx-irx</span>
+    <span class="c">#     &quot;&quot;&quot;</span>
+    <span class="c">#     gr = GrRay3D()</span>
+    <span class="c">#     gr.load(self.dtra[itx][irx], self.L)</span>
+    <span class="c">#     return(gr)</span>
+
+    <span class="c"># def VC(self, itx, irx):</span>
+    <span class="c">#     &quot;&quot;&quot;</span>
+    <span class="c">#         return Vect Channel for link itx irx</span>
+    <span class="c">#     &quot;&quot;&quot;</span>
+
+    <span class="c">#     VCl = channelc.VectChannel(self, itx, irx, False)</span>
+    <span class="c">#     return(VCl)</span>
+
+    <span class="c"># def cir(self, itx, irx, store_level=0, alpha=1.0, ext=&#39;&#39;, rep=pstruc[&#39;DIRCIR&#39;],format=&#39;a&#39;):</span>
+    <span class="c">#     &quot;&quot;&quot;</span>
+    <span class="c">#     Calculate a set of channel impulse responses</span>
+
+    <span class="c">#     Parameters</span>
+    <span class="c">#     ----------</span>
+    <span class="c">#         itx : transmitter index iterable set</span>
+    <span class="c">#         irx : receiver index iterable set</span>
+    <span class="c">#         wav : applied waveform (st,sf,sfg)</span>
+    <span class="c">#             this waveform includes the gamma factor</span>
+    <span class="c">#         store_level : binary mask</span>
+    <span class="c">#                          bit  0 : save CVC</span>
+    <span class="c">#                          bit  1 : save CVCO</span>
+    <span class="c">#                          bit  2 : save CSCA</span>
+    <span class="c">#                          bit  3 : save CIRo</span>
+    <span class="c">#                          bit  4 : save CIRa</span>
+    <span class="c">#         alpha : normalization factor</span>
+    <span class="c">#         ext :</span>
+    <span class="c">#         rep :</span>
+    <span class="c">#         format : string</span>
+    <span class="c">#             a : with antenna</span>
+    <span class="c">#             o : omnidirectionnal</span>
+    <span class="c">#      Notes</span>
+    <span class="c">#      -----</span>
+    <span class="c">#      A factor ::math`\\sqrt{1}{30}` is necessary when applying the antenna</span>
+
+    <span class="c">#      Examples</span>
+    <span class="c">#      --------</span>
+
+    <span class="c">#     &quot;&quot;&quot;</span>
+    <span class="c">#     if type(itx) == int:</span>
+    <span class="c">#         itx = [itx]</span>
+
+    <span class="c">#     if type(irx) == int:</span>
+    <span class="c">#         irx = [irx]</span>
+
+    <span class="c">#     if (store_level) &amp; 1 == 1:</span>
+    <span class="c">#         self.CVC = []</span>
+    <span class="c">#     if (store_level) &amp; 2 == 2:</span>
+    <span class="c">#         self.CSCO = []</span>
+    <span class="c">#     if (store_level) &amp; 4 == 4:</span>
+    <span class="c">#         self.CSCA = []</span>
+    <span class="c">#     if (store_level) &amp; 8 == 8:</span>
+    <span class="c">#         self.CIRo = []</span>
+    <span class="c">#     if (store_level) &amp; 16 == 16:</span>
+    <span class="c">#         self.CIRa = []</span>
+    <span class="c">#     racine = self.filesimul.replace(&#39;.ini&#39;, &#39;&#39;) + &#39;cir-&#39;</span>
+    <span class="c">#     for l in itx:</span>
+    <span class="c">#         # create cir entry in outputTx if required</span>
+    <span class="c">#         _outfilename = self.config.get(&#39;output&#39;, str(l))</span>
+    <span class="c">#         outfilename = pyu.getlong(_outfilename, pstruc[&#39;DIRLCH&#39;])</span>
+    <span class="c">#         if &quot;cir&quot; not in  self.output[l].sections():</span>
+    <span class="c">#             self.output[l].add_section(&quot;cir&quot;)</span>
+
+    <span class="c">#         CVC = []</span>
+    <span class="c">#         CSCO = []</span>
+    <span class="c">#         CSCA = []</span>
+    <span class="c">#         CIRo = []</span>
+    <span class="c">#         CIRa = []</span>
+    <span class="c">#         for k in irx:</span>
+    <span class="c">#             D = {}</span>
+    <span class="c">#             D[&#39;Tx&#39;] = self.tx.points[l]</span>
+    <span class="c">#             if ext == &#39;&#39;:</span>
+    <span class="c">#                 if (self.tx.name == &#39;&#39;) and (self.rx.name == &#39;&#39;):</span>
+    <span class="c">#                     txrx = &#39;tx&#39; + str(&#39;%0.3d&#39; % l) + &#39;-rx&#39; + str(&#39;%0.3d&#39; % k)</span>
+    <span class="c">#                 else :</span>
+    <span class="c">#                     txrx = self.tx.name +&#39;-&#39; + self.rx.name + str(&#39;-p%0.3d&#39; % k)</span>
+    <span class="c">#             else:</span>
+    <span class="c">#                 txrx = ext</span>
+
+    <span class="c">#             _filename = racine + txrx</span>
+    <span class="c">#             self.dcir[l][k] = _filename</span>
+    <span class="c">#             if self.tx.name == &#39;&#39;:</span>
+    <span class="c">#                 rep = rep + &#39;/Tx&#39; + str(&#39;%0.3d&#39; % l)</span>
+    <span class="c">#             else :</span>
+    <span class="c">#                 rep = rep +&#39;/&#39; + self.tx.name</span>
+    <span class="c">#             if not os.path.isdir(basename+&#39;/&#39;+rep):</span>
+    <span class="c">#                 try:</span>
+    <span class="c">#                     os.mkdir(basename+&#39;/&#39;+rep)</span>
+    <span class="c">#                 except:</span>
+    <span class="c">#                     raise NameError(basename+&#39;/&#39;+rep)</span>
+
+
+    <span class="c">#             filename = pyu.getlong(_filename, rep)</span>
+    <span class="c">#             VCl = channelc.VectChannel(self, l, k, False)</span>
+    <span class="c">#             CVC.append(VCl)</span>
+    <span class="c">#             if not VCl.fail:</span>
+    <span class="c">#                 #SCO = VCl.vec2scal()</span>
+    <span class="c">#                 SCO = VCl.prop2tran(a=&#39;theta&#39;,b=&#39;theta&#39;)</span>
+    <span class="c">#                 CSCO.append(SCO)</span>
+    <span class="c">#                 #SCA = VCl.vec2scalA(self.tx.A, self.rx.A, alpha=alpha)</span>
+    <span class="c">#                 #</span>
+    <span class="c">#                 #  Apply the apha factor on waveform </span>
+    <span class="c">#                 #</span>
+    <span class="c">#                 SCA = VCl.prop2tran(a=self.tx.A,b=self.rx.A)</span>
+    <span class="c">#                 CSCA.append(SCA)</span>
+    <span class="c">#                 ciro = SCO.applywavB(self.wav.sfg)</span>
+    <span class="c">#                 CIRo.append(ciro)</span>
+    <span class="c">#                 cira = SCA.applywavB(self.wav.sfg)</span>
+    <span class="c">#                 CIRa.append(cira)</span>
+    <span class="c">#                 D[&#39;Rx&#39; + str(k)] = self.rx.points[int(k)]</span>
+    <span class="c">#                 if &#39;o&#39; in format:</span>
+    <span class="c">#                     D[&#39;to&#39;] = ciro.x</span>
+    <span class="c">#                     D[&#39;ciro&#39;] = ciro.y</span>
+    <span class="c">#                 if &#39;a&#39; in format:</span>
+    <span class="c">#                     D[&#39;t&#39;] = cira.x</span>
+    <span class="c">#                     D[&#39;cir&#39;] = cira.y</span>
+    <span class="c">#                 spio.savemat(filename, D)</span>
+    <span class="c">#                 self.output[l].set(&quot;cir&quot;, str(k), self.dcir[l][k])</span>
+    <span class="c">#                 fd = open(outfilename, &quot;w&quot;)</span>
+    <span class="c">#                 self.output[l].write(fd)</span>
+    <span class="c">#                 fd.close()</span>
+    <span class="c">#             else:</span>
+    <span class="c">#                 CSCO.append([])</span>
+    <span class="c">#                 CSCA.append([])</span>
+    <span class="c">#                 CIRo.append([])</span>
+    <span class="c">#                 CIRa.append([])</span>
+
+    <span class="c">#         if (store_level) &amp; 1 == 1:</span>
+    <span class="c">#             self.CVC.append(CVC)</span>
+    <span class="c">#             self.CSCO.append(CSCO)</span>
+    <span class="c">#         if (store_level) &amp; 4 == 4:</span>
+    <span class="c">#             self.CSCA.append(CSCA)</span>
+    <span class="c">#         if (store_level) &amp; 8 == 8:</span>
+    <span class="c">#             self.CIRo.append(CIRo)</span>
+    <span class="c">#         if (store_level) &amp; 16 == 16:</span>
+    <span class="c">#             self.CIRa.append(CIRa)</span>
+
+</div>
+<span class="k">if</span> <span class="p">(</span><span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">):</span>
+    <span class="c">#plt.ion()</span>
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 06, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

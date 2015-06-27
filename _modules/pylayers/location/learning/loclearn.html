@@ -1,0 +1,344 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.location.learning.loclearn &mdash; Python 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/sidebar.js"></script>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="top" title="Python 1 documentation" href="../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../index.html" />
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+  </head>
+  <body>
+
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="../../../../index.html">
+            <img src="../../../../_static/pylayers.png" alt="Logo"/>
+          </a>
+          </p><div class="navbar">
+          <ul>
+            <li><a href="../../../../download.html">Download</a></li>
+            <li><a href="../../../../notebook/TOC.html">User Guide</a></li>
+            <li><a href="../../../../modules/pylayers.html">Reference</a></li>
+       </ul>
+
+<div class="search_form">
+
+<div id="cse" style="width: 100%;"></div>
+<script src="http://www.google.com/jsapi" type="text/javascript"></script>
+<script type="text/javascript">
+  google.load('search', '1', {language : 'en'});
+  google.setOnLoadCallback(function() {
+    var customSearchControl = new google.search.CustomSearchControl('016639176250731907682:tjtqbvtvij0');
+    customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
+    var options = new google.search.DrawOptions();
+    options.setAutoComplete(true);
+    customSearchControl.draw('cse', options);
+  }, true);
+</script>
+
+</div>
+</div> <!-- end navbar --></div>
+    </div>
+
+    <div class="content-wrapper">
+
+      <div class="sphinxsidebar">
+	<div class="sphinxsidebarwrapper">
+	  <div class="rel">
+	   
+	<!-- rellinks[1:] is an ugly hack to avoid link to module
+	    index  -->
+	<div class="rellink">
+	<a href="../../../../py-modindex.html" title="Python Module Index"
+	    >Modules
+	    <br>
+	    <span class="smallrellink">
+	    Python Module In...
+	    </span>
+	    <span class="hiddenrellink">
+	    Python Module Index
+	    </span>
+	    
+	    </a>
+	</div>
+	<!-- Ad a link to the 'up' page -->
+	<div class="spacer">
+	&nbsp;
+	</div>
+	<div class="rellink">
+	<a href="../../../index.html" title="Module code" >
+	Up
+	<br>
+	<span class="smallrellink">
+	Module code
+	</span>
+	<span class="hiddenrellink">
+	Module code
+	</span>
+	
+	</a>
+	</div>
+    </div>
+    <p style="text-align: center; background-color: #BFFFFF">This documentation is
+
+    for Python <strong>version 1</strong>
+    &mdash; <a href="https://github.com/pylayers/pylayers/archive/master.zip">Other versions</a></p>
+    
+    <h3>Citing</h3>
+    <p>If you use the software, please consider
+    <a href="../../../../about.html#citing-pylayers">citing pylayers</a>.</p>
+    <h3>This page</h3>
+	
+    
+    </div>
+	  </div>
+
+
+      <div class="content">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.location.learning.loclearn</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/python</span>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="c">#</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">.. currentmodule:: pylayers.location.learning.loclearn</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    ffnetwork</span>
+<span class="sd">    knn_learn</span>
+<span class="sd">    ffann_learn</span>
+<span class="sd">    svm_learn</span>
+<span class="sd">    lreg_learn</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
+<span class="kn">import</span> <span class="nn">pylab</span> <span class="kn">as</span> <span class="nn">pl</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="kn">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="c">#import interval</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">NX</span>
+<span class="kn">import</span> <span class="nn">ffnet</span>  <span class="c"># ffnet, mlgraph, savenet, loadnet, exportnet</span>
+<span class="kn">from</span> <span class="nn">numpy.random</span> <span class="kn">import</span> <span class="n">RandomState</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">cycle</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">linear_model</span> <span class="k">as</span> <span class="n">lm</span>  <span class="c"># LogisticRegression, SGDClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">svm</span>  <span class="c"># SVC, NuSVC, LinearSVC, SVR</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">neighbors</span> <span class="k">as</span> <span class="n">ngb</span>  <span class="c"># KNeighborsClassifier, KNeighborsRegressor</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">mixture</span> <span class="k">as</span> <span class="n">mix</span>  <span class="c"># GMM</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">cluster</span> <span class="k">as</span> <span class="n">clus</span>  <span class="c"># KMeans, MeanShift, AffinityPropagation, SpectralClustering</span>
+
+
+<div class="viewcode-block" id="ffnetwork"><a class="viewcode-back" href="../../../../modules/generated/pylayers.location.learning.loclearn.ffnetwork.html#pylayers.location.learning.loclearn.ffnetwork">[docs]</a><span class="k">def</span> <span class="nf">ffnetwork</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Define a feedforward neural network</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    inputs : integer</span>
+<span class="sd">        default = 1</span>
+<span class="sd">        defines the length of input vector</span>
+<span class="sd">    layers : integer</span>
+<span class="sd">        default = 1</span>
+<span class="sd">        defines the number of layers</span>
+<span class="sd">    outputs : integer</span>
+<span class="sd">        default = 1</span>
+<span class="sd">        defines the length of output vector</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    net : Feed-forward neural network</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">conec</span> <span class="o">=</span> <span class="n">ffnet</span><span class="o">.</span><span class="n">mlgraph</span><span class="p">((</span><span class="n">inputs</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="n">outputs</span><span class="p">),</span> <span class="n">biases</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">net</span> <span class="o">=</span> <span class="n">ffnet</span><span class="o">.</span><span class="n">ffnet</span><span class="p">(</span><span class="n">conec</span><span class="p">)</span>
+    <span class="sd">&#39;&#39;&#39;NX.draw_graphviz(net.graph, prog=&#39;dot&#39;)</span>
+<span class="sd">    plt.show()&#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">net</span>
+
+</div>
+<div class="viewcode-block" id="knn_learn"><a class="viewcode-back" href="../../../../modules/generated/pylayers.location.learning.loclearn.knn_learn.html#pylayers.location.learning.loclearn.knn_learn">[docs]</a><span class="k">def</span> <span class="nf">knn_learn</span><span class="p">(</span><span class="n">nneighbors</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">data_train</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">target_train</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">data_test</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    estimate position using the K neareast neighbors (KNN) technique</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    nneighbors : int</span>
+<span class="sd">        default = 1</span>
+<span class="sd">    data_train : numpy.ndarray</span>
+<span class="sd">        default = array([])</span>
+<span class="sd">    target_train : numpy.ndarray</span>
+<span class="sd">        default = array([])</span>
+<span class="sd">    data_test : numpy.ndarray</span>
+<span class="sd">        default = array([])</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    targets : numpy.ndarray</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">clf</span> <span class="o">=</span> <span class="n">ngb</span><span class="o">.</span><span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">nneighbors</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data_train</span><span class="p">,</span> <span class="n">target_train</span><span class="p">)</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data_test</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">targets</span>
+
+</div>
+<div class="viewcode-block" id="ffann_learn"><a class="viewcode-back" href="../../../../modules/generated/pylayers.location.learning.loclearn.ffann_learn.html#pylayers.location.learning.loclearn.ffann_learn">[docs]</a><span class="k">def</span> <span class="nf">ffann_learn</span><span class="p">(</span><span class="n">layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">data_train</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">target_train</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">data_test</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    estimate position using the feed-forward ANN technique</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    layers : int</span>
+<span class="sd">        default = 1</span>
+<span class="sd">    data_train : numpy.ndarray</span>
+<span class="sd">        default = array([])</span>
+<span class="sd">    target_train : numpy.ndarray</span>
+<span class="sd">        default = array([])</span>
+<span class="sd">    data_test : numpy.ndarray</span>
+<span class="sd">        default = array([])</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    targets : numpy.ndarray</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">net</span> <span class="o">=</span> <span class="n">ffnetwork</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data_train</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span> <span class="n">layers</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data_train</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">target_train</span> <span class="o">=</span> <span class="n">target_train</span> <span class="o">*</span> <span class="mf">1.0</span>
+    <span class="n">net</span><span class="o">.</span><span class="n">train_tnc</span><span class="p">(</span><span class="n">data_train</span><span class="p">,</span> <span class="n">target_train</span><span class="p">)</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">data_test</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">targets</span>
+</div>
+<div class="viewcode-block" id="svm_learn"><a class="viewcode-back" href="../../../../modules/generated/pylayers.location.learning.loclearn.svm_learn.html#pylayers.location.learning.loclearn.svm_learn">[docs]</a><span class="k">def</span> <span class="nf">svm_learn</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s">&#39;linear&#39;</span><span class="p">,</span> <span class="n">data_train</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">target_train</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">data_test</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    estimate position using the svm techniques</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    kernel : string</span>
+<span class="sd">        default = &#39;linear&#39;</span>
+<span class="sd">        kernel can be &#39;linear&#39;, &#39;poly&#39;, &#39;rbf&#39;, &#39;sigmoid&#39;</span>
+<span class="sd">    data_train : numpy.ndarray</span>
+<span class="sd">        default = array([])</span>
+<span class="sd">    target_train : numpy.ndarray</span>
+<span class="sd">        default = array([])</span>
+<span class="sd">    data_test : numpy.ndarray</span>
+<span class="sd">        default = array([])</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    targets : numpy.ndarray</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">clf</span> <span class="o">=</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data_train</span><span class="p">,</span> <span class="n">target_train</span><span class="p">)</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data_test</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">targets</span>
+
+</div>
+<div class="viewcode-block" id="lreg_learn"><a class="viewcode-back" href="../../../../modules/generated/pylayers.location.learning.loclearn.lreg_learn.html#pylayers.location.learning.loclearn.lreg_learn">[docs]</a><span class="k">def</span> <span class="nf">lreg_learn</span><span class="p">(</span><span class="n">data_train</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">target_train</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">data_test</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    estimate position using logistic regression</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    data_train : numpy.ndarray</span>
+<span class="sd">        default = array([])</span>
+<span class="sd">    target_train : numpy.ndarray</span>
+<span class="sd">        default = array([])</span>
+<span class="sd">    data_test : numpy.ndarray</span>
+<span class="sd">        default = array([])</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    targets : numpy.ndarray</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">clf</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">LogisticRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data_train</span><span class="p">,</span> <span class="n">target_train</span><span class="p">)</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data_test</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">targets</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+  
+
+    <div class="footer">
+        &copy; 2015, PyLayers developer team.
+      Last updated on juin 27, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+    </div>
+     <div class="rel">
+    
+    <div class="buttonPrevious">
+      <a href="../../../../py-modindex.html">
+        Previous
+      </a>  
+    </div>
+    
+     </div>
+     <script type="text/javascript">
+       $("div.buttonNext, div.buttonPrevious").hover(
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           },
+           function () {
+               $(this).css('background-color', '#AFFFFF');
+           }
+       );
+     </script>
+  </body>
+</html>
