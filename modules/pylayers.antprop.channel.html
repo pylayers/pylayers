@@ -264,6 +264,7 @@
 <dt id="pylayers.antprop.channel.Ctilde.choose">
 <tt class="descname">choose</tt><big>(</big><big>)</big><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.choose" title="Permalink to this definition">¶</a></dt>
 <dd><p>Choose a field file in tud directory</p>
+<p>DEPRECATED</p>
 </dd></dl>
 
 <dl class="method">
@@ -389,21 +390,17 @@ axis 1 : frequency</dd>
 <dt id="pylayers.antprop.channel.Ctilde.load">
 <tt class="descname">load</tt><big>(</big><em>filefield</em>, <em>transpose=False</em><big>)</big><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>load a Ctilde from a .field file</p>
-<p>Load the three files .tauk .tang .rang which contain respectively
-delay , angle of departure , angle of arrival.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filefield</strong> : string</p>
-<p><strong>transpose</strong> : boolean</p>
+<blockquote>
+<div>Load the three files .tauk .tang .rang which contain respectively
+delay , angle of departure , angle of arrival.</div></blockquote>
+<dl class="docutils">
+<dt>maicher</dt>
+<dd><p class="first">filefield  : string
+transpose  : boolean</p>
 <blockquote class="last">
-<div><p>default False</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<div>default False</div></blockquote>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.channel</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
@@ -472,6 +469,24 @@ delay , angle of departure , angle of arrival.</p>
 <blockquote class="last">
 <div><p>depends on self.islocal boolean value</p>
 </div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.los">
+<tt class="descname">los</tt><big>(</big><em>pa=array([0</em>, <em>0</em>, <em>0])</em>, <em>pb=array([3</em>, <em>0</em>, <em>0])</em>, <em>fGHz=array([ 2.4])</em>, <em>tang=array([ 1.57</em>, <em>3.14])</em>, <em>rang=array([ 1.57</em>, <em>0.  ])</em><big>)</big><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.los" title="Permalink to this definition">¶</a></dt>
+<dd><p>Line of site channel</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>d (m)</strong> :</p>
+<p><strong>fGHz (,Nf)</strong> :</p>
+<p><strong>tang (1x2)</strong> :</p>
+<p class="last"><strong>rang (1x2)</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -560,7 +575,7 @@ display direction of departure | arrival</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.channel.Ctilde.prop2tran">
-<tt class="descname">prop2tran</tt><big>(</big><em>a='theta'</em>, <em>b='theta'</em>, <em>Ta=[]</em>, <em>Tb=[]</em>, <em>Friis=True</em>, <em>debug=True</em><big>)</big><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.prop2tran" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">prop2tran</tt><big>(</big><em>a='theta'</em>, <em>b='theta'</em>, <em>Friis=True</em>, <em>debug=True</em><big>)</big><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.prop2tran" title="Permalink to this definition">¶</a></dt>
 <dd><p>transform propagation channel into transmission channel</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -589,6 +604,10 @@ default (theta)</p>
 <p><strong>Friis</strong> : boolean</p>
 <blockquote>
 <div><p>if True scale with <img src="../_images/mathmpl/math-b3da88f31d.png" style="position: relative; bottom: -13px"/></p>
+</div></blockquote>
+<p><strong>debug</strong> : boolean</p>
+<blockquote>
+<div><p>if True the antenna gain for each ray is stored</p>
 </div></blockquote>
 </td>
 </tr>
@@ -1164,7 +1183,7 @@ the energy is colorcoded over all couples of DoA-DoD</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mai 13, 2015.
+      Last updated on juin 27, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.antprop.channel.txt"

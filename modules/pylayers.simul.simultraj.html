@@ -165,6 +165,9 @@
 <li><a class="reference internal" href="#simul-class">Simul class</a><ul>
 <li><a class="reference internal" href="#run-simulation-and-data-exploitation">Run simulation and data exploitation</a></li>
 <li><a class="reference internal" href="#loading-and-saving">Loading and Saving</a></li>
+<li><a class="reference internal" href="#extraction">Extraction</a></li>
+<li><a class="reference internal" href="#miscellanous">Miscellanous</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
 </ul>
 </li>
 </ul>
@@ -237,8 +240,61 @@
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul._loadh5.html#pylayers.simul.simultraj.Simul._loadh5" title="pylayers.simul.simultraj.Simul._loadh5"><tt class="xref py py-obj docutils literal"><span class="pre">Simul._loadh5</span></tt></a>(grpname)</td>
 <td>Load in h5py format</td>
 </tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Simul.savepd</span></tt>(df)</td>
+<td>save data information of a simulation</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">Simul.loadpd</span></tt>()</td>
+<td>load data from previous simulations</td>
+</tr>
 </tbody>
 </table>
+</div>
+<div class="section" id="extraction">
+<h3>Extraction<a class="headerlink" href="#extraction" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Simul.get_link</span></tt>(**kwargs)</td>
+<td>retrieve a Link specific time from a simultraj</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">Simul.get_value</span></tt>(**kwargs)</td>
+<td>retrieve output parameter at a specific time</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="miscellanous">
+<h3>Miscellanous<a class="headerlink" href="#miscellanous" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Simul.setttime</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">Simul.replace_data</span></tt>(df)</td>
+<td>check if a dataframe df already exists in self.data</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Simul.check_exist</span></tt>(df)</td>
+<td>check if a dataframe df already exists in self.data</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">Simul.get_df_from_link</span></tt>(id_a,&nbsp;id_b[,&nbsp;wstd])</td>
+<td>Return a restricted data frame for a specific link</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Simul.update_pos</span></tt>(t)</td>
+<td>update positions of devices and bodies for a given time index</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="see-also">
+<h3>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h3>
+<p>pylayers.simul.link</p>
 </div>
 </div>
 </div>
@@ -254,7 +310,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mai 13, 2015.
+      Last updated on juin 27, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.simul.simultraj.txt"

@@ -159,6 +159,7 @@
 <li><a class="reference internal" href="#vizualizing-processing">Vizualizing processing</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#notes">Notes</a></li>
 </ul>
 </li>
 </ul>
@@ -178,7 +179,7 @@
             
   <div class="section" id="module-pylayers.measures.cormoran">
 <span id="pylayers-measures-cormoran"></span><h1>pylayers.measures.cormoran<a class="headerlink" href="#module-pylayers.measures.cormoran" title="Permalink to this headline">¶</a></h1>
-<p>This module help to the CORMORAN measurement campaign exploitation</p>
+<p>This module handles CORMORAN measurement data</p>
 <div class="section" id="corser-class">
 <h2>CorSer Class<a class="headerlink" href="#corser-class" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
@@ -201,7 +202,15 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.__init__.html#pylayers.measures.cormoran.CorSer.__init__" title="pylayers.measures.cormoran.CorSer.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.__init__</span></tt></a>([serie,&nbsp;day,&nbsp;source])</td>
-<td></td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.__repr__.html#pylayers.measures.cormoran.CorSer.__repr__" title="pylayers.measures.cormoran.CorSer.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.__repr__</span></tt></a>()</td>
 <td></td>
@@ -216,7 +225,7 @@
 <td>load offset_dictionnary.bin</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._loadbody.html#pylayers.measures.cormoran.CorSer._loadbody" title="pylayers.measures.cormoran.CorSer._loadbody"><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._loadbody</span></tt></a>([day,&nbsp;serie])</td>
-<td>load log file</td>
+<td>load motion capture file</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer._loadcam.html#pylayers.measures.cormoran.CorSer._loadcam" title="pylayers.measures.cormoran.CorSer._loadcam"><tt class="xref py py-obj docutils literal"><span class="pre">CorSer._loadcam</span></tt></a>()</td>
 <td>load camera position</td>
@@ -228,7 +237,7 @@
 <td>load infrastructure nodes</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.measures.cormoran.CorSer.loadlog.html#pylayers.measures.cormoran.CorSer.loadlog" title="pylayers.measures.cormoran.CorSer.loadlog"><tt class="xref py py-obj docutils literal"><span class="pre">CorSer.loadlog</span></tt></a>()</td>
-<td>load in self.log the log of current serie</td>
+<td>load in self.log the log of the current serie</td>
 </tr>
 </tbody>
 </table>
@@ -481,6 +490,12 @@
 </table>
 </div>
 </div>
+<div class="section" id="notes">
+<h3>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h3>
+<p>Useful members</p>
+<p>distdf : distance between radio nodes (122 columns)
+devdf  : device data frame</p>
+</div>
 </div>
 </div>
 
@@ -495,7 +510,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mai 13, 2015.
+      Last updated on juin 27, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.measures.cormoran.txt"

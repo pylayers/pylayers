@@ -181,6 +181,85 @@
 <dt id="pylayers.simul.link.DLink.eval">
 <tt class="descclassname">DLink.</tt><tt class="descname">eval</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#pylayers.simul.link.DLink.eval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate the link</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>applywav :boolean</strong> :</p>
+<blockquote>
+<div><p>Apply waveform to H</p>
+</div></blockquote>
+<p><strong>force</strong> : list</p>
+<blockquote>
+<div><p>Force the computation ([&#8216;sig&#8217;,&#8217;ray&#8217;,&#8217;Ct&#8217;,&#8217;H&#8217;]) AND save (replace previous computations)</p>
+</div></blockquote>
+<p><strong>si_algo</strong> : str (&#8216;old&#8217;|&#8217;new&#8217;)</p>
+<blockquote>
+<div><p>signature.run algo type
+&#8216;old&#8217; : call propaths2
+&#8216;new&#8217; : call procone2</p>
+</div></blockquote>
+<p><strong>alg</strong> : 5|7</p>
+<blockquote>
+<div><p>version of run for signature</p>
+</div></blockquote>
+<p><strong>si_mt: boolean</strong> :</p>
+<blockquote>
+<div><p>Multi thread version of algo version 7</p>
+</div></blockquote>
+<p><strong>si_progress: bollean ( False)</strong> :</p>
+<blockquote>
+<div><p>display progression bar for signatures</p>
+</div></blockquote>
+<p><strong>diffraction</strong> : boolean (False)</p>
+<blockquote>
+<div><p>takes into consideration diffraction points</p>
+</div></blockquote>
+<p><strong>ra_number_mirror_cf</strong> : int</p>
+<blockquote>
+<div><p>rays.to3D number of ceil/floor reflexions</p>
+</div></blockquote>
+<p><strong>ra_ceil_height_meter: float,</strong> :</p>
+<blockquote>
+<div><p>ceil height</p>
+</div></blockquote>
+<p><strong>ra_vectorized: boolean (True)</strong> :</p>
+<blockquote>
+<div><p>if True used the (2015 new) vectorized approach to determine 2drays</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ak</strong> : ndarray</p>
+<blockquote>
+<div><p>alpha_k</p>
+</div></blockquote>
+<p><strong>tk</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>tau_k</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="../pylayers.antprop.signature.html#module-pylayers.antprop.signature" title="pylayers.antprop.signature"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.signature</span></tt></a>, <a class="reference internal" href="../pylayers.antprop.rays.html#module-pylayers.antprop.rays" title="pylayers.antprop.rays"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.rays</span></tt></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>update self.ak and self.tk</p>
+<dl class="docutils">
+<dt>self.ak <span class="classifier-delimiter">:</span> <span class="classifier">ndarray</span></dt>
+<dd>alpha_k</dd>
+<dt>self.tk <span class="classifier-delimiter">:</span> <span class="classifier">ndarray</span></dt>
+<dd>tau_k</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.simul.link</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">=</span><span class="n">DLink</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aktk</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-simul-link-DLink-eval-1.py">Source code</a>)</p>
 </dd></dl>
 
 </div>
@@ -196,7 +275,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on mai 13, 2015.
+      Last updated on juin 27, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.simul.link.DLink.eval.txt"
