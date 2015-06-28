@@ -7,33 +7,29 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Search &mdash; Python 1 documentation</title>
+    <title>pylayers.signal.devices &mdash; Python 1 documentation</title>
     
-    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
+        URL_ROOT:    '../',
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/searchtools.js"></script>
-    <script type="text/javascript" src="_static/sidebar.js"></script>
-    <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="Python 1 documentation" href="index.html" />
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
-  <script type="text/javascript" id="searchindexloader"></script>
-  
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="top" title="Python 1 documentation" href="../index.html" />
+    <link rel="up" title="PyLayers" href="pylayers.html" />
+    <link rel="next" title="pylayers.signal.DF" href="pylayers.signal.DF.html" />
+    <link rel="prev" title="pylayers.signal.bsignal.MaskImpulse.show" href="generated/pylayers.signal.bsignal.MaskImpulse.show.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -48,20 +44,19 @@
 
 </script>
 
-
   </head>
   <body>
 
     <div class="header-wrapper">
       <div class="header">
-          <p class="logo"><a href="index.html">
-            <img src="_static/pylayers.png" alt="Logo"/>
+          <p class="logo"><a href="../index.html">
+            <img src="../_static/pylayers.png" alt="Logo"/>
           </a>
           </p><div class="navbar">
           <ul>
-            <li><a href="download.html">Download</a></li>
-            <li><a href="notebook/TOC.html">User Guide</a></li>
-            <li><a href="modules/pylayers.html">Reference</a></li>
+            <li><a href="../download.html">Download</a></li>
+            <li><a href="../notebook/TOC.html">User Guide</a></li>
+            <li><a href="pylayers.html">Reference</a></li>
        </ul>
 
 <div class="search_form">
@@ -87,12 +82,46 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	   <div class="rel rellarge">
-	     
+	  <div class="rel">
+	   
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
 	<div class="rellink">
-	<a href="py-modindex.html" title="Python Module Index"
+	<a href="generated/pylayers.signal.bsignal.MaskImpulse.show.html" title="pylayers.signal.bsignal.MaskImpulse.show"
+	    accesskey="P">Previous
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.signal....
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.signal.bsignal.MaskImpulse.show
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="pylayers.signal.DF.html" title="pylayers.signal.DF"
+	    accesskey="N">Next
+	    <br>
+	    <span class="smallrellink">
+	    pylayers.signal....
+	    </span>
+	    <span class="hiddenrellink">
+	    pylayers.signal.DF
+	    </span>
+	    
+	    </a>
+	</div>
+	    <div class="spacer">
+	    &nbsp;
+	    </div>
+	
+	<div class="rellink">
+	<a href="../py-modindex.html" title="Python Module Index"
 	    >Modules
 	    <br>
 	    <span class="smallrellink">
@@ -105,6 +134,22 @@
 	    </a>
 	</div>
 	<!-- Ad a link to the 'up' page -->
+	<div class="spacer">
+	&nbsp;
+	</div>
+	<div class="rellink">
+	<a href="pylayers.html" title="PyLayers" >
+	Up
+	<br>
+	<span class="smallrellink">
+	PyLayers
+	</span>
+	<span class="hiddenrellink">
+	PyLayers
+	</span>
+	
+	</a>
+	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -113,9 +158,12 @@
     
     <h3>Citing</h3>
     <p>If you use the software, please consider
-    <a href="about.html#citing-pylayers">citing pylayers</a>.</p>
+    <a href="../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
-	
+	<ul>
+<li><a class="reference internal" href="#">pylayers.signal.devices</a></li>
+</ul>
+
     
     </div>
 	  </div>
@@ -127,29 +175,10 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <h1 id="search-documentation">Search</h1>
-  <div id="fallback" class="admonition warning">
-  <script type="text/javascript">$('#fallback').hide();</script>
-  <p>
-    Please activate JavaScript to enable the search
-    functionality.
-  </p>
-  </div>
-  <p>
-    From here you can search these documents. Enter your search
-    words into the box below and click "search". Note that the search
-    function will automatically search for all of the words. Pages
-    containing fewer words won't appear in the result list.
-  </p>
-  <form action="" method="get">
-    <input type="text" name="q" value="" />
-    <input type="submit" value="search" />
-    <span id="search-progress" style="padding-left: 10px"></span>
-  </form>
-  
-  <div id="search-results">
-  
-  </div>
+  <div class="section" id="pylayers-signal-devices">
+<h1>pylayers.signal.devices<a class="headerlink" href="#pylayers-signal-devices" title="Permalink to this headline">¶</a></h1>
+</div>
+
 
           </div>
         </div>
@@ -163,11 +192,25 @@
         &copy; 2015, PyLayers developer team.
       Last updated on Jun 28, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+    <span style="padding-left: 5ex;">
+    <a href="../_sources/modules/pylayers.signal.devices.txt"
+	    rel="nofollow">Show this page source</a>
+    </span>
     </div>
-     <div class="rel rellarge">
+     <div class="rel">
     
     <div class="buttonPrevious">
-      <a href="py-modindex.html">
+      <a href="generated/pylayers.signal.bsignal.MaskImpulse.show.html">
+        Previous
+      </a>  
+    </div>
+    <div class="buttonNext">
+      <a href="pylayers.signal.DF.html">
+        Next
+      </a>  
+    </div>
+    <div class="buttonPrevious">
+      <a href="../py-modindex.html">
         Previous
       </a>  
     </div>
