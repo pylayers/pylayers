@@ -576,9 +576,9 @@
 <span class="sd">        dev : list</span>
 <span class="sd">            list of Devices</span>
 <span class="sd">        p : ndarray (Ndev x 3)</span>
-<span class="sd">            np.array of devices&#39; positions</span>
+<span class="sd">            np.array of devices positions</span>
 <span class="sd">        grp : string</span>
-<span class="sd">            name of the group of device belong to.</span>
+<span class="sd">            name of the group of devices</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -599,7 +599,11 @@
                 <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;Devices must have a different ID&#39;</span><span class="p">)</span>
 
 
-        <span class="c"># add spectific node informations</span>
+        <span class="c"># determine node type</span>
+        <span class="c">#</span>
+        <span class="c">#  ap : access point</span>
+        <span class="c">#  ag : agent</span>
+        <span class="c">#</span>
         <span class="k">if</span> <span class="s">&#39;ap&#39;</span> <span class="ow">in</span> <span class="n">grp</span><span class="p">:</span>
             <span class="n">typ</span> <span class="o">=</span> <span class="s">&#39;ap&#39;</span>
         <span class="k">else</span> <span class="p">:</span>
@@ -611,14 +615,17 @@
               <span class="s">&#39;typ&#39;</span><span class="p">:</span><span class="n">typ</span><span class="p">,</span>
               <span class="s">&#39;dev&#39;</span><span class="p">:</span><span class="n">d</span><span class="p">,</span>
                     <span class="p">})</span> <span class="k">for</span> <span class="n">ud</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dev</span><span class="p">)]</span>
-<span class="c"># </span>
+        <span class="c">#</span>
         <span class="c"># self.add_nodes_from([(d.ID, ldic[ud]) for ud,d in enumerate(dev)])</span>
+        <span class="c">#</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">([(</span><span class="n">d</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">__dict__</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dev</span><span class="p">])</span>
 
         <span class="c"># create personnal network</span>
         <span class="k">for</span> <span class="n">ud</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dev</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="n">PN</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">([(</span><span class="n">d</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="n">d</span><span class="o">.</span><span class="n">__dict__</span><span class="p">)])</span>
+
+        <span class="c"># get wireless standard</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_get_wstd</span><span class="p">()</span>
         <span class="c"># for d in dev:</span>
         <span class="c">#     for s in d.wstd.keys():</span>
@@ -843,7 +850,7 @@
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.network.network import *</span>
 <span class="sd">        &gt;&gt;&gt; N=Network()</span>
-<span class="sd">        &gt;&gt;&gt;    N=Network.Network()</span>
+<span class="sd">        &gt;&gt;&gt; N=Network.Network()</span>
 <span class="sd">        &gt;&gt;&gt; for i in range(3):</span>
 <span class="sd">                no = Node(ID=i,wstd=[&#39;wifi&#39;,&#39;bt&#39;])</span>
 <span class="sd">                N.add_nodes_from(no.nodes(data=True))</span>
@@ -2225,7 +2232,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on juin 27, 2015.
+      Last updated on juin 28, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

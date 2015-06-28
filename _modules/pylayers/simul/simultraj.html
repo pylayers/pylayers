@@ -477,7 +477,9 @@
         <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dpersons</span><span class="p">:</span>
             <span class="n">D</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">dev</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dpersons</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">dev</span><span class="p">:</span>
-                <span class="n">D</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Device</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dpersons</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">dev</span><span class="p">[</span><span class="n">dev</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">],</span> <span class="n">ID</span> <span class="o">=</span> <span class="n">dev</span><span class="p">))</span>
+
+                <span class="n">aDev</span> <span class="o">=</span> <span class="n">Device</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dpersons</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">dev</span><span class="p">[</span><span class="n">dev</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">],</span> <span class="n">ID</span> <span class="o">=</span> <span class="n">dev</span><span class="p">)</span>
+                <span class="n">D</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aDev</span><span class="p">)</span>
 
                 <span class="n">D</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">ant</span><span class="p">[</span><span class="s">&#39;A1&#39;</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dpersons</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">dev</span><span class="p">[</span><span class="n">dev</span><span class="p">][</span><span class="s">&#39;file&#39;</span><span class="p">]</span>
                 <span class="n">D</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">ant</span><span class="p">[</span><span class="s">&#39;antenna&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dpersons</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">dev</span><span class="p">[</span><span class="n">dev</span><span class="p">][</span><span class="s">&#39;ant&#39;</span><span class="p">]</span>
@@ -491,9 +493,14 @@
             <span class="n">N</span><span class="o">.</span><span class="n">add_devices</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">grp</span> <span class="o">=</span> <span class="s">&#39;ap&#39;</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">ap</span><span class="p">][</span><span class="s">&#39;pos&#39;</span><span class="p">])</span>
             <span class="n">N</span><span class="o">.</span><span class="n">update_orient</span><span class="p">(</span><span class="n">ap</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">ap</span><span class="p">][</span><span class="s">&#39;T&#39;</span><span class="p">],</span> <span class="n">now</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">)</span>
         <span class="c"># create Network</span>
+        <span class="c">#</span>
+        <span class="c">#    _get_wstd</span>
+        <span class="c">#    _get_grp</span>
+        <span class="c">#    _connect</span>
+        <span class="c">#    _init_PN</span>
+        <span class="c">#</span>
         <span class="n">N</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">N</span>
-        <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Simul.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simultraj.Simul.show.html#pylayers.simul.simultraj.Simul.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show actual simlulation configuration</span>
@@ -550,13 +557,12 @@
         <span class="c">#      only center frequency is calculated</span>
         <span class="c">#</span>
         <span class="c">#</span>
-        <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">fmode</span> <span class="o">==</span> <span class="s">&#39;center&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">DL</span><span class="o">.</span><span class="n">fGHz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">na</span><span class="p">][</span><span class="s">&#39;wstd&#39;</span><span class="p">][</span><span class="n">wstd</span><span class="p">][</span><span class="s">&#39;fcghz&#39;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">minb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">na</span><span class="p">][</span><span class="s">&#39;wstd&#39;</span><span class="p">][</span><span class="n">wstd</span><span class="p">][</span><span class="s">&#39;fbminghz&#39;</span><span class="p">]</span>
-            <span class="n">maxb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">na</span><span class="p">][</span><span class="s">&#39;wstd&#39;</span><span class="p">][</span><span class="n">wstd</span><span class="p">][</span><span class="s">&#39;fbmaxghz&#39;</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">DL</span><span class="o">.</span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">minb</span><span class="p">,</span> <span class="n">maxb</span><span class="p">,</span> <span class="n">nf</span><span class="p">)</span>
+            <span class="n">fminGHz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">na</span><span class="p">][</span><span class="s">&#39;wstd&#39;</span><span class="p">][</span><span class="n">wstd</span><span class="p">][</span><span class="s">&#39;fbminghz&#39;</span><span class="p">]</span>
+            <span class="n">fmaxGHz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">na</span><span class="p">][</span><span class="s">&#39;wstd&#39;</span><span class="p">][</span><span class="n">wstd</span><span class="p">][</span><span class="s">&#39;fbmaxghz&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">DL</span><span class="o">.</span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">fminGHz</span><span class="p">,</span> <span class="n">fmaxGHz</span><span class="p">,</span> <span class="n">nf</span><span class="p">)</span>
         <span class="n">a</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DL</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="n">t</span>
@@ -786,9 +792,14 @@
                             <span class="k">print</span> <span class="s">&#39;-&#39;</span><span class="o">*</span><span class="mi">30</span>
                         <span class="n">eng</span> <span class="o">=</span> <span class="mi">0</span>
                         <span class="c">#</span>
-                        <span class="c"># Invoque deterministic simulation of the link</span>
+                        <span class="c"># Invoque link deterministic simulation </span>
                         <span class="c">#</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">evaldeter</span><span class="p">(</span><span class="n">na</span><span class="p">,</span> <span class="n">nb</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span><span class="n">applywav</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="o">**</span><span class="n">DLkwargs</span><span class="p">)</span>
+                        <span class="c">#  node : na</span>
+                        <span class="c">#  node : nb</span>
+                        <span class="c">#  wstd : w</span>
+                        <span class="c">#</span>
+                        <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">evaldeter</span><span class="p">(</span><span class="n">na</span><span class="p">,</span> <span class="n">nb</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">applywav</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">**</span><span class="n">DLkwargs</span><span class="p">)</span>
                         <span class="c"># if typ == &#39;OB&#39;:</span>
                         <span class="c">#     self.evalstat(na, nb)</span>
                         <span class="c">#     eng = self.SL.eng</span>
@@ -1529,7 +1540,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on juin 27, 2015.
+      Last updated on juin 28, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
