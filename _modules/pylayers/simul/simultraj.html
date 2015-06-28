@@ -848,7 +848,7 @@
 
                         <span class="bp">self</span><span class="o">.</span><span class="n">savepd</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">replace_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.replace_data"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simultraj.Simul.replace_data.html#pylayers.simul.simultraj.Simul.replace_data">[docs]</a>    <span class="k">def</span> <span class="nf">replace_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;check if a dataframe df already exists in self.data</span>
 
 <span class="sd">        Parameters</span>
@@ -869,8 +869,8 @@
                   <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;wstd&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">df</span><span class="p">[</span><span class="s">&#39;wstd&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">values</span>
 
 
-
-    <span class="k">def</span> <span class="nf">check_exist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Simul.check_exist"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simultraj.Simul.check_exist.html#pylayers.simul.simultraj.Simul.check_exist">[docs]</a>    <span class="k">def</span> <span class="nf">check_exist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;check if a dataframe df already exists in self.data</span>
 
 <span class="sd">        Parameters</span>
@@ -900,8 +900,8 @@
         <span class="k">else</span> <span class="p">:</span>
             <span class="k">return</span> <span class="bp">False</span>
 
-
-    <span class="k">def</span> <span class="nf">savepd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">df</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Simul.savepd"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simultraj.Simul.savepd.html#pylayers.simul.simultraj.Simul.savepd">[docs]</a>    <span class="k">def</span> <span class="nf">savepd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">df</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save data information of a simulation</span>
 
 <span class="sd">        Parameters</span>
@@ -919,8 +919,8 @@
         <span class="c">#self.data=self.data.sort()</span>
         <span class="n">store</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;df&#39;</span><span class="p">,</span><span class="n">df</span><span class="p">)</span>
         <span class="n">store</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">loadpd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Simul.loadpd"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simultraj.Simul.loadpd.html#pylayers.simul.simultraj.Simul.loadpd">[docs]</a>    <span class="k">def</span> <span class="nf">loadpd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load data from previous simulations</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">filenameh5</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLNK&#39;</span><span class="p">])</span>
@@ -929,7 +929,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;df&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;t&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
-
+</div>
     <span class="k">def</span> <span class="nf">get_sim_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">t</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; retrieve closest time value in regard of passed t value in parameter</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -940,7 +940,7 @@
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">get_sim_time</span><span class="p">(</span><span class="n">tt</span><span class="p">)</span> <span class="k">for</span> <span class="n">tt</span> <span class="ow">in</span> <span class="n">t</span><span class="p">])[:,</span><span class="mi">0</span><span class="p">]</span>
 
 
-    <span class="k">def</span> <span class="nf">get_df_from_link</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">id_a</span><span class="p">,</span><span class="n">id_b</span><span class="p">,</span><span class="n">wstd</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.get_df_from_link"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simultraj.Simul.get_df_from_link.html#pylayers.simul.simultraj.Simul.get_df_from_link">[docs]</a>    <span class="k">def</span> <span class="nf">get_df_from_link</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">id_a</span><span class="p">,</span><span class="n">id_b</span><span class="p">,</span><span class="n">wstd</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return a restricted data frame for a specific link</span>
 
 <span class="sd">            Parameters</span>
@@ -961,8 +961,8 @@
                              <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;id_b&#39;</span><span class="p">]</span><span class="o">==</span><span class="n">id_b</span><span class="p">)</span> <span class="o">&amp;</span>
                              <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;wstd&#39;</span><span class="p">]</span><span class="o">==</span><span class="n">wstd</span><span class="p">]</span>
 
-
-    <span class="k">def</span> <span class="nf">update_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Simul.update_pos"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simultraj.Simul.update_pos.html#pylayers.simul.simultraj.Simul.update_pos">[docs]</a>    <span class="k">def</span> <span class="nf">update_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; update positions of devices and bodies for a given time index</span>
 
 <span class="sd">        Parameters</span>
@@ -993,8 +993,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">update_dis</span><span class="p">()</span>
 
 
-
-    <span class="k">def</span> <span class="nf">get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Simul.get_value"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simultraj.Simul.get_value.html#pylayers.simul.simultraj.Simul.get_value">[docs]</a>    <span class="k">def</span> <span class="nf">get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; retrieve output parameter at a specific time</span>
 
 <span class="sd">        Parameters</span>
@@ -1156,8 +1156,8 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
 
-
-    <span class="k">def</span> <span class="nf">get_link</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Simul.get_link"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simultraj.Simul.get_link.html#pylayers.simul.simultraj.Simul.get_link">[docs]</a>    <span class="k">def</span> <span class="nf">get_link</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; retrieve a Link specific time from a simultraj</span>
 
 <span class="sd">        Parameters</span>
@@ -1279,7 +1279,7 @@
         <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DL</span><span class="p">)</span>
 
 
-
+</div>
     <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; 3D show using Mayavi</span>
 
