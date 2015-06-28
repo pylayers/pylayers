@@ -835,19 +835,19 @@ class Rays(PyLayers,dict):
                     # new ceil or floor point. The case of successive ceil or
                     # floor reflexion make
                     #
-                    # Tous les points précédents qui ne sont pas des Ceils ou
+                    # Tous les points prcdents qui ne sont pas des Ceils ou
                     # des floors et tous les points suivants qui ne sont pas
-                    # des points de réflexion ceil ou floor
+                    # des points de rflexion ceil ou floor
                     #
                     # Afin de tenir compte du rayon et du groupe d'interaction
-                    # concerné, il faut passer un tuple qui concatène la valeur
+                    # concern, il faut passer un tuple qui concatne la valeur
                     # de l'indice d'interaction floor ou ceil et l'indice de
-                    # rayons du groupe associé (d'ou le zip)
+                    # rayons du groupe associ (d'ou le zip)
                     #
-                    # Cette séquence d'instruction fixe le bug #133
+                    # Cette squence d'instruction fixe le bug #133
                     #
-                    # Antérieurement il y avait une hypothèse de succession
-                    # immediate d'un point 2D renseigné.
+                    # Antrieurement il y avait une hypothse de succession
+                    # immediate d'un point 2D renseign.
                     #
                     try:
                         iintm_f = map(lambda x : np.where( (siges[1,0:x[0],x[1]]<>4) & (siges[1,0:x[0],x[1]]<>5))[0][-1], zip(iint_f,iray_f))
@@ -1360,15 +1360,15 @@ class Rays(PyLayers,dict):
                         
 
                         uu = np.array([u[0],u[1]]).T
-                        # determine which interaction and rays 
-                        # present the colinearity issue
+                        #determine which interaction and rays 
+                        #present the colinearity issue
                         uvv = abs(vn[2,uu[:,0],uu[:,1]])>0.99
                         # uv : nbi x nbr colinear index
                         uv = uu[uvv]
                         # uh : nbi x nbr anti-colinear index
                         uh = uu[np.logical_not(uvv)]
                         try:
-                            # fiw w for colinear index
+                            #fiw w for colinear index
                             w[:,uv[:,0],uv[:,1]] = np.array(([1,0,0]))[:,np.newaxis]
                             # update normal
                             nw[uv[:,0],uv[:,1]] = \

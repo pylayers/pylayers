@@ -358,7 +358,7 @@ class Axes(object):
             else:
                 print "Stop motion when a limit is hit but continue the program, "
 
-            print 'decceleraton : ',eval(ans[3].split('D')[1]), "rps²"
+            print 'decceleraton : ',eval(ans[3].split('D')[1]), "rps"
 
 
         if cmd=='set':
@@ -418,7 +418,7 @@ class Axes(object):
             else:
                 print 'velocity : -',eval(ans[3].split('V-')[1]), "rps"
 
-            print 'acceleraton : ',eval(ans[4].split('A')[1]), "rps²"
+            print 'acceleraton : ',eval(ans[4].split('A')[1]), "rps"
 
             if '0' in ans[5]:
                 print 'Mode 0: Motor in the active window of the switch(default)'
@@ -598,13 +598,13 @@ class Axes(object):
         Parameters
         ----------
 
-        var : distance (cm) | degres (°)
+        var : distance (cm) | degres ()
 
         Examples
         --------
 
         >>> s.a[1].mv(10) # moves over 10cm on axis 1
-        >>> s.a[3].mv(45) # moves over 45° on axis 3
+        >>> s.a[3].mv(45) # moves over 45 on axis 3
 
         """
         #assert(self.typ=='t'),'Axes is not a linear axes'
@@ -676,7 +676,7 @@ class Scanner(object):
         """
 
         # Ou suis-je ?
-        # Ou dois-je aller : p1
+        #Ou dois-je aller : p1
         # Comment y aller
         #   + fabriquer les profils
         #   + Appliquer les profils

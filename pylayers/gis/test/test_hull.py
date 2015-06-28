@@ -47,12 +47,12 @@ for p in polys:
         L.Gt.pos[ncy] = tuple(cy.g)
         # WARNING
         # recreate polygon is mandatory otherwise cycle.cycle and polygon.vnodes
-        # are shifted.
+        #are shifted.
         L.Gt.node[ncy]['polyg'] = p#geu.Polygon(p.xy,cy.cycle)
         # L.Gt.node[ncy]['polyg'].setvnodes()
         L.Gt.node[ncy]['isopen'] = True
         L.Gt.node[ncy]['indoor'] = False
-        # 1 - add link between created cycle and outdoor
+        #1 - add link between created cycle and outdoor
         L.Gt.add_edge(ncy, 0)
         # 2 - search and add link between the created cycle and indoor cycles
         for k in L.Gt.nodes():
@@ -68,27 +68,27 @@ for p in polys:
                     segment = intersection_vnodes[np.where(intersection_vnodes>0)]
                     L.Gt.add_edge(ncy, k,segment= segment)
 
-        # 3 - Update Gs
+        #3 - Update Gs
         for v in filter(lambda x: x>0,p.vnodes):
             # add new ncycle to Gs for the new airwall
-            # that new airwall always separate the new created cycle
-            # and the outdoor cycle
+            #that new airwall always separate the new created cycle
+            #and the outdoor cycle
             if v == awid :
                 L.Gs.node[awid]['ncycles']=[ncy,0]
             # other wise update the cycles seen by semengts
             else :
                 cy = L.Gs.node[v]['ncycles'].pop()
-                # if the pop cycle is the outdoor cycle, replace it with the new cycle
+                #if the pop cycle is the outdoor cycle, replace it with the new cycle
                 if cy == 0:
                     L.Gs.node[v]['ncycles'].append(ncy)
-                # else replace old value with [pos cycle , new cycle]
+                #else replace old value with [pos cycle , new cycle]
                 else:
                     L.Gs.node[v]['ncycles']=[cy,ncy]
         ncy=ncy+1
 # L.build('t')
 # tcc, nn = L.ma.ptconvex()
 # utconvex = np.nonzero(tcc == -1)[0]
-# # all possible diffracting point (in and out of cycle)
+# #all possible diffracting point (in and out of cycle)
 # utsconvex = np.nonzero(abs(tcc) == 1)[0]
 # if len(utconvex) != 0:
 #     # get points ID in the cycle
@@ -120,18 +120,18 @@ for p in polys:
 #             if U.area < (1*ats/100):
 #                 #pkt.append(pucs[t])
 #                 #if 2 convex nodes are directly following in the list 
-#                 # of all convex nodes (ucs) they are already connected
-#                 # otherwise, an airwall has to be create.
+#                 #of all convex nodes (ucs) they are already connected
+#                 #otherwise, an airwall has to be create.
 #                 # 
 #                 # ucs[t]
 
 #                 daucs = np.diff(aucs[t])
-#                 # search where an airwall is required
-#                 # ncp : not connected points
+#                 #search where an airwall is required
+#                 #ncp : not connected points
 #                 ncp = np.where(daucs != 1)[0]
 #                 for i in ncp:
-#                     # keep trace of created airwalls, because some 
-#                     # of them will be destroyed in step 3
+#                     #keep trace of created airwalls, because some 
+#                     #of them will be destroyed in step 3
 #                     print ucs[t][i],ucs[t][i+1]
 #                     naw.append(L.add_segment(ucs[t][i],ucs[t][i+1],name='AIR'))
 #                 kt.append(t) 
@@ -147,7 +147,7 @@ for p in polys:
 #             for ip2,p2 in enumerate(polys):
 #                 conv=False
 #                 inter = p.intersection(p2)
-#                 # if 2 triangles have a common segment
+#                 #if 2 triangles have a common segment
 #                 pold = p
 #                 if isinstance(inter,sh.LineString):
 #                     p = p + p2
@@ -179,7 +179,7 @@ for p in polys:
 #         #     ptmp.setvnodes(L)
 #         #     ncpol.append(ptmp)
 #         #     vnodes.extend(ptmp.vnodes)
-#         # # air walls to be deleted (because origin Delaunay triangle
+#         # #air walls to be deleted (because origin Delaunay triangle
 #         # # has been merged )
 #         # daw = filter(lambda x: x not in vnodes,naw)
 #         # [L.del_segment(d) for d in daw]

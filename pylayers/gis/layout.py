@@ -486,6 +486,10 @@ class Layout(PyLayers):
             Ls.Gs.edge.update(other.Gs.edge)
             Ls.Gs.adj.update(other.Gs.adj)
             Ls.Gs.pos.update(other.Gs.pos)
+            Ls.Np = Ls.Np+other.Np
+            Ls.Ns = Ls.Ns+other.Ns
+            Ls.Nss = Ls.Nss+other.Nss
+
         return(Ls)
 
 
@@ -2586,13 +2590,33 @@ class Layout(PyLayers):
 
     def mask(self):
         """  returns the polygonal mask of the building
+
+        Returns
+        -------
+
+        mask : geu.Polygon
+
+        Notes
+        -----
+
+        This function assumes graph Gt has been generated
+
         """
-        p  = self.Gt.node[1]['polyg']
+        # takes the 1st cycle polygon
+        p = self.Gt.node[1]['polyg']
+        # get the exterior of the polygon
         ps = sh.Polygon(p.exterior)
+        # make the union of the exterior of all the cycles
+        #
+        # cycle : -1 exterior
+        #          0 ??
+        #
+
         for k in self.Gt.node:
             if (k!=0) & (k!=-1):
                 p = self.Gt.node[k]['polyg']
                 ps = ps.union(sh.Polygon(p.exterior))
+
         mask = geu.Polygon(ps)
         mask.setvnodes(self)
         return(mask)
@@ -2938,7 +2962,7 @@ class Layout(PyLayers):
                                 self.name[data[i]] = [e1]
                     i = i + 1
             except:
-                # if cancel
+                #if cancel
                 pass
         else:
             if outdata=={}:
@@ -5654,9 +5678,9 @@ class Layout(PyLayers):
             if a cycle is tagged as non convex
 
             1- find its polygon
-            2- partion polygon into convex polygons (Delaunay)
-            3- try to merge partioned polygon in order to obtain
-               the minimal number of convex polygon
+            2- partition polygon into convex polygons (Delaunay)
+            3- try to merge partitioned polygons in order to obtain
+               the minimal number of convex polygons
             4- re-number/re-create Gt by creating  new 'convex' cycles
                from those convex polygons
 

@@ -200,7 +200,7 @@ def savefig(filename,mlabview=[],magnification = 3):
 
     filename : str
         name of the figure
-    mlabview : [] | (x,y,z, np.array([ xroll,yroll,zroll]))
+    mlabview : [] |(x,y,z, np.array([ xroll,yroll,zroll]))
         specifyy angle of camera view ( see mayavi.view )
     magnification : int
         resolution of the generated image ( see mayavi.savefig)

@@ -101,14 +101,20 @@ class Simul(PyLayers):
 
     or a CorSer instance
 
+    Members
+    -------
+
+    dpersons : dictionnary of persons (agent)
+    dap : dictionnary of access points
+
     Methods
     -------
 
-    load_simul : load configuration file 
-    load_Corser : load a Corser file 
+    load_simul : load configuration file
+    load_Corser : load a Corser file
     _gen_net : generate network and asociated links
-    show : show layout and network 
-    evaldeter : run simulation over time 
+    show : show layout and network
+    evaldeter : run simulation over time
 
 
     """
@@ -142,6 +148,7 @@ class Simul(PyLayers):
         self.Nag = 0
         self.Nap = 0
 
+        # source analysis
         if isinstance(source,str):
             self.filetraj = source
             self.load_simul(source)
@@ -153,9 +160,13 @@ class Simul(PyLayers):
             self.source = 'CorSer'
 
 
-
+        # generate the Network
+        # The wireless standard and frequency is fixed in this function
+        #
         self._gen_net()
+        # initialize Stochastic Link
         self.SL = SLink()
+        # initialize Deterministic Link
         self.DL = DLink(L=self.L,verbose=self.verbose)
         self.DL.cutoff=cutoff
 
@@ -256,7 +267,7 @@ class Simul(PyLayers):
         self.traj = traj
 
     def load_CorSer(self,source):
-        """
+        """ load CorSer file for simulation
 
         Parameters
         ----------
@@ -322,24 +333,33 @@ class Simul(PyLayers):
         #
         # get devices on bodies
         #
+        # forall person
+        #   forall device
         for p in self.dpersons:
             D = []
             for dev in self.dpersons[p].dev:
-                D.append(
-                    Device(self.dpersons[p].dev[dev]['name'], ID=dev))
+                pdb.set_trace()
+                aDev = Device(self.dpersons[p].dev[dev]['name'], ID = dev)
+                D.append(aDev)
 
                 D[-1].ant['A1']['name'] = self.dpersons[p].dev[dev]['file']
-                D[-1].ant['antenna']= self.dpersons[p].dev[dev]['ant']
+                D[-1].ant['antenna'] = self.dpersons[p].dev[dev]['ant']
             N.add_devices(D, grp=p)
         #
         # get access point devices
         #
         for ap in self.dap:
-            D = Device(self.dap[ap]['name'], ID=ap)
-            D.ant['antenna']= self.dap[ap]['ant']
-            N.add_devices(D, grp='ap', p=self.dap[ap]['pos'])
-            N.update_orient(ap, self.dap[ap]['T'], now=0.)
+            D = Device(self.dap[ap]['name'], ID = ap)
+            D.ant['antenna'] = self.dap[ap]['ant']
+            N.add_devices(D, grp = 'ap', p = self.dap[ap]['pos'])
+            N.update_orient(ap, self.dap[ap]['T'], now = 0.)
         # create Network
+        #
+        #    _get_wstd
+        #    _get_grp
+        #    _connect
+        #    _init_PN
+        #
         N.create()
         self.N = N
 
@@ -393,14 +413,17 @@ class Simul(PyLayers):
         self.DL.Tb = self.N.node[nb]['T']
 
         #
-        # Choose frequency band
+        # The frequency band is chosen from the selected standard
+        #  if fmode == 'center'
+        #      only center frequency is calculated
+        #
         #
         if fmode == 'center':
             self.DL.fGHz = self.N.node[na]['wstd'][wstd]['fcghz']
         else:
-            minb = self.N.node[na]['wstd'][wstd]['fbminghz']
-            maxb = self.N.node[na]['wstd'][wstd]['fbmaxghz']
-            self.DL.fGHz = np.linspace(minb, maxb, nf)
+            fminGHz = self.N.node[na]['wstd'][wstd]['fbminghz']
+            fmaxGHz = self.N.node[na]['wstd'][wstd]['fbmaxghz']
+            self.DL.fGHz = np.linspace(fminGHz, fmaxGHz, nf)
         a, t = self.DL.eval(**kwargs)
 
         return a, t
@@ -630,9 +653,14 @@ class Simul(PyLayers):
                             print '-'*30
                         eng = 0
                         #
-                        # Invoque deterministic simulation of the link
+                        # Invoque link deterministic simulation 
                         #
-                        self.evaldeter(na, nb, w,applywav=False,**DLkwargs)
+                        #  node : na
+                        #  node : nb
+                        #  wstd : w
+                        #
+                        pdb.set_trace()
+                        self.evaldeter(na, nb, w, applywav=False, **DLkwargs)
                         # if typ == 'OB':
                         #     self.evalstat(na, nb)
                         #     eng = self.SL.eng
@@ -835,7 +863,7 @@ class Simul(PyLayers):
 
         typ : list
                 list of parameters to be retrieved
-                (R | C | H | ak | tk | rss )
+                (R | C |H | ak | tk | rss )
         links: list
             dictionnary of link to be evaluated (key is wtsd and value is a list of links)
             (if [], all link are considered)
@@ -911,7 +939,7 @@ class Simul(PyLayers):
                     #     if len(line) == 0:
                     #         raise AttributeError('invalid link')
 
-                    # retrieve correct position and orientation given the time
+                    #retrieve correct position and orientation given the time
                     #self.update_pos(t=tt)
                     # antennas positions
                     #self.DL.a = self.N.node[link[0]]['p']
@@ -998,7 +1026,7 @@ class Simul(PyLayers):
 
         typ : list
                 list of parameters to be retrieved
-                (ak | tk | R | C)
+                (ak | tk | R |C)
         links: list
             dictionnary of link to be evaluated (key is wtsd and value is a list of links)
             (if [], all link are considered)
@@ -1081,7 +1109,7 @@ class Simul(PyLayers):
                     #     if len(line) == 0:
                     #         raise AttributeError('invalid link')
 
-                    # retrieve correct position and orientation given the time
+                    #retrieve correct position and orientation given the time
                     self.update_pos(t=tt)
                     self.DL.a = self.N.node[link[0]]['p']
                     self.DL.b = self.N.node[link[1]]['p']

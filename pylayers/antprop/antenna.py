@@ -828,7 +828,7 @@ class Antenna(PyLayers):
         """ Display antenna coefficient
 
             typ : string
-                'ssh' | 'vsh'
+                'ssh' |'vsh'
             L  : maximum level
             kf : frequency index
             vmin  : float

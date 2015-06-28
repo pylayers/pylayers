@@ -376,7 +376,6 @@ class CorSer(PyLayers):
 
         if ('HK' in self.typ) or ('FULL' in self.typ):
             print '\nHKB data frame index:', 
-            pdb.set_trace()
             self._align_on_devdf(typ='HKB')
             print 'Align on mocap OK...',
             try:
@@ -703,7 +702,7 @@ bernard
                           's3off':-0.2}      ,
                  })
 
-        # load extra  information from inifile (antenna, rotation matrix,...)
+        #load extra  information from inifile (antenna, rotation matrix,...)
 
         inifile = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','BodyandWear','AccesPoints.ini')
         config = ConfigParser.ConfigParser()

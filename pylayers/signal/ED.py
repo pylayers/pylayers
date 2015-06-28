@@ -145,7 +145,7 @@ class ED(PyLayers):
         # calculates ED moments, order and scale
         #
         # self.moment(typ='struc')
-        # kB = 1,3806488 × 10-23
+        # kB = 1,3806488  10-23
         kB = 1.3806488e-23
         # TB : Noise temperature
         TB  = 290*10**(self.NF/10.)

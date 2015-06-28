@@ -1465,7 +1465,7 @@ class GrRay3D(PyLayers):
             self.ray3d = []
 
             for i in range(self.n):
-                # print "Rayon NÂ° : ",i
+                # print "Rayon N : ",i
                 ray3D = Ray3D()
                 start = stop
                 stop = start + 4

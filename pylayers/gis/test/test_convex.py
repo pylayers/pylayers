@@ -1,11 +1,13 @@
 from pylayers.gis.layout import *
 import pylayers.util.geomutil as geu
+import os
+
 Lfile = 'WHERE1_nc.ini'
 Lfile = 'TA-Office.ini'
 
 
-data = '/home/niamiot/Documents/code/pylayers/data/struc/ini/'+Lfile
-proj = '/home/niamiot/Documents/Pylayers_project/P1/struc/ini/'+Lfile
+data = os.environ('PYLAYERS')+'/data/struc/ini/'+Lfile
+proj = os.environ('Basenae')+/P1/struc/ini/'+Lfile
 
 shutil.copyfile(data,proj)
 

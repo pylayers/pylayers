@@ -220,6 +220,7 @@ Physical Layer
 
    pylayers.simul.radionode
    pylayers.signal.bsignal
+   pylayers.signal.device
    pylayers.signal.DF
    pylayers.signal.ED
    pylayers.signal.waveform
