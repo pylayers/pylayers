@@ -2869,10 +2869,11 @@ class Cylinder(object):
     """
 
     def __init__(self,name = 'Meriem_Cylindre:',
-                _filemocap='/media/niamiot/DONNEES/svn2/measures/CORMORAN/RAW/12-06-2014/MOCAP/Nav_serie_006.c3d',
+                _filemocap='/RAW/12-06-2014/MOCAP/Nav_serie_006.c3d',
                 unit='mm',
                 color='white'):
         self.name = name
+        filemocap = os.environ('CORMORAN')+ _filemocap
         self.loadC3D(_filemocap,unit=unit)
         self.init_traj()
         self.color=color

@@ -4,9 +4,8 @@ from scipy.spatial import Delaunay
 from pylayers.gis.layout import *
 import shapely.geometry as sh
 Lfile = 'scattering_nonconvex.ini'
-data = '/home/niamiot/Documents/code/pylayers/data/struc/ini/'+Lfile
-proj = '/home/niamiot/Documents/Pylayers_project/P1/struc/ini/'+Lfile
-
+data = os.environ['PYLAYERS']+'/data/struc/ini/'+Lfile
+proj = os.environ['BASENAME']+'/struc/ini/'+Lfile
 shutil.copyfile(data,proj)
 
 L = Layout(Lfile,force=True)
