@@ -338,7 +338,6 @@ class Simul(PyLayers):
         for p in self.dpersons:
             D = []
             for dev in self.dpersons[p].dev:
-                pdb.set_trace()
                 aDev = Device(self.dpersons[p].dev[dev]['name'], ID = dev)
                 D.append(aDev)
 
@@ -370,7 +369,7 @@ class Simul(PyLayers):
         fig, ax = self.N.show(fig=fig, ax=ax)
         return fig, ax
 
-    def evaldeter(self, na, nb, wstd, fmode='band', nf=10,**kwargs):
+    def evaldeter(self, na, nb, wstd, fmode='band',nf=10,fGHz=[], **kwargs):
         """ deterministic evaluation of a link
 
         Parameters
@@ -384,8 +383,8 @@ class Simul(PyLayers):
             wireless standard used for commmunication between na and nb
         fmode : string ('center'|'band')
             mode of frequency evaluation
-            center : only on the centered frequency
-            band : on the whole band
+            center : single frequency (center frequency of a channel)
+            band : nf points on the whole band
         nf : int:
             number of frequency points (if fmode = 'band')
 
@@ -420,10 +419,14 @@ class Simul(PyLayers):
         #
         if fmode == 'center':
             self.DL.fGHz = self.N.node[na]['wstd'][wstd]['fcghz']
-        else:
+        if fmode == 'band':
             fminGHz = self.N.node[na]['wstd'][wstd]['fbminghz']
             fmaxGHz = self.N.node[na]['wstd'][wstd]['fbmaxghz']
             self.DL.fGHz = np.linspace(fminGHz, fmaxGHz, nf)
+        if fmode == 'force':
+            assert fGHz!=[],"fGHz has not been defined"
+            self.DL.fGHz = fGHz
+
         a, t = self.DL.eval(**kwargs)
 
         return a, t
@@ -659,7 +662,6 @@ class Simul(PyLayers):
                         #  node : nb
                         #  wstd : w
                         #
-                        pdb.set_trace()
                         self.evaldeter(na, nb, w, applywav=False, **DLkwargs)
                         # if typ == 'OB':
                         #     self.evalstat(na, nb)

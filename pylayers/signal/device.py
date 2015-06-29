@@ -151,7 +151,7 @@ class Device(object):
         wstd : string
             worerless standard
         channel : int
-            channel number
+            channel numbern
         """
 
         W = Wstandard(wstd)
@@ -179,9 +179,10 @@ class Device(object):
         dev = json.load(fp)
         fp.close()
 
-        fp = open(pyu.getlong('wstd.json',pstruc['DIRSIMUL']))
-        wstds = json.load(fp)
-        fp.close()
+        
+        #fp = open(pyu.getlong('wstd.json',pstruc['DIRSIMUL']))
+        #wstds = json.load(fp)
+        #fp.close()
 
 
         dim = dev[devname]['dimensions']
@@ -213,4 +214,3 @@ class Device(object):
             self.wstd[k]['cca'] = ''
 
 
-WW
