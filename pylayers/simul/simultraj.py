@@ -508,6 +508,7 @@ class Simul(PyLayers):
                 and replace by new simulation id
 
 
+
         Examples
         --------
 
@@ -662,7 +663,7 @@ class Simul(PyLayers):
                         #  node : nb
                         #  wstd : w
                         #
-                        self.evaldeter(na, nb, w, applywav=False, **DLkwargs)
+                        self.evaldeter(na, nb, w, applywav=False, fmod=fmod, fGHz=fGHz, **DLkwargs)
                         # if typ == 'OB':
                         #     self.evalstat(na, nb)
                         #     eng = self.SL.eng

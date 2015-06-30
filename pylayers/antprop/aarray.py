@@ -1,6 +1,7 @@
 # -*- coding:Utf-8 -*-
 import numpy as np
 import pylayers.antprop.antenna as ant
+import matplotlib.pyplot as plt
 import pdb
 r"""
 
@@ -9,6 +10,15 @@ r"""
 This module handles antenna arrays
 
 """
+class TXRU(object):
+    """ Tranceiver Units
+
+    See : Y-Han Nam , Saifur Rahman, Yang Li : Full Dimension MIMO for LTE-Advanced and 5G
+
+    """
+    def __init__(self):
+        pass
+
 class Array(object):
     """ Array class
     """
@@ -33,28 +43,35 @@ class Array(object):
 
         return(st)
 
-    def show3(self):
-        """  show 3D visualization of the array
-        """
-
-        pass
-
-
 class ULArray(Array):
     """ Uniform Linear Array
+
+    An uniform array is centered on the origin.
+    It has Nx, Ny, Nz antennas placed respectively along the x,y,z axis.
+
     """
     def __init__(self,**kwargs):
-        defaults = { 'N'   : [8,1,1],
-                    'dm'   :[0.075,0,0]
+        """
+
+        Parameters
+        ----------
+        N  : list
+            [Nx,Ny,Nz]  don't use 0 the total number of antennas is Nx*Ny*Nz
+        dm : list of floats
+            [dxm,dym,dzm] distance are expressed in meters
+
+        """
+        defaults = { 'N'    : [8,1,1],
+                     'dm'   : [0.075,0,0]
                    }
         for k in defaults:
             if k not in kwargs:
-                kwargs[k]=defaults[k] 
-        
+                kwargs[k]=defaults[k]
+
         self.N  = kwargs['N']
         self.dm = np.array(kwargs['dm'])
-        self.Na = np.prod(self.N)  
-        
+        self.Na = np.prod(self.N)
+
         Nx = self.N[0]
         Ny = self.N[1]
         Nz = self.N[2]
@@ -62,57 +79,85 @@ class ULArray(Array):
         if Nx%2==0:
             px = self.dm[0]*np.linspace(-Nx/2,Nx/2,Nx)[None,:,None,None] # 1 x Nx x Ny x Nz
         else:
-            px = self.dm[0]*np.linspace(-(Nx-1)/2,(Nx-1)/2,Nx)[None,:,None,None] #Nx x Ny x Nz
+            px = self.dm[0]*np.linspace(-(Nx-1)/2,(Nx-1)/2,Nx)[None,:,None,None] # 1 x Nx x Ny x Nz
         if Ny%2==0:
-            py = self.dm[1]*np.linspace(-Ny/2,Ny/2,Ny)[None,None,:,None] # Nx x Ny x Nz
+            py = self.dm[1]*np.linspace(-Ny/2,Ny/2,Ny)[None,None,:,None] # 1 x Nx x Ny x Nz
         else:
-            py = self.dm[1]*np.linspace(-(Ny-1)/2,(Ny-1)/2,Ny)[None,None,:,None] # Nx x Ny x Nz
+            py = self.dm[1]*np.linspace(-(Ny-1)/2,(Ny-1)/2,Ny)[None,None,:,None] # 1 X Nx x Ny x Nz
         if Nz%2==0:
-            pz = self.dm[2]*np.linspace(-Nz/2,Nz/2,Nz)[None,None,None,:] #  Nx x Ny x Nz
+            pz = self.dm[2]*np.linspace(-Nz/2,Nz/2,Nz)[None,None,None,:] #  1 x Nx x Ny x Nz
         else:
-            pz = self.dm[2]*np.linspace(-(Nz-1)/2,(Nz-1)/2,Nz)[None,None,None,:] # Nx x Ny x Nz
+            pz = self.dm[2]*np.linspace(-(Nz-1)/2,(Nz-1)/2,Nz)[None,None,None,:] # 1 x Nx x Ny x Nz
 
         p = np.zeros((3,Nx,Ny,Nz))
+        #p = np.zeros((3,Nx*Ny*Nz))
 
         p[0,:,:,:] = px
         p[1,:,:,:] = py
         p[2,:,:,:] = pz
 
-        super(ULArray,self).__init__(p=p)
+        q = p.reshape((3,Nx*Ny*Nz))
+
+        super(ULArray,self).__init__(p=q)
 
 class UCArray(Array):
     """ Uniform Circular Array
     """
+
     pass
 
 class AntArray(Array,ant.Antenna):
-    """ Class Antenna which inherits Array and Antenna classes
+    """ Class AntArray
+
+    inherits from Array and Antenna classes
+
     """
 
     def __init__(self,**kwargs):
-        defaults = {'typ': 'UA',
-                    'A'    : [],
+        defaults = {'tarr': 'UA',
                     'N'    : [8,1,1],
-                    'dm'   : [0.075,0,0]
-                   }
+                    'dm'   : [0.075,0,0],
+                    'Ntxru' : 1,
+                    'pattern' : True,
+                    'typ':'Omni',
+                    'directory': 'ant',
+                    'nf':104,
+                    'pol':'v',
+                    'source':'satimo',
+                    'ntheta':90,
+                    'nphi':181,
+                    'p0':0,
+                    't0':np.pi/2.,
+                    'p3':np.pi/6.,
+                    't3':np.pi/6.,
+                    'L':90,
+                    'fmin':0.8,
+                    'fmax':5.95,
+                    'gm': 18,
+                    'sllv':-18,
+                    'hpbwv':6.2,
+                    'hpbwh':65,
+                    'fbrh':30,
+                    'thtilt':0}
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]
 
-        self.typ = kwargs['typ']
+        self.tarr = kwargs.pop('tarr')
+        self.N  = np.array(kwargs.pop('N'))
+        self.Na = np.prod(self.N)  # number of antennas
+        self.Ntxru = kwargs.pop('Ntxru')
+        self.dm = np.array(kwargs.pop('dm'))
+        self.typ = kwargs.pop('typ')
 
-        if self.typ=='UA':
-           UA = ULArray(N=kwargs['N'],dm=kwargs['dm'])
+        if self.tarr=='UA':
+           UA = ULArray(N = self.N,dm = self.dm)
 
-        self.N   = np.array(kwargs['N'])
-        self.dm  = np.array(kwargs['dm'])
+
+        # init Antenna parent
+        ant.Antenna.__init__(self,typ=self.typ,**kwargs)
 
         super(AntArray,self).__init__(p=UA.p)
-
-        if kwargs['A']<>[]:
-            self.A   = kwargs['A']
-        else:
-            self.A   = ant.Antenna('Omni')
 
 
     def __repr__(self):
@@ -120,52 +165,113 @@ class AntArray(Array,ant.Antenna):
          st = st + 'typ : '+self.typ+'\n'
          st = st + 'N : '+str(self.N)+'\n'
          st = st + 'dm : '+str(self.dm)+'\n'
+         st = st + ant.Antenna.__repr__(self)
          return(st)
 
-    def calF(self,ang,fGHz=2.0):
-        """
+    def calF(self,**kwargs):
+        """ calculates array factor
+
          Parameters
          ----------
 
          ang : np.array(Nkx2) [theta,phi]
             array direction angles in radians
 
+         w :  complex weight  (Nf x Nant x Ntxru)
+
          Examples
          --------
 
-         >>> Nk = 180
+         >>> Nd = 180
          >>> theta = np.pi*np.ones(Nk)/2.
-         >>> phi = np.linspace(0,np.pi,Nk)
+         >>> phi = np.linspace(0,np.pi,Nd)
          >>> ang = np.vstack((theta,phi)).T
          >>> A = AntArray()
          >>> A.calF(ang)
 
         """
 
-        lamda = 0.3/fGHz
+        defaults = { 'w' : [],
+                     'th' :[],
+                     'ph': [],
+                     'pattern':True
+                   }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+
+        if (kwargs['th'] == []) and (kwargs['ph'] == []):
+            self.theta = np.linspace(0,np.pi,self.Nt)
+            self.phi = np.linspace(0,2*np.pi,self.Np,endpoint=False)
+        else:
+            self.theta = th
+            self.phi = ph
+
+        if kwargs['w']==[]:
+            w = np.ones((self.Nf,1,self.Na,self.Ntxru))
+        else:
+            pass
+
+        lamda = (0.3/self.fGHz)
         k     = 2*np.pi/lamda
 
-        kx = np.sin(ang[:,0])*np.cos(ang[:,1])    # N x 1
-        ky = np.sin(ang[:,0])*np.sin(ang[:,1])    # N x 1
-        kz = np.cos(ang[:,0])                     # N x 1
-        self.k  = np.vstack((kx,ky,kz)).T         # N x 3
+        # Nd number of directions
 
-        Na = np.prod(self.N)  # number of antennas
-        
+        if kwargs['pattern']:
+            sx = np.sin(self.theta[:,None])*np.cos(self.phi[None,:])    # Ntheta x Nphi
+            sy = np.sin(self.theta[:,None])*np.sin(self.phi[None,:])    # Ntheta x Nphi
+            sz = np.cos(self.theta[:,None])*np.ones(len(self.phi))[None,:]   # Ntheta x Nphi
+            sx = sx.reshape(self.Nt*self.Np)
+            sy = sy.reshape(self.Nt*self.Np)
+            sz = sz.reshape(self.Nt*self.Np)
+        else:
+            sx = np.sin(self.theta)*np.cos(self.phi)    # Nd x 1
+            sy = np.sin(self.theta)*np.sin(self.phi)    # Nd x 1
+            sz = np.cos(self.theta)                     # Nd x 1
+
+        self.s  = np.vstack((sx,sy,sz)).T         # Nd x 3
+
+
         #
-        # F = exp(+jkD)
+        # F = exp(+jk s.p)
         #
-        kD = np.einsum('ij,jklm->iklm',self.k,self.p)   # k.D
-        self.E = np.exp(1j*k*np.einsum('ij,jklm->iklm',self.k,self.p))
-        self.F = np.einsum('ijkl->i',self.E)
+
+        # s : Nd x 3
+        # p : 3 x Na
+        # w : 1 x Na
+        # sdotp : Nd x Na
+
+        sdotp  = np.dot(self.s,self.p)   # s . p
+
+        #
+        # E : Nf x Nd x Na x 1
+        # w : Nf x 1  x Na x Nt
+        # wE : f x Nd x Na x Nt
+
+        self.wE = w*np.exp(1j*k[:,None,None]*sdotp[None,:,:])[:,:,:,None]
+
+        #
+        # sum over antennas (axes 2 Na )
+        #
+        # Nf x Nd x Ntxru
+        # or
+        # Nf x Ntheta x Nphi x Ntxru
+        #
+
+        self.F = np.sum(self.wE,axis=2)
+        if kwargs['pattern']:
+            self.Ftheta = self.F.reshape(self.Nf,self.Nt,self.Np,self.Ntxru)
+            self.Fphi = self.F.reshape(self.Nf,self.Nt,self.Np,self.Ntxru)
 
 
 
 
-## 
-## 
-## 
-## 
+# 
+# 
+# 
+# 
 ## + We assume X band 
 #
 ## In[2]:
@@ -431,7 +537,7 @@ class AntArray(Array,ant.Antenna):
 #    k     = 2*pi/lam
 #    if d ==[]:
 #        d     = lam/2
-#        
+#
 #    W  = outer(conj(w.T),w)
 #    u  = 1j*k*d*outer(n,sin(theta))
 #    v  = 1j*k*d*outer(n,cos(theta))
@@ -440,6 +546,7 @@ class AntArray(Array,ant.Antenna):
 #    R  = -u*exp(v)+v*v*exp(u)
 #    T  = S+U
 #    F  = real(dot(conj(S.T),dot(W,S)))
+#
 #    G  = real(dot(conj(U.T),dot(W,S))+dot(conj(S.T),dot(W,U)))
 #    H  = real(dot(conj(R.T),dot(W,S))+2*dot(conj(U.T),dot(W,U))+dot(conj(S.T),dot(W,R)))
 #    f  = diag(F)/max(diag(F))

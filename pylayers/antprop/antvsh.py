@@ -105,13 +105,11 @@ def vsh(A, dsf=1):
     Cr[:, :, 0] = 0.5 * Cr[:, :, 0]
     Ci[:, :, 0] = 0.5 * Ci[:, :, 0]
 
-    #print "A.fa[0] = ",A.fa[0]
-    #print "A.fa[-1] = ",A.fa[-1]
 
-    Br = ant.VCoeff(typ='s1', fmin=A.fa[0], fmax=A.fa[-1], data=Br)
-    Bi = ant.VCoeff(typ='s1', fmin=A.fa[0], fmax=A.fa[-1], data=Bi)
-    Cr = ant.VCoeff(typ='s1', fmin=A.fa[0], fmax=A.fa[-1], data=Cr)
-    Ci = ant.VCoeff(typ='s1', fmin=A.fa[0], fmax=A.fa[-1], data=Ci)
+    Br = ant.VCoeff(typ='s1', fmin=A.fGHz[0], fmax=A.fGHz[-1], data=Br)
+    Bi = ant.VCoeff(typ='s1', fmin=A.fGHz[0], fmax=A.fGHz[-1], data=Bi)
+    Cr = ant.VCoeff(typ='s1', fmin=A.fGHz[0], fmax=A.fGHz[-1], data=Cr)
+    Ci = ant.VCoeff(typ='s1', fmin=A.fGHz[0], fmax=A.fGHz[-1], data=Ci)
     A.C = ant.VSHCoeff(Br, Bi, Cr, Ci)
     return(A)
 
