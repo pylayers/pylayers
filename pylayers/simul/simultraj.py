@@ -381,7 +381,7 @@ class Simul(PyLayers):
             node b id in self.N (Network)
         wstd : string:
             wireless standard used for commmunication between na and nb
-        fmode : string ('center'|'band')
+        fmode : string ('center'|'band'|'force')
             mode of frequency evaluation
             center : single frequency (center frequency of a channel)
             band : nf points on the whole band
@@ -507,6 +507,8 @@ class Simul(PyLayers):
             if True , reference id of all already simulated link will be erased
                 and replace by new simulation id
 
+        fGHz : np.array
+            frequency in GHz
 
 
         Examples
@@ -533,6 +535,7 @@ class Simul(PyLayers):
                     'btr':True,
                     'DLkwargs':{},
                     'replace_data':True,
+                    'fGHz':[]
                     }
 
         for k in defaults:

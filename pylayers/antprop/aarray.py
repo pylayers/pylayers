@@ -49,6 +49,12 @@ class ULArray(Array):
     An uniform array is centered on the origin.
     It has Nx, Ny, Nz antennas placed respectively along the x,y,z axis.
 
+
+    The assumed mapping between the antenna port index ik and the spatial indexing
+    (ix,iy,iz) is
+
+    ik = iz Nx Ny + iy Nx + ix
+
     """
     def __init__(self,**kwargs):
         """
@@ -117,28 +123,11 @@ class AntArray(Array,ant.Antenna):
         defaults = {'tarr': 'UA',
                     'N'    : [8,1,1],
                     'dm'   : [0.075,0,0],
+                    'S'    : [],
                     'Ntxru' : 1,
                     'pattern' : True,
                     'typ':'Omni',
-                    'directory': 'ant',
-                    'nf':104,
-                    'pol':'v',
-                    'source':'satimo',
-                    'ntheta':90,
-                    'nphi':181,
-                    'p0':0,
-                    't0':np.pi/2.,
-                    'p3':np.pi/6.,
-                    't3':np.pi/6.,
-                    'L':90,
-                    'fmin':0.8,
-                    'fmax':5.95,
-                    'gm': 18,
-                    'sllv':-18,
-                    'hpbwv':6.2,
-                    'hpbwh':65,
-                    'fbrh':30,
-                    'thtilt':0}
+                    }
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]
