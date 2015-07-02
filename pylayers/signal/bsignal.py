@@ -343,7 +343,7 @@ class Bsignal(PyLayers):
             values  (...,Nx)
             the number of dimensions of y is arbitrary.
             the last dimension of y must be the primary axis
-
+        label : list of labels
 
         """
         self.x = x
@@ -356,17 +356,18 @@ class Bsignal(PyLayers):
                 self.label.append('ax'+str(k))
         else:
             self.label=label
-        if ndim > 1:
-            shy = np.shape(self.y)
-            shx = np.shape(self.x)
-            lx  = shx[0]
-            ly  = shy[-1]
-            # last dimension of y should be equal to dimension of x
-            if (ly != 1):
-                if (ly != lx) :
-                    print "Error in Bsignal : Dimension incompatibility "
-                    print "x : ", lx
-                    print "y : ", ly
+
+        shx = np.shape(self.x)
+        shy = np.shape(self.y)
+        self.N  = shx[0]
+        ly  = shy[-1]
+        # multi axes indexation
+        self.uax = np.hstack((np.ones(ndim-1),np.r_[self.N]))
+        # last dimension of y should be equal to first dimension of x
+        if (ly != self.N) :
+            print "Error in Bsignal : Dimension incompatibility "
+            print "x : ", self.N
+            print "y : ", ly
 
 
     def __repr__(self):
@@ -375,11 +376,25 @@ class Bsignal(PyLayers):
                             str(np.shape(self.x)),
                             str(np.shape(self.y)))
 
-        for k in range(self.y.ndim):
-            st = st + '\n' +self.label[k]+ ' : ' + str(self.y.shape[k])
+        #for k in range(self.y.ndim):
+        #    st = st + '\n' +self.label[k]+ ' : ' + str(self.y.shape[k])
 
         return(st)
 
+    def mean(self):
+        """ mean value of the signal
+        """
+        S = type(self)()
+        S.x = self.x
+        S.y = np.mean(self.y,axis=0)
+        return(S)
+
+
+    def append(self,bs):
+        """ append bs to Bsignal
+        """
+        assert((self.x==bs.x).all())
+        self.y = np.vstack((self.y,bs.y))
 
     def extract(self,u):
         r""" extract a subset of signal from index
@@ -581,7 +596,7 @@ class Bsignal(PyLayers):
         typ : string
             ['l10','l20','d','r','du','ru','m','re','im']
         sel  : list of ndarray()
-            data selection along selected axis, all the axis void 
+            data selection along selected axis, all the axis void
             default [[],[]]
         ik : fixed axis value default (0)
 
@@ -846,6 +861,13 @@ class Bsignal(PyLayers):
         logy  : boolean
             default False
 
+        Returns
+        -------
+
+        fig : figure
+        ax : np.array of axes
+
+
         """
 
         defaults = {'iy'  :  -1,
@@ -859,6 +881,7 @@ class Bsignal(PyLayers):
                   'xmax'  : 1e15,
                   'logx'  : False,
                   'logy'  : False,
+                  'idx'   :[0,0,0,0,0,0,0]
                  }
 
         for key, value in defaults.items():
@@ -869,6 +892,7 @@ class Bsignal(PyLayers):
         vline = kwargs['vline']
         hline = kwargs['hline']
 
+        idx = kwargs['idx']
         # filtering kwargs argument for plot function
         args ={}
         for k in kwargs:
@@ -895,17 +919,23 @@ class Bsignal(PyLayers):
         #
         # if ndim(y) > 1
         #
-        if ndim > 1:
-            yx = self.y[...,u]
+        if ndim == 4:
+            yx = self.y[idx[0],idx[1],idx[2],u]
             fig,ax = mulcplot(self.x[u],yx*conversion,**args)
-        else:
+        if ndim == 3:
+            yx = self.y[idx[0],idx[1],u]
+            fig,ax = mulcplot(self.x[u],yx*conversion,**args)
+        if ndim == 2:
+            yx = self.y[idx[0],u]
+            fig,ax = mulcplot(self.x[u],yx*conversion,**args)
+        if ndim==1:
             fig,ax = mulcplot(self.x[u],self.y[u]*conversion,**args)
         #
         # Draw vertical and horizontal lines
         #
         # To be added in mulcplot
         #
-
+    
         tcolor = ['red', 'green', 'green', 'green', 'black', 'black', 'black']
         nl,nc = np.shape(ax)
         for l in range(nl):
@@ -1032,19 +1062,23 @@ class Usignal(Bsignal):
         return(U)
 
     def __sub__(self, u):
-
+        pdb.set_trace()
         t = type(u).__name__
         if ((t == 'int') | (t == 'float')):
             U = Usignal(self.x, self.y - u)
-        else:
-            assert  (u.y.ndim == 1) | (u.y.shape[0]==1)
-            L = self.align(u)
+        if type(u)==type(self):
+            assert (u.x.shape==self.x.shape)
+            assert (u.y.shape[0]==1)|(u.y.shape[0]==self.y.shape[0])
+            assert (u.y.ndim == 1) | (u.y.shape[0]==1)
+            #L = self.align(u)
             #u1 = L[0]
             #u2 = L[1]
-            val = L.y[0:-1,:] - L.y[-1,:]
-            if ((val.ndim>1) & (val.shape[0]==1)):
-                val = val.reshape(val.shape[1])
-            U = Usignal(L.x,val)
+            #val = L.y[0:-1,:] - L.y[-1,:]
+            #if ((val.ndim>1) & (val.shape[0]==1)):
+            #    val = val.reshape(val.shape[1])
+            U = type(self)()
+            U.x = self.x 
+            U.y = self.y-u.y
             #U = Usignal(u1.x, u1.y - u2.y)
         return(U)
 
@@ -1585,10 +1619,20 @@ class TBsignal(Bsignal):
 
         return(fig,ax)
 
-    def energy(self):
-        """ return energy
+    def integ(self,Tns,Tsns=50):
+        """ integtation of alphak tauk
+
+        used energy detector for IEEE 802.15.6 standard
+
+
         """
-        return(sum(self.y*np.conj(self.y)))
+        u1 = np.where(self.x<(self.x[0]+Tns))[0]
+        u2 = np.where((self.x<(self.x[0]+Tsns+Tns)) &
+                      (self.x>=(self.x[0]+Tsns)))[0]
+        Hp = np.sum((self.y[u1])**2)
+        Hi = np.sum((self.y[u2])**2)
+
+        return(Hp,Hi)
 
     def translate(self, tau):
         """  translate signal by tau
@@ -1622,6 +1666,15 @@ class TBsignal(Bsignal):
 
     def b2fud(self, N=300):
         r""" conversion into a FUDsignal
+
+
+        Parameters
+        ----------
+
+        N :
+
+        Notes
+        -----
 
         This method is assuming that each element of TBsignal is a delta function.
 
@@ -1771,6 +1824,7 @@ class TUsignal(TBsignal, Usignal):
 
         Returns
         -------
+
         n
         sn
 
@@ -1793,18 +1847,16 @@ class TUsignal(TBsignal, Usignal):
             PSDdBmpHz = 10*np.log10(pmWpHz)
 
         n = Noise(ti = ti,
-                   tf = tf+tsns,
-                   fsGHz = fsGHz,
-                   PSDdBmpHz = PSDdBmpHz,
-                   R = R,
-                   seed = seed)
+                  tf = tf+tsns,
+                  fsGHz = fsGHz,
+                  PSDdBmpHz = PSDdBmpHz,
+                  R = R,
+                  seed = seed)
 
-
-        sn = TUsignal()
-        sn.y = self.y + n.y
+        sn.y = self.y + n.y[0:len(self.x)]
         sn.x = self.x
 
-        return sn
+        return sn,n
 
     def fft(self, shift=False):
         """  forward fast Fourier transform
@@ -1873,6 +1925,9 @@ class TUsignal(TBsignal, Usignal):
         S.y = y
         S.y = S.y * te
         return(S)
+
+    def idealf(self,fcGHz,BGHz):
+        pass
 
     def filter(self, order=4, wp=0.3, ws=0.4, ftype='butter'):
         """ signal filtering
@@ -2550,7 +2605,7 @@ class TUsignal(TBsignal, Usignal):
             u = np.nonzero(self.y > thre)[0]
             v = nbint(u)
             h = np.nonzero(u > n)[0]
-            g = delete(u, h)
+            g = np.delete(u, h)
             vl = nbint(g) - 1
 
             THRE = np.hstack((THRE, thre))
@@ -2569,7 +2624,8 @@ class TUsignal(TBsignal, Usignal):
         plt.show()
 
     def toa_new(self):
-        """ calculate time of arrival (new method) 
+        """ estimate time of arrival (new method)
+
         """
         t = self.x
         Max = max(self.y)
@@ -2588,12 +2644,12 @@ class TUsignal(TBsignal, Usignal):
 
             u = np.nonzero(self.y > thre)[0]
             hr = np.nonzero(u > n)[0]
-            g = delete(u, hr)
+            g = np.delete(u, hr)
 
             if nmax >= 6000:
             #set the fenetre=6000*0.005=30ns
                 hl = np.nonzero(g < nmax - 6000)[0]
-                u = delete(g, hl)
+                u = np.delete(g, hl)
             else:
                 u = g
 
@@ -2606,7 +2662,7 @@ class TUsignal(TBsignal, Usignal):
                 d = 0
                 n = u[0]
                 N = np.hstack((N, n))
-                print N
+                #print N
 
             thre = thre - step
             if thre < 0:
@@ -2646,12 +2702,12 @@ class TUsignal(TBsignal, Usignal):
 
             u = np.nonzero(self.y > thre)[0]
             hr = np.nonzero(u > n)[0]
-            g = delete(u, hr)
+            g = np.delete(u, hr)
 
             if nmax >= 6000:
             #set the fenetre=6000*0.005=30ns
                 hl = np.nonzero(g < nmax - 6000)[0]
-                u = delete(g, hl)
+                u = np.delete(g, hl)
             else:
                 u = g
 
@@ -3413,7 +3469,7 @@ class FUsignal(FBsignal, Usignal):
     ----------
 
     x  : nd.array((1xN))
-    y  : Complex nd.array((M x N )
+    y  : Complex nd.array((... x N )
 
 
     Methods
@@ -3432,12 +3488,12 @@ class FUsignal(FBsignal, Usignal):
     plotdB   : plot modulus in dB
     get      : get k th ray
     tap      : calculates channel taps
-
+    window   : 
+    
     """
     def __init__(self, x=np.array([]), y=np.array([]),label=[]):
         super(FUsignal,self).__init__(x,y,label)
         self.isFriis = False
-        #FBsignal.__init__(self, x, y)
 
     def __repr__(self):
         s = FBsignal.__repr__(self)
@@ -3483,10 +3539,11 @@ class FUsignal(FBsignal, Usignal):
 
 
     def window(self, win='hamming'):
-        """ windowing of FU signal
+        """ windowing FUsignal
 
         Parameters
         ----------
+
         win : string
             window type ('hamming','blackman','hanning')
 
@@ -3502,8 +3559,7 @@ class FUsignal(FBsignal, Usignal):
             >>> x = np.arange(2,8,0.1)
             >>> y = np.ones(len(x))
             >>> U = FUsignal(x,y)
-            >>> fi = plt.figure()
-         fig,ax = U.plot()
+            >>> fig,ax = U.plot()
             >>> U.window('hamming')
             >>> fig,ax = U.plot()
 
@@ -3511,28 +3567,18 @@ class FUsignal(FBsignal, Usignal):
 
 
         """
-        Nx = len(self.x)
-        shy = np.shape(self.y)
-        if len(shy) > 1:
-            if shy[0] == Nx:
-                Ny = shy[1]
-                ind = 0
-            else:
-                Ny = shy[0]
-                ind = 1
 
         if win == 'hamming':
-            w = np.hamming(Nx)
+            w = np.hamming(self.N)
         if win == 'blackman':
-            w = np.blackman(Nx)
+            w = np.blackman(self.N)
+        if win == 'hanning':
+            w = np.hanning(self.N)
 
-        if len(shy) > 1:
-            if ind == 0:
-                w = np.outer(w, np.ones(Ny))
-            else:
-                w = np.outer(np.ones(Ny), w)
-
+        w   = w.reshape(self.uax)
         self.y = self.y * w
+
+
 
     def applyFriis(self):
         r""" apply Friis factor
@@ -3540,16 +3586,21 @@ class FUsignal(FBsignal, Usignal):
         The Friis factor is multiplied to y
 
         .. math::
-            y := \frac{c}{4 \pi f} y
+            y := \( \frac{-j c}{4 \pi f} \) y
+
+            x is frequency in GHz
 
         boolean `isFriis` is set to `True`
 
         """
+
         if not self.isFriis:
             factor = -1j*0.3/(4*np.pi*self.x)
-            self.y = self.y*factor[np.newaxis,:]
+            factor = factor.reshape(self.uax)
+            self.y = self.y*factor
             self.isFriis = True
 
+    
 
     def get(self, k):
         """
@@ -3766,7 +3817,7 @@ class FUsignal(FBsignal, Usignal):
         return(U)
 
     def dftresamp(self, df_new):
-        """ non finished 
+        """ non finished
 
         Parameters
         ----------
@@ -3838,7 +3889,7 @@ class FUsignal(FBsignal, Usignal):
         V  : FHsignal
 
         """
-        assert self.x[0]!=0
+        #assert self.x[0]!=0
         f = self.x
         U = self.y
         N = len(f)
@@ -4133,6 +4184,10 @@ class FUsignal(FBsignal, Usignal):
         ax1 = fig.add_subplot(121)
         fig,ax1 = self.imshow(typ='l20',fig=fig,ax=ax1,**kwargs)
         ax2 = fig.add_subplot(122)
+        if 'vmin' in kwargs: 
+            del kwargs['vmin']
+        if 'vmax' in kwargs: 
+            del kwargs['vmax']
         fig,ax2= self.imshow(typ='d',fig=fig,ax=ax2,**kwargs)
 
         return fig,[ax1,ax2]
@@ -4203,7 +4258,7 @@ class FUsignal(FBsignal, Usignal):
         [Tse] David Tse, http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf page 26
 
         """
-        defaults = { 'fcGHz':4.5,
+        defaults = {'fcGHz':4.5,
                     'WMHz':1,
                     'Ntap':100,
                     'baseband':True}
@@ -4980,9 +5035,9 @@ class Noise(TUsignal):
                  ti=0,
                  tf = 100,
                  fsGHz = 50,
-                 PSDdBmpHz=-174,
-                 NF=0,
-                 R=50, seed=1):
+                 PSDdBmpHz = -174,
+                 NF = 0,
+                 R = 50, seed=1):
         """ object constructor
 
         Parameters
@@ -5093,12 +5148,15 @@ class Noise(TUsignal):
 
 
     def eval(self):
-        """ noise evaluation
+        r""" noise evaluation
+
+        $$N_0 = 4 \times 10^{-21}$$
+
         """
-        p = self._PSDdBmpHz + self._NF
-        pmW = 10 ** (p / 10.)  # DSP : dBm/Hz -> mW/Hz
-        pW = pmW / 1e3         # DSP : mw/Hz  -> W/Hz
-        self.PW = pW * (self._fsGHz * 1e9)   # Power : p * Bandwith Hz
+        e  = self._PSDdBmpHz + self._NF
+        emJ = 10 ** (e / 10.)  # DSP : dBm/Hz -> mW/Hz
+        eJ = emJ / 1e3         # DSP : mw/Hz  -> W/Hz
+        self.PW = eJ * (self._fsGHz * 1e9)   # Power : p * Bandwith Hz
         self.vrms = np.sqrt(self._R*self.PW)
         self.x = np.arange(self.ti, self.tf, self.tsns)
         N = len(self.x)
@@ -5106,6 +5164,7 @@ class Noise(TUsignal):
         self.y   = n
         self.var = np.var(n)
         self.Pr  = self.var/self._R
+        self.Er  = self.Pr/(self._fsGHz*1e9)
 
     def __repr__(self):
         st = ''
@@ -5113,12 +5172,15 @@ class Noise(TUsignal):
         st = st+ 'ti  : '+ str(self.ti)+'ns \n'
         st = st+ 'tf  : '+ str(self.tf)+'ns \n'
         st = st+ 'ts  : '+ str(self.tsns)+'ns \n'
+        st = st+ 'N   : '+ str(len(self.x))+'\n'
         st = st + '-------------\n'
         st = st+ 'DSP : ' + str(self.PSDdBmpHz)+ ' dBm/Hz\n'
-        st = st+ 'NF : ' + str(self.NF)+ ' dB\n'
+        st = st+ '    : ' + str(10**(self.PSDdBmpHz/10.)*1e-3)+ ' Joules\n'
+        st = st + '-------------\n'
+        st = st+ 'Noise Figure : ' + str(self.NF)+ ' dB\n'
         st = st+ 'Vrms : '+ str(self.vrms)+ ' Volts\n'
         st = st+ 'Variance : '+ str(self.var)+ ' V^2\n'
-        st = st+ 'Power /'+str(self.R)+' Ohms : '+ str(10*np.log10(self.PW)-60)+ ' dBm\n'
+        st = st+ 'Power (dBm) /'+str(self.R)+' Ohms : '+ str(10*np.log10(self.PW)-60)+ ' dBm\n'
         st = st+ 'Power realized /'+str(self.R)+' Ohms : '+ str(10*np.log10(self.Pr)-60)+ ' dBm\n'
         return(st)
 
@@ -5367,7 +5429,7 @@ def test():
 if __name__ == "__main__":
     pass
     #plt.ion()
-    #doctest.testmod()
+    doctest.testmod()
     #ip1 = EnImpulse(fc=4.493,band=0.499,thresh=3,fe=40)
     #ip2 = EnImpulse(fc=4.493,band=0.499,thresh=3,fe=40)
     #ip2.translate(1.123)

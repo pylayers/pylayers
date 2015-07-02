@@ -1,57 +1,15 @@
-# -*- coding:Utf-8 -*-
+# -*t coding:Utf-8 -*-
 """
 .. currentmodule:: pylayers.antprop.channel
 
-.. autosummary::
-    :toctree: generated/
+.. automodule::
+    :members:
 
-Ctilde class
-============
+.. autoclass:: Ctilde
+    :members:
 
-.. autosummary::
-    :toctree: generated/
-
-    Ctilde.__init__
-    Ctilde.__repr__
-    Ctilde.info
-    Ctilde.choose
-    Ctilde.saveh5
-    Ctilde.loadh5
-    Ctilde.load
-    Ctilde.mobility
-    Ctilde.doadod
-    Ctilde.locbas
-    Ctilde.Cg2Cl
-    Ctilde.show
-    Ctilde.plotd
-    Ctilde.check_reciprocity
-    Ctilde.energy
-    Ctilde.sort
-    Ctilde.prop2tran
-    Ctilde.PLoss
-
-Tchannel Class
-==============
-
-.. autosummary::
-    :toctree: generated/
-
-    Tchannel.__init__
-    Tchannel.__repr__
-    Tchannel.apply
-    Tchannel.chantap
-    Tchannel.applywavA
-    Tchannel.applywavB
-    Tchannel.applywavC
-    Tchannel.plotd
-    Tchannel.plotad
-    Tchannel.doadod
-    Tchannel.energy
-    Tchannel.wavefig
-    Tchannel.rayfig
-    Tchannel.RSSI
-    Tchannel.saveh5
-    Tchannel.loadh5
+.. autoclass:: Tchannel
+    :members:
 
 """
 import doctest
@@ -138,6 +96,8 @@ class Ctilde(PyLayers):
 
     def choose(self):
         """ Choose a field file in tud directory
+
+        DEPRECATED 
         """
         import tkFileDialog as FD
         filefield = FD.askopenfilename(filetypes=[("Files field  ", "*.field"),
@@ -311,6 +271,38 @@ class Ctilde(PyLayers):
             fh5.close()
             raise NameError('Channel.Ctilde: issue when writting h5py file')
 
+    def los(self,pa=np.r_[0,0,0],pb=np.r_[3,0,0],fGHz=np.r_[2.4],tang=np.r_[[1.57,3.14]],rang=np.r_[[1.57,0]]):
+        """ Line of site channel
+
+        Parameters
+        ----------
+
+        d (m) 
+        fGHz (,Nf)
+        tang (1x2)
+        rang (1x2)
+
+        """
+        self.pa = pa
+        self.pb = pb
+        self.fGHz = fGHz
+        self.nfreq = len(fGHz)
+        self.nray = 1
+        si = pb-pa
+        d = np.r_[np.sqrt(np.sum(si*si))]
+        self.tauk = d/0.3
+        tht =  np.arccos(si[2])
+        pht =  np.arctan2(si[1],si[0])
+        thr =  np.arccos(-si[2])
+        phr =  np.arctan2(-si[1],-si[0])
+        self.tang = np.array([tht,pht]).reshape((1,2))
+        self.rang = np.array([thr,phr]).reshape((1,2))
+        U = np.ones(len(self.fGHz),dtype=complex)/d[0]
+        Z = np.zeros(len(self.fGHz),dtype=complex)
+        self.Ctt = bs.FUsignal(self.fGHz, U)
+        self.Ctp = bs.FUsignal(self.fGHz, Z)
+        self.Cpt = bs.FUsignal(self.fGHz, Z)
+        self.Cpp = bs.FUsignal(self.fGHz, U)
 
     def _loadh5(self,filenameh5,grpname):
         """ load Ctilde object in hdf5 format
@@ -327,7 +319,6 @@ class Ctilde(PyLayers):
         """
 
         filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
-
         try:
             fh5=h5py.File(filename,'r')
             f = fh5['Ct/'+grpname]
@@ -339,7 +330,6 @@ class Ctilde(PyLayers):
 
             self.Tt = f['Tt'][:]
             self.Tr = f['Tr'][:]
-
             Ctt = f['Ctt_y'][:]
             Cpp = f['Cpp_y'][:]
             Ctp = f['Ctp_y'][:]
@@ -364,7 +354,7 @@ class Ctilde(PyLayers):
 
         Load the three files .tauk .tang .rang which contain respectively
         delay , angle of departure , angle of arrival.
-
+maicher
         Parameters
         ----------
 
@@ -529,7 +519,8 @@ class Ctilde(PyLayers):
         Parameters
         ----------
 
-        d: 'doa' | 'dod'
+        d: string
+            'doa' | 'dod'
             display direction of departure | arrival
         fig : plt.figure
         ax : plt.axis
@@ -788,7 +779,6 @@ class Ctilde(PyLayers):
         # get frequency axes
 
         fGHz = self.fGHz
-
         # if rot matrices are passed
         if (Tt != []) & (Tr != []):
             if self.islocal:
@@ -1096,7 +1086,7 @@ class Ctilde(PyLayers):
         Notes
         -----
 
-        r x f
+        r x f+
           axis 0 : ray
           axis 1 : frequency
 
@@ -1186,7 +1176,7 @@ class Ctilde(PyLayers):
         self.Ctp.y = self.Ctp.y[u,:]
         self.Cpt.y = self.Cpt.y[u,:]
 
-    def prop2tran(self,a='theta',b='theta',Ta=[],Tb=[],Friis=True):
+    def prop2tran(self,a='theta',b='theta',Friis=True,debug=True):
         r""" transform propagation channel into transmission channel
 
         Parameters
@@ -1208,6 +1198,8 @@ class Ctilde(PyLayers):
            unitary matrice for antenna orientation
         Friis : boolean
             if True scale with :math:`-j\frac{\lambda}{f}`
+        debug : boolean
+            if True the antenna gain for each ray is stored
 
         Returns
         -------
@@ -1220,7 +1212,6 @@ class Ctilde(PyLayers):
         nfreq = self.nfreq
         nray  = self.nray
         sh = np.shape(self.Ctt.y)
-
         if type(a) == str:
 
             if a == 'theta':
@@ -1275,29 +1266,44 @@ class Ctilde(PyLayers):
         #
 
         #
-        #  C  = 2 x 2 x r x f   ? 
-        #  Fa = 2 x r x f     ?
+        #  C  = 2 x 2 x r x f
+        #  Fa = 2 x r x f
         #  Fb = 2 x r x f
         #t1 = self.Ctt * Fat + self.Cpt * Fap
         #t2 = self.Ctp * Fat + self.Cpp * Fap
-
         t1 = self.Ctt * Fat + self.Ctp * Fap
         t2 = self.Cpt * Fat + self.Cpp * Fap
         alpha = t1 * Fbt + t2 * Fbp
 
+
+
         H = Tchannel(alpha.x, alpha.y, self.tauk, self.tang, self.rang)
+
+        if debug :
+            H.alpha=alpha.y
+            H.Fat=Fat.y
+            H.Fap=Fap.y
+            H.Fbt=Fbt.y
+            H.Fbp=Fbp.y
+            H.Gat=10*np.log10(np.sum(Fat.y*np.conj(Fat.y),axis=1)/len(Fat.x))
+            H.Gap=10*np.log10(np.sum(Fap.y*np.conj(Fap.y),axis=1)/len(Fap.x))
+            H.Gbt=10*np.log10(np.sum(Fbt.y*np.conj(Fbt.y),axis=1)/len(Fbt.x))
+            H.Gbp=10*np.log10(np.sum(Fbp.y*np.conj(Fbp.y),axis=1)/len(Fbp.x))
+
         if Friis:
             H.applyFriis()
 
         # average w.r.t frequency
-        H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y)/self.nfreq, axis=1)))
+        Nf   = H.y.shape[1]
+        H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y)/Nf, axis=1)))
         H.tk = H.taud
+
         return(H)
 
     def _vec2scal(self):
         """ calculate scalChannel from VectChannel and antenna
 
-        DEPRECTATED
+        DEPRECATED
         Returns
         -------
 
@@ -1401,7 +1407,7 @@ class Tchannel(bs.FUDAsignal):
     doddoa()
     wavefig(w,Nray)
     rayfig(w,Nray)
-    RSSI(ufreq)
+    rssi(ufreq)
 
     See Also
     --------
@@ -1422,19 +1428,22 @@ class Tchannel(bs.FUDAsignal):
         ----------
 
         fGHz  :  1 x nfreq
-        alpha :  channel amplitude (nray x nfreq)
-        tau   :  delay (1 x nray)
+            frequency GHz
+        alpha :  nray x nfreq
+            path amplitude
+        tau   :  1 x nray
+            path delay (ns)
         dod   :  direction of departure (nray x 2)
-        doa   :  direction of arrival  (nray x 2)
+        doa   :  direction of arrival   (nray x 2)
 
         """
         super(Tchannel,self).__init__(fGHz, alpha, tau, dod, doa)
 
     def __repr__(self):
         st = ''
-        st = st + 'freq :'+str(self.x[0])+' '+str(self.x[-1])+' '+str(len(self.x))+"\n"
-        st = st + 'shape  :'+str(np.shape(self.y))+"\n"
-        st = st + 'tau :'+str(min(self.taud))+' '+str(max(self.taud))+"\n"
+        st = st + 'freq : '+str(self.x[0])+' '+str(self.x[-1])+' '+str(len(self.x))+"\n"
+        st = st + 'shape  : '+str(np.shape(self.y))+"\n"
+        st = st + 'tau (min, max) : '+str(min(self.taud))+' '+str(max(self.taud))+"\n"
         st = st + 'dist :'+str(min(0.3*self.taud))+' '+str(max(0.3*self.taud))+"\n"
         if self.isFriis:
             st = st + 'Friis factor -j c/(4 pi f) has been applied'
@@ -1449,7 +1458,7 @@ class Tchannel(bs.FUDAsignal):
 
         Lfilename  : string
             Layout filename
-        idx : int
+        Tilde
             file identifier number
         a : np.ndarray
             postion of point a (transmitter)
@@ -1467,7 +1476,7 @@ class Tchannel(bs.FUDAsignal):
 
         f=h5py.File(filenameh5,'w')
 
-        # try/except to avoid loosing the h5 file if 
+        # try/except to avoid loosing the h5 file if
         # read/write error
         try:
             f.attrs['a']=a
@@ -1559,6 +1568,7 @@ class Tchannel(bs.FUDAsignal):
         # try/except to avoid loosing the h5 file if
         # read/write error
         try:
+
             fh5=h5py.File(filename,'a')
             if not grpname in fh5['H'].keys():
                 fh5['H'].create_group(grpname)
@@ -1567,6 +1577,7 @@ class Tchannel(bs.FUDAsignal):
             f=fh5['H/'+grpname]
 
             for k,va in self.__dict__.items():
+                #print k,va
                 f.create_dataset(k,shape = np.shape(va),data=va)
             fh5.close()
         except:
@@ -1574,7 +1585,7 @@ class Tchannel(bs.FUDAsignal):
             raise NameError('Channel Tchannel: issue when writting h5py file')
 
     def _loadh5(self,filenameh5,grpname):
-        """ Load Ctilde object in hdf5 format compliant with Link Class
+        """ Load H object in hdf5 format compliant with Link Class
 
         Parameters
         ----------
@@ -1588,15 +1599,18 @@ class Tchannel(bs.FUDAsignal):
         filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
         try:
             fh5=h5py.File(filename,'r')
+
             f = fh5['H/'+grpname]
 
             # keys not saved as attribute of h5py file
             for k,va in f.items():
                 if k !='isFriis':
-                    setattr(self,str(k),va[:])
+                    try:
+                        setattr(self,str(k),va[:])
+                    except:
+                        setattr(self,str(k),va)
                 else :
                     setattr(self,str(k),va)
-
             fh5.close()
             self.__init__(self.x, self.y, self.taud, self.dod, self.doa)
 
@@ -1606,7 +1620,7 @@ class Tchannel(bs.FUDAsignal):
 
 
     def apply(self, W):
-        """ Apply a FUsignal W to the ScalChannel.
+        """ apply FUsignal W to the Tchannel
 
         Parameters
         ----------
@@ -1730,8 +1744,10 @@ class Tchannel(bs.FUDAsignal):
 
         """
         #
-        # return a FUDsignal
+        # return a TUsignal
         #
+        #import ipdb
+        #ipdb.set_trace()
         Y = self.apply(Wgam)
         ri = Y.ft1(Nz=500,ffts=1)
 
@@ -1827,7 +1843,8 @@ class Tchannel(bs.FUDAsignal):
         normalize = kwargs.pop('normalize')
         mode =kwargs.pop('mode')
         title =kwargs.pop('title')
-
+        xa = kwargs.pop('xa')
+        xb = kwargs.pop('xb')
         if fig == []:
             fig = plt.figure()
 
@@ -2351,7 +2368,7 @@ class Tchannel(bs.FUDAsignal):
 
         # qHk.x[0]==Wk.x[0]
 
-    def RSSI(self,ufreq=0) :
+    def rssi(self,ufreq=0) :
         """ Compute RSSI value for a frequency index
 
         Parameters
@@ -2365,7 +2382,7 @@ class Tchannel(bs.FUDAsignal):
         -------
 
         RSSI: float
-        RSSI value
+        RSSI value in dB
 
         Notes
         -----
@@ -2374,8 +2391,14 @@ class Tchannel(bs.FUDAsignal):
 
         """
 
-        Tk = np.real(self.y[:, ufreq])
-        return(20*np.log(np.sum(Tk**2)))
+        Ak   = self.y[:, ufreq]
+        Pr   = np.sum(Ak*np.conj(Ak))
+        akp   = Ak*np.exp(-2*1j*np.pi*self.x[ufreq]*self.tk)
+        Prp   = np.abs(np.sum(akp))**2
+        PrdB  = 10*np.log10(Pr)
+        PrpdB = 10*np.log10(Prp)
+
+        return PrdB,PrpdB
 
 
 if __name__ == "__main__":

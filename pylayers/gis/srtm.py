@@ -8,7 +8,7 @@
 #import xml.dom.minidom
 from HTMLParser import HTMLParser
 import ftplib
-import httplib
+import urllib2
 import re
 import pickle
 import os.path
@@ -16,7 +16,7 @@ import os
 import zipfile
 import array
 import math
-import pdb
+import ipdb
 
 class NoSuchTileError(Exception):
     """Raised when there is no tile for a region."""
@@ -42,7 +42,7 @@ class WrongTileError(Exception):
             self.tile_lat, self.tile_lon, self.req_lat, self.req_lon)
 
 class InvalidTileError(Exception):
-    """Raised when the SRTM tile file contains invalid data.""" 
+    """Raised when the SRTM tile file contains invalid data."""
     def __init__(self, lat, lon):
         Exception.__init__()
         self.lat = lat
@@ -57,7 +57,7 @@ class SRTMDownloader:
                  directory=os.path.join('srtm','version2_1','SRTM3'),
                  cachedir="cache",
                  protocol="http"):
-        self.protocol=protocol
+        self.protocol = protocol
         self.server = server
         self.directory = directory
         self.cachedir = cachedir
@@ -119,14 +119,13 @@ class SRTMDownloader:
         30may2010  GJ ORIGINAL VERSION
         """
         print "createFileListHTTP"
-        conn = httplib.HTTPConnection(self.server)
-        conn.request("GET",self.directory)
-        r1 = conn.getresponse()
-        if r1.status==200:
-            print "status200 received ok"
-        else:
-            print "oh no = status=%d %s" \
-                  % (r1.status,r1.reason)
+        conn = urllib2.Request('http://'+self.server+'/'+self.directory)
+        r1 = urllib2.urlopen(conn)
+        #if r1.status==200:
+        #    print "status200 received ok"
+        #else:
+        #    print "oh no = status=%d %s" \
+        #          % (r1.status,r1.reason)
 
         data = r1.read()
         parser = parseHTMLDirectoryListing()
@@ -136,14 +135,8 @@ class SRTMDownloader:
 
         for continent in continents:
             print "Downloading file list for", continent
-            conn.request("GET","%s/%s" % \
-                         (self.directory,continent))
-            r1 = conn.getresponse()
-            if r1.status==200:
-                print "status200 received ok"
-            else:
-                print "oh no = status=%d %s" \
-                      % (r1.status,r1.reason)
+            conn = urllib2.Request('http://'+self.server+'/'+self.directory+'/'+continent)
+            r1 = urllib2.urlopen(conn)
             data = r1.read()
             parser = parseHTMLDirectoryListing()
             parser.feed(data)
@@ -161,7 +154,7 @@ class SRTMDownloader:
             pickle.dump(self.filelist, output)
 
 
-        
+
     def parseFilename(self, filename):
         """Get lat/lon values from filename."""
         match = self.filename_regex.match(filename)
@@ -211,24 +204,13 @@ class SRTMDownloader:
                 ftp.close()
         else:
             #Use HTTP
-            conn = httplib.HTTPConnection(self.server)
-            conn.set_debuglevel(0)
-            filepath = "%s%s%s" % \
-                         (self.directory,continent,filename)
-            print "filepath=%s" % filepath
-            conn.request("GET", filepath)
-            r1 = conn.getresponse()
-            if r1.status==200:
-                print "status200 received ok"
-                data = r1.read()
-                self.ftpfile = open(os.path.join(self.cachedir,filename), 'wb')
-                self.ftpfile.write(data)
-                self.ftpfile.close()
-                self.ftpfile = None
-            else:
-                print "oh no = status=%d %s" \
-                      % (r1.status,r1.reason)
-
+            conn = urllib2.Request('http://'+self.server+'/'+self.directory+'/'+continent+'/'+filename)
+            r1 = urllib2.urlopen(conn)
+            data = r1.read()
+            self.ftpfile = open(os.path.join(self.cachedir,filename), 'wb')
+            self.ftpfile.write(data)
+            self.ftpfile.close()
+            self.ftpfile = None
 
 
     def ftpCallback(self, data):
@@ -395,5 +377,5 @@ class parseHTMLDirectoryListing(HTMLParser):
 if __name__ == '__main__':
     downloader = SRTMDownloader()
     downloader.loadFileList()
-    tile = downloader.getTile(48,-2)
-#    print tile.getAltitudeFromLatLon(49.1234, 12.56789)
+    tile = downloader.getTile(48,3)
+    #tile.getAltitudeFromLatLon(49.1234, 12.56789)

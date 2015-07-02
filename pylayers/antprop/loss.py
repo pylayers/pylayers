@@ -2,8 +2,13 @@
 #from numpy import *
 """
 
+.. currentmodule:: pylayers.antprop.loss
+
 Loss module
 ===========
+
+This module implements path loss models for various situations.
+
 
 .. autosummary::
     :toctree: generated/
@@ -184,22 +189,33 @@ def cost231(pBS,pMS,hroof,phir,wr,fMHz,wb=20,dB=True,city='medium'):
     Examples
     --------
 
-    >>> from pylayers.antprop.loss import *
-    >>> import matplotlib.pyplot as plt
-    >>> import numpy as np
-    >>> Nlink = 100
-    >>> hBS = 300
-    >>> hMS = 1.5
-    >>> hroof = 40*np.random.rand(Nlink)
-    >>> wr = 10*np.ones(Nlink)
-    >>> phir = 90*np.random.rand(Nlink)
-    >>> pMS = np.vstack((np.linspace(10,2500,Nlink),np.zeros(Nlink),hMS*np.ones(Nlink)))
-    >>> pBS = np.vstack((np.zeros(Nlink),np.zeros(Nlink),hBS*np.ones(Nlink)))
-    >>> fMHz = np.linspace(700,1900,120)
-    >>> pl = cost231(pBS,pMS,hroof,phir,wr,fMHz)
-    >>> im = plt.imshow(pl)
-    >>> cb = plt.colorbar()
-    >>> plt.show()
+    .. plot::
+        :include-source:
+
+        >>> from pylayers.antprop.loss import *
+        >>> import matplotlib.pyplot as plt
+        >>> import numpy as np
+        >>> # Number of links and BS and MS heights
+        >>> Nlink = 100
+        >>> hBS = 300
+        >>> hMS = 1.5
+        >>> # hroof and phir are drawn uniformily at random 
+        >>> hroof = 40*np.random.rand(Nlink)
+        >>> wr = 10*np.ones(Nlink)
+        >>> phir = 90*np.random.rand(Nlink)
+        >>> pMS = np.vstack((np.linspace(10,2500,Nlink),np.zeros(Nlink),hMS*np.ones(Nlink)))
+        >>> pBS = np.vstack((np.zeros(Nlink),np.zeros(Nlink),hBS*np.ones(Nlink)))
+        >>> # frequency range 
+        >>> fMHz = np.linspace(700,1900,120)
+        >>> pl = cost231(pBS,pMS,hroof,phir,wr,fMHz)
+        >>> im = plt.imshow(pl,extent=(0,100,0.7,1.9))
+        >>> cb = plt.colorbar()
+        >>> cb.set_label('Loss (dB)')
+        >>> plt.axis('tight')
+        >>> plt.xlabel('Frequency (GHz)')
+        >>> plt.ylabel('Link Number')
+        >>> plt.title('100 WI Path Loss realizations ')
+        >>> plt.show()
 
     """
 
@@ -262,7 +278,7 @@ def cost231(pBS,pMS,hroof,phir,wr,fMHz,wb=20,dB=True,city='medium'):
     return(pl)
 
 def cost259(pMS,pBS,fMHz):
-    """
+    """ cost259 model 
 
     Parameters
     ----------
@@ -278,8 +294,6 @@ def cost259(pMS,pBS,fMHz):
     http://
 
     """
-    hBS = pBS[3,:]
-    hMS = pMS[3,:]
     dm  = np.sqrt((pBS-pMS)*(pBS-pMS))
     lmbd = 300/fMHz
     pl = 10*2.6*np.log10(dm)+20*log10(4*np.pi/lmbd)
@@ -290,6 +304,9 @@ def cost259(pMS,pBS,fMHz):
 
 def hata(pMS,pBS,fGHz,hMS,hBS,typ):
     """ Hata Path loss model
+
+    Parameters
+    ----------
 
     pMS : np.array
         Mobile position (meters)
@@ -396,7 +413,7 @@ def PL(fGHz,pts,p,n=2.0,dB=True):
     return(PL)
 
 def Losst(L,fGHz,p1,p2,dB=True):
-    """  calculate Losses between links p1  p2
+    """  calculate Losses between links p1 p2
 
     Parameters
     ----------
@@ -456,6 +473,7 @@ def Losst(L,fGHz,p1,p2,dB=True):
     if (len(sh1)<2) & (len(sh2)<2):
         Nlink = 1
 
+    # determine incidence angles on segment crossing p1-p2 segment
     data = L.angleonlink(p1,p2)
 
     # as many slabs as segments
@@ -510,14 +528,14 @@ def Losst(L,fGHz,p1,p2,dB=True):
     return(LossWallo,LossWallp,EdWallo,EdWallp)
 
 def Loss0(S,rx,ry,f,p):
-    """ calculate Loss through Layers theta=0 deg
+    """ calculate Loss through Layers for theta=0 deg
 
     Parameters
     ----------
 
-    S : Simulation object
-    rx:
-    ry:
+    S  : Simulation object
+    rx : extremity of link 
+    ry : extremity of link 
     fGHz : float
         frequency GHz
     p :
@@ -531,14 +549,14 @@ def Loss0(S,rx,ry,f,p):
     for x in rx:
         j   = 0
         for y in ry:
-            L = 0
+            Loss = 0
             pxy = np.array([x,y])
-            seglist,theta = S.L.angleonlinkold(p,pxy)
+            seglist,theta = L.angleonlinkold(p,pxy)
             for k in seglist:
-                name = S.L.name[k]
-                lk = S.sl[name].loss0(f)
-                L  = L + lk[0]
-            Lw[i,j] = L
+                name = L.name[k]
+                lk = L.sl[name].loss0(f)
+                Loss  = Loss + lk[0]
+            Lw[i,j] = Loss
             j = j+1
         i = i+1
     return(Lw)
@@ -579,7 +597,7 @@ def calnu(h,d1,d2,fGHz):
     return(nu)
 
 def showfurniture(fig,ax):
-    """ 
+    """ show furniture (not the good module) 
     """
     #R1_A.show(fig,ax)
     #R1_B1.show(fig,ax)

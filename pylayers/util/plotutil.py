@@ -139,6 +139,10 @@ def mulcplot(x,y,**kwargs):
     nlin : int
         number of lines
 
+    Returns
+    -------
+
+    fig,lax : figure and list of axes
 
     Notes
     -----
@@ -148,7 +152,7 @@ def mulcplot(x,y,**kwargs):
     If len(y.shape) > 2 the two first axes are used as nlin and ncol this
     takes the priority over the passed values nlin and ncol
 
-    notice thet typ is la list of string and not a string
+    notice the typ is a list of string and not a string
 
     Examples
     --------
@@ -244,6 +248,8 @@ def mulcplot(x,y,**kwargs):
     ncol = kwargs['ncol']
     titles = kwargs['titles']
     types = kwargs['typ']
+    if type(types)==str:
+        types=[types]
     labels = kwargs['labels']
     xlabels = kwargs['xlabels']
     figsize = kwargs['figsize']

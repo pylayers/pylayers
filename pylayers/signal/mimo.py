@@ -135,7 +135,7 @@ class MIMO(object):
         Notes
         -----
 
-        C = log_2(det(I+(Et/N0Nt)HH^{H})
+            C = log_2(det(I+(Et/N0Nt)HH^{H})
 
         """
 
@@ -228,18 +228,18 @@ class MIMO(object):
                 if frequency:
                     if not phase:
                         if dB:
-                            #ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[k,:])),color=color) 
-                            ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[iR,iT,:])),color=color) 
+                            #ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[k,:])),color=color)
+                            ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[iR,iT,:])),color=color)
                         else:
-                            #ax[iR,iT].plot(H.x,abs(H.y[k,:]),color='k') 
-                            ax[iR,iT].plot(H.x,abs(H.y[iR,iT,:]),color='k') 
+                            #ax[iR,iT].plot(H.x,abs(H.y[k,:]),color='k')
+                            ax[iR,iT].plot(H.x,abs(H.y[iR,iT,:]),color='k')
                     else:
-                        #ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[k,:])),color=color) 
-                        ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[iR,iT,:])),color=color) 
+                        #ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[k,:])),color=color)
+                        ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[iR,iT,:])),color=color)
                 else:
-                        ax[iR,iT].plot(self.h.x,abs(self.h.y[iR,iT,:]),color=color) 
-                if (iR==7):         
-                    ax[iR,iT].set_xlabel('f (GHz)') 
-                ax[iR,iT].set_title(str(iR+1)+'x'+str(iT+1)) 
+                        ax[iR,iT].plot(self.h.x,abs(self.h.y[iR,iT,:]),color=color)
+                if (iR==7):
+                    ax[iR,iT].set_xlabel('f (GHz)')
+                ax[iR,iT].set_title(str(iR+1)+'x'+str(iT+1))
         return(fig,ax)
 

@@ -4,6 +4,24 @@ PyLayers
 .. contents::
    :depth: 4
 
+Simulations  
+-----------
+
+In this section are described the different high level module 
+in charge of the different simulations. 
+
++ Dlink is for the deterministic simulation 
+
+
+.. toctree::
+   :maxdepth: 2
+
+   pylayers.simul.link
+   pylayers.simul.exploit
+   pylayers.simul.exploit_simulnet
+   pylayers.simul.simulnet
+   pylayers.simul.simultraj
+
 Antenna and Propagation
 -----------------------
 
@@ -34,6 +52,7 @@ Channel
 .. toctree::
    :maxdepth: 1
 
+   pylayers.antprop.loss
    pylayers.antprop.channel
    pylayers.antprop.channelc
    pylayers.antprop.coeffModel
@@ -141,6 +160,7 @@ Measurement Data
    :maxdepth: 2
 
    pylayers.measures.mesuwb
+   pylayers.measures.cormoran
 
 Agents and Bodies Mobility 
 --------------------------
@@ -192,32 +212,21 @@ Networks
    pylayers.network.show
    pylayers.network.wsn
 
-Signals
--------
+Physical Layer
+--------------
 
 .. toctree::
    :maxdepth: 2
 
+   pylayers.simul.radionode
    pylayers.signal.bsignal
    pylayers.signal.DF
-   pylayers.signal.Fading
+   pylayers.signal.ED
    pylayers.signal.waveform
    pylayers.signal.standard
 
 
-Simulations 
------------
 
-.. toctree::
-   :maxdepth: 2
-
-   pylayers.simul.exploit
-   pylayers.simul.exploit_simulnet
-   pylayers.simul.radionode
-   pylayers.simul.simulem
-   pylayers.simul.simulnet
-   pylayers.simul.simultraj
-   pylayers.simul.link
 
 Utility classes and functions 
 -----------------------------

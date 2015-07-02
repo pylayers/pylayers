@@ -185,10 +185,12 @@ class Body(PyLayers):
                     st = st+'on the upper part of '
                 if side=='b':
                     st = st+'on the lower part of '
-                st = st + str(self.dev[k]['cyl'])[0:-1]+'\n'
+                st = st + str(self.dev[k]['cyl'])[0:-1]
+                st = st + ' witn antenna '+ str(self.dev[k]['file'])+'\n'
             else :
                 st = st + 'I have a '+self.dev[k]['name']+' device with id #'+k+' on '+\
-                            self.dev[k]['radiomarkname']+'\n'
+                            self.dev[k]['radiomarkname']+'\t'+\
+                            '-> Antenna '+ str(self.dev[k]['file']).split('.')[0]+'\n'
 
 
 
@@ -324,7 +326,7 @@ class Body(PyLayers):
             if not os.path.exists(devfilename):
                 raise AttributeError('the wareable file '+di['wearable']['file']+
                                  ' cannot be found in $BASENAME/'+pstruc['DIRWEAR'])
-        else : 
+        else :
             # check if local or global path
             if ('/' or '\\') in _filewear:
                 devfilename = _filewear
@@ -352,6 +354,8 @@ class Body(PyLayers):
                     self.dev[section][option]=eval(devconf.get(section,option))
                 except:
                     self.dev[section][option]=devconf.get(section,option)
+                if option == 'file':
+                    self.dev[section]['ant']=ant.Antenna(self.dev[section]['file'])
 
 
         try:
@@ -454,7 +458,7 @@ class Body(PyLayers):
                 raise AttributeError(self.name +' is not in the MOCAP file :' +filename)
 
 
-            # in case of multiple body into the mocap file, 
+            # in case of multiple body into the mocap file,
             # mocap is restricted to nodes belonging to a single body.
             # the body is automatically selected by using the self.name
             # 
@@ -462,7 +466,7 @@ class Body(PyLayers):
             self._f =self._f[:,up,:]
             self._s=[s for s in self._s if self.name in s ]
             self._p=[p for p in self._p if self.name in p ]
-            
+
 
 
 
@@ -515,9 +519,9 @@ class Body(PyLayers):
 
         self._dmn={n:un for un,n in enumerate(self._mocanodes)}
         self._ccs=np.empty((11,3,3,self.nframes))
+        # T10 5 strn 7
 
         for k,v in config['ccs'].items():
-
             # clean bracket and coma
             vc = v.split('[')[1].split(']')[0].split(',')
             # get position in uc3d of marker
@@ -537,15 +541,31 @@ class Body(PyLayers):
             # 2.1 determine their positions
             # pccs = position of cylinder coordinates system (Nframe x Npts x 3)
             # determine associated vetors
+
             pccs = self._f[:,uccs,:]
 
-            # vccs = vectors of cylinder coordinates system (Nframe x 3 x 3)
-            vccs = self.d[:,kta,np.newaxis,:] - pccs[:,np.newaxis:,:].T
-
+            # vccs = vectors of cylinder coordinates system (3 x 2(Npt) x Nframe)
+            vccs = self.d[:,kta,np.newaxis,:] - pccs[:,:,:].T
             # vccs = pccs[:,0,np.newaxis,:]-pccs[:,1:,:]
-            vccs=np.concatenate((ca[:,np.newaxis,:],vccs),axis=1)
-            self._ccs[self.dcyl[k],:,:,:]=geu.qrdecomp(vccs)
+            # vccs = vectors of cylinder coordinates system (3 x 3(Npt) x Nframe)
+            # import ipdb
+            # ipdb.set_trace()
 
+            vccs=np.concatenate((ca[:,np.newaxis,:],vccs),axis=1)
+            self._ccs[self.dcyl[k],:,:,:]=geu.gram_schmidt(vccs)
+
+
+
+
+            # check ccs continuity
+            #~ W=self._ccs[self.dcyl[k],:,:,:]
+            #~ W1=W[:,:,:-1]
+            #~ W2=W[:,:,1:]
+            #~ W1r=np.rollaxis(W1,2)
+            #~ W2r=np.rollaxis(W2,2) 
+            #~ W2ri=np.linalg.inv(W2r)
+            #~ R=np.einsum('ijk,ikl->ijl',W1r,W2ri)
+            #~ assert len(np.where(np.linalg.det(R)<1e-9)[0]) <1
 
     def cylfromc3d(self,centered = False):
         """ Create cylinders from C3D file
@@ -945,6 +965,12 @@ class Body(PyLayers):
         # vt = traj[kt+1,1:] - traj[kt,1:]
 
         return(kf,kt,vsn,wsn,vtn,wtn)
+
+    def time2frame(self,t):
+        return np.where(self.time<=15)[0][-1]
+
+    def frame2time(self,f):
+        return self.time[f]
 
     def settopos(self,traj=[],t=0,cs=True,treadmill=False,p0=np.array(([0.,0.]))):
         """ translate the body on a time stamped trajectory
@@ -1726,14 +1752,13 @@ class Body(PyLayers):
         Parameters
         ----------
 
-
-
         name : boolean (False)
             display body name
 
 
-        Cylinders 
+        Cylinders
         ---------
+
         cylinder : boolean (True)
             dispaly body cylinder
         widthfactor : float
@@ -1813,6 +1838,7 @@ class Body(PyLayers):
                     'devtyp':[],
                     'k':0,
                     'save':False,
+                    'mocanodes':False,
                     'returnfig':False}
 
         for k in defaults:
@@ -1859,7 +1885,7 @@ class Body(PyLayers):
             tube.filter.vary_radius = 'vary_radius_by_absolute_scalar'
             mlab.pipeline.surface(tube, color=body_color,opacity=kwargs['opacity'])
             f.children[-1].__setattr__('name',self.name )
-                
+
         # ax = phe-pta
         # l = np.sqrt(np.sum((ax**2), axis=0))
         # cyl = [visual.Cylinder(pos=(pta[0, i],pta[1, i],pta[2, i]),
@@ -1873,6 +1899,18 @@ class Body(PyLayers):
         # [f.children[k].__setattr__('name', partnames[k]+str(k))
         #  for k in range(self.ncyl)]
 
+        if kwargs['mocanodes']:
+            center = self.pg[:,fId]
+            X=self._f[fId,:,:].T
+            mlab.points3d(X[0,:],X[1,:], X[2,:], 
+                          scale_factor=20*self._unit, 
+                          resolution=10)
+            [mlab.text3d(X[0,i],
+                                 X[1,i],
+                                 X[2,i],self._p[i].split(':')[1],
+                                        scale=0.01,
+                                        color=(1,0,0)) for i in range(len(self._p)) ]
+
         if kwargs['name']:
             uupper = np.where(X[2]==X[2].max())[0]
             self._mayaname = mlab.text3d(X[0,uupper][0],X[1,uupper][0],X[2,uupper][0],self.name,scale=0.05,color=(1,0,0))
@@ -1882,15 +1920,15 @@ class Body(PyLayers):
             dev_color = tuple(pyu.rgb(colhex)/255.)
 
             if kwargs['devlist'] == []:
-                dev = self.dev.keys()
+                devlist = self.dev.keys()
             else :
-                dev = [d  for d in self.dev if d in kwargs['devlist']]
+                devlist = [d  for d in self.dev if d in kwargs['devlist']]
 
 
             if 'dcs' in dir(self):
-                X=np.array(self.getdevp(dev)).T
+                X=np.array(self.getdevp(devlist)).T
             else:
-                udev = [self.dev[i]['uc3d'][0] for i in dev]
+                udev = [self.dev[i]['uc3d'][0] for i in devlist]
 
                 center = self.pg[:,fId]
                 X=self._f[fId,udev,:].T-center[:,np.newaxis]
@@ -1901,13 +1939,13 @@ class Body(PyLayers):
                           color = dev_color,
                           opacity=kwargs['devopacity'])
             nodename = self.dev.keys()
-            
+
             if kwargs['devid']:
 
                 if kwargs['devtyp']== []:
                     udt = np.arange(len(nodename))
                 else:
-                    devtyp = np.unique([self.dev[x]['name'] for x in dev])
+                    devtyp = np.unique([self.dev[x]['name'] for x in devlist])
                     ln =[filter(lambda x: d in x,nodename) for d in devtyp]
                     udev = [[nodename.index(n) for n in ln[i]] for i in range(len(ln))]
 
@@ -1923,7 +1961,7 @@ class Body(PyLayers):
 
         if kwargs['ccs']:
             # to be improved
-            
+
             col=np.linspace(0,1,11)[:,np.newaxis]*np.ones((11,3))
             col[:,0]=0
 
@@ -1968,24 +2006,23 @@ class Body(PyLayers):
 
         if kwargs['pattern']:
             self.setacs()
-            for key in self.dcs.keys():
-                Ant =  ant.Antenna(self.dev[key]['file'])
 
-                if not hasattr(Ant,'SqG'):
-                    Ant.Fsynth()
-
+            for key in devlist:
+                if not hasattr(self.dev[key]['ant'],'SqG'):
+                    self.dev[key]['ant'].Fsynth()
                 U = self.dcs[key]
-                V = Ant.SqG[kwargs['k'],:,:]
+                V = self.dev[key]['ant'].SqG[kwargs['k'],:,:]
                 T = self.acs[key]
 
-                Ant._show3(po=U[:,0],
+                self.dev[key]['ant']._show3(po=U[:,0],
                            T=T,
                            ilog=False,
                            minr=0.01,
                            maxr=0.2,
                            newfig=False,
                            title=False,
-                           colorbar=False)
+                           colorbar=False,
+                           )
         if kwargs['save']:
             fig = mlab.gcf()
             mlab.savefig('Body.png',figure=fig)
@@ -2011,6 +2048,8 @@ class Body(PyLayers):
 
 
 
+        Todo 
+        
         """
 
         defaults = {'frameId' : 0,
@@ -2830,10 +2869,11 @@ class Cylinder(object):
     """
 
     def __init__(self,name = 'Meriem_Cylindre:',
-                _filemocap='/media/niamiot/DONNEES/svn2/measures/CORMORAN/RAW/12-06-2014/MOCAP/Nav_serie_006.c3d',
+                _filemocap='/RAW/12-06-2014/MOCAP/Nav_serie_006.c3d',
                 unit='mm',
                 color='white'):
         self.name = name
+        filemocap = os.environ('CORMORAN')+ _filemocap
         self.loadC3D(_filemocap,unit=unit)
         self.init_traj()
         self.color=color

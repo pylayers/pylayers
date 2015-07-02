@@ -142,7 +142,7 @@ class Trajectories(PyLayers,list):
         if os.path.exists(filename):
             fil = pd.HDFStore(filename)
         else:
-            raise NameError(filename + ' not founded')
+            raise NameError(filename + ' not found')
         if not append:
             [self.pop(0) for i in range(len(self))]
         for k in fil.keys():
@@ -431,10 +431,16 @@ class Trajectory(PyLayers,pd.DataFrame):
 
     def copy(self,deep=True):
         """ copy of trajectroy
+
+        Parameters
+        ----------
+
+        deep : boolean
+
         """
         df = super(Trajectory, self).copy(deep=deep)
         return Trajectory(df=df,ID=self.ID,name=self.name,typ=self.typ)
-        
+
 
 
     def update(self):

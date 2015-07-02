@@ -1,4 +1,55 @@
-# -*- coding:Utf-8 -*-
+#!/usr/bin/python
+#-*- coding:Utf-8 -*-
+r"""
+.. currentmodule:: pylayers.util.pyutil
+
+.. autosummary::
+    :toctree: genaerated
+
+    delay
+    lt2idic
+    getlong
+    getshort
+    getdir
+    shp
+    dimcmp
+    tstincl
+    findpos
+    ininter
+    cshift
+    LegFunc
+    ExpFunc
+    InvFunc
+    PowFunc
+    randcol
+    coldict
+    createtrxfile
+    rgb
+    nbint
+    encodmtlb
+    sqrte
+    untie
+    corrcy
+    foo
+    cdf
+    bitreverse
+    timestamp
+    writemeca
+    writenet
+    writenode
+    writeDetails
+    zipd
+    unzipd
+    unzipf
+    rotate_line
+    extract_block_diag
+    fill_block_diag
+    fill_block_diagMDA
+    has_colours
+    printout
+    in_ipynb
+
+"""
 import os
 import numpy as np
 import scipy as sp
@@ -1430,7 +1481,7 @@ def cdf(x,color='b',label=" ",lw=1,xlabel="x",ylabel="CDF",logx=False):
     plt.ylabel(ylabel)
 
 def bitreverse(N=256,nbit=9):
-    """ 
+    """
     Parameters
     ----------
     N : ideally a power of 2
@@ -1439,7 +1490,7 @@ def bitreverse(N=256,nbit=9):
     -------
     t : list of the N integers in time reverse order
 
-    Notes 
+    Notes
     -----
     This function is used for example in buildGv. 
     One error has been fixed  by forbidding the value 0 
@@ -1450,7 +1501,7 @@ def bitreverse(N=256,nbit=9):
     for k in np.arange(N-1)+1:
         b = BitString(uint=k,length=nbit) 
         b.reverse()
-        b.ror(1)
+        #b.ror(1)
         t.append(b.uint)
     return(np.array(t))
 
