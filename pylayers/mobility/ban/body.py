@@ -318,7 +318,9 @@ class Body(PyLayers):
             pass
         self.dev={}
 
-
+        #
+        # parse section wearables :
+        #
         # read default in ini file
         if _filewear == []:
             devfilename = pyu.getlong(di['wearable']['file'],pstruc['DIRWEAR'])
@@ -355,7 +357,13 @@ class Body(PyLayers):
                 except:
                     self.dev[section][option]=devconf.get(section,option)
                 if option == 'file':
-                    self.dev[section]['ant']=ant.Antenna(self.dev[section]['file'])
+                    #
+                    # For each device load the antenna from the filename
+                    #
+                    # TODO : Modify antenna class in order to load an antenna
+                    # from a pattern function
+                    #
+                    self.dev[section]['ant'] = ant.Antenna(self.dev[section]['file'])
 
 
         try:

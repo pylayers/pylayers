@@ -66,9 +66,9 @@ class Device(object):
             device id
         ant : dict
             dictionnary of used antennas with:
-            key : 
+            key :
                 antenna name
-            values : 
+            values :
                 p : relative position of antenna on the device
                 T : Rotaion matrice of antenna (acs)
         dim : ndarray
@@ -179,7 +179,7 @@ class Device(object):
         dev = json.load(fp)
         fp.close()
 
-        
+
         #fp = open(pyu.getlong('wstd.json',pstruc['DIRSIMUL']))
         #wstds = json.load(fp)
         #fp.close()

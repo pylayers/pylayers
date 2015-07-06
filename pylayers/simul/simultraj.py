@@ -369,7 +369,7 @@ class Simul(PyLayers):
         fig, ax = self.N.show(fig=fig, ax=ax)
         return fig, ax
 
-    def evaldeter(self, na, nb, wstd, fmode='band',nf=10,fGHz=[], **kwargs):
+    def evaldeter(self, na, nb, wstd, fmod='band',nf=10,fGHz=[], **kwargs):
         """ deterministic evaluation of a link
 
         Parameters
@@ -417,13 +417,13 @@ class Simul(PyLayers):
         #      only center frequency is calculated
         #
         #
-        if fmode == 'center':
+        if fmod == 'center':
             self.DL.fGHz = self.N.node[na]['wstd'][wstd]['fcghz']
-        if fmode == 'band':
+        if fmod == 'band':
             fminGHz = self.N.node[na]['wstd'][wstd]['fbminghz']
             fmaxGHz = self.N.node[na]['wstd'][wstd]['fbmaxghz']
             self.DL.fGHz = np.linspace(fminGHz, fmaxGHz, nf)
-        if fmode == 'force':
+        if fmod == 'force':
             assert fGHz!=[],"fGHz has not been defined"
             self.DL.fGHz = fGHz
 
@@ -535,6 +535,7 @@ class Simul(PyLayers):
                     'btr':True,
                     'DLkwargs':{},
                     'replace_data':True,
+                    'fmod':'band',
                     'fGHz':[]
                     }
 
@@ -549,6 +550,9 @@ class Simul(PyLayers):
         B2B = kwargs.pop('B2B')
         B2I = kwargs.pop('B2I')
         I2I = kwargs.pop('I2I')
+        fmod = kwargs.pop('fmod')
+        fGHz = kwargs.pop('fGHz')
+
         self.todo.update({'OB':OB,'B2B':B2B,'B2I':B2I,'I2I':I2I})
 
 
