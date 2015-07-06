@@ -23,6 +23,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import axes3d
 from matplotlib.collections import PolyCollection
 from matplotlib import cm
+import seaborn as sns
 import doctest
 import pdb
 
