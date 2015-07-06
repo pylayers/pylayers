@@ -147,18 +147,16 @@ import pandas as pd
 import matplotlib.pylab as plt
 
 class Pattern(PyLayers):
-    """
-    theta
-    phi
-    Nt
-    Np
-    Nf
+    """ Class Pattern
+
+    MetaClass of Antenna 
+
     """
     def __init__(self,**kwargs):
         """
         """
-        defaults = { 'th':[],
-                     'ph':[],
+        defaults = {'th':[],
+                    'ph':[],
                     'fGHz':[],
                     'nth':90,
                     'nph':181
@@ -213,7 +211,7 @@ class Pattern(PyLayers):
     def pGauss(self,**kwargs):
         """ Gauss pattern
         """
-        defaults = { 'p0' : 0,
+        defaults = {'p0' : 0,
                     't0' : np.pi/2,
                     'p3' : np.pi/6,
                     't3' : np.pi/6
@@ -528,6 +526,7 @@ class Antenna(Pattern):
                 self.loadhfss(typ, self.Nt, self.Np)
 
         else:
+            self.typ=typ
             fminGHz = kwargs['fminGHz']
             fmaxGHz = kwargs['fmaxGHz']
             nf = kwargs['nf']
@@ -600,7 +599,7 @@ class Antenna(Pattern):
                     st = st + 'FileName : ' + self._filename[i]+'\n'
                 st = st + '-----------------------\n'
         #st = st + 'file type : ' + self.typ+'\n'
-        if 'fa' in self.__dict__:
+        if 'fGHz' in self.__dict__:
             st = st + "fmin : %4.2f" % (self.fGHz[0]) + "GHz\n"
             st = st + "fmax : %4.2f" % (self.fGHz[-1]) + "GHz\n"
             try:
@@ -612,9 +611,9 @@ class Antenna(Pattern):
 
         if self.evaluated:
             st = st + '-----------------------\n'
-            st = st + "Ntheta : %d" % (self.Nt) + "\n"
-            st = st + "Nphi : %d" % (self.Np) + "\n"
-            u = np.where(self.sqG==self.SqG.max())
+            st = st + "Ntheta : %d" % (self.nth) + "\n"
+            st = st + "Nphi : %d" % (self.nph) + "\n"
+            u = np.where(self.sqG==self.sqG.max())
             if len(u[0]>1):
                 S = self.sqG[(u[0][0],u[1][0],u[2][0])]
                 uf = u[0][0]
@@ -2211,7 +2210,13 @@ class Antenna(Pattern):
         if ((self.fromfile) or (self.typ=='vsh') or (self.typ=='ssh')):
             Ft,Fp = self.Fsynth3(theta,phi,pattern)
         else :
-            Ft,Fp = self.Fpatt(theta,phi,pattern)
+
+            Ft = self.Ft
+            Fp = self.Fp
+            self.theta = theta
+            self.phi = phi
+            eval('self.p'+self.typ)()
+            #Ft,Fp = self.Fpatt(theta,phi,pattern)
         return (Ft,Fp)
 
 

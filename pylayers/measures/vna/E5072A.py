@@ -9,7 +9,7 @@ from numpy import array
 import pdb
 import select
 import pylayers.signal.bsignal as bs
-import pylayers.signal.channel as ch 
+import pylayers.antprop.channel as ch 
 from time import sleep
 """
 
