@@ -4728,12 +4728,12 @@ maicher
                 Fat, Fap = a.Fsynth3(self.tangl[:, 0], self.tangl[:, 1], pattern=False)
                 Fat = Fat.transpose()
                 Fap = Fap.transpose()
-                Fat = bs.FUsignal(a.fa, Fat)
-                Fap = bs.FUsignal(a.fa, Fap)
+                Fat = bs.FUsignal(a.fGHz, Fat)
+                Fap = bs.FUsignal(a.fGHz, Fap)
             else:
                 Fat, Fap = a.Fpatt(self.tangl[:, 0], self.tangl[:, 1], pattern=False)
-                Fat = bs.FUsignal(a.fa, Fat)
-                Fap = bs.FUsignal(a.fa, Fap)
+                Fat = bs.FUsignal(a.fGHz, Fat)
+                Fap = bs.FUsignal(a.fGHz, Fap)
 
 
         if type(b) == str:
@@ -4753,12 +4753,12 @@ maicher
                 Fbt, Fbp = b.Fsynth3(self.rangl[:, 0], self.rangl[:, 1], pattern=False)
                 Fbt = Fbt.transpose()
                 Fbp = Fbp.transpose()
-                Fbt = bs.FUsignal(b.fa, Fbt)
-                Fbp = bs.FUsignal(b.fa, Fbp)
+                Fbt = bs.FUsignal(b.fGHz, Fbt)
+                Fbp = bs.FUsignal(b.fGHz, Fbp)
             else:
                 Fbt, Fbp = b.Fpatt(self.rangl[:, 0], self.rangl[:, 1], pattern=False)
-                Fbt = bs.FUsignal(b.fa, Fbt)
-                Fbp = bs.FUsignal(b.fa, Fbp)
+                Fbt = bs.FUsignal(b.fGHz, Fbt)
+                Fbp = bs.FUsignal(b.fGHz, Fbp)
         # Ctt : r x f
         # Cg2cl should be applied here
         #
@@ -4855,10 +4855,10 @@ maicher
         Frt = Frt.transpose()
         Frp = Frp.transpose()
 
-        Ftt = bs.FUsignal(At.fa, Ftt * alpha)
-        Ftp = bs.FUsignal(At.fa, Ftp * alpha)
-        Frt = bs.FUsignal(Ar.fa, Frt * alpha)
-        Frp = bs.FUsignal(Ar.fa, Frp * alpha)
+        Ftt = bs.FUsignal(At.fGHz, Ftt * alpha)
+        Ftp = bs.FUsignal(At.fGHz, Ftp * alpha)
+        Frt = bs.FUsignal(Ar.fGHz, Frt * alpha)
+        Frp = bs.FUsignal(Ar.fGHz, Frp * alpha)
 
         scalch = ScalChannel(self, Ftt, Ftp, Frt, Frp)
         return(scalch)
