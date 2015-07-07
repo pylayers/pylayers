@@ -2249,6 +2249,7 @@ class Geomoff(Geomview):
         # retrieving dimensions
         Nt = len(theta)#np.shape(theta)[0]
         Np = len(phi)#np.shape(phi)[1]
+
         theta = theta[:,np.newaxis]
         phi = phi[np.newaxis,:]
 
@@ -2260,14 +2261,18 @@ class Geomoff(Geomview):
         #Th = np.outer(theta, np.ones(Np))
         #Ph = np.outer(np.ones(Nt), phi)
 
-        U = (R - R.min()) / (R.max() - R.min())
-        Ry = minr + (maxr-minr) * U
+        if R.min()!=R.max():
+            U = (R - R.min()) / (R.max() - R.min())
+            Ry = minr + (maxr-minr) * U
+        else:
+            Ry = maxr
         # x (Nt,Np)
         # y (Nt,Np)
         # z (Nt,Np)
+
         x = Ry * np.sin(theta) * np.cos(phi)
         y = Ry * np.sin(theta) * np.sin(phi)
-        z = Ry * np.cos(theta)
+        z = Ry * np.cos(theta) * np.ones(phi.shape)
 
         # p : Nt x Np x 3
         p = np.concatenate((x[...,np.newaxis],y[...,np.newaxis],z[...,np.newaxis]),axis=2)
@@ -2291,7 +2296,12 @@ class Geomoff(Geomview):
         colmap = plt.get_cmap()
         Ncol = colmap.N
         cmap = colmap(np.arange(Ncol))
-        g = np.round(U * (Ncol - 1)).astype(int)
+
+        if R.min()!=R.max():
+            g = np.round(U * (Ncol - 1)).astype(int)
+        else:
+            g = np.round(np.ones((Nt,Np))*(Ncol-1)).astype(int)
+
         fd = open(self.filename, 'w')
         fd.write('COFF\n')
         chaine = str(Npoints) + ' ' + str(Nfaces) + ' ' + str(Nedge) + '\n'
@@ -2302,7 +2312,7 @@ class Geomoff(Geomview):
                 cpos = str(q[ii, jj,0]) + ' ' + str(q[ii, jj,1]) + ' ' + str(q[ii, jj,2])
                 cpos = cpos.replace(',', '.')
                 ik = g[ii, jj]
-                
+
                 ccol = str(cmap[ik, 0]) + ' ' + str(cmap[ik, 1]) + \
                     ' ' + str(cmap[ik, 2])
                 ccol = ccol.replace(',', '.')

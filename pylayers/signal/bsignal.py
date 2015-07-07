@@ -3657,7 +3657,7 @@ class EnImpulse(TUsignal):
 
 
     """
-    def __init__(self,, fc=4, band=3, thresh=10, fe=20):
+    def __init__(self, fc=4, band=3, thresh=10, fe=20):
         """
 
         Parameters

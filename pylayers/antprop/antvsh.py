@@ -51,7 +51,7 @@ def vsh(A, dsf=1):
     nth = len(th)
     nph = len(ph)
 
-    nf = A.Nf
+    nf = A.nf
 
     if (nph % 2) == 1:
         mdab = min(nth, (nph + 1) / 2)
@@ -72,8 +72,8 @@ def vsh(A, dsf=1):
         #
         # Real part
         #
-        Fpr = A.Fphi[k][::dsf, ::dsf].real
-        Ftr = A.Ftheta[k][::dsf, ::dsf].real
+        Fpr = A.Fp[k][::dsf, ::dsf].real
+        Ftr = A.Ft[k][::dsf, ::dsf].real
         #
         # Fpr     Ntheta,Nphi
         #
@@ -84,8 +84,8 @@ def vsh(A, dsf=1):
         #
         # Imaginary part
         #
-        Fpi = A.Fphi[k][::dsf, ::dsf].imag
-        Fti = A.Ftheta[k][::dsf, ::dsf].imag
+        Fpi = A.Fp[k][::dsf, ::dsf].imag
+        Fti = A.Ft[k][::dsf, ::dsf].imag
         bri, bii, cri, cii = gridComp.vha(nth, nph, 1,
                                           lvha, wvha,
                                           np.transpose(Fpi),

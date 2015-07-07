@@ -150,17 +150,40 @@ import matplotlib.pylab as plt
 class Pattern(PyLayers):
     """ Class Pattern
 
-    MetaClass of Antenna 
+    MetaClass of Antenna
+
+    A pattern is evaluated with the 3 np.array parameters
+
+    theta
+    phi
+    fGHz
+
+    This class implement pattern methods.
+    The name of a patter method starts by p.
+    Each pattern method has a unique dictionnary argument 'param'
 
     """
-    def __init__(self,**kwargs):
-        """
+    def __init__(self):
+        super(Pattern,self).__init__()
+        self.eval(first=True)
+
+    def __repr__(self):
+        st = ''
+        st = st + 'Antenna type : ' + self.typ
+        if param in self.__dict__:
+            for k in self.param:
+                st = st + ' ' + k + ' : ' + str(self.param[k])+'\n'
+        return (st)
+
+    def eval(self,**kwargs):
+        """  evaluate pattern functions
         """
         defaults = {'th':[],
                     'ph':[],
                     'fGHz':[],
                     'nth':90,
                     'nph':181
+                    'first':False
                    }
         for k in defaults:
             if k not in kwargs:
@@ -171,6 +194,7 @@ class Pattern(PyLayers):
             self.fGHz=np.array([2.4])
         else:
             self.fGHz = kwargs['fGHz']
+
         self.nf = len(self.fGHz)
         if (kwargs['th'] == []) and (kwargs['ph'] == []):
             self.theta = np.linspace(0,np.pi,kwargs['nth'])
@@ -186,25 +210,31 @@ class Pattern(PyLayers):
         if len(self.theta) != len(self.phi):
             self.pattern = True
 
+        if kwargs['first']:
+            eval('self.p'+self.typ)(param=self.param)
+        else:
+            eval('self.p'+self.typ)()
+
     def pomni(self,**kwargs):
         """  omnidirectional pattern
 
-        TODO : gain w.r.t frequency 
+        TODO : gain w.r.t frequency
         """
-        defaults = { 'pol' : 'h',
-                     'GmaxdB': 0
-                   }
+        defaults = { 'param' : { 'pol' : 'h', 'GmaxdB': 0 } }
 
-        for k in defaults:
-            if k not in kwargs:
-                kwargs[k]=defaults[k]
+        if 'param' not in kwargs:
+            kwargs['param']=defaults['param']
 
-        self.GdB  = kwargs.pop('GmaxdB') 
-        self.pol  = kwargs.pop('pol') 
+        self.typ ='omni'
+        self.param = kwargs['param']
 
-        self.G    = pow(10.,self.GdB/10.) # linear gain
+        self.GmaxdB  = self.param['GmaxdB']
+        self.pol  = self.param['pol']
+
+        self.G    = pow(10.,self.GmaxdB/10.) # linear gain
         if self.pattern:
             self.sqG  = np.array(np.sqrt(self.G))[None,None,None]
+            self.evaluated = True
         else:
             self.sqG =  np.array(np.sqrt(self.G))[None,None]
         self.F()
@@ -221,6 +251,7 @@ class Pattern(PyLayers):
             if k not in kwargs:
                 kwargs[k]=defaults[k]
 
+        self.typ='Gauss'
         self.p0 = kwargs.pop('p0')
         self.t0 = kwargs.pop('t0')
         self.p3 = kwargs.pop('p3')
@@ -274,6 +305,7 @@ class Pattern(PyLayers):
             if k not in kwargs:
                 kwargs[k]=defaults[k]
 
+        self.typ = "3gpp" 
         self.thtilt = kwargs.pop('thtilt')
         self.hpbwh = kwargs.pop('hpbwh')
         self.hpbwv = kwargs.pop('hpbwv')
@@ -289,7 +321,8 @@ class Pattern(PyLayers):
             GvdB = np.maximum(-12*((theta-self.thtilt)/self.hpbwv)**2,self.sllv)[None,:,None]
             GhdB = (-np.minimum(12*(phi/self.hpbwh)**2,self.fbrh)+self.gm)[None,None,:]
             GdB  = GhdB+GvdB
-            self.sqG = np.sqrt(10**(GdB/10.))*np.ones(self.Nf)[:,None,None]
+            self.sqG = np.sqrt(10**(GdB/10.))*np.ones(self.nf)[:,None,None]
+            self.evaluated = True
         else:
             GvdB = np.maximum(-12*((theta-self.thtilt)/self.hpbwv)**2,self.sllv)
             GhdB = (-np.minimum(12*(phi/self.hpbwh)**2,self.fbrh)+self.gm)
@@ -356,7 +389,7 @@ class Pattern(PyLayers):
 #                self.Fp = self.sqG * (argth[:,None])
 #                #self.theta=self.theta[:,None]
 #                #self.phi=self.ph[None,:]
-#                self.sqG=np.ones((self.Nf,self.Nt,self.Np))
+#                self.sqG=np.ones((self.nf,self.nth,self.nph))
 #                self.sqG[:]=Fap
 #                self.evaluated = True
 #            else:
@@ -369,16 +402,16 @@ class Pattern(PyLayers):
 #
 #            if pattern :
 #
-#                self.Ft = self.sqG * np.ones((self.Nf,self.Nt,self.Np))
-#                self.Fp = self.sqG * np.ones((self.Nf,self.Nt,self.Np))
-#                self.sqG = self.sqG * np.ones((self.Nf,self.Nt,self.Np))
+#                self.Ft = self.sqG * np.ones((self.nf,self.nth,self.nph))
+#                self.Fp = self.sqG * np.ones((self.nf,self.nth,self.nph))
+#                self.sqG = self.sqG * np.ones((self.nf,self.nth,self.nph))
 #                self.evaluated = True
 #                Fat = self.sqG
 #                Fap = self.sqG
 #
 #            else:
-#                self.Ft = self.sqG * np.ones((len(self.theta),self.Nf))
-#                self.Fp = self.sqG * np.zeros((len(self.theta),self.Nf))
+#                self.Ft = self.sqG * np.ones((len(self.theta),self.nf))
+#                self.Fp = self.sqG * np.zeros((len(self.theta),self.nf))
 class Antenna(Pattern):
     """ Antenna
 
@@ -387,16 +420,14 @@ class Antenna(Pattern):
 
     name   : Antenna name
 
-    Nf     : number of frequency
-    Nt     : number of theta
-    Np     : number of phi
+    nf     : number of frequency
+    nth    : number of theta
+    nph    : number of phi
 
-    Ftheta : Normalized Ftheta    (nf,ntheta,nphi)
-    Fphi   : Normalized Fphi      (nf,ntheta,nphi)
-    SqG    : Square root of gain  (nf,ntheta,nphi)
+    Ft     : Normalized Ftheta    (nf,ntheta,nphi)
+    Fp     : Normalized Fphi      (nf,ntheta,nphi)
+    sqG    : square root of gain  (nf,ntheta,nphi)
 
-    Ttheta  : theta                (nf,ntheta,nphi)
-    Tphi    : phi                  (nf,ntheta,nphi)
 
     theta  : theta base            1 x ntheta
     phi    : phi base              1 x phi
@@ -476,9 +507,9 @@ class Antenna(Pattern):
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
-        self.Nf = kwargs['nf']
-        self.Nt = kwargs['ntheta']
-        self.Np = kwargs['nphi']
+        self.nf = kwargs['nf']
+        self.nth = kwargs['ntheta']
+        self.nph = kwargs['nphi']
         self.source = kwargs['source']
 
         #
@@ -514,7 +545,7 @@ class Antenna(Pattern):
                     self.loadsh2()
                 if self.ext == 'trx1':
                     self.typ='trx'
-                    self.load_trx(kwargs['directory'],self.Nf,self.Nt,self.Np)
+                    self.load_trx(kwargs['directory'],self.nf,self.nth,self.nph)
                 if self.ext == 'trx':
                     self.typ='trx'
                     self.loadtrx(kwargs['directory'])
@@ -524,19 +555,12 @@ class Antenna(Pattern):
             elif isinstance(typ,list):
                 self._filename = typ
                 self.ext='hfss'
-                self.loadhfss(typ, self.Nt, self.Np)
+                self.loadhfss(typ, self.nth, self.nph)
 
         else:
             self.typ=typ
-            fminGHz = kwargs['fminGHz']
-            fmaxGHz = kwargs['fmaxGHz']
-            nf = kwargs['nf']
-            fGHz = np.linspace(fminGHz,fmaxGHz,nf)
-            kwargs['th'] = []
-            kwargs['ph'] = []
-            kwargs['fgHz'] = fGHz
-            super(Antenna,self).__init__(**kwargs)
-            eval('self.p'+typ)(**kwargs)
+            super(Antenna,self).__init__()
+            self.eval() 
             # If antenna is defined from a pattern function
             # The frequency range can be defined from fmin
 #            self._filename = typ
@@ -646,8 +670,8 @@ class Antenna(Pattern):
             st = st + 'Notes : ' + self.Notes+'\n'
             st = st + 'Serie : ' + str(self.Serie)+'\n'
             st = st + 'Run : ' + str(self.Run)+'\n'
-            st = st + "Nb theta (lat) : "+ str(self.Nt)+'\n'
-            st = st + "Nb phi (lon) :"+ str(self.Np)+'\n'
+            st = st + "Nb theta (lat) : "+ str(self.nth)+'\n'
+            st = st + "Nb phi (lon) :"+ str(self.nph)+'\n'
 
         if self.typ == 'Gauss':
             st = st + 'Gaussian pattern' + '\n'
@@ -720,7 +744,7 @@ class Antenna(Pattern):
             default True
 
         if pattern
-            The pattern is generated from self.Nt and self.Np points
+            The pattern is generated from self.nth and self.nph points
         else:
             phi and theta have the same length (typically ray direction)
 
@@ -741,12 +765,12 @@ class Antenna(Pattern):
 
         assert not self.fromfile , 'Error : this is not a pattern antenna'
 
-        self.fGHz = np.linspace(2,10,self.Nf)
+        self.fGHz = np.linspace(2,10,self.nf)
 
 
         if (th == []) and (ph == []):
-            self.theta = np.linspace(0,np.pi,self.Nt)
-            self.phi = np.linspace(0,2*np.pi,self.Np,endpoint=False)
+            self.theta = np.linspace(0,np.pi,self.nth)
+            self.phi = np.linspace(0,2*np.pi,self.nph,endpoint=False)
         else :
             self.theta = th
             self.phi = ph
@@ -765,7 +789,7 @@ class Antenna(Pattern):
                 self.Fp = self.sqG * ( np.exp(-2.76*argth[:,None]) * np.exp(-2.76*argphi[None,:]) )
                 #self.theta=self.th[:,None]
                 #self.phi=self.ph[None,:]
-                self.sqG=np.ones((self.Nf,self.Nt,self.Np))
+                self.sqG=np.ones((self.nf,self.nth,self.nph))
                 self.sqG[:]=Fap
                 self.evaluated = True
             else:
@@ -783,12 +807,12 @@ class Antenna(Pattern):
                 GhdB = (-np.minimum(12*(phi/self.hpbwh)**2,self.fbrh)+self.gm)[None,:]
                 GdB  = GhdB+GvdB
                 self.sqG = np.sqrt(10**(GdB/10.))
-                self.sqG = self.sqG[None,...]*np.ones(self.Nf)[:,None,None]
+                self.sqG = self.sqG[None,...]*np.ones(self.nf)[:,None,None]
                 if self.pol=='h':
                     self.Ft = self.sqG
-                    self.Fp = np.zeros((len(self.theta),self.Nf))
+                    self.Fp = np.zeros((len(self.theta),self.nf))
                 if self.pol=='v':
-                    self.Fp = np.zeros((len(self.phi),self.Nf))
+                    self.Fp = np.zeros((len(self.phi),self.nf))
                     self.Ft = self.sqG
                 if self.pol=='c':
                     self.Fp = (1./sqrt(2))*self.sqG
@@ -803,9 +827,9 @@ class Antenna(Pattern):
                 self.sqG = np.sqrt(10**(GdB/10.))
                 if self.pol=='h':
                     self.Fp = self.sqG
-                    sel.Ftheta = np.zeros((len(self.theta),self.Nf))
+                    sel.Ftheta = np.zeros((len(self.theta),self.nf))
                 if self.pol=='v':
-                    self.Fp = np.zeros((len(self.phi),self.Nf))
+                    self.Fp = np.zeros((len(self.phi),self.nf))
                     self.Ft = self.sqG
                 if self.pol=='c':
                     self.Fp = (1./sqrt(2))*self.sqG
@@ -833,7 +857,7 @@ class Antenna(Pattern):
                 self.Fp = self.sqG * (argth[:,None])
                 #self.theta=self.theta[:,None]
                 #self.phi=self.ph[None,:]
-                self.sqG=np.ones((self.Nf,self.Nt,self.Np))
+                self.sqG=np.ones((self.nf,self.nth,self.nph))
                 self.sqG[:]=Fap
                 self.evaluated = True
             else:
@@ -846,16 +870,16 @@ class Antenna(Pattern):
 
             if pattern :
 
-                self.Ft = self.sqG * np.ones((self.Nf,self.Nt,self.Np))
-                self.Fp = self.sqG * np.ones((self.Nf,self.Nt,self.Np))
-                self.sqG = self.sqG * np.ones((self.Nf,self.Nt,self.Np))
+                self.Ft = self.sqG * np.ones((self.nf,self.nth,self.nph))
+                self.Fp = self.sqG * np.ones((self.nf,self.nth,self.nph))
+                self.sqG = self.sqG * np.ones((self.nf,self.nth,self.nph))
                 self.evaluated = True
                 Fat = self.sqG
                 Fap = self.sqG
 
             else:
-                self.Ft = self.sqG * np.ones((len(self.theta),self.Nf))
-                self.Fp = self.sqG * np.zeros((len(self.theta),self.Nf))
+                self.Ft = self.sqG * np.ones((len(self.theta),self.nf))
+                self.Fp = self.sqG * np.zeros((len(self.theta),self.nf))
         # TODO create 2 separate functions
         #if not pattern:
         #    return (Fat,Fap)
@@ -917,15 +941,15 @@ class Antenna(Pattern):
         Gr = np.real(self.Fp * np.conj(self.Fp) + \
                      self.Ft * np.conj(self.Ft))
         self.sqG = np.sqrt(Gr)
-        #self.Nt = np.shape(self.theta)[0]
-        #self.Np = np.shape(self.phi)[1]
-        self.Nt = len(self.theta)
-        self.Np = len(self.phi)
+        #self.nth = np.shape(self.theta)[0]
+        #self.nph = np.shape(self.phi)[1]
+        self.nth = len(self.theta)
+        self.nph = len(self.phi)
 
         if type(self.fGHz) ==  float:
-            self.Nf = 1
+            self.nf = 1
         else:
-            self.Nf = len(self.fGHz)
+            self.nf = len(self.fGHz)
 
         self.evaluated = True
 
@@ -1009,9 +1033,9 @@ class Antenna(Pattern):
         self.Ft = np.concatenate((A1, A2[:, ::-1, :]), axis=2)
         self.theta = np.linspace(0, np.pi, 91)
         self.phi = np.linspace(0, 2 * np.pi, 180, endpoint=False)
-        self.Nt = 91
-        self.Np = 180
-        self.Nf = 104
+        self.nth = 91
+        self.nph = 180
+        self.nf = 104
         self.evaluated = True
 
     def pattern(self,theta=[],phi=[],typ='s3'):
@@ -1191,8 +1215,8 @@ class Antenna(Pattern):
         if typ =='s3':
             FTh, FPh = self.Fsynth3(theta, phi,pattern=True)
 
-        #FTh = Fth.reshape(self.Nf, Nt, Np)
-        #FPh = Fph.reshape(self.Nf, Nt, Np)
+        #FTh = Fth.reshape(self.nf, Nt, Np)
+        #FPh = Fph.reshape(self.nf, Nt, Np)
         #
         #  Jacobian
         #
@@ -1269,12 +1293,12 @@ class Antenna(Pattern):
         """
 
         # lfa : list file antenna
-        self.Nf = len(lfa)
+        self.nf = len(lfa)
         fGHz  = []
         lacsv = []
-        Fphi = np.empty((self.Nf,self.Nt,self.Np))
-        Ftheta = np.empty((self.Nf,self.Nt,self.Np))
-        SqG = np.empty((self.Nf,self.Nt,self.Np))
+        Fphi = np.empty((self.nf,self.nth,self.nph))
+        Ftheta = np.empty((self.nf,self.nth,self.nph))
+        SqG = np.empty((self.nf,self.nth,self.nph))
 
         for i in range (len(lfa)):
 
@@ -1471,9 +1495,9 @@ class Antenna(Pattern):
         np.testing.assert_almost_equal(self.phi[0],phmin,3)
         np.testing.assert_almost_equal(self.phi[-1],phmax,3)
 
-        self.Nf = nf
-        self.Nt = ntheta
-        self.Np = nphi
+        self.nf = nf
+        self.nth = ntheta
+        self.nph = nphi
         self.tau = tau
 
         self.evaluated = True
@@ -1531,19 +1555,19 @@ class Antenna(Pattern):
             print self.Notes
             print self.Serie
             print self.Run
-            print "Nb theta (lat) :", self.Nt
-            print "Nb phi (lon) :", self.Np
+            print "Nb theta (lat) :", self.nth
+            print "Nb phi (lon) :", self.nph
         if self.typ =='bcp':
             print "--------------------------"
             print "fmin (GHz) :", self.fGHz[0]
             print "fmax (GHz) :", self.fGHz[-1]
-            print "Nf   :", self.Nf
+            print "Nf   :", self.nf
             print "thmin (rad) :", self.theta[0]
             print "thmax (rad) :", self.theta[-1]
-            print "Nth  :", self.Nt
+            print "Nth  :", self.nth
             print "phmin (rad) :", self.phi[0]
             print "phmax (rad) :", self.phi[-1]
-            print "Nph  :", self.Np
+            print "Nph  :", self.nph
         try:
             self.C.info()
         except:
@@ -1647,10 +1671,10 @@ class Antenna(Pattern):
             chaine = 'f = %3.2f GHz' %(self.fGHz[ik])
             # all theta
             if 'phd' in kwargs:
-                itheta = np.arange(self.Nt)
+                itheta = np.arange(self.nth)
                 #iphi1 = np.where(abs(self.phi[0,:]-kwargs['phd']*dtr)<dtheta)[0][0]
                 iphi1 = np.where(abs(self.phi-kwargs['phd']*dtr)<dphi)[0][0]
-                Np = self.Np
+                Np = self.nph
 
                 if np.mod(Np, 2) == 0:
                     iphi2 = np.mod(iphi1 + Np / 2, Np)
@@ -1662,7 +1686,7 @@ class Antenna(Pattern):
                 #              (self.theta[:,0] >= 0))[0]
                 u1 = np.where((self.theta <= np.pi / 2.) & (self.theta >= 0))[0]
                 #   0:Nt-1
-                u2 = np.arange(self.Nt)
+                u2 = np.arange(self.nth)
                 #   pi/2 < theta < pi
                 #u3 = np.nonzero((self.theta[:,0] <= np.pi) & ( self.theta[:,0]
                 #                                              > np.pi / 2))[0]
@@ -1699,7 +1723,7 @@ class Antenna(Pattern):
               #  plt.title(u'V plane $\\theta$ (degrees)')
 
             if 'thd' in kwargs:
-                iphi = np.arange(self.Np)
+                iphi = np.arange(self.nph)
                 #itheta = np.where(abs(self.theta[:,0]-kwargs['thd']*dtr)<dtheta)[0][0]
                 #angle = self.phi[0,iphi]
                 itheta = np.where(abs(self.theta-kwargs['thd']*dtr)<dtheta)[0][0]
@@ -1861,7 +1885,7 @@ class Antenna(Pattern):
 
         return x, y, z, k, scalar
 
-    def show3(self,k=0,po=[],T=[],txru=0,typ='Gain', mode='linear', silent=False):
+    def show3(self,k=0,po=[],T=[],txru=0,typ='G', mode='linear', silent=False):
         """ show3 geomview
 
         Parameters
@@ -1871,7 +1895,7 @@ class Antenna(Pattern):
         po : poition of the antenna
         T  : GCS of the antenna
         typ : string
-            'Gain' | 'Ftheta' | 'Fphi'
+            'G' | 'Ft' | 'Fp'
         mode : string
             'linear'| 'not implemented'
         silent : boolean
@@ -1893,22 +1917,22 @@ class Antenna(Pattern):
 
         f = self.fGHz[k]
 
-        # 3 axis : Nf x Nt x Np
+        # 3 axis : nf x nth x nph
         if len(self.Ft.shape)==3:
-            if typ == 'Gain':
+            if typ == 'G':
                 V = self.sqG[k, :, :]
-            if typ == 'Ftheta':
+            if typ == 'Ft':
                 V = self.Ft[k, :, :]
-            if typ == 'Fphi':
+            if typ == 'Fp':
                 V = self.Fp[k, :, :]
 
-        # 4 axis : Nf x Nt x Np x Ntxru
+        # 4 axis : nf x nth x nph x ntxru
         if len(self.Ft.shape)==4:
-            if typ == 'Gain':
+            if typ == 'G':
                 V = self.sqG[k, :, :, txru]
-            if typ == 'Ftheta':
+            if typ == 'Ft':
                 V = self.Ft[k, :, : ,txru]
-            if typ == 'Fphi':
+            if typ == 'Fp':
                 V = self.Fp[k, :, :,txru]
 
         if po ==[]:
@@ -1967,8 +1991,8 @@ class Antenna(Pattern):
         if typ == 'Fphi':
             V = self.Fp[k, :, :]
 
-        vt = np.ones(self.Nt)
-        vp = np.ones(self.Np)
+        vt = np.ones(self.nth)
+        vp = np.ones(self.nph)
         Th = np.outer(self.theta, vp)
         Ph = np.outer(vt, self.phi)
 
@@ -2013,8 +2037,8 @@ class Antenna(Pattern):
         fd = open(filename, "w")
         fd.write("LIST\n")
 
-        Nt = self.Nt
-        Np = self.Np
+        Nt = self.nth
+        Np = self.nph
         N = 10
         plth = np.arange(0, Nt, St)
         plph = np.arange(0, Np, Sp)
@@ -2494,15 +2518,15 @@ class Antenna(Pattern):
 
         """
 
-        self.Nt = len(theta)
-        self.Np = len(phi)
-        self.Nf = len(self.fGHz)
+        self.nth = len(theta)
+        self.nph = len(phi)
+        self.nf = len(self.fGHz)
 
         if typ =='vsh' :
 
             if pattern:
-                theta = np.kron(theta, np.ones(self.Np))
-                phi = np.kron(np.ones(self.Nt),phi)
+                theta = np.kron(theta, np.ones(self.nph))
+                phi = np.kron(np.ones(self.nth),phi)
 
             Br = self.C.Br.s2
             Bi = self.C.Bi.s2
@@ -2535,8 +2559,8 @@ class Antenna(Pattern):
                 np.dot(Bi, np.real(W.T)) + np.dot(Br, np.imag(W.T))
 
             if pattern:
-                Fth = Fth.reshape(self.Nf, self.Nt, self.Np)
-                Fph = Fph.reshape(self.Nf, self.Nt, self.Np)
+                Fth = Fth.reshape(self.nf, self.nth, self.nph)
+                Fph = Fph.reshape(self.nf, self.nth, self.nph)
         else:
 
             cx = self.S.Cx.s2
@@ -2545,9 +2569,9 @@ class Antenna(Pattern):
 
             lmax = self.S.Cx.lmax
             Y ,indx = SSHFunc(lmax, theta,phi)
-            Ex = np.dot(cx,Y).reshape(self.Nf,self.Nt,self.Np)
-            Ey = np.dot(cy,Y).reshape(self.Nf,self.Nt,self.Np)
-            Ez = np.dot(cz,Y).reshape(self.Nf,self.Nt,self.Np)
+            Ex = np.dot(cx,Y).reshape(self.nf,self.nth,self.nph)
+            Ey = np.dot(cy,Y).reshape(self.nf,self.nth,self.nph)
+            Ez = np.dot(cz,Y).reshape(self.nf,self.nth,self.nph)
 
             Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True )
 
@@ -2628,8 +2652,8 @@ class Antenna(Pattern):
 
         Nt = len(theta)
         Np = len(phi)
-        self.Nt = len(theta)
-        self.Np = len(phi)
+        self.nth = len(theta)
+        self.nph = len(phi)
 
         if pattern:
             #self.theta = theta[:,None]
@@ -2815,8 +2839,8 @@ class Antenna(Pattern):
 
         """
 
-        #th = np.kron(self.theta, np.ones(self.Np))
-        #ph = np.kron(np.ones(self.Nt), self.phi)
+        #th = np.kron(self.theta, np.ones(self.nph))
+        #ph = np.kron(np.ones(self.nth), self.phi)
 
         Fth3, Fph3 = self.Fsynth3(self.theta, self.phi,pattern=True)
         Err = self.mse(Fth3, Fph3, 0)
@@ -3060,8 +3084,8 @@ class Antenna(Pattern):
             else:
                 self.S.sets3(Cx,Cy,Cz)
 
-            self.Nf = np.shape(Cx.s3)[0]
-            self.fGHz = np.linspace(fmin, fmax, self.Nf)
+            self.nf = np.shape(Cx.s3)[0]
+            self.fGHz = np.linspace(fmin, fmax, self.nf)
         else:
             print _filesh3, ' does not exist'
 

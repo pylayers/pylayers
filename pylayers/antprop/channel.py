@@ -56,7 +56,7 @@ except:
 
 from pylayers.signal.bsignal import *
 
-class TBchannel(TBchannel):
+class TBchannel(TBsignal):
     """ Uniform channel in delay domain
     """
     def __init__(self, x=np.array([]), y=np.array([]),label=[]):
@@ -727,7 +727,7 @@ class TBchannel(TBchannel):
 
         return(taurms)
 
-class TUchannel(TBsignal):
+class TUchannel(TBchannel):
     """ Uniform channel in delay domain
     """
     def __init__(self, x=np.array([]), y=np.array([]),label=[]):

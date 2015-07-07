@@ -263,6 +263,8 @@ from pylayers.util import pyutil as pyu
 from pylayers.util import graphutil as gru
 from pylayers.util import cone
 
+#from  more_itertools import unique_everseen
+
 # Handle furnitures
 import pylayers.gis.furniture as fur
 import pylayers.gis.osmparser as osm
@@ -436,7 +438,7 @@ class Layout(PyLayers):
                 if  (k < 2) or (k>3):
                     st = st + 'degree '+str(k)+' : '+str(self.degree[k])+"\n"
                 else:
-                    st = st + 'degree '+str(k)+' : '+str(len(self.degree[k]))+"\n"
+                    st = st + 'number of node point of degree '+str(k)+' : '+str(len(self.degree[k]))+"\n"
         st = st + "\n"
         st = st + "xrange :"+ str(self.ax[0:2])+"\n"
         st = st + "yrange :"+ str(self.ax[2:])+"\n"
@@ -1018,9 +1020,13 @@ class Layout(PyLayers):
         #
         wedgea = self.wedge(self.degree[2])
 
-        # wedge < 179 (not flat)
+        # wedge < 179 deg (not flat)
         idiff = filter(lambda x: wedgea[x]<179,range(len(self.degree[2])))
         self.ldiff = map(lambda x : self.degree[2][x],idiff)
+        # add degree 1 point
+        # This corresponds to degree 2 point with an adjascent airwall
+        # (half-plane diffraction)
+        self.ldiff = self.ldiff+list(self.degree[1])
         # if problem here check file format 'z' should be a string
         self.maxheight = np.max([v[1] for v in nx.get_node_attributes(self.Gs,'z').values()])
 
@@ -6972,7 +6978,7 @@ class Layout(PyLayers):
                     'mode':'nocycle',
                     'alphacy':0.8,
                     'colorcy':'abcdef',
-                    'linter':['RR','TT','RT','TR','RD','DR','TD','DT','DD'],
+                    'linter' : ['RR','TT','RT','TR','RD','DR','TD','DT','DD'],
                     'show0':False,
                     'axis':False
                     }
@@ -7032,8 +7038,8 @@ class Layout(PyLayers):
                     'mode':'nocycle',
                     'alphacy':0.8,
                     'colorcy':'#abcdef',
-                    'lvis':['nn','ne','ee'],
-                    'linter':['RR','TT','RT','TR','RD','DR','TD','DT','DD'],
+                    'lvis' : ['nn','ne','ee'],
+                    'linter' : ['RR','TT','RT','TR','RD','DR','TD','DT','DD'],
                     'show0':False,
                     'axis':False
                     }
@@ -7059,6 +7065,7 @@ class Layout(PyLayers):
         #
         # s : structure graph
         #
+
         if 's' in graph:
 
             # not efficient
@@ -7239,6 +7246,8 @@ class Layout(PyLayers):
 
             edges = G.edges()
 
+            # range len edges
+
             rle = range(len(edges))
 
             DD = filter(lambda x:  ((len(edges[x][0])==1) &
@@ -7268,7 +7277,7 @@ class Layout(PyLayers):
             DT = filter(lambda x:  ((len(edges[x][0]) ==1) &
                                     (len(edges[x][1]) ==3)),rle )
 
-            tabcol = ['b','g','r','m','c','orange','purple','maroon'][::-1]
+            tabcol = ['b','g','r','m','c','orange','purple','maroon','purple','k'][::-1]
             li = []
             if 'i' in labels:
                 kwargs['labels']=True
@@ -7278,6 +7287,14 @@ class Layout(PyLayers):
                 if len(eval(inter))>0:
                     li.append(inter)
                     kwargs['edgelist'] = eval(inter)
+                    ndlist = map(lambda x: self.Gi.edges()[x][0],kwargs['edgelist'])+\
+                             map(lambda x: self.Gi.edges()[x][1],kwargs['edgelist'])
+
+                    # keep only unique interaction
+                    unique = []
+                    [unique.append(it) for it in ndlist if it not in unique]
+
+                    kwargs['nodelist'] = unique
                     kwargs['edge_color'] = tabcol.pop()
                     kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
             legtxt = ['Gs'] + li
