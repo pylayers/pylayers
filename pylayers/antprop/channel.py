@@ -1908,7 +1908,7 @@ class FUDchannel(FUchannel):
         taud : np.array(
 
         """
-        super(FUDsignal,self).__init__(x,y,label)
+        super(FUDchannel,self).__init__(x,y,label)
         self.taud = taud
         self.taue = np.zeros(len(taud))
 
@@ -2269,7 +2269,7 @@ class FUDAchannel(FUDchannel):
                  doa = np.array([]),
                  label = []
                  ):
-        super(FUDAsignal,self).__init__(x, y,taud,label)
+        super(FUDAchannel,self).__init__(x, y,taud,label)
         # FUDsignal.__init__(self, x, y,taud)
         self.dod  = dod
         self.doa  = doa
@@ -2552,7 +2552,7 @@ class Tchannel(FUDAchannel):
         Parameters
         ----------
 
-        fGHz  :  1 x nfreq
+        fGHz  :  , nfreq
             frequency GHz
         alpha :  nray x nfreq
             path amplitude
@@ -2562,7 +2562,7 @@ class Tchannel(FUDAchannel):
         doa   :  direction of arrival   (nray x 2)
 
         """
-        super(Tchannel,self).__init__(fGHz, alpha, tau, dod, doa)
+        FUDAchannel.__init__(self,fGHz, alpha, tau, dod, doa)
 
     def __repr__(self):
         st = ''
@@ -2768,12 +2768,12 @@ class Tchannel(FUDAchannel):
             + W may have a more important number of points and a smaller frequency band.
             + If the frequency band of the waveform exceeds the one of the
             Transmission Channel, a warning is sent.
-            + W is a FUsignal whose shape doesn't need to be homogeneous with FUDsignal H
+            + W is a FUsignal whose shape doesn't need to be homogeneous with FUChannel H
 
         """
 
         U = self * W
-        V = bs.FUDAsignal(U.x, U.y, self.taud, self.dod, self.doa)
+        V = bs.FUDAchannel(U.x, U.y, self.taud, self.dod, self.doa)
 
         return(V)
 
@@ -4706,59 +4706,20 @@ maicher
 
 
         """
-        freq = self.fGHz
+        freq  = self.fGHz
         nfreq = self.nfreq
         nray  = self.nray
         sh = np.shape(self.Ctt.y)
-        if type(a) == str:
-
-            if a == 'theta':
-                Fat = np.ones((nray, nfreq))
-                Fap = np.zeros(nray*nfreq).reshape((nray, nfreq))
-
-            if a == 'phi':
-                Fat = np.zeros(nray*nfreq).reshape((nray, nfreq))
-                Fap = np.ones((nray, nfreq))
-
-            Fat = bs.FUsignal(self.fGHz, Fat)
-            Fap = bs.FUsignal(self.fGHz, Fap)
-
-        else:
-            if a.fromfile :
-                Fat, Fap = a.Fsynth3(self.tangl[:, 0], self.tangl[:, 1], pattern=False)
-                Fat = Fat.transpose()
-                Fap = Fap.transpose()
-                Fat = bs.FUsignal(a.fGHz, Fat)
-                Fap = bs.FUsignal(a.fGHz, Fap)
-            else:
-                Fat, Fap = a.Fpatt(self.tangl[:, 0], self.tangl[:, 1], pattern=False)
-                Fat = bs.FUsignal(a.fGHz, Fat)
-                Fap = bs.FUsignal(a.fGHz, Fap)
 
 
-        if type(b) == str:
+        a.eval(self.tangl[:, 0], self.tangl[:, 1], grid=False)
+        Fat = bs.FUsignal(a.fGHz, a.Ft)
+        Fap = bs.FUsignal(a.fGHz, a.Fp)
+        b.eval(self.tangl[:, 0], self.tangl[:, 1], grid=False)
+        Fbt = bs.FUsignal(a.fGHz, b.Ft)
+        Fbp = bs.FUsignal(a.fGHz, b.Fp)
 
-            if b == 'theta':
-                Fbt = np.ones((nray, nfreq))
-                Fbp = np.zeros(nray*nfreq).reshape((nray, nfreq))
-            if b == 'phi':
-                Fbp = np.ones((nray, nfreq))
-                Fbt = np.zeros(nray*nfreq).reshape((nray, nfreq))
 
-            Fbt = bs.FUsignal(self.fGHz, Fbt)
-            Fbp = bs.FUsignal(self.fGHz, Fbp)
-        else:
-
-            if b.fromfile :
-                Fbt, Fbp = b.Fsynth3(self.rangl[:, 0], self.rangl[:, 1], pattern=False)
-                Fbt = Fbt.transpose()
-                Fbp = Fbp.transpose()
-                Fbt = bs.FUsignal(b.fGHz, Fbt)
-                Fbp = bs.FUsignal(b.fGHz, Fbp)
-            else:
-                Fbt, Fbp = b.Fpatt(self.rangl[:, 0], self.rangl[:, 1], pattern=False)
-                Fbt = bs.FUsignal(b.fGHz, Fbt)
-                Fbp = bs.FUsignal(b.fGHz, Fbp)
         # Ctt : r x f
         # Cg2cl should be applied here
         #
@@ -4773,7 +4734,7 @@ maicher
         t2 = self.Cpt * Fat + self.Cpp * Fap
         alpha = t1 * Fbt + t2 * Fbp
 
-
+        self.fGHz = alpha.x
 
         H = Tchannel(alpha.x, alpha.y, self.tauk, self.tang, self.rang)
 

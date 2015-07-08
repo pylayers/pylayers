@@ -154,10 +154,10 @@ class Waveform(dict):
         self['te'] = te
         Np     = fe*Tw
         self['Np']=Np
-        x      = np.linspace(-0.5*Tw+te/2,0.5*Tw+te/2,Np,endpoint=False)
+        #x      = np.linspace(-0.5*Tw+te/2,0.5*Tw+te/2,Np,endpoint=False)
         #x     = arange(-Tw,Tw,te)
 
-        w   = bs.EnImpulse(x,fc,band,thresh,fe)
+        w   = bs.EnImpulse(fc,band,thresh,fe)
         #W = w.ft()
         W   = w.ftshift()
         return (w,W)

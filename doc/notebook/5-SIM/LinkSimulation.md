@@ -1,10 +1,5 @@
 ```python
 >>> from pylayers.simul.link import *
->>> %pylab inline
-WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
-Populating the interactive namespace from numpy and matplotlib
-WARNING: pylab import has clobbered these variables: ['plt', 'mlab']
-`%matplotlib` prevents importing * from pylab and numpy
 ```
 
 # How to do Ray Tracing simulation using DLink

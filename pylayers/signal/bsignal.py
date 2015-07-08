@@ -323,9 +323,9 @@ class Bsignal(PyLayers):
 
     The x base is not necessarily uniform
 
-    x can have 1 or two axis
+    x has 1 axis
 
-    The first axis of x the last axes of y have the same length
+    x and the last axes of y have the same length
 
     By construction shape(y)[-1] :=len(x), len(x) takes priority in case of observed conflict
 
@@ -353,7 +353,8 @@ class Bsignal(PyLayers):
         if ndim==1:
             self.y=self.y.reshape((1,len(self.y)))
             ndim = 2
-        # default naming of the axix
+        assert(len(x)==self.y.shape[-1])," Dimension problem"
+        # default naming of the axis
         if label==[]:
             self.label=[]
             for k in range(ndim):
@@ -368,10 +369,10 @@ class Bsignal(PyLayers):
         # multi axes indexation
         self.uax = np.hstack((np.ones(ndim-1),np.r_[self.N]))
         # last dimension of y should be equal to first dimension of x
-        if (ly != self.N) :
-            print "Error in Bsignal : Dimension incompatibility "
-            print "x : ", self.N
-            print "y : ", ly
+        #if (ly != self.N) :
+        #    print "Error in Bsignal : Dimension incompatibility "
+        #    print "x : ", self.N
+        #    print "y : ", ly
 
 
     def __repr__(self):
@@ -3657,7 +3658,7 @@ class EnImpulse(TUsignal):
 
 
     """
-    def __init__(self, fc=4, band=3, thresh=10, fe=20):
+    def __init__(self, **kwargs):
         """
 
         Parameters
@@ -3668,28 +3669,37 @@ class EnImpulse(TUsignal):
         threshdB
         feGHz :
         """
-        defaults = {fcGHz : 4,
-                    WGHz : 3,
-                    threshdB : 10,
-                    feGHz : 20
+        defaults = {'fcGHz' : 4,
+                    'WGHz' : 3,
+                    'threshdB' : 10,
+                    'feGHz' : 20
                    }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+        WGHz = kwargs.pop('WGHz')
+        fcGHz = kwargs.pop('fcGHz')
+        feGHz = kwargs.pop('feGHz')
+        threshdB = kwargs.pop('threshdB')
+
         TUsignal.__init__(self)
-        Tp = (2 / (band * np.pi)) * np.sqrt(abs(thresh) * np.log(10) /20.)
+        Tp = (2 / (WGHz * np.pi)) * np.sqrt(abs(threshdB) * np.log(10) /20.)
         coeff = np.sqrt(2 * np.sqrt(2)/ (Tp * np.sqrt(np.pi)))
 
-        if len(x) == 0:
-            te = 1.0 / fe
-            Tww = 10 * Tp
-            Ni = round(Tww / (2 * te))
-            # Tww/2 multiple de te
-            Tww = 2 * te * Ni
-            x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
+        te = 1.0 / feGHz
+        Tww = 10 * Tp
+        Ni = round(Tww / (2 * te))
+        # Tww/2 multiple de te
+        Tww = 2 * te * Ni
+        x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
 
-        y = coeff * np.exp(-(x / Tp) ** 2) * np.cos(2 * np.pi * fc * x)
+        y = coeff * np.exp(-(x / Tp) ** 2) * np.cos(2 * np.pi * fcGHz * x)
         self.x = x
         self.y = y[None,:]
         self.Tp = Tp
-        self.fc = fc
+        self.fcGHz = fcGHz
 
     def demo():
         """ small demo in the docsting
