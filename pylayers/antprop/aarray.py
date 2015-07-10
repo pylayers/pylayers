@@ -61,6 +61,7 @@ class ULArray(Array):
 
         Parameters
         ----------
+
         N  : list
             [Nx,Ny,Nz]  don't use 0 the total number of antennas is Nx*Ny*Nz
         dm : list of floats
