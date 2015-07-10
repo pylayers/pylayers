@@ -704,8 +704,7 @@ bernard
         inifile = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','BodyandWear','AccesPoints.ini')
         config = ConfigParser.ConfigParser()
         config.read(inifile)
-        
-        pdb.set_trace()
+
         for d in self.din:
             self.din[d]['antname']=config.get(d,'file')
             self.din[d]['ant']=antenna.Antenna(config.get(d,'file'))

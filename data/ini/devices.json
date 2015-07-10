@@ -158,7 +158,7 @@
         "antennas": {
             "A1": {
                 "T": "[1.,0.,0.],[0.,1.,0.],[0.,0.,1.]",
-                "name": "S2R2.sh3",
+                "name": "WireplateMease.sh3",
                 "p": [
                     0.5,
                     0.5,
@@ -178,6 +178,56 @@
                 ]
             }
         }
-    }
+    },
 
+    "bespoon": {
+        "antennas": {
+            "A1": {
+                "T": "[1.,0.,0.],[0.,1.,0.],[0.,0.,1.]",
+                "name": "WireplateMease.sh3",
+                "p": [
+                    0.5,
+                    0.5,
+                    0.5
+                ]
+            }
+        },
+        "dimensions": {
+            "depth": 4.5,
+            "height": 7.7,
+            "width": 3.6
+        },
+        "standards": {
+            "ieee802154b": {
+                "antenna": [
+                    "A1"
+                ]
+            }
+        }
+    }
+    "tcr": {
+        "antennas": {
+            "A1": {
+                "T": "[1.,0.,0.],[0.,1.,0.],[0.,0.,1.]",
+                "name": "WireplateMease.sh3",
+                "p": [
+                    0.5,
+                    0.5,
+                    0.5
+                ]
+            }
+        },
+        "dimensions": {
+            "depth": 4.5,
+            "height": 7.7,
+            "width": 3.6
+        },
+        "standards": {
+            "ieee802154b": {
+                "antenna": [
+                    "A1"
+                ]
+            }
+        }
+    }
 }
