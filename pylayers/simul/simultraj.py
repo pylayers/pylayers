@@ -322,6 +322,9 @@ class Simul(PyLayers):
 
         """
 
+        #
+        # Create Network
+        #
         N = Network()
         #
         # get devices on bodies
