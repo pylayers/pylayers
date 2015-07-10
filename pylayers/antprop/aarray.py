@@ -129,6 +129,7 @@ class AntArray(Array,ant.Antenna):
                     'pattern' : True,
                     'typ':'Omni',
                     }
+
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]
@@ -136,7 +137,7 @@ class AntArray(Array,ant.Antenna):
         self.tarr = kwargs.pop('tarr')
         self.N  = np.array(kwargs.pop('N'))
         self.Na = np.prod(self.N)  # number of antennas
-        self.Ntxru = kwargs.pop('Ntxru')
+        self.nthxru = kwargs.pop('Ntxru')
         self.dm = np.array(kwargs.pop('dm'))
         self.typ = kwargs.pop('typ')
 
@@ -193,14 +194,14 @@ class AntArray(Array,ant.Antenna):
 
 
         if (kwargs['th'] == []) and (kwargs['ph'] == []):
-            self.theta = np.linspace(0,np.pi,self.Nt)
-            self.phi = np.linspace(0,2*np.pi,self.Np,endpoint=False)
+            self.theta = np.linspace(0,np.pi,self.nth)
+            self.phi = np.linspace(0,2*np.pi,self.nph,endpoint=False)
         else:
             self.theta = th
             self.phi = ph
 
         if kwargs['w']==[]:
-            w = np.ones((self.Nf,1,self.Na,self.Ntxru))
+            w = np.ones((self.nf,1,self.Na,self.nthxru))
         else:
             pass
 
@@ -213,9 +214,9 @@ class AntArray(Array,ant.Antenna):
             sx = np.sin(self.theta[:,None])*np.cos(self.phi[None,:])    # Ntheta x Nphi
             sy = np.sin(self.theta[:,None])*np.sin(self.phi[None,:])    # Ntheta x Nphi
             sz = np.cos(self.theta[:,None])*np.ones(len(self.phi))[None,:]   # Ntheta x Nphi
-            sx = sx.reshape(self.Nt*self.Np)
-            sy = sy.reshape(self.Nt*self.Np)
-            sz = sz.reshape(self.Nt*self.Np)
+            sx = sx.reshape(self.nth*self.nph)
+            sy = sy.reshape(self.nth*self.nph)
+            sz = sz.reshape(self.nth*self.nph)
         else:
             sx = np.sin(self.theta)*np.cos(self.phi)    # Nd x 1
             sy = np.sin(self.theta)*np.sin(self.phi)    # Nd x 1
@@ -252,8 +253,8 @@ class AntArray(Array,ant.Antenna):
 
         self.F = np.sum(self.wE,axis=2)
         if kwargs['pattern']:
-            self.Ftheta = self.F.reshape(self.Nf,self.Nt,self.Np,self.Ntxru)
-            self.Fphi = self.F.reshape(self.Nf,self.Nt,self.Np,self.Ntxru)
+            self.Ftheta = self.F.reshape(self.nf,self.nth,self.nph,self.nthxru)
+            self.Fphi = self.F.reshape(self.nf,self.nth,self.nph,self.nthxru)
 
 
 
