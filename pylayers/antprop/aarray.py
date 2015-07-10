@@ -193,12 +193,12 @@ class AntArray(Array,ant.Antenna):
                 kwargs[k]=defaults[k]
 
 
-        if (kwargs['th'] == []) and (kwargs['ph'] == []):
-            self.theta = np.linspace(0,np.pi,self.nth)
-            self.phi = np.linspace(0,2*np.pi,self.nph,endpoint=False)
-        else:
-            self.theta = th
-            self.phi = ph
+#        if (kwargs['th'] == []) and (kwargs['ph'] == []):
+#            self.theta = np.linspace(0,np.pi,self.nth)
+#            self.phi = np.linspace(0,2*np.pi,self.nph,endpoint=False)
+#        else:
+#            self.theta = th
+#            self.phi = ph
 
         if kwargs['w']==[]:
             w = np.ones((self.nf,1,self.Na,self.nthxru))
@@ -241,7 +241,8 @@ class AntArray(Array,ant.Antenna):
         # w : Nf x 1  x Na x Nt
         # wE : f x Nd x Na x Nt
 
-        self.wE = w*np.exp(1j*k[:,None,None]*sdotp[None,:,:])[:,:,:,None]
+        E    = np.exp(1j*k[:,None,None]*sdotp[None,:,:])[:,:,:,None]
+        self.wE = w*E
 
         #
         # sum over antennas (axes 2 Na )
@@ -723,4 +724,6 @@ class AntArray(Array,ant.Antenna):
 #
 ##  ## POSTMA
 #
-## Comparaison petit réseau et grand réseau. 
+#el(dot(conj(U.T),dot(W,S))+dot(conj(S.T),dot(W,U)))
+#    H  =
+#    real(dot(conj(R.T),dot(W,S))+2*dot(conj(U.T),dot(W,U))+dot(conj(S.T),dot(W,R)))# Comparaison petit réseau et grand réseau. 
