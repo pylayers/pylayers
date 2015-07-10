@@ -290,6 +290,10 @@ class Simul(PyLayers):
             techno,ID=ap.split(':')
             if techno == 'HKB':
                 techno = 'hikob'
+            if techno == 'TCR':
+                techno = 'tcr'
+            if techno == 'BS':
+                techno = 'bespoon'
 
 
             self.dap.update({ap: {'pos': source.din[ap]['p'],
