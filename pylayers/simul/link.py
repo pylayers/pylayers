@@ -647,7 +647,7 @@ class DLink(Link):
         s = s + 'fstep (fGHz) : ' + str(self.fGHz[1]-self.fGHz[0]) +'\n'
         s = s + 'Nf : ' + str(len(self.fGHz)) +'\n '
         d =  np.sqrt(np.sum((self.a-self.b)**2)) 
-        fc = (self.fGHz[-1]+self.fGHz[0])/2.
+        fcGHz = (self.fGHz[-1]+self.fGHz[0])/2.
         L  = 32.4+20*np.log(d)+20*np.log10(fcGHz)
         return s
 

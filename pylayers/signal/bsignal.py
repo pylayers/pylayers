@@ -1122,22 +1122,26 @@ class Usignal(Bsignal):
     def __mul__(self, u):
         t = type(u).__name__
         if ((t == 'int') | (t == 'float') | (t== 'float64') ):
-            U = Usignal(self.x, self.y * u)
-        if type(u)==type(self):
-            assert (u.x.shape==self.x.shape)
+            U = type(self)()
+            U.x = self.x
+            U.y = self.y*u
+        if issubclass(type(self),type(u)):
+            #assert (u.x.shape==self.x.shape)
             assert (u.y.ndim == 2)  ,"y has not ndim=2"
             assert (u.y.shape[0]==1)|(u.y.shape[1]==self.y.shape[1])
-            U = type(self)()
-            U.x = self.x 
-            U.y = self.y*u.y
-            # L = self.align(u)
+            #U = type(self)()
+            #U.x = self.x
+            #U.y = self.y*u.y
+            L = self.align(u)
             # #u1 = L[0]
             # #u2 = L[1]
             # #U = Usignal(u1.x, u1.y * u2.y)
-            # val = L.y[0:-1,:] * L.y[-1,:]
-            # if ((val.ndim>1) & (val.shape[0]==1)):
-            #     val = val.reshape(val.shape[1])
-            # U = Usignal(L.x, val)
+            val = L.y[0:-1,:] * L.y[-1,:]
+            #if ((val.ndim>1) & (val.shape[0]==1)):
+            #    val = val.reshape(val.shape[1])
+            U = type(self)()
+            U.x = L.x
+            U.y = val
         return(U)
 
     def setx(self, start, stop, dx):
@@ -2858,7 +2862,7 @@ class FUsignal(FBsignal, Usignal):
 
 
     def resample(self, x_new, kind='linear'):
-        """ resample
+        """ resample a complex signal
 
 
         This function resamples the Usignal with a new x base
@@ -2871,7 +2875,7 @@ class FUsignal(FBsignal, Usignal):
         ----------
 
         x_new :
-        kind : string
+        kind : string {'linear' | 'spline'
 
         See Also
         --------
@@ -2921,23 +2925,18 @@ class FUsignal(FBsignal, Usignal):
         f = self.x
         U = self.y
         N = len(f)
-        ndim = U.ndim
+
+        ys = U.shape
         ze_x = np.array([0])
-        if ndim > 1:
-            ze_y = np.zeros([ndim, 1])
-        else:
-            ze_y = np.array([0])
+        ze_y = np.zeros((ys[0],1))
+
         if parity == 0:
-            if ndim > 1:
-                Up = np.concatenate((ze_y, U, np.flipud(
-                    np.conjugate(U[:, 0:-1]))), 1)
-            else:
-                Up = np.concatenate((ze_y, U, np.flipud(
-                    np.conjugate(U[0:-1]))), 0)
+            Up = np.concatenate((ze_y, U, np.flipud(np.conjugate(U[:, 0:-1]))), 1)
             fp = np.concatenate((ze_x, f, f[0:-1] + f[-1]))
         else:
             Up = np.concatenate((ze_y, U, np.flipud(np.conjugate(U))), 1)
             fp = np.concatenate((ze_x, f, f + f[-1]))
+
         V = FHsignal(fp, Up)
         return V
 
@@ -3044,7 +3043,7 @@ class FUsignal(FBsignal, Usignal):
 
         return V
 
-    def align(self, u2):
+    def alignc(self, u2):
         """ align 2 FUsignal
 
         align <=> intersection
@@ -3055,6 +3054,10 @@ class FUsignal(FBsignal, Usignal):
         >>> i2 = EnImpulse()
         >>> i2.translate(-10)
         >>> L  = i1.align(i2)
+
+        Notes
+        -----
+
 
         """
 

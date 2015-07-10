@@ -3237,7 +3237,7 @@ bernard
         t0 =kwargs['t0']
         t1 =kwargs['t1']
         if t1 ==-1:
-            t1=self.thkb[-1]
+            t1=self.ttcr[-1]
 
         if isinstance(a,str):
             ia = self.dTCR[a]
@@ -3345,7 +3345,8 @@ bernard
         t0 =kwargs.pop('t0')
         t1 =kwargs.pop('t1')
         if t1 ==-1:
-            t1=self.thkb[-1]
+            #t1=self.thkb[-1]
+            t1=self.ttcr[-1]
 
 
         label = a+'-'+b
@@ -3430,13 +3431,15 @@ bernard
 
             var = self.getlink(iatcr,ibtcr,'TCR').values
 
-            if inverse:
-                var = 1./(var)**2
-                if log :
-                    var = gamma*10*np.log10(var)
-            else:
-                if log :
-                    var = gamma*10*np.log10(var)
+            #if inverse:
+            #    var = 1./(var)**2
+            #    if log :
+            #        var = gamma*10*np.log10(var)
+            #else:
+            #    if log :
+            #        var = gamma*10*np.log10(var)
+
+            #pdb.set_trace()
             ax.plot(self.B[subject].time,var,**kwargs)
 
 

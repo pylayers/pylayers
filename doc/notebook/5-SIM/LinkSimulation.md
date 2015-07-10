@@ -1,5 +1,8 @@
 ```python
 >>> from pylayers.simul.link import *
+>>> %matplotlib inline
+>>> import seaborn as sns
+>>> sns.set_style("dark")
 ```
 
 # How to do Ray Tracing simulation using DLink
@@ -34,31 +37,32 @@ Link Parameters :
 ------- --------
 Layout : defstr.ini
 
-Node a
-------
+Node a   
+------  
 position : [  766.00300113  1113.94747911     1.2       ]
 Antenna : S2R2.sh3
-Rotation matrice :
+Rotation matrice : 
  [[ 1.  0.  0.]
  [ 0.  1.  0.]
  [ 0.  0.  1.]]
 
-Node b
-------
-position : [  766.00300113  1113.94747911     1.2       ]
+Node b   
+------  
+position : [  761.0028967   1113.91576981     1.2       ]
 Antenna : S2R2.sh3
-Rotation matrice :
+Rotation matrice : 
  [[ 1.  0.  0.]
  [ 0.  1.  0.]
  [ 0.  0.  1.]]
 
-Link evaluation information :
------------------------------
-distance :  0.000 m
-delay :  0.000 ns
+Link evaluation information : 
+----------------------------- 
+distance :  5.000 m 
+delay : 16.667 ns
 fmin (fGHz) : 2.0
 fmax (fGHz) : 11.0
 fstep (fGHz) : 0.05
+Nf : 181
 ```
 
 To evaluate a link there is the `eval` method. This method takes as argument a list of desired outputs,
@@ -67,16 +71,16 @@ the type of algorithm being used, the ceil heigh and the number og multi reflect
 ```python
 >>> aktk=L.eval(force=[], output=['sig','ray','Ct','H'],
 ...             si_algo='old',ra_ceil_height_meter=3,ra_number_mirror_cf=1)
-Signatures'> from 1_1_3 loaded
-Rays'> from 3_0_0 loaded
-Ctilde'> from 0_0_0 loaded
-Tchannel'> from 0_0_0_0_0_0_0 loaded
+Signatures'> from 1_2_3 loaded
+Rays'> from 3_0_2 loaded
+Ctilde'> from 0_2_0 loaded
+Tchannel'> from 0_2_0_0_0_1_1 loaded
 ```
 
 The propagation channel (without antenna) can be vizualized on a ray by ray mode.
 
 ```python
->>> #L._show3()
+>>> #L._show3()sns.set_style("dark")
 ```
 
 ```python
@@ -89,7 +93,7 @@ It is possible to look at individual ray transfer function, as illustrated below
 
 ```python
 >>> C.Ctt.y.shape
-(105, 181)
+(95, 181)
 ```
 
 ```python
@@ -112,9 +116,7 @@ In the link we also have the transmission channel accounting for the effect of a
 
 ```python
 >>> plt.plot(L.H.x,L.H.y[0,:]*4*np.pi*L.H.x/0.3)
-/home/uguen/anaconda/lib/python2.7/site-packages/numpy/core/numeric.py:462: ComplexWarning: Casting complex values to real discards the imaginary part
-  return array(a, dtype, copy=False, order=order)
-[<matplotlib.lines.Line2D at 0x7f37ec81c0d0>]
+[<matplotlib.lines.Line2D at 0x7f76e8cd2f90>]
 ```
 
 Notice that in this case the frequency
@@ -147,14 +149,14 @@ Image('/home/uguen/Bureau/P1/struc/images/DLR4991.png')
 ----------------
 
 Number of points  : 71
-Number of segments  : 94
+Number of segments  : 87
 Number of sub segments  : 16
-Number of cycles  : 25
-Number of rooms  : 24
+Number of cycles  : 18
+Number of rooms  : 17
 degree 0 : []
 degree 1 : []
-degree 2 : 39
-degree 3 : 32
+number of node point of degree 2 : 39
+number of node point of degree 3 : 32
 
 xrange :(0.0, 40.0)
 yrange :(0.0, 15.0)
@@ -163,13 +165,13 @@ Useful dictionnaries
 ----------------
 dca {cycle : []} cycle with an airwall
 sl {slab name : slab dictionary}
-name :  {slab :seglist}
+name :  {slab :seglist} 
 
 Useful arrays
 ----------------
-pt : numpy array of points
-normal : numpy array of normal
-offset : numpy array of offset
+pt : numpy array of points 
+normal : numpy array of normal 
+offset : numpy array of offset 
 tsg : get segment index in Gs from tahe
 isss :  sub-segment index above Nsmax
 tgs : get segment index in tahe from Gs
@@ -201,39 +203,39 @@ Trajectories performed in Layout : TA-Office.ini
 Trajectory of agent John with ID 1
 ----------------------------------
 t (s) : 0.00 : 0.20 : 119.80
-dtot (m) : 423.35
-Vmoy (m/s) : 3.53
-                                    x         y        vx        vy        ax  \
-t
-1970-01-01 00:00:00         18.907750  2.528547  0.038749  0.155237  0.193744
-1970-01-01 00:00:00.200000  18.921699  2.584433  0.069748  0.279427  0.154995
+dtot (m) : 431.40
+Vmoy (m/s) : 3.60
+                                 x         y        vx        vy        ax  \
+t                                                                            
+1970-01-01 00:00:00.000  18.907750  2.528547  0.038749  0.155237  0.193744   
+1970-01-01 00:00:00.200  18.921699  2.584433  0.069748  0.279427  0.154995   
 
-                                  ay      s
-t
-1970-01-01 00:00:00         0.776185  0.160
-1970-01-01 00:00:00.200000  0.620948  0.448
+                               ay      s  
+t                                         
+1970-01-01 00:00:00.000  0.776185  0.160  
+1970-01-01 00:00:00.200  0.620948  0.448  
 
 Trajectory of agent Alex with ID 2
 ----------------------------------
 t (s) : 0.00 : 0.20 : 119.80
-dtot (m) : 426.68
-Vmoy (m/s) : 3.56
-                                  x       y     vx            vy    ax  \
-t
-1970-01-01 00:00:00         13.5320  7.4965  0.160 -1.141434e-16  0.80
-1970-01-01 00:00:00.200000  13.5896  7.4965  0.288 -2.069441e-16  0.64
+dtot (m) : 437.21
+Vmoy (m/s) : 3.65
+                                 x          y        vx        vy        ax  \
+t                                                                             
+1970-01-01 00:00:00.000  24.306132  12.467593  0.030661 -0.157035  0.153303   
+1970-01-01 00:00:00.200  24.317170  12.411061  0.055189 -0.282663  0.122642   
 
-                                      ay      s
-t
-1970-01-01 00:00:00        -5.707171e-16  0.160
-1970-01-01 00:00:00.200000 -4.640036e-16  0.448
+                               ay      s  
+t                                         
+1970-01-01 00:00:00.000 -0.785174  0.160  
+1970-01-01 00:00:00.200 -0.628139  0.448  
 
 Access point Router with ID 6
 -----------------------------
 t (s) : 0.00
 Vmoy (m/s) : 0.0
               x  y    z  vx  vy  ax  ay  s
-t
+t                                         
 1970-01-01  0.5  2  2.5   0   0   0   0  0
 
 Access point Router with ID 7
@@ -241,7 +243,7 @@ Access point Router with ID 7
 t (s) : 0.00
 Vmoy (m/s) : 0.0
               x   y    z  vx  vy  ax  ay  s
-t
+t                                          
 1970-01-01  0.7  14  2.5   0   0   0   0  0
 
 Access point Router with ID 8
@@ -249,7 +251,7 @@ Access point Router with ID 8
 t (s) : 0.00
 Vmoy (m/s) : 0.0
              x   y    z  vx  vy  ax  ay  s
-t
+t                                         
 1970-01-01  39  13  2.5   0   0   0   0  0
 ```
 
@@ -258,8 +260,6 @@ The Simultraj object get the trajectories from the `simultaj.ini` file.
 
 ```python
 >>> St=st.Simul(verbose=False)
-**** Processor coding : Intel-PC
-**** Processor coding : Intel-PC
 ```
 
 ```python
@@ -290,4 +290,8 @@ Information about the simulated network is obtained
 
 ```python
 >>> #stem(tk,ak)
+```
+
+```python
+
 ```

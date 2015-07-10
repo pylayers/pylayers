@@ -1764,7 +1764,7 @@ class FUchannel(FUsignal):
           y=np.array([]),
           label=[]):
 
-          super(FUchannel,self).__init__(x,y,label)
+          FUsignal.__init__(self,x,y,label)
           self.calibrated = False
           self.win = 'rect'
           self.windowed = False
@@ -1908,7 +1908,7 @@ class FUDchannel(FUchannel):
         taud : np.array(
 
         """
-        super(FUDchannel,self).__init__(x,y,label)
+        FUchannel.__init__(self,x,y,label)
         self.taud = taud
         self.taue = np.zeros(len(taud))
 
@@ -2269,7 +2269,7 @@ class FUDAchannel(FUDchannel):
                  doa = np.array([]),
                  label = []
                  ):
-        super(FUDAchannel,self).__init__(x, y,taud,label)
+        FUDchannel.__init__(self,x,y,taud,label)
         # FUDsignal.__init__(self, x, y,taud)
         self.dod  = dod
         self.doa  = doa

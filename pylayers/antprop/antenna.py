@@ -230,7 +230,7 @@ class Pattern(PyLayers):
 
         eval('self.p'+self.typ)(param=self.param)
 
-    def pomni(self,**kwargs):
+    def pOmni(self,**kwargs):
         """  omnidirectional pattern
 
         TODO : gain w.r.t frequency
@@ -243,10 +243,9 @@ class Pattern(PyLayers):
         """
         defaults = { 'param' : { 'pol' : 'h', 'GmaxdB': 0 } }
 
-        if 'param' not in kwargs:
+        if 'param' not in kwargs or kwargs['param']=={}:
             kwargs['param']=defaults['param']
 
-        self.typ ='omni'
         self.param = kwargs['param']
 
         self.GmaxdB  = self.param['GmaxdB']
