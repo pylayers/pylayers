@@ -817,19 +817,21 @@ class Simul(PyLayers):
         if ((self.todo['OB']) or (self.todo['B2B']) or (self.todo['B2I'])):
             nodeid = []
             pos = []
+            devlist = []
             orient = []
             for up, person in enumerate(self.dpersons.values()):
                 person.settopos(self._traj[up], t=t, cs=True)
                 name = person.name
                 dev = person.dev.keys()
+                devlist.extend(dev)
                 #nodeid.extend([n + '_' + name for n in dev])
                 pos.extend([person.dcs[d][:, 0] for d in dev])
                 orient.extend([person.acs[d] for d in dev])
             # TODO !!!!!!!!!!!!!!!!!!!!
             # in a future version , the network update must also update
-            # antenna positon in the device coordinate system
-            self.N.update_pos(dev, pos, now=t)
-            self.N.update_orient(dev, orient, now=t)
+            # antenna position in the device coordinate system
+            self.N.update_pos(devlist, pos, now=t)
+            self.N.update_orient(devlist, orient, now=t)
         self.N.update_dis()
 
 
