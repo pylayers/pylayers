@@ -6,8 +6,8 @@ Lfile = 'WHERE1_nc.ini'
 Lfile = 'TA-Office.ini'
 
 
-data = os.environ('PYLAYERS')+'/data/struc/ini/'+Lfile
-proj = os.environ('Basenae')+/P1/struc/ini/'+Lfile
+data = os.environ['PYLAYERS']+'/data/struc/ini/'+Lfile
+proj = os.environ['BASENAME']+'/struc/ini/'+Lfile
 
 shutil.copyfile(data,proj)
 
