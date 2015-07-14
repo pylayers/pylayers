@@ -456,6 +456,51 @@ class Pattern(PyLayers):
 
         self.gain()
 
+    def pwireplate(self,**kwargs):
+        """ pattern wire plate antenna
+
+        """
+        defaults = {'param':{'t0' : np.pi/2,
+                             'sqGmax': 1
+                   }}
+
+        if 'param' not in kwargs or kwargs['param']=={}:
+            kwargs['param']=defaults['param']
+
+        self.typ='wireplate'
+        self.param = kwargs['param']
+        pdb.set_trace()
+        t0 = self.param['t0']
+        sqGmax = self.param['sqGmax']
+
+        uth1 = np.where(self.theta < t0)[0]
+        uth2 = np.where(self.theta >= t0)[0]
+        p = t0
+        q = np.pi/2.
+        A = np.array(([[3*p**2,2*p,1],[p**3,p**2,p],[q**3,q**2,q]]))
+        Y = np.array(([0,1,1/(1.*sqGmax)]))
+        self.poly = la.solve(A,Y)
+
+        argth1 = np.abs(self.poly[0]*self.theta[uth1]**3
+                      + self.poly[1]*self.theta[uth1]**2
+                      + self.poly[2]*self.theta[uth1])
+
+        argth2 = -(1/(np.pi-t0)**2)*(self.theta[uth2]-t0)**2+1
+        argth = np.hstack((argth1,argth2))[::-1]
+
+        if self.grid:
+            self.Ft = self.sqG * (argth[:,None])
+            self.Fp = self.sqG * (argth[:,None])
+            self.sqG=np.ones((self.nf,self.nth,self.nph))
+            self.sqG[:]=Fap
+            self.evaluated = True
+        else:
+            Fat = self.sqG * argth
+            Fap = self.sqG * argth
+            self.Ft = np.dot(Fat[:,None],np.ones(len(self.fGHz))[None,:])
+            self.Fp = np.dot(Fap[:,None],np.ones(len(self.fGHz))[None,:])
+
+
     def F(self):
         """ evaluate radiation fonction w.r.t polarization
         """
@@ -493,37 +538,6 @@ class Pattern(PyLayers):
 
 
 
-#        if self.typ == 'WirePlate':
-#
-#            uth1 = np.where(self.theta < self.t0)[0]
-#            uth2 = np.where(self.theta >= self.t0)[0]
-#            p = self.t0
-#            q = np.pi/2.
-#            A = np.array(([[3*p**2,2*p,1],[p**3,p**2,p],[q**3,q**2,q]]))
-#            Y = np.array(([0,1,1/(1.*self.sqG)]))
-#            self.poly = la.solve(A,Y)
-#
-#            argth1 = np.abs(self.poly[0]*self.theta[uth1]**3
-#                     + self.poly[1]*self.theta[uth1]**2
-#                             + self.poly[2]*self.theta[uth1])
-#
-#            argth2 = -(1/(np.pi-self.t0)**2)*(self.theta[uth2]-self.t0)**2+1
-#            argth = np.hstack((argth1,argth2))[::-1]
-#
-#            if pattern :
-#                self.Ft = self.sqG * (argth[:,None])
-#                self.Fp = self.sqG * (argth[:,None])
-#                #self.theta=self.theta[:,None]
-#                #self.phi=self.ph[None,:]
-#                self.sqG=np.ones((self.nf,self.nth,self.nph))
-#                self.sqG[:]=Fap
-#                self.evaluated = True
-#            else:
-#                Fat = self.sqG * argth
-#                Fap = self.sqG * argth
-#                self.Ft = np.dot(Fat[:,None],np.ones(len(self.fGHz))[None,:])
-#                self.Fp = np.dot(Fap[:,None],np.ones(len(self.fGHz))[None,:])
-#
 class Antenna(Pattern):
     """ Antenna
 
@@ -557,7 +571,7 @@ class Antenna(Pattern):
 
     Antenna trx file can be stored in various order
         natural : HFSS
-        bcp     : near filed chamber
+        ncp     : near filed chamber
 
     It is important when initializing an antenna object
     to be aware of the typ of trx file
@@ -1381,7 +1395,7 @@ class Antenna(Pattern):
         # type : refers to the way the angular values are stored in the file
         # Detection of file type
         #
-        # Bcp
+        # nfc
         #    f  phi theta
         #    2    1    0
         # Natural
@@ -1394,7 +1408,7 @@ class Antenna(Pattern):
         dtheta = abs(theta[0] - theta[1])
 
         if (dphi == 0) & (dtheta != 0):
-            typ = 'bcp'
+            typ = 'nfc'
         if (dtheta == 0) & (dphi != 0):
             typ = 'natural'
 
@@ -1420,7 +1434,7 @@ class Antenna(Pattern):
             Ttheta = theta.reshape((nf, ntheta, nphi))
             Tphi = phi.reshape((nf, ntheta, nphi))
             Tf = f.reshape((nf, ntheta, nphi))
-        if typ == 'bcp':
+        if typ == 'nfc':
             self.Fp = Fphi.reshape((nf, nphi, ntheta))
             self.Ft = Ftheta.reshape((nf, nphi, ntheta))
             self.sqG = SqG.reshape((nf, nphi, ntheta))
@@ -1514,7 +1528,7 @@ class Antenna(Pattern):
             print self.Run
             print "Nb theta (lat) :", self.nth
             print "Nb phi (lon) :", self.nph
-        if self.typ =='bcp':
+        if self.typ =='nfc':
             print "--------------------------"
             print "fmin (GHz) :", self.fGHz[0]
             print "fmax (GHz) :", self.fGHz[-1]
