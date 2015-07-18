@@ -113,8 +113,7 @@ Miscellianous  functions
 """
 
 try:
-    from mayavi import mlab
-    #import mayavi.mlab as mlab
+    import mayavi.mlab as mlab
 except:
     print 'mayavi not installed'
 
@@ -134,13 +133,12 @@ import pylayers.util.pyutil as pyu
 import pylayers.util.geomutil as geu
 from pylayers.util.project import *
 from pylayers.antprop.spharm import *
+from pylayers.antprop.antssh import SSHFunc2, SSHFunc, SSHCoeff, CartToSphere
+from pylayers.antprop.coeffModel import *
 from matplotlib.font_manager import FontProperties
-from mpl_toolkits.mplot3d import axes3d
-#from scipy import sparse
 from matplotlib import rc
 from matplotlib import cm # colormaps
-from pylayers.antprop.antssh import *
-from pylayers.antprop.coeffModel import *
+from mpl_toolkits.mplot3d import axes3d
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from matplotlib.ticker import MaxNLocator
 import pandas as pd
@@ -460,8 +458,8 @@ class Pattern(PyLayers):
         """ pattern wire plate antenna
 
         """
-        defaults = {'param':{'t0' : np.pi/2,
-                             'sqGmax': 1
+        defaults = {'param':{'t0' : 5*np.pi/6,
+                             'GmaxdB': 5
                    }}
 
         if 'param' not in kwargs or kwargs['param']=={}:
@@ -469,9 +467,10 @@ class Pattern(PyLayers):
 
         self.typ='wireplate'
         self.param = kwargs['param']
-        pdb.set_trace()
         t0 = self.param['t0']
-        sqGmax = self.param['sqGmax']
+        GmaxdB = self.param['GmaxdB']
+        Gmax = pow(GmaxdB/10.,10)
+        sqGmax = np.sqrt(Gmax)
 
         uth1 = np.where(self.theta < t0)[0]
         uth2 = np.where(self.theta >= t0)[0]
@@ -489,17 +488,16 @@ class Pattern(PyLayers):
         argth = np.hstack((argth1,argth2))[::-1]
 
         if self.grid:
-            self.Ft = self.sqG * (argth[:,None])
-            self.Fp = self.sqG * (argth[:,None])
-            self.sqG=np.ones((self.nf,self.nth,self.nph))
-            self.sqG[:]=Fap
+            self.Ft = sqGmax * (argth[:,None])
+            self.Fp = sqGmax * (argth[:,None])
             self.evaluated = True
         else:
-            Fat = self.sqG * argth
-            Fap = self.sqG * argth
+            Fat = sqGmax * argth
+            Fap = sqGmax * argth
             self.Ft = np.dot(Fat[:,None],np.ones(len(self.fGHz))[None,:])
             self.Fp = np.dot(Fap[:,None],np.ones(len(self.fGHz))[None,:])
 
+        self.gain()
 
     def F(self):
         """ evaluate radiation fonction w.r.t polarization
@@ -2157,7 +2155,7 @@ class Antenna(Pattern):
 
             >>> from pylayers.antprop.antenna import *
             >>> A = Antenna('S2R2.sh3')
-            >>> A.Fsynth()
+            >>> A.eval()
             >>> tau = A.getdelay()
             >>> A.elec_delay(tau)
 
@@ -2592,9 +2590,7 @@ class Antenna(Pattern):
             >>> import numpy as np
             >>> import matplotlib.pylab as plt
             >>> A = Antenna('defant.vsh3')
-            >>> theta = np.linspace(0,np.pi,70)
-            >>> phi = np.linspace(0,2*np.pi,180)
-            >>> F = A.Fsynth3(theta,phi,pattern=True)
+            >>> F = A.eval(grid=True)
 
         All Br,Cr,Bi,Ci have the same (l,m) index in order to evaluate only
         once the V,W function
@@ -3759,7 +3755,7 @@ def show3D(F, theta, phi, k, col=True):
         >>> import matplotlib.pyplot as plt
         >>> from pylayers.antprop.antenna import *
         >>> A = Antenna('defant.vsh3')
-        >>> A.Fsynth()
+        >>> A.eval(grid=True)
 
 
     Warnings

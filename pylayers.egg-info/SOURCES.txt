@@ -1,12 +1,14 @@
 README
 setup.py
 pylayers/__init__.py
+pylayers/f1.py
 pylayers.egg-info/PKG-INFO
 pylayers.egg-info/SOURCES.txt
 pylayers.egg-info/dependency_links.txt
 pylayers.egg-info/requires.txt
 pylayers.egg-info/top_level.txt
 pylayers/antprop/3gppmodel.py
+pylayers/antprop/RadarCom.py
 pylayers/antprop/SHCoeffShow.py
 pylayers/antprop/SalehValenzuela.py
 pylayers/antprop/__init__.py
@@ -23,6 +25,7 @@ pylayers/antprop/coverage.py
 pylayers/antprop/diffraction.py
 pylayers/antprop/gg.py
 pylayers/antprop/interactions.py
+pylayers/antprop/ipython_log.py
 pylayers/antprop/loss.py
 pylayers/antprop/new.py
 pylayers/antprop/rays.py
@@ -142,6 +145,7 @@ pylayers/signal/DF.py
 pylayers/signal/ED.py
 pylayers/signal/__init__.py
 pylayers/signal/baseband.py
+pylayers/signal/beamforming.py
 pylayers/signal/bsignal.py
 pylayers/signal/detect_quad.py
 pylayers/signal/device.py

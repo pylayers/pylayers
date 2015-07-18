@@ -337,10 +337,10 @@ class CorSer(PyLayers):
             else :
                 self.B.traj.Lfilename=copy.copy(self.L.filename)
 
-        #reference time is tmocap
+        # reference time is tmocap
         self.tmocap = self.B[self.subject[0]].time
 
-        #load offset dict
+        # load offset dict
         self.offset= self._load_offset_dict()
 
         ########################
@@ -4183,7 +4183,7 @@ bernard
 
 
     def getlinkd(self,a,b,techno='',t=''):
-        """    get a link devices distances
+        """    get the distance for a link between devices
 
         Parameters
         ----------
@@ -4193,8 +4193,8 @@ bernard
         b : str | int
             name |id
 
-        oprional 
-        
+        optional
+
         techno : str
             radio techno
 
@@ -4206,20 +4206,21 @@ bernard
         Returns
         -------
 
-        dist : np.array() 
-            all distances for all timestamp for the given link
+        dist : np.array()
+            all distances for all timestamps for the given link
 
         Examples
         --------
 
         >>> from pylayers.measures.cormoran import *
-        >>> S=CorSer(serie=34)
-        >>> d=S.getlinkd('AP1','WristLeft')
+        >>> S = CorSer(serie=6)
+        >>> d = S.getlinkd('AP1','WristLeft')
 
         """
 
-        ra=a
-        rb=b
+        ra = a
+        rb = b
+
         a,ia,nna,subjecta,techno = self.devmapper(a,techno)
         b,ib,nnb,subjectb,techno = self.devmapper(b,techno)
 
@@ -4245,10 +4246,10 @@ bernard
             hstep = (df.index[1]-df.index[0])/2.
             val = df[(df.index >= t-hstep) & (df.index <= t+hstep)][link]
 
-        
+
 
         return val
-        
+
 
 
     def getlinkp(self,a,b,technoa='',technob='',t='',fId=''):
@@ -4325,7 +4326,7 @@ bernard
         Returns
         -------
 
-        Pandas Serie 
+        Pandas Serie
 
         Examples
         --------
@@ -4341,6 +4342,7 @@ bernard
         rb = b
         a,ia,nna,subjecta,techno = self.devmapper(a,techno)
         b,ib,nnb,subjectb,techno = self.devmapper(b,techno)
+
         if ('HK' in techno) :
             if (a +'-' + b) in self.hkb.keys():
                 link = a +'-' + b
@@ -4730,11 +4732,11 @@ bernard
             self.thkb = self.hkb.index
 
     def _align_on_devdf(self,typ=''):
-        """ align hkb or bs time on device data frame ( devdf) time index
+        """ align hkb or bs time on device data frame (devdf) time index
 
         In place (a.k.a. replace old self.hkb by the resampled one)
 
-        Parameters 
+        Parameters
         ----------
 
         typp : 'HKB' |'BS'
@@ -4743,7 +4745,7 @@ bernard
         --------
 
         >>> from pylayers.measures.cormoran import *
-        >>> S=CorSer(6)
+        >>> S = CorSer(6)
         >>> devdf = S.devdf[S.devdf['id']=='HKB:15']
         >>> hkbdf = S.hkb['AP1-AnkleLeft']
         >>> devdf2 = S._align_on_hkb(devdf,hkbdf,typ ='HKB')
@@ -4758,16 +4760,20 @@ bernard
             idf = self.tcr
 
         # mocap time
+        #
+        # 0 0.010001 0.020002
         mocapindex = pd.to_datetime(self.tmocap,unit='s')
         # radio time
+        # 0  0.023  0.0473
         idf.index = pd.to_datetime(idf.index,unit='s')
 
-        
+
         sf = (mocapindex[2]-mocapindex[1]).microseconds
         df = idf.resample(str(sf)+'U',fill_method='ffill')
 
         nindex = time2npa(df.index)
         df.index = pd.Index(nindex)
+
         if typ == 'HKB':
             self.hkb = df
         elif typ == 'BS':

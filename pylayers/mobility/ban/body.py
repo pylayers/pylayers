@@ -506,7 +506,7 @@ class Body(PyLayers):
 
         self._f=self._f*self._unit
 
-        self.Tmocap = self.nframes / info['VideoFrameRate']
+        self.Tmocap = (self.nframes-1) / info['VideoFrameRate']
 
         # time base of the motion capture file (sec)
         self.time = np.linspace(0,self.Tmocap,self.nframes)

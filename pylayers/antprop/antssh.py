@@ -13,7 +13,7 @@ Scalar Spherical Harmonics Functions
    CartToSphere
 
 """
-from pylayers.antprop.antenna import *
+#from pylayers.antprop.antenna import *
 #from pylayers.antprop.antvsh import *
 from pylayers.antprop.spharm import *
 
@@ -33,8 +33,8 @@ def SSHFunc(L, theta,phi):
 
     L : integer,
         spherical harmonics order
-    theta: numpy array(1, nth)
-    phi: numpy array(1,nph)
+    theta: numpy array (1,nth)
+    phi: numpy array (1,nph)
 
     Notes
     -----
