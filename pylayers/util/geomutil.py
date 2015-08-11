@@ -2529,6 +2529,7 @@ def isBetween(p1, p2, p, epsilon=1e-5):
 
     Parameters
     ----------
+
     p1 : np.array
     p2 : np.array
     p  : np.array

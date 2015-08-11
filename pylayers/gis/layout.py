@@ -898,7 +898,7 @@ class Layout(PyLayers):
             self.degree[deg] = npt
 
 
-                #
+        #
         # convert geometric information in numpy array
         #
 
@@ -934,6 +934,7 @@ class Layout(PyLayers):
         #
         # handling of segment related arrays
         #
+        #pdb.set_trace()
         if Nsmax >0:
             self.tgs = np.zeros(Nsmax+1,dtype=int)
             rag = np.arange(len(useg))
@@ -1013,7 +1014,6 @@ class Layout(PyLayers):
         normal_ss = self.normal[:,self.tgs[self.lsss]]
         self.normal = np.hstack((self.normal,normal_ss))
 
-
         # calculate extremum of segments
         #
         # Calculate the wedge angle of degree 2 points
@@ -1033,7 +1033,7 @@ class Layout(PyLayers):
         self.extrseg()
 
     def loadosm(self, _fileosm):
-        """ load layout from an osm file format
+        """ load layout from an osm file 
 
         Parameters
         ----------
@@ -1045,8 +1045,8 @@ class Layout(PyLayers):
         -----
 
         In JOSM nodes are numbered with negative indexes. It is not valid to
-        have a positive node number. To stay compliant with the PyLayers
-        convention which tells that <0 node are points and >0 are segments,
+        have a positive node number. To remain compliant with the PyLayers
+        convention which assumes that <0 nodes are points and >0 nodes are segments,
         in the osm format, segments are numbered negatively with a known offset
         of 1e7=10000000. The convention is set back when loading the osm file.
 
@@ -1073,11 +1073,11 @@ class Layout(PyLayers):
 
                 # old format conversion
                 if d.has_key('zmin'):
-                    d['z']=(d['zmin'],d['zmax'])
+                    d['z']=[d['zmin'],d['zmax']]
                     del(d['zmin'])
                     del(d['zmax'])
                 if d.has_key('ss_zmin'):
-                    d['ss_z']=[(d['ss_zmin'],d['ss_zmax'])]
+                    d['ss_z']=[[d['ss_zmin'],d['ss_zmax']]]
                     d['ss_name']=[d['ss_name']]
                     del(d['ss_zmin'])
                     del(d['ss_zmax'])
@@ -1088,37 +1088,42 @@ class Layout(PyLayers):
                     except:
                         pass
                 # avoid  0 value (not a segment number)
-                ns = k+1
-                # transcode segment index
-                if d.has_key('name'):
-                    name = d['name']
-                else:
-                    name = 'AIR'
-                    d['name'] = 'AIR'
-                self.Gs.add_node(ns)
-                self.Gs.add_edge(nta,ns)
-                self.Gs.add_edge(ns,nhe)
-                self.Gs.node[ns] = d
-                self.Gs.pos[ns] = tuple((np.array(self.Gs.pos[nta])+np.array(self.Gs.pos[nhe]))/2.)
-                if name not in self.display['subseg']:
-                    self.display['layers'].append(name)
-                self.labels[ns] = str(ns)
+#                ns = k+1
+#                # transcode segment index
+#                if d.has_key('name'):
+#                    name = d['name']
+#                else:
+#                    name = 'AIR'
+#                    d['name'] = 'AIR'
+#                self.Gs.add_node(ns)
+#                self.Gs.add_edge(nta,ns)
+#                self.Gs.add_edge(ns,nhe)
+#                self.Gs.node[ns] = d
+#                self.Gs.pos[ns] = tuple((np.array(self.Gs.pos[nta])+np.array(self.Gs.pos[nhe]))/2.)
+#                if name not in self.display['layers']:
+#                    self.display['layers'].append(name)
+#                self.labels[ns] = str(ns)
+#                if d.has_key('ss_name'):
+#                    nss+=len(d['ss_name'])
+#                    for n in d['ss_name']:
+#                        if n in self.name:
+#                            self.name[n].append(ns)
+#                        else:
+#                            self.name[n]=[ns]
+#                if name in self.name:
+#                    self.name[name].append(ns)
+#                else:
+#                    self.name[name] = [ns]
+                ns = self.add_segment(nta,nhe,name=d['name'],z=[eval(u) for u in d['z']],offset=0)
+               # self.chgmss(s1,ss_name=d['ss_name'],ss_offset=d['ss_offset'],ss_z=d['ss_z'])
                 if d.has_key('ss_name'):
                     nss+=len(d['ss_name'])
-                    for n in d['ss_name']:
-                        if n in self.name:
-                            self.name[n].append(ns)
-                        else:
-                            self.name[n]=[ns]
-                if name in self.name:
-                    self.name[name].append(ns)
-                else:
-                    self.name[name] = [ns]
+                    self.chgmss(ns,ss_name=d['ss_name'],ss_z=[[eval(u) for u in v ] for v in d['ss_z']])
 
-                _ns+=1
+#                _ns+=1
 
         self.Np = _np
-        self.Ns = _ns
+        #self.Ns = _ns
         self.Nss = nss
         #del coords
         #del nodes
@@ -1249,7 +1254,7 @@ class Layout(PyLayers):
 
 
     def loadini(self, _fileini):
-        """ load a structure file from an .ini format
+        """ load a structure file from an .ini file
 
         Parameters
         ----------
@@ -2290,12 +2295,12 @@ class Layout(PyLayers):
         # delete old edge ns
         self.del_segment(ns)
         # add new edge np[0] num
-        self.add_segment(nop[0], num, name=namens, z = (zminns,zmaxns), offset=0)
+        self.add_segment(nop[0], num, name=namens, z = [zminns,zmaxns], offset=0)
         # add new edge num np[1]
-        self.add_segment(num, nop[1], name=namens, z = (zminns,zmaxns), offset=0)
+        self.add_segment(num, nop[1], name=namens, z = [zminns,zmaxns], offset=0)
 
-    def add_segment(self, n1, n2, name='PARTITION',z=(0.0,3.0),offset=0):
-        """  add edge between node n1 and node n2
+    def add_segment(self, n1, n2, name='PARTITION',z=[0.0,3.0],offset=0):
+        """  add segment between node n1 and node n2
 
         Parameters
         ----------
@@ -2304,8 +2309,8 @@ class Layout(PyLayers):
         n2  : integer < 0
         name : string
             layer name 'PARTITION'
-        z : tuple of float
-            default = (0,3.0)
+        z : list of float
+            default = [0,3.0]
         offset : float
             [-1,1] default (0)
 
@@ -2320,8 +2325,7 @@ class Layout(PyLayers):
         A segment dictionnary has the following mandatory attributes
 
         name : slab name associated with segment
-        zmin : float  (meters)
-        zmax : float  (meters)
+        z : list (zmin,zmax)   (meters)
         norm : array  (1x3)  segment normal
         transition : boolean
         ncycles : list of involved cycles
@@ -2355,13 +2359,16 @@ class Layout(PyLayers):
         transition = False
         if name == 'AIR':
             transition=True
+
         p1 = np.array(self.Gs.pos[n1])
         p2 = np.array(self.Gs.pos[n2])
         p2mp1 = p2 - p1
         t = p2mp1 / np.sqrt(np.dot(p2mp1, p2mp1))
+
         #
         # n = t x z
         #
+
         norm = np.array([t[1], -t[0], 0])
         self.Gs.add_node(num, name=name)
         self.Gs.add_node(num, z=z)
@@ -2374,7 +2381,6 @@ class Layout(PyLayers):
         self.Gs.add_edge(n2, num)
         self.Ns = self.Ns + 1
         # update slab name <-> edge number dictionnary
-        print num,name
         try:
             self.name[name].append(num)
         except:
@@ -2476,10 +2482,10 @@ class Layout(PyLayers):
         n2 = self.add_fnod(p2)
         n3 = self.add_fnod(p3)
         # adding segments
-        self.add_segment(n0, n1, matname, (zmin, zmin+height))
-        self.add_segment(n1, n2, matname, (zmin, zmin+height))
-        self.add_segment(n2, n3, matname, (zmin, zmin+height))
-        self.add_segment(n3, n0, matname, (zmin, zmin+height))
+        self.add_segment(n0, n1, matname, [zmin, zmin+height])
+        self.add_segment(n1, n2, matname, [zmin, zmin+height])
+        self.add_segment(n2, n3, matname, [zmin, zmin+height])
+        self.add_segment(n3, n0, matname, [zmin, zmin+height])
 
     def add_furniture_file(self, _filefur, typ=''):
         """  add pieces of furniture from .ini files
@@ -2860,7 +2866,7 @@ class Layout(PyLayers):
 
 
     def chgmss(self,ns,ss_name=[],ss_z=[],ss_offset=[]):
-        """ change multi subseggments properties
+        """ change multi subsegments properties
 
         Parameters
         ----------
@@ -2873,7 +2879,7 @@ class Layout(PyLayers):
 
         ss_z : list of Nss tuple (zmin,zmax)
 
-        ss_offset : list os subsegment offsets
+        ss_offset : list of subsegment offsets
 
         Examples
         --------
