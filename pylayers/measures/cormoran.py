@@ -1,6 +1,4 @@
 # -*- coding:Utf-8 -*-
-
-
 """
 
 This module handles CORMORAN measurement data
@@ -1165,7 +1163,7 @@ bernard
         #mapping between device name in self.hkb and on body/in self.devdf
         dev_bid = [self.devmapper(k,techno=techno)[2] for k in dnode.keys()]
 
-        nb_totaldev=len(np.unique(self.devdf['id'])) 
+        nb_totaldev=len(np.unique(self.devdf['id']))
         # extract all dev position on body
         # Mpdev : (3 x (nb devices and nb infra nodes) x nb_timestamp)
         Mpdev = np.empty((3,len(dev_bid),len(self.devdf.index)/nb_totaldev))
@@ -1177,7 +1175,7 @@ bernard
                 except:
                     Mpdev[:,ik,:] = self.din[i]['p'][:,np.newaxis]
 
-        # create A and B from links 
+        # create A and B from links
         nA = np.array([prefix+ str(dnode[l[0]]) for l in links])
         nB = np.array([prefix+ str(dnode[l[1]]) for l in links])
 
@@ -1189,7 +1187,7 @@ bernard
         B=Mpdev[:,mnB]
 
 
-        # intersect2D matrix is 
+        # intersect2D matrix is
         # d_0: nb links
         #d_1: (cylinder number) * nb body + 1 * nb  cylinder_object
         # d_2 : nb frame
@@ -4214,7 +4212,7 @@ bernard
 
         >>> from pylayers.measures.cormoran import *
         >>> S = CorSer(serie=6)
-        >>> d = S.getlinkd('AP1','WristLeft')
+        >>> d = S.getlinkd('AP1','WristLeft',techno='HKB')
 
         """
 
@@ -4634,7 +4632,7 @@ bernard
         ipdb.set_trace()
         sf = (hkbdfc.index[2]-hkbdfc.index[1]).microseconds
         devdfc= devdfc.resample(str(sf)+'U')
-        
+
         devdfc.index = pd.Series([val.time() for val in devdfc.index])
         hkbdfc.index = pd.Series([val.time() for val in hkbdfc.index])
 
@@ -4645,7 +4643,7 @@ bernard
         """ apply offset from self.offset[self._filename][techno+'_index']
 
             if offset >0
-                add np.nan at the begining 
+                add np.nan at the begining
             if offset <0
                 first values of self.hkb will be dropped
         """
@@ -4656,7 +4654,7 @@ bernard
             df = self.tcr
         elif techno == 'BS':
             df = self.bespo
-        else : 
+        else :
             raise AttributeError('Unknown tecnology got applying offset')
 
 
@@ -4688,7 +4686,7 @@ bernard
         """ apply offset from self.offset[self._filename]['hkb_index']
 
             if offset >0
-                add np.nan at the begining 
+                add np.nan at the begining
             if offset <0
                 first values of self.hkb will be dropped
         """
@@ -4782,8 +4780,7 @@ bernard
             self.tcr = df
 
     def _align_devdf_on_hkb(self,devdf,hkbdf):
-
-        """ NOT USED Practically 
+        """ NOT USED Practically
             align time of 2 data frames:
 
         the time delta of the second data frame is applyied on the first one
@@ -4841,11 +4838,12 @@ bernard
             dgb[d]['subject']=subject[d]
             dgb[d]['id']=d
 
-        # create the realigned dataframe
+        # create the realigned Dataframe
+
         lgb = [dgb[d] for d in dgb]
         df = pd.concat(lgb)
         df.sort_index(inplace=True)
-        
+
         nindex = time2npa(df.index)
         df.index = pd.Index(nindex)
         cols=['id','subject','x','y','z','v','vx','vy','vz','a','ax','ay','az']

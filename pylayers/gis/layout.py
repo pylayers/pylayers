@@ -745,7 +745,7 @@ class Layout(PyLayers):
                if ke[u]>0:
                    self.del_segment(ke[u])
                if ke[u]<0:
-                   self.del_point(ke[u])
+                   self.del_points(ke[u])
 
            nodes = self.Gs.nodes()
            useg  = filter(lambda x : x>0,nodes)
@@ -2523,7 +2523,7 @@ class Layout(PyLayers):
         """ delete points in list lp
 
         Parameters
-        ----------add
+        ----------
 
         lp : list
             node list
@@ -2749,6 +2749,7 @@ class Layout(PyLayers):
         for n in self.Gs.node.keys():
             if ((n < 0) & (self.Gs.degree(n) == 0)):
                 self.Gs.remove_node(n)
+                del self.Gs.pos[n]
                 try:
                     self.Gc.remove_node(n)
                 except:
@@ -2759,6 +2760,7 @@ class Layout(PyLayers):
                     pass
 
         self.Np = len(np.nonzero(np.array(self.Gs.node.keys()) < 0)[0])
+        self.g2npy()
 
     def displaygui(self):
         """
