@@ -42,7 +42,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -133,7 +133,7 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="network-simulation-configuration">
 <h1>Network Simulation Configuration<a class="headerlink" href="#network-simulation-configuration" title="Permalink to this headline">¶</a></h1>
@@ -151,11 +151,11 @@ should be as realistic as possible, because for many applications it
 turns out that many parameters of interest are stongly dependent of the
 dynamic topology of the mobile network.</p>
 <p>In the following the configuration files for proceeding with those high
-level <tt class="docutils literal"><span class="pre">PyLayers</span></tt> simulation are described.</p>
-<p>The configuration file is <tt class="docutils literal"><span class="pre">simulnet.ini</span></tt></p>
+level <code class="docutils literal"><span class="pre">PyLayers</span></code> simulation are described.</p>
+<p>The configuration file is <code class="docutils literal"><span class="pre">simulnet.ini</span></code></p>
 <div class="section" id="simulnet-ini">
 <h2>Simulnet.ini<a class="headerlink" href="#simulnet-ini" title="Permalink to this headline">¶</a></h2>
-<p>This file is assumed to be located in <tt class="docutils literal"><span class="pre">$BASENAME/ini</span></tt>. As the format
+<p>This file is assumed to be located in <code class="docutils literal"><span class="pre">$BASENAME/ini</span></code>. As the format
 of this file is not stable yet. Refer to the comment in the file below
 for obtaining the inforamtion about the format.</p>
 <div class="code python highlight-python"><div class="highlight"><pre>!cat $BASENAME/ini/simulnet.ini
@@ -248,7 +248,7 @@ verbose = False
 <div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;/home/uguen/Bureau/P1/ini/simulnet.ini&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>Current version of <tt class="docutils literal"><span class="pre">Simulnet.ini</span></tt> contains the following sections</p>
+<p>Current version of <code class="docutils literal"><span class="pre">Simulnet.ini</span></code> contains the following sections</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Cp</span><span class="o">.</span><span class="n">sections</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -270,7 +270,7 @@ verbose = False
 <div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;save&#39;</span><span class="p">:</span> <span class="s">&#39;[]&#39;</span><span class="p">,</span> <span class="s">&#39;savep&#39;</span><span class="p">:</span> <span class="s">&#39;True&#39;</span><span class="p">,</span> <span class="s">&#39;savepd&#39;</span><span class="p">:</span> <span class="s">&#39;True&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
-<p>The <tt class="docutils literal"><span class="pre">savep</span></tt> boolean enable/disable saving of the simulation.</p>
+<p>The <code class="docutils literal"><span class="pre">savep</span></code> boolean enable/disable saving of the simulation.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Save&#39;</span><span class="p">))[</span><span class="s">&#39;savep&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -278,7 +278,7 @@ verbose = False
 </pre></div>
 </div>
 <p>The log file which contains all traces from the simulated dynamics are
-in <tt class="docutils literal"><span class="pre">$BASENAME/netsave</span></tt></p>
+in <code class="docutils literal"><span class="pre">$BASENAME/netsave</span></code></p>
 <div class="code python highlight-python"><div class="highlight"><pre>!ls $BASENAME/netsave/*
 </pre></div>
 </div>
@@ -338,12 +338,12 @@ simulation</p>
 </div>
 <p>Setup communication mode between node:</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">&quot;autonomous&quot;</span></tt> : the data exchange between nodes is driven by the
+<li><code class="docutils literal"><span class="pre">&quot;autonomous&quot;</span></code> : the data exchange between nodes is driven by the
 localization layer. If more information is required to estimate the
 position then a communication request is sent to the communication
 state</li>
-<li><tt class="docutils literal"><span class="pre">&quot;synchro&quot;</span></tt> : the data exchange between nodes is periodic. LDPs are
-periodically refreshed at the <tt class="docutils literal"><span class="pre">network_update_time</span></tt></li>
+<li><code class="docutils literal"><span class="pre">&quot;synchro&quot;</span></code> : the data exchange between nodes is periodic. LDPs are
+periodically refreshed at the <code class="docutils literal"><span class="pre">network_update_time</span></code></li>
 </ul>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Network&#39;</span><span class="p">))[</span><span class="s">&#39;communication_mode&#39;</span><span class="p">]</span>
 </pre></div>
@@ -394,9 +394,9 @@ periodically refreshed at the <tt class="docutils literal"><span class="pre">net
 </div>
 <p>Setup how agent choose their target:</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">&quot;random&quot;</span></tt>: the agnet move into the layout randomly</li>
-<li><tt class="docutils literal"><span class="pre">&quot;file&quot;</span></tt> : the agent follow the sequence specified in
-<tt class="docutils literal"><span class="pre">&lt;project_dir&gt;/nodes_destination.ini</span></tt></li>
+<li><code class="docutils literal"><span class="pre">&quot;random&quot;</span></code>: the agnet move into the layout randomly</li>
+<li><code class="docutils literal"><span class="pre">&quot;file&quot;</span></code> : the agent follow the sequence specified in
+<code class="docutils literal"><span class="pre">&lt;project_dir&gt;/nodes_destination.ini</span></code></li>
 </ul>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Mechanics&#39;</span><span class="p">))[</span><span class="s">&#39;choose_destination&#39;</span><span class="p">]</span>
 </pre></div>
@@ -513,8 +513,8 @@ NameError: name &#39;FileLink&#39; is not defined
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on juin 27, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on août 12, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/5-SIM/SimulNetConfig.txt"
 	    rel="nofollow">Show this page source</a>

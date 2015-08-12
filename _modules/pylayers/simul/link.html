@@ -43,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -134,7 +134,7 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for pylayers.simul.link</h1><div class="highlight"><pre>
 <span class="c">#!/usr/bin/python</span>
@@ -257,12 +257,12 @@
 
 
 
-<span class="k">class</span> <span class="nc">Link</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Link</span><span class="p">(</span><span class="n">Tchannel</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Link evaluation metaclass</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="n">Tchannel</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Link</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span> <span class="p">()</span>
 
 
 <div class="viewcode-block" id="Link.__add__"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.Link.__add__.html#pylayers.simul.link.Link.__add__">[docs]</a>    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">l</span><span class="p">):</span>
@@ -433,6 +433,7 @@
 <span class="sd">            Signature identifier (si_ID#N):</span>
 <span class="sd">                ca_cb_cutoff</span>
 
+<span class="sd">%pylab inline</span>
 <span class="sd">            Ray identifier (ray_ID#N):</span>
 <span class="sd">                cutoff_ua_ub</span>
 
@@ -450,7 +451,8 @@
 <span class="sd">            ub : indice of a position in &#39;p_map&#39; position dataset</span>
 <span class="sd">            uf : indice of freq position in &#39;f_map&#39; frequency dataset</span>
 <span class="sd">            uTa : indice of a position in &#39;T_map&#39; Rotation dataset</span>
-<span class="sd">            uTb : indice of b position in &#39;T_map&#39; Rotation dataset</span>
+<span class="sd">            uTb : indice o</span>
+<span class="sd">%pylab inlinef b position in &#39;T_map&#39; Rotation dataset</span>
 <span class="sd">            uAa : indice of a position in &#39;A_map&#39; Antenna name dataset</span>
 <span class="sd">            uAb : indice of b position in &#39;A_map&#39; Antenna name dataset</span>
 
@@ -784,7 +786,7 @@
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;fstep (fGHz) : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Nf : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">))</span> <span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s"> &#39;</span>
         <span class="n">d</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span> 
-        <span class="n">fc</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="mf">2.</span>
+        <span class="n">fcGHz</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="mf">2.</span>
         <span class="n">L</span>  <span class="o">=</span> <span class="mf">32.4</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fcGHz</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">s</span>
 
@@ -1730,8 +1732,8 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on Jun 28, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on août 12, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
     

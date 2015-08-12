@@ -42,7 +42,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -129,7 +129,7 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="code python highlight-python"><div class="highlight"><pre>%pylab inline
 </pre></div>
@@ -140,15 +140,15 @@
 <div class="section" id="synthesis-of-ultra-wide-band-waveforms">
 <h1>Synthesis of Ultra Wide Band Waveforms<a class="headerlink" href="#synthesis-of-ultra-wide-band-waveforms" title="Permalink to this headline">¶</a></h1>
 <p>Once the propagation channel has been evaluated. This is done in the
-<tt class="docutils literal"><span class="pre">pylayers.antprop.channel</span></tt> module. The received signal is evaluated in
+<code class="docutils literal"><span class="pre">pylayers.antprop.channel</span></code> module. The received signal is evaluated in
 applying a convolution product of each ray tranfer function with a
 specific IR-UWB waveform. The necessary modules are</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">pylayers.signal.bsignal</span></tt>.</li>
-<li><tt class="docutils literal"><span class="pre">pylayers.signal.waveform</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">pylayers.signal.channel</span></tt></li>
+<li><code class="docutils literal"><span class="pre">pylayers.signal.bsignal</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">pylayers.signal.waveform</span></code></li>
+<li><code class="docutils literal"><span class="pre">pylayers.signal.channel</span></code></li>
 </ul>
-<p>The module <tt class="docutils literal"><span class="pre">pylayers.simul.simulem</span></tt> is for definition of
+<p>The module <code class="docutils literal"><span class="pre">pylayers.simul.simulem</span></code> is for definition of
 electromagnetic simulation.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.signal.waveform</span> <span class="kn">import</span> <span class="o">*</span>
@@ -165,7 +165,7 @@ electromagnetic simulation.</p>
 <div class="section" id="generation-of-an-impulse-of-normalized-energy">
 <h2>Generation of an Impulse of normalized energy<a class="headerlink" href="#generation-of-an-impulse-of-normalized-energy" title="Permalink to this headline">¶</a></h2>
 <p>One possible manner to define an energy normalized short UWB impulse is
-as follows using <tt class="docutils literal"><span class="pre">bsignal.EnImpulse</span></tt> function.</p>
+as follows using <code class="docutils literal"><span class="pre">bsignal.EnImpulse</span></code> function.</p>
 <p>The default waveform is a gaussian windowing of a sine wave of frequency
 <img src="../../_images/mathmpl/math-e5c4897d65.png" style="position: relative; bottom: -7px"/>. The normalization term depends on the exponential scaling
 factor <img src="../../_images/mathmpl/math-f970af607c.png" style="position: relative; bottom: -3px"/>.</p>
@@ -225,7 +225,7 @@ ymax : 2.16154131873
 <div class="highlight-python"><div class="highlight"><pre>new file WHERE1.str
 </pre></div>
 </div>
-<p>A simulation object has an <tt class="docutils literal"><span class="pre">info</span></tt> method providing a summary of
+<p>A simulation object has an <code class="docutils literal"><span class="pre">info</span></code> method providing a summary of
 simulation informations.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">st</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span>
 <span class="n">sf</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span>
@@ -265,9 +265,9 @@ add easyly any other mathematical expression of UWB waveform for
 investigation on pulse waveform modulation for example. The waveform can
 also comes from measurement. For now there are two version of this
 waveform which has been used during the M1 measurement campaign. One is
-not compensated <tt class="docutils literal"><span class="pre">W1compensate</span></tt> for an extra short delay which can
+not compensated <code class="docutils literal"><span class="pre">W1compensate</span></code> for an extra short delay which can
 introduse a bias when interpretating the observed delay in terms of
-distance. The non compensated version is <tt class="docutils literal"><span class="pre">W1offset</span></tt> from the time
+distance. The non compensated version is <code class="docutils literal"><span class="pre">W1offset</span></code> from the time
 origin about 0.7 ns.</p>
 <p>The waveform class should grow for incorporating more waveforms,
 especially waveforms compliants with the current IEEE 802.15.4a and IEEE
@@ -289,8 +289,8 @@ to center the signal in the middle of the array. The waveform has
 embedded in the object its frequency domain and time domain
 representation.</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">st</span></tt> member stands for signal in time domain</li>
-<li><tt class="docutils literal"><span class="pre">sf</span></tt> member stands for signal in frequency domain</li>
+<li><code class="docutils literal"><span class="pre">st</span></code> member stands for signal in time domain</li>
+<li><code class="docutils literal"><span class="pre">sf</span></code> member stands for signal in frequency domain</li>
 </ul>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="nb">type</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="p">)</span>
 <span class="k">print</span> <span class="nb">type</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span><span class="p">)</span>
@@ -301,8 +301,8 @@ representation.</p>
 </pre></div>
 </div>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">FUsignal</span></tt> Frequency domain uniformly sampled base signal</li>
-<li><tt class="docutils literal"><span class="pre">TUsignal</span></tt> Time domain uniformly sampled base signal</li>
+<li><code class="docutils literal"><span class="pre">FUsignal</span></code> Frequency domain uniformly sampled base signal</li>
+<li><code class="docutils literal"><span class="pre">TUsignal</span></code> Time domain uniformly sampled base signal</li>
 </ul>
 </div>
 <div class="section" id="construction-of-the-propagation-channel">
@@ -410,7 +410,7 @@ the phase term due to delay along the ray.</p>
 <p>The transmission channel is obtained from the combination of the
 propagation channel <img src="../../_images/mathmpl/math-c2b5c6f441.png" style="position: relative; bottom: -3px"/> and the vector antenna
 pattern at both side of the radio link. This operation is implemented in
-the <tt class="docutils literal"><span class="pre">prop2tran</span></tt> method of the <tt class="docutils literal"><span class="pre">Ctilde</span></tt> class.</p>
+the <code class="docutils literal"><span class="pre">prop2tran</span></code> method of the <code class="docutils literal"><span class="pre">Ctilde</span></code> class.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">sc</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -488,7 +488,7 @@ between <img src="../../_images/mathmpl/math-c7217de4b7.png" style="position: re
 <p>In practice this is what is done after a resampling of the time base
 with a reinterpolated time step.</p>
 <p>The process which consists in going from time domain to frequency domain
-is delegated to a specialized class <tt class="docutils literal"><span class="pre">pylayers.signal.bsignal.Bsignal</span></tt>
+is delegated to a specialized class <code class="docutils literal"><span class="pre">pylayers.signal.bsignal.Bsignal</span></code>
 which maintains the proper binding between signal samples and their
 indexation either in time or in frequency domain.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">wgam</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span>
@@ -562,8 +562,8 @@ sorted.</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on juin 27, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on août 12, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/3-PHY/Signal.txt"
 	    rel="nofollow">Show this page source</a>

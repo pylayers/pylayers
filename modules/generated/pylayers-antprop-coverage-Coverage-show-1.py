@@ -1,6 +1,6 @@
 from pylayers.antprop.coverage import *
 C = Coverage()
-C.cover(polar='o')
+C.cover()
 f,a = C.show(typ='pr',figsize=(10,8))
 plt.show()
 f,a = C.show(typ='best',figsize=(10,8))

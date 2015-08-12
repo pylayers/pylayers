@@ -42,7 +42,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -152,7 +152,7 @@
 <li><a class="reference internal" href="#segment-and-sub-segments">6.6.4. Segment and sub-segments</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#channel-variability-due-to-different-layout-constitutive-materials">6.7. Channel variability due to different <tt class="docutils literal"><span class="pre">Layout</span></tt> constitutive materials</a></li>
+<li><a class="reference internal" href="#channel-variability-due-to-different-layout-constitutive-materials">6.7. Channel variability due to different <code class="docutils literal"><span class="pre">Layout</span></code> constitutive materials</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#electromagnetic-simulation">7. Electromagnetic Simulation</a><ul>
@@ -188,7 +188,7 @@
 </li>
 <li><a class="reference internal" href="#handling-human-mobility">10. Handling Human mobility</a><ul>
 <li><a class="reference internal" href="#body-mobility">10.1. Body Mobility</a><ul>
-<li><a class="reference internal" href="#bodycylinder-data-structure">10.1.1. <tt class="docutils literal"><span class="pre">BodyCylinder</span></tt> data structure</a></li>
+<li><a class="reference internal" href="#bodycylinder-data-structure">10.1.1. <code class="docutils literal"><span class="pre">BodyCylinder</span></code> data structure</a></li>
 <li><a class="reference internal" href="#description-of-a-body-file">10.1.2. Description of a body file</a></li>
 <li><a class="reference internal" href="#loading-a-motion-capture-file">10.1.3. Loading a Motion Capture File</a></li>
 <li><a class="reference internal" href="#defining-a-trajectory">10.1.4. Defining a trajectory</a></li>
@@ -197,7 +197,7 @@
 <li><a class="reference internal" href="#trajectory">10.1.7. Trajectory</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#posvel">10.2. <tt class="docutils literal"><span class="pre">posvel()</span></tt></a><ul>
+<li><a class="reference internal" href="#posvel">10.2. <code class="docutils literal"><span class="pre">posvel()</span></code></a><ul>
 <li><a class="reference internal" href="#definition-of-several-coordinates-systems">10.2.1. Definition of Several Coordinates systems</a></li>
 <li><a class="reference internal" href="#construction-of-the-cylinder-coordinate-system-ccs">10.2.2. Construction of the Cylinder Coordinate System (CCS)</a></li>
 <li><a class="reference internal" href="#placing-a-dcs-device-coordinate-system-on-the-cylinder">10.2.3. Placing a dcs (Device Coordinate System ) on the cylinder</a></li>
@@ -227,7 +227,7 @@
 <li><a class="reference internal" href="#geomutil-class">14. Geomutil Class</a></li>
 <li><a class="reference internal" href="#class-polygon">15. Class Polygon</a><ul>
 <li><a class="reference internal" href="#ploting-polygons">15.1. ploting polygons</a></li>
-<li><a class="reference internal" href="#buildgv">15.2. <tt class="docutils literal"><span class="pre">buildGv()</span></tt></a></li>
+<li><a class="reference internal" href="#buildgv">15.2. <code class="docutils literal"><span class="pre">buildGv()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#geomview-classes">16. Geomview classes</a><ul>
@@ -261,7 +261,7 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="what-is-pylayers-about">
 <h1>1. What is PyLayers about ?<a class="headerlink" href="#what-is-pylayers-about" title="Permalink to this headline">¶</a></h1>
@@ -319,7 +319,7 @@ complementary battery of tests using
 <a class="reference external" href="https://pypi.python.org/pypi/runipy">runipy</a>, it is used to track
 regressions and broken functionalities as it happens on a regular basis
 in a living project.</p>
-<p>It is expected that the magic of <tt class="docutils literal"><span class="pre">git</span></tt> will gradually improves
+<p>It is expected that the magic of <code class="docutils literal"><span class="pre">git</span></code> will gradually improves
 this document and the code at the same time.</p>
 <p>Nothing in PyLayers is guarantee, nothing should be taken for granted. This
 documention is by far not sufficiently peer reviewed at that time to
@@ -332,11 +332,11 @@ please do not hesitate to provide a feed back on the <a class="reference externa
 page of the
 project</a></p>
 <p>If you find a bug, please keep track of it in a .
-and <tt class="docutils literal"><span class="pre">gist</span></tt> it and send the link on the issues page.</p>
+and <code class="docutils literal"><span class="pre">gist</span></code> it and send the link on the issues page.</p>
 <p>Any feedback from users is more than welcome for any suggestions of
 improvement about the source code.</p>
 <p>If you have any interest to be involved and to participate to the
-<tt class="docutils literal"><span class="pre">PyLayers</span></tt> project, the best way is to open a <tt class="docutils literal"><span class="pre">github</span></tt> account and
+<code class="docutils literal"><span class="pre">PyLayers</span></code> project, the best way is to open a <code class="docutils literal"><span class="pre">github</span></code> account and
 to fork the project on your own machine. Use PyLayers for your own
 needs, and if you wish provide feedback to the project with a <strong>pull
 request</strong>.</p>
@@ -426,7 +426,7 @@ It goes from a simple antenna gain formula to a full polarization description.</
 <div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x79a8990&gt;
 </pre></div>
 </div>
-<p>Lets start by loading an antenna from a <tt class="docutils literal"><span class="pre">vsh3</span></tt> file.</p>
+<p>Lets start by loading an antenna from a <code class="docutils literal"><span class="pre">vsh3</span></code> file.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;S1R1.vsh3&#39;</span><span class="p">)</span>
 <span class="n">A</span>
 </pre></div>
@@ -445,7 +445,7 @@ been loaded and there is an antenna down there. The only thing we know
 at that point is the name of the file which has extension &#8216;.vsh3&#8217; which
 means vector spherical harmonics in shape 3. To list all the availble
 antenna files in the dedicated directory of the project it i possible to
-invoke the <tt class="docutils literal"><span class="pre">ls()</span></tt> method.</p>
+invoke the <code class="docutils literal"><span class="pre">ls()</span></code> method.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s">&#39;sh3&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -464,13 +464,13 @@ invoke the <tt class="docutils literal"><span class="pre">ls()</span></tt> metho
 </div>
 <p>At that point the radiation pattern of the antenna has not yet been
 evaluated. For a shape 3 pattern the method to calculate the pattern is
-<tt class="docutils literal"><span class="pre">Fsynth3()</span></tt> with the <tt class="docutils literal"><span class="pre">pattern</span></tt> option set to true.</p>
+<code class="docutils literal"><span class="pre">Fsynth3()</span></code> with the <code class="docutils literal"><span class="pre">pattern</span></code> option set to true.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The <tt class="docutils literal"><span class="pre">polar()</span></tt> method allows to superpose different pattern for a list o
-frequecies <tt class="docutils literal"><span class="pre">fGHz</span></tt> + If <tt class="docutils literal"><span class="pre">phd</span></tt> is precised the diagram is given as a
-function of <img src="../_images/mathmpl/math-5dc8912759.png" style="position: relative; bottom: -3px"/> + If <tt class="docutils literal"><span class="pre">thd</span></tt> is precised the diagram is given
+<p>The <code class="docutils literal"><span class="pre">polar()</span></code> method allows to superpose different pattern for a list o
+frequecies <code class="docutils literal"><span class="pre">fGHz</span></code> + If <code class="docutils literal"><span class="pre">phd</span></code> is precised the diagram is given as a
+function of <img src="../_images/mathmpl/math-5dc8912759.png" style="position: relative; bottom: -3px"/> + If <code class="docutils literal"><span class="pre">thd</span></code> is precised the diagram is given
 as a function of <img src="../_images/mathmpl/math-e22cc525ec.png" style="position: relative; bottom: -7px"/></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
 <span class="n">a1</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -561,7 +561,7 @@ Nb theta (lat) : 91
 Nb phi (lon) :180
 </pre></div>
 </div>
-<p>To calculate scalar spherical harmonics coefficient the method <tt class="docutils literal"><span class="pre">ssh(A,L)</span></tt> is
+<p>To calculate scalar spherical harmonics coefficient the method <code class="docutils literal"><span class="pre">ssh(A,L)</span></code> is
 used.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span> <span class="o">=</span> <span class="mi">5</span>
 <span class="n">A</span> <span class="o">=</span> <span class="n">ssh</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">L</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
@@ -888,19 +888,19 @@ Slabs are used to describe properties of the different constitutive
 elements of a building such as wall, windows ,...</p>
 <p>In practice when describing a specific building, we specify a set of different slabs with different
 dielectric characteristics.</p>
-<p>The structure which gathers <cite>Slab</cite> is <tt class="docutils literal"><span class="pre">SlabDB</span></tt>. If no file argument
+<p>The structure which gathers <cite>Slab</cite> is <code class="docutils literal"><span class="pre">SlabDB</span></code>. If no file argument
 is given, this structure is initialized with the default file:</p>
 <p><a class="reference external" href="https://github.com/pylayers/pylayers/blob/master/data/ini/slabDB.ini">slabDB.ini</a></p>
-<p>We illustrates below some features of the <tt class="docutils literal"><span class="pre">pylayers.antprop.slab</span></tt> module.</p>
+<p>We illustrates below some features of the <code class="docutils literal"><span class="pre">pylayers.antprop.slab</span></code> module.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>The Class <tt class="docutils literal"><span class="pre">SlabDB</span></tt> contains a dictionnary of all available Slab. This
-information is read in the file <tt class="docutils literal"><span class="pre">slabDB.ini</span></tt> of the current project
-pointed by environment variable <tt class="docutils literal"><span class="pre">$BASENAME</span></tt></p>
-<p>A <tt class="docutils literal"><span class="pre">__repr__</span></tt> method provides a visual indication of the thichness and
-materials of a <tt class="docutils literal"><span class="pre">Slab</span></tt></p>
+<p>The Class <code class="docutils literal"><span class="pre">SlabDB</span></code> contains a dictionnary of all available Slab. This
+information is read in the file <code class="docutils literal"><span class="pre">slabDB.ini</span></code> of the current project
+pointed by environment variable <code class="docutils literal"><span class="pre">$BASENAME</span></code></p>
+<p>A <code class="docutils literal"><span class="pre">__repr__</span></code> method provides a visual indication of the thichness and
+materials of a <code class="docutils literal"><span class="pre">Slab</span></code></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span> <span class="o">=</span> <span class="n">SlabDB</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -984,21 +984,21 @@ coefficients w.r.t angle anf frequency.</p>
 <p>Each slab contains informations about the electromagnetic properties of its constitutive materials.</p>
 <p>Below is presented an example for a simple slab, constituted with a single material.
 The slab &#8216;WOOD&#8217; is defined as a layer of 4cm &#8216;WOOD&#8217; material.</p>
-<p><tt class="docutils literal"><span class="pre">lmatname</span></tt> list of material names</p>
+<p><code class="docutils literal"><span class="pre">lmatname</span></code> list of material names</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">][</span><span class="s">&#39;lmatname&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<p><tt class="docutils literal"><span class="pre">lithickname</span></tt> list of slab thickness</p>
+<p><code class="docutils literal"><span class="pre">lithickname</span></code> list of slab thickness</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">][</span><span class="s">&#39;lthick&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="mf">0.04</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>There is also a <tt class="docutils literal"><span class="pre">color</span></tt> attribute</p>
+<p>There is also a <code class="docutils literal"><span class="pre">color</span></code> attribute</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">][</span><span class="s">&#39;color&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -1272,15 +1272,15 @@ N°18</a></p>
 <p>A Layout is a representation of a floorplan, it is handled by the module
 <strong>pylayers.gis.layout</strong>.</p>
 <p>This module recognizes different file formats including geo-referenced
-files in open street map format <tt class="docutils literal"><span class="pre">.osm</span></tt>.</p>
+files in open street map format <code class="docutils literal"><span class="pre">.osm</span></code>.</p>
 <p>Using osm allows to take advantage of a mature floor plan editor <em>JOSM</em>
 with the plugin <em>PicLayer</em>. This is well described in
 <a class="reference external" href="http://wiki.openstreetmap.org/wiki/IndoorOSM">http://wiki.openstreetmap.org/wiki/IndoorOSM</a></p>
-<p>The <tt class="docutils literal"><span class="pre">pylayers.gis.osmparser</span></tt> module parses <tt class="docutils literal"><span class="pre">osm</span></tt> files.</p>
+<p>The <code class="docutils literal"><span class="pre">pylayers.gis.osmparser</span></code> module parses <code class="docutils literal"><span class="pre">osm</span></code> files.</p>
 <p>See the following methods of the layout object</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">loadosm()</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">saveosm()</span></tt></li>
+<li><code class="docutils literal"><span class="pre">loadosm()</span></code></li>
+<li><code class="docutils literal"><span class="pre">saveosm()</span></code></li>
 </ul>
 <div class="section" id="structure-of-a-layout">
 <h2>6.1. Structure of a Layout<a class="headerlink" href="#structure-of-a-layout" title="Permalink to this headline">¶</a></h2>
@@ -1294,24 +1294,24 @@ are exploited for further analysis.</p>
 </div>
 <div class="section" id="subsegments">
 <h2>6.2. Subsegments<a class="headerlink" href="#subsegments" title="Permalink to this headline">¶</a></h2>
-<p>To describe doors and windows, the concept of <tt class="docutils literal"><span class="pre">subsegment</span></tt> is
+<p>To describe doors and windows, the concept of <code class="docutils literal"><span class="pre">subsegment</span></code> is
 introduced.</p>
-<p>A <tt class="docutils literal"><span class="pre">segment</span></tt> has attributes :</p>
+<p>A <code class="docutils literal"><span class="pre">segment</span></code> has attributes :</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">name</span></tt> : slab name</li>
-<li><tt class="docutils literal"><span class="pre">z</span></tt> : tuple of minimum and maximum heights with respect to ground
+<li><code class="docutils literal"><span class="pre">name</span></code> : slab name</li>
+<li><code class="docutils literal"><span class="pre">z</span></code> : tuple of minimum and maximum heights with respect to ground
 (meters)</li>
-<li><tt class="docutils literal"><span class="pre">transition</span></tt> : a boolean indicating if a human can cross this
+<li><code class="docutils literal"><span class="pre">transition</span></code> : a boolean indicating if a human can cross this
 segment. For example, segments associated with a door are transition
 segments but we will see later that it may be judicious to split
 space with transparent segments which have the name &#8216;AIR&#8217;. Those
-segments are also <tt class="docutils literal"><span class="pre">transition=True</span></tt></li>
+segments are also <code class="docutils literal"><span class="pre">transition=True</span></code></li>
 </ul>
-<p>A <tt class="docutils literal"><span class="pre">subsegment</span></tt> belongs to a <tt class="docutils literal"><span class="pre">segment</span></tt>, it has mainly 2 attached
+<p>A <code class="docutils literal"><span class="pre">subsegment</span></code> belongs to a <code class="docutils literal"><span class="pre">segment</span></code>, it has mainly 2 attached
 parameters :</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">ss_name</span></tt> : subsegment slab name</li>
-<li><tt class="docutils literal"><span class="pre">ss_z</span></tt> : [(zmin1,zmax1),(zmin2,zmax2),...,(zminK,zmaxK))] list of
+<li><code class="docutils literal"><span class="pre">ss_name</span></code> : subsegment slab name</li>
+<li><code class="docutils literal"><span class="pre">ss_z</span></code> : [(zmin1,zmax1),(zmin2,zmax2),...,(zminK,zmaxK))] list of
 minimum and maximum heights of associated subsegments (meters)</li>
 </ul>
 <p>When appearing in a 3D ray a subsegment has a unique index
@@ -1323,12 +1323,12 @@ different from the segment index.</p>
 again. Currently, the different recognized file extensions are the
 following :</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">.str2</span></tt>: a ASCII file (Node list + edge list)</li>
-<li><tt class="docutils literal"><span class="pre">.str</span></tt> : a binary file which includes visibility relations between
+<li><code class="docutils literal"><span class="pre">.str2</span></code>: a ASCII file (Node list + edge list)</li>
+<li><code class="docutils literal"><span class="pre">.str</span></code> : a binary file which includes visibility relations between
 point and segments</li>
-<li><tt class="docutils literal"><span class="pre">.ini</span></tt> : an ini file which gather node list and edge list as well
-as the state of the current <tt class="docutils literal"><span class="pre">display</span></tt> dictionnary</li>
-<li><tt class="docutils literal"><span class="pre">.osm</span></tt> : an xml file which can be edited with
+<li><code class="docutils literal"><span class="pre">.ini</span></code> : an ini file which gather node list and edge list as well
+as the state of the current <code class="docutils literal"><span class="pre">display</span></code> dictionnary</li>
+<li><code class="docutils literal"><span class="pre">.osm</span></code> : an xml file which can be edited with
 <a class="reference external" href="http://josm.openstreetmap.de/">JOSM</a></li>
 </ul>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
@@ -1340,8 +1340,8 @@ as the state of the current <tt class="docutils literal"><span class="pre">displ
 <h2>6.4. Reading an exiting Layout<a class="headerlink" href="#reading-an-exiting-layout" title="Permalink to this headline">¶</a></h2>
 <p>To read an existing layout it is sufficient to create a Layout object
 with, as an argument, a file name with one of the recognized extension.
-All files are stored in the <tt class="docutils literal"><span class="pre">pstruc['DIRSTRUC']</span></tt> directory of the
-project. The project root directory is defined in the <tt class="docutils literal"><span class="pre">$BASENAME</span></tt>
+All files are stored in the <code class="docutils literal"><span class="pre">pstruc['DIRSTRUC']</span></code> directory of the
+project. The project root directory is defined in the <code class="docutils literal"><span class="pre">$BASENAME</span></code>
 environment variable.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRSTRUC&#39;</span><span class="p">]</span>
 </pre></div>
@@ -1349,8 +1349,8 @@ environment variable.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">struc</span><span class="o">/</span><span class="nb">str</span>
 </pre></div>
 </div>
-<p><tt class="docutils literal"><span class="pre">pstruc</span></tt> is a dictionnary which gathers all directories which are used
-in <tt class="docutils literal"><span class="pre">PyLayers</span></tt></p>
+<p><code class="docutils literal"><span class="pre">pstruc</span></code> is a dictionnary which gathers all directories which are used
+in <code class="docutils literal"><span class="pre">PyLayers</span></code></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">pstruc</span>
 </pre></div>
 </div>
@@ -1381,7 +1381,7 @@ in <tt class="docutils literal"><span class="pre">PyLayers</span></tt></p>
  <span class="s">&#39;DIRWRL&#39;</span><span class="p">:</span> <span class="s">&#39;struc/wrl&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
-<p>The structure of the <tt class="docutils literal"><span class="pre">.osm</span></tt> file is shown below</p>
+<p>The structure of the <code class="docutils literal"><span class="pre">.osm</span></code> file is shown below</p>
 <div class="highlight-python"><div class="highlight"><pre>%%bash
 
     cd $BASENAME/struc
@@ -1528,7 +1528,7 @@ Nc  = Gr.node[nroom][&#39;cycles&#39;]
 </div>
 <p>The layout can be displayed using matplotlib ploting primitive. Several
 display options are specified in the display dictionnary. Those options
-are exploited in <tt class="docutils literal"><span class="pre">showGs()</span></tt> vizualisation method.</p>
+are exploited in <code class="docutils literal"><span class="pre">showGs()</span></code> vizualisation method.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">display</span>
 </pre></div>
 </div>
@@ -1584,16 +1584,16 @@ are exploited in <tt class="docutils literal"><span class="pre">showGs()</span><
 <div class="section" id="interactive-editor">
 <h2>6.6. Interactive editor<a class="headerlink" href="#interactive-editor" title="Permalink to this headline">¶</a></h2>
 <p>The command <cite>L.editor()</cite> launches a simple Layout interactive editor.
-The state machine is implemented in module <tt class="docutils literal"><span class="pre">pylayers.gis.selectl.py</span></tt>.</p>
+The state machine is implemented in module <code class="docutils literal"><span class="pre">pylayers.gis.selectl.py</span></code>.</p>
 <p>To have an idea of all available options, look in the
-<tt class="docutils literal"><span class="pre">`pylayers.gis.SelectL</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.new_state">http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.new_state</a>&gt;`__
+<code class="docutils literal"><span class="pre">`pylayers.gis.SelectL</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.new_state">http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.new_state</a>&gt;`__
 module</p>
 <p>All ergonomic improvement of this editor is welcome.
 Just pull request your modifications.</p>
 <p>PyLayers comes along with a low level structure editor based on
-<tt class="docutils literal"><span class="pre">matplotlib</span></tt> which can be invoqued using the <tt class="docutils literal"><span class="pre">editor()</span></tt> method. This
+<code class="docutils literal"><span class="pre">matplotlib</span></code> which can be invoqued using the <code class="docutils literal"><span class="pre">editor()</span></code> method. This
 editor is more suited for modyfing constitutive properties of walls.</p>
-<p>An alternative editing solution is to use the open street map editor <tt class="docutils literal"><span class="pre">JOSM</span></tt></p>
+<p>An alternative editing solution is to use the open street map editor <code class="docutils literal"><span class="pre">JOSM</span></code></p>
 <p>There are two different modes of edition</p>
 <ul class="simple">
 <li>A create points mode CP<ul>
@@ -1709,7 +1709,7 @@ a segment (wall,door,window,...).</p>
 </div>
 <p>The studied configuration is composed of a simple 2 rooms building
 separated by a subsegment which has a multi subsegment attribute. The
-attribute of the subsegment can be changed with the method <tt class="docutils literal"><span class="pre">chgmss</span></tt>
+attribute of the subsegment can be changed with the method <code class="docutils literal"><span class="pre">chgmss</span></code>
 (change multisubsegment)</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;WOOD&#39;</span><span class="p">],</span><span class="n">ss_z</span> <span class="o">=</span><span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">2.7</span><span class="p">),(</span><span class="mf">2.7</span><span class="p">,</span><span class="mf">2.8</span><span class="p">),(</span><span class="mf">2.8</span><span class="p">,</span><span class="mi">3</span><span class="p">)])</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
@@ -1884,7 +1884,7 @@ None
 </div>
 </div>
 <div class="section" id="channel-variability-due-to-different-layout-constitutive-materials">
-<h2>6.7. Channel variability due to different <tt class="docutils literal"><span class="pre">Layout</span></tt> constitutive materials<a class="headerlink" href="#channel-variability-due-to-different-layout-constitutive-materials" title="Permalink to this headline">¶</a></h2>
+<h2>6.7. Channel variability due to different <code class="docutils literal"><span class="pre">Layout</span></code> constitutive materials<a class="headerlink" href="#channel-variability-due-to-different-layout-constitutive-materials" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span>
 </pre></div>
 </div>
@@ -2015,14 +2015,14 @@ nl : 4048
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The 2 extremities of the radio link are coordinates in <tt class="docutils literal"><span class="pre">numpy.array</span></tt>
+<p>The 2 extremities of the radio link are coordinates in <code class="docutils literal"><span class="pre">numpy.array</span></code>
 of transmitter and receiver. <cite>A</cite> and  <cite>B</cite> are radionodes at the two
 termination of the radio link.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span> <span class="c"># defining transmitter position</span>
 <span class="n">B</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">30</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span> <span class="c"># defining receiver position</span>
 </pre></div>
 </div>
-<p>The scene is plotted with the <tt class="docutils literal"><span class="pre">showG</span></tt> method of the Layout.</p>
+<p>The scene is plotted with the <code class="docutils literal"><span class="pre">showG</span></code> method of the Layout.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># figure instanciation</span>
 <span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
@@ -2038,7 +2038,7 @@ termination of the radio link.</p>
 </pre></div>
 </div>
 <img alt="./AP-multiwallmodel_files/AP-multiwallmodel_9_0.png" src="./AP-multiwallmodel_files/AP-multiwallmodel_9_0.png" />
-<p>The function <tt class="docutils literal"><span class="pre">angleonlink</span></tt> returns the list of intersected segments
+<p>The function <code class="docutils literal"><span class="pre">angleonlink</span></code> returns the list of intersected segments
 and the corresponding incidence angles (in radians) with respect to the
 segment normal.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">data</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">angleonlink</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">)</span>
@@ -2075,8 +2075,8 @@ Excess delay parallel polarization           2.12364 ns
 a given indoor environment. Ray tracing is generally time consuming
 and depending on the purpose of the study it could be relevant to
 proceed with a simpler approach while staying site-specific.
-<tt class="docutils literal"><span class="pre">PyLayers</span></tt> provides such a tool which heavily relies on the core
-module <tt class="docutils literal"><span class="pre">slab.py</span></tt></p>
+<code class="docutils literal"><span class="pre">PyLayers</span></code> provides such a tool which heavily relies on the core
+module <code class="docutils literal"><span class="pre">slab.py</span></code></p>
 <p>The multi-wall model can also be used to perform a full
 coverage of a Layout given a transmitter position.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">()</span>
@@ -2131,12 +2131,12 @@ For Orthogonal polarization
 </div>
 <img alt="./AP-multiwallmodel_files/AP-multiwallmodel_28_0.png" src="./AP-multiwallmodel_files/AP-multiwallmodel_28_0.png" />
 <img alt="./AP-multiwallmodel_files/AP-multiwallmodel_28_1.png" src="./AP-multiwallmodel_files/AP-multiwallmodel_28_1.png" />
-<p>First let&#8217;s import the <tt class="docutils literal"><span class="pre">coverage</span></tt> module</p>
+<p>First let&#8217;s import the <code class="docutils literal"><span class="pre">coverage</span></code> module</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">time</span>
 </pre></div>
 </div>
-<p>Instantiate a coverage object. By defaut, <tt class="docutils literal"><span class="pre">TA-Office.str</span></tt> layout
+<p>Instantiate a coverage object. By defaut, <code class="docutils literal"><span class="pre">TA-Office.str</span></code> layout
 strucure is loaded.</p>
 <p>This information can be modified in the <strong>coverage.ini</strong> file in the
 project directory.</p>
@@ -2185,7 +2185,7 @@ show = True
 <span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The coverage object has a <tt class="docutils literal"><span class="pre">__repr__</span></tt> which summarizes the different
+<p>The coverage object has a <code class="docutils literal"><span class="pre">__repr__</span></code> which summarizes the different
 parameters of the current coverage object</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span>
 </pre></div>
@@ -2224,7 +2224,7 @@ plm : {&#39;fghz&#39;: &#39;3.0&#39;, &#39;rssnp&#39;: &#39;2.64&#39;, &#39;d0&#
 </pre></div>
 </div>
 <img alt="./AP-coverage_files/AP-coverage_11_1.png" src="./AP-coverage_files/AP-coverage_11_1.png" />
-<p>The coverage calculation is launched by calling the <tt class="docutils literal"><span class="pre">cover()</span></tt>
+<p>The coverage calculation is launched by calling the <code class="docutils literal"><span class="pre">cover()</span></code>
 method</p>
 <p>The shadowing map coverage results can be displayed by invoquing various
 functions.</p>
@@ -2320,7 +2320,7 @@ different frequencies</p>
 </div>
 <img alt="./AP-signatures_files/AP-signatures_6_0.png" src="./AP-signatures_files/AP-signatures_6_0.png" />
 <p>All the interactions of a given cycle are stored as meta information in
-nodes of <tt class="docutils literal"><span class="pre">Gt</span></tt></p>
+nodes of <code class="docutils literal"><span class="pre">Gt</span></code></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;inter&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -2343,11 +2343,11 @@ cycle numbers. In example below it is 0 and 1.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Si</span> <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The cold start determination of the signature is done with a <tt class="docutils literal"><span class="pre">run</span></tt>
+<p>The cold start determination of the signature is done with a <code class="docutils literal"><span class="pre">run</span></code>
 function. The code is not in its final shape here and there is room for
 significant acceleration in incorporating propagation based heuristics.
 The mitigation of graph exploration depth is done in setting a
-<tt class="docutils literal"><span class="pre">cutoff</span></tt> value which limits the exploration in the interaction graph.</p>
+<code class="docutils literal"><span class="pre">cutoff</span></code> value which limits the exploration in the interaction graph.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Si</span><span class="o">.</span><span class="n">run4</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -2374,15 +2374,15 @@ interactions.</p>
 <div class="section" id="synthesis-of-ultra-wide-band-waveforms">
 <h2>7.4. Synthesis of Ultra Wide Band Waveforms<a class="headerlink" href="#synthesis-of-ultra-wide-band-waveforms" title="Permalink to this headline">¶</a></h2>
 <p>Once the propagation channel has been evaluated. This is done in the
-<tt class="docutils literal"><span class="pre">pylayers.antprop.channel</span></tt> module. The received signal is evaluated in
+<code class="docutils literal"><span class="pre">pylayers.antprop.channel</span></code> module. The received signal is evaluated in
 applying a convolution product of each ray tranfer function with a
 specific IR-UWB waveform. The necessary modules are</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">pylayers.signal.bsignal</span></tt>.</li>
-<li><tt class="docutils literal"><span class="pre">pylayers.signal.waveform</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">pylayers.signal.channel</span></tt></li>
+<li><code class="docutils literal"><span class="pre">pylayers.signal.bsignal</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">pylayers.signal.waveform</span></code></li>
+<li><code class="docutils literal"><span class="pre">pylayers.signal.channel</span></code></li>
 </ul>
-<p>The module <tt class="docutils literal"><span class="pre">pylayers.simul.simulem</span></tt> is for definition of
+<p>The module <code class="docutils literal"><span class="pre">pylayers.simul.simulem</span></code> is for definition of
 electromagnetic simulation.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.signal.waveform</span> <span class="kn">import</span> <span class="o">*</span>
@@ -2392,7 +2392,7 @@ electromagnetic simulation.</p>
 </div>
 <p>Generation of a pulse of normalized energy</p>
 <p>One possible manner to define an energy normalized short UWB pulse is
-as follows using <tt class="docutils literal"><span class="pre">bsignal.EnImpulse</span></tt> function.</p>
+as follows using <code class="docutils literal"><span class="pre">bsignal.EnImpulse</span></code> function.</p>
 <p>The default waveform is a gaussian windowing of a sine wave of frequency
 <img src="../_images/mathmpl/math-e5c4897d65.png" style="position: relative; bottom: -7px"/>. The normalization term depends on the exponential scaling
 factor <img src="../_images/mathmpl/math-f970af607c.png" style="position: relative; bottom: -3px"/>.</p>
@@ -2445,7 +2445,7 @@ ymax : 2.16154131873
 <span class="n">S</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;defstr3.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>A simulation object has an <tt class="docutils literal"><span class="pre">info</span></tt> method providing a summary of
+<p>A simulation object has an <code class="docutils literal"><span class="pre">info</span></code> method providing a summary of
 simulation informations.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
@@ -2606,9 +2606,9 @@ add easily any other mathematical expression of UWB waveform for
 investigation on pulse waveform modulation for example. The waveform can
 also comes from measurement. For now there are two versions of this
 waveform which has been used during the M1 measurement campaign. One is
-not compensated <tt class="docutils literal"><span class="pre">W1compensate</span></tt> for an extra short delay which can
+not compensated <code class="docutils literal"><span class="pre">W1compensate</span></code> for an extra short delay which can
 introduce a bias when interpreting the observed delay in terms of
-distance. The non compensated version is <tt class="docutils literal"><span class="pre">W1offset</span></tt> from the time
+distance. The non compensated version is <code class="docutils literal"><span class="pre">W1offset</span></code> from the time
 origin about 0.7 ns.</p>
 <p>The waveform class should grow for incorporating more waveforms,
 especially waveforms compliant with the current IEEE 802.15.4a and IEEE
@@ -2630,8 +2630,8 @@ to center the signal in the middle of the array. The waveform has
 embedded in the object its frequency domain and time domain
 representation.</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">st</span></tt> member stands for signal in time domain</li>
-<li><tt class="docutils literal"><span class="pre">sf</span></tt> member stands for signal in frequency domain</li>
+<li><code class="docutils literal"><span class="pre">st</span></code> member stands for signal in time domain</li>
+<li><code class="docutils literal"><span class="pre">sf</span></code> member stands for signal in frequency domain</li>
 </ul>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="nb">type</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="p">)</span>
 <span class="k">print</span> <span class="nb">type</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span><span class="p">)</span>
@@ -2642,8 +2642,8 @@ representation.</p>
 </pre></div>
 </div>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">FUsignal</span></tt> Frequency domain uniformly sampled base signal</li>
-<li><tt class="docutils literal"><span class="pre">TUsignal</span></tt> Time domain uniformly sampled base signal</li>
+<li><code class="docutils literal"><span class="pre">FUsignal</span></code> Frequency domain uniformly sampled base signal</li>
+<li><code class="docutils literal"><span class="pre">TUsignal</span></code> Time domain uniformly sampled base signal</li>
 </ul>
 </div>
 </div>
@@ -2754,7 +2754,7 @@ the phase term due to delay along the ray.</p>
 <p>The transmission channel is obtained from the combination of the
 propagation channel <img src="../_images/mathmpl/math-c2b5c6f441.png" style="position: relative; bottom: -3px"/> and the vector antenna
 pattern at both side of the radio link. This operation is implemented in
-the <tt class="docutils literal"><span class="pre">prop2tran</span></tt> method of the <tt class="docutils literal"><span class="pre">Ctilde</span></tt> class.</p>
+the <code class="docutils literal"><span class="pre">prop2tran</span></code> method of the <code class="docutils literal"><span class="pre">Ctilde</span></code> class.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">sc</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -2833,7 +2833,7 @@ between <img src="../_images/mathmpl/math-c7217de4b7.png" style="position: relat
 <p>In practice this is what is done after a resampling of the time base
 with a reinterpolated time step.</p>
 <p>The process which consists in going from time domain to frequency domain
-is delegated to a specialized class <tt class="docutils literal"><span class="pre">pylayers.signal.bsignal.Bsignal</span></tt>
+is delegated to a specialized class <code class="docutils literal"><span class="pre">pylayers.signal.bsignal.Bsignal</span></code>
 which maintains the proper binding between signal samples and their
 indexation either in time or in frequency domain.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">wgam</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span>
@@ -2955,9 +2955,9 @@ default configuration file named <strong>default.ini</strong> is loaded.</p>
 </pre></div>
 </div>
 <p>A first step consists in loading a layout associated with the
-simulation. Here the <tt class="docutils literal"><span class="pre">WHERE1.ini</span></tt> layout is chosen along with the
-corresponding slabs and materials files <tt class="docutils literal"><span class="pre">matDB.ini</span></tt> and
-<tt class="docutils literal"><span class="pre">slabDB.ini</span></tt>.</p>
+simulation. Here the <code class="docutils literal"><span class="pre">WHERE1.ini</span></code> layout is chosen along with the
+corresponding slabs and materials files <code class="docutils literal"><span class="pre">matDB.ini</span></code> and
+<code class="docutils literal"><span class="pre">slabDB.ini</span></code>.</p>
 <p>This layout corresponds to the office building where the first WHERE1
 UWB measurement campaign has been conducted.</p>
 <p>The layout method loads those in a member layout object <strong>L</strong> of the
@@ -2976,7 +2976,7 @@ simulation object <strong>S</strong>.</p>
 </div>
 <p>The layout display is fully parameterized via the embedded <strong>display</strong>
 dictionnary member of the Layout object.which allows to configure the
-<tt class="docutils literal"><span class="pre">showGs()</span></tt> method behavior.</p>
+<code class="docutils literal"><span class="pre">showGs()</span></code> method behavior.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;WHERE1 Project Office Measurement Site&#39;</span>
@@ -3143,9 +3143,9 @@ from cycle : 5 to cycle 4
 </pre></div>
 </div>
 <p>Once the signature has been obtained, 2D rays are calculated with the
-<tt class="docutils literal"><span class="pre">rays()</span></tt> method of the signature <strong>Si</strong>. The coordinates of a
+<code class="docutils literal"><span class="pre">rays()</span></code> method of the signature <strong>Si</strong>. The coordinates of a
 transmitter and a receiver should be parameters of the function. <strong>r2d</strong>
-object has a <tt class="docutils literal"><span class="pre">show</span></tt> and <tt class="docutils literal"><span class="pre">show3</span></tt> method</p>
+object has a <code class="docutils literal"><span class="pre">show</span></code> and <code class="docutils literal"><span class="pre">show3</span></code> method</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">tx</span>
 </pre></div>
 </div>
@@ -3202,7 +3202,7 @@ the reflection on ceil and floor.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Below <tt class="docutils literal"><span class="pre">ni</span></tt> is the number of interactions</p>
+<p>Below <code class="docutils literal"><span class="pre">ni</span></code> is the number of interactions</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span>
 </pre></div>
 </div>
@@ -3238,8 +3238,8 @@ nl : 2504
 </div>
 <div class="section" id="calculating-the-propagation-channel">
 <h2>8.3. Calculating the Propagation Channel<a class="headerlink" href="#calculating-the-propagation-channel" title="Permalink to this headline">¶</a></h2>
-<p>The propagation channel is a <tt class="docutils literal"><span class="pre">Ctilde</span></tt> object. This object can be
-evaluated for different frequency point thanks to the <tt class="docutils literal"><span class="pre">eval()</span></tt> method
+<p>The propagation channel is a <code class="docutils literal"><span class="pre">Ctilde</span></code> object. This object can be
+evaluated for different frequency point thanks to the <code class="docutils literal"><span class="pre">eval()</span></code> method
 with a frequency array as argument.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">fGHz</span>
 </pre></div>
@@ -3327,7 +3327,7 @@ nl : 2504
 </pre></div>
 </div>
 <img alt="./SIM-raytracing_files/SIM-raytracing_54_1.png" src="./SIM-raytracing_files/SIM-raytracing_54_1.png" />
-<p>The multipath doa/dod diagram can be obtained via the method <tt class="docutils literal"><span class="pre">doadod</span></tt>.
+<p>The multipath doa/dod diagram can be obtained via the method <code class="docutils literal"><span class="pre">doadod</span></code>.
 The colorbar corresponds to the total energy of the path.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">doadod</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">180</span><span class="p">))</span>
 </pre></div>
@@ -3348,7 +3348,7 @@ shape Cpp : (210, 181)
 <div class="section" id="apply-waveform">
 <h2>8.4. Apply waveform<a class="headerlink" href="#apply-waveform" title="Permalink to this headline">¶</a></h2>
 <p>Once the propagation channel is obtained the transmission channel is
-calculated with the method <tt class="docutils literal"><span class="pre">prop2tran</span></tt></p>
+calculated with the method <code class="docutils literal"><span class="pre">prop2tran</span></code></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">freq</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">fGHz</span>
 <span class="n">sco</span> <span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="s">&#39;theta&#39;</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="s">&#39;theta&#39;</span><span class="p">)</span>
 <span class="n">sca</span> <span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">A</span><span class="p">)</span>
@@ -3407,7 +3407,7 @@ there is a default configuration file named <strong>default.ini</strong>.</p>
 </pre></div>
 </div>
 <p>A first step consists in loading a layout associated with the
-simulation. Here the <tt class="docutils literal"><span class="pre">WHERE1.ini</span></tt> layout is chosen along with the
+simulation. Here the <code class="docutils literal"><span class="pre">WHERE1.ini</span></code> layout is chosen along with the
 corresponding slabs and materials.</p>
 <p>This layout corresponds to the office building where the first WHERE1
 UWB measurement campaign has been conducted.</p>
@@ -3467,7 +3467,7 @@ dictionnary member of the Layout object.</p>
 <h2>9.1. Adding coordinates of transmiting and receiving points<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
 <p>Coordinates of transmitters and receivers for the simulation to be
 perform are stotred in <strong>.ini</strong> files. Transmitter and Receiver are
-instances of the class <tt class="docutils literal"><span class="pre">RadioNode</span></tt> which offers different methods for
+instances of the class <code class="docutils literal"><span class="pre">RadioNode</span></code> which offers different methods for
 specifying nodes positions. The stucture of this <strong>.ini</strong> file presented
 below. The node Id is associated with the 3 coordinates <img src="../_images/mathmpl/math-aaef4cabe9.png" style="position: relative; bottom: -7px"/>
 separated by white spaces.</p>
@@ -3696,7 +3696,7 @@ nl : 1027
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span> <span class="o">=</span> <span class="n">r3d</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">freq</span><span class="p">())</span>
 </pre></div>
 </div>
-<p>The <tt class="docutils literal"><span class="pre">energy</span></tt> method calculates the energy hoeld by each ray</p>
+<p>The <code class="docutils literal"><span class="pre">energy</span></code> method calculates the energy hoeld by each ray</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -4107,8 +4107,8 @@ campaign.</p>
 </div>
 <img alt="./SIM-trajectory_files/SIM-trajectory_11_1.png" src="./SIM-trajectory_files/SIM-trajectory_11_1.png" />
 <p>In the following a trajectory for the receiver is defined.</p>
-<p><tt class="docutils literal"><span class="pre">linevect</span></tt> function allows to define a linear trajectory from <tt class="docutils literal"><span class="pre">ptt</span></tt>
-along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.</p>
+<p><code class="docutils literal"><span class="pre">linevect</span></code> function allows to define a linear trajectory from <code class="docutils literal"><span class="pre">ptt</span></code>
+along direction <code class="docutils literal"><span class="pre">vec</span></code>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">linevect</span><span class="p">(</span><span class="n">npt</span><span class="o">=</span><span class="mi">290</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">ptt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.275</span><span class="p">],</span> <span class="n">vec</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">)</span>
 <span class="n">ps</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 <span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">linevect</span><span class="p">(</span><span class="n">npt</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">ptt</span><span class="o">=</span><span class="n">ps</span><span class="p">,</span><span class="n">vec</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
@@ -4212,12 +4212,12 @@ scale) and the trajectory level (large scale)</p>
 chosen manner to achieve a high degree of realism for the modeling of
 the human motion. Two kind of files exist :</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">c3d</span></tt> files are a set of point which are evolving in time</li>
-<li><tt class="docutils literal"><span class="pre">bvh</span></tt> files are a stuctured version of the motion capture.</li>
+<li><code class="docutils literal"><span class="pre">c3d</span></code> files are a set of point which are evolving in time</li>
+<li><code class="docutils literal"><span class="pre">bvh</span></code> files are a stuctured version of the motion capture.</li>
 </ul>
 <p>Both type of file will be exploited in the following.</p>
 <div class="section" id="bodycylinder-data-structure">
-<h3>10.1.1. <tt class="docutils literal"><span class="pre">BodyCylinder</span></tt> data structure<a class="headerlink" href="#bodycylinder-data-structure" title="Permalink to this headline">¶</a></h3>
+<h3>10.1.1. <code class="docutils literal"><span class="pre">BodyCylinder</span></code> data structure<a class="headerlink" href="#bodycylinder-data-structure" title="Permalink to this headline">¶</a></h3>
 <p>To ease electromagnetic simulation a simplification of the motion
 capture data structure is necessary. Generally there is a large number
 of captured points, not all of them being useful for the modeling.</p>
@@ -4227,7 +4227,7 @@ transformed into <img src="../_images/mathmpl/math-b43c97c188.png" style="positi
 two arms, 4 cylinders decribing the two legs, 2 cylinders describing the
 trunk and 1 cylinder for the head.</p>
 <p>The body cylinder model is handle by a dedicated Python class call
-<tt class="docutils literal"><span class="pre">Body</span></tt></p>
+<code class="docutils literal"><span class="pre">Body</span></code></p>
 <p>To create a void body, simply instantiate a Body object from the class</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span> <span class="o">=</span> <span class="n">Body</span><span class="p">()</span>
 </pre></div>
@@ -4238,11 +4238,11 @@ trunk and 1 cylinder for the head.</p>
 </div>
 <p>The default body filename is John.ini and the default motion capture
 filename is &#8216;07_01.c3d&#8217;. The creation of a Body consists in reading a
-<tt class="docutils literal"><span class="pre">_filebody</span></tt> and a <tt class="docutils literal"><span class="pre">_filemocap</span></tt></p>
+<code class="docutils literal"><span class="pre">_filebody</span></code> and a <code class="docutils literal"><span class="pre">_filemocap</span></code></p>
 </div>
 <div class="section" id="description-of-a-body-file">
 <h3>10.1.2. Description of a body file<a class="headerlink" href="#description-of-a-body-file" title="Permalink to this headline">¶</a></h3>
-<p>An example of a body file is given below. It is a file in <tt class="docutils literal"><span class="pre">ini</span></tt> format
+<p>An example of a body file is given below. It is a file in <code class="docutils literal"><span class="pre">ini</span></code> format
 with 4 sections.</p>
 <ul class="simple">
 <li>[nodes]</li>
@@ -4365,13 +4365,13 @@ Mocap Speed : 1.36558346484
 </div>
 <div class="section" id="loading-a-motion-capture-file">
 <h3>10.1.3. Loading a Motion Capture File<a class="headerlink" href="#loading-a-motion-capture-file" title="Permalink to this headline">¶</a></h3>
-<p>A <tt class="docutils literal"><span class="pre">.c3d</span></tt> motion capture file is loaded with the method <tt class="docutils literal"><span class="pre">loadC3D</span></tt>
+<p>A <code class="docutils literal"><span class="pre">.c3d</span></code> motion capture file is loaded with the method <code class="docutils literal"><span class="pre">loadC3D</span></code>
 with as arguments the motion capture file and the number of frames to
 load.</p>
-<p>The motion is represented as a sequence of framef stored in the <tt class="docutils literal"><span class="pre">d</span></tt>
+<p>The motion is represented as a sequence of framef stored in the <code class="docutils literal"><span class="pre">d</span></code>
 variable member.</p>
 <p>It is possible to get the information from the C3D header by using the
-verbose option of the <tt class="docutils literal"><span class="pre">read_c3d</span></tt> function</p>
+verbose option of the <code class="docutils literal"><span class="pre">read_c3d</span></code> function</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Video Frame Rate</span>
 <span class="n">Vrate</span> <span class="o">=</span> <span class="mi">120</span>
 <span class="c"># Inter Frame</span>
@@ -4394,7 +4394,7 @@ verbose option of the <tt class="docutils literal"><span class="pre">read_c3d</s
 <div class="highlight-python"><div class="highlight"><pre>Duration of the motion capture sequence 2.5  seconds
 </pre></div>
 </div>
-<p><tt class="docutils literal"><span class="pre">d</span></tt> is a MDA of shape <tt class="docutils literal"><span class="pre">(3,npoint,nframe)</span></tt>. It contains all the
+<p><code class="docutils literal"><span class="pre">d</span></code> is a MDA of shape <code class="docutils literal"><span class="pre">(3,npoint,nframe)</span></code>. It contains all the
 possible configurations of the body. In general it is supposed to be a
 cyclic motion as an integer number of walking steps. This allows to
 instantiate the body configuration anywhere else in space in a given
@@ -4412,7 +4412,7 @@ trajectory.</p>
 <h3>10.1.4. Defining a trajectory<a class="headerlink" href="#defining-a-trajectory" title="Permalink to this headline">¶</a></h3>
 <p>A Trajectory is a class which :</p>
 <ul class="simple">
-<li>derives from a pandas <tt class="docutils literal"><span class="pre">DataFrame</span></tt></li>
+<li>derives from a pandas <code class="docutils literal"><span class="pre">DataFrame</span></code></li>
 <li>is container for time,position,velocity and acceleration.</li>
 </ul>
 <p>To define a default trajectory :</p>
@@ -4518,7 +4518,7 @@ trajectory.</p>
 <h3>10.1.5. settopos () method<a class="headerlink" href="#settopos-method" title="Permalink to this headline">¶</a></h3>
 <p>Once the trajectory has been defined it is possible to send the body at
 the position corresponding to any time of the trajectory with the
-<tt class="docutils literal"><span class="pre">settopos</span></tt> method.</p>
+<code class="docutils literal"><span class="pre">settopos</span></code> method.</p>
 <p>settopos takes as argument</p>
 <ul class="simple">
 <li>A trajectory</li>
@@ -4686,7 +4686,7 @@ Center of gravity of the centered frame [  3.74700271e-16   1.38777878e-17   8.9
 <div class="section" id="defining-a-large-scale-trajectory">
 <h3>10.1.6. Defining a large scale trajectory<a class="headerlink" href="#defining-a-large-scale-trajectory" title="Permalink to this headline">¶</a></h3>
 <p>A large scale trajectory is defined in the <img src="../_images/mathmpl/math-7578f948ac.png" style="position: relative; bottom: -8px"/> plane.</p>
-<p><tt class="docutils literal"><span class="pre">traj</span></tt> is a data structure (Npt,2)</p>
+<p><code class="docutils literal"><span class="pre">traj</span></code> is a data structure (Npt,2)</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">v</span> <span class="o">=</span> <span class="n">Vmocap</span>
 <span class="k">print</span> <span class="n">v</span><span class="o">*</span><span class="mf">3.6</span><span class="p">,</span><span class="s">&quot;Kmph&quot;</span>
 </pre></div>
@@ -4804,11 +4804,11 @@ Center of gravity of the centered frame [  3.74700271e-16   1.38777878e-17   8.9
 </div>
 </div>
 <div class="section" id="posvel">
-<h2>10.2. <tt class="docutils literal"><span class="pre">posvel()</span></tt><a class="headerlink" href="#posvel" title="Permalink to this headline">¶</a></h2>
-<p>The <tt class="docutils literal"><span class="pre">posvel()</span></tt> function (position and velocity) takes as arguments the
+<h2>10.2. <code class="docutils literal"><span class="pre">posvel()</span></code><a class="headerlink" href="#posvel" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">posvel()</span></code> function (position and velocity) takes as arguments the
 following parameters</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">traj</span></tt> a plane trajectory object.</li>
+<li><code class="docutils literal"><span class="pre">traj</span></code> a plane trajectory object.</li>
 <li><img src="../_images/mathmpl/math-2970bf83e5.png" style="position: relative; bottom: -7px"/> time for evaluation of topos</li>
 <li><img src="../_images/mathmpl/math-69fdbd409a.png" style="position: relative; bottom: -10px"/> duration of the periodic motion frame sequence</li>
 </ul>
@@ -4827,9 +4827,9 @@ following parameters</p>
 <p><img src="../_images/mathmpl/math-c68c18ac15.png" style="position: relative; bottom: -13px"/> is the interframe time or frame sampling
 period, it is equal to the whole duration of the motion sequence
 <img src="../_images/mathmpl/math-69fdbd409a.png" style="position: relative; bottom: -10px"/> divided by the number of frames</p>
-<p><tt class="docutils literal"><span class="pre">settopos</span></tt> is a method which takes as argument :</p>
+<p><code class="docutils literal"><span class="pre">settopos</span></code> is a method which takes as argument :</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">traj</span></tt> a plane trajectory (Npt,2)</li>
+<li><code class="docutils literal"><span class="pre">traj</span></code> a plane trajectory (Npt,2)</li>
 <li><img src="../_images/mathmpl/math-2970bf83e5.png" style="position: relative; bottom: -7px"/> time for evaluation of topos</li>
 </ul>
 <p>In futher version of the project, this function will be modified to be
@@ -4838,7 +4838,7 @@ able to avoid passing the whole trajectory.</p>
 </pre></div>
 </div>
 <p>There is now a new data structure in the Body objet. This data structure
-is called a <tt class="docutils literal"><span class="pre">topos</span></tt>.</p>
+is called a <code class="docutils literal"><span class="pre">topos</span></code>.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">topos</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -4880,7 +4880,7 @@ is called a <tt class="docutils literal"><span class="pre">topos</span></tt>.</p
 <img alt="./MOB-body_files/MOB-body_69_1.png" src="./MOB-body_files/MOB-body_69_1.png" />
 <div class="section" id="definition-of-several-coordinates-systems">
 <h3>10.2.1. Definition of Several Coordinates systems<a class="headerlink" href="#definition-of-several-coordinates-systems" title="Permalink to this headline">¶</a></h3>
-<p>Each cylinder of the <tt class="docutils literal"><span class="pre">Body</span></tt> model bears one specific coordinate
+<p>Each cylinder of the <code class="docutils literal"><span class="pre">Body</span></code> model bears one specific coordinate
 system.</p>
 <p>One or several cylinder coordinate systems can be chosen to define the
 Body Local Coordinates System (BLCS) which is required for motion
@@ -4892,20 +4892,20 @@ System (GCS) of the scene.</p>
 </div>
 <div class="section" id="construction-of-the-cylinder-coordinate-system-ccs">
 <h3>10.2.2. Construction of the Cylinder Coordinate System (CCS)<a class="headerlink" href="#construction-of-the-cylinder-coordinate-system-ccs" title="Permalink to this headline">¶</a></h3>
-<p>The method <tt class="docutils literal"><span class="pre">setccs()</span></tt> is used to associate a Cylinder Coordinate
+<p>The method <code class="docutils literal"><span class="pre">setccs()</span></code> is used to associate a Cylinder Coordinate
 System (CCS) to each cylinder of the bodyCylinder model. Notice that
 those cylinders coordinates systems are not known by the localization
 application. The localization application will define the BLCS from the
 position of radiating devices placed on the body surface.</p>
 <p>Each basis is constructed with the function from
-<tt class="docutils literal"><span class="pre">geomutil.onbfromaxe()</span></tt> : orthonormal bases from axes. This function
+<code class="docutils literal"><span class="pre">geomutil.onbfromaxe()</span></code> : orthonormal bases from axes. This function
 takes 2 sets of <img src="../_images/mathmpl/math-e7b31363a1.png" style="position: relative; bottom: -3px"/> points <img src="../_images/mathmpl/math-2014ddb223.png" style="position: relative; bottom: -10px"/> and
 <img src="../_images/mathmpl/math-04e6380741.png" style="position: relative; bottom: -10px"/> as input and provides an orthonormal basis as
 output.</p>
 <p>3 unitary vectors are constructed :</p>
 <img src="../_images/mathmpl/math-0cf2836a48.png" class="center" /><img src="../_images/mathmpl/math-2d89adcbdc.png" class="center" /><img src="../_images/mathmpl/math-a83fa5bdd7.png" class="center" /><p>Where <img src="../_images/mathmpl/math-9ebaf25e76.png" style="position: relative; bottom: -10px"/> is the unit velocity vector along
 actual trajectory.</p>
-<p>The outpout of <tt class="docutils literal"><span class="pre">geomutil.onbframe</span></tt> is an MDA
+<p>The outpout of <code class="docutils literal"><span class="pre">geomutil.onbframe</span></code> is an MDA
 <img src="../_images/mathmpl/math-6d67c54727.png" style="position: relative; bottom: -8px"/> of <img src="../_images/mathmpl/math-e7b31363a1.png" style="position: relative; bottom: -3px"/> unitary matrices aggregated
 along axis 1</p>
 <img src="../_images/mathmpl/math-7a3bcb860d.png" class="center" /><p>To create the CCS :</p>
@@ -5237,7 +5237,7 @@ distance p-4= 18.0277563773 / toa3= 60.0925212577
 <h1>12. RGPA (Robust Geometric Positioning Algorithm)<a class="headerlink" href="#rgpa-robust-geometric-positioning-algorithm" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="exploiting-time-of-arrival-toa-only">
 <h2>12.1. Exploiting Time of Arrival (ToA) only<a class="headerlink" href="#exploiting-time-of-arrival-toa-only" title="Permalink to this headline">¶</a></h2>
-<p>We call <tt class="docutils literal"><span class="pre">Constraint</span> <span class="pre">Layer</span> <span class="pre">Array</span></tt> (CLA) the object which gathers all
+<p>We call <code class="docutils literal"><span class="pre">Constraint</span> <span class="pre">Layer</span> <span class="pre">Array</span></code> (CLA) the object which gathers all
 the geometric constraints of a considered scenario.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">=</span><span class="n">CLA</span><span class="p">()</span>
 </pre></div>
@@ -5327,7 +5327,7 @@ parametric model. The bettet the model, better would be tthe inference
 ab out tthe associated distance. t To model the Path Loss shadowing
 model is widely used.</p>
 <p>To define the classical path loss shadowing model widely used in this
-context the <tt class="docutils literal"><span class="pre">PLSmodel</span></tt> class has been defined.</p>
+context the <code class="docutils literal"><span class="pre">PLSmodel</span></code> class has been defined.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">M</span> <span class="o">=</span> <span class="n">PLSmodel</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span><span class="n">rssnp</span><span class="o">=</span><span class="mf">2.64</span><span class="p">,</span><span class="n">d0</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="n">sigrss</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s">&#39;mode&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -5403,9 +5403,9 @@ be as realistic as possible, because for many applications it turns out
 that many parameter of interest are stongly dependent of the dynamic
 topology of the mobile network.</p>
 <p>In the following the configuration files for proceeding with those high
-level <tt class="docutils literal"><span class="pre">PyLayers</span></tt> simulation are described.</p>
-<p>The configuration file is <tt class="docutils literal"><span class="pre">simulnet.ini</span></tt></p>
-<p>This file is located in <tt class="docutils literal"><span class="pre">$BASENAME/ini</span></tt></p>
+level <code class="docutils literal"><span class="pre">PyLayers</span></code> simulation are described.</p>
+<p>The configuration file is <code class="docutils literal"><span class="pre">simulnet.ini</span></code></p>
+<p>This file is located in <code class="docutils literal"><span class="pre">$BASENAME/ini</span></code></p>
 <div class="highlight-python"><div class="highlight"><pre>!cat $BASENAME/ini/simulnet.ini
 </pre></div>
 </div>
@@ -5507,7 +5507,7 @@ verbose = True
 <div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;save&#39;</span><span class="p">:</span> <span class="s">&#39;[]&#39;</span><span class="p">,</span> <span class="s">&#39;savep&#39;</span><span class="p">:</span> <span class="s">&#39;True&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
-<p>The <tt class="docutils literal"><span class="pre">savep</span></tt> boolean enable/disable saving of the simulation.</p>
+<p>The <code class="docutils literal"><span class="pre">savep</span></code> boolean enable/disable saving of the simulation.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Save&#39;</span><span class="p">))[</span><span class="s">&#39;savep&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -5515,7 +5515,7 @@ verbose = True
 </pre></div>
 </div>
 <p>The log file which contains all traces from the dynamic are in
-<tt class="docutils literal"><span class="pre">$BASENAME/netsave</span></tt></p>
+<code class="docutils literal"><span class="pre">$BASENAME/netsave</span></code></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ls</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">Bureau</span><span class="o">/</span><span class="n">P1</span><span class="o">/</span><span class="n">netsave</span><span class="o">/</span>
 </pre></div>
 </div>
@@ -5715,7 +5715,7 @@ periodically refreshed at the network_update_time</li>
 <span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<p>trajectories can be imported from a simulnet simulation with the <tt class="docutils literal"><span class="pre">importsn</span></tt> method</p>
+<p>trajectories can be imported from a simulnet simulation with the <code class="docutils literal"><span class="pre">importsn</span></code> method</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -5723,7 +5723,7 @@ periodically refreshed at the network_update_time</li>
 </pre></div>
 </div>
 <p>The 2 following trajectories have been calculated with
-<tt class="docutils literal"><span class="pre">pylayers.simul.simulnet</span></tt></p>
+<code class="docutils literal"><span class="pre">pylayers.simul.simulnet</span></code></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
@@ -5779,7 +5779,7 @@ to initialize a Polygon with different object
 <img alt="./MISC-geomutil_files/MISC-geomutil_8_0.png" src="./MISC-geomutil_files/MISC-geomutil_8_0.png" />
 </div>
 <div class="section" id="buildgv">
-<h2>15.2. <tt class="docutils literal"><span class="pre">buildGv()</span></tt><a class="headerlink" href="#buildgv" title="Permalink to this headline">¶</a></h2>
+<h2>15.2. <code class="docutils literal"><span class="pre">buildGv()</span></code><a class="headerlink" href="#buildgv" title="Permalink to this headline">¶</a></h2>
 <p>Dertermine visibility relationships in a Polygon. Returns a graph</p>
 <p>This function is used for determining visibility relationships in indoor
 environement.</p>
@@ -6085,8 +6085,8 @@ index in the ndarray.</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on Jun 28, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on août 12, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/./UserManual.txt"
 	    rel="nofollow">Show this page source</a>

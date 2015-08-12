@@ -42,7 +42,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -129,7 +129,7 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="multi-wall-model">
 <h1>Multi-wall model<a class="headerlink" href="#multi-wall-model" title="Permalink to this headline">¶</a></h1>
@@ -155,7 +155,7 @@ they are built.</p>
 <div class="section" id="defining-a-radio-link">
 <h2>Defining a radio link<a class="headerlink" href="#defining-a-radio-link" title="Permalink to this headline">¶</a></h2>
 <p>The 2 extremities of the radio link (transmitter and receiver) have
-coordinates described as 1x2 <tt class="docutils literal"><span class="pre">numpy.array</span></tt> .</p>
+coordinates described as 1x2 <code class="docutils literal"><span class="pre">numpy.array</span></code> .</p>
 <ul class="simple">
 <li>A a radio node</li>
 <li>B a radio node</li>
@@ -167,7 +167,7 @@ coordinates described as 1x2 <tt class="docutils literal"><span class="pre">nump
 </div>
 <div class="section" id="ploting-the-scene">
 <h2>Ploting the scene<a class="headerlink" href="#ploting-the-scene" title="Permalink to this headline">¶</a></h2>
-<p>The scene is plotted with the <tt class="docutils literal"><span class="pre">showG</span></tt> method of the Layout</p>
+<p>The scene is plotted with the <code class="docutils literal"><span class="pre">showG</span></code> method of the Layout</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c"># figure instanciation</span>
 <span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
@@ -185,7 +185,7 @@ coordinates described as 1x2 <tt class="docutils literal"><span class="pre">nump
 <img alt="../../_images/MultiWall_11_0.png" src="../../_images/MultiWall_11_0.png" />
 <div class="section" id="finding-the-intersection-between-the-direct-path-and-the-walls">
 <h3>Finding the intersection between the &#8220;direct&#8221; path and the walls<a class="headerlink" href="#finding-the-intersection-between-the-direct-path-and-the-walls" title="Permalink to this headline">¶</a></h3>
-<p>The function <tt class="docutils literal"><span class="pre">angleonlink</span></tt> returns the list of intersected segments
+<p>The function <code class="docutils literal"><span class="pre">angleonlink</span></code> returns the list of intersected segments
 and the corresponding incidence angles (in radians) with respect to the
 segment normal.</p>
 <div class="code python highlight-python"><div class="highlight"><pre>%pdef L.angleonlink
@@ -278,7 +278,7 @@ degree : degree of nodes
 </div>
 <p>The coverage is performed on a grid. Boundaries of the grid are
 specified in the
-<tt class="docutils literal"><span class="pre">`coverage.ini</span></tt> &lt;<a class="reference external" href="https://github.com/pylayers/pylayers/blob/master/data/ini/coverage.ini">https://github.com/pylayers/pylayers/blob/master/data/ini/coverage.ini</a>&gt;`__
+<code class="docutils literal"><span class="pre">`coverage.ini</span></code> &lt;<a class="reference external" href="https://github.com/pylayers/pylayers/blob/master/data/ini/coverage.ini">https://github.com/pylayers/pylayers/blob/master/data/ini/coverage.ini</a>&gt;`__
 file</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">t1</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 <span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
@@ -315,8 +315,8 @@ file</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on juin 27, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on août 12, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/2-AP/MultiWall.txt"
 	    rel="nofollow">Show this page source</a>

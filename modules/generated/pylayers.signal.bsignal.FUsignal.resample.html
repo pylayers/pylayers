@@ -45,7 +45,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -173,14 +173,15 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-signal-bsignal-fusignal-resample">
 <h1>pylayers.signal.bsignal.FUsignal.resample<a class="headerlink" href="#pylayers-signal-bsignal-fusignal-resample" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.signal.bsignal.FUsignal.resample">
-<tt class="descclassname">FUsignal.</tt><tt class="descname">resample</tt><big>(</big><em>x_new</em>, <em>kind='linear'</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#FUsignal.resample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.resample" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function resamples the Usignal with a new x base
+<code class="descclassname">FUsignal.</code><code class="descname">resample</code><span class="sig-paren">(</span><em>x_new</em>, <em>kind='linear'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#FUsignal.resample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.resample" title="Permalink to this definition">¶</a></dt>
+<dd><p>resample a complex signal</p>
+<p>This function resamples the Usignal with a new x base
 which needs to be strictly included in the original x
 base of the Usignal.
 x is a 1D array
@@ -190,14 +191,14 @@ y is a 2D array</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x_new :</strong> :</p>
-<p class="last"><strong>kind</strong> : string</p>
+<p class="last"><strong>kind</strong> : string {&#8216;linear&#8217; | &#8216;spline&#8217;</p>
 </td>
 </tr>
 </tbody>
 </table>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">interp.interp1d</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">splrep</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">splev</span></tt></p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">interp.interp1d</span></code>, <code class="xref py py-obj docutils literal"><span class="pre">splrep</span></code>, <code class="xref py py-obj docutils literal"><span class="pre">splev</span></code></p>
 </div>
 </dd></dl>
 
@@ -214,8 +215,8 @@ y is a 2D array</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on juin 27, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on août 12, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.signal.bsignal.FUsignal.resample.txt"
 	    rel="nofollow">Show this page source</a>

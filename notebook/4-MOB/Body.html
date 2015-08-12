@@ -42,7 +42,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -109,7 +109,7 @@
     <h3>This page</h3>
 	<ul>
 <li><a class="reference internal" href="#">Handling Body Description and Mobility</a><ul>
-<li><a class="reference internal" href="#bodycylinder-data-structure"><tt class="docutils literal"><span class="pre">BodyCylinder</span></tt> data structure</a></li>
+<li><a class="reference internal" href="#bodycylinder-data-structure"><code class="docutils literal"><span class="pre">BodyCylinder</span></code> data structure</a></li>
 <li><a class="reference internal" href="#description-of-a-body-file">Description of a body file</a></li>
 <li><a class="reference internal" href="#example-of-a-body-file">Example of a Body file</a></li>
 <li><a class="reference internal" href="#loading-a-motion-capture-file">Loading a Motion Capture File</a></li>
@@ -120,7 +120,7 @@
 <li><a class="reference internal" href="#centering-the-motion">Centering the motion</a></li>
 <li><a class="reference internal" href="#defining-a-large-scale-trajectory">Defining a large scale trajectory</a></li>
 <li><a class="reference internal" href="#trajectory">Trajectory</a></li>
-<li><a class="reference internal" href="#posvel"><tt class="docutils literal"><span class="pre">posvel()</span></tt></a></li>
+<li><a class="reference internal" href="#posvel"><code class="docutils literal"><span class="pre">posvel()</span></code></a></li>
 <li><a class="reference internal" href="#definition-of-several-coordinates-systems">Definition of Several Coordinates systems</a><ul>
 <li><a class="reference internal" href="#construction-of-the-cylinder-coordinate-system-ccs">Construction of the Cylinder Coordinate System (CCS)</a></li>
 </ul>
@@ -139,7 +139,7 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="handling-body-description-and-mobility">
 <h1>Handling Body Description and Mobility<a class="headerlink" href="#handling-body-description-and-mobility" title="Permalink to this headline">¶</a></h1>
@@ -158,12 +158,12 @@ import pylayers.util.mayautil as mau
 chosen manner to achieve a high degree of realism for the modeling of
 the human motion. Two kind of files exist :</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">c3d</span></tt> files are a set of point which are evolving in time</li>
-<li><tt class="docutils literal"><span class="pre">bvh</span></tt> files are a stuctured version of the motion capture.</li>
+<li><code class="docutils literal"><span class="pre">c3d</span></code> files are a set of point which are evolving in time</li>
+<li><code class="docutils literal"><span class="pre">bvh</span></code> files are a stuctured version of the motion capture.</li>
 </ul>
 <p>Both type of file will be exploited in the following.</p>
 <div class="section" id="bodycylinder-data-structure">
-<h2><tt class="docutils literal"><span class="pre">BodyCylinder</span></tt> data structure<a class="headerlink" href="#bodycylinder-data-structure" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal"><span class="pre">BodyCylinder</span></code> data structure<a class="headerlink" href="#bodycylinder-data-structure" title="Permalink to this headline">¶</a></h2>
 <p>To ease electromagnetic simulation a simplification of the motion
 capture data structure is necessary. Generally there is a large number
 of captured points, not all of them being useful for our modeling.</p>
@@ -173,7 +173,7 @@ transformed into <img src="../../_images/mathmpl/math-b43c97c188.png" style="pos
 two arms, 4 cylinders decribing the two legs, 2 cylinders describing the
 trunk and 1 cylinder for the head.</p>
 <p>The body cylinder model is handled by the dedicated Python class call
-<tt class="docutils literal"><span class="pre">Body</span></tt></p>
+<code class="docutils literal"><span class="pre">Body</span></code></p>
 <p>To create a void body, simply instantiate a Body object from the class</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span> <span class="o">=</span> <span class="n">Body</span><span class="p">()</span>
 </pre></div>
@@ -190,7 +190,7 @@ trunk and 1 cylinder for the head.</p>
 </div>
 <p>The default body filename is John.ini and the default motion capture
 filename is &#8216;07_01.c3d&#8217;. The creation of a Body consists in reading a
-<tt class="docutils literal"><span class="pre">_filebody</span></tt> and a <tt class="docutils literal"><span class="pre">_filemocap</span></tt></p>
+<code class="docutils literal"><span class="pre">_filebody</span></code> and a <code class="docutils literal"><span class="pre">_filemocap</span></code></p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">_show3</span><span class="p">()</span>
 <span class="n">mau</span><span class="o">.</span><span class="n">inotshow</span><span class="p">(</span><span class="s">&#39;John&#39;</span><span class="p">,</span><span class="n">doc</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
@@ -203,7 +203,7 @@ filename is &#8216;07_01.c3d&#8217;. The creation of a Body consists in reading 
 </div>
 <div class="section" id="description-of-a-body-file">
 <h2>Description of a body file<a class="headerlink" href="#description-of-a-body-file" title="Permalink to this headline">¶</a></h2>
-<p>An example of a body file is given below. It is a file in <tt class="docutils literal"><span class="pre">ini</span></tt> format
+<p>An example of a body file is given below. It is a file in <code class="docutils literal"><span class="pre">ini</span></code> format
 with 4 sections.</p>
 <ul class="simple">
 <li>[nodes]</li>
@@ -297,13 +297,13 @@ nframes = -1
 </div>
 <div class="section" id="loading-a-motion-capture-file">
 <h2>Loading a Motion Capture File<a class="headerlink" href="#loading-a-motion-capture-file" title="Permalink to this headline">¶</a></h2>
-<p>A <tt class="docutils literal"><span class="pre">.c3d</span></tt> motion capture file is loaded with the method <strong>``loadC3D``</strong>
+<p>A <code class="docutils literal"><span class="pre">.c3d</span></code> motion capture file is loaded with the method <strong>``loadC3D``</strong>
 with as arguments the motion capture file and the number of frames to
 load.</p>
 <p>The motion is represented as a sequence of frames stored in the
 <strong>``d``</strong> variable member.</p>
 <p>It is possible to get the information from the C3D header by using the
-verbose option of the <tt class="docutils literal"><span class="pre">read_c3d</span></tt> function</p>
+verbose option of the <code class="docutils literal"><span class="pre">read_c3d</span></code> function</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Video Frame Rate</span>
 <span class="n">Vrate</span> <span class="o">=</span> <span class="mi">120</span>
 <span class="c"># Inter Frame</span>
@@ -326,7 +326,7 @@ verbose option of the <tt class="docutils literal"><span class="pre">read_c3d</s
 <div class="highlight-python"><div class="highlight"><pre>Duration of the motion capture sequence 2.5  seconds
 </pre></div>
 </div>
-<p><tt class="docutils literal"><span class="pre">d</span></tt> is a MDA of shape <tt class="docutils literal"><span class="pre">(3,npoint,nframe)</span></tt>. It contains all the
+<p><code class="docutils literal"><span class="pre">d</span></code> is a MDA of shape <code class="docutils literal"><span class="pre">(3,npoint,nframe)</span></code>. It contains all the
 possible configurations of the body. In general it is supposed to be a
 cyclic motion as an integer number of walking steps. This allows to
 instantiate the body configuration anywhere else in space in a given
@@ -344,7 +344,7 @@ trajectory.</p>
 <h2>Defining a trajectory<a class="headerlink" href="#defining-a-trajectory" title="Permalink to this headline">¶</a></h2>
 <p>A Trajectory is a class which :</p>
 <ul class="simple">
-<li>derives from a pandas <tt class="docutils literal"><span class="pre">DataFrame</span></tt></li>
+<li>derives from a pandas <code class="docutils literal"><span class="pre">DataFrame</span></code></li>
 <li>is a container for time,position,velocity and acceleration.</li>
 </ul>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">traj</span> <span class="o">=</span> <span class="n">Trajectory</span><span class="p">()</span>
@@ -672,7 +672,7 @@ Center of gravity of the centered frame [  4.44089210e-16  -1.05471187e-15   8.9
 <div class="section" id="defining-a-large-scale-trajectory">
 <h2>Defining a large scale trajectory<a class="headerlink" href="#defining-a-large-scale-trajectory" title="Permalink to this headline">¶</a></h2>
 <p>A large scale trajectory is defined in the <img src="../../_images/mathmpl/math-7578f948ac.png" style="position: relative; bottom: -8px"/> plane.</p>
-<p><tt class="docutils literal"><span class="pre">traj</span></tt> is a data structure (Npt,2)</p>
+<p><code class="docutils literal"><span class="pre">traj</span></code> is a data structure (Npt,2)</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">v</span> <span class="o">=</span> <span class="n">Vmocap</span>
 <span class="k">print</span> <span class="n">v</span><span class="o">*</span><span class="mf">3.6</span><span class="p">,</span><span class="s">&quot;Kmph&quot;</span>
 </pre></div>
@@ -788,11 +788,11 @@ Center of gravity of the centered frame [  4.44089210e-16  -1.05471187e-15   8.9
 <h2>Trajectory<a class="headerlink" href="#trajectory" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="posvel">
-<h2><tt class="docutils literal"><span class="pre">posvel()</span></tt><a class="headerlink" href="#posvel" title="Permalink to this headline">¶</a></h2>
-<p>The <tt class="docutils literal"><span class="pre">posvel()</span></tt> method (position and velocity) takes as arguments the
+<h2><code class="docutils literal"><span class="pre">posvel()</span></code><a class="headerlink" href="#posvel" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">posvel()</span></code> method (position and velocity) takes as arguments the
 following parameters</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">traj</span></tt> a plane trajectory object.</li>
+<li><code class="docutils literal"><span class="pre">traj</span></code> a plane trajectory object.</li>
 <li><img src="../../_images/mathmpl/math-2970bf83e5.png" style="position: relative; bottom: -7px"/> time for evaluation of topos</li>
 <li><img src="../../_images/mathmpl/math-69fdbd409a.png" style="position: relative; bottom: -10px"/> duration of the periodic motion frame sequence</li>
 </ul>
@@ -811,9 +811,9 @@ following parameters</p>
 <p><img src="../../_images/mathmpl/math-c68c18ac15.png" style="position: relative; bottom: -13px"/> is the interframe time or frame sampling
 period, it is equal to the whole duration of the motion sequence
 <img src="../../_images/mathmpl/math-69fdbd409a.png" style="position: relative; bottom: -10px"/> divided by the number of frames</p>
-<p><tt class="docutils literal"><span class="pre">settopos</span></tt> is a method which takes as argument :</p>
+<p><code class="docutils literal"><span class="pre">settopos</span></code> is a method which takes as argument :</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">traj</span></tt> a plane trajectory (Npt,2)</li>
+<li><code class="docutils literal"><span class="pre">traj</span></code> a plane trajectory (Npt,2)</li>
 <li><img src="../../_images/mathmpl/math-2970bf83e5.png" style="position: relative; bottom: -7px"/> time for evaluation of topos</li>
 </ul>
 <p>In further version of the class, this function will be modified to avoid
@@ -822,7 +822,7 @@ passing the whole trajectory.</p>
 </pre></div>
 </div>
 <p>There is now a new data structure in the Body objet. This data structure
-is called a <tt class="docutils literal"><span class="pre">topos</span></tt>.</p>
+is called a <code class="docutils literal"><span class="pre">topos</span></code>.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">topos</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -869,7 +869,7 @@ is called a <tt class="docutils literal"><span class="pre">topos</span></tt>.</p
 </div>
 <div class="section" id="definition-of-several-coordinates-systems">
 <h2>Definition of Several Coordinates systems<a class="headerlink" href="#definition-of-several-coordinates-systems" title="Permalink to this headline">¶</a></h2>
-<p>Each cylinder of the <tt class="docutils literal"><span class="pre">Body</span></tt> model bears one specific coordinate
+<p>Each cylinder of the <code class="docutils literal"><span class="pre">Body</span></code> model bears one specific coordinate
 system.</p>
 <p>One or several cylinder coordinate systems can be chosen to define the
 Body Local Coordinates System (BLCS) which is required for motion
@@ -880,20 +880,20 @@ time invariant as on the chest or the back.</p>
 System (GCS) of the scene.</p>
 <div class="section" id="construction-of-the-cylinder-coordinate-system-ccs">
 <h3>Construction of the Cylinder Coordinate System (CCS)<a class="headerlink" href="#construction-of-the-cylinder-coordinate-system-ccs" title="Permalink to this headline">¶</a></h3>
-<p>The method <tt class="docutils literal"><span class="pre">setccs()</span></tt> is used to associate a Cylinder Coordinate
+<p>The method <code class="docutils literal"><span class="pre">setccs()</span></code> is used to associate a Cylinder Coordinate
 System (CCS) to each cylinder of the bodyCylinder model. Notice that
 those cylinders coordinates systems are not known by the localization
 application. The localization application will define the BLCS from the
 position of radiating devices placed on the body surface.</p>
 <p>Each basis is constructed with the function from
-<tt class="docutils literal"><span class="pre">geomutil.onbfromaxe()</span></tt> : orthonormal bases from axes. This function
+<code class="docutils literal"><span class="pre">geomutil.onbfromaxe()</span></code> : orthonormal bases from axes. This function
 takes 2 sets of <img src="../../_images/mathmpl/math-e7b31363a1.png" style="position: relative; bottom: -3px"/> points <img src="../../_images/mathmpl/math-2014ddb223.png" style="position: relative; bottom: -10px"/> and
 <img src="../../_images/mathmpl/math-04e6380741.png" style="position: relative; bottom: -10px"/> as input and provides an orthonormal basis as
 output.</p>
 <p>3 unitary vectors are constructed :</p>
 <img src="../../_images/mathmpl/math-0cf2836a48.png" class="center" /><img src="../../_images/mathmpl/math-2d89adcbdc.png" class="center" /><img src="../../_images/mathmpl/math-a83fa5bdd7.png" class="center" /><p>Where <img src="../../_images/mathmpl/math-9ebaf25e76.png" style="position: relative; bottom: -10px"/> is the unit velocity vector along
 actual trajectory.</p>
-<p>The outpout of <tt class="docutils literal"><span class="pre">geomutil.onbframe</span></tt> is an MDA
+<p>The outpout of <code class="docutils literal"><span class="pre">geomutil.onbframe</span></code> is an MDA
 <img src="../../_images/mathmpl/math-6d67c54727.png" style="position: relative; bottom: -8px"/> of <img src="../../_images/mathmpl/math-e7b31363a1.png" style="position: relative; bottom: -3px"/> unitary matrices aggregated
 along axis 1</p>
 <img src="../../_images/mathmpl/math-7a3bcb860d.png" class="center" /><p>To create the CCS :</p>
@@ -1083,8 +1083,8 @@ CCS (Cylinder coordinates systems)</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on juin 27, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on août 12, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/4-MOB/Body.txt"
 	    rel="nofollow">Show this page source</a>

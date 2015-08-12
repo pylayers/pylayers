@@ -42,7 +42,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -108,7 +108,7 @@
     <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">Geographical Information and the Earth Zone class : <tt class="docutils literal"><span class="pre">Ezone</span></tt></a><ul>
+<li><a class="reference internal" href="#">Geographical Information and the Earth Zone class : <code class="docutils literal"><span class="pre">Ezone</span></code></a><ul>
 <li><a class="reference internal" href="#zooming-in">Zooming in</a></li>
 <li><a class="reference internal" href="#ground-height-profile-extraction">Ground Height Profile Extraction</a></li>
 </ul>
@@ -124,7 +124,7 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pylayers.gis.ezone</span> <span class="kn">as</span> <span class="nn">ez</span>
 <span class="kn">from</span> <span class="nn">pylayers.gis.gisutil</span> <span class="kn">import</span> <span class="n">ent</span><span class="p">,</span><span class="n">ext2qt</span>
@@ -136,14 +136,14 @@
 </pre></div>
 </div>
 <div class="section" id="geographical-information-and-the-earth-zone-class-ezone">
-<h1>Geographical Information and the Earth Zone class : <tt class="docutils literal"><span class="pre">Ezone</span></tt><a class="headerlink" href="#geographical-information-and-the-earth-zone-class-ezone" title="Permalink to this headline">¶</a></h1>
-<p>The <tt class="docutils literal"><span class="pre">Ezone</span></tt> class handles an earth zone which corresponds to the
-<tt class="docutils literal"><span class="pre">strm</span></tt> or <tt class="docutils literal"><span class="pre">aster</span></tt> DEM data. It has the same naming convention as
-<tt class="docutils literal"><span class="pre">srtm</span></tt> files and corresponds to a portion of earth corresponding to 1
-latitude and 1 of longitude. An <tt class="docutils literal"><span class="pre">Ezone</span></tt> is an heterogeneous dataset
-stored in <tt class="docutils literal"><span class="pre">hdf5</span></tt> format. Let see an example with the file
-<tt class="docutils literal"><span class="pre">N48W002.h5</span></tt>.</p>
-<p>By default files are placed in directory <tt class="docutils literal"><span class="pre">gis/h5</span></tt> of the current
+<h1>Geographical Information and the Earth Zone class : <code class="docutils literal"><span class="pre">Ezone</span></code><a class="headerlink" href="#geographical-information-and-the-earth-zone-class-ezone" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal"><span class="pre">Ezone</span></code> class handles an earth zone which corresponds to the
+<code class="docutils literal"><span class="pre">strm</span></code> or <code class="docutils literal"><span class="pre">aster</span></code> DEM data. It has the same naming convention as
+<code class="docutils literal"><span class="pre">srtm</span></code> files and corresponds to a portion of earth corresponding to 1
+latitude and 1 of longitude. An <code class="docutils literal"><span class="pre">Ezone</span></code> is an heterogeneous dataset
+stored in <code class="docutils literal"><span class="pre">hdf5</span></code> format. Let see an example with the file
+<code class="docutils literal"><span class="pre">N48W002.h5</span></code>.</p>
+<p>By default files are placed in directory <code class="docutils literal"><span class="pre">gis/h5</span></code> of the current
 project tree.</p>
 <p>The command h5ls allows to see the hierarchical structure of the file</p>
 <div class="code python highlight-python"><div class="highlight"><pre>!h5ls $BASENAME/gis/h5/N48W002.h5
@@ -157,14 +157,14 @@ extent                   Dataset {4}
 <p>Invoquing an earth zone requires to specify the tile prefix with the
 same naming convention as with SRTM files. For example let consider the
 earth zone from -2 to -1 in west longitude and from 48 to 49 in North
-latitude this corresponds to the <tt class="docutils literal"><span class="pre">N48W002</span></tt> tile, so the ezone <tt class="docutils literal"><span class="pre">z</span></tt> is
+latitude this corresponds to the <code class="docutils literal"><span class="pre">N48W002</span></code> tile, so the ezone <code class="docutils literal"><span class="pre">z</span></code> is
 invoqued as :</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">z</span> <span class="o">=</span> <span class="n">ez</span><span class="o">.</span><span class="n">Ezone</span><span class="p">(</span><span class="s">&#39;N48W002&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>In this initial phase no data is loaded yet, to load all the data
-gathered for this <tt class="docutils literal"><span class="pre">Ezone</span></tt> in an existing HDF5 file let invoque the
-<tt class="docutils literal"><span class="pre">loadh5</span></tt> method.</p>
+gathered for this <code class="docutils literal"><span class="pre">Ezone</span></code> in an existing HDF5 file let invoque the
+<code class="docutils literal"><span class="pre">loadh5</span></code> method.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">z</span><span class="o">.</span><span class="n">loadh5</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -183,8 +183,8 @@ i-latitude  : 19 38
 </pre></div>
 </div>
 <p>This object contains the srtm DEM data, the aster data and a filtration
-of the <tt class="docutils literal"><span class="pre">open</span> <span class="pre">street</span> <span class="pre">map</span></tt> database selecting only the ways with
-<tt class="docutils literal"><span class="pre">building</span></tt> attribute. Let&#8217;s have a look to the data with the <tt class="docutils literal"><span class="pre">show</span></tt>
+of the <code class="docutils literal"><span class="pre">open</span> <span class="pre">street</span> <span class="pre">map</span></code> database selecting only the ways with
+<code class="docutils literal"><span class="pre">building</span></code> attribute. Let&#8217;s have a look to the data with the <code class="docutils literal"><span class="pre">show</span></code>
 method.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">ltiles</span> <span class="o">=</span> <span class="n">ext2qt</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">extent</span><span class="p">,</span><span class="n">z</span><span class="o">.</span><span class="n">lL0</span><span class="p">)</span>
 </pre></div>
@@ -197,7 +197,7 @@ method.</p>
 </pre></div>
 </div>
 <img alt="../../_images/Ezone_14_1.png" src="../../_images/Ezone_14_1.png" />
-<p>The <tt class="docutils literal"><span class="pre">Ezone</span></tt> object has a member extent which gives
+<p>The <code class="docutils literal"><span class="pre">Ezone</span></code> object has a member extent which gives
 [lonmin,lonmax,latmin,latmax]</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">z</span><span class="o">.</span><span class="n">extent</span>
 </pre></div>
@@ -235,9 +235,9 @@ Rennes in Brittany (France).</p>
 <div class="section" id="zooming-in">
 <h2>Zooming in<a class="headerlink" href="#zooming-in" title="Permalink to this headline">¶</a></h2>
 <p>For zooming into a smaller region, we define the zone to vizualize a
-given rectangular region with <tt class="docutils literal"><span class="pre">(lonmin,lonmax,latmin,latmax)</span></tt>.</p>
+given rectangular region with <code class="docutils literal"><span class="pre">(lonmin,lonmax,latmin,latmax)</span></code>.</p>
 <p>This region can be converted into cartesian coordinates with the
-<tt class="docutils literal"><span class="pre">conv</span></tt> method.</p>
+<code class="docutils literal"><span class="pre">conv</span></code> method.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">extent1</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.8</span><span class="p">,</span><span class="o">-</span><span class="mf">1.6</span><span class="p">,</span><span class="mf">48.05</span><span class="p">,</span><span class="mf">48.15</span><span class="p">)</span>
 <span class="n">extent1_cart</span>  <span class="o">=</span> <span class="n">ez</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">extent1</span><span class="p">,</span><span class="n">z</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
 <span class="k">print</span> <span class="s">&quot;latlon extent :&quot;</span><span class="p">,</span><span class="n">extent1</span>
@@ -249,7 +249,7 @@ Cartesian extent (meters): [ 14902.21631869  29782.9577558    5482.53114884  165
 </pre></div>
 </div>
 <p>Once the selected extent has been chosen, it is possible to pass it to
-the <tt class="docutils literal"><span class="pre">show</span></tt> method for zooming in the map.</p>
+the <code class="docutils literal"><span class="pre">show</span></code> method for zooming in the map.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&#39;Rennes City Center (ASTER data)&#39;</span><span class="p">,</span>
              <span class="n">extent</span><span class="o">=</span><span class="n">extent1</span><span class="p">,</span>
              <span class="n">bldg</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
@@ -320,7 +320,7 @@ of the city.</p>
 <div class="section" id="ground-height-profile-extraction">
 <h2>Ground Height Profile Extraction<a class="headerlink" href="#ground-height-profile-extraction" title="Permalink to this headline">¶</a></h2>
 <p>For predicting the radio propagation, it is necessary to retrieve the
-height profile between 2 points on the earth surface. The <tt class="docutils literal"><span class="pre">profile</span></tt>
+height profile between 2 points on the earth surface. The <code class="docutils literal"><span class="pre">profile</span></code>
 method does a profile extraction and geometrical calculation for further
 propagation loss determination using the Deygout method. Points have to
 be expressed in (lon,lat) coordinates in WGS84 system.</p>
@@ -386,8 +386,8 @@ i-latitude  : 19 38
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on juin 27, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on août 12, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/1-GIS/Ezone.txt"
 	    rel="nofollow">Show this page source</a>

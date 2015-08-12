@@ -42,7 +42,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -120,7 +120,7 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="ray-signatures">
 <h1>Ray Signatures<a class="headerlink" href="#ray-signatures" title="Permalink to this headline">¶</a></h1>
@@ -131,7 +131,7 @@ not stabilized yet, a lot of approaches have been implemented so far,
 with very different performances. It is expected that the signature is
 delivering all its utility when dealing with mobile trajectories.</p>
 <p>The evaluation of a signature from one cycle to another is implemented
-in the <tt class="docutils literal"><span class="pre">pylayers.simul.Link.DLink</span></tt> class.</p>
+in the <code class="docutils literal"><span class="pre">pylayers.simul.Link.DLink</span></code> class.</p>
 <div class="code python highlight-python"><div class="highlight"><pre>import time
 from pylayers.gis.layout import *
 from pylayers.antprop.signature import *
@@ -160,7 +160,7 @@ from pylayers.antprop.rays import *
 </div>
 <img alt="../../_images/Signatures_8_0.png" src="../../_images/Signatures_8_0.png" />
 <p>All the interactions of a given cycle are stored as meta information in
-nodes of <tt class="docutils literal"><span class="pre">Gt</span></tt></p>
+nodes of <code class="docutils literal"><span class="pre">Gt</span></code></p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">node</span>
 </pre></div>
 </div>
@@ -234,11 +234,11 @@ cycle numbers. In example below it is 0 and 1.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Si</span> <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The cold start determination of the signature is done with a <tt class="docutils literal"><span class="pre">run</span></tt>
+<p>The cold start determination of the signature is done with a <code class="docutils literal"><span class="pre">run</span></code>
 function. The code is not in its final shape here and there is room for
 significant acceleration in incorporating propagation based heuristics.
 The mitigation of graph exploration depth is done in setting a
-<tt class="docutils literal"><span class="pre">cutoff</span></tt> value which limits the exploration in the interaction graph.</p>
+<code class="docutils literal"><span class="pre">cutoff</span></code> value which limits the exploration in the interaction graph.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Si</span><span class="o">.</span><span class="n">run5</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">diffraction</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">algo</span><span class="o">=</span><span class="s">&#39;old&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -275,8 +275,8 @@ different signatures. Signatures are grouped by number of interactions.</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on juin 27, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on août 12, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/2-AP/Signatures.txt"
 	    rel="nofollow">Show this page source</a>

@@ -28,7 +28,6 @@
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
     <link rel="up" title="pylayers.antprop.antenna" href="../pylayers.antprop.antenna.html" />
-    <link rel="next" title="pylayers.antprop.antenna.Antenna.Fpatt" href="pylayers.antprop.antenna.Antenna.Fpatt.html" />
     <link rel="prev" title="pylayers.antprop.antenna.Antenna.Fsynth2" href="pylayers.antprop.antenna.Antenna.Fsynth2.html" />
 <script type="text/javascript">
 
@@ -45,7 +44,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -95,23 +94,6 @@
 	    </span>
 	    <span class="hiddenrellink">
 	    pylayers.antprop.antenna.Antenna.Fsynth2
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="pylayers.antprop.antenna.Antenna.Fpatt.html" title="pylayers.antprop.antenna.Antenna.Fpatt"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.antprop...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.antprop.antenna.Antenna.Fpatt
 	    </span>
 	    
 	    </a>
@@ -173,13 +155,13 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-antprop-antenna-antenna-fsynth3">
 <h1>pylayers.antprop.antenna.Antenna.Fsynth3<a class="headerlink" href="#pylayers-antprop-antenna-antenna-fsynth3" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.Fsynth3">
-<tt class="descclassname">Antenna.</tt><tt class="descname">Fsynth3</tt><big>(</big><em>theta=[]</em>, <em>phi=[]</em>, <em>pattern=True</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/antenna.html#Antenna.Fsynth3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fsynth3" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Antenna.</code><code class="descname">Fsynth3</code><span class="sig-paren">(</span><em>theta=[]</em>, <em>phi=[]</em>, <em>pattern=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/antenna.html#Antenna.Fsynth3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fsynth3" title="Permalink to this definition">¶</a></dt>
 <dd><p>synthesis of a complex antenna pattern from SH coefficients
 (vsh or ssh  in shape 3)</p>
 <p>Ndir is the number of directions</p>
@@ -212,16 +194,14 @@ Fph   : ndarray (1 x Ndir)</p>
 </table>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.channel._vec2scalA</span></tt></p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.channel._vec2scalA</span></code></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">70</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">180</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">F</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">F</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>(<a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-Antenna-Fsynth3-1.py">Source code</a>)</p>
@@ -244,8 +224,8 @@ the pattern is multiplied by $frac{4pi}{120pi}=frac{1}{sqrt{30}$</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on juin 27, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on août 12, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.antprop.antenna.Antenna.Fsynth3.txt"
 	    rel="nofollow">Show this page source</a>
@@ -259,13 +239,8 @@ the pattern is multiplied by $frac{4pi}{120pi}=frac{1}{sqrt{30}$</p>
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="pylayers.antprop.antenna.Antenna.Fpatt.html">
-        Next
-      </a>  
-    </div>
-    <div class="buttonPrevious">
       <a href="../../py-modindex.html">
-        Previous
+        Next
       </a>  
     </div>
     

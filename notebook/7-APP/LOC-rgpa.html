@@ -42,7 +42,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -125,7 +125,7 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <p>Robust Geometric Positioning Algorithm</p>
 <div class="code python highlight-python"><div class="highlight"><pre>from pylayers.location.geometric.constraints.cla import *
@@ -190,7 +190,7 @@ distance p4= 18.0277563773  m / toa3= 60.0925212577 ns
 <h1>RGPA (Robust Geometric Positioning Algorithm)<a class="headerlink" href="#rgpa-robust-geometric-positioning-algorithm" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="exploiting-time-of-arrival-toa-only">
 <h2>Exploiting Time of Arrival (ToA) only<a class="headerlink" href="#exploiting-time-of-arrival-toa-only" title="Permalink to this headline">¶</a></h2>
-<p>We call <tt class="docutils literal"><span class="pre">Constraint</span> <span class="pre">Layer</span> <span class="pre">Array</span></tt> (CLA), the object which gathers all
+<p>We call <code class="docutils literal"><span class="pre">Constraint</span> <span class="pre">Layer</span> <span class="pre">Array</span></code> (CLA), the object which gathers all
 the geometric constraints of a considered scenario.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">=</span><span class="n">CLA</span><span class="p">()</span>
 </pre></div>
@@ -284,7 +284,7 @@ parametric model. The better the model, the better would be the
 inference about tthe associated distance. In that purpose, the Path Loss
 shadowing model is a widely used model.</p>
 <p>To define the classical path loss shadowing model widely used in this
-context the <tt class="docutils literal"><span class="pre">PLSmodel</span></tt> class has been defined.</p>
+context the <code class="docutils literal"><span class="pre">PLSmodel</span></code> class has been defined.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">M</span> <span class="o">=</span> <span class="n">PLSmodel</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span><span class="n">rssnp</span><span class="o">=</span><span class="mf">2.64</span><span class="p">,</span><span class="n">d0</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="n">sigrss</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s">&#39;mode&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -342,8 +342,8 @@ with the above model</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on juin 27, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on août 12, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/7-APP/LOC-rgpa.txt"
 	    rel="nofollow">Show this page source</a>

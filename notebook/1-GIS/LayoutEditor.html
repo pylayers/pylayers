@@ -42,7 +42,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -140,7 +140,7 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="the-layout-class">
 <h1>The Layout class<a class="headerlink" href="#the-layout-class" title="Permalink to this headline">¶</a></h1>
@@ -150,15 +150,15 @@
 <p>A Layout is a representation of a floorplan, it is handled by the module
 <strong>pylayers.gis.layout</strong>.</p>
 <p>This module recognizes different file formats including geo-referenced
-files in open street map format <tt class="docutils literal"><span class="pre">.osm</span></tt>.</p>
+files in open street map format <code class="docutils literal"><span class="pre">.osm</span></code>.</p>
 <p>Using osm allows to take advantage of a mature floor plan editor <em>JOSM</em>
 with the plugin <em>PicLayer</em>. This is well described in
 <a class="reference external" href="http://wiki.openstreetmap.org/wiki/IndoorOSM">http://wiki.openstreetmap.org/wiki/IndoorOSM</a></p>
-<p>The <tt class="docutils literal"><span class="pre">pylayers.gis.osmparser</span></tt> module parses <tt class="docutils literal"><span class="pre">osm</span></tt> files.</p>
+<p>The <code class="docutils literal"><span class="pre">pylayers.gis.osmparser</span></code> module parses <code class="docutils literal"><span class="pre">osm</span></code> files.</p>
 <p>See the following methods of the layout object</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">loadosm()</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">saveosm()</span></tt></li>
+<li><code class="docutils literal"><span class="pre">loadosm()</span></code></li>
+<li><code class="docutils literal"><span class="pre">saveosm()</span></code></li>
 </ul>
 </div>
 <div class="section" id="structure-of-a-layout">
@@ -173,24 +173,24 @@ are exploited for further analysis.</p>
 </div>
 <div class="section" id="subsegments">
 <h2>Subsegments<a class="headerlink" href="#subsegments" title="Permalink to this headline">¶</a></h2>
-<p>To describe doors and windows, the concept of <tt class="docutils literal"><span class="pre">subsegment</span></tt> is
+<p>To describe doors and windows, the concept of <code class="docutils literal"><span class="pre">subsegment</span></code> is
 introduced.</p>
-<p>A <tt class="docutils literal"><span class="pre">segment</span></tt> has attributes :</p>
+<p>A <code class="docutils literal"><span class="pre">segment</span></code> has attributes :</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">name</span></tt> : slab name</li>
-<li><tt class="docutils literal"><span class="pre">z</span></tt> : tuple of minimum and maximum heights with respect to ground
+<li><code class="docutils literal"><span class="pre">name</span></code> : slab name</li>
+<li><code class="docutils literal"><span class="pre">z</span></code> : tuple of minimum and maximum heights with respect to ground
 (meters)</li>
-<li><tt class="docutils literal"><span class="pre">transition</span></tt> : a boolean indicating if a human can cross this
+<li><code class="docutils literal"><span class="pre">transition</span></code> : a boolean indicating if a human can cross this
 segment. For example, segments associated with a door are transition
 segments but we will see later that it may be judicious to split
 space with transparent segments which have the name &#8216;AIR&#8217;. Those
-segments are also <tt class="docutils literal"><span class="pre">transition=True</span></tt></li>
+segments are also <code class="docutils literal"><span class="pre">transition=True</span></code></li>
 </ul>
-<p>A <tt class="docutils literal"><span class="pre">subsegment</span></tt> belongs to a <tt class="docutils literal"><span class="pre">segment</span></tt>, it has mainly 2 attached
+<p>A <code class="docutils literal"><span class="pre">subsegment</span></code> belongs to a <code class="docutils literal"><span class="pre">segment</span></code>, it has mainly 2 attached
 parameters :</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">ss_name</span></tt> : subsegment slab name</li>
-<li><tt class="docutils literal"><span class="pre">ss_z</span></tt> : [(zmin1,zmax1),(zmin2,zmax2),...,(zminK,zmaxK))] list of
+<li><code class="docutils literal"><span class="pre">ss_name</span></code> : subsegment slab name</li>
+<li><code class="docutils literal"><span class="pre">ss_z</span></code> : [(zmin1,zmax1),(zmin2,zmax2),...,(zminK,zmaxK))] list of
 minimum and maximum height of associated subsegments (meters)</li>
 </ul>
 <p>When appearing in a 3D ray a subsegment should have a unique index
@@ -202,12 +202,12 @@ different from the segment index.</p>
 again. Currently, the different recognized file extensions are the
 following :</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">.str2</span></tt>: a ASCII file (Node list + edge list)</li>
-<li><tt class="docutils literal"><span class="pre">.str</span></tt> : a binary file which includes visibility relations between
+<li><code class="docutils literal"><span class="pre">.str2</span></code>: a ASCII file (Node list + edge list)</li>
+<li><code class="docutils literal"><span class="pre">.str</span></code> : a binary file which includes visibility relations between
 point and segments</li>
-<li><tt class="docutils literal"><span class="pre">.ini</span></tt> : an ini file which gather node list and edge list as well
-as the state of the current <tt class="docutils literal"><span class="pre">display</span></tt> dictionnary</li>
-<li><tt class="docutils literal"><span class="pre">.osm</span></tt> : an xml file which can be edited with
+<li><code class="docutils literal"><span class="pre">.ini</span></code> : an ini file which gather node list and edge list as well
+as the state of the current <code class="docutils literal"><span class="pre">display</span></code> dictionnary</li>
+<li><code class="docutils literal"><span class="pre">.osm</span></code> : an xml file which can be edited with
 <a class="reference external" href="http://josm.openstreetmap.de/">JOSM</a></li>
 </ul>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
@@ -222,8 +222,8 @@ as the state of the current <tt class="docutils literal"><span class="pre">displ
 <h2>Reading an exiting Layout<a class="headerlink" href="#reading-an-exiting-layout" title="Permalink to this headline">¶</a></h2>
 <p>To read an existing layout it is sufficient to create a Layout object
 with, as an argument, a file name with one of the recognized extension.
-All files are stored in the <tt class="docutils literal"><span class="pre">pstruc['DIRSTRUC']</span></tt> directory of the
-project. The project root directory is defined in the <tt class="docutils literal"><span class="pre">$BASENAME</span></tt>
+All files are stored in the <code class="docutils literal"><span class="pre">pstruc['DIRSTRUC']</span></code> directory of the
+project. The project root directory is defined in the <code class="docutils literal"><span class="pre">$BASENAME</span></code>
 environment variable.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRSTRUC&#39;</span><span class="p">]</span>
 </pre></div>
@@ -231,8 +231,8 @@ environment variable.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">struc</span><span class="o">/</span><span class="nb">str</span>
 </pre></div>
 </div>
-<p><tt class="docutils literal"><span class="pre">pstruc</span></tt> is a dictionnary which gathers all directories which are used
-in <tt class="docutils literal"><span class="pre">PyLayers</span></tt></p>
+<p><code class="docutils literal"><span class="pre">pstruc</span></code> is a dictionnary which gathers all directories which are used
+in <code class="docutils literal"><span class="pre">PyLayers</span></code></p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">pstruc</span>
 </pre></div>
 </div>
@@ -271,7 +271,7 @@ in <tt class="docutils literal"><span class="pre">PyLayers</span></tt></p>
  <span class="s">&#39;DIRWRL&#39;</span><span class="p">:</span> <span class="s">&#39;struc/wrl&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
-<p>The structure of the <tt class="docutils literal"><span class="pre">.osm</span></tt> file is shown below</p>
+<p>The structure of the <code class="docutils literal"><span class="pre">.osm</span></code> file is shown below</p>
 <div class="code python highlight-python"><div class="highlight"><pre>%%bash
 
     cd $BASENAME/struc
@@ -414,7 +414,7 @@ Nc  = Gr.node[nroom][&#39;cycles&#39;]
 </div>
 <p>The layout can be displayed using matplotlib ploting primitive. Several
 display options are specified in the display dictionnary. Those options
-are exploited in <tt class="docutils literal"><span class="pre">showGs()</span></tt> vizualisation method.</p>
+are exploited in <code class="docutils literal"><span class="pre">showGs()</span></code> vizualisation method.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">display</span>
 </pre></div>
 </div>
@@ -515,16 +515,16 @@ are exploited in <tt class="docutils literal"><span class="pre">showGs()</span><
 <div class="section" id="interactive-editor">
 <h2>Interactive editor<a class="headerlink" href="#interactive-editor" title="Permalink to this headline">¶</a></h2>
 <p>The command L.editor() launches an interactive editor. The state machine
-is implemented in module <tt class="docutils literal"><span class="pre">pylayers.gis.selectl.py</span></tt>.</p>
+is implemented in module <code class="docutils literal"><span class="pre">pylayers.gis.selectl.py</span></code>.</p>
 <p>To have an idea of all available options, look in the
-<tt class="docutils literal"><span class="pre">`pylayers.gis.SelectL</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.new_state">http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.new_state</a>&gt;`__
+<code class="docutils literal"><span class="pre">`pylayers.gis.SelectL</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.new_state">http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.new_state</a>&gt;`__
 module</p>
 <p>All bug correction and ergonomic improvement of this editor is welcome.
 Just pull request your modifications.</p>
 <p>PyLayers comes along with a low level structure editor based on
-<tt class="docutils literal"><span class="pre">matplotlib</span></tt> which can be invoqued using the <tt class="docutils literal"><span class="pre">editor()</span></tt> method. This
+<code class="docutils literal"><span class="pre">matplotlib</span></code> which can be invoqued using the <code class="docutils literal"><span class="pre">editor()</span></code> method. This
 editor is more suited for modyfing constitutive properties of walls. In
-the future a dedicated plugin in <tt class="docutils literal"><span class="pre">JOSM</span></tt> could be a much better
+the future a dedicated plugin in <code class="docutils literal"><span class="pre">JOSM</span></code> could be a much better
 solution.</p>
 <p>There are two different modes of edition</p>
 <ul class="simple">
@@ -640,8 +640,8 @@ a segment (wall,door,window,...).</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on juin 27, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on août 12, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/1-GIS/LayoutEditor.txt"
 	    rel="nofollow">Show this page source</a>

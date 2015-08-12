@@ -45,7 +45,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -173,13 +173,13 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pylayers-antprop-antenna-antenna-elec-delay">
 <h1>pylayers.antprop.antenna.Antenna.elec_delay<a class="headerlink" href="#pylayers-antprop-antenna-antenna-elec-delay" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.elec_delay">
-<tt class="descclassname">Antenna.</tt><tt class="descname">elec_delay</tt><big>(</big><em>tau</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/antenna.html#Antenna.elec_delay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.elec_delay" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Antenna.</code><code class="descname">elec_delay</code><span class="sig-paren">(</span><em>tau</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/antenna.html#Antenna.elec_delay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.elec_delay" title="Permalink to this definition">¶</a></dt>
 <dd><p>apply an electrical delay</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -195,11 +195,11 @@
 </table>
 <p class="rubric">Notes</p>
 <p>This function applies an electrical delay math::<cite>exp{+2 j pi f tau)</cite>
-on the phase of diagram math::<tt class="docutils literal"><span class="pre">F_{\theta}</span></tt> and math::<cite>F_{phi}</cite></p>
+on the phase of diagram math::<code class="docutils literal"><span class="pre">F_{\theta}</span></code> and math::<cite>F_{phi}</cite></p>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;S2R2.sh3&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tau</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">getdelay</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">elec_delay</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span>
 </pre></div>
@@ -220,8 +220,8 @@ on the phase of diagram math::<tt class="docutils literal"><span class="pre">F_{
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on juin 27, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on août 12, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.antprop.antenna.Antenna.elec_delay.txt"
 	    rel="nofollow">Show this page source</a>

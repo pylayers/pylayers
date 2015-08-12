@@ -43,7 +43,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -134,7 +134,7 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for pylayers.measures.mesuwb</h1><div class="highlight"><pre>
 <span class="c">#!/usr/bin/python</span>
@@ -1214,7 +1214,7 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">pl</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">delay</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]]),</span> <span class="n">display</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<div class="viewcode-block" id="Tdd.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.Tdd.show.html#pylayers.measures.mesuwb.Tdd.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">delay</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]]),</span> <span class="n">display</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
              <span class="n">title</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Rx1&#39;</span><span class="p">,</span> <span class="s">&#39;Rx2&#39;</span><span class="p">,</span> <span class="s">&#39;Rx3&#39;</span><span class="p">,</span> <span class="s">&#39;Rx4&#39;</span><span class="p">],</span> <span class="n">col</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;k&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;g&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">],</span>
              <span class="n">xmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show the 4 Impulse Radio Impulse responses</span>
@@ -1273,7 +1273,7 @@
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="n">f</span><span class="p">,</span><span class="n">a4</span>
-
+</div>
 <div class="viewcode-block" id="Tdd.show_span"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.Tdd.show_span.html#pylayers.measures.mesuwb.Tdd.show_span">[docs]</a>    <span class="k">def</span> <span class="nf">show_span</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">wide</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])):</span>
         <span class="sd">&quot;&quot;&quot; show span</span>
 
@@ -1878,7 +1878,7 @@
                 <span class="k">print</span> <span class="s">&quot;LQI Meth1&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">LQI</span><span class="p">[</span><span class="s">&#39;Method1_CH4&#39;</span><span class="p">],</span> <span class="s">&quot; (dB)&quot;</span>
                 <span class="k">print</span> <span class="s">&quot;LQI Meth2&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">LQI</span><span class="p">[</span><span class="s">&#39;Method2_CH4&#39;</span><span class="p">],</span> <span class="s">&quot; (dB)&quot;</span>
 </div>
-    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">delay</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]]),</span><span class="n">display</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<div class="viewcode-block" id="UWBMeasure.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.show.html#pylayers.measures.mesuwb.UWBMeasure.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">delay</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]]),</span><span class="n">display</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
             <span class="n">col</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;k&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;g&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">],</span><span class="n">xmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">NC</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show measurement in time domain</span>
 
@@ -1920,7 +1920,7 @@
                       <span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">,</span>
                       <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">f</span><span class="p">,</span><span class="n">a</span>
-
+</div>
 <div class="viewcode-block" id="UWBMeasure.Epercent"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.Epercent.html#pylayers.measures.mesuwb.UWBMeasure.Epercent">[docs]</a>    <span class="k">def</span> <span class="nf">Epercent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
         <span class="n">epercent1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">Epercent</span><span class="p">()</span>
@@ -2431,8 +2431,8 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on Jun 28, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on août 12, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
     

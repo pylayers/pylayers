@@ -42,7 +42,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -131,7 +131,7 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="slabs-and-materials">
 <h1>Slabs and Materials<a class="headerlink" href="#slabs-and-materials" title="Permalink to this headline">¶</a></h1>
@@ -143,17 +143,17 @@ Slabs are used to describe properties of the different constitutive
 elements of a building such as wall, windows ,...</p>
 <p>In practice when describing a specific building, it is necessary to
 specify a set of different slabs with different characteristics.</p>
-<p>The structure which gathers this set is <tt class="docutils literal"><span class="pre">SlabDB</span></tt>. If no file argument
+<p>The structure which gathers this set is <code class="docutils literal"><span class="pre">SlabDB</span></code>. If no file argument
 is given, this structure is initialized with the default file:
 <a class="reference external" href="https://github.com/pylayers/pylayers/blob/master/data/ini/slabDB.ini">slabDB.ini</a></p>
-<p>This section demonstrates some features of the <tt class="docutils literal"><span class="pre">pylayers.antprop.slab</span></tt>
+<p>This section demonstrates some features of the <code class="docutils literal"><span class="pre">pylayers.antprop.slab</span></code>
 module.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<p>The Class <tt class="docutils literal"><span class="pre">SlabDB</span></tt> contains a dictionnary of all available Slabs. This
-information is read in the file <tt class="docutils literal"><span class="pre">slabDB.ini</span></tt> of the current project
-pointed by environment variable <tt class="docutils literal"><span class="pre">$BASENAME</span></tt></p>
+<p>The Class <code class="docutils literal"><span class="pre">SlabDB</span></code> contains a dictionnary of all available Slabs. This
+information is read in the file <code class="docutils literal"><span class="pre">slabDB.ini</span></code> of the current project
+pointed by environment variable <code class="docutils literal"><span class="pre">$BASENAME</span></code></p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span> <span class="o">=</span> <span class="n">SlabDB</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -384,7 +384,7 @@ Transmission coefficient @ 3.01 GHz and theta= 0.1 :
 </div>
 <div class="section" id="ploting-reflection-and-transmission-coefficients">
 <h3>Ploting Reflection and Transmission Coefficients<a class="headerlink" href="#ploting-reflection-and-transmission-coefficients" title="Permalink to this headline">¶</a></h3>
-<p>The method <tt class="docutils literal"><span class="pre">plotwrt</span></tt> can plot the different calculated coefficients
+<p>The method <code class="docutils literal"><span class="pre">plotwrt</span></code> can plot the different calculated coefficients
 with respect to angle or frequency.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">][</span><span class="s">&#39;lthick&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="mf">0.02</span><span class="p">]</span>
 <span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">()</span>
@@ -599,8 +599,8 @@ N18</a></p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on juin 27, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on août 12, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/2-AP/SlabsMaterials.txt"
 	    rel="nofollow">Show this page source</a>

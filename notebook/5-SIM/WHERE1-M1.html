@@ -42,7 +42,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -126,7 +126,7 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="example-of-an-uwb-channel-ray-tracing-simulation">
 <h1>Example of an UWB channel Ray Tracing simulation<a class="headerlink" href="#example-of-an-uwb-channel-ray-tracing-simulation" title="Permalink to this headline">¶</a></h1>
@@ -151,9 +151,9 @@ from pylayers.simul.link import *
 </pre></div>
 </div>
 <p>A first step consists in loading a layout associated with the
-simulation. Here the <tt class="docutils literal"><span class="pre">WHERE1.ini</span></tt> layout is chosen along with the
-corresponding slabs and materials files <tt class="docutils literal"><span class="pre">matDB.ini</span></tt> and
-<tt class="docutils literal"><span class="pre">slabDB.ini</span></tt>.</p>
+simulation. Here the <code class="docutils literal"><span class="pre">WHERE1.ini</span></code> layout is chosen along with the
+corresponding slabs and materials files <code class="docutils literal"><span class="pre">matDB.ini</span></code> and
+<code class="docutils literal"><span class="pre">slabDB.ini</span></code>.</p>
 <p>This layout corresponds to the office building where the first WHERE1
 UWB measurement campaign has been conducted.</p>
 <p>The layout method loads those in a member layout object <strong>L</strong> of the
@@ -172,7 +172,7 @@ simulation object <strong>S</strong>.</p>
 </div>
 <p>The layout display is fully parameterized via the embedded <strong>display</strong>
 dictionnary member of the Layout object.which allows to configure the
-<tt class="docutils literal"><span class="pre">showGs()</span></tt> method behavior.</p>
+<code class="docutils literal"><span class="pre">showGs()</span></code> method behavior.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;WHERE1 Project Office Measurement Site&#39;</span>
@@ -185,7 +185,7 @@ dictionnary member of the Layout object.which allows to configure the
 <h2>Adding Coordinates of Transmiting and Receiving points<a class="headerlink" href="#adding-coordinates-of-transmiting-and-receiving-points" title="Permalink to this headline">¶</a></h2>
 <p>Coordinates of transmitters and receivers for the simulation are stored
 in <strong>.ini</strong> files. The transmitter and the receiver are instances of the
-class <tt class="docutils literal"><span class="pre">RadioNode</span></tt> which offers different methods for specifying nodes
+class <code class="docutils literal"><span class="pre">RadioNode</span></code> which offers different methods for specifying nodes
 positions. The stucture of this <strong>.ini</strong> file presented below. The node
 Id is associated with the 3 coordinates <img src="../../_images/mathmpl/math-aaef4cabe9.png" style="position: relative; bottom: -7px"/> separated by white
 spaces.</p>
@@ -242,14 +242,14 @@ represented below. Not all cycles are rooms.</p>
 <p>Then an existing interaction is picked up and the neighbors in the graph
 of interactions <img src="../../_images/mathmpl/math-4c79050f98.png" style="position: relative; bottom: -7px"/> are shown</p>
 <p>Then a selected sequence of interactions is chosen and the attribute
-<tt class="docutils literal"><span class="pre">output</span></tt> of the corresponding edge is shown. The result is the set of
+<code class="docutils literal"><span class="pre">output</span></code> of the corresponding edge is shown. The result is the set of
 possible next interactions. Notice that associated with each of these
 potential output interactions is associated a number
 <img src="../../_images/mathmpl/math-0b25e675fd.png" /> which indicates the probability of the
 corresponding sequence with respect of the full range of incidence
 angles. This value is not fully exploited yet in the algorithm which
 seek for
-<tt class="docutils literal"><span class="pre">`Signatures</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.antprop.signature.html">http://pylayers.github.io/pylayers/modules/pylayers.antprop.signature.html</a>&gt;`__</p>
+<code class="docutils literal"><span class="pre">`Signatures</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.antprop.signature.html">http://pylayers.github.io/pylayers/modules/pylayers.antprop.signature.html</a>&gt;`__</p>
 </div>
 <div class="section" id="signatures-rays-and-propagation-and-transmission-channel">
 <h2>Signatures, rays and propagation and transmission channel<a class="headerlink" href="#signatures-rays-and-propagation-and-transmission-channel" title="Permalink to this headline">¶</a></h2>
@@ -278,7 +278,7 @@ receiver. The signature is calculated from a layout cycle to an other
 layout cycle. This means that it is needed first to retrieve the cycle
 number from point coordinates. This is done thanks to the helping
 function
-<tt class="docutils literal"><span class="pre">`pt2cy</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/generated/pylayers.gis.layout.Layout.pt2cy.html">http://pylayers.github.io/pylayers/modules/generated/pylayers.gis.layout.Layout.pt2cy.html</a>&gt;`__,
+<code class="docutils literal"><span class="pre">`pt2cy</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/generated/pylayers.gis.layout.Layout.pt2cy.html">http://pylayers.github.io/pylayers/modules/generated/pylayers.gis.layout.Layout.pt2cy.html</a>&gt;`__,
 point to cycle function.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">ctx</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">tx</span><span class="p">)</span>
 <span class="n">crx</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">rx</span><span class="p">)</span>
@@ -293,7 +293,7 @@ rx point belongs to cycle  5
 <p>Then the signature between the 2 chosen cycles can be calculated. This
 is done by instantiating a Signature object with a given layout and the
 2 cycle number.</p>
-<p>The <tt class="docutils literal"><span class="pre">__repr__</span></tt> of a signature object provides information about the
+<p>The <code class="docutils literal"><span class="pre">__repr__</span></code> of a signature object provides information about the
 number of signatures for each number of interactions.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">DL</span><span class="o">=</span><span class="n">DLink</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
 <span class="n">DL</span><span class="o">.</span><span class="n">a</span><span class="o">=</span> <span class="n">tx</span>
@@ -376,9 +376,9 @@ fstep (fGHz) : 0.05
 </pre></div>
 </div>
 <p>Once the signature has been obtained, 2D rays are calculated with the
-<tt class="docutils literal"><span class="pre">rays()</span></tt> method of the signature <strong>Si</strong>. The coordinates of a
+<code class="docutils literal"><span class="pre">rays()</span></code> method of the signature <strong>Si</strong>. The coordinates of a
 transmitter and a receiver should be parameters of the function. <strong>r2d</strong>
-object has a <tt class="docutils literal"><span class="pre">show</span></tt> and <tt class="docutils literal"><span class="pre">show3</span></tt> method.</p>
+object has a <code class="docutils literal"><span class="pre">show</span></code> and <code class="docutils literal"><span class="pre">show3</span></code> method.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
 <span class="n">r2d</span> <span class="o">=</span> <span class="n">Si</span><span class="o">.</span><span class="n">rays</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">)</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
@@ -489,22 +489,22 @@ pRx : [-18.7747  15.178    1.2   ]
 account the reflection on ceil and floor.</p>
 <p>Once the 3D rays are obtained the local basis are determined with the
 specialized method
-<tt class="docutils literal"><span class="pre">`to3D</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.rays.Rays.to3D.html">http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.rays.Rays.to3D.html</a>&gt;`__</p>
+<code class="docutils literal"><span class="pre">`to3D</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.rays.Rays.to3D.html">http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.rays.Rays.to3D.html</a>&gt;`__</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">=</span><span class="n">r2d</span><span class="o">.</span><span class="n">to3D</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The the local basis of each ray are determined with the specialized
 method
-<tt class="docutils literal"><span class="pre">`locbas</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.rays.Rays.locbas.html">http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.rays.Rays.locbas.html</a>&gt;`__</p>
+<code class="docutils literal"><span class="pre">`locbas</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.rays.Rays.locbas.html">http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.rays.Rays.locbas.html</a>&gt;`__</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">.</span><span class="n">locbas</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>and the the interaction matrices are filled with the specialized method
-<tt class="docutils literal"><span class="pre">`fillinter</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.rays.Rays.fillinter.html">http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.rays.Rays.fillinter.html</a>&gt;`__</p>
+<code class="docutils literal"><span class="pre">`fillinter</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.rays.Rays.fillinter.html">http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.rays.Rays.fillinter.html</a>&gt;`__</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Below <tt class="docutils literal"><span class="pre">ni</span></tt> is the number of interactions</p>
+<p>Below <code class="docutils literal"><span class="pre">ni</span></code> is the number of interactions</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">r3d</span>
 </pre></div>
 </div>
@@ -530,9 +530,9 @@ nl : 1266
 <div class="section" id="calulating-the-propagation-channel">
 <h2>Calulating the Propagation Channel<a class="headerlink" href="#calulating-the-propagation-channel" title="Permalink to this headline">¶</a></h2>
 <p>The propagation channel is a
-<tt class="docutils literal"><span class="pre">`Ctilde</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.antprop.channel.html">http://pylayers.github.io/pylayers/modules/pylayers.antprop.channel.html</a>&gt;`__
+<code class="docutils literal"><span class="pre">`Ctilde</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.antprop.channel.html">http://pylayers.github.io/pylayers/modules/pylayers.antprop.channel.html</a>&gt;`__
 object. This object can be evaluated for different frequency point
-thanks to the <tt class="docutils literal"><span class="pre">eval()</span></tt> method with a <tt class="docutils literal"><span class="pre">fGHz</span></tt> array as argument.</p>
+thanks to the <code class="docutils literal"><span class="pre">eval()</span></code> method with a <code class="docutils literal"><span class="pre">fGHz</span></code> array as argument.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">fGHz</span>
 </pre></div>
 </div>
@@ -576,7 +576,7 @@ Nf :  181
 </div>
 <p>The energy on each polarization couple of the channel can be obtained
 with the
-<tt class="docutils literal"><span class="pre">`energy</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.channel.Ctilde.energy.html">http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.channel.Ctilde.energy.html</a>&gt;`__
+<code class="docutils literal"><span class="pre">`energy</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.channel.Ctilde.energy.html">http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.channel.Ctilde.energy.html</a>&gt;`__
 method. By default this method scaling the channel with the Friis factor
 <img src="../../_images/mathmpl/math-2b322afa76.png" style="position: relative; bottom: -13px"/>.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="nb">type</span><span class="p">(</span><span class="n">DL</span><span class="o">.</span><span class="n">C</span><span class="p">)</span>
@@ -608,7 +608,7 @@ method. By default this method scaling the channel with the Friis factor
 </div>
 <img alt="../../_images/WHERE1-M1_61_0.png" src="../../_images/WHERE1-M1_61_0.png" />
 <p>The multipath doa/dod diagram can be obtained via the method
-<tt class="docutils literal"><span class="pre">`doadod</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.channel.Ctilde.doadod.html">http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.channel.Ctilde.doadod.html</a>&gt;`__.
+<code class="docutils literal"><span class="pre">`doadod</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.channel.Ctilde.doadod.html">http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.channel.Ctilde.doadod.html</a>&gt;`__.
 The colorbar corresponds to the total energy of the path.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
 <span class="n">DL</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">doadod</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">180</span><span class="p">),</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
@@ -636,7 +636,7 @@ shape Cpp : (1055, 181)
 <h2>Applying a waveform to the transmission channel<a class="headerlink" href="#applying-a-waveform-to-the-transmission-channel" title="Permalink to this headline">¶</a></h2>
 <p>Once the propagation channel is obtained the transmission channel is
 calculated with the method
-<tt class="docutils literal"><span class="pre">`prop2tran</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.channel.Ctilde.prop2tran.html">http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.channel.Ctilde.prop2tran.html</a>&gt;`__.
+<code class="docutils literal"><span class="pre">`prop2tran</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.channel.Ctilde.prop2tran.html">http://pylayers.github.io/pylayers/modules/generated/pylayers.antprop.channel.Ctilde.prop2tran.html</a>&gt;`__.
 The Friis factor has to be set to False.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">DL</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">freq</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">fGHz</span>
 <span class="n">sco</span> <span class="o">=</span> <span class="n">DL</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="s">&#39;theta&#39;</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="s">&#39;theta&#39;</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
@@ -696,8 +696,8 @@ waveform to the transmission channel.</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on juin 27, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on août 12, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/5-SIM/WHERE1-M1.txt"
 	    rel="nofollow">Show this page source</a>

@@ -7,6 +7,6 @@ y = 3*t*np.sin(t)
 z = 0*t
 pt =np.vstack((x,y,z)).T
 traj = Trajectory()
-traj.generate(t,pt)
+traj.generate(t=t,pt=pt)
 f,a = traj.plot()
 plt.show()

@@ -42,7 +42,7 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
 
     <div class="header-wrapper">
       <div class="header">
@@ -126,7 +126,7 @@
             
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="where1-m1-uwb-measurement-campaign">
 <h1>WHERE1-M1 UWB measurement campaign<a class="headerlink" href="#where1-m1-uwb-measurement-campaign" title="Permalink to this headline">¶</a></h1>
@@ -154,10 +154,10 @@ features</a></p>
 <div class="section" id="simulation-creation">
 <h2>Simulation Creation<a class="headerlink" href="#simulation-creation" title="Permalink to this headline">¶</a></h2>
 <p>A ray-tracing simulation is controlled via a configuration file which is
-stored in the <tt class="docutils literal"><span class="pre">ini</span></tt> directory of the project directory. By default,
-there is a default configuration file named <tt class="docutils literal"><span class="pre">default.ini</span></tt>.</p>
+stored in the <code class="docutils literal"><span class="pre">ini</span></code> directory of the project directory. By default,
+there is a default configuration file named <code class="docutils literal"><span class="pre">default.ini</span></code>.</p>
 <p>A first step consists in loading a layout associated with the
-simulation. Here the <tt class="docutils literal"><span class="pre">WHERE1.ini</span></tt> layout is chosen along with the
+simulation. Here the <code class="docutils literal"><span class="pre">WHERE1.ini</span></code> layout is chosen along with the
 corresponding slabs and materials.</p>
 <p>This layout corresponds to the office building where the first WHERE1
 UWB measurement campaign has been conducted.</p>
@@ -216,7 +216,7 @@ dictionnary member of the Layout object.</p>
 <h2>Adding coordinates of transmiting and receiving points<a class="headerlink" href="#adding-coordinates-of-transmiting-and-receiving-points" title="Permalink to this headline">¶</a></h2>
 <p>Transmitters and receivers coordinates for the simulation are stored in
 <strong>.ini</strong> files. Transmitter and Receiver are instances of the class
-<tt class="docutils literal"><span class="pre">RadioNode</span></tt> which offers different methods for specifying nodes
+<code class="docutils literal"><span class="pre">RadioNode</span></code> which offers different methods for specifying nodes
 positions. The stucture of this <strong>.ini</strong> file presented below. The node
 Id is associated with the 3 coordinates <img src="../../_images/mathmpl/math-aaef4cabe9.png" style="position: relative; bottom: -7px"/> separated by white
 spaces.</p>
@@ -436,7 +436,7 @@ nl : 7079
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Ct</span> <span class="o">=</span> <span class="n">r3d</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">freq</span><span class="p">())</span>
 </pre></div>
 </div>
-<p>The <tt class="docutils literal"><span class="pre">energy</span></tt> method calculates the energy of each ray</p>
+<p>The <code class="docutils literal"><span class="pre">energy</span></code> method calculates the energy of each ray</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Ett</span><span class="p">,</span><span class="n">Epp</span><span class="p">,</span><span class="n">Etp</span><span class="p">,</span><span class="n">Ept</span> <span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -570,8 +570,8 @@ rotation matrix# [0] type: B
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on juin 27, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on août 12, 2015.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/5-SIM/Where1M1.txt"
 	    rel="nofollow">Show this page source</a>
