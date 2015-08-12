@@ -476,6 +476,10 @@ class Layout(PyLayers):
         return(st)
 
     def __add__(self, other):
+        """ addition
+
+        One can add a numpy array or an other layout
+        """
         Ls = copy.deepcopy(self)
         if type(other)==np.ndarray:
             for k in Ls.Gs.pos:

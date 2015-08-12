@@ -1,4 +1,4 @@
-nn# -*- coding:Utf-8 -*-
+# -*- coding:Utf-8 -*-
 """
 
 .. currentmodule:: pylayers.antprop.antenna
@@ -160,7 +160,7 @@ class Pattern(PyLayers):
     The name of a pattern method starts by p.
     Each pattern method has a unique dictionnary argument 'param'
 
-    If self.grid
+    If self.grid dimensions are
         Nf x Nt x Np
     else:
         Ndir x Nf
@@ -737,55 +737,52 @@ class Antenna(Pattern):
 
     def __repr__(self):
         st = Pattern.__repr__(self)
-#        rtd = 180./np.pi
-#        st = ''
-#        if self.fromfile:
-#            if isinstance(self._filename,str):
-#                st = st + 'FileName : ' + self._filename+'\n'
-#                st = st + '-----------------------\n'
-#            else:
-#                for i in range(len(self._filename)):
-#                    st = st + 'FileName : ' + self._filename[i]+'\n'
-#                st = st + '-----------------------\n'
+        rtd = 180./np.pi
+        if self.fromfile:
+            if isinstance(self._filename,str):
+                st = st + 'file name : ' + self._filename+'\n'
+            else:
+                for i in range(len(self._filename)):
+                    st = st + 'FileName : ' + self._filename[i]+'\n'
 #        #st = st + 'file type : ' + self.typ+'\n'
-#        if 'fGHz' in self.__dict__:
-#            st = st + "fmin : %4.2f" % (self.fGHz[0]) + "GHz\n"
-#            st = st + "fmax : %4.2f" % (self.fGHz[-1]) + "GHz\n"
-#            try:
-#                st = st + "step : %4.2f" % (1000*(self.fGHz[1]-self.fGHz[0])) + "MHz\n"
-#            except:
-#                st = st + "step : None\n"
-#            st = st + "Nf : %d" % (len(self.fGHz)) +"\n"
+        if 'fGHz' in self.__dict__:
+            st = st + "fmin : %4.2f" % (self.fGHz[0]) + "GHz\n"
+            st = st + "fmax : %4.2f" % (self.fGHz[-1]) + "GHz\n"
+            try:
+                st = st + "step : %4.2f" % (1000*(self.fGHz[1]-self.fGHz[0])) + "MHz\n"
+            except:
+                st = st + "step : None\n"
+            st = st + "Nf : %d" % (len(self.fGHz)) +"\n"
 #
 #
-#        if self.evaluated:
-#            st = st + '-----------------------\n'
-#            st = st + "Ntheta : %d" % (self.nth) + "\n"
-#            st = st + "Nphi : %d" % (self.nph) + "\n"
+        if self.evaluated:
+            st = st + '-----------------------\n'
+            st = st + "Ntheta : %d" % (self.nth) + "\n"
+            st = st + "Nphi : %d" % (self.nph) + "\n"
 #                kwargs[k] = defaults[k]
 
-#            u = np.where(self.sqG==self.sqG.max())
-#            if len(u[0]>1):
-#                S = self.sqG[(u[0][0],u[1][0],u[2][0])]
-#                uf = u[0][0]
-#                ut = u[1][0]
-#                up = u[2][0]
-#            else:
-#                S = self.sqG[u]
-#                uf = u[0]
-#                ut = u[1]
-#                up = u[2]
-#            if self.source=='satimo':
-#                GdB = 20*np.log10(S)
-#            # see WHERE1 D4.1 sec 3.1.1.2.2
-#            if self.source=='cst':
-#                GdB = 20*np.log10(S/np.sqrt(30))
-#            st = st + "GmaxdB : %4.2f dB \n" % (GdB)
-#            st = st + "   f = %4.2f GHz \n" % (self.fGHz[uf])
-#            st = st + "   theta = %4.2f (degrees) \n" %
-#            st = st + "   phi = %4.2f  (degrees) \n" % (self.phi[up]*rtd)
-#        else:
-#            st = st + 'Not evaluated\n'
+            u = np.where(self.sqG==self.sqG.max())
+            if len(u[0]>1):
+                S = self.sqG[(u[0][0],u[1][0],u[2][0])]
+                uf = u[0][0]
+                ut = u[1][0]
+                up = u[2][0]
+            else:
+                S = self.sqG[u]
+                uf = u[0]
+                ut = u[1]
+                up = u[2]
+            if self.source=='satimo':
+                GdB = 20*np.log10(S)
+            # see WHERE1 D4.1 sec 3.1.1.2.2
+            if self.source=='cst':
+                GdB = 20*np.log10(S/np.sqrt(30))
+            st = st + "GmaxdB : %4.2f dB \n" % (GdB)
+            st = st + "   f = %4.2f GHz \n" % (self.fGHz[uf])
+            st = st + "   theta = %4.2f (degrees) \n" % (self.theta[ut]*rtd)
+            st = st + "   phi = %4.2f  (degrees) \n" % (self.phi[up]*rtd)
+        else:
+            st = st + 'Not evaluated\n'
 #
 #
 #        if self.typ == 'mat':
@@ -1635,7 +1632,9 @@ class Antenna(Pattern):
         else:
             lfreq = kwargs['fGHz']
         for f in lfreq:
-            ik = np.where(abs(self.fGHz-f)<fstep)[0][0]
+            df  = abs(self.fGHz-f)
+            ik0 = np.where(df==min(df))
+            ik = ik0[0][0]
             #ik=0
             chaine = 'f = %3.2f GHz' %(self.fGHz[ik])
             # all theta
@@ -1760,26 +1759,26 @@ class Antenna(Pattern):
         Parameters
         ----------
 
-        fGHz : np.array() 
+        fGHz : np.array()
             default [] : takes center frequency fa[len(fa)/2]
         po   : np.array()
             location point of the antenna
         T    : np.array
             rotation matrix
-        minr : float    
-            minimum radius in meter 
-        maxr : float 
-            maximum radius in meter  
-        tag : string 
-        ilog : boolean 
-        title : boolean 
+        minr : float
+            minimum radius in meter
+        maxr : float
+            maximum radius in meters
+        tag : string
+        ilog : boolean
+        title : boolean
 
 
         Returns
         -------
 
         (x, y, z, k)
-        
+
         x , y , z values in cartesian axis
         k frequency point evaluated
 
@@ -1823,12 +1822,12 @@ class Antenna(Pattern):
         if r.max() != r.min():
             u = (r - r.min()) /(r.max() - r.min())
         else : u = r
-        
+
         r = minr + (maxr-minr) * u
 
-        x = r * np.sin(th) * np.cos(phi) 
-        y = r * np.sin(th) * np.sin(phi) 
-        z = r * np.cos(th) 
+        x = r * np.sin(th) * np.cos(phi)
+        y = r * np.sin(th) * np.sin(phi)
+        z = r * np.cos(th)
 
         p = np.concatenate((x[...,None],
                             y[...,None],
@@ -1841,7 +1840,7 @@ class Antenna(Pattern):
         # translation
         #
         scalar=(q[...,0]**2+q[...,1]**2+q[...,2]**2)
-        
+
         q[...,0]=q[...,0]+po[0]
         q[...,1]=q[...,1]+po[1]
         q[...,2]=q[...,2]+po[2]

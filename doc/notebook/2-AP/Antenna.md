@@ -26,16 +26,23 @@ The object antenna can show itself just by typing it's name.
 
 ```python
 >>> A
-FileName : S1R1.vsh3
------------------------
+Antenna type : vsh3
+------------------------
+file name : S1R1.vsh3
 fmin : 0.80GHz
 fmax : 5.95GHz
 step : 50.00MHz
 Nf : 104
-Not evaluated
+-----------------------
+Ntheta : 90
+Nphi : 181
+GmaxdB : 2.23 dB 
+   f = 5.60 GHz 
+   theta = 68.76 (degrees) 
+   phi = 270.50  (degrees)
 ```
 
-We got information about the antenna filename and the frequency band where is has been defined.
+We got information about the antenna filename and the frequency band where it has been defined.
 
 At loading time the antenna is not evaluated. It means that there is not internally any instanciation of the pattern for a set of angular and frequency values.
 
@@ -61,13 +68,13 @@ We can use the `ls` method to determine the number of files of different type
 >>> print lssh3[0:5]
 >>> print lmat[0:5]
 Number of antenna in .vsh3 format :  66
-Number of antenna in .sh3 format :  42
+Number of antenna in .sh3 format :  56
 ['S1R1.vsh3', 'S1R10.vsh3', 'S1R11.vsh3', 'S1R12.vsh3', 'S1R13.vsh3']
-['S17R1.sh3', 'S17R2m.sh3', 'S1R1.sh3', 'S1R10.sh3', 'S1R11.sh3']
-[]
+['3GPP_AnkleLeft_7.sh3', '3GPP_AnkleRight_7.sh3', '3GPP_BackCenter_7.sh3', '3GPP_BackCenter_8.sh3', '3GPP_ElbowLeft_7.sh3']
+['S1R1.mat']
 ```
 
-As already mentionned above, at that point the radiation pattern of the antenna has not yet been evaluated. The method to evaluate the pattern is `Fsynth()` with the `pattern` option set to true. If the `pattern` option is set to False, the antenna is evaluated for only the specified direction. This mode is used in the ray tracing, while the former is used to visualize the whole antenna pattern.
+As already mentionned, the radiation pattern of the antenna has not yet been evaluated. The method to evaluate the pattern is `eval()` with the `grid` option set to true. If the `grid` option is set to False, the antenna is evaluated for only the specified direction. This mode is used in the ray tracing, while the former is used to visualize the whole antenna pattern.
 
 The vector spherical coefficient are strored in `A.C`. This C refers to the coefficients.
 Those coefficients are obtained thanks to the [Spherepack Module](http://nldr.library.ucar.edu/repository/assets/technotes/TECH-NOTE-000-000-000-380.pdf).
@@ -80,6 +87,8 @@ Only the vector spherical analysis is done using the `vha` function `Spherepack`
 [pylayers.antprop.spharm.py](http://pylayers.github.io/pylayers/modules/pylayers.antprop.spharm.html) module.
 
 [Description of Vector Spherical Harmonics](./AntennaVSH.html)
+
+The coefficients of the antenna also have a __repr__
 
 ```python
 >>> A.C
@@ -117,7 +126,7 @@ Ncoeff s3 : 72
 The radiation pattern is synthetized with the following call
 
 ```python
->>> A.Fsynth(pattern=True)
+>>> A.eval(grid=True)
 ```
 
 The `polar()` method allow to superpose different pattern for a list of frequencies `fGHz`
@@ -127,9 +136,22 @@ The `polar()` method allow to superpose different pattern for a list of frequenc
 ```python
 >>> f = plt.figure(figsize=(15,15))
 >>> a1 = f.add_subplot(121,polar=True)
->>> f1,a1 = A.polar(fGHz=[3,4,5],phd=0,GmaxdB=0,fig=f,ax=a1)
+>>> f1,a1 = A.polar(fGHz=[3,4,5.6],phd=0,GmaxdB=5,fig=f,ax=a1)
 >>> a2 = f.add_subplot(122,polar=True)
->>> f2,a2 = A.polar(fGHz=[3,4,5],thd=90,GmaxdB=5,fig=f,ax=a2)
+>>> f2,a2 = A.polar(fGHz=[3,4,5.6],thd=68.76,GmaxdB=5,fig=f,ax=a2)
+>>> plt.tight_layout()
+```
+
+```python
+>>> A.fGHz[96]
+5.6000000000000005
+```
+
+```python
+>>> A.polar(fGHz=[5.6],phd=0,GmaxdB=5)
+96
+(<matplotlib.figure.Figure at 0x7fe1d4455ad0>,
+ <matplotlib.projections.polar.PolarAxes at 0x7fe1d3f73250>)
 ```
 
 The vector spherical coefficients can be dispalayed as follows
