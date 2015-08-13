@@ -1184,6 +1184,119 @@ class Usignal(Bsignal):
 
         return(self.x[1] - self.x[0])
 
+    def resample(self, x_new, kind='linear'):
+        """ resample the Usignal with a new x base
+
+        x_new needs to be strictly included in the original x base of the Usignal.
+
+        x is a 1D array
+        y is a 2D array
+
+        if y is complex the interpolation is done on module and unwrapped
+        phase separately
+
+        Parameters
+        ----------
+
+        x_new : ndarray
+        kind  : string
+            'linear' |'spline'
+        """
+        if kind == 'linear':
+            if np.iscomplex(self.y).any():
+                module = abs(self.y)
+                argu = np.unwrap(np.arctan2(np.imag(self.y), np.real(self.y)))
+                fm = interp.interp1d(self.x, module)
+                fa = interp.interp1d(self.x, argu)
+
+                mod_new = fm(x_new)
+                arg_new = fa(x_new)
+                y_new = mod_new * (np.cos(arg_new) + 1j * np.sin(arg_new))
+            else:
+                f = interp.interp1d(self.x, self.y)
+                y_new = f(x_new)
+
+        if kind == 'spline':
+            if np.iscomplex(self.y).any():
+                module = abs(self.y)
+                argu = unwrap(np.arctan2(np.imag(y), np.real(y)))
+                coefm = splrep(self.x, module, s=0)
+                coefa = splrep(self.x, argu, s=0)
+
+                mod_new = splev(x_new, coefm, der=0)
+                arg_new = splev(x_new, coefa, der=0)
+                y_new = mod_new * (np.cos(arg_new) + 1j * np.sin(arg_new))
+            else:
+                coef = splrep(self.x, self.y, s=0)
+                y_new = splev(x_new, coef, der=0)
+
+        U = type(self)(x_new, y_new)
+        return(U)
+
+    def alignc(self, u2):
+        """ align 2 Usignal
+
+        align <=> intersection
+        align : align two Usignal on a same base
+            return a list which contains the two aligned signals
+
+        >>> i1 = EnImpulse()
+        >>> i2 = EnImpulse()
+        >>> i2.translate(-10)
+        >>> L  = i1.alignc(i2)
+
+        Returns
+        -------
+
+        u1 , u2 : the 2 aligned signals
+
+
+        """
+
+        u1 = self
+        dx1 = u1.dx()
+        dx2 = u2.dx()
+        u1_start = u1.x[0]
+        u2_start = u2.x[0]
+        u1_stop = u1.x[-1]
+        u2_stop = u2.x[-1]
+
+        # it starts at the maximum of both signal
+        #    stops  at the minimum of both signal
+        xstart = max(u1_start, u2_start)
+        xstop = min(u1_stop, u2_stop)
+        dx = min(dx1, dx2)
+        if tstincl(u1.x, u2.x) == 0:
+            print 'Warning: Impossible to align the 2 signals'
+
+        if (dx1 <= dx2):
+
+            xnew = ininter(u1.x, xstart, xstop)
+
+            dim1 = u1.len()
+            #pstart1 = findpos(u1.x, xnew[0])
+            pstart1 = np.where(u1.x==xnew[0])[0]
+            #pstop1 = pstart1 + findpos(u1.x[pstart1:dim1], xnew[-1])
+            pstop1 = pstart1 + np.where(u1.x[pstart1:dim1]==xnew[-1])[0]
+            u1 = u1.truncate(pstart1, pstop1 + 1)
+
+            u2 = u2.resample(xnew)
+
+        if (dx2 < dx1):
+
+            xnew = ininter(u2.x, xstart, xstop)
+
+            dim2 = u2.len()
+            #pstart2 = findpos(u2.x, xnew[0])
+            pstart2 = np.where(u2.x==xnew[0])[0]
+            #pstop2 = pstart2 + findpos(u2.x[pstart2:dim2], xnew[-1])
+            pstop2 = pstart2 + np.where(u2.x[pstart2:dim2]==xnew[-1])[0]
+
+            u2 = u2.truncate(pstart2, pstop2 + 1)
+            u1 = u1.resample(xnew)
+
+        return(u1, u2)
+
     def width(self):
         r""" get the extension support of the Usignal
 
@@ -2244,29 +2357,6 @@ class TUsignal(TBsignal, Usignal):
         Efirst = 20 * np.log10(Efirst)
         return(Efirst)
 
-    def resample(self, x_new, kind='linear'):
-        """ resample the TUsignal with a new x base
-
-        x_new needs to be strictly included in the original x base of the Usignal.
-        x is a 1D array
-        y is a 2D array
-
-        Parameters
-        ----------
-        x_new : ndarray
-        kind  : string
-            'linear' |'spline'
-        """
-        if kind == 'linear':
-            f = interp.interp1d(self.x, self.y)
-            y_new = f(x_new)
-
-        if kind == 'spline':
-            coef = splrep(self.x, self.y, s=0)
-            y_new = splev(x_new, coef, der=0)
-
-        U = TUsignal(x_new, y_new)
-        return(U)
 
     def ft(self):
         """ return the associated FUsignal
@@ -2863,50 +2953,6 @@ class FUsignal(FBsignal,Usignal):
         fh = FH.ifft()
 
 
-    def resample(self, x_new, kind='linear'):
-        """ resample a complex signal
-
-
-        This function resamples the Usignal with a new x base
-        which needs to be strictly included in the original x
-        base of the Usignal.
-        x is a 1D array
-        y is a 2D array
-
-        Parameters
-        ----------
-
-        x_new :
-        kind : string {'linear' | 'spline'
-
-        See Also
-        --------
-
-        interp.interp1d, splrep, splev
-        """
-
-        if kind == 'linear':
-            module = abs(self.y)
-            argu = np.unwrap(np.arctan2(np.imag(self.y), np.real(self.y)))
-            fm = interp.interp1d(self.x, module)
-            fa = interp.interp1d(self.x, argu)
-
-            mod_new = fm(x_new)
-            arg_new = fa(x_new)
-            y_new = mod_new * (np.cos(arg_new) + 1j * np.sin(arg_new))
-
-        if kind == 'spline':
-            module = abs(self.y)
-            argu = unwrap(np.arctan2(np.imag(y), np.real(y)))
-            coefm = splrep(self.x, module, s=0)
-            coefa = splrep(self.x, argu, s=0)
-
-            mod_new = splev(x_new, coefm, der=0)
-            arg_new = splev(x_new, coefa, der=0)
-            y_new = mod_new * (np.cos(arg_new) + 1j * np.sin(arg_new))
-
-        U = FUsignal(x_new, y_new)
-        return(U)
 
     def symH(self, parity=0):
         """ enforce Hermitian symetry
@@ -3045,64 +3091,7 @@ class FUsignal(FBsignal,Usignal):
 
         return V
 
-    def alignc(self, u2):
-        """ align 2 FUsignal
-
-        align <=> intersection
-        align : align two FUsignal on a same base
-            return a list which contains the two aligned signals
-
-        >>> i1 = EnImpulse()
-        >>> i2 = EnImpulse()
-        >>> i2.translate(-10)
-        >>> L  = i1.align(i2)
-
-        Notes
-        -----
-
-
-        """
-
-        u1 = self
-        dx1 = u1.dx()
-        dx2 = u2.dx()
-        u1_start = u1.x[0]
-        u2_start = u2.x[0]
-        u1_stop = u1.x[-1]
-        u2_stop = u2.x[-1]
-
-        # it starts at the maximum of both signal
-        #    stops  at the minimum of both signal
-        xstart = max(u1_start, u2_start)
-        xstop = min(u1_stop, u2_stop)
-        dx = min(dx1, dx2)
-        if tstincl(u1.x, u2.x) == 0:
-            print 'Warning: Impossible to align the 2 signals'
-
-        if (dx1 <= dx2):
-
-            xnew = ininter(u1.x, xstart, xstop)
-
-            dim1 = u1.len()
-            pstart1 = findpos(u1.x, xnew[0])
-            pstop1 = pstart1 + findpos(u1.x[pstart1:dim1], xnew[-1])
-            u1 = u1.truncate(pstart1, pstop1 + 1)
-
-            u2 = u2.resample(xnew)
-
-        if (dx2 < dx1):
-
-            xnew = ininter(u2.x, xstart, xstop)
-
-            dim2 = u2.len()
-            pstart2 = findpos(u2.x, xnew[0])
-            pstop2 = pstart2 + findpos(u2.x[pstart2:dim2], xnew[-1])
-            u2 = u2.truncate(pstart2, pstop2 + 1)
-
-            u1 = u1.resample(xnew)
-
-        return(u1, u2)
-
+    
     def ifft(self, Npt=-1):
         r""" Inverse Fourier transform
 

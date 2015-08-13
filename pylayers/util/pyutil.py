@@ -14,7 +14,6 @@ r"""
     shp
     dimcmp
     tstincl
-    findpos
     ininter
     cshift
     LegFunc
@@ -70,7 +69,6 @@ import zipfile
 # shp
 # dimcmp
 # tstincl
-# findpos
 # ininter
 #
 ###################################
@@ -300,28 +298,6 @@ def tstincl(ar1,ar2):
         return(0)
     else:
         return(2)
-
-def findpos(ar,val):
-    """
-    findpos(ar,val)
-
-    return the i position in array ar, such that ar[i] == val 
-    if the value is not find, return 'value not found'
-    """
-    dim=len(ar)
-    i=0
-    find=0
-    while (i<dim):
-        if (ar[i]==val):
-            pos=i
-            find=1
-            i=dim
-        else:
-            i=i+1
-    if (find==1):
-        return(pos)
-    else:
-        return('value not found')
 
 def ininter(ar,val1,val2):
     """

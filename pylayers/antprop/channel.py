@@ -2874,8 +2874,8 @@ class Tchannel(FUDAchannel):
         #
         # return a TUsignal
         #
-        import ipdb
-        ipdb.set_trace()
+        #import ipdb
+        pdb.set_trace()
         Y = self.apply(Wgam)
         ri = Y.ft1(Nz=500,ffts=1)
 

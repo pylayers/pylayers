@@ -51,12 +51,16 @@ Nf : 181
 ```
 
 To evaluate a link there is the `eval` method. This method takes as argument 
-+ a list of desired outputs,
-the type of algorithm being used, the ceil heigh and the number og multi reflection between ceil and floor.
++ a list of the desired outputs,
++ the type of algorithm being used, 
++ the ceil heigh 
++ the number of multi reflection between ceil and floor.
 
 ```python
 >>> aktk=L.eval(force=[], output=['sig','ray','Ct','H'],
 ...             si_algo='old',ra_ceil_height_meter=3,ra_number_mirror_cf=1)
+ipdb> l
+ipdb> p
 ```
 
 The propagation channel (without antenna) can be vizualized on a ray by ray mode.
