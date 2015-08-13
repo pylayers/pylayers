@@ -19,7 +19,31 @@ Examples
     >>> import matplotlib.pyplot as plt
     >>> from pylayers.antprop.antenna import *
     >>> A = Antenna('defant.trx')
-    >>> fig,ax = A.polar(fGHz=[2,3,4],phd=0)
+    >>> fig,ax = A.plot(fGHz=[2,3,4],phd=0)
+
+Pattern Class
+=============
+
+.. autosummary::
+    :toctree: generated/
+
+    Pattern.eval
+    Pattern.gain
+    Pattern.F
+
+Pattern Functions
+-----------------
+
+    Pattern.pOmni
+    Pattern.pGauss
+    Pattern.p3gpp
+    Pattern.p3gpp
+
+Pattern from SH coeff
+---------------------
+
+    Pattern.pvsh3
+    Pattern.psh3
 
 
 Antenna Class
@@ -72,7 +96,7 @@ Visualization functions
     :toctree: generated/
 
     Antenna.pattern
-    Antenna.polar
+    Antenna.plotG
     Antenna._show3
     Antenna.show3
     Antenna.plot3d
@@ -636,7 +660,8 @@ class Antenna(Pattern):
 
         self.param = kwargs['param']
 
-        super(Antenna,self).__init__()
+        #super(Antenna,self).__init__()
+        #Pattern.__init__(self)
         #
         # if typ string has an extension it is a file
         #
@@ -875,8 +900,8 @@ class Antenna(Pattern):
             >>> import matplotlib.pyplot as plt
             >>> from pylayers.antprop.antenna import *
             >>> A = Antenna('S1R1.mat',directory='ant/UWBAN/Matfile')
-            >>> f,a = A.polar(phd=0)
-            >>> f,a = A.polar(thd=90,fig=f,ax=a)
+            >>> f,a = A.plot(phd=0)
+            >>> f,a = A.plot(thd=90,fig=f,ax=a)
             >>> txt = plt.title('S1R1 antenna : st loadmat')
             >>> plt.show()
 
@@ -1539,8 +1564,8 @@ class Antenna(Pattern):
         except:
             print "No vsh coefficient calculated yet"
 
-    def polar(self,**kwargs):
-        """ antenna 2D polar plot
+    def plotG(self,**kwargs):
+        """ antenna plot gain in 2D
 
         Parameters
         ----------
@@ -1549,6 +1574,7 @@ class Antenna(Pattern):
         phd  : phi in degrees
         thd  : theta in degrees
         GmaxdB :  max gain to be displayed
+        polar : boolean
 
         Returns
         -------
@@ -1565,8 +1591,8 @@ class Antenna(Pattern):
             >>> import matplotlib.pyplot as plt
             >>> from pylayers.antprop.antenna import *
             >>> A = Antenna('defant.trx')
-            >>> fig,ax = A.polar(fGHz=[2,3,4],phd=0)
-            >>> fig,ax = A.polar(fGHz=[2,3,4],thd=90)
+            >>> fig,ax = A.plotG(fGHz=[2,3,4],phd=0)
+            >>> fig,ax = A.plotG(fGHz=[2,3,4],thd=90)
 
         """
 
@@ -1580,6 +1606,7 @@ class Antenna(Pattern):
                     'phd' : 0,
                     'legend':True,
                     'GmaxdB':5,
+                    'polar':True,
                     'topos':False}
 
         for k in defaults:
@@ -1598,7 +1625,10 @@ class Antenna(Pattern):
 
         if 'ax' not in kwargs:
             #ax = fig.add_axes([0.1, 0.1, 0.8, 0.8], polar=True, axisbg='#d5de9c')
-            ax = fig.add_axes([0.1, 0.1, 0.8, 0.8], polar=True )
+            if kwargs['polar']:
+                ax = fig.add_axes([0.1, 0.1, 0.8, 0.8], polar=True )
+            else:
+                ax = fig.add_subplot(111)
         else:
             ax = kwargs['ax']
 
@@ -1659,33 +1689,40 @@ class Antenna(Pattern):
                 #u3 = np.nonzero((self.theta[:,0] <= np.pi) & ( self.theta[:,0]
                 #                                              > np.pi / 2))[0]
                 u3 = np.nonzero((self.theta <= np.pi) & ( self.theta > np.pi / 2))[0]
-                if self.source=='satimo':
-                    r1 = -GmindB + 20 * np.log10(  self.sqG[ik, u1, iphi1]+1e-12)
-                if self.source=='cst':
-                    r1 = -GmindB + 20 * np.log10(  self.sqG[ik, u1, iphi1]/np.sqrt(30)+1e-12)
+                if kwargs['polar']:
+                    if self.source=='satimo':
+                        r1 = -GmindB + 20 * np.log10(  self.sqG[ik, u1, iphi1]+1e-12)
+                    if self.source=='cst':
+                        r1 = -GmindB + 20 * np.log10(  self.sqG[ik, u1, iphi1]/np.sqrt(30)+1e-12)
 
-                #r1  = self.sqG[k,u1[0],iphi1]
-                negr1 = np.nonzero(r1 < 0)
-                r1[negr1[0]] = 0
-                if self.source=='satimo':
-                    r2 = -GmindB + 20 * np.log10( self.sqG[ik, u2, iphi2]+1e-12)
-                if self.source=='cst':
-                    r2 = -GmindB + 20 * np.log10(  self.sqG[ik, u2, iphi2]/np.sqrt(30)+1e-12)
-                #r2  = self.sqG[k,u2,iphi2]
-                negr2 = np.nonzero(r2 < 0)
-                r2[negr2[0]] = 0
-                if self.source=='satimo':
-                    r3 = -GmindB + 20 * np.log10( self.sqG[ik, u3, iphi1]+1e-12)
-                if self.source=='cst':
-                    r3 = -GmindB + 20 * np.log10(  self.sqG[ik, u3, iphi1]/np.sqrt(30)+1e-12)
-                #r3  = self.sqG[k,u3[0],iphi1]
-                negr3 = np.nonzero(r3 < 0)
-                r3[negr3[0]] = 0
-                r = np.hstack((r1[::-1], r2, r3[::-1], r1[-1]))
+                    #r1  = self.sqG[k,u1[0],iphi1]
+                    negr1 = np.nonzero(r1 < 0)
+                    r1[negr1[0]] = 0
+                    if self.source=='satimo':
+                        r2 = -GmindB + 20 * np.log10( self.sqG[ik, u2, iphi2]+1e-12)
+                    if self.source=='cst':
+                        r2 = -GmindB + 20 * np.log10(  self.sqG[ik, u2, iphi2]/np.sqrt(30)+1e-12)
+                    #r2  = self.sqG[k,u2,iphi2]
+                    negr2 = np.nonzero(r2 < 0)
+                    r2[negr2[0]] = 0
+                    if self.source=='satimo':
+                        r3 = -GmindB + 20 * np.log10( self.sqG[ik, u3, iphi1]+1e-12)
+                    if self.source=='cst':
+                        r3 = -GmindB + 20 * np.log10(  self.sqG[ik, u3, iphi1]/np.sqrt(30)+1e-12)
+                    #r3  = self.sqG[k,u3[0],iphi1]
+                    negr3 = np.nonzero(r3 < 0)
+                    r3[negr3[0]] = 0
+                    r = np.hstack((r1[::-1], r2, r3[::-1], r1[-1]))
 
-                a1 = np.arange(0, 360, 30)
-                a2 = [90, 60, 30, 0, 330, 300, 270, 240, 210, 180, 150, 120]
-                rline2, rtext2 = plt.thetagrids(a1, a2)
+                    a1 = np.arange(0, 360, 30)
+                    a2 = [90, 60, 30, 0, 330, 300, 270, 240, 210, 180, 150, 120]
+                    rline2, rtext2 = plt.thetagrids(a1, a2)
+
+                else:
+                    r1 = 20 * np.log10( self.sqG[ik, u1, iphi1]+1e-12)
+                    r2 = 20 * np.log10( self.sqG[ik, u2, iphi2]+1e-12)
+                    r3 = 20 * np.log10( self.sqG[ik, u3, iphi1]+1e-12)
+                    r = np.hstack((r1[::-1], r2, r3[::-1], r1[-1]))
 
                 angle = np.linspace(0, 2 * np.pi, len(r), endpoint=True)
               #  plt.title(u'V plane $\\theta$ (degrees)')
@@ -1697,16 +1734,20 @@ class Antenna(Pattern):
                 itheta = np.where(abs(self.theta-kwargs['thd']*dtr)<dtheta)[0][0]
                 #angle = self.phi[0,iphi]
                 angle = self.phi[iphi]
-                r = -GmindB + 20 * np.log10(self.sqG[ik, itheta, iphi])
-                neg = np.nonzero(r < 0)
-                r[neg] = 0
+                if kwargs['polar']:
+                    r = -GmindB + 20 * np.log10(self.sqG[ik, itheta, iphi])
+                    neg = np.nonzero(r < 0)
+                    r[neg] = 0
                # plt.title(u'H plane - $\phi$ degrees')
-                a1 = np.arange(0, 360, 30)
-                a2 = [0, 30, 60, 90, 120 , 150 , 180 , 210, 240 , 300 , 330]
-                rline2, rtext2 = plt.thetagrids(a1, a2)
+                    a1 = np.arange(0, 360, 30)
+                    a2 = [0, 30, 60, 90, 120 , 150 , 180 , 210, 240 , 300 , 330]
+                    rline2, rtext2 = plt.thetagrids(a1, a2)
+                else:
+                    r =  20 * np.log10(self.sqG[ik, itheta, iphi])
 
             ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
-            rline1, rtext1 = plt.rgrids(t1, t2)
+            if kwargs['polar']:
+                rline1, rtext1 = plt.rgrids(t1, t2)
             cpt = cpt + 1
         if kwargs['legend']:
             ax.legend()
@@ -1979,7 +2020,7 @@ class Antenna(Pattern):
             ax.plot3D(np.ravel(X), np.ravel(Y), np.ravel(Z))
         plt.show()
 
-    def pol3d(self, k=0, R=50, St=1, Sp=1, silent=False):
+    def pol3d(self, k=0, R=50, St=4, Sp=4, silent=False):
         """ Display polarisation diagram  in 3D
 
            Parameters
@@ -1988,13 +2029,13 @@ class Antenna(Pattern):
            k  : int
                frequency index
            R  : float
-                Radius of the sphere
+               radius of the sphere
            St : int
-               Downsampling factor along theta
+               downsampling factor along theta
            Sp : int
-               Downsampling factor along phi
+               downsampling factor along phi
            silent : Boolean
-                (If True the file is created and not displayed')
+               (if True the file is created and not displayed')
 
            The file created is named : Polar{ifreq}.list
            it is placed in the /geom directory of the project

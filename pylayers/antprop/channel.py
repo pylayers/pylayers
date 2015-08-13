@@ -54,13 +54,12 @@ except:
 
 
 
-from pylayers.signal.bsignal import *
-
-class TBchannel(TBsignal):
+class TBchannel(bs.TBsignal):
     """ Uniform channel in delay domain
     """
     def __init__(self, x=np.array([]), y=np.array([]),label=[]):
-        super(TUsignal,self).__init__(x,y,label)
+        #super(TUsignal,self).__init__(x,y,label)
+        bs.TBsignal.__init__(x,y,label)
 
 
     def taumax(self):
@@ -72,9 +71,11 @@ class TBchannel(TBsignal):
         """
 
         y2 = (self.y) ** 2
+
         #
         # determine time of maximum value of ()^2
         #
+
         maxy2 = max(y2)
         u = np.nonzero(y2 == maxy2)[0]
         tau = self.x[u]
@@ -576,7 +577,7 @@ class TBchannel(TBsignal):
         Nt = len(t)
         Necdf = len(ecdf)
         N = min(Nt, Necdf)
-        ecdf = TUsignal(t[0:N], ecdf[0:N])
+        ecdf = bs.TUsignal(t[0:N], ecdf[0:N])
         #
         # Display
         #
@@ -1550,7 +1551,7 @@ class TUchannel(TBchannel):
         Nt = len(t)
         Necdf = len(ecdf)
         N = min(Nt, Necdf)
-        ecdf = TUsignal(t[0:N], ecdf[0:N])
+        ecdf = bs.TUsignal(t[0:N], ecdf[0:N])
         #
         # Display
         #
@@ -1715,13 +1716,13 @@ class TUDchannel(TUchannel):
 
     """
     def __init__(self,x=np.array([]),y=np.array([]),taud=np.array([]),taue=np.array([])):
-        super(TUDsignal,self).__init__(x,y)
+        super(TUDchannel,self).__init__(x,y)
         #TUsignal.__init__(self, x, y)
         self.taud = taud
         self.taue = taue
 
     def __repr__(self):
-        s = TUsignal.__repr__(self)
+        s = TUchannel.__repr__(self)
         return(s)
 
     def fig(self, N):
@@ -1754,7 +1755,7 @@ class TUDchannel(TUchannel):
            #    yi = self.y[i+1,:] + (N1-i)*ecmax
            #    r.lines(x,yi,col='black')
 
-class FUchannel(FUsignal):
+class FUchannel(bs.FUsignal):
     """
     A channel in Frequency domain
 
@@ -1764,15 +1765,15 @@ class FUchannel(FUsignal):
           y=np.array([]),
           label=[]):
 
-          FUsignal.__init__(self,x,y,label)
+          bs.FUsignal.__init__(self,x,y,label)
           self.calibrated = False
           self.win = 'rect'
           self.windowed = False
           self.filcal="calibration.mat"
 
     def __repr__(self):
-        st = FUsignal.__repr__(self)
-        if self.calibrated: 
+        st = bs.FUsignal.__repr__(self)
+        if self.calibrated:
             st = st+'\n calibrated : Yes\n'
         else:
             st = st+'\n calibrated : No\n'
@@ -1905,7 +1906,7 @@ class FUDchannel(FUchannel):
 
         x : np.array()
         y : np.array()
-        taud : np.array(
+        taud : np.array()
 
         """
         FUchannel.__init__(self,x,y,label)
@@ -1913,7 +1914,7 @@ class FUDchannel(FUchannel):
         self.taue = np.zeros(len(taud))
 
     def __repr__(self):
-        s = FUsignal.__repr__(self)
+        s = bs.FUsignal.__repr__(self)
         return(s)
 
     def minphas(self):
@@ -1995,7 +1996,7 @@ class FUDchannel(FUchannel):
         y = fft.ifft(self.y)
         T = 1/(self.x[1]-self.x[0])
         x = np.linspace(0,T,len(self.x))
-        h = TUDsignal(x,y,self.taud,self.taue)
+        h = bs.TUDsignal(x,y,self.taud,self.taue)
         return(h)
 
 
@@ -2032,7 +2033,7 @@ class FUDchannel(FUchannel):
         """
         Nray = len(self.taud)
         s = self.ift(Nz, ffts)
-        h = TUDsignal(s.x, fft.fftshift(s.y), self.taud,self.taue)
+        h = bs.TUDsignal(s.x, fft.fftshift(s.y), self.taud,self.taue)
         return(h)
 
 
@@ -2074,13 +2075,13 @@ class FUDchannel(FUchannel):
         dx = s.dx()
         x_new = np.arange(tstart, tstop, dx)
         yini = np.zeros((Nray, len(x_new)))
-        rf = TUsignal(x_new, yini)
+        rf = bs.TUsignal(x_new, yini)
         #
         # initializes a void signal
         #
         for i in range(Nray):
-            r = TUsignal(x_new, np.zeros(len(x_new)))
-            si = TUsignal(x, s.y[i, :])
+            r = bs.TUsignal(x_new, np.zeros(len(x_new)))
+            si = bs.TUsignal(x, s.y[i, :])
             si.translate(tau[i])
             r = r + si
             rf.y[i, :] = r.y
@@ -2113,13 +2114,13 @@ class FUDchannel(FUchannel):
         tau = self.taud+self.taue
         self.s = self.ift(Nz, ffts)
         x = self.s.x
-        r = TUsignal(x, np.zeros(len(x)))
+        r = bs.TUsignal(x, np.zeros(len(x)))
 
         if len(tau) == 1:
             return(self.s)
         else:
             for i in range(len(tau)):
-                si = TUsignal(self.s.x, self.s.y[i, :])
+                si = bs.TUsignal(self.s.x, self.s.y[i, :])
                 si.translate(tau[i])
                 r = r + si
             return r
@@ -2137,13 +2138,15 @@ class FUDchannel(FUchannel):
 
         Returns
         -------
+
         r : TUsignal
+
         """
         tau = self.taud + self.taue
         s = self.ift(Nz, ffts)
         x = s.x
-        r = TUsignal(x, np.zeros(len(x)))
-        si = TUsignal(s.x, s.y[k, :])
+        r  = bs.TUsignal(x, np.zeros(len(x)))
+        si = bs.TUsignal(s.x, s.y[k, :])
         si.translate(tau[k])
         r = r + si
         return r
@@ -2227,7 +2230,7 @@ class FUDchannel(FUchannel):
 
         f = np.arange(fmin, fmax, df)
 
-        U = FUsignal(f, np.zeros(len(f)))
+        U = bs.FUsignal(f, np.zeros(len(f)))
 
         TAUF = np.outer(tau, f)
         E = np.exp(-2 * 1j * np.pi * TAUF)
@@ -2275,7 +2278,7 @@ class FUDAchannel(FUDchannel):
         self.doa  = doa
 
     def __repr__(self):
-        s = FUDsignal.__repr__(self)
+        s = FUDchannel.__repr__(self)
         return(s)
 
     def cut(self,threshold=0.99):
@@ -2773,7 +2776,7 @@ class Tchannel(FUDAchannel):
         """
 
         U = self * W
-        V = bs.FUDAchannel(U.x, U.y, self.taud, self.dod, self.doa)
+        V = FUDAchannel(U.x, U.y, self.taud, self.dod, self.doa)
 
         return(V)
 
@@ -2803,7 +2806,7 @@ class Tchannel(FUDAchannel):
                 f = interp1d(w.x, w.y)
                 x_new = arange(w.x[0], w.x[-1], dxh)[0:-1]
                 y_new = f(x_new)
-                w = TUsignal(x_new, y_new)
+                w = bs.TUsignal(x_new, y_new)
             else:
                 # reinterpolate h
                 f = interp1d(h.x, h.y)
@@ -2871,8 +2874,8 @@ class Tchannel(FUDAchannel):
         #
         # return a TUsignal
         #
-        #import ipdb
-        #ipdb.set_trace()
+        import ipdb
+        ipdb.set_trace()
         Y = self.apply(Wgam)
         ri = Y.ft1(Nz=500,ffts=1)
 

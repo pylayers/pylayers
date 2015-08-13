@@ -10,9 +10,8 @@ The  `Antenna` class is stored in the [antenna.py](http://pylayers.github.io/pyl
 ```python
 >>> from pylayers.antprop.antenna import *
 >>> %pylab inline
-WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
 Populating the interactive namespace from numpy and matplotlib
-WARNING: pylab import has clobbered these variables: ['plt', 'mlab', 'rc']
+WARNING: pylab import has clobbered these variables: ['mlab', 'plt', 'rc']
 `%matplotlib` prevents importing * from pylab and numpy
 ```
 
@@ -33,13 +32,7 @@ fmin : 0.80GHz
 fmax : 5.95GHz
 step : 50.00MHz
 Nf : 104
------------------------
-Ntheta : 90
-Nphi : 181
-GmaxdB : 2.23 dB 
-   f = 5.60 GHz 
-   theta = 68.76 (degrees) 
-   phi = 270.50  (degrees)
+Not evaluated
 ```
 
 We got information about the antenna filename and the frequency band where it has been defined.
@@ -138,7 +131,16 @@ The `polar()` method allow to superpose different pattern for a list of frequenc
 >>> a1 = f.add_subplot(121,polar=True)
 >>> f1,a1 = A.polar(fGHz=[3,4,5.6],phd=0,GmaxdB=5,fig=f,ax=a1)
 >>> a2 = f.add_subplot(122,polar=True)
->>> f2,a2 = A.polar(fGHz=[3,4,5.6],thd=68.76,GmaxdB=5,fig=f,ax=a2)
+>>> f2,a2 = A.polar(fGHz=[3,4,5.6],thd=90,GmaxdB=5,fig=f,ax=a2)
+>>> plt.tight_layout()
+```
+
+```python
+>>> f = plt.figure(figsize=(15,15))
+>>> a1 = f.add_subplot(121)
+>>> f1,a1 = A.polar(fGHz=[3,4,5.6],phd=0,GmaxdB=5,fig=f,ax=a1,polar=False)
+>>> a2 = f.add_subplot(122)
+>>> f2,a2 = A.polar(fGHz=[3,4,5.6],thd=90,GmaxdB=5,fig=f,ax=a2,polar=False)
 >>> plt.tight_layout()
 ```
 
@@ -148,10 +150,13 @@ The `polar()` method allow to superpose different pattern for a list of frequenc
 ```
 
 ```python
->>> A.polar(fGHz=[5.6],phd=0,GmaxdB=5)
-96
-(<matplotlib.figure.Figure at 0x7fe1d4455ad0>,
- <matplotlib.projections.polar.PolarAxes at 0x7fe1d3f73250>)
+>>> A.polar(fGHz=[5.6],phd=270,GmaxdB=5)
+(<matplotlib.figure.Figure at 0x7fe1d43c5790>,
+ <matplotlib.projections.polar.PolarAxes at 0x7fe1d3ed8c10>)
+```
+
+```python
+>>> A.pol3d(R=5,St=8,Sp=8)
 ```
 
 The vector spherical coefficients can be dispalayed as follows
@@ -170,21 +175,15 @@ An antenna can also be defined from closed-form expressions. Available antennas 
 + WirePlate
 
 ```python
->>> A = Antenna('Omni')
+>>> A = Antenna(typ='Gauss')
 ```
 
 ```python
->>> A.Fpatt(pattern=True)
-```
 
-```python
->>> A.polar()
 ```
 
 ```python
 >>> A = Antenna('Gauss')
->>> A.Fsynth()
->>> A.polar()
 ```
 
 ```python

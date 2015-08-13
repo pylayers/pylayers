@@ -121,9 +121,9 @@ import pdb
 class Link(Tchannel):
     def __init__(self):
         """ Link evaluation metaclass
-
         """
-        super(Link,self).__init__ ()
+        Tchannel.__init__(self)
+    #    super(Link,self).__init__ ()
 
 
     def __add__(self,l):
@@ -330,7 +330,7 @@ class DLink(Link):
         """
 
 
-        super(DLink,self).__init__()
+        Link.__init__(self)
 
         defaults={ 'L':Layout(),
                    'a':np.array(()),

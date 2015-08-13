@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #-*- coding:Utf-8 -*-
 r"""
 .. currentmodule:: pylayers.signal.bsignal
@@ -14,6 +13,11 @@ Bsignal Class
 
     Bsignal.__init__
     Bsignal.__repr__
+    Bsignal.mean
+    Bsignal.min
+    Bsignal.max
+    Bsignal.len
+    Bsignal.append
     Bsignal.extract
     Bsignal.save
     Bsignal.load
@@ -26,7 +30,6 @@ Bsignal Class
     Bsignal.plot
     Bsignal.flatteny
     Bsignal.gating
-    Bsignal.len
 
 Usignal Class
 =============
@@ -982,8 +985,10 @@ class Bsignal(PyLayers):
 
     def flatteny(self,yrange=[],reversible=False):
         r""" flatten y array
+
         Parameters
         ----------
+
         yrange : array of y index values to be flattenned
         reversible : boolean
             if True the sum is place in object member yf
@@ -1070,9 +1075,9 @@ class Usignal(Bsignal):
 
     """
 
-    def __init__(self, x=np.array([]), y=np.array([]),label=[]):
-        super(Usignal,self).__init__(x,y,label)
-        #Bsignal.__init__(self, x, y)
+    #def __init__(self, x=np.array([]), y=np.array([]),label=[]):
+    #    super(Usignal,self).__init__(x,y,label)
+    #   #Bsignal.__init__(self, x, y)
 
     def __repr__(self):
         s = Bsignal.__repr__(self)
@@ -1619,9 +1624,8 @@ class TBsignal(Bsignal):
 
     """
     def __init__(self, x=np.array([]), y=np.array([]),label=[]):
-        super(TBsignal,self).__init__(x,y,label)
-        #Bsignal.__init__(self, x, y)
-        self.label[-1] = 'time (ns)'
+        Bsignal.__init__(self, x, y)
+        self.label = 'time (ns)'
 
     def __repr__(self):
         s = Bsignal.__repr__(self)
@@ -1839,7 +1843,6 @@ class TUsignal(TBsignal, Usignal):
     """
     def __init__(self, x=np.array([]), y=np.array([]),label=[]):
         super(TUsignal,self).__init__(x,y,label)
-        #Usignal.__init__(self, x, y)
 
     def __repr__(self):
         s = Usignal.__repr__(self)
@@ -2332,7 +2335,6 @@ class TUsignal(TBsignal, Usignal):
 
 
 
-
 class FBsignal(Bsignal):
     """
     FBsignal : Base signal in Frequency domain
@@ -2342,9 +2344,8 @@ class FBsignal(Bsignal):
     plotdB   : plot modulus in dB
     """
     def __init__(self, x=np.array([]), y=np.array([]),label=[]):
-        super(FBsignal,self).__init__(x,y,label)
-        #Bsignal.__init__(self, x, y)
-        self.label[-1]='Frequency (GHz)'
+        Bsignal.__init__(self, x, y)
+        self.label='Frequency (GHz)'
 
     def __repr__(self):
         s = Bsignal.__repr__(self)
@@ -2531,7 +2532,7 @@ class FBsignal(Bsignal):
             plt.ylabel('imaginary part)')
 
 
-class FUsignal(FBsignal, Usignal):
+class FUsignal(FBsignal,Usignal):
     """
     FUsignal : Uniform signal in Frequency Domain
 
@@ -2558,8 +2559,8 @@ class FUsignal(FBsignal, Usignal):
     plotdB   : plot modulus in dB
     get      : get k th ray
     tap      : calculates channel taps
-    window   : 
-    
+    window   :
+
     """
     def __init__(self, x=np.array([]), y=np.array([]),label=[]):
         super(FUsignal,self).__init__(x,y,label)
@@ -2636,15 +2637,16 @@ class FUsignal(FBsignal, Usignal):
 
     def get(self, k):
         """
-            get the kh signal
+        get the kh signal
 
-            Parameters
-            ----------
-            k : indes to get
+        Parameters
+        ----------
+        k : indes to get
 
-            Return
-            ------
-            G : FUsignal
+        Returns
+        -------
+
+        G : FUsignal
 
         """
         G = FUsignal()
@@ -3332,8 +3334,8 @@ class FHsignal(FUsignal):
     unrex : unredundant extraction    --> FUsignal
 
     """
-    def __init__(self, x=np.array([]), y=np.array([]),label=[]):
-        FUsignal.__init__(self, x, y,label)
+    #def __init__(self, x=np.array([]), y=np.array([]),label=[]):
+    #    FUsignal.__init__(self, x, y,label)
 
     def __repr__(self):
         s = FUsignal.__repr__(self)
@@ -3423,7 +3425,7 @@ class FHsignal(FUsignal):
             xu = self.x[1:(N + 1) / 2]
             yu = self.y[:,1:(N + 1) / 2]
 
-        O = FUsignal(xu, yu)
+        O = FUsignal(x=xu, y=yu)
 
         return(O)
 
@@ -3687,7 +3689,7 @@ class EnImpulse(TUsignal):
         feGHz = kwargs.pop('feGHz')
         threshdB = kwargs.pop('threshdB')
 
-        TUsignal.__init__(self)
+        #TUsignal.__init__(self)
         Tp = (2 / (WGHz * np.pi)) * np.sqrt(abs(threshdB) * np.log(10) /20.)
         coeff = np.sqrt(2 * np.sqrt(2)/ (Tp * np.sqrt(np.pi)))
 

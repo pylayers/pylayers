@@ -10,7 +10,7 @@ import scipy.signal as si
 import scipy.linalg as la
 import ConfigParser
 import matplotlib.pylab as plt
-from pylayers.signal   import bsignal as bs
+import pylayers.signal.bsignal as bs
 from pylayers.util     import easygui
 from pylayers.measures import mesuwb
 
@@ -96,8 +96,9 @@ class Waveform(dict):
         self.st       = st
         self.sf       = sf
         self.f        = self.sf.x
+
         ygamma        = -1j*0.3/(4*np.pi*self.f)
-        self.gamm     = bs.FUsignal(self.f,ygamma)
+        self.gamm     = bs.FUsignal(x=self.f,y=ygamma)
         self.sfg      = self.sf*self.gamm
         self.sfgh     = self.sfg.symH(0)
         self.stgh     = self.sfgh.ifft(1)
@@ -157,7 +158,7 @@ class Waveform(dict):
         #x      = np.linspace(-0.5*Tw+te/2,0.5*Tw+te/2,Np,endpoint=False)
         #x     = arange(-Tw,Tw,te)
 
-        w = bs.EnImpulse(fcGHz=fcGHz,WGHz=band,thresh=thresh,feGHz=feGHz)
+        w = bs.EnImpulse(fcGHz=fcGHz,WGHz=band,threshdB=thresh,feGHz=feGHz)
         #W = w.ft()
         W = w.ftshift()
         return (w,W)
@@ -310,7 +311,7 @@ class Waveform(dict):
                 self[key] = float(val)
             if key == "typ":
                 self[key] = val
- 
+
         self.eval()
 
 
