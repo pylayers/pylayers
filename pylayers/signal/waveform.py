@@ -157,8 +157,8 @@ class Waveform(dict):
         self['Np']=Np
         #x      = np.linspace(-0.5*Tw+te/2,0.5*Tw+te/2,Np,endpoint=False)
         #x     = arange(-Tw,Tw,te)
-
-        w = bs.EnImpulse(fcGHz=fcGHz,WGHz=band,threshdB=thresh,feGHz=feGHz)
+        w = bs.TUsignal()
+        w.EnImpulse(fcGHz=fcGHz,WGHz=band,threshdB=thresh,feGHz=feGHz)
         #W = w.ft()
         W = w.ftshift()
         return (w,W)

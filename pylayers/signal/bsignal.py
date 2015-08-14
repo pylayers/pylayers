@@ -466,7 +466,8 @@ class Bsignal(PyLayers):
 
             >>> from pylayers.signal.bsignal import *
             >>> import matplotlib.pyplot as plt
-            >>> e = EnImpulse(fe=100)
+            >>> e = TUsignal()
+            >>> e.EnImpulse(feGHz=100)
             >>> fig,ax = e.plot(typ=['v'])
             >>> tit1 = plt.title('original waveform')
             >>> e.save('impulse.mat')
@@ -1103,7 +1104,7 @@ class Usignal(Bsignal):
             #if ((val.ndim>1) & (val.shape[0]==1)):
             #    val = val.reshape(val.shape[1])
             U = type(self)()
-            U.x = self.x 
+            U.x = self.x
             U.y = self.y-u.y
             #U = Usignal(u1.x, u1.y - u2.y)
         return(U)
@@ -1121,7 +1122,8 @@ class Usignal(Bsignal):
             #U = type(self)()
             #U.x = self.x
             #U.y = self.y*u.y
-            L = self.align(u)
+            #L = self.align(u)
+            L = self.alignc(u)
             # #u1 = L[0]
             # #u2 = L[1]
             # #U = Usignal(u1.x, u1.y * u2.y)
@@ -1220,19 +1222,24 @@ class Usignal(Bsignal):
     def alignc(self, u2):
         """ align 2 Usignal
 
-        align <=> intersection
-        align : align two Usignal on a same base
+        alignc <=> intersection
+        alignc : align two Usignal on a same base
             return a list which contains the two aligned signals
-
-        >>> i1 = EnImpulse()
-        >>> i2 = EnImpulse()
-        >>> i2.translate(-10)
-        >>> L  = i1.alignc(i2)
 
         Returns
         -------
 
-        u1 , u2 : the 2 aligned signals
+
+        Examples
+        --------
+
+        >>> from pylayers.signal.bsignal import *
+        >>> i1 = TUsignal()
+        >>> i2 = TUsignal()
+        >>> i1.EnImpulse()
+        >>> i2.EnImpulse()
+        >>> i2.translate(-10)
+        >>> L  = i1.alignc(i2)
 
 
         """
@@ -1279,8 +1286,11 @@ class Usignal(Bsignal):
 
             u2 = u2.truncate(pstart2, pstop2 + 1)
             u1 = u1.resample(xnew)
+        L   = Usignal()
+        L.x = u1.x
+        L.y = np.vstack((u1.y,u2.y))
 
-        return(u1, u2)
+        return(L)
 
     def width(self):
         r""" get the extension support of the Usignal
@@ -1386,10 +1396,8 @@ class Usignal(Bsignal):
         else:
             y_new = self.y[posmin:posmax]
 
-        print type(self)
         U = type(self)(x_new, y_new)
 
-        #if 'U' not in locals():
         return(U)
 
     def align(self, u2):
@@ -1933,10 +1941,6 @@ class TUsignal(TBsignal, Usignal):
     """
     def __init__(self, x=np.array([]), y=np.array([]),label=[]):
         super(TUsignal,self).__init__(x,y,label)
-
-    def __repr__(self):
-        s = Usignal.__repr__(self)
-        return(s)
 
     def diff(self):
         """ numerical differentiation
