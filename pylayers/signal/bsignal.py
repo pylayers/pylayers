@@ -159,6 +159,8 @@ TOA Estimation Functions
     TUsignal.toa_cum_tm
     TUsignal.toa_cum_tmtm
     TUsignal.toa_cum_tmt
+    TUsignal.EnImpulse
+    TUsignal.MaskImpulse
 
 Input Output Functions
 -----------------------
@@ -277,24 +279,6 @@ Noise Class
     Noise.__init__
     Noise.amplify
     Noise.gating
-
-EnImpulse Class
-===============
-
-.. autosummary::
-    :toctree: generated/
-
-    EnImpulse.__init__
-    EnImpulse.demo
-
-MaskImpulse Class
-=================
-
-.. autosummary::
-    :toctree: generated/
-
-    MaskImpulse.__init__
-    MaskImpulse.show
 
 """
 import doctest
@@ -1265,6 +1249,7 @@ class Usignal(Bsignal):
         #    stops  at the minimum of both signal
         xstart = max(u1_start, u2_start)
         xstop = min(u1_stop, u2_stop)
+        assert(xstop>xstart), "error the 2 signal have disjoint support"
         dx = min(dx1, dx2)
         if tstincl(u1.x, u2.x) == 0:
             print 'Warning: Impossible to align the 2 signals'
@@ -1401,16 +1386,8 @@ class Usignal(Bsignal):
         else:
             y_new = self.y[posmin:posmax]
 
-        if t == 'Usignal':
-            U = Usignal(x_new, y_new)
-        if t == 'Tchannel':
-            U = Usignal(x_new, y_new)
-        if t == 'TUsignal':
-            U = TUsignal(x_new, y_new)
-        if t == 'FUsignal':
-            U = FUsignal(x_new, y_new)
-        if t == 'FUDsignal':
-            U = FUDsignal(x_new, y_new, self.taud)
+        print type(self)
+        U = type(self)(x_new, y_new)
 
         #if 'U' not in locals():
         return(U)
@@ -2423,6 +2400,121 @@ class TUsignal(TBsignal, Usignal):
         t1 = self.x[-1]
         self.x = np.hstack((self.x, aux - (aux[0] - t1 - te)))
 
+
+    def EnImpulse(self,**kwargs):
+        """
+        Create an Energy normalized Gaussian impulse (Usignal)
+
+        Parameters
+        ----------
+
+        fcGHz : float
+        WGHz : float
+        threshdB : float
+        feGHz : float
+
+        """
+        defaults = {'fcGHz' : 4,
+                    'WGHz' : 3,
+                    'threshdB' : 10,
+                    'feGHz' : 20
+                   }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+        WGHz = kwargs.pop('WGHz')
+        fcGHz = kwargs.pop('fcGHz')
+        feGHz = kwargs.pop('feGHz')
+        threshdB = kwargs.pop('threshdB')
+
+        #TUsignal.__init__(self)
+        Tp = (2 / (WGHz * np.pi)) * np.sqrt(abs(threshdB) * np.log(10) /20.)
+        coeff = np.sqrt(2 * np.sqrt(2)/ (Tp * np.sqrt(np.pi)))
+
+        te = 1.0 / feGHz
+        Tww = 10 * Tp
+        Ni = round(Tww / (2 * te))
+        # Tww/2 multiple de te
+        Tww = 2 * te * Ni
+        x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
+
+        y = coeff * np.exp(-(x / Tp) ** 2) * np.cos(2 * np.pi * fcGHz * x)
+        self.x = x
+        self.y = y[None,:]
+        self.Tp = Tp
+        self.fcGHz = fcGHz
+
+    #    def demo():
+    #        """ small demo in the docsting
+    #
+    #        Examples
+    #        --------
+    #
+    #        >>> from pylayers.signal.bsignal import *
+    #        >>> ip    = EnImpulse(fc=4,band=3,thresh=10,fe=100)
+    #        >>> Eip1  = ip.energy()
+    #        >>> ESDu  = ip.esd(mode='unilateral')
+    #        >>> ESDb  = ip.esd(mode='bilateral')
+    #        >>> df    = ESDu.dx()
+    #        >>> Eipu  = sum(ESDu.y)*df
+    #        >>> Eipb  = sum(ESDb.y)*df
+    #        >>> erru  = Eip1-Eipu
+    #        >>> errb  = Eip1-Eipb
+    #
+    #        """
+    #        pass
+
+
+    def MaskImpulse(self,**kwargs):
+        """
+        MaskImpulse : Create an Energy normalized Gaussian impulse (Usignal)
+
+        def __init__(self, x=np.array([]), fc=4, band=3, thresh=10, Tp=100, Pm=-41.3, R=50, fe=100):
+
+            Parameters
+            ----------
+            fc     : center frequency (GHz)
+            band   : bandwidth (GHz)
+            Tp     : Pulse repetion rate
+            R      : Resistance
+            Pm     : PSD max
+            fe     : sampling freqeuncy
+            thresh : definition of band at Pm - thresh (dB)
+
+            """
+        self.fc = fc
+        self.band = band
+        self.thresh = thresh
+        self.Tp = Tp
+        self.Pm = Pm
+        self.R = R
+        self.fe = fe
+
+        Usignal.__init__(self)
+        #alpha  = 1./(2*np.sqrt(abs(thresh)*np.log(10)/20))
+        alpha = 1. / (2 * np.sqrt(abs(thresh) * np.log(10) / 10))
+        tau = 1 / (alpha * band * np.pi * np.sqrt(2))
+        A = np.sqrt(2 * R * Tp * 10 ** (Pm / 10)) / (tau * np.sqrt(np.pi))
+        if len(x) == 0:
+            te = 1.0 / fe
+            Tw = 10. / band
+            Ni = round(Tw / (2 * te))
+            # Tww/2 multiple de te
+            Tww = 2 * te * Ni
+            x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
+
+        y = A * np.exp(-(x / tau) ** 2) * np.cos(2 * np.pi * fc * x)
+        self.x = x
+        self.y = y
+
+    #    def show(self):
+    #        plt.subplot(211)
+    #        self.plot()
+    #        plt.subplot(212)
+    #        P = self.psd(self.Tp, self.R)
+    #        P.plotdB(mask=True)
 
 
 class FBsignal(Bsignal):
@@ -3638,149 +3730,6 @@ class Noise(TUsignal):
     #    self.x = o.x
     #    self.y = o.y
 
-
-class EnImpulse(TUsignal):
-    """
-    Create an Energy normalized Gaussian impulse (Usignal)
-
-    EnImpulse(x,fc,band,thresh,fe)
-
-          fc     (GHz)   (def = 4GHz)
-          band   (GHz)   (def = 3GHz)
-          thresh (dB)    (def = 10dB)
-          fe     (GHz)   (def = 100GHz)
-
-
-    """
-    def __init__(self, **kwargs):
-        """
-
-        Parameters
-        ----------
-
-        fcGHz : float
-        WGHz :
-        threshdB
-        feGHz :
-        """
-        defaults = {'fcGHz' : 4,
-                    'WGHz' : 3,
-                    'threshdB' : 10,
-                    'feGHz' : 20
-                   }
-
-        for k in defaults:
-            if k not in kwargs:
-                kwargs[k]=defaults[k]
-
-        WGHz = kwargs.pop('WGHz')
-        fcGHz = kwargs.pop('fcGHz')
-        feGHz = kwargs.pop('feGHz')
-        threshdB = kwargs.pop('threshdB')
-
-        #TUsignal.__init__(self)
-        Tp = (2 / (WGHz * np.pi)) * np.sqrt(abs(threshdB) * np.log(10) /20.)
-        coeff = np.sqrt(2 * np.sqrt(2)/ (Tp * np.sqrt(np.pi)))
-
-        te = 1.0 / feGHz
-        Tww = 10 * Tp
-        Ni = round(Tww / (2 * te))
-        # Tww/2 multiple de te
-        Tww = 2 * te * Ni
-        x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
-
-        y = coeff * np.exp(-(x / Tp) ** 2) * np.cos(2 * np.pi * fcGHz * x)
-        self.x = x
-        self.y = y[None,:]
-        self.Tp = Tp
-        self.fcGHz = fcGHz
-
-    def demo():
-        """ small demo in the docsting
-
-        Examples
-        --------
-
-        >>> from pylayers.signal.bsignal import *
-        >>> ip    = EnImpulse(fc=4,band=3,thresh=10,fe=100)
-        >>> Eip1  = ip.energy()
-        >>> ESDu  = ip.esd(mode='unilateral')
-        >>> ESDb  = ip.esd(mode='bilateral')
-        >>> df    = ESDu.dx()
-        >>> Eipu  = sum(ESDu.y)*df
-        >>> Eipb  = sum(ESDb.y)*df
-        >>> erru  = Eip1-Eipu
-        >>> errb  = Eip1-Eipb
-
-        """
-        pass
-
-
-class MaskImpulse(TUsignal):
-    """
-    MaskImpulse : Create an Energy normalized Gaussian impulse (Usignal)
-
-          fc     (GHz)   (def = 4GHz)
-          band   (GHz)   (def = 3GHz)
-          thresh (dB)    (def = 10dB)
-          fe     (GHz)   (def = 100GHz)
-
-    Examples
-    --------
-
-        >>> ip    = EnImpulse(fc=4,band=3,thresh=10,fe=20)
-        >>> Eip1  = ip.energy()
-        >>> ESDip = ip.esd()
-        >>> df    = ESDip.dx()
-        >>> Eip2  = sum(ESDip.y)*df
-        >>> err   = Eip1-Eip2
-
-    """
-    def __init__(self, x=np.array([]), fc=4, band=3, thresh=10, Tp=100, Pm=-41.3, R=50, fe=100):
-        """ object constructor
-
-        Parameters
-        ----------
-        fc     : center frequency (GHz)
-        band   : bandwidth (GHz)
-        Tp     : Pulse repetion rate
-        R      : Resistance
-        Pm     : PSD max
-        fe     : sampling freqeuncy
-        thresh : definition of band at Pm - thresh (dB)
-
-        """
-        self.fc = fc
-        self.band = band
-        self.thresh = thresh
-        self.Tp = Tp
-        self.Pm = Pm
-        self.R = R
-        self.fe = fe
-
-        Usignal.__init__(self)
-        #alpha  = 1./(2*np.sqrt(abs(thresh)*np.log(10)/20))
-        alpha = 1. / (2 * np.sqrt(abs(thresh) * np.log(10) / 10))
-        tau = 1 / (alpha * band * np.pi * np.sqrt(2))
-        A = np.sqrt(2 * R * Tp * 10 ** (Pm / 10)) / (tau * np.sqrt(np.pi))
-        if len(x) == 0:
-            te = 1.0 / fe
-            Tw = 10. / band
-            Ni = round(Tw / (2 * te))
-            # Tww/2 multiple de te
-            Tww = 2 * te * Ni
-            x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
-
-        y = A * np.exp(-(x / tau) ** 2) * np.cos(2 * np.pi * fc * x)
-        self.x = x
-        self.y = y
-
-    def show(self):
-        plt.subplot(211)
-        self.plot()
-        plt.subplot(212)
-        P = self.psd(self.Tp, self.R)
-        P.plotdB(mask=True)
 
 
 def test():
