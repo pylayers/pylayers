@@ -186,17 +186,19 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="pylayers-simul-link">
-<h1>pylayers.simul.link<a class="headerlink" href="#pylayers-simul-link" title="Permalink to this headline">¶</a></h1>
-<p>This class is used for calculation of a radio channel between two points A and
-B in a Layout L</p>
-<span class="target" id="module-pylayers.simul.link"></span><p>This module runs the electromagnetic simulation at the link level.
-It stores simulated objects in <cite>hdf5</cite> format.</p>
-<p>Link is a MetaClass
-Dlink is for deterministic links
-Slink is for statistical links.</p>
+  <div class="section" id="module-pylayers.simul.link">
+<span id="pylayers-simul-link"></span><h1>pylayers.simul.link<a class="headerlink" href="#module-pylayers.simul.link" title="Permalink to this headline">¶</a></h1>
+<p>This module runs the electromagnetic simulation for a link.
+A deterministic link has two termination points and an associated Layout 
+whereas a statistical link do not need any of those precursor object.</p>
+<p>It stores simulated objects in <cite>hdf5</cite> format.</p>
 <div class="section" id="link-class">
 <h2>Link Class<a class="headerlink" href="#link-class" title="Permalink to this headline">¶</a></h2>
+<p>Link is a MetaClass, which derives from <cite>Tchannel</cite>.
+Tchannel is a transmission channel i.e a radio channel
+which includes both link termination antennas.</p>
+<p>A common factor of both statistical (SLink) and deterministic channel (DLink) 
+is the exitence of <img src="../_images/mathmpl/math-74f622ea16.png" style="position: relative; bottom: -7px"/> and <img src="../_images/mathmpl/math-2517e81469.png" style="position: relative; bottom: -7px"/></p>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -211,6 +213,7 @@ Slink is for statistical links.</p>
 </div>
 <div class="section" id="slink-class">
 <h2>SLink Class<a class="headerlink" href="#slink-class" title="Permalink to this headline">¶</a></h2>
+<p>Slink is for statistical links.</p>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -225,6 +228,7 @@ Slink is for statistical links.</p>
 </div>
 <div class="section" id="dlink-class">
 <h2>DLink Class<a class="headerlink" href="#dlink-class" title="Permalink to this headline">¶</a></h2>
+<p>Dlink is for deterministic links</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.simul.link</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">aktk</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
@@ -239,7 +243,7 @@ Slink is for statistical links.</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.eval.html#pylayers.simul.link.DLink.eval" title="pylayers.simul.link.DLink.eval"><code class="xref py py-obj docutils literal"><span class="pre">DLink.eval</span></code></a>(**kwargs)</td>
-<td>Evaluate the link</td>
+<td>evaluate the link</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink._show3.html#pylayers.simul.link.DLink._show3" title="pylayers.simul.link.DLink._show3"><code class="xref py py-obj docutils literal"><span class="pre">DLink._show3</span></code></a>([rays,&nbsp;lay,&nbsp;ant,&nbsp;newfig])</td>
 <td>display the simulation scene using Mayavi</td>
@@ -333,7 +337,7 @@ Slink is for statistical links.</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on août 12, 2015.
+      Last updated on août 15, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.simul.link.txt"

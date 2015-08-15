@@ -167,22 +167,14 @@
 <li><a class="reference internal" href="#tbsignal-class">TBsignal Class</a></li>
 <li><a class="reference internal" href="#tusignal-class">TUsignal Class</a><ul>
 <li><a class="reference internal" href="#fourier-functions">Fourier Functions</a></li>
-<li><a class="reference internal" href="#cir-functions">CIR Functions</a></li>
 <li><a class="reference internal" href="#visualization-functions">Visualization Functions</a></li>
-<li><a class="reference internal" href="#energy-functions">Energy Functions</a></li>
-<li><a class="reference internal" href="#toa-estimation-functions">TOA Estimation Functions</a></li>
 <li><a class="reference internal" href="#input-output-functions">Input Output Functions</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#tudsignal-class">TUDsignal Class</a></li>
 <li><a class="reference internal" href="#fbsignal-class">FBsignal Class</a></li>
 <li><a class="reference internal" href="#fusignal-class">FUsignal Class</a></li>
-<li><a class="reference internal" href="#fudsignal-class">FUDsignal Class</a></li>
-<li><a class="reference internal" href="#fudasignal-class">FUDAsignal Class</a></li>
 <li><a class="reference internal" href="#fhsignal-class">FHsignal Class</a></li>
 <li><a class="reference internal" href="#noise-class">Noise Class</a></li>
-<li><a class="reference internal" href="#enimpulse-class">EnImpulse Class</a></li>
-<li><a class="reference internal" href="#maskimpulse-class">MaskImpulse Class</a></li>
 </ul>
 </li>
 </ul>
@@ -222,44 +214,56 @@
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.__repr__.html#pylayers.signal.bsignal.Bsignal.__repr__" title="pylayers.signal.bsignal.Bsignal.__repr__"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.__repr__</span></code></a>()</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.extract.html#pylayers.signal.bsignal.Bsignal.extract" title="pylayers.signal.bsignal.Bsignal.extract"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.extract</span></code></a>(u)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.mean.html#pylayers.signal.bsignal.Bsignal.mean" title="pylayers.signal.bsignal.Bsignal.mean"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.mean</span></code></a>()</td>
+<td>mean value of the signal</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.min.html#pylayers.signal.bsignal.Bsignal.min" title="pylayers.signal.bsignal.Bsignal.min"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.min</span></code></a>()</td>
+<td>min value of the signal (module if complex)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.max.html#pylayers.signal.bsignal.Bsignal.max" title="pylayers.signal.bsignal.Bsignal.max"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.max</span></code></a>()</td>
+<td>max value of the signal (module if complex)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.len.html#pylayers.signal.bsignal.Bsignal.len" title="pylayers.signal.bsignal.Bsignal.len"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.len</span></code></a>()</td>
+<td>returm length of x axis</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.append.html#pylayers.signal.bsignal.Bsignal.append" title="pylayers.signal.bsignal.Bsignal.append"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.append</span></code></a>(bs)</td>
+<td>append bs to Bsignal</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.extract.html#pylayers.signal.bsignal.Bsignal.extract" title="pylayers.signal.bsignal.Bsignal.extract"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.extract</span></code></a>(u)</td>
 <td>extract a subset of signal from index</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.save.html#pylayers.signal.bsignal.Bsignal.save" title="pylayers.signal.bsignal.Bsignal.save"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.save</span></code></a>(filename)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.save.html#pylayers.signal.bsignal.Bsignal.save" title="pylayers.signal.bsignal.Bsignal.save"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.save</span></code></a>(filename)</td>
 <td>save Bsignal in Matlab File Format</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.load.html#pylayers.signal.bsignal.Bsignal.load" title="pylayers.signal.bsignal.Bsignal.load"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.load</span></code></a>(filename)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.load.html#pylayers.signal.bsignal.Bsignal.load" title="pylayers.signal.bsignal.Bsignal.load"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.load</span></code></a>(filename)</td>
 <td>load a Bsignal from a Matlab File</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.setx.html#pylayers.signal.bsignal.Bsignal.setx" title="pylayers.signal.bsignal.Bsignal.setx"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.setx</span></code></a>(x)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.setx.html#pylayers.signal.bsignal.Bsignal.setx" title="pylayers.signal.bsignal.Bsignal.setx"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.setx</span></code></a>(x)</td>
 <td>setx : set x vector</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.sety.html#pylayers.signal.bsignal.Bsignal.sety" title="pylayers.signal.bsignal.Bsignal.sety"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.sety</span></code></a>(fun)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.sety.html#pylayers.signal.bsignal.Bsignal.sety" title="pylayers.signal.bsignal.Bsignal.sety"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.sety</span></code></a>(fun)</td>
 <td>sety : set y vector</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.stem.html#pylayers.signal.bsignal.Bsignal.stem" title="pylayers.signal.bsignal.Bsignal.stem"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.stem</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.stem.html#pylayers.signal.bsignal.Bsignal.stem" title="pylayers.signal.bsignal.Bsignal.stem"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.stem</span></code></a>(**kwargs)</td>
 <td>stem display</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.step.html#pylayers.signal.bsignal.Bsignal.step" title="pylayers.signal.bsignal.Bsignal.step"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.step</span></code></a>([color])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.step.html#pylayers.signal.bsignal.Bsignal.step" title="pylayers.signal.bsignal.Bsignal.step"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.step</span></code></a>([color])</td>
 <td>plot steps display</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.cformat.html#pylayers.signal.bsignal.Bsignal.cformat" title="pylayers.signal.bsignal.Bsignal.cformat"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.cformat</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.cformat.html#pylayers.signal.bsignal.Bsignal.cformat" title="pylayers.signal.bsignal.Bsignal.cformat"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.cformat</span></code></a>(**kwargs)</td>
 <td>complex format</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.imshow.html#pylayers.signal.bsignal.Bsignal.imshow" title="pylayers.signal.bsignal.Bsignal.imshow"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.imshow</span></code></a>(**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.imshow.html#pylayers.signal.bsignal.Bsignal.imshow" title="pylayers.signal.bsignal.Bsignal.imshow"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.imshow</span></code></a>(**kwargs)</td>
 <td>imshow of y matrix</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.plot.html#pylayers.signal.bsignal.Bsignal.plot" title="pylayers.signal.bsignal.Bsignal.plot"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.plot</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.plot.html#pylayers.signal.bsignal.Bsignal.plot" title="pylayers.signal.bsignal.Bsignal.plot"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.plot</span></code></a>(**kwargs)</td>
 <td>plot signal</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.flatteny.html#pylayers.signal.bsignal.Bsignal.flatteny" title="pylayers.signal.bsignal.Bsignal.flatteny"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.flatteny</span></code></a>([yrange,&nbsp;reversible])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.flatteny.html#pylayers.signal.bsignal.Bsignal.flatteny" title="pylayers.signal.bsignal.Bsignal.flatteny"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.flatteny</span></code></a>([yrange,&nbsp;reversible])</td>
 <td>flatten y array</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.gating.html#pylayers.signal.bsignal.Bsignal.gating" title="pylayers.signal.bsignal.Bsignal.gating"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.gating</span></code></a>(xmin,&nbsp;xmax)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.gating.html#pylayers.signal.bsignal.Bsignal.gating" title="pylayers.signal.bsignal.Bsignal.gating"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.gating</span></code></a>(xmin,&nbsp;xmax)</td>
 <td>gating between xmin and xmax</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Bsignal.len.html#pylayers.signal.bsignal.Bsignal.len" title="pylayers.signal.bsignal.Bsignal.len"><code class="xref py py-obj docutils literal"><span class="pre">Bsignal.len</span></code></a>()</td>
-<td>returm length of x axis</td>
 </tr>
 </tbody>
 </table>
@@ -273,7 +277,7 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Usignal.__init__.html#pylayers.signal.bsignal.Usignal.__init__" title="pylayers.signal.bsignal.Usignal.__init__"><code class="xref py py-obj docutils literal"><span class="pre">Usignal.__init__</span></code></a>([x,&nbsp;dtype,&nbsp;y,&nbsp;dtype,&nbsp;label])</td>
-<td></td>
+<td>object constructor</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.Usignal.__repr__.html#pylayers.signal.bsignal.Usignal.__repr__" title="pylayers.signal.bsignal.Usignal.__repr__"><code class="xref py py-obj docutils literal"><span class="pre">Usignal.__repr__</span></code></a>()</td>
 <td></td>
@@ -421,35 +425,6 @@
 </tbody>
 </table>
 </div>
-<div class="section" id="cir-functions">
-<h3>CIR Functions<a class="headerlink" href="#cir-functions" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.aggcir</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.ecdf</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.taumax</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.tau_moy</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.delays</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.tau_rms</span></code></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
 <div class="section" id="visualization-functions">
 <h3>Visualization Functions<a class="headerlink" href="#visualization-functions" title="Permalink to this headline">¶</a></h3>
 <table border="1" class="longtable docutils">
@@ -474,98 +449,10 @@
 <td>Correlate TUsignal with a normalized gaussian of standard deviation sigma</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.resample.html#pylayers.signal.bsignal.TUsignal.resample" title="pylayers.signal.bsignal.TUsignal.resample"><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.resample</span></code></a>(x_new[,&nbsp;kind])</td>
-<td>resample the TUsignal with a new x base</td>
+<td>resample the Usignal with a new x base</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.convolve.html#pylayers.signal.bsignal.TUsignal.convolve" title="pylayers.signal.bsignal.TUsignal.convolve"><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.convolve</span></code></a>(u)</td>
 <td>time domain convolution</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="energy-functions">
-<h3>Energy Functions<a class="headerlink" href="#energy-functions" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.Epercent</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.Etau0</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.Ewin</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.Etot</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.Efirst</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.Efirst_loc.html#pylayers.signal.bsignal.TUsignal.Efirst_loc" title="pylayers.signal.bsignal.TUsignal.Efirst_loc"><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.Efirst_loc</span></code></a>(nint,&nbsp;E0)</td>
-<td>find the Efirst using the mean like toa_max</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.Efirst_corr</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.Efirst_toath</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.Emax</span></code></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="toa-estimation-functions">
-<h3>TOA Estimation Functions<a class="headerlink" href="#toa-estimation-functions" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.tau_Emax</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.toa_max2</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.toa_new</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.toa_win</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.toa_max</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.toa_th</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.toa_cum</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.toa_th_tmtm</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.toa_th_tm</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.toa_th_tmt</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.toa_cum_tm</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.toa_cum_tmtm</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">TUsignal.toa_cum_tmt</span></code></td>
-<td></td>
 </tr>
 </tbody>
 </table>
@@ -587,26 +474,6 @@
 </tbody>
 </table>
 </div>
-</div>
-<div class="section" id="tudsignal-class">
-<h2>TUDsignal Class<a class="headerlink" href="#tudsignal-class" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">TUDsignal.__init__</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">TUDsignal.__repr__</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">TUDsignal.fig</span></code></td>
-<td></td>
-</tr>
-</tbody>
-</table>
 </div>
 <div class="section" id="fbsignal-class">
 <h2>FBsignal Class<a class="headerlink" href="#fbsignal-class" title="Permalink to this headline">¶</a></h2>
@@ -694,7 +561,7 @@
 <td>non finished</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.resample.html#pylayers.signal.bsignal.FUsignal.resample" title="pylayers.signal.bsignal.FUsignal.resample"><code class="xref py py-obj docutils literal"><span class="pre">FUsignal.resample</span></code></a>(x_new[,&nbsp;kind])</td>
-<td>resample a complex signal</td>
+<td>resample the Usignal with a new x base</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.symH.html#pylayers.signal.bsignal.FUsignal.symH" title="pylayers.signal.bsignal.FUsignal.symH"><code class="xref py py-obj docutils literal"><span class="pre">FUsignal.symH</span></code></a>([parity])</td>
 <td>enforce Hermitian symetry</td>
@@ -719,79 +586,6 @@
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.decimate.html#pylayers.signal.bsignal.FUsignal.decimate" title="pylayers.signal.bsignal.FUsignal.decimate"><code class="xref py py-obj docutils literal"><span class="pre">FUsignal.decimate</span></code></a>([N])</td>
 <td>decimate FUsignal by N</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.tap.html#pylayers.signal.bsignal.FUsignal.tap" title="pylayers.signal.bsignal.FUsignal.tap"><code class="xref py py-obj docutils literal"><span class="pre">FUsignal.tap</span></code></a>(**kwargs)</td>
-<td>calculates channel taps</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="fudsignal-class">
-<h2>FUDsignal Class<a class="headerlink" href="#fudsignal-class" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">FUDsignal.__init__</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">FUDsignal.__repr__</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">FUDsignal.minphas</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">FUDsignal.totime</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">FUDsignal.iftd</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">FUDsignal.ft1</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">FUDsignal.ftau</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">FUDsignal.cir</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">FUDsignal.plot3d</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">FUDsignal.ft2</span></code></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="fudasignal-class">
-<h2>FUDAsignal Class<a class="headerlink" href="#fudasignal-class" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">FUDAsignal.__init__</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">FUDAsignal.__repr__</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">FUDAsignal.cut</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">FUDAsignal.sort</span></code></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">FUDAsignal.showtap</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">FUDAsignal.tap</span></code></td>
-<td></td>
 </tr>
 </tbody>
 </table>
@@ -842,48 +636,6 @@
 </tbody>
 </table>
 </div>
-<div class="section" id="enimpulse-class">
-<h2>EnImpulse Class<a class="headerlink" href="#enimpulse-class" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.EnImpulse.__init__.html#pylayers.signal.bsignal.EnImpulse.__init__" title="pylayers.signal.bsignal.EnImpulse.__init__"><code class="xref py py-obj docutils literal"><span class="pre">EnImpulse.__init__</span></code></a>(**kwargs)</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.EnImpulse.demo.html#pylayers.signal.bsignal.EnImpulse.demo" title="pylayers.signal.bsignal.EnImpulse.demo"><code class="xref py py-obj docutils literal"><span class="pre">EnImpulse.demo</span></code></a>()</td>
-<td>small demo in the docsting</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="maskimpulse-class">
-<h2>MaskImpulse Class<a class="headerlink" href="#maskimpulse-class" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.MaskImpulse.__init__.html#pylayers.signal.bsignal.MaskImpulse.__init__" title="pylayers.signal.bsignal.MaskImpulse.__init__"><code class="xref py py-obj docutils literal"><span class="pre">MaskImpulse.__init__</span></code></a>([x,&nbsp;dtype,&nbsp;fc,&nbsp;band,&nbsp;...])</td>
-<td>object constructor</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.MaskImpulse.show.html#pylayers.signal.bsignal.MaskImpulse.show" title="pylayers.signal.bsignal.MaskImpulse.show"><code class="xref py py-obj docutils literal"><span class="pre">MaskImpulse.show</span></code></a>()</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
 </div>
 
 
@@ -897,7 +649,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on août 12, 2015.
+      Last updated on août 15, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.signal.bsignal.txt"

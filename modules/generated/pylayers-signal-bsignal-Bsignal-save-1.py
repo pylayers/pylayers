@@ -1,6 +1,7 @@
 from pylayers.signal.bsignal import *
 import matplotlib.pyplot as plt
-e = EnImpulse(fe=100)
+e = TUsignal()
+e.EnImpulse(feGHz=100)
 fig,ax = e.plot(typ=['v'])
 tit1 = plt.title('original waveform')
 e.save('impulse.mat')
