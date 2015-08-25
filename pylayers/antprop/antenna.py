@@ -215,7 +215,25 @@ class Pattern(PyLayers):
         nth:90
         nph:181
         first: boolean True if first call (to define self.param)
-        grid:  True for pattern : False in RT
+        grid:  True for pattern mode, False for Ray Tracing mode
+        th0 : theta initial value
+        th1 : theta finale value
+        ph0 : phi initial value
+        ph1 : phi final value
+
+
+        Examples
+        --------
+
+        >>> from pylayers.antprop.aarray import *
+        >>> A0=Antenna('Omni')
+        >>> A1=Antenna('Gauss')
+        >>> A2=Antenna('3gpp')
+        >>> A3=ULArray()
+        >>> A0.eval()
+        >>> A1.eval()
+        >>> A2.eval()
+        >>> A3.eval()
 
         """
         defaults = {'th':[],
@@ -223,7 +241,11 @@ class Pattern(PyLayers):
                     'fGHz':[],
                     'nth':90,
                     'nph':181,
-                    'grid':True
+                    'grid':True,
+                    'th0':0,
+                    'th1':np.pi,
+                    'ph0':0,
+                    'ph1':2*np.pi
                    }
         for k in defaults:
             if k not in kwargs:
@@ -237,11 +259,13 @@ class Pattern(PyLayers):
             self.fGHz = kwargs['fGHz']
 
         self.nf = len(self.fGHz)
+
         if (kwargs['th'] == []) and (kwargs['ph'] == []):
-            self.theta = np.linspace(0,np.pi,kwargs['nth'])
-            self.phi = np.linspace(0,2*np.pi,kwargs['nph'],endpoint=False)
+            self.theta = np.linspace(kwargs['th0'],kwargs['th1'],kwargs['nth'])
+            self.phi = np.linspace(kwargs['ph0'],kwargs['ph1'],kwargs['nph'],endpoint=False)
             self.grid = True
         else :
+            assert(len(kwargs['th'])==len(kwargs['ph']))
             self.theta = kwargs['th']
             self.phi = kwargs['ph']
 
@@ -251,6 +275,8 @@ class Pattern(PyLayers):
         self.grid = kwargs['grid']
 
         eval('self._Pattern__p'+self.typ)(param=self.param)
+
+        self.evaluated = True
 
     def __pOmni(self,**kwargs):
         """  omnidirectional pattern
@@ -279,7 +305,7 @@ class Pattern(PyLayers):
             self.evaluated = True
         else:
             self.sqG =  np.array(np.sqrt(self.G))[None,None]
-        self.F()
+        self.radF()
 
     def __pGauss(self,**kwargs):
         """ Gauss pattern
@@ -385,7 +411,7 @@ class Pattern(PyLayers):
             GhdB = (-np.minimum(12*(phi/hpbwh)**2,fbrh)+gm)
             GdB  = GhdB+GvdB
             self.sqG = np.sqrt(10**(GdB/10.))
-        self.F()
+        self.radF()
 
     def __pvsh3(self,**kwargs):
         """ calculate pattern for vsh3
@@ -525,10 +551,77 @@ class Pattern(PyLayers):
 
     def __pArray(self,**kwargs):
         """ Array factor
-        """
-        print "evaluate Array Factor"
 
-    def F(self):
+        Nd : Number of directions
+        Np : Number of points
+
+        """
+
+        if 'param' not in kwargs or kwargs['param']=={}:
+            kwargs['param']=defaults['param']
+
+        lamda = (0.3/self.fGHz)
+        k     = 2*np.pi/lamda
+
+        if self.grid:
+            sx = np.sin(self.theta[:,None])*np.cos(self.phi[None,:])    # Ntheta x Nphi
+            sy = np.sin(self.theta[:,None])*np.sin(self.phi[None,:])    # Ntheta x Nphi
+            sz = np.cos(self.theta[:,None])*np.ones(len(self.phi))[None,:]   # Ntheta x Nphi
+            sx = sx.reshape(self.nth*self.nph)
+            sy = sy.reshape(self.nth*self.nph)
+            sz = sz.reshape(self.nth*self.nph)
+        else:
+            sx = np.sin(self.theta)*np.cos(self.phi)    # Nd x 1
+            sy = np.sin(self.theta)*np.sin(self.phi)    # Nd x 1
+            sz = np.cos(self.theta)                     # Nd x 1
+
+        self.s  = np.vstack((sx,sy,sz)).T         # Nd x 3
+        #
+        # F = exp(+jk s.p)
+        #
+
+        # s : Nd x 3
+        # p : 3 x Np
+        #
+        # sdotp : Nd x Np
+
+        sdotp  = np.dot(self.s,self.p)   # s . p
+
+
+        #
+        # Nf : frequency
+        # Nd : direction
+        # Np : points
+        # Nu : user
+        #
+        # w :  Nf x Np x Nu
+        #
+        # add direction axisi (=1) in w
+        self.w   = self.w[:,None,:,:]
+        # E :  Nf x Nd x Np x 1
+        # w :  Nf x 1  x Np x Nu
+        # wE : Nf x Nd x Np x Nu
+        E    = np.exp(1j*k[:,None,None]*sdotp[None,:,:])[:,:,:,None]
+
+        self.wE = self.w*E
+
+        #
+        # sum over points (axes 2 Np )
+        #
+        # Nf x Nd x Ntxru
+        # or
+        # Nf x Ntheta x Nphi x Ntxru
+        #
+
+        self.F = np.sum(self.wE,axis=2)
+
+        if self.grid:
+            self.Ft = self.F.reshape(self.nf,self.nth,self.nph,self.ntxru)
+            self.Fp = self.F.reshape(self.nf,self.nth,self.nph,self.ntxru)
+
+        self.gain()
+
+    def radF(self):
         """ evaluate radiation fonction w.r.t polarization
 
 
@@ -562,6 +655,237 @@ class Pattern(PyLayers):
                          +  self.Ft * np.conj(self.Ft) )
         self.sqG = np.sqrt(self.G)
         self.GdB = 10*np.log10(self.G)
+
+    def plotG(self,**kwargs):
+        """ antenna plot gain in 2D
+
+        Parameters
+        ----------
+
+        fGHz : frequency
+        phd  : phi in degrees
+        thd  : theta in degrees
+        GmaxdB :  max gain to be displayed
+        polar : boolean
+
+        Returns
+        -------
+
+        fig
+        ax
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> import matplotlib.pyplot as plt
+            >>> from pylayers.antprop.antenna import *
+            >>> A = Antenna('defant.trx')
+            >>> fig,ax = A.plotG(fGHz=[2,3,4],phd=0)
+            >>> fig,ax = A.plotG(fGHz=[2,3,4],thd=90)
+
+        """
+
+        if not self.evaluated:
+            self.Fsynth(pattern=True)
+
+        dtr = np.pi/180.
+
+        defaults = {'fGHz' : [],
+                    'dyn' : 8 ,
+                    'phd' : 0,
+                    'legend':True,
+                    'GmaxdB':5,
+                    'polar':True,
+                    'topos':False,
+                    'source':'satimo',
+                    'u':0,
+                    }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        args = {}
+        for k in kwargs:
+            if k not in defaults:
+                args[k] = kwargs[k]
+
+        if 'fig' not in kwargs:
+            fig = plt.figure(figsize=(8, 8))
+        else:
+            fig = kwargs['fig']
+
+        if 'ax' not in kwargs:
+            #ax = fig.add_axes([0.1, 0.1, 0.8, 0.8], polar=True, axisbg='#d5de9c')
+            if kwargs['polar']:
+                ax = fig.add_axes([0.1, 0.1, 0.8, 0.8], polar=True )
+            else:
+                ax = fig.add_subplot(111)
+        else:
+            ax = kwargs['ax']
+
+        u = kwargs['u']
+        rc('grid', color='#316931', linewidth=1, linestyle='-')
+        rc('xtick', labelsize=15)
+        rc('ytick', labelsize=15)
+
+        DyndB = kwargs['dyn'] * 5
+        GmindB = kwargs['GmaxdB'] - DyndB
+        #print "DyndB",DyndB
+        #print "GmindB",GmindB
+
+        # force square figure and square axes looks better for polar, IMO
+
+        t1 = np.arange(5, DyndB + 5, 5)
+        t2 = np.arange(GmindB + 5, kwargs['GmaxdB'] + 5, 5)
+
+        col = ['k', 'r', 'g', 'b', 'm', 'c', 'y']
+        cpt = 0
+
+        if len(self.fGHz) > 1 :
+            fstep = self.fGHz[1]-self.fGHz[0]
+        else :
+            fstep = np.array((abs(self.fGHz-kwargs['fGHz'][0])+1))
+        #dtheta = self.theta[1,0]-self.theta[0,0]
+        #dphi = self.phi[0,1]-self.phi[0,0]
+        dtheta = self.theta[1]-self.theta[0]
+        dphi = self.phi[1]-self.phi[0]
+        if kwargs['fGHz']==[]:
+            lfreq = [self.fGHz[0]]
+        else:
+            lfreq = kwargs['fGHz']
+        for f in lfreq:
+            df  = abs(self.fGHz-f)
+            ik0 = np.where(df==min(df))
+            ik = ik0[0][0]
+            #ik=0
+            chaine = 'f = %3.2f GHz' %(self.fGHz[ik])
+            # all theta
+            if 'phd' in kwargs:
+                itheta = np.arange(self.nth)
+                #iphi1 = np.where(abs(self.phi[0,:]-kwargs['phd']*dtr)<dtheta)[0][0]
+                iphi1 = np.where(abs(self.phi-kwargs['phd']*dtr)<dphi)[0][0]
+                Np = self.nph
+
+                if np.mod(Np, 2) == 0:
+                    iphi2 = np.mod(iphi1 + Np / 2, Np)
+                else:
+                    iphi2 = np.mod(iphi1 + (Np - 1) / 2, Np)
+
+                #   0 < theta < pi/2
+                #u1 = np.where((self.theta[:,0] <= np.pi / 2) &
+                #              (self.theta[:,0] >= 0))[0]
+                u1 = np.where((self.theta <= np.pi / 2.) & (self.theta >= 0))[0]
+                #   0:Nt-1
+                u2 = np.arange(self.nth)
+                #   pi/2 < theta < pi
+                #u3 = np.nonzero((self.theta[:,0] <= np.pi) & ( self.theta[:,0]
+                #                                              > np.pi / 2))[0]
+                u3 = np.nonzero((self.theta <= np.pi) & ( self.theta > np.pi / 2))[0]
+                if len(self.sqG)==3:
+                    if kwargs['polar']:
+                        if kwargs['source']=='satimo':
+                            r1 = -GmindB + 20 * np.log10(  self.sqG[ik, u1, iphi1]+1e-12)
+                        if kwargs['source']=='cst':
+                            r1 = -GmindB + 20 * np.log10(  self.sqG[ik, u1, iphi1]/np.sqrt(30)+1e-12)
+
+                        #r1  = self.sqG[k,u1[0],iphi1]
+                        negr1 = np.nonzero(r1 < 0)
+                        r1[negr1[0]] = 0
+                        if kwargs['source']=='satimo':
+                            r2 = -GmindB + 20 * np.log10( self.sqG[ik, u2, iphi2]+1e-12)
+                        if kwargs['source']=='cst':
+                            r2 = -GmindB + 20 * np.log10(  self.sqG[ik, u2,iphi2]/np.sqrt(30)+1e-12)
+                        #r2  = self.sqG[k,u2,iphi2]
+                        negr2 = np.nonzero(r2 < 0)
+                        r2[negr2[0]] = 0
+                        if kwargs['source']=='satimo':
+                            r3 = -GmindB + 20 * np.log10( self.sqG[ik, u3, iphi1]+1e-12)
+                        if kwargs['source']=='cst':
+                            r3 = -GmindB + 20 * np.log10(  self.sqG[ik, u3, iphi1]/np.sqrt(30)+1e-12)
+                        #r3  = self.sqG[k,u3[0],iphi1]
+                        negr3 = np.nonzero(r3 < 0)
+                        r3[negr3[0]] = 0
+                        r = np.hstack((r1[::-1], r2, r3[::-1], r1[-1]))
+
+                        a1 = np.arange(0, 360, 30)
+                        a2 = [90, 60, 30, 0, 330, 300, 270, 240, 210, 180, 150, 120]
+                        rline2, rtext2 = plt.thetagrids(a1, a2)
+
+                    else:
+                        r1 = 20 * np.log10( self.sqG[ik, u1, iphi1]+1e-12)
+                        r2 = 20 * np.log10( self.sqG[ik, u2, iphi2]+1e-12)
+                        r3 = 20 * np.log10( self.sqG[ik, u3, iphi1]+1e-12)
+
+                    r = np.hstack((r1[::-1], r2, r3[::-1], r1[-1]))
+                else:
+                    if kwargs['polar']:
+                        if kwargs['source']=='satimo':
+                            r1 = -GmindB + 20 * np.log10(  self.sqG[ik, u1,iphi1,u]+1e-12)
+                        if kwargs['source']=='cst':
+                            r1 = -GmindB + 20 * np.log10(  self.sqG[ik, u1, iphi1,u]/np.sqrt(30)+1e-12)
+
+                        #r1  = self.sqG[k,u1[0],iphi1]
+                        negr1 = np.nonzero(r1 < 0)
+                        r1[negr1[0]] = 0
+                        if kwargs['source']=='satimo':
+                            r2 = -GmindB + 20 * np.log10( self.sqG[ik, u2, iphi2,u]+1e-12)
+                        if kwargs['source']=='cst':
+                            r2 = -GmindB + 20 * np.log10(  self.sqG[ik,u2,iphi2i,u]/np.sqrt(30)+1e-12)
+                        #r2  = self.sqG[k,u2,iphi2]
+                        negr2 = np.nonzero(r2 < 0)
+                        r2[negr2[0]] = 0
+                        if kwargs['source']=='satimo':
+                            r3 = -GmindB + 20 * np.log10( self.sqG[ik, u3, iphi1,u]+1e-12)
+                        if kwargs['source']=='cst':
+                            r3 = -GmindB + 20 * np.log10(  self.sqG[ik, u3, iphi1,u]/np.sqrt(30)+1e-12)
+                        #r3  = self.sqG[k,u3[0],iphi1]
+                        negr3 = np.nonzero(r3 < 0)
+                        r3[negr3[0]] = 0
+                        r = np.hstack((r1[::-1], r2, r3[::-1], r1[-1]))
+
+                        a1 = np.arange(0, 360, 30)
+                        a2 = [90, 60, 30, 0, 330, 300, 270, 240, 210, 180, 150, 120]
+                        rline2, rtext2 = plt.thetagrids(a1, a2)
+
+                    else:
+                        r1 = 20 * np.log10( self.sqG[ik, u1, iphi1,u]+1e-12)
+                        r2 = 20 * np.log10( self.sqG[ik, u2, iphi2,u]+1e-12)
+                        r3 = 20 * np.log10( self.sqG[ik, u3, iphi1,u]+1e-12)
+                    r = np.hstack((r1[::-1], r2, r3[::-1], r1[-1]))
+
+
+                angle = np.linspace(0, 2 * np.pi, len(r), endpoint=True)
+              #  plt.title(u'V plane $\\theta$ (degrees)')
+
+            if 'thd' in kwargs:
+                iphi = np.arange(self.nph)
+                #itheta = np.where(abs(self.theta[:,0]-kwargs['thd']*dtr)<dtheta)[0][0]
+                #angle = self.phi[0,iphi]
+                itheta = np.where(abs(self.theta-kwargs['thd']*dtr)<dtheta)[0][0]
+                #angle = self.phi[0,iphi]
+                angle = self.phi[iphi]
+                if kwargs['polar']:
+                    r = -GmindB + 20 * np.log10(self.sqG[ik, itheta, iphi])
+                    neg = np.nonzero(r < 0)
+                    r[neg] = 0
+               # plt.title(u'H plane - $\phi$ degrees')
+                    a1 = np.arange(0, 360, 30)
+                    a2 = [0, 30, 60, 90, 120 , 150 , 180 , 210, 240 , 300 , 330]
+                    rline2, rtext2 = plt.thetagrids(a1, a2)
+                else:
+                    r =  20 * np.log10(self.sqG[ik, itheta, iphi])
+
+            ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
+            if kwargs['polar']:
+                rline1, rtext1 = plt.rgrids(t1, t2)
+            cpt = cpt + 1
+        if kwargs['legend']:
+            ax.legend()
+        return(fig,ax)
 
 class Antenna(Pattern):
     """ Antenna
@@ -1565,195 +1889,6 @@ class Antenna(Pattern):
             self.C.info()
         except:
             print "No vsh coefficient calculated yet"
-
-    def plotG(self,**kwargs):
-        """ antenna plot gain in 2D
-
-        Parameters
-        ----------
-
-        fGHz : frequency
-        phd  : phi in degrees
-        thd  : theta in degrees
-        GmaxdB :  max gain to be displayed
-        polar : boolean
-
-        Returns
-        -------
-
-        fig
-        ax
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> import matplotlib.pyplot as plt
-            >>> from pylayers.antprop.antenna import *
-            >>> A = Antenna('defant.trx')
-            >>> fig,ax = A.plotG(fGHz=[2,3,4],phd=0)
-            >>> fig,ax = A.plotG(fGHz=[2,3,4],thd=90)
-
-        """
-
-        if not self.evaluated:
-            self.Fsynth(pattern=True)
-
-        dtr = np.pi/180.
-
-        defaults = {'fGHz' : [],
-                    'dyn' : 8 ,
-                    'phd' : 0,
-                    'legend':True,
-                    'GmaxdB':5,
-                    'polar':True,
-                    'topos':False}
-
-        for k in defaults:
-            if k not in kwargs:
-                kwargs[k] = defaults[k]
-
-        args = {}
-        for k in kwargs:
-            if k not in defaults:
-                args[k] = kwargs[k]
-
-        if 'fig' not in kwargs:
-            fig = plt.figure(figsize=(8, 8))
-        else:
-            fig = kwargs['fig']
-
-        if 'ax' not in kwargs:
-            #ax = fig.add_axes([0.1, 0.1, 0.8, 0.8], polar=True, axisbg='#d5de9c')
-            if kwargs['polar']:
-                ax = fig.add_axes([0.1, 0.1, 0.8, 0.8], polar=True )
-            else:
-                ax = fig.add_subplot(111)
-        else:
-            ax = kwargs['ax']
-
-        rc('grid', color='#316931', linewidth=1, linestyle='-')
-        rc('xtick', labelsize=15)
-        rc('ytick', labelsize=15)
-
-        DyndB = kwargs['dyn'] * 5
-        GmindB = kwargs['GmaxdB'] - DyndB
-        #print "DyndB",DyndB
-        #print "GmindB",GmindB
-
-        # force square figure and square axes looks better for polar, IMO
-
-        t1 = np.arange(5, DyndB + 5, 5)
-        t2 = np.arange(GmindB + 5, kwargs['GmaxdB'] + 5, 5)
-
-        col = ['k', 'r', 'g', 'b', 'm', 'c', 'y']
-        cpt = 0
-
-        if len(self.fGHz) > 1 :
-            fstep = self.fGHz[1]-self.fGHz[0]
-        else :
-            fstep = np.array((abs(self.fGHz-kwargs['fGHz'][0])+1))
-        #dtheta = self.theta[1,0]-self.theta[0,0]
-        #dphi = self.phi[0,1]-self.phi[0,0]
-        dtheta = self.theta[1]-self.theta[0]
-        dphi = self.phi[1]-self.phi[0]
-        if kwargs['fGHz']==[]:
-            lfreq = [self.fGHz[0]]
-        else:
-            lfreq = kwargs['fGHz']
-        for f in lfreq:
-            df  = abs(self.fGHz-f)
-            ik0 = np.where(df==min(df))
-            ik = ik0[0][0]
-            #ik=0
-            chaine = 'f = %3.2f GHz' %(self.fGHz[ik])
-            # all theta
-            if 'phd' in kwargs:
-                itheta = np.arange(self.nth)
-                #iphi1 = np.where(abs(self.phi[0,:]-kwargs['phd']*dtr)<dtheta)[0][0]
-                iphi1 = np.where(abs(self.phi-kwargs['phd']*dtr)<dphi)[0][0]
-                Np = self.nph
-
-                if np.mod(Np, 2) == 0:
-                    iphi2 = np.mod(iphi1 + Np / 2, Np)
-                else:
-                    iphi2 = np.mod(iphi1 + (Np - 1) / 2, Np)
-
-                #   0 < theta < pi/2
-                #u1 = np.where((self.theta[:,0] <= np.pi / 2) &
-                #              (self.theta[:,0] >= 0))[0]
-                u1 = np.where((self.theta <= np.pi / 2.) & (self.theta >= 0))[0]
-                #   0:Nt-1
-                u2 = np.arange(self.nth)
-                #   pi/2 < theta < pi
-                #u3 = np.nonzero((self.theta[:,0] <= np.pi) & ( self.theta[:,0]
-                #                                              > np.pi / 2))[0]
-                u3 = np.nonzero((self.theta <= np.pi) & ( self.theta > np.pi / 2))[0]
-                if kwargs['polar']:
-                    if self.source=='satimo':
-                        r1 = -GmindB + 20 * np.log10(  self.sqG[ik, u1, iphi1]+1e-12)
-                    if self.source=='cst':
-                        r1 = -GmindB + 20 * np.log10(  self.sqG[ik, u1, iphi1]/np.sqrt(30)+1e-12)
-
-                    #r1  = self.sqG[k,u1[0],iphi1]
-                    negr1 = np.nonzero(r1 < 0)
-                    r1[negr1[0]] = 0
-                    if self.source=='satimo':
-                        r2 = -GmindB + 20 * np.log10( self.sqG[ik, u2, iphi2]+1e-12)
-                    if self.source=='cst':
-                        r2 = -GmindB + 20 * np.log10(  self.sqG[ik, u2, iphi2]/np.sqrt(30)+1e-12)
-                    #r2  = self.sqG[k,u2,iphi2]
-                    negr2 = np.nonzero(r2 < 0)
-                    r2[negr2[0]] = 0
-                    if self.source=='satimo':
-                        r3 = -GmindB + 20 * np.log10( self.sqG[ik, u3, iphi1]+1e-12)
-                    if self.source=='cst':
-                        r3 = -GmindB + 20 * np.log10(  self.sqG[ik, u3, iphi1]/np.sqrt(30)+1e-12)
-                    #r3  = self.sqG[k,u3[0],iphi1]
-                    negr3 = np.nonzero(r3 < 0)
-                    r3[negr3[0]] = 0
-                    r = np.hstack((r1[::-1], r2, r3[::-1], r1[-1]))
-
-                    a1 = np.arange(0, 360, 30)
-                    a2 = [90, 60, 30, 0, 330, 300, 270, 240, 210, 180, 150, 120]
-                    rline2, rtext2 = plt.thetagrids(a1, a2)
-
-                else:
-                    r1 = 20 * np.log10( self.sqG[ik, u1, iphi1]+1e-12)
-                    r2 = 20 * np.log10( self.sqG[ik, u2, iphi2]+1e-12)
-                    r3 = 20 * np.log10( self.sqG[ik, u3, iphi1]+1e-12)
-                    r = np.hstack((r1[::-1], r2, r3[::-1], r1[-1]))
-
-                angle = np.linspace(0, 2 * np.pi, len(r), endpoint=True)
-              #  plt.title(u'V plane $\\theta$ (degrees)')
-
-            if 'thd' in kwargs:
-                iphi = np.arange(self.nph)
-                #itheta = np.where(abs(self.theta[:,0]-kwargs['thd']*dtr)<dtheta)[0][0]
-                #angle = self.phi[0,iphi]
-                itheta = np.where(abs(self.theta-kwargs['thd']*dtr)<dtheta)[0][0]
-                #angle = self.phi[0,iphi]
-                angle = self.phi[iphi]
-                if kwargs['polar']:
-                    r = -GmindB + 20 * np.log10(self.sqG[ik, itheta, iphi])
-                    neg = np.nonzero(r < 0)
-                    r[neg] = 0
-               # plt.title(u'H plane - $\phi$ degrees')
-                    a1 = np.arange(0, 360, 30)
-                    a2 = [0, 30, 60, 90, 120 , 150 , 180 , 210, 240 , 300 , 330]
-                    rline2, rtext2 = plt.thetagrids(a1, a2)
-                else:
-                    r =  20 * np.log10(self.sqG[ik, itheta, iphi])
-
-            ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
-            if kwargs['polar']:
-                rline1, rtext1 = plt.rgrids(t1, t2)
-            cpt = cpt + 1
-        if kwargs['legend']:
-            ax.legend()
-        return(fig,ax)
 
     #@mlab.show
     def _show3(self,newfig = True,colorbar =True,
