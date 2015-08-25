@@ -5,14 +5,34 @@ r"""
 .. autosummary::
     :toctree: generated
 
+TBchannel class
+===============
+
+.. autosummary::
+    :toctree: generated/
+
+    TBchannel.tau_Emax
+    TBchannel.tau_moy
+    TBchannel.tau_rms
+    TBchannel.delays
+    TBchannel.SalehValenzuela
+
 TUchannel class
 ===============
 
 .. autosummary::
     :toctree: generated/
 
-TUDchannel class
-================
+    TUchannel.psd
+    TUchannel.awgn
+    TUchannel.Etau0
+    TUchannel.Ewin
+    TUchannel.Etot
+    TUchannel.Emax
+
+
+TUDchannel 
+==========
 
 .. autosummary::
     :toctree: generated/
@@ -20,8 +40,21 @@ TUDchannel class
 FUchannel
 =========
 
+Members
+-------
+
+    filcal : calibration file 
+    win : string type of window {'rect'| }
+
+
 .. autosummary::
     :toctree: generated/
+    
+    FUchannel.frombuf
+    FUchannel.capacity
+    FUchannel.calibrate
+    FUchannel.pdp 
+
 
 FUDchannel
 ==========
@@ -29,9 +62,18 @@ FUDchannel
 .. autosummary::
     :toctree: generated/
 
+    FUDchannel.minphas
+    FUDchannel.ifft
+    FUDchannel.totime
+    FUDchannel.iftd
+    FUDchannel.ft1
+    FUDchannel.ftau
+
 FUDAchannel
 ===========
 
+.. autosummary::
+    :toctree: generated/
 
 
 """
@@ -41,6 +83,7 @@ import numpy as np
 import scipy as sp
 import pylab as plt
 import struct as stru
+import scipy.stats as st
 import pylayers.util.pyutil as pyu
 import pylayers.signal.bsignal as bs
 import pylayers.util.geomutil as geu
@@ -59,38 +102,215 @@ class TBchannel(bs.TBsignal):
     """
     def __init__(self, x=np.array([]), y=np.array([]),label=[]):
         #super(TUsignal,self).__init__(x,y,label)
-        bs.TBsignal.__init__(x,y,label)
-
-
-    def taumax(self):
-        r""" calculate taumax
-
-        .. math::
-            \max_{\tau} y^{2}(\tau)
-
-        """
-
-        y2 = (self.y) ** 2
-
-        #
-        # determine time of maximum value of ()^2
-        #
-
-        maxy2 = max(y2)
-        u = np.nonzero(y2 == maxy2)[0]
-        tau = self.x[u]
-        return(tau)
+        bs.TBsignal.__init__(self,x,y,label)
 
 
     def tau_Emax(self):
         """ calculate the delay of max energy peak
+
+        .. math::
+            \max_{\tau} y^{2}(\tau)
         """
         y2 = (self.y) ** 2
-        t = self.x
         maxy2 = max(y2)
         u = np.nonzero(y2 == maxy2)[0]
-        tau_Emax = t[u]
+        tau_Emax = self.x[u]
         return(tau_Emax)
+
+    def tau_moy(self, alpha=0.1, tau0=0):
+        """ calculate mean excess delay starting from delay tau_0
+
+        Parameters
+        ----------
+
+        alpha : float
+        tau0 : float
+
+        """
+        t = self.x
+        y = self.y
+
+        #cdf, vary = self.ecdf()
+
+        cdf = np.cumsum(self.y,axis=1)
+        cdf = cdf/cdf[:,-1][:,None]
+
+        pdf = np.diff(cdf.y)
+
+        u = np.nonzero(cdf.y > alpha)[0]
+        v = np.nonzero(cdf.y < 1 - alpha)[0]
+
+        t = t[u[0]:v[-1]]
+        pdf = pdf[u[0]:v[-1]]
+
+        a = np.sum(t * pdf)
+        b = np.sum(pdf)
+        taum = a / b
+
+        return(taum)
+
+    def delays(self):
+        r""" calculate delay parameters and orthogonality factor from cir
+
+        Returns
+        -------
+
+        taum :
+            mean excess delay
+        delayspread
+            rms delay spread
+        of  :
+            orthogonality factor
+
+        Neelesh Metha, Andreas Molish, Lary Greenstein "Orthogonality Factor in WCDMA Donlinks in Urban Macrocellular
+        environments"
+
+        .. :math:
+
+            \beta0 = 1 \frac{\sum_i=1^L}|\alpha_i|^4}{\left(\sum_i=1^L|\alpha_i|^2)^2}
+
+        """
+
+        self.flatteny(reversible=True)
+        y2 = self.yf*self.yf
+        y4 = y2*y2
+        taum = sum(self.x*y2,axis=0)/sum(y2,axis=0)
+        delayspread = np.sqrt(sum((self.x-taum)*(self.x-taum)*y2)/sum(y2,axis=0))
+        of = 1 -sum(y4,axis=0)/sum(y2,axis=0)**2
+        return taum,delayspread,of
+
+
+
+    def tau_rms(self, alpha=0.1, tau0=0):
+        r""" calculate root mean square delay spread starting from delay tau_0
+
+        Parameters
+        ----------
+
+        alpha : float
+        threshold : float
+            ( delay interval is defined between :math:`\tau(\alpha)` and :math:`\tau(1 -\alpha)` )
+        tau0 : float
+            argument for specifying the delay start
+
+        Notes
+        -----
+
+        .. math::
+
+            \sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)} (\tau-\tau_m)^{2} PDP(\tau) d\tau} {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}}
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.measures.mesuwb import *
+            >>> import matplotlib.pyplot as plt
+            >>> M = UWBMeasure(1)
+            >>> ch4 = M.tdd.ch4
+            >>> f1,a1=ch4.plot(color='k')
+            >>> tit0 = plt.title("WHERE1 M1 UWB Channel impulse response")
+            >>> f2,a2=ch4.plot(color='k')
+            >>> tit1= plt.title("WHERE1 M1 UWB Channel impulse response (Zoom 1)")
+            >>> ax1=plt.axis([10,160,-90,-50])
+            >>> f3,a3=ch4.plot(color='k')
+            >>> tit2 = plt.title("WHERE1 M1 UWB Channel impulse response (Zoom 2)")
+            >>> ax2=plt.axis([20,120,-80,-50])
+            >>> plt.show()
+            >>> tau_moy = ch4.tau_moy()
+
+
+
+        See Also
+        --------
+
+        TUsignal.ecdf
+        TUsignal.tau_moy
+
+        """
+
+        t = self.x
+        y = self.y
+        #cdf, vary = self.ecdf()
+        #pdp = np.diff(cdf.y)
+
+        cdf = np.cumsum(self.y,axis=1)
+        cdf = cdf/cdf[:,-1][:,None]
+
+        taum = self.tau_moy(tau0)
+
+        u = np.nonzero(cdf.y > alpha)[0]
+        v = np.nonzero(cdf.y < 1 - alpha)[0]
+
+        t = t[u[0]:v[-1]]
+        pdp = pdp[u[0]:v[-1]]
+        b = sum(pdp)
+        m = sum(pdp * (t - taum) * (t - taum))
+        taurms = np.sqrt(m / b)
+
+        return(taurms)
+
+    def SalehValenzuela(self,**kwargs):
+        """ generic Saleh and Valenzuela Model
+
+        Parameters
+        ----------
+
+        Lam : clusters Poisson Process parameter (ns)
+        lam : rays Poisson Process parameter (ns)
+        Gam : clusters exponential decay factor
+        gam : rays exponential decay factor
+        T   : observation duration
+
+
+        """
+        defaults = { 'Lam' : .1,
+                     'lam' : .5,
+                     'Gam' : 30,
+                     'gam' : 5 ,
+                     'T'   : 100}
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+        Lam = kwargs['Lam']
+        lam = kwargs['lam']
+        Gam = kwargs['Gam']
+        gam = kwargs['gam']
+        T   = kwargs['T']
+        Nr  = 1.2*T/Lam
+        Nc  = 1.2*T/lam
+        e1 = st.expon(1./Lam)
+        e2 = st.expon(1./lam)
+        # cluster time of arrival
+        tc   = np.cumsum(e1.rvs(Nr))
+        tc   = tc[np.where(tc<T)]
+        Nc   = len(tc)
+        tauc = np.kron(tc,np.ones((1,Nr)))[0,:]
+        # rays time of arrival
+        taur = np.cumsum(e2.rvs((Nr,Nc)),axis=0).ravel()
+        # exponential decays of cluster and rays
+        etc = np.exp(-tauc/(1.0*Gam))
+        etr = np.exp(-taur/(1.0*gam))
+        et = etc*etr
+        tau = tauc+taur
+        # filtering < T and reordering in delay domain
+        tau = tau[np.where(tau<T)]
+        et = et[np.where(tau<T)]
+        u = np.argsort(tau)
+        taus = tau[u]
+        ets  = et[u]*np.sign(np.random.rand(len(u))-0.5)
+        self.x = taus
+        self.y = ets
+
+class TUchannel(TBchannel):
+    """ Uniform channel in delay domain
+    """
+    def __init__(self, x=np.array([]), y=np.array([]),label=[]):
+        super(TBchannel,self).__init__(x,y,label)
 
     def toa_max2(self):
         """ calculate time of arrival max2 method
@@ -419,320 +639,6 @@ class TBchannel(bs.TBsignal):
         return toa
 
 
-    def aggcir(self,alphak,tauk):
-        """ aggregation of CIR from (alphak,tauk)
-
-        Parameters
-        ----------
-
-        alphak : ndarray
-            CIR path amplitude
-        tauk : ndarray
-            CIR delay values
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> from pylayers.signal.bsignal import *
-            >>> import numpy as np
-            >>> alphak = 10*np.random.rand(7)
-            >>> tauk = 100*np.random.rand(7)
-            >>> tau = np.arange(0,150,0.1)
-            >>> y = np.zeros(len(tau))
-            >>> CIR = TUsignal(tau,y)
-            >>> CIR.aggcir(alphak,tauk)
-            >>> f,a =CIR.plot(typ=['v'])
-
-        """
-        shy = np.shape(self.y)
-        x = self.x
-        eps = (x[1]-x[0])/2
-        u = map(lambda t: np.where( (x>t-eps) & (x<=t+eps))[0][0],tauk)
-        ynew  = np.zeros(len(x))
-        ynew[u] = alphak
-        if len(shy)>1:
-           self.y = np.vstack((self.y,ynew))
-        else:
-           self.y = ynew[np.newaxis,:]
-
-
-    def readcir(self,filename,outdir=[]):
-        """ read channel impulse response
-
-        Parameters
-        ----------
-        filename : string
-            long file name if outdir is []
-            short file name is outdir is <> []
-        outdir : string
-            output directory
-        """
-        if outdir <> []:
-            outdir = 'output/'+outdir
-            filename = getlong(filename, outdir)
-
-        cir = ios.loadmat(filename)
-        self.x = cir['t'].ravel()
-        self.y = cir['cir'].ravel()
-
-
-    def readuwb(self, _filename):
-        """ read  Waveform from Matlab file format
-
-        Parameters
-        ----------
-
-
-        _filename : string
-
-        """
-        outdir = 'output/'+outdir
-        filename = getlong(_filename, outdir)
-        wfm = ios.loadmat(filename)
-        d = wfm['data'][0][0]
-        T0 = d.T0[0][0] / 1e-9
-        Tres = d.Tres[0][0] / 1e-9
-        s = d.WformOut1
-        N = len(s)
-        self.x = np.linspace(T0, T0 + (N - 1) * Tres, N)
-        self.y = s.reshape(len(s))
-
-    def ecdf(self, Tnoise=10, rem_noise=True, in_positivity=True, display=False, normalize=True, delay=0):
-        """ calculate energy cumulative density function
-
-        Parameters
-        ----------
-
-        Tnoise     :
-            Time duration of noise only portion (default=5ns)
-        rem_noise  :
-            remove noise if True
-        in_positivity :
-            inforce positivity if True
-        normalize  :
-            normalize if True (Not implemented)
-        display    :
-            display ecdf if True
-        delay      :
-            give a delay for vizualization
-
-        Returns
-        -------
-
-        ecdf , vary
-
-        """
-        #
-        #  ( ) ^2
-        #
-        t = self.x
-        y = self.y
-        te = self.dx()
-        y2 = y ** 2
-        #
-        f1 = np.cumsum(y2) * te
-        # retrieve the noise only portion at the beginning of TUsignal
-        #
-        Nnoise = int(np.ceil(Tnoise / te))
-        tn = t[0:Nnoise]
-        fn = f1[0:Nnoise]
-        stdy = np.std(y[0:Nnoise])
-        vary = stdy * stdy
-        y = t * vary
-        #
-        # y : linear interpolation of noise ecdf  (over whole time base)
-        #
-        #(ar,br)= polyfit(tn,fn,1)
-        #print ar
-        #y  = polyval([ar,br],t)
-        if rem_noise:
-            f = f1 - y
-        else:
-            f = f1
-
-        #
-        # inforce positivity
-        #
-        if in_positivity:
-            pdf = np.diff(f)
-            u = np.nonzero(pdf < 0)[0]
-            pdf[u] = 0
-            ecdf = np.cumsum(pdf)
-        else:
-            ecdf = f
-        #
-        # Normalization step
-        #
-        E = ecdf[-1]
-        #print E
-
-        if normalize:
-            ecdf = ecdf / E
-        #
-        # Resizing
-        #
-        Nt = len(t)
-        Necdf = len(ecdf)
-        N = min(Nt, Necdf)
-        ecdf = bs.TUsignal(t[0:N], ecdf[0:N])
-        #
-        # Display
-        #
-        if display:
-            plt.subplot(211)
-            ecdf.plot()
-            if normalize:
-                plt.plot(t, 2 * vary * np.sqrt(2 * t) / E, 'r')
-                plt.plot(t, -2 * vary * np.sqrt(2 * t) / E, 'r')
-            else:
-                plt.plot(t, 3 * vary * np.sqrt(2 * t), 'r')
-                plt.plot(t, -3 * vary * np.sqrt(2 * t), 'r')
-            plt.axvline(x=delay, color='red')
-            plt.subplot(212)
-            plt.plot(t, y, color='red')
-            plt.plot(t, f1, color='black')
-            plt.plot(t, f, color='blue')
-            plt.show()
-
-        return ecdf, vary
-
-    def tau_moy(self, alpha=0.1, tau0=0):
-        """ calculate mean excess delay starting from delay tau_0
-
-        Parameters
-        ----------
-
-        alpha : float
-        tau0 : float
-
-        """
-        t = self.x
-        y = self.y
-
-        cdf, vary = self.ecdf()
-        pdf = np.diff(cdf.y)
-
-        u = np.nonzero(cdf.y > alpha)[0]
-        v = np.nonzero(cdf.y < 1 - alpha)[0]
-
-        t = t[u[0]:v[-1]]
-        pdf = pdf[u[0]:v[-1]]
-
-        te = self.dx()
-        a = np.sum(t * pdf)
-        b = np.sum(pdf)
-        taum = a / b
-
-        return(taum)
-
-    def delays(self):
-        r""" calculate delay parameters and orthogonality factor from cir
-
-        Returns
-        -------
-
-        taum :
-            mean excess delay
-        delayspread
-            rms delay spread
-        of  :
-            orthogonality factor
-
-        Neelesh Metha, Andreas Molish, Lary Greenstein "Orthogonality Factor in WCDMA Donlinks in Urban Macrocellular
-        environments" 
-
-        .. :math:
-
-            \beta0 = 1 \frac{\sum_i=1^L}|\alpha_i|^4}{\left(\sum_i=1^L|\alpha_i|^2)^2}
-
-        """
-
-        self.flatteny(reversible=True)
-        y2 = self.yf*self.yf
-        y4 = y2*y2
-        taum = sum(self.x*y2,axis=0)/sum(y2,axis=0)
-        delayspread = np.sqrt(sum((self.x-taum)*(self.x-taum)*y2)/sum(y2,axis=0))
-        of = 1 -sum(y4,axis=0)/sum(y2,axis=0)**2
-        return taum,delayspread,of
-
-
-
-    def tau_rms(self, alpha=0.1, tau0=0):
-        r""" calculate root mean square delay spread starting from delay tau_0
-
-        Parameters
-        ----------
-
-        alpha : float
-        threshold : float
-            ( delay interval is defined between :math:`\tau(\alpha)` and :math:`\tau(1 -\alpha)` )
-        tau0 : float
-            argument for specifying the delay start
-
-        Notes
-        -----
-
-        .. math::
-
-            \sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)} (\tau-\tau_m)^{2} PDP(\tau) d\tau} {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}}
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> from pylayers.measures.mesuwb import *
-            >>> import matplotlib.pyplot as plt
-            >>> M = UWBMeasure(1)
-            >>> ch4 = M.tdd.ch4
-            >>> f1,a1=ch4.plot(color='k')
-            >>> tit0 = plt.title("WHERE1 M1 UWB Channel impulse response")
-            >>> f2,a2=ch4.plot(color='k')
-            >>> tit1= plt.title("WHERE1 M1 UWB Channel impulse response (Zoom 1)")
-            >>> ax1=plt.axis([10,160,-90,-50])
-            >>> f3,a3=ch4.plot(color='k')
-            >>> tit2 = plt.title("WHERE1 M1 UWB Channel impulse response (Zoom 2)")
-            >>> ax2=plt.axis([20,120,-80,-50])
-            >>> plt.show()
-            >>> tau_moy = ch4.tau_moy()
-
-
-
-        See Also
-        --------
-
-        TUsignal.ecdf
-        TUsignal.tau_moy
-
-        """
-
-        t = self.x
-        y = self.y
-        cdf, vary = self.ecdf()
-        pdp = np.diff(cdf.y)
-        taum = self.tau_moy(tau0)
-
-        u = np.nonzero(cdf.y > alpha)[0]
-        v = np.nonzero(cdf.y < 1 - alpha)[0]
-
-        t = t[u[0]:v[-1]]
-        pdp = pdp[u[0]:v[-1]]
-        te = self.dx()
-        b = sum(pdp)
-        m = sum(pdp * (t - taum) * (t - taum))
-        taurms = np.sqrt(m / b)
-
-        return(taurms)
-
-class TUchannel(TBchannel):
-    """ Uniform channel in delay domain
-    """
-    def __init__(self, x=np.array([]), y=np.array([]),label=[]):
-        super(TBchannel,self).__init__(x,y,label)
 
     def psd(self, Tpns=100, R=50,periodic=True):
         """ calculate power spectral density
@@ -967,23 +873,6 @@ class TUchannel(TBchannel):
 
         return(efirst)
 
-    def taumax(self):
-        r""" calculate taumax
-
-        .. math::
-            \max_{\tau} y^{2}(\tau)
-
-        """
-
-        y2 = (self.y) ** 2
-        #
-        # determine time of maximum value of ()^2
-        #
-        maxy2 = max(y2)
-        u = np.nonzero(y2 == maxy2)[0]
-        tau = self.x[u]
-        return(tau)
-
     def Epercent(self, N=10):
         """ return N percentile delay of a cdf
 
@@ -1072,332 +961,6 @@ class TUchannel(TBchannel):
         u = np.nonzero(y2 == maxy2)[0]
         tau_Emax = t[u]
         return(tau_Emax)
-
-    def toa_max2(self):
-        """ calculate time of arrival max2 method
-        """
-
-        THRE = array([])
-        V = array([])
-        VL = array([])
-
-        M = max(self.y)
-        n = np.nonzero(self.y == M)[0]
-
-        thre = M
-        v = 1
-        vl = 0
-        THRE = np.hstack((THRE, thre))
-        V = np.hstack((V, v))
-        VL = np.hstack((VL, vl))
-
-        step = M / 1e2
-        thre = M - step
-
-    #       while thre > M/1e2:
-        while vl < 20:
-    #       while v < 50:
-
-            u = np.nonzero(self.y > thre)[0]
-            v = nbint(u)
-            h = np.nonzero(u > n)[0]
-            g = np.delete(u, h)
-            vl = nbint(g) - 1
-
-            THRE = np.hstack((THRE, thre))
-            V = np.hstack((V, v))
-            VL = np.hstack((VL, vl))
-
-            thre = thre - step
-
-        plt.plot(1 - THRE / M, V, 'b', drawstyle='steps',
-                 label='interval number')
-        plt.plot(1 - THRE / M, VL, '-r', drawstyle='steps',
-                 label='interval(Left) number')
-        plt.xlabel('Gamma/Vmax')
-        plt.legend(loc=2)
-    #       ylabel('Interval Number')
-        plt.show()
-
-    def toa_new(self):
-        """ estimate time of arrival (new method)
-
-        """
-        t = self.x
-        Max = max(self.y)
-        nmax = np.nonzero(self.y == Max)[0]
-        n = nmax
-        step = Max / 1e2
-        thre = Max - step
-
-        delta = 100
-        d = 0
-        nint = 0
-        N = np.array([])
-        N = np.hstack((N, n))
-
-        while delta > 4 * Max / 1e2:
-
-            u = np.nonzero(self.y > thre)[0]
-            hr = np.nonzero(u > n)[0]
-            g = np.delete(u, hr)
-
-            if nmax >= 6000:
-            #set the fenetre=6000*0.005=30ns
-                hl = np.nonzero(g < nmax - 6000)[0]
-                u = np.delete(g, hl)
-            else:
-                u = g
-
-            n_int = nbint(u) - 1
-
-            if n_int == 0:
-                d = d + step
-            else:
-                delta = d + step
-                d = 0
-                n = u[0]
-                N = np.hstack((N, n))
-                #print N
-
-            thre = thre - step
-            if thre < 0:
-                break
-        if len(N) >= 3:
-            nn = N[-3]
-        else:
-            nn = N[0]
-
-        tau = t[nn]
-        return tau
-
-    def toa_win(self, w):
-        """ calulate time of arrival (window method)
-
-        Parameters
-        ----------
-        w : parameter between 0 and 100
-        Lei takes w = 9
-
-        """
-        t = self.x
-        maxbruit = max(self.y[0:1000])
-        Max = max(self.y)
-        nmax = np.nonzero(self.y == Max)[0]
-        n = nmax
-        step = Max / 1e2
-        thre = Max - step
-
-        delta = 100
-        d = 0
-        nint = 0
-        N = np.array([])
-        N = np.hstack((N, n))
-        # tant delta est plus grande que w% du Max
-        while delta > w * Max / 1e2:
-
-            u = np.nonzero(self.y > thre)[0]
-            hr = np.nonzero(u > n)[0]
-            g = np.delete(u, hr)
-
-            if nmax >= 6000:
-            #set the fenetre=6000*0.005=30ns
-                hl = np.nonzero(g < nmax - 6000)[0]
-                u = np.delete(g, hl)
-            else:
-                u = g
-
-            n_int = nbint(u) - 1
-
-            if n_int == 0:
-                thre = thre - step
-                d = d + step
-            else:
-                delta = Max - maxbruit - d - step
-                d = d + step
-                n = u[0]
-                N = np.hstack((N, n))
-                thre = thre - step
-
-            if thre < 0:
-                break
-        if len(N) >= 2:
-            nn = N[-2]
-        else:
-            nn = N[0]
-
-        tau = t[nn]
-        return tau
-
-    def toa_max(self, nint):
-        """ calculate time of arrival
-
-        descendant threshold based toa estimation
-
-        Parameters
-        ----------
-        nint : integer
-
-        """
-        #
-        # seek fot the maximum value of the signal
-        #
-        M = max(self.y)
-        step = M / 1e2
-    #       plot(self.x,self.y)
-        thre = M - step
-        while step > M / 1e5:
-    #          axhline(y=thre,color='green')
-            u = np.nonzero(self.y > thre)[0]
-            if nbint(u) < nint:
-            # down
-                thre = thre - step
-            else:
-            # up + step reduction
-                thre = thre + step
-                step = step / 2
-
-    #       plt.show()
-        tau = self.x[u[0]]
-        return tau
-
-    def toa_th(self, thlos, thnlos, visibility=0):
-        """ calculate time of arrival
-
-        threshold based toa estimation using energy peak
-
-        """
-        #
-        #  ( ) ^2
-        #
-        y2 = (self.y) ** 2
-        maxy2 = max(y2)
-        t = self.x
-
-        if visibility == 'LOS':
-            th = thlos * maxy2
-        else:
-            th = thnlos * maxy2
-        #
-        #In the W1-M1 measurement
-        #thlos=0.05   thnlos=0.15
-        #
-        v = np.nonzero(y2 >= th)[0]
-        toa = t[v[0]]
-        return toa
-
-    def toa_cum(self, th):
-        """ calculate time of arrival
-
-        threshold based toa estimation using cumulative energy
-        """
-        t = self.x
-        y = self.y
-        cdf, vary = self.ecdf()
-        #
-        #In the W1-M1 measurement th=0.15
-        #
-        v = np.nonzero(cdf.y >= th)[0]
-        toa = t[v[0]]
-        return toa
-
-    def toa_th_tmtm(self):
-        """ calculate time of arrival
-
-        """
-        y2 = (self.y) ** 2
-        maxy2 = max(y2)
-        t = self.x
-
-        alpha = (np.sqrt(self.Etot()) - np.sqrt(self.Emax())) /  \
-                (np.sqrt(self.Etot()) + np.sqrt(self.Emax()))
-        th = alpha * maxy2
-
-        v = np.nonzero(y2 >= th)[0]
-        toa = t[v[0]]
-        return toa
-
-    def toa_th_tm(self):
-        """ calculate time of arrival
-
-        """
-
-        y2 = (self.y) ** 2
-        maxy2 = max(y2)
-        t = self.x
-
-        alpha = np.sqrt(self.Emax()) / np.sqrt(self.Etot())
-        print alpha
-        th = alpha * maxy2
-
-        v = np.nonzero(y2 >= th)[0]
-        toa = t[v[0]]
-        return toa
-
-    def toa_th_tmt(self):
-        """ calculate time of arrival
-
-        """
-        y2 = (self.y) ** 2
-        maxy2 = max(y2)
-        t = self.x
-
-        alpha = (np.sqrt(self.Etot(
-        )) - np.sqrt(self.Emax())) / np.sqrt(self.Etot())
-        print alpha
-        th = alpha * maxy2
-
-        v = np.nonzero(y2 >= th)[0]
-        toa = t[v[0]]
-        return toa
-
-    def toa_cum_tm(self):
-        """ calculate time of arrival
-
-        """
-
-        y2 = (self.y) ** 2
-        t = self.x
-        maxy2 = max(y2)
-        u = np.nonzero(y2 == maxy2)[0]
-        cdf, vary = self.ecdf()
-
-        alpha = np.sqrt(cdf.y[u]) / np.sqrt(cdf.y[-1])
-        v = np.nonzero(cdf.y >= alpha * cdf.y[u])[0]
-        toa = t[v[0]]
-        return toa
-
-    def toa_cum_tmtm(self):
-        """ calculate time of arrival
-
-        """
-
-        y2 = (self.y) ** 2
-        t = self.x
-        maxy2 = max(y2)
-        u = np.nonzero(y2 == maxy2)[0]
-        cdf, vary = self.ecdf()
-
-        alpha = (np.sqrt(cdf.y[-1]) - np.sqrt(
-            cdf.y[u])) / (np.sqrt(cdf.y[-1]) + np.sqrt(cdf.y[u]))
-        v = np.nonzero(cdf.y >= alpha * cdf.y[u])[0]
-        toa = t[v[0]]
-        return toa
-
-    def toa_cum_tmt(self):
-        """ calculate time of arrival
-
-        """
-        y2 = (self.y) ** 2
-        t = self.x
-        maxy2 = max(y2)
-        u = np.nonzero(y2 == maxy2)[0]
-        cdf, vary = self.ecdf()
-
-        alpha = (np.sqrt(cdf.y[-1]) - np.sqrt(cdf.y[u])) / np.sqrt(cdf.y[-1])
-        v = np.nonzero(cdf.y >= alpha * cdf.y[u])[0]
-        toa = t[v[0]]
-        return toa
 
 
     def aggcir(self,alphak,tauk):
@@ -1573,134 +1136,6 @@ class TUchannel(TBchannel):
 
         return ecdf, vary
 
-    def tau_moy(self, alpha=0.1, tau0=0):
-        """ calculate mean excess delay starting from delay tau_0
-
-        Parameters
-        ----------
-
-        alpha : float
-        tau0 : float
-
-        """
-        t = self.x
-        y = self.y
-
-        cdf, vary = self.ecdf()
-        pdf = np.diff(cdf.y)
-
-        u = np.nonzero(cdf.y > alpha)[0]
-        v = np.nonzero(cdf.y < 1 - alpha)[0]
-
-        t = t[u[0]:v[-1]]
-        pdf = pdf[u[0]:v[-1]]
-
-        te = self.dx()
-        a = np.sum(t * pdf)
-        b = np.sum(pdf)
-        taum = a / b
-
-        return(taum)
-
-    def delays(self):
-        r""" calculate delay parameters and orthogonality factor from cir
-
-        Returns
-        -------
-
-        taum :
-            mean excess delay
-        delayspread
-            rms delay spread
-        of  :
-            orthogonality factor
-
-        Neelesh Metha, Andreas Molish, Lary Greenstein "Orthogonality Factor in WCDMA Donlinks in Urban Macrocellular
-        environments" 
-
-        .. :math:
-
-            \beta0 = 1 \frac{\sum_i=1^L}|\alpha_i|^4}{\left(\sum_i=1^L|\alpha_i|^2)^2}
-
-        """
-
-        self.flatteny(reversible=True)
-        y2 = self.yf*self.yf
-        y4 = y2*y2
-        taum = sum(self.x*y2,axis=0)/sum(y2,axis=0)
-        delayspread = np.sqrt(sum((self.x-taum)*(self.x-taum)*y2)/sum(y2,axis=0))
-        of = 1 -sum(y4,axis=0)/sum(y2,axis=0)**2
-        return taum,delayspread,of
-
-
-
-    def tau_rms(self, alpha=0.1, tau0=0):
-        r""" calculate root mean square delay spread starting from delay tau_0
-
-        Parameters
-        ----------
-
-        alpha : float
-        threshold : float
-            ( delay interval is defined between :math:`\tau(\alpha)` and :math:`\tau(1 -\alpha)` )
-        tau0 : float
-            argument for specifying the delay start
-
-        Notes
-        -----
-
-        .. math::
-
-            \sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)} (\tau-\tau_m)^{2} PDP(\tau) d\tau} {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}}
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> from pylayers.measures.mesuwb import *
-            >>> import matplotlib.pyplot as plt
-            >>> M = UWBMeasure(1)
-            >>> ch4 = M.tdd.ch4
-            >>> f1,a1=ch4.plot(color='k')
-            >>> tit0 = plt.title("WHERE1 M1 UWB Channel impulse response")
-            >>> f2,a2=ch4.plot(color='k')
-            >>> tit1= plt.title("WHERE1 M1 UWB Channel impulse response (Zoom 1)")
-            >>> ax1=plt.axis([10,160,-90,-50])
-            >>> f3,a3=ch4.plot(color='k')
-            >>> tit2 = plt.title("WHERE1 M1 UWB Channel impulse response (Zoom 2)")
-            >>> ax2=plt.axis([20,120,-80,-50])
-            >>> plt.show()
-            >>> tau_moy = ch4.tau_moy()
-
-
-
-        See Also
-        --------
-
-        TUsignal.ecdf
-        TUsignal.tau_moy
-
-        """
-
-        t = self.x
-        y = self.y
-        cdf, vary = self.ecdf()
-        pdp = np.diff(cdf.y)
-        taum = self.tau_moy(tau0)
-
-        u = np.nonzero(cdf.y > alpha)[0]
-        v = np.nonzero(cdf.y < 1 - alpha)[0]
-
-        t = t[u[0]:v[-1]]
-        pdp = pdp[u[0]:v[-1]]
-        te = self.dx()
-        b = sum(pdp)
-        m = sum(pdp * (t - taum) * (t - taum))
-        taurms = np.sqrt(m / b)
-
-        return(taurms)
 class TUDchannel(TUchannel):
     """ Uniform channel in Time domain with delay
 
@@ -1756,8 +1191,7 @@ class TUDchannel(TUchannel):
            #    r.lines(x,yi,col='black')
 
 class FUchannel(bs.FUsignal):
-    """
-    A channel in Frequency domain
+    """ channel in Frequency domain
 
     """
     def __init__(self,
@@ -1986,17 +1420,12 @@ class FUDchannel(FUchannel):
         >>> T2 = L.H.totime()
         >>> f,a = T2.plot(typ='v')
 
-        See Also
-        --------
-
-        FUsignal.ift
-
 
         """
         y = fft.ifft(self.y)
         T = 1/(self.x[1]-self.x[0])
         x = np.linspace(0,T,len(self.x))
-        h = bs.TUDsignal(x,y,self.taud,self.taue)
+        h = TUDchannel(x,y,self.taud,self.taue)
         return(h)
 
 
@@ -2528,7 +1957,6 @@ class Tchannel(FUDAchannel):
 
     imshow()
     apply(W)
-    applywavB(Wgam,Tw)
     applywavB(Wgam)
     applywavC(Wgam)
     chantap(fcGHz,WGHz,Ntap)
@@ -2849,7 +2277,7 @@ class Tchannel(FUDAchannel):
         Parameters
         ----------
 
-        Wgam : waveform including gamma factor
+        Wgam : waveform
 
         Returns
         -------
@@ -2875,7 +2303,6 @@ class Tchannel(FUDAchannel):
         # return a TUsignal
         #
         #import ipdb
-        pdb.set_trace()
         Y = self.apply(Wgam)
         ri = Y.ft1(Nz=500,ffts=1)
 
@@ -3596,7 +3023,7 @@ class Ctilde(PyLayers):
     def choose(self):
         """ Choose a field file in tud directory
 
-        DEPRECATED 
+        DEPRECATED
         """
         import tkFileDialog as FD
         filefield = FD.askopenfilename(filetypes=[("Files field  ", "*.field"),
@@ -3741,12 +3168,12 @@ class Ctilde(PyLayers):
 
 
         filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
-        # try/except to avoid loosing the h5 file if 
+        # try/except to avoid loosing the h5 file if
         # read/write error
         try:
 
             fh5=h5py.File(filename,'a')
-            if not grpname in fh5['Ct'].keys(): 
+            if not grpname in fh5['Ct'].keys():
                 fh5['Ct'].create_group(grpname)
             else :
                 print 'Warning : Ct/'+grpname +'already exists in '+filenameh5
@@ -3778,7 +3205,7 @@ class Ctilde(PyLayers):
         Parameters
         ----------
 
-        d (m) 
+        d(m)
         fGHz (,Nf)
         tang (1x2)
         rang (1x2)

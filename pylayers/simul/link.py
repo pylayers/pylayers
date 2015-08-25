@@ -5,23 +5,33 @@ r"""
 
 .. currentmodule:: pylayers.simul.link
 
-This module runs the electromagnetic simulation at the link level.
+This module runs the electromagnetic simulation for a link.
+A deterministic link has two termination points and an associated Layout 
+whereas a statistical link do not need any of those precursor object.
+
 It stores simulated objects in `hdf5` format.
 
-Link is a MetaClass
-Dlink is for deterministic links
-Slink is for statistical links.
 
 Link Class
 ===========
+
+Link is a MetaClass, which derives from `Tchannel`.
+Tchannel is a transmission channel i.e a radio channel
+which includes both link termination antennas.
+
+A common factor of both statistical (SLink) and deterministic channel (DLink) 
+is the exitence of :math:`\alpha_k` and :math:`\tau_k`
 
 .. autosummary::
     :toctree: generated/
 
     Link.__add__
 
+
 SLink Class
 ===========
+
+Slink is for statistical links.
 
 .. autosummary::
     :toctree: generated/
@@ -30,6 +40,8 @@ SLink Class
 
 DLink Class
 ===========
+
+Dlink is for deterministic links
 
 >>> from pylayers.simul.link import *
 >>> L = DLink(verbose=False)
@@ -651,41 +663,6 @@ class DLink(Link):
         L  = 32.4+20*np.log(d)+20*np.log10(fcGHz)
         return s
 
-
-
-    def help(self,letter='az',mod='meth'):
-        """ help
-
-        Parameters
-        ----------
-
-        txt : string
-            'members' | 'methods'
-        """
-
-        members = self.__dict__.keys()
-        lmeth = np.sort(dir(self))
-
-        if mod=='memb':
-            print np.sort(self.__dict__.keys())
-        if mod=='meth':
-            for s in lmeth:
-                if s not in members:
-                    if s[0]!='_':
-                        if len(letter)>1:
-                            if (s[0]>=letter[0])&(s[0]<letter[1]):
-                                try:
-                                    doc = eval('self.'+s+'.__doc__').split('\n')
-                                    print s+': '+ doc[0]
-                                except:
-                                    pass
-                        else:
-                            if (s[0]==letter[0]):
-                                try:
-                                    doc = eval('self.'+s+'.__doc__').split('\n')
-                                    print s+': '+ doc[0]
-                                except:
-                                    pass
     def reset_config(self):
         """ reset configuration when a new layout is loaded
         """
@@ -1132,7 +1109,7 @@ class DLink(Link):
 
 
     def eval(self,**kwargs):
-        """ Evaluate the link
+        """ evaluate the link
 
 
         Parameters

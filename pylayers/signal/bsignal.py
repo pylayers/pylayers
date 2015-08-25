@@ -97,19 +97,6 @@ Fourier Functions
     TUsignal.Yadd_zeros2r
     TUsignal.esd
 
-CIR Functions
--------------
-
-.. autosummary::
-    :toctree: generated/
-
-    TUsignal.aggcir
-    TUsignal.ecdf
-    TUsignal.taumax
-    TUsignal.tau_moy
-    TUsignal.delays
-    TUsignal.tau_rms
-
 Visualization Functions
 -----------------------
 
@@ -124,44 +111,6 @@ Visualization Functions
     TUsignal.resample
     TUsignal.convolve
 
-Energy Functions
-----------------
-
-.. autosummary::
-    :toctree: generated/
-
-    TUsignal.Epercent
-    TUsignal.Etau0
-    TUsignal.Ewin
-    TUsignal.Etot
-    TUsignal.Efirst
-    TUsignal.Efirst_loc
-    TUsignal.Efirst_corr
-    TUsignal.Efirst_toath
-    TUsignal.Emax
-
-TOA Estimation Functions
-------------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    TUsignal.tau_Emax
-    TUsignal.toa_max2
-    TUsignal.toa_new
-    TUsignal.toa_win
-    TUsignal.toa_max
-    TUsignal.toa_th
-    TUsignal.toa_cum
-    TUsignal.toa_th_tmtm
-    TUsignal.toa_th_tm
-    TUsignal.toa_th_tmt
-    TUsignal.toa_cum_tm
-    TUsignal.toa_cum_tmtm
-    TUsignal.toa_cum_tmt
-    TUsignal.EnImpulse
-    TUsignal.MaskImpulse
-
 Input Output Functions
 -----------------------
 
@@ -170,16 +119,6 @@ Input Output Functions
 
     TUsignal.readcir
     TUsignal.readuwb
-
-TUDsignal Class
-===============
-
-.. autosummary::
-    :toctree: generated/
-
-    TUDsignal.__init__
-    TUDsignal.__repr__
-    TUDsignal.fig
 
 FBsignal Class
 ==============
@@ -225,38 +164,6 @@ FUsignal Class
     FUsignal.iftshift
     FUsignal.show
     FUsignal.decimate
-    FUsignal.tap
-
-FUDsignal Class
-===============
-
-.. autosummary::
-    :toctree: generated/
-
-    FUDsignal.__init__
-    FUDsignal.__repr__
-    FUDsignal.minphas
-    FUDsignal.totime
-    FUDsignal.iftd
-    FUDsignal.ft1
-    FUDsignal.ftau
-    FUDsignal.cir
-    FUDsignal.plot3d
-    FUDsignal.ft2
-
-
-FUDAsignal Class
-===============
-
-.. autosummary::
-    :toctree: generated/
-
-    FUDAsignal.__init__
-    FUDAsignal.__repr__
-    FUDAsignal.cut
-    FUDAsignal.sort
-    FUDAsignal.showtap
-    FUDAsignal.tap
 
 FHsignal Class
 ================
@@ -2744,7 +2651,6 @@ class FUsignal(FBsignal,Usignal):
     plotri   : plot real part and imaginary part
     plotdB   : plot modulus in dB
     get      : get k th ray
-    tap      : calculates channel taps
     window   :
 
     """
@@ -3187,7 +3093,7 @@ class FUsignal(FBsignal,Usignal):
 
         return V
 
-    
+
     def ifft(self, Npt=-1):
         r""" Inverse Fourier transform
 

@@ -4,7 +4,7 @@ r"""
 .. currentmodule:: pylayers.util.pyutil
 
 .. autosummary::
-    :toctree: genaerated
+    :toctree: generated
 
     delay
     lt2idic
