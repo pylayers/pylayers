@@ -31,7 +31,7 @@ TUchannel class
     TUchannel.Emax
 
 
-TUDchannel 
+TUDchannel
 ==========
 
 .. autosummary::
@@ -4188,71 +4188,6 @@ maicher
         H.tk = H.taud
 
         return(H)
-
-    def _vec2scal(self):
-        """ calculate scalChannel from VectChannel and antenna
-
-        DEPRECATED
-        Returns
-        -------
-
-        slach : ScalChannel
-
-        Note
-        ----
-
-        deprecated this is now replaced by the function prop2tran
-
-        """
-        fGHz = self.fGHz
-        sh = np.shape(self.Ctt.y)
-        Ftt = bs.FUsignal(fGHz, np.ones(sh))
-        Ftp = bs.FUsignal(fGHz, np.zeros(sh))
-        Frt = bs.FUsignal(fGHz, np.ones(sh))
-        Frp = bs.FUsignal(fGHz, np.zeros(sh))
-        scalch = ScalChannel(self, Ftt, Ftp, Frt, Frp)
-        return(scalch)
-
-    # Inclusion of realistic antenna behaviour
-    # Specify transmitter antenna and receiver antenna
-
-    def _vec2scalA(self, At, Ar, alpha=1.0):
-        """ calculate scalChannel from Vectchannel
-
-        DEPRECATED
-
-        Parameters
-        ----------
-
-        At : transmitter antenna
-        Ar : receiver antenna
-        alpha : normalization factor
-
-        Notes
-        -----
-
-        Calculate ScalChannel by combining the propagation channel VectChannel
-        with realistic antennas transfer function
-
-
-        """
-
-        Ftt, Ftp = At.Fsynth3(self.rang[:, 0], self.rang[:, 1], pattern=False)
-
-        Frt, Frp = Ar.Fsynth3(self.rang[:, 0], self.rang[:, 1], pattern=False)
-
-        Ftt = Ftt.transpose()
-        Ftp = Ftp.transpose()
-        Frt = Frt.transpose()
-        Frp = Frp.transpose()
-
-        Ftt = bs.FUsignal(At.fGHz, Ftt * alpha)
-        Ftp = bs.FUsignal(At.fGHz, Ftp * alpha)
-        Frt = bs.FUsignal(Ar.fGHz, Frt * alpha)
-        Frp = bs.FUsignal(Ar.fGHz, Frp * alpha)
-
-        scalch = ScalChannel(self, Ftt, Ftp, Frt, Frp)
-        return(scalch)
 
     def info(self):
         """ Info (Nf,Nray,shape(y))

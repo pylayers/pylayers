@@ -19,17 +19,22 @@ class TXRU(object):
     def __init__(self):
         pass
 
-class Array(object):
+class Array(ant.Pattern):
     """ Array class
+
+    An array is defined as the association of a set of points and a set of
+    exitations
+
     """
 
-    def __init__(self,p):
+    def __init__(self,p,w=[]):
         """
 
         Parameters
         ----------
 
         p  : set of 3D points (3xN) or 3x Nx x Ny x Nz
+        w  : set of weight N x Nf or  Nx x Ny x Nz x Nf
 
 
         """
@@ -37,6 +42,16 @@ class Array(object):
         assert p.shape[0]==3," Array not a 3D point"
 
         self.p = p
+        shp = np.shape(p)
+        # If no excitation choose uniform excitation
+        if w == []:
+            w = np.ones((shp[1:]))[...,None]
+        self.w = w
+
+        self.typ = 'Array'
+        self.param={'param':{}}
+
+        ant.Pattern.__init__(self)
 
     def __repr__(self):
         st = ''
@@ -105,7 +120,7 @@ class ULArray(Array):
 
         q = p.reshape((3,Nx*Ny*Nz))
 
-        super(ULArray,self).__init__(p=q)
+        Array.__init__(self,p=q)
 
 class UCArray(Array):
     """ Uniform Circular Array

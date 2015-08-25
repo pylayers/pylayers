@@ -19,7 +19,7 @@ Examples
     >>> import matplotlib.pyplot as plt
     >>> from pylayers.antprop.antenna import *
     >>> A = Antenna('defant.trx')
-    >>> fig,ax = A.plot(fGHz=[2,3,4],phd=0)
+    >>> fig,ax = A.plotG(fGHz=[2,3,4],phd=0)
 
 Pattern Class
 =============
@@ -34,16 +34,16 @@ Pattern Class
 Pattern Functions
 -----------------
 
-    Pattern.pOmni
-    Pattern.pGauss
-    Pattern.p3gpp
-    Pattern.p3gpp
+    Pattern.__pOmni
+    Pattern.__pGauss
+    Pattern.__p3gpp
+    Pattern.__p3gpp
 
 Pattern from SH coeff
 ---------------------
 
-    Pattern.pvsh3
-    Pattern.psh3
+    Pattern.__pvsh3
+    Pattern.__psh3
 
 
 Antenna Class
@@ -191,7 +191,7 @@ class Pattern(PyLayers):
 
     """
     def __init__(self):
-        super(Pattern,self).__init__()
+        PyLayers.__init__(self)
 
     def __repr__(self):
         st = ''
@@ -250,9 +250,9 @@ class Pattern(PyLayers):
 
         self.grid = kwargs['grid']
 
-        eval('self.p'+self.typ)(param=self.param)
+        eval('self._Pattern__p'+self.typ)(param=self.param)
 
-    def pOmni(self,**kwargs):
+    def __pOmni(self,**kwargs):
         """  omnidirectional pattern
 
         TODO : gain w.r.t frequency
@@ -281,7 +281,7 @@ class Pattern(PyLayers):
             self.sqG =  np.array(np.sqrt(self.G))[None,None]
         self.F()
 
-    def pGauss(self,**kwargs):
+    def __pGauss(self,**kwargs):
         """ Gauss pattern
 
         Parameters
@@ -334,7 +334,7 @@ class Pattern(PyLayers):
             self.Fp = np.dot(Fp[:,None],np.ones(len(self.fGHz))[None,:])
         self.gain()
 
-    def p3gpp(self,**kwargs):
+    def __p3gpp(self,**kwargs):
         """ 3GPP pattern
 
         if pattern
@@ -387,7 +387,7 @@ class Pattern(PyLayers):
             self.sqG = np.sqrt(10**(GdB/10.))
         self.F()
 
-    def pvsh3(self,**kwargs):
+    def __pvsh3(self,**kwargs):
         """ calculate pattern for vsh3
         """
 
@@ -438,7 +438,7 @@ class Pattern(PyLayers):
 
         self.gain()
 
-    def psh3(self,**kwargs):
+    def __psh3(self,**kwargs):
         """ calculate pattern for sh3
         """
 
@@ -478,7 +478,7 @@ class Pattern(PyLayers):
 
         self.gain()
 
-    def pwireplate(self,**kwargs):
+    def __pwireplate(self,**kwargs):
         """ pattern wire plate antenna
 
         """
@@ -523,8 +523,15 @@ class Pattern(PyLayers):
 
         self.gain()
 
+    def __pArray(self,**kwargs):
+        """ Array factor
+        """
+        print "evaluate Array Factor"
+
     def F(self):
         """ evaluate radiation fonction w.r.t polarization
+
+
         """
         if self.pol=='h':
             self.Fp = self.sqG
@@ -556,10 +563,6 @@ class Pattern(PyLayers):
         self.sqG = np.sqrt(self.G)
         self.GdB = 10*np.log10(self.G)
 
-
-
-
-
 class Antenna(Pattern):
     """ Antenna
 
@@ -589,7 +592,6 @@ class Antenna(Pattern):
     vsh   : calculates Vector Spherical Harmonics
     show3 : Geomview diagram
     plot3d : 3D diagram plotting using matplotlib toolkit
-    Fsynth2 : Antenna F synthesis from coeff in s2
 
     Antenna trx file can be stored in various order
         natural : HFSS
@@ -900,8 +902,8 @@ class Antenna(Pattern):
             >>> import matplotlib.pyplot as plt
             >>> from pylayers.antprop.antenna import *
             >>> A = Antenna('S1R1.mat',directory='ant/UWBAN/Matfile')
-            >>> f,a = A.plot(phd=0)
-            >>> f,a = A.plot(thd=90,fig=f,ax=a)
+            >>> f,a = A.plotG(phd=0)
+            >>> f,a = A.plotG(thd=90,fig=f,ax=a)
             >>> txt = plt.title('S1R1 antenna : st loadmat')
             >>> plt.show()
 
