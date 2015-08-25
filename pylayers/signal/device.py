@@ -183,7 +183,6 @@ class Device(object):
         wstds = json.load(fp)
         fp.close()
 
-
         dim = dev[devname]['dimensions']
         ant = dev[devname]['antennas']
         wstd = dev[devname]['standards']

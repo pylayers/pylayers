@@ -313,8 +313,10 @@ class CorSer(PyLayers):
         self.L= Layout('MOCAP-small2.ini')
 
 
-        # Infrastructure Nodes
+        # Load Infrastructure Nodes
         self._loadinfranodes()
+
+        # Load cameras
         self._loadcam()
 
         #BODY & interferers
