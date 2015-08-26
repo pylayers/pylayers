@@ -34,10 +34,10 @@ class Array(ant.Pattern):
         ----------
 
         p  : set of 3D points (3xNp)   or  3 x Nx x Ny x Nz
-        w  : set of weight Nf x Np x Nu 
-                       or  Nf x Nx x Ny x Nz x Nu 
+        w  : set of weight Nf x Np x Nu
+                       or  Nf x Nx x Ny x Nz x Nu
 
-        fGhz : np.array 
+        fGhz : np.array
             frequency in GHz
         ntxru : number of spatial flux
 
@@ -49,6 +49,7 @@ class Array(ant.Pattern):
         self.fGHz = fGHz
         self.ntxru = ntxru
         shp = np.shape(p)
+
         # If no excitation choose uniform excitation
         if w == []:
             w = np.ones((shp[1:]))[None,...,None]
@@ -90,14 +91,17 @@ class ULArray(Array):
 
         """
         defaults = { 'N'    : [8,1,1],
-                     'dm'   : [0.075,0,0]
+                     'dm'   : [0.075,0,0],
+                     'w'   : [],
+                    'fGHz' : np.linspace(1.8,2.2,10),
+                    'ntxru': 1
                    }
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]
 
-        self.N  = kwargs['N']
-        self.dm = np.array(kwargs['dm'])
+        self.N  = kwargs.pop('N')
+        self.dm = np.array(kwargs.pop('dm'))
         self.Na = np.prod(self.N)
 
         Nx = self.N[0]
@@ -126,7 +130,7 @@ class ULArray(Array):
 
         q = p.reshape((3,Nx*Ny*Nz))
 
-        Array.__init__(self,p=q)
+        Array.__init__(self,p=q,**kwargs)
 
 class UCArray(Array):
     """ Uniform Circular Array
@@ -179,109 +183,6 @@ class AntArray(Array,ant.Antenna):
          st = st + 'dm : '+str(self.dm)+'\n'
          st = st + ant.Antenna.__repr__(self)
          return(st)
-
-    def calF(self,**kwargs):
-        """ calculates array factor
-
-         Parameters
-         ----------
-
-         ang : np.array(Nkx2) [theta,phi]
-            array direction angles in radians
-
-         w :  complex weight  (Nf x Nant x Ntxru)
-
-         Examples
-         --------
-
-         >>> Nd = 180
-         >>> theta = np.pi*np.ones(Nk)/2.
-         >>> phi = np.linspace(0,np.pi,Nd)
-         >>> ang = np.vstack((theta,phi)).T
-         >>> A = AntArray()
-         >>> A.calF(ang)
-
-        """
-
-        defaults = { 'w' : [],
-                     'th' :[],
-                     'ph': [],
-                     'pattern':True
-                   }
-
-        for k in defaults:
-            if k not in kwargs:
-                kwargs[k]=defaults[k]
-
-
-#        if (kwargs['th'] == []) and (kwargs['ph'] == []):
-#            self.theta = np.linspace(0,np.pi,self.nth)
-#            self.phi = np.linspace(0,2*np.pi,self.nph,endpoint=False)
-#        else:
-#            self.theta = th
-#            self.phi = ph
-
-        if kwargs['w']==[]:
-            w = np.ones((self.nf,1,self.Na,self.ntxru))
-        else:
-            pass
-
-        lamda = (0.3/self.fGHz)
-        k     = 2*np.pi/lamda
-
-        # Nd number of directions
-
-        if kwargs['pattern']:
-            sx = np.sin(self.theta[:,None])*np.cos(self.phi[None,:])    # Ntheta x Nphi
-            sy = np.sin(self.theta[:,None])*np.sin(self.phi[None,:])    # Ntheta x Nphi
-            sz = np.cos(self.theta[:,None])*np.ones(len(self.phi))[None,:]   # Ntheta x Nphi
-            sx = sx.reshape(self.nth*self.nph)
-            sy = sy.reshape(self.nth*self.nph)
-            sz = sz.reshape(self.nth*self.nph)
-        else:
-            sx = np.sin(self.theta)*np.cos(self.phi)    # Nd x 1
-            sy = np.sin(self.theta)*np.sin(self.phi)    # Nd x 1
-            sz = np.cos(self.theta)                     # Nd x 1
-
-        self.s  = np.vstack((sx,sy,sz)).T         # Nd x 3
-
-
-        #
-        # F = exp(+jk s.p)
-        #
-
-        # s : Nd x 3
-        # p : 3 x Na
-        # w : 1 x Na
-        # sdotp : Nd x Na
-
-        sdotp  = np.dot(self.s,self.p)   # s . p
-
-        #
-        # Nf : frequency 
-        # Nd : direction 
-        # Np : points 
-        # Nu : user 
-        #
-        # E :  Nf x Nd x Np x 1
-        # w :  Nf x 1  x Np x Nu 
-        # wE : Nf x Nd x Np x Nu 
-        #
-        #
-
-        E    = np.exp(1j*k[:,None,None]*sdotp[None,:,:])[:,:,:,None]
-        self.wE = w*E
-
-        #
-        # sum over antennas (axes 2 p )
-        #
-        # f x d x u
-        #
-
-        self.F = np.sum(self.wE,axis=2)
-        if kwargs['pattern']:
-            self.Ftheta = self.F.reshape(self.nf,self.nth,self.nph,self.ntxru)
-            self.Fphi = self.F.reshape(self.nf,self.nth,self.nph,self.ntxru)
 
 
 
