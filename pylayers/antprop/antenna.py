@@ -301,11 +301,11 @@ class Pattern(PyLayers):
 
         self.G    = pow(10.,self.GmaxdB/10.) # linear gain
         if self.grid:
-            # Nf x Nth x Nph
+            # Nth x Nph x Nf
             self.sqG  = np.array(np.sqrt(self.G))[None,None,None]
             self.evaluated = True
         else:
-            # Nf x Nd
+            # Nd x Nf
             self.sqG =  np.array(np.sqrt(self.G))[None,None]
         self.radF()
 
@@ -351,14 +351,13 @@ class Pattern(PyLayers):
         argphi = (e**2)/p3
 
         if self.grid :
-            # Nf x Nth x Nph
-            self.Ft = self.sqGmax * ( np.exp(-2.76*argth[None,:,None]) * np.exp(-2.76*argphi[None,None,:]) )
-            self.Fp = self.sqGmax * ( np.exp(-2.76*argth[None,:,None]) * np.exp(-2.76*argphi[None,None,:]) )
+            # Nth x Nph x Nf
+            self.Ft = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) )
+            self.Fp = self.sqGmax * ( np.exp(-2.76*argth[:,None,None]) * np.exp(-2.76*argphi[None,:,None]) )
             self.evaluated = True
         else:
             #
-            # Probably wrong Ndir x Nf !!!!
-            # Nf should be first
+            #  Nd x Nf
             #
             Ft = self.sqGmax * ( np.exp(-2.76*argth) * np.exp(-2.76*argphi) )
             Fp = self.sqGmax * ( np.exp(-2.76*argth) * np.exp(-2.76*argphi) )
@@ -408,16 +407,16 @@ class Pattern(PyLayers):
         theta = self.theta*180/np.pi-90
 
         if self.grid:
-            # Nf x Nth x Nph
+            # Nth x Nph x Nf
             GvdB = np.maximum(-12*((theta-thtilt)/hpbwv)**2,sllv)[None,:,None]
             GhdB = (-np.minimum(12*(phi/hpbwh)**2,fbrh)+gm)[None,None,:]
             GdB  = GhdB+GvdB
             self.sqG = np.sqrt(10**(GdB/10.))*np.ones(self.nf)[:,None,None]
             self.evaluated = True
         else:
-            # Nf x Nd
-            GvdB = np.maximum(-12*((theta-thtilt)/hpbwv)**2,sllv)[None,:]
-            GhdB = (-np.minimum(12*(phi/hpbwh)**2,fbrh)+gm)[None,:]
+            # Nd x Nf
+            GvdB = np.maximum(-12*((theta-thtilt)/hpbwv)**2,sllv)[:,None]
+            GhdB = (-np.minimum(12*(phi/hpbwh)**2,fbrh)+gm)[:,None]
             GdB  = GhdB+GvdB
             self.sqG = np.sqrt(10**(GdB/10.))
         # radiating functions are deduced from square root of gain
@@ -458,19 +457,23 @@ class Pattern(PyLayers):
                np.dot(Bi, np.real(W.T)) + \
                np.dot(Br, np.imag(W.T))
 
+        # here Nf x Nd
+
+        self.Ft = Fth.transpose()
+        self.Fp = Fph.transpose()
+
+        # then Nd x Nf
+
         if self.grid:
+        # Nth x Nph x Nf
+            #self.Ft = Fth.reshape(self.nf, self.nth, self.nph)
+            #self.Fp = Fph.reshape(self.nf, self.nth, self.nph)
+            self.Ft = self.Ft.reshape(self.nth, self.nph,self.nf)
+            self.Fp = self.Fp.reshape(self.nth, self.nph,self.nf)
 
-            self.Ft = Fth.reshape(self.nf, self.nth, self.nph)
-            self.Fp = Fph.reshape(self.nf, self.nth, self.nph)
-            self.evaluated = True
 
-        else:
-            # Nd x Nf
-            self.Ft = Fth.transpose()
-            self.Fp = Fph.transpose()
-
-            assert(self.Ft.shape[-1]==self.nf)
-            assert(self.Fp.shape[-1]==self.nf)
+        assert(self.Ft.shape[-1]==self.nf)
+        assert(self.Fp.shape[-1]==self.nf)
 
         self.gain()
 
@@ -494,23 +497,23 @@ class Pattern(PyLayers):
 
         k = self.S.Cx.k2
 
+        self.Ft = Fth.transpose()
+        self.Fp = Fph.transpose()
         if self.grid:
             Ex = np.dot(cx,Y[k])
             Ey = np.dot(cy,Y[k])
             Ez = np.dot(cz,Y[k])
             Fth,Fph = CartToSphere(theta, phi, Ex, Ey,Ez, bfreq = True, pattern = True )
-            self.Ft = Fth.reshape(self.nf, self.nth, self.nph)
-            self.Fp = Fph.reshape(self.nf, self.nth, self.nph)
-            self.evaluated = True
+            self.Ft = Fth.reshape(self.nth, self.nph,self.nf)
+            self.Fp = Fph.reshape(self.nth, self.nph,self.nf)
         else:
             Ex = np.dot(cx,Y[k])
             Ey = np.dot(cy,Y[k])
             Ez = np.dot(cz,Y[k])
             Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True, pattern = False)
-            self.Ft = Fth.transpose()
-            self.Fp = Fph.transpose()
-            assert(self.Ft.shape[-1]==self.nf)
-            assert(self.Fp.shape[-1]==self.nf)
+
+        assert(self.Ft.shape[-1]==self.nf)
+        assert(self.Fp.shape[-1]==self.nf)
 
         self.gain()
 
@@ -550,7 +553,6 @@ class Pattern(PyLayers):
         if self.grid:
             self.Ft = sqGmax * (argth[:,None])
             self.Fp = sqGmax * (argth[:,None])
-            self.evaluated = True
         else:
             Fat = sqGmax * argth
             Fap = sqGmax * argth
@@ -601,19 +603,19 @@ class Pattern(PyLayers):
 
         for a in self.la:
             a.eval()
-            # aFt : Nf x Nt x Np  | Nd x Nf
-            # aFp : Nf x Nt x Np  | Nd x Nf
+            # aFt : Nt x Np x Nf  | Nd x Nf
+            # aFp : Nt x Np x Nf  | Nd x Nf
             aFt = a.Ft
             aFp = a.Fp
         #
-        # if self.grid : Force conversion to Nf x Nd or Nf x Nd x Np
+        # Force conversion to Nd x Nf
         #
-        if self.grid:
-            shF = aFt.shape
-            aFt = aFt.reshape(shF[0],np.prod(shF[1:]))
-            aFp = aFp.reshape(shF[0],np.prod(shF[1:]))
+
+        shF = aFt.shape
+        aFt = aFt.reshape(np.prod(shF[0:-1]),shF[-1])
+        aFp = aFp.reshape(np.prod(shF[0:-1]),shF[-1])
         #
-        # add 2 new axis p (position) u (txru)
+        # add 2 new axis Np (position) Nu (txru)
         #
         #    TODO : not yet implemented for different antennas
 
@@ -623,50 +625,50 @@ class Pattern(PyLayers):
         #
         # Nf : frequency
         # Nd : direction
-        # Np : points
-        # Nu : user
+        # Np : points or array element position
+        # Nu : users
         #
-        #   w :  Nf x Np x Nu
-        # add direction axis (=1) in w
-        if self.grid:
-            if len(self.w.shape)==3:
-                self.w   = self.w[:,None,:,:]
-        else:
-            if len(self.w.shape)==3:
-                self.w   = self.w[None,:,:,:]
+        # w  :  Nf x Np x Nu
+        # add direction axis (=0) in w
+        if len(self.w.shape)==3:
+            self.w   = self.w[None,:,:,:]
 
-        # aFT :  Nf x Nd x Np x 1
-        # E   :  Nf x Nd x Np x 1
-        # w   :  Nf x 1  x Np x Nu
-        if self.grid:
-            E    = np.exp(1j*k[:,None,None]*sdotp[None,:,:])[:,:,:,None]
-        else:
-            E    = np.exp(1j*k[None,:,None]*sdotp[:,None,:])[:,:,:,None]
+        # aFT :  Nd x Nf x Np x 1
+        # E   :  Nd x Nf x Np x 1
+        # w   :  1  x Nf x Np x Nu
+
+        E    = np.exp(1j*k[None,:,None]*sdotp[:,None,:])[:,:,:,None]
 
         # C : Nf x Np x Np
         # w' = WC
         # w C (A.E)
         #
-        # waFpE  : Nf x Nd x Np x Nu
-        # waFtE  : Nf x Nd x Np x Nu
+        # TODO : implement coupling
+        #
+        # Fp  : Nd x Nf x Np x Nu
+        # Ft  : Nd x Nf x Np x Nu
         #
 
-        self.waFtE = self.w*aFt*E
-        self.waFpE = self.w*aFp*E
+        self.Ft = self.w*aFt*E
+        self.Fp = self.w*aFp*E
 
+    def __pFactor(self,**kwargs):
         #
         # sum over points (axes 2 Np )
-        # if self.grid
-        #   Nf x Nd x Ntxru
-        # else
+        #
         #   Nd x Nf x Ntxru
         #
-        self.Ft = np.sum(self.waFtE,axis=2)
-        self.Fp = np.sum(self.waFpE,axis=2)
+        defaults = {'param':{}}
+
+        if 'param' not in kwargs or kwargs['param']=={}:
+            kwargs['param']=defaults['param']
+
+        self.Ft = np.sum(self.Ft,axis=2)
+        self.Fp = np.sum(self.Fp,axis=2)
 
         if self.grid:
-            self.Ft = self.Ft.reshape(self.nf,self.nth,self.nph,self.ntxru)
-            self.Fp = self.Fp.reshape(self.nf,self.nth,self.nph,self.ntxru)
+            self.Ft = self.Ft.reshape(self.nth,self.nph,self.nf,self.ntxru)
+            self.Fp = self.Fp.reshape(self.nth,self.nph,self.nf,self.ntxru)
 
         self.gain()
 
@@ -678,12 +680,12 @@ class Pattern(PyLayers):
         if self.pol=='h':
             self.Fp = self.sqG
             if len(self.sqG.shape)==3:
-                self.Ft = np.zeros((self.nf,self.nth,self.nph))
+                self.Ft = np.zeros((self.nth,self.nph,self.nf))
             else:
                 self.Ft = np.zeros((len(self.theta),self.nf))
         if self.pol=='v':
             if len(self.sqG.shape)==3:
-                self.Fp = np.zeros((self.nf,self.nth,self.nph))
+                self.Fp = np.zeros((self.nth,self.nph,self.nf))
             else:
                 self.Fp = np.zeros((len(self.theta),self.nf))
             self.Ft = self.sqG
@@ -745,7 +747,7 @@ class Pattern(PyLayers):
         defaults = {'fGHz' : [],
                     'dyn' : 8 ,
                     'phd' : 0,
-                    'legend':True,A
+                    'legend':True,
                     'GmaxdB':5,
                     'polar':True,
                     'topos':False,
@@ -803,10 +805,12 @@ class Pattern(PyLayers):
         #dphi = self.phi[0,1]-self.phi[0,0]
         dtheta = self.theta[1]-self.theta[0]
         dphi = self.phi[1]-self.phi[0]
+
         if kwargs['fGHz']==[]:
             lfreq = [self.fGHz[0]]
         else:
             lfreq = kwargs['fGHz']
+
         for f in lfreq:
             df  = abs(self.fGHz-f)
             ik0 = np.where(df==min(df))
@@ -835,27 +839,27 @@ class Pattern(PyLayers):
                 #u3 = np.nonzero((self.theta[:,0] <= np.pi) & ( self.theta[:,0]
                 #                                              > np.pi / 2))[0]
                 u3 = np.nonzero((self.theta <= np.pi) & ( self.theta > np.pi / 2))[0]
-                if len(self.sqG)==3:
+                if len(self.sqG.shape)==3:
                     if kwargs['polar']:
                         if kwargs['source']=='satimo':
-                            r1 = -GmindB + 20 * np.log10(  self.sqG[ik, u1, iphi1]+1e-12)
+                            r1 = -GmindB + 20 * np.log10(  self.sqG[u1, iphi1,ik]+1e-12)
                         if kwargs['source']=='cst':
-                            r1 = -GmindB + 20 * np.log10(  self.sqG[ik, u1, iphi1]/np.sqrt(30)+1e-12)
+                            r1 = -GmindB + 20 * np.log10(  self.sqG[u1, iphi1,ik]/np.sqrt(30)+1e-12)
 
                         #r1  = self.sqG[k,u1[0],iphi1]
                         negr1 = np.nonzero(r1 < 0)
                         r1[negr1[0]] = 0
                         if kwargs['source']=='satimo':
-                            r2 = -GmindB + 20 * np.log10( self.sqG[ik, u2, iphi2]+1e-12)
+                            r2 = -GmindB + 20 * np.log10( self.sqG[ u2, iphi2,ik]+1e-12)
                         if kwargs['source']=='cst':
-                            r2 = -GmindB + 20 * np.log10(  self.sqG[ik, u2,iphi2]/np.sqrt(30)+1e-12)
+                            r2 = -GmindB + 20 * np.log10( self.sqG[u2,iphi2,ik]/np.sqrt(30)+1e-12)
                         #r2  = self.sqG[k,u2,iphi2]
                         negr2 = np.nonzero(r2 < 0)
                         r2[negr2[0]] = 0
                         if kwargs['source']=='satimo':
-                            r3 = -GmindB + 20 * np.log10( self.sqG[ik, u3, iphi1]+1e-12)
+                            r3 = -GmindB + 20 * np.log10( self.sqG[u3, iphi1,ik]+1e-12)
                         if kwargs['source']=='cst':
-                            r3 = -GmindB + 20 * np.log10(  self.sqG[ik, u3, iphi1]/np.sqrt(30)+1e-12)
+                            r3 = -GmindB + 20 * np.log10(  self.sqG[u3, iphi1,ik]/np.sqrt(30)+1e-12)
                         #r3  = self.sqG[k,u3[0],iphi1]
                         negr3 = np.nonzero(r3 < 0)
                         r3[negr3[0]] = 0
@@ -866,32 +870,32 @@ class Pattern(PyLayers):
                         rline2, rtext2 = plt.thetagrids(a1, a2)
 
                     else:
-                        r1 = 20 * np.log10( self.sqG[ik, u1, iphi1]+1e-12)
-                        r2 = 20 * np.log10( self.sqG[ik, u2, iphi2]+1e-12)
-                        r3 = 20 * np.log10( self.sqG[ik, u3, iphi1]+1e-12)
+                        r1 = 20 * np.log10( self.sqG[u1, iphi1,ik]+1e-12)
+                        r2 = 20 * np.log10( self.sqG[u2, iphi2,ik]+1e-12)
+                        r3 = 20 * np.log10( self.sqG[u3, iphi1,ik]+1e-12)
 
                     r = np.hstack((r1[::-1], r2, r3[::-1], r1[-1]))
                 else:
                     if kwargs['polar']:
                         if kwargs['source']=='satimo':
-                            r1 = -GmindB + 20 * np.log10(  self.sqG[ik, u1,iphi1,u]+1e-12)
+                            r1 = -GmindB + 20 * np.log10( self.sqG[u1,iphi1,ik,u]+1e-12)
                         if kwargs['source']=='cst':
-                            r1 = -GmindB + 20 * np.log10(  self.sqG[ik, u1, iphi1,u]/np.sqrt(30)+1e-12)
+                            r1 = -GmindB + 20 * np.log10(  self.sqG[u1,iphi1,ik,u]/np.sqrt(30)+1e-12)
 
                         #r1  = self.sqG[k,u1[0],iphi1]
                         negr1 = np.nonzero(r1 < 0)
                         r1[negr1[0]] = 0
                         if kwargs['source']=='satimo':
-                            r2 = -GmindB + 20 * np.log10( self.sqG[ik, u2, iphi2,u]+1e-12)
+                            r2 = -GmindB + 20 * np.log10( self.sqG[u2,iphi2,ik,u]+1e-12)
                         if kwargs['source']=='cst':
-                            r2 = -GmindB + 20 * np.log10(  self.sqG[ik,u2,iphi2i,u]/np.sqrt(30)+1e-12)
+                            r2 = -GmindB + 20 * np.log10(self.sqG[u2,iphi2,ik,u]/np.sqrt(30)+1e-12)
                         #r2  = self.sqG[k,u2,iphi2]
                         negr2 = np.nonzero(r2 < 0)
                         r2[negr2[0]] = 0
                         if kwargs['source']=='satimo':
-                            r3 = -GmindB + 20 * np.log10( self.sqG[ik, u3, iphi1,u]+1e-12)
+                            r3 = -GmindB + 20 * np.log10( self.sqG[ u3,iphi1,ik,u]+1e-12)
                         if kwargs['source']=='cst':
-                            r3 = -GmindB + 20 * np.log10(  self.sqG[ik, u3, iphi1,u]/np.sqrt(30)+1e-12)
+                            r3 = -GmindB + 20 * np.log10(  self.sqG[ u3,iphi1,ik,u]/np.sqrt(30)+1e-12)
                         #r3  = self.sqG[k,u3[0],iphi1]
                         negr3 = np.nonzero(r3 < 0)
                         r3[negr3[0]] = 0
@@ -902,9 +906,9 @@ class Pattern(PyLayers):
                         rline2, rtext2 = plt.thetagrids(a1, a2)
 
                     else:
-                        r1 = 20 * np.log10( self.sqG[ik, u1, iphi1,u]+1e-12)
-                        r2 = 20 * np.log10( self.sqG[ik, u2, iphi2,u]+1e-12)
-                        r3 = 20 * np.log10( self.sqG[ik, u3, iphi1,u]+1e-12)
+                        r1 = 20 * np.log10( self.sqG[u1, iphi1,ik,u]+1e-12)
+                        r2 = 20 * np.log10( self.sqG[u2, iphi2,ik,u]+1e-12)
+                        r3 = 20 * np.log10( self.sqG[u3, iphi1,ik,u]+1e-12)
                     r = np.hstack((r1[::-1], r2, r3[::-1], r1[-1]))
 
 
@@ -927,7 +931,7 @@ class Pattern(PyLayers):
                     a2 = [0, 30, 60, 90, 120 , 150 , 180 , 210, 240 , 300 , 330]
                     rline2, rtext2 = plt.thetagrids(a1, a2)
                 else:
-                    r =  20 * np.log10(self.sqG[ik, itheta, iphi])
+                    r =  20 * np.log10(self.sqG[itheta, iphi,ik])
 
             ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
             if kwargs['polar']:
