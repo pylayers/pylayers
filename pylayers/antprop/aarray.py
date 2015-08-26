@@ -152,8 +152,10 @@ class AntArray(Array,ant.Antenna):
                     'S'    : [],
                     'Ntxru' : 1,
                     'pattern' : True,
-                    'typ':'Omni',
+                    #'typant':'S1R1.vsh3',
+                    'typant':'Gauss'
                     }
+        
 
         for k in defaults:
             if k not in kwargs:
@@ -164,16 +166,33 @@ class AntArray(Array,ant.Antenna):
         self.Na = np.prod(self.N)  # number of antennas
         self.ntxru = kwargs.pop('Ntxru')
         self.dm = np.array(kwargs.pop('dm'))
-        self.typ = kwargs.pop('typ')
+        self.typant = kwargs.pop('typant')
+
+        if type(self.typant)==list:
+            self.sameAnt=False
+            assert len(self.typant)==self.Na,"Wrong number of antennas"
+        else:
+            self.sameAnt=True
+
 
         if self.tarr=='UA':
            UA = ULArray(N = self.N,dm = self.dm)
 
-
+        #
+        # Add the antennas of the array, either 1 (same for all points), or Na
+        # (array size)
+        #
+        typ = 'Array'
         # init Antenna parent
-        ant.Antenna.__init__(self,typ=self.typ,**kwargs)
+        self.la = []
+        if self.sameAnt:
+            self.la.append(ant.Antenna(typ=self.typant))
+        else:
+            for t in self.typant:
+                self.la.append(ant.Antenna(typ=t))
 
-        super(AntArray,self).__init__(p=UA.p)
+        super(AntArray,self).__init__(p=UA.p,fGHz=self.la[0].fGHz)
+        ant.Antenna.__init__(self,typ=typ,**kwargs)
 
 
     def __repr__(self):

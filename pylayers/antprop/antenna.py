@@ -301,9 +301,11 @@ class Pattern(PyLayers):
 
         self.G    = pow(10.,self.GmaxdB/10.) # linear gain
         if self.grid:
+            # Nf x Nth x Nph
             self.sqG  = np.array(np.sqrt(self.G))[None,None,None]
             self.evaluated = True
         else:
+            # Nf x Nd
             self.sqG =  np.array(np.sqrt(self.G))[None,None]
         self.radF()
 
@@ -349,10 +351,15 @@ class Pattern(PyLayers):
         argphi = (e**2)/p3
 
         if self.grid :
+            # Nf x Nth x Nph
             self.Ft = self.sqGmax * ( np.exp(-2.76*argth[None,:,None]) * np.exp(-2.76*argphi[None,None,:]) )
             self.Fp = self.sqGmax * ( np.exp(-2.76*argth[None,:,None]) * np.exp(-2.76*argphi[None,None,:]) )
             self.evaluated = True
         else:
+            #
+            # Probably wrong Ndir x Nf !!!!
+            # Nf should be first
+            #
             Ft = self.sqGmax * ( np.exp(-2.76*argth) * np.exp(-2.76*argphi) )
             Fp = self.sqGmax * ( np.exp(-2.76*argth) * np.exp(-2.76*argphi) )
             # add frequency axis (Ndir x Nf)
@@ -401,16 +408,19 @@ class Pattern(PyLayers):
         theta = self.theta*180/np.pi-90
 
         if self.grid:
+            # Nf x Nth x Nph
             GvdB = np.maximum(-12*((theta-thtilt)/hpbwv)**2,sllv)[None,:,None]
             GhdB = (-np.minimum(12*(phi/hpbwh)**2,fbrh)+gm)[None,None,:]
             GdB  = GhdB+GvdB
             self.sqG = np.sqrt(10**(GdB/10.))*np.ones(self.nf)[:,None,None]
             self.evaluated = True
         else:
-            GvdB = np.maximum(-12*((theta-thtilt)/hpbwv)**2,sllv)
-            GhdB = (-np.minimum(12*(phi/hpbwh)**2,fbrh)+gm)
+            # Nf x Nd
+            GvdB = np.maximum(-12*((theta-thtilt)/hpbwv)**2,sllv)[None,:]
+            GhdB = (-np.minimum(12*(phi/hpbwh)**2,fbrh)+gm)[None,:]
             GdB  = GhdB+GvdB
             self.sqG = np.sqrt(10**(GdB/10.))
+        # radiating functions are deduced from square root of gain
         self.radF()
 
     def __pvsh3(self,**kwargs):
@@ -455,7 +465,7 @@ class Pattern(PyLayers):
             self.evaluated = True
 
         else:
-            # ndir x nf
+            # Nd x Nf
             self.Ft = Fth.transpose()
             self.Fp = Fph.transpose()
 
@@ -557,6 +567,8 @@ class Pattern(PyLayers):
 
         """
 
+        defaults = {'param':{}}
+
         if 'param' not in kwargs or kwargs['param']=={}:
             kwargs['param']=defaults['param']
 
@@ -571,9 +583,9 @@ class Pattern(PyLayers):
             sy = sy.reshape(self.nth*self.nph)
             sz = sz.reshape(self.nth*self.nph)
         else:
-            sx = np.sin(self.theta)*np.cos(self.phi)    # Nd x 1
-            sy = np.sin(self.theta)*np.sin(self.phi)    # Nd x 1
-            sz = np.cos(self.theta)                     # Nd x 1
+            sx = np.sin(self.theta)*np.cos(self.phi)    # ,Nd
+            sy = np.sin(self.theta)*np.sin(self.phi)    # ,Nd
+            sz = np.cos(self.theta)                     # ,Nd
 
         self.s  = np.vstack((sx,sy,sz)).T         # Nd x 3
         #
@@ -587,6 +599,26 @@ class Pattern(PyLayers):
 
         sdotp  = np.dot(self.s,self.p)   # s . p
 
+        for a in self.la:
+            a.eval()
+            # aFt : Nf x Nt x Np  | Nd x Nf
+            # aFp : Nf x Nt x Np  | Nd x Nf
+            aFt = a.Ft
+            aFp = a.Fp
+        #
+        # if self.grid : Force conversion to Nf x Nd or Nf x Nd x Np
+        #
+        if self.grid:
+            shF = aFt.shape
+            aFt = aFt.reshape(shF[0],np.prod(shF[1:]))
+            aFp = aFp.reshape(shF[0],np.prod(shF[1:]))
+        #
+        # add 2 new axis p (position) u (txru)
+        #
+        #    TODO : not yet implemented for different antennas
+
+        aFt = aFt[...,None,None]
+        aFp = aFp[...,None,None]
 
         #
         # Nf : frequency
@@ -594,30 +626,47 @@ class Pattern(PyLayers):
         # Np : points
         # Nu : user
         #
-        # w :  Nf x Np x Nu
-        #
-        # add direction axisi (=1) in w
-        self.w   = self.w[:,None,:,:]
-        # E :  Nf x Nd x Np x 1
-        # w :  Nf x 1  x Np x Nu
-        # wE : Nf x Nd x Np x Nu
-        E    = np.exp(1j*k[:,None,None]*sdotp[None,:,:])[:,:,:,None]
+        #   w :  Nf x Np x Nu
+        # add direction axis (=1) in w
+        if self.grid:
+            if len(self.w.shape)==3:
+                self.w   = self.w[:,None,:,:]
+        else:
+            if len(self.w.shape)==3:
+                self.w   = self.w[None,:,:,:]
 
-        self.wE = self.w*E
+        # aFT :  Nf x Nd x Np x 1
+        # E   :  Nf x Nd x Np x 1
+        # w   :  Nf x 1  x Np x Nu
+        if self.grid:
+            E    = np.exp(1j*k[:,None,None]*sdotp[None,:,:])[:,:,:,None]
+        else:
+            E    = np.exp(1j*k[None,:,None]*sdotp[:,None,:])[:,:,:,None]
+
+        # C : Nf x Np x Np
+        # w' = WC
+        # w C (A.E)
+        #
+        # waFpE  : Nf x Nd x Np x Nu
+        # waFtE  : Nf x Nd x Np x Nu
+        #
+
+        self.waFtE = self.w*aFt*E
+        self.waFpE = self.w*aFp*E
 
         #
         # sum over points (axes 2 Np )
+        # if self.grid
+        #   Nf x Nd x Ntxru
+        # else
+        #   Nd x Nf x Ntxru
         #
-        # Nf x Nd x Ntxru
-        # or
-        # Nf x Ntheta x Nphi x Ntxru
-        #
-
-        self.F = np.sum(self.wE,axis=2)
+        self.Ft = np.sum(self.waFtE,axis=2)
+        self.Fp = np.sum(self.waFpE,axis=2)
 
         if self.grid:
-            self.Ft = self.F.reshape(self.nf,self.nth,self.nph,self.ntxru)
-            self.Fp = self.F.reshape(self.nf,self.nth,self.nph,self.ntxru)
+            self.Ft = self.Ft.reshape(self.nf,self.nth,self.nph,self.ntxru)
+            self.Fp = self.Fp.reshape(self.nf,self.nth,self.nph,self.ntxru)
 
         self.gain()
 
@@ -696,11 +745,12 @@ class Pattern(PyLayers):
         defaults = {'fGHz' : [],
                     'dyn' : 8 ,
                     'phd' : 0,
-                    'legend':True,
+                    'legend':True,A
                     'GmaxdB':5,
                     'polar':True,
                     'topos':False,
                     'source':'satimo',
+                    'show':True,
                     'u':0,
                     }
 
@@ -745,10 +795,10 @@ class Pattern(PyLayers):
         col = ['k', 'r', 'g', 'b', 'm', 'c', 'y']
         cpt = 0
 
-        if len(self.fGHz) > 1 :
-            fstep = self.fGHz[1]-self.fGHz[0]
-        else :
-            fstep = np.array((abs(self.fGHz-kwargs['fGHz'][0])+1))
+        #if len(self.fGHz) > 1 :
+        #    fstep = self.fGHz[1]-self.fGHz[0]
+        #else :
+        #    fstep = np.array((abs(self.fGHz-kwargs['fGHz'][0])+1))
         #dtheta = self.theta[1,0]-self.theta[0,0]
         #dphi = self.phi[0,1]-self.phi[0,0]
         dtheta = self.theta[1]-self.theta[0]
@@ -885,6 +935,9 @@ class Pattern(PyLayers):
             cpt = cpt + 1
         if kwargs['legend']:
             ax.legend()
+        if kwargs['show']:
+            plt.ion()
+            plt.show()
         return(fig,ax)
 
 class Antenna(Pattern):
