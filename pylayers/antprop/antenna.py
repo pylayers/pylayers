@@ -564,15 +564,33 @@ class Pattern(PyLayers):
     def __pArray(self,**kwargs):
         """ Array factor
 
+        Parameters
+        ----------
+
+        Sc : np.array
+            coupling S matrix
+
+        Notes
+        -----
+
         Nd : Number of directions
         Np : Number of points
+        Nf : Number of frequency
 
         """
 
-        defaults = {'param':{}}
+        defaults = {'param':{'Sc':[]}}
 
         if 'param' not in kwargs or kwargs['param']=={}:
             kwargs['param']=defaults['param']
+
+        self.param = kwargs['param']
+        Sc = self.param['Sc']
+        Np =self.p.shape[1] 
+        if Sc==[]:
+            # Sc : Np x Np x Nf
+            #Sc = np.eye(self.p.shape[1])[None,...]
+            Sc = np.random.rand(Np,Np)[None,...]
 
         lamda = (0.3/self.fGHz)
         k     = 2*np.pi/lamda
@@ -628,10 +646,19 @@ class Pattern(PyLayers):
         # Np : points or array element position
         # Nu : users
         #
-        # w  :  Nf x Np x Nu
+        # w  : Nf x Np x Nu
+        # Sc : Nf x Np x Np
+        #
+        #
+        # w' = w.Sc   Nf x Np x Nu
+        #
+        # Coupling is implemented here
+
+        wp = np.einsum('ijk,ijm->imk',self.w,Sc)
         # add direction axis (=0) in w
-        if len(self.w.shape)==3:
-            self.w   = self.w[None,:,:,:]
+
+        #if len(.w.shape)==3:
+        #    self.wp   = self.wp[None,:,:,:]
 
         # aFT :  Nd x Nf x Np x 1
         # E   :  Nd x Nf x Np x 1
@@ -639,29 +666,23 @@ class Pattern(PyLayers):
 
         E    = np.exp(1j*k[None,:,None]*sdotp[:,None,:])[:,:,:,None]
 
-        # C : Nf x Np x Np
-        # w' = WC
-        # w C (A.E)
-        #
-        # TODO : implement coupling
         #
         # Fp  : Nd x Nf x Np x Nu
         # Ft  : Nd x Nf x Np x Nu
         #
 
-        self.Ft = self.w*aFt*E
-        self.Fp = self.w*aFp*E
-
-    def __pFactor(self,**kwargs):
+        self.Ft = wp*aFt*E
+        self.Fp = wp*aFp*E
+        # Those quantities are necessary for receiving mode
         #
         # sum over points (axes 2 Np )
         #
         #   Nd x Nf x Ntxru
         #
-        defaults = {'param':{}}
+        #defaults = {'param':{}}
 
-        if 'param' not in kwargs or kwargs['param']=={}:
-            kwargs['param']=defaults['param']
+        #if 'param' not in kwargs or kwargs['param']=={}:
+        #    kwargs['param']=defaults['param']
 
         self.Ft = np.sum(self.Ft,axis=2)
         self.Fp = np.sum(self.Fp,axis=2)

@@ -155,7 +155,7 @@ class AntArray(Array,ant.Antenna):
                     #'typant':'S1R1.vsh3',
                     'typant':'Gauss'
                     }
-        
+
 
         for k in defaults:
             if k not in kwargs:
@@ -197,14 +197,11 @@ class AntArray(Array,ant.Antenna):
 
     def __repr__(self):
          st = "Antenna Array : \n"
-         st = st + 'typ : '+self.typ+'\n'
+         st = st + self.typ+ 'of '+self.typant+'\n'
          st = st + 'N : '+str(self.N)+'\n'
          st = st + 'dm : '+str(self.dm)+'\n'
          st = st + ant.Antenna.__repr__(self)
          return(st)
-
-
-
 
 # 
 # 
