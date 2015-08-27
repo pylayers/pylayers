@@ -82,12 +82,23 @@ following :
 
 .. code:: python
 
-    from pylayers.gis.layout import *
+    from pylayers.gis.loyout import *
     from pylayers.util.project import *
 
-.. parsed-literal::
 
-    WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
+::
+
+
+    ---------------------------------------------------------------------------
+
+    ImportError                               Traceback (most recent call last)
+
+    <ipython-input-1-341e1dead720> in <module>()
+    ----> 1 from pylayers.gis.loyout import *
+          2 from pylayers.util.project import *
+
+
+    ImportError: No module named loyout
 
 
 Reading an exiting Layout
@@ -103,9 +114,19 @@ environment variable.
 
     print pstruc['DIRSTRUC']
 
-.. parsed-literal::
 
-    struc/str
+::
+
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-2-957771f05f1b> in <module>()
+    ----> 1 print pstruc['DIRSTRUC']
+    
+
+    NameError: name 'pstruc' is not defined
 
 
 ``pstruc`` is a dictionnary which gathers all directories which are used
@@ -116,43 +137,18 @@ in ``PyLayers``
     pstruc
 
 
+::
 
-.. parsed-literal::
 
-    {'DIRANT': 'ant',
-     'DIRBODY': 'body',
-     'DIRC3D': 'body/c3d',
-     'DIRCIR': 'output',
-     'DIRCT': 'output/Ct',
-     'DIRFUR': 'struc/furnitures',
-     'DIRGEOM': 'geom',
-     'DIRGIS': 'gis',
-     'DIRH': 'output/H',
-     'DIRIMAGE': 'struc/images',
-     'DIRINI': 'struc/ini',
-     'DIRLCH': 'output',
-     'DIRLNK': 'output',
-     'DIRMAT': 'ini',
-     'DIRMAT2': 'ini',
-     'DIRMES': 'meas',
-     'DIRNETSAVE': 'netsave',
-     'DIROOSM': 'gis/osm',
-     'DIROSM': 'struc/osm',
-     'DIRPICKLE': 'struc/gpickle',
-     'DIRR2D': 'output/r2d',
-     'DIRR3D': 'output/r3d',
-     'DIRSIG': 'output/sig',
-     'DIRSIMUL': 'ini',
-     'DIRSLAB': 'ini',
-     'DIRSLAB2': 'ini',
-     'DIRSTRUC': 'struc/str',
-     'DIRSTRUC2': 'struc/str',
-     'DIRTRA': 'output',
-     'DIRTUD': 'output',
-     'DIRTx': 'output/Tx001',
-     'DIRWEAR': 'body/wear',
-     'DIRWRL': 'struc/wrl'}
+    ---------------------------------------------------------------------------
 
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-3-6d40b18d0400> in <module>()
+    ----> 1 pstruc
+    
+
+    NameError: name 'pstruc' is not defined
 
 
 The structure of the ``.osm`` file is shown below
@@ -164,11 +160,15 @@ The structure of the ``.osm`` file is shown below
         cd $BASENAME/struc
         ls *.osm
 
+
 .. parsed-literal::
 
     DLR.osm
+    MADRID-METIS.osm
     MOCAP2.osm
     MOCAP3.osm
+    MOCAP-small2.osm
+    TA-Office.osm
 
 
 .. code:: python
@@ -178,6 +178,7 @@ The structure of the ``.osm`` file is shown below
         head DLR.osm
         echo '---'
         tail -17 DLR.osm
+
 
 .. parsed-literal::
 
@@ -216,32 +217,58 @@ To read a new layout in osm format :
 .. code:: python
 
     L=Layout('DLR.ini')
+
+
+::
+
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-6-dc64c84c00f1> in <module>()
+    ----> 1 L=Layout('DLR.ini')
+    
+
+    NameError: name 'Layout' is not defined
+
+
 .. code:: python
 
     fig,ax=L.showGs()
+
+
+::
+
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-7-b9ee126fbab0> in <module>()
+    ----> 1 fig,ax=L.showGs()
+    
+
+    NameError: name 'L' is not defined
+
+
 .. code:: python
 
     L.info()
 
-.. parsed-literal::
 
-    filestr :  DLR.ini
-    filematini :  matDB.ini
-    fileslabini :  slabDB.ini
-    filegeom :  DLR.off
-    boundaries  (-0.505, 32.586, -8.277, 8.878)
-    number of Points : 105
-    number of Segments : 124
-    number of Sub-Segments : 30
-    Gs Nodes :  229
-    Gs Edges :  248
-    Gt Nodes :  0
-    Gt Edges :  0
-    vnodes = Gt.node[Nc]['cycles'].cycle 
-    poly = Gt.node[Nc]['cycle'].polyg 
-    Gr Nodes    : 0
-    Gr Edges    : 0
-    Nc  = Gr.node[nroom]['cycles']  
+::
+
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-8-468dc52db9b2> in <module>()
+    ----> 1 L.info()
+    
+
+    NameError: name 'L' is not defined
 
 
 The different graphs associated with the layout are then built
@@ -249,6 +276,22 @@ The different graphs associated with the layout are then built
 .. code:: python
 
     L.build()
+
+
+::
+
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-9-63002b766909> in <module>()
+    ----> 1 L.build()
+    
+
+    NameError: name 'L' is not defined
+
+
 The topological graph :math:`\mathcal{G}_t` or graph of non overlapping
 cycles.
 
@@ -256,6 +299,23 @@ cycles.
 
     f,a=L.showG('t')
     b=plt.axis('off')
+
+
+::
+
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-10-b2e03138f16c> in <module>()
+    ----> 1 f,a=L.showG('t')
+          2 b=plt.axis('off')
+
+
+    NameError: name 'L' is not defined
+
+
 The graph of room :math:`\mathcal{G}_r`. Two rooms which share at least
 a wall are connected. Two rooms which share only a corner (punctual
 connection) are not connected
@@ -264,6 +324,23 @@ connection) are not connected
 
     f,a=L.showG('r')
     b=plt.axis('off')
+
+
+::
+
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-11-691b11b3fe3c> in <module>()
+    ----> 1 f,a=L.showG('r')
+          2 b=plt.axis('off')
+
+
+    NameError: name 'L' is not defined
+
+
 The graph of waypath :math:`\mathcal{G}_w`. This graph is used for agent
 mobility. This allows to determine the shortest path between 2 rooms.
 This information could be included in the osm file. This is not the case
@@ -273,12 +350,46 @@ yet
 
     f,a=L.showG('w')
     b=plt.axis('off')
+
+
+::
+
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-12-17ec2c11acac> in <module>()
+    ----> 1 f,a=L.showG('w')
+          2 b=plt.axis('off')
+
+
+    NameError: name 'L' is not defined
+
+
 The graph of visibility :math:`\mathcal{G_v}`
 
 .. code:: python
 
     f,a=L.showG('v')
     b=plt.axis('off')
+
+
+::
+
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-13-7202a7193478> in <module>()
+    ----> 1 f,a=L.showG('v')
+          2 b=plt.axis('off')
+
+
+    NameError: name 'L' is not defined
+
+
 The graph of interactions :math:`\mathcal{G}_i` used to determine the
 ray signatures.
 
@@ -288,6 +399,25 @@ ray signatures.
     a = f.gca()
     f,a=L.showG('i',fig=f,ax=a)
     b= plt.axis('off')
+
+
+::
+
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-14-568749c658a8> in <module>()
+    ----> 1 f=plt.figure(figsize=(15,15))
+          2 a = f.gca()
+          3 f,a=L.showG('i',fig=f,ax=a)
+          4 b= plt.axis('off')
+
+
+    NameError: name 'plt' is not defined
+
+
 The display options dictionnary
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -295,25 +425,19 @@ The display options dictionnary
 
     L.info()
 
-.. parsed-literal::
 
-    filestr :  DLR.ini
-    filematini :  matDB.ini
-    fileslabini :  slabDB.ini
-    filegeom :  DLR.off
-    boundaries  (-0.505, 32.586, -8.277, 8.878)
-    number of Points : 105
-    number of Segments : 124
-    number of Sub-Segments : 30
-    Gs Nodes :  229
-    Gs Edges :  248
-    Gt Nodes :  21
-    Gt Edges :  52
-    vnodes = Gt.node[Nc]['cycles'].cycle 
-    poly = Gt.node[Nc]['cycle'].polyg 
-    Gr Nodes    : 18
-    Gr Edges    : 18
-    Nc  = Gr.node[nroom]['cycles']  
+::
+
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-15-468dc52db9b2> in <module>()
+    ----> 1 L.info()
+    
+
+    NameError: name 'L' is not defined
 
 
 The layout can be displayed using matplotlib ploting primitive. Several
@@ -325,57 +449,18 @@ are exploited in ``showGs()`` vizualisation method.
     L.display
 
 
+::
 
-.. parsed-literal::
 
-    {'activelayer': 'WALL',
-     'alpha': 0.5,
-     'box': (-0.505, 32.586, -8.277, 8.878),
-     'clear': True,
-     'edges': True,
-     'edlabel': False,
-     'edlblsize': 20,
-     'ednodes': True,
-     'fileoverlay': 'DLR4991.png',
-     'fontsize': 10,
-     'inverse': False,
-     'layer': [],
-     'layers': ['WALL', 'PARTITION', 'AIR', 'WINDOW_GLASS', '3D_WINDOW_GLASS'],
-     'layerset': ['WINDOW_GLASS',
-      'PLASTERBOARD_7CM',
-      'WALL',
-      'AIR',
-      'WINDOW',
-      'METALIC',
-      'PLASTERBOARD_14CM',
-      'DOOR',
-      'FLOOR',
-      'METAL',
-      'PARTITION',
-      'CONCRETE_20CM3D',
-      'PLASTERBOARD_10CM',
-      'CEIL',
-      'CONCRETE_6CM3D',
-      'CONCRETE_15CM3D',
-      '3D_WINDOW_GLASS',
-      'WALLS',
-      'WOOD',
-      'CONCRETE_7CM3D',
-      'PILLAR',
-      'ABSORBENT'],
-     'ndlabel': False,
-     'ndlblsize': 20,
-     'ndsize': 10,
-     'nodes': True,
-     'overlay': False,
-     'scaled': True,
-     'subseg': True,
-     'subsegnb': True,
-     'thin': False,
-     'ticksoff': True,
-     'title': 'Init',
-     'visu': False}
+    ---------------------------------------------------------------------------
 
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-16-6a8994bd33b4> in <module>()
+    ----> 1 L.display
+    
+
+    NameError: name 'L' is not defined
 
 
 Layers
@@ -419,7 +504,7 @@ Booleans
 -  'ndlabel',boolean, If True display node labels
 -  'ednodes', boolean, True
 
-Interactive editor
+Interactive Editor
 ~~~~~~~~~~~~~~~~~~
 
 The command L.editor() launches an interactive editor. The state machine
@@ -469,6 +554,23 @@ a filename. In that case the file is stored in
 
     L=Layout()
     L.display['fileoverlay']='http://images.wikia.com/theoffice/images/9/9e/Layout.jpg'
+
+
+::
+
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-17-cead63e6ceaa> in <module>()
+    ----> 1 L=Layout()
+          2 L.display['fileoverlay']='http://images.wikia.com/theoffice/images/9/9e/Layout.jpg'
+
+
+    NameError: name 'Layout' is not defined
+
+
 .. code:: python
 
     L.display['overlay']=True
@@ -476,18 +578,45 @@ a filename. In that case the file is stored in
     L.display['scaled']=False
     L.display['ticksoff']=False
     L.display['inverse']=True
+
+
+::
+
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-18-ee2fbd9090b8> in <module>()
+    ----> 1 L.display['overlay']=True
+          2 L.display['alpha']=1
+          3 L.display['scaled']=False
+          4 L.display['ticksoff']=False
+          5 L.display['inverse']=True
+
+
+    NameError: name 'L' is not defined
+
+
 .. code:: python
 
     plt.figure(figsize=(10,10))
     L.showGs()
 
 
+::
 
-.. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x2aab2c105c50>,
-     <matplotlib.axes.AxesSubplot at 0x2aab2c128d90>)
+    ---------------------------------------------------------------------------
 
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-19-9bcb9acc34ba> in <module>()
+    ----> 1 plt.figure(figsize=(10,10))
+          2 L.showGs()
+
+
+    NameError: name 'plt' is not defined
 
 
 Scaling the figure overlay
@@ -544,6 +673,26 @@ Vizualisation of the layout
     ax = fig.gca()
     fig,ax = L.showG(fig=fig,ax=ax,graph='s',labels=True,font_size=9,node_size=220,node_color='c')
     a = plt.axis('off')
+
+
+::
+
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-20-19a72aa609b6> in <module>()
+    ----> 1 L = Layout('TA-Office.ini')
+          2 L.dumpr()
+          3 fig = plt.figure(figsize=(25,25))
+          4 ax = fig.gca()
+          5 fig,ax = L.showG(fig=fig,ax=ax,graph='s',labels=True,font_size=9,node_size=220,node_color='c')
+
+
+    NameError: name 'Layout' is not defined
+
+
 Each node of :math:`\mathcal{G}_s` with a negative index is a point.
 
 Each node of :math:`\mathcal{G}_s` with a positive index corresponds to

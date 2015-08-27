@@ -3,9 +3,8 @@ Description of the propagation environment
 ==========================================
 
 The ``Layout`` class contains the data structure for describing an
-Indoor environment. It contains data structures necessary for the graph
-based ray tracing implemented in PyLayers. The class is implemented in
-the
+Indoor environment. It implements the different graphs helping the
+implementation of the ray tracing. The class is implemented in the
 ```layout.py`` <http://pylayers.github.io/pylayers/modules/pylayers.gis.layout.html>`__
 module.
 
@@ -15,6 +14,7 @@ module.
     from IPython.display import Image
     import os
     %matplotlib inline
+
 
 .. parsed-literal::
 
@@ -29,11 +29,57 @@ Creating a default Layout is as simple as :
 .. code:: python
 
     L=Layout()
+    L
+
+
+
+
+.. parsed-literal::
+
+    
+    ----------------
+    defstr.ini
+    ----------------
+    
+    Number of points  : 8
+    Number of segments  : 9
+    Number of sub segments  : 3
+    Number of cycles  : 3
+    Number of rooms  : 2
+    degree 0 : []
+    degree 1 : [-8 -7]
+    number of node point of degree 2 : 4
+    number of node point of degree 3 : 2
+    
+    xrange :(758.49, 768.516)
+    yrange :(1111.9, 1115.963)
+    
+    Useful dictionnaries
+    ----------------
+    dca {cycle : []} cycle with an airwall
+    sl {slab name : slab dictionary}
+    name :  {slab :seglist} 
+    
+    Useful arrays
+    ----------------
+    pt : numpy array of points 
+    normal : numpy array of normal 
+    offset : numpy array of offset 
+    tsg : get segment index in Gs from tahe
+    isss :  sub-segment index above Nsmax
+    tgs : get segment index in tahe from Gs
+    lsss : list of segments with sub-segment
+    sla : list of all slab names (Nsmax+Nss+1)
+    degree : degree of nodes 
+
+
+
 Querying the default file name as simple as :
 
 .. code:: python
 
     L.filename
+
 
 
 
@@ -44,7 +90,7 @@ Querying the default file name as simple as :
 
 
 The ``ls()`` method lists the layout files which are available in the
-``struc`` directory of your current project which is set up via the
+``struc`` directory of your current project, which is set up via the
 $BASENAME environment variable which is crucial to be early defined in
 order PyLayers find its way to the good directories. Over the
 development process, the layout data format has evolved quite a lot, the
@@ -56,15 +102,19 @@ most simple is an ``ini`` key-value text file.
 
 
 
+
 .. parsed-literal::
 
-    ['DLR.ini',
+    ['CORM1.ini',
+     'DLR.ini',
      'DLR2.ini',
      'MADRID-METIS.ini',
      'MOCAP-small.ini',
      'MOCAP-small2.ini',
+     'MOCAP-small3.ini',
      'MOCAP.ini',
      'MOCAPext.ini',
+     'Scene.ini',
      'TA-Office.ini',
      'TA-OfficeAir.ini',
      'W2PTIN.ini',
@@ -86,9 +136,11 @@ most simple is an ``ini`` key-value text file.
 .. code:: python
 
     L=Layout('DLR.ini')
+
 .. code:: python
 
     f,a=L.showG('s')
+
 
 
 .. image:: Layout_files/Layout_11_0.png
@@ -102,6 +154,7 @@ To check which are the used slabs :
     for s in Slabs:
         if s in L.sl:
             print L.sl[s]
+
 
 .. parsed-literal::
 
@@ -124,50 +177,6 @@ Let's load an other layout
 .. code:: python
 
     L=Layout('WHERE1.ini')
-    L
-
-
-
-.. parsed-literal::
-
-    
-    ----------------
-    WHERE1.ini
-    ----------------
-    
-    Number of points  : 281
-    Number of segments  : 357
-    Number of sub segments  : 71
-    Number of cycles  : 80
-    Number of rooms  : 33
-    degree 0 : [-3]
-    degree 1 : [-270 -264 -236 -235 -206  -15]
-    degree 2 : 143
-    degree 3 : 128
-    degree 4 : [-211 -177 -171]
-    
-    xrange :(-28.13, 31.749)
-    yrange :(4.258, 16.839)
-    
-    Useful dictionnaries
-    ----------------
-    dca {cycle : []} cycle with an airwall
-    sl {slab name : slab dictionary}
-    name :  {slab :seglist} 
-    
-    Useful arrays
-    ----------------
-    pt : numpy array of points 
-    normal : numpy array of normal 
-    offset : numpy array of offset 
-    tsg : get segment index in Gs from tahe
-    isss :  sub-segment index above Nsmax
-    tgs : get segment index in tahe from Gs
-    lsss : list of segments with sub-segment
-    sla : list of all slab names (Nsmax+Nss+1)
-    degree : degree of nodes 
-
-
 
 The showG method provides many vizualization of the layout
 
@@ -176,60 +185,49 @@ The showG method provides many vizualization of the layout
     f,a=L.showG('s',airwalls=False,figsize=(20,10))
 
 
+
 .. image:: Layout_files/Layout_17_0.png
 
 
 .. code:: python
 
     L=Layout('W2PTIN.ini')
-    L
 
 
+::
 
-.. parsed-literal::
 
-    
-    ----------------
-    W2PTIN.ini
-    Image('/home/uguen/Bureau/P1/struc/images/W2PTIN.png')
-    ----------------
-    
-    Number of points  : 185
-    Number of segments  : 236
-    Number of sub segments  : 11
-    Number of cycles  : 0
-    Number of rooms  : 0
-    degree 0 : [-110 -109 -108 -103]
-    degree 1 : [-80]
-    degree 2 : 97
-    degree 3 : 81
-    degree 4 : [-127  -87]
-    
-    xrange :(-7.578, 30.217)
-    yrange :(-7.642, 30.753)
-    
-    Useful dictionnaries
-    ----------------
-    sl {slab name : slab dictionary}
-    name :  {slab :seglist} 
-    
-    Useful arrays
-    ----------------
-    pt : numpy array of points 
-    normal : numpy array of normal 
-    offset : numpy array of offset 
-    tsg : get segment index in Gs from tahe
-    isss :  sub-segment index above Nsmax
-    tgs : get segment index in tahe from Gs
-    lsss : list of segments with sub-segment
-    sla : list of all slab names (Nsmax+Nss+1)
-    degree : degree of nodes 
+    ---------------------------------------------------------------------------
 
+    AssertionError                            Traceback (most recent call last)
+
+    <ipython-input-10-366aeaf5fde2> in <module>()
+    ----> 1 L=Layout('W2PTIN.ini')
+    
+
+    /home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in __init__(self, _filename, _filematini, _fileslabini, _filefur, force, check)
+        411         # check layout integrity (default)
+        412         if check:
+    --> 413             self.check()
+        414         self.boundary()
+        415 
+
+
+    /home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in check(self, level)
+        719             deg0 = filter(lambda x: nx.degree(self.Gs,x)==0,upnt)
+        720             deg1 = filter(lambda x: nx.degree(self.Gs,x)==1,upnt)
+    --> 721             assert (len(deg0)==0), "It exists degree 0 points :  %r" % deg0
+        722             assert (len(deg1)==0), "It exists degree 1 points : %r" % deg1
+        723 
+
+
+    AssertionError: It exists degree 0 points :  [-110, -109, -108, -103]
 
 
 .. code:: python
 
     f,a = L.showG('s')
+
 
 
 .. image:: Layout_files/Layout_19_0.png
@@ -268,10 +266,11 @@ principle is a bad thing to do !).
     print np.shape(L.pt)
     print len(filter(lambda x: x<0,L.Gs.pos))
 
+
 .. parsed-literal::
 
-    (2, 185)
-    185
+    (2, 278)
+    278
 
 
 This dual storage is chosen (temporarily ? ) for computational
@@ -290,6 +289,7 @@ Where :math:`k` is the index of a given segment (starting in 0).
 .. code:: python
 
     L.build()
+
 The figure below illustrates a Layout and a surimposition of the graph
 of cycles :math:`\mathcal{G}_c`. Those cycles are automatically
 extracted from a well defined layout. This concept of **cycles** is
@@ -304,6 +304,7 @@ connected to the origin (corresponding to exterior cycle).
     nx.draw(L.Gc,L.Gc.pos)
 
 
+
 .. image:: Layout_files/Layout_32_0.png
 
 
@@ -314,9 +315,10 @@ connected to the origin (corresponding to exterior cycle).
 
 
 
+
 .. parsed-literal::
 
-    <matplotlib.collections.LineCollection at 0x2b56ecea3250>
+    <matplotlib.collections.LineCollection at 0x2b1d75935950>
 
 
 
@@ -334,29 +336,34 @@ because none segment has 0 as an index.
 
     ns = 5
     utahe = L.tgs[ns]
+
 .. code:: python
 
     tahe =  L.tahe[:,utahe]
+
 .. code:: python
 
     ptail = L.pt[:,tahe[0]]
     phead = L.pt[:,tahe[1]]
+
 .. code:: python
 
     print ptail
 
+
 .. parsed-literal::
 
-    [ 29.785   6.822]
+    [-28.081  10.923]
 
 
 .. code:: python
 
     print phead
 
+
 .. parsed-literal::
 
-    [ 27.414   6.822]
+    [-28.118  14.857]
 
 
 .. code:: python
@@ -365,15 +372,19 @@ because none segment has 0 as an index.
 
 
 
+
 .. parsed-literal::
 
-    {'connect': [-8, -139],
-     'name': 'PARTITION',
-     'ncycles': [36, 0],
-     'norm': array([ 0., -1.,  0.]),
+    {'connect': [-286, -292],
+     'name': 'CONCRETE_20CM3D',
+     'ncycles': [6, 0],
+     'norm': array([-0.99995577, -0.00940477,  0.        ]),
      'offset': 0,
+     'ss_name': ['3D_WINDOW_GLASS'],
+     'ss_offset': [0],
+     'ss_z': [(1.5, 2.5)],
      'transition': False,
-     'z': (0, 3.0)}
+     'z': (0.0, 3.0)}
 
 
 
@@ -382,18 +393,21 @@ because none segment has 0 as an index.
     print L.Gs.pos[-8]
     print L.Gs.pos[-139]
 
+
 .. parsed-literal::
 
-    (29.785, 6.822)
-    (27.414, 6.822)
+    (31.687, 11.252)
+    (5.037, 10.963)
 
 
 .. code:: python
 
     aseg = np.array([4,7,134])
+
 .. code:: python
 
     print np.shape(aseg)
+
 
 .. parsed-literal::
 
@@ -405,9 +419,11 @@ because none segment has 0 as an index.
     pt  = L.tahe[:,L.tgs[aseg]][0,:]
     ph = L.tahe[:,L.tgs[aseg]][1,:]
     pth = np.vstack((pt,ph))
+
 .. code:: python
 
     np.shape(pth)
+
 
 
 
@@ -426,12 +442,13 @@ because none segment has 0 as an index.
 
 
 
+
 .. parsed-literal::
 
-    array([[ 29.785,  -3.754,  22.538],
-           [  6.822,  23.078,   8.711],
-           [ 29.785,   0.044,  20.326],
-           [  8.921,  23.078,   8.693]])
+    array([[-28.081, -27.833,   0.454],
+           [ 10.923,  10.686,   4.805],
+           [-27.836, -27.835,   0.457],
+           [ 10.926,  10.891,   4.529]])
 
 
 
@@ -439,9 +456,11 @@ because none segment has 0 as an index.
 
     aseg = array(filter(lambda x: x>0,L.Gs.nodes()))
     pth = L.seg2pts(aseg)
+
 .. code:: python
 
     from pylayers.util.plotutil import displot
+
 .. code:: python
 
     displot(pth[0:2,:],pth[2:,:])
@@ -449,9 +468,10 @@ because none segment has 0 as an index.
 
 
 
+
 .. parsed-literal::
 
-    (-10.0, 35.0, -10.0, 35.0)
+    (-30.0, 40.0, 4.0, 18.0)
 
 
 

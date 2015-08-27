@@ -10,7 +10,6 @@
 >>> from pylayers.simul.simulem import *
 >>> import matplotlib.pyplot as plt
 >>> %matplotlib inline
-WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
 ```
 
 This section presents a simple Ray Tracing simulation with different material properties of a subsegment separating 2 rooms.
@@ -106,16 +105,14 @@ The $\mathcal{G}_s$ graph dictionnary has the following structure
   'offset': 0,
   'transition': False,
   'z': (0.0, 3.0)},
- 9: {'connect': [-2, -1],
+ 9: {'connect': [-1, -2],
   'name': 'WALL',
   'ncycles': [2, 0],
-  'norm': array([ 0.00639987, -0.99997952,  0.        ]),
+  'norm': array([-0.00639987,  0.99997952,  0.        ]),
   'offset': 0,
   'transition': False,
   'z': (0.0, 3.0)}}
 ```
-
-
 
 We define now two points which are the termination of a radio link.
 
@@ -130,40 +127,12 @@ We define now two points which are the termination of a radio link.
 >>> Lk = DLink(L=L,a=tx,b=rx,Aa=Antenna('Omni'),Ab=Antenna('Omni'))
 structure saved in  defstr3.str2
 structure saved in  defstr3.ini
+Links save file for defstr3.ini does not exist.
+Creating file. You'll see this message only once per Layout
 ```
 
 ```python
 >>> Lk
-filename: Links_0_defstr3.ini.h5
-Link Parameters :
-------- --------
-Layout : defstr3.ini
-
-Node a
-------
-position : [  7.59000000e+02   1.11400000e+03   1.00000000e+00]
-Antenna : Omni
-Rotation matrice :
- [[ 1.  0.  0.]
- [ 0.  1.  0.]
- [ 0.  0.  1.]]
-
-Node b
-------
-position : [  767.   1114.      1.5]
-Antenna : Omni
-Rotation matrice :
- [[ 1.  0.  0.]
- [ 0.  1.  0.]
- [ 0.  0.  1.]]
-
-Link evaluation information :
------------------------------
-distance :  8.016 m
-delay : 26.719 ns
-fmin (fGHz) : 2.0
-fmax (fGHz) : 11.0
-fstep (fGHz) : 0.05
 ```
 
 ```python

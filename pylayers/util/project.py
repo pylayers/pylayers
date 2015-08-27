@@ -29,6 +29,9 @@ class PyLayers(object):
         txt : string
             'mb' | 'mt'
 
+            mb :members
+            mt :methods
+
         """
 
         members = self.__dict__.keys()

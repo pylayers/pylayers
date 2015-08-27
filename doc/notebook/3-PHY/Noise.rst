@@ -6,12 +6,14 @@ Modelisation of the Thermal Noise
 
     from pylayers.signal.bsignal import *
     %matplotlib inline
+
 The bsignal module has a dedicated class for handling noise signal. To
 create a white noise just type :
 
 .. code:: python
 
     w = Noise()
+
 The representation of the noise object provides information about
 default values. In digital representation of noise the sampling
 frequency is important. The noise signal is generated from a time
@@ -25,25 +27,30 @@ density is :math:`-174dBm/Hz` and can be modified with the argument
 
 
 
+
 .. parsed-literal::
 
     Sampling frequency : 50 GHz
     ti  : 0ns 
     tf  : 100ns 
     ts  : 0.02ns 
+    N   : 5000
     -------------
     DSP : -174 dBm/Hz
-    NF : 0 dB
+        : 3.98107170553e-21 Joules
+    -------------
+    Noise Figure : 0 dB
     Vrms : 9.97631157484e-05 Volts
-    Variance : 9.92227469331e-09 V^2
-    Power /50 Ohms : -157.010299957 dBm
-    Power realized /50 Ohms : -157.023587582 dBm
+    Variance : 9.94012046425e-09 V^2
+    Power (dBm) /50 Ohms : -157.010299957 dBm
+    Power realized /50 Ohms : -157.015783567 dBm
 
 
 
 .. code:: python
 
     f,a=w.plot(typ='v')
+
 
 
 .. image:: Noise_files/Noise_6_0.png
@@ -54,24 +61,74 @@ density is :math:`-174dBm/Hz` and can be modified with the argument
     w.psd()
 
 
+::
 
-.. parsed-literal::
 
-    FUsignal :  (2500,)  (2500,) 
-    Frequency (GHz) : 2500
+    ---------------------------------------------------------------------------
 
+    AttributeError                            Traceback (most recent call last)
+
+    <ipython-input-5-638d26c14f9e> in <module>()
+    ----> 1 w.psd()
+    
+
+    AttributeError: 'Noise' object has no attribute 'psd'
 
 
 .. code:: python
 
     w2 = w.fgating(fcGHz=4,BGHz=3)
+
+
+::
+
+
+    ---------------------------------------------------------------------------
+
+    IndexError                                Traceback (most recent call last)
+
+    <ipython-input-6-0901d96562a6> in <module>()
+    ----> 1 w2 = w.fgating(fcGHz=4,BGHz=3)
+    
+
+    /home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in fgating(self, fcGHz, BGHz, window)
+       3616         else:
+       3617             parity = 1
+    -> 3618         U = N.unrex()
+       3619         f = U.x
+       3620         f1 = fcGHz - BGHz / 2.
+
+
+    /home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.pyc in unrex(self)
+       3411         if np.mod(N, 2) == 0:
+       3412             xu = self.x[1:(N + 2) / 2]
+    -> 3413             yu = self.y[:,1:(N + 2) / 2]
+       3414         # odd case
+       3415         else:
+
+
+    IndexError: too many indices for array
+
+
 .. code:: python
 
     W2=w2.psd()
     W2.plotdB(mask=True)
 
 
-.. image:: Noise_files/Noise_9_0.png
+::
+
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-7-00fd8114e3d7> in <module>()
+    ----> 1 W2=w2.psd()
+          2 W2.plotdB(mask=True)
+
+
+    NameError: name 'w2' is not defined
 
 
 .. code:: python
@@ -80,10 +137,11 @@ density is :math:`-174dBm/Hz` and can be modified with the argument
 
 
 
+
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x2b2b0f1e4c50>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x2b2b0f26d2d0>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x2b9921022f10>,
+     array([[<matplotlib.axes._subplots.AxesSubplot object at 0x2b9920ede390>]], dtype=object))
 
 
 
@@ -93,17 +151,53 @@ density is :math:`-174dBm/Hz` and can be modified with the argument
 
 .. code:: python
 
-    ip=EnImpulse(fe=100)
+    ip=EnImpulse(fc=4.4928,band=0.4992,fe=100)
+
+
+::
+
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-9-307076f57f86> in <module>()
+    ----> 1 ip=EnImpulse(fc=4.4928,band=0.4992,fe=100)
+    
+
+    NameError: name 'EnImpulse' is not defined
+
+
 .. code:: python
 
     fig = plt.figure(figsize=(10,10))
     for k,snr in enumerate(range(30,-30,-10)):
         a = fig.add_subplot(3,2,k+1)
-        ipn=ip.awgn(snr=snr,typ='snr')
+        ipn,n=ip.awgn(snr=snr,typ='snr')
         ipn.plot(typ='v',fig=fig,ax=a)
         a.set_title('SNR :'+str(snr)+' dB')
     plt.tight_layout()
 
 
-.. image:: Noise_files/Noise_12_0.png
+::
+
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-10-897bc488bfef> in <module>()
+          2 for k,snr in enumerate(range(30,-30,-10)):
+          3     a = fig.add_subplot(3,2,k+1)
+    ----> 4     ipn,n=ip.awgn(snr=snr,typ='snr')
+          5     ipn.plot(typ='v',fig=fig,ax=a)
+          6     a.set_title('SNR :'+str(snr)+' dB')
+
+
+    NameError: name 'ip' is not defined
+
+
+
+.. image:: Noise_files/Noise_12_1.png
+
 

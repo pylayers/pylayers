@@ -859,7 +859,8 @@ class Ezone(PyLayers):
                     'extent':[],
                     'contour':False,
                     'source':'srtm',
-                    'facecolor':'black'
+                    'facecolor':'black',
+                    'cmap':plt.cm.jet
                    }
 
         for k in defaults:
@@ -936,7 +937,7 @@ class Ezone(PyLayers):
 
             if kwargs['height']:
                 im = ax.imshow(hgt[iy[0]:(iy[-1]+1),ix[0]:(ix[-1]+1)],
-                               extent=extent,clim=kwargs['clim'])
+                               extent=extent,clim=kwargs['clim'],cmap=kwargs['cmap'])
                 divider = make_axes_locatable(ax)
                 cax = divider.append_axes("right", size="5%", pad=0.05)
                 cb = fig.colorbar(im,cax)

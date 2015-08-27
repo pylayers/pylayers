@@ -6,7 +6,7 @@ r"""
 .. currentmodule:: pylayers.simul.link
 
 This module runs the electromagnetic simulation for a link.
-A deterministic link has two termination points and an associated Layout 
+A deterministic link has two termination points and an associated Layout
 whereas a statistical link do not need any of those precursor object.
 
 It stores simulated objects in `hdf5` format.
@@ -19,7 +19,7 @@ Link is a MetaClass, which derives from `Tchannel`.
 Tchannel is a transmission channel i.e a radio channel
 which includes both link termination antennas.
 
-A common factor of both statistical (SLink) and deterministic channel (DLink) 
+A common factor of both statistical (SLink) and deterministic channel (DLink)
 is the exitence of :math:`\alpha_k` and :math:`\tau_k`
 
 .. autosummary::
@@ -390,13 +390,11 @@ class DLink(Link):
         self.tx = RadioNode(name = '',
                             typ = 'tx',
                             _fileini = 'radiotx.ini',
-                            _fileant = self.Aa._filename
                             )
 
         self.rx = RadioNode(name = '',
                             typ = 'rx',
                             _fileini = 'radiorx.ini',
-                            _fileant = self.Ab._filename,
                             )
 
 
@@ -576,7 +574,6 @@ class DLink(Link):
         self.tx = RadioNode(name = '',
                             typ = 'tx',
                             _fileini = 'radiotx.ini',
-                            _fileant = Ant._filename
                             )
         self._Aa = Ant
         #to be removed when radionode will be updated
@@ -591,7 +588,6 @@ class DLink(Link):
         self.rx = RadioNode(name = '',
                             typ = 'rx',
                             _fileini = 'radiorx.ini',
-                            _fileant = Ant._filename,
                             )
         self._Ab = Ant
         #to be removed when radionode will be updated
