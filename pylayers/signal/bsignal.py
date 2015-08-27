@@ -247,6 +247,7 @@ class Bsignal(PyLayers):
         if ndim==1:
             self.y=self.y.reshape((1,len(self.y)))
             ndim = 2
+        pdb.set_trace()
         assert(len(x)==self.y.shape[-1])," Dimension problem"
         # default naming of the axis
         if label==[]:

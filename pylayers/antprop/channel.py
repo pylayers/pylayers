@@ -1199,7 +1199,7 @@ class FUchannel(bs.FUsignal):
           y=np.array([]),
           label=[]):
 
-          bs.FUsignal.__init__(self,x,y,label)
+          bs.FUsignal.__init__(FUchannel(self),x,y,label)
           self.calibrated = False
           self.win = 'rect'
           self.windowed = False
@@ -1993,7 +1993,8 @@ class Tchannel(FUDAchannel):
         doa   :  direction of arrival   (nray x 2)
 
         """
-        FUDAchannel.__init__(self,fGHz, alpha, tau, dod, doa)
+        #FUDAchannel.__init__(FUDAchannel(self),fGHz, alpha, tau, dod, doa)
+        super(Tchannel,self).__init__(fGHz, alpha, tau, dod, doa)
 
     def __repr__(self):
         st = ''
@@ -4142,10 +4143,10 @@ maicher
         sh = np.shape(self.Ctt.y)
 
 
-        a.eval(self.tangl[:, 0], self.tangl[:, 1], grid=False)
+        a.eval(th=self.tangl[:, 0], ph=self.tangl[:, 1], grid=False)
         Fat = bs.FUsignal(a.fGHz, a.Ft)
         Fap = bs.FUsignal(a.fGHz, a.Fp)
-        b.eval(self.tangl[:, 0], self.tangl[:, 1], grid=False)
+        b.eval(th=self.tangl[:, 0], ph=self.tangl[:, 1], grid=False)
         Fbt = bs.FUsignal(a.fGHz, b.Ft)
         Fbp = bs.FUsignal(a.fGHz, b.Fp)
 

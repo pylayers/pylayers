@@ -638,12 +638,12 @@ class DLink(Link):
         s = s + 'Node a   \n'
         s = s + '------  \n'
         s = s + 'position : ' + str (self.a) + '\n'
-        s = s + 'Antenna : ' + str (self.Aa._filename) + '\n'
+        s = s + 'Antenna : ' + str (self.Aa.typ) + '\n'
         s = s + 'Rotation matrice : \n ' + str (self.Ta) + '\n\n'
         s = s + 'Node b   \n'
         s = s + '------  \n'
         s = s + 'position : ' + str (self.b) + '\n'
-        s = s + 'Antenna : ' + str (self.Ab._filename) + '\n'
+        s = s + 'Antenna : ' + str (self.Ab.typ) + '\n'
         s = s + 'Rotation matrice : \n ' + str (self.Tb) + '\n\n'
         s = s + 'Link evaluation information : \n'
         s = s + '----------------------------- \n'
@@ -928,9 +928,10 @@ class DLink(Link):
         # check existence of Rot b (Tb) in h5py file
         uTb_opt, uTb = self.get_idx('T_map',self.Tb)
         # check existence of Antenna a (Aa) in h5py file
-        uAa_opt, uAa = self.get_idx('A_map',self.Aa._filename)
+        #uAa_opt, uAa = self.get_idx('A_map',self.Aa._filename)
+        uAa_opt, uAa = self.get_idx('A_map',self.Aa.typ)
         # check existence of Antenna b (Ab) in h5py file
-        uAb_opt, uAb = self.get_idx('A_map',self.Ab._filename)
+        uAb_opt, uAb = self.get_idx('A_map',self.Ab.typ)
 
 
         grpname = str(ua) + '_' + str(ub) + '_' + str(uf) + \

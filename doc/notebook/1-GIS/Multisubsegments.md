@@ -10,6 +10,7 @@
 >>> from pylayers.simul.simulem import *
 >>> import matplotlib.pyplot as plt
 >>> %matplotlib inline
+WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
 ```
 
 This section presents a simple Ray Tracing simulation with different material properties of a subsegment separating 2 rooms.
@@ -127,8 +128,6 @@ We define now two points which are the termination of a radio link.
 >>> Lk = DLink(L=L,a=tx,b=rx,Aa=Antenna('Omni'),Ab=Antenna('Omni'))
 structure saved in  defstr3.str2
 structure saved in  defstr3.ini
-Links save file for defstr3.ini does not exist.
-Creating file. You'll see this message only once per Layout
 ```
 
 ```python
@@ -144,10 +143,6 @@ Then for evaluating the radio link, simply type:
 
 ```python
 >>> ak,tauk=Lk.eval(force=True)
-Signatures'> from 2_1_3 saved
-Rays'> from 3_0_1 saved
-Ctilde'> from 0_1_0 saved
-Tchannel'> from 0_1_0_0_0_1_1 saved
 ```
 
 At that point the channel has been evaluated and all the data stored in an `hdf5` file
@@ -158,32 +153,10 @@ The Signature of the radio channel is in `Lk.Si`, the 3D rays are in `Lk.R`, the
 
 ```python
 >>> Lk.R
-Rays3D
-----------
-1 / 1 : [0]
-2 / 6 : [1 2 3 4 5 6]
-3 / 18 : [ 7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24]
-4 / 37 : [25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49
- 50 51 52 53 54 55 56 57 58 59 60 61]
-5 / 42 : [ 62  63  64  65  66  67  68  69  70  71  72  73  74  75  76  77  78  79
-  80  81  82  83  84  85  86  87  88  89  90  91  92  93  94  95  96  97
-  98  99 100 101 102 103]
-6 / 26 : [104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121
- 122 123 124 125 126 127 128 129]
------
-ni : 581
-nl : 1292
 ```
 
 ```python
 >>> Lk.C
-Ctilde
----------
-(130, 181)
-Nray : 130
-fmin(GHz) : 2.0
-fmax(GHz): 11.0
-Nfreq : 181
 ```
 
 ```python
@@ -193,11 +166,6 @@ Nfreq : 181
 
 ```python
 >>> Lk.H
-freq :2.0 10.0 161
-shape  :(130, 161)
-tau :26.7186992365 73.2944728109
-dist :8.01560977094 21.9883418433
-Friis factor -j c/(4 pi f) has been applied
 ```
 
 ```python
