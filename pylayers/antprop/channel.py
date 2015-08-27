@@ -37,7 +37,7 @@ TUDchannel
 .. autosummary::
     :toctree: generated/
 
-FUchannel
+Tchannel
 =========
 
 Members
@@ -49,32 +49,17 @@ Members
 
 .. autosummary::
     :toctree: generated/
-    
+
     FUchannel.frombuf
     FUchannel.capacity
     FUchannel.calibrate
-    FUchannel.pdp 
-
-
-FUDchannel
-==========
-
-.. autosummary::
-    :toctree: generated/
-
+    FUchannel.pdp
     FUDchannel.minphas
     FUDchannel.ifft
     FUDchannel.totime
     FUDchannel.iftd
     FUDchannel.ft1
     FUDchannel.ftau
-
-FUDAchannel
-===========
-
-.. autosummary::
-    :toctree: generated/
-
 
 """
 import doctest
@@ -94,8 +79,6 @@ try:
     import h5py
 except:
     print 'h5py is not installed: Ctilde(object cannot be saved)'
-
-
 
 class TBchannel(bs.TBsignal):
     """ Uniform channel in delay domain
@@ -1190,752 +1173,7 @@ class TUDchannel(TUchannel):
            #    yi = self.y[i+1,:] + (N1-i)*ecmax
            #    r.lines(x,yi,col='black')
 
-class FUchannel(bs.FUsignal):
-    """ channel in Frequency domain
-
-    """
-    def __init__(self,
-          x=np.array([]),
-          y=np.array([]),
-          label=[]):
-
-          bs.FUsignal.__init__(FUchannel(self),x,y,label)
-          self.calibrated = False
-          self.win = 'rect'
-          self.windowed = False
-          self.filcal="calibration.mat"
-
-    def __repr__(self):
-        st = bs.FUsignal.__repr__(self)
-        if self.calibrated:
-            st = st+'\n calibrated : Yes\n'
-        else:
-            st = st+'\n calibrated : No\n'
-
-        if self.windowed:
-            st = st+' windowed : Yes\n'
-            st = st+self.win+'\n'
-        else:
-            st = st+' windowed : No\n'
-
-        return(st)
-
-    def frombuf(self,S,sign=-1):
-        """ load a buffer from vna
-
-        sign : int (+1 |-1)  for complex reconstruction
-
-        """
-        N = len(self.x)
-        u = np.arange(0,N)*2
-        v = np.arange(0,N)*2+1
-        S21 = (S[u]+sign*1j*S[v]).reshape((1,N))
-        self.y = S21
-
-    def capacity(self,Pt,T=290,mode='blast'):
-            """  calculates channel Shannon capacity (no csi)
-
-            Parameters
-            ----------
-
-            Pt : Power transmitted
-            T : Temperrature Kelvin
-            mode : string 
-
-            Returns
-            -------
-
-            C : Channel capacity (bit/s)
-
-            """
-            kB = 1.3806488e-23
-            N0 = kB*T
-            dfGHz = self.x[1]-self.x[0]
-            BGHz  = self.x[-1]-self.x[0]
-            Pb = N0*BGHz*1e9
-            H2 = self.y*np.conj(self.y)
-            snr = Pt[:,None]*H2[None,:]/Pb
-            c = np.log(1+snr)/np.log(2)
-            C = np.sum(c,axis=1)*dfGHz
-            SNR = np.sum(snr,axis=1)*dfGHz
-
-            return(C,SNR)
-
-    def calibrate(self,filecal='calibration.mat',conjugate=False):
-        """ calibrate
-
-        Parameters
-        ----------
-
-        filecal : string
-        conjugate : boolean
-
-
-        """
-        self.filecal = filecal
-        self.calibrated = not self.calibrated
-        Hcal = FUchannel()
-        Hcal.load(filecal)
-        assert (len(self.x) == len(Hcal.x)),"calibration file has hot the same number of points"
-        if not self.calibrated:
-            if not(conjugate):
-                self.y = self.y/Hcal.y
-            else:
-                self.y = self.y/np.conj(Hcal.y)
-        else:
-            if not(conjugate):
-                self.y = self.y*Hcal.y
-            else:
-                self.y = self.y*np.conj(Hcal.y)
-
-    def pdp(self,win='hamming',calibrate=True):
-        """ calculates power delay profile
-
-        Parameters
-        ----------
-
-        win : string
-            window name
-        """
-        self.win = win
-        if calibrate and not self.calibrated:
-            self.calibrate()
-
-        if not self.windowed:
-            self.window(win=win)
-
-        # inverse Fourier transform
-
-        pdp = self.ift(ffts=1)
-        return pdp
-
-class FUDchannel(FUchannel):
-    """
-    FUDchannel : Uniform channel in Frequency domain with delays
-
-
-    Attributes
-    ----------
-
-    x    : ndarray 1xN
-    y    : ndarray MxN
-    taud : direct delay (Time of Flight)
-    taue : excess delay
-
-    Methods
-    -------
-
-    minphas : force minimal phase    (Not tested)
-    totime  : transform to a TUD signal
-    iftd    : inverse Fourier transform
-    ft1     : construct CIR from ifft(RTF)
-    ft2     :
-
-    """
-    def __init__(self, x=np.array([]), y=np.array([]), taud=np.array([]),label=[]):
-        """ object constructor
-
-        Parameters
-        ----------
-
-        x : np.array()
-        y : np.array()
-        taud : np.array()
-
-        """
-        FUchannel.__init__(self,x,y,label)
-        self.taud = taud
-        self.taue = np.zeros(len(taud))
-
-    def __repr__(self):
-        s = bs.FUsignal.__repr__(self)
-        return(s)
-
-    def minphas(self):
-        """ construct a minimal phase FUsignal
-
-        Notes
-        -----
-
-        - Evaluate slope of the phase
-        - deduce delay
-        - update delay of FUDSignal
-        - Compensation of phase slope to obtain minimal phase
-
-        This methods updates the excess delay `taue` member.
-
-        The samplinf frequency step should be
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> from pylayers.signal.bsignal import *
-            >>> import numpy as np
-            >>> fGHz = np.arange(2,11,0.1)
-            >>> tau1 = np.array([1,2,3])[:,np.newaxis]
-            >>> y = np.exp(-2*1j*np.pi*fGHz[np.newaxis,:]*tau1)/fGHz[np.newaxis,:]
-            >>> H = FUDsignal(x=fGHz,y=y,taud=np.array([15,17,18]))
-            >>> f,a = H.plot(typ=['ru'],xlabels=['Frequency GHz'])
-            >>> t1 = plt.suptitle('Before minimal phase compensation')
-            >>> H.minphas()
-            >>> H.taue
-            array([ 1.,  2.,  3.])
-            >>> f,a = H.plot(typ=['ru'],xlabels=['Frequency GHz'])
-            >>> t2 = plt.suptitle('After minimal phase compensation')
-
-        """
-
-        f = self.x
-        phase = np.unwrap(np.angle(self.y))
-        dphi = phase[:, -1] - phase[:, 0]
-        df = self.x[-1] - self.x[0]
-        slope = dphi / df
-        #if slope >0:
-        #   print 'm  inphas Warning : non causal FUSignal'
-        #phi0      = +1j*slope*(f[-1]+f[0]/2)
-        F, S = np.meshgrid(f, slope)
-        #E   = exp(-1j*slope*f+phi0)
-        E = np.exp(-1j * S * F)
-        self.y = self.y * E
-        self.taue = -slope / (2 * np.pi)
-        # update total delay
-        #self.tau = self.tau+self.taue
-
-    def ifft(self):
-        """ inverse Fourier Transform
-
-        Examples
-        --------
-
-        >>> from pylayers.simul.link import *
-        >>> L = DLink(verbose=False)
-        >>> aktk = L.eval()
-        >>> L.H.cut()
-        >>> T1 = L.H.totime()
-        >>> f,a = T1.plot(typ='v')
-        >>> L.H.minphas()
-        >>> T2 = L.H.totime()
-        >>> f,a = T2.plot(typ='v')
-
-
-        """
-        y = fft.ifft(self.y)
-        T = 1/(self.x[1]-self.x[0])
-        x = np.linspace(0,T,len(self.x))
-        h = TUDchannel(x,y,self.taud,self.taue)
-        return(h)
-
-
-    def totime(self, Nz=1, ffts=0):
-        """ transform to TUDsignal
-
-        Parameters
-        ----------
-
-            Nz : int
-                Number of zeros for zero padding
-            ffts : nt
-                fftshift indicator (default 0 )
-
-        Examples
-        --------
-
-        >>> from pylayers.simul.link import *
-        >>> L = DLink(verbose=False)
-        >>> aktk = L.eval()
-        >>> L.H.cut()
-        >>> T1 = L.H.totime()
-        >>> f,a = T1.plot(typ='v')
-        >>> L.H.minphas()
-        >>> T2 = L.H.totime()
-        >>> f,a = T2.plot(typ='v')
-
-        See Also
-        --------
-
-        FUsignal.ift
-
-
-        """
-        Nray = len(self.taud)
-        s = self.ift(Nz, ffts)
-        h = bs.TUDsignal(s.x, fft.fftshift(s.y), self.taud,self.taue)
-        return(h)
-
-
-    def iftd(self, Nz=1, tstart=-10, tstop=100, ffts=0):
-        """ time pasting
-
-        Parameters
-        ----------
-
-        Nz : int
-            Number of zeros
-        tstart : float
-        tstop  : float
-        ffts   : int
-            fftshift indicator
-
-
-        Returns
-        -------
-
-        rf : TUsignal (1,N)
-
-
-        See Also
-        --------
-
-        TUsignal.translate
-
-
-        Examples
-        --------
-
-
-        """
-        tau = self.taud+self.taue
-        Nray = len(tau)
-        s = self.ift(Nz, ffts)
-        x = s.x
-        dx = s.dx()
-        x_new = np.arange(tstart, tstop, dx)
-        yini = np.zeros((Nray, len(x_new)))
-        rf = bs.TUsignal(x_new, yini)
-        #
-        # initializes a void signal
-        #
-        for i in range(Nray):
-            r = bs.TUsignal(x_new, np.zeros(len(x_new)))
-            si = bs.TUsignal(x, s.y[i, :])
-            si.translate(tau[i])
-            r = r + si
-            rf.y[i, :] = r.y
-        return rf
-
-    def ft1(self, Nz, ffts=0):
-        """  construct CIR from ifft(RTF)
-
-        Parameters
-        ----------
-
-        Nz   : number of zeros for zero padding
-        ffts : fftshift indicator
-            0  no fftshift
-            1  apply fftshift
-
-        Returns
-        -------
-
-        r : TUsignal
-
-
-        See Also
-        --------
-
-        pylayers.signal.bsignal.
-
-
-        """
-        tau = self.taud+self.taue
-        self.s = self.ift(Nz, ffts)
-        x = self.s.x
-        r = bs.TUsignal(x, np.zeros(len(x)))
-
-        if len(tau) == 1:
-            return(self.s)
-        else:
-            for i in range(len(tau)):
-                si = bs.TUsignal(self.s.x, self.s.y[i, :])
-                si.translate(tau[i])
-                r = r + si
-            return r
-
-    def ftau(self, Nz=0, k=0, ffts=0):
-        """ time superposition
-
-        Parameters
-        ----------
-
-        Nz  : number of zeros for zero padding
-        k   : starting index
-        ffts = 0  no fftshift
-        ffts = 1  apply fftshift
-
-        Returns
-        -------
-
-        r : TUsignal
-
-        """
-        tau = self.taud + self.taue
-        s = self.ift(Nz, ffts)
-        x = s.x
-        r  = bs.TUsignal(x, np.zeros(len(x)))
-        si = bs.TUsignal(s.x, s.y[k, :])
-        si.translate(tau[k])
-        r = r + si
-        return r
-
-    def cir(self,fGHzmin=0,fGHzmax=1000):
-        """
-        """
-        u = (self.x>fGHzmin) & (self.y<fGHzmax)
-        cir = sum(self.y)
-
-
-    def plot3d(self,fig=[],ax=[]):
-        """ plot in 3D
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> from pylayers.signal.bsignal import *
-            >>> import numpy as np
-            >>> N = 20
-            >>> fGHz = np.arange(1,3,1)
-            >>> taud = np.sort(np.random.rand(N))
-            >>> alpha = np.random.rand(N,len(fGHz))
-            >>> s = FUDsignal(x=fGHz,y=alpha,taud=taud)
-            >>> s.plot3d()
-
-        """
-        Ntau = np.shape(self.y)[0]
-        Nf   = np.shape(self.y)[1]
-
-        if fig==[]:
-            fig = plt.figure()
-
-        if ax == []:
-            ax  = fig.add_subplot(111, projection = '3d')
-
-        for k,f in enumerate(self.x):
-            for i,j in zip(self.taud+self.taue,abs(self.y[:,k])):
-                ax.plot([i,i],[f,f],[0,j],color= 'k')
-
-        ax.set_xlabel('Delay (ns)')
-        ax.set_xlim3d(0,max(self.taud+self.taue))
-
-        ax.set_ylabel('Frequency (fGHz)')
-        ax.set_ylim3d(self.x[0],self.x[-1])
-
-        powermin = abs(self.y).min()
-        powermax = abs(self.y).max()
-        ax.set_zlabel('Power (linear)')
-        ax.set_zlim3d(powermin,powermax)
-
-
-    def ft2(self, df=0.01):
-        """ build channel transfer function (frequency domain)
-
-        Parameters
-        ----------
-
-        df : float
-            frequency step (default 0.01)
-
-        Notes
-        -----
-
-        1. get  fmin and fmax
-        2. build a new base with frequency step df
-        3. Initialize a FUsignal with the new frequency base
-        4. build  matrix tau * f  (Nray x Nf)
-        5. buildl matrix E= exp(-2 j pi f tau)
-        6. resampling of FUDsignal according to f --> S
-        7. apply the element wise product E .* S
-        8. add all rays
-
-        """
-        fmin = self.x[0]
-        fmax = self.x[-1]
-        tau = self.taud+self.taue
-
-        f = np.arange(fmin, fmax, df)
-
-        U = bs.FUsignal(f, np.zeros(len(f)))
-
-        TAUF = np.outer(tau, f)
-        E = np.exp(-2 * 1j * np.pi * TAUF)
-
-        S = self.resample(f)
-        ES = E * S.y
-        V = sum(ES, axis=0)
-        U.y = V
-
-        return U
-
-class FUDAchannel(FUDchannel):
-    """ FUDAchannel : Uniform signal with Delays and Angles
-
-
-    Attributes
-    ----------
-
-    x    : ndarray 1xN
-    y    : ndarray MxN
-    taud : delay
-    tau1 : additional delay
-
-    Methods
-    -------
-
-    minphas : force minimal phase    (Not tested)
-    totime  : transform to a TUD signal
-    iftd    : inverse Fourier transform
-    ft1     : construct CIR from ifft(RTF)
-    ft2     :
-
-    """
-    def __init__(self,
-                 x = np.array([]),
-                 y = np.array([]),
-                 taud = np.array([]),
-                 dod = np.array([]),
-                 doa = np.array([]),
-                 label = []
-                 ):
-        FUDchannel.__init__(self,x,y,taud,label)
-        # FUDsignal.__init__(self, x, y,taud)
-        self.dod  = dod
-        self.doa  = doa
-
-    def __repr__(self):
-        s = FUDchannel.__repr__(self)
-        return(s)
-
-    def cut(self,threshold=0.99):
-        """ cut the signal at an Energy threshold level
-
-        Parameters
-        ----------
-
-        threshold : float
-            default 0.99
-
-        """
-        self.sort(typ='energy')
-        E = self.eprfl()
-        cumE = np.cumsum(E)/sum(E)
-        v = np.where(cumE<threshold)[0]
-        self.taud = self.taud[v]
-        self.taue = self.taue[v]
-        #self.tau = self.tau[v]
-        self.doa = self.doa[v]
-        self.dod = self.dod[v]
-        self.y = self.y[v,:]
-
-    def sort(self,typ='tau'):
-        """ sort FUD signal
-
-        Parameters
-        ----------
-
-        typ  : string
-            which parameter to sort '
-                tau : (default)
-                energy
-
-        """
-
-        if typ == 'tau':
-            u = np.argsort(self.taud+self.taue)
-
-        if typ == 'energy':
-            E = self.eprfl()
-            u = np.argsort(E)[::-1]
-
-        self.taud = self.taud[u]
-        self.taue = self.taue[u]
-        self.doa = self.doa[u]
-        self.dod = self.dod[u]
-        self.y = self.y[u,:]
-
-    def showtap(self,**kwargs):
-        """ show tap
-
-        Parameters
-        ----------
-
-        same as tap
-
-        See Also
-        --------
-
-        tap
-
-        """
-
-        # f x s  x m x tap
-
-        htap = self.tap(**kwargs)
-        # sum over time m
-        Et_htap = np.sqrt(np.sum(htap*np.conj(htap),axis=2))/Nm
-        # sum over s
-        Er_htap = np.sum(htap,axis=1)/Ns
-        corrtap = correlate(Er_htap[0,:,0],np.conj(Er_htap[0,:,0]))
-
-    def tap(self,**kwargs):
-        """ calculate channel tap
-
-        Parameters
-        ----------
-
-        fcGHz : float
-            center frequency
-        WMHz : float
-            bandwidth
-        Ntap : int
-            number of taps (related to bandwith)
-            as the bandwith increases the potential number of taps increases
-        Ns : int
-            number of spatial realizations
-        Nm : int
-            number of time samples
-            the channel is sampled along a distance of half a wavelength
-        Va : velocity of link termination a
-        Vb : velocity of link termination b
-        theta_va : float
-            theta velocity termination a (in radians)
-        phi_va  :
-            phi  velocity termination a (in radians)
-        theta_vb:
-            theta velocity termination b (in radians)
-        phi_vb  :
-            phi velocity termination b (in radians)
-
-
-        Examples
-        --------
-
-        >>> from pylayers.signal.bsignal import *
-
-        """
-
-        defaults = {'fcGHz':4.5,
-                    'WMHz':1,
-                    'Ntap':3,
-                    'Ns':8,
-                    'Nm':10,
-                    'Va':1,  #meter/s
-                    'Vb':1,  #meter/s
-                    'theta_va':0,
-                    'phi_va':0,
-                    'theta_vb':0,
-                    'phi_vb':0 }
-
-
-        for key, value in defaults.items():
-            if key not in kwargs:
-                kwargs[key] = value
-
-        fcGHz=kwargs['fcGHz']
-        WMHz=kwargs['WMHz']
-        Ntap=kwargs['Ntap']
-        Ns=kwargs['Ns']
-        Nm=kwargs['Nm']
-        Va = kwargs['Va']
-        Vb = kwargs['Vb']
-        # direction of link termination velocity vectors
-        theta_va = kwargs['theta_va']
-        theta_vb = kwargs['theta_vb']
-        phi_va = kwargs['phi_va']
-        phi_vb = kwargs['phi_vb']
-
-        Nf = len(self.x)
-
-        mmax = 0.3*WMHz*1e6/(2*fcGHz*(Va+Vb))
-        lam = 0.3/fcGHz
-        lamo2 = lam/2.
-        fmaHz = (Va/0.3)*fcGHz
-        fmbHz = (Vb/0.3)*fcGHz
-        # Coherence Time
-        Tca = 9/(14*np.pi*fmaHz)
-        Tcb = 9/(14*np.pi*fmbHz)
-        Tc  = 9/(14*np.pi*(fmaHz+fmbHz))
-
-        # DoD DoA
-
-        theta_a = self.dod[:,0]
-        phi_a = self.dod[:,1]
-        theta_b = self.doa[:,0]
-        phi_b = self.doa[:,1]
-
-        # 3 x r
-        ska = np.array([np.cos(theta_a)*np.cos(phi_a),np.cos(theta_a)*np.sin(phi_a),np.sin(theta_a)])
-        skb = np.array([np.cos(theta_b)*np.cos(phi_b),np.cos(theta_b)*np.sin(phi_b),np.sin(theta_b)])
-
-        # Monte Carlo for spatial realization
-        # s x m x tap
-        ua0 = (np.cos(theta_va)+1)/2
-        va0 =  phi_va/(2*np.pi)
-        ub0 = (np.cos(theta_vb)+1)/2
-        vb0 =  phi_vb/(2*np.pi)
-        # standard deviation of  velocity vector orientation is inversely
-        # proportional to velocity magnitude
-        ua = (((1/(Va+0.1))*np.random.rand(Ns)+ua0)%1)[:,np.newaxis,np.newaxis]
-        va = (((1/(Va+0.1))*np.random.rand(Ns)+va0)%1)[:,np.newaxis,np.newaxis]
-        ub = (((1/(Vb+0.1))*np.random.rand(Ns)+ub0)%1)[:,np.newaxis,np.newaxis]
-        vb = (((1/(Vb+0.1))*np.random.rand(Ns)+vb0)%1)[:,np.newaxis,np.newaxis]
-
-        # uniform sampling over the sphere
-        tha = np.arccos(2*va-1)
-        pha = 2*np.pi*ua
-        thb = np.arccos(2*vb-1)
-        phb = 2*np.pi*ub
-
-        vax = np.cos(tha)*np.cos(pha)
-        vay = np.cos(tha)*np.sin(pha)
-        vaz = np.sin(tha)*np.cos(pha*0)
-
-        vaxy = np.concatenate([vax[np.newaxis,np.newaxis,np.newaxis,...],vay[np.newaxis,np.newaxis,np.newaxis,...]])
-        va = np.concatenate([vaxy,vaz[np.newaxis,np.newaxis,np.newaxis,...]])
-
-        vbx = np.cos(thb)*np.cos(phb)
-        vby = np.cos(thb)*np.sin(phb)
-        vbz = np.sin(thb)*np.cos(phb*0)
-
-        vbxy = np.concatenate([vbx[np.newaxis,np.newaxis,np.newaxis,...],vby[np.newaxis,np.newaxis,np.newaxis,...]])
-
-        # 3 x r x f x s x m x tap
-        vb = np.concatenate([vbxy,vbz[np.newaxis,np.newaxis,np.newaxis,...]])
-
-        # beta : r x f x s x m x tap
-        betaa = np.sum(ska[:,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]*va,axis=0)
-        betab = np.sum(skb[:,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]*vb,axis=0)
-
-
-        # m discrete time axis
-        # r x f x s x m x tap
-        m = np.linspace(0,mmax,Nm)[np.newaxis,np.newaxis,np.newaxis,:,np.newaxis]
-        # r x f x s x m x tap
-        l  = np.arange(Ntap)[np.newaxis,np.newaxis,np.newaxis,np.newaxis,:]
-        # l : r x f x s x m x tap
-        tau = self.taud[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]+ \
-              self.taue[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
-
-        ba  = betaa*Va*m/(0.3*WMHz*1e6)
-        bb  = betab*Vb*m/(0.3*WMHz*1e6)
-        tau2 = tau + ba + bb
-        # S : r x f x s x m x tap (form 2.34 [D. Tse])
-        S   = np.sinc(l-tau2*WMHz/1000.)
-        # sum over r :  f x s  x m x tap
-        htap = np.sum(S*self.y[...,np.newaxis,np.newaxis,np.newaxis]*np.exp(-2*1j*np.pi*fcGHz*tau2),axis=0)
-
-        # f x s  x m x tap
-        htap  = htap.reshape(Nf,Ns,Nm,Ntap)
-        Et_htap = np.sqrt(np.sum(htap*np.conj(htap),axis=2))/Nm
-        Er_htap = np.sum(htap,axis=1)/Ns
-        corrtap = correlate(Er_htap[0,:,0],np.conj(Er_htap[0,:,0]))
-        return(htap,Et_htap,Er_htap,corrtap)
-
-class Tchannel(FUDAchannel):
+class Tchannel(FUsignal):
     """ Handle the transmission channel
 
     The transmission channel TChannel is obtained through combination of the propagation
@@ -1994,7 +1232,23 @@ class Tchannel(FUDAchannel):
 
         """
         #FUDAchannel.__init__(FUDAchannel(self),fGHz, alpha, tau, dod, doa)
-        super(Tchannel,self).__init__(fGHz, alpha, tau, dod, doa)
+     def __init__(self,
+                 x = np.array([]),
+                 y = np.array([]),
+                 taud = np.array([]),
+                 dod = np.array([]),
+                 doa = np.array([]),
+                 label = []
+                 ):
+        self.taud = taud
+        # FUDsignal.__init__(self, x, y,taud)
+        self.dod  = dod
+        self.doa  = doa
+        self.x = fGHz
+        self.y 
+        #FUsignal.__init__(self,x,y,taud,label)
+
+   super(Tchannel,self).__init__(fGHz, alpha, tau, dod, doa)
 
     def __repr__(self):
         st = ''
@@ -2955,6 +2209,712 @@ class Tchannel(FUDAchannel):
         PrpdB = 10*np.log10(Prp)
 
         return PrdB,PrpdB
+
+        def __repr__(self):
+        s = FUDchannel.__repr__(self)
+        return(s)
+
+    def cut(self,threshold=0.99):
+        """ cut the signal at an Energy threshold level
+
+        Parameters
+        ----------
+
+        threshold : float
+            default 0.99
+
+        """
+        self.sort(typ='energy')
+        E = self.eprfl()
+        cumE = np.cumsum(E)/sum(E)
+        v = np.where(cumE<threshold)[0]
+        self.taud = self.taud[v]
+        self.taue = self.taue[v]
+        #self.tau = self.tau[v]
+        self.doa = self.doa[v]
+        self.dod = self.dod[v]
+        self.y = self.y[v,:]
+
+    def sort(self,typ='tau'):
+        """ sort FUD signal
+
+        Parameters
+        ----------
+
+        typ  : string
+            which parameter to sort '
+                tau : (default)
+                energy
+
+        """
+
+        if typ == 'tau':
+            u = np.argsort(self.taud+self.taue)
+
+        if typ == 'energy':
+            E = self.eprfl()
+            u = np.argsort(E)[::-1]
+
+        self.taud = self.taud[u]
+        self.taue = self.taue[u]
+        self.doa = self.doa[u]
+        self.dod = self.dod[u]
+        self.y = self.y[u,:]
+
+    def showtap(self,**kwargs):
+        """ show tap
+
+        Parameters
+        ----------
+
+        same as tap
+
+        See Also
+        --------
+
+        tap
+
+        """
+
+        # f x s  x m x tap
+
+        htap = self.tap(**kwargs)
+        # sum over time m
+        Et_htap = np.sqrt(np.sum(htap*np.conj(htap),axis=2))/Nm
+        # sum over s
+        Er_htap = np.sum(htap,axis=1)/Ns
+        corrtap = correlate(Er_htap[0,:,0],np.conj(Er_htap[0,:,0]))
+
+    def tap(self,**kwargs):
+        """ calculate channel tap
+
+        Parameters
+        ----------
+
+        fcGHz : float
+            center frequency
+        WMHz : float
+            bandwidth
+        Ntap : int
+            number of taps (related to bandwith)
+            as the bandwith increases the potential number of taps increases
+        Ns : int
+            number of spatial realizations
+        Nm : int
+            number of time samples
+            the channel is sampled along a distance of half a wavelength
+        Va : velocity of link termination a
+        Vb : velocity of link termination b
+        theta_va : float
+            theta velocity termination a (in radians)
+        phi_va  :
+            phi  velocity termination a (in radians)
+        theta_vb:
+            theta velocity termination b (in radians)
+        phi_vb  :
+            phi velocity termination b (in radians)
+
+
+        Examples
+        --------
+
+        >>> from pylayers.signal.bsignal import *
+
+        """
+
+        defaults = {'fcGHz':4.5,
+                    'WMHz':1,
+                    'Ntap':3,
+                    'Ns':8,
+                    'Nm':10,
+                    'Va':1,  #meter/s
+                    'Vb':1,  #meter/s
+                    'theta_va':0,
+                    'phi_va':0,
+                    'theta_vb':0,
+                    'phi_vb':0 }
+
+
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+        fcGHz=kwargs['fcGHz']
+        WMHz=kwargs['WMHz']
+        Ntap=kwargs['Ntap']
+        Ns=kwargs['Ns']
+        Nm=kwargs['Nm']
+        Va = kwargs['Va']
+        Vb = kwargs['Vb']
+        # direction of link termination velocity vectors
+        theta_va = kwargs['theta_va']
+        theta_vb = kwargs['theta_vb']
+        phi_va = kwargs['phi_va']
+        phi_vb = kwargs['phi_vb']
+
+        Nf = len(self.x)
+
+        mmax = 0.3*WMHz*1e6/(2*fcGHz*(Va+Vb))
+        lam = 0.3/fcGHz
+        lamo2 = lam/2.
+        fmaHz = (Va/0.3)*fcGHz
+        fmbHz = (Vb/0.3)*fcGHz
+        # Coherence Time
+        Tca = 9/(14*np.pi*fmaHz)
+        Tcb = 9/(14*np.pi*fmbHz)
+        Tc  = 9/(14*np.pi*(fmaHz+fmbHz))
+
+        # DoD DoA
+
+        theta_a = self.dod[:,0]
+        phi_a = self.dod[:,1]
+        theta_b = self.doa[:,0]
+        phi_b = self.doa[:,1]
+
+        # 3 x r
+        ska = np.array([np.cos(theta_a)*np.cos(phi_a),np.cos(theta_a)*np.sin(phi_a),np.sin(theta_a)])
+        skb = np.array([np.cos(theta_b)*np.cos(phi_b),np.cos(theta_b)*np.sin(phi_b),np.sin(theta_b)])
+
+        # Monte Carlo for spatial realization
+        # s x m x tap
+        ua0 = (np.cos(theta_va)+1)/2
+        va0 =  phi_va/(2*np.pi)
+        ub0 = (np.cos(theta_vb)+1)/2
+        vb0 =  phi_vb/(2*np.pi)
+        # standard deviation of  velocity vector orientation is inversely
+        # proportional to velocity magnitude
+        ua = (((1/(Va+0.1))*np.random.rand(Ns)+ua0)%1)[:,np.newaxis,np.newaxis]
+        va = (((1/(Va+0.1))*np.random.rand(Ns)+va0)%1)[:,np.newaxis,np.newaxis]
+        ub = (((1/(Vb+0.1))*np.random.rand(Ns)+ub0)%1)[:,np.newaxis,np.newaxis]
+        vb = (((1/(Vb+0.1))*np.random.rand(Ns)+vb0)%1)[:,np.newaxis,np.newaxis]
+
+        # uniform sampling over the sphere
+        tha = np.arccos(2*va-1)
+        pha = 2*np.pi*ua
+        thb = np.arccos(2*vb-1)
+        phb = 2*np.pi*ub
+
+        vax = np.cos(tha)*np.cos(pha)
+        vay = np.cos(tha)*np.sin(pha)
+        vaz = np.sin(tha)*np.cos(pha*0)
+
+        vaxy = np.concatenate([vax[np.newaxis,np.newaxis,np.newaxis,...],vay[np.newaxis,np.newaxis,np.newaxis,...]])
+        va = np.concatenate([vaxy,vaz[np.newaxis,np.newaxis,np.newaxis,...]])
+
+        vbx = np.cos(thb)*np.cos(phb)
+        vby = np.cos(thb)*np.sin(phb)
+        vbz = np.sin(thb)*np.cos(phb*0)
+
+        vbxy = np.concatenate([vbx[np.newaxis,np.newaxis,np.newaxis,...],vby[np.newaxis,np.newaxis,np.newaxis,...]])
+
+        # 3 x r x f x s x m x tap
+        vb = np.concatenate([vbxy,vbz[np.newaxis,np.newaxis,np.newaxis,...]])
+
+        # beta : r x f x s x m x tap
+        betaa = np.sum(ska[:,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]*va,axis=0)
+        betab = np.sum(skb[:,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]*vb,axis=0)
+
+
+        # m discrete time axis
+        # r x f x s x m x tap
+        m = np.linspace(0,mmax,Nm)[np.newaxis,np.newaxis,np.newaxis,:,np.newaxis]
+        # r x f x s x m x tap
+        l  = np.arange(Ntap)[np.newaxis,np.newaxis,np.newaxis,np.newaxis,:]
+        # l : r x f x s x m x tap
+        tau = self.taud[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]+ \
+              self.taue[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
+
+        ba  = betaa*Va*m/(0.3*WMHz*1e6)
+        bb  = betab*Vb*m/(0.3*WMHz*1e6)
+        tau2 = tau + ba + bb
+        # S : r x f x s x m x tap (form 2.34 [D. Tse])
+        S   = np.sinc(l-tau2*WMHz/1000.)
+        # sum over r :  f x s  x m x tap
+        htap = np.sum(S*self.y[...,np.newaxis,np.newaxis,np.newaxis]*np.exp(-2*1j*np.pi*fcGHz*tau2),axis=0)
+
+        # f x s  x m x tap
+        htap  = htap.reshape(Nf,Ns,Nm,Ntap)
+        Et_htap = np.sqrt(np.sum(htap*np.conj(htap),axis=2))/Nm
+        Er_htap = np.sum(htap,axis=1)/Ns
+        corrtap = correlate(Er_htap[0,:,0],np.conj(Er_htap[0,:,0]))
+        return(htap,Et_htap,Er_htap,corrtap)
+    """
+    FUDchannel : Uniform channel in Frequency domain with delays
+
+
+    Attributes
+    ----------
+
+    x    : ndarray 1xN
+    y    : ndarray MxN
+    taud : direct delay (Time of Flight)
+    taue : excess delay
+
+    Methods
+    -------
+
+    minphas : force minimal phase    (Not tested)
+    totime  : transform to a TUD signal
+    iftd    : inverse Fourier transform
+    ft1     : construct CIR from ifft(RTF)
+    ft2     :
+
+    """
+    def __init__(self, x=np.array([]), y=np.array([]), taud=np.array([]),label=[]):
+        """ object constructor
+
+        Parameters
+        ----------
+
+        x : np.array()
+        y : np.array()
+        taud : np.array()
+
+        """
+        FUchannel.__init__(self,x,y,label)
+        self.taud = taud
+        self.taue = np.zeros(len(taud))
+
+    def __repr__(self):
+        s = bs.FUsignal.__repr__(self)
+        return(s)
+
+    def minphas(self):
+        """ construct a minimal phase FUsignal
+
+        Notes
+        -----
+
+        - Evaluate slope of the phase
+        - deduce delay
+        - update delay of FUDSignal
+        - Compensation of phase slope to obtain minimal phase
+
+        This methods updates the excess delay `taue` member.
+
+        The samplinf frequency step should be
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.signal.bsignal import *
+            >>> import numpy as np
+            >>> fGHz = np.arange(2,11,0.1)
+            >>> tau1 = np.array([1,2,3])[:,np.newaxis]
+            >>> y = np.exp(-2*1j*np.pi*fGHz[np.newaxis,:]*tau1)/fGHz[np.newaxis,:]
+            >>> H = FUDsignal(x=fGHz,y=y,taud=np.array([15,17,18]))
+            >>> f,a = H.plot(typ=['ru'],xlabels=['Frequency GHz'])
+            >>> t1 = plt.suptitle('Before minimal phase compensation')
+            >>> H.minphas()
+            >>> H.taue
+            array([ 1.,  2.,  3.])
+            >>> f,a = H.plot(typ=['ru'],xlabels=['Frequency GHz'])
+            >>> t2 = plt.suptitle('After minimal phase compensation')
+
+        """
+
+        f = self.x
+        phase = np.unwrap(np.angle(self.y))
+        dphi = phase[:, -1] - phase[:, 0]
+        df = self.x[-1] - self.x[0]
+        slope = dphi / df
+        #if slope >0:
+        #   print 'm  inphas Warning : non causal FUSignal'
+        #phi0      = +1j*slope*(f[-1]+f[0]/2)
+        F, S = np.meshgrid(f, slope)
+        #E   = exp(-1j*slope*f+phi0)
+        E = np.exp(-1j * S * F)
+        self.y = self.y * E
+        self.taue = -slope / (2 * np.pi)
+        # update total delay
+        #self.tau = self.tau+self.taue
+
+    def ifft(self):
+        """ inverse Fourier Transform
+
+        Examples
+        --------
+
+        >>> from pylayers.simul.link import *
+        >>> L = DLink(verbose=False)
+        >>> aktk = L.eval()
+        >>> L.H.cut()
+        >>> T1 = L.H.totime()
+        >>> f,a = T1.plot(typ='v')
+        >>> L.H.minphas()
+        >>> T2 = L.H.totime()
+        >>> f,a = T2.plot(typ='v')
+
+
+        """
+        y = fft.ifft(self.y)
+        T = 1/(self.x[1]-self.x[0])
+        x = np.linspace(0,T,len(self.x))
+        h = TUDchannel(x,y,self.taud,self.taue)
+        return(h)
+
+
+    def totime(self, Nz=1, ffts=0):
+        """ transform to TUDsignal
+
+        Parameters
+        ----------
+
+            Nz : int
+                Number of zeros for zero padding
+            ffts : nt
+                fftshift indicator (default 0 )
+
+        Examples
+        --------
+
+        >>> from pylayers.simul.link import *
+        >>> L = DLink(verbose=False)
+        >>> aktk = L.eval()
+        >>> L.H.cut()
+        >>> T1 = L.H.totime()
+        >>> f,a = T1.plot(typ='v')
+        >>> L.H.minphas()
+        >>> T2 = L.H.totime()
+        >>> f,a = T2.plot(typ='v')
+
+        See Also
+        --------
+
+        FUsignal.ift
+
+
+        """
+        Nray = len(self.taud)
+        s = self.ift(Nz, ffts)
+        h = bs.TUDsignal(s.x, fft.fftshift(s.y), self.taud,self.taue)
+        return(h)
+
+
+    def iftd(self, Nz=1, tstart=-10, tstop=100, ffts=0):
+        """ time pasting
+
+        Parameters
+        ----------
+
+        Nz : int
+            Number of zeros
+        tstart : float
+        tstop  : float
+        ffts   : int
+            fftshift indicator
+
+
+        Returns
+        -------
+
+        rf : TUsignal (1,N)
+
+
+        See Also
+        --------
+
+        TUsignal.translate
+
+
+        Examples
+        --------
+
+
+        """
+        tau = self.taud+self.taue
+        Nray = len(tau)
+        s = self.ift(Nz, ffts)
+        x = s.x
+        dx = s.dx()
+        x_new = np.arange(tstart, tstop, dx)
+        yini = np.zeros((Nray, len(x_new)))
+        rf = bs.TUsignal(x_new, yini)
+        #
+        # initializes a void signal
+        #
+        for i in range(Nray):
+            r = bs.TUsignal(x_new, np.zeros(len(x_new)))
+            si = bs.TUsignal(x, s.y[i, :])
+            si.translate(tau[i])
+            r = r + si
+            rf.y[i, :] = r.y
+        return rf
+
+    def ft1(self, Nz, ffts=0):
+        """  construct CIR from ifft(RTF)
+
+        Parameters
+        ----------
+
+        Nz   : number of zeros for zero padding
+        ffts : fftshift indicator
+            0  no fftshift
+            1  apply fftshift
+
+        Returns
+        -------
+
+        r : TUsignal
+
+
+        See Also
+        --------
+
+        pylayers.signal.bsignal.
+
+
+        """
+        tau = self.taud+self.taue
+        self.s = self.ift(Nz, ffts)
+        x = self.s.x
+        r = bs.TUsignal(x, np.zeros(len(x)))
+
+        if len(tau) == 1:
+            return(self.s)
+        else:
+            for i in range(len(tau)):
+                si = bs.TUsignal(self.s.x, self.s.y[i, :])
+                si.translate(tau[i])
+                r = r + si
+            return r
+
+    def ftau(self, Nz=0, k=0, ffts=0):
+        """ time superposition
+
+        Parameters
+        ----------
+
+        Nz  : number of zeros for zero padding
+        k   : starting index
+        ffts = 0  no fftshift
+        ffts = 1  apply fftshift
+
+        Returns
+        -------
+
+        r : TUsignal
+
+        """
+        tau = self.taud + self.taue
+        s = self.ift(Nz, ffts)
+        x = s.x
+        r  = bs.TUsignal(x, np.zeros(len(x)))
+        si = bs.TUsignal(s.x, s.y[k, :])
+        si.translate(tau[k])
+        r = r + si
+        return r
+
+    def cir(self,fGHzmin=0,fGHzmax=1000):
+        """
+        """
+        u = (self.x>fGHzmin) & (self.y<fGHzmax)
+        cir = sum(self.y)
+
+
+    def plot3d(self,fig=[],ax=[]):
+        """ plot in 3D
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.signal.bsignal import *
+            >>> import numpy as np
+            >>> N = 20
+            >>> fGHz = np.arange(1,3,1)
+            >>> taud = np.sort(np.random.rand(N))
+            >>> alpha = np.random.rand(N,len(fGHz))
+            >>> s = FUDsignal(x=fGHz,y=alpha,taud=taud)
+            >>> s.plot3d()
+
+        """
+        Ntau = np.shape(self.y)[0]
+        Nf   = np.shape(self.y)[1]
+
+        if fig==[]:
+            fig = plt.figure()
+
+        if ax == []:
+            ax  = fig.add_subplot(111, projection = '3d')
+
+        for k,f in enumerate(self.x):
+            for i,j in zip(self.taud+self.taue,abs(self.y[:,k])):
+                ax.plot([i,i],[f,f],[0,j],color= 'k')
+
+        ax.set_xlabel('Delay (ns)')
+        ax.set_xlim3d(0,max(self.taud+self.taue))
+
+        ax.set_ylabel('Frequency (fGHz)')
+        ax.set_ylim3d(self.x[0],self.x[-1])
+
+        powermin = abs(self.y).min()
+        powermax = abs(self.y).max()
+        ax.set_zlabel('Power (linear)')
+        ax.set_zlim3d(powermin,powermax)
+
+
+    def ft2(self, df=0.01):
+        """ build channel transfer function (frequency domain)
+
+        Parameters
+        ----------
+
+        df : float
+            frequency step (default 0.01)
+
+        Notes
+        -----
+
+        1. get  fmin and fmax
+        2. build a new base with frequency step df
+        3. Initialize a FUsignal with the new frequency base
+        4. build  matrix tau * f  (Nray x Nf)
+        5. buildl matrix E= exp(-2 j pi f tau)
+        6. resampling of FUDsignal according to f --> S
+        7. apply the element wise product E .* S
+        8. add all rays
+
+        """
+        fmin = self.x[0]
+        fmax = self.x[-1]
+        tau = self.taud+self.taue
+
+        f = np.arange(fmin, fmax, df)
+
+        U = bs.FUsignal(f, np.zeros(len(f)))
+
+        TAUF = np.outer(tau, f)
+        E = np.exp(-2 * 1j * np.pi * TAUF)
+
+        S = self.resample(f)
+        ES = E * S.y
+        V = sum(ES, axis=0)
+        U.y = V
+
+        return U
+    """ channel in Frequency domain
+
+    """
+    def __init__(self,
+          x=np.array([]),
+          y=np.array([]),
+          label=[]):
+
+          bs.FUsignal.__init__(FUchannel(self),x,y,label)
+          self.calibrated = False
+          self.win = 'rect'
+          self.windowed = False
+          self.filcal="calibration.mat"
+
+    def __repr__(self):
+        st = bs.FUsignal.__repr__(self)
+        if self.calibrated:
+            st = st+'\n calibrated : Yes\n'
+        else:
+            st = st+'\n calibrated : No\n'
+
+        if self.windowed:
+            st = st+' windowed : Yes\n'
+            st = st+self.win+'\n'
+        else:
+            st = st+' windowed : No\n'
+
+        return(st)
+
+    def frombuf(self,S,sign=-1):
+        """ load a buffer from vna
+
+        sign : int (+1 |-1)  for complex reconstruction
+
+        """
+        N = len(self.x)
+        u = np.arange(0,N)*2
+        v = np.arange(0,N)*2+1
+        S21 = (S[u]+sign*1j*S[v]).reshape((1,N))
+        self.y = S21
+
+    def capacity(self,Pt,T=290,mode='blast'):
+            """  calculates channel Shannon capacity (no csi)
+
+            Parameters
+            ----------
+
+            Pt : Power transmitted
+            T : Temperrature Kelvin
+            mode : string 
+
+            Returns
+            -------
+
+            C : Channel capacity (bit/s)
+
+            """
+            kB = 1.3806488e-23
+            N0 = kB*T
+            dfGHz = self.x[1]-self.x[0]
+            BGHz  = self.x[-1]-self.x[0]
+            Pb = N0*BGHz*1e9
+            H2 = self.y*np.conj(self.y)
+            snr = Pt[:,None]*H2[None,:]/Pb
+            c = np.log(1+snr)/np.log(2)
+            C = np.sum(c,axis=1)*dfGHz
+            SNR = np.sum(snr,axis=1)*dfGHz
+
+            return(C,SNR)
+
+    def calibrate(self,filecal='calibration.mat',conjugate=False):
+        """ calibrate
+
+        Parameters
+        ----------
+
+        filecal : string
+        conjugate : boolean
+
+
+        """
+        self.filecal = filecal
+        self.calibrated = not self.calibrated
+        Hcal = FUchannel()
+        Hcal.load(filecal)
+        assert (len(self.x) == len(Hcal.x)),"calibration file has hot the same number of points"
+        if not self.calibrated:
+            if not(conjugate):
+                self.y = self.y/Hcal.y
+            else:
+                self.y = self.y/np.conj(Hcal.y)
+        else:
+            if not(conjugate):
+                self.y = self.y*Hcal.y
+            else:
+                self.y = self.y*np.conj(Hcal.y)
+
+    def pdp(self,win='hamming',calibrate=True):
+        """ calculates power delay profile
+
+        Parameters
+        ----------
+
+        win : string
+            window name
+        """
+        self.win = win
+        if calibrate and not self.calibrated:
+            self.calibrate()
+
+        if not self.windowed:
+            self.window(win=win)
+
+        # inverse Fourier transform
+
+        pdp = self.ift(ffts=1)
+        return pdp
 
 class Ctilde(PyLayers):
     """ container for the 4 components of the polarimetric ray channel
