@@ -263,6 +263,8 @@ from pylayers.util import pyutil as pyu
 from pylayers.util import graphutil as gru
 from pylayers.util import cone
 
+#from  more_itertools import unique_everseen
+
 # Handle furnitures
 import pylayers.gis.furniture as fur
 import pylayers.gis.osmparser as osm
@@ -296,7 +298,7 @@ class Layout(PyLayers):
 
     Gs     : Structure graph
     Gt     : Topological graph  (indicates topological relationships between rooms)
-    Gr     : Graph of room
+    Gr     : Graph of rooms
     Gv     : Graph of visibility
     Gc     : Connection graph (indicates visbility relationships)
     Nnode  : Number of nodes of Gs
@@ -399,6 +401,9 @@ class Layout(PyLayers):
         self.display['box'] = (-50,50,-50,50)
         self.name = {}
 
+
+        self.zmin = 0
+
         for k in self.sl.keys():
             self.name[k] = []
 
@@ -433,11 +438,11 @@ class Layout(PyLayers):
                 if  (k < 2) or (k>3):
                     st = st + 'degree '+str(k)+' : '+str(self.degree[k])+"\n"
                 else:
-                    st = st + 'degree '+str(k)+' : '+str(len(self.degree[k]))+"\n"
+                    st = st + 'number of node point of degree '+str(k)+' : '+str(len(self.degree[k]))+"\n"
         st = st + "\n"
         st = st + "xrange :"+ str(self.ax[0:2])+"\n"
         st = st + "yrange :"+ str(self.ax[2:])+"\n"
-        st = st + "\nUseful dictionnaries"+"\n----------------\n"
+        st = st + "\nUseful dictionnaries" + "\n----------------\n"
         if hasattr(self,'dca'):
             st = st + "dca {cycle : []} cycle with an airwall" +"\n"
         if hasattr(self,'di'):
@@ -469,6 +474,80 @@ class Layout(PyLayers):
             st = st + "degree : degree of nodes " +"\n"
 
         return(st)
+
+    def __add__(self, other):
+        """ addition
+
+        One can add a numpy array or an other layout
+        """
+        Ls = copy.deepcopy(self)
+        if type(other)==np.ndarray:
+            for k in Ls.Gs.pos:
+                Ls.Gs.pos[k]=Ls.Gs.pos[k]+other[0:2]
+        else:
+            offp = -min(Ls.Gs.nodes())
+            offs = max(Ls.Gs.nodes())
+            other.offset_index(offp=offp,offs=offs)
+            Ls.Gs.node.update(other.Gs.node)
+            Ls.Gs.edge.update(other.Gs.edge)
+            Ls.Gs.adj.update(other.Gs.adj)
+            Ls.Gs.pos.update(other.Gs.pos)
+            Ls.Np = Ls.Np+other.Np
+            Ls.Ns = Ls.Ns+other.Ns
+            Ls.Nss = Ls.Nss+other.Nss
+
+        return(Ls)
+
+
+    def __mul__(self,alpha):
+        """ scale the layout 
+
+        other : scaling factor (np.array or int or float)
+
+        Returns
+        -------
+
+        Ls : Layout
+            scaled layout
+
+        """
+        Ls = copy.deepcopy(self)
+        Gs = Ls.Gs
+        if type(alpha) != np.ndarray:
+            assert((type(alpha) == float) or (type(alpha) == int)), " not float"
+            alpha=np.array([alpha, alpha, alpha])
+        else:
+            assert(len(alpha)==3), " not 3D"
+        #
+        # scaling x & y
+        #
+        x = np.array(Gs.pos.values())[:,0]
+        xc = np.mean(x)
+        x = (x-xc)*alpha[0] + xc
+
+        y = np.array(Gs.pos.values())[:,1]
+        yc = np.mean(y)
+        y = (y-yc)*alpha[1] + yc
+
+        xy = np.vstack((x,y)).T
+        Ls.Gs.pos = dict(zip(Gs.pos.keys(),tuple(xy)))
+
+        #
+        # scaling z
+        #
+
+        nseg = filter(lambda x : x>0, Gs.nodes())
+        for k in nseg:
+            Ls.Gs.node[k]['z'] = tuple((np.array(Ls.Gs.node[k]['z'])-self.zmin)*alpha[2]+self.zmin)
+            if Ls.Gs.node[k].has_key('ss_z'):
+                Ls.Gs.node[k]['ss_z'] = list((np.array(Ls.Gs.node[k]['ss_z'])-self.zmin)*alpha[2]+self.zmin)
+
+        #
+        # updating numpy array from graph
+        #
+
+        Ls.g2npy()
+        return Ls
 
     def ls(self, typ='ini'):
         """ list the available file in dirstruc
@@ -535,6 +614,49 @@ class Layout(PyLayers):
         self.Gs = nx.Graph()
         self.Gc = nx.Graph()
         self.Gm = nx.Graph()
+
+    def offset_index(self,offp=0,offs=0):
+        """ offset points and segment index
+
+        Parameters
+        ----------
+        offp : offset points
+        offs : offset segments
+
+        """
+
+        newpoint = dict( (k-offp,v) for k,v in self.Gs.node.items() if k <0)
+        assert (np.array(newpoint.keys())<0).all()
+        newseg =   dict( (k+offs,v) for k,v in self.Gs.node.items() if k > 0)
+        assert (np.array(newseg.keys())>0).all()
+        newpoint.update(newseg)
+        self.Gs.node = newpoint
+
+        newppoint = dict( (k-offp,v) for k,v in self.Gs.pos.items() if k <0)
+        newpseg =   dict( (k+offs,v) for k,v in self.Gs.pos.items() if k > 0)
+        newppoint.update(newpseg)
+        self.Gs.pos =  newppoint
+
+        # adjascence list of segments
+        ladjs = [self.Gs.adj[k] for k in self.Gs.adj.keys() if k > 0 ]
+        # adjascence list of points
+        ladjp = [self.Gs.adj[k] for k in self.Gs.adj.keys() if k < 0 ]
+
+        nladjs = map(lambda x: dict((k-offp,v) for k,v in x.items()),ladjs)
+        nladjp = map(lambda x: dict((k+offs,v) for k,v in x.items()),ladjp)
+
+        lpt  = [k-offp for k in self.Gs.adj.keys() if k <0 ]
+        lseg = [k+offs for k in self.Gs.adj.keys() if k >0 ]
+
+        dpt  = dict(zip(lpt,nladjp))
+        dseg = dict(zip(lseg,nladjs))
+        dseg.update(dpt)
+        self.Gs.adj =  dseg
+        self.Gs.edge = dseg
+        #pdb.set_trace()
+        #dict(zip(self.Gs.keys(),))
+        #self.Gs.adj = newapoint
+
 
     def check(self,level=0):
         """ Check Layout consistency
@@ -627,7 +749,7 @@ class Layout(PyLayers):
                if ke[u]>0:
                    self.del_segment(ke[u])
                if ke[u]<0:
-                   self.del_point(ke[u])
+                   self.del_points(ke[u])
 
            nodes = self.Gs.nodes()
            useg  = filter(lambda x : x>0,nodes)
@@ -717,7 +839,6 @@ class Layout(PyLayers):
 
 
         nodes = self.Gs.nodes()
-
         # nodes include points and segments
 
         #segment index
@@ -781,7 +902,7 @@ class Layout(PyLayers):
             self.degree[deg] = npt
 
 
-                #
+        #
         # convert geometric information in numpy array
         #
 
@@ -817,6 +938,7 @@ class Layout(PyLayers):
         #
         # handling of segment related arrays
         #
+        #pdb.set_trace()
         if Nsmax >0:
             self.tgs = np.zeros(Nsmax+1,dtype=int)
             rag = np.arange(len(useg))
@@ -896,7 +1018,6 @@ class Layout(PyLayers):
         normal_ss = self.normal[:,self.tgs[self.lsss]]
         self.normal = np.hstack((self.normal,normal_ss))
 
-
         # calculate extremum of segments
         #
         # Calculate the wedge angle of degree 2 points
@@ -904,16 +1025,26 @@ class Layout(PyLayers):
         if 2 in self.degree:
             wedgea = self.wedge(self.degree[2])
 
+<<<<<<< HEAD
         # wedge < 179 (not flat)
             idiff = filter(lambda x: wedgea[x]<179,range(len(self.degree[2])))
             self.ldiff = map(lambda x : self.degree[2][x],idiff)
+=======
+        # wedge < 179 deg (not flat)
+        idiff = filter(lambda x: wedgea[x]<179,range(len(self.degree[2])))
+        self.ldiff = map(lambda x : self.degree[2][x],idiff)
+        # add degree 1 point
+        # This corresponds to degree 2 point with an adjascent airwall
+        # (half-plane diffraction)
+        self.ldiff = self.ldiff+list(self.degree[1])
+>>>>>>> f64cbc42b0d27abd496e3bdda020fecc016e9a8b
         # if problem here check file format 'z' should be a string
             self.maxheight = np.max([v[1] for v in nx.get_node_attributes(self.Gs,'z').values()])
 
             self.extrseg()
 
     def loadosm(self, _fileosm):
-        """ load layout from an osm file format
+        """ load layout from an osm file 
 
         Parameters
         ----------
@@ -925,8 +1056,8 @@ class Layout(PyLayers):
         -----
 
         In JOSM nodes are numbered with negative indexes. It is not valid to
-        have a positive node number. To stay compliant with the PyLayers
-        convention which tells that <0 node are points and >0 are segments,
+        have a positive node number. To remain compliant with the PyLayers
+        convention which assumes that <0 nodes are points and >0 nodes are segments,
         in the osm format, segments are numbered negatively with a known offset
         of 1e7=10000000. The convention is set back when loading the osm file.
 
@@ -953,11 +1084,11 @@ class Layout(PyLayers):
 
                 # old format conversion
                 if d.has_key('zmin'):
-                    d['z']=(d['zmin'],d['zmax'])
+                    d['z']=[d['zmin'],d['zmax']]
                     del(d['zmin'])
                     del(d['zmax'])
                 if d.has_key('ss_zmin'):
-                    d['ss_z']=[(d['ss_zmin'],d['ss_zmax'])]
+                    d['ss_z']=[[d['ss_zmin'],d['ss_zmax']]]
                     d['ss_name']=[d['ss_name']]
                     del(d['ss_zmin'])
                     del(d['ss_zmax'])
@@ -968,37 +1099,42 @@ class Layout(PyLayers):
                     except:
                         pass
                 # avoid  0 value (not a segment number)
-                ns = k+1
-                # transcode segment index
-                if d.has_key('name'):
-                    name = d['name']
-                else:
-                    name = 'AIR'
-                    d['name'] = 'AIR'
-                self.Gs.add_node(ns)
-                self.Gs.add_edge(nta,ns)
-                self.Gs.add_edge(ns,nhe)
-                self.Gs.node[ns] = d
-                self.Gs.pos[ns] = tuple((np.array(self.Gs.pos[nta])+np.array(self.Gs.pos[nhe]))/2.)
-                if name not in self.display['subseg']:
-                    self.display['layers'].append(name)
-                self.labels[ns] = str(ns)
+#                ns = k+1
+#                # transcode segment index
+#                if d.has_key('name'):
+#                    name = d['name']
+#                else:
+#                    name = 'AIR'
+#                    d['name'] = 'AIR'
+#                self.Gs.add_node(ns)
+#                self.Gs.add_edge(nta,ns)
+#                self.Gs.add_edge(ns,nhe)
+#                self.Gs.node[ns] = d
+#                self.Gs.pos[ns] = tuple((np.array(self.Gs.pos[nta])+np.array(self.Gs.pos[nhe]))/2.)
+#                if name not in self.display['layers']:
+#                    self.display['layers'].append(name)
+#                self.labels[ns] = str(ns)
+#                if d.has_key('ss_name'):
+#                    nss+=len(d['ss_name'])
+#                    for n in d['ss_name']:
+#                        if n in self.name:
+#                            self.name[n].append(ns)
+#                        else:
+#                            self.name[n]=[ns]
+#                if name in self.name:
+#                    self.name[name].append(ns)
+#                else:
+#                    self.name[name] = [ns]
+                ns = self.add_segment(nta,nhe,name=d['name'],z=[eval(u) for u in d['z']],offset=0)
+               # self.chgmss(s1,ss_name=d['ss_name'],ss_offset=d['ss_offset'],ss_z=d['ss_z'])
                 if d.has_key('ss_name'):
                     nss+=len(d['ss_name'])
-                    for n in d['ss_name']:
-                        if n in self.name:
-                            self.name[n].append(ns)
-                        else:
-                            self.name[n]=[ns]
-                if name in self.name:
-                    self.name[name].append(ns)
-                else:
-                    self.name[name] = [ns]
+                    self.chgmss(ns,ss_name=d['ss_name'],ss_z=[[eval(u) for u in v ] for v in d['ss_z']])
 
-                _ns+=1
+#                _ns+=1
 
         self.Np = _np
-        self.Ns = _ns
+        #self.Ns = _ns
         self.Nss = nss
         #del coords
         #del nodes
@@ -1129,7 +1265,7 @@ class Layout(PyLayers):
 
 
     def loadini(self, _fileini):
-        """ load a structure file from an .ini format
+        """ load a structure file from an .ini file
 
         Parameters
         ----------
@@ -2170,12 +2306,12 @@ class Layout(PyLayers):
         # delete old edge ns
         self.del_segment(ns)
         # add new edge np[0] num
-        self.add_segment(nop[0], num, name=namens, z = (zminns,zmaxns), offset=0)
+        self.add_segment(nop[0], num, name=namens, z = [zminns,zmaxns], offset=0)
         # add new edge num np[1]
-        self.add_segment(num, nop[1], name=namens, z = (zminns,zmaxns), offset=0)
+        self.add_segment(num, nop[1], name=namens, z = [zminns,zmaxns], offset=0)
 
-    def add_segment(self, n1, n2, name='PARTITION',z=(0.0,3.0),offset=0):
-        """  add edge between node n1 and node n2
+    def add_segment(self, n1, n2, name='PARTITION',z=[0.0,3.0],offset=0):
+        """  add segment between node n1 and node n2
 
         Parameters
         ----------
@@ -2184,8 +2320,8 @@ class Layout(PyLayers):
         n2  : integer < 0
         name : string
             layer name 'PARTITION'
-        z : tuple of float
-            default = (0,3.0)
+        z : list of float
+            default = [0,3.0]
         offset : float
             [-1,1] default (0)
 
@@ -2200,8 +2336,7 @@ class Layout(PyLayers):
         A segment dictionnary has the following mandatory attributes
 
         name : slab name associated with segment
-        zmin : float  (meters)
-        zmax : float  (meters)
+        z : list (zmin,zmax)   (meters)
         norm : array  (1x3)  segment normal
         transition : boolean
         ncycles : list of involved cycles
@@ -2235,13 +2370,16 @@ class Layout(PyLayers):
         transition = False
         if name == 'AIR':
             transition=True
+
         p1 = np.array(self.Gs.pos[n1])
         p2 = np.array(self.Gs.pos[n2])
         p2mp1 = p2 - p1
         t = p2mp1 / np.sqrt(np.dot(p2mp1, p2mp1))
+
         #
         # n = t x z
         #
+
         norm = np.array([t[1], -t[0], 0])
         self.Gs.add_node(num, name=name)
         self.Gs.add_node(num, z=z)
@@ -2254,7 +2392,6 @@ class Layout(PyLayers):
         self.Gs.add_edge(n2, num)
         self.Ns = self.Ns + 1
         # update slab name <-> edge number dictionnary
-        print num,name
         try:
             self.name[name].append(num)
         except:
@@ -2356,10 +2493,10 @@ class Layout(PyLayers):
         n2 = self.add_fnod(p2)
         n3 = self.add_fnod(p3)
         # adding segments
-        self.add_segment(n0, n1, matname, (zmin, zmin+height))
-        self.add_segment(n1, n2, matname, (zmin, zmin+height))
-        self.add_segment(n2, n3, matname, (zmin, zmin+height))
-        self.add_segment(n3, n0, matname, (zmin, zmin+height))
+        self.add_segment(n0, n1, matname, [zmin, zmin+height])
+        self.add_segment(n1, n2, matname, [zmin, zmin+height])
+        self.add_segment(n2, n3, matname, [zmin, zmin+height])
+        self.add_segment(n3, n0, matname, [zmin, zmin+height])
 
     def add_furniture_file(self, _filefur, typ=''):
         """  add pieces of furniture from .ini files
@@ -2403,7 +2540,7 @@ class Layout(PyLayers):
         """ delete points in list lp
 
         Parameters
-        ----------add
+        ----------
 
         lp : list
             node list
@@ -2476,49 +2613,37 @@ class Layout(PyLayers):
 
     def mask(self):
         """  returns the polygonal mask of the building
-        """
-        p  = self.Gt.node[1]['polyg']
-        ps = sh.Polygon(p.exterior)
-        for k in self.Gt.node:
-            if (k!=0) & (k!=-1):
-                p = self.Gt.node[k]['polyg']
-                ps = ps.union(sh.Polygon(p.exterior))
-        mask = geu.Polygon(ps)
-        mask.setvnodes(self)
-        return(mask)
-
-    def scale(self,alpha=[1,1,1]):
-        """ scale the layout
-        alpha : scaling factor
 
         Returns
         -------
 
-        Ls : Layout
-            scaled layout
+        mask : geu.Polygon
+
+        Notes
+        -----
+
+        This function assumes graph Gt has been generated
+
         """
-        Ls = copy.deepcopy(self)
-        Gs = Ls.Gs
+        # takes the 1st cycle polygon
+        p = self.Gt.node[1]['polyg']
+        # get the exterior of the polygon
+        ps = sh.Polygon(p.exterior)
+        # make the union of the exterior of all the cycles
         #
-        # scaling x & y
+        # cycle : -1 exterior
+        #          0 ??
         #
-        x = np.array(Gs.pos.values())[:,0]*alpha[0]
-        y = np.array(Gs.pos.values())[:,1]*alpha[1]
-        xy = np.vstack((x,y)).T
-        Ls.Gs.pos = dict(zip(Gs.pos.keys(),tuple(xy)))
-        #
-        # scaling z
-        #
-        nseg = filter(lambda x : x>0, Gs.nodes())
-        for k in nseg:
-            Ls.Gs.node[k]['z'] = np.array(Ls.Gs.node[k]['z'])*alpha[2]
-        for k in Ls.lsss:
-            Ls.Gs.node[k]['ss_z'] = np.array(Ls.Gs.node[k]['ss_z'])*alpha[2]
-        #
-        # updating numpy array from graph
-        #
-        Ls.g2npy()
-        return Ls
+
+        for k in self.Gt.node:
+            if (k!=0) & (k!=-1):
+                p = self.Gt.node[k]['polyg']
+                ps = ps.union(sh.Polygon(p.exterior))
+
+        mask = geu.Polygon(ps)
+        mask.setvnodes(self)
+        return(mask)
+
 
     def translate(self,vec):
         """ translate layout
@@ -2641,6 +2766,7 @@ class Layout(PyLayers):
         for n in self.Gs.node.keys():
             if ((n < 0) & (self.Gs.degree(n) == 0)):
                 self.Gs.remove_node(n)
+                del self.Gs.pos[n]
                 try:
                     self.Gc.remove_node(n)
                 except:
@@ -2651,6 +2777,7 @@ class Layout(PyLayers):
                     pass
 
         self.Np = len(np.nonzero(np.array(self.Gs.node.keys()) < 0)[0])
+        self.g2npy()
 
     def displaygui(self):
         """
@@ -2750,7 +2877,7 @@ class Layout(PyLayers):
 
 
     def chgmss(self,ns,ss_name=[],ss_z=[],ss_offset=[]):
-        """ change multi subseggments properties
+        """ change multi subsegments properties
 
         Parameters
         ----------
@@ -2763,7 +2890,7 @@ class Layout(PyLayers):
 
         ss_z : list of Nss tuple (zmin,zmax)
 
-        ss_offset : list os subsegment offsets
+        ss_offset : list of subsegment offsets
 
         Examples
         --------
@@ -2860,7 +2987,7 @@ class Layout(PyLayers):
                                 self.name[data[i]] = [e1]
                     i = i + 1
             except:
-                # if cancel
+                #if cancel
                 pass
         else:
             if outdata=={}:
@@ -3881,7 +4008,7 @@ class Layout(PyLayers):
         >>> L = Layout('TA-Office.ini')
         >>> ptlist  = np.array([0,1])
         >>> L.segpt(ptlist)
-        array([26, 61, 62, 70])
+        array([44, 50, 84, 86])
 
         """
 
@@ -4099,8 +4226,7 @@ class Layout(PyLayers):
             array([ 1,  3,  7,  8, 14, 15, 16, 17, 18, 20, 21, 23, 24, 26, 27, 29, 30,
                    32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 44, 46, 47, 52, 53, 54,
                    55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71,
-                   72, 73, 74, 75, 76, 77, 78, 81, 82, 85, 86, 87, 88, 89, 90, 91, 92,
-                   93])
+                   72, 73, 74, 75, 76, 77, 78, 81, 82, 85, 86])
 
         """
         max_x = max(p1[0], p2[0])
@@ -5576,9 +5702,9 @@ class Layout(PyLayers):
             if a cycle is tagged as non convex
 
             1- find its polygon
-            2- partion polygon into convex polygons (Delaunay)
-            3- try to merge partioned polygon in order to obtain
-               the minimal number of convex polygon
+            2- partition polygon into convex polygons (Delaunay)
+            3- try to merge partitioned polygons in order to obtain
+               the minimal number of convex polygons
             4- re-number/re-create Gt by creating  new 'convex' cycles
                from those convex polygons
 
@@ -6870,7 +6996,7 @@ class Layout(PyLayers):
                     'mode':'nocycle',
                     'alphacy':0.8,
                     'colorcy':'abcdef',
-                    'linter':['RR','TT','RT','TR','RD','DR','TD','DT','DD'],
+                    'linter' : ['RR','TT','RT','TR','RD','DR','TD','DT','DD'],
                     'show0':False,
                     'axis':False
                     }
@@ -6930,8 +7056,8 @@ class Layout(PyLayers):
                     'mode':'nocycle',
                     'alphacy':0.8,
                     'colorcy':'#abcdef',
-                    'lvis':['nn','ne','ee'],
-                    'linter':['RR','TT','RT','TR','RD','DR','TD','DT','DD'],
+                    'lvis' : ['nn','ne','ee'],
+                    'linter' : ['RR','TT','RT','TR','RD','DR','TD','DT','DD'],
                     'show0':False,
                     'axis':False
                     }
@@ -6957,6 +7083,7 @@ class Layout(PyLayers):
         #
         # s : structure graph
         #
+
         if 's' in graph:
 
             # not efficient
@@ -7137,6 +7264,8 @@ class Layout(PyLayers):
 
             edges = G.edges()
 
+            # range len edges
+
             rle = range(len(edges))
 
             DD = filter(lambda x:  ((len(edges[x][0])==1) &
@@ -7166,7 +7295,7 @@ class Layout(PyLayers):
             DT = filter(lambda x:  ((len(edges[x][0]) ==1) &
                                     (len(edges[x][1]) ==3)),rle )
 
-            tabcol = ['b','g','r','m','c','orange','purple','maroon'][::-1]
+            tabcol = ['b','g','r','m','c','orange','purple','maroon','purple','k'][::-1]
             li = []
             if 'i' in labels:
                 kwargs['labels']=True
@@ -7176,6 +7305,14 @@ class Layout(PyLayers):
                 if len(eval(inter))>0:
                     li.append(inter)
                     kwargs['edgelist'] = eval(inter)
+                    ndlist = map(lambda x: self.Gi.edges()[x][0],kwargs['edgelist'])+\
+                             map(lambda x: self.Gi.edges()[x][1],kwargs['edgelist'])
+
+                    # keep only unique interaction
+                    unique = []
+                    [unique.append(it) for it in ndlist if it not in unique]
+
+                    kwargs['nodelist'] = unique
                     kwargs['edge_color'] = tabcol.pop()
                     kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
             legtxt = ['Gs'] + li

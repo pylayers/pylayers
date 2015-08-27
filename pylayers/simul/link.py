@@ -5,23 +5,33 @@ r"""
 
 .. currentmodule:: pylayers.simul.link
 
-This module runs the electromagnetic simulation at the link level.
+This module runs the electromagnetic simulation for a link.
+A deterministic link has two termination points and an associated Layout 
+whereas a statistical link do not need any of those precursor object.
+
 It stores simulated objects in `hdf5` format.
 
-Link is a MetaClass
-Dlink is for deterministic links
-Slink is for statistical links.
 
 Link Class
 ===========
+
+Link is a MetaClass, which derives from `Tchannel`.
+Tchannel is a transmission channel i.e a radio channel
+which includes both link termination antennas.
+
+A common factor of both statistical (SLink) and deterministic channel (DLink) 
+is the exitence of :math:`\alpha_k` and :math:`\tau_k`
 
 .. autosummary::
     :toctree: generated/
 
     Link.__add__
 
+
 SLink Class
 ===========
+
+Slink is for statistical links.
 
 .. autosummary::
     :toctree: generated/
@@ -30,6 +40,8 @@ SLink Class
 
 DLink Class
 ===========
+
+Dlink is for deterministic links
 
 >>> from pylayers.simul.link import *
 >>> L = DLink(verbose=False)
@@ -118,12 +130,12 @@ import pdb
 
 
 
-class Link(object):
+class Link(Tchannel):
     def __init__(self):
         """ Link evaluation metaclass
-
         """
-        self.H = Tchannel()
+        Tchannel.__init__(self)
+    #    super(Link,self).__init__ ()
 
 
     def __add__(self,l):
@@ -294,6 +306,7 @@ class DLink(Link):
             Signature identifier (si_ID#N):
                 ca_cb_cutoff
 
+%pylab inline
             Ray identifier (ray_ID#N):
                 cutoff_ua_ub
 
@@ -311,7 +324,8 @@ class DLink(Link):
             ub : indice of a position in 'p_map' position dataset
             uf : indice of freq position in 'f_map' frequency dataset
             uTa : indice of a position in 'T_map' Rotation dataset
-            uTb : indice of b position in 'T_map' Rotation dataset
+            uTb : indice o
+%pylab inlinef b position in 'T_map' Rotation dataset
             uAa : indice of a position in 'A_map' Antenna name dataset
             uAb : indice of b position in 'A_map' Antenna name dataset
 
@@ -328,7 +342,7 @@ class DLink(Link):
         """
 
 
-        super(DLink,self).__init__()
+        Link.__init__(self)
 
         defaults={ 'L':Layout(),
                    'a':np.array(()),
@@ -565,7 +579,7 @@ class DLink(Link):
                             _fileant = Ant._filename
                             )
         self._Aa = Ant
-        # to be removed when radionode will be updated
+        #to be removed when radionode will be updated
         self.a = position
         self.Ta = rot
 
@@ -580,7 +594,7 @@ class DLink(Link):
                             _fileant = Ant._filename,
                             )
         self._Ab = Ant
-        # to be removed when radionode will be updated
+        #to be removed when radionode will be updated
         self.b = position
         self.Tb = rot
 
@@ -645,45 +659,10 @@ class DLink(Link):
         s = s + 'fstep (fGHz) : ' + str(self.fGHz[1]-self.fGHz[0]) +'\n'
         s = s + 'Nf : ' + str(len(self.fGHz)) +'\n '
         d =  np.sqrt(np.sum((self.a-self.b)**2)) 
-        fc = (self.fGHz[-1]+self.fGHz[0])/2.
+        fcGHz = (self.fGHz[-1]+self.fGHz[0])/2.
         L  = 32.4+20*np.log(d)+20*np.log10(fcGHz)
         return s
 
-
-
-    def help(self,letter='az',mod='meth'):
-        """ help
-
-        Parameters
-        ----------
-
-        txt : string
-            'members' | 'methods'
-        """
-
-        members = self.__dict__.keys()
-        lmeth = np.sort(dir(self))
-
-        if mod=='memb':
-            print np.sort(self.__dict__.keys())
-        if mod=='meth':
-            for s in lmeth:
-                if s not in members:
-                    if s[0]!='_':
-                        if len(letter)>1:
-                            if (s[0]>=letter[0])&(s[0]<letter[1]):
-                                try:
-                                    doc = eval('self.'+s+'.__doc__').split('\n')
-                                    print s+': '+ doc[0]
-                                except:
-                                    pass
-                        else:
-                            if (s[0]==letter[0]):
-                                try:
-                                    doc = eval('self.'+s+'.__doc__').split('\n')
-                                    print s+': '+ doc[0]
-                                except:
-                                    pass
     def reset_config(self):
         """ reset configuration when a new layout is loaded
         """
@@ -1130,7 +1109,7 @@ class DLink(Link):
 
 
     def eval(self,**kwargs):
-        """ Evaluate the link
+        """ evaluate the link
 
 
         Parameters
@@ -1144,7 +1123,7 @@ class DLink(Link):
             signature.run algo type
             'old' : call propaths2
             'new' : call procone2
-        alg : 5 | 7
+        alg : 5|7
             version of run for signature
         si_mt: boolean
             Multi thread version of algo version 7

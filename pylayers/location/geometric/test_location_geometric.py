@@ -17,12 +17,12 @@ Lmax=20
 # standard deviation
 std = 5
 
-# nb of trials
+#nb of trials
 N=100
 
 P = np.random.rand(2,N)
 
-# anchors :
+#anchors :
 A = np.array(([[0,0],
                 [0,Lmax],
                 [Lmax,0],
@@ -33,13 +33,13 @@ A = np.array(([[0,0],
 D = np.sqrt(np.sum((A[:,None,:]-P[:,:,None])**2,axis=0))
 toa = D/0.3
 
-# error 
+#error 
 n = std*np.random.randn(N,A.shape[1])
 toa= toa + n
 
 # TDOAs
 tdoa = np.array(([toa[:,0]-toa[:,1]],[toa[:,0]-toa[:,2]],[toa[:,0]-toa[:,3]])).reshape(N,3)
-# ATDOA : nb_tdoa,a1a2,xy
+#ATDOA : nb_tdoa,a1a2,xy
 ATDOA= np.array(([A[:,0],A[:,1]], [A[:,0],A[:,2]], [A[:,0],A[:,3]]))
 
 
@@ -61,7 +61,7 @@ for k in xrange(N):
     C_toa_tdoa=CLA()
     T = []
     TD = []
-    # TOA
+    #TOA
     for ia in range(A.shape[1]):
         T.append(TOA(id=0,value = toa[k,ia], std = std, p = A[:,ia]))
         C_toa.append(T[ia])
@@ -70,7 +70,7 @@ for k in xrange(N):
     C_toa.compute()
     pe_toa.append(C_toa.pe)
 
-    # TDOA
+    #TDOA
     for ia in range(A.shape[1]-1):
         TD.append(TDOA(id=0,value = tdoa[k,ia], std = std, p = ATDOA[ia]) )
         C_tdoa.append(TD[ia])

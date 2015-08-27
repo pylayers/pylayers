@@ -204,13 +204,13 @@ class MIMO(object):
         H   = self.Hcal.y
         # Hd : nt x nr x nf
         Hd  = np.conj(self.Hcal.y.swapaxes(0,1))
-        # HdH : nt x nt x nf
+        #HdH : nt x nt x nf
         HdH = np.einsum('ijk,jlk->ilk',Hd,H)
         # HdH : nf x nt x nt
         HdH  = HdH.swapaxes(0,2)
-        # U   : nf x nt x nt
-        # S   : nf x nt
-        # V   : nf x nt x nt
+        #U   : nf x nt x nt
+        #S   : nf x nt
+        #V   : nf x nt x nt
         U,S,V  = la.svd(HdH)
 
         return (HdH,U,S,V)
@@ -255,7 +255,7 @@ class MIMO(object):
 
         HdH,U,S,V = self.transfer()
 
-        # singular value decomposition of channel tensor (broadcasted along frequency axis)
+        #singular value decomposition of channel tensor (broadcasted along frequency axis)
 
         Us,D,Vsh = self.svd()
 

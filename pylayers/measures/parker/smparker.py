@@ -564,6 +564,7 @@ class Axes(object):
     def set_profile(self,num):
         """
         """
+<<<<<<< HEAD
         assert(num<=len(self.lprofile)),"profile number not defined" 
         #self.com(str(self._id)+'USE'+str(num))
         self.com('USE'+str(num))
@@ -583,6 +584,10 @@ class Axes(object):
         
         """
         self.lprofile.pop(index-1)
+=======
+        assert(num<=len(self.lprofile)),"profile number not defined"
+        self.com(str(self._id)+'USE'+str(num))
+>>>>>>> f64cbc42b0d27abd496e3bdda020fecc016e9a8b
 
     def reset(self):
         """ reset axis
@@ -773,6 +778,8 @@ class Scanner(object):
 
     def array(A):
         """ Implement an Array
+
+
 
 
         """

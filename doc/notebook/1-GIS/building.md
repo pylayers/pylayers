@@ -32,8 +32,6 @@ no aster file for this point
 
 ```python
 >>> E.show(clim=[-20,180])
-(<matplotlib.figure.Figure at 0x7ffa46a9de50>,
- <matplotlib.axes.AxesSubplot at 0x7ffa46ab62d0>)
 ```
 
 ```python
@@ -44,6 +42,4 @@ N47W002
 latlon : [ -0.000 75118.790 cartesian :0.000 111194.505 ]
 ```
 
-```python
 
-```

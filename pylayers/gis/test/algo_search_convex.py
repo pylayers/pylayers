@@ -104,7 +104,7 @@ def polyplot(poly,fig=[]):
 # lacy : list of added cycles
 lacy =[]
 for n in L.Gt.nodes():
-    # if indoor cycles
+    #if indoor cycles
     if n > 0:
         ncy=max(L.Gt.nodes())
 
@@ -117,7 +117,7 @@ for n in L.Gt.nodes():
             tcc, nn = L.Gt.node[n]['polyg'].ptconvex()
             # diffracting points 
             utconvex = np.nonzero(tcc == 1)[0]
-            # all possible diffracting point (in and out of cycle)
+            #all possible diffracting point (in and out of cycle)
             utsconvex = np.nonzero(abs(tcc) == 1)[0]
             if len(utconvex) != 0:
                 # get points ID in the cycle
@@ -144,7 +144,7 @@ for n in L.Gt.nodes():
                     for t in tri:
                         ts = geu.Polygon(pucs[t])
                         # check if the new polygon is contained into 
-                        # the original polygon (non guaratee by Delaunay)
+                        #the original polygon (non guaratee by Delaunay)
                         #U = L.Gt.node[n]['polyg'].contains(ts)
                         U = L.Gt.node[n]['polyg'].intersection(ts)
                         if not isinstance(U,sh.MultiPolygon):
@@ -156,8 +156,8 @@ for n in L.Gt.nodes():
                                 uaw = np.where(cp.vnodes == 0)[0]
                                 lvn = len(cp.vnodes)
                                 for i in uaw:
-                                    # keep trace of created airwalls, because some 
-                                    # of them will be destroyed in step 3.
+                                    #keep trace of created airwalls, because some 
+                                    #of them will be destroyed in step 3.
                                     naw.append(L.add_segment(
                                                cp.vnodes[np.mod(i-1,lvn)],
                                                cp.vnodes[np.mod(i+1,lvn)]
@@ -176,7 +176,7 @@ for n in L.Gt.nodes():
                     for ip2,p2 in enumerate(polys):
                         conv=False
                         inter = p.intersection(p2)
-                        # if 2 triangles have a common segment
+                        #if 2 triangles have a common segment
                         pold = p
                         if isinstance(inter,sh.LineString):
                             p = p + p2
@@ -221,13 +221,13 @@ for n in L.Gt.nodes():
                     ptmp.setvnodes(L)
                     ncpol.append(ptmp)
                     vnodes.extend(ptmp.vnodes)
-                # air walls to be deleted (because origin Delaunay triangle
+                #air walls to be deleted (because origin Delaunay triangle
                 # has been merged )
                 daw = filter(lambda x: x not in vnodes,naw)
                 [L.del_segment(d,verbose=False) for d in daw]
                 nbpolys=len(ncpol)
 
-                # remove old cycle
+                #remove old cycle
                 L.Gt.remove_node(n)
                 # lcyid: (new) list of cycle id 
                 lcyid = [n] + range(ncy+1,ncy+(nbpolys))
@@ -244,7 +244,7 @@ for n in L.Gt.nodes():
                     L.Gt.add_node(cyid,cycle=cy)
                     # WARNING
                     # recreate polygon is mandatory otherwise cycle.cycle and polygon.vnodes
-                    # are shifted.
+                    #are shifted.
                     L.Gt.node[cyid]['polyg'] = p#geu.Polygon(p.xy,cy.cycle)
                     L.Gt.node[cyid]['indoor']=True
                     L.Gt.node[cyid]['isopen']=True
@@ -263,11 +263,11 @@ for n in L.Gt.nodes():
                         segment = intersection_vnodes[np.where(intersection_vnodes>0)]
                         L.Gt.add_edge(k[0], k[1],segment= segment)
 
-# update self.Gs.node[x]['ncycles']
+#update self.Gs.node[x]['ncycles']
 L._updGsncy()
-# add outside cycle to Gs.node[x]['ncycles']
+#add outside cycle to Gs.node[x]['ncycles']
 L._addoutcy()
-# update interaction list into Gt.nodes (cycles)
+#update interaction list into Gt.nodes (cycles)
 L._interlist(nodelist=lacy)
 
 
@@ -282,7 +282,7 @@ L._interlist(nodelist=lacy)
 #         tcc, nn = L.Gt.node[n]['polyg'].ptconvex()
 #         # diffracting points 
 #         utconvex = np.nonzero(tcc == 1)[0]
-#         # all possible diffracting point (in and out of cycle)
+#         #all possible diffracting point (in and out of cycle)
 #         utsconvex = np.nonzero(abs(tcc) == 1)[0]
 #         if len(utconvex) != 0:
 #             # get points ID in the cycle
@@ -332,7 +332,7 @@ L._interlist(nodelist=lacy)
 #                 for ip2,p2 in enumerate(polys):
 #                     conv=False
 #                     inter = p.intersection(p2)
-#                     # if 2 triangles have a common segment
+#                     #if 2 triangles have a common segment
 #                     pold = p
 #                     if isinstance(inter,sh.LineString):
                         

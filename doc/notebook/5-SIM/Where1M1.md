@@ -227,8 +227,8 @@ The representaion of a signature objet
 ```python
 >>> fig = plt.figure(figsize=(10,10))
 >>> r2d.show(L=S.L,fig=fig)
-(<matplotlib.figure.Figure at 0x7f161ad3c850>,
- <matplotlib.axes.AxesSubplot at 0x7f161ad3c750>)
+(<matplotlib.figure.Figure at 0x7fc4895b0710>,
+ <matplotlib.axes._subplots.AxesSubplot at 0x7fc4895b0890>)
 ```
 
 ```python
@@ -328,7 +328,6 @@ The `energy` method calculates the energy of each ray
 
 ```python
 >>> sco.isFriis
-True
 ```
 
 ```python

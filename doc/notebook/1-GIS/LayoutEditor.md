@@ -58,7 +58,7 @@ Currently, the different recognized file extensions are the following :
 + `.osm`  : an xml file which can be edited with [JOSM](http://josm.openstreetmap.de/)
 
 ```python
->>> from pylayers.gis.layout import *
+>>> from pylayers.gis.loyout import *
 >>> from pylayers.util.project import *
 WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
 ```
@@ -352,7 +352,7 @@ The layout can be displayed using matplotlib ploting primitive. Several display 
  + 'ndlabel',boolean, If True display node labels
  + 'ednodes', boolean, True
 
-### Interactive editor
+### Interactive Editor
 
 The command L.editor() launches an interactive editor. The state machine is implemented in module `pylayers.gis.selectl.py`.
 
