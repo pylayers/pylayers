@@ -34,8 +34,8 @@ class Array(ant.Pattern):
         ----------
 
         p  : set of 3D points (3xNp)   or  3 x Nx x Ny x Nz
-        w  : set of weight Nf x Np x Nu
-                       or  Nf x Nx x Ny x Nz x Nu
+        w  : set of weight Np x Nu x Nf
+                       or  Nx x Ny x Nz x Nu x Nf
 
         fGhz : np.array
             frequency in GHz
@@ -51,8 +51,9 @@ class Array(ant.Pattern):
         shp = np.shape(p)
 
         # If no excitation choose uniform excitation
+        # Np x Nu x Nf
         if w == []:
-            w = np.ones((shp[1:]))[None,...,None]
+            w = np.ones((shp[1:]))[...,None,None]
         self.w = w
 
         self.typ = 'Array'

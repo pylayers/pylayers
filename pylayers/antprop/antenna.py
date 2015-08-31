@@ -1,4 +1,4 @@
-# -*- coding:Utf-8 -*-
+#-*- coding:Utf-8 -*-
 """
 
 .. currentmodule:: pylayers.antprop.antenna
@@ -185,7 +185,7 @@ class Pattern(PyLayers):
     Each pattern method has a unique dictionnary argument 'param'
 
     If self.grid dimensions are
-        Nf x Nt x Np
+        Nt x Np x Nf
     else:
         Ndir x Nf
 
@@ -590,7 +590,7 @@ class Pattern(PyLayers):
         if Sc==[]:
             # Sc : Np x Np x Nf
             #Sc = np.eye(self.p.shape[1])[None,...]
-            Sc = np.random.rand(Np,Np)[None,...]
+            Sc = np.random.rand(Np,Np)[...,None]
 
         lamda = (0.3/self.fGHz)
         k     = 2*np.pi/lamda
@@ -637,8 +637,8 @@ class Pattern(PyLayers):
         #
         #    TODO : not yet implemented for different antennas
 
-        aFt = aFt[...,None,None]
-        aFp = aFp[...,None,None]
+        aFt = aFt[:,None,None,:]
+        aFp = aFp[:,None,None,:]
 
         #
         # Nf : frequency
@@ -646,29 +646,31 @@ class Pattern(PyLayers):
         # Np : points or array element position
         # Nu : users
         #
-        # w  : Nf x Np x Nu
-        # Sc : Nf x Np x Np
+        # w  : Np x Nu x Nf
+        # Sc : Np x Np x Nf
         #
         #
-        # w' = w.Sc   Nf x Np x Nu
+        # w' = w.Sc   Np x Nu x Nf
         #
         # Coupling is implemented here
 
-        wp = np.einsum('ijk,ijm->imk',self.w,Sc)
+        # wp   :  1  x Np x Nu x Nf
+
+        wp = np.einsum('jki,jmi->mki',self.w,Sc)
+
         # add direction axis (=0) in w
 
         #if len(.w.shape)==3:
         #    self.wp   = self.wp[None,:,:,:]
 
-        # aFT :  Nd x Nf x Np x 1
-        # E   :  Nd x Nf x Np x 1
-        # w   :  1  x Nf x Np x Nu
+        # aFT :  Nd x Np x 1 x Nf
+        # E   :  Nd x Np x 1 x Nf
 
-        E    = np.exp(1j*k[None,:,None]*sdotp[:,None,:])[:,:,:,None]
+        E    = np.exp(1j*k[None,None,None,:]*sdotp[:,:,None,None])
 
         #
-        # Fp  : Nd x Nf x Np x Nu
-        # Ft  : Nd x Nf x Np x Nu
+        # Fp  : Nd x Np x Nu x Nf
+        # Ft  : Nd x Np x Nu x Nf
         #
 
         self.Ft = wp*aFt*E
@@ -677,19 +679,19 @@ class Pattern(PyLayers):
         #
         # sum over points (axes 2 Np )
         #
-        #   Nd x Nf x Ntxru
+        #   Nd x Ntxru x Nf
         #
         #defaults = {'param':{}}
 
         #if 'param' not in kwargs or kwargs['param']=={}:
         #    kwargs['param']=defaults['param']
 
-        self.Ft = np.sum(self.Ft,axis=2)
-        self.Fp = np.sum(self.Fp,axis=2)
+        self.Ft = np.sum(self.Ft,axis=1)
+        self.Fp = np.sum(self.Fp,axis=1)
 
         if self.grid:
-            self.Ft = self.Ft.reshape(self.nth,self.nph,self.nf,self.ntxru)
-            self.Fp = self.Fp.reshape(self.nth,self.nph,self.nf,self.ntxru)
+            self.Ft = self.Ft.reshape(self.nth,self.nph,self.ntxru,self.nf)
+            self.Fp = self.Fp.reshape(self.nth,self.nph,self.ntxru,self.nf)
 
         self.gain()
 
