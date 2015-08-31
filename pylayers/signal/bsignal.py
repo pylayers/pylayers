@@ -984,7 +984,7 @@ class Usignal(Bsignal):
             assert (u.y.ndim == 2)  ,"y has not ndim=2"
             assert (u.y.shape[0]==1)|(u.y.shape[1]==self.y.shape[1])
             U = type(self)()
-            U.x = self.x 
+            U.x = self.x
             U.y = self.y+u.y
             # L = self.align(u)
             # #u1 = L[0]
@@ -1150,8 +1150,10 @@ class Usignal(Bsignal):
 
 
         """
-
         u1 = self
+        naxis1 = len(u1.y.shape)
+        naxis2 = len(u2.y.shape)
+        assert(naxis1==naxis2),"Problem signal haven't the same number of axis"
         dx1 = u1.dx()
         dx2 = u2.dx()
         u1_start = u1.x[0]
@@ -1195,7 +1197,10 @@ class Usignal(Bsignal):
             u1 = u1.resample(xnew)
         L   = Usignal()
         L.x = u1.x
-        L.y = np.vstack((u1.y,u2.y))
+        #L.y = np.vstack((u1.y,u2.y))
+        u1.y=u1.y[...,None]
+        u2.y=u2.y[...,None]
+        L.y = np.concatenate((u1.y,u2.y),axis=naxis1)
 
         return(L)
 
@@ -1299,7 +1304,7 @@ class Usignal(Bsignal):
 
         x_new = self.x[posmin:posmax]
         if ndim > 1:
-            y_new = self.y[:, posmin:posmax]
+            y_new = self.y[..., posmin:posmax]
         else:
             y_new = self.y[posmin:posmax]
 
@@ -2663,40 +2668,23 @@ class FUsignal(FBsignal,Usignal):
         return(s)
 
     def __add__(self, u):
-        L = self.align(u)
-        u1 = L[0]
-        u2 = L[1]
-        U = FUsignal(u1.x, u1.y + u2.y)
-         #U =FUsignal(self.x,self.y+u.y)
+        L = self.alignc(u)
+        U = FUsignal(L.x, L.y[...,0] + L.y[...,1])
         return(U)
 
     def __sub__(self, u):
-        L = self.align(u)
-        u1 = L[0]
-        u2 = L[1]
-        U = FUsignal(u1.x, u1.y - u2.y)
-         #U =FUsignal(self.x,self.y-u.y)
+        L = self.alignc(u)
+        U = FUsignal(L.x, L.y[...,0] - L.y[...,1])
         return(U)
 
     def __mul__(self, u):
-    #     L = self.align(u)
-        u1 = L[0]
-        u2 = L[1]
-    #     #
-    #     # Normalisation 19/05/2009
-        Df = u1.x[1] - u1.x[0]
-        U = FUsignal(u1.x, u1.y * u2.y)
-    #     #rint shape(self.x)
-    #     #rint shape(self.y)
-    #     #rint shape(u.y)
-    #     # =FUsignal(self.x,self.y*u.y)
+        L = self.alignc(u)
+        U = FUsignal(L.x, L.y[...,0] * L.y[...,1])
         return(U)
 
     def __div__(self, u):
-        L = self.align(u)
-        u1 = L[0]
-        u2 = L[1]
-        U = FUsignal(u1.x, u1.y / u2.y)
+        L = self.alignc(u)
+        U = FUsignal(L.x, L.y[...,0] / L.y[...,1])
         return(U)
 
 
