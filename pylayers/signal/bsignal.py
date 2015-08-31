@@ -351,10 +351,7 @@ class Bsignal(PyLayers):
         """
         O = copy(self)
         O.x = O.x[u]
-        try:
-            O.y = O.y[u,:]
-        except:
-            O.y = O.y[u]
+        O.y = O.y[...,u]
         return(O)
 
     def save(self, filename):
@@ -1136,17 +1133,8 @@ class Usignal(Bsignal):
         Returns
         -------
 
-
-        Examples
-        --------
-
-        >>> from pylayers.signal.bsignal import *
-        >>> i1 = TUsignal()
-        >>> i2 = TUsignal()
-        >>> i1.EnImpulse()
-        >>> i2.EnImpulse()
-        >>> i2.translate(-10)
-        >>> L  = i1.alignc(i2)
+        L : Usignal
+            concatenated signal L1.y and L2.y 
 
 
         """
@@ -1338,8 +1326,10 @@ class Usignal(Bsignal):
 
             >>> import matplotlib.pylab as plt
             >>> from pylayers.signal.bsignal import *
-            >>> i1 = EnImpulse()
-            >>> i2 = EnImpulse()
+            >>> i1 = TUsignal()
+            >>> i2 = TUsignal()
+            >>> i1.EnImpulse()
+            >>> i2.EnImpulse()
             >>> i2.translate(-10)
             >>> i3 = i1.align(i2)
             >>> fig,ax=i3.plot(typ=['v'])
@@ -1500,7 +1490,9 @@ class Usignal(Bsignal):
         energy : float
 
         """
-        energy = self.dx() * np.sum(self.y * np.conj(self.y),axis=0)
+        shy = self.y.shape
+        nay = len(shy)
+        energy = self.dx() * np.sum(self.y * np.conj(self.y),axis=nay-1)
         return(energy)
 
     def fftshift(self):
@@ -1538,58 +1530,59 @@ class Usignal(Bsignal):
         self.x = np.hstack((xadd, self.x))
         self.y = np.hstack((yadd, self.y))
 
-    def zlr(self, xmin, xmax):
-        """  add zeros to the left and to the right
-
-        Parameters
-        ----------
-
-        xmin : float
-            add zeros before xmin
-        xmax : float
-            add zeros after xmax
-
-        Summary
-        --------
-
-        This corresponds to a gating between xmin and xmax
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> from pylayers.signal.bsignal import *
-            >>> from matplotlib.pylab import *
-            >>> ip = EnImpulse()
-            >>> f,a = ip.plot(typ=['v'])
-            >>> ip.zlr(-10,10)
-            >>> f,a = ip.plot(typ=['v'])
-
-        """
-        dx = self.dx()
-        cmin = min(self.x)
-        cmax = max(self.x)
-        if cmin > xmin:
-            xaddl = np.arange(xmin, cmin - dx, dx)
-            yaddl = np.zeros(len(xaddl))
-            self.x = np.hstack((xaddl, self.x))
-            self.y = np.hstack((yaddl, self.y))
-        else:
-            u = np.nonzero(self.x >= xmin)
-            self.x = self.x[u[0]]
-            self.y = self.y[u[0]]
-
-        if cmax < xmax:
-            xaddr = np.arange(cmax + dx, xmax, dx)
-            yaddr = np.zeros(len(xaddr))
-            self.x = np.hstack((self.x, xaddr))
-            self.y = np.hstack((self.y, yaddr))
-        else:
-            u = np.nonzero(self.x <= xmax)
-            self.x = self.x[u[0]]
-            self.y = self.y[u[0]]
+#    def zlr(self, xmin, xmax):
+#        """  add zeros to the left and to the right
+#
+#        Parameters
+#        ----------
+#
+#        xmin : float
+#            add zeros before xmin
+#        xmax : float
+#            add zeros after xmax
+#
+#        Summary
+#        --------
+#
+#        This corresponds to a gating between xmin and xmax
+#
+#        Examples
+#        --------
+#
+#        .. plot::
+#            :include-source:
+#
+#            >>> from pylayers.signal.bsignal import *
+#            >>> from matplotlib.pylab import *
+#            >>> ip = TUsignal()
+#            >>> ip.EnImpulse()
+#            >>> f,a = ip.plot(typ=['v'])
+#            >>> ip.zlr(-10,10)
+#            >>> f,a = ip.plot(typ=['v'])
+#
+#        """
+#        dx = self.dx()
+#        cmin = min(self.x)
+#        cmax = max(self.x)
+#        if cmin > xmin:
+#            xaddl = np.arange(xmin, cmin - dx, dx)
+#            yaddl = np.zeros(len(xaddl))
+#            self.x = np.hstack((xaddl, self.x))
+#            self.y = np.hstack((yaddl, self.y))
+#        else:
+#            u = np.nonzero(self.x >= xmin)
+#            self.x = self.x[u[0]]
+#            self.y = self.y[u[0]]
+#
+#        if cmax < xmax:
+#            xaddr = np.arange(cmax + dx, xmax, dx)
+#            yaddr = np.zeros(len(xaddr))
+#            self.x = np.hstack((self.x, xaddr))
+#            self.y = np.hstack((self.y, yaddr))
+#        else:
+#            u = np.nonzero(self.x <= xmax)
+#            self.x = self.x[u[0]]
+#            self.y = self.y[u[0]]
 
     def window(self, win='hamming'):
         """ windowing Usignal
@@ -1755,7 +1748,8 @@ class TBsignal(Bsignal):
 
             >>> from pylayers.signal.bsignal import *
             >>> from matplotlib.pylab import *
-            >>> ip = EnImpulse()
+            >>> ip = TUsignal()
+            >>> ip.EnImpulse()
             >>> ip.translate(-10)
             >>> fig,ax=ip.plot(typ=['v'])
             >>> show()
@@ -1928,7 +1922,9 @@ class TUsignal(TBsignal, Usignal):
         Examples
         --------
 
-        >>> e = EnImpulse()
+        >>> from pylayers.signal.bsignal import *
+        >>> e = TUsignal()
+        >>> e.EnImpulse()
         >>> E = e.fft()
 
         """
@@ -1974,7 +1970,7 @@ class TUsignal(TBsignal, Usignal):
         S.y = S.y * te
         return(S)
 
-    def idealf(self,fcGHz,BGHz):
+    def idealf(self,fcGHz,WGHz):
         pass
 
     def filter(self, order=4, wp=0.3, ws=0.4, ftype='butter'):
@@ -2748,7 +2744,7 @@ class FUsignal(FBsignal,Usignal):
         print 'Duration (ns) :', T
         print 'Frequency sampling step : ', df
 
-    def energy(self,axis=0,Friis=False,mode='mean'):
+    def energy(self,axis=1,Friis=False,mode='mean'):
         r""" calculate energy along given axis
 
         Parameters
@@ -2762,8 +2758,9 @@ class FUsignal(FBsignal,Usignal):
         Examples
         --------
 
-        >>> S = EnImpulse()
-        >>> En1 = S.energy()
+        >>> ip = TUsignal()
+        >>> ip.EnImpulse()
+        >>> En1 = ip.energy()
         >>> assert((En1>0.99) & (En1<1.01))
 
         Notes
@@ -3129,7 +3126,8 @@ class FUsignal(FBsignal,Usignal):
         --------
 
         >>> from pylayers.signal.bsignal import *
-        >>> e  = EnImpulse()
+        >>> e = TUsignal()
+        >>> e.EnImpulse()
         >>> E  = e.fft()
         >>> EU = E.unrex()
 
@@ -3341,10 +3339,12 @@ class FHsignal(FUsignal):
         Examples
         --------
 
-        >>> e  = EnImpulse(fe=200)
+        >>> e  = TUsignal()
+        >>> e.EnImpulse(feGHz=200)
         >>> E  = e.fft()
         >>> ee = E.ifft()
-        >>> assert(abs(sum(e.y-ee.y))<1e-13)
+        >>> assert(abs(sum(e.y-ee.y).all())<1e-13)
+
 
         """
         Np = len(self.x)
@@ -3581,14 +3581,14 @@ class Noise(TUsignal):
     def amplify(self, GdB, NF):
         sel
 
-    def fgating(self, fcGHz, BGHz, window='rect'):
+    def fgating(self, fcGHz, WGHz, window='rect'):
         """ apply a frequency gating
 
         Parameters
         ----------
 
         fcGHz : float
-        BGHz  : float
+        WGHz  : float
         window : string
             'rect'
 
@@ -3600,8 +3600,8 @@ class Noise(TUsignal):
             parity = 1
         U = N.unrex()
         f = U.x
-        f1 = fcGHz - BGHz / 2.
-        f2 = fcGHz + BGHz / 2.
+        f1 = fcGHz - WGHz / 2.
+        f2 = fcGHz + WGHz / 2.
         u = np.nonzero((f > f1) & (f < f2))[0]
         gate = np.zeros(len(f))
         if window=='rect':
@@ -3615,8 +3615,8 @@ class Noise(TUsignal):
         #fe = 1./(self.x[1]-self.x[0])
         #fN = fe/2
         #print "fN : ",fN
-        #wp = (fcGHz-BGHz/2.)/fN
-        #ws = (fcGHz+BGHz/2.)/fN
+        #wp = (fcGHz-WGHz/2.)/fN
+        #ws = (fcGHz+WGHz/2.)/fN
         #print "fN : ",wp
         #print "fN : ",ws
         #o  = self.iirfilter(order=4,wp=wp,ws=ws)
@@ -3628,7 +3628,8 @@ class Noise(TUsignal):
 def test():
     dx1 = 0.01
     x1 = np.arange(-5, 5, dx1)
-    s1 = EnImpulse(x1, 4, 2, 10)
+    s1 = TUsignal()
+    s1 = s1.EnImpulse(x1, fcGHz=4, WGHz=2, feGHz=10)
 
     S1 = s1.fft()
 
