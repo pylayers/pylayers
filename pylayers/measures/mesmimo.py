@@ -129,10 +129,14 @@ class MIMO(object):
                     #tc = C.H.y[iR*4+iT,:]
                     tc = C.H.y[iR,iT,:]
 
+        # Nr x Nt x Nf
         tc = tc.reshape(self.Nr,self.Nt,self.Nf)
+
+        # C.freq , Nf
 
         self.C = FUsignal(C.freq,tc)
 
+        pdb.set_trace()
         self.Hcal = self.H/self.C
 
         del self.H

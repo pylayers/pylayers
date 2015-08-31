@@ -10,7 +10,6 @@
 >>> from pylayers.simul.simulem import *
 >>> import matplotlib.pyplot as plt
 >>> %matplotlib inline
-WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
 ```
 
 This section presents a simple Ray Tracing simulation with different material properties of a subsegment separating 2 rooms.
@@ -106,10 +105,10 @@ The $\mathcal{G}_s$ graph dictionnary has the following structure
   'offset': 0,
   'transition': False,
   'z': (0.0, 3.0)},
- 9: {'connect': [-1, -2],
+ 9: {'connect': [-2, -1],
   'name': 'WALL',
   'ncycles': [2, 0],
-  'norm': array([-0.00639987,  0.99997952,  0.        ]),
+  'norm': array([ 0.00639987, -0.99997952,  0.        ]),
   'offset': 0,
   'transition': False,
   'z': (0.0, 3.0)}}
@@ -125,13 +124,63 @@ We define now two points which are the termination of a radio link.
 ```python
 >>> L.chgmss(1,ss_name=['WOOD','AIR','WOOD'],ss_z =[(0.0,2.7),(2.7,2.8),(2.8,3)],ss_offset=[0,0,0])
 >>> L.save()
->>> Lk = DLink(L=L,a=tx,b=rx,Aa=Antenna('Omni'),Ab=Antenna('Omni'))
+>>> Lk = DLink(L=L,a=tx,b=rx,Aa=Antenna('Omni'),Ab=Antenna('Omni'),fGHz=np.linspace(1.8,2.2,3))
 structure saved in  defstr3.str2
 structure saved in  defstr3.ini
 ```
 
 ```python
 >>> Lk
+filename: Links_0_defstr3.ini.h5
+Link Parameters :
+------- --------
+Layout : defstr3.ini
+
+Node a   
+------  
+position : [  7.59000000e+02   1.11400000e+03   1.00000000e+00]
+Antenna : Omni
+Rotation matrice : 
+ [[ 1.  0.  0.]
+ [ 0.  1.  0.]
+ [ 0.  0.  1.]]
+
+Node b   
+------  
+position : [  767.   1114.      1.5]
+Antenna : Omni
+Rotation matrice : 
+ [[ 1.  0.  0.]
+ [ 0.  1.  0.]
+ [ 0.  0.  1.]]
+
+Link evaluation information : 
+----------------------------- 
+distance :  8.016 m 
+delay : 26.719 ns
+fmin (fGHz) : 1.8
+fmax (fGHz) : 2.2
+fstep (fGHz) : 0.2
+Nf : 3
+```
+
+```python
+>>> Lk.Aa
+Antenna type : Omni
+------------------------
+ pol : h
+ GmaxdB : 0
+fmin : 2.40GHz
+fmax : 2.40GHz
+step : None
+Nf : 1
+-----------------------
+Ntheta : 90
+Nphi : 181
+GmaxdB : 0.00 dB 
+   f = 2.40 GHz 
+   theta = 0.00 (degrees) 
+   phi = 0.00  (degrees)
 ```
 
 ```python
@@ -143,6 +192,22 @@ Then for evaluating the radio link, simply type:
 
 ```python
 >>> ak,tauk=Lk.eval(force=True)
+Signatures'> from 2_1_3 saved
+Rays'> from 3_0_1 saved
+Ctilde'> from 0_1_0 saved
+> /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.py(3934)prop2tran()
+-> t1 = self.Ctt * Fat + self.Ctp * Fap
+(Pdb) p a
+(Pdb) a
+self = Ctilde
+---------
+(155, 181)
+Nray : 155
+fmin(GHz) : 2.0
+fmax(GHz): 11.0
+Nfreq : 181
+
+a =
 ```
 
 At that point the channel has been evaluated and all the data stored in an `hdf5` file

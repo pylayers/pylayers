@@ -247,7 +247,6 @@ class Bsignal(PyLayers):
         if ndim==1:
             self.y=self.y.reshape((1,len(self.y)))
             ndim = 2
-        pdb.set_trace()
         assert(len(x)==self.y.shape[-1])," Dimension problem"
         # default naming of the axis
         if label==[]:
@@ -2663,47 +2662,42 @@ class FUsignal(FBsignal,Usignal):
         s = FBsignal.__repr__(self)
         return(s)
 
-    # def __add__(self, u):
-    #     L = self.align(u)
-    #     u1 = L[0]
-    #     u2 = L[1]
-    #     U = FUsignal(u1.x, u1.y + u2.y)
-    #     #U =FUsignal(self.x,self.y+u.y)
-    #     return(U)
+    def __add__(self, u):
+        L = self.align(u)
+        u1 = L[0]
+        u2 = L[1]
+        U = FUsignal(u1.x, u1.y + u2.y)
+         #U =FUsignal(self.x,self.y+u.y)
+        return(U)
 
-    # def __sub__(self, u):
-    #     L = self.align(u)
-    #     u1 = L[0]
-    #     u2 = L[1]
-    #     U = FUsignal(u1.x, u1.y - u2.y)
-    #     #U =FUsignal(self.x,self.y-u.y)
-    #     return(U)
+    def __sub__(self, u):
+        L = self.align(u)
+        u1 = L[0]
+        u2 = L[1]
+        U = FUsignal(u1.x, u1.y - u2.y)
+         #U =FUsignal(self.x,self.y-u.y)
+        return(U)
 
-    # def __mul__(self, u):
+    def __mul__(self, u):
     #     L = self.align(u)
-    #     u1 = L[0]
-    #     u2 = L[1]
+        u1 = L[0]
+        u2 = L[1]
     #     #
     #     # Normalisation 19/05/2009
-    #     Df = u1.x[1] - u1.x[0]
-    #     U = FUsignal(u1.x, u1.y * u2.y)
+        Df = u1.x[1] - u1.x[0]
+        U = FUsignal(u1.x, u1.y * u2.y)
     #     #rint shape(self.x)
     #     #rint shape(self.y)
     #     #rint shape(u.y)
     #     # =FUsignal(self.x,self.y*u.y)
-    #     return(U)
+        return(U)
 
-    # def __div__(self, u):
-    #     L = self.align(u)
-    #     u1 = L[0]
-    #     u2 = L[1]
-    #     U = FUsignal(u1.x, u1.y / u2.y)
-    #     return(U)
-
-
-
-
-
+    def __div__(self, u):
+        L = self.align(u)
+        u1 = L[0]
+        u2 = L[1]
+        U = FUsignal(u1.x, u1.y / u2.y)
+        return(U)
 
 
     def applyFriis(self):
@@ -2726,7 +2720,7 @@ class FUsignal(FBsignal,Usignal):
             self.y = self.y*factor
             self.isFriis = True
 
-    
+
 
     def get(self, k):
         """

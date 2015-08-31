@@ -1173,7 +1173,7 @@ class TUDchannel(TUchannel):
            #    yi = self.y[i+1,:] + (N1-i)*ecmax
            #    r.lines(x,yi,col='black')
 
-class Tchannel(FUsignal):
+class Tchannel(bs.FUsignal):
     """ Handle the transmission channel
 
     The transmission channel TChannel is obtained through combination of the propagation
@@ -1211,19 +1211,20 @@ class Tchannel(FUsignal):
 
     """
     def __init__(self,
-                fGHz = np.arange(0,2,1),
-                alpha= np.arange(0,2,1),
+                x = np.arange(0,2,1),
+                y = np.arange(0,2,1),
                 tau  = np.array(([],)),
                 dod  = np.array(([[],[]])).T,
-                doa  = np.array(([[],[]])).T):
+                doa  = np.array(([[],[]])).T,
+                label = ''):
         """ class constructor
 
         Parameters
         ----------
 
-        fGHz  :  , nfreq
+        x  :  , nfreq
             frequency GHz
-        alpha :  nray x nfreq
+        y  :  nray x nfreq
             path amplitude
         tau   :  1 x nray
             path delay (ns)
@@ -1231,24 +1232,23 @@ class Tchannel(FUsignal):
         doa   :  direction of arrival   (nray x 2)
 
         """
-        #FUDAchannel.__init__(FUDAchannel(self),fGHz, alpha, tau, dod, doa)
-     def __init__(self,
-                 x = np.array([]),
-                 y = np.array([]),
-                 taud = np.array([]),
-                 dod = np.array([]),
-                 doa = np.array([]),
-                 label = []
-                 ):
-        self.taud = taud
+        self.taud = tau
+        self.taue = np.zeros(len(tau))
         # FUDsignal.__init__(self, x, y,taud)
         self.dod  = dod
         self.doa  = doa
-        self.x = fGHz
-        self.y 
+        # , Nf
+        self.x = x
+        # Nd x Nf x Np x Nu
+        self.y = y
+        self.label = label
         #FUsignal.__init__(self,x,y,taud,label)
+        self.win = 'rect'
+        self.isFriis = False
+        self.windowed = False
+        self.calibrated = False
+        self.filcal="calibration.mat"
 
-   super(Tchannel,self).__init__(fGHz, alpha, tau, dod, doa)
 
     def __repr__(self):
         st = ''
@@ -1258,6 +1258,20 @@ class Tchannel(FUsignal):
         st = st + 'dist :'+str(min(0.3*self.taud))+' '+str(max(0.3*self.taud))+"\n"
         if self.isFriis:
             st = st + 'Friis factor -j c/(4 pi f) has been applied'
+
+        if self.calibrated:
+            st = st+'\n calibrated : Yes\n'
+        else:
+            st = st+'\n calibrated : No\n'
+
+        if self.windowed:
+            st = st+' windowed : Yes\n'
+            st = st+self.win+'\n'
+        else:
+            st = st+' windowed : No\n'
+
+        return(st)
+
         return(st)
 
 
@@ -1968,139 +1982,6 @@ class Tchannel(FUsignal):
             Etot = np.sum(Etot,axis=0)
         return Etot
 
-
-
-
-    #def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12,phi=(0, 360),norm=False,polar=False):
-    # def doadod(self,**kwargs):
-    #     """ doadod scatter plot
-
-    #     Parameters
-    #     -----------
-
-    #     cmap : color map
-    #     s    : float
-    #         size (default 30)
-    #     fontsize : integer
-    #         default 12
-
-    #     Summary
-    #     --------
-
-    #     scatter plot of the DoA-DoD channel structure
-    #     the energy is colorcoded over all couples of DoA-DoD
-
-    #     """
-
-    #     defaults = {'cmap' : plt.cm.hot_r,
-    #                 's': 30,
-    #                 'fontsize' : 12,
-    #                 'phi':(-180,180),
-    #                 'normalize':False,
-    #                 'polar':False,
-    #                 'mode':'center'}
-
-    #     for k in defaults:
-    #         if k not in kwargs:
-    #             kwargs[k] = defaults[k]
-
-    #     args = {}
-    #     for k in kwargs:
-    #         if k not in defaults:
-    #             args[k] = kwargs[k]
-                
-    #     the = (0,180)
-    #     dod = self.dod
-    #     doa = self.doa
-    #     #
-    #     # determine Energy in each channel
-    #     #
-    #     Etot = self.energy(mode=kwargs['mode']) +1e-15
-
-    #     # normalization
-    #     if kwargs['normalize']:
-    #         Emax = max(Etot)
-    #         Etot = Etot / Emax
-
-    #     Emax = max(10 * np.log10(Etot))
-    #     Emin = min(10 * np.log10(Etot))
-
-    #     #
-    #     #
-    #     #
-    #     # col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
-    #     #
-
-    #     if kwargs['polar'] :
-    #         al = 1.
-    #         phi=np.array(phi)
-    #         the=np.array(the)            
-    #         phi[0] = phi[0]*np.pi/180
-    #         phi[1] = phi[1]*np.pi/180
-    #         the[0] = the[0]*np.pi/180
-    #         the[1] = the[1]*np.pi/180
-    #     else :
-    #         al = 180./np.pi
-
-    #     col = 10 * np.log10(Etot)
-
-    #     if len(col) != len(dod):
-    #         print "len(col):", len(col)
-    #         print "len(dod):", len(dod)
-
-    #     plt.subplot(121, polar=kwargs['polar'])
-    #     if kwargs['reverse']:
-    #         plt.scatter(dod[:, 1] * al, dod[:, 0] * al,
-    #                     s=kwargs['s'], c=col,
-    #                     cmap=kwargs['cmap'],
-    #                     edgecolors='none')
-    #         plt.axis((kwargs['phi'][0], kwargs['phi'][1],the[0],the[1]))
-    #         plt.xlabel('$\phi(^{\circ})$', fontsize=kwargs['fontsize'])
-    #         plt.ylabel("$\\theta_t(^{\circ})$", fontsize=kwargs['fontsize'])
-    #     else:
-    #         plt.scatter(dod[:, 0] * al, dod[:, 1] * al,
-    #                     s=kwargs['s'], c=col,
-    #                     cmap=kwargs['cmap'],
-    #                     edgecolors='none')
-    #         plt.axis((the[0], the[1], kwargs['phi'][0], kwargs['phi'][1]))
-    #         plt.xlabel("$\\theta_t(^{\circ})$", fontsize=kwargs['fontsize'])
-    #         plt.ylabel('$\phi(^{\circ})$', fontsize=kwargs['fontsize'])
-    #     # ylabel('$\phi_t(^{\circ})$',fontsize=18)
-    #     plt.title('DoD', fontsize=kwargs['fontsize']+2)
-
-
-    #     plt.subplot(122, polar=kwargs['polar'])
-    #     if kwargs['reverse']:
-    #         plt.scatter(doa[:, 1] * al, doa[:, 0] * al, s=30, c=col,
-    #                     cmap=plt.cm.hot_r, edgecolors='none')
-    #         plt.axis((kwargs['phi'][0], kwargs['phi'][1],the[0],the[1]))
-    #         plt.xlabel("$\phi_r (^{\circ})$", fontsize=kwargs['fontsize'])
-    #         plt.ylabel("$\\theta_r(^{\circ})$", fontsize=kwargs['fontsize'])
-            
-    #     else :
-    #         plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=30, c=col,
-    #                     cmap=plt.cm.hot_r, edgecolors='none')
-    #         plt.axis((the[0], the[1], kwargs['phi'][0], kwargs['phi'][1]))
-    #         plt.xlabel("$\\theta_r(^{\circ})$", fontsize=kwargs['fontsize'])
-    #         plt.ylabel("$\phi_r (^{\circ})$", fontsize=kwargs['fontsize'])
-
-    #     plt.title('DoA', fontsize=kwargs['fontsize']+2)
-
-    #     # plt.xticks(fontsize=20)
-    #     # plt.yticks(fontsize=20)
-    #     b = plt.colorbar()
-    #     if kwargs['normalize']:
-    #         b.set_label('dB')
-    #     else:
-    #         b.set_label('Path Loss (dB)')
-    #     # for t in b.ax.get_yticklabels():
-    #     #    t.set_fontsize(20)
-    #     plt.xlabel("$\\theta_r(^{\circ})$", fontsize=kwargs['fontsize'])
-    #     plt.title('DoA', fontsize=kwargs['fontsize']+2)
-    #     plt.ylabel("$\phi_r (^{\circ})$", fontsize=kwargs['fontsize'])
-
-
-
     def wavefig(self, w, Nray=5):
         """ display
 
@@ -2209,10 +2090,6 @@ class Tchannel(FUsignal):
         PrpdB = 10*np.log10(Prp)
 
         return PrdB,PrpdB
-
-        def __repr__(self):
-        s = FUDchannel.__repr__(self)
-        return(s)
 
     def cut(self,threshold=0.99):
         """ cut the signal at an Energy threshold level
@@ -2438,46 +2315,6 @@ class Tchannel(FUsignal):
         Er_htap = np.sum(htap,axis=1)/Ns
         corrtap = correlate(Er_htap[0,:,0],np.conj(Er_htap[0,:,0]))
         return(htap,Et_htap,Er_htap,corrtap)
-    """
-    FUDchannel : Uniform channel in Frequency domain with delays
-
-
-    Attributes
-    ----------
-
-    x    : ndarray 1xN
-    y    : ndarray MxN
-    taud : direct delay (Time of Flight)
-    taue : excess delay
-
-    Methods
-    -------
-
-    minphas : force minimal phase    (Not tested)
-    totime  : transform to a TUD signal
-    iftd    : inverse Fourier transform
-    ft1     : construct CIR from ifft(RTF)
-    ft2     :
-
-    """
-    def __init__(self, x=np.array([]), y=np.array([]), taud=np.array([]),label=[]):
-        """ object constructor
-
-        Parameters
-        ----------
-
-        x : np.array()
-        y : np.array()
-        taud : np.array()
-
-        """
-        FUchannel.__init__(self,x,y,label)
-        self.taud = taud
-        self.taue = np.zeros(len(taud))
-
-    def __repr__(self):
-        s = bs.FUsignal.__repr__(self)
-        return(s)
 
     def minphas(self):
         """ construct a minimal phase FUsignal
@@ -2505,7 +2342,7 @@ class Tchannel(FUsignal):
             >>> fGHz = np.arange(2,11,0.1)
             >>> tau1 = np.array([1,2,3])[:,np.newaxis]
             >>> y = np.exp(-2*1j*np.pi*fGHz[np.newaxis,:]*tau1)/fGHz[np.newaxis,:]
-            >>> H = FUDsignal(x=fGHz,y=y,taud=np.array([15,17,18]))
+            >>> H = Tchannel(x=fGHz,y=y,taud=np.array([15,17,18]))
             >>> f,a = H.plot(typ=['ru'],xlabels=['Frequency GHz'])
             >>> t1 = plt.suptitle('Before minimal phase compensation')
             >>> H.minphas()
@@ -2730,7 +2567,7 @@ class Tchannel(FUsignal):
             >>> fGHz = np.arange(1,3,1)
             >>> taud = np.sort(np.random.rand(N))
             >>> alpha = np.random.rand(N,len(fGHz))
-            >>> s = FUDsignal(x=fGHz,y=alpha,taud=taud)
+            >>> s = Tchannel(x=fGHz,y=alpha,taud=taud)
             >>> s.plot3d()
 
         """
@@ -2798,34 +2635,6 @@ class Tchannel(FUsignal):
         U.y = V
 
         return U
-    """ channel in Frequency domain
-
-    """
-    def __init__(self,
-          x=np.array([]),
-          y=np.array([]),
-          label=[]):
-
-          bs.FUsignal.__init__(FUchannel(self),x,y,label)
-          self.calibrated = False
-          self.win = 'rect'
-          self.windowed = False
-          self.filcal="calibration.mat"
-
-    def __repr__(self):
-        st = bs.FUsignal.__repr__(self)
-        if self.calibrated:
-            st = st+'\n calibrated : Yes\n'
-        else:
-            st = st+'\n calibrated : No\n'
-
-        if self.windowed:
-            st = st+' windowed : Yes\n'
-            st = st+self.win+'\n'
-        else:
-            st = st+' windowed : No\n'
-
-        return(st)
 
     def frombuf(self,S,sign=-1):
         """ load a buffer from vna
@@ -4093,7 +3902,7 @@ maicher
         Returns
         -------
 
-        H : Tchannel(bs.FUDAsignal)
+        H : Tchannel(bs.FUsignal)
 
 
         """
@@ -4121,6 +3930,7 @@ maicher
         #  Fb = 2 x r x f
         #t1 = self.Ctt * Fat + self.Cpt * Fap
         #t2 = self.Ctp * Fat + self.Cpp * Fap
+        pdb.set_trace()
         t1 = self.Ctt * Fat + self.Ctp * Fap
         t2 = self.Cpt * Fat + self.Cpp * Fap
         alpha = t1 * Fbt + t2 * Fbp
