@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #-*- coding:Utf-8 -*-
 r"""
 .. currentmodule:: pylayers.signal.bsignal
@@ -14,6 +13,11 @@ Bsignal Class
 
     Bsignal.__init__
     Bsignal.__repr__
+    Bsignal.mean
+    Bsignal.min
+    Bsignal.max
+    Bsignal.len
+    Bsignal.append
     Bsignal.extract
     Bsignal.save
     Bsignal.load
@@ -26,7 +30,6 @@ Bsignal Class
     Bsignal.plot
     Bsignal.flatteny
     Bsignal.gating
-    Bsignal.len
 
 Usignal Class
 =============
@@ -94,19 +97,6 @@ Fourier Functions
     TUsignal.Yadd_zeros2r
     TUsignal.esd
 
-CIR Functions
--------------
-
-.. autosummary::
-    :toctree: generated/
-
-    TUsignal.aggcir
-    TUsignal.ecdf
-    TUsignal.taumax
-    TUsignal.tau_moy
-    TUsignal.delays
-    TUsignal.tau_rms
-
 Visualization Functions
 -----------------------
 
@@ -121,42 +111,6 @@ Visualization Functions
     TUsignal.resample
     TUsignal.convolve
 
-Energy Functions
-----------------
-
-.. autosummary::
-    :toctree: generated/
-
-    TUsignal.Epercent
-    TUsignal.Etau0
-    TUsignal.Ewin
-    TUsignal.Etot
-    TUsignal.Efirst
-    TUsignal.Efirst_loc
-    TUsignal.Efirst_corr
-    TUsignal.Efirst_toath
-    TUsignal.Emax
-
-TOA Estimation Functions
-------------------------
-
-.. autosummary::
-    :toctree: generated/
-
-    TUsignal.tau_Emax
-    TUsignal.toa_max2
-    TUsignal.toa_new
-    TUsignal.toa_win
-    TUsignal.toa_max
-    TUsignal.toa_th
-    TUsignal.toa_cum
-    TUsignal.toa_th_tmtm
-    TUsignal.toa_th_tm
-    TUsignal.toa_th_tmt
-    TUsignal.toa_cum_tm
-    TUsignal.toa_cum_tmtm
-    TUsignal.toa_cum_tmt
-
 Input Output Functions
 -----------------------
 
@@ -165,16 +119,6 @@ Input Output Functions
 
     TUsignal.readcir
     TUsignal.readuwb
-
-TUDsignal Class
-===============
-
-.. autosummary::
-    :toctree: generated/
-
-    TUDsignal.__init__
-    TUDsignal.__repr__
-    TUDsignal.fig
 
 FBsignal Class
 ==============
@@ -220,38 +164,6 @@ FUsignal Class
     FUsignal.iftshift
     FUsignal.show
     FUsignal.decimate
-    FUsignal.tap
-
-FUDsignal Class
-===============
-
-.. autosummary::
-    :toctree: generated/
-
-    FUDsignal.__init__
-    FUDsignal.__repr__
-    FUDsignal.minphas
-    FUDsignal.totime
-    FUDsignal.iftd
-    FUDsignal.ft1
-    FUDsignal.ftau
-    FUDsignal.cir
-    FUDsignal.plot3d
-    FUDsignal.ft2
-
-
-FUDAsignal Class
-===============
-
-.. autosummary::
-    :toctree: generated/
-
-    FUDAsignal.__init__
-    FUDAsignal.__repr__
-    FUDAsignal.cut
-    FUDAsignal.sort
-    FUDAsignal.showtap
-    FUDAsignal.tap
 
 FHsignal Class
 ================
@@ -275,24 +187,6 @@ Noise Class
     Noise.amplify
     Noise.gating
 
-EnImpulse Class
-===============
-
-.. autosummary::
-    :toctree: generated/
-
-    EnImpulse.__init__
-    EnImpulse.demo
-
-MaskImpulse Class
-=================
-
-.. autosummary::
-    :toctree: generated/
-
-    MaskImpulse.__init__
-    MaskImpulse.show
-
 """
 import doctest
 import os
@@ -313,6 +207,7 @@ import scipy.io as ios
 from scipy.signal import cspline1d, cspline1d_eval, iirfilter, iirdesign, lfilter, firwin , correlate
 #from sklearn import mixture
 import scipy.stats as st
+import seaborn as sns
 
 
 class Bsignal(PyLayers):
@@ -322,9 +217,9 @@ class Bsignal(PyLayers):
 
     The x base is not necessarily uniform
 
-    x can have 1 or two axis
+    x has 1 axis
 
-    The first axis of x the last axes of y have the same length
+    x and the last axes of y have the same length
 
     By construction shape(y)[-1] :=len(x), len(x) takes priority in case of observed conflict
 
@@ -349,7 +244,11 @@ class Bsignal(PyLayers):
         self.x = x
         self.y = y
         ndim = self.y.ndim
-        # default naming of the axix
+        if ndim==1:
+            self.y=self.y.reshape((1,len(self.y)))
+            ndim = 2
+        assert(len(x)==self.y.shape[-1])," Dimension problem"
+        # default naming of the axis
         if label==[]:
             self.label=[]
             for k in range(ndim):
@@ -364,10 +263,10 @@ class Bsignal(PyLayers):
         # multi axes indexation
         self.uax = np.hstack((np.ones(ndim-1),np.r_[self.N]))
         # last dimension of y should be equal to first dimension of x
-        if (ly != self.N) :
-            print "Error in Bsignal : Dimension incompatibility "
-            print "x : ", self.N
-            print "y : ", ly
+        #if (ly != self.N) :
+        #    print "Error in Bsignal : Dimension incompatibility "
+        #    print "x : ", self.N
+        #    print "y : ", ly
 
 
     def __repr__(self):
@@ -385,10 +284,35 @@ class Bsignal(PyLayers):
         """ mean value of the signal
         """
         S = type(self)()
+        S.__dict__=self.__dict__
         S.x = self.x
-        S.y = np.mean(self.y,axis=0)
+        S.y = np.mean(self.y,axis=0)[None,:]
         return(S)
 
+    def min(self):
+        """ min value of the signal (module if complex)
+        """
+        S = type(self)()
+        S.__dict__=self.__dict__
+        S.x = self.x
+        if np.iscomplex(self.y).any():
+            S.y = np.min(np.abs(self.y),axis=0)[None,:]
+        else:
+            S.y = np.min(self.y,axis=0)[None,:]
+        return(S)
+
+    def max(self):
+        """ max value of the signal (module if complex)
+        """
+        S = type(self)()
+        S.__dict__=self.__dict__
+        S.x = self.x
+        if np.iscomplex(self.y).any():
+            S.y = np.max(np.abs(self.y),axis=0)[None,:]
+        else:
+            S.y = np.max(self.y,axis=0)[None,:]
+
+        return(S)
 
     def append(self,bs):
         """ append bs to Bsignal
@@ -427,10 +351,7 @@ class Bsignal(PyLayers):
         """
         O = copy(self)
         O.x = O.x[u]
-        try:
-            O.y = O.y[u,:]
-        except:
-            O.y = O.y[u]
+        O.y = O.y[...,u]
         return(O)
 
     def save(self, filename):
@@ -449,7 +370,8 @@ class Bsignal(PyLayers):
 
             >>> from pylayers.signal.bsignal import *
             >>> import matplotlib.pyplot as plt
-            >>> e = EnImpulse(fe=100)
+            >>> e = TUsignal()
+            >>> e.EnImpulse(feGHz=100)
             >>> fig,ax = e.plot(typ=['v'])
             >>> tit1 = plt.title('original waveform')
             >>> e.save('impulse.mat')
@@ -489,6 +411,9 @@ class Bsignal(PyLayers):
         d = ios.loadmat(filename)
         self.x = d['x'][0,:]
         self.y = d['y']
+        if self.y.ndim==1:
+            self.y = self.y[None,:]
+        self.N = len(self.x)
 
     def setx(self, x):
         r""" setx : set x vector
@@ -542,7 +467,7 @@ class Bsignal(PyLayers):
             >>> import matplotlib.pyplot as plt
             >>> si = Bsignal()
             >>> si.x= np.arange(100)
-            >>> si.y= np.arange(100)
+            >>> si.y= np.arange(100)[None,:]
             >>> f,a = si.stem()
 
         """
@@ -763,7 +688,7 @@ class Bsignal(PyLayers):
         >>> F = FUsignal(f,y)
 
         """
-
+        sns.set_style("whitegrid")
         defaults = {'interpolation':'none',
                     'cmap':plt.cm.BrBG,
                     'aspect':'auto',
@@ -830,7 +755,7 @@ class Bsignal(PyLayers):
             plt.axis('auto')
             fig.tight_layout()
 
-            return fig,ax
+            return fig, ax
 
     def plot(self, **kwargs):
         r""" plot signal
@@ -935,7 +860,7 @@ class Bsignal(PyLayers):
         #
         # To be added in mulcplot
         #
-    
+
         tcolor = ['red', 'green', 'green', 'green', 'black', 'black', 'black']
         nl,nc = np.shape(ax)
         for l in range(nl):
@@ -949,8 +874,10 @@ class Bsignal(PyLayers):
 
     def flatteny(self,yrange=[],reversible=False):
         r""" flatten y array
+
         Parameters
         ----------
+
         yrange : array of y index values to be flattenned
         reversible : boolean
             if True the sum is place in object member yf
@@ -1037,9 +964,9 @@ class Usignal(Bsignal):
 
     """
 
-    def __init__(self, x=np.array([]), y=np.array([]),label=[]):
-        super(Usignal,self).__init__(x,y,label)
-        #Bsignal.__init__(self, x, y)
+    #def __init__(self, x=np.array([]), y=np.array([]),label=[]):
+    #    super(Usignal,self).__init__(x,y,label)
+    #   #Bsignal.__init__(self, x, y)
 
     def __repr__(self):
         s = Bsignal.__repr__(self)
@@ -1049,27 +976,31 @@ class Usignal(Bsignal):
         t = type(u).__name__
         if ((t == 'int') | (t == 'float')):
             U = Usignal(self.x, self.y + u)
-        else:
-            assert (u.y.ndim == 1) | (u.y.shape[0]==1)
-            L = self.align(u)
-            #u1 = L[0]
-            #u2 = L[1]
-            val = L.y[0:-1,:] + L.y[-1,:]
-            # handle one dimensional array
-            if ((val.ndim>1) & (val.shape[0]==1)):
-                val = val.reshape(val.shape[1])
-            U = Usignal(L.x, val)
+        if type(u)==type(self):
+            assert (u.x.shape==self.x.shape)
+            assert (u.y.ndim == 2)  ,"y has not ndim=2"
+            assert (u.y.shape[0]==1)|(u.y.shape[1]==self.y.shape[1])
+            U = type(self)()
+            U.x = self.x
+            U.y = self.y+u.y
+            # L = self.align(u)
+            # #u1 = L[0]
+            # #u2 = L[1]
+            # val = L.y[0:-1,:] + L.y[-1,:]
+            # # handle one dimensional array
+            # if ((val.ndim>1) & (val.shape[0]==1)):
+            #     val = val.reshape(val.shape[1])
+            # U = Usignal(L.x, val)
         return(U)
 
     def __sub__(self, u):
-        pdb.set_trace()
         t = type(u).__name__
         if ((t == 'int') | (t == 'float')):
             U = Usignal(self.x, self.y - u)
         if type(u)==type(self):
             assert (u.x.shape==self.x.shape)
-            assert (u.y.shape[0]==1)|(u.y.shape[0]==self.y.shape[0])
-            assert (u.y.ndim == 1) | (u.y.shape[0]==1)
+            assert (u.y.ndim == 2)  ,"y has not ndim=2"
+            assert (u.y.shape[0]==1)|(u.y.shape[1]==self.y.shape[1])
             #L = self.align(u)
             #u1 = L[0]
             #u2 = L[1]
@@ -1077,7 +1008,7 @@ class Usignal(Bsignal):
             #if ((val.ndim>1) & (val.shape[0]==1)):
             #    val = val.reshape(val.shape[1])
             U = type(self)()
-            U.x = self.x 
+            U.x = self.x
             U.y = self.y-u.y
             #U = Usignal(u1.x, u1.y - u2.y)
         return(U)
@@ -1085,17 +1016,27 @@ class Usignal(Bsignal):
     def __mul__(self, u):
         t = type(u).__name__
         if ((t == 'int') | (t == 'float') | (t== 'float64') ):
-            U = Usignal(self.x, self.y * u)
-        else:
-            assert  (u.y.ndim == 1) | (u.y.shape[0]==1)
-            L = self.align(u)
-            #u1 = L[0]
-            #u2 = L[1]
-            #U = Usignal(u1.x, u1.y * u2.y)
+            U = type(self)()
+            U.x = self.x
+            U.y = self.y*u
+        if issubclass(type(self),type(u)):
+            #assert (u.x.shape==self.x.shape)
+            assert (u.y.ndim == 2)  ,"y has not ndim=2"
+            assert (u.y.shape[0]==1)|(u.y.shape[1]==self.y.shape[1])
+            #U = type(self)()
+            #U.x = self.x
+            #U.y = self.y*u.y
+            #L = self.align(u)
+            L = self.alignc(u)
+            # #u1 = L[0]
+            # #u2 = L[1]
+            # #U = Usignal(u1.x, u1.y * u2.y)
             val = L.y[0:-1,:] * L.y[-1,:]
-            if ((val.ndim>1) & (val.shape[0]==1)):
-                val = val.reshape(val.shape[1])
-            U = Usignal(L.x, val)
+            #if ((val.ndim>1) & (val.shape[0]==1)):
+            #    val = val.reshape(val.shape[1])
+            U = type(self)()
+            U.x = L.x
+            U.y = val
         return(U)
 
     def setx(self, start, stop, dx):
@@ -1130,8 +1071,131 @@ class Usignal(Bsignal):
         >>> assert(u.dx()==0.1)
 
         """
+        if len(self.x)>1:
+            return(self.x[1] - self.x[0])
+        else:
+            return(0)
 
-        return(self.x[1] - self.x[0])
+    def resample(self, x_new, kind='linear'):
+        """ resample the Usignal with a new x base
+
+        x_new needs to be strictly included in the original x base of the Usignal.
+
+        x is a 1D array
+        y is a 2D array
+
+        if y is complex the interpolation is done on module and unwrapped
+        phase separately
+
+        Parameters
+        ----------
+
+        x_new : ndarray
+        kind  : string
+            'linear' |'spline'
+        """
+        if kind == 'linear':
+            if np.iscomplex(self.y).any():
+                module = abs(self.y)
+                argu = np.unwrap(np.arctan2(np.imag(self.y), np.real(self.y)))
+                fm = interp.interp1d(self.x, module)
+                fa = interp.interp1d(self.x, argu)
+
+                mod_new = fm(x_new)
+                arg_new = fa(x_new)
+                y_new = mod_new * (np.cos(arg_new) + 1j * np.sin(arg_new))
+            else:
+                f = interp.interp1d(self.x, self.y)
+                y_new = f(x_new)
+
+        if kind == 'spline':
+            if np.iscomplex(self.y).any():
+                module = abs(self.y)
+                argu = unwrap(np.arctan2(np.imag(y), np.real(y)))
+                coefm = splrep(self.x, module, s=0)
+                coefa = splrep(self.x, argu, s=0)
+
+                mod_new = splev(x_new, coefm, der=0)
+                arg_new = splev(x_new, coefa, der=0)
+                y_new = mod_new * (np.cos(arg_new) + 1j * np.sin(arg_new))
+            else:
+                coef = splrep(self.x, self.y, s=0)
+                y_new = splev(x_new, coef, der=0)
+
+        U = type(self)(x_new, y_new)
+        return(U)
+
+    def alignc(self, u2):
+        """ align 2 Usignal
+
+        alignc <=> intersection
+        alignc : align two Usignal on a same base
+            return a list which contains the two aligned signals
+
+        Returns
+        -------
+
+        L : Usignal
+            concatenated signal L1.y and L2.y 
+
+
+        """
+        u1 = self
+        sh1 = u1.y.shape
+        sh2 = u2.y.shape
+        naxis1 = len(sh1)
+        naxis2 = len(sh2)
+        assert(naxis1==naxis2),"Problem signal haven't the same number of axis"
+        
+        dx1 = u1.dx()   
+        dx2 = u2.dx()
+        
+        u1_start = u1.x[0]
+        u1_stop = u1.x[-1]
+        u2_start = u2.x[0]
+        u2_stop = u2.x[-1]
+        # it starts at the maximum of both signal
+        #    stops  at the minimum of both signal
+        xstart = max(u1_start, u2_start)
+        xstop = min(u1_stop, u2_stop)
+        assert(xstop>=xstart), "error the 2 signal have disjoint support"
+        dx = min(dx1, dx2)
+        if tstincl(u1.x, u2.x) == 0:
+            print 'Warning: Impossible to align the 2 signals'
+
+        if (dx1 <= dx2):
+
+            xnew = ininter(u1.x, xstart, xstop)
+
+            dim1 = u1.len()
+            #pstart1 = findpos(u1.x, xnew[0])
+            pstart1 = np.where(u1.x==xnew[0])[0]
+            #pstop1 = pstart1 + findpos(u1.x[pstart1:dim1], xnew[-1])
+            pstop1 = pstart1 + np.where(u1.x[pstart1:dim1]==xnew[-1])[0]
+            u1 = u1.truncate(pstart1, pstop1 + 1)
+
+            u2 = u2.resample(xnew)
+
+        if (dx2 < dx1):
+
+            xnew = ininter(u2.x, xstart, xstop)
+
+            dim2 = u2.len()
+            #pstart2 = findpos(u2.x, xnew[0])
+            pstart2 = np.where(u2.x==xnew[0])[0]
+            #pstop2 = pstart2 + findpos(u2.x[pstart2:dim2], xnew[-1])
+            pstop2 = pstart2 + np.where(u2.x[pstart2:dim2]==xnew[-1])[0]
+
+            u2 = u2.truncate(pstart2, pstop2 + 1)
+            u1 = u1.resample(xnew)
+        L   = Usignal()
+        L.x = u1.x
+        #L.y = np.vstack((u1.y,u2.y))
+        u1.y=u1.y[...,None]
+        u2.y=u2.y[...,None]
+        L.y = np.concatenate((u1.y,u2.y),axis=naxis1)
+
+        return(L)
 
     def width(self):
         r""" get the extension support of the Usignal
@@ -1233,23 +1297,12 @@ class Usignal(Bsignal):
 
         x_new = self.x[posmin:posmax]
         if ndim > 1:
-            y_new = self.y[:, posmin:posmax]
+            y_new = self.y[..., posmin:posmax]
         else:
             y_new = self.y[posmin:posmax]
 
-        if t == 'Usignal':
-            U = Usignal(x_new, y_new)
-        if t == 'Tchannel':
-            U = Usignal(x_new, y_new)
-        if t == 'TUsignal':
-            U = TUsignal(x_new, y_new)
-        if t == 'FUsignal':
-            U = FUsignal(x_new, y_new)
-        if t == 'FUDsignal':
-            U = FUDsignal(x_new, y_new, self.taud)
+        U = type(self)(x_new, y_new)
 
-        #if 'U' not in locals():
-            #pdb.set_trace()
         return(U)
 
     def align(self, u2):
@@ -1278,8 +1331,10 @@ class Usignal(Bsignal):
 
             >>> import matplotlib.pylab as plt
             >>> from pylayers.signal.bsignal import *
-            >>> i1 = EnImpulse()
-            >>> i2 = EnImpulse()
+            >>> i1 = TUsignal()
+            >>> i2 = TUsignal()
+            >>> i1.EnImpulse()
+            >>> i2.EnImpulse()
             >>> i2.translate(-10)
             >>> i3 = i1.align(i2)
             >>> fig,ax=i3.plot(typ=['v'])
@@ -1367,7 +1422,6 @@ class Usignal(Bsignal):
                 x = u1.x
                 indx = np.nonzero((x >= u2_start) & (x <= u2_stop))[0]
                 U2 = Usignal(x, np.zeros((N2,len(x))))
-                #pdb.set_trace()
                 U2.y[:,indx] = u2.y[:, 0:np.shape(indx)[0]]
 
             if (b2i & b2f):
@@ -1441,7 +1495,9 @@ class Usignal(Bsignal):
         energy : float
 
         """
-        energy = self.dx() * np.sum(self.y * np.conj(self.y),axis=0)
+        shy = self.y.shape
+        nay = len(shy)
+        energy = self.dx() * np.sum(self.y * np.conj(self.y),axis=nay-1)
         return(energy)
 
     def fftshift(self):
@@ -1479,21 +1535,67 @@ class Usignal(Bsignal):
         self.x = np.hstack((xadd, self.x))
         self.y = np.hstack((yadd, self.y))
 
-    def zlr(self, xmin, xmax):
-        """  add zeros to the left and to the right
+#    def zlr(self, xmin, xmax):
+#        """  add zeros to the left and to the right
+#
+#        Parameters
+#        ----------
+#
+#        xmin : float
+#            add zeros before xmin
+#        xmax : float
+#            add zeros after xmax
+#
+#        Summary
+#        --------
+#
+#        This corresponds to a gating between xmin and xmax
+#
+#        Examples
+#        --------
+#
+#        .. plot::
+#            :include-source:
+#
+#            >>> from pylayers.signal.bsignal import *
+#            >>> from matplotlib.pylab import *
+#            >>> ip = TUsignal()
+#            >>> ip.EnImpulse()
+#            >>> f,a = ip.plot(typ=['v'])
+#            >>> ip.zlr(-10,10)
+#            >>> f,a = ip.plot(typ=['v'])
+#
+#        """
+#        dx = self.dx()
+#        cmin = min(self.x)
+#        cmax = max(self.x)
+#        if cmin > xmin:
+#            xaddl = np.arange(xmin, cmin - dx, dx)
+#            yaddl = np.zeros(len(xaddl))
+#            self.x = np.hstack((xaddl, self.x))
+#            self.y = np.hstack((yaddl, self.y))
+#        else:
+#            u = np.nonzero(self.x >= xmin)
+#            self.x = self.x[u[0]]
+#            self.y = self.y[u[0]]
+#
+#        if cmax < xmax:
+#            xaddr = np.arange(cmax + dx, xmax, dx)
+#            yaddr = np.zeros(len(xaddr))
+#            self.x = np.hstack((self.x, xaddr))
+#            self.y = np.hstack((self.y, yaddr))
+#        else:
+#            u = np.nonzero(self.x <= xmax)
+#            self.x = self.x[u[0]]
+#            self.y = self.y[u[0]]
 
+    def window(self, win='hamming'):
+        """ windowing Usignal
         Parameters
         ----------
 
-        xmin : float
-            add zeros before xmin
-        xmax : float
-            add zeros after xmax
-
-        Summary
-        --------
-
-        This corresponds to a gating between xmin and xmax
+        win : string
+            window type ('hamming','blackman','hanning')
 
         Examples
         --------
@@ -1501,36 +1603,28 @@ class Usignal(Bsignal):
         .. plot::
             :include-source:
 
+            >>> import numpy as np
+            >>> import matplotlib.pyplot as plt
             >>> from pylayers.signal.bsignal import *
-            >>> from matplotlib.pylab import *
-            >>> ip = EnImpulse()
-            >>> f,a = ip.plot(typ=['v'])
-            >>> ip.zlr(-10,10)
-            >>> f,a = ip.plot(typ=['v'])
+            >>> x = np.arange(2,8,0.1)
+            >>> y = np.ones(len(x))
+            >>> U = Usignal(x,y)
+            >>> fig,ax = U.plot()
+            >>> U.window('hamming')
+            >>> fig,ax = U.plot()
+
 
         """
-        dx = self.dx()
-        cmin = min(self.x)
-        cmax = max(self.x)
-        if cmin > xmin:
-            xaddl = np.arange(xmin, cmin - dx, dx)
-            yaddl = np.zeros(len(xaddl))
-            self.x = np.hstack((xaddl, self.x))
-            self.y = np.hstack((yaddl, self.y))
-        else:
-            u = np.nonzero(self.x >= xmin)
-            self.x = self.x[u[0]]
-            self.y = self.y[u[0]]
-
-        if cmax < xmax:
-            xaddr = np.arange(cmax + dx, xmax, dx)
-            yaddr = np.zeros(len(xaddr))
-            self.x = np.hstack((self.x, xaddr))
-            self.y = np.hstack((self.y, yaddr))
-        else:
-            u = np.nonzero(self.x <= xmax)
-            self.x = self.x[u[0]]
-            self.y = self.y[u[0]]
+        if win=='rect':
+            exit
+        if win == 'hamming':
+            w = np.hamming(len(self.x))[None,:]
+        if win == 'blackman':
+            w = np.blackman(len(self.x))[None,:]
+        if win == 'hanning':
+            w = np.hanning(len(self.x))[None,:]
+        self.windowed = True
+        self.y = self.y * w
 
 class TBsignal(Bsignal):
     """  Based signal in Time domain
@@ -1538,9 +1632,8 @@ class TBsignal(Bsignal):
 
     """
     def __init__(self, x=np.array([]), y=np.array([]),label=[]):
-        super(TBsignal,self).__init__(x,y,label)
-        #Bsignal.__init__(self, x, y)
-        self.label[-1] = 'time (ns)'
+        Bsignal.__init__(self, x, y)
+        self.label = 'time (ns)'
 
     def __repr__(self):
         s = Bsignal.__repr__(self)
@@ -1554,6 +1647,11 @@ class TBsignal(Bsignal):
 
         unit1 : actual unit of data
         unit2 : unit for display
+        dist : boolean
+        xmin : float
+        xmax : float
+        logx : boolean
+        logy :boolean
 
         Examples
         --------
@@ -1655,7 +1753,8 @@ class TBsignal(Bsignal):
 
             >>> from pylayers.signal.bsignal import *
             >>> from matplotlib.pylab import *
-            >>> ip = EnImpulse()
+            >>> ip = TUsignal()
+            >>> ip.EnImpulse()
             >>> ip.translate(-10)
             >>> fig,ax=ip.plot(typ=['v'])
             >>> show()
@@ -1694,7 +1793,7 @@ class TBsignal(Bsignal):
         f = np.linspace(fmax/(1.0*N),fmax,N)
         z = np.sum(self.y[:,None]*np.exp(-2*1j*f[None,:]*np.pi*self.x[:,None]),axis=0)
         H = FUDsignal(f,z,taud=self.x)
-        return(H)
+        return H
 
     def b2tu(self, N):
         """ conversion into a TUsignal
@@ -1746,18 +1845,13 @@ class TBsignal(Bsignal):
 
 
 class TUsignal(TBsignal, Usignal):
-    """ Uniform signal in Time domain
+    """ Uniform signal in time domain
 
     This class inheritates from TBsignal and Usignal
 
     """
     def __init__(self, x=np.array([]), y=np.array([]),label=[]):
         super(TUsignal,self).__init__(x,y,label)
-        #Usignal.__init__(self, x, y)
-
-    def __repr__(self):
-        s = Usignal.__repr__(self)
-        return(s)
 
     def diff(self):
         """ numerical differentiation
@@ -1810,53 +1904,6 @@ class TUsignal(TBsignal, Usignal):
         print 'ymax :', self.y.max()
 
 
-    def awgn(self,PSDdBmpHz=-174,snr=0,seed=1,typ='psd',R=50):
-        """ add a white Gaussian noise
-
-        Parameters
-        ----------
-        PSDdBmpHz : float
-        snr : float
-        seed : float
-        typ : string
-            'psd' | 'snr'
-        R : float
-
-        Returns
-        -------
-
-        n
-        sn
-
-        See Also
-        --------
-
-        bsignal.Noise
-
-        """
-        ti = self.x[0]
-        tf = self.x[-1]
-        tsns = self.x[1]-self.x[0]
-        fsGHz = 1./tsns
-
-        if typ=='snr':
-            Ps = self.energy()/(R*(tf-ti))
-            PW = Ps/10**(snr/10.)
-            pWpHz = PW/(fsGHz*1e9)
-            pmWpHz = pWpHz*1e3
-            PSDdBmpHz = 10*np.log10(pmWpHz)
-
-        n = Noise(ti = ti,
-                  tf = tf+tsns,
-                  fsGHz = fsGHz,
-                  PSDdBmpHz = PSDdBmpHz,
-                  R = R,
-                  seed = seed)
-
-        sn.y = self.y + n.y[0:len(self.x)]
-        sn.x = self.x
-
-        return sn,n
 
     def fft(self, shift=False):
         """  forward fast Fourier transform
@@ -1880,7 +1927,9 @@ class TUsignal(TBsignal, Usignal):
         Examples
         --------
 
-        >>> e = EnImpulse()
+        >>> from pylayers.signal.bsignal import *
+        >>> e = TUsignal()
+        >>> e.EnImpulse()
         >>> E = e.fft()
 
         """
@@ -1926,7 +1975,7 @@ class TUsignal(TBsignal, Usignal):
         S.y = S.y * te
         return(S)
 
-    def idealf(self,fcGHz,BGHz):
+    def idealf(self,fcGHz,WGHz):
         pass
 
     def filter(self, order=4, wp=0.3, ws=0.4, ftype='butter'):
@@ -1934,6 +1983,7 @@ class TUsignal(TBsignal, Usignal):
 
         Parameters
         ----------
+
         order : int
         wp    : float
         ws    : float
@@ -1941,7 +1991,8 @@ class TUsignal(TBsignal, Usignal):
 
         Returns
         -------
-        O : Output filetered TUsignal
+
+        O : Output filtered TUsignal
 
 
         """
@@ -1974,33 +2025,6 @@ class TUsignal(TBsignal, Usignal):
         AU = A.unrex()
         return(AU)
 
-    def psd(self, Tpns=100, R=50,periodic=True):
-        """ calculate power spectral density
-
-        Parameters
-        ----------
-
-        R    : Resistance (default 50 Ohms)
-            Ohms
-        Tpns : real
-            Signal period PRP (default 100 ns)
-
-        .. note::
-
-            Notice this interesting property that if time is represented in ns
-            the resulting PSD is expressed in dBm/MHz because there is the
-            same scale factor 1e-9 between second and nanosecond as between
-            dBW/Hz and dBm/MHz
-
-            If periodic is False the signal duration is taken as period.
-
-        """
-        P = self.esd(mode='unilateral')
-        if periodic:
-            P.y = P.y / (R * Tpns)
-        else:
-            P.y = P.y/ (R* (P.x[-1]-P.x[0]))
-        return(P)
 
     def show(self,fig=[],ax=[],display=True,PRPns=100):
         """  show psd
@@ -2072,7 +2096,7 @@ class TUsignal(TBsignal, Usignal):
 
         """
         te = self.dx()
-        Y = self.fft()
+        Y  = self.fft()
         #YY  = (te*te)*abs(Y.y)**2
         YY = abs(Y.y) ** 2
         O = FHsignal(Y.x, YY)
@@ -2227,29 +2251,6 @@ class TUsignal(TBsignal, Usignal):
         Efirst = 20 * np.log10(Efirst)
         return(Efirst)
 
-    def resample(self, x_new, kind='linear'):
-        """ resample the TUsignal with a new x base
-
-        x_new needs to be strictly included in the original x base of the Usignal.
-        x is a 1D array
-        y is a 2D array
-
-        Parameters
-        ----------
-        x_new : ndarray
-        kind  : string
-            'linear' |'spline'
-        """
-        if kind == 'linear':
-            f = interp.interp1d(self.x, self.y)
-            y_new = f(x_new)
-
-        if kind == 'spline':
-            coef = splrep(self.x, self.y, s=0)
-            y_new = splev(x_new, coef, der=0)
-
-        U = TUsignal(x_new, y_new)
-        return(U)
 
     def ft(self):
         """ return the associated FUsignal
@@ -2317,950 +2318,120 @@ class TUsignal(TBsignal, Usignal):
         self.x = np.hstack((self.x, aux - (aux[0] - t1 - te)))
 
 
-    def Epercent(self, N=10):
-        """ return N percentile delay of a cdf
+    def EnImpulse(self,**kwargs):
+        """
+        Create an Energy normalized Gaussian impulse (Usignal)
 
         Parameters
         ----------
 
-        N : 10
+        fcGHz : float
+        WGHz : float
+        threshdB : float
+        feGHz : float
 
         """
+        defaults = {'fcGHz' : 4,
+                    'WGHz' : 3,
+                    'threshdB' : 10,
+                    'feGHz' : 20
+                   }
 
-        cdf, vary = self.ecdf()
-        t = cdf.x
-        Cdf = cdf.y
-        pc = array([])
-        for i in range(N - 1):
-            u = np.nonzero(Cdf > (i + 1.) / N)
-            tp = t[u[0]]
-            pc = np.hstack((pc, tp))
-        return(pc)
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
 
-    def Etau0(self, tau0=0.0, Tint=1, sym=0.25, dB=True):
-        """ calculate energy around delay tau0
+        WGHz = kwargs.pop('WGHz')
+        fcGHz = kwargs.pop('fcGHz')
+        feGHz = kwargs.pop('feGHz')
+        threshdB = kwargs.pop('threshdB')
 
-        Parameters
-        ----------
-        tau0  : (ns)            (0)
-        Tint  : Integration time (ns)   (1) include the system error
-        sym   : symetrie factor 0.5 = symetric (0.25)
-        dB    : logscale indicator (True)
+        #TUsignal.__init__(self)
+        Tp = (2 / (WGHz * np.pi)) * np.sqrt(abs(threshdB) * np.log(10) /20.)
+        coeff = np.sqrt(2 * np.sqrt(2)/ (Tp * np.sqrt(np.pi)))
+
+        te = 1.0 / feGHz
+        Tww = 10 * Tp
+        Ni = round(Tww / (2 * te))
+        # Tww/2 multiple de te
+        Tww = 2 * te * Ni
+        x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
+
+        y = coeff * np.exp(-(x / Tp) ** 2) * np.cos(2 * np.pi * fcGHz * x)
+        self.x = x
+        self.y = y[None,:]
+        self.Tp = Tp
+        self.fcGHz = fcGHz
+
+    #    def demo():
+    #        """ small demo in the docsting
+    #
+    #        Examples
+    #        --------
+    #
+    #        >>> from pylayers.signal.bsignal import *
+    #        >>> ip    = EnImpulse(fc=4,band=3,thresh=10,fe=100)
+    #        >>> Eip1  = ip.energy()
+    #        >>> ESDu  = ip.esd(mode='unilateral')
+    #        >>> ESDb  = ip.esd(mode='bilateral')
+    #        >>> df    = ESDu.dx()
+    #        >>> Eipu  = sum(ESDu.y)*df
+    #        >>> Eipb  = sum(ESDb.y)*df
+    #        >>> erru  = Eip1-Eipu
+    #        >>> errb  = Eip1-Eipb
+    #
+    #        """
+    #        pass
+
+
+    def MaskImpulse(self,**kwargs):
         """
-        #u  = nonzero((tau0 + Tint*(1-sym) > self.x) & (self.x > tau0 - Tint*sym))
-        u = nonzero((tau0 + Tint > self.x) & (self.x > tau0))
-        etau0 = self.dx() * sum(self.y[u] * np.conj(self.y[u]))
-        if dB:
-            etau0 = 10 * np.log10(etau0)
-        return(etau0)
-
-    def Ewin(self, tau, Tint=1, sym=0.25, dB=False):
-        """  integrate energy around delay tau
-
-        Parameters
-        ----------
-        tau   : (ns)            (0)
-        Tint  : Integration time (ns)   (1) include the system error
-        sym   : symetrie factor 0.5 = symetric (0.25)
-        dB    : logscale indicator (True)
-
-        """
-        tstart = tau - Tint * sym
-        tstop = tau + Tint * (1 - sym)
-        u = np.nonzero((self.x > tstart) & (self.x < tstop))
-        energy = self.dx() * sum(self.y[u] * np.conj(self.y[u]))
-        if dB:
-            energy = 10 * np.log10(energy)
-        return(energy)
-
-    def Etot(self, tau0=0.0, taumax=200, dB=False):
-        """
-        Etot  calculate the energy of the signal
-
-        Parameters
-        ----------
-        tau0 : start value for integration
-        dB   : (False default) if True value in dB
-
-        usage  :
-
-            s.Etot(tau0=10,dB=True)
-
-        """
-        u = (self.x > tau0) & (self.x < taumax)
-        etot = self.dx() * sum(self.y[u] * np.conj(self.y[u]))
-        if dB:
-            etot = 10 * np.log10(etot)
-        return(etot)
-
-    def Efirst(self, toa, Tint=1, sym=0.25, dB=True):
-        """ calculate the energy of the first path
-
-        Parameters
-        ----------
-        toa  : float
-            delay value
-        Tint : float
-            duration value (1)
-        sym : float
-            symmetry around delay value ( 0.25)
-        dB : Boolean
-
-        Returns
-        -------
-
-        Efirst : Energy amount in the window (in dB if dB)
-
-        """
-        u = np.nonzero((toa + Tint > self.x) & (self.x > toa))
-        efirst = self.dx() * sum(self.y[u] * np.conj(self.y[u]))
-        if dB:
-            efirst = 10 * np.log10(efirst)
-        return(efirst)
-
-    def Efirst_corr(self, tau0, Sx, Sy, dB=True):
-        """ calculate Efirst utilizing the correlation of signal emission et reponse impulsionnelle
-
-       Parameters
-       ----------
-       tau0
-       Sx
-       Sy
-       dB
-
-        """
-        te = self.dx()
-        E0 = sum(Sy * Sy) * te
-        n = int(np.ceil(tau0 / te))
-        Correlation = np.correlate(self.y, Sy, mode='full')
-        seuil = max(Correlation[len(Sx):len(Sx) + n - 200])
-        v = np.nonzero(Correlation[len(Sx) + n - 200:] > seuil)[0]
-        if len(v) == 0:
-            ff = seuil / E0
-        else:
-
-            w = v[1:] - v[0:-1]
-            w0 = np.nonzero(w != 1)[0]
-            if len(w0) == 0:
-                ff = max(Correlation[len(Sx) + n - 200:][v]) / E0
-            else:
-                vv = v[0:w0[0] + 1]
-                ff = max(Correlation[len(Sx) + n - 200:][vv]) / E0
-
-        if dB:
-            Ef = 20 * np.log10(ff)
-
-        return(Ef)
-
-    def Efirst_toath(self, tau0, Tint=1, sym=0.25, dB=True):
-        """ calculate Efirst
-
-        Parameters
-        ----------
-        tau0   : Time of flight
-        Tint
-        sym
-        dB   : if True return value in dBnJ
-
-        """
-
-        te = self.dx()
-        n = int(np.ceil(tau0 / te))
-        seuil = max(self.y[:n])
-        v = np.nonzero(self.y[n:] > seuil)[0]
-        if len(v) == 0:
-            toa = n * te
-        else:
-            w = v[1:] - v[0:-1]
-            w0 = np.nonzero(w != 1)[0]
-            if len(w0) == 0:
-                r = max(self.y[n:][v])
-                toa = np.nonzero(self.y == r)[0] * te
-
-            else:
-                vv = v[0:w0[0] + 1]
-                r = max(self.y[n:][vv])
-                toa = np.nonzero(self.y == r)[0] * te
-
-        u = np.nonzero((toa + Tint * (1 - sym) > self.x) & (
-            self.x > toa - Tint * sym))
-        efirst = te * sum(self.y[u] * np.conj(self.y[u]))
-
-        if dB:
-            efirst = 10 * np.log10(efirst)
-
-        return(efirst)
-
-    def taumax(self):
-        r""" calculate taumax
-
-        .. math::
-            \max_{\tau} y^{2}(\tau)
-
-        """
-
-        y2 = (self.y) ** 2
-        #
-        # determine time of maximum value of ()^2
-        #
-        maxy2 = max(y2)
-        u = np.nonzero(y2 == maxy2)[0]
-        tau = self.x[u]
-        return(tau)
-
-    def Emax(self, Tint=1, sym=0.5, dB=False):
-        """ calculate the maximum of Energy integrated over a duration Tint
-
-        A symetry of sym around the max value of the squared signal
-
-        Parameters
-        ----------
-
-        Tint: float
-            Integration time (ns) default 1
-        sym : float
-            Symmetry factor (default 0.5)
-        dB  : boolean
-            default False
-
-        Notes
-        -----
-
-        W1-M1
-        te     = 0.005 ns
-        left  = 12
-        Nright = 33
-        Tint   = 45*te = 0.225 ns
-        sym    = 0.25
-
-        """
-        #
-        #  ( ) ^2
-        #
-        y2 = (self.y) ** 2
-        #
-        # determine time of maximum value of ()^2
-        #
-        maxy2 = max(y2)
-        u = np.nonzero(y2 == maxy2)[0]
-
-        te = self.dx()
-
-        Npt = int(np.ceil(Tint / te))
-        Nleft = int(np.ceil(sym * Npt))
-        Nright = int(np.ceil((1 - sym) * Npt))
-        #
-        #  Integration around the maximum value of E^2
-        #  In the W1_M1 measurement
-        #  te     = 0.005 ns
-        #  Nleft  = 12
-        #  Nright = 33
-        #  Tint   = 45*te = 0.225 ns
-        #  sym    = 0.25
-        #
-
-        Y = y2[u - Nleft:u + Nright]
-        cumY = np.cumsum(Y)
-        maxY = cumY[-1]
-        Emax = maxY * te
-        if dB:
-            return(10 * np.log10(Emax))
-        return(Emax)
-
-    def tau_Emax(self):
-        """ calculate the delay of max energy peak
-        """
-        y2 = (self.y) ** 2
-        t = self.x
-        maxy2 = max(y2)
-        u = np.nonzero(y2 == maxy2)[0]
-        tau_Emax = t[u]
-        return(tau_Emax)
-
-    def toa_max2(self):
-        """ calculate time of arrival max2 method
-        """
-
-        THRE = array([])
-        V = array([])
-        VL = array([])
-
-        M = max(self.y)
-        n = np.nonzero(self.y == M)[0]
-
-        thre = M
-        v = 1
-        vl = 0
-        THRE = np.hstack((THRE, thre))
-        V = np.hstack((V, v))
-        VL = np.hstack((VL, vl))
-
-        step = M / 1e2
-        thre = M - step
-
-    #       while thre > M/1e2:
-        while vl < 20:
-    #       while v < 50:
-
-            u = np.nonzero(self.y > thre)[0]
-            v = nbint(u)
-            h = np.nonzero(u > n)[0]
-            g = np.delete(u, h)
-            vl = nbint(g) - 1
-
-            THRE = np.hstack((THRE, thre))
-            V = np.hstack((V, v))
-            VL = np.hstack((VL, vl))
-
-            thre = thre - step
-
-        plt.plot(1 - THRE / M, V, 'b', drawstyle='steps',
-                 label='interval number')
-        plt.plot(1 - THRE / M, VL, '-r', drawstyle='steps',
-                 label='interval(Left) number')
-        plt.xlabel('Gamma/Vmax')
-        plt.legend(loc=2)
-    #       ylabel('Interval Number')
-        plt.show()
-
-    def toa_new(self):
-        """ estimate time of arrival (new method)
-
-        """
-        t = self.x
-        Max = max(self.y)
-        nmax = np.nonzero(self.y == Max)[0]
-        n = nmax
-        step = Max / 1e2
-        thre = Max - step
-
-        delta = 100
-        d = 0
-        nint = 0
-        N = np.array([])
-        N = np.hstack((N, n))
-
-        while delta > 4 * Max / 1e2:
-
-            u = np.nonzero(self.y > thre)[0]
-            hr = np.nonzero(u > n)[0]
-            g = np.delete(u, hr)
-
-            if nmax >= 6000:
-            #set the fenetre=6000*0.005=30ns
-                hl = np.nonzero(g < nmax - 6000)[0]
-                u = np.delete(g, hl)
-            else:
-                u = g
-
-            n_int = nbint(u) - 1
-
-            if n_int == 0:
-                d = d + step
-            else:
-                delta = d + step
-                d = 0
-                n = u[0]
-                N = np.hstack((N, n))
-                #print N
-
-            thre = thre - step
-            if thre < 0:
-                break
-        if len(N) >= 3:
-            nn = N[-3]
-        else:
-            nn = N[0]
-
-        tau = t[nn]
-        return tau
-
-    def toa_win(self, w):
-        """ calulate time of arrival (window method)
-
-        Parameters
-        ----------
-        w : parameter between 0 and 100
-        Lei takes w = 9
-
-        """
-        t = self.x
-        maxbruit = max(self.y[0:1000])
-        Max = max(self.y)
-        nmax = np.nonzero(self.y == Max)[0]
-        n = nmax
-        step = Max / 1e2
-        thre = Max - step
-
-        delta = 100
-        d = 0
-        nint = 0
-        N = np.array([])
-        N = np.hstack((N, n))
-        # tant delta est plus grande que w% du Max
-        while delta > w * Max / 1e2:
-
-            u = np.nonzero(self.y > thre)[0]
-            hr = np.nonzero(u > n)[0]
-            g = np.delete(u, hr)
-
-            if nmax >= 6000:
-            #set the fenetre=6000*0.005=30ns
-                hl = np.nonzero(g < nmax - 6000)[0]
-                u = np.delete(g, hl)
-            else:
-                u = g
-
-            n_int = nbint(u) - 1
-
-            if n_int == 0:
-                thre = thre - step
-                d = d + step
-            else:
-                delta = Max - maxbruit - d - step
-                d = d + step
-                n = u[0]
-                N = np.hstack((N, n))
-                thre = thre - step
-
-            if thre < 0:
-                break
-        if len(N) >= 2:
-            nn = N[-2]
-        else:
-            nn = N[0]
-
-        tau = t[nn]
-        return tau
-
-    def toa_max(self, nint):
-        """ calculate time of arrival
-
-        descendant threshold based toa estimation
-
-        Parameters
-        ----------
-        nint : integer
-
-        """
-        #
-        # seek fot the maximum value of the signal
-        #
-        M = max(self.y)
-        step = M / 1e2
-    #       plot(self.x,self.y)
-        thre = M - step
-        while step > M / 1e5:
-    #          axhline(y=thre,color='green')
-            u = np.nonzero(self.y > thre)[0]
-            if nbint(u) < nint:
-            # down
-                thre = thre - step
-            else:
-            # up + step reduction
-                thre = thre + step
-                step = step / 2
-
-    #       plt.show()
-        tau = self.x[u[0]]
-        return tau
-
-    def toa_th(self, thlos, thnlos, visibility=0):
-        """ calculate time of arrival
-
-        threshold based toa estimation using energy peak
-
-        """
-        #
-        #  ( ) ^2
-        #
-        y2 = (self.y) ** 2
-        maxy2 = max(y2)
-        t = self.x
-
-        if visibility == 'LOS':
-            th = thlos * maxy2
-        else:
-            th = thnlos * maxy2
-        #
-        #In the W1-M1 measurement
-        #thlos=0.05   thnlos=0.15
-        #
-        v = np.nonzero(y2 >= th)[0]
-        toa = t[v[0]]
-        return toa
-
-    def toa_cum(self, th):
-        """ calculate time of arrival
-
-        threshold based toa estimation using cumulative energy
-        """
-        t = self.x
-        y = self.y
-        cdf, vary = self.ecdf()
-        #
-        #In the W1-M1 measurement th=0.15
-        #
-        v = np.nonzero(cdf.y >= th)[0]
-        toa = t[v[0]]
-        return toa
-
-    def toa_th_tmtm(self):
-        """ calculate time of arrival
-
-        """
-        y2 = (self.y) ** 2
-        maxy2 = max(y2)
-        t = self.x
-
-        alpha = (np.sqrt(self.Etot()) - np.sqrt(self.Emax())) /  \
-                (np.sqrt(self.Etot()) + np.sqrt(self.Emax()))
-        th = alpha * maxy2
-
-        v = np.nonzero(y2 >= th)[0]
-        toa = t[v[0]]
-        return toa
-
-    def toa_th_tm(self):
-        """ calculate time of arrival
-
-        """
-
-        y2 = (self.y) ** 2
-        maxy2 = max(y2)
-        t = self.x
-
-        alpha = np.sqrt(self.Emax()) / np.sqrt(self.Etot())
-        print alpha
-        th = alpha * maxy2
-
-        v = np.nonzero(y2 >= th)[0]
-        toa = t[v[0]]
-        return toa
-
-    def toa_th_tmt(self):
-        """ calculate time of arrival
-
-        """
-        y2 = (self.y) ** 2
-        maxy2 = max(y2)
-        t = self.x
-
-        alpha = (np.sqrt(self.Etot(
-        )) - np.sqrt(self.Emax())) / np.sqrt(self.Etot())
-        print alpha
-        th = alpha * maxy2
-
-        v = np.nonzero(y2 >= th)[0]
-        toa = t[v[0]]
-        return toa
-
-    def toa_cum_tm(self):
-        """ calculate time of arrival
-
-        """
-
-        y2 = (self.y) ** 2
-        t = self.x
-        maxy2 = max(y2)
-        u = np.nonzero(y2 == maxy2)[0]
-        cdf, vary = self.ecdf()
-
-        alpha = np.sqrt(cdf.y[u]) / np.sqrt(cdf.y[-1])
-        v = np.nonzero(cdf.y >= alpha * cdf.y[u])[0]
-        toa = t[v[0]]
-        return toa
-
-    def toa_cum_tmtm(self):
-        """ calculate time of arrival
-
-        """
-
-        y2 = (self.y) ** 2
-        t = self.x
-        maxy2 = max(y2)
-        u = np.nonzero(y2 == maxy2)[0]
-        cdf, vary = self.ecdf()
-
-        alpha = (np.sqrt(cdf.y[-1]) - np.sqrt(
-            cdf.y[u])) / (np.sqrt(cdf.y[-1]) + np.sqrt(cdf.y[u]))
-        v = np.nonzero(cdf.y >= alpha * cdf.y[u])[0]
-        toa = t[v[0]]
-        return toa
-
-    def toa_cum_tmt(self):
-        """ calculate time of arrival
-
-        """
-        y2 = (self.y) ** 2
-        t = self.x
-        maxy2 = max(y2)
-        u = np.nonzero(y2 == maxy2)[0]
-        cdf, vary = self.ecdf()
-
-        alpha = (np.sqrt(cdf.y[-1]) - np.sqrt(cdf.y[u])) / np.sqrt(cdf.y[-1])
-        v = np.nonzero(cdf.y >= alpha * cdf.y[u])[0]
-        toa = t[v[0]]
-        return toa
-
-
-
-    def aggcir(self,alphak,tauk):
-        """ aggregation of CIR from (alphak,tauk)
-
-        Parameters
-        ----------
-
-        alphak : ndarray
-            CIR path amplitude
-        tauk : ndarray
-            CIR delay values
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> from pylayers.signal.bsignal import *
-            >>> import numpy as np
-            >>> alphak = 10*np.random.rand(7)
-            >>> tauk = 100*np.random.rand(7)
-            >>> tau = np.arange(0,150,0.1)
-            >>> y = np.zeros(len(tau))
-            >>> CIR = TUsignal(tau,y)
-            >>> CIR.aggcir(alphak,tauk)
-            >>> f,a =CIR.plot(typ=['v'])
-
-        """
-        shy = np.shape(self.y)
-        x = self.x
-        eps = (x[1]-x[0])/2
-        u = map(lambda t: np.where( (x>t-eps) & (x<=t+eps))[0][0],tauk)
-        ynew  = np.zeros(len(x))
-        ynew[u] = alphak
-        if len(shy)>1:
-           self.y = np.vstack((self.y,ynew))
-        else:
-           self.y = ynew[np.newaxis,:]
-
-
-    def readcir(self,filename,outdir=[]):
-        """ read channel impulse response
-
-        Parameters
-        ----------
-        filename : string
-            long file name if outdir is []
-            short file name is outdir is <> []
-        outdir : string
-            output directory
-        """
-        if outdir <> []:
-            outdir = 'output/'+outdir
-            filename = getlong(filename, outdir)
-
-        cir = ios.loadmat(filename)
-        self.x = cir['t'].ravel()
-        self.y = cir['cir'].ravel()
-
-
-    def readuwb(self, _filename):
-        """ read  Waveform from Matlab file
-        """
-        outdir = 'output/'+outdir
-        filename = getlong(_filename, outdir)
-        wfm = ios.loadmat(filename)
-        d = wfm['data'][0][0]
-        T0 = d.T0[0][0] / 1e-9
-        Tres = d.Tres[0][0] / 1e-9
-        s = d.WformOut1
-        N = len(s)
-        self.x = np.linspace(T0, T0 + (N - 1) * Tres, N)
-        self.y = s.reshape(len(s))
-
-    def ecdf(self, Tnoise=10, rem_noise=True, in_positivity=True, display=False, normalize=True, delay=0):
-        """ calculate energy cumulative density function
-
-        Parameters
-        ----------
-
-        Tnoise     :
-            Time duration of noise only portion (default=5ns)
-        rem_noise  :
-            remove noise if True
-        in_positivity :
-            inforce positivity if True
-        normalize  :
-            normalize if True (Not implemented)
-        display    :
-            display ecdf if True
-        delay      :
-            give a delay for vizualization
-
-        Returns
-        -------
-
-        ecdf , vary
-
-        """
-        #
-        #  ( ) ^2
-        #
-        t = self.x
-        y = self.y
-        te = self.dx()
-        y2 = y ** 2
-        #
-        f1 = np.cumsum(y2) * te
-        # retrieve the noise only portion at the beginning of TUsignal
-        #
-        Nnoise = int(np.ceil(Tnoise / te))
-        tn = t[0:Nnoise]
-        fn = f1[0:Nnoise]
-        stdy = np.std(y[0:Nnoise])
-        vary = stdy * stdy
-        y = t * vary
-        #
-        # y : linear interpolation of noise ecdf  (over whole time base)
-        #
-        #(ar,br)= polyfit(tn,fn,1)
-        #print ar
-        #y  = polyval([ar,br],t)
-        if rem_noise:
-            f = f1 - y
-        else:
-            f = f1
-
-        #
-        # inforce positivity
-        #
-        if in_positivity:
-            pdf = np.diff(f)
-            u = np.nonzero(pdf < 0)[0]
-            pdf[u] = 0
-            ecdf = np.cumsum(pdf)
-        else:
-            ecdf = f
-        #
-        # Normalization step
-        #
-        E = ecdf[-1]
-        #print E
-
-        if normalize:
-            ecdf = ecdf / E
-        #
-        # Resizing
-        #
-        Nt = len(t)
-        Necdf = len(ecdf)
-        N = min(Nt, Necdf)
-        ecdf = TUsignal(t[0:N], ecdf[0:N])
-        #
-        # Display
-        #
-        if display:
-            plt.subplot(211)
-            ecdf.plot()
-            if normalize:
-                plt.plot(t, 2 * vary * np.sqrt(2 * t) / E, 'r')
-                plt.plot(t, -2 * vary * np.sqrt(2 * t) / E, 'r')
-            else:
-                plt.plot(t, 3 * vary * np.sqrt(2 * t), 'r')
-                plt.plot(t, -3 * vary * np.sqrt(2 * t), 'r')
-            plt.axvline(x=delay, color='red')
-            plt.subplot(212)
-            plt.plot(t, y, color='red')
-            plt.plot(t, f1, color='black')
-            plt.plot(t, f, color='blue')
-            plt.show()
-
-        return ecdf, vary
-
-    def tau_moy(self, alpha=0.1, tau0=0):
-        """ calculate mean excess delay starting from delay tau_0
-
-        Parameters
-        ----------
-
-        alpha : float
-        tau0 : float
-
-        """
-        t = self.x
-        y = self.y
-
-        cdf, vary = self.ecdf()
-        pdf = np.diff(cdf.y)
-
-        u = np.nonzero(cdf.y > alpha)[0]
-        v = np.nonzero(cdf.y < 1 - alpha)[0]
-
-        t = t[u[0]:v[-1]]
-        pdf = pdf[u[0]:v[-1]]
-
-        te = self.dx()
-        a = np.sum(t * pdf)
-        b = np.sum(pdf)
-        taum = a / b
-
-        return(taum)
-
-    def delays(self):
-        r""" calculate delay parameters and orthogonality factor from cir
-
-        Returns
-        -------
-
-        taum :
-            mean excess delay
-        delayspread
-            rms delay spread
-        of  :
-            orthogonality factor
-
-        Neelesh Metha, Andreas Molish, Lary Greenstein "Orthogonality Factor in WCDMA Donlinks in Urban Macrocellular
-        environments" 
-
-        .. :math:
-
-            \beta0 = 1 \frac{\sum_i=1^L}|\alpha_i|^4}{\left(\sum_i=1^L|\alpha_i|^2)^2}
-
-        """
-
-        self.flatteny(reversible=True)
-        y2 = self.yf*self.yf
-        y4 = y2*y2
-        taum = sum(self.x*y2,axis=0)/sum(y2,axis=0)
-        delayspread = np.sqrt(sum((self.x-taum)*(self.x-taum)*y2)/sum(y2,axis=0))
-        of = 1 -sum(y4,axis=0)/sum(y2,axis=0)**2
-        return taum,delayspread,of
-
-
-
-    def tau_rms(self, alpha=0.1, tau0=0):
-        r""" calculate root mean square delay spread starting from delay tau_0
-
-        Parameters
-        ----------
-
-        alpha : float
-        threshold : float
-            ( delay interval is defined between :math:`\tau(\alpha)` and :math:`\tau(1 -\alpha)` )
-        tau0 : float
-            argument for specifying the delay start
-
-        Notes
-        -----
-
-        .. math::
-
-            \sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)} (\tau-\tau_m)^{2} PDP(\tau) d\tau} {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}}
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> from pylayers.measures.mesuwb import *
-            >>> import matplotlib.pyplot as plt
-            >>> M = UWBMeasure(1)
-            >>> ch4 = M.tdd.ch4
-            >>> f1,a1=ch4.plot(color='k')
-            >>> tit0 = plt.title("WHERE1 M1 UWB Channel impulse response")
-            >>> f2,a2=ch4.plot(color='k')
-            >>> tit1= plt.title("WHERE1 M1 UWB Channel impulse response (Zoom 1)")
-            >>> ax1=plt.axis([10,160,-90,-50])
-            >>> f3,a3=ch4.plot(color='k')
-            >>> tit2 = plt.title("WHERE1 M1 UWB Channel impulse response (Zoom 2)")
-            >>> ax2=plt.axis([20,120,-80,-50])
-            >>> plt.show()
-            >>> tau_moy = ch4.tau_moy()
-
-
-
-        See Also
-        --------
-
-        TUsignal.ecdf
-        TUsignal.tau_moy
-
-        """
-
-        t = self.x
-        y = self.y
-        cdf, vary = self.ecdf()
-        pdp = np.diff(cdf.y)
-        taum = self.tau_moy(tau0)
-
-        u = np.nonzero(cdf.y > alpha)[0]
-        v = np.nonzero(cdf.y < 1 - alpha)[0]
-
-        t = t[u[0]:v[-1]]
-        pdp = pdp[u[0]:v[-1]]
-        te = self.dx()
-        b = sum(pdp)
-        m = sum(pdp * (t - taum) * (t - taum))
-        taurms = np.sqrt(m / b)
-
-        return(taurms)
-
-
-class TUDsignal(TUsignal):
-    """ Uniform signal in Time domain with delay
-
-    Attributes
-    ----------
-
-    x   : ndarray
-    y   : ndarray
-    taud : ndarray
-        direct delay
-    taue : ndarray
-        excess delay
-
-    """
-    def __init__(self,x=np.array([]),y=np.array([]),taud=np.array([]),taue=np.array([])):
-        super(TUDsignal,self).__init__(x,y)
-        #TUsignal.__init__(self, x, y)
-        self.taud = taud
-        self.taue = taue
-
-    def __repr__(self):
-        s = TUsignal.__repr__(self)
-        return(s)
-
-    def fig(self, N):
-        """ plot a figure of the N first signals
-
-        Parameters
-        ----------
-
-        N : int
-            number of y signal to plot
-
-        """
-        x = self.x
-        min = self.y.min()
-        max = self.y.max()
-        ec = max - min
-        ecmax = ec.max()
-        sh = np.shape(self.y)
-        Nmax = sh[0]
-        N1 = int(minimum(N, Nmax))
-        y1 = self.y[0, :] + (N1 - 1) * ecmax
-        yN1 = self.y[N1 - 1, :]
-        for k in range(N):
-            gk = str(N) + str(1) + str(k)
-            plt.subplot(gk)
-            plot(x, yN1[k, :])
-
-           #r.plot(x, yN1, main='Ray response', xlab='Time (ns)', ylab='y', type='l', col='black' ,frame='False',  ylim=r.range(y1,yN1) )
-           #for i in range(N1-1):
-           #    yi = self.y[i+1,:] + (N1-i)*ecmax
-           #    r.lines(x,yi,col='black')
+        MaskImpulse : Create an Energy normalized Gaussian impulse (Usignal)
+
+        def __init__(self, x=np.array([]), fc=4, band=3, thresh=10, Tp=100, Pm=-41.3, R=50, fe=100):
+
+            Parameters
+            ----------
+            fc     : center frequency (GHz)
+            band   : bandwidth (GHz)
+            Tp     : Pulse repetion rate
+            R      : Resistance
+            Pm     : PSD max
+            fe     : sampling freqeuncy
+            thresh : definition of band at Pm - thresh (dB)
+
+            """
+        self.fc = fc
+        self.band = band
+        self.thresh = thresh
+        self.Tp = Tp
+        self.Pm = Pm
+        self.R = R
+        self.fe = fe
+
+        Usignal.__init__(self)
+        #alpha  = 1./(2*np.sqrt(abs(thresh)*np.log(10)/20))
+        alpha = 1. / (2 * np.sqrt(abs(thresh) * np.log(10) / 10))
+        tau = 1 / (alpha * band * np.pi * np.sqrt(2))
+        A = np.sqrt(2 * R * Tp * 10 ** (Pm / 10)) / (tau * np.sqrt(np.pi))
+        if len(x) == 0:
+            te = 1.0 / fe
+            Tw = 10. / band
+            Ni = round(Tw / (2 * te))
+            # Tww/2 multiple de te
+            Tww = 2 * te * Ni
+            x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
+
+        y = A * np.exp(-(x / tau) ** 2) * np.cos(2 * np.pi * fc * x)
+        self.x = x
+        self.y = y
+
+    #    def show(self):
+    #        plt.subplot(211)
+    #        self.plot()
+    #        plt.subplot(212)
+    #        P = self.psd(self.Tp, self.R)
+    #        P.plotdB(mask=True)
 
 
 class FBsignal(Bsignal):
@@ -3272,9 +2443,8 @@ class FBsignal(Bsignal):
     plotdB   : plot modulus in dB
     """
     def __init__(self, x=np.array([]), y=np.array([]),label=[]):
-        super(FBsignal,self).__init__(x,y,label)
-        #Bsignal.__init__(self, x, y)
-        self.label[-1]='Frequency (GHz)'
+        Bsignal.__init__(self, x, y)
+        self.label='Frequency (GHz)'
 
     def __repr__(self):
         s = Bsignal.__repr__(self)
@@ -3461,7 +2631,7 @@ class FBsignal(Bsignal):
             plt.ylabel('imaginary part)')
 
 
-class FUsignal(FBsignal, Usignal):
+class FUsignal(FBsignal,Usignal):
     """
     FUsignal : Uniform signal in Frequency Domain
 
@@ -3487,9 +2657,8 @@ class FUsignal(FBsignal, Usignal):
     plotri   : plot real part and imaginary part
     plotdB   : plot modulus in dB
     get      : get k th ray
-    tap      : calculates channel taps
-    window   : 
-    
+    window   :
+
     """
     def __init__(self, x=np.array([]), y=np.array([]),label=[]):
         super(FUsignal,self).__init__(x,y,label)
@@ -3500,84 +2669,24 @@ class FUsignal(FBsignal, Usignal):
         return(s)
 
     def __add__(self, u):
-        L = self.align(u)
-        u1 = L[0]
-        u2 = L[1]
-        U = FUsignal(u1.x, u1.y + u2.y)
-        #U =FUsignal(self.x,self.y+u.y)
+        L = self.alignc(u)
+        U = FUsignal(L.x, L.y[...,0] + L.y[...,1])
         return(U)
 
     def __sub__(self, u):
-        L = self.align(u)
-        u1 = L[0]
-        u2 = L[1]
-        U = FUsignal(u1.x, u1.y - u2.y)
-        #U =FUsignal(self.x,self.y-u.y)
+        L = self.alignc(u)
+        U = FUsignal(L.x, L.y[...,0] - L.y[...,1])
         return(U)
 
     def __mul__(self, u):
-        L = self.align(u)
-        u1 = L[0]
-        u2 = L[1]
-        #
-        # Normalisation 19/05/2009
-        Df = u1.x[1] - u1.x[0]
-        U = FUsignal(u1.x, u1.y * u2.y)
-        #rint shape(self.x)
-        #rint shape(self.y)
-        #rint shape(u.y)
-        # =FUsignal(self.x,self.y*u.y)
+        L = self.alignc(u)
+        U = FUsignal(L.x, L.y[...,0] * L.y[...,1])
         return(U)
 
     def __div__(self, u):
-        L = self.align(u)
-        u1 = L[0]
-        u2 = L[1]
-        U = FUsignal(u1.x, u1.y / u2.y)
+        L = self.alignc(u)
+        U = FUsignal(L.x, L.y[...,0] / L.y[...,1])
         return(U)
-
-
-
-    def window(self, win='hamming'):
-        """ windowing FUsignal
-
-        Parameters
-        ----------
-
-        win : string
-            window type ('hamming','blackman','hanning')
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> import numpy as np
-            >>> import matplotlib.pyplot as plt
-            >>> from pylayers.signal.bsignal import *
-            >>> x = np.arange(2,8,0.1)
-            >>> y = np.ones(len(x))
-            >>> U = FUsignal(x,y)
-            >>> fig,ax = U.plot()
-            >>> U.window('hamming')
-            >>> fig,ax = U.plot()
-
-
-
-
-        """
-
-        if win == 'hamming':
-            w = np.hamming(self.N)
-        if win == 'blackman':
-            w = np.blackman(self.N)
-        if win == 'hanning':
-            w = np.hanning(self.N)
-
-        w   = w.reshape(self.uax)
-        self.y = self.y * w
-
 
 
     def applyFriis(self):
@@ -3600,19 +2709,20 @@ class FUsignal(FBsignal, Usignal):
             self.y = self.y*factor
             self.isFriis = True
 
-    
+
 
     def get(self, k):
         """
-            get the kh signal
+        get the kh signal
 
-            Parameters
-            ----------
-            k : indes to get
+        Parameters
+        ----------
+        k : indes to get
 
-            Return
-            ------
-            G : FUsignal
+        Returns
+        -------
+
+        G : FUsignal
 
         """
         G = FUsignal()
@@ -3639,7 +2749,7 @@ class FUsignal(FBsignal, Usignal):
         print 'Duration (ns) :', T
         print 'Frequency sampling step : ', df
 
-    def energy(self,axis=0,Friis=False,mode='mean'):
+    def energy(self,axis=1,Friis=False,mode='mean'):
         r""" calculate energy along given axis
 
         Parameters
@@ -3653,8 +2763,9 @@ class FUsignal(FBsignal, Usignal):
         Examples
         --------
 
-        >>> S = EnImpulse()
-        >>> En1 = S.energy()
+        >>> ip = TUsignal()
+        >>> ip.EnImpulse()
+        >>> En1 = ip.energy()
         >>> assert((En1>0.99) & (En1<1.01))
 
         Notes
@@ -3829,50 +2940,6 @@ class FUsignal(FBsignal, Usignal):
         fh = FH.ifft()
 
 
-    def resample(self, x_new, kind='linear'):
-        """ resample
-
-
-        This function resamples the Usignal with a new x base
-        which needs to be strictly included in the original x
-        base of the Usignal.
-        x is a 1D array
-        y is a 2D array
-
-        Parameters
-        ----------
-
-        x_new :
-        kind : string
-
-        See Also
-        --------
-
-        interp.interp1d, splrep, splev
-        """
-
-        if kind == 'linear':
-            module = abs(self.y)
-            argu = np.unwrap(np.arctan2(np.imag(self.y), np.real(self.y)))
-            fm = interp.interp1d(self.x, module)
-            fa = interp.interp1d(self.x, argu)
-
-            mod_new = fm(x_new)
-            arg_new = fa(x_new)
-            y_new = mod_new * (np.cos(arg_new) + 1j * np.sin(arg_new))
-
-        if kind == 'spline':
-            module = abs(self.y)
-            argu = unwrap(np.arctan2(np.imag(y), np.real(y)))
-            coefm = splrep(self.x, module, s=0)
-            coefa = splrep(self.x, argu, s=0)
-
-            mod_new = splev(x_new, coefm, der=0)
-            arg_new = splev(x_new, coefa, der=0)
-            y_new = mod_new * (np.cos(arg_new) + 1j * np.sin(arg_new))
-
-        U = FUsignal(x_new, y_new)
-        return(U)
 
     def symH(self, parity=0):
         """ enforce Hermitian symetry
@@ -3893,23 +2960,18 @@ class FUsignal(FBsignal, Usignal):
         f = self.x
         U = self.y
         N = len(f)
-        ndim = U.ndim
+
+        ys = U.shape
         ze_x = np.array([0])
-        if ndim > 1:
-            ze_y = np.zeros([ndim, 1])
-        else:
-            ze_y = np.array([0])
+        ze_y = np.zeros((ys[0],1))
+
         if parity == 0:
-            if ndim > 1:
-                Up = np.concatenate((ze_y, U, np.flipud(
-                    np.conjugate(U[:, 0:-1]))), 1)
-            else:
-                Up = np.concatenate((ze_y, U, np.flipud(
-                    np.conjugate(U[0:-1]))), 0)
+            Up = np.concatenate((ze_y, U, np.flipud(np.conjugate(U[:, 0:-1]))), 1)
             fp = np.concatenate((ze_x, f, f[0:-1] + f[-1]))
         else:
             Up = np.concatenate((ze_y, U, np.flipud(np.conjugate(U))), 1)
             fp = np.concatenate((ze_x, f, f + f[-1]))
+
         V = FHsignal(fp, Up)
         return V
 
@@ -3977,7 +3039,6 @@ class FUsignal(FBsignal, Usignal):
             zl = np.zeros(Nl)
             zlm1 = np.zeros(Nl-1)
 
-        #pdb.set_trace()
         if  Nz > 0:
             if ndim > 1:
                 zh = np.zeros([nline, Nz])
@@ -4017,59 +3078,6 @@ class FUsignal(FBsignal, Usignal):
 
         return V
 
-    def align(self, u2):
-        """ align 2 FUsignal
-
-        align <=> intersection
-        align : align two FUsignal on a same base
-            return a list which contains the two aligned signals
-
-        >>> i1 = EnImpulse()
-        >>> i2 = EnImpulse()
-        >>> i2.translate(-10)
-        >>> L  = i1.align(i2)
-
-        """
-
-        u1 = self
-        dx1 = u1.dx()
-        dx2 = u2.dx()
-        u1_start = u1.x[0]
-        u2_start = u2.x[0]
-        u1_stop = u1.x[-1]
-        u2_stop = u2.x[-1]
-
-        # it starts at the maximum of both signal
-        #    stops  at the minimum of both signal
-        xstart = max(u1_start, u2_start)
-        xstop = min(u1_stop, u2_stop)
-        dx = min(dx1, dx2)
-        if tstincl(u1.x, u2.x) == 0:
-            print 'Warning: Impossible to align the 2 signals'
-
-        if (dx1 <= dx2):
-
-            xnew = ininter(u1.x, xstart, xstop)
-
-            dim1 = u1.len()
-            pstart1 = findpos(u1.x, xnew[0])
-            pstop1 = pstart1 + findpos(u1.x[pstart1:dim1], xnew[-1])
-            u1 = u1.truncate(pstart1, pstop1 + 1)
-
-            u2 = u2.resample(xnew)
-
-        if (dx2 < dx1):
-
-            xnew = ininter(u2.x, xstart, xstop)
-
-            dim2 = u2.len()
-            pstart2 = findpos(u2.x, xnew[0])
-            pstop2 = pstart2 + findpos(u2.x[pstart2:dim2], xnew[-1])
-            u2 = u2.truncate(pstart2, pstop2 + 1)
-
-            u1 = u1.resample(xnew)
-
-        return(u1, u2)
 
     def ifft(self, Npt=-1):
         r""" Inverse Fourier transform
@@ -4123,7 +3131,8 @@ class FUsignal(FBsignal, Usignal):
         --------
 
         >>> from pylayers.signal.bsignal import *
-        >>> e  = EnImpulse()
+        >>> e = TUsignal()
+        >>> e.EnImpulse()
         >>> E  = e.fft()
         >>> EU = E.unrex()
 
@@ -4291,645 +3300,19 @@ class FUsignal(FBsignal, Usignal):
 
 
 
-class FUDsignal(FUsignal):
-    """
-    FUDsignal : Uniform signal in Frequency domain with delays
-
-
-    Attributes
-    ----------
-
-    x    : ndarray 1xN
-    y    : ndarray MxN
-    taud : direct delay (Time of Flight)
-    taue : excess delay
-
-    Methods
-    -------
-
-    minphas : force minimal phase    (Not tested)
-    totime  : transform to a TUD signal
-    iftd    : inverse Fourier transform
-    ft1     : construct CIR from ifft(RTF)
-    ft2     :
-
-    """
-    def __init__(self, x=np.array([]), y=np.array([]), taud=np.array([]),label=[]):
-        """ object constructor
-
-        Parameters
-        ----------
-
-        x : np.array()
-        y : np.array()
-        taud : np.array(
-
-        """
-        super(FUDsignal,self).__init__(x,y,label)
-        self.taud = taud
-        self.taue = np.zeros(len(taud))
-
-    def __repr__(self):
-        s = FUsignal.__repr__(self)
-        return(s)
-
-    def minphas(self):
-        """ construct a minimal phase FUsignal
-
-        Notes
-        -----
-
-        - Evaluate slope of the phase
-        - deduce delay
-        - update delay of FUDSignal
-        - Compensation of phase slope to obtain minimal phase
-
-        This methods updates the excess delay `taue` member.
-
-        The samplinf frequency step should be
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> from pylayers.signal.bsignal import *
-            >>> import numpy as np
-            >>> fGHz = np.arange(2,11,0.1)
-            >>> tau1 = np.array([1,2,3])[:,np.newaxis]
-            >>> y = np.exp(-2*1j*np.pi*fGHz[np.newaxis,:]*tau1)/fGHz[np.newaxis,:]
-            >>> H = FUDsignal(x=fGHz,y=y,taud=np.array([15,17,18]))
-            >>> f,a = H.plot(typ=['ru'],xlabels=['Frequency GHz'])
-            >>> t1 = plt.suptitle('Before minimal phase compensation')
-            >>> H.minphas()
-            >>> H.taue
-            array([ 1.,  2.,  3.])
-            >>> f,a = H.plot(typ=['ru'],xlabels=['Frequency GHz'])
-            >>> t2 = plt.suptitle('After minimal phase compensation')
-
-        """
-
-        f = self.x
-        phase = np.unwrap(np.angle(self.y))
-        dphi = phase[:, -1] - phase[:, 0]
-        df = self.x[-1] - self.x[0]
-        slope = dphi / df
-        #if slope >0:
-        #   print 'm  inphas Warning : non causal FUSignal'
-        #phi0      = +1j*slope*(f[-1]+f[0]/2)
-        F, S = np.meshgrid(f, slope)
-        #E   = exp(-1j*slope*f+phi0)
-        E = np.exp(-1j * S * F)
-        self.y = self.y * E
-        self.taue = -slope / (2 * np.pi)
-        # update total delay
-        #self.tau = self.tau+self.taue
-
-    def ifft(self):
-        """ inverse Fourier Transform
-
-        Examples
-        --------
-
-        >>> from pylayers.simul.link import *
-        >>> L = DLink(verbose=False)
-        >>> aktk = L.eval()
-        >>> L.H.cut()
-        >>> T1 = L.H.totime()
-        >>> f,a = T1.plot(typ='v')
-        >>> L.H.minphas()
-        >>> T2 = L.H.totime()
-        >>> f,a = T2.plot(typ='v')
-
-        See Also
-        --------
-
-        FUsignal.ift
-
-
-        """
-        y = fft.ifft(self.y)
-        T = 1/(self.x[1]-self.x[0])
-        x = np.linspace(0,T,len(self.x))
-        h = TUDsignal(x,y,self.taud,self.taue)
-        return(h)
-
-
-    def totime(self, Nz=1, ffts=0):
-        """ transform to TUDsignal
-
-        Parameters
-        ----------
-
-            Nz : int
-                Number of zeros for zero padding
-            ffts : nt
-                fftshift indicator (default 0 )
-
-        Examples
-        --------
-
-        >>> from pylayers.simul.link import *
-        >>> L = DLink(verbose=False)
-        >>> aktk = L.eval()
-        >>> L.H.cut()
-        >>> T1 = L.H.totime()
-        >>> f,a = T1.plot(typ='v')
-        >>> L.H.minphas()
-        >>> T2 = L.H.totime()
-        >>> f,a = T2.plot(typ='v')
-
-        See Also
-        --------
-
-        FUsignal.ift
-
-
-        """
-        Nray = len(self.taud)
-        s = self.ift(Nz, ffts)
-        h = TUDsignal(s.x, fft.fftshift(s.y), self.taud,self.taue)
-        return(h)
-
-
-    def iftd(self, Nz=1, tstart=-10, tstop=100, ffts=0):
-        """ time pasting
-
-        Parameters
-        ----------
-
-        Nz : int
-            Number of zeros
-        tstart : float
-        tstop  : float
-        ffts   : int
-            fftshift indicator
-
-
-        Returns
-        -------
-
-        rf : TUsignal (1,N)
-
-
-        See Also
-        --------
-
-        TUsignal.translate
-
-
-        Examples
-        --------
-
-
-        """
-        tau = self.taud+self.taue
-        Nray = len(tau)
-        s = self.ift(Nz, ffts)
-        x = s.x
-        dx = s.dx()
-        x_new = np.arange(tstart, tstop, dx)
-        yini = np.zeros((Nray, len(x_new)))
-        rf = TUsignal(x_new, yini)
-        #
-        # initializes a void signal
-        #
-        for i in range(Nray):
-            r = TUsignal(x_new, np.zeros(len(x_new)))
-            si = TUsignal(x, s.y[i, :])
-            si.translate(tau[i])
-            r = r + si
-            rf.y[i, :] = r.y
-        return rf
-
-    def ft1(self, Nz, ffts=0):
-        """  construct CIR from ifft(RTF)
-
-        Parameters
-        ----------
-
-        Nz   : number of zeros for zero padding
-        ffts : fftshift indicator
-            0  no fftshift
-            1  apply fftshift
-
-        Returns
-        -------
-
-        r : TUsignal
-
-
-        See Also
-        --------
-
-        pylayers.signal.bsignal.
-
-
-        """
-        tau = self.taud+self.taue
-        self.s = self.ift(Nz, ffts)
-        x = self.s.x
-        r = TUsignal(x, np.zeros(len(x)))
-
-        if len(tau) == 1:
-            return(self.s)
-        else:
-            for i in range(len(tau)):
-                si = TUsignal(self.s.x, self.s.y[i, :])
-                si.translate(tau[i])
-                r = r + si
-            return r
-
-    def ftau(self, Nz=0, k=0, ffts=0):
-        """ time superposition
-
-        Parameters
-        ----------
-
-        Nz  : number of zeros for zero padding
-        k   : starting index
-        ffts = 0  no fftshift
-        ffts = 1  apply fftshift
-
-        Returns
-        -------
-        r : TUsignal
-        """
-        tau = self.taud + self.taue
-        s = self.ift(Nz, ffts)
-        x = s.x
-        r = TUsignal(x, np.zeros(len(x)))
-        si = TUsignal(s.x, s.y[k, :])
-        si.translate(tau[k])
-        r = r + si
-        return r
-
-    def cir(self,fGHzmin=0,fGHzmax=1000):
-        """
-        """
-        u = (self.x>fGHzmin) & (self.y<fGHzmax)
-        cir = sum(self.y)
-
-
-    def plot3d(self,fig=[],ax=[]):
-        """ plot in 3D
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> from pylayers.signal.bsignal import *
-            >>> import numpy as np
-            >>> N = 20
-            >>> fGHz = np.arange(1,3,1)
-            >>> taud = np.sort(np.random.rand(N))
-            >>> alpha = np.random.rand(N,len(fGHz))
-            >>> s = FUDsignal(x=fGHz,y=alpha,taud=taud)
-            >>> s.plot3d()
-
-        """
-        Ntau = np.shape(self.y)[0]
-        Nf   = np.shape(self.y)[1]
-
-        if fig==[]:
-            fig = plt.figure()
-
-        if ax == []:
-            ax  = fig.add_subplot(111, projection = '3d')
-
-        for k,f in enumerate(self.x):
-            for i,j in zip(self.taud+self.taue,abs(self.y[:,k])):
-                ax.plot([i,i],[f,f],[0,j],color= 'k')
-
-        ax.set_xlabel('Delay (ns)')
-        ax.set_xlim3d(0,max(self.taud+self.taue))
-
-        ax.set_ylabel('Frequency (fGHz)')
-        ax.set_ylim3d(self.x[0],self.x[-1])
-
-        powermin = abs(self.y).min()
-        powermax = abs(self.y).max()
-        ax.set_zlabel('Power (linear)')
-        ax.set_zlim3d(powermin,powermax)
-
-
-    def ft2(self, df=0.01):
-        """ build channel transfer function (frequency domain)
-
-        Parameters
-        ----------
-
-        df : float
-            frequency step (default 0.01)
-
-        Notes
-        -----
-
-        1. get  fmin and fmax
-        2. build a new base with frequency step df
-        3. Initialize a FUsignal with the new frequency base
-        4. build  matrix tau * f  (Nray x Nf)
-        5. buildl matrix E= exp(-2 j pi f tau)
-        6. resampling of FUDsignal according to f --> S
-        7. apply the element wise product E .* S
-        8. add all rays
-
-        """
-        fmin = self.x[0]
-        fmax = self.x[-1]
-        tau = self.taud+self.taue
-
-        f = np.arange(fmin, fmax, df)
-
-        U = FUsignal(f, np.zeros(len(f)))
-
-        TAUF = np.outer(tau, f)
-        E = np.exp(-2 * 1j * np.pi * TAUF)
-
-        S = self.resample(f)
-        ES = E * S.y
-        V = sum(ES, axis=0)
-        U.y = V
-
-        return U
-
-class FUDAsignal(FUDsignal):
-    """ FUDAsignal : Uniform signal with Delays and Angles
-
-
-    Attributes
-    ----------
-
-    x    : ndarray 1xN
-    y    : ndarray MxN
-    taud : delay
-    tau1 : additional delay
-
-    Methods
-    -------
-
-    minphas : force minimal phase    (Not tested)
-    totime  : transform to a TUD signal
-    iftd    : inverse Fourier transform
-    ft1     : construct CIR from ifft(RTF)
-    ft2     :
-
-    """
-    def __init__(self,
-                 x = np.array([]),
-                 y = np.array([]),
-                 taud = np.array([]),
-                 dod = np.array([]),
-                 doa = np.array([]),
-                 label = []
-                 ):
-        super(FUDAsignal,self).__init__(x, y,taud,label)
-        # FUDsignal.__init__(self, x, y,taud)
-        self.dod  = dod
-        self.doa  = doa
-
-    def __repr__(self):
-        s = FUDsignal.__repr__(self)
-        return(s)
-
-    def cut(self,threshold=0.99):
-        """ cut the signal at an Energy threshold level
-
-        Parameters
-        ----------
-
-        threshold : float
-            default 0.99
-
-        """
-        self.sort(typ='energy')
-        E = self.eprfl()
-        cumE = np.cumsum(E)/sum(E)
-        v = np.where(cumE<threshold)[0]
-        self.taud = self.taud[v]
-        self.taue = self.taue[v]
-        #self.tau = self.tau[v]
-        self.doa = self.doa[v]
-        self.dod = self.dod[v]
-        self.y = self.y[v,:]
-
-    def sort(self,typ='tau'):
-        """ sort FUD signal
-
-        Parameters
-        ----------
-
-        typ  : string
-            which parameter to sort '
-                tau : (default)
-                energy
-
-        """
-
-        if typ == 'tau':
-            u = np.argsort(self.taud+self.taue)
-
-        if typ == 'energy':
-            E = self.eprfl()
-            u = np.argsort(E)[::-1]
-
-        self.taud = self.taud[u]
-        self.taue = self.taue[u]
-        self.doa = self.doa[u]
-        self.dod = self.dod[u]
-        self.y = self.y[u,:]
-
-    def showtap(self,**kwargs):
-        """ show tap
-
-        Parameters
-        ----------
-
-        same as tap
-
-        See Also
-        --------
-
-        tap
-
-        """
-
-        # f x s  x m x tap
-
-        htap = self.tap(**kwargs)
-        # sum over time m
-        Et_htap = np.sqrt(np.sum(htap*np.conj(htap),axis=2))/Nm
-        # sum over s
-        Er_htap = np.sum(htap,axis=1)/Ns
-        corrtap = correlate(Er_htap[0,:,0],np.conj(Er_htap[0,:,0]))
-
-    def tap(self,**kwargs):
-        """ calculate channel tap
-
-        Parameters
-        ----------
-
-        fcGHz : float
-            center frequency
-        WMHz : float
-            bandwidth
-        Ntap : int
-            number of taps (related to bandwith)
-            as the bandwith increases the potential number of taps increases
-        Ns : int
-            number of spatial realizations
-        Nm : int
-            number of time samples
-            the channel is sampled along a distance of half a wavelength
-        Va : velocity of link termination a
-        Vb : velocity of link termination b
-        theta_va : float
-            theta velocity termination a (in radians)
-        phi_va  :
-            phi  velocity termination a (in radians)
-        theta_vb:
-            theta velocity termination b (in radians)
-        phi_vb  :
-            phi velocity termination b (in radians)
-
-
-        Examples
-        --------
-
-        >>> from pylayers.signal.bsignal import *
-
-        """
-
-        defaults = {'fcGHz':4.5,
-                    'WMHz':1,
-                    'Ntap':3,
-                    'Ns':8,
-                    'Nm':10,
-                    'Va':1,  #meter/s
-                    'Vb':1,  #meter/s
-                    'theta_va':0,
-                    'phi_va':0,
-                    'theta_vb':0,
-                    'phi_vb':0 }
-
-
-        for key, value in defaults.items():
-            if key not in kwargs:
-                kwargs[key] = value
-
-        fcGHz=kwargs['fcGHz']
-        WMHz=kwargs['WMHz']
-        Ntap=kwargs['Ntap']
-        Ns=kwargs['Ns']
-        Nm=kwargs['Nm']
-        Va = kwargs['Va']
-        Vb = kwargs['Vb']
-        # direction of link termination velocity vectors
-        theta_va = kwargs['theta_va']
-        theta_vb = kwargs['theta_vb']
-        phi_va = kwargs['phi_va']
-        phi_vb = kwargs['phi_vb']
-
-        Nf = len(self.x)
-
-        mmax = 0.3*WMHz*1e6/(2*fcGHz*(Va+Vb))
-        lam = 0.3/fcGHz
-        lamo2 = lam/2.
-        fmaHz = (Va/0.3)*fcGHz
-        fmbHz = (Vb/0.3)*fcGHz
-        # Coherence Time
-        Tca = 9/(14*np.pi*fmaHz)
-        Tcb = 9/(14*np.pi*fmbHz)
-        Tc  = 9/(14*np.pi*(fmaHz+fmbHz))
-
-        # DoD DoA
-
-        theta_a = self.dod[:,0]
-        phi_a = self.dod[:,1]
-        theta_b = self.doa[:,0]
-        phi_b = self.doa[:,1]
-
-        # 3 x r
-        ska = np.array([np.cos(theta_a)*np.cos(phi_a),np.cos(theta_a)*np.sin(phi_a),np.sin(theta_a)])
-        skb = np.array([np.cos(theta_b)*np.cos(phi_b),np.cos(theta_b)*np.sin(phi_b),np.sin(theta_b)])
-
-        # Monte Carlo for spatial realization
-        # s x m x tap
-        ua0 = (np.cos(theta_va)+1)/2
-        va0 =  phi_va/(2*np.pi)
-        ub0 = (np.cos(theta_vb)+1)/2
-        vb0 =  phi_vb/(2*np.pi)
-        # standard deviation of  velocity vector orientation is inversely
-        # proportional to velocity magnitude
-        ua = (((1/(Va+0.1))*np.random.rand(Ns)+ua0)%1)[:,np.newaxis,np.newaxis]
-        va = (((1/(Va+0.1))*np.random.rand(Ns)+va0)%1)[:,np.newaxis,np.newaxis]
-        ub = (((1/(Vb+0.1))*np.random.rand(Ns)+ub0)%1)[:,np.newaxis,np.newaxis]
-        vb = (((1/(Vb+0.1))*np.random.rand(Ns)+vb0)%1)[:,np.newaxis,np.newaxis]
-
-        # uniform sampling over the sphere
-        tha = np.arccos(2*va-1)
-        pha = 2*np.pi*ua
-        thb = np.arccos(2*vb-1)
-        phb = 2*np.pi*ub
-
-        vax = np.cos(tha)*np.cos(pha)
-        vay = np.cos(tha)*np.sin(pha)
-        vaz = np.sin(tha)*np.cos(pha*0)
-
-        vaxy = np.concatenate([vax[np.newaxis,np.newaxis,np.newaxis,...],vay[np.newaxis,np.newaxis,np.newaxis,...]])
-        va = np.concatenate([vaxy,vaz[np.newaxis,np.newaxis,np.newaxis,...]])
-
-        vbx = np.cos(thb)*np.cos(phb)
-        vby = np.cos(thb)*np.sin(phb)
-        vbz = np.sin(thb)*np.cos(phb*0)
-
-        vbxy = np.concatenate([vbx[np.newaxis,np.newaxis,np.newaxis,...],vby[np.newaxis,np.newaxis,np.newaxis,...]])
-
-        # 3 x r x f x s x m x tap
-        vb = np.concatenate([vbxy,vbz[np.newaxis,np.newaxis,np.newaxis,...]])
-
-        # beta : r x f x s x m x tap
-        betaa = np.sum(ska[:,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]*va,axis=0)
-        betab = np.sum(skb[:,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]*vb,axis=0)
-
-
-        # m discrete time axis
-        # r x f x s x m x tap
-        m = np.linspace(0,mmax,Nm)[np.newaxis,np.newaxis,np.newaxis,:,np.newaxis]
-        # r x f x s x m x tap
-        l  = np.arange(Ntap)[np.newaxis,np.newaxis,np.newaxis,np.newaxis,:]
-        # l : r x f x s x m x tap
-        tau = self.taud[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]+ \
-              self.taue[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
-
-        ba  = betaa*Va*m/(0.3*WMHz*1e6)
-        bb  = betab*Vb*m/(0.3*WMHz*1e6)
-        tau2 = tau + ba + bb
-        # S : r x f x s x m x tap (form 2.34 [D. Tse])
-        S   = np.sinc(l-tau2*WMHz/1000.)
-        # sum over r :  f x s  x m x tap
-        htap = np.sum(S*self.y[...,np.newaxis,np.newaxis,np.newaxis]*np.exp(-2*1j*np.pi*fcGHz*tau2),axis=0)
-
-        # f x s  x m x tap
-        htap  = htap.reshape(Nf,Ns,Nm,Ntap)
-        Et_htap = np.sqrt(np.sum(htap*np.conj(htap),axis=2))/Nm
-        Er_htap = np.sum(htap,axis=1)/Ns
-        corrtap = correlate(Er_htap[0,:,0],np.conj(Er_htap[0,:,0]))
-        return(htap,Et_htap,Er_htap,corrtap)
-
 class FHsignal(FUsignal):
     """
     FHsignal : Hermitian uniform signal in Frequency domain
+
+    Methods
+    -------
 
     ifft  : inverse Fourier transform --> TUsignal
     unrex : unredundant extraction    --> FUsignal
 
     """
-    def __init__(self, x=np.array([]), y=np.array([]),label=[]):
-        FUsignal.__init__(self, x, y,label)
+    #def __init__(self, x=np.array([]), y=np.array([]),label=[]):
+    #    FUsignal.__init__(self, x, y,label)
 
     def __repr__(self):
         s = FUsignal.__repr__(self)
@@ -4961,10 +3344,12 @@ class FHsignal(FUsignal):
         Examples
         --------
 
-        >>> e  = EnImpulse(fe=200)
+        >>> e  = TUsignal()
+        >>> e.EnImpulse(feGHz=200)
         >>> E  = e.fft()
         >>> ee = E.ifft()
-        >>> assert(abs(sum(e.y-ee.y))<1e-13)
+        >>> assert(abs(sum(e.y-ee.y).all())<1e-13)
+
 
         """
         Np = len(self.x)
@@ -5010,14 +3395,16 @@ class FHsignal(FUsignal):
 
         """
         N = len(self.x)
+        # even case
         if np.mod(N, 2) == 0:
             xu = self.x[1:(N + 2) / 2]
-            yu = self.y[1:(N + 2) / 2]
+            yu = self.y[:,1:(N + 2) / 2]
+        # odd case
         else:
             xu = self.x[1:(N + 1) / 2]
-            yu = self.y[1:(N + 1) / 2]
+            yu = self.y[:,1:(N + 1) / 2]
 
-        O = FUsignal(xu, yu)
+        O = FUsignal(x=xu, y=yu)
 
         return(O)
 
@@ -5199,14 +3586,14 @@ class Noise(TUsignal):
     def amplify(self, GdB, NF):
         sel
 
-    def fgating(self, fcGHz, BGHz, window='rect'):
+    def fgating(self, fcGHz, WGHz, window='rect'):
         """ apply a frequency gating
 
         Parameters
         ----------
 
         fcGHz : float
-        BGHz  : float
+        WGHz  : float
         window : string
             'rect'
 
@@ -5218,8 +3605,8 @@ class Noise(TUsignal):
             parity = 1
         U = N.unrex()
         f = U.x
-        f1 = fcGHz - BGHz / 2.
-        f2 = fcGHz + BGHz / 2.
+        f1 = fcGHz - WGHz / 2.
+        f2 = fcGHz + WGHz / 2.
         u = np.nonzero((f > f1) & (f < f2))[0]
         gate = np.zeros(len(f))
         if window=='rect':
@@ -5233,8 +3620,8 @@ class Noise(TUsignal):
         #fe = 1./(self.x[1]-self.x[0])
         #fN = fe/2
         #print "fN : ",fN
-        #wp = (fcGHz-BGHz/2.)/fN
-        #ws = (fcGHz+BGHz/2.)/fN
+        #wp = (fcGHz-WGHz/2.)/fN
+        #ws = (fcGHz+WGHz/2.)/fN
         #print "fN : ",wp
         #print "fN : ",ws
         #o  = self.iirfilter(order=4,wp=wp,ws=ws)
@@ -5242,129 +3629,12 @@ class Noise(TUsignal):
     #    self.y = o.y
 
 
-class EnImpulse(TUsignal):
-    """
-    Create an Energy normalized Gaussian impulse (Usignal)
-
-    EnImpulse(x,fc,band,thresh,fe)
-
-          fc     (GHz)   (def = 4GHz)
-          band   (GHz)   (def = 3GHz)
-          thresh (dB)    (def = 10dB)
-          fe     (GHz)   (def = 100GHz)
-
-
-    """
-    def __init__(self, x=np.array([]), fc=4, band=3, thresh=10, fe=20):
-        TUsignal.__init__(self)
-        Tp = (2 / (band * np.pi)) * np.sqrt(abs(thresh) * np.log(10) /20.)
-        coeff = np.sqrt(2 * np.sqrt(2)/ (Tp * np.sqrt(np.pi)))
-
-        if len(x) == 0:
-            te = 1.0 / fe
-            Tww = 10 * Tp
-            Ni = round(Tww / (2 * te))
-            # Tww/2 multiple de te
-            Tww = 2 * te * Ni
-            x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
-
-        y = coeff * np.exp(-(x / Tp) ** 2) * np.cos(2 * np.pi * fc * x)
-        self.x = x
-        self.y = y
-        self.Tp = Tp
-        self.fc = fc
-
-    def demo():
-        """ small demo in the docsting
-
-        Examples
-        --------
-
-        >>> from pylayers.signal.bsignal import *
-        >>> ip    = EnImpulse(fc=4,band=3,thresh=10,fe=100)
-        >>> Eip1  = ip.energy()
-        >>> ESDu  = ip.esd(mode='unilateral')
-        >>> ESDb  = ip.esd(mode='bilateral')
-        >>> df    = ESDu.dx()
-        >>> Eipu  = sum(ESDu.y)*df
-        >>> Eipb  = sum(ESDb.y)*df
-        >>> erru  = Eip1-Eipu
-        >>> errb  = Eip1-Eipb
-
-        """
-        pass
-
-class MaskImpulse(TUsignal):
-    """
-    MaskImpulse : Create an Energy normalized Gaussian impulse (Usignal)
-
-          fc     (GHz)   (def = 4GHz)
-          band   (GHz)   (def = 3GHz)
-          thresh (dB)    (def = 10dB)
-          fe     (GHz)   (def = 100GHz)
-
-    Examples
-    --------
-
-        >>> ip    = EnImpulse(fc=4,band=3,thresh=10,fe=20)
-        >>> Eip1  = ip.energy()
-        >>> ESDip = ip.esd()
-        >>> df    = ESDip.dx()
-        >>> Eip2  = sum(ESDip.y)*df
-        >>> err   = Eip1-Eip2
-
-    """
-    def __init__(self, x=np.array([]), fc=4, band=3, thresh=10, Tp=100, Pm=-41.3, R=50, fe=100):
-        """ object constructor
-
-        Parameters
-        ----------
-        fc     : center frequency (GHz)
-        band   : bandwidth (GHz)
-        Tp     : Pulse repetion rate
-        R      : Resistance
-        Pm     : PSD max
-        fe     : sampling freqeuncy
-        thresh : definition of band at Pm - thresh (dB)
-
-        """
-        self.fc = fc
-        self.band = band
-        self.thresh = thresh
-        self.Tp = Tp
-        self.Pm = Pm
-        self.R = R
-        self.fe = fe
-
-        Usignal.__init__(self)
-        #alpha  = 1./(2*np.sqrt(abs(thresh)*np.log(10)/20))
-        alpha = 1. / (2 * np.sqrt(abs(thresh) * np.log(10) / 10))
-        tau = 1 / (alpha * band * np.pi * np.sqrt(2))
-        A = np.sqrt(2 * R * Tp * 10 ** (Pm / 10)) / (tau * np.sqrt(np.pi))
-        if len(x) == 0:
-            te = 1.0 / fe
-            Tw = 10. / band
-            Ni = round(Tw / (2 * te))
-            # Tww/2 multiple de te
-            Tww = 2 * te * Ni
-            x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
-
-        y = A * np.exp(-(x / tau) ** 2) * np.cos(2 * np.pi * fc * x)
-        self.x = x
-        self.y = y
-
-    def show(self):
-        plt.subplot(211)
-        self.plot()
-        plt.subplot(212)
-        P = self.psd(self.Tp, self.R)
-        P.plotdB(mask=True)
-
 
 def test():
     dx1 = 0.01
     x1 = np.arange(-5, 5, dx1)
-    s1 = EnImpulse(x1, 4, 2, 10)
+    s1 = TUsignal()
+    s1 = s1.EnImpulse(x1, fcGHz=4, WGHz=2, feGHz=10)
 
     S1 = s1.fft()
 
