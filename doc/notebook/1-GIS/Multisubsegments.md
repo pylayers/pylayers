@@ -10,6 +10,7 @@
 >>> from pylayers.simul.simulem import *
 >>> import matplotlib.pyplot as plt
 >>> %matplotlib inline
+WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
 ```
 
 This section presents a simple Ray Tracing simulation with different material properties of a subsegment separating 2 rooms.
@@ -124,18 +125,12 @@ We define now two points which are the termination of a radio link.
 ```python
 >>> L.chgmss(1,ss_name=['WOOD','AIR','WOOD'],ss_z =[(0.0,2.7),(2.7,2.8),(2.8,3)],ss_offset=[0,0,0])
 >>> L.save()
->>> Lk = DLink(L=L,a=tx,b=rx,Aa=Antenna('Omni'),Ab=Antenna('Omni'),fGHz=np.linspace(1.8,2.6,3))
+>>> fGHz=np.linspace(1,11,100)
+>>> Aa = Antenna('Omni',fGHz=fGHz)
+>>> Ab = Antenna('Omni',fGHz=fGHz)
+>>> Lk = DLink(L=L,a=tx,b=rx,Aa=Aa,Ab=Ab,fGHz=np.linspace(1,11,100))
 structure saved in  defstr3.str2
 structure saved in  defstr3.ini
-```
-
-```python
->>> Aa=Antenna('Omni')
-```
-
-```python
->>> Aa.fGHz
-array([ 2.4])
 ```
 
 ```python
@@ -150,47 +145,7 @@ Then for evaluating the radio link, simply type:
 Signatures'> from 2_1_3 saved
 Rays'> from 3_0_1 saved
 Ctilde'> from 0_1_0 saved
-> /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.py(3934)prop2tran()
--> t1 = self.Ctt * Fat + self.Ctp * Fap
-(Pdb) s
---Call--
-> /home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py(2676)__mul__()
--> def __mul__(self, u):
-(Pdb) n
-> /home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py(2677)__mul__()
--> L = self.alignc(u)
-(Pdb) s
---Call--
-> /home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py(1126)alignc()
--> def alignc(self, u2):
-(Pdb) l
-1121 	                y_new = splev(x_new, coef, der=0)
-1122 	
-1123 	        U = type(self)(x_new, y_new)
-1124 	        return(U)
-1125 	
-1126 ->	    def alignc(self, u2):
-1127 	        """ align 2 Usignal
-1128 	
-1129 	        alignc <=> intersection
-1130 	        alignc : align two Usignal on a same base
-1131 	            return a list which contains the two aligned signals
-(Pdb) n
-> /home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py(1141)alignc()
--> u1 = self
-(Pdb) n
-> /home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py(1142)alignc()
--> naxis1 = len(u1.y.shape)
-(Pdb) n
-> /home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py(1143)alignc()
--> naxis2 = len(u2.y.shape)
-(Pdb) n
-> /home/uguen/Documents/rch/devel/pylayers/pylayers/signal/bsignal.py(1144)alignc()
--> assert(naxis1==naxis2),"Problem signal haven't the same number of axis"
-(Pdb) p naxis1
-2
-(Pdb) p naxis2
-2
+Tchannel'> from 0_1_0_0_0_0_0 saved
 ```
 
 At that point the channel has been evaluated and all the data stored in an `hdf5` file

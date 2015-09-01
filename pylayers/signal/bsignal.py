@@ -1071,8 +1071,10 @@ class Usignal(Bsignal):
         >>> assert(u.dx()==0.1)
 
         """
-
-        return(self.x[1] - self.x[0])
+        if (len(self.x)>1):
+            return(self.x[1] - self.x[0])
+        else:
+            return(0)
 
     def resample(self, x_new, kind='linear'):
         """ resample the Usignal with a new x base
@@ -1134,16 +1136,23 @@ class Usignal(Bsignal):
         -------
 
         L : Usignal
-            concatenated signal L1.y and L2.y 
+            concatenated signal L1.y and L2.y
 
 
         """
         u1 = self
-        naxis1 = len(u1.y.shape)
-        naxis2 = len(u2.y.shape)
+        # nothing to align
+        if (u1.x==u2.x).all():
+            return u1.x,u1.y,u2.y
+        sh1 = u1.y.shape
+        sh2 = u2.y.shape
+        naxis1 = len(sh1)
+        naxis2 = len(sh2)
         assert(naxis1==naxis2),"Problem signal haven't the same number of axis"
+
         dx1 = u1.dx()
         dx2 = u2.dx()
+
         u1_start = u1.x[0]
         u2_start = u2.x[0]
         u1_stop = u1.x[-1]
@@ -1151,12 +1160,15 @@ class Usignal(Bsignal):
 
         # it starts at the maximum of both signal
         #    stops  at the minimum of both signal
+
         xstart = max(u1_start, u2_start)
         xstop = min(u1_stop, u2_stop)
-        assert(xstop>xstart), "error the 2 signal have disjoint support"
+
+        assert(xstop>=xstart), "error the 2 signal have disjoint support"
+
         dx = min(dx1, dx2)
         if tstincl(u1.x, u2.x) == 0:
-            print 'Warning: Impossible to align the 2 signals'
+            print 'Warning: impossible to align the 2 signals'
 
         if (dx1 <= dx2):
 
@@ -1183,14 +1195,15 @@ class Usignal(Bsignal):
 
             u2 = u2.truncate(pstart2, pstop2 + 1)
             u1 = u1.resample(xnew)
-        L   = Usignal()
-        L.x = u1.x
+        #L   = Usignal()
+        #L.x = u1.x
         #L.y = np.vstack((u1.y,u2.y))
-        u1.y=u1.y[...,None]
-        u2.y=u2.y[...,None]
-        L.y = np.concatenate((u1.y,u2.y),axis=naxis1)
+        #u1.y=u1.y[...,None]
+        #u2.y=u2.y[...,None]
+        #pdb.set_trace()
+        #L.y = np.concatenate((u1.y,u2.y),axis=naxis1)
 
-        return(L)
+        return(u1.x,u1.y,u2.y)
 
     def width(self):
         r""" get the extension support of the Usignal
@@ -2664,23 +2677,23 @@ class FUsignal(FBsignal,Usignal):
         return(s)
 
     def __add__(self, u):
-        L = self.alignc(u)
-        U = FUsignal(L.x, L.y[...,0] + L.y[...,1])
+        x,y1,y2 = self.alignc(u)
+        U = FUsignal(x, y1 + y2)
         return(U)
 
     def __sub__(self, u):
-        L = self.alignc(u)
-        U = FUsignal(L.x, L.y[...,0] - L.y[...,1])
+        x,y1,y2 = self.alignc(u)
+        U = FUsignal(x, y1 - y2)
         return(U)
 
     def __mul__(self, u):
-        L = self.alignc(u)
-        U = FUsignal(L.x, L.y[...,0] * L.y[...,1])
+        x,y1,y2 = self.alignc(u)
+        U = FUsignal(x, y1 * y2)
         return(U)
 
     def __div__(self, u):
-        L = self.alignc(u)
-        U = FUsignal(L.x, L.y[...,0] / L.y[...,1])
+        x,y1,y2 = self.alignc(u)
+        U = FUsignal(x, y1 / y2)
         return(U)
 
 

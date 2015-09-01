@@ -1238,16 +1238,14 @@ class Tchannel(bs.FUsignal):
         self.dod  = dod
         self.doa  = doa
         # , Nf
-        self.x = x
         # Nd x Nf x Np x Nu
-        self.y = y
         self.label = label
-        #FUsignal.__init__(self,x,y,taud,label)
         self.win = 'rect'
         self.isFriis = False
         self.windowed = False
         self.calibrated = False
         self.filcal="calibration.mat"
+        bs.FUsignal.__init__(self,x=x,y=y,label='Channel')
 
 
     def __repr__(self):
@@ -1473,7 +1471,7 @@ class Tchannel(bs.FUsignal):
         """
 
         U = self * W
-        V = FUDAchannel(U.x, U.y, self.taud, self.dod, self.doa)
+        V = Tchannel(x= U.x, y = U.y, tau = self.taud, dod = self.dod, doa= self.doa)
 
         return(V)
 
@@ -1536,7 +1534,7 @@ class Tchannel(bs.FUsignal):
 
 
 
-        h = bs.FUDsignal(self.x, self.y, self.taud)
+        h = bs.Tchannel(x=self.x, y=self.y, tau=self.taud)
         htap = h.chantap(**kwargs)
         return htap
 
@@ -3930,7 +3928,7 @@ maicher
         #  Fb = 2 x r x f
         #t1 = self.Ctt * Fat + self.Cpt * Fap
         #t2 = self.Ctp * Fat + self.Cpp * Fap
-        pdb.set_trace()
+        #pdb.set_trace()
         t1 = self.Ctt * Fat + self.Ctp * Fap
         t2 = self.Cpt * Fat + self.Cpp * Fap
         alpha = t1 * Fbt + t2 * Fbp
