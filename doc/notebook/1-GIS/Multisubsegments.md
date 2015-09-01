@@ -126,8 +126,8 @@ We define now two points which are the termination of a radio link.
 >>> L.chgmss(1,ss_name=['WOOD','AIR','WOOD'],ss_z =[(0.0,2.7),(2.7,2.8),(2.8,3)],ss_offset=[0,0,0])
 >>> L.save()
 >>> fGHz=np.linspace(1,11,100)
->>> Aa = Antenna('Omni',fGHz=fGHz)
->>> Ab = Antenna('Omni',fGHz=fGHz)
+>>> Aa = Antenna('S1R1.vsh3',fGHz=fGHz)
+>>> Ab = Antenna('S1R1.vsh3',fGHz=fGHz)
 >>> Lk = DLink(L=L,a=tx,b=rx,Aa=Aa,Ab=Ab,fGHz=np.linspace(1,11,100))
 structure saved in  defstr3.str2
 structure saved in  defstr3.ini
@@ -145,7 +145,34 @@ Then for evaluating the radio link, simply type:
 Signatures'> from 2_1_3 saved
 Rays'> from 3_0_1 saved
 Ctilde'> from 0_1_0 saved
-Tchannel'> from 0_1_0_0_0_0_0 saved
+> /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.py(3914)prop2tran()
+-> a.eval(th=self.tangl[:, 0], ph=self.tangl[:, 1], grid=False)
+(Pdb) n
+> /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.py(3915)prop2tran()
+-> Fat = bs.FUsignal(a.fGHz, a.Ft)
+(Pdb) n
+> /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.py(3916)prop2tran()
+-> Fap = bs.FUsignal(a.fGHz, a.Fp)
+(Pdb) n
+> /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.py(3917)prop2tran()
+-> b.eval(th=self.tangl[:, 0], ph=self.tangl[:, 1], grid=False)
+(Pdb) n
+> /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.py(3918)prop2tran()
+-> Fbt = bs.FUsignal(a.fGHz, b.Ft)
+(Pdb) n
+> /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.py(3919)prop2tran()
+-> Fbp = bs.FUsignal(a.fGHz, b.Fp)
+(Pdb) n
+> /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.py(3933)prop2tran()
+-> t1 = self.Ctt * Fat + self.Ctp * Fap
+(Pdb) n
+> /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.py(3934)prop2tran()
+-> t2 = self.Cpt * Fat + self.Cpp * Fap
+(Pdb) n
+> /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.py(3935)prop2tran()
+-> alpha = t1 * Fbt + t2 * Fbp
+(Pdb) c
+Tchannel'> from 0_1_0_0_0_1_1 saved
 ```
 
 At that point the channel has been evaluated and all the data stored in an `hdf5` file
@@ -156,10 +183,33 @@ The Signature of the radio channel is in `Lk.Si`, the 3D rays are in `Lk.R`, the
 
 ```python
 >>> Lk.R
+Rays3D
+----------
+1 / 1 : [0]
+2 / 6 : [1 2 3 4 5 6]
+3 / 19 : [ 7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25]
+4 / 40 : [26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50
+ 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65]
+5 / 49 : [ 66  67  68  69  70  71  72  73  74  75  76  77  78  79  80  81  82  83
+  84  85  86  87  88  89  90  91  92  93  94  95  96  97  98  99 100 101
+ 102 103 104 105 106 107 108 109 110 111 112 113 114]
+6 / 34 : [115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132
+ 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148]
+7 / 6 : [149 150 151 152 153 154]
+-----
+ni : 721
+nl : 1597
 ```
 
 ```python
 >>> Lk.C
+Ctilde
+---------
+(155, 100)
+Nray : 155
+fmin(GHz) : 1.0
+fmax(GHz): 11.0
+Nfreq : 100
 ```
 
 ```python
@@ -169,6 +219,13 @@ The Signature of the radio channel is in `Lk.Si`, the 3D rays are in `Lk.R`, the
 
 ```python
 >>> Lk.H
+freq : 1.0 5.95 100
+shape  : (155, 100)
+tau (min, max) : 26.7186992365 95.816242908
+dist :8.01560977094 28.7448728724
+Friis factor -j c/(4 pi f) has been applied
+ calibrated : No
+ windowed : No
 ```
 
 ```python

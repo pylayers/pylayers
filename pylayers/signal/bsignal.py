@@ -713,6 +713,7 @@ class Bsignal(PyLayers):
 
         # axis selection
         sax = kwargs['sax']
+        sns.set_style("white")
 
         if self.y.ndim>1:
             dt,ylabels = self.cformat(**kwargs)
@@ -733,7 +734,7 @@ class Bsignal(PyLayers):
                            vmin = vmin,
                            vmax = vmax,
                            aspect = kwargs['aspect'],
-                           #extent = (0,dt.shape[sax[0]],0,dt.shape[sax[1]]),
+                           extent = (self.x[0],self.x[-1],0,self.y.shape[0]),
                            interpolation=kwargs['interpolation'],
                            cmap = kwargs['cmap'],
                            )
@@ -1142,8 +1143,10 @@ class Usignal(Bsignal):
         """
         u1 = self
         # nothing to align
-        if (u1.x==u2.x).all():
-            return u1.x,u1.y,u2.y
+        if len(u1.x)==len(u2.x):
+            if (u1.x==u2.x).all():
+                return u1.x,u1.y,u2.y
+
         sh1 = u1.y.shape
         sh2 = u2.y.shape
         naxis1 = len(sh1)
