@@ -136,7 +136,7 @@ class MIMO(object):
 
         self.C = FUsignal(C.freq,tc)
 
-        pdb.set_trace()
+        
         self.Hcal = self.H/self.C
 
         del self.H
@@ -256,11 +256,14 @@ class MIMO(object):
 
 
         # Evaluation of the transfer tensor
+        #
+        # HdH : 
 
         HdH,U,S,V = self.transfer()
 
         #singular value decomposition of channel tensor (broadcasted along frequency axis)
 
+        
         Us,D,Vsh = self.svd()
 
         # Vsh : nf x nt x nt
@@ -312,11 +315,16 @@ class MIMO(object):
         pass
 
     def BFcapacity(self,Pt=np.array([1e-3]),Tp=273):
-        """ calculates the capacity in putting all the power on the more important 
+        """ calculates the capacity in putting all the power on the more important mode
 
         Parameters
         ----------
-        mode
+        
+        Pt : np.array 
+        	Transmitted power
+        Tp : float
+        	Noise Temperature
+        	
         """
         fGHz  = self.Hcal.x
         Nf    = len(fGHz)

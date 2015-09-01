@@ -115,8 +115,8 @@ of the channel
 
 ```python
 >>> hu.plot(typ='m')
-(<matplotlib.figure.Figure at 0x7fd3bcafb690>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7fd3bcaf3c50>]], dtype=object))
+(<matplotlib.figure.Figure at 0x7f8ad838ec90>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f8ad84b6c90>]], dtype=object))
 ```
 
 ```python
@@ -132,8 +132,8 @@ of the channel
 
 ```python
 >>> H.plot(typ='m')
-(<matplotlib.figure.Figure at 0x7fd3bc812a10>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7fd3bc8254d0>]], dtype=object))
+(<matplotlib.figure.Figure at 0x7f8ad8282450>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f8ad8312f10>]], dtype=object))
 ```
 
 ```python
@@ -142,8 +142,8 @@ of the channel
 
 ```python
 >>> h.plot(typ='v')
-(<matplotlib.figure.Figure at 0x7fd3bc972790>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7fd3bcaa1310>]], dtype=object))
+(<matplotlib.figure.Figure at 0x7f8ad81c6890>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f8ad83565d0>]], dtype=object))
 ```
 
 ```python
@@ -151,39 +151,24 @@ of the channel
 >>> u = np.where(h.y==max(h.y))[0]
 >>> tau = h.x[u]
 >>> alpha = abs(h.y[u])
->>> print alpha,tau
-[[  4.26036983e-14   5.77312005e-03   1.92248178e-02 ...,   2.34781108e-03
-    1.91361122e-02   1.16994371e-03]
- [  4.26036983e-14   5.77312005e-03   1.92248178e-02 ...,   2.34781108e-03
-    1.91361122e-02   1.16994371e-03]
- [  4.26036983e-14   5.77312005e-03   1.92248178e-02 ...,   2.34781108e-03
-    1.91361122e-02   1.16994371e-03]
- ..., 
- [  4.26036983e-14   5.77312005e-03   1.92248178e-02 ...,   2.34781108e-03
-    1.91361122e-02   1.16994371e-03]
- [  4.26036983e-14   5.77312005e-03   1.92248178e-02 ...,   2.34781108e-03
-    1.91361122e-02   1.16994371e-03]
- [  4.26036983e-14   5.77312005e-03   1.92248178e-02 ...,   2.34781108e-03
-    1.91361122e-02   1.16994371e-03]] [-49.97728305 -49.97728305 -49.97728305 ..., -49.97728305 -49.97728305
- -49.97728305]
 ```
 
 ```python
 >>> fft.ifft(H.y)
-array([[ -1.93565190e-15 -1.70240923e-19j,
-          2.62295322e-04 -3.27871407e-19j,
-          8.73458329e-04 -4.09839258e-20j, ...,
-         -1.06670199e-04 +2.90350482e-19j,
-         -8.69428086e-04 -1.58117458e-18j,
-         -5.31550980e-05 -2.71727936e-20j]])
+array([[ -1.50593859e-15 -6.41964563e-20j,
+          1.22745263e-04 -1.36427337e-19j,
+          8.94216494e-05 -1.03247967e-19j, ...,
+          1.05839739e-05 +7.80645228e-20j,
+         -1.37135712e-04 -1.94405223e-19j,
+          8.17123442e-05 +3.02799103e-19j]])
 ```
 
 ```python
 >>> print H.y[...,203]
 >>> print H.y[...,-203]
 >>> len(H.y)
-[ 0.11616926-0.04599466j]
-[ 0.11616926+0.04599466j]
+[-0.10108118-0.07343977j]
+[-0.10108118+0.07343977j]
 1
 ```
 
@@ -193,6 +178,6 @@ array([[ -1.93565190e-15 -1.70240923e-19j,
 
 ```python
 >>> Y.plot(typ='m')
-(<matplotlib.figure.Figure at 0x7fd3bc8bd8d0>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7fd3bcd15dd0>]], dtype=object))
+(<matplotlib.figure.Figure at 0x7f8ad836ec90>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f8ad8491590>]], dtype=object))
 ```
