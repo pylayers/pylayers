@@ -1456,6 +1456,7 @@ class Tchannel(bs.FUsignal):
         Returns
         -------
 
+        mport ipdb
         V : FUDAsignal
 
         Notes
@@ -1482,7 +1483,7 @@ class Tchannel(bs.FUsignal):
         ----------
         w :
             waveform
-        dxw
+        dxw :
 
         Notes
         -----
@@ -1520,7 +1521,7 @@ class Tchannel(bs.FUsignal):
 
         fcGHz :
             WGHz  :
-        Ntap  :
+        Ntap  : int
 
         """
 
@@ -1531,8 +1532,6 @@ class Tchannel(bs.FUsignal):
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
-
-
 
         h = bs.Tchannel(x=self.x, y=self.y, tau=self.taud)
         htap = h.chantap(**kwargs)
@@ -1569,7 +1568,6 @@ class Tchannel(bs.FUsignal):
         #
         # return a TUsignal
         #
-        #import ipdb
         Y = self.apply(Wgam)
         ri = Y.ft1(Nz=500,ffts=1)
 
