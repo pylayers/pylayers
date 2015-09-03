@@ -1285,7 +1285,7 @@ maicher
             H.alpha=alpha.y
             H.Fat=Fat.y
             H.Fap=Fap.y
-            H.Fbt=Fbt.y
+           .rang-Lk.H.doa
             H.Fbp=Fbp.y
             H.Gat=10*np.log10(np.sum(Fat.y*np.conj(Fat.y),axis=1)/len(Fat.x))
             H.Gap=10*np.log10(np.sum(Fap.y*np.conj(Fap.y),axis=1)/len(Fap.x))
