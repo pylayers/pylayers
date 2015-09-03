@@ -1193,7 +1193,7 @@ class Antenna(Pattern):
 #                kwargs[k] = defaults[k]
 
             u = np.where(self.sqG==self.sqG.max())
-            if len(u[0]>1):
+            if len(u[0])>1:
                 S = self.sqG[(u[0][0],u[1][0],u[2][0])]
                 uf = u[0][0]
                 ut = u[1][0]

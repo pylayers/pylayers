@@ -1,5 +1,7 @@
 # Effect of Modyfiying the Nature of Sub-Segments
 
+This notebook illustrtates a simple ray tracing simulation with diffecent material properties for a single segment separating 2 rooms which contains multi-subsegments. The noteboook illustrates in details the whole steps.
+
 ```python
 >>> from pylayers.simul.link import *
 >>> from pylayers.antprop.rays import *
@@ -13,14 +15,14 @@
 WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
 ```
 
-This section presents a simple Ray Tracing simulation with different material properties of a subsegment separating 2 rooms.
+Let start by loading a simple layout with 2 single rooms. The multi subsegment appears in the middle with the red vertical lines. Each subsegment is materialized by a  segment.
 
 ```python
 >>> L=Layout('defstr3.ini')
 >>> f,a=L.showG('s',subseg=True,figsize=(10,10))
 ```
 
-The studied configuration is composed of a simple 2 rooms building separated by a subsegment which has a multi subsegment attribute. The attribute of the subsegment can be changed  with the method [`chgmss`](http://pylayers.github.io/pylayers/modules/generated/pylayers.gis.layout.Layout.chgmss.html) (change multisubsegment)
+The studied configuration is composed of a simple 2 rooms building separated by a subsegment which has a multi subsegment attribute. The attribute of the subsegment can be changed  with the method [`chgmss`](http://pylayers.github.io/pylayers/modules/generated/pylayers.gis.layout.Layout.chgmss.html) (change multisubsegment). In the example WOOD in the lower part then 10cm of AIR then wood again until the ceiling.
 
 ```python
 >>> L.chgmss(1,ss_name=['WOOD','AIR','WOOD'],ss_z =[(0.0,2.7),(2.7,2.8),(2.8,3)],ss_offset=[0,0,0])
@@ -106,10 +108,10 @@ The $\mathcal{G}_s$ graph dictionnary has the following structure
   'offset': 0,
   'transition': False,
   'z': (0.0, 3.0)},
- 9: {'connect': [-1, -2],
+ 9: {'connect': [-2, -1],
   'name': 'WALL',
   'ncycles': [2, 0],
-  'norm': array([-0.00639987,  0.99997952,  0.        ]),
+  'norm': array([ 0.00639987, -0.99997952,  0.        ]),
   'offset': 0,
   'transition': False,
   'z': (0.0, 3.0)}}
@@ -133,6 +135,8 @@ structure saved in  defstr3.str2
 structure saved in  defstr3.ini
 ```
 
+A link is the set of a layout and 2 termination points.
+
 ```python
 >>> f,a=Lk.show()
 ```
@@ -149,6 +153,33 @@ Tchannel'> from 0_1_0_0_0_1_1 saved
 ```
 
 At that point the channel has been evaluated and all the data stored in an `hdf5` file
+
+```python
+>>> A=Antenna()
+```
+
+```python
+>>> A.evaluated
+False
+```
+
+```python
+>>> Lk.Aa
+> /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/antenna.py(1196)__repr__()
+-> u = np.where(self.sqG==self.sqG.max())
+(Pdb) p u
+*** NameError: NameError("name 'u' is not defined",)
+(Pdb) n
+> /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/antenna.py(1197)__repr__()
+-> if len(u[0]>1):
+(Pdb) p u.shape
+*** AttributeError: AttributeError("'tuple' object has no attribute 'shape'",)
+(Pdb) p u
+(array([134]), array([96]))
+(Pdb) n
+> /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/antenna.py(1198)__repr__()
+-> S = self.sqG[(u[0][0],u[1][0],u[2][0])]
+```
 
 ## The different members of the link are
 
@@ -213,136 +244,23 @@ Friis factor -j c/(4 pi f) has been applied
 ```
 
 ```python
->>> Lk.H.taud
-array([ 26.71869924,  27.93842436,  29.10708199,  29.64889324,
-        30.03048589,  30.075433  ,  36.72255959,  30.75261837,
-        31.12068041,  31.1640552 ,  31.81807982,  32.17395555,
-        32.21591227,  32.36081306,  32.66533294,  33.05244038,
-        34.35921355,  37.6193175 ,  37.62655033,  37.86521462,
-        38.49519081,  38.90590625,  39.23286412,  40.03698677,
-        60.02330145,  60.0237882 ,  33.67032288,  34.04600538,
-        34.64617309,  34.81939407,  35.01138599,  35.14489175,
-        35.18330575,  36.68410469,  36.99319869,  37.02969534,
-        38.50225911,  38.7355282 ,  39.35848858,  39.58671257,
-        39.75344272,  40.04709276,  40.07348617,  40.27031144,
-        40.58328319,  40.8610692 ,  40.89683313,  41.01072684,
-        41.66885699,  42.04868734,  42.35118067,  42.60531715,
-        45.28154414,  45.47942049,  47.70172314,  48.49380416,
-        60.57609581,  60.57657812,  61.12389099,  61.12436898,
-        61.38177086,  61.38655397,  61.589339  ,  61.5932084 ,
-        63.33967443,  70.03865417,  37.42134832,  37.75972919,
-        39.16236258,  39.48582634,  40.87097143,  41.08971465,
-        41.6785673 ,  41.82213078,  41.8930939 ,  42.03698148,
-        42.83408426,  42.97677133,  43.13106967,  43.27298187,
-        43.38690997,  43.59404942,  43.6053373 ,  43.89710511,
-        44.00333673,  44.50096862,  44.78709963,  45.49315307,
-        46.01179095,  46.20654017,  46.73062778,  46.9223936 ,
-        48.00940863,  48.19516497,  48.39546526,  49.07940224,
-        49.17637348,  49.84959754,  61.92243907,  61.92718042,
-        62.12820088,  62.13203673,  62.45842719,  62.46312786,
-        62.66242903,  62.66623217,  62.73858502,  62.73905071,
-        63.7923458 ,  63.7928038 ,  63.86376926,  64.38359799,
-        70.51297572,  70.98412788,  93.34926748,  44.01253199,
-        44.21573608,  45.50204727,  45.69862854,  45.84130714,
-        46.11893144,  47.27323528,  47.54249857,  48.69876778,
-        48.82367841,  48.88190455,  49.00725478,  49.37850393,
-        49.55912892,  50.17055816,  50.34922397,  51.07629317,
-        51.81681556,  52.36526576,  53.0878113 ,  64.039481  ,
-        64.04406563,  64.23846209,  64.24217193,  65.07217885,
-        65.07669072,  65.26801165,  65.27166298,  65.91849278,
-        66.92220128,  72.37918493,  73.29447281,  93.70566901,
-        94.06072013,  51.36376787,  51.53743551,  52.64570242,
-        52.81515495,  95.11792193,  95.81624291])
+>>> len(Lk.fGHz)
+181
+```
+
+```python
+>>> plt.stem(Lk.H.taud,Lk.H.ak)
+<Container object of 3 artists>
 ```
 
 ```python
 >>> cir = Lk.H.applywavB(wav.sf)
-> /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.py(2510)ft1()
--> if len(tau) == 1:
-(Pdb) p r
-TUsignal :  (1239,)  (1, 1239) 
-(Pdb) p x
-array([-9.99192897, -9.97578692, -9.95964487, ...,  9.95964487,
-        9.97578692,  9.99192897])
-(Pdb) n
-> /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.py(2513)ft1()
--> for i in range(len(tau)):
-(Pdb) p len(tau)
-155
-(Pdb) n
-> /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.py(2514)ft1()
--> si = bs.TUsignal(self.s.x, self.s.y[i, :])
-(Pdb) n
-> /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.py(2515)ft1()
--> si.translate(tau[i])
-(Pdb) p si.x
-array([-9.99192897, -9.97578692, -9.95964487, ...,  9.95964487,
-        9.97578692,  9.99192897])
-(Pdb) p tau[i]
-26.718699236469
-(Pdb) n
-> /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.py(2516)ft1()
--> r = r + si
-(Pdb) p si.x
-array([ 16.72677026,  16.74291231,  16.75905436, ...,  36.67834411,
-        36.69448616,  36.71062821])
-(Pdb) n
-> /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channel.py(2513)ft1()
--> for i in range(len(tau)):
-(Pdb) p r
-TUsignal :  (1239,)  (1, 1239) 
-(Pdb) p r.x
-array([-9.99192897, -9.97578692, -9.95964487, ...,  9.95964487,
-        9.97578692,  9.99192897])
-```
-
-```python
->>> Lk.H.taud
-array([ 26.71869924,  27.93842436,  29.10708199,  29.64889324,
-        30.03048589,  30.075433  ,  36.72255959,  30.75261837,
-        31.12068041,  31.1640552 ,  31.81807982,  32.17395555,
-        32.21591227,  32.36081306,  32.66533294,  33.05244038,
-        34.35921355,  37.6193175 ,  37.62655033,  37.86521462,
-        38.49519081,  38.90590625,  39.23286412,  40.03698677,
-        60.02330145,  60.0237882 ,  33.67032288,  34.04600538,
-        34.64617309,  34.81939407,  35.01138599,  35.14489175,
-        35.18330575,  36.68410469,  36.99319869,  37.02969534,
-        38.50225911,  38.7355282 ,  39.35848858,  39.58671257,
-        39.75344272,  40.04709276,  40.07348617,  40.27031144,
-        40.58328319,  40.8610692 ,  40.89683313,  41.01072684,
-        41.66885699,  42.04868734,  42.35118067,  42.60531715,
-        45.28154414,  45.47942049,  47.70172314,  48.49380416,
-        60.57609581,  60.57657812,  61.12389099,  61.12436898,
-        61.38177086,  61.38655397,  61.589339  ,  61.5932084 ,
-        63.33967443,  70.03865417,  37.42134832,  37.75972919,
-        39.16236258,  39.48582634,  40.87097143,  41.08971465,
-        41.6785673 ,  41.82213078,  41.8930939 ,  42.03698148,
-        42.83408426,  42.97677133,  43.13106967,  43.27298187,
-        43.38690997,  43.59404942,  43.6053373 ,  43.89710511,
-        44.00333673,  44.50096862,  44.78709963,  45.49315307,
-        46.01179095,  46.20654017,  46.73062778,  46.9223936 ,
-        48.00940863,  48.19516497,  48.39546526,  49.07940224,
-        49.17637348,  49.84959754,  61.92243907,  61.92718042,
-        62.12820088,  62.13203673,  62.45842719,  62.46312786,
-        62.66242903,  62.66623217,  62.73858502,  62.73905071,
-        63.7923458 ,  63.7928038 ,  63.86376926,  64.38359799,
-        70.51297572,  70.98412788,  93.34926748,  44.01253199,
-        44.21573608,  45.50204727,  45.69862854,  45.84130714,
-        46.11893144,  47.27323528,  47.54249857,  48.69876778,
-        48.82367841,  48.88190455,  49.00725478,  49.37850393,
-        49.55912892,  50.17055816,  50.34922397,  51.07629317,
-        51.81681556,  52.36526576,  53.0878113 ,  64.039481  ,
-        64.04406563,  64.23846209,  64.24217193,  65.07217885,
-        65.07669072,  65.26801165,  65.27166298,  65.91849278,
-        66.92220128,  72.37918493,  73.29447281,  93.70566901,
-        94.06072013,  51.36376787,  51.53743551,  52.64570242,
-        52.81515495,  95.11792193,  95.81624291])
 ```
 
 ```python
 >>> cir.x
-array([-9.99192897, -9.97578692, -9.95964487, ...,  9.95964487,
-        9.97578692,  9.99192897])
+array([  -9.99192897,   -9.97578692,   -9.95964487, ...,  105.74656981,
+        105.76271186,  105.77885391])
 ```
 
 ```python
@@ -351,18 +269,21 @@ array([-9.99192897, -9.97578692, -9.95964487, ...,  9.95964487,
 >>> L.Gs.node[1]['ss_name']=layer
 >>> L.g2npy()
 >>> L.save()
->>> Lk = DLink(L=L,a=tx,b=rx,Aa=Antenna('Omni'),Ab=Antenna('Omni'))
+>>> fGHz=np.linspace(2,11,181)
+>>> A = Antenna('Omni',fGHz=fGHz)
+>>> Lk = DLink(L=L,a=tx,b=rx,Aa=A,Ab=A)
 >>> Lk.eval(force=True)
->>> cirair = Lk.H.applywavB(wav.sf)
->>> cirair.plot(typ=['v'],xmin=20,xmax=80)
 structure saved in  defstr3.str2
 structure saved in  defstr3.ini
 Signatures'> from 2_1_3 saved
 Rays'> from 3_0_1 saved
 Ctilde'> from 0_1_0 saved
-Tchannel'> from 0_1_0_0_0_1_1 saved
-(<matplotlib.figure.Figure at 0x7f39272475d0>,
- array([[<matplotlib.axes.AxesSubplot object at 0x7f3926fbb690>]], dtype=object))
+```
+
+```python
+>>> cirair = Lk.H.applywavB(wacirair = Lk.H.applywavB(wav.sf)
+>>> cirair.plot(typ=['v'],xmin=20,xmax=80)v.sf)
+>>> cirair.plot(typ=['v'],xmin=20,xmax=80)
 ```
 
 ```python
@@ -375,14 +296,6 @@ Tchannel'> from 0_1_0_0_0_1_1 saved
 >>> Lk.eval(force=True)
 >>> cirpart = Lk.H.applywavB(wav.sf)
 >>> cirpart.plot(typ=['v'],xmin=20,xmax=80)
-structure saved in  defstr3.str2
-structure saved in  defstr3.ini
-Signatures'> from 2_1_3 saved
-Rays'> from 3_0_1 saved
-Ctilde'> from 0_1_0 saved
-Tchannel'> from 0_1_0_0_0_1_1 saved
-(<matplotlib.figure.Figure at 0x7f392b898d90>,
- array([[<matplotlib.axes.AxesSubplot object at 0x7f392b8988d0>]], dtype=object))
 ```
 
 ```python
@@ -395,14 +308,6 @@ Tchannel'> from 0_1_0_0_0_1_1 saved
 >>> Lk.eval(force=True)
 >>> cirmet = Lk.H.applywavB(wav.sf)
 >>> cirmet.plot(typ=['v'],xmin=20,xmax=80)
-structure saved in  defstr3.str2
-structure saved in  defstr3.ini
-Signatures'> from 2_1_3 saved
-Rays'> from 3_0_1 saved
-Ctilde'> from 0_1_0 saved
-Tchannel'> from 0_1_0_0_0_1_1 saved
-(<matplotlib.figure.Figure at 0x7f392793d690>,
- array([[<matplotlib.axes.AxesSubplot object at 0x7f3926fb4d10>]], dtype=object))
 ```
 
 ```python

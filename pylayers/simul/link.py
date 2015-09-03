@@ -306,7 +306,6 @@ class DLink(Link):
             Signature identifier (si_ID#N):
                 ca_cb_cutoff
 
-%pylab inline
             Ray identifier (ray_ID#N):
                 cutoff_ua_ub
 
@@ -324,8 +323,7 @@ class DLink(Link):
             ub : indice of a position in 'p_map' position dataset
             uf : indice of freq position in 'f_map' frequency dataset
             uTa : indice of a position in 'T_map' Rotation dataset
-            uTb : indice o
-%pylab inlinef b position in 'T_map' Rotation dataset
+            uTb : indice of a position in 'T_map' Rotation dataset
             uAa : indice of a position in 'A_map' Antenna name dataset
             uAb : indice of b position in 'A_map' Antenna name dataset
 

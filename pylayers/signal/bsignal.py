@@ -212,7 +212,6 @@ import scipy.io as ios
 from scipy.signal import cspline1d, cspline1d_eval, iirfilter, iirdesign, lfilter, firwin , correlate
 #from sklearn import mixture
 import scipy.stats as st
-import seaborn as sns
 
 
 class Bsignal(PyLayers):
@@ -718,7 +717,6 @@ class Bsignal(PyLayers):
 
         # axis selection
         sax = kwargs['sax']
-        sns.set_style("white")
 
         if self.y.ndim>1:
             dt,ylabels = self.cformat(**kwargs)
