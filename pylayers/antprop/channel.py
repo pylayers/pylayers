@@ -75,7 +75,6 @@ import pylayers.util.geomutil as geu
 from pylayers.antprop.raysc import GrRay3D
 from pylayers.util.project import *
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-import seaborn as sns
 try:
     import h5py
 except:
@@ -3706,7 +3705,6 @@ maicher
         if 'fig' not in kwargs:
             kwargs['fig'] = plt.figure()
 
-        sns.set_style("white")
 
         ax1 = kwargs['fig'].add_subplot(221)
         fig, ax1 = self.Ctt.imshow(ax=ax1,**kwargs)

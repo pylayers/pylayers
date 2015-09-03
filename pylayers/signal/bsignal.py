@@ -692,7 +692,6 @@ class Bsignal(PyLayers):
         >>> F = FUsignal(f,y)
 
         """
-        sns.set_style("whitegrid")
         defaults = {'interpolation':'none',
                     'cmap':plt.cm.BrBG,
                     'aspect':'auto',

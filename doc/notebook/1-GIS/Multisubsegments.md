@@ -120,7 +120,7 @@ The $\mathcal{G}_s$ graph dictionnary has the following structure
 We define now two points which are the termination of a radio link.
 
 ```python
->>> tx=np.array([759,1114,1.0])
+>>> tx=np.array([759,1114,1.5])
 >>> rx=np.array([767,1114,1.5])
 ```
 
@@ -145,11 +145,11 @@ On the figure above, we can see the Tx and Rx each placed in a different room ap
 Then for evaluating the radio link, simply type:
 
 ```python
->>> ak,tauk=Lk.eval(force=True)
+>>> ak,tauk=Lk.eval(force=True,a=tx,b=rx)
 Signatures'> from 2_1_3 saved
-Rays'> from 3_0_1 saved
-Ctilde'> from 0_1_0 saved
-Tchannel'> from 0_1_0_0_0_1_1 saved
+Rays'> from 3_2_1 saved
+Ctilde'> from 2_1_0 saved
+Tchannel'> from 2_1_0_0_0_1_1 saved
 ```
 
 At that point the channel has been evaluated and all the data stored in an `hdf5` file
@@ -210,17 +210,6 @@ Nfreq : 100
 ```
 
 ```python
->>> Lk.H((
-freq : 1.0 5.95 100
-shape  : (155, 100)
-tau (min, max) : 26.7186992365 95.816242908
-dist :8.01560977094 28.7448728724
-Friis factor -j c/(4 pi f) has been applied
- calibrated : No
- windowed : No
-```
-
-```python
 >>> fGHz=np.arange(2,6,0.5)
 >>> wav = wvf.Waveform(fcGHz=4,bandGHz=1.5)
 >>> wav.show()
@@ -242,56 +231,23 @@ Friis factor -j c/(4 pi f) has been applied
 ```
 
 ```python
+>>> Lk.a
+array([  759. ,  1114. ,     1.5])
+```
+
+```python
+>>> Lk.b
+array([  767. ,  1114. ,     1.5])
+```
+
+```python
 >>> cir = Lk.H.applywavB(wav.sf)
 ```
 
 ```python
->>> Lk.H.taud
-array([ 26.71869924,  27.93842436,  29.10708199,  29.64889324,
-        30.03048589,  30.075433  ,  36.72255959,  30.75261837,
-        31.12068041,  31.1640552 ,  31.81807982,  32.17395555,
-        32.21591227,  32.36081306,  32.66533294,  33.05244038,
-        34.35921355,  37.6193175 ,  37.62655033,  37.86521462,
-        38.49519081,  38.90590625,  39.23286412,  40.03698677,
-        60.02330145,  60.0237882 ,  33.67032288,  34.04600538,
-        34.64617309,  34.81939407,  35.01138599,  35.14489175,
-        35.18330575,  36.68410469,  36.99319869,  37.02969534,
-        38.50225911,  38.7355282 ,  39.35848858,  39.58671257,
-        39.75344272,  40.04709276,  40.07348617,  40.27031144,
-        40.58328319,  40.8610692 ,  40.89683313,  41.01072684,
-        41.66885699,  42.04868734,  42.35118067,  42.60531715,
-        45.28154414,  45.47942049,  47.70172314,  48.49380416,
-        60.57609581,  60.57657812,  61.12389099,  61.12436898,
-        61.38177086,  61.38655397,  61.589339  ,  61.5932084 ,
-        63.33967443,  70.03865417,  37.42134832,  37.75972919,
-        39.16236258,  39.48582634,  40.87097143,  41.08971465,
-        41.6785673 ,  41.82213078,  41.8930939 ,  42.03698148,
-        42.83408426,  42.97677133,  43.13106967,  43.27298187,
-        43.38690997,  43.59404942,  43.6053373 ,  43.89710511,
-        44.00333673,  44.50096862,  44.78709963,  45.49315307,
-        46.01179095,  46.20654017,  46.73062778,  46.9223936 ,
-        48.00940863,  48.19516497,  48.39546526,  49.07940224,
-        49.17637348,  49.84959754,  61.92243907,  61.92718042,
-        62.12820088,  62.13203673,  62.45842719,  62.46312786,
-        62.66242903,  62.66623217,  62.73858502,  62.73905071,
-        63.7923458 ,  63.7928038 ,  63.86376926,  64.38359799,
-        70.51297572,  70.98412788,  93.34926748,  44.01253199,
-        44.21573608,  45.50204727,  45.69862854,  45.84130714,
-        46.11893144,  47.27323528,  47.54249857,  48.69876778,
-        48.82367841,  48.88190455,  49.00725478,  49.37850393,
-        49.55912892,  50.17055816,  50.34922397,  51.07629317,
-        51.81681556,  52.36526576,  53.0878113 ,  64.039481  ,
-        64.04406563,  64.23846209,  64.24217193,  65.07217885,
-        65.07669072,  65.26801165,  65.27166298,  65.91849278,
-        66.92220128,  72.37918493,  73.29447281,  93.70566901,
-        94.06072013,  51.36376787,  51.53743551,  52.64570242,
-        52.81515495,  95.11792193,  95.81624291])
-```
-
-```python
 >>> cir.plot(xmin=0,xmax=100,typ='v')
-(<matplotlib.figure.Figure at 0x7fca0f93c9d0>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7fca0f975a90>]], dtype=object))
+(<matplotlib.figure.Figure at 0x7f51aed8de50>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f51aed9b4d0>]], dtype=object))
 ```
 
 ```python
@@ -303,19 +259,26 @@ array([ 26.71869924,  27.93842436,  29.10708199,  29.64889324,
 >>> fGHz=np.linspace(2,11,181)
 >>> #Aa = Antenna('Omni',fGHz=fGHz)
 ... #Aa = Antenna('Omni',fGHz=fGHz)
-... Lk = DLink(L=L,a=tx,b=rx)
->>> Lk.eval(force=True)
+... Lk = DLink(L=L,a=tx,b=rx,Aa=Aa,Ab=Ab)
+>>> ak,tauk=Lk.eval(force=True)
+>>> plt.stem(Lk.H.taud,Lk.H.ak)
 structure saved in  defstr3.str2
 structure saved in  defstr3.ini
 Signatures'> from 2_1_3 saved
-Rays'> from 3_0_1 saved
-Ctilde'> from 0_1_0 saved
+Rays'> from 3_2_1 saved
+Ctilde'> from 2_1_0 saved
+Tchannel'> from 2_1_0_0_0_1_1 saved
+<Container object of 3 artists>
 ```
 
 ```python
->>> cirair = Lk.H.applywavB(wacirair = Lk.H.applywavB(wav.sf)
->>> cirair.plot(typ=['v'],xmin=20,xmax=80)v.sf)
+>>> cirair = Lk.H.applywavB(wav.sf)
+```
+
+```python
 >>> cirair.plot(typ=['v'],xmin=20,xmax=80)
+(<matplotlib.figure.Figure at 0x7f51aecbdd50>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f51aed3c4d0>]], dtype=object))
 ```
 
 ```python
@@ -324,10 +287,18 @@ Ctilde'> from 0_1_0 saved
 >>> L.Gs.node[1]['ss_name']=layer
 >>> L.g2npy()
 >>> L.save()
->>> Lk = DLink(L=L,a=tx,b=rx,Aa=Antenna('Omni'),Ab=Antenna('Omni'))
+>>> Lk = DLink(L=L,a=tx,b=rx)
 >>> Lk.eval(force=True)
 >>> cirpart = Lk.H.applywavB(wav.sf)
 >>> cirpart.plot(typ=['v'],xmin=20,xmax=80)
+structure saved in  defstr3.str2
+structure saved in  defstr3.ini
+Signatures'> from 2_1_3 saved
+Rays'> from 3_2_1 saved
+Ctilde'> from 2_1_0 saved
+Tchannel'> from 2_1_0_0_0_2_2 saved
+(<matplotlib.figure.Figure at 0x7f51b1c77d90>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f51af1c8910>]], dtype=object))
 ```
 
 ```python
@@ -336,10 +307,18 @@ Ctilde'> from 0_1_0 saved
 >>> L.Gs.node[1]['ss_name']=layer
 >>> L.g2npy()
 >>> L.save()
->>> Lk = DLink(L=L,a=tx,b=rx,Aa=Antenna('Omni'),Ab=Antenna('Omni'))
+>>> Lk = DLink(L=L,a=tx,b=rx)
 >>> Lk.eval(force=True)
 >>> cirmet = Lk.H.applywavB(wav.sf)
 >>> cirmet.plot(typ=['v'],xmin=20,xmax=80)
+structure saved in  defstr3.str2
+structure saved in  defstr3.ini
+Signatures'> from 2_1_3 saved
+Rays'> from 3_2_1 saved
+Ctilde'> from 2_1_0 saved
+Tchannel'> from 2_1_0_0_0_2_2 saved
+(<matplotlib.figure.Figure at 0x7f51b10bf610>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f51b12ff150>]], dtype=object))
 ```
 
 ```python
