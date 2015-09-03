@@ -2736,6 +2736,8 @@ class Ctilde(PyLayers):
     tauk : ndarray delays
     tang : ndarray angles of departure
     rang : ndarray angles of arrival
+    tangl : ndarray angles of departure (local)
+    rangl : ndarray angles of arrival (local)
 
     fGHz : np.array
         frequency array
@@ -3914,7 +3916,7 @@ maicher
         a.eval(th=self.tangl[:, 0], ph=self.tangl[:, 1], grid=False)
         Fat = bs.FUsignal(a.fGHz, a.Ft)
         Fap = bs.FUsignal(a.fGHz, a.Fp)
-        b.eval(th=self.tangl[:, 0], ph=self.tangl[:, 1], grid=False)
+        b.eval(th=self.rangl[:, 0], ph=self.rangl[:, 1], grid=False)
         Fbt = bs.FUsignal(a.fGHz, b.Ft)
         Fbp = bs.FUsignal(a.fGHz, b.Fp)
 

@@ -1302,6 +1302,7 @@ class DLink(Link):
             self.save(C,'Ct',self.dexist['Ct']['grpname'],force = kwargs['force'])
 
         self.C = C
+        pdb.set_trace()
 
         ############
         # H

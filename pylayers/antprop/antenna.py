@@ -979,9 +979,9 @@ class Antenna(Pattern):
     nth    : number of theta
     nph    : number of phi
 
-    Ft     : Normalized Ftheta    (nf,ntheta,nphi)
-    Fp     : Normalized Fphi      (nf,ntheta,nphi)
-    sqG    : square root of gain  (nf,ntheta,nphi)
+    Ft     : Normalized Ftheta    (ntheta,nphi,nf)
+    Fp     : Normalized Fphi      (ntheta,nphi,nf)
+    sqG    : square root of gain  (ntheta,nphi,nf)
 
 
     theta  : theta base            1 x ntheta
@@ -1193,16 +1193,27 @@ class Antenna(Pattern):
 #                kwargs[k] = defaults[k]
 
             u = np.where(self.sqG==self.sqG.max())
-            if len(u[0])>1:
-                S = self.sqG[(u[0][0],u[1][0],u[2][0])]
-                uf = u[0][0]
-                ut = u[1][0]
-                up = u[2][0]
+            if self.grid:
+                if len(u[0])>1:
+                    S = self.sqG[(u[0][0],u[1][0],u[2][0])]
+                    ut = u[0][0]
+                    up = u[1][0]
+                    uf = u[2][0]
+                else:
+                    S = self.sqG[u]
+                    ut = u[0]
+                    up = u[1]
+                    uf = u[2]
             else:
-                S = self.sqG[u]
-                uf = u[0]
-                ut = u[1]
-                up = u[2]
+                if len(u[0])>1:
+                    S = self.sqG[(u[0][0],u[1][0])]
+                    ud = u[0][0]
+                    uf = u[1][0]
+                else:
+                    S = self.sqG[u]
+                    ud = u[0]
+                    uf = u[1]
+
             if self.source=='satimo':
                 GdB = 20*np.log10(S)
             # see WHERE1 D4.1 sec 3.1.1.2.2
@@ -1210,8 +1221,11 @@ class Antenna(Pattern):
                 GdB = 20*np.log10(S/np.sqrt(30))
             st = st + "GmaxdB : %4.2f dB \n" % (GdB)
             st = st + "   f = %4.2f GHz \n" % (self.fGHz[uf])
-            st = st + "   theta = %4.2f (degrees) \n" % (self.theta[ut]*rtd)
-            st = st + "   phi = %4.2f  (degrees) \n" % (self.phi[up]*rtd)
+            if self.grid:
+                st = st + "   theta = %4.2f (degrees) \n" % (self.theta[ut]*rtd)
+                st = st + "   phi = %4.2f  (degrees) \n" % (self.phi[up]*rtd)
+            else:
+                st = st + " Ray n° :" + str(ud)+' \n'
         else:
             st = st + 'Not evaluated\n'
 #
@@ -1363,6 +1377,7 @@ class Antenna(Pattern):
         nphi : float
                number of phi
 
+        TODO : DEPRECATED (Fix the Ft and Fp format with Nf as last axis)
 
         """
         _filetrx = self._filename
