@@ -497,8 +497,8 @@ class Pattern(PyLayers):
 
         k = self.S.Cx.k2
 
-        self.Ft = Fth.transpose()
-        self.Fp = Fph.transpose()
+        #self.Ft = Fth.transpose()
+        #self.Fp = Fph.transpose()
         if self.grid:
             Ex = np.dot(cx,Y[k])
             Ey = np.dot(cy,Y[k])
@@ -510,7 +510,7 @@ class Pattern(PyLayers):
             Ex = np.dot(cx,Y[k])
             Ey = np.dot(cy,Y[k])
             Ez = np.dot(cz,Y[k])
-            Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True, pattern = False)
+            self.Ft,self.Fp = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True, pattern = False)
 
         assert(self.Ft.shape[-1]==self.nf)
         assert(self.Fp.shape[-1]==self.nf)
