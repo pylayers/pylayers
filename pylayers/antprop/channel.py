@@ -72,6 +72,7 @@ import scipy.stats as st
 import pylayers.util.pyutil as pyu
 import pylayers.signal.bsignal as bs
 import pylayers.util.geomutil as geu
+import pylayers.antprop.antenna as ant
 from pylayers.antprop.raysc import GrRay3D
 from pylayers.util.project import *
 from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -289,7 +290,7 @@ class TBchannel(bs.TBsignal):
         self.x = taus
         self.y = ets
 
-class TUchannel(TBchannel):
+class TUchannel(TBchannel,bs.TUsignal):
     """ Uniform channel in delay domain
     """
     def __init__(self, x=np.array([]), y=np.array([]),label=[]):
@@ -458,26 +459,29 @@ class TUchannel(TBchannel):
 
         Parameters
         ----------
+
         nint : integer
+            number of intervals
 
         """
         #
         # seek fot the maximum value of the signal
         #
-        M = max(self.y)
+        M = self.y.max()
         step = M / 1e2
     #       plot(self.x,self.y)
         thre = M - step
         while step > M / 1e5:
     #          axhline(y=thre,color='green')
-            u = np.nonzero(self.y > thre)[0]
-            if nbint(u) < nint:
+            u = np.where(self.y > thre)[0]
+            # nbint : number of contiguous intervals
+            if pyu.nbint(u) < nint:
             # down
                 thre = thre - step
             else:
             # up + step reduction
                 thre = thre + step
-                step = step / 2
+                step = step / 2.
 
     #       plt.show()
         tau = self.x[u[0]]
@@ -1885,9 +1889,6 @@ class Tchannel(bs.FUsignal):
                 b.set_label('Path Loss (dB)')
 
         return (fig, ax)
-
-
-
 
 
     def doadod(self, **kwargs):
@@ -3472,7 +3473,7 @@ maicher
         --------
 
         """
-        # get frequency axes
+        # get Ctilde frequency axes
 
         fGHz = self.fGHz
         # if rot matrices are passed
@@ -3564,6 +3565,7 @@ maicher
         Ctpl = t00 * r0 + t01 * r1
         Cppl = t10 * r0 + t11 * r1
 
+        pdb.set_trace()
         self.Ctt = bs.FUsignal(fGHz, Cttl)
         self.Ctp = bs.FUsignal(fGHz, Ctpl)
         self.Cpt = bs.FUsignal(fGHz, Cptl)
@@ -3873,7 +3875,7 @@ maicher
         self.Ctp.y = self.Ctp.y[u,:]
         self.Cpt.y = self.Cpt.y[u,:]
 
-    def prop2tran(self,a='theta',b='theta',Friis=True,debug=True):
+    def prop2tran(self,a=[],b=[],Friis=True,debug=True):
         r""" transform propagation channel into transmission channel
 
         Parameters
@@ -3910,6 +3912,14 @@ maicher
         nray  = self.nray
         sh = np.shape(self.Ctt.y)
 
+        # select default antennas
+        # omni polar theta 't' <=> vertical polarization
+        #
+        if a ==[]:
+            a = ant.Antenna('Omni',param={'pol':'t','GmaxdB':0})
+        if b ==[]:
+            b = ant.Antenna('Omni',param={'pol':'t','GmaxdB':0})
+
 
         a.eval(th=self.tangl[:, 0], ph=self.tangl[:, 1], grid=False)
         Fat = bs.FUsignal(a.fGHz, a.Ft)
@@ -3917,7 +3927,6 @@ maicher
         b.eval(th=self.rangl[:, 0], ph=self.rangl[:, 1], grid=False)
         Fbt = bs.FUsignal(a.fGHz, b.Ft)
         Fbp = bs.FUsignal(a.fGHz, b.Fp)
-
 
         # Ctt : r x f
         # Cg2cl should be applied here
@@ -3927,11 +3936,10 @@ maicher
         #  C  = 2 x 2 x r x f
         #  Fa = 2 x r x f
         #  Fb = 2 x r x f
-        #t1 = self.Ctt * Fat + self.Cpt * Fap
-        #t2 = self.Ctp * Fat + self.Cpp * Fap
-        #pdb.set_trace()
+
         t1 = self.Ctt * Fat + self.Ctp * Fap
         t2 = self.Cpt * Fat + self.Cpp * Fap
+
         alpha = t1 * Fbt + t2 * Fbp
 
         self.fGHz = alpha.x

@@ -3,9 +3,7 @@
 ```python
 >>> %matplotlib inline
 >>> from pylayers.measures.mesuwb import *
->>> from pylayers.measures.mesuwb import *
 >>> from pylayers.gis.layout import *
->>> 
 >>> from pylayers.simul.link import *
 >>> from pylayers.signal.waveform import *
 WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
@@ -100,15 +98,14 @@ LQI Meth2 4.89658815244  (dB)
 
 ```python
 >>> toa1
-array([ 47.51 ,  25.005,  74.725,  56.52 ])
 ```
 
 ```python
 >>> K.tau_Emax()
-array([[ 48.125],
-       [ 28.025],
-       [ 75.17 ],
-       [ 57.405]])
+array([[ 0.,  0.,  0., ...,  0.,  0.,  0.],
+       [ 0.,  0.,  0., ...,  0.,  0.,  0.],
+       [ 0.,  0.,  0., ...,  0.,  0.,  0.],
+       [ 0.,  0.,  0., ...,  0.,  0.,  0.]])
 ```
 
 ```python
@@ -123,50 +120,60 @@ array([[  0.    ,   0.    ,   1.2   ],
 The code below reads data from the M1-WHERE2 measurement campaign.
 
 ```python
+>>> M=UWBMeasure(15)
+```
+
+```python
 >>> for k in range(300):
 ...     try:
 ...         M  = UWBMeasure(k)
-...         tx = M.tx
-...         D  = M.rx-tx[np.newaxis,:]
-...         D2 = D*D
-...         dist = np.sqrt(np.sum(D2,axis=1))[1:]
-...         Emax = M.Emax()
-...         Etot = M.Etot()[0]
-...         try:
-...             td1 = np.hstack((td1,dist[0]))
-...             td2 = np.hstack((td2,dist[1]))
-...             td3 = np.hstack((td3,dist[2]))
-...             td4 = np.hstack((td4,dist[3]))
->>> 
-...             te1 = np.hstack((te1,Emax[0]))
-...             te2 = np.hstack((te2,Emax[1]))
-...             te3 = np.hstack((te3,Emax[2]))
-...             te4 = np.hstack((te4,Emax[3]))
->>> 
-...             tt1 = np.hstack((tt1,Etot[0]))
-...             tt2 = np.hstack((tt2,Etot[1]))
-...             tt3 = np.hstack((tt3,Etot[2]))
-...             tt4 = np.hstack((tt4,Etot[3]))
-...             #tdist = np.hstack((tdist,dist))
-...             #te = np.hstack((te,Emax))
-...         except:
-...             td1=np.array(dist[0])
-...             td2=np.array(dist[1])
-...             td3=np.array(dist[2])
-...             td4=np.array(dist[3])
-...             te1 =np.array(Emax[0])
-...             te2 =np.array(Emax[1])
-...             te3 =np.array(Emax[2])
-...             te4 =np.array(Emax[3])
-...             tt1 =np.array(Etot[0])
-...             tt2 =np.array(Etot[1])
-...             tt3 =np.array(Etot[2])
-...             tt4 =np.array(Etot[3])
 ...     except:
-...         pass
+...         print k
+...         break
+...     tx = M.tx
+...     D  = M.rx-tx[np.newaxis,:]
+...     D2 = D*D
+...     dist = np.sqrt(np.sum(D2,axis=1))[1:]
+...     Emax = M.Emax()
+...     Etot = M.Etot()[0]
+...     try:
+...         td1 = np.hstack((td1,dist[0]))
+...         td2 = np.hstack((td2,dist[1]))
+...         td3 = np.hstack((td3,dist[2]))
+...         td4 = np.hstack((td4,dist[3]))
+>>> 
+...         te1 = np.hstack((te1,Emax[0]))
+...         te2 = np.hstack((te2,Emax[1]))
+...         te3 = np.hstack((te3,Emax[2]))
+...         te4 = np.hstack((te4,Emax[3]))
+>>> 
+...         tt1 = np.hstack((tt1,Etot[0]))
+...         tt2 = np.hstack((tt2,Etot[1]))
+...         tt3 = np.hstack((tt3,Etot[2]))
+...         tt4 = np.hstack((tt4,Etot[3]))
+...         #tdist = np.hstack((tdist,dist))
+...         #te = np.hstack((te,Emax))
+...     except:
+...         td1=np.array(dist[0])
+...         td2=np.array(dist[1])
+...         td3=np.array(dist[2])
+...         td4=np.array(dist[3])
+...         te1 =np.array(Emax[0])
+...         te2 =np.array(Emax[1])
+...         te3 =np.array(Emax[2])
+...         te4 =np.array(Emax[3])
+...         tt1 =np.array(Etot[0])
+...         tt2 =np.array(Etot[1])
+...         tt3 =np.array(Etot[2])
+...         tt4 =np.array(Etot[3])
+0
 ```
 
 The IR-UWB applied waweform is available in the raw data structure and can be extracted as follow. This exracttion is important in order to proceeed to the ray tracing simulation with the same waveform as the one used in the measurement campaign.
+
+```python
+>>> td1
+```
 
 ```python
 >>> from pylayers.signal.bsignal import *
@@ -196,76 +203,16 @@ The IR-UWB applied waweform is available in the raw data structure and can be ex
 >>> print E2*30
 >>> E2dB=10*np.log10(E2*30)
 >>> print E2dB
-0.0918920633424
--10.3672199673
 ```
 
 ```python
 >>> se.plot(typ='v')
-(<matplotlib.figure.Figure at 0x7f2c2269c210>,
- array([[<matplotlib.axes.AxesSubplot object at 0x7f2c215695d0>]], dtype=object))
+(<matplotlib.figure.Figure at 0x7fce03b40190>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7fce0831d590>]], dtype=object))
 ```
 
 ```python
 >>> td1
-array([ 16.63802705,  16.22905158,  15.89686715,  15.26732076,
-        15.42201416,  14.94989777,  14.78166126,  14.32910319,
-        13.8580487 ,  13.39009378,  12.91841813,  12.44769576,
-        12.27846378,  12.75884594,  13.23550693,  13.70142849,
-        13.54291613,  13.05896727,  12.60297775,  12.11540199,
-        11.96937715,  12.45704202,  12.93235531,  13.40780514,
-        13.28520053,  12.79592003,  12.32508324,  12.22779408,
-        12.70149509,  12.65309875,  12.145696  ,  11.64408114,
-        11.73348438,  11.84737775,  11.35013274,  11.48499662,
-        11.64842176,  11.18276087,  11.01347706,  10.87195268,
-        10.38563262,  10.5338205 ,  10.71673568,  10.24994967,
-        10.06163999,   9.91002968,   9.43039528,   9.58756834,
-         9.782949  ,   9.32605947,   9.11637664,   8.95437626,
-         8.48282527,   8.65957274,   8.86191108,   8.43762996,
-         8.19890922,   8.03001201,   7.54285004,   7.74911708,
-         7.96266398,   7.53499816,   7.29638897,   7.07732451,
-         6.62123076,   6.85684233,   7.09947199,   6.68099249,
-         6.42128625,   6.14889592,   5.72478837,   5.99892575,
-         6.26734075,   5.86938915,   5.5740077 ,   5.2705324 ,
-         4.84724195,   5.17401311,   5.48614278,   5.85294709,
-         6.21375247,   6.57846333,   6.96926048,   8.66469589,
-         9.10164736,   9.5441802 ,  10.00011931,  10.22893391,
-        10.44978677,  10.66274567,  11.115319  ,  11.33981619,
-        10.9056425 ,  11.16089704,  11.56784403,  11.80936487,
-         5.28906287,   5.54799698,   5.9734221 ,   5.75313436,
-         6.22113476,   6.43860912,   6.88650904,   6.68037347,
-         6.49954391,   7.1456863 ,   7.3478422 ,   7.6175347 ,
-         7.80093813,   8.50739073,   8.28268026,   4.43741569,
-         4.79654883,   5.12885782,   4.78646063,   4.3861392 ,
-         4.05584659,   3.68823229,   4.11082963,   4.01511245,
-         3.5713588 ,   2.9244687 ,   3.36393718,   3.84392945,
-         4.33348152,   4.82720377,   5.3202106 ,   4.73076284,
-         4.22538864,   3.73128982,   3.22785818,   2.77548704,
-         2.46021144,   2.6839712 ,   3.17544241,   3.68555356,
-         4.19807301,   4.20703032,   3.70401587,   3.19453039,
-         2.69525932,   2.81926615,   3.29637135,   3.78773907,
-         4.28199186,   4.40809119,   3.93465372,   3.46779841,
-         2.98455999,   3.70440599,   4.13931887,   4.58926358,
-         4.89083016,   5.37383427,   5.0592459 ,   5.26866816,
-         5.53806419,   5.72012401,   5.53617501,   4.78217776,
-         4.33567869,   3.97467902,   3.57635672,   3.9332935 ,
-         4.30812933,   4.68910278,   5.09636539,   5.39895459,
-         5.02145051,   4.64612565,   4.33198972,   4.75163358,
-         5.02416557,   5.38446311,   5.73265782,   6.11697015,
-         5.74674355,   5.42395157,   5.17310049,   5.61125298,
-         5.83992563,   6.13509025,   6.45356677,   6.79084918,
-         6.54278157,   6.27900107,   6.06948836,   6.71180054,
-         6.9571285 ,   7.40743691,   7.17684452,   7.6350584 ,
-         7.84483777,   8.29796522,   8.10517577,   8.56738738,
-         8.75305301,   9.21565071,   9.03716299,   9.5144246 ,
-         9.68171345,  10.14760049,   9.99354333,  10.61437379,
-        10.466769  ,  10.94857171,  11.08608088,  11.55921579,
-        11.42969697,  11.91336755,  12.03542457,  10.67221083,
-        10.59280221,  10.52425148,  11.03106793,  11.00296178,
-        10.48954005,  10.46008797,  10.98842391,  11.00074418,
-        10.47094729,  10.50232476,  11.05242161,  11.1036464 ,
-        10.57384902,  10.6514114 ,  11.15021192,  12.8764748 ,
-        13.35628445,  13.47389805])
 ```
 
 ```python

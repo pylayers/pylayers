@@ -226,7 +226,7 @@ class Pattern(PyLayers):
         --------
 
         >>> from pylayers.antprop.aarray import *
-        >>> A0=Antenna('Omni')
+        >>> A0=Antenna('Omni',param={'pol':'t','GmaxdB':0})
         >>> A1=Antenna('Gauss')
         >>> A2=Antenna('3gpp')
         >>> A3=ULArray()
@@ -285,11 +285,11 @@ class Pattern(PyLayers):
 
         self.grid is used for switching between
 
-        nf x nth x nph
-        nf x ndir
+          True   angular grid : nth x nph x nf
+          False  direction    : ndir x nf
 
         """
-        defaults = { 'param' : { 'pol' : 'h', 'GmaxdB': 0 } }
+        defaults = { 'param' : { 'pol' : 't', 'GmaxdB': 0 } }
 
         if 'param' not in kwargs or kwargs['param']=={}:
             kwargs['param']=defaults['param']
@@ -298,7 +298,6 @@ class Pattern(PyLayers):
 
         self.GmaxdB  = self.param['GmaxdB']
         self.pol  = self.param['pol']
-
         self.G    = pow(10.,self.GmaxdB/10.) # linear gain
         if self.grid:
             # Nth x Nph x Nf
@@ -586,7 +585,7 @@ class Pattern(PyLayers):
 
         self.param = kwargs['param']
         Sc = self.param['Sc']
-        Np =self.p.shape[1] 
+        Np =self.p.shape[1]
         if Sc==[]:
             # Sc : Np x Np x Nf
             #Sc = np.eye(self.p.shape[1])[None,...]
@@ -698,19 +697,22 @@ class Pattern(PyLayers):
     def radF(self):
         """ evaluate radiation fonction w.r.t polarization
 
+        self.pol : 't' : theta , 'p' : phi n, 'c' : circular
 
         """
-        if self.pol=='h':
+        assert self.pol in ['t','p','c']
+        if self.pol=='p':
             self.Fp = self.sqG
             if len(self.sqG.shape)==3:
-                self.Ft = np.zeros((self.nth,self.nph,self.nf))
+                self.Ft = np.array([0])[:,None,None]
             else:
-                self.Ft = np.zeros((len(self.theta),self.nf))
-        if self.pol=='v':
+                self.Ft = np.array([0])[:,None]
+
+        if self.pol=='t':
             if len(self.sqG.shape)==3:
-                self.Fp = np.zeros((self.nth,self.nph,self.nf))
+                self.Fp = np.array([0])[:,None,None]
             else:
-                self.Fp = np.zeros((len(self.theta),self.nf))
+                self.Fp = np.array([0])[:,None]
             self.Ft = self.sqG
         if self.pol=='c':
             self.Fp = (1./sqrt(2))*self.sqG

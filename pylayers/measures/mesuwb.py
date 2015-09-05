@@ -112,6 +112,7 @@ import matplotlib.pylab as plt
 import pylayers.util.pyutil as pyu
 import pylayers.util.geomutil as geu
 import pylayers.signal.bsignal as bs
+import pylayers.antprop.channel as ch
 from   pylayers.util.project import *
 from   scipy import io
 from   scipy import signal, linspace, polyval, polyfit, stats
@@ -965,13 +966,13 @@ class Tdd(PyLayers):
     ----------
 
     ch1
-        signal on channel 1 (bs.TUsignal)
+        signal on channel 1 (ch.TUchannel)
     ch2
-        signal on channel 2 (bs.TUsignal)
+        signal on channel 2 (ch.TUchannel)
     ch3
-        signal on channel 3 (bs.TUsignal)
+        signal on channel 3 (ch.TUchannel)
     ch4
-        signal on channel 4 (bs.TUsignal)
+        signal on channel 4 (ch.TUchannel)
     tx
         exitation waveform ( Impulse feeding Tx antenna) (bs.TUsignal)
 
@@ -1003,12 +1004,12 @@ class Tdd(PyLayers):
             ##### to the measurements !!
             #####
             t = d[0][0] * 1e9
-            self.ch3 = bs.TUsignal(t, d[1][0])
-            self.ch4 = bs.TUsignal(t, d[2][0])
-            self.ch1 = bs.TUsignal(t, d[3][0])
-            self.ch2 = bs.TUsignal(t, d[4][0])
+            self.ch3 = ch.TUchannel(x=t, y=d[1][0])
+            self.ch4 = ch.TUchannel(x=t, y=d[2][0])
+            self.ch1 = ch.TUchannel(x=t, y=d[3][0])
+            self.ch2 = ch.TUchannel(x=t, y=d[4][0])
             #self.tx   = bs.TUsignal(t,d.TX)
-            self.tx = bs.TUsignal(t, d[5][0])
+            self.tx = ch.TUchannel(t, d[5][0])
         else:
             pass
 
@@ -1878,7 +1879,7 @@ class UWBMeasure(PyLayers):
         Parameters
         ----------
 
-        n : integer 
+        n : integer
             (default 6)
 
         """
@@ -1899,9 +1900,9 @@ class UWBMeasure(PyLayers):
         Parameters
         ----------
 
-        r : float 
+        r : float
             threshold los
-        k : float 
+        k : float
             threshold nlos
 
         """

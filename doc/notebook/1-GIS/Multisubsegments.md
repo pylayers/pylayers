@@ -108,10 +108,10 @@ The $\mathcal{G}_s$ graph dictionnary has the following structure
   'offset': 0,
   'transition': False,
   'z': (0.0, 3.0)},
- 9: {'connect': [-1, -2],
+ 9: {'connect': [-2, -1],
   'name': 'WALL',
   'ncycles': [2, 0],
-  'norm': array([-0.00639987,  0.99997952,  0.        ]),
+  'norm': array([ 0.00639987, -0.99997952,  0.        ]),
   'offset': 0,
   'transition': False,
   'z': (0.0, 3.0)}}
@@ -128,8 +128,10 @@ We define now two points which are the termination of a radio link.
 >>> L.chgmss(1,ss_name=['WOOD','AIR','WOOD'],ss_z =[(0.0,2.7),(2.7,2.8),(2.8,3)],ss_offset=[0,0,0])
 >>> L.save()
 >>> fGHz=np.linspace(1,11,100)
->>> Aa = Antenna('S1R1.vsh3',fGHz=fGHz)
->>> Ab = Antenna('S1R1.vsh3',fGHz=fGHz)
+>>> #Aa = Antenna('S1R1.vsh3')
+... #Ab = Antenna('S1R1.vsh3')
+... Aa = Antenna('Omni',fGHz=fGHz)
+>>> Ab = Antenna('Omni',fGHz=fGHz)
 >>> Lk = DLink(L=L,a=tx,b=rx,Aa=Aa,Ab=Ab,fGHz=np.linspace(1,11,100))
 structure saved in  defstr3.str2
 structure saved in  defstr3.ini
@@ -149,25 +151,10 @@ Then for evaluating the radio link, simply type:
 Signatures'> from 2_1_3 saved
 Rays'> from 3_2_1 saved
 Ctilde'> from 2_1_0 saved
-Tchannel'> from 2_1_0_0_0_1_1 saved
+Tchannel'> from 2_1_0_0_0_0_0 saved
 ```
 
 At that point the channel has been evaluated and all the data stored in an `hdf5` file
-
-```python
->>> Lk.H.x
-array([ 1.  ,  1.05,  1.1 ,  1.15,  1.2 ,  1.25,  1.3 ,  1.35,  1.4 ,
-        1.45,  1.5 ,  1.55,  1.6 ,  1.65,  1.7 ,  1.75,  1.8 ,  1.85,
-        1.9 ,  1.95,  2.  ,  2.05,  2.1 ,  2.15,  2.2 ,  2.25,  2.3 ,
-        2.35,  2.4 ,  2.45,  2.5 ,  2.55,  2.6 ,  2.65,  2.7 ,  2.75,
-        2.8 ,  2.85,  2.9 ,  2.95,  3.  ,  3.05,  3.1 ,  3.15,  3.2 ,
-        3.25,  3.3 ,  3.35,  3.4 ,  3.45,  3.5 ,  3.55,  3.6 ,  3.65,
-        3.7 ,  3.75,  3.8 ,  3.85,  3.9 ,  3.95,  4.  ,  4.05,  4.1 ,
-        4.15,  4.2 ,  4.25,  4.3 ,  4.35,  4.4 ,  4.45,  4.5 ,  4.55,
-        4.6 ,  4.65,  4.7 ,  4.75,  4.8 ,  4.85,  4.9 ,  4.95,  5.  ,
-        5.05,  5.1 ,  5.15,  5.2 ,  5.25,  5.3 ,  5.35,  5.4 ,  5.45,
-        5.5 ,  5.55,  5.6 ,  5.65,  5.7 ,  5.75,  5.8 ,  5.85,  5.9 ,  5.95])
-```
 
 ## The different members of the link are
 
@@ -206,7 +193,7 @@ Nfreq : 100
 
 ```python
 >>> f = plt.figure(figsize=(10,10))
->>> f,a=Lk.C.show(cmap='jet',fig=f,typ='l20')
+>>> f,a=Lk.C.show(cmap='jet',fig=f,typ='l20',vmin=-120,vmax=-10)
 ```
 
 ```python
@@ -226,7 +213,7 @@ Nfreq : 100
 ```
 
 ```python
->>> plt.stem(Lk.H.taud,Lk.H.ak)
+>>> Lk = DLink(L=L,a=tx,b=rx)plt.stem(Lk.H.taud,Lk.H.ak)
 <Container object of 3 artists>
 ```
 
@@ -245,29 +232,28 @@ array([  767. ,  1114. ,     1.5])
 ```
 
 ```python
->>> cir.plot(xmin=0,xmax=100,typ='v')
-(<matplotlib.figure.Figure at 0x7f51aed8de50>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f51aed9b4d0>]], dtype=object))
+>>> cir.plot(xmin=20,xmax=80,typ='v')
+(<matplotlib.figure.Figure at 0x7f3b52349110>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f3b52349910>]], dtype=object))
 ```
 
 ```python
 >>> layer = ['AIR','AIR','AIR']
->>> L.chgmss(1,ss_name=layer)
->>> L.Gs.node[1]['ss_name']=layer
->>> L.g2npy()
->>> L.save()
+>>> Lk.L.chgmss(1,ss_name=layer)
+>>> Lk.L.Gs.node[1]['ss_name']=layer
+>>> Lk.L.g2npy()
+>>> Lk.L.save()
 >>> fGHz=np.linspace(2,11,181)
 >>> #Aa = Antenna('Omni',fGHz=fGHz)
 ... #Aa = Antenna('Omni',fGHz=fGHz)
-... Lk = DLink(L=L,a=tx,b=rx,Aa=Aa,Ab=Ab)
->>> ak,tauk=Lk.eval(force=True)
+... ak,tauk=Lk.eval(force=True)
 >>> plt.stem(Lk.H.taud,Lk.H.ak)
 structure saved in  defstr3.str2
 structure saved in  defstr3.ini
 Signatures'> from 2_1_3 saved
 Rays'> from 3_2_1 saved
 Ctilde'> from 2_1_0 saved
-Tchannel'> from 2_1_0_0_0_1_1 saved
+Tchannel'> from 2_1_0_0_0_0_0 saved
 <Container object of 3 artists>
 ```
 
@@ -277,17 +263,16 @@ Tchannel'> from 2_1_0_0_0_1_1 saved
 
 ```python
 >>> cirair.plot(typ=['v'],xmin=20,xmax=80)
-(<matplotlib.figure.Figure at 0x7f51aecbdd50>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f51aed3c4d0>]], dtype=object))
+(<matplotlib.figure.Figure at 0x7f3b5230fb10>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f3b52359490>]], dtype=object))
 ```
 
 ```python
 >>> layer = ['PARTITION','PARTITION','PARTITION']
->>> L.chgmss(1,ss_name=layer)
->>> L.Gs.node[1]['ss_name']=layer
->>> L.g2npy()
->>> L.save()
->>> Lk = DLink(L=L,a=tx,b=rx)
+>>> Lk.L.chgmss(1,ss_name=layer)
+>>> Lk.L.Gs.node[1]['ss_name']=layer
+>>> Lk.L.g2npy()
+>>> Lk.Lk = DLink(L=L,a=tx,b=rx)L.save()
 >>> Lk.eval(force=True)
 >>> cirpart = Lk.H.applywavB(wav.sf)
 >>> cirpart.plot(typ=['v'],xmin=20,xmax=80)
@@ -296,18 +281,17 @@ structure saved in  defstr3.ini
 Signatures'> from 2_1_3 saved
 Rays'> from 3_2_1 saved
 Ctilde'> from 2_1_0 saved
-Tchannel'> from 2_1_0_0_0_2_2 saved
-(<matplotlib.figure.Figure at 0x7f51b1c77d90>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f51af1c8910>]], dtype=object))
+Tchannel'> from 2_1_0_0_0_0_0 saved
+(<matplotlib.figure.Figure at 0x7f3b523495d0>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f3b532c3150>]], dtype=object))
 ```
 
 ```python
 >>> layer = ['METAL','METAL','METAL']
->>> L.chgmss(1,ss_name=layer)
->>> L.Gs.node[1]['ss_name']=layer
->>> L.g2npy()
->>> L.save()
->>> Lk = DLink(L=L,a=tx,b=rx)
+>>> Lk.L.chgmss(1,ss_name=layer)
+>>> Lk.L.Gs.node[1]['ss_name']=layer
+>>> Lk.L.g2npy()
+>>> Lk.L.save()
 >>> Lk.eval(force=True)
 >>> cirmet = Lk.H.applywavB(wav.sf)
 >>> cirmet.plot(typ=['v'],xmin=20,xmax=80)
@@ -316,9 +300,9 @@ structure saved in  defstr3.ini
 Signatures'> from 2_1_3 saved
 Rays'> from 3_2_1 saved
 Ctilde'> from 2_1_0 saved
-Tchannel'> from 2_1_0_0_0_2_2 saved
-(<matplotlib.figure.Figure at 0x7f51b10bf610>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f51b12ff150>]], dtype=object))
+Tchannel'> from 2_1_0_0_0_0_0 saved
+(<matplotlib.figure.Figure at 0x7f3b5359c350>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f3b52300490>]], dtype=object))
 ```
 
 ```python

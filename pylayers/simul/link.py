@@ -66,7 +66,7 @@ DLink init
     DLink.__init__
     DLink.__repr__
     DLink.reset_config
-    DLink.fill_dexist
+    DLink.check_grpname
 
 
 search in hdf5 file
@@ -105,6 +105,7 @@ try:
 except:
     print 'Layout:Mayavi is not installed'
 import doctest
+import time
 import numpy as np
 import matplotlib.pylab as plt
 import pylayers.signal.waveform as wvf
@@ -233,8 +234,8 @@ class DLink(Link):
             Rotation matrice of Antenna of device dev_a relative to global Layout scene
         Tb : np.ndarray (3,3)
             Rotation matrice of Antenna of device dev_b relative to global Layout scene
-        fGHz : np.ndarray (Nptf,)
-            frequency range of Nptf points used for evaluation of channel
+        fGHz : np.ndarray (Nf,)
+            frequency range of Nf points used for evaluation of channel
         wav : Waveform
             Waveform to be applied on the channel
         save_idx : int
@@ -362,6 +363,7 @@ class DLink(Link):
         self._cb=-1
         specset = ['a','b','Aa','Ab','Ta','Tb','L','fGHz','wav']
 
+        # set default attribute
         for key, value in defaults.items():
             if key not in kwargs:
                 if key in specset :
@@ -382,7 +384,7 @@ class DLink(Link):
 
 
         ###########
-        # init ant
+        # Transmitter and Receiver positions
         ###########
 
         self.tx = RadioNode(name = '',
@@ -457,10 +459,11 @@ class DLink(Link):
 
         ###########
         # init freq
+        # TODO Check where it is used redundant with fGHz
         ###########
-        self.fmin = self.fGHz[0]
-        self.fmax = self.fGHz[-1]
-        self.fstep = self.fGHz[1]-self.fGHz[0]
+        #self.fmin  = self.fGHz[0]
+        #self.fmax  = self.fGHz[-1]
+        #self.fstep = self.fGHz[1]-self.fGHz[0]
 
 
         self.Si = Signatures(self.L,self.ca,self.cb,cutoff=self.cutoff)
@@ -608,14 +611,14 @@ class DLink(Link):
             freq=np.array([freq])
         self._fGHz = freq
 
-        if len(freq)>1:
-            self.fmin = freq[0]
-            self.fmax = freq[-1]
-            self.fstep = freq[1]-freq[0]
-        else:
-            self.fmin = freq
-            self.fmax = freq
-            self.step = 0
+        #if len(freq)>1:
+        #    self.fmin = freq[0]
+        #    self.fmax = freq[-1]
+        #    self.fstep = freq[1]-freq[0]
+        #else:
+        #    self.fmin = freq
+        #    self.fmax = freq
+        #    self.step = 0
 
     @wav.setter
     def wav(self,waveform):
@@ -650,10 +653,17 @@ class DLink(Link):
         #s = s + 'Frequency range :  \n'
         s = s + 'fmin (fGHz) : ' + str(self.fGHz[0]) +'\n'
         s = s + 'fmax (fGHz) : ' + str(self.fGHz[-1]) +'\n'
-        s = s + 'fstep (fGHz) : ' + str(self.fGHz[1]-self.fGHz[0]) +'\n'
-        s = s + 'Nf : ' + str(len(self.fGHz)) +'\n '
-        d =  np.sqrt(np.sum((self.a-self.b)**2)) 
-        fcGHz = (self.fGHz[-1]+self.fGHz[0])/2.
+        Nf = len(self.fGHz)
+        if Nf>1:
+            s = s + 'fstep (fGHz) : ' + str(self.fGHz[1]-self.fGHz[0]) +'\n'
+        else:
+            s = s + 'fstep (fGHz) : ' + str(self.fGHz[0]-self.fGHz[0]) +'\n'
+        s = s + 'Nf : ' + str(Nf) +'\n '
+        d =  np.sqrt(np.sum((self.a-self.b)**2))
+        if Nf>1:
+            fcGHz = (self.fGHz[-1]+self.fGHz[0])/2.
+        else:
+            fcGHz = self.fGHz[0]
         L  = 32.4+20*np.log(d)+20*np.log10(fcGHz)
         return s
 
@@ -700,7 +710,7 @@ class DLink(Link):
 
 
     def checkh5(self):
-        """ check existence of previous simulation run with the same parameters.
+        """ check existence of previous simulations run with the same parameters.
 
 
         Returns
@@ -709,10 +719,10 @@ class DLink(Link):
         update self.dexist dictionnary
 
         """
-        # get identifier groupname in h5py file
+        # get identifier group name in h5py file
         self.get_grpname()
-        # check if grpnamee exist in the h5py file
-        [self.fill_dexist(k,self.dexist[k]['grpname'])   for k in self.save_opt]
+        # check if group name exists in the h5py file
+        [self.check_grpname(k,self.dexist[k]['grpname'])   for k in self.save_opt]
 
 
 
@@ -910,7 +920,12 @@ class DLink(Link):
         #############
 
         # check existence of frequency in h5py file
-        farray = np.array(([self.fmin,self.fmax,self.fstep]))
+        #farray = np.array(([self.fmin,self.fmax,self.fstep]))
+        Nf = len(self.fGHz)
+        if Nf > 1:
+            farray = np.array(([self.fGHz[0],self.fGHz[-1],self.fGHz[1]-self.fGHz[0]]))
+        else:
+            farray = np.array(([self.fGHz[0],self.fGHz[-1],0]))
         uf_opt, uf = self.get_idx('f_map',farray)
 
         grpname = str(ua) + '_' + str(ub) + '_' + str(uf)
@@ -936,10 +951,10 @@ class DLink(Link):
                   '_'  + str(uTa) + '_' + str(uTb) + \
                   '_'  + str(uAa) + '_' + str(uAb)
 
-        self.dexist['H']['grpname']=grpname
+        self.dexist['H']['grpname'] = grpname
 
 
-    def fill_dexist(self,key,grpname):
+    def check_grpname(self,key,grpname):
         """Check if the key's data with a given groupname
             already exists in the h5py file
 
@@ -959,7 +974,7 @@ class DLink(Link):
         """
         try :
             lfilename=pyu.getlong(self.filename,pstruc['DIRLNK'])
-            f=h5py.File(lfilename,'r')
+            f = h5py.File(lfilename,'r')
             if grpname.decode('utf8') in f[key].keys():
                 self.dexist[key]['exist']=True
             else :
@@ -982,9 +997,9 @@ class DLink(Link):
         key: string
             key of the h5py group
         array : np.ndarray
-            array type to check existency
+            array to check existence
         tol : np.float64
-            tolerance (in meter for key == 'p_map')
+            tolerance (in meters for key == 'p_map')
 
         Returns
         -------
@@ -1197,7 +1212,6 @@ class DLink(Link):
             if key not in kwargs:
                 kwargs[key]=value
 
-
         if 'cutoff' not in kwargs:
             kwargs['cutoff']=self.cutoff
         else:
@@ -1211,6 +1225,7 @@ class DLink(Link):
                     kwargs['force'] = []
 
         # must be placed after all the init !!!!
+        print "checkh5"
         self.checkh5()
 
 
@@ -1218,24 +1233,29 @@ class DLink(Link):
         # Signatures
         ############
 
+        print "Start Signatures"
+        tic = time.time()
         Si = Signatures(self.L,self.ca,self.cb,cutoff=kwargs['cutoff'])
 
         if (self.dexist['sig']['exist'] and not ('sig' in kwargs['force'])):
             self.load(Si,self.dexist['sig']['grpname'])
-
+            print "load signature"
         else :
             if kwargs['alg']==2015:
                 TMP=Si.run2015(cutoff=kwargs['cutoff'],
                         cutoffbound=kwargs['si_reverb'])
+                print "algo 2015"
             if kwargs['alg']==20152:
                 TMP=Si.run2015_2(cutoff=kwargs['cutoff'],
                         cutoffbound=kwargs['si_reverb'])
+                print "algo 20152"
 
             if kwargs['alg']==5:
                 Si.run5(cutoff=kwargs['cutoff'],
                         algo=kwargs['si_algo'],
                         diffraction=kwargs['diffraction'],
                         progress=kwargs['si_progress'])
+                print "algo 5"
             if kwargs['alg']==7:
                 if kwargs['si_mt']==7:
                     Si.run7mt(cutoff=kwargs['cutoff'],
@@ -1243,16 +1263,20 @@ class DLink(Link):
                         diffraction=kwargs['diffraction'],
                         threshold=kwargs['threshold'],
                         progress=kwargs['si_progress'])
+                    print "algo 7 , si_mt"
                 else :
                     Si.run7(cutoff=kwargs['cutoff'],
                         algo=kwargs['si_algo'],
                         diffraction=kwargs['diffraction'],
                         threshold=kwargs['threshold'],
                         progress=kwargs['si_progress'])
+                    print "algo 7"
+        toc = time.time()
+        print "Stop signature",toc-tic
 
             #Si.run6(diffraction=kwargs['diffraction'])
-            # save sig
-            self.save(Si,'sig',self.dexist['sig']['grpname'],force = kwargs['force'])
+        # save sig
+        self.save(Si,'sig',self.dexist['sig']['grpname'],force = kwargs['force'])
 
         self.Si = Si
 
@@ -1262,6 +1286,8 @@ class DLink(Link):
         # Rays
         ############
 
+        print "Start Rays"
+        tic = time.time()
         R = Rays(self.a,self.b)
 
         if self.dexist['ray']['exist'] and not ('ray' in kwargs['force']):
@@ -1281,6 +1307,8 @@ class DLink(Link):
             self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])
 
         self.R = R
+        toc = time.time()
+        print "Stop rays",toc-tic
 
         if self.R.nray == 0:
             raise NameError('No rays have been found. Try to re-run the simulation with a higher S.cutoff ')

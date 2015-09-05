@@ -265,7 +265,7 @@ class Waveform(dict):
 
 #        tnsp = np.arange(0,tns[-1]-tns[u]+0.5*te,te)
 #        tnsm = np.arange(-(tns[-1]-tns[u]),0,te)
-        N=len(ts)-1
+        N = len(ts)-1
         tnsm = np.linspace(-tns[-1],-te,N)
         y = np.hstack((yzp,y))
         tns = np.hstack((tnsm,tns))
@@ -274,11 +274,10 @@ class Waveform(dict):
         # Warning (check if 1/sqrt(30) is not applied elsewhere
         #
         w.x = tns
-        w.y = y*(1/np.sqrt(30))
+        w.y = (y*(1/np.sqrt(30)))[None,:]
 
         #  w : TUsignal
         #  W : FUsignal (Hermitian redundancy removed)
-
         W   = w.ftshift()
         return (w,W)
 

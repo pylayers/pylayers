@@ -1117,8 +1117,28 @@ def rgb(valex,out='int'):
 
 
 def nbint(a):
-    """
-        calculate the number of intervals in a sequence of integer
+    """ calculate the number of distinct contiguous sets in a sequence of integer
+
+    Parameters
+    ----------
+
+    a : np.array
+
+    Examples
+    --------
+
+    >>> import numpy as np
+    >>> from pylayers.util.pyutil import *
+    >>> a = np.array([1,2,3,4])
+    >>> nbint(a)
+    1
+    >>> b = np.array([1,2,4,5])
+    >>> nbint(b)
+    2
+    >>> c = np.array([1,2,4,5,7,8,9])
+    >>> nbint(c)
+    3
+
     """
     b = a[1:]-a[0:-1]
     u = np.nonzero(b!=1)[0]
@@ -1132,7 +1152,6 @@ def encodmtlb(lin):
     ----------
 
     lin : input list
-    encodmtlbi(lin) :
 
     Returns
     -------
@@ -1142,10 +1161,10 @@ def encodmtlb(lin):
     Examples
     --------
 
+    >>> import scipy.io as io
     >>> lin = ['aaa','bbbbbbb','ccc','dd']
-    >>> F   = {}
-    >>> F['lin']=encodmtl(lin)
-    >>> print F['lin']
+    >>> F = {}
+    >>> F['lin']=encodmtlb(lin)
     >>> io.savemat('encodmtlb_ex.mat',F)
 
     Notes
@@ -1160,7 +1179,7 @@ def encodmtlb(lin):
 
     N = len(lin)
 
-    # 
+    #
     M  = 0
     lout = []
     str  = ''
@@ -1176,10 +1195,10 @@ def encodmtlb(lin):
             if (j>=m):
                 c = ' '
             else:
-                 c = lin[i][j]    
+                 c = lin[i][j]
 
             str = str + c
-            if mod(k+1,M)==0:
+            if np.mod(k+1,M)==0:
                 lout.append(str)
                 str=''
 

@@ -251,7 +251,7 @@ class Bsignal(PyLayers):
         if ndim==1:
             self.y=self.y.reshape((1,len(self.y)))
             ndim = 2
-        assert(len(x)==self.y.shape[-1])," Dimension problem"
+        assert((len(x)==self.y.shape[-1])or (self.y.shape[-1]==1) )," Dimension problem"
         # default naming of the axis
         if label==[]:
             self.label=[]
@@ -1350,59 +1350,63 @@ class Usignal(Bsignal):
         self.x = np.hstack((xadd, self.x))
         self.y = np.hstack((yadd, self.y))
 
-#    def zlr(self, xmin, xmax):
-#        """  add zeros to the left and to the right
-#
-#        Parameters
-#        ----------
-#
-#        xmin : float
-#            add zeros before xmin
-#        xmax : float
-#            add zeros after xmax
-#
-#        Summary
-#        --------
-#
-#        This corresponds to a gating between xmin and xmax
-#
-#        Examples
-#        --------
-#
-#        .. plot::
-#            :include-source:
-#
-#            >>> from pylayers.signal.bsignal import *
-#            >>> from matplotlib.pylab import *
-#            >>> ip = TUsignal()
-#            >>> ip.EnImpulse()
-#            >>> f,a = ip.plot(typ=['v'])
-#            >>> ip.zlr(-10,10)
-#            >>> f,a = ip.plot(typ=['v'])
-#
-#        """
-#        dx = self.dx()
-#        cmin = min(self.x)
-#        cmax = max(self.x)
-#        if cmin > xmin:
-#            xaddl = np.arange(xmin, cmin - dx, dx)
-#            yaddl = np.zeros(len(xaddl))
-#            self.x = np.hstack((xaddl, self.x))
-#            self.y = np.hstack((yaddl, self.y))
-#        else:
-#            u = np.nonzero(self.x >= xmin)
-#            self.x = self.x[u[0]]
-#            self.y = self.y[u[0]]
-#
-#        if cmax < xmax:
-#            xaddr = np.arange(cmax + dx, xmax, dx)
-#            yaddr = np.zeros(len(xaddr))
-#            self.x = np.hstack((self.x, xaddr))
-#            self.y = np.hstack((self.y, yaddr))
-#        else:
-#            u = np.nonzero(self.x <= xmax)
-#            self.x = self.x[u[0]]
-#            self.y = self.y[u[0]]
+    def zlr(self, xmin, xmax):
+        """  add zeros to the left and to the right
+
+        Parameters
+        ----------
+
+        xmin : float
+            add zeros before xmin
+        xmax : float
+            add zeros after xmax
+
+        Summary
+        --------
+
+        This corresponds to a gating between xmin and xmax
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.signal.bsignal import *
+            >>> from matplotlib.pylab import *
+            >>> ip = TUsignal()
+            >>> ip.EnImpulse()
+            >>> f,a = ip.plot(typ=['v'])
+            >>> ip.zlr(-10,10)
+            >>> f,a = ip.plot(typ=['v'])
+
+        """
+        dx = self.dx()
+        cmin = min(self.x)
+        cmax = max(self.x)
+        shy = self.y.shape
+        shyl = shy[0:-1]
+        if cmin > xmin:
+            xaddl = np.arange(xmin, cmin - dx, dx)
+            nshy = list(shyl)+[len(xaddl)]
+            yaddl = np.zeros(nshy)
+            self.x = np.hstack((xaddl, self.x))
+            self.y = np.concatenate((yaddl, self.y))
+        else:
+            u = np.nonzero(self.x >= xmin)
+            self.x = self.x[u[0]]
+            self.y = self.y[...,u[0]]
+
+        if cmax < xmax:
+            xaddr = np.arange(cmax + dx, xmax, dx)
+            nshy = list(shyl)+[len(xaddr)]
+            yaddl = np.zeros(nshy)
+            self.x = np.hstack((self.x, xaddr))
+            self.y = np.concatenate((self.y, yaddr))
+        else:
+            u = np.nonzero(self.x <= xmax)
+            self.x = self.x[u[0]]
+            self.y = self.y[...,u[0]]
 
     def window(self, win='hamming'):
         """ windowing Usignal
