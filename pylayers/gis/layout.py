@@ -1022,14 +1022,8 @@ class Layout(PyLayers):
         #
         # Calculate the wedge angle of degree 2 points
         #
-        if 2 in self.degree:
-            wedgea = self.wedge(self.degree[2])
+        wedgea = self.wedge(self.degree[2])
 
-<<<<<<< HEAD
-        # wedge < 179 (not flat)
-            idiff = filter(lambda x: wedgea[x]<179,range(len(self.degree[2])))
-            self.ldiff = map(lambda x : self.degree[2][x],idiff)
-=======
         # wedge < 179 deg (not flat)
         idiff = filter(lambda x: wedgea[x]<179,range(len(self.degree[2])))
         self.ldiff = map(lambda x : self.degree[2][x],idiff)
@@ -1037,11 +1031,10 @@ class Layout(PyLayers):
         # This corresponds to degree 2 point with an adjascent airwall
         # (half-plane diffraction)
         self.ldiff = self.ldiff+list(self.degree[1])
->>>>>>> channel
         # if problem here check file format 'z' should be a string
-            self.maxheight = np.max([v[1] for v in nx.get_node_attributes(self.Gs,'z').values()])
+        self.maxheight = np.max([v[1] for v in nx.get_node_attributes(self.Gs,'z').values()])
 
-            self.extrseg()
+        self.extrseg()
 
     def loadosm(self, _fileosm):
         """ load layout from an osm file 

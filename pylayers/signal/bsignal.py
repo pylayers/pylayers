@@ -212,7 +212,6 @@ import scipy.io as ios
 from scipy.signal import cspline1d, cspline1d_eval, iirfilter, iirdesign, lfilter, firwin , correlate
 #from sklearn import mixture
 import scipy.stats as st
-import seaborn as sns
 
 
 class Bsignal(PyLayers):
@@ -977,75 +976,6 @@ class Usignal(Bsignal):
         s = Bsignal.__repr__(self)
         return(s)
 
-    def __add__(self, u):
-        t = type(u).__name__
-        if ((t == 'int') | (t == 'float')):
-            U = Usignal(self.x, self.y + u)
-        if type(u)==type(self):
-            assert (u.x.shape==self.x.shape)
-            assert (u.y.ndim == 2)  ,"y has not ndim=2"
-            assert (u.y.shape[0]==1)|(u.y.shape[1]==self.y.shape[1])
-            U = type(self)()
-            U.x = self.x
-            U.y = self.y+u.y
-            # L = self.align(u)
-            # #u1 = L[0]
-            # #u2 = L[1]
-            # val = L.y[0:-1,:] + L.y[-1,:]
-            # # handle one dimensional array
-            # if ((val.ndim>1) & (val.shape[0]==1)):
-            #     val = val.reshape(val.shape[1])
-            # U = Usignal(L.x, val)
-        return(U)
-
-    def __sub__(self, u):
-        t = type(u).__name__
-        if ((t == 'int') | (t == 'float')):
-            U = Usignal(self.x, self.y - u)
-        if type(u)==type(self):
-            assert (u.x.shape==self.x.shape)
-            assert (u.y.ndim == 2)  ,"y has not ndim=2"
-            assert (u.y.shape[0]==1)|(u.y.shape[1]==self.y.shape[1])
-            #L = self.align(u)
-            #u1 = L[0]
-            #u2 = L[1]
-            #val = L.y[0:-1,:] - L.y[-1,:]
-            #if ((val.ndim>1) & (val.shape[0]==1)):
-            #    val = val.reshape(val.shape[1])
-            U = type(self)()
-            U.x = self.x
-            U.y = self.y-u.y
-            #U = Usignal(u1.x, u1.y - u2.y)
-        return(U)
-
-    def __mul__(self, u):
-        t = type(u).__name__
-        if ((t == 'int') | (t == 'float') | (t== 'float64') ):
-            U = type(self)()
-            U.x = self.x
-            U.y = self.y*u
-        if issubclass(type(self),type(u)):
-            #assert (u.x.shape==self.x.shape)
-            assert (u.y.ndim == 2)  ,"y has not ndim=2"
-            assert (u.y.shape[0]==1)|(u.y.shape[1]==self.y.shape[1])
-            #U = type(self)()
-            #U.x = self.x
-            #U.y = self.y*u.y
-            #L = self.align(u)
-            L = self.alignc(u)
-            # #u1 = L[0]
-            # #u2 = L[1]
-            # #U = Usignal(u1.x, u1.y * u2.y)
-            val = L.y[0:-1,:] * L.y[-1,:]
-            #if ((val.ndim>1) & (val.shape[0]==1)):
-            #    val = val.reshape(val.shape[1])
-            U = type(self)()
-            U.x = L.x
-            U.y = val
-        return(U)
-
-=======
->>>>>>> channel
     def setx(self, start, stop, dx):
         r""" set the x array of the Usignal (y=0)
 
@@ -1078,7 +1008,7 @@ class Usignal(Bsignal):
         >>> assert(u.dx()==0.1)
 
         """
-        if len(self.x)>1:
+        if (len(self.x)>1):
             return(self.x[1] - self.x[0])
         else:
             return(0)
@@ -1204,6 +1134,13 @@ class Usignal(Bsignal):
 
             u2 = u2.truncate(pstart2, pstop2 + 1)
             u1 = u1.resample(xnew)
+        #L   = Usignal()
+        #L.x = u1.x
+        #L.y = np.vstack((u1.y,u2.y))
+        #u1.y=u1.y[...,None]
+        #u2.y=u2.y[...,None]
+        #pdb.set_trace()
+        #L.y = np.concatenate((u1.y,u2.y),axis=naxis1)
 
         return(u1.x,u1.y,u2.y)
 
@@ -1413,67 +1350,21 @@ class Usignal(Bsignal):
         self.x = np.hstack((xadd, self.x))
         self.y = np.hstack((yadd, self.y))
 
-#    def zlr(self, xmin, xmax):
-#        """  add zeros to the left and to the right
-#
-#        Parameters
-#        ----------
-#
-#        xmin : float
-#            add zeros before xmin
-#        xmax : float
-#            add zeros after xmax
-#
-#        Summary
-#        --------
-#
-#        This corresponds to a gating between xmin and xmax
-#
-#        Examples
-#        --------
-#
-#        .. plot::
-#            :include-source:
-#
-#            >>> from pylayers.signal.bsignal import *
-#            >>> from matplotlib.pylab import *
-#            >>> ip = TUsignal()
-#            >>> ip.EnImpulse()
-#            >>> f,a = ip.plot(typ=['v'])
-#            >>> ip.zlr(-10,10)
-#            >>> f,a = ip.plot(typ=['v'])
-#
-#        """
-#        dx = self.dx()
-#        cmin = min(self.x)
-#        cmax = max(self.x)
-#        if cmin > xmin:
-#            xaddl = np.arange(xmin, cmin - dx, dx)
-#            yaddl = np.zeros(len(xaddl))
-#            self.x = np.hstack((xaddl, self.x))
-#            self.y = np.hstack((yaddl, self.y))
-#        else:
-#            u = np.nonzero(self.x >= xmin)
-#            self.x = self.x[u[0]]
-#            self.y = self.y[u[0]]
-#
-#        if cmax < xmax:
-#            xaddr = np.arange(cmax + dx, xmax, dx)
-#            yaddr = np.zeros(len(xaddr))
-#            self.x = np.hstack((self.x, xaddr))
-#            self.y = np.hstack((self.y, yaddr))
-#        else:
-#            u = np.nonzero(self.x <= xmax)
-#            self.x = self.x[u[0]]
-#            self.y = self.y[u[0]]
+    def zlr(self, xmin, xmax):
+        """  add zeros to the left and to the right
 
-    def window(self, win='hamming'):
-        """ windowing Usignal
         Parameters
         ----------
 
-        win : string
-            window type ('hamming','blackman','hanning')
+        xmin : float
+            add zeros before xmin
+        xmax : float
+            add zeros after xmax
+
+        Summary
+        --------
+
+        This corresponds to a gating between xmin and xmax
 
         Examples
         --------
@@ -1481,8 +1372,6 @@ class Usignal(Bsignal):
         .. plot::
             :include-source:
 
-            >>> import numpy as np
-            >>> import matplotlib.pyplot as plt
             >>> from pylayers.signal.bsignal import *
             >>> from matplotlib.pylab import *
             >>> ip = TUsignal()
@@ -1545,7 +1434,6 @@ class Usignal(Bsignal):
 
 
         """
->>>>>>> channel
         if win=='rect':
             exit
         if win == 'hamming':
@@ -1820,6 +1708,7 @@ class TUsignal(TBsignal, Usignal):
 
         return(U)
 
+
     def diff(self):
         """ numerical differentiation
 
@@ -1964,17 +1853,6 @@ class TUsignal(TBsignal, Usignal):
         Examples
         --------
 
-        pylayers.signal.bsignal.TUsignal.fftsh
-        pylayers.signal.waveform.ip_generic
-
-        """
-        A  = self.fftsh()
-        AU = A.unrex()
-        return(AU)
-
-
-    def show(self,fig=[],ax=[],display=True,PRPns=100):
-        """  show psd
         .. plot::
             :include-source:
 
@@ -2004,7 +1882,6 @@ class TUsignal(TBsignal, Usignal):
             N1 = 1
             M1 = len(u1.y)
             u1.y = u1.y.reshape(1,M1)
->>>>>>> channel
 
         if u2.y.ndim>1:
             N2 = u2.y.shape[0]
@@ -2087,7 +1964,6 @@ class TUsignal(TBsignal, Usignal):
             #L.x = U1.x
             #L.y = np.vstack((U1.y,U2.y))
         return U1.x,U1.y,U2.y
-
     def filter(self, order=4, wp=0.3, ws=0.4, ftype='butter'):
         """ signal filtering
 
@@ -2602,238 +2478,6 @@ class FBsignal(Bsignal):
             plt.stem(self.x, np.imag(self.y))
             plt.xlabel('Frequency (GHz)')
             plt.ylabel('Imaginary part')
-<<<<<<< HEAD
-
-    def plot(self, **kwargs):
-        """ plot FBsignal
-
-        Parameters
-        ----------
-
-        phase : boolean
-            default True
-        dB : boolean
-            default True
-        iy : index of y value to be displayed
-            default [0]  only the first is displayed
-        typ : string
-            ['l10','l20','d','r','du','ru']
-        xlabels
-        ylabels
-
-        Examples
-        --------
-
-        >>> from pylayers.signal.bsignal import *
-        >>> from numpy import *
-        >>> from scipy import *
-        >>> S = FBsignal()
-        >>> S.x = arange(100)
-        >>> S.y = cos(2*pi*S.x)+1j*sin(3*pi*S.x+pi/3)
-        >>> fig,ax = S.plot()
-        >>> plt.show()
-
-        See Also
-        --------
-
-        Bsignal.plot
-        pylayers.util.plotutil.mulcplot
-
-        """
-
-        if 'typ' not in kwargs:
-            kwargs['typ'] = ['l20']
-            kwargs['xlabels'] = ['Frequency (GHz)']
-
-        fig,ax = Bsignal.plot(self,**kwargs)
-
-        return fig,ax
-
-    def plotdB(self, mask=False, n=2, phase=True):
-        """ usage : plotdB()
-
-        Parameters
-        ----------
-        mask :
-        n :
-        phase :
-
-        """
-        ndim = self.y.ndim
-        if ndim > 1:
-            nl = len(self.y)
-            for k in range(nl):
-                if phase:
-                    plt.subplot(211)
-                    plt.plot(self.x, 10 * n * np.log10(
-                        abs(self.y[k]) + 1.0e-15))
-                    plt.xlabel('Frequency (GHz)')
-                    plt.ylabel('Modulus (dB)')
-                    plt.subplot(212)
-                    plt.plot(self.x, np.unwrap(np.angle(self.y[k])))
-                    plt.xlabel('Frequency (GHz)')
-                    plt.ylabel('Phase')
-                else:
-                    plt.plot(self.x, 10 * n * np.log10(
-                        abs(self.y[k]) + 1.0e-15))
-                    plt.xlabel('Frequency (GHz)')
-                    plt.ylabel('Modulus (dB)')
-
-        else:
-            if mask:
-                n = 1
-                xfcc = np.array([0., 0.96, 0.96, 0.96, 0.96, 1.61, 1.61, 1.61, 1.61,
-                                 1.99, 1.99, 1.99, 1.99, 3.1, 3.1, 3.1, 3.1, 10.6, 10.6, 10.6, 10.6, 15])
-                xcept = np.array([0., 1.61, 1.61, 1.61, 1.61, 3.8, 3.8, 3.8, 3.8, 6.,
-                                  6, 6, 6, 8.5, 8.5, 8.5, 8.5, 10.6, 10.6, 10.6, 10.6, 15])
-                ycept = np.array([-90, -90, -90, -85, -85, -85, -85, -70, -70, -70, -70,
-                                  -41.3, -41.3, -41.3, -41.3, -65, -65, -65, -65, -85, -85, -85])
-                yfcc = np.array([-41.3, -41.3, -41.3, -75.3, -75.3, -75.3, -75.3, -53.3, -53.3,
-                                 -53.3, -53.3, -51.3, -51.3, -51.3, -51.3, -41.3, -41.3, -41.3, -41.3, -51.3, -51.3, -51.3])
-                xnoise = np.array([0., 15])
-                ynoise = np.array([-114., -114])
-                plt.step(xfcc, yfcc, 'b', linewidth=2)
-                plt.step(xcept, ycept, 'r', linewidth=2)
-                plt.step(xnoise, ynoise, 'k', linewidth=2)
-                phase = False
-                plt.axis([0, 15, -120, -40])
-            plt.xlabel('Frequency (GHz)')
-            plt.ylabel('PSD (dBm/MHz)')
-            if phase:
-                plt.subplot(211)
-            plt.plot(self.x, 10 * n * np.log10(abs(self.y) + 1.0e-15),linewidth=0.3)
-            if phase:
-                plt.subplot(212)
-                plt.plot(self.x, np.unwrap(np.angle(self.y)))
-                plt.xlabel('Frequency (GHz)')
-                plt.ylabel('Phase')
-
-    def stem(self, color='b-'):
-        """ stem plot
-
-        Parameters
-        ----------
-        color : string
-
-        """
-
-        ndim = self.y.ndim
-        if ndim > 1:
-            nl = len(self.y)
-            for k in range(nl):
-
-                plt.subplot(211)
-                plt.stem(self.x, np.real(self.y[k]), color)
-                plt.xlabel('Frequency (GHz)')
-                plt.ylabel('real part)')
-                plt.subplot(212)
-                plt.stem(self.x, np.imag(self.y[k]), color)
-                plt.xlabel('Frequency (GHz)')
-                plt.ylabel('imaginary part)')
-        else:
-
-            plt.subplot(211)
-            plt.stem(self.x, np.real(self.y), color)
-            plt.xlabel('Frequency (GHz)')
-            plt.ylabel('real part)')
-            plt.subplot(212)
-            plt.stem(self.x, np.imag(self.y), color)
-            plt.xlabel('Frequency (GHz)')
-            plt.ylabel('imaginary part)')
-
-
-class FUsignal(FBsignal,Usignal):
-    """
-    FUsignal : Uniform signal in Frequency Domain
-
-    Attributes
-    ----------
-
-    x  : nd.array((1xN))
-    y  : Complex nd.array((... x N )
-
-
-    Methods
-    -------
-
-    symH     : force Hermitian symetry --> FHsignal
-    symHz    : force Hermitian symetry with zero padding --> FHsignal
-    align    : align two FUsignal on a same frequency base
-    enthrsh  : Energy thresholding thresh = 99.99 %
-    dBthrsh  : dB thresholding thresh  = 40dB
-    ift      : Inverse Fourier transform
-    resample : resampling with a new base
-    newdf    : resampling with a new df
-    zp       : zero padding until len(x) = N
-    plotri   : plot real part and imaginary part
-    plotdB   : plot modulus in dB
-    get      : get k th ray
-    window   :
-
-    """
-    def __init__(self, x=np.array([]), y=np.array([]),label=[]):
-        super(FUsignal,self).__init__(x,y,label)
-        self.isFriis = False
-
-    def __repr__(self):
-        s = FBsignal.__repr__(self)
-        return(s)
-
-    def __add__(self, u):
-        L = self.alignc(u)
-        U = FUsignal(L.x, L.y[...,0] + L.y[...,1])
-        return(U)
-
-    def __sub__(self, u):
-        L = self.alignc(u)
-        U = FUsignal(L.x, L.y[...,0] - L.y[...,1])
-        return(U)
-
-    def __mul__(self, u):
-        L = self.alignc(u)
-        U = FUsignal(L.x, L.y[...,0] * L.y[...,1])
-        return(U)
-
-    def __div__(self, u):
-        L = self.alignc(u)
-        U = FUsignal(L.x, L.y[...,0] / L.y[...,1])
-        return(U)
-
-
-    def applyFriis(self):
-        r""" apply Friis factor
-
-        The Friis factor is multiplied to y
-
-        .. math::
-            y := \( \frac{-j c}{4 \pi f} \) y
-
-            x is frequency in GHz
-
-        boolean `isFriis` is set to `True`
-
-        """
-
-        if not self.isFriis:
-            factor = -1j*0.3/(4*np.pi*self.x)
-            factor = factor.reshape(self.uax)
-            self.y = self.y*factor
-            self.isFriis = True
-
-
-
-    def get(self, k):
-        """
-        get the kh signal
-
-        Parameters
-        ----------
-        k : indes to get
-
-        Returns
-        -------
-
-=======
 
     def plot(self, **kwargs):
         """ plot FBsignal
@@ -3064,7 +2708,6 @@ class FUsignal(FBsignal,Usignal):
         Returns
         -------
 
->>>>>>> channel
         G : FUsignal
 
         """
@@ -3119,7 +2762,6 @@ class FUsignal(FBsignal,Usignal):
         :math:`\frac{-j*c}{4 pi fGHz}`
 
         axis = 0 is ray axis
-<<<<<<< HEAD
 
         if mode == 'mean'
 
@@ -3136,45 +2778,6 @@ class FUsignal(FBsignal,Usignal):
         """
 
         H = self.y
-=======
-
-        if mode == 'mean'
-
-        :math:`E=\frac{1}{K} \sum_k |y_k|^2`
-
-        if mode == 'integ'
-
-        :math:`E=\delta_x \sum_k |y_k|^2`
-
-        if mode == 'center'
-
-        :math:`E= |y_{K/2}|^2`
->>>>>>> channel
-
-        if Friis:
-            factor = -1.j*0.3/(4*np.pi*self.x)
-            H = H*factor[np.newaxis,:]
-
-<<<<<<< HEAD
-        MH2 = abs(H * np.conjugate(H))
-
-        if mode=='mean':
-            EMH2  = MH2.mean(axis=axis)
-
-        if mode=='integ':
-            EMH2  = MH2.sum(axis=axis)*(self.x[1]-self.x[0])
-
-        if mode=='center':
-            EMH2  = MH2[:,len(self.x)/2]
-
-        if mode=='first':
-            EMH2  = MH2[:,0]
-
-        if mode=='last':
-            EMH2  = MH2[:,-1]
-
-=======
-        H = self.y
 
         if Friis:
             factor = -1.j*0.3/(4*np.pi*self.x)
@@ -3197,7 +2800,6 @@ class FUsignal(FBsignal,Usignal):
         if mode=='last':
             EMH2  = MH2[:,-1]
 
->>>>>>> channel
         return(EMH2)
 
 
@@ -3224,21 +2826,12 @@ class FUsignal(FBsignal,Usignal):
         ind1 = EMH2.argsort()
         ind1rev = ind1[::-1, ]
         EMH2sorted = EMH2[ind1rev]
-<<<<<<< HEAD
 
         EMH2cum = EMH2sorted.cumsum()
         EMH2cumnor = EMH2cum * 100 / EMH2cum[-1]
         ind2 = np.nonzero(EMH2cumnor < thresh)[0]
         indices = ind1rev[ind2]
 
-=======
-
-        EMH2cum = EMH2sorted.cumsum()
-        EMH2cumnor = EMH2cum * 100 / EMH2cum[-1]
-        ind2 = np.nonzero(EMH2cumnor < thresh)[0]
-        indices = ind1rev[ind2]
-
->>>>>>> channel
         self.indices = indices
         self.y = H[indices, :]
         self.taud = self.taud[indices]
@@ -3331,15 +2924,9 @@ class FUsignal(FBsignal,Usignal):
         """
         FH = self.symH(0)
         fh = FH.ifft()
-<<<<<<< HEAD
 
 
 
-=======
-
-
-
->>>>>>> channel
     def symH(self, parity=0):
         """ enforce Hermitian symetry
 
@@ -3370,17 +2957,10 @@ class FUsignal(FBsignal,Usignal):
         else:
             Up = np.concatenate((ze_y, U, np.flipud(np.conjugate(U))), 1)
             fp = np.concatenate((ze_x, f, f + f[-1]))
-<<<<<<< HEAD
 
         V = FHsignal(fp, Up)
         return V
 
-=======
-
-        V = FHsignal(fp, Up)
-        return V
-
->>>>>>> channel
     def symHz(self,Nz,scale='extract'):
         r""" Force Hermitian symmetry with zero padding
 
@@ -3396,21 +2976,12 @@ class FUsignal(FBsignal,Usignal):
         -------
 
         SH : FHsignal
-<<<<<<< HEAD
 
         Warnings
         --------
 
         The signal is rescaled in order to conserve energy
 
-=======
-
-        Warnings
-        --------
-
-        The signal is rescaled in order to conserve energy
-
->>>>>>> channel
         Let denotes the FUsignal as :math:`mathcal{X}_d`
         The Fourier matrix is :math:`\left[ \matrix{\mathbb{1}\\
                                                     \mathbb{W}_d\\
@@ -3678,15 +3249,9 @@ class FUsignal(FBsignal,Usignal):
 
         Notes
         -----
-<<<<<<< HEAD
 
         [Tse] David Tse, http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf page 26
 
-=======
-
-        [Tse] David Tse, http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf page 26
-
->>>>>>> channel
         """
         defaults = {'fcGHz':4.5,
                     'WMHz':1,
@@ -3819,19 +3384,11 @@ class FHsignal(FUsignal):
         # even case
         if np.mod(N, 2) == 0:
             xu = self.x[1:(N + 2) / 2]
-<<<<<<< HEAD
-            yu = self.y[:,1:(N + 2) / 2]
-        # odd case
-        else:
-            xu = self.x[1:(N + 1) / 2]
-            yu = self.y[:,1:(N + 1) / 2]
-=======
             yu = self.y[...,1:(N + 2) / 2]
         # odd case
         else:
             xu = self.x[1:(N + 1) / 2]
             yu = self.y[...,1:(N + 1) / 2]
->>>>>>> channel
 
         O = FUsignal(x=xu, y=yu)
 
