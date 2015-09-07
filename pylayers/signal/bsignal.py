@@ -1964,6 +1964,7 @@ class TUsignal(TBsignal, Usignal):
             #L.x = U1.x
             #L.y = np.vstack((U1.y,U2.y))
         return U1.x,U1.y,U2.y
+
     def filter(self, order=4, wp=0.3, ws=0.4, ftype='butter'):
         """ signal filtering
 
@@ -2490,7 +2491,6 @@ class FBsignal(Bsignal):
         dB : boolean
             default True
         iy : index of y value to be displayed
-            default [0]  only the first is displayed
         typ : string
             ['l10','l20','d','r','du','ru']
         xlabels
