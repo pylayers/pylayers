@@ -1400,7 +1400,7 @@ class Usignal(Bsignal):
         if cmax < xmax:
             xaddr = np.arange(cmax + dx, xmax, dx)
             nshy = list(shyl)+[len(xaddr)]
-            yaddl = np.zeros(nshy)
+            yaddr = np.zeros(nshy)
             self.x = np.hstack((self.x, xaddr))
             self.y = np.concatenate((self.y, yaddr))
         else:

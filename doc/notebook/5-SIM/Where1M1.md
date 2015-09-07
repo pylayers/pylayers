@@ -13,6 +13,7 @@
 >>> from pylayers.measures.mesuwb import *
 >>> import pylayers.util.pyutil as pyu
 >>> import pylayers.signal.bsignal as bs
+WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
 ```
 
 The deliverable describing the FP7 WHERE1 measurement campaign M1 can be found @
@@ -168,7 +169,7 @@ Choose measurement points
 >>> rxm = M.rx[irx]
 >>> print tx,txm
 >>> print rx,rxm
->>> v = np.sum((tx-rx=*(tx-rx))
+>>> v = np.sum((tx-rx)*(tx-rx))
 >>> 
 >>> 
 >>> if (tx[0] - txm[0] > 0.001) or (tx[1] - txm[1] > 0.001):
@@ -229,8 +230,8 @@ The representaion of a signature objet
 ```python
 >>> fig = plt.figure(figsize=(10,10))
 >>> r2d.show(L=S.L,fig=fig)
-(<matplotlib.figure.Figure at 0x7f0757844e90>,
- <matplotlib.axes._subplots.AxesSubplot at 0x7f0757844f10>)
+(<matplotlib.figure.Figure at 0x7f0aa6d5aed0>,
+ <matplotlib.axes._subplots.AxesSubplot at 0x7f0aa6d5aa50>)
 ```
 
 ```python
@@ -369,8 +370,7 @@ True
 ```
 
 ```python
->>> irx
-2
+>>> M.tdd.show()
 ```
 
 ```python
