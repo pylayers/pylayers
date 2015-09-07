@@ -13,7 +13,6 @@
 >>> from pylayers.measures.mesuwb import *
 >>> import pylayers.util.pyutil as pyu
 >>> import pylayers.signal.bsignal as bs
-WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
 ```
 
 The deliverable describing the FP7 WHERE1 measurement campaign M1 can be found @
@@ -169,6 +168,8 @@ Choose measurement points
 >>> rxm = M.rx[irx]
 >>> print tx,txm
 >>> print rx,rxm
+>>> v = np.sum((tx-rx=*(tx-rx))
+>>> 
 >>> 
 >>> if (tx[0] - txm[0] > 0.001) or (tx[1] - txm[1] > 0.001):
 ...     print 'Tx and Txm are not the same !'
@@ -228,8 +229,8 @@ The representaion of a signature objet
 ```python
 >>> fig = plt.figure(figsize=(10,10))
 >>> r2d.show(L=S.L,fig=fig)
-(<matplotlib.figure.Figure at 0x7f0757495c90>,
- <matplotlib.axes._subplots.AxesSubplot at 0x7f07574958d0>)
+(<matplotlib.figure.Figure at 0x7f0757844e90>,
+ <matplotlib.axes._subplots.AxesSubplot at 0x7f0757844f10>)
 ```
 
 ```python
@@ -334,6 +335,7 @@ The `energy` method calculates the energy of each ray
 
 ```python
 >>> sco.isFriis
+True
 ```
 
 ```python
@@ -367,6 +369,11 @@ The `energy` method calculates the energy of each ray
 ```
 
 ```python
+>>> irx
+2
+```
+
+```python
 >>> fig = plt.figure(figsize=(10,6))
 >>> ax1 = fig.add_subplot(311,title="Measurements")
 >>> cmd='M.tdd.' + str(dchan[irx]) + '.plot(ax=ax1)'
@@ -387,6 +394,27 @@ The `energy` method calculates the energy of each ray
 
 ```python
 >>> r3d.info(0)
+-------------------------
+Informations of ray # 0
+-------------------------
+
+Index , type, slab      , th(rad), alpha     , gamma2    
+    0 , B0  , -         , -      , -         , -         
+    0 , T   , PARTITION ,    0.43,  (0.35+0j),  (0.88+0j)
+    0 , B   , -         , -      , -         , -         
+
+----------------------------------------
+ Matrix of ray # 0 at f= 2.0
+----------------------------------------
+rotation matrix# type: B0
+[[-0.99533359 -0.09649373]
+ [ 0.09649373 -0.99533359]]
+interaction # 0 type: T
+[[ 0.05599940-0.55542654j  0.00000000-0.j        ]
+ [ 0.00000000-0.j          0.03832677-0.60999405j]]
+rotation matrix# [0] type: B
+[[-0.99533359 -0.09649373]
+ [ 0.09649373 -0.99533359]]
 ```
 
 ```python

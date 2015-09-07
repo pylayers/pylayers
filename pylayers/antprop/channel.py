@@ -3565,7 +3565,6 @@ maicher
         Ctpl = t00 * r0 + t01 * r1
         Cppl = t10 * r0 + t11 * r1
 
-        pdb.set_trace()
         self.Ctt = bs.FUsignal(fGHz, Cttl)
         self.Ctp = bs.FUsignal(fGHz, Ctpl)
         self.Cpt = bs.FUsignal(fGHz, Cptl)
@@ -3916,9 +3915,9 @@ maicher
         # omni polar theta 't' <=> vertical polarization
         #
         if a ==[]:
-            a = ant.Antenna('Omni',param={'pol':'t','GmaxdB':0})
+            a = ant.Antenna('Omni',param={'pol':'t','GmaxdB':0},fGHz=self.fGHz)
         if b ==[]:
-            b = ant.Antenna('Omni',param={'pol':'t','GmaxdB':0})
+            b = ant.Antenna('Omni',param={'pol':'t','GmaxdB':0},fGHz=self.fGHz)
 
 
         a.eval(th=self.tangl[:, 0], ph=self.tangl[:, 1], grid=False)

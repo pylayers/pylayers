@@ -58,9 +58,9 @@ Currently, the different recognized file extensions are the following :
 + `.osm`  : an xml file which can be edited with [JOSM](http://josm.openstreetmap.de/)
 
 ```python
->>> from pylayers.gis.loyout import *
+>>> from pylayers.gis.layout import *
 >>> from pylayers.util.project import *
-WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
+>>> %matplotlib inline
 ```
 
 ### Reading an exiting Layout
@@ -121,8 +121,11 @@ The structure of the `.osm` file is shown below
 ...     cd $BASENAME/struc
 ...     ls *.osm
 DLR.osm
+MADRID-METIS.osm
 MOCAP2.osm
 MOCAP3.osm
+MOCAP-small2.osm
+TA-Office.osm
 ```
 
 ```python
@@ -177,18 +180,18 @@ filestr :  DLR.ini
 filematini :  matDB.ini
 fileslabini :  slabDB.ini
 filegeom :  DLR.off
-boundaries  (758.35, 794.771, 1111.898, 1138.987)
+boundaries  (-0.505, 32.586, -8.277, 8.878)
 number of Points : 105
 number of Segments : 124
 number of Sub-Segments : 30
 Gs Nodes :  229
 Gs Edges :  248
-Gt Nodes :  21
-Gt Edges :  52
-vnodes = Gt.node[Nc]['cycles'].cycle
-poly = Gt.node[Nc]['cycle'].polyg
-Gr Nodes    : 18
-Gr Edges    : 18
+Gt Nodes :  0
+Gt Edges :  0
+vnodes = Gt.node[Nc]['cycles'].cycle 
+poly = Gt.node[Nc]['cycle'].polyg 
+Gr Nodes    : 0
+Gr Edges    : 0
 Nc  = Gr.node[nroom]['cycles']
 ```
 
@@ -196,9 +199,6 @@ The different graphs associated with the layout are then built
 
 ```python
 >>> L.build()
-CRITICAL:root:segment are not connected
-> /home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py(550)from2csegs()
--> self.apex = p
 ```
 
 The topological graph $\mathcal{G}_t$ or graph of non overlapping cycles.
@@ -243,75 +243,12 @@ The graph of interactions $\mathcal{G}_i$ used to determine the ray signatures.
 
 ```python
 >>> L.info()
-filestr :  DLR.ini
-filematini :  matDB.ini
-fileslabini :  slabDB.ini
-filegeom :  DLR.off
-boundaries  (758.35, 794.771, 1111.898, 1138.987)
-number of Points : 105
-number of Segments : 124
-number of Sub-Segments : 30
-Gs Nodes :  229
-Gs Edges :  248
-Gt Nodes :  21
-Gt Edges :  52
-vnodes = Gt.node[Nc]['cycles'].cycle
-poly = Gt.node[Nc]['cycle'].polyg
-Gr Nodes    : 16
-Gr Edges    : 16
-Nc  = Gr.node[nroom]['cycles']
 ```
 
 The layout can be displayed using matplotlib ploting primitive. Several display options are specified in the display dictionnary. Those options are exploited in `showGs()` vizualisation method.
 
 ```python
 >>> L.display
-{'activelayer': 'WINDOW_GLASS',
- 'alpha': 0.5,
- 'box': (758.35, 794.771, 1111.898, 1138.987),
- 'clear': False,
- 'edges': True,
- 'edlabel': False,
- 'edlblsize': 20,
- 'ednodes': False,
- 'fileoverlay': '',
- 'fontsize': 20,
- 'inverse': False,
- 'layer': [],
- 'layers': ['WALL', 'PARTITION', 'AIR', '3D_WINDOW_GLASS'],
- 'layerset': ['WINDOW_GLASS',
-  'PLASTERBOARD_7CM',
-  'WALL',
-  'AIR',
-  'WINDOW',
-  'METALIC',
-  'PLASTERBOARD_14CM',
-  'DOOR',
-  'FLOOR',
-  'METAL',
-  'PARTITION',
-  'CONCRETE_20CM3D',
-  'PLASTERBOARD_10CM',
-  'CEIL',
-  'CONCRETE_6CM3D',
-  'CONCRETE_15CM3D',
-  '3D_WINDOW_GLASS',
-  'WALLS',
-  'WOOD',
-  'CONCRETE_7CM3D',
-  'PILLAR',
-  'ABSORBENT'],
- 'ndlabel': False,
- 'ndlblsize': 20,
- 'ndsize': 10,
- 'nodes': False,
- 'overlay': False,
- 'scaled': True,
- 'subseg': True,
- 'thin': False,
- 'ticksoff': True,
- 'title': '',
- 'visu': False}
 ```
 
 #### Layers
@@ -404,8 +341,6 @@ or a filename. In that case the file is stored in
 ```python
 >>> plt.figure(figsize=(10,10))
 >>> L.showGs()
-(<matplotlib.figure.Figure at 0x7f49b9e4b450>,
- <matplotlib.axes.AxesSubplot at 0x7f49b9aff290>)
 ```
 
 #### Scaling the figure overlay
