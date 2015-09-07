@@ -2,6 +2,11 @@
 Effect of Modyfiying the Nature of Sub-Segments
 ===============================================
 
+This notebook illustrtates a simple ray tracing simulation with
+diffecent material properties for a single segment separating 2 rooms
+which contains multi-subsegments. The noteboook illustrates in details
+the whole steps.
+
 .. code:: python
 
     from pylayers.simul.link import *
@@ -14,13 +19,15 @@ Effect of Modyfiying the Nature of Sub-Segments
     import matplotlib.pyplot as plt
     %matplotlib inline
 
+
 .. parsed-literal::
 
     WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
 
 
-This section presents a simple Ray Tracing simulation with different
-material properties of a subsegment separating 2 rooms.
+Let start by loading a simple layout with 2 single rooms. The multi
+subsegment appears in the middle with the red vertical lines. Each
+subsegment is materialized by a segment.
 
 .. code:: python
 
@@ -28,18 +35,21 @@ material properties of a subsegment separating 2 rooms.
     f,a=L.showG('s',subseg=True,figsize=(10,10))
 
 
-.. image:: Multisubsegments_files/Multisubsegments_3_0.png
+
+.. image:: Multisubsegments_files/Multisubsegments_4_0.png
 
 
 The studied configuration is composed of a simple 2 rooms building
 separated by a subsegment which has a multi subsegment attribute. The
 attribute of the subsegment can be changed with the method
 ```chgmss`` <http://pylayers.github.io/pylayers/modules/generated/pylayers.gis.layout.Layout.chgmss.html>`__
-(change multisubsegment)
+(change multisubsegment). In the example WOOD in the lower part then
+10cm of AIR then wood again until the ceiling.
 
 .. code:: python
 
     L.chgmss(1,ss_name=['WOOD','AIR','WOOD'],ss_z =[(0.0,2.7),(2.7,2.8),(2.8,3)],ss_offset=[0,0,0])
+
 As the Layout structure has been modified it is required to rebuild the
 structure.
 
@@ -47,6 +57,7 @@ structure.
 
     L.build()
     L.save()
+
 
 .. parsed-literal::
 
@@ -59,6 +70,7 @@ The :math:`\mathcal{G}_s` graph dictionnary has the following structure
 .. code:: python
 
     L.Gs.node
+
 
 
 
@@ -145,13 +157,20 @@ We define now two points which are the termination of a radio link.
 
 .. code:: python
 
-    tx=np.array([759,1114,1.0])
+    tx=np.array([759,1114,1.5])
     rx=np.array([767,1114,1.5])
+
 .. code:: python
 
     L.chgmss(1,ss_name=['WOOD','AIR','WOOD'],ss_z =[(0.0,2.7),(2.7,2.8),(2.8,3)],ss_offset=[0,0,0])
     L.save()
-    Lk = DLink(L=L,a=tx,b=rx,Aa=Antenna('Omni'),Ab=Antenna('Omni'))
+    fGHz=np.linspace(1,11,100)
+    #Aa = Antenna('S1R1.vsh3')
+    #Ab = Antenna('S1R1.vsh3')
+    Aa = Antenna('Omni',fGHz=fGHz)
+    Ab = Antenna('Omni',fGHz=fGHz)
+    Lk = DLink(L=L,a=tx,b=rx,Aa=Aa,Ab=Ab,fGHz=np.linspace(1,11,100))
+
 
 .. parsed-literal::
 
@@ -159,54 +178,15 @@ We define now two points which are the termination of a radio link.
     structure saved in  defstr3.ini
 
 
-.. code:: python
-
-    Lk
-
-
-
-.. parsed-literal::
-
-    filename: Links_0_defstr3.ini.h5
-    Link Parameters :
-    ------- --------
-    Layout : defstr3.ini
-    
-    Node a   
-    ------  
-    position : [  7.59000000e+02   1.11400000e+03   1.00000000e+00]
-    Antenna : Omni
-    Rotation matrice : 
-     [[ 1.  0.  0.]
-     [ 0.  1.  0.]
-     [ 0.  0.  1.]]
-    
-    Node b   
-    ------  
-    position : [  767.   1114.      1.5]
-    Antenna : Omni
-    Rotation matrice : 
-     [[ 1.  0.  0.]
-     [ 0.  1.  0.]
-     [ 0.  0.  1.]]
-    
-    Link evaluation information : 
-    ----------------------------- 
-    distance :  8.016 m 
-    delay : 26.719 ns
-    fmin (fGHz) : 2.0
-    fmax (fGHz) : 11.0
-    fstep (fGHz) : 0.05
-     
-
-
+A link is the set of a layout and 2 termination points.
 
 .. code:: python
 
     f,a=Lk.show()
 
 
-.. image:: Multisubsegments_files/Multisubsegments_14_0.png
+
+.. image:: Multisubsegments_files/Multisubsegments_15_0.png
 
 
 On the figure above, we can see the Tx and Rx each placed in a different
@@ -215,21 +195,28 @@ for evaluating the radio link, simply type:
 
 .. code:: python
 
-    ak,tauk=Lk.eval(force=True)
+    ak,tauk=Lk.eval(force=True,a=tx,b=rx)
+
 
 .. parsed-literal::
 
+    checkh5
+    Start Signatures
+    algo 7
     Signatures'> from 2_1_3 saved
-    Rays'> from 3_0_1 saved
-    Ctilde'> from 0_1_0 saved
-    Tchannel'> from 0_1_0_0_0_1_1 saved
+    Stop signature 0.0472140312195
+    Start Rays
+    Rays'> from 3_2_1 saved
+    Stop rays 0.546607017517
+    Ctilde'> from 2_1_0 saved
+    Tchannel'> from 2_1_0_0_0_0_0 saved
 
 
 At that point the channel has been evaluated and all the data stored in
 an ``hdf5`` file
 
-The different members of the link are
--------------------------------------
+Link members
+------------
 
 The Signature of the radio channel is in ``Lk.Si``, the 3D rays are in
 ``Lk.R``, the propagation channel is in ``Lk.C`` and the transmission
@@ -238,6 +225,7 @@ channel is in ``Lk.H``
 .. code:: python
 
     Lk.R
+
 
 
 
@@ -268,41 +256,27 @@ channel is in ``Lk.H``
 
 
 
+
 .. parsed-literal::
 
     Ctilde
     ---------
-    (140, 181)
+    (140, 100)
     Nray : 140
-    fmin(GHz) : 2.0
+    fmin(GHz) : 1.0
     fmax(GHz): 11.0
-    Nfreq : 181
+    Nfreq : 100
 
 
 
 .. code:: python
 
     f = plt.figure(figsize=(10,10))
-    f,a=Lk.C.show(cmap='jet',fig=f,typ='l20')
-
-
-.. image:: Multisubsegments_files/Multisubsegments_22_0.png
-
-
-.. code:: python
-
-    Lk.H
+    f,a=Lk.C.show(cmap='jet',fig=f,typ='l20',vmin=-120,vmax=-10)
 
 
 
-.. parsed-literal::
-
-    freq :2.0 10.0 161
-    shape  :(140, 161)
-    tau :26.7186992365 73.2944728109
-    dist :8.01560977094 21.9883418433
-    Friis factor -j c/(4 pi f) has been applied
-
+.. image:: Multisubsegments_files/Multisubsegments_23_0.png
 
 
 .. code:: python
@@ -312,132 +286,214 @@ channel is in ``Lk.H``
     wav.show()
 
 
+
 .. image:: Multisubsegments_files/Multisubsegments_24_0.png
 
 
 .. code:: python
 
-    cir = Lk.H.applywavB(wav.sf)
-.. code:: python
+    wav.st.y.shape
 
-    cir.plot(typ=['v'],xmin=20,xmax=80)
 
 
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x2ba8c1387190>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x2ba90eb75e90>]], dtype=object))
+    (1, 251)
 
-
-
-
-.. image:: Multisubsegments_files/Multisubsegments_26_1.png
 
 
 .. code:: python
 
+    len(Lk.fGHz)
+
+
+
+
+.. parsed-literal::
+
+    100
+
+
+
+.. code:: python
+
+    Lk = DLink(L=L,a=tx,b=rx)
+
+.. code:: python
+
+    Lk.a
+
+
+
+
+.. parsed-literal::
+
+    array([  759. ,  1114. ,     1.5])
+
+
+
+.. code:: python
+
+    Lk.b
+
+
+
+
+.. parsed-literal::
+
+    array([  767. ,  1114. ,     1.5])
+
+
+
+.. code:: python
+
+    cir = Lk.H.applywavB(wav.sf)
+
+.. code:: python
+
     layer = ['AIR','AIR','AIR']
-    L.chgmss(1,ss_name=layer)
-    L.Gs.node[1]['ss_name']=layer
-    L.g2npy()
-    L.save()
-    Lk = DLink(L=L,a=tx,b=rx,Aa=Antenna('Omni'),Ab=Antenna('Omni'))
-    Lk.eval(force=True)
-    cirair = Lk.H.applywavB(wav.sf)
-    cirair.plot(typ=['v'],xmin=20,xmax=80)
+    Lk.L.chgmss(1,ss_name=layer)
+    Lk.L.Gs.node[1]['ss_name']=layer
+    Lk.L.g2npy()
+    Lk.L.save()
+    fGHz=np.linspace(2,11,181)
+    #Aa = Antenna('Omni',fGHz=fGHz)
+    #Aa = Antenna('Omni',fGHz=fGHz)
+    ak,tauk=Lk.eval(force=True)
+    plt.stem(Lk.H.taud,Lk.H.ak)
+
 
 .. parsed-literal::
 
     structure saved in  defstr3.str2
     structure saved in  defstr3.ini
+    checkh5
+    Start Signatures
+    algo 7
     Signatures'> from 2_1_3 saved
-    Rays'> from 3_0_1 saved
-    Ctilde'> from 0_1_0 saved
-    Tchannel'> from 0_1_0_0_0_1_1 saved
+    Stop signature 0.0257730484009
+    Start Rays
+    Rays'> from 3_2_1 saved
+    Stop rays 0.311182022095
+    Ctilde'> from 2_1_0 saved
+    Tchannel'> from 2_1_0_0_0_2_2 saved
 
 
 
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x2ba90eba8d90>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x2ba90ec64490>]], dtype=object))
+    <Container object of 3 artists>
 
 
 
 
-.. image:: Multisubsegments_files/Multisubsegments_27_2.png
+.. image:: Multisubsegments_files/Multisubsegments_31_2.png
+
+
+.. code:: python
+
+    cirair = Lk.H.applywavB(wav.sf)
+
+.. code:: python
+
+    cirair.plot(typ=['v'],xmin=20,xmax=80)
+
+
+
+
+.. parsed-literal::
+
+    (<matplotlib.figure.Figure at 0x2b73a37a9950>,
+     array([[<matplotlib.axes._subplots.AxesSubplot object at 0x2b73a37b2050>]], dtype=object))
+
+
+
+
+.. image:: Multisubsegments_files/Multisubsegments_33_1.png
 
 
 .. code:: python
 
     layer = ['PARTITION','PARTITION','PARTITION']
-    L.chgmss(1,ss_name=layer)
-    L.Gs.node[1]['ss_name']=layer
-    L.g2npy()
-    L.save()
-    Lk = DLink(L=L,a=tx,b=rx,Aa=Antenna('Omni'),Ab=Antenna('Omni'))
+    Lk.L.chgmss(1,ss_name=layer)
+    Lk.L.Gs.node[1]['ss_name']=layer
+    Lk.L.g2npy()
+    Lk.L.save()
     Lk.eval(force=True)
     cirpart = Lk.H.applywavB(wav.sf)
     cirpart.plot(typ=['v'],xmin=20,xmax=80)
+
 
 .. parsed-literal::
 
     structure saved in  defstr3.str2
     structure saved in  defstr3.ini
+    checkh5
+    Start Signatures
+    algo 7
     Signatures'> from 2_1_3 saved
-    Rays'> from 3_0_1 saved
-    Ctilde'> from 0_1_0 saved
-    Tchannel'> from 0_1_0_0_0_1_1 saved
+    Stop signature 0.0452868938446
+    Start Rays
+    Rays'> from 3_2_1 saved
+    Stop rays 0.529342889786
+    Ctilde'> from 2_1_0 saved
+    Tchannel'> from 2_1_0_0_0_2_2 saved
 
 
 
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x2ba90e973d90>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x2ba90e6d1190>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x2b73a300e150>,
+     array([[<matplotlib.axes._subplots.AxesSubplot object at 0x2b73a8818090>]], dtype=object))
 
 
 
 
-.. image:: Multisubsegments_files/Multisubsegments_28_2.png
+.. image:: Multisubsegments_files/Multisubsegments_34_2.png
 
 
 .. code:: python
 
     layer = ['METAL','METAL','METAL']
-    L.chgmss(1,ss_name=layer)
-    L.Gs.node[1]['ss_name']=layer
-    L.g2npy()
-    L.save()
-    Lk = DLink(L=L,a=tx,b=rx,Aa=Antenna('Omni'),Ab=Antenna('Omni'))
+    Lk.L.chgmss(1,ss_name=layer)
+    Lk.L.Gs.node[1]['ss_name']=layer
+    Lk.L.g2npy()
+    Lk.L.save()
     Lk.eval(force=True)
     cirmet = Lk.H.applywavB(wav.sf)
     cirmet.plot(typ=['v'],xmin=20,xmax=80)
+
 
 .. parsed-literal::
 
     structure saved in  defstr3.str2
     structure saved in  defstr3.ini
+    checkh5
+    Start Signatures
+    algo 7
     Signatures'> from 2_1_3 saved
-    Rays'> from 3_0_1 saved
-    Ctilde'> from 0_1_0 saved
-    Tchannel'> from 0_1_0_0_0_1_1 saved
+    Stop signature 0.0311608314514
+    Start Rays
+    Rays'> from 3_2_1 saved
+    Stop rays 0.318943977356
+    Ctilde'> from 2_1_0 saved
+    Tchannel'> from 2_1_0_0_0_2_2 saved
 
 
 
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x2ba90e84ccd0>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x2ba90f2f6090>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x2b73a876e410>,
+     array([[<matplotlib.axes._subplots.AxesSubplot object at 0x2b73a3764b50>]], dtype=object))
 
 
 
 
-.. image:: Multisubsegments_files/Multisubsegments_29_2.png
+.. image:: Multisubsegments_files/Multisubsegments_35_2.png
 
 
 .. code:: python
@@ -456,22 +512,23 @@ channel is in ``Lk.H``
 
 
 
+
 .. parsed-literal::
 
-    <matplotlib.legend.Legend at 0x2ba9102b0d10>
+    <matplotlib.legend.Legend at 0x2b73a2802510>
 
 
 
 
-.. image:: Multisubsegments_files/Multisubsegments_30_1.png
+.. image:: Multisubsegments_files/Multisubsegments_36_1.png
 
 
 
-.. image:: Multisubsegments_files/Multisubsegments_30_2.png
+.. image:: Multisubsegments_files/Multisubsegments_36_2.png
 
 
 
-.. image:: Multisubsegments_files/Multisubsegments_30_3.png
+.. image:: Multisubsegments_files/Multisubsegments_36_3.png
 
 
 We have modified successively the nature of the 3 surfaces in the sub
@@ -479,80 +536,3 @@ segment placed in the sepataion partition. The first was AIR, the second
 WOOD and the third METAL. As the subsegment is placed on the LOS path
 the blockage effect is clearly visible. The chosen antennas were
 omnidirectional ``Antenna('Omni')``
-
-.. code:: python
-
-    from IPython.core.display import HTML
-    
-    def css_styling():
-        styles = open("../styles/custom.css", "r").read()
-        return HTML(styles)
-    css_styling()
-
-
-
-.. raw:: html
-
-    <style>
-        @font-face {
-            font-family: "Computer Modern";
-            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-        }
-        div.cell{
-            width:800px;
-            margin-left:16% !important;
-            margin-right:auto;
-        }
-        h1 {
-            font-family: Helvetica, serif;
-        }
-        h4{
-            margin-top:12px;
-            margin-bottom: 3px;
-           }
-        div.text_cell_render{
-            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-            line-height: 145%;
-            font-size: 130%;
-            width:800px;
-            margin-left:auto;
-            margin-right:auto;
-        }
-        .CodeMirror{
-                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-        }
-        .prompt{
-            display: None;
-        }
-        .text_cell_render h5 {
-            font-weight: 300;
-            font-size: 22pt;
-            color: #4057A1;
-            font-style: italic;
-            margin-bottom: .5em;
-            margin-top: 0.5em;
-            display: block;
-        }
-        
-        .warning{
-            color: rgb( 240, 20, 20 )
-            }  
-    </style>
-    <script>
-        MathJax.Hub.Config({
-                            TeX: {
-                               extensions: ["AMSmath.js"]
-                               },
-                    tex2jax: {
-                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                    },
-                    displayAlign: 'center', // Change this to 'center' to center equations.
-                    "HTML-CSS": {
-                        styles: {'.MathJax_Display': {"margin": 4}}
-                    }
-            });
-    </script>
-
-
-

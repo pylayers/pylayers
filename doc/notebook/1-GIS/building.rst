@@ -58,8 +58,8 @@
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x2b9f676af790>,
-     <matplotlib.axes._subplots.AxesSubplot at 0x2b9f33e5b850>)
+    (<matplotlib.figure.Figure at 0x2b6eb5f7a210>,
+     <matplotlib.axes._subplots.AxesSubplot at 0x2b6ee9172190>)
 
 
 
