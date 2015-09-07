@@ -3384,11 +3384,11 @@ class FHsignal(FUsignal):
         # even case
         if np.mod(N, 2) == 0:
             xu = self.x[1:(N + 2) / 2]
-            yu = self.y[:,1:(N + 2) / 2]
+            yu = self.y[...,1:(N + 2) / 2]
         # odd case
         else:
             xu = self.x[1:(N + 1) / 2]
-            yu = self.y[:,1:(N + 1) / 2]
+            yu = self.y[...,1:(N + 1) / 2]
 
         O = FUsignal(x=xu, y=yu)
 

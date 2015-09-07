@@ -1271,14 +1271,14 @@ class DLink(Link):
                         threshold=kwargs['threshold'],
                         progress=kwargs['si_progress'])
                     print "algo 7"
-        toc = time.time()
-        print "Stop signature",toc-tic
 
-            #Si.run6(diffraction=kwargs['diffraction'])
+        #Si.run6(diffraction=kwargs['diffraction'])
         # save sig
-        self.save(Si,'sig',self.dexist['sig']['grpname'],force = kwargs['force'])
+            self.save(Si,'sig',self.dexist['sig']['grpname'],force = kwargs['force'])
 
         self.Si = Si
+        toc = time.time()
+        print "Stop signature",toc-tic
 
 
 

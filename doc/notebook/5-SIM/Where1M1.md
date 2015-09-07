@@ -187,6 +187,11 @@ Rxs OK
 ```
 
 ```python
+>>> M.tdd.ch1.y.shape
+(1, 40000)
+```
+
+```python
 >>> fig =plt.figure(figsize=(16,8))
 >>> fig,ax=S.L.showG('s',fig=fig)
 >>> ax.plot(M.tx[0],M.tx[1],'or',label='tx')
@@ -230,8 +235,8 @@ The representaion of a signature objet
 ```python
 >>> fig = plt.figure(figsize=(10,10))
 >>> r2d.show(L=S.L,fig=fig)
-(<matplotlib.figure.Figure at 0x7f0aa6d5aed0>,
- <matplotlib.axes._subplots.AxesSubplot at 0x7f0aa6d5aa50>)
+(<matplotlib.figure.Figure at 0x7fe130942810>,
+ <matplotlib.axes._subplots.AxesSubplot at 0x7fe130942690>)
 ```
 
 ```python
@@ -370,7 +375,7 @@ True
 ```
 
 ```python
->>> M.tdd.show()
+>>> M.show()
 ```
 
 ```python
@@ -394,27 +399,6 @@ True
 
 ```python
 >>> r3d.info(0)
--------------------------
-Informations of ray # 0
--------------------------
-
-Index , type, slab      , th(rad), alpha     , gamma2    
-    0 , B0  , -         , -      , -         , -         
-    0 , T   , PARTITION ,    0.43,  (0.35+0j),  (0.88+0j)
-    0 , B   , -         , -      , -         , -         
-
-----------------------------------------
- Matrix of ray # 0 at f= 2.0
-----------------------------------------
-rotation matrix# type: B0
-[[-0.99533359 -0.09649373]
- [ 0.09649373 -0.99533359]]
-interaction # 0 type: T
-[[ 0.05599940-0.55542654j  0.00000000-0.j        ]
- [ 0.00000000-0.j          0.03832677-0.60999405j]]
-rotation matrix# [0] type: B
-[[-0.99533359 -0.09649373]
- [ 0.09649373 -0.99533359]]
 ```
 
 ```python

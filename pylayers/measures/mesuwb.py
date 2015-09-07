@@ -999,9 +999,9 @@ class Tdd(PyLayers):
             #self.tx   = bs.TUsignal(t,d.TX)
             #self.tx   = bs.TUsignal(t,d.TX[0])
             #####
-            ##### Definitely not obvious , but 
+            ##### Definitely not obvious , but
             ##### this order is the corect one regarding
-            ##### to the measurements !!
+            ##### dhe measurements !!
             #####
             t = d[0][0] * 1e9
             self.ch3 = ch.TUchannel(x=t, y=d[1][0])
