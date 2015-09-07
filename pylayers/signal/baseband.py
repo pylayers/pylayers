@@ -40,7 +40,7 @@ class OFDM(Baseband):
         #  prefix cyclic extraction
         cyclic_prefix = y_vec[N-L:]
 
-        # ajout du préfixe cyclique
+        # ajout du prfixe cyclique
         # pour former le symbole
         # complet
         self.y = np.concatenate( (cyclic_prefix, y_vec))

@@ -312,7 +312,7 @@ class Cycle(object):
         if lnode == []:
             self.cycle = np.array(cycle)
         else :
-            # lnodes allow to give the order of the cycle
+            #lnodes allow to give the order of the cycle
             # used in Layout._convexify
             assert len(lnode) == len(cycle)
             uc =cycle.index(lnode[0])

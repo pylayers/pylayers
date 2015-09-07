@@ -409,7 +409,7 @@ class SSHCoeff(PyLayers):
 
 
 class SCoeff(PyLayers):
-    """ Scalar Spherical Harmonics Coefficient
+    """ scalar Spherical Harmonics coefficients
 
     d = np.array [Nf,N+1,M+1]
 
@@ -1590,6 +1590,7 @@ class VSHCoeff(object):
 
         Returns
         -------
+
         E  : np.array in the same shape as typ
             s1 : (f,l,m)
             s2 : (f,l*m)

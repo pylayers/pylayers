@@ -4,7 +4,7 @@ r"""
 .. currentmodule:: pylayers.util.pyutil
 
 .. autosummary::
-    :toctree: genaerated
+    :toctree: generated
 
     delay
     lt2idic
@@ -14,7 +14,6 @@ r"""
     shp
     dimcmp
     tstincl
-    findpos
     ininter
     cshift
     LegFunc
@@ -70,7 +69,6 @@ import zipfile
 # shp
 # dimcmp
 # tstincl
-# findpos
 # ininter
 #
 ###################################
@@ -300,28 +298,6 @@ def tstincl(ar1,ar2):
         return(0)
     else:
         return(2)
-
-def findpos(ar,val):
-    """
-    findpos(ar,val)
-
-    return the i position in array ar, such that ar[i] == val 
-    if the value is not find, return 'value not found'
-    """
-    dim=len(ar)
-    i=0
-    find=0
-    while (i<dim):
-        if (ar[i]==val):
-            pos=i
-            find=1
-            i=dim
-        else:
-            i=i+1
-    if (find==1):
-        return(pos)
-    else:
-        return('value not found')
 
 def ininter(ar,val1,val2):
     """
@@ -1141,8 +1117,28 @@ def rgb(valex,out='int'):
 
 
 def nbint(a):
-    """
-        calculate the number of intervals in a sequence of integer
+    """ calculate the number of distinct contiguous sets in a sequence of integer
+
+    Parameters
+    ----------
+
+    a : np.array
+
+    Examples
+    --------
+
+    >>> import numpy as np
+    >>> from pylayers.util.pyutil import *
+    >>> a = np.array([1,2,3,4])
+    >>> nbint(a)
+    1
+    >>> b = np.array([1,2,4,5])
+    >>> nbint(b)
+    2
+    >>> c = np.array([1,2,4,5,7,8,9])
+    >>> nbint(c)
+    3
+
     """
     b = a[1:]-a[0:-1]
     u = np.nonzero(b!=1)[0]
@@ -1156,7 +1152,6 @@ def encodmtlb(lin):
     ----------
 
     lin : input list
-    encodmtlbi(lin) :
 
     Returns
     -------
@@ -1166,10 +1161,10 @@ def encodmtlb(lin):
     Examples
     --------
 
+    >>> import scipy.io as io
     >>> lin = ['aaa','bbbbbbb','ccc','dd']
-    >>> F   = {}
-    >>> F['lin']=encodmtl(lin)
-    >>> print F['lin']
+    >>> F = {}
+    >>> F['lin']=encodmtlb(lin)
     >>> io.savemat('encodmtlb_ex.mat',F)
 
     Notes
@@ -1184,7 +1179,7 @@ def encodmtlb(lin):
 
     N = len(lin)
 
-    # 
+    #
     M  = 0
     lout = []
     str  = ''
@@ -1200,10 +1195,10 @@ def encodmtlb(lin):
             if (j>=m):
                 c = ' '
             else:
-                 c = lin[i][j]    
+                 c = lin[i][j]
 
             str = str + c
-            if mod(k+1,M)==0:
+            if np.mod(k+1,M)==0:
                 lout.append(str)
                 str=''
 

@@ -925,7 +925,7 @@ class CLA(object):
 #                    axis[i] = 1
 
 #                    try:
-#                        # divisé par 2 pour pouvoir aveir les index  de cluster comme les centre des box
+#                        # divis par 2 pour pouvoir aveir les index  de cluster comme les centre des box
 #                        clust.append(np.nonzero(uni[gidx[0]] < self.dlayer[l]
 #                                                [dlindx].bd[:, i])[0] / 2)
 #                        clust.append(np.nonzero(uni[gidx[0]] > self.dlayer[l]
@@ -1310,7 +1310,7 @@ class CLA(object):
                     lclust.append(clusters)
                     pc = np.sum(np.array(self.dlayer[l][dlindx].ctr)[np.unique(clusters)], axis=0) / len(np.unique(clusters))
                     lpc.append(pc)
-                    # verifier que les contraintes utilisées sont les bonne ( ce n'est pas le cas)
+                    # verifier que les contraintes utilises sont les bonne ( ce n'est pas le cas)
                     # ne marche que si 2 constriantes genere le cluster ( a robustifier)   
                     pu = np.where(self.usable)[0]
                     # try:

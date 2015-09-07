@@ -5,23 +5,33 @@ r"""
 
 .. currentmodule:: pylayers.simul.link
 
-This module runs the electromagnetic simulation at the link level.
+This module runs the electromagnetic simulation for a link.
+A deterministic link has two termination points and an associated Layout
+whereas a statistical link do not need any of those precursor object.
+
 It stores simulated objects in `hdf5` format.
 
-Link is a MetaClass
-Dlink is for deterministic links
-Slink is for statistical links.
 
 Link Class
 ===========
+
+Link is a MetaClass, which derives from `Tchannel`.
+Tchannel is a transmission channel i.e a radio channel
+which includes both link termination antennas.
+
+A common factor of both statistical (SLink) and deterministic channel (DLink)
+is the exitence of :math:`\alpha_k` and :math:`\tau_k`
 
 .. autosummary::
     :toctree: generated/
 
     Link.__add__
 
+
 SLink Class
 ===========
+
+Slink is for statistical links.
 
 .. autosummary::
     :toctree: generated/
@@ -30,6 +40,8 @@ SLink Class
 
 DLink Class
 ===========
+
+Dlink is for deterministic links
 
 >>> from pylayers.simul.link import *
 >>> L = DLink(verbose=False)
@@ -54,7 +66,7 @@ DLink init
     DLink.__init__
     DLink.__repr__
     DLink.reset_config
-    DLink.fill_dexist
+    DLink.check_grpname
 
 
 search in hdf5 file
@@ -93,6 +105,7 @@ try:
 except:
     print 'Layout:Mayavi is not installed'
 import doctest
+import time
 import numpy as np
 import matplotlib.pylab as plt
 import pylayers.signal.waveform as wvf
@@ -118,12 +131,12 @@ import pdb
 
 
 
-class Link(object):
+class Link(Tchannel):
     def __init__(self):
         """ Link evaluation metaclass
-
         """
-        self.H = Tchannel()
+        Tchannel.__init__(self)
+    #    super(Link,self).__init__ ()
 
 
     def __add__(self,l):
@@ -221,8 +234,8 @@ class DLink(Link):
             Rotation matrice of Antenna of device dev_a relative to global Layout scene
         Tb : np.ndarray (3,3)
             Rotation matrice of Antenna of device dev_b relative to global Layout scene
-        fGHz : np.ndarray (Nptf,)
-            frequency range of Nptf points used for evaluation of channel
+        fGHz : np.ndarray (Nf,)
+            frequency range of Nf points used for evaluation of channel
         wav : Waveform
             Waveform to be applied on the channel
         save_idx : int
@@ -311,7 +324,7 @@ class DLink(Link):
             ub : indice of a position in 'p_map' position dataset
             uf : indice of freq position in 'f_map' frequency dataset
             uTa : indice of a position in 'T_map' Rotation dataset
-            uTb : indice of b position in 'T_map' Rotation dataset
+            uTb : indice of a position in 'T_map' Rotation dataset
             uAa : indice of a position in 'A_map' Antenna name dataset
             uAb : indice of b position in 'A_map' Antenna name dataset
 
@@ -328,7 +341,7 @@ class DLink(Link):
         """
 
 
-        super(DLink,self).__init__()
+        Link.__init__(self)
 
         defaults={ 'L':Layout(),
                    'a':np.array(()),
@@ -350,6 +363,7 @@ class DLink(Link):
         self._cb=-1
         specset = ['a','b','Aa','Ab','Ta','Tb','L','fGHz','wav']
 
+        # set default attribute
         for key, value in defaults.items():
             if key not in kwargs:
                 if key in specset :
@@ -370,19 +384,17 @@ class DLink(Link):
 
 
         ###########
-        # init ant
+        # Transmitter and Receiver positions
         ###########
 
         self.tx = RadioNode(name = '',
                             typ = 'tx',
                             _fileini = 'radiotx.ini',
-                            _fileant = self.Aa._filename
                             )
 
         self.rx = RadioNode(name = '',
                             typ = 'rx',
                             _fileini = 'radiorx.ini',
-                            _fileant = self.Ab._filename,
                             )
 
 
@@ -447,10 +459,11 @@ class DLink(Link):
 
         ###########
         # init freq
+        # TODO Check where it is used redundant with fGHz
         ###########
-        self.fmin = self.fGHz[0]
-        self.fmax = self.fGHz[-1]
-        self.fstep = self.fGHz[1]-self.fGHz[0]
+        #self.fmin  = self.fGHz[0]
+        #self.fmax  = self.fGHz[-1]
+        #self.fstep = self.fGHz[1]-self.fGHz[0]
 
 
         self.Si = Signatures(self.L,self.ca,self.cb,cutoff=self.cutoff)
@@ -562,10 +575,9 @@ class DLink(Link):
         self.tx = RadioNode(name = '',
                             typ = 'tx',
                             _fileini = 'radiotx.ini',
-                            _fileant = Ant._filename
                             )
         self._Aa = Ant
-        # to be removed when radionode will be updated
+        #to be removed when radionode will be updated
         self.a = position
         self.Ta = rot
 
@@ -577,10 +589,9 @@ class DLink(Link):
         self.rx = RadioNode(name = '',
                             typ = 'rx',
                             _fileini = 'radiorx.ini',
-                            _fileant = Ant._filename,
                             )
         self._Ab = Ant
-        # to be removed when radionode will be updated
+        #to be removed when radionode will be updated
         self.b = position
         self.Tb = rot
 
@@ -600,14 +611,14 @@ class DLink(Link):
             freq=np.array([freq])
         self._fGHz = freq
 
-        if len(freq)>1:
-            self.fmin = freq[0]
-            self.fmax = freq[-1]
-            self.fstep = freq[1]-freq[0]
-        else:
-            self.fmin = freq
-            self.fmax = freq
-            self.step = 0
+        #if len(freq)>1:
+        #    self.fmin = freq[0]
+        #    self.fmax = freq[-1]
+        #    self.fstep = freq[1]-freq[0]
+        #else:
+        #    self.fmin = freq
+        #    self.fmax = freq
+        #    self.step = 0
 
     @wav.setter
     def wav(self,waveform):
@@ -628,12 +639,12 @@ class DLink(Link):
         s = s + 'Node a   \n'
         s = s + '------  \n'
         s = s + 'position : ' + str (self.a) + '\n'
-        s = s + 'Antenna : ' + str (self.Aa._filename) + '\n'
+        s = s + 'Antenna : ' + str (self.Aa.typ) + '\n'
         s = s + 'Rotation matrice : \n ' + str (self.Ta) + '\n\n'
         s = s + 'Node b   \n'
         s = s + '------  \n'
         s = s + 'position : ' + str (self.b) + '\n'
-        s = s + 'Antenna : ' + str (self.Ab._filename) + '\n'
+        s = s + 'Antenna : ' + str (self.Ab.typ) + '\n'
         s = s + 'Rotation matrice : \n ' + str (self.Tb) + '\n\n'
         s = s + 'Link evaluation information : \n'
         s = s + '----------------------------- \n'
@@ -642,48 +653,20 @@ class DLink(Link):
         #s = s + 'Frequency range :  \n'
         s = s + 'fmin (fGHz) : ' + str(self.fGHz[0]) +'\n'
         s = s + 'fmax (fGHz) : ' + str(self.fGHz[-1]) +'\n'
-        s = s + 'fstep (fGHz) : ' + str(self.fGHz[1]-self.fGHz[0]) +'\n'
-        s = s + 'Nf : ' + str(len(self.fGHz)) +'\n '
-        d =  np.sqrt(np.sum((self.a-self.b)**2)) 
-        fc = (self.fGHz[-1]+self.fGHz[0])/2.
+        Nf = len(self.fGHz)
+        if Nf>1:
+            s = s + 'fstep (fGHz) : ' + str(self.fGHz[1]-self.fGHz[0]) +'\n'
+        else:
+            s = s + 'fstep (fGHz) : ' + str(self.fGHz[0]-self.fGHz[0]) +'\n'
+        s = s + 'Nf : ' + str(Nf) +'\n '
+        d =  np.sqrt(np.sum((self.a-self.b)**2))
+        if Nf>1:
+            fcGHz = (self.fGHz[-1]+self.fGHz[0])/2.
+        else:
+            fcGHz = self.fGHz[0]
         L  = 32.4+20*np.log(d)+20*np.log10(fcGHz)
         return s
 
-
-
-    def help(self,letter='az',mod='meth'):
-        """ help
-
-        Parameters
-        ----------
-
-        txt : string
-            'members' | 'methods'
-        """
-
-        members = self.__dict__.keys()
-        lmeth = np.sort(dir(self))
-
-        if mod=='memb':
-            print np.sort(self.__dict__.keys())
-        if mod=='meth':
-            for s in lmeth:
-                if s not in members:
-                    if s[0]!='_':
-                        if len(letter)>1:
-                            if (s[0]>=letter[0])&(s[0]<letter[1]):
-                                try:
-                                    doc = eval('self.'+s+'.__doc__').split('\n')
-                                    print s+': '+ doc[0]
-                                except:
-                                    pass
-                        else:
-                            if (s[0]==letter[0]):
-                                try:
-                                    doc = eval('self.'+s+'.__doc__').split('\n')
-                                    print s+': '+ doc[0]
-                                except:
-                                    pass
     def reset_config(self):
         """ reset configuration when a new layout is loaded
         """
@@ -727,7 +710,7 @@ class DLink(Link):
 
 
     def checkh5(self):
-        """ check existence of previous simulation run with the same parameters.
+        """ check existence of previous simulations run with the same parameters.
 
 
         Returns
@@ -736,10 +719,10 @@ class DLink(Link):
         update self.dexist dictionnary
 
         """
-        # get identifier groupname in h5py file
+        # get identifier group name in h5py file
         self.get_grpname()
-        # check if grpnamee exist in the h5py file
-        [self.fill_dexist(k,self.dexist[k]['grpname'])   for k in self.save_opt]
+        # check if group name exists in the h5py file
+        [self.check_grpname(k,self.dexist[k]['grpname'])   for k in self.save_opt]
 
 
 
@@ -937,7 +920,12 @@ class DLink(Link):
         #############
 
         # check existence of frequency in h5py file
-        farray = np.array(([self.fmin,self.fmax,self.fstep]))
+        #farray = np.array(([self.fmin,self.fmax,self.fstep]))
+        Nf = len(self.fGHz)
+        if Nf > 1:
+            farray = np.array(([self.fGHz[0],self.fGHz[-1],self.fGHz[1]-self.fGHz[0]]))
+        else:
+            farray = np.array(([self.fGHz[0],self.fGHz[-1],0]))
         uf_opt, uf = self.get_idx('f_map',farray)
 
         grpname = str(ua) + '_' + str(ub) + '_' + str(uf)
@@ -953,19 +941,20 @@ class DLink(Link):
         # check existence of Rot b (Tb) in h5py file
         uTb_opt, uTb = self.get_idx('T_map',self.Tb)
         # check existence of Antenna a (Aa) in h5py file
-        uAa_opt, uAa = self.get_idx('A_map',self.Aa._filename)
+        #uAa_opt, uAa = self.get_idx('A_map',self.Aa._filename)
+        uAa_opt, uAa = self.get_idx('A_map',self.Aa.typ)
         # check existence of Antenna b (Ab) in h5py file
-        uAb_opt, uAb = self.get_idx('A_map',self.Ab._filename)
+        uAb_opt, uAb = self.get_idx('A_map',self.Ab.typ)
 
 
         grpname = str(ua) + '_' + str(ub) + '_' + str(uf) + \
                   '_'  + str(uTa) + '_' + str(uTb) + \
                   '_'  + str(uAa) + '_' + str(uAb)
 
-        self.dexist['H']['grpname']=grpname
+        self.dexist['H']['grpname'] = grpname
 
 
-    def fill_dexist(self,key,grpname):
+    def check_grpname(self,key,grpname):
         """Check if the key's data with a given groupname
             already exists in the h5py file
 
@@ -985,7 +974,7 @@ class DLink(Link):
         """
         try :
             lfilename=pyu.getlong(self.filename,pstruc['DIRLNK'])
-            f=h5py.File(lfilename,'r')
+            f = h5py.File(lfilename,'r')
             if grpname.decode('utf8') in f[key].keys():
                 self.dexist[key]['exist']=True
             else :
@@ -1008,9 +997,9 @@ class DLink(Link):
         key: string
             key of the h5py group
         array : np.ndarray
-            array type to check existency
+            array to check existence
         tol : np.float64
-            tolerance (in meter for key == 'p_map')
+            tolerance (in meters for key == 'p_map')
 
         Returns
         -------
@@ -1130,7 +1119,7 @@ class DLink(Link):
 
 
     def eval(self,**kwargs):
-        """ Evaluate the link
+        """ evaluate the link
 
 
         Parameters
@@ -1144,7 +1133,7 @@ class DLink(Link):
             signature.run algo type
             'old' : call propaths2
             'new' : call procone2
-        alg : 5 | 7
+        alg : 5|7
             version of run for signature
         si_mt: boolean
             Multi thread version of algo version 7
@@ -1223,7 +1212,6 @@ class DLink(Link):
             if key not in kwargs:
                 kwargs[key]=value
 
-
         if 'cutoff' not in kwargs:
             kwargs['cutoff']=self.cutoff
         else:
@@ -1237,6 +1225,7 @@ class DLink(Link):
                     kwargs['force'] = []
 
         # must be placed after all the init !!!!
+        print "checkh5"
         self.checkh5()
 
 
@@ -1244,24 +1233,29 @@ class DLink(Link):
         # Signatures
         ############
 
+        print "Start Signatures"
+        tic = time.time()
         Si = Signatures(self.L,self.ca,self.cb,cutoff=kwargs['cutoff'])
 
         if (self.dexist['sig']['exist'] and not ('sig' in kwargs['force'])):
             self.load(Si,self.dexist['sig']['grpname'])
-
+            print "load signature"
         else :
             if kwargs['alg']==2015:
                 TMP=Si.run2015(cutoff=kwargs['cutoff'],
                         cutoffbound=kwargs['si_reverb'])
+                print "algo 2015"
             if kwargs['alg']==20152:
                 TMP=Si.run2015_2(cutoff=kwargs['cutoff'],
                         cutoffbound=kwargs['si_reverb'])
+                print "algo 20152"
 
             if kwargs['alg']==5:
                 Si.run5(cutoff=kwargs['cutoff'],
                         algo=kwargs['si_algo'],
                         diffraction=kwargs['diffraction'],
                         progress=kwargs['si_progress'])
+                print "algo 5"
             if kwargs['alg']==7:
                 if kwargs['si_mt']==7:
                     Si.run7mt(cutoff=kwargs['cutoff'],
@@ -1269,18 +1263,22 @@ class DLink(Link):
                         diffraction=kwargs['diffraction'],
                         threshold=kwargs['threshold'],
                         progress=kwargs['si_progress'])
+                    print "algo 7 , si_mt"
                 else :
                     Si.run7(cutoff=kwargs['cutoff'],
                         algo=kwargs['si_algo'],
                         diffraction=kwargs['diffraction'],
                         threshold=kwargs['threshold'],
                         progress=kwargs['si_progress'])
+                    print "algo 7"
 
-            #Si.run6(diffraction=kwargs['diffraction'])
-            # save sig
+        #Si.run6(diffraction=kwargs['diffraction'])
+        # save sig
             self.save(Si,'sig',self.dexist['sig']['grpname'],force = kwargs['force'])
 
         self.Si = Si
+        toc = time.time()
+        print "Stop signature",toc-tic
 
 
 
@@ -1288,6 +1286,8 @@ class DLink(Link):
         # Rays
         ############
 
+        print "Start Rays"
+        tic = time.time()
         R = Rays(self.a,self.b)
 
         if self.dexist['ray']['exist'] and not ('ray' in kwargs['force']):
@@ -1307,6 +1307,8 @@ class DLink(Link):
             self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])
 
         self.R = R
+        toc = time.time()
+        print "Stop rays",toc-tic
 
         if self.R.nray == 0:
             raise NameError('No rays have been found. Try to re-run the simulation with a higher S.cutoff ')

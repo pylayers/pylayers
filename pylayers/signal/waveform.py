@@ -10,7 +10,7 @@ import scipy.signal as si
 import scipy.linalg as la
 import ConfigParser
 import matplotlib.pylab as plt
-from pylayers.signal   import bsignal as bs
+import pylayers.signal.bsignal as bs
 from pylayers.util     import easygui
 from pylayers.measures import mesuwb
 
@@ -96,8 +96,9 @@ class Waveform(dict):
         self.st       = st
         self.sf       = sf
         self.f        = self.sf.x
+
         ygamma        = -1j*0.3/(4*np.pi*self.f)
-        self.gamm     = bs.FUsignal(self.f,ygamma)
+        self.gamm     = bs.FUsignal(x=self.f,y=ygamma)
         self.sfg      = self.sf*self.gamm
         self.sfgh     = self.sfg.symH(0)
         self.stgh     = self.sfgh.ifft(1)
@@ -144,22 +145,22 @@ class Waveform(dict):
 
 
         """
-        Tw     = self['twns']
-        fc     = self['fcGHz']
-        band   = self['bandGHz']
+        Tw = self['twns']
+        fcGHz = self['fcGHz']
+        band = self['bandGHz']
         thresh = self['threshdB']
-        fe     = self['feGHz']
-        te     = 1.0/fe
+        feGHz = self['feGHz']
+        te = 1.0/feGHz
 
         self['te'] = te
-        Np     = fe*Tw
+        Np     = feGHz*Tw
         self['Np']=Np
-        x      = np.linspace(-0.5*Tw+te/2,0.5*Tw+te/2,Np,endpoint=False)
+        #x      = np.linspace(-0.5*Tw+te/2,0.5*Tw+te/2,Np,endpoint=False)
         #x     = arange(-Tw,Tw,te)
-
-        w   = bs.EnImpulse(x,fc,band,thresh,fe)
+        w = bs.TUsignal()
+        w.EnImpulse(fcGHz=fcGHz,WGHz=band,threshdB=thresh,feGHz=feGHz)
         #W = w.ft()
-        W   = w.ftshift()
+        W = w.ftshift()
         return (w,W)
 
     def ref156(self):
@@ -264,7 +265,7 @@ class Waveform(dict):
 
 #        tnsp = np.arange(0,tns[-1]-tns[u]+0.5*te,te)
 #        tnsm = np.arange(-(tns[-1]-tns[u]),0,te)
-        N=len(ts)-1
+        N = len(ts)-1
         tnsm = np.linspace(-tns[-1],-te,N)
         y = np.hstack((yzp,y))
         tns = np.hstack((tnsm,tns))
@@ -273,11 +274,10 @@ class Waveform(dict):
         # Warning (check if 1/sqrt(30) is not applied elsewhere
         #
         w.x = tns
-        w.y = y*(1/np.sqrt(30))
+        w.y = (y*(1/np.sqrt(30)))[None,:]
 
         #  w : TUsignal
         #  W : FUsignal (Hermitian redundancy removed)
-
         W   = w.ftshift()
         return (w,W)
 
@@ -310,7 +310,7 @@ class Waveform(dict):
                 self[key] = float(val)
             if key == "typ":
                 self[key] = val
- 
+
         self.eval()
 
 
@@ -360,11 +360,11 @@ class Waveform(dict):
                 title = title + str(val) + ' '
         #plt.title(title)
         ax1 = fig.add_subplot(2,1,1)
-        ax1.plot(self.st.x,self.st.y)
+        ax1.plot(self.st.x,self.st.y[0,:])
         plt.xlabel('time (ns)')
         plt.ylabel('level in linear scale')
         ax2 = fig.add_subplot(2,1,2)
-        ax2.plot(self.sf.x,abs(self.sf.y))
+        ax2.plot(self.sf.x,abs(self.sf.y[0,:]))
         plt.xlabel('frequency (GHz)')
         plt.ylabel('level in linear scale')
         fig.suptitle(title)

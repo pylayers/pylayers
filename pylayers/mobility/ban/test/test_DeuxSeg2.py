@@ -15,16 +15,16 @@ B = 5*np.random.rand(3,N)
 C = 20*np.random.rand(3,M)
 D = 120*np.random.rand(3,M)
 
-# # 3 x N x M
+# #3 x N x M
 # AC = C[:,np.newaxis,:]-A[:,:,np.newaxis]
 # # 3 x M 
 # CD = D-C
 # # 3 x N 
 # BA = A-B
 
-# # u0 : N x M
+# #u0 : N x M
 # u0 = np.einsum('ijk,ijk->jk',AC,AC)#np.dot(AC,AC)
-# # u4 : N 
+# #u4 : N 
 # u4 = np.einsum('ij,ij->j',BA,BA)[:,np.newaxis]#np.dot(BA,BA)
 # # u5 : M 
 # u5 = np.einsum('ij,ij->j',CD,CD)[np.newaxis,:]#np.dot(CD,CD)
@@ -37,7 +37,7 @@ D = 120*np.random.rand(3,M)
 
 # # den : N x M
 # den   = u4*u5-u3*u3
-# # alpha = N x M
+# #alpha = N x M
 # alpha = (u2*u3-u1*u5)/(1.*den)
 # # beta = N x M
 # beta  = (u1*u3-u2*u4)/(1.*den)

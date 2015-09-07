@@ -318,7 +318,9 @@ class Body(PyLayers):
             pass
         self.dev={}
 
-
+        #
+        # parse section wearables :
+        #
         # read default in ini file
         if _filewear == []:
             devfilename = pyu.getlong(di['wearable']['file'],pstruc['DIRWEAR'])
@@ -327,7 +329,7 @@ class Body(PyLayers):
                 raise AttributeError('the wareable file '+di['wearable']['file']+
                                  ' cannot be found in $BASENAME/'+pstruc['DIRWEAR'])
         else :
-            # check if local or global path
+            #check if local or global path
             if ('/' or '\\') in _filewear:
                 devfilename = _filewear
             else :
@@ -355,11 +357,17 @@ class Body(PyLayers):
                 except:
                     self.dev[section][option]=devconf.get(section,option)
                 if option == 'file':
-                    self.dev[section]['ant']=ant.Antenna(self.dev[section]['file'])
+                    #
+                    # For each device load the antenna from the filename
+                    #
+                    # TODO : Modify antenna class in order to load an antenna
+                    # from a pattern function
+                    #
+                    self.dev[section]['ant'] = ant.Antenna(self.dev[section]['file'])
 
 
         try:
-            # mocapprefix : retrieve where the prefix is the body name
+            #mocapprefix : retrieve where the prefix is the body name
             ump = [self.name.lower() in p.lower() for p in self._s]
             if sum(ump) >1:
                 # Handle case CorSer (serie=3,day=11)
@@ -458,10 +466,10 @@ class Body(PyLayers):
                 raise AttributeError(self.name +' is not in the MOCAP file :' +filename)
 
 
-            # in case of multiple body into the mocap file,
-            # mocap is restricted to nodes belonging to a single body.
-            # the body is automatically selected by using the self.name
-            # 
+            #in case of multiple body into the mocap file,
+            #mocap is restricted to nodes belonging to a single body.
+            #the body is automatically selected by using the self.name
+            #
 
             self._f =self._f[:,up,:]
             self._s=[s for s in self._s if self.name in s ]
@@ -498,7 +506,7 @@ class Body(PyLayers):
 
         self._f=self._f*self._unit
 
-        self.Tmocap = self.nframes / info['VideoFrameRate']
+        self.Tmocap = (self.nframes-1) / info['VideoFrameRate']
 
         # time base of the motion capture file (sec)
         self.time = np.linspace(0,self.Tmocap,self.nframes)
@@ -514,33 +522,33 @@ class Body(PyLayers):
         """
 
 
-        # dmn = dictionnary of mocap nodes position in self._p
+        #dmn = dictionnary of mocap nodes position in self._p
         # for further ccs from marker creation
 
         self._dmn={n:un for un,n in enumerate(self._mocanodes)}
         self._ccs=np.empty((11,3,3,self.nframes))
-        # T10 5 strn 7
+        #T10 5 strn 7
 
         for k,v in config['ccs'].items():
             # clean bracket and coma
             vc = v.split('[')[1].split(']')[0].split(',')
-            # get position in uc3d of marker
+            #get position in uc3d of marker
             uccs=map(lambda x: self._dmn[x],vc)
 
 
-            # 1 vector carried by cylinder axis
+            #1 vector carried by cylinder axis
             # 1.1 get cylinder number related to body part k
             upart = config['cylinder'][k]['i']
-            # 1.2 get tail and head position in self.d
+            #1.2 get tail and head position in self.d
             kta = self.sl[upart,0].astype(int)
             khe = self.sl[upart,1].astype(int)
-            # 1.3 create cylinder axis vector
+            #1.3 create cylinder axis vector
             ca = self.d[:,kta,:]-self.d[:,khe,:]
 
-            # 2 . create 2 extra vectors
-            # 2.1 determine their positions
+            #2 . create 2 extra vectors
+            #2.1 determine their positions
             # pccs = position of cylinder coordinates system (Nframe x Npts x 3)
-            # determine associated vetors
+            #determine associated vetors
 
             pccs = self._f[:,uccs,:]
 
@@ -1265,7 +1273,7 @@ class Body(PyLayers):
                         dhed = np.sqrt(np.sum((phe-de.T)**2,axis=0))
                         mta = np.min(dtad)
                         mhe = np.min(dhed)
-                        # select the smallest distance as best candidate
+                        #select the smallest distance as best candidate
                         if mta < mhe : 
                             um = np.where(dtad==mta)[0]
                         else :
@@ -1553,8 +1561,8 @@ class Body(PyLayers):
             Ant = {}
             for key in self.dcs.keys():
                 Ant[key]=ant.Antenna(self.dev[key]['file'])
-                if not hasattr(Ant[key],'SqG'):
-                    Ant[key].Fsynth()
+                if not hasattr(Ant[key],'sqG'):
+                    Ant[key].eval()
                 Ant[key]._show3(po=self.dcs[key][:,0],
                                T=self.acs[key],
                                ilog=False,
@@ -1801,7 +1809,7 @@ class Body(PyLayers):
 
         save : boolean (False)
             save _show3 into file
-        returnfig': booleéan (False)
+        returnfig': boolean (False)
             return mlab.figure instance
 
 
@@ -2008,10 +2016,10 @@ class Body(PyLayers):
             self.setacs()
 
             for key in devlist:
-                if not hasattr(self.dev[key]['ant'],'SqG'):
-                    self.dev[key]['ant'].Fsynth()
+                if not hasattr(self.dev[key]['ant'],'sqG'):
+                    self.dev[key]['ant'].eval()
                 U = self.dcs[key]
-                V = self.dev[key]['ant'].SqG[kwargs['k'],:,:]
+                V = self.dev[key]['ant'].sqG[kwargs['k'],:,:]
                 T = self.acs[key]
 
                 self.dev[key]['ant']._show3(po=U[:,0],
@@ -2216,7 +2224,7 @@ class Body(PyLayers):
         iframe = kwargs['iframe']
 
         Ant = ant.Antenna(kwargs['fileant'])
-        Ant.Fsynth3()
+        Ant.eval()
 
         if kwargs['lccs']==[]:
             lccs = np.arange(11)
@@ -2316,12 +2324,14 @@ class Body(PyLayers):
             self.setacs()
             for key in self.dcs.keys():
                 Ant =  ant.Antenna(self.dev[key]['file'])
-                if not hasattr(Ant,'SqG'):
-                    Ant.Fsynth3()
+                if not hasattr(Ant,'sqG'):
+                    Ant.eval()
                 U = self.dcs[key]
                 _filepatt = kwargs['tag']+'patt-'+key
                 geo = geu.Geomoff(_filepatt)
-                V = Ant.SqG[kwargs['k'],:,:]
+                if not hasattr(Ant,'sqG'):
+                    Ant.eval()
+                V = Ant.sqG[kwargs['k'],:,:]
                 #T = U[:,1:]
                 #Rab = self.dev[key]['T']
                 #T = np.vstack((U[:,1+DT[0]],U[:,1+DT[1]],U[:,1+DT[2]]))
@@ -2921,10 +2931,10 @@ class Cylinder(object):
             raise AttributeError(self.name +' is not in the MOCAP file :' +filename)
 
 
-            # in case of multiple body into the mocap file, 
-            # mocap is restricted to nodes belonging to a single body.
-            # the body is automatically selected by using the self.name
-        # 
+            #in case of multiple body into the mocap file, 
+            #mocap is restricted to nodes belonging to a single body.
+            #the body is automatically selected by using the self.name
+        #
 
         self._f =self._f[:,up,:]
         self._s=[s for s in self._s if self.name in s ]

@@ -437,9 +437,9 @@ class Network(PyLayers,nx.MultiDiGraph):
         dev : list
             list of Devices
         p : ndarray (Ndev x 3)
-            np.array of devices' positions
+            np.array of devices positions
         grp : string
-            name of the group of device belong to.
+            name of the group of devices
 
         """
 
@@ -460,7 +460,11 @@ class Network(PyLayers,nx.MultiDiGraph):
                 raise AttributeError('Devices must have a different ID')
 
 
-        # add spectific node informations
+        # determine node type
+        #
+        #  ap : access point
+        #  ag : agent
+        #
         if 'ap' in grp:
             typ = 'ap'
         else :
@@ -472,14 +476,17 @@ class Network(PyLayers,nx.MultiDiGraph):
               'typ':typ,
               'dev':d,
                     }) for ud, d in enumerate(dev)]
-# 
+        #
         # self.add_nodes_from([(d.ID, ldic[ud]) for ud,d in enumerate(dev)])
+        #
         self.add_nodes_from([(d.ID, d.__dict__) for d in dev])
 
         # create personnal network
         for ud, d in enumerate(dev):
             self.node[d.ID]['PN']= Network(owner=d.ID, PN=True)
             self.node[d.ID]['PN'].add_nodes_from([(d.ID,d.__dict__)])
+
+        # get wireless standard
         self._get_wstd()
         # for d in dev:
         #     for s in d.wstd.keys():
@@ -704,7 +711,7 @@ class Network(PyLayers,nx.MultiDiGraph):
 
         >>> from pylayers.network.network import *
         >>> N=Network()
-        >>>    N=Network.Network()
+        >>> N=Network.Network()
         >>> for i in range(3):
                 no = Node(ID=i,wstd=['wifi','bt'])
                 N.add_nodes_from(no.nodes(data=True))

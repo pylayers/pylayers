@@ -58,7 +58,7 @@ class SubSegWin(QDialog):    # any super class is okay
 
 
         for ss in range(self.Nss):
-            # slab
+            #slab
             # hboxtitle=QHBoxLayout()
             # hboxtitle.addWidget(QLabel('Sub-Segment'+str(ss+1)))
             hbox1 = QHBoxLayout()
@@ -148,7 +148,7 @@ class SubSegWin(QDialog):    # any super class is okay
         self.lcomboslab = []
         self.lzQ=[]
 
-        # TODO
+        #TODO
         # sort subsegments from floor to ceil
         # add connect to impose begin of previous segment
         # sort subseg by height
@@ -371,7 +371,7 @@ class PropertiesWin(QDialog):    # any super class is okay
 
     def _init_layout(self):
 
-        # slab
+        #slab
         hbox1 = QHBoxLayout()
         hbox1.addWidget(self.comboslab)
 

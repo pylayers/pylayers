@@ -307,7 +307,7 @@ class SelectL2(object):
 
             if self.state == 'CP':
 
-                # if new point is created
+                #if new point is created
 
                 try:
                     # old node num
@@ -316,7 +316,7 @@ class SelectL2(object):
                     self.pt_previousid = 0
                 if self.nsel == 0:
                     # print 'create new pt'
-                    # manage ctrl and shift same x/Y
+                    #manage ctrl and shift same x/Y
                     if self.pt_previousid !=0:
                         if self.shift_is_held:
                             self.ptsel[0] = self.L.Gs.pos[self.pt_currentid][0]
@@ -369,7 +369,7 @@ class SelectL2(object):
                 else:
                     self.modeIni()
 
-            # select a segment
+            #select a segment
             if self.state=='SS':
                 # print 'sel seg'
                 if self.nsel >0:
@@ -387,7 +387,7 @@ class SelectL2(object):
                     self.selpt1()
                 else :
                     self.modeIni()
-            # select a point
+            #select a point
             if self.state=='SP1':
                 if self.nsel >0:
                     self.modeIni()
@@ -1509,15 +1509,15 @@ class SelectL2(object):
         'b'  : edit segment keyboard
         'CTRL + t'  : translate  structure
         'h'  : add subsegment
-        'd | Del'  : delete subsegment
-        'r | F5'  : refresh
+        'd |Del'  : delete subsegment
+        'r |F5'  : refresh
         'o'  : toggle overlay (<> CP mode)
                set origin (CP mode)
         'm'  : toggle mode (point or segment)
         'n'  : toggle node label display
         'z'  : change display parameters
         'CTRL+q'  : quit
-        'x | CTRL+s'  : save .str2 and .ini file
+        'x |CTRL+s'  : save .str2 and .ini file
         'w'  : display all layers
         'v'  : flip layout w.r.t y axis
         'f'  : toggle points nodes display
@@ -1912,7 +1912,7 @@ class SelectL2(object):
             return
 
         # if self.evt == 'f1':
-        #     # avoid conflict between zoom and selection
+        #     #avoid conflict between zoom and selection
         #     # fm=plt.get_current_fig_manager()
         #     # if fm.toolbar._active == 'PAN':
         #     #     fm.toolbar.pan()

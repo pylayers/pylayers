@@ -201,16 +201,16 @@ def dist(A,B,C,D,alpha,beta):
 
 
 
-    # 3 x N x M
+    #3 x N x M
     AC = C[:,np.newaxis,:]-A[:,:,np.newaxis]
     # 3 x M 
     CD = D-C
     # 3 x N 
     BA = A-B
 
-    # u0 : N x M
+    #u0 : N x M
     u0 = np.einsum('ijk...,ijk...->jk...',AC,AC)#np.dot(AC,AC)
-    # u4 : N 
+    #u4 : N 
     u4 = np.einsum('ij...,ij...->j...',BA,BA)[:,np.newaxis]#np.dot(BA,BA)
     # u5 : M 
     u5 = np.einsum('ij...,ij...->j...',CD,CD)[np.newaxis,:]#np.dot(CD,CD)
@@ -228,7 +228,7 @@ def dist(A,B,C,D,alpha,beta):
     X  = A[:,:,np.newaxis]-alpha[np.newaxis,:,:]*BA[:,:,np.newaxis] # A - alpha*BA
     # Y : 3 x N x M
     Y  = C[:,np.newaxis,:] + beta[np.newaxis,:,:]*CD[:,np.newaxis,:]# C + beta*CD
-    # g : N x M
+    #g : N x M
     g =np.einsum('ijk...,ijk...->jk...',X-Y,X-Y)
 
     return(f,g)
@@ -276,16 +276,16 @@ def dmin3d(A,B,C,D):
         D=D.reshape(3,1) 
 
 
-    # 3 x N x M
+    #3 x N x M
     AC = C[:,np.newaxis,:]-A[:,:,np.newaxis]
     # 3 x M 
     CD = D-C
     # 3 x N 
     BA = A-B
 
-    # u0 : N x M
+    #u0 : N x M
     u0 = np.einsum('ijk...,ijk...->jk...',AC,AC)#np.dot(AC,AC)
-    # u4 : N 
+    #u4 : N 
     u4 = np.einsum('ij...,ij...->j...',BA,BA)[:,np.newaxis]#np.dot(BA,BA)
     # u5 : M 
     u5 = np.einsum('ij...,ij...->j...',CD,CD)[np.newaxis,:]#np.dot(CD,CD)
@@ -298,7 +298,7 @@ def dmin3d(A,B,C,D):
 
     # den : N x M
     den   = u4*u5-u3*u3
-    # alpha = N x M
+    #alpha = N x M
     alpha = (u2*u3-u1*u5)/(1.*den)
     # beta = N x M
     beta  = (u1*u3-u2*u4)/(1.*den)
@@ -358,16 +358,16 @@ def segdist(A,B,C,D,hard=True):
         D=D.reshape(3,1) 
 
 
-    # 3 x N x M
+    #3 x N x M
     AC = C[:,np.newaxis,:]-A[:,:,np.newaxis]
     # 3 x M 
     CD = D-C
     # 3 x N p
     BA = A-B
 
-    # u0 : N x M
+    #u0 : N x M
     u0 = np.einsum('ijk...,ijk...->jk...',AC,AC)#np.dot(AC,AC)
-    # u4 : N 
+    #u4 : N 
     u4 = np.einsum('ij...,ij...->j...',BA,BA)[:,np.newaxis]#np.dot(BA,BA)
     # u5 : M 
     u5 = np.einsum('ij...,ij...->j...',CD,CD)[np.newaxis,:]#np.dot(CD,CD)
@@ -380,7 +380,7 @@ def segdist(A,B,C,D,hard=True):
 
     # den : N x M
     den   = u4*u5-u3*u3
-    # alpha = N x M
+    #alpha = N x M
     alpha = (u2*u3-u1*u5)/(1.*den)
     # beta = N x M
     beta  = (u1*u3-u2*u4)/(1.*den)
@@ -405,7 +405,7 @@ def segdist(A,B,C,D,hard=True):
     X  = A[:,:,np.newaxis]-alpha[np.newaxis,:,:]*BA[:,:,np.newaxis] # A - alpha*BA
     # Y : 3 x N x M
     Y  = C[:,np.newaxis,:] + beta[np.newaxis,:,:]*CD[:,np.newaxis,:]# C + beta*CD
-    # g : N x M
+    #g : N x M
     g =np.sqrt(np.einsum('ijk...,ijk...->jk...',X-Y,X-Y))
 
     return(f,g,X,Y,alpha,beta,dmin)

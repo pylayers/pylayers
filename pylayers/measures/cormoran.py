@@ -1,6 +1,4 @@
 # -*- coding:Utf-8 -*-
-
-
 """
 
 This module handles CORMORAN measurement data
@@ -159,7 +157,7 @@ import numpy.ma as ma
 import scipy.io as io
 from pylayers.util.project import *
 from pylayers.util.pyutil import *
-import  pylayers.util.mayautil as myu
+#import  pylayers.util.mayautil as myu
 from pylayers.mobility.ban.body import *
 from pylayers.gis.layout import *
 import pylayers.antprop.antenna as antenna
@@ -337,10 +335,10 @@ class CorSer(PyLayers):
             else :
                 self.B.traj.Lfilename=copy.copy(self.L.filename)
 
-        #reference time is tmocap
+        # reference time is tmocap
         self.tmocap = self.B[self.subject[0]].time
 
-        #load offset dict
+        # load offset dict
         self.offset= self._load_offset_dict()
 
         ########################
@@ -699,7 +697,7 @@ bernard
                           's3off':-0.2}      ,
                  })
 
-        # load extra  information from inifile (antenna, rotation matrix,...)
+        #load extra  information from inifile (antenna, rotation matrix,...)
 
         inifile = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','BodyandWear','AccesPoints.ini')
         config = ConfigParser.ConfigParser()
@@ -1165,7 +1163,7 @@ bernard
         #mapping between device name in self.hkb and on body/in self.devdf
         dev_bid = [self.devmapper(k,techno=techno)[2] for k in dnode.keys()]
 
-        nb_totaldev=len(np.unique(self.devdf['id'])) 
+        nb_totaldev=len(np.unique(self.devdf['id']))
         # extract all dev position on body
         # Mpdev : (3 x (nb devices and nb infra nodes) x nb_timestamp)
         Mpdev = np.empty((3,len(dev_bid),len(self.devdf.index)/nb_totaldev))
@@ -1177,7 +1175,7 @@ bernard
                 except:
                     Mpdev[:,ik,:] = self.din[i]['p'][:,np.newaxis]
 
-        # create A and B from links 
+        # create A and B from links
         nA = np.array([prefix+ str(dnode[l[0]]) for l in links])
         nB = np.array([prefix+ str(dnode[l[1]]) for l in links])
 
@@ -1189,7 +1187,7 @@ bernard
         B=Mpdev[:,mnB]
 
 
-        # intersect2D matrix is 
+        # intersect2D matrix is
         # d_0: nb links
         #d_1: (cylinder number) * nb body + 1 * nb  cylinder_object
         # d_2 : nb frame
@@ -1290,14 +1288,15 @@ bernard
         """  imshow visibility mda
 
 
-        Parameters 
+        Parameters
         ----------
+
         techno : (HKB|TCR)
         t : float
             time in second
 
-        Example 
-        -------
+        Examples
+        --------
 
         >>> from pylayers.measures.cormoran import *
         >>> import matplotlib.pyplot as plt
@@ -3233,7 +3232,7 @@ bernard
         t0 =kwargs['t0']
         t1 =kwargs['t1']
         if t1 ==-1:
-            t1=self.thkb[-1]
+            t1=self.ttcr[-1]
 
         if isinstance(a,str):
             ia = self.dTCR[a]
@@ -3341,7 +3340,8 @@ bernard
         t0 =kwargs.pop('t0')
         t1 =kwargs.pop('t1')
         if t1 ==-1:
-            t1=self.thkb[-1]
+            #t1=self.thkb[-1]
+            t1=self.ttcr[-1]
 
 
         label = a+'-'+b
@@ -3426,13 +3426,15 @@ bernard
 
             var = self.getlink(iatcr,ibtcr,'TCR').values
 
-            if inverse:
-                var = 1./(var)**2
-                if log :
-                    var = gamma*10*np.log10(var)
-            else:
-                if log :
-                    var = gamma*10*np.log10(var)
+            #if inverse:
+            #    var = 1./(var)**2
+            #    if log :
+            #        var = gamma*10*np.log10(var)
+            #else:
+            #    if log :
+            #        var = gamma*10*np.log10(var)
+
+            #pdb.set_trace()
             ax.plot(self.B[subject].time,var,**kwargs)
 
 
@@ -4179,7 +4181,7 @@ bernard
 
 
     def getlinkd(self,a,b,techno='',t=''):
-        """    get a link devices distances
+        """    get the distance for a link between devices
 
         Parameters
         ----------
@@ -4189,8 +4191,8 @@ bernard
         b : str | int
             name |id
 
-        oprional 
-        
+        optional
+
         techno : str
             radio techno
 
@@ -4202,20 +4204,21 @@ bernard
         Returns
         -------
 
-        dist : np.array() 
-            all distances for all timestamp for the given link
+        dist : np.array()
+            all distances for all timestamps for the given link
 
         Examples
         --------
 
         >>> from pylayers.measures.cormoran import *
-        >>> S=CorSer(serie=34)
-        >>> d=S.getlinkd('AP1','WristLeft')
+        >>> S = CorSer(serie=6)
+        >>> d = S.getlinkd('AP1','WristLeft',techno='HKB')
 
         """
 
-        ra=a
-        rb=b
+        ra = a
+        rb = b
+
         a,ia,nna,subjecta,techno = self.devmapper(a,techno)
         b,ib,nnb,subjectb,techno = self.devmapper(b,techno)
 
@@ -4241,10 +4244,10 @@ bernard
             hstep = (df.index[1]-df.index[0])/2.
             val = df[(df.index >= t-hstep) & (df.index <= t+hstep)][link]
 
-        
+
 
         return val
-        
+
 
 
     def getlinkp(self,a,b,technoa='',technob='',t='',fId=''):
@@ -4321,7 +4324,7 @@ bernard
         Returns
         -------
 
-        Pandas Serie 
+        Pandas Serie
 
         Examples
         --------
@@ -4337,6 +4340,7 @@ bernard
         rb = b
         a,ia,nna,subjecta,techno = self.devmapper(a,techno)
         b,ib,nnb,subjectb,techno = self.devmapper(b,techno)
+
         if ('HK' in techno) :
             if (a +'-' + b) in self.hkb.keys():
                 link = a +'-' + b
@@ -4628,7 +4632,7 @@ bernard
         ipdb.set_trace()
         sf = (hkbdfc.index[2]-hkbdfc.index[1]).microseconds
         devdfc= devdfc.resample(str(sf)+'U')
-        
+
         devdfc.index = pd.Series([val.time() for val in devdfc.index])
         hkbdfc.index = pd.Series([val.time() for val in hkbdfc.index])
 
@@ -4639,7 +4643,7 @@ bernard
         """ apply offset from self.offset[self._filename][techno+'_index']
 
             if offset >0
-                add np.nan at the begining 
+                add np.nan at the begining
             if offset <0
                 first values of self.hkb will be dropped
         """
@@ -4650,7 +4654,7 @@ bernard
             df = self.tcr
         elif techno == 'BS':
             df = self.bespo
-        else : 
+        else :
             raise AttributeError('Unknown tecnology got applying offset')
 
 
@@ -4682,7 +4686,7 @@ bernard
         """ apply offset from self.offset[self._filename]['hkb_index']
 
             if offset >0
-                add np.nan at the begining 
+                add np.nan at the begining
             if offset <0
                 first values of self.hkb will be dropped
         """
@@ -4726,11 +4730,11 @@ bernard
             self.thkb = self.hkb.index
 
     def _align_on_devdf(self,typ=''):
-        """ align hkb or bs time on device data frame ( devdf) time index
+        """ align hkb or bs time on device data frame (devdf) time index
 
         In place (a.k.a. replace old self.hkb by the resampled one)
 
-        Parameters 
+        Parameters
         ----------
 
         typp : 'HKB' |'BS'
@@ -4739,7 +4743,7 @@ bernard
         --------
 
         >>> from pylayers.measures.cormoran import *
-        >>> S=CorSer(6)
+        >>> S = CorSer(6)
         >>> devdf = S.devdf[S.devdf['id']=='HKB:15']
         >>> hkbdf = S.hkb['AP1-AnkleLeft']
         >>> devdf2 = S._align_on_hkb(devdf,hkbdf,typ ='HKB')
@@ -4754,16 +4758,20 @@ bernard
             idf = self.tcr
 
         # mocap time
+        #
+        # 0 0.010001 0.020002
         mocapindex = pd.to_datetime(self.tmocap,unit='s')
         # radio time
+        # 0  0.023  0.0473
         idf.index = pd.to_datetime(idf.index,unit='s')
 
-        
+
         sf = (mocapindex[2]-mocapindex[1]).microseconds
         df = idf.resample(str(sf)+'U',fill_method='ffill')
 
         nindex = time2npa(df.index)
         df.index = pd.Index(nindex)
+
         if typ == 'HKB':
             self.hkb = df
         elif typ == 'BS':
@@ -4772,8 +4780,7 @@ bernard
             self.tcr = df
 
     def _align_devdf_on_hkb(self,devdf,hkbdf):
-
-        """ NOT USED Practically 
+        """ NOT USED Practically
             align time of 2 data frames:
 
         the time delta of the second data frame is applyied on the first one
@@ -4831,11 +4838,12 @@ bernard
             dgb[d]['subject']=subject[d]
             dgb[d]['id']=d
 
-        # create the realigned dataframe
+        # create the realigned Dataframe
+
         lgb = [dgb[d] for d in dgb]
         df = pd.concat(lgb)
         df.sort_index(inplace=True)
-        
+
         nindex = time2npa(df.index)
         df.index = pd.Index(nindex)
         cols=['id','subject','x','y','z','v','vx','vy','vz','a','ax','ay','az']

@@ -6,20 +6,18 @@
 RadioNode Class
 ===============
 
-A radio Node is a data structure which store positions of 
-a radio node at several time step. It contains also the information 
-about the antenna file.
+A radio Node is a data structure which store positions of
+a radio node at several time step.
 
-This data structure is used in DLink.  
+This data structure is used in DLink.
 
-Members of a radionode are 
+Members of a radionode are
 
 position    : 3xNt
-time        : 1xNt 
+time        : 1xNt
 orientation : 3x3xNt
 typ         : 'tx' or 'rx'
-name        : string 
-fileant     : antenna file 
+name        : string
 
 
 .. autosummary::
@@ -50,7 +48,6 @@ fileant     : antenna file
     RadioNode.move
     RadioNode.extract
     RadioNode.loadvsh
-    RadioNode.gantenna
 
 """
 
@@ -61,14 +58,13 @@ import ConfigParser
 import pylayers.util.easygui as eg
 import pylayers.util.pyutil as pyu
 import pylayers.util.geomutil as geo
-from pylayers.antprop.antenna import *
 from pylayers.mobility.trajectory import *
 from pylayers.util.project import *
 import numpy as np
 import scipy as sp
 
 
-class RadioNode(object):
+class RadioNode(PyLayers):
     """ container for a Radio Node
 
      This class manages the spatial and temporal behavior of a radio node
@@ -84,8 +80,6 @@ class RadioNode(object):
         orientation 3x3xn (rotation matrix for each position)
      points
         dictionnary of points (redundant information)
-     antenneid
-        id of the antenna
      type
         0: undefined 1: Tx 2 : Rx
 
@@ -126,8 +120,6 @@ class RadioNode(object):
             2 : rx
         _fileini : string
             file of RadioNode coordinates
-        _fileant : string
-            file of antenna VSH
         _filestr : string
             file of layout structure
 
@@ -176,19 +168,12 @@ class RadioNode(object):
         except:
             pass
 
-        #
-        # print _fileant
-        #
-        self.fileant = _fileant
-        try:
-            self.loadvsh() # is it still necessary ? 
-        except:
-            raise NameError('antenna file does not exist')
         self.save()
 
     def __repr__(self):
         """ representation of radio node
-        Only position if shown 
+
+        Only position is shown
         """
         st = ''
         for k in range(self.N):
@@ -213,11 +198,12 @@ class RadioNode(object):
         Parameters
         ----------
 
-        alpha : float 
+        alpha : float
             angle (rad)
         trans : np.array()  (,2)
 
         """
+
         d2r = np.pi/180
         Rot = np.array([[np.cos(d2r*alpha),-np.sin(d2r*alpha)],
                         [np.sin(d2r*alpha),np.cos(d2r*alpha)]])
@@ -979,30 +965,6 @@ class RadioNode(object):
             fi.close()
 
         return u
-
-    def loadvsh(self):
-        """ load an antenna 
-
-
-        """
-        #print self.fileant
-        A = Antenna(self.fileant)
-        self.A = A
-
-    def gantenna(self, mode='subst'):
-        """ get antenna file
-        """
-        import tkFileDialog
-        FD = tkFileDialog
-
-        fileant = FD.askopenfilename(filetypes=[("Fichiers vsh3", "*.vsh3"),
-                                                ("All", "*")],
-                                     title="Please choose an antenna file",
-                                     initialdir=antdir)
-
-        _fileant = os.path.split(fileant)[1]
-        self.fileant = _fileant
-        self.loadvsh()
 
 if (__name__ == "__main__"):
     tx = RadioNode(_fileini='w2m1rx.ini')

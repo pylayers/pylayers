@@ -774,7 +774,7 @@ class Trajectory(PyLayers,pd.DataFrame):
         if tmax == None:
             tmax = tt[-1]
 
-        assert(tmax>tmin)
+        assert(tmax>=tmin)
         assert(tmax<=tt[-1])
         assert(tmin>=tt[0])
 

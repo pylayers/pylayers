@@ -51,7 +51,7 @@ cp2 = poly2.centroid.xy
 
 # <markdowncell>
 
-# Here the centroïd of each cycle is chosen in order to become respectively the transmitter and the receiver of the link. 
+# Here the centrod of each cycle is chosen in order to become respectively the transmitter and the receiver of the link. 
 
 # <codecell>
 

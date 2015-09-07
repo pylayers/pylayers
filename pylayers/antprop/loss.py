@@ -332,12 +332,12 @@ def hata(pMS,pBS,fGHz,hMS,hBS,typ):
     ----------
 
     OKUMURA (Y.), OHMORI (E.), KAWANO (T.)
-    et FUKUA (K.). – Field strength and its varia-
+    et FUKUA (K.).  Field strength and its varia-
     bility in UHF and VHF land-mobile radio ser-
     vice. Rev. Elec. Commun. Lab., vol. 16, n o 9,
     1968.
 
-    HATA (M.). – Empirical formula for propaga-
+    HATA (M.).  Empirical formula for propaga-
     tion loss in land mobile radio services. IEEE
     Trans. Veh. Technol., vol. 29, pp. 317-325,
     Aug. 1980

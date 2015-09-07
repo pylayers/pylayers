@@ -9,6 +9,7 @@
 .. code:: python
 
     %matplotlib inline
+
 Geographical Information and the Earth Zone class : ``Ezone``
 =============================================================
 
@@ -26,13 +27,12 @@ The command h5ls allows to see the hierarchical structure of the file
 
 .. code:: python
 
-    !h5ls $BASENAME/gis/h5/N48W002.h5
+    !h5ls $BASENAME/gis/h5/N48W002.h5ls
+
 
 .. parsed-literal::
 
-    bldg                     Group
-    dem                      Group
-    extent                   Dataset {4}
+    /home/uguen/Bureau/P1/gis/h5/N48W002.h5ls: unable to open file
 
 
 Invoquing an earth zone requires to specify the tile prefix with the
@@ -52,9 +52,11 @@ gathered for this ``Ezone`` in an existing HDF5 file let invoque the
 .. code:: python
 
     z.loadh5()
+
 .. code:: python
 
     z
+
 
 
 
@@ -87,10 +89,11 @@ method.
 
 
 
+
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x2b8b54b6f4d0>,
-     <matplotlib.axes.AxesSubplot at 0x2b8b54b6f8d0>)
+    (<matplotlib.figure.Figure at 0x2b90e8763410>,
+     <matplotlib.axes._subplots.AxesSubplot at 0x2b90e8763810>)
 
 
 
@@ -104,6 +107,7 @@ The ``Ezone`` object has a member extent which gives
 .. code:: python
 
     z.extent
+
 
 
 
@@ -122,6 +126,7 @@ The shape of hgta data is larger (3601,3601) than the srtm data
 
 
 
+
 .. parsed-literal::
 
     (3601, 3601)
@@ -131,6 +136,7 @@ The shape of hgta data is larger (3601,3601) than the srtm data
 .. code:: python
 
     z.hgts.shape
+
 
 
 
@@ -148,10 +154,11 @@ The aster DEM can also be shown.
 
 
 
+
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x2b8b52dc12d0>,
-     <matplotlib.axes.AxesSubplot at 0x2b8b52dc15d0>)
+    (<matplotlib.figure.Figure at 0x2b90e8ba6710>,
+     <matplotlib.axes._subplots.AxesSubplot at 0x2b90e8ba6110>)
 
 
 
@@ -179,6 +186,7 @@ This region can be converted into cartesian coordinates with the
     extent1_cart  = ez.conv(extent1,z.m)
     print "latlon extent :",extent1
     print "Cartesian extent (meters):",extent1_cart
+
 
 .. parsed-literal::
 
@@ -211,6 +219,7 @@ the ``show`` method for zooming in the map.
                  )
 
 
+
 .. image:: Ezone_files/Ezone_28_0.png
 
 
@@ -226,12 +235,14 @@ cartesian coordinates as below
 
     z.rebase()
     z.tocart()
+
 .. code:: python
 
     f,a = z.show(title='Rennes City Center',
                  extent=extent1_cart,coord='cartesian',
                  bldg=True,height=True,
                  clim=[0,100])
+
 
 
 .. image:: Ezone_files/Ezone_31_0.png
@@ -246,6 +257,7 @@ of the city.
     extent2_cart = ez.conv(extent2,z.m)
     print extent2
     print extent2_cart
+
 
 .. parsed-literal::
 
@@ -263,6 +275,7 @@ of the city.
                  clim=[0,40])
 
 
+
 .. image:: Ezone_files/Ezone_34_0.png
 
 
@@ -274,6 +287,7 @@ of the city.
                  bldg=True,
                  height=True,
                  clim=[0,80])
+
 
 
 .. image:: Ezone_files/Ezone_35_0.png
@@ -294,6 +308,7 @@ be expressed in (lon,lat) coordinates in WGS84 system.
                                     pb=(-1.62,48.325),
                                     fGHz=0.3,
                                     source='srtm')
+
 .. code:: python
 
     f = plt.figure(figsize=(15,5))
@@ -302,9 +317,10 @@ be expressed in (lon,lat) coordinates in WGS84 system.
 
 
 
+
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x2b8b57a1b190>
+    <matplotlib.text.Text at 0x2b90fcc80990>
 
 
 
@@ -322,9 +338,10 @@ be expressed in (lon,lat) coordinates in WGS84 system.
 
 
 
+
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x2b8b5516f210>
+    <matplotlib.text.Text at 0x2b90fcca9e90>
 
 
 
@@ -332,9 +349,10 @@ be expressed in (lon,lat) coordinates in WGS84 system.
 .. image:: Ezone_files/Ezone_40_1.png
 
 
-. code:: python
+.. code:: python
 
     z
+
 
 
 
@@ -356,12 +374,7 @@ be expressed in (lon,lat) coordinates in WGS84 system.
 
     a=z.cover(Ht=2,Hr=2,Rmax=10000)
 
-.. parsed-literal::
-
-    /home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/delaunay/triangulate.py:104: DuplicatePointWarning: Input data contains duplicate x,y points; some values are ignored.
-      DuplicatePointWarning,
 
 
-
-.. image:: Ezone_files/Ezone_42_1.png
+.. image:: Ezone_files/Ezone_42_0.png
 
