@@ -29,7 +29,7 @@ Pattern Class
 
     Pattern.eval
     Pattern.gain
-    Pattern.F
+    Pattern.radF
 
 Pattern Functions
 -----------------
@@ -87,7 +87,6 @@ Synthesis Functions
     Antenna.Fsynth2b
     Antenna.Fsynth2
     Antenna.Fsynth3
-    Antenna.Fpatt
 
 Visualization functions
 -----------------------

@@ -30,4 +30,5 @@ The css is in _static/sphinxdoc.css
 To transform the notebook in rst file and moving figures and images in the
 proper place type : 
 
-../notebook/buildoc
+../notebook/
+make

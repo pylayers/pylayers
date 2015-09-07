@@ -43,23 +43,44 @@ Tchannel
 Members
 -------
 
-    filcal : calibration file 
+    filcal : calibration file
     win : string type of window {'rect'| }
 
 
 .. autosummary::
     :toctree: generated/
 
-    FUchannel.frombuf
-    FUchannel.capacity
-    FUchannel.calibrate
-    FUchannel.pdp
-    FUDchannel.minphas
-    FUDchannel.ifft
-    FUDchannel.totime
-    FUDchannel.iftd
-    FUDchannel.ft1
-    FUDchannel.ftau
+    Tchannel.saveh5
+    Tchannel.loadh5
+    Tchannel.apply
+    Tchannel.applywavC
+    Tchannel.chantap
+    Tchannel.applywavB
+    Tchannel.applywavA
+    Tchannel.plotd
+    Tchannel.plotad
+    Tchannel.doadod
+    Tchannel.energy
+    Tchannel.wavefig
+    Tchannel.rayfig
+    Tchannel.rssi
+    Tchannel.cut
+    Tchannel.sort
+    Tchannel.showtap
+    Tchannel.tap
+    Tchannel.minphas
+    Tchannel.ifft
+    Tchannel.totime
+    Tchannel.iftd
+    Tchannel.ft1
+    Tchannel.ftau
+    Tchannel.cir
+    Tchannel.plot3d
+    Tchannel.ft2
+    Tchannel.frombuf
+    Tchannel.capacity
+    Tchannel.calibrate
+    Tchannel.pdp
 
 """
 import doctest
@@ -2636,6 +2657,10 @@ class Tchannel(bs.FUsignal):
     def frombuf(self,S,sign=-1):
         """ load a buffer from vna
 
+        Parameters
+        ----------
+
+        S : buffer
         sign : int (+1 |-1)  for complex reconstruction
 
         """
@@ -2681,13 +2706,14 @@ class Tchannel(bs.FUsignal):
         ----------
 
         filecal : string
+            calibration file name  "calibration.mat"
         conjugate : boolean
+            default False
 
 
         """
         self.filecal = filecal
-        self.calibrated = not self.calibrated
-        Hcal = FUchannel()
+        Hcal = Tchannel()
         Hcal.load(filecal)
         assert (len(self.x) == len(Hcal.x)),"calibration file has hot the same number of points"
         if not self.calibrated:
@@ -2695,11 +2721,13 @@ class Tchannel(bs.FUsignal):
                 self.y = self.y/Hcal.y
             else:
                 self.y = self.y/np.conj(Hcal.y)
+            self.calibrated = not self.calibrated
         else:
             if not(conjugate):
                 self.y = self.y*Hcal.y
             else:
                 self.y = self.y*np.conj(Hcal.y)
+            self.calibrated = not self.calibrated
 
     def pdp(self,win='hamming',calibrate=True):
         """ calculates power delay profile
