@@ -243,12 +243,77 @@ The graph of interactions $\mathcal{G}_i$ used to determine the ray signatures.
 
 ```python
 >>> L.info()
+filestr :  DLR.ini
+filematini :  matDB.ini
+fileslabini :  slabDB.ini
+filegeom :  DLR.off
+boundaries  (-0.505, 32.586, -8.277, 8.878)
+number of Points : 105
+number of Segments : 124
+number of Sub-Segments : 30
+Gs Nodes :  229
+Gs Edges :  248
+Gt Nodes :  21
+Gt Edges :  52
+vnodes = Gt.node[Nc]['cycles'].cycle 
+poly = Gt.node[Nc]['cycle'].polyg 
+Gr Nodes    : 18
+Gr Edges    : 18
+Nc  = Gr.node[nroom]['cycles']
 ```
 
 The layout can be displayed using matplotlib ploting primitive. Several display options are specified in the display dictionnary. Those options are exploited in `showGs()` vizualisation method.
 
 ```python
 >>> L.display
+{'activelayer': 'WALL',
+ 'alpha': 0.5,
+ 'box': (-0.505, 32.586, -8.277, 8.878),
+ 'clear': True,
+ 'edges': True,
+ 'edlabel': False,
+ 'edlblsize': 20,
+ 'ednodes': True,
+ 'fileoverlay': 'DLR4991.png',
+ 'fontsize': 10,
+ 'inverse': False,
+ 'layer': [],
+ 'layers': ['WALL', 'PARTITION', 'AIR', 'WINDOW_GLASS', '3D_WINDOW_GLASS'],
+ 'layerset': ['WINDOW_GLASS',
+  'PLASTERBOARD_7CM',
+  'WALL',
+  'AIR',
+  'WINDOW',
+  'METALIC',
+  'PLASTERBOARD_14CM',
+  'DOOR',
+  'FLOOR',
+  'METAL',
+  'PARTITION',
+  'CONCRETE_20CM3D',
+  'PLASTERBOARD_10CM',
+  'CEIL',
+  'CONCRETE_6CM3D',
+  'CONCRETE_15CM3D',
+  '3D_WINDOW_GLASS',
+  'WALLS',
+  'WOOD',
+  'CONCRETE_7CM3D',
+  'PILLAR',
+  'ABSORBENT'],
+ 'ndlabel': False,
+ 'ndlblsize': 20,
+ 'ndsize': 10,
+ 'nodes': True,
+ 'overlay': False,
+ 'scaled': True,
+ 'subseg': True,
+ 'subsegnb': True,
+ 'thin': False,
+ 'ticksoff': True,
+ 'title': 'Init',
+ 'transition': True,
+ 'visu': False}
 ```
 
 #### Layers

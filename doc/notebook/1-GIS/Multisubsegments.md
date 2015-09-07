@@ -148,15 +148,21 @@ Then for evaluating the radio link, simply type:
 
 ```python
 >>> ak,tauk=Lk.eval(force=True,a=tx,b=rx)
+checkh5
+Start Signatures
+algo 7
+Stop signature 0.0476150512695
 Signatures'> from 2_1_3 saved
+Start Rays
 Rays'> from 3_2_1 saved
+Stop rays 0.548882961273
 Ctilde'> from 2_1_0 saved
 Tchannel'> from 2_1_0_0_0_0_0 saved
 ```
 
 At that point the channel has been evaluated and all the data stored in an `hdf5` file
 
-## The different members of the link are
+## Link members
 
 The Signature of the radio channel is in `Lk.Si`, the 3D rays are in `Lk.R`, the propagation channel is in `Lk.C` and the transmission channel is in `Lk.H`
 
@@ -213,8 +219,7 @@ Nfreq : 100
 ```
 
 ```python
->>> Lk = DLink(L=L,a=tx,b=rx)plt.stem(Lk.H.taud,Lk.H.ak)
-<Container object of 3 artists>
+>>> Lk = DLink(L=L,a=tx,b=rx)
 ```
 
 ```python
@@ -232,12 +237,6 @@ array([  767. ,  1114. ,     1.5])
 ```
 
 ```python
->>> cir.plot(xmin=20,xmax=80,typ='v')
-(<matplotlib.figure.Figure at 0x7f3b52349110>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f3b52349910>]], dtype=object))
-```
-
-```python
 >>> layer = ['AIR','AIR','AIR']
 >>> Lk.L.chgmss(1,ss_name=layer)
 >>> Lk.L.Gs.node[1]['ss_name']=layer
@@ -250,10 +249,16 @@ array([  767. ,  1114. ,     1.5])
 >>> plt.stem(Lk.H.taud,Lk.H.ak)
 structure saved in  defstr3.str2
 structure saved in  defstr3.ini
+checkh5
+Start Signatures
+algo 7
+Stop signature 0.0449650287628
 Signatures'> from 2_1_3 saved
+Start Rays
 Rays'> from 3_2_1 saved
+Stop rays 0.557983160019
 Ctilde'> from 2_1_0 saved
-Tchannel'> from 2_1_0_0_0_0_0 saved
+Tchannel'> from 2_1_0_0_0_2_2 saved
 <Container object of 3 artists>
 ```
 
@@ -263,8 +268,8 @@ Tchannel'> from 2_1_0_0_0_0_0 saved
 
 ```python
 >>> cirair.plot(typ=['v'],xmin=20,xmax=80)
-(<matplotlib.figure.Figure at 0x7f3b5230fb10>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f3b52359490>]], dtype=object))
+(<matplotlib.figure.Figure at 0x7fad347f2ad0>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7fad347f9ad0>]], dtype=object))
 ```
 
 ```python
@@ -272,18 +277,24 @@ Tchannel'> from 2_1_0_0_0_0_0 saved
 >>> Lk.L.chgmss(1,ss_name=layer)
 >>> Lk.L.Gs.node[1]['ss_name']=layer
 >>> Lk.L.g2npy()
->>> Lk.Lk = DLink(L=L,a=tx,b=rx)L.save()
+>>> Lk.L.save()
 >>> Lk.eval(force=True)
 >>> cirpart = Lk.H.applywavB(wav.sf)
 >>> cirpart.plot(typ=['v'],xmin=20,xmax=80)
 structure saved in  defstr3.str2
 structure saved in  defstr3.ini
+checkh5
+Start Signatures
+algo 7
+Stop signature 0.0465669631958
 Signatures'> from 2_1_3 saved
+Start Rays
 Rays'> from 3_2_1 saved
+Stop rays 0.558837890625
 Ctilde'> from 2_1_0 saved
-Tchannel'> from 2_1_0_0_0_0_0 saved
-(<matplotlib.figure.Figure at 0x7f3b523495d0>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f3b532c3150>]], dtype=object))
+Tchannel'> from 2_1_0_0_0_2_2 saved
+(<matplotlib.figure.Figure at 0x7fad2f51ab10>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7fad3463c7d0>]], dtype=object))
 ```
 
 ```python
@@ -297,12 +308,18 @@ Tchannel'> from 2_1_0_0_0_0_0 saved
 >>> cirmet.plot(typ=['v'],xmin=20,xmax=80)
 structure saved in  defstr3.str2
 structure saved in  defstr3.ini
+checkh5
+Start Signatures
+algo 7
+Stop signature 0.0461058616638
 Signatures'> from 2_1_3 saved
+Start Rays
 Rays'> from 3_2_1 saved
+Stop rays 0.56045293808
 Ctilde'> from 2_1_0 saved
-Tchannel'> from 2_1_0_0_0_0_0 saved
-(<matplotlib.figure.Figure at 0x7f3b5359c350>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f3b52300490>]], dtype=object))
+Tchannel'> from 2_1_0_0_0_2_2 saved
+(<matplotlib.figure.Figure at 0x7fad3629f190>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7fad3465b790>]], dtype=object))
 ```
 
 ```python
