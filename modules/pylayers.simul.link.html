@@ -189,7 +189,7 @@
   <div class="section" id="module-pylayers.simul.link">
 <span id="pylayers-simul-link"></span><h1>pylayers.simul.link<a class="headerlink" href="#module-pylayers.simul.link" title="Permalink to this headline">¶</a></h1>
 <p>This module runs the electromagnetic simulation for a link.
-A deterministic link has two termination points and an associated Layout 
+A deterministic link has two termination points and an associated Layout
 whereas a statistical link do not need any of those precursor object.</p>
 <p>It stores simulated objects in <cite>hdf5</cite> format.</p>
 <div class="section" id="link-class">
@@ -197,7 +197,7 @@ whereas a statistical link do not need any of those precursor object.</p>
 <p>Link is a MetaClass, which derives from <cite>Tchannel</cite>.
 Tchannel is a transmission channel i.e a radio channel
 which includes both link termination antennas.</p>
-<p>A common factor of both statistical (SLink) and deterministic channel (DLink) 
+<p>A common factor of both statistical (SLink) and deterministic channel (DLink)
 is the exitence of <img src="../_images/mathmpl/math-74f622ea16.png" style="position: relative; bottom: -7px"/> and <img src="../_images/mathmpl/math-2517e81469.png" style="position: relative; bottom: -7px"/></p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -268,7 +268,7 @@ is the exitence of <img src="../_images/mathmpl/math-74f622ea16.png" style="posi
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.reset_config.html#pylayers.simul.link.DLink.reset_config" title="pylayers.simul.link.DLink.reset_config"><code class="xref py py-obj docutils literal"><span class="pre">DLink.reset_config</span></code></a>()</td>
 <td>reset configuration when a new layout is loaded</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.fill_dexist.html#pylayers.simul.link.DLink.fill_dexist" title="pylayers.simul.link.DLink.fill_dexist"><code class="xref py py-obj docutils literal"><span class="pre">DLink.fill_dexist</span></code></a>(key,&nbsp;grpname)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.check_grpname.html#pylayers.simul.link.DLink.check_grpname" title="pylayers.simul.link.DLink.check_grpname"><code class="xref py py-obj docutils literal"><span class="pre">DLink.check_grpname</span></code></a>(key,&nbsp;grpname)</td>
 <td>Check if the key&#8217;s data with a given groupname</td>
 </tr>
 </tbody>
@@ -283,7 +283,7 @@ is the exitence of <img src="../_images/mathmpl/math-74f622ea16.png" style="posi
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.checkh5.html#pylayers.simul.link.DLink.checkh5" title="pylayers.simul.link.DLink.checkh5"><code class="xref py py-obj docutils literal"><span class="pre">DLink.checkh5</span></code></a>()</td>
-<td>check existence of previous simulation run with the same parameters.</td>
+<td>check existence of previous simulations run with the same parameters.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.array_exist.html#pylayers.simul.link.DLink.array_exist" title="pylayers.simul.link.DLink.array_exist"><code class="xref py py-obj docutils literal"><span class="pre">DLink.array_exist</span></code></a>(key,&nbsp;array[,&nbsp;tol])</td>
 <td>check if an array of a given key (h5py group)</td>
@@ -337,7 +337,7 @@ is the exitence of <img src="../_images/mathmpl/math-74f622ea16.png" style="posi
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on août 15, 2015.
+      Last updated on sept. 07, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.simul.link.txt"

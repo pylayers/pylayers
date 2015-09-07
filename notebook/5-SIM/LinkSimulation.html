@@ -123,19 +123,14 @@
           <div class="body" role="main">
             
   <div class="code python highlight-python"><div class="highlight"><pre>from pylayers.simul.link import *
-%pylab inline
+%matplotlib inline
+import seaborn as sns
+sns.set_style(&quot;dark&quot;)
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Populating the interactive namespace from numpy and matplotlib
-</pre></div>
-</div>
-<pre class="literal-block">
-WARNING: pylab import has clobbered these variables: ['plt', 'mlab']
-<cite>%matplotlib</cite> prevents importing * from pylab and numpy
-</pre>
 <div class="section" id="how-to-do-ray-tracing-simulation-using-dlink">
 <h1>How to do Ray Tracing simulation using DLink<a class="headerlink" href="#how-to-do-ray-tracing-simulation-using-dlink" title="Permalink to this headline">¶</a></h1>
 <p>This section illustrates the
@@ -145,13 +140,14 @@ Output) SISO link.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">DLink</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal"><span class="pre">repr</span></code> function provides information about the default link, which
-is stored in the <code class="docutils literal"><span class="pre">hdf5</span></code> file. It should correspond to the default
-Layout. A link gathers various objects and information e.g + Layout file
-+ Node a (first termination of the link) + position + antenna file +
-antenna rotation matrix + Node b (second termination of the link) +
-position + antenna file + antenna rotation matrix + Frequency range +
-fmin + fmax + fstep</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b2136c1b5d0&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x2b20c91d1f90&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/LinkSimulation_4_1.png" src="../../_images/LinkSimulation_4_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span>
 </pre></div>
 </div>
@@ -163,7 +159,7 @@ Layout : defstr.ini
 Node a
 ------
 position : [  766.00300113  1113.94747911     1.2       ]
-Antenna : S2R2.sh3
+Antenna : sh3
 Rotation matrice :
  [[ 1.  0.  0.]
  [ 0.  1.  0.]
@@ -171,8 +167,8 @@ Rotation matrice :
 
 Node b
 ------
-position : [  766.00300113  1113.94747911     1.2       ]
-Antenna : S2R2.sh3
+position : [  761.0028967   1113.91576981     1.2       ]
+Antenna : sh3
 Rotation matrice :
  [[ 1.  0.  0.]
  [ 0.  1.  0.]
@@ -180,57 +176,187 @@ Rotation matrice :
 
 Link evaluation information :
 -----------------------------
-distance :  0.000 m
-delay :  0.000 ns
+distance :  5.000 m
+delay : 16.667 ns
 fmin (fGHz) : 2.0
 fmax (fGHz) : 11.0
 fstep (fGHz) : 0.05
+Nf : 181
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>checkh5
+Start Signatures
+Signatures&#39;&gt; from 1_2_3 loaded
+load signature
+Stop signature 0.121777057648
+Start Rays
+Rays&#39;&gt; from 3_0_2 loaded
+Stop rays 0.152944087982
+Ctilde&#39;&gt; from 0_2_0 loaded
+Tchannel&#39;&gt; from 0_2_0_0_0_2_2 loaded
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="n">array</span><span class="p">([</span>  <span class="mf">8.74446418e-05</span><span class="p">,</span>   <span class="mf">1.46698690e-04</span><span class="p">,</span>   <span class="mf">0.00000000e+00</span><span class="p">,</span>
+          <span class="mf">3.14995445e-06</span><span class="p">,</span>   <span class="mf">1.51702810e-04</span><span class="p">,</span>   <span class="mf">7.29356204e-05</span><span class="p">,</span>
+          <span class="mf">5.90710148e-05</span><span class="p">,</span>   <span class="mf">2.46454264e-05</span><span class="p">,</span>   <span class="mf">2.44450202e-05</span><span class="p">,</span>
+          <span class="mf">4.87319705e-06</span><span class="p">,</span>   <span class="mf">1.75686332e-04</span><span class="p">,</span>   <span class="mf">7.13675689e-06</span><span class="p">,</span>
+          <span class="mf">7.47211694e-05</span><span class="p">,</span>   <span class="mf">6.74741489e-08</span><span class="p">,</span>   <span class="mf">1.95936070e-06</span><span class="p">,</span>
+          <span class="mf">2.23741852e-07</span><span class="p">,</span>   <span class="mf">2.26646476e-06</span><span class="p">,</span>   <span class="mf">4.14435099e-06</span><span class="p">,</span>
+          <span class="mf">3.00650318e-06</span><span class="p">,</span>   <span class="mf">3.00698950e-06</span><span class="p">,</span>   <span class="mf">2.61297158e-05</span><span class="p">,</span>
+          <span class="mf">2.70506446e-05</span><span class="p">,</span>   <span class="mf">0.00000000e+00</span><span class="p">,</span>   <span class="mf">0.00000000e+00</span><span class="p">,</span>
+          <span class="mf">7.97779088e-08</span><span class="p">,</span>   <span class="mf">2.38562292e-06</span><span class="p">,</span>   <span class="mf">4.04156289e-08</span><span class="p">,</span>
+          <span class="mf">2.64709912e-06</span><span class="p">,</span>   <span class="mf">9.07630898e-08</span><span class="p">,</span>   <span class="mf">1.12916970e-06</span><span class="p">,</span>
+          <span class="mf">1.22492177e-07</span><span class="p">,</span>   <span class="mf">1.33692589e-06</span><span class="p">,</span>   <span class="mf">8.04381204e-06</span><span class="p">,</span>
+          <span class="mf">8.49458480e-06</span><span class="p">,</span>   <span class="mf">6.14904213e-05</span><span class="p">,</span>   <span class="mf">5.66523749e-05</span><span class="p">,</span>
+          <span class="mf">4.67849894e-06</span><span class="p">,</span>   <span class="mf">3.68188625e-06</span><span class="p">,</span>   <span class="mf">3.68423370e-06</span><span class="p">,</span>
+          <span class="mf">0.00000000e+00</span><span class="p">,</span>   <span class="mf">3.88676042e-06</span><span class="p">,</span>   <span class="mf">3.88632416e-06</span><span class="p">,</span>
+          <span class="mf">2.23404583e-07</span><span class="p">,</span>   <span class="mf">5.46676503e-06</span><span class="p">,</span>   <span class="mf">1.02274728e-05</span><span class="p">,</span>
+          <span class="mf">1.00586800e-05</span><span class="p">,</span>   <span class="mf">1.07393894e-05</span><span class="p">,</span>   <span class="mf">9.71108468e-06</span><span class="p">,</span>
+          <span class="mf">9.25607532e-08</span><span class="p">,</span>   <span class="mf">1.62695253e-07</span><span class="p">,</span>   <span class="mf">4.71935354e-07</span><span class="p">,</span>
+          <span class="mf">1.21853846e-06</span><span class="p">,</span>   <span class="mf">1.61900680e-07</span><span class="p">,</span>   <span class="mf">1.01020395e-07</span><span class="p">,</span>
+          <span class="mf">1.47301403e-06</span><span class="p">,</span>   <span class="mf">6.52210803e-07</span><span class="p">,</span>   <span class="mf">4.42388951e-06</span><span class="p">,</span>
+          <span class="mf">6.41935326e-06</span><span class="p">,</span>   <span class="mf">5.64142360e-06</span><span class="p">,</span>   <span class="mf">3.84647619e-06</span><span class="p">,</span>
+          <span class="mf">3.84739961e-06</span><span class="p">,</span>   <span class="mf">5.64145807e-06</span><span class="p">,</span>   <span class="mf">3.27350264e-06</span><span class="p">,</span>
+          <span class="mf">3.34549293e-06</span><span class="p">,</span>   <span class="mf">9.67273293e-08</span><span class="p">,</span>   <span class="mf">1.64206449e-07</span><span class="p">,</span>
+          <span class="mf">2.35671508e-07</span><span class="p">,</span>   <span class="mf">6.21878652e-06</span><span class="p">,</span>   <span class="mf">1.36855910e-07</span><span class="p">,</span>
+          <span class="mf">3.45202976e-06</span><span class="p">,</span>   <span class="mf">2.66614869e-07</span><span class="p">,</span>   <span class="mf">9.25499264e-07</span><span class="p">,</span>
+          <span class="mf">9.77377034e-07</span><span class="p">,</span>   <span class="mf">0.00000000e+00</span><span class="p">,</span>   <span class="mf">0.00000000e+00</span><span class="p">,</span>
+          <span class="mf">1.01308828e-07</span><span class="p">,</span>   <span class="mf">1.36303838e-07</span><span class="p">,</span>   <span class="mf">0.00000000e+00</span><span class="p">,</span>
+          <span class="mf">0.00000000e+00</span><span class="p">,</span>   <span class="mf">1.91570108e-07</span><span class="p">,</span>   <span class="mf">2.77178941e-07</span><span class="p">,</span>
+          <span class="mf">3.40906186e-06</span><span class="p">,</span>   <span class="mf">5.08162922e-06</span><span class="p">,</span>   <span class="mf">2.75700486e-07</span><span class="p">,</span>
+          <span class="mf">0.00000000e+00</span><span class="p">,</span>   <span class="mf">1.71902246e-06</span><span class="p">,</span>   <span class="mf">1.71676236e-06</span><span class="p">,</span>
+          <span class="mf">1.68408980e-06</span><span class="p">,</span>   <span class="mf">1.76350549e-06</span><span class="p">,</span>   <span class="mf">1.12834353e-07</span><span class="p">,</span>
+          <span class="mf">3.06875167e-08</span><span class="p">,</span>   <span class="mf">1.41120249e-07</span><span class="p">,</span>   <span class="mf">3.95694440e-08</span><span class="p">,</span>
+          <span class="mf">3.54499281e-07</span><span class="p">,</span>   <span class="mf">4.25309327e-07</span><span class="p">]),</span>
+ <span class="n">array</span><span class="p">([</span> <span class="mf">16.66734994</span><span class="p">,</span>  <span class="mf">18.48784882</span><span class="p">,</span>  <span class="mf">20.53778357</span><span class="p">,</span>  <span class="mf">33.33365909</span><span class="p">,</span>
+         <span class="mf">33.3343511</span> <span class="p">,</span>  <span class="mf">26.03460301</span><span class="p">,</span>  <span class="mf">26.03460301</span><span class="p">,</span>  <span class="mf">31.44237961</span><span class="p">,</span>
+         <span class="mf">31.44261404</span><span class="p">,</span>  <span class="mf">34.28021045</span><span class="p">,</span>  <span class="mf">34.28088335</span><span class="p">,</span>  <span class="mf">35.42785385</span><span class="p">,</span>
+         <span class="mf">35.42850495</span><span class="p">,</span>  <span class="mf">35.89995802</span><span class="p">,</span>  <span class="mf">35.89997275</span><span class="p">,</span>  <span class="mf">35.90181477</span><span class="p">,</span>
+         <span class="mf">35.90184832</span><span class="p">,</span>  <span class="mf">50.00066032</span><span class="p">,</span>  <span class="mf">50.0013426</span> <span class="p">,</span>  <span class="mf">50.00136179</span><span class="p">,</span>
+         <span class="mf">32.44415565</span><span class="p">,</span>  <span class="mf">32.44438284</span><span class="p">,</span>  <span class="mf">33.65446829</span><span class="p">,</span>  <span class="mf">33.65468731</span><span class="p">,</span>
+         <span class="mf">36.78052454</span><span class="p">,</span>  <span class="mf">36.78053892</span><span class="p">,</span>  <span class="mf">36.78233685</span><span class="p">,</span>  <span class="mf">36.78236959</span><span class="p">,</span>
+         <span class="mf">37.85243698</span><span class="p">,</span>  <span class="mf">37.85245096</span><span class="p">,</span>  <span class="mf">37.85419797</span><span class="p">,</span>  <span class="mf">37.85422979</span><span class="p">,</span>
+         <span class="mf">38.87329197</span><span class="p">,</span>  <span class="mf">38.87329197</span><span class="p">,</span>  <span class="mf">38.87388536</span><span class="p">,</span>  <span class="mf">38.87388536</span><span class="p">,</span>
+         <span class="mf">50.63660763</span><span class="p">,</span>  <span class="mf">50.63728134</span><span class="p">,</span>  <span class="mf">50.63730029</span><span class="p">,</span>  <span class="mf">51.42048261</span><span class="p">,</span>
+         <span class="mf">51.42114606</span><span class="p">,</span>  <span class="mf">51.42116471</span><span class="p">,</span>  <span class="mf">66.66765177</span><span class="p">,</span>  <span class="mf">66.66836297</span><span class="p">,</span>
+         <span class="mf">37.26423534</span><span class="p">,</span>  <span class="mf">37.26423534</span><span class="p">,</span>  <span class="mf">37.26443315</span><span class="p">,</span>  <span class="mf">37.26443315</span><span class="p">,</span>
+         <span class="mf">41.09509686</span><span class="p">,</span>  <span class="mf">41.09509686</span><span class="p">,</span>  <span class="mf">41.09510973</span><span class="p">,</span>  <span class="mf">41.09510973</span><span class="p">,</span>
+         <span class="mf">41.0967189</span> <span class="p">,</span>  <span class="mf">41.0967189</span> <span class="p">,</span>  <span class="mf">41.0967482</span> <span class="p">,</span>  <span class="mf">41.0967482</span> <span class="p">,</span>
+         <span class="mf">53.85226116</span><span class="p">,</span>  <span class="mf">53.85226116</span><span class="p">,</span>  <span class="mf">53.85289465</span><span class="p">,</span>  <span class="mf">53.85289465</span><span class="p">,</span>
+         <span class="mf">53.85291246</span><span class="p">,</span>  <span class="mf">53.85291246</span><span class="p">,</span>  <span class="mf">55.86686011</span><span class="p">,</span>  <span class="mf">55.8671227</span> <span class="p">,</span>
+         <span class="mf">56.66325336</span><span class="p">,</span>  <span class="mf">56.66785273</span><span class="p">,</span>  <span class="mf">67.14592909</span><span class="p">,</span>  <span class="mf">67.14663522</span><span class="p">,</span>
+         <span class="mf">67.7390271</span> <span class="p">,</span>  <span class="mf">67.73972705</span><span class="p">,</span>  <span class="mf">83.33535519</span><span class="p">,</span>  <span class="mf">56.43674387</span><span class="p">,</span>
+         <span class="mf">56.43700381</span><span class="p">,</span>  <span class="mf">57.14110656</span><span class="p">,</span>  <span class="mf">57.14136329</span><span class="p">,</span>  <span class="mf">57.2252067</span> <span class="p">,</span>
+         <span class="mf">57.2297609</span> <span class="p">,</span>  <span class="mf">57.91998171</span><span class="p">,</span>  <span class="mf">57.92448129</span><span class="p">,</span>  <span class="mf">69.60298696</span><span class="p">,</span>
+         <span class="mf">69.60298696</span><span class="p">,</span>  <span class="mf">69.60366816</span><span class="p">,</span>  <span class="mf">69.60366816</span><span class="p">,</span>  <span class="mf">83.71846526</span><span class="p">,</span>
+         <span class="mf">84.19490142</span><span class="p">,</span>  <span class="mf">59.33890847</span><span class="p">,</span>  <span class="mf">59.33890847</span><span class="p">,</span>  <span class="mf">59.3391557</span> <span class="p">,</span>
+         <span class="mf">59.3391557</span> <span class="p">,</span>  <span class="mf">60.08930256</span><span class="p">,</span>  <span class="mf">60.08930256</span><span class="p">,</span>  <span class="mf">60.09363971</span><span class="p">,</span>
+         <span class="mf">60.09363971</span><span class="p">,</span>  <span class="mf">85.70170024</span><span class="p">,</span>  <span class="mf">85.70170024</span><span class="p">]))</span>
 </pre></div>
 </div>
 <p>To evaluate a link there is the <code class="docutils literal"><span class="pre">eval</span></code> method. This method takes as
-argument a list of desired outputs, the type of algorithm being used,
-the ceil heigh and the number og multi reflection between ceil and
+argument + a list of the desired outputs, + the type of algorithm being
+used, + the ceil heigh + the number of multi reflection between ceil and
 floor.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b2136dfc190&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x2b2136dfc710&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/LinkSimulation_8_1.png" src="../../_images/LinkSimulation_8_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span> <span class="mf">16.66734994</span><span class="p">,</span>  <span class="mf">18.48784882</span><span class="p">,</span>  <span class="mf">20.53778357</span><span class="p">,</span>  <span class="mf">33.33365909</span><span class="p">,</span>
+        <span class="mf">33.3343511</span> <span class="p">,</span>  <span class="mf">26.03460301</span><span class="p">,</span>  <span class="mf">26.03460301</span><span class="p">,</span>  <span class="mf">31.44237961</span><span class="p">,</span>
+        <span class="mf">31.44261404</span><span class="p">,</span>  <span class="mf">34.28021045</span><span class="p">,</span>  <span class="mf">34.28088335</span><span class="p">,</span>  <span class="mf">35.42785385</span><span class="p">,</span>
+        <span class="mf">35.42850495</span><span class="p">,</span>  <span class="mf">35.89995802</span><span class="p">,</span>  <span class="mf">35.89997275</span><span class="p">,</span>  <span class="mf">35.90181477</span><span class="p">,</span>
+        <span class="mf">35.90184832</span><span class="p">,</span>  <span class="mf">50.00066032</span><span class="p">,</span>  <span class="mf">50.0013426</span> <span class="p">,</span>  <span class="mf">50.00136179</span><span class="p">,</span>
+        <span class="mf">32.44415565</span><span class="p">,</span>  <span class="mf">32.44438284</span><span class="p">,</span>  <span class="mf">33.65446829</span><span class="p">,</span>  <span class="mf">33.65468731</span><span class="p">,</span>
+        <span class="mf">36.78052454</span><span class="p">,</span>  <span class="mf">36.78053892</span><span class="p">,</span>  <span class="mf">36.78233685</span><span class="p">,</span>  <span class="mf">36.78236959</span><span class="p">,</span>
+        <span class="mf">37.85243698</span><span class="p">,</span>  <span class="mf">37.85245096</span><span class="p">,</span>  <span class="mf">37.85419797</span><span class="p">,</span>  <span class="mf">37.85422979</span><span class="p">,</span>
+        <span class="mf">38.87329197</span><span class="p">,</span>  <span class="mf">38.87329197</span><span class="p">,</span>  <span class="mf">38.87388536</span><span class="p">,</span>  <span class="mf">38.87388536</span><span class="p">,</span>
+        <span class="mf">50.63660763</span><span class="p">,</span>  <span class="mf">50.63728134</span><span class="p">,</span>  <span class="mf">50.63730029</span><span class="p">,</span>  <span class="mf">51.42048261</span><span class="p">,</span>
+        <span class="mf">51.42114606</span><span class="p">,</span>  <span class="mf">51.42116471</span><span class="p">,</span>  <span class="mf">66.66765177</span><span class="p">,</span>  <span class="mf">66.66836297</span><span class="p">,</span>
+        <span class="mf">37.26423534</span><span class="p">,</span>  <span class="mf">37.26423534</span><span class="p">,</span>  <span class="mf">37.26443315</span><span class="p">,</span>  <span class="mf">37.26443315</span><span class="p">,</span>
+        <span class="mf">41.09509686</span><span class="p">,</span>  <span class="mf">41.09509686</span><span class="p">,</span>  <span class="mf">41.09510973</span><span class="p">,</span>  <span class="mf">41.09510973</span><span class="p">,</span>
+        <span class="mf">41.0967189</span> <span class="p">,</span>  <span class="mf">41.0967189</span> <span class="p">,</span>  <span class="mf">41.0967482</span> <span class="p">,</span>  <span class="mf">41.0967482</span> <span class="p">,</span>
+        <span class="mf">53.85226116</span><span class="p">,</span>  <span class="mf">53.85226116</span><span class="p">,</span>  <span class="mf">53.85289465</span><span class="p">,</span>  <span class="mf">53.85289465</span><span class="p">,</span>
+        <span class="mf">53.85291246</span><span class="p">,</span>  <span class="mf">53.85291246</span><span class="p">,</span>  <span class="mf">55.86686011</span><span class="p">,</span>  <span class="mf">55.8671227</span> <span class="p">,</span>
+        <span class="mf">56.66325336</span><span class="p">,</span>  <span class="mf">56.66785273</span><span class="p">,</span>  <span class="mf">67.14592909</span><span class="p">,</span>  <span class="mf">67.14663522</span><span class="p">,</span>
+        <span class="mf">67.7390271</span> <span class="p">,</span>  <span class="mf">67.73972705</span><span class="p">,</span>  <span class="mf">83.33535519</span><span class="p">,</span>  <span class="mf">56.43674387</span><span class="p">,</span>
+        <span class="mf">56.43700381</span><span class="p">,</span>  <span class="mf">57.14110656</span><span class="p">,</span>  <span class="mf">57.14136329</span><span class="p">,</span>  <span class="mf">57.2252067</span> <span class="p">,</span>
+        <span class="mf">57.2297609</span> <span class="p">,</span>  <span class="mf">57.91998171</span><span class="p">,</span>  <span class="mf">57.92448129</span><span class="p">,</span>  <span class="mf">69.60298696</span><span class="p">,</span>
+        <span class="mf">69.60298696</span><span class="p">,</span>  <span class="mf">69.60366816</span><span class="p">,</span>  <span class="mf">69.60366816</span><span class="p">,</span>  <span class="mf">83.71846526</span><span class="p">,</span>
+        <span class="mf">84.19490142</span><span class="p">,</span>  <span class="mf">59.33890847</span><span class="p">,</span>  <span class="mf">59.33890847</span><span class="p">,</span>  <span class="mf">59.3391557</span> <span class="p">,</span>
+        <span class="mf">59.3391557</span> <span class="p">,</span>  <span class="mf">60.08930256</span><span class="p">,</span>  <span class="mf">60.08930256</span><span class="p">,</span>  <span class="mf">60.09363971</span><span class="p">,</span>
+        <span class="mf">60.09363971</span><span class="p">,</span>  <span class="mf">85.70170024</span><span class="p">,</span>  <span class="mf">85.70170024</span><span class="p">])</span>
+</pre></div>
+</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">aktk</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="p">[],</span> <span class="n">output</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;sig&#39;</span><span class="p">,</span><span class="s">&#39;ray&#39;</span><span class="p">,</span><span class="s">&#39;Ct&#39;</span><span class="p">,</span><span class="s">&#39;H&#39;</span><span class="p">],</span>
             <span class="n">si_algo</span><span class="o">=</span><span class="s">&#39;old&#39;</span><span class="p">,</span><span class="n">ra_ceil_height_meter</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">ra_number_mirror_cf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Signatures&#39;&gt; from 1_1_3 loaded
-Rays&#39;&gt; from 3_0_0 loaded
-Ctilde&#39;&gt; from 0_0_0 loaded
-Tchannel&#39;&gt; from 0_0_0_0_0_0_0 loaded
+<div class="highlight-python"><div class="highlight"><pre>checkh5
+Start Signatures
+Signatures&#39;&gt; from 1_2_3 loaded
+load signature
+Stop signature 0.12762093544
+Start Rays
+Rays&#39;&gt; from 3_0_2 loaded
+Stop rays 0.0357868671417
+Ctilde&#39;&gt; from 0_2_0 loaded
+Tchannel&#39;&gt; from 0_2_0_0_0_2_2 loaded
 </pre></div>
 </div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">aktk</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">aktk</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;Container object of 3 artists&gt;
+</pre></div>
+</div>
+<img alt="../../_images/LinkSimulation_11_1.png" src="../../_images/LinkSimulation_11_1.png" />
 <p>The propagation channel (without antenna) can be vizualized on a ray by
 ray mode.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#L._show3()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">type</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">C</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pylayers</span><span class="o">.</span><span class="n">antprop</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">Ctilde</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#L._show3()sns.set_style(&quot;dark&quot;)</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
 <span class="n">C</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">C</span>
-<span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
+<span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;l10&#39;</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span><span class="n">vmax</span><span class="o">=-</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/LinkSimulation_10_0.png" src="../../_images/LinkSimulation_10_0.png" />
+<img alt="../../_images/LinkSimulation_15_0.png" src="../../_images/LinkSimulation_15_0.png" />
 <p>It is possible to look at individual ray transfer function, as
 illustrated below.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">105</span><span class="p">,</span> <span class="mi">181</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">95</span><span class="p">,</span> <span class="mi">181</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">ir</span> <span class="o">=</span> <span class="mi">0</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">ir</span> <span class="o">=</span> <span class="mi">80</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">ir</span><span class="p">,:]))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Frequency (GHz)&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Level (linear)&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Modulus of the ray &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; transfer function&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b0683a59250&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b2137988c90&gt;
 </pre></div>
 </div>
-<img alt="../../_images/LinkSimulation_13_1.png" src="../../_images/LinkSimulation_13_1.png" />
+<img alt="../../_images/LinkSimulation_18_1.png" src="../../_images/LinkSimulation_18_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">ir</span> <span class="o">=</span> <span class="mi">30</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">ir</span><span class="p">,:]))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Frequency (GHz)&#39;</span><span class="p">)</span>
@@ -238,10 +364,10 @@ illustrated below.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Modulus of the ray &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; transfer function&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b0683df21d0&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b21380bc790&gt;
 </pre></div>
 </div>
-<img alt="../../_images/LinkSimulation_14_1.png" src="../../_images/LinkSimulation_14_1.png" />
+<img alt="../../_images/LinkSimulation_19_1.png" src="../../_images/LinkSimulation_19_1.png" />
 <p>In the link we also have the transmission channel accounting for the
 effect of antennas and Friis factor. If the ray transfer function is
 scaled with <img src="../../_images/mathmpl/math-2568d81340.png" style="position: relative; bottom: -7px"/></p>
@@ -252,10 +378,10 @@ scaled with <img src="../../_images/mathmpl/math-2568d81340.png" style="position
   return array(a, dtype, copy=False, order=order)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2b0683ee6950&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2b2138189fd0&gt;]
 </pre></div>
 </div>
-<img alt="../../_images/LinkSimulation_16_2.png" src="../../_images/LinkSimulation_16_2.png" />
+<img alt="../../_images/LinkSimulation_21_2.png" src="../../_images/LinkSimulation_21_2.png" />
 <p>Notice that in this case the frequency</p>
 <p>The infinite bandwidth channel impulse response is plotted below from
 the extrated set <img src="../../_images/mathmpl/math-4187fb41bb.png" style="position: relative; bottom: -7px"/>.</p>
@@ -265,10 +391,10 @@ the extrated set <img src="../../_images/mathmpl/math-4187fb41bb.png" style="pos
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;amplitude (linear scale&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b0683f20390&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b2137946cd0&gt;
 </pre></div>
 </div>
-<img alt="../../_images/LinkSimulation_19_1.png" src="../../_images/LinkSimulation_19_1.png" />
+<img alt="../../_images/LinkSimulation_24_1.png" src="../../_images/LinkSimulation_24_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pylayers.simul.simulnet</span> <span class="kn">as</span> <span class="nn">sn</span>
 <span class="kn">import</span> <span class="nn">pylayers.simul.simultraj</span> <span class="kn">as</span> <span class="nn">st</span>
 </pre></div>
@@ -288,14 +414,14 @@ Image(&#39;/home/uguen/Bureau/P1/struc/images/DLR4991.png&#39;)
 ----------------
 
 Number of points  : 71
-Number of segments  : 94
-Number of sub segments  : 18
-Number of cycles  : 25
-Number of rooms  : 24
+Number of segments  : 87
+Number of sub segments  : 16
+Number of cycles  : 18
+Number of rooms  : 17
 degree 0 : []
-degree 1 : [-17 -16]
-degree 2 : 37
-degree 3 : 32
+degree 1 : []
+number of node point of degree 2 : 39
+number of node point of degree 3 : 32
 
 xrange :(0.0, 40.0)
 yrange :(0.0, 15.0)
@@ -322,7 +448,8 @@ degree : degree of nodes
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">runsimul</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.mobility.trajectory</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">dB</span><span class="o">=</span><span class="bp">True</span>
+<span class="kn">from</span> <span class="nn">pylayers.mobility.trajectory</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
 <p>A trajectories object is a list of trajectories. The loadh5 methods by
@@ -341,30 +468,30 @@ Trajectories performed in Layout : TA-Office.ini
 Trajectory of agent John with ID 1
 ----------------------------------
 t (s) : 0.00 : 0.20 : 119.80
-dtot (m) : 454.84
-Vmoy (m/s) : 3.80
-                                    x         y        vx        vy        ax  t
-1970-01-01 00:00:00         18.907750  2.528547  0.038749  0.155237  0.193744
-1970-01-01 00:00:00.200000  18.921699  2.584433  0.069748  0.279427  0.154995
+dtot (m) : 406.09
+Vmoy (m/s) : 3.39
+                                 x         y        vx        vy        ax  t
+1970-01-01 00:00:00.000  18.907750  2.528547  0.038749  0.155237  0.193744
+1970-01-01 00:00:00.200  18.921699  2.584433  0.069748  0.279427  0.154995
 
-                                  ay      s
+                               ay      s
 t
-1970-01-01 00:00:00         0.776185  0.160
-1970-01-01 00:00:00.200000  0.620948  0.448
+1970-01-01 00:00:00.000  0.776185  0.160
+1970-01-01 00:00:00.200  0.620948  0.448
 
 Trajectory of agent Alex with ID 2
 ----------------------------------
 t (s) : 0.00 : 0.20 : 119.80
-dtot (m) : 437.65
-Vmoy (m/s) : 3.65
-                                  x       y     vx            vy    ax  t
-1970-01-01 00:00:00         13.5320  7.4965  0.160 -1.141434e-16  0.80
-1970-01-01 00:00:00.200000  13.5896  7.4965  0.288 -2.069441e-16  0.64
+dtot (m) : 361.43
+Vmoy (m/s) : 3.02
+                                 x          y        vx        vy        ax  t
+1970-01-01 00:00:00.000  24.306132  12.467593  0.030661 -0.157035  0.153303
+1970-01-01 00:00:00.200  24.317170  12.411061  0.055189 -0.282663  0.122642
 
-                                      ay      s
+                               ay      s
 t
-1970-01-01 00:00:00        -5.707171e-16  0.160
-1970-01-01 00:00:00.200000 -4.640036e-16  0.448
+1970-01-01 00:00:00.000 -0.785174  0.160
+1970-01-01 00:00:00.200 -0.628139  0.448
 
 Access point Router with ID 6
 -----------------------------
@@ -396,43 +523,31 @@ trajectories from the <code class="docutils literal"><span class="pre">simultaj.
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">St</span><span class="o">=</span><span class="n">st</span><span class="o">.</span><span class="n">Simul</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>**** Processor coding : Intel-PC
-**** Processor coding : Intel-PC
-</pre></div>
-</div>
 <div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
 
 AttributeError                            Traceback (most recent call last)
 
-&lt;ipython-input-19-ae27233a0375&gt; in &lt;module&gt;()
+&lt;ipython-input-25-ae27233a0375&gt; in &lt;module&gt;()
 ----&gt; 1 St=st.Simul(verbose=False)
 
 
 /home/uguen/Documents/rch/devel/pylayers/pylayers/simul/simultraj.pyc in __init__(self, source, verbose)
-    110
-    111
---&gt; 112         self._gen_net()
-    113         self.SL = SLink()
-    114         self.DL = DLink(L=self.L,verbose=self.verbose)
+    152         if isinstance(source,str):
+    153             self.filetraj = source
+--&gt; 154             self.load_simul(source)
+    155             self.source = &#39;simul&#39;
+    156         elif &#39;pylayers&#39; in source.__module__:
 
 
-/home/uguen/Documents/rch/devel/pylayers/pylayers/simul/simultraj.pyc in _gen_net(self)
-    260                 D.append(
-    261                     Device(self.dpersons[p].dev[dev][&#39;name&#39;], ID=dev))
---&gt; 262             N.add_devices(D, grp=p)
-    263         # get access point devices
-    264         for ap in self.dap:
+/home/uguen/Documents/rch/devel/pylayers/pylayers/simul/simultraj.pyc in load_simul(self, source)
+    237         if not os.path.isfile(source):
+    238             raise AttributeError(&#39;Trajectory file&#39;+source+&#39;has not been found.\
+--&gt; 239              Please make sure you have run a simulnet simulation before runining simultraj.&#39;)
+    240
+    241         # get the trajectory
 
 
-/home/uguen/Documents/rch/devel/pylayers/pylayers/network/network.pyc in add_devices(self, dev, p, grp)
-    454         for d in dev:
-    455             if d.ID in self:
---&gt; 456                 raise AttributeError(&#39;Devices must have a different ID&#39;)
-    457
-    458
-
-
-AttributeError: Devices must have a different ID
+AttributeError: Trajectory filesimulnet_TA-Office.h5has not been found.             Please make sure you have run a simulnet simulation before runining simultraj.
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c">#St.run(t=list(np.arange(0,1,0.1)),OB=True,B2B=True,B2I=True)</span>
@@ -449,7 +564,7 @@ AttributeError: Devices must have a different ID
 
 NameError                                 Traceback (most recent call last)
 
-&lt;ipython-input-22-292f54c77c9f&gt; in &lt;module&gt;()
+&lt;ipython-input-28-292f54c77c9f&gt; in &lt;module&gt;()
 ----&gt; 1 St.N
 
 
@@ -481,7 +596,7 @@ NameError: name &#39;St&#39; is not defined
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on août 12, 2015.
+      Last updated on sept. 07, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/5-SIM/LinkSimulation.txt"

@@ -145,7 +145,7 @@
 <span class="sd">.. currentmodule:: pylayers.simul.link</span>
 
 <span class="sd">This module runs the electromagnetic simulation for a link.</span>
-<span class="sd">A deterministic link has two termination points and an associated Layout </span>
+<span class="sd">A deterministic link has two termination points and an associated Layout</span>
 <span class="sd">whereas a statistical link do not need any of those precursor object.</span>
 
 <span class="sd">It stores simulated objects in `hdf5` format.</span>
@@ -158,7 +158,7 @@
 <span class="sd">Tchannel is a transmission channel i.e a radio channel</span>
 <span class="sd">which includes both link termination antennas.</span>
 
-<span class="sd">A common factor of both statistical (SLink) and deterministic channel (DLink) </span>
+<span class="sd">A common factor of both statistical (SLink) and deterministic channel (DLink)</span>
 <span class="sd">is the exitence of :math:`\alpha_k` and :math:`\tau_k`</span>
 
 <span class="sd">.. autosummary::</span>
@@ -205,7 +205,7 @@
 <span class="sd">    DLink.__init__</span>
 <span class="sd">    DLink.__repr__</span>
 <span class="sd">    DLink.reset_config</span>
-<span class="sd">    DLink.fill_dexist</span>
+<span class="sd">    DLink.check_grpname</span>
 
 
 <span class="sd">search in hdf5 file</span>
@@ -244,6 +244,7 @@
 <span class="k">except</span><span class="p">:</span>
     <span class="k">print</span> <span class="s">&#39;Layout:Mayavi is not installed&#39;</span>
 <span class="kn">import</span> <span class="nn">doctest</span>
+<span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">pylayers.signal.waveform</span> <span class="kn">as</span> <span class="nn">wvf</span>
@@ -372,8 +373,8 @@
 <span class="sd">            Rotation matrice of Antenna of device dev_a relative to global Layout scene</span>
 <span class="sd">        Tb : np.ndarray (3,3)</span>
 <span class="sd">            Rotation matrice of Antenna of device dev_b relative to global Layout scene</span>
-<span class="sd">        fGHz : np.ndarray (Nptf,)</span>
-<span class="sd">            frequency range of Nptf points used for evaluation of channel</span>
+<span class="sd">        fGHz : np.ndarray (Nf,)</span>
+<span class="sd">            frequency range of Nf points used for evaluation of channel</span>
 <span class="sd">        wav : Waveform</span>
 <span class="sd">            Waveform to be applied on the channel</span>
 <span class="sd">        save_idx : int</span>
@@ -445,7 +446,6 @@
 <span class="sd">            Signature identifier (si_ID#N):</span>
 <span class="sd">                ca_cb_cutoff</span>
 
-<span class="sd">%pylab inline</span>
 <span class="sd">            Ray identifier (ray_ID#N):</span>
 <span class="sd">                cutoff_ua_ub</span>
 
@@ -463,8 +463,7 @@
 <span class="sd">            ub : indice of a position in &#39;p_map&#39; position dataset</span>
 <span class="sd">            uf : indice of freq position in &#39;f_map&#39; frequency dataset</span>
 <span class="sd">            uTa : indice of a position in &#39;T_map&#39; Rotation dataset</span>
-<span class="sd">            uTb : indice o</span>
-<span class="sd">%pylab inlinef b position in &#39;T_map&#39; Rotation dataset</span>
+<span class="sd">            uTb : indice of a position in &#39;T_map&#39; Rotation dataset</span>
 <span class="sd">            uAa : indice of a position in &#39;A_map&#39; Antenna name dataset</span>
 <span class="sd">            uAb : indice of b position in &#39;A_map&#39; Antenna name dataset</span>
 
@@ -503,6 +502,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_cb</span><span class="o">=-</span><span class="mi">1</span>
         <span class="n">specset</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="s">&#39;Aa&#39;</span><span class="p">,</span><span class="s">&#39;Ab&#39;</span><span class="p">,</span><span class="s">&#39;Ta&#39;</span><span class="p">,</span><span class="s">&#39;Tb&#39;</span><span class="p">,</span><span class="s">&#39;L&#39;</span><span class="p">,</span><span class="s">&#39;fGHz&#39;</span><span class="p">,</span><span class="s">&#39;wav&#39;</span><span class="p">]</span>
 
+        <span class="c"># set default attribute</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">specset</span> <span class="p">:</span>
@@ -523,19 +523,17 @@
 
 
         <span class="c">###########</span>
-        <span class="c"># init ant</span>
+        <span class="c"># Transmitter and Receiver positions</span>
         <span class="c">###########</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
                             <span class="n">typ</span> <span class="o">=</span> <span class="s">&#39;tx&#39;</span><span class="p">,</span>
                             <span class="n">_fileini</span> <span class="o">=</span> <span class="s">&#39;radiotx.ini&#39;</span><span class="p">,</span>
-                            <span class="n">_fileant</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="o">.</span><span class="n">_filename</span>
                             <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
                             <span class="n">typ</span> <span class="o">=</span> <span class="s">&#39;rx&#39;</span><span class="p">,</span>
                             <span class="n">_fileini</span> <span class="o">=</span> <span class="s">&#39;radiorx.ini&#39;</span><span class="p">,</span>
-                            <span class="n">_fileant</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="o">.</span><span class="n">_filename</span><span class="p">,</span>
                             <span class="p">)</span>
 
 
@@ -600,10 +598,11 @@
 
         <span class="c">###########</span>
         <span class="c"># init freq</span>
+        <span class="c"># TODO Check where it is used redundant with fGHz</span>
         <span class="c">###########</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fstep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c">#self.fmin  = self.fGHz[0]</span>
+        <span class="c">#self.fmax  = self.fGHz[-1]</span>
+        <span class="c">#self.fstep = self.fGHz[1]-self.fGHz[0]</span>
 
 
         <span class="bp">self</span><span class="o">.</span><span class="n">Si</span> <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ca</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">cb</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">)</span>
@@ -715,7 +714,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
                             <span class="n">typ</span> <span class="o">=</span> <span class="s">&#39;tx&#39;</span><span class="p">,</span>
                             <span class="n">_fileini</span> <span class="o">=</span> <span class="s">&#39;radiotx.ini&#39;</span><span class="p">,</span>
-                            <span class="n">_fileant</span> <span class="o">=</span> <span class="n">Ant</span><span class="o">.</span><span class="n">_filename</span>
                             <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_Aa</span> <span class="o">=</span> <span class="n">Ant</span>
         <span class="c">#to be removed when radionode will be updated</span>
@@ -730,7 +728,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
                             <span class="n">typ</span> <span class="o">=</span> <span class="s">&#39;rx&#39;</span><span class="p">,</span>
                             <span class="n">_fileini</span> <span class="o">=</span> <span class="s">&#39;radiorx.ini&#39;</span><span class="p">,</span>
-                            <span class="n">_fileant</span> <span class="o">=</span> <span class="n">Ant</span><span class="o">.</span><span class="n">_filename</span><span class="p">,</span>
                             <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_Ab</span> <span class="o">=</span> <span class="n">Ant</span>
         <span class="c">#to be removed when radionode will be updated</span>
@@ -753,14 +750,14 @@
             <span class="n">freq</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">freq</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fGHz</span> <span class="o">=</span> <span class="n">freq</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fmin</span> <span class="o">=</span> <span class="n">freq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fmax</span> <span class="o">=</span> <span class="n">freq</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fstep</span> <span class="o">=</span> <span class="n">freq</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">freq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fmin</span> <span class="o">=</span> <span class="n">freq</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fmax</span> <span class="o">=</span> <span class="n">freq</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">step</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c">#if len(freq)&gt;1:</span>
+        <span class="c">#    self.fmin = freq[0]</span>
+        <span class="c">#    self.fmax = freq[-1]</span>
+        <span class="c">#    self.fstep = freq[1]-freq[0]</span>
+        <span class="c">#else:</span>
+        <span class="c">#    self.fmin = freq</span>
+        <span class="c">#    self.fmax = freq</span>
+        <span class="c">#    self.step = 0</span>
 
     <span class="nd">@wav.setter</span>
     <span class="k">def</span> <span class="nf">wav</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">waveform</span><span class="p">):</span>
@@ -781,12 +778,12 @@
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Node a   </span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;------  </span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;position : &#39;</span> <span class="o">+</span> <span class="nb">str</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Antenna : &#39;</span> <span class="o">+</span> <span class="nb">str</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="o">.</span><span class="n">_filename</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Antenna : &#39;</span> <span class="o">+</span> <span class="nb">str</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="o">.</span><span class="n">typ</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Rotation matrice : </span><span class="se">\n</span><span class="s"> &#39;</span> <span class="o">+</span> <span class="nb">str</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ta</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Node b   </span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;------  </span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;position : &#39;</span> <span class="o">+</span> <span class="nb">str</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Antenna : &#39;</span> <span class="o">+</span> <span class="nb">str</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="o">.</span><span class="n">_filename</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Antenna : &#39;</span> <span class="o">+</span> <span class="nb">str</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="o">.</span><span class="n">typ</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Rotation matrice : </span><span class="se">\n</span><span class="s"> &#39;</span> <span class="o">+</span> <span class="nb">str</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Tb</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Link evaluation information : </span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;----------------------------- </span><span class="se">\n</span><span class="s">&#39;</span>
@@ -795,10 +792,17 @@
         <span class="c">#s = s + &#39;Frequency range :  \n&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;fmin (fGHz) : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;fmax (fGHz) : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;fstep (fGHz) : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Nf : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">))</span> <span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s"> &#39;</span>
-        <span class="n">d</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span> 
-        <span class="n">fcGHz</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="mf">2.</span>
+        <span class="n">Nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Nf</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;fstep (fGHz) : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;fstep (fGHz) : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Nf : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">Nf</span><span class="p">)</span> <span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s"> &#39;</span>
+        <span class="n">d</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">Nf</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">fcGHz</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="mf">2.</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fcGHz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">L</span>  <span class="o">=</span> <span class="mf">32.4</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fcGHz</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">s</span>
 </div>
@@ -845,7 +849,7 @@
 
 </div>
 <div class="viewcode-block" id="DLink.checkh5"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.checkh5.html#pylayers.simul.link.DLink.checkh5">[docs]</a>    <span class="k">def</span> <span class="nf">checkh5</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; check existence of previous simulation run with the same parameters.</span>
+        <span class="sd">&quot;&quot;&quot; check existence of previous simulations run with the same parameters.</span>
 
 
 <span class="sd">        Returns</span>
@@ -854,10 +858,10 @@
 <span class="sd">        update self.dexist dictionnary</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># get identifier groupname in h5py file</span>
+        <span class="c"># get identifier group name in h5py file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">get_grpname</span><span class="p">()</span>
-        <span class="c"># check if grpnamee exist in the h5py file</span>
-        <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fill_dexist</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">])</span>   <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">]</span>
+        <span class="c"># check if group name exists in the h5py file</span>
+        <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">check_grpname</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">])</span>   <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">]</span>
 
 
 </div>
@@ -1055,7 +1059,12 @@
         <span class="c">#############</span>
 
         <span class="c"># check existence of frequency in h5py file</span>
-        <span class="n">farray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="bp">self</span><span class="o">.</span><span class="n">fmin</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">fmax</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">fstep</span><span class="p">]))</span>
+        <span class="c">#farray = np.array(([self.fmin,self.fmax,self.fstep]))</span>
+        <span class="n">Nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Nf</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">farray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">farray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="mi">0</span><span class="p">]))</span>
         <span class="n">uf_opt</span><span class="p">,</span> <span class="n">uf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;f_map&#39;</span><span class="p">,</span><span class="n">farray</span><span class="p">)</span>
 
         <span class="n">grpname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">ua</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ub</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">uf</span><span class="p">)</span>
@@ -1071,19 +1080,20 @@
         <span class="c"># check existence of Rot b (Tb) in h5py file</span>
         <span class="n">uTb_opt</span><span class="p">,</span> <span class="n">uTb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;T_map&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Tb</span><span class="p">)</span>
         <span class="c"># check existence of Antenna a (Aa) in h5py file</span>
-        <span class="n">uAa_opt</span><span class="p">,</span> <span class="n">uAa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;A_map&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="o">.</span><span class="n">_filename</span><span class="p">)</span>
+        <span class="c">#uAa_opt, uAa = self.get_idx(&#39;A_map&#39;,self.Aa._filename)</span>
+        <span class="n">uAa_opt</span><span class="p">,</span> <span class="n">uAa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;A_map&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="o">.</span><span class="n">typ</span><span class="p">)</span>
         <span class="c"># check existence of Antenna b (Ab) in h5py file</span>
-        <span class="n">uAb_opt</span><span class="p">,</span> <span class="n">uAb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;A_map&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="o">.</span><span class="n">_filename</span><span class="p">)</span>
+        <span class="n">uAb_opt</span><span class="p">,</span> <span class="n">uAb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idx</span><span class="p">(</span><span class="s">&#39;A_map&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="o">.</span><span class="n">typ</span><span class="p">)</span>
 
 
         <span class="n">grpname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">ua</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ub</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">uf</span><span class="p">)</span> <span class="o">+</span> \
                   <span class="s">&#39;_&#39;</span>  <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">uTa</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">uTb</span><span class="p">)</span> <span class="o">+</span> \
                   <span class="s">&#39;_&#39;</span>  <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">uAa</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">uAb</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;H&#39;</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">grpname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;H&#39;</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grpname</span>
 
 </div>
-<div class="viewcode-block" id="DLink.fill_dexist"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.fill_dexist.html#pylayers.simul.link.DLink.fill_dexist">[docs]</a>    <span class="k">def</span> <span class="nf">fill_dexist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
+<div class="viewcode-block" id="DLink.check_grpname"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.check_grpname.html#pylayers.simul.link.DLink.check_grpname">[docs]</a>    <span class="k">def</span> <span class="nf">check_grpname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Check if the key&#39;s data with a given groupname</span>
 <span class="sd">            already exists in the h5py file</span>
 
@@ -1103,7 +1113,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span> <span class="p">:</span>
             <span class="n">lfilename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLNK&#39;</span><span class="p">])</span>
-            <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">lfilename</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">lfilename</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">grpname</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf8&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">f</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;exist&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
             <span class="k">else</span> <span class="p">:</span>
@@ -1126,9 +1136,9 @@
 <span class="sd">        key: string</span>
 <span class="sd">            key of the h5py group</span>
 <span class="sd">        array : np.ndarray</span>
-<span class="sd">            array type to check existency</span>
+<span class="sd">            array to check existence</span>
 <span class="sd">        tol : np.float64</span>
-<span class="sd">            tolerance (in meter for key == &#39;p_map&#39;)</span>
+<span class="sd">            tolerance (in meters for key == &#39;p_map&#39;)</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1341,7 +1351,6 @@
             <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">=</span><span class="n">value</span>
 
-
         <span class="k">if</span> <span class="s">&#39;cutoff&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1355,6 +1364,7 @@
                     <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c"># must be placed after all the init !!!!</span>
+        <span class="k">print</span> <span class="s">&quot;checkh5&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">checkh5</span><span class="p">()</span>
 
 
@@ -1362,24 +1372,29 @@
         <span class="c"># Signatures</span>
         <span class="c">############</span>
 
+        <span class="k">print</span> <span class="s">&quot;Start Signatures&quot;</span>
+        <span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="n">Si</span> <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ca</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">cb</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;sig&#39;</span><span class="p">][</span><span class="s">&#39;exist&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="s">&#39;sig&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">])):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">Si</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;sig&#39;</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">])</span>
-
+            <span class="k">print</span> <span class="s">&quot;load signature&quot;</span>
         <span class="k">else</span> <span class="p">:</span>
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alg&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">2015</span><span class="p">:</span>
                 <span class="n">TMP</span><span class="o">=</span><span class="n">Si</span><span class="o">.</span><span class="n">run2015</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">],</span>
                         <span class="n">cutoffbound</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_reverb&#39;</span><span class="p">])</span>
+                <span class="k">print</span> <span class="s">&quot;algo 2015&quot;</span>
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alg&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">20152</span><span class="p">:</span>
                 <span class="n">TMP</span><span class="o">=</span><span class="n">Si</span><span class="o">.</span><span class="n">run2015_2</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">],</span>
                         <span class="n">cutoffbound</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_reverb&#39;</span><span class="p">])</span>
+                <span class="k">print</span> <span class="s">&quot;algo 20152&quot;</span>
 
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alg&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">5</span><span class="p">:</span>
                 <span class="n">Si</span><span class="o">.</span><span class="n">run5</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">],</span>
                         <span class="n">algo</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_algo&#39;</span><span class="p">],</span>
                         <span class="n">diffraction</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;diffraction&#39;</span><span class="p">],</span>
                         <span class="n">progress</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_progress&#39;</span><span class="p">])</span>
+                <span class="k">print</span> <span class="s">&quot;algo 5&quot;</span>
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alg&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">7</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_mt&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">7</span><span class="p">:</span>
                     <span class="n">Si</span><span class="o">.</span><span class="n">run7mt</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">],</span>
@@ -1387,18 +1402,22 @@
                         <span class="n">diffraction</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;diffraction&#39;</span><span class="p">],</span>
                         <span class="n">threshold</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;threshold&#39;</span><span class="p">],</span>
                         <span class="n">progress</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_progress&#39;</span><span class="p">])</span>
+                    <span class="k">print</span> <span class="s">&quot;algo 7 , si_mt&quot;</span>
                 <span class="k">else</span> <span class="p">:</span>
                     <span class="n">Si</span><span class="o">.</span><span class="n">run7</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">],</span>
                         <span class="n">algo</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_algo&#39;</span><span class="p">],</span>
                         <span class="n">diffraction</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;diffraction&#39;</span><span class="p">],</span>
                         <span class="n">threshold</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;threshold&#39;</span><span class="p">],</span>
                         <span class="n">progress</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_progress&#39;</span><span class="p">])</span>
+                    <span class="k">print</span> <span class="s">&quot;algo 7&quot;</span>
 
-            <span class="c">#Si.run6(diffraction=kwargs[&#39;diffraction&#39;])</span>
-            <span class="c"># save sig</span>
+        <span class="c">#Si.run6(diffraction=kwargs[&#39;diffraction&#39;])</span>
+        <span class="c"># save sig</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">Si</span><span class="p">,</span><span class="s">&#39;sig&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;sig&#39;</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">],</span><span class="n">force</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">])</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">Si</span> <span class="o">=</span> <span class="n">Si</span>
+        <span class="n">toc</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">print</span> <span class="s">&quot;Stop signature&quot;</span><span class="p">,</span><span class="n">toc</span><span class="o">-</span><span class="n">tic</span>
 
 
 
@@ -1406,6 +1425,8 @@
         <span class="c"># Rays</span>
         <span class="c">############</span>
 
+        <span class="k">print</span> <span class="s">&quot;Start Rays&quot;</span>
+        <span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="n">R</span> <span class="o">=</span> <span class="n">Rays</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;ray&#39;</span><span class="p">][</span><span class="s">&#39;exist&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="s">&#39;ray&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">]):</span>
@@ -1425,6 +1446,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">R</span><span class="p">,</span><span class="s">&#39;ray&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;ray&#39;</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">],</span><span class="n">force</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">])</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">R</span>
+        <span class="n">toc</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">print</span> <span class="s">&quot;Stop rays&quot;</span><span class="p">,</span><span class="n">toc</span><span class="o">-</span><span class="n">tic</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">nray</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;No rays have been found. Try to re-run the simulation with a higher S.cutoff &#39;</span><span class="p">)</span>
@@ -1709,7 +1732,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on août 15, 2015.
+      Last updated on sept. 07, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

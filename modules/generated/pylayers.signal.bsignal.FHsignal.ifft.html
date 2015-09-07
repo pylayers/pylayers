@@ -199,10 +199,11 @@
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span>  <span class="o">=</span> <span class="n">EnImpulse</span><span class="p">(</span><span class="n">fe</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span>  <span class="o">=</span> <span class="n">TUsignal</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">EnImpulse</span><span class="p">(</span><span class="n">feGHz</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">E</span>  <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">fft</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ee</span> <span class="o">=</span> <span class="n">E</span><span class="o">.</span><span class="n">ifft</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">y</span><span class="o">-</span><span class="n">ee</span><span class="o">.</span><span class="n">y</span><span class="p">))</span><span class="o">&lt;</span><span class="mf">1e-13</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">y</span><span class="o">-</span><span class="n">ee</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">())</span><span class="o">&lt;</span><span class="mf">1e-13</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -220,7 +221,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on août 15, 2015.
+      Last updated on sept. 07, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.signal.bsignal.FHsignal.ifft.txt"

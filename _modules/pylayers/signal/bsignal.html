@@ -178,9 +178,6 @@
 
 <span class="sd">    Usignal.__init__</span>
 <span class="sd">    Usignal.__repr__</span>
-<span class="sd">    Usignal.__add__</span>
-<span class="sd">    Usignal.__sub__</span>
-<span class="sd">    Usignal.__mul__</span>
 <span class="sd">    Usignal.setx</span>
 <span class="sd">    Usignal.dx</span>
 <span class="sd">    Usignal.width</span>
@@ -188,7 +185,6 @@
 <span class="sd">    Usignal.max</span>
 <span class="sd">    Usignal.min</span>
 <span class="sd">    Usignal.truncate</span>
-<span class="sd">    Usignal.align</span>
 <span class="sd">    Usignal.abs</span>
 <span class="sd">    Usignal.eprfl</span>
 <span class="sd">    Usignal.energy</span>
@@ -218,8 +214,17 @@
 
 <span class="sd">    TUsignal.__init__</span>
 <span class="sd">    TUsignal.__repr__</span>
+<span class="sd">    TUsignal.__add__</span>
 <span class="sd">    TUsignal.diff</span>
 <span class="sd">    TUsignal.info</span>
+<span class="sd">    TUsignal.align</span>
+<span class="sd">    TUsignal.filter</span>
+<span class="sd">    TUsignal.ftshift</span>
+<span class="sd">    TUsignal.show</span>
+<span class="sd">    TUsignal.esd</span>
+<span class="sd">    TUsignal.shift</span>
+
+
 
 <span class="sd">Fourier Functions</span>
 <span class="sd">-----------------</span>
@@ -346,7 +351,6 @@
 <span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">cspline1d</span><span class="p">,</span> <span class="n">cspline1d_eval</span><span class="p">,</span> <span class="n">iirfilter</span><span class="p">,</span> <span class="n">iirdesign</span><span class="p">,</span> <span class="n">lfilter</span><span class="p">,</span> <span class="n">firwin</span> <span class="p">,</span> <span class="n">correlate</span>
 <span class="c">#from sklearn import mixture</span>
 <span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="kn">as</span> <span class="nn">st</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="kn">as</span> <span class="nn">sns</span>
 
 
 <span class="k">class</span> <span class="nc">Bsignal</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
@@ -386,7 +390,7 @@
         <span class="k">if</span> <span class="n">ndim</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)))</span>
             <span class="n">ndim</span> <span class="o">=</span> <span class="mi">2</span>
-        <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span><span class="s">&quot; Dimension problem&quot;</span>
+        <span class="k">assert</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="p">),</span><span class="s">&quot; Dimension problem&quot;</span>
         <span class="c"># default naming of the axis</span>
         <span class="k">if</span> <span class="n">label</span><span class="o">==</span><span class="p">[]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="o">=</span><span class="p">[]</span>
@@ -490,10 +494,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">O</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">O</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">O</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">u</span><span class="p">]</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">O</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">O</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:]</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="n">O</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">O</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">]</span>
+        <span class="n">O</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">O</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">u</span><span class="p">]</span>
         <span class="k">return</span><span class="p">(</span><span class="n">O</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Bsignal.save"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.save.html#pylayers.signal.bsignal.Bsignal.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
@@ -830,7 +831,6 @@
 <span class="sd">        &gt;&gt;&gt; F = FUsignal(f,y)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s">&quot;whitegrid&quot;</span><span class="p">)</span>
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;interpolation&#39;</span><span class="p">:</span><span class="s">&#39;none&#39;</span><span class="p">,</span>
                     <span class="s">&#39;cmap&#39;</span><span class="p">:</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">BrBG</span><span class="p">,</span>
                     <span class="s">&#39;aspect&#39;</span><span class="p">:</span><span class="s">&#39;auto&#39;</span><span class="p">,</span>
@@ -875,7 +875,7 @@
                            <span class="n">vmin</span> <span class="o">=</span> <span class="n">vmin</span><span class="p">,</span>
                            <span class="n">vmax</span> <span class="o">=</span> <span class="n">vmax</span><span class="p">,</span>
                            <span class="n">aspect</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;aspect&#39;</span><span class="p">],</span>
-                           <span class="c">#extent = (0,dt.shape[sax[0]],0,dt.shape[sax[1]]),</span>
+                           <span class="n">extent</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
                            <span class="n">interpolation</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;interpolation&#39;</span><span class="p">],</span>
                            <span class="n">cmap</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cmap&#39;</span><span class="p">],</span>
                            <span class="p">)</span>
@@ -933,6 +933,11 @@
 
 <span class="sd">        fig : figure</span>
 <span class="sd">        ax : np.array of axes</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        pylayers.util.plotutil.mulcplot</span>
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1106,80 +1111,9 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c">#def __init__(self, x=np.array([]), y=np.array([]),label=[]):</span>
-    <span class="c">#    super(Usignal,self).__init__(x,y,label)</span>
-    <span class="c">#   #Bsignal.__init__(self, x, y)</span>
-
 <div class="viewcode-block" id="Usignal.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Usignal.__repr__.html#pylayers.signal.bsignal.Usignal.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">Bsignal</span><span class="o">.</span><span class="n">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Usignal.__add__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Usignal.__add__.html#pylayers.signal.bsignal.Usignal.__add__">[docs]</a>    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span>
-        <span class="k">if</span> <span class="p">((</span><span class="n">t</span> <span class="o">==</span> <span class="s">&#39;int&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="s">&#39;float&#39;</span><span class="p">)):</span>
-            <span class="n">U</span> <span class="o">=</span> <span class="n">Usignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">u</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">==</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="k">assert</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-            <span class="k">assert</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span>  <span class="p">,</span><span class="s">&quot;y has not ndim=2&quot;</span>
-            <span class="k">assert</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-            <span class="n">U</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)()</span>
-            <span class="n">U</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> 
-            <span class="n">U</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">+</span><span class="n">u</span><span class="o">.</span><span class="n">y</span>
-            <span class="c"># L = self.align(u)</span>
-            <span class="c"># #u1 = L[0]</span>
-            <span class="c"># #u2 = L[1]</span>
-            <span class="c"># val = L.y[0:-1,:] + L.y[-1,:]</span>
-            <span class="c"># # handle one dimensional array</span>
-            <span class="c"># if ((val.ndim&gt;1) &amp; (val.shape[0]==1)):</span>
-            <span class="c">#     val = val.reshape(val.shape[1])</span>
-            <span class="c"># U = Usignal(L.x, val)</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Usignal.__sub__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Usignal.__sub__.html#pylayers.signal.bsignal.Usignal.__sub__">[docs]</a>    <span class="k">def</span> <span class="nf">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span>
-        <span class="k">if</span> <span class="p">((</span><span class="n">t</span> <span class="o">==</span> <span class="s">&#39;int&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="s">&#39;float&#39;</span><span class="p">)):</span>
-            <span class="n">U</span> <span class="o">=</span> <span class="n">Usignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">u</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">==</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="k">assert</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-            <span class="k">assert</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span>  <span class="p">,</span><span class="s">&quot;y has not ndim=2&quot;</span>
-            <span class="k">assert</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-            <span class="c">#L = self.align(u)</span>
-            <span class="c">#u1 = L[0]</span>
-            <span class="c">#u2 = L[1]</span>
-            <span class="c">#val = L.y[0:-1,:] - L.y[-1,:]</span>
-            <span class="c">#if ((val.ndim&gt;1) &amp; (val.shape[0]==1)):</span>
-            <span class="c">#    val = val.reshape(val.shape[1])</span>
-            <span class="n">U</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)()</span>
-            <span class="n">U</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
-            <span class="n">U</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">-</span><span class="n">u</span><span class="o">.</span><span class="n">y</span>
-            <span class="c">#U = Usignal(u1.x, u1.y - u2.y)</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Usignal.__mul__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Usignal.__mul__.html#pylayers.signal.bsignal.Usignal.__mul__">[docs]</a>    <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span>
-        <span class="k">if</span> <span class="p">((</span><span class="n">t</span> <span class="o">==</span> <span class="s">&#39;int&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="s">&#39;float&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">t</span><span class="o">==</span> <span class="s">&#39;float64&#39;</span><span class="p">)</span> <span class="p">):</span>
-            <span class="n">U</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)()</span>
-            <span class="n">U</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
-            <span class="n">U</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">u</span>
-        <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span><span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)):</span>
-            <span class="c">#assert (u.x.shape==self.x.shape)</span>
-            <span class="k">assert</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span>  <span class="p">,</span><span class="s">&quot;y has not ndim=2&quot;</span>
-            <span class="k">assert</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-            <span class="c">#U = type(self)()</span>
-            <span class="c">#U.x = self.x</span>
-            <span class="c">#U.y = self.y*u.y</span>
-            <span class="c">#L = self.align(u)</span>
-            <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alignc</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
-            <span class="c"># #u1 = L[0]</span>
-            <span class="c"># #u2 = L[1]</span>
-            <span class="c"># #U = Usignal(u1.x, u1.y * u2.y)</span>
-            <span class="n">val</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">L</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,:]</span>
-            <span class="c">#if ((val.ndim&gt;1) &amp; (val.shape[0]==1)):</span>
-            <span class="c">#    val = val.reshape(val.shape[1])</span>
-            <span class="n">U</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)()</span>
-            <span class="n">U</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">x</span>
-            <span class="n">U</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Usignal.setx"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Usignal.setx.html#pylayers.signal.bsignal.Usignal.setx">[docs]</a>    <span class="k">def</span> <span class="nf">setx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">dx</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot; set the x array of the Usignal (y=0)</span>
@@ -1213,8 +1147,10 @@
 <span class="sd">        &gt;&gt;&gt; assert(u.dx()==0.1)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 </div>
     <span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_new</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s">&#39;linear&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; resample the Usignal with a new x base</span>
@@ -1275,24 +1211,26 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-
-<span class="sd">        &gt;&gt;&gt; from pylayers.signal.bsignal import *</span>
-<span class="sd">        &gt;&gt;&gt; i1 = TUsignal()</span>
-<span class="sd">        &gt;&gt;&gt; i2 = TUsignal()</span>
-<span class="sd">        &gt;&gt;&gt; i1.EnImpulse()</span>
-<span class="sd">        &gt;&gt;&gt; i2.EnImpulse()</span>
-<span class="sd">        &gt;&gt;&gt; i2.translate(-10)</span>
-<span class="sd">        &gt;&gt;&gt; L  = i1.alignc(i2)</span>
+<span class="sd">        L : Usignal</span>
+<span class="sd">            concatenated signal L1.y and L2.y</span>
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="n">u1</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="c"># nothing to align</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">u1</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">u2</span><span class="o">.</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">u1</span><span class="o">.</span><span class="n">x</span><span class="o">==</span><span class="n">u2</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                <span class="k">return</span> <span class="n">u1</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">u1</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">u2</span><span class="o">.</span><span class="n">y</span>
+
+        <span class="n">sh1</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">sh2</span> <span class="o">=</span> <span class="n">u2</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">naxis1</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sh1</span><span class="p">)</span>
+        <span class="n">naxis2</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sh2</span><span class="p">)</span>
+        <span class="k">assert</span><span class="p">(</span><span class="n">naxis1</span><span class="o">==</span><span class="n">naxis2</span><span class="p">),</span><span class="s">&quot;Problem signal haven&#39;t the same number of axis&quot;</span>
+
         <span class="n">dx1</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
         <span class="n">dx2</span> <span class="o">=</span> <span class="n">u2</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
+
         <span class="n">u1_start</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">u2_start</span> <span class="o">=</span> <span class="n">u2</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">u1_stop</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -1300,12 +1238,15 @@
 
         <span class="c"># it starts at the maximum of both signal</span>
         <span class="c">#    stops  at the minimum of both signal</span>
+
         <span class="n">xstart</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">u1_start</span><span class="p">,</span> <span class="n">u2_start</span><span class="p">)</span>
         <span class="n">xstop</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">u1_stop</span><span class="p">,</span> <span class="n">u2_stop</span><span class="p">)</span>
-        <span class="k">assert</span><span class="p">(</span><span class="n">xstop</span><span class="o">&gt;</span><span class="n">xstart</span><span class="p">),</span> <span class="s">&quot;error the 2 signal have disjoint support&quot;</span>
+
+        <span class="k">assert</span><span class="p">(</span><span class="n">xstop</span><span class="o">&gt;=</span><span class="n">xstart</span><span class="p">),</span> <span class="s">&quot;error the 2 signal have disjoint support&quot;</span>
+
         <span class="n">dx</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">dx1</span><span class="p">,</span> <span class="n">dx2</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">tstincl</span><span class="p">(</span><span class="n">u1</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">u2</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s">&#39;Warning: Impossible to align the 2 signals&#39;</span>
+            <span class="k">print</span> <span class="s">&#39;Warning: impossible to align the 2 signals&#39;</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">dx1</span> <span class="o">&lt;=</span> <span class="n">dx2</span><span class="p">):</span>
 
@@ -1332,11 +1273,15 @@
 
             <span class="n">u2</span> <span class="o">=</span> <span class="n">u2</span><span class="o">.</span><span class="n">truncate</span><span class="p">(</span><span class="n">pstart2</span><span class="p">,</span> <span class="n">pstop2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">u1</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">xnew</span><span class="p">)</span>
-        <span class="n">L</span>   <span class="o">=</span> <span class="n">Usignal</span><span class="p">()</span>
-        <span class="n">L</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">x</span>
-        <span class="n">L</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">u1</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">u2</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+        <span class="c">#L   = Usignal()</span>
+        <span class="c">#L.x = u1.x</span>
+        <span class="c">#L.y = np.vstack((u1.y,u2.y))</span>
+        <span class="c">#u1.y=u1.y[...,None]</span>
+        <span class="c">#u2.y=u2.y[...,None]</span>
+        <span class="c">#pdb.set_trace()</span>
+        <span class="c">#L.y = np.concatenate((u1.y,u2.y),axis=naxis1)</span>
 
-        <span class="k">return</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">u1</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">u1</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">u2</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Usignal.width"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Usignal.width.html#pylayers.signal.bsignal.Usignal.width">[docs]</a>    <span class="k">def</span> <span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot; get the extension support of the Usignal</span>
@@ -1438,144 +1383,14 @@
 
         <span class="n">x_new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">posmin</span><span class="p">:</span><span class="n">posmax</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">y_new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[:,</span> <span class="n">posmin</span><span class="p">:</span><span class="n">posmax</span><span class="p">]</span>
+            <span class="n">y_new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">posmin</span><span class="p">:</span><span class="n">posmax</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">y_new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">posmin</span><span class="p">:</span><span class="n">posmax</span><span class="p">]</span>
 
         <span class="n">U</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="n">x_new</span><span class="p">,</span> <span class="n">y_new</span><span class="p">)</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Usignal.align"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Usignal.align.html#pylayers.signal.bsignal.Usignal.align">[docs]</a>    <span class="k">def</span> <span class="nf">align</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u2</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; align two Usignal on a same base</span>
 
-<span class="sd">        returns a list which contains the two aligned signals</span>
-
-<span class="sd">        It is assume that both signal u1 and u2 share the same dx</span>
-<span class="sd">        This function can be improved regarding time granularity</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-
-<span class="sd">        u2 : TUsignal</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-
-<span class="sd">        TUsignal y extended TU signal, x bases are adjusted</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-
-<span class="sd">        .. plot::</span>
-<span class="sd">            :include-source:</span>
-
-<span class="sd">            &gt;&gt;&gt; import matplotlib.pylab as plt</span>
-<span class="sd">            &gt;&gt;&gt; from pylayers.signal.bsignal import *</span>
-<span class="sd">            &gt;&gt;&gt; i1 = EnImpulse()</span>
-<span class="sd">            &gt;&gt;&gt; i2 = EnImpulse()</span>
-<span class="sd">            &gt;&gt;&gt; i2.translate(-10)</span>
-<span class="sd">            &gt;&gt;&gt; i3 = i1.align(i2)</span>
-<span class="sd">            &gt;&gt;&gt; fig,ax=i3.plot(typ=[&#39;v&#39;])</span>
-<span class="sd">            &gt;&gt;&gt; plt.show()</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># copy object</span>
-        <span class="n">u1</span> <span class="o">=</span> <span class="bp">self</span>
-        <span class="n">u1_start</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">u1_stop</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">u2_start</span> <span class="o">=</span> <span class="n">u2</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">u2_stop</span> <span class="o">=</span> <span class="n">u2</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="c"># get dimensions</span>
-        <span class="k">if</span> <span class="n">u1</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">ndim</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
-            <span class="n">N1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">M1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">N1</span> <span class="o">=</span> <span class="mi">1</span>
-            <span class="n">M1</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">u1</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
-            <span class="n">u1</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">M1</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">u2</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">ndim</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
-            <span class="n">N2</span> <span class="o">=</span> <span class="n">u2</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">M2</span> <span class="o">=</span> <span class="n">u2</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">N2</span> <span class="o">=</span> <span class="mi">1</span>
-            <span class="n">M2</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">u2</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
-            <span class="n">u2</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">u2</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">M2</span><span class="p">)</span>
-
-        <span class="n">bool1</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">u1_start</span> <span class="o">-</span> <span class="n">u2_start</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-10</span>
-        <span class="n">bool2</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">u1_stop</span> <span class="o">-</span> <span class="n">u2_stop</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-10</span>
-
-        <span class="nb">bool</span> <span class="o">=</span> <span class="n">bool1</span> <span class="o">&amp;</span> <span class="n">bool2</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="nb">bool</span><span class="p">):</span>
-        <span class="c"># same x support</span>
-            <span class="n">L</span> <span class="o">=</span> <span class="n">Usignal</span><span class="p">(</span><span class="n">u1</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">u1</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">u2</span><span class="o">.</span><span class="n">y</span><span class="p">)))</span>
-        <span class="k">else</span><span class="p">:</span>
-        <span class="c"># different x support</span>
-            <span class="n">xstart</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">u1_start</span><span class="p">,</span> <span class="n">u2_start</span><span class="p">)</span>
-            <span class="n">xstop</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">u1_stop</span><span class="p">,</span> <span class="n">u2_stop</span><span class="p">)</span>
-
-            <span class="n">b1i</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">xstart</span> <span class="o">-</span> <span class="n">u1</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">1e-15</span>
-            <span class="n">b2i</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">xstart</span> <span class="o">-</span> <span class="n">u2</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">1e-15</span>
-            <span class="n">b1f</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">xstop</span> <span class="o">-</span> <span class="n">u1</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">1e-15</span>
-            <span class="n">b2f</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">xstop</span> <span class="o">-</span> <span class="n">u2</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">1e-15</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="n">b1i</span> <span class="o">&amp;</span> <span class="n">b2f</span><span class="p">):</span>
-            <span class="c"># u1 is left u2 is right</span>
-                <span class="n">dx</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
-                <span class="n">T</span> <span class="o">=</span> <span class="n">xstop</span> <span class="o">-</span> <span class="n">xstart</span>
-                <span class="n">N</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="n">dx</span><span class="p">))</span>
-                <span class="n">x</span> <span class="o">=</span> <span class="n">xstart</span> <span class="o">+</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-                <span class="n">Y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N1</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-                <span class="n">Y2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N2</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-                <span class="n">yleft</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">y</span>
-                <span class="n">yright</span> <span class="o">=</span> <span class="n">u2</span><span class="o">.</span><span class="n">y</span>
-                <span class="n">Nleft</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">M1</span><span class="p">)</span>
-                <span class="n">Nright</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">M2</span><span class="p">)</span>
-                <span class="n">Y1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">Nleft</span><span class="p">]</span> <span class="o">=</span> <span class="n">yleft</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">Nleft</span><span class="p">]</span>
-                <span class="n">Y2</span><span class="p">[:,</span><span class="o">-</span><span class="n">Nright</span><span class="p">:]</span> <span class="o">=</span> <span class="n">yright</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">Nright</span><span class="p">]</span>
-                <span class="n">U1</span> <span class="o">=</span> <span class="n">Usignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Y1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">])</span>
-                <span class="n">U2</span> <span class="o">=</span> <span class="n">Usignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Y2</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">])</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="n">b2i</span> <span class="o">&amp;</span> <span class="n">b1f</span><span class="p">):</span>
-            <span class="c"># u2 is left u1 is right</span>
-                <span class="n">dx</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
-                <span class="n">T</span> <span class="o">=</span> <span class="n">xstop</span> <span class="o">-</span> <span class="n">xstart</span>
-                <span class="n">N</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="n">dx</span><span class="p">))</span>
-                <span class="n">x</span> <span class="o">=</span> <span class="n">xstart</span> <span class="o">+</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-                <span class="n">Y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N1</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-                <span class="n">Y2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N2</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-                <span class="n">yleft</span> <span class="o">=</span> <span class="n">u2</span><span class="o">.</span><span class="n">y</span>
-                <span class="n">yright</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">y</span>
-                <span class="n">Nleft</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">M2</span><span class="p">)</span>
-                <span class="n">Nright</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">M1</span><span class="p">)</span>
-                <span class="n">Y2</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">Nleft</span><span class="p">]</span> <span class="o">=</span> <span class="n">yleft</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">Nleft</span><span class="p">]</span>
-                <span class="n">Y1</span><span class="p">[:,</span><span class="o">-</span><span class="n">Nright</span><span class="p">:]</span> <span class="o">=</span> <span class="n">yright</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">Nright</span><span class="p">]</span>
-                <span class="n">U1</span> <span class="o">=</span> <span class="n">Usignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Y1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">])</span>
-                <span class="n">U2</span> <span class="o">=</span> <span class="n">Usignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Y2</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">])</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="n">b1i</span> <span class="o">&amp;</span> <span class="n">b1f</span><span class="p">):</span>
-            <span class="c"># u2 is included in u1</span>
-                <span class="n">U1</span> <span class="o">=</span> <span class="n">u1</span>
-                <span class="n">x</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">x</span>
-                <span class="n">indx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">((</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="n">u2_start</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">u2_stop</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">U2</span> <span class="o">=</span> <span class="n">Usignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N2</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))))</span>
-                <span class="n">U2</span><span class="o">.</span><span class="n">y</span><span class="p">[:,</span><span class="n">indx</span><span class="p">]</span> <span class="o">=</span> <span class="n">u2</span><span class="o">.</span><span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">indx</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="n">b2i</span> <span class="o">&amp;</span> <span class="n">b2f</span><span class="p">):</span>
-            <span class="c"># u1 is included in u2</span>
-                <span class="n">U2</span> <span class="o">=</span> <span class="n">u2</span>
-                <span class="n">x</span> <span class="o">=</span> <span class="n">u2</span><span class="o">.</span><span class="n">x</span>
-                <span class="n">indx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">((</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="n">u1_start</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">u1_stop</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">U1</span> <span class="o">=</span> <span class="n">Usignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))))</span>
-                <span class="n">U1</span><span class="o">.</span><span class="n">y</span><span class="p">[:,</span><span class="n">indx</span><span class="p">]</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">y</span>
-
-            <span class="c">#L = [U1, U2]</span>
-            <span class="n">L</span>   <span class="o">=</span> <span class="n">Usignal</span><span class="p">()</span>
-            <span class="n">L</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">U1</span><span class="o">.</span><span class="n">x</span>
-            <span class="n">L</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">U1</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">U2</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">L</span>
 </div>
 <div class="viewcode-block" id="Usignal.abs"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Usignal.abs.html#pylayers.signal.bsignal.Usignal.abs">[docs]</a>    <span class="k">def</span> <span class="nf">abs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; return the absolute value of an Usignal</span>
@@ -1634,7 +1449,9 @@
 <span class="sd">        energy : float</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">energy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">shy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">nay</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">shy</span><span class="p">)</span>
+        <span class="n">energy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="n">nay</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">energy</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Usignal.fftshift"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Usignal.fftshift.html#pylayers.signal.bsignal.Usignal.fftshift">[docs]</a>    <span class="k">def</span> <span class="nf">fftshift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1696,7 +1513,8 @@
 
 <span class="sd">            &gt;&gt;&gt; from pylayers.signal.bsignal import *</span>
 <span class="sd">            &gt;&gt;&gt; from matplotlib.pylab import *</span>
-<span class="sd">            &gt;&gt;&gt; ip = EnImpulse()</span>
+<span class="sd">            &gt;&gt;&gt; ip = TUsignal()</span>
+<span class="sd">            &gt;&gt;&gt; ip.EnImpulse()</span>
 <span class="sd">            &gt;&gt;&gt; f,a = ip.plot(typ=[&#39;v&#39;])</span>
 <span class="sd">            &gt;&gt;&gt; ip.zlr(-10,10)</span>
 <span class="sd">            &gt;&gt;&gt; f,a = ip.plot(typ=[&#39;v&#39;])</span>
@@ -1705,25 +1523,29 @@
         <span class="n">dx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
         <span class="n">cmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
         <span class="n">cmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">shy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">shyl</span> <span class="o">=</span> <span class="n">shy</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">cmin</span> <span class="o">&gt;</span> <span class="n">xmin</span><span class="p">:</span>
             <span class="n">xaddl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">cmin</span> <span class="o">-</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dx</span><span class="p">)</span>
-            <span class="n">yaddl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xaddl</span><span class="p">))</span>
+            <span class="n">nshy</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">shyl</span><span class="p">)</span><span class="o">+</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">xaddl</span><span class="p">)]</span>
+            <span class="n">yaddl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nshy</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">xaddl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">yaddl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">yaddl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="n">xmin</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
 
         <span class="k">if</span> <span class="n">cmax</span> <span class="o">&lt;</span> <span class="n">xmax</span><span class="p">:</span>
             <span class="n">xaddr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">cmax</span> <span class="o">+</span> <span class="n">dx</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">dx</span><span class="p">)</span>
-            <span class="n">yaddr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xaddr</span><span class="p">))</span>
+            <span class="n">nshy</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">shyl</span><span class="p">)</span><span class="o">+</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">xaddr</span><span class="p">)]</span>
+            <span class="n">yaddr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nshy</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">xaddr</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">yaddr</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">yaddr</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">xmax</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
 </div>
     <span class="k">def</span> <span class="nf">window</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">win</span><span class="o">=</span><span class="s">&#39;hamming&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; windowing Usignal</span>
@@ -1889,7 +1711,8 @@
 
 <span class="sd">            &gt;&gt;&gt; from pylayers.signal.bsignal import *</span>
 <span class="sd">            &gt;&gt;&gt; from matplotlib.pylab import *</span>
-<span class="sd">            &gt;&gt;&gt; ip = EnImpulse()</span>
+<span class="sd">            &gt;&gt;&gt; ip = TUsignal()</span>
+<span class="sd">            &gt;&gt;&gt; ip.EnImpulse()</span>
 <span class="sd">            &gt;&gt;&gt; ip.translate(-10)</span>
 <span class="sd">            &gt;&gt;&gt; fig,ax=ip.plot(typ=[&#39;v&#39;])</span>
 <span class="sd">            &gt;&gt;&gt; show()</span>
@@ -1988,6 +1811,43 @@
 <div class="viewcode-block" id="TUsignal.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.TUsignal.__init__.html#pylayers.signal.bsignal.TUsignal.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span><span class="n">label</span><span class="o">=</span><span class="p">[]):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">TUsignal</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">label</span><span class="p">)</span>
 </div>
+<div class="viewcode-block" id="TUsignal.__add__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.TUsignal.__add__.html#pylayers.signal.bsignal.TUsignal.__add__">[docs]</a>    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">t</span> <span class="o">==</span> <span class="s">&#39;int&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="s">&#39;float&#39;</span><span class="p">)):</span>
+            <span class="n">U</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">u</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">==</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="n">x</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="n">y2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">align</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+            <span class="n">U</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)()</span>
+            <span class="n">U</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="n">U</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y1</span> <span class="o">+</span> <span class="n">y2</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">t</span> <span class="o">==</span> <span class="s">&#39;int&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="s">&#39;float&#39;</span><span class="p">)):</span>
+            <span class="n">U</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">u</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">==</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="n">x</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="n">y2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">align</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+            <span class="n">U</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)()</span>
+            <span class="n">U</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="n">U</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y1</span> <span class="o">-</span> <span class="n">y2</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">t</span> <span class="o">==</span> <span class="s">&#39;int&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="s">&#39;float&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">t</span><span class="o">==</span> <span class="s">&#39;float64&#39;</span><span class="p">)</span> <span class="p">):</span>
+            <span class="n">U</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)()</span>
+            <span class="n">U</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+            <span class="n">U</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">u</span>
+        <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span><span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="p">)):</span>
+            <span class="n">x</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="n">y2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">align</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+            <span class="n">U</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)()</span>
+            <span class="n">U</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="n">U</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y1</span> <span class="o">*</span> <span class="n">y2</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
+
+
 <div class="viewcode-block" id="TUsignal.diff"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.TUsignal.diff.html#pylayers.signal.bsignal.TUsignal.diff">[docs]</a>    <span class="k">def</span> <span class="nf">diff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; numerical differentiation</span>
 
@@ -2062,7 +1922,9 @@
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 
-<span class="sd">        &gt;&gt;&gt; e = EnImpulse()</span>
+<span class="sd">        &gt;&gt;&gt; from pylayers.signal.bsignal import *</span>
+<span class="sd">        &gt;&gt;&gt; e = TUsignal()</span>
+<span class="sd">        &gt;&gt;&gt; e.EnImpulse()</span>
 <span class="sd">        &gt;&gt;&gt; E = e.fft()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2107,10 +1969,140 @@
         <span class="n">S</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
         <span class="n">S</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">te</span>
         <span class="k">return</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
-</div>
-    <span class="k">def</span> <span class="nf">idealf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fcGHz</span><span class="p">,</span><span class="n">BGHz</span><span class="p">):</span>
-        <span class="k">pass</span>
 
+</div>
+<div class="viewcode-block" id="TUsignal.align"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.TUsignal.align.html#pylayers.signal.bsignal.TUsignal.align">[docs]</a>    <span class="k">def</span> <span class="nf">align</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; align two Usignal on a same base</span>
+
+<span class="sd">        returns a list which contains the two aligned signals</span>
+
+<span class="sd">        It is assume that both signal u1 and u2 share the same dx</span>
+<span class="sd">        This function can be improved regarding time granularity</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        u2 : TUsignal</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        TUsignal y extended TU signal, x bases are adjusted</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. plot::</span>
+<span class="sd">            :include-source:</span>
+
+<span class="sd">            &gt;&gt;&gt; import matplotlib.pylab as plt</span>
+<span class="sd">            &gt;&gt;&gt; from pylayers.signal.bsignal import *</span>
+<span class="sd">            &gt;&gt;&gt; i1 = TUsignal()</span>
+<span class="sd">            &gt;&gt;&gt; i2 = TUsignal()</span>
+<span class="sd">            &gt;&gt;&gt; i1.EnImpulse()</span>
+<span class="sd">            &gt;&gt;&gt; i2.EnImpulse()</span>
+<span class="sd">            &gt;&gt;&gt; i2.translate(-10)</span>
+<span class="sd">            &gt;&gt;&gt; i3 = i1.align(i2)</span>
+<span class="sd">            &gt;&gt;&gt; fig,ax=i3.plot(typ=[&#39;v&#39;])</span>
+<span class="sd">            &gt;&gt;&gt; plt.show()</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># copy object</span>
+        <span class="n">u1</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="n">u1_start</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">u1_stop</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">u2_start</span> <span class="o">=</span> <span class="n">u2</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">u2_stop</span> <span class="o">=</span> <span class="n">u2</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c"># get dimensions</span>
+        <span class="k">if</span> <span class="n">u1</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">ndim</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">N1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">M1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">N1</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">M1</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">u1</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+            <span class="n">u1</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">M1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">u2</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">ndim</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">N2</span> <span class="o">=</span> <span class="n">u2</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">M2</span> <span class="o">=</span> <span class="n">u2</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">N2</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">M2</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">u2</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+            <span class="n">u2</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">u2</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">M2</span><span class="p">)</span>
+
+        <span class="n">bool1</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">u1_start</span> <span class="o">-</span> <span class="n">u2_start</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-10</span>
+        <span class="n">bool2</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">u1_stop</span> <span class="o">-</span> <span class="n">u2_stop</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-10</span>
+
+        <span class="nb">bool</span> <span class="o">=</span> <span class="n">bool1</span> <span class="o">&amp;</span> <span class="n">bool2</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nb">bool</span><span class="p">):</span>
+        <span class="c"># same x support</span>
+            <span class="n">L</span> <span class="o">=</span> <span class="n">Usignal</span><span class="p">(</span><span class="n">u1</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">u1</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">u2</span><span class="o">.</span><span class="n">y</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+        <span class="c"># different x support</span>
+            <span class="n">xstart</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">u1_start</span><span class="p">,</span> <span class="n">u2_start</span><span class="p">)</span>
+            <span class="n">xstop</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">u1_stop</span><span class="p">,</span> <span class="n">u2_stop</span><span class="p">)</span>
+
+            <span class="n">b1i</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">xstart</span> <span class="o">-</span> <span class="n">u1</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">1e-15</span>
+            <span class="n">b2i</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">xstart</span> <span class="o">-</span> <span class="n">u2</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">1e-15</span>
+            <span class="n">b1f</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">xstop</span> <span class="o">-</span> <span class="n">u1</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">1e-15</span>
+            <span class="n">b2f</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">xstop</span> <span class="o">-</span> <span class="n">u2</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">1e-15</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">b1i</span> <span class="o">&amp;</span> <span class="n">b2f</span><span class="p">):</span>
+            <span class="c"># u1 is left u2 is right</span>
+                <span class="n">dx</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
+                <span class="n">T</span> <span class="o">=</span> <span class="n">xstop</span> <span class="o">-</span> <span class="n">xstart</span>
+                <span class="n">N</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="n">dx</span><span class="p">))</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">xstart</span> <span class="o">+</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+                <span class="n">Y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N1</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+                <span class="n">Y2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N2</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+                <span class="n">yleft</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">y</span>
+                <span class="n">yright</span> <span class="o">=</span> <span class="n">u2</span><span class="o">.</span><span class="n">y</span>
+                <span class="n">Nleft</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">M1</span><span class="p">)</span>
+                <span class="n">Nright</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">M2</span><span class="p">)</span>
+                <span class="n">Y1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">Nleft</span><span class="p">]</span> <span class="o">=</span> <span class="n">yleft</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">Nleft</span><span class="p">]</span>
+                <span class="n">Y2</span><span class="p">[:,</span><span class="o">-</span><span class="n">Nright</span><span class="p">:]</span> <span class="o">=</span> <span class="n">yright</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">Nright</span><span class="p">]</span>
+                <span class="n">U1</span> <span class="o">=</span> <span class="n">Usignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Y1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">])</span>
+                <span class="n">U2</span> <span class="o">=</span> <span class="n">Usignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Y2</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">b2i</span> <span class="o">&amp;</span> <span class="n">b1f</span><span class="p">):</span>
+            <span class="c"># u2 is left u1 is right</span>
+                <span class="n">dx</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
+                <span class="n">T</span> <span class="o">=</span> <span class="n">xstop</span> <span class="o">-</span> <span class="n">xstart</span>
+                <span class="n">N</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="n">dx</span><span class="p">))</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">xstart</span> <span class="o">+</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+                <span class="n">Y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N1</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+                <span class="n">Y2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N2</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+                <span class="n">yleft</span> <span class="o">=</span> <span class="n">u2</span><span class="o">.</span><span class="n">y</span>
+                <span class="n">yright</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">y</span>
+                <span class="n">Nleft</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">M2</span><span class="p">)</span>
+                <span class="n">Nright</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">M1</span><span class="p">)</span>
+                <span class="n">Y2</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">Nleft</span><span class="p">]</span> <span class="o">=</span> <span class="n">yleft</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">Nleft</span><span class="p">]</span>
+                <span class="n">Y1</span><span class="p">[:,</span><span class="o">-</span><span class="n">Nright</span><span class="p">:]</span> <span class="o">=</span> <span class="n">yright</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">Nright</span><span class="p">]</span>
+                <span class="n">U1</span> <span class="o">=</span> <span class="n">Usignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Y1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">])</span>
+                <span class="n">U2</span> <span class="o">=</span> <span class="n">Usignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Y2</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">b1i</span> <span class="o">&amp;</span> <span class="n">b1f</span><span class="p">):</span>
+            <span class="c"># u2 is included in u1</span>
+                <span class="n">U1</span> <span class="o">=</span> <span class="n">u1</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">x</span>
+                <span class="n">indx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">((</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="n">u2_start</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">u2_stop</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">U2</span> <span class="o">=</span> <span class="n">Usignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N2</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))))</span>
+                <span class="n">U2</span><span class="o">.</span><span class="n">y</span><span class="p">[:,</span><span class="n">indx</span><span class="p">]</span> <span class="o">=</span> <span class="n">u2</span><span class="o">.</span><span class="n">y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">indx</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">b2i</span> <span class="o">&amp;</span> <span class="n">b2f</span><span class="p">):</span>
+            <span class="c"># u1 is included in u2</span>
+                <span class="n">U2</span> <span class="o">=</span> <span class="n">u2</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">u2</span><span class="o">.</span><span class="n">x</span>
+                <span class="n">indx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">((</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="n">u1_start</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">u1_stop</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">U1</span> <span class="o">=</span> <span class="n">Usignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))))</span>
+                <span class="n">U1</span><span class="o">.</span><span class="n">y</span><span class="p">[:,</span><span class="n">indx</span><span class="p">]</span> <span class="o">=</span> <span class="n">u1</span><span class="o">.</span><span class="n">y</span>
+
+            <span class="c">#L = [U1, U2]</span>
+            <span class="c">#L   = Usignal()</span>
+            <span class="c">#L.x = U1.x</span>
+            <span class="c">#L.y = np.vstack((U1.y,U2.y))</span>
+        <span class="k">return</span> <span class="n">U1</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">U1</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">U2</span><span class="o">.</span><span class="n">y</span></div>
 <div class="viewcode-block" id="TUsignal.filter"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.TUsignal.filter.html#pylayers.signal.bsignal.TUsignal.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">wp</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">ws</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">ftype</span><span class="o">=</span><span class="s">&#39;butter&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; signal filtering</span>
 
@@ -2800,48 +2792,26 @@
 <div class="viewcode-block" id="FUsignal.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.__repr__.html#pylayers.signal.bsignal.FUsignal.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">FBsignal</span><span class="o">.</span><span class="n">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-
-    <span class="c"># def __add__(self, u):</span>
-    <span class="c">#     L = self.align(u)</span>
-    <span class="c">#     u1 = L[0]</span>
-    <span class="c">#     u2 = L[1]</span>
-    <span class="c">#     U = FUsignal(u1.x, u1.y + u2.y)</span>
-    <span class="c">#     #U =FUsignal(self.x,self.y+u.y)</span>
-    <span class="c">#     return(U)</span>
-
-    <span class="c"># def __sub__(self, u):</span>
-    <span class="c">#     L = self.align(u)</span>
-    <span class="c">#     u1 = L[0]</span>
-    <span class="c">#     u2 = L[1]</span>
-    <span class="c">#     U = FUsignal(u1.x, u1.y - u2.y)</span>
-    <span class="c">#     #U =FUsignal(self.x,self.y-u.y)</span>
-    <span class="c">#     return(U)</span>
-
-    <span class="c"># def __mul__(self, u):</span>
-    <span class="c">#     L = self.align(u)</span>
-    <span class="c">#     u1 = L[0]</span>
-    <span class="c">#     u2 = L[1]</span>
-    <span class="c">#     #</span>
-    <span class="c">#     # Normalisation 19/05/2009</span>
-    <span class="c">#     Df = u1.x[1] - u1.x[0]</span>
-    <span class="c">#     U = FUsignal(u1.x, u1.y * u2.y)</span>
-    <span class="c">#     #rint shape(self.x)</span>
-    <span class="c">#     #rint shape(self.y)</span>
-    <span class="c">#     #rint shape(u.y)</span>
-    <span class="c">#     # =FUsignal(self.x,self.y*u.y)</span>
-    <span class="c">#     return(U)</span>
-
-    <span class="c"># def __div__(self, u):</span>
-    <span class="c">#     L = self.align(u)</span>
-    <span class="c">#     u1 = L[0]</span>
-    <span class="c">#     u2 = L[1]</span>
-    <span class="c">#     U = FUsignal(u1.x, u1.y / u2.y)</span>
-    <span class="c">#     return(U)</span>
-
-
-
-
-
+</div>
+<div class="viewcode-block" id="FUsignal.__add__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.__add__.html#pylayers.signal.bsignal.FUsignal.__add__">[docs]</a>    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="n">y2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alignc</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">FUsignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y1</span> <span class="o">+</span> <span class="n">y2</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="FUsignal.__sub__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.__sub__.html#pylayers.signal.bsignal.FUsignal.__sub__">[docs]</a>    <span class="k">def</span> <span class="nf">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="n">y2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alignc</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">FUsignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y1</span> <span class="o">-</span> <span class="n">y2</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="FUsignal.__mul__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.__mul__.html#pylayers.signal.bsignal.FUsignal.__mul__">[docs]</a>    <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="n">y2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alignc</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">FUsignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y1</span> <span class="o">*</span> <span class="n">y2</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="FUsignal.__div__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.__div__.html#pylayers.signal.bsignal.FUsignal.__div__">[docs]</a>    <span class="k">def</span> <span class="nf">__div__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="n">y2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alignc</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">FUsignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y1</span> <span class="o">/</span> <span class="n">y2</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
 
 </div>
 <div class="viewcode-block" id="FUsignal.applyFriis"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.applyFriis.html#pylayers.signal.bsignal.FUsignal.applyFriis">[docs]</a>    <span class="k">def</span> <span class="nf">applyFriis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -2864,7 +2834,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">factor</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">isFriis</span> <span class="o">=</span> <span class="bp">True</span>
 
-    
+
 </div>
 <div class="viewcode-block" id="FUsignal.get"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.get.html#pylayers.signal.bsignal.FUsignal.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -2904,7 +2874,7 @@
         <span class="k">print</span> <span class="s">&#39;Duration (ns) :&#39;</span><span class="p">,</span> <span class="n">T</span>
         <span class="k">print</span> <span class="s">&#39;Frequency sampling step : &#39;</span><span class="p">,</span> <span class="n">df</span>
 </div>
-<div class="viewcode-block" id="FUsignal.energy"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.energy.html#pylayers.signal.bsignal.FUsignal.energy">[docs]</a>    <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;mean&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="FUsignal.energy"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.energy.html#pylayers.signal.bsignal.FUsignal.energy">[docs]</a>    <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;mean&#39;</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot; calculate energy along given axis</span>
 
 <span class="sd">        Parameters</span>
@@ -2918,8 +2888,9 @@
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 
-<span class="sd">        &gt;&gt;&gt; S = EnImpulse()</span>
-<span class="sd">        &gt;&gt;&gt; En1 = S.energy()</span>
+<span class="sd">        &gt;&gt;&gt; ip = TUsignal()</span>
+<span class="sd">        &gt;&gt;&gt; ip.EnImpulse()</span>
+<span class="sd">        &gt;&gt;&gt; En1 = ip.energy()</span>
 <span class="sd">        &gt;&gt;&gt; assert((En1&gt;0.99) &amp; (En1&lt;1.01))</span>
 
 <span class="sd">        Notes</span>
@@ -3285,7 +3256,8 @@
 <span class="sd">        --------</span>
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.signal.bsignal import *</span>
-<span class="sd">        &gt;&gt;&gt; e  = EnImpulse()</span>
+<span class="sd">        &gt;&gt;&gt; e = TUsignal()</span>
+<span class="sd">        &gt;&gt;&gt; e.EnImpulse()</span>
 <span class="sd">        &gt;&gt;&gt; E  = e.fft()</span>
 <span class="sd">        &gt;&gt;&gt; EU = E.unrex()</span>
 
@@ -3497,10 +3469,12 @@
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 
-<span class="sd">        &gt;&gt;&gt; e  = EnImpulse(fe=200)</span>
+<span class="sd">        &gt;&gt;&gt; e  = TUsignal()</span>
+<span class="sd">        &gt;&gt;&gt; e.EnImpulse(feGHz=200)</span>
 <span class="sd">        &gt;&gt;&gt; E  = e.fft()</span>
 <span class="sd">        &gt;&gt;&gt; ee = E.ifft()</span>
-<span class="sd">        &gt;&gt;&gt; assert(abs(sum(e.y-ee.y))&lt;1e-13)</span>
+<span class="sd">        &gt;&gt;&gt; assert(abs(sum(e.y-ee.y).all())&lt;1e-13)</span>
+
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">Np</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
@@ -3549,11 +3523,11 @@
         <span class="c"># even case</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">xu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span>
-            <span class="n">yu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span>
+            <span class="n">yu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">1</span><span class="p">:(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span>
         <span class="c"># odd case</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">xu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span>
-            <span class="n">yu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span>
+            <span class="n">yu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">1</span><span class="p">:(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span>
 
         <span class="n">O</span> <span class="o">=</span> <span class="n">FUsignal</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xu</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">yu</span><span class="p">)</span>
 
@@ -3737,14 +3711,14 @@
 <div class="viewcode-block" id="Noise.amplify"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Noise.amplify.html#pylayers.signal.bsignal.Noise.amplify">[docs]</a>    <span class="k">def</span> <span class="nf">amplify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">GdB</span><span class="p">,</span> <span class="n">NF</span><span class="p">):</span>
         <span class="n">sel</span>
 </div>
-    <span class="k">def</span> <span class="nf">fgating</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fcGHz</span><span class="p">,</span> <span class="n">BGHz</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="s">&#39;rect&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">fgating</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fcGHz</span><span class="p">,</span> <span class="n">WGHz</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="s">&#39;rect&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; apply a frequency gating</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
 <span class="sd">        fcGHz : float</span>
-<span class="sd">        BGHz  : float</span>
+<span class="sd">        WGHz  : float</span>
 <span class="sd">        window : string</span>
 <span class="sd">            &#39;rect&#39;</span>
 
@@ -3756,8 +3730,8 @@
             <span class="n">parity</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">U</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">unrex</span><span class="p">()</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">x</span>
-        <span class="n">f1</span> <span class="o">=</span> <span class="n">fcGHz</span> <span class="o">-</span> <span class="n">BGHz</span> <span class="o">/</span> <span class="mf">2.</span>
-        <span class="n">f2</span> <span class="o">=</span> <span class="n">fcGHz</span> <span class="o">+</span> <span class="n">BGHz</span> <span class="o">/</span> <span class="mf">2.</span>
+        <span class="n">f1</span> <span class="o">=</span> <span class="n">fcGHz</span> <span class="o">-</span> <span class="n">WGHz</span> <span class="o">/</span> <span class="mf">2.</span>
+        <span class="n">f2</span> <span class="o">=</span> <span class="n">fcGHz</span> <span class="o">+</span> <span class="n">WGHz</span> <span class="o">/</span> <span class="mf">2.</span>
         <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">((</span><span class="n">f</span> <span class="o">&gt;</span> <span class="n">f1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">f</span> <span class="o">&lt;</span> <span class="n">f2</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">gate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">window</span><span class="o">==</span><span class="s">&#39;rect&#39;</span><span class="p">:</span>
@@ -3771,8 +3745,8 @@
         <span class="c">#fe = 1./(self.x[1]-self.x[0])</span>
         <span class="c">#fN = fe/2</span>
         <span class="c">#print &quot;fN : &quot;,fN</span>
-        <span class="c">#wp = (fcGHz-BGHz/2.)/fN</span>
-        <span class="c">#ws = (fcGHz+BGHz/2.)/fN</span>
+        <span class="c">#wp = (fcGHz-WGHz/2.)/fN</span>
+        <span class="c">#ws = (fcGHz+WGHz/2.)/fN</span>
         <span class="c">#print &quot;fN : &quot;,wp</span>
         <span class="c">#print &quot;fN : &quot;,ws</span>
         <span class="c">#o  = self.iirfilter(order=4,wp=wp,ws=ws)</span>
@@ -3784,7 +3758,8 @@
 <span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
     <span class="n">dx1</span> <span class="o">=</span> <span class="mf">0.01</span>
     <span class="n">x1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">dx1</span><span class="p">)</span>
-    <span class="n">s1</span> <span class="o">=</span> <span class="n">EnImpulse</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">TUsignal</span><span class="p">()</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">s1</span><span class="o">.</span><span class="n">EnImpulse</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">fcGHz</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">WGHz</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">feGHz</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
     <span class="n">S1</span> <span class="o">=</span> <span class="n">s1</span><span class="o">.</span><span class="n">fft</span><span class="p">()</span>
 
@@ -3919,7 +3894,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on août 15, 2015.
+      Last updated on sept. 07, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

@@ -27,9 +27,6 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="Python 1 documentation" href="../../index.html" />
-    <link rel="up" title="pylayers.antprop.channel" href="../pylayers.antprop.channel.html" />
-    <link rel="next" title="pylayers.antprop.channel.FUDchannel.iftd" href="pylayers.antprop.channel.FUDchannel.iftd.html" />
-    <link rel="prev" title="pylayers.antprop.channel.FUDchannel.ifft" href="pylayers.antprop.channel.FUDchannel.ifft.html" />
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -82,44 +79,10 @@
 
       <div class="sphinxsidebar">
 	<div class="sphinxsidebarwrapper">
-	  <div class="rel">
-	   
+	   <div class="rel rellarge">
+	     
 	<!-- rellinks[1:] is an ugly hack to avoid link to module
 	    index  -->
-	<div class="rellink">
-	<a href="pylayers.antprop.channel.FUDchannel.ifft.html" title="pylayers.antprop.channel.FUDchannel.ifft"
-	    accesskey="P">Previous
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.antprop...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.antprop.channel.FUDchannel.ifft
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
-	<div class="rellink">
-	<a href="pylayers.antprop.channel.FUDchannel.iftd.html" title="pylayers.antprop.channel.FUDchannel.iftd"
-	    accesskey="N">Next
-	    <br>
-	    <span class="smallrellink">
-	    pylayers.antprop...
-	    </span>
-	    <span class="hiddenrellink">
-	    pylayers.antprop.channel.FUDchannel.iftd
-	    </span>
-	    
-	    </a>
-	</div>
-	    <div class="spacer">
-	    &nbsp;
-	    </div>
-	
 	<div class="rellink">
 	<a href="../../py-modindex.html" title="Python Module Index"
 	    >Modules
@@ -134,22 +97,6 @@
 	    </a>
 	</div>
 	<!-- Ad a link to the 'up' page -->
-	<div class="spacer">
-	&nbsp;
-	</div>
-	<div class="rellink">
-	<a href="../pylayers.antprop.channel.html" title="pylayers.antprop.channel" >
-	Up
-	<br>
-	<span class="smallrellink">
-	pylayers.antprop...
-	</span>
-	<span class="hiddenrellink">
-	pylayers.antprop.channel
-	</span>
-	
-	</a>
-	</div>
     </div>
     <p style="text-align: center; background-color: #BFFFFF">This documentation is
 
@@ -177,47 +124,6 @@
             
   <div class="section" id="pylayers-antprop-channel-fudchannel-totime">
 <h1>pylayers.antprop.channel.FUDchannel.totime<a class="headerlink" href="#pylayers-antprop-channel-fudchannel-totime" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="pylayers.antprop.channel.FUDchannel.totime">
-<code class="descclassname">FUDchannel.</code><code class="descname">totime</code><span class="sig-paren">(</span><em>Nz=1</em>, <em>ffts=0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/channel.html#FUDchannel.totime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.FUDchannel.totime" title="Permalink to this definition">¶</a></dt>
-<dd><p>transform to TUDsignal</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Nz</strong> : int</p>
-<blockquote class="last">
-<div><blockquote>
-<div><p>Number of zeros for zero padding</p>
-</div></blockquote>
-<dl class="docutils">
-<dt>ffts <span class="classifier-delimiter">:</span> <span class="classifier">nt</span></dt>
-<dd><p class="first last">fftshift indicator (default 0 )</p>
-</dd>
-</dl>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">FUsignal.ift</span></code></p>
-</div>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.simul.link</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">aktk</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">cut</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">T1</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">totime</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">T1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">minphas</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">T2</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">totime</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">T2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
 </div>
 
 
@@ -231,25 +137,15 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on août 15, 2015.
+      Last updated on sept. 07, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.antprop.channel.FUDchannel.totime.txt"
 	    rel="nofollow">Show this page source</a>
     </span>
     </div>
-     <div class="rel">
+     <div class="rel rellarge">
     
-    <div class="buttonPrevious">
-      <a href="pylayers.antprop.channel.FUDchannel.ifft.html">
-        Previous
-      </a>  
-    </div>
-    <div class="buttonNext">
-      <a href="pylayers.antprop.channel.FUDchannel.iftd.html">
-        Next
-      </a>  
-    </div>
     <div class="buttonPrevious">
       <a href="../../py-modindex.html">
         Previous

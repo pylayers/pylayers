@@ -141,6 +141,8 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">.. currentmodule:: pylayers.antprop.channelc</span>
 
+<span class="sd">DEPRECATED</span>
+
 <span class="sd">VectChannel Class</span>
 <span class="sd">=================</span>
 
@@ -467,8 +469,73 @@
 
         <span class="n">chaine</span> <span class="o">=</span> <span class="s">&quot;geomview -nopanel -b 1 1 1 &quot;</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s">&quot; 2&gt;/dev/null &amp;&quot;</span>
         <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
-
 </div>
+    <span class="k">def</span> <span class="nf">_vec2scal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; calculate scalChannel from VectChannel and antenna</span>
+
+<span class="sd">        DEPRECATED</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        slach : ScalChannel</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+
+<span class="sd">        deprecated this is now replaced by the function prop2tran</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fGHz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span>
+        <span class="n">sh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">Ftt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">sh</span><span class="p">))</span>
+        <span class="n">Ftp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">sh</span><span class="p">))</span>
+        <span class="n">Frt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">sh</span><span class="p">))</span>
+        <span class="n">Frp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">sh</span><span class="p">))</span>
+        <span class="n">scalch</span> <span class="o">=</span> <span class="n">ScalChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Ftt</span><span class="p">,</span> <span class="n">Ftp</span><span class="p">,</span> <span class="n">Frt</span><span class="p">,</span> <span class="n">Frp</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">scalch</span><span class="p">)</span>
+
+    <span class="c"># Inclusion of realistic antenna behaviour</span>
+    <span class="c"># Specify transmitter antenna and receiver antenna</span>
+
+    <span class="k">def</span> <span class="nf">_vec2scalA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">At</span><span class="p">,</span> <span class="n">Ar</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; calculate scalChannel from Vectchannel</span>
+
+<span class="sd">        DEPRECATED</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        At : transmitter antenna</span>
+<span class="sd">        Ar : receiver antenna</span>
+<span class="sd">        alpha : normalization factor</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        Calculate ScalChannel by combining the propagation channel VectChannel</span>
+<span class="sd">        with realistic antennas transfer function</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">Ftt</span><span class="p">,</span> <span class="n">Ftp</span> <span class="o">=</span> <span class="n">At</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">pattern</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+        <span class="n">Frt</span><span class="p">,</span> <span class="n">Frp</span> <span class="o">=</span> <span class="n">Ar</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">pattern</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+        <span class="n">Ftt</span> <span class="o">=</span> <span class="n">Ftt</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+        <span class="n">Ftp</span> <span class="o">=</span> <span class="n">Ftp</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+        <span class="n">Frt</span> <span class="o">=</span> <span class="n">Frt</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+        <span class="n">Frp</span> <span class="o">=</span> <span class="n">Frp</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+
+        <span class="n">Ftt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">At</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Ftt</span> <span class="o">*</span> <span class="n">alpha</span><span class="p">)</span>
+        <span class="n">Ftp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">At</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Ftp</span> <span class="o">*</span> <span class="n">alpha</span><span class="p">)</span>
+        <span class="n">Frt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">Ar</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Frt</span> <span class="o">*</span> <span class="n">alpha</span><span class="p">)</span>
+        <span class="n">Frp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">Ar</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Frp</span> <span class="o">*</span> <span class="n">alpha</span><span class="p">)</span>
+
+        <span class="n">scalch</span> <span class="o">=</span> <span class="n">ScalChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Ftt</span><span class="p">,</span> <span class="n">Ftp</span><span class="p">,</span> <span class="n">Frt</span><span class="p">,</span> <span class="n">Frp</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">scalch</span><span class="p">)</span>
+
+
 <span class="k">class</span> <span class="nc">ScalChannel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    DEPRECATED</span>
@@ -815,7 +882,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on août 15, 2015.
+      Last updated on sept. 07, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

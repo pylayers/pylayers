@@ -251,6 +251,7 @@
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">as</span> <span class="nn">geu</span>
 <span class="kn">import</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">as</span> <span class="nn">bs</span>
+<span class="kn">import</span> <span class="nn">pylayers.antprop.channel</span> <span class="kn">as</span> <span class="nn">ch</span>
 <span class="kn">from</span>   <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span>   <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">io</span>
 <span class="kn">from</span>   <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">signal</span><span class="p">,</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">polyval</span><span class="p">,</span> <span class="n">polyfit</span><span class="p">,</span> <span class="n">stats</span>
@@ -1104,13 +1105,13 @@
 <span class="sd">    ----------</span>
 
 <span class="sd">    ch1</span>
-<span class="sd">        signal on channel 1 (bs.TUsignal)</span>
+<span class="sd">        signal on channel 1 (ch.TUchannel)</span>
 <span class="sd">    ch2</span>
-<span class="sd">        signal on channel 2 (bs.TUsignal)</span>
+<span class="sd">        signal on channel 2 (ch.TUchannel)</span>
 <span class="sd">    ch3</span>
-<span class="sd">        signal on channel 3 (bs.TUsignal)</span>
+<span class="sd">        signal on channel 3 (ch.TUchannel)</span>
 <span class="sd">    ch4</span>
-<span class="sd">        signal on channel 4 (bs.TUsignal)</span>
+<span class="sd">        signal on channel 4 (ch.TUchannel)</span>
 <span class="sd">    tx</span>
 <span class="sd">        exitation waveform ( Impulse feeding Tx antenna) (bs.TUsignal)</span>
 
@@ -1137,17 +1138,17 @@
             <span class="c">#self.tx   = bs.TUsignal(t,d.TX)</span>
             <span class="c">#self.tx   = bs.TUsignal(t,d.TX[0])</span>
             <span class="c">#####</span>
-            <span class="c">##### Definitely not obvious , but </span>
+            <span class="c">##### Definitely not obvious , but</span>
             <span class="c">##### this order is the corect one regarding</span>
-            <span class="c">##### to the measurements !!</span>
+            <span class="c">##### dhe measurements !!</span>
             <span class="c">#####</span>
             <span class="n">t</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1e9</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ch3</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ch4</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ch1</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ch2</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ch3</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">TUchannel</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ch4</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">TUchannel</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ch1</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">TUchannel</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ch2</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">TUchannel</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
             <span class="c">#self.tx   = bs.TUsignal(t,d.TX)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="mi">5</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">TUchannel</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="mi">5</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">pass</span>
 </div>
@@ -2017,7 +2018,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        n : integer </span>
+<span class="sd">        n : integer</span>
 <span class="sd">            (default 6)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2038,9 +2039,9 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        r : float </span>
+<span class="sd">        r : float</span>
 <span class="sd">            threshold los</span>
-<span class="sd">        k : float </span>
+<span class="sd">        k : float</span>
 <span class="sd">            threshold nlos</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2431,7 +2432,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on août 15, 2015.
+      Last updated on sept. 07, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

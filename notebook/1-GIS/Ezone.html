@@ -146,12 +146,10 @@ stored in <code class="docutils literal"><span class="pre">hdf5</span></code> fo
 <p>By default files are placed in directory <code class="docutils literal"><span class="pre">gis/h5</span></code> of the current
 project tree.</p>
 <p>The command h5ls allows to see the hierarchical structure of the file</p>
-<div class="code python highlight-python"><div class="highlight"><pre>!h5ls $BASENAME/gis/h5/N48W002.h5
+<div class="code python highlight-python"><div class="highlight"><pre>!h5ls $BASENAME/gis/h5/N48W002.h5ls
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>bldg                     Group
-dem                      Group
-extent                   Dataset {4}
+<div class="highlight-python"><div class="highlight"><pre>/home/uguen/Bureau/P1/gis/h5/N48W002.h5ls: unable to open file
 </pre></div>
 </div>
 <p>Invoquing an earth zone requires to specify the tile prefix with the
@@ -192,8 +190,8 @@ method.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">z</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s">&#39;srtm&#39;</span><span class="p">,</span><span class="n">bldg</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="mi">80</span><span class="p">,</span><span class="mi">120</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b8b54b6f4d0&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b8b54b6f8d0&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b90e8763410&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x2b90e8763810&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/Ezone_14_1.png" src="../../_images/Ezone_14_1.png" />
@@ -223,8 +221,8 @@ method.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">z</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s">&#39;aster&#39;</span><span class="p">,</span><span class="n">bldg</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">120</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b8b52dc12d0&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2b8b52dc15d0&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b90e8ba6710&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x2b90e8ba6110&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/Ezone_21_1.png" src="../../_images/Ezone_21_1.png" />
@@ -335,7 +333,7 @@ be expressed in (lon,lat) coordinates in WGS84 system.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;distance (meters)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b8b57a1b190&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b90fcc80990&gt;
 </pre></div>
 </div>
 <img alt="../../_images/Ezone_39_1.png" src="../../_images/Ezone_39_1.png" />
@@ -346,13 +344,13 @@ be expressed in (lon,lat) coordinates in WGS84 system.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Distance (meters)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b8b5516f210&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b90fcca9e90&gt;
 </pre></div>
 </div>
 <img alt="../../_images/Ezone_40_1.png" src="../../_images/Ezone_40_1.png" />
-<p>. code:: python</p>
-<blockquote>
-<div>z</div></blockquote>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">z</span>
+</pre></div>
+</div>
 <div class="highlight-python"><div class="highlight"><pre>N48W002
 --------
 [-2 -1 48 49]
@@ -367,11 +365,7 @@ i-latitude  : 19 38
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">a</span><span class="o">=</span><span class="n">z</span><span class="o">.</span><span class="n">cover</span><span class="p">(</span><span class="n">Ht</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">Hr</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">Rmax</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/delaunay/triangulate.py:104: DuplicatePointWarning: Input data contains duplicate x,y points; some values are ignored.
-  DuplicatePointWarning,
-</pre></div>
-</div>
-<img alt="../../_images/Ezone_42_1.png" src="../../_images/Ezone_42_1.png" />
+<img alt="../../_images/Ezone_42_0.png" src="../../_images/Ezone_42_0.png" />
 </div>
 </div>
 
@@ -386,7 +380,7 @@ i-latitude  : 19 38
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on août 12, 2015.
+      Last updated on sept. 07, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/1-GIS/Ezone.txt"

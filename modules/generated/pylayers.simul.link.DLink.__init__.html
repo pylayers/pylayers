@@ -186,56 +186,108 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : Layout</p>
-<blockquote class="last">
-<div><blockquote>
+<blockquote>
 <div><p>Layout to be used</p>
 </div></blockquote>
-<dl class="docutils">
-<dt>a <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarray (3,)</span></dt>
-<dd><p class="first last">position of a device dev_a</p>
-</dd>
-<dt>b <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarray (3,)</span></dt>
-<dd><p class="first last">position of a device dev_b</p>
-</dd>
-<dt>Aa <span class="classifier-delimiter">:</span> <span class="classifier">Antenna</span></dt>
-<dd><p class="first last">Antenna of device dev_a</p>
-</dd>
-<dt>Ab <span class="classifier-delimiter">:</span> <span class="classifier">Antenna</span></dt>
-<dd><p class="first last">Antenna of device dev_b</p>
-</dd>
-<dt>Ta <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarray (3,3)</span></dt>
-<dd><p class="first last">Rotation matrice of Antenna of device dev_a relative to global Layout scene</p>
-</dd>
-<dt>Tb <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarray (3,3)</span></dt>
-<dd><p class="first last">Rotation matrice of Antenna of device dev_b relative to global Layout scene</p>
-</dd>
-<dt>fGHz <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarray (Nptf,)</span></dt>
-<dd><p class="first last">frequency range of Nptf points used for evaluation of channel</p>
-</dd>
-<dt>wav <span class="classifier-delimiter">:</span> <span class="classifier">Waveform</span></dt>
-<dd><p class="first last">Waveform to be applied on the channel</p>
-</dd>
-<dt>save_idx <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first last">number to identify the h5 file generated</p>
-</dd>
-</dl>
-<p>Advanced (change only if you really know what you do !)</p>
-<dl class="docutils">
-<dt>save_opt <span class="classifier-delimiter">:</span> <span class="classifier">list ([&#8216;sig&#8217;,&#8217;ray&#8217;,&#8217;Ct&#8217;,&#8217;H&#8217;])</span></dt>
-<dd><p class="first last">information to be saved in the Links h5 file. Should never be Modified !</p>
-</dd>
-<dt>force_create <span class="classifier-delimiter">:</span> <span class="classifier">Boolean (False)</span></dt>
-<dd><p class="first last">forcecreating the h5py file (if already exist, will be erased)</p>
-</dd>
-</dl>
+<p><strong>a</strong> : np.ndarray (3,)</p>
+<blockquote>
+<div><p>position of a device dev_a</p>
+</div></blockquote>
+<p><strong>b</strong> : np.ndarray (3,)</p>
+<blockquote>
+<div><p>position of a device dev_b</p>
+</div></blockquote>
+<p><strong>Aa</strong> : Antenna</p>
+<blockquote>
+<div><p>Antenna of device dev_a</p>
+</div></blockquote>
+<p><strong>Ab</strong> : Antenna</p>
+<blockquote>
+<div><p>Antenna of device dev_b</p>
+</div></blockquote>
+<p><strong>Ta</strong> : np.ndarray (3,3)</p>
+<blockquote>
+<div><p>Rotation matrice of Antenna of device dev_a relative to global Layout scene</p>
+</div></blockquote>
+<p><strong>Tb</strong> : np.ndarray (3,3)</p>
+<blockquote>
+<div><p>Rotation matrice of Antenna of device dev_b relative to global Layout scene</p>
+</div></blockquote>
+<p><strong>fGHz</strong> : np.ndarray (Nf,)</p>
+<blockquote>
+<div><p>frequency range of Nf points used for evaluation of channel</p>
+</div></blockquote>
+<p><strong>wav</strong> : Waveform</p>
+<blockquote>
+<div><p>Waveform to be applied on the channel</p>
+</div></blockquote>
+<p><strong>save_idx</strong> : int</p>
+<blockquote>
+<div><p>number to identify the h5 file generated</p>
+</div></blockquote>
+<p><strong>Advanced (change only if you really know what you do !)</strong> :</p>
+<p><strong>save_opt</strong> : list ([&#8216;sig&#8217;,&#8217;ray&#8217;,&#8217;Ct&#8217;,&#8217;H&#8217;])</p>
+<blockquote>
+<div><p>information to be saved in the Links h5 file. Should never be Modified !</p>
+</div></blockquote>
+<p><strong>force_create</strong> : Boolean (False)</p>
+<blockquote class="last">
+<div><p>forcecreating the h5py file (if already exist, will be erased)</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<p>All simulations are stored into a unique file in your &lt;PyProject&gt;/output directory
+using the following convention:</p>
+<p>Links_&lt;save_idx&gt;_&lt;LayoutFilename&gt;.h5</p>
 <dl class="docutils">
-<dt>%pylab inline</dt>
-<dd><dl class="first docutils">
+<dt>where</dt>
+<dd>&lt;save_idx&gt; is an integer number to distinguish different links simulations</dd>
+</dl>
+<p>and &lt;LayoutFilename&gt; is the Layout used for the link simulation.</p>
+<p>Dataset organisation:</p>
+<dl class="docutils">
+<dt>Links_&lt;idx&gt;_&lt;Layout_name&gt;.h5</dt>
+<dd><div class="first line-block">
+<div class="line"><br /></div>
+</div>
+<p class="last"><a href="#id1"><span class="problematic" id="id2">|</span></a>/sig/si_ID#0/
+|    /si_ID#1/
+|    ...
+|
+<a href="#id3"><span class="problematic" id="id4">|</span></a>/ray/ray_ID#0/
+|    /ray_ID#1/
+|    ...
+|
+<a href="#id5"><span class="problematic" id="id6">|</span></a>/Ct/Ct_ID#0/
+|   /Ct_ID#1/
+|    ...
+|
+<a href="#id7"><span class="problematic" id="id8">|</span></a>/H/H_ID#0/
+|  /H_ID#1/
+|    ...
+|
+|
+<a href="#id9"><span class="problematic" id="id10">|</span></a>p_map
+<a href="#id11"><span class="problematic" id="id12">|</span></a>c_map
+<a href="#id13"><span class="problematic" id="id14">|</span></a>f_map
+<a href="#id15"><span class="problematic" id="id16">|</span></a>A_map
+<a href="#id17"><span class="problematic" id="id18">|</span></a>T_map</p>
+</dd>
+</dl>
+<p>Roots Dataset :</p>
+<p>c_map : Cycles (Nc x 3)
+p_map : Positions (Np x 3)
+f_map : Frequency (Nf x 3)
+T_map : Rotation matrices (Nt x 3)
+A_map : Antenna name (Na x 3)</p>
+<p>Groups and subgroups:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Signature identifier (si_ID#N):</dt>
+<dd>ca_cb_cutoff</dd>
 <dt>Ray identifier (ray_ID#N):</dt>
 <dd>cutoff_ua_ub</dd>
 <dt>Ctilde identifier (Ct_ID#N):</dt>
@@ -243,7 +295,7 @@
 <dt>H identifier (H_ID#N):</dt>
 <dd>ua_ub_uf_uTa_uTb_uAa_uAb</dd>
 </dl>
-<p class="last">with
+<p>with
 ca : cycle number of a
 cb : cycle number of b
 cutoff : signature.run cutoff
@@ -251,12 +303,10 @@ ua : indice of a position in &#8216;p_map&#8217; position dataset
 ub : indice of a position in &#8216;p_map&#8217; position dataset
 uf : indice of freq position in &#8216;f_map&#8217; frequency dataset
 uTa : indice of a position in &#8216;T_map&#8217; Rotation dataset
-uTb : indice o</p>
-</dd>
-<dt>%pylab inlinef b position in &#8216;T_map&#8217; Rotation dataset</dt>
-<dd>uAa : indice of a position in &#8216;A_map&#8217; Antenna name dataset
-uAb : indice of b position in &#8216;A_map&#8217; Antenna name dataset</dd>
-</dl>
+uTb : indice of a position in &#8216;T_map&#8217; Rotation dataset
+uAa : indice of a position in &#8216;A_map&#8217; Antenna name dataset
+uAb : indice of b position in &#8216;A_map&#8217; Antenna name dataset</p>
+</div></blockquote>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.simul.link</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
@@ -278,7 +328,7 @@ uAb : indice of b position in &#8216;A_map&#8217; Antenna name dataset</dd>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on août 15, 2015.
+      Last updated on sept. 07, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.simul.link.DLink.__init__.txt"

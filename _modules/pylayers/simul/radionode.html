@@ -145,20 +145,18 @@
 <span class="sd">RadioNode Class</span>
 <span class="sd">===============</span>
 
-<span class="sd">A radio Node is a data structure which store positions of </span>
-<span class="sd">a radio node at several time step. It contains also the information </span>
-<span class="sd">about the antenna file.</span>
+<span class="sd">A radio Node is a data structure which store positions of</span>
+<span class="sd">a radio node at several time step.</span>
 
-<span class="sd">This data structure is used in DLink.  </span>
+<span class="sd">This data structure is used in DLink.</span>
 
-<span class="sd">Members of a radionode are </span>
+<span class="sd">Members of a radionode are</span>
 
 <span class="sd">position    : 3xNt</span>
-<span class="sd">time        : 1xNt </span>
+<span class="sd">time        : 1xNt</span>
 <span class="sd">orientation : 3x3xNt</span>
 <span class="sd">typ         : &#39;tx&#39; or &#39;rx&#39;</span>
-<span class="sd">name        : string </span>
-<span class="sd">fileant     : antenna file </span>
+<span class="sd">name        : string</span>
 
 
 <span class="sd">.. autosummary::</span>
@@ -189,7 +187,6 @@
 <span class="sd">    RadioNode.move</span>
 <span class="sd">    RadioNode.extract</span>
 <span class="sd">    RadioNode.loadvsh</span>
-<span class="sd">    RadioNode.gantenna</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -200,14 +197,13 @@
 <span class="kn">import</span> <span class="nn">pylayers.util.easygui</span> <span class="kn">as</span> <span class="nn">eg</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">as</span> <span class="nn">geo</span>
-<span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.mobility.trajectory</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
 
 
-<span class="k">class</span> <span class="nc">RadioNode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">RadioNode</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; container for a Radio Node</span>
 
 <span class="sd">     This class manages the spatial and temporal behavior of a radio node</span>
@@ -223,8 +219,6 @@
 <span class="sd">        orientation 3x3xn (rotation matrix for each position)</span>
 <span class="sd">     points</span>
 <span class="sd">        dictionnary of points (redundant information)</span>
-<span class="sd">     antenneid</span>
-<span class="sd">        id of the antenna</span>
 <span class="sd">     type</span>
 <span class="sd">        0: undefined 1: Tx 2 : Rx</span>
 
@@ -265,8 +259,6 @@
 <span class="sd">            2 : rx</span>
 <span class="sd">        _fileini : string</span>
 <span class="sd">            file of RadioNode coordinates</span>
-<span class="sd">        _fileant : string</span>
-<span class="sd">            file of antenna VSH</span>
 <span class="sd">        _filestr : string</span>
 <span class="sd">            file of layout structure</span>
 
@@ -315,19 +307,12 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">pass</span>
 
-        <span class="c">#</span>
-        <span class="c"># print _fileant</span>
-        <span class="c">#</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fileant</span> <span class="o">=</span> <span class="n">_fileant</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">loadvsh</span><span class="p">()</span> <span class="c"># is it still necessary ? </span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;antenna file does not exist&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="RadioNode.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.__repr__.html#pylayers.simul.radionode.RadioNode.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; representation of radio node</span>
-<span class="sd">        Only position if shown </span>
+
+<span class="sd">        Only position is shown</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">):</span>
@@ -352,11 +337,12 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        alpha : float </span>
+<span class="sd">        alpha : float</span>
 <span class="sd">            angle (rad)</span>
 <span class="sd">        trans : np.array()  (,2)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">d2r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span>
         <span class="n">Rot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">d2r</span><span class="o">*</span><span class="n">alpha</span><span class="p">),</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">d2r</span><span class="o">*</span><span class="n">alpha</span><span class="p">)],</span>
                         <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">d2r</span><span class="o">*</span><span class="n">alpha</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">d2r</span><span class="o">*</span><span class="n">alpha</span><span class="p">)]])</span>
@@ -1119,30 +1105,6 @@
 
         <span class="k">return</span> <span class="n">u</span>
 </div>
-<div class="viewcode-block" id="RadioNode.loadvsh"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.loadvsh.html#pylayers.simul.radionode.RadioNode.loadvsh">[docs]</a>    <span class="k">def</span> <span class="nf">loadvsh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; load an antenna </span>
-
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c">#print self.fileant</span>
-        <span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fileant</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">A</span>
-</div>
-<div class="viewcode-block" id="RadioNode.gantenna"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.gantenna.html#pylayers.simul.radionode.RadioNode.gantenna">[docs]</a>    <span class="k">def</span> <span class="nf">gantenna</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get antenna file</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">import</span> <span class="nn">tkFileDialog</span>
-        <span class="n">FD</span> <span class="o">=</span> <span class="n">tkFileDialog</span>
-
-        <span class="n">fileant</span> <span class="o">=</span> <span class="n">FD</span><span class="o">.</span><span class="n">askopenfilename</span><span class="p">(</span><span class="n">filetypes</span><span class="o">=</span><span class="p">[(</span><span class="s">&quot;Fichiers vsh3&quot;</span><span class="p">,</span> <span class="s">&quot;*.vsh3&quot;</span><span class="p">),</span>
-                                                <span class="p">(</span><span class="s">&quot;All&quot;</span><span class="p">,</span> <span class="s">&quot;*&quot;</span><span class="p">)],</span>
-                                     <span class="n">title</span><span class="o">=</span><span class="s">&quot;Please choose an antenna file&quot;</span><span class="p">,</span>
-                                     <span class="n">initialdir</span><span class="o">=</span><span class="n">antdir</span><span class="p">)</span>
-
-        <span class="n">_fileant</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">fileant</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fileant</span> <span class="o">=</span> <span class="n">_fileant</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">loadvsh</span><span class="p">()</span>
-</div>
 <span class="k">if</span> <span class="p">(</span><span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">):</span>
     <span class="n">tx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;w2m1rx.ini&#39;</span><span class="p">)</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
@@ -1158,7 +1120,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on août 15, 2015.
+      Last updated on sept. 07, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

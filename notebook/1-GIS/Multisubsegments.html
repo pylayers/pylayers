@@ -109,7 +109,7 @@
     <h3>This page</h3>
 	<ul>
 <li><a class="reference internal" href="#">Effect of Modyfiying the Nature of Sub-Segments</a><ul>
-<li><a class="reference internal" href="#the-different-members-of-the-link-are">The different members of the link are</a></li>
+<li><a class="reference internal" href="#link-members">Link members</a></li>
 </ul>
 </li>
 </ul>
@@ -127,6 +127,10 @@
             
   <div class="section" id="effect-of-modyfiying-the-nature-of-sub-segments">
 <h1>Effect of Modyfiying the Nature of Sub-Segments<a class="headerlink" href="#effect-of-modyfiying-the-nature-of-sub-segments" title="Permalink to this headline">¶</a></h1>
+<p>This notebook illustrtates a simple ray tracing simulation with
+diffecent material properties for a single segment separating 2 rooms
+which contains multi-subsegments. The noteboook illustrates in details
+the whole steps.</p>
 <div class="code python highlight-python"><div class="highlight"><pre>from pylayers.simul.link import *
 from pylayers.antprop.rays import *
 from pylayers.gis.layout import *
@@ -141,18 +145,20 @@ import matplotlib.pyplot as plt
 <div class="highlight-python"><div class="highlight"><pre>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
 </pre></div>
 </div>
-<p>This section presents a simple Ray Tracing simulation with different
-material properties of a subsegment separating 2 rooms.</p>
+<p>Let start by loading a simple layout with 2 single rooms. The multi
+subsegment appears in the middle with the red vertical lines. Each
+subsegment is materialized by a segment.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;defstr3.ini&#39;</span><span class="p">)</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">subseg</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_3_0.png" src="../../_images/Multisubsegments_3_0.png" />
+<img alt="../../_images/Multisubsegments_4_0.png" src="../../_images/Multisubsegments_4_0.png" />
 <p>The studied configuration is composed of a simple 2 rooms building
 separated by a subsegment which has a multi subsegment attribute. The
 attribute of the subsegment can be changed with the method
 <code class="docutils literal"><span class="pre">`chgmss</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/generated/pylayers.gis.layout.Layout.chgmss.html">http://pylayers.github.io/pylayers/modules/generated/pylayers.gis.layout.Layout.chgmss.html</a>&gt;`__
-(change multisubsegment)</p>
+(change multisubsegment). In the example WOOD in the lower part then
+10cm of AIR then wood again until the ceiling.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;WOOD&#39;</span><span class="p">],</span><span class="n">ss_z</span> <span class="o">=</span><span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">2.7</span><span class="p">),(</span><span class="mf">2.7</span><span class="p">,</span><span class="mf">2.8</span><span class="p">),(</span><span class="mf">2.8</span><span class="p">,</span><span class="mi">3</span><span class="p">)],</span><span class="n">ss_offset</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -247,74 +253,51 @@ structure saved in  defstr3.ini
 </pre></div>
 </div>
 <p>We define now two points which are the termination of a radio link.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">tx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">759</span><span class="p">,</span><span class="mi">1114</span><span class="p">,</span><span class="mf">1.0</span><span class="p">])</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">tx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">759</span><span class="p">,</span><span class="mi">1114</span><span class="p">,</span><span class="mf">1.5</span><span class="p">])</span>
 <span class="n">rx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">767</span><span class="p">,</span><span class="mi">1114</span><span class="p">,</span><span class="mf">1.5</span><span class="p">])</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;WOOD&#39;</span><span class="p">],</span><span class="n">ss_z</span> <span class="o">=</span><span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">2.7</span><span class="p">),(</span><span class="mf">2.7</span><span class="p">,</span><span class="mf">2.8</span><span class="p">),(</span><span class="mf">2.8</span><span class="p">,</span><span class="mi">3</span><span class="p">)],</span><span class="n">ss_offset</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">L</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-<span class="n">Lk</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">tx</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">rx</span><span class="p">,</span><span class="n">Aa</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Omni&#39;</span><span class="p">),</span><span class="n">Ab</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Omni&#39;</span><span class="p">))</span>
+<span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+<span class="c">#Aa = Antenna(&#39;S1R1.vsh3&#39;)</span>
+<span class="c">#Ab = Antenna(&#39;S1R1.vsh3&#39;)</span>
+<span class="n">Aa</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Omni&#39;</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span><span class="p">)</span>
+<span class="n">Ab</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Omni&#39;</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span><span class="p">)</span>
+<span class="n">Lk</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">tx</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">rx</span><span class="p">,</span><span class="n">Aa</span><span class="o">=</span><span class="n">Aa</span><span class="p">,</span><span class="n">Ab</span><span class="o">=</span><span class="n">Ab</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre>structure saved in  defstr3.str2
 structure saved in  defstr3.ini
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>filename: Links_0_defstr3.ini.h5
-Link Parameters :
-------- --------
-Layout : defstr3.ini
-
-Node a
-------
-position : [  7.59000000e+02   1.11400000e+03   1.00000000e+00]
-Antenna : Omni
-Rotation matrice :
- [[ 1.  0.  0.]
- [ 0.  1.  0.]
- [ 0.  0.  1.]]
-
-Node b
-------
-position : [  767.   1114.      1.5]
-Antenna : Omni
-Rotation matrice :
- [[ 1.  0.  0.]
- [ 0.  1.  0.]
- [ 0.  0.  1.]]
-
-Link evaluation information :
------------------------------
-distance :  8.016 m
-delay : 26.719 ns
-fmin (fGHz) : 2.0
-fmax (fGHz) : 11.0
-fstep (fGHz) : 0.05
-</pre></div>
-</div>
+<p>A link is the set of a layout and 2 termination points.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_14_0.png" src="../../_images/Multisubsegments_14_0.png" />
+<img alt="../../_images/Multisubsegments_15_0.png" src="../../_images/Multisubsegments_15_0.png" />
 <p>On the figure above, we can see the Tx and Rx each placed in a different
 room appart from a wall with a subsegement placed in the middle. Then
 for evaluating the radio link, simply type:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">ak</span><span class="p">,</span><span class="n">tauk</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">ak</span><span class="p">,</span><span class="n">tauk</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">tx</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">rx</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Signatures&#39;&gt; from 2_1_3 saved
-Rays&#39;&gt; from 3_0_1 saved
-Ctilde&#39;&gt; from 0_1_0 saved
-Tchannel&#39;&gt; from 0_1_0_0_0_1_1 saved
+<div class="highlight-python"><div class="highlight"><pre>checkh5
+Start Signatures
+algo 7
+Signatures&#39;&gt; from 2_1_3 saved
+Stop signature 0.0472140312195
+Start Rays
+Rays&#39;&gt; from 3_2_1 saved
+Stop rays 0.546607017517
+Ctilde&#39;&gt; from 2_1_0 saved
+Tchannel&#39;&gt; from 2_1_0_0_0_0_0 saved
 </pre></div>
 </div>
 <p>At that point the channel has been evaluated and all the data stored in
 an <code class="docutils literal"><span class="pre">hdf5</span></code> file</p>
-<div class="section" id="the-different-members-of-the-link-are">
-<h2>The different members of the link are<a class="headerlink" href="#the-different-members-of-the-link-are" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="link-members">
+<h2>Link members<a class="headerlink" href="#link-members" title="Permalink to this headline">¶</a></h2>
 <p>The Signature of the radio channel is in <code class="docutils literal"><span class="pre">Lk.Si</span></code>, the 3D rays are in
 <code class="docutils literal"><span class="pre">Lk.R</span></code>, the propagation channel is in <code class="docutils literal"><span class="pre">Lk.C</span></code> and the transmission
 channel is in <code class="docutils literal"><span class="pre">Lk.H</span></code></p>
@@ -343,75 +326,100 @@ nl : 1396
 </div>
 <div class="highlight-python"><div class="highlight"><pre>Ctilde
 ---------
-(140, 181)
+(140, 100)
 Nray : 140
-fmin(GHz) : 2.0
+fmin(GHz) : 1.0
 fmax(GHz): 11.0
-Nfreq : 181
+Nfreq : 100
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-<span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;l20&#39;</span><span class="p">)</span>
+<span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;l20&#39;</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">120</span><span class="p">,</span><span class="n">vmax</span><span class="o">=-</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_22_0.png" src="../../_images/Multisubsegments_22_0.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">H</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>freq :2.0 10.0 161
-shape  :(140, 161)
-tau :26.7186992365 73.2944728109
-dist :8.01560977094 21.9883418433
-Friis factor -j c/(4 pi f) has been applied
-</pre></div>
-</div>
+<img alt="../../_images/Multisubsegments_23_0.png" src="../../_images/Multisubsegments_23_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="n">fcGHz</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">bandGHz</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
 <span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="../../_images/Multisubsegments_24_0.png" src="../../_images/Multisubsegments_24_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">wav</span><span class="o">.</span><span class="n">st</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">251</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">len</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">100</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">tx</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">rx</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">a</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span>  <span class="mf">759.</span> <span class="p">,</span>  <span class="mf">1114.</span> <span class="p">,</span>     <span class="mf">1.5</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">b</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span>  <span class="mf">767.</span> <span class="p">,</span>  <span class="mf">1114.</span> <span class="p">,</span>     <span class="mf">1.5</span><span class="p">])</span>
+</pre></div>
+</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">cir</span> <span class="o">=</span> <span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">cir</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">],</span><span class="n">xmin</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">xmax</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2ba8c1387190&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x2ba90eb75e90&gt;]], dtype=object))
-</pre></div>
-</div>
-<img alt="../../_images/Multisubsegments_26_1.png" src="../../_images/Multisubsegments_26_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">layer</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">]</span>
-<span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="n">layer</span><span class="p">)</span>
-<span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">layer</span>
-<span class="n">L</span><span class="o">.</span><span class="n">g2npy</span><span class="p">()</span>
-<span class="n">L</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-<span class="n">Lk</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">tx</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">rx</span><span class="p">,</span><span class="n">Aa</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Omni&#39;</span><span class="p">),</span><span class="n">Ab</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Omni&#39;</span><span class="p">))</span>
-<span class="n">Lk</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="n">cirair</span> <span class="o">=</span> <span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="p">)</span>
-<span class="n">cirair</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">],</span><span class="n">xmin</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">xmax</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="n">layer</span><span class="p">)</span>
+<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">layer</span>
+<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">g2npy</span><span class="p">()</span>
+<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+<span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">181</span><span class="p">)</span>
+<span class="c">#Aa = Antenna(&#39;Omni&#39;,fGHz=fGHz)</span>
+<span class="c">#Aa = Antenna(&#39;Omni&#39;,fGHz=fGHz)</span>
+<span class="n">ak</span><span class="p">,</span><span class="n">tauk</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ak</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre>structure saved in  defstr3.str2
 structure saved in  defstr3.ini
+checkh5
+Start Signatures
+algo 7
 Signatures&#39;&gt; from 2_1_3 saved
-Rays&#39;&gt; from 3_0_1 saved
-Ctilde&#39;&gt; from 0_1_0 saved
-Tchannel&#39;&gt; from 0_1_0_0_0_1_1 saved
+Stop signature 0.0257730484009
+Start Rays
+Rays&#39;&gt; from 3_2_1 saved
+Stop rays 0.311182022095
+Ctilde&#39;&gt; from 2_1_0 saved
+Tchannel&#39;&gt; from 2_1_0_0_0_2_2 saved
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2ba90eba8d90&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x2ba90ec64490&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre>&lt;Container object of 3 artists&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_27_2.png" src="../../_images/Multisubsegments_27_2.png" />
+<img alt="../../_images/Multisubsegments_31_2.png" src="../../_images/Multisubsegments_31_2.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">cirair</span> <span class="o">=</span> <span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">cirair</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">],</span><span class="n">xmin</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">xmax</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b73a37a9950&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2b73a37b2050&gt;]], dtype=object))
+</pre></div>
+</div>
+<img alt="../../_images/Multisubsegments_33_1.png" src="../../_images/Multisubsegments_33_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">layer</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;PARTITION&#39;</span><span class="p">,</span><span class="s">&#39;PARTITION&#39;</span><span class="p">,</span><span class="s">&#39;PARTITION&#39;</span><span class="p">]</span>
-<span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="n">layer</span><span class="p">)</span>
-<span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">layer</span>
-<span class="n">L</span><span class="o">.</span><span class="n">g2npy</span><span class="p">()</span>
-<span class="n">L</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-<span class="n">Lk</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">tx</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">rx</span><span class="p">,</span><span class="n">Aa</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Omni&#39;</span><span class="p">),</span><span class="n">Ab</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Omni&#39;</span><span class="p">))</span>
+<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="n">layer</span><span class="p">)</span>
+<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">layer</span>
+<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">g2npy</span><span class="p">()</span>
+<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 <span class="n">Lk</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">cirpart</span> <span class="o">=</span> <span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="p">)</span>
 <span class="n">cirpart</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">],</span><span class="n">xmin</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">xmax</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
@@ -419,23 +427,28 @@ Tchannel&#39;&gt; from 0_1_0_0_0_1_1 saved
 </div>
 <div class="highlight-python"><div class="highlight"><pre>structure saved in  defstr3.str2
 structure saved in  defstr3.ini
+checkh5
+Start Signatures
+algo 7
 Signatures&#39;&gt; from 2_1_3 saved
-Rays&#39;&gt; from 3_0_1 saved
-Ctilde&#39;&gt; from 0_1_0 saved
-Tchannel&#39;&gt; from 0_1_0_0_0_1_1 saved
+Stop signature 0.0452868938446
+Start Rays
+Rays&#39;&gt; from 3_2_1 saved
+Stop rays 0.529342889786
+Ctilde&#39;&gt; from 2_1_0 saved
+Tchannel&#39;&gt; from 2_1_0_0_0_2_2 saved
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2ba90e973d90&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x2ba90e6d1190&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b73a300e150&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2b73a8818090&gt;]], dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_28_2.png" src="../../_images/Multisubsegments_28_2.png" />
+<img alt="../../_images/Multisubsegments_34_2.png" src="../../_images/Multisubsegments_34_2.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">layer</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;METAL&#39;</span><span class="p">,</span><span class="s">&#39;METAL&#39;</span><span class="p">,</span><span class="s">&#39;METAL&#39;</span><span class="p">]</span>
-<span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="n">layer</span><span class="p">)</span>
-<span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">layer</span>
-<span class="n">L</span><span class="o">.</span><span class="n">g2npy</span><span class="p">()</span>
-<span class="n">L</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-<span class="n">Lk</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">tx</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">rx</span><span class="p">,</span><span class="n">Aa</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Omni&#39;</span><span class="p">),</span><span class="n">Ab</span><span class="o">=</span><span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Omni&#39;</span><span class="p">))</span>
+<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="n">layer</span><span class="p">)</span>
+<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">layer</span>
+<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">g2npy</span><span class="p">()</span>
+<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 <span class="n">Lk</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">cirmet</span> <span class="o">=</span> <span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="p">)</span>
 <span class="n">cirmet</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">],</span><span class="n">xmin</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">xmax</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
@@ -443,17 +456,23 @@ Tchannel&#39;&gt; from 0_1_0_0_0_1_1 saved
 </div>
 <div class="highlight-python"><div class="highlight"><pre>structure saved in  defstr3.str2
 structure saved in  defstr3.ini
+checkh5
+Start Signatures
+algo 7
 Signatures&#39;&gt; from 2_1_3 saved
-Rays&#39;&gt; from 3_0_1 saved
-Ctilde&#39;&gt; from 0_1_0 saved
-Tchannel&#39;&gt; from 0_1_0_0_0_1_1 saved
+Stop signature 0.0311608314514
+Start Rays
+Rays&#39;&gt; from 3_2_1 saved
+Stop rays 0.318943977356
+Ctilde&#39;&gt; from 2_1_0 saved
+Tchannel&#39;&gt; from 2_1_0_0_0_2_2 saved
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2ba90e84ccd0&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x2ba90f2f6090&gt;]], dtype=object))
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b73a876e410&gt;,
+ array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2b73a3764b50&gt;]], dtype=object))
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_29_2.png" src="../../_images/Multisubsegments_29_2.png" />
+<img alt="../../_images/Multisubsegments_35_2.png" src="../../_images/Multisubsegments_35_2.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c">#fig2=plt.figure()</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">cirair</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;l20&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span><span class="o">-</span><span class="mi">40</span><span class="p">])</span>
@@ -467,85 +486,18 @@ Tchannel&#39;&gt; from 0_1_0_0_0_1_1 saved
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s">&#39;metal&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.legend.Legend at 0x2ba9102b0d10&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.legend.Legend at 0x2b73a2802510&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_30_1.png" src="../../_images/Multisubsegments_30_1.png" />
-<img alt="../../_images/Multisubsegments_30_2.png" src="../../_images/Multisubsegments_30_2.png" />
-<img alt="../../_images/Multisubsegments_30_3.png" src="../../_images/Multisubsegments_30_3.png" />
+<img alt="../../_images/Multisubsegments_36_1.png" src="../../_images/Multisubsegments_36_1.png" />
+<img alt="../../_images/Multisubsegments_36_2.png" src="../../_images/Multisubsegments_36_2.png" />
+<img alt="../../_images/Multisubsegments_36_3.png" src="../../_images/Multisubsegments_36_3.png" />
 <p>We have modified successively the nature of the 3 surfaces in the sub
 segment placed in the sepataion partition. The first was AIR, the second
 WOOD and the third METAL. As the subsegment is placed on the LOS path
 the blockage effect is clearly visible. The chosen antennas were
 omnidirectional <code class="docutils literal"><span class="pre">Antenna('Omni')</span></code></p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
-
-<span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
-    <span class="n">styles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;../styles/custom.css&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="n">styles</span><span class="p">)</span>
-<span class="n">css_styling</span><span class="p">()</span>
-</pre></div>
 </div>
-<style>
-    @font-face {
-        font-family: "Computer Modern";
-        src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-    }
-    div.cell{
-        width:800px;
-        margin-left:16% !important;
-        margin-right:auto;
-    }
-    h1 {
-        font-family: Helvetica, serif;
-    }
-    h4{
-        margin-top:12px;
-        margin-bottom: 3px;
-       }
-    div.text_cell_render{
-        font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-        line-height: 145%;
-        font-size: 130%;
-        width:800px;
-        margin-left:auto;
-        margin-right:auto;
-    }
-    .CodeMirror{
-            font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-    }
-    .prompt{
-        display: None;
-    }
-    .text_cell_render h5 {
-        font-weight: 300;
-        font-size: 22pt;
-        color: #4057A1;
-        font-style: italic;
-        margin-bottom: .5em;
-        margin-top: 0.5em;
-        display: block;
-    }
-
-    .warning{
-        color: rgb( 240, 20, 20 )
-        }
-</style>
-<script>
-    MathJax.Hub.Config({
-                        TeX: {
-                           extensions: ["AMSmath.js"]
-                           },
-                tex2jax: {
-                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                },
-                displayAlign: 'center', // Change this to 'center' to center equations.
-                "HTML-CSS": {
-                    styles: {'.MathJax_Display': {"margin": 4}}
-                }
-        });
-</script></div>
 </div>
 
 
@@ -559,7 +511,7 @@ omnidirectional <code class="docutils literal"><span class="pre">Antenna('Omni')
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on août 12, 2015.
+      Last updated on sept. 07, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/1-GIS/Multisubsegments.txt"
