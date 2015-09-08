@@ -2539,6 +2539,63 @@ bernard
     #         plt.ion()
 
 
+    def mtlbsave(self):
+        """ matlab save
+
+        Save the serie in matlab format
+
+        """
+        key = 'S'+str(day)+'_'+str(serie)
+        filename = key+'.mat'
+        inter,lks = S.compute_visibility(techno='HKB')
+        if self.typ=='HKBS':
+            links = list(self.hkb.columns)
+            tdec = []
+            tratio = []
+            maxratio = 0
+            for l in links:
+                ls   = l.split('-')
+                nl = ls[0]+'_'+ls[1]
+                d['key'][nl] = {}
+                ix0 = np.where(lks==ls[0])[0]
+                ix1 = np.where(lks==ls[1])[0]
+                #print ix0,ix1,ls[0],ls[1]
+                Ssh = inter[ix0,ix1,:]
+                Srssi = S.getlink(ls[0],ls[1],techno='HKB')
+                Sdist = S.getlinkd(ls[0],ls[1],techno='HKB')
+
+                z1 = 10*np.log10((1/dist1**2)).values
+                u = np.where(Ssh[0]==1)[0]
+                z1[u] = z1[u]-15
+                z1 = z1-np.mean(z1)
+                z2 = Srssi.values
+                z2m = np.mean(z2[~np.isnan(z2)])
+                z2[np.isnan(z2)]=z2m
+                z2 = z2-np.mean(z2)
+                z1n = z1/np.sqrt(np.sum(z1*z1))
+                z2n = z2/np.sqrt(np.sum(z2*z2))
+                cn,dec,ratio = resync(z1n,z2n)
+                tdec.append(dec)
+
+                tratio.append(ratio)
+                if ratio>maxratio:
+                    maxratio = ratio
+                    linkmax = l
+
+                d[key][nl]['rssi'] = Srssi.values
+                d[key][nl]['dsh'] = z1
+                #d['S6'][nl]['rssi_dec'] = np.roll(Srssi.values,-dec)
+                d[key][nl]['sh'] = Ssh
+                d[key][nl]['tr'] = np.array(Srssi.index)
+                d[key][nl]['dist']=Sdist.values
+                d[key][nl]['td']= np.array(Sdist.index)
+                d[key][nl]['dec']= dec
+                d[key][nl]['ratio']= ratio
+
+            io.savemat('serie6.mat',d)
+
+
+
 
 
     def pltvisi(self,a,b,techno='',**kwargs):

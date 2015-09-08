@@ -11,6 +11,7 @@ import select
 import pylayers.signal.bsignal as bs
 import pylayers.antprop.channel as ch
 from time import sleep
+import seaborn as sns
 """
 
 Module to drive the network analyzer E5072A
@@ -300,45 +301,70 @@ class SCPI:
 if __name__=='__main__':
     vna = SCPI("129.20.33.201",verbose=False)
     ident = vna.getIdent()
-    Npoints = 1201
+    #lNpoints = [201,401,801,1001,1201,1401,1601]
+    lNpoints = [1601]
     print "Talking to : ",ident
     vna.write("FORM:DATA REAL")
+    #vna.write("SENS:AVER:ON")
     vna.select(param='S21',chan=1)
-    vna.setnpoint(Npoints=Npoints)
-
-    #vna.write(":SENS1:SWE:POIN 1201")
-    #vna.write("DISP:WIND1:TRAC1:Y:SCAL:AUTO")
-    #vna.s.send(":SENS1:SWE:POIN?\n")
-    #Npoints = eval(vna.s.recv(56).replace('\n',''))
-    print "Npoints : ",Npoints
-    # set fmin fmax
     vna.setf(startGHz=1.8,stopGHz=2.2)
-    #vna.write(":SENS1:FREQ:STAR 1.8e9")
-    #vna.write(":SENS1:FREQ:STOP 2.2e9")
-
-    #get frequency range
-    com = ":SENS1:FREQ:DATA?\n"
-
-    #vna.write("TRIG:SING")
-
-    time.sleep(1)
-    com1 = ":CALC1:DATA:SDAT?\n"
-    #u = np.arange(0,Npoints)*2
-    #v = np.arange(0,Npoints)*2+1
-    N = 100
-    fGHz = np.linspace(1.8,2.2,Npoints)
+    lav = [1,999]
+    lsif = ['1000','300000']
+    lS = []
     lt = []
-    tic = time.time()
-    for k in range(N):
-        S = vna.getdata(Npoints=Npoints)
-        lt.append(time.time())
-        try:
-            S21.append(S)
-        except:
-            S21=S
-    tab = vna.read(com)
-    f = np.frombuffer(tab,'>f8')
-    freq = f[1:]
+    Npoints = 201
+    #for Npoints in lNpoints:
+    for sif in lsif:
+    #for av in lav:
+        #print Npoints
+        #print av
+        vna.setnpoint(Npoints=Npoints)
+
+        vna.write(":SENS1:BAND "+sif)
+        #vna.write(":SENS1:SWE:POIN 1201")
+        #vna.write("DISP:WIND1:TRAC1:Y:SCAL:AUTO")
+        #vna.s.send(":SENS1:SWE:POIN?\n")
+        #Npoints = eval(vna.s.recv(56).replace('\n',''))
+        print "Npoints : ",Npoints
+        # set fmin fmax
+        #vna.write(":SENS1:FREQ:STAR 1.8e9")
+        #vna.write(":SENS1:FREQ:STOP 2.2e9")
+
+
+        #vna.write("TRIG:SING")
+
+        #vna.write("SENS:AVER:"+str(av))
+        #vna.write("SENS:AVER:CLE")
+        #time.sleep(6)
+        com1 = ":CALC1:DATA:SDAT?\n"
+        #u = np.arange(0,Npoints)*2
+        #v = np.arange(0,Npoints)*2+1
+        N = 100
+        fGHz = np.linspace(1.8,2.2,Npoints)
+        tic = time.time()
+        for k in range(N):
+            S = vna.getdata(Npoints=Npoints)
+            lt.append(time.time())
+            try:
+                S21.append(S)
+            except:
+                S21=S
+        toc = time.time()
+        print toc-tic
+        lt.append(toc-tic)
+        lS.append(S21)
+        del S21
+        #get frequency range
+        #com = ":SENS1:FREQ:DATA?\n"
+        #tab = vna.read(com)
+        #f = np.frombuffer(tab,'>f8')
+        #freq = f[1:]
+
     vna.close()
-    toc = time.time()
-    print toc-tic
+    v0=np.var(lS[0].y,axis=0)
+    v1=np.var(lS[1].y,axis=0)
+    plt.semilogy(v1,'b')
+    plt.semilogy(v0,'r')
+    #sns.tsplot(data=np.abs(S21.y),time=S21.x,err_style="ci_bars")
+    #sns.tsplot(data=np.abs(S21.y),time=S21.x,err_style="ci_band")
+

@@ -210,6 +210,7 @@ from pylayers.util.pyutil import *
 from pylayers.util.plotutil import *
 import scipy.io as ios
 from scipy.signal import cspline1d, cspline1d_eval, iirfilter, iirdesign, lfilter, firwin , correlate
+import seaborn as sns
 #from sklearn import mixture
 import scipy.stats as st
 
@@ -840,7 +841,7 @@ class Bsignal(PyLayers):
         u = np.nonzero((self.x > kwargs['xmin']) & (self.x < kwargs['xmax']))[0]
 
         #
-        # conver ns in meter if dist=True
+        # convert ns in meter if dist=True
         #
         if kwargs['dist']:
             x = 0.3 * self.x[u]
@@ -856,12 +857,11 @@ class Bsignal(PyLayers):
             yx = self.y[idx[0],idx[1],idx[2],u]
             fig,ax = mulcplot(self.x[u],yx*conversion,**args)
         if ndim == 3:
-            yx = self.y[idx[0],idx[1],u]
             fig,ax = mulcplot(self.x[u],yx*conversion,**args)
         if ndim == 2:
             yx = self.y[idx[0],u]
-            fig,ax = mulcplot(self.x[u],yx*conversion,**args)
-        if ndim==1:
+            #fig,ax = mulcplot(self.x[u],yx*conversion,**args)
+        if ndim == 1:
             fig,ax = mulcplot(self.x[u],self.y[u]*conversion,**args)
         #
         # Draw vertical and horizontal lines
