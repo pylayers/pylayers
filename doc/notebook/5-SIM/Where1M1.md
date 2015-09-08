@@ -8,6 +8,7 @@
 >>> from pylayers.simul.simulem import *
 >>> from pylayers.antprop.rays import *
 >>> from pylayers.antprop.channel import *
+>>> from pylayers.antprop.antenna import *
 >>> from pylayers.antprop.signature import *
 >>> from pylayers.measures.mesuwb import *
 >>> import pylayers.util.pyutil as pyu
@@ -168,6 +169,8 @@ Choose measurement points
 >>> rxm = M.rx[irx]
 >>> print tx,txm
 >>> print rx,rxm
+>>> v = np.sum((tx-rx)*(tx-rx))
+>>> 
 >>> 
 >>> if (tx[0] - txm[0] > 0.001) or (tx[1] - txm[1] > 0.001):
 ...     print 'Tx and Txm are not the same !'
@@ -181,6 +184,11 @@ Choose measurement points
 [-18.7747  15.178    1.2   ] [-18.7747  15.178    1.2   ]
 Txs OK
 Rxs OK
+```
+
+```python
+>>> M.tdd.ch1.y.shape
+(1, 40000)
 ```
 
 ```python
@@ -227,8 +235,8 @@ The representaion of a signature objet
 ```python
 >>> fig = plt.figure(figsize=(10,10))
 >>> r2d.show(L=S.L,fig=fig)
-(<matplotlib.figure.Figure at 0x7fc4895b0710>,
- <matplotlib.axes._subplots.AxesSubplot at 0x7fc4895b0890>)
+(<matplotlib.figure.Figure at 0x7fe130942810>,
+ <matplotlib.axes._subplots.AxesSubplot at 0x7fe130942690>)
 ```
 
 ```python
@@ -315,9 +323,14 @@ The `energy` method calculates the energy of each ray
 ## Apply waveform
 
 ```python
+>>> Aa= Antenna('defant.vsh3')
+>>> Ab= Antenna('defant.vsh3')
+```
+
+```python
 >>> Ct.freq = S.freq
->>> sco= Ct.prop2tran(a='theta',b='theta')
->>> sca= Ct.prop2tran(a=S.tx.A,b=S.rx.A)
+>>> sco= Ct.prop2tran()
+>>> sca= Ct.prop2tran(a=Aa,b=Ab)
 ```
 
 ```python
@@ -328,6 +341,7 @@ The `energy` method calculates the energy of each ray
 
 ```python
 >>> sco.isFriis
+True
 ```
 
 ```python
@@ -361,6 +375,10 @@ The `energy` method calculates the energy of each ray
 ```
 
 ```python
+>>> M.show()
+```
+
+```python
 >>> fig = plt.figure(figsize=(10,6))
 >>> ax1 = fig.add_subplot(311,title="Measurements")
 >>> cmd='M.tdd.' + str(dchan[irx]) + '.plot(ax=ax1)'
@@ -381,33 +399,8 @@ The `energy` method calculates the energy of each ray
 
 ```python
 >>> r3d.info(0)
--------------------------
-Informations of ray # 0
--------------------------
-
-Index , type, slab      , th(rad), alpha     , gamma2    
-    0 , B0  , -         , -      , -         , -         
-    0 , T   , PARTITION ,    0.43,  (0.35+0j),  (0.88+0j)
-    0 , B   , -         , -      , -         , -         
-
-----------------------------------------
- Matrix of ray # 0 at f= 2.0
-----------------------------------------
-rotation matrix# type: B0
-[[-0.99533359 -0.09649373]
- [ 0.09649373 -0.99533359]]
-interaction # 0 type: T
-[[ 0.05599940-0.55542654j  0.00000000-0.j        ]
- [ 0.00000000-0.j          0.03832677-0.60999405j]]
-rotation matrix# [0] type: B
-[[-0.99533359 -0.09649373]
- [ 0.09649373 -0.99533359]]
 ```
 
 ```python
 >>> f,a=Ct.doadod(phi=(-180,180),cmap='copper')
-```
-
-```python
-
 ```

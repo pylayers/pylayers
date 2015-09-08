@@ -2234,7 +2234,7 @@ class Rays(PyLayers,dict):
 
         L : Layout object
             Layout to be displayed
-        ilist : list 
+        ilist : list
             list of group of interactions
         rlist : list
             list of index rays
@@ -2314,9 +2314,9 @@ class Rays(PyLayers,dict):
             Layout to be displayed
         ilist : list of group of interactions
         raylist : list of index rays
-        centered : boolean    
+        centered : boolean
             if True center the layout before display
-        
+
 
         """
 

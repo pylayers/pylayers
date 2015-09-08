@@ -39,9 +39,6 @@ Usignal Class
 
     Usignal.__init__
     Usignal.__repr__
-    Usignal.__add__
-    Usignal.__sub__
-    Usignal.__mul__
     Usignal.setx
     Usignal.dx
     Usignal.width
@@ -49,7 +46,6 @@ Usignal Class
     Usignal.max
     Usignal.min
     Usignal.truncate
-    Usignal.align
     Usignal.abs
     Usignal.eprfl
     Usignal.energy
@@ -79,8 +75,17 @@ TUsignal Class
 
     TUsignal.__init__
     TUsignal.__repr__
+    TUsignal.__add__
     TUsignal.diff
     TUsignal.info
+    TUsignal.align
+    TUsignal.filter
+    TUsignal.ftshift
+    TUsignal.show
+    TUsignal.esd
+    TUsignal.shift
+
+
 
 Fourier Functions
 -----------------
@@ -207,7 +212,6 @@ import scipy.io as ios
 from scipy.signal import cspline1d, cspline1d_eval, iirfilter, iirdesign, lfilter, firwin , correlate
 #from sklearn import mixture
 import scipy.stats as st
-import seaborn as sns
 
 
 class Bsignal(PyLayers):
@@ -247,7 +251,7 @@ class Bsignal(PyLayers):
         if ndim==1:
             self.y=self.y.reshape((1,len(self.y)))
             ndim = 2
-        assert(len(x)==self.y.shape[-1])," Dimension problem"
+        assert((len(x)==self.y.shape[-1])or (self.y.shape[-1]==1) )," Dimension problem"
         # default naming of the axis
         if label==[]:
             self.label=[]
@@ -351,10 +355,7 @@ class Bsignal(PyLayers):
         """
         O = copy(self)
         O.x = O.x[u]
-        try:
-            O.y = O.y[u,:]
-        except:
-            O.y = O.y[u]
+        O.y = O.y[...,u]
         return(O)
 
     def save(self, filename):
@@ -691,7 +692,6 @@ class Bsignal(PyLayers):
         >>> F = FUsignal(f,y)
 
         """
-        sns.set_style("whitegrid")
         defaults = {'interpolation':'none',
                     'cmap':plt.cm.BrBG,
                     'aspect':'auto',
@@ -736,7 +736,7 @@ class Bsignal(PyLayers):
                            vmin = vmin,
                            vmax = vmax,
                            aspect = kwargs['aspect'],
-                           #extent = (0,dt.shape[sax[0]],0,dt.shape[sax[1]]),
+                           extent = (self.x[0],self.x[-1],0,self.y.shape[0]),
                            interpolation=kwargs['interpolation'],
                            cmap = kwargs['cmap'],
                            )
@@ -794,6 +794,11 @@ class Bsignal(PyLayers):
 
         fig : figure
         ax : np.array of axes
+
+        See Also
+        --------
+
+        pylayers.util.plotutil.mulcplot
 
 
         """
@@ -967,80 +972,9 @@ class Usignal(Bsignal):
 
     """
 
-    #def __init__(self, x=np.array([]), y=np.array([]),label=[]):
-    #    super(Usignal,self).__init__(x,y,label)
-    #   #Bsignal.__init__(self, x, y)
-
     def __repr__(self):
         s = Bsignal.__repr__(self)
         return(s)
-
-    def __add__(self, u):
-        t = type(u).__name__
-        if ((t == 'int') | (t == 'float')):
-            U = Usignal(self.x, self.y + u)
-        if type(u)==type(self):
-            assert (u.x.shape==self.x.shape)
-            assert (u.y.ndim == 2)  ,"y has not ndim=2"
-            assert (u.y.shape[0]==1)|(u.y.shape[1]==self.y.shape[1])
-            U = type(self)()
-            U.x = self.x 
-            U.y = self.y+u.y
-            # L = self.align(u)
-            # #u1 = L[0]
-            # #u2 = L[1]
-            # val = L.y[0:-1,:] + L.y[-1,:]
-            # # handle one dimensional array
-            # if ((val.ndim>1) & (val.shape[0]==1)):
-            #     val = val.reshape(val.shape[1])
-            # U = Usignal(L.x, val)
-        return(U)
-
-    def __sub__(self, u):
-        t = type(u).__name__
-        if ((t == 'int') | (t == 'float')):
-            U = Usignal(self.x, self.y - u)
-        if type(u)==type(self):
-            assert (u.x.shape==self.x.shape)
-            assert (u.y.ndim == 2)  ,"y has not ndim=2"
-            assert (u.y.shape[0]==1)|(u.y.shape[1]==self.y.shape[1])
-            #L = self.align(u)
-            #u1 = L[0]
-            #u2 = L[1]
-            #val = L.y[0:-1,:] - L.y[-1,:]
-            #if ((val.ndim>1) & (val.shape[0]==1)):
-            #    val = val.reshape(val.shape[1])
-            U = type(self)()
-            U.x = self.x
-            U.y = self.y-u.y
-            #U = Usignal(u1.x, u1.y - u2.y)
-        return(U)
-
-    def __mul__(self, u):
-        t = type(u).__name__
-        if ((t == 'int') | (t == 'float') | (t== 'float64') ):
-            U = type(self)()
-            U.x = self.x
-            U.y = self.y*u
-        if issubclass(type(self),type(u)):
-            #assert (u.x.shape==self.x.shape)
-            assert (u.y.ndim == 2)  ,"y has not ndim=2"
-            assert (u.y.shape[0]==1)|(u.y.shape[1]==self.y.shape[1])
-            #U = type(self)()
-            #U.x = self.x
-            #U.y = self.y*u.y
-            #L = self.align(u)
-            L = self.alignc(u)
-            # #u1 = L[0]
-            # #u2 = L[1]
-            # #U = Usignal(u1.x, u1.y * u2.y)
-            val = L.y[0:-1,:] * L.y[-1,:]
-            #if ((val.ndim>1) & (val.shape[0]==1)):
-            #    val = val.reshape(val.shape[1])
-            U = type(self)()
-            U.x = L.x
-            U.y = val
-        return(U)
 
     def setx(self, start, stop, dx):
         r""" set the x array of the Usignal (y=0)
@@ -1074,8 +1008,10 @@ class Usignal(Bsignal):
         >>> assert(u.dx()==0.1)
 
         """
-
-        return(self.x[1] - self.x[0])
+        if (len(self.x)>1):
+            return(self.x[1] - self.x[0])
+        else:
+            return(0)
 
     def resample(self, x_new, kind='linear'):
         """ resample the Usignal with a new x base
@@ -1136,24 +1072,26 @@ class Usignal(Bsignal):
         Returns
         -------
 
-
-        Examples
-        --------
-
-        >>> from pylayers.signal.bsignal import *
-        >>> i1 = TUsignal()
-        >>> i2 = TUsignal()
-        >>> i1.EnImpulse()
-        >>> i2.EnImpulse()
-        >>> i2.translate(-10)
-        >>> L  = i1.alignc(i2)
+        L : Usignal
+            concatenated signal L1.y and L2.y
 
 
         """
-
         u1 = self
+        # nothing to align
+        if len(u1.x)==len(u2.x):
+            if (u1.x==u2.x).all():
+                return u1.x,u1.y,u2.y
+
+        sh1 = u1.y.shape
+        sh2 = u2.y.shape
+        naxis1 = len(sh1)
+        naxis2 = len(sh2)
+        assert(naxis1==naxis2),"Problem signal haven't the same number of axis"
+
         dx1 = u1.dx()
         dx2 = u2.dx()
+
         u1_start = u1.x[0]
         u2_start = u2.x[0]
         u1_stop = u1.x[-1]
@@ -1161,12 +1099,15 @@ class Usignal(Bsignal):
 
         # it starts at the maximum of both signal
         #    stops  at the minimum of both signal
+
         xstart = max(u1_start, u2_start)
         xstop = min(u1_stop, u2_stop)
-        assert(xstop>xstart), "error the 2 signal have disjoint support"
+
+        assert(xstop>=xstart), "error the 2 signal have disjoint support"
+
         dx = min(dx1, dx2)
         if tstincl(u1.x, u2.x) == 0:
-            print 'Warning: Impossible to align the 2 signals'
+            print 'Warning: impossible to align the 2 signals'
 
         if (dx1 <= dx2):
 
@@ -1193,11 +1134,15 @@ class Usignal(Bsignal):
 
             u2 = u2.truncate(pstart2, pstop2 + 1)
             u1 = u1.resample(xnew)
-        L   = Usignal()
-        L.x = u1.x
-        L.y = np.vstack((u1.y,u2.y))
+        #L   = Usignal()
+        #L.x = u1.x
+        #L.y = np.vstack((u1.y,u2.y))
+        #u1.y=u1.y[...,None]
+        #u2.y=u2.y[...,None]
+        #pdb.set_trace()
+        #L.y = np.concatenate((u1.y,u2.y),axis=naxis1)
 
-        return(L)
+        return(u1.x,u1.y,u2.y)
 
     def width(self):
         r""" get the extension support of the Usignal
@@ -1299,7 +1244,7 @@ class Usignal(Bsignal):
 
         x_new = self.x[posmin:posmax]
         if ndim > 1:
-            y_new = self.y[:, posmin:posmax]
+            y_new = self.y[..., posmin:posmax]
         else:
             y_new = self.y[posmin:posmax]
 
@@ -1307,136 +1252,6 @@ class Usignal(Bsignal):
 
         return(U)
 
-    def align(self, u2):
-        """ align two Usignal on a same base
-
-        returns a list which contains the two aligned signals
-
-        It is assume that both signal u1 and u2 share the same dx
-        This function can be improved regarding time granularity
-
-        Parameters
-        ----------
-
-        u2 : TUsignal
-
-        Returns
-        -------
-
-        TUsignal y extended TU signal, x bases are adjusted
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> import matplotlib.pylab as plt
-            >>> from pylayers.signal.bsignal import *
-            >>> i1 = EnImpulse()
-            >>> i2 = EnImpulse()
-            >>> i2.translate(-10)
-            >>> i3 = i1.align(i2)
-            >>> fig,ax=i3.plot(typ=['v'])
-            >>> plt.show()
-
-        """
-        # copy object
-        u1 = self
-        u1_start = u1.x[0]
-        u1_stop = u1.x[-1]
-        u2_start = u2.x[0]
-        u2_stop = u2.x[-1]
-        # get dimensions
-        if u1.y.ndim>1:
-            N1 = self.y.shape[0]
-            M1 = self.y.shape[1]
-        else:
-            N1 = 1
-            M1 = len(u1.y)
-            u1.y = u1.y.reshape(1,M1)
-
-        if u2.y.ndim>1:
-            N2 = u2.y.shape[0]
-            M2 = u2.y.shape[1]
-        else:
-            N2 = 1
-            M2 = len(u2.y)
-            u2.y = u2.y.reshape(1,M2)
-
-        bool1 = abs(u1_start - u2_start) < 1e-10
-        bool2 = abs(u1_stop - u2_stop) < 1e-10
-
-        bool = bool1 & bool2
-
-        if (bool):
-        # same x support
-            L = Usignal(u1.x, np.vstack((u1.y,u2.y)))
-        else:
-        # different x support
-            xstart = min(u1_start, u2_start)
-            xstop = max(u1_stop, u2_stop)
-
-            b1i = abs(xstart - u1.x[0]) < 1e-15
-            b2i = abs(xstart - u2.x[0]) < 1e-15
-            b1f = abs(xstop - u1.x[-1]) < 1e-15
-            b2f = abs(xstop - u2.x[-1]) < 1e-15
-
-            if (b1i & b2f):
-            # u1 is left u2 is right
-                dx = u1.dx()
-                T = xstop - xstart
-                N = int(np.floor(T / dx))
-                x = xstart + dx * np.arange(N)
-                Y1 = np.zeros((N1,N), dtype=float)
-                Y2 = np.zeros((N2,N), dtype=float)
-                yleft = u1.y
-                yright = u2.y
-                Nleft = min(N,M1)
-                Nright = min(N,M2)
-                Y1[:,0:Nleft] = yleft[:,0:Nleft]
-                Y2[:,-Nright:] = yright[:,0:Nright]
-                U1 = Usignal(x, Y1[:,0:N])
-                U2 = Usignal(x, Y2[:,0:N])
-
-            if (b2i & b1f):
-            # u2 is left u1 is right
-                dx = u1.dx()
-                T = xstop - xstart
-                N = int(np.floor(T / dx))
-                x = xstart + dx * np.arange(N)
-                Y1 = np.zeros((N1,N), dtype=float)
-                Y2 = np.zeros((N2,N), dtype=float)
-                yleft = u2.y
-                yright = u1.y
-                Nleft = min(N, M2)
-                Nright = min(N, M1)
-                Y2[:,0:Nleft] = yleft[:,0:Nleft]
-                Y1[:,-Nright:] = yright[:,0:Nright]
-                U1 = Usignal(x, Y1[:,0:N])
-                U2 = Usignal(x, Y2[:,0:N])
-
-            if (b1i & b1f):
-            # u2 is included in u1
-                U1 = u1
-                x = u1.x
-                indx = np.nonzero((x >= u2_start) & (x <= u2_stop))[0]
-                U2 = Usignal(x, np.zeros((N2,len(x))))
-                U2.y[:,indx] = u2.y[:, 0:np.shape(indx)[0]]
-
-            if (b2i & b2f):
-            # u1 is included in u2
-                U2 = u2
-                x = u2.x
-                indx = np.nonzero((x >= u1_start) & (x <= u1_stop))[0]
-                U1 = Usignal(x, np.zeros((N1,len(x))))
-                U1.y[:,indx] = u1.y
-
-            #L = [U1, U2]
-            L   = Usignal()
-            L.x = U1.x
-            L.y = np.vstack((U1.y,U2.y))
-        return L
 
     def abs(self):
         """ return the absolute value of an Usignal
@@ -1495,7 +1310,9 @@ class Usignal(Bsignal):
         energy : float
 
         """
-        energy = self.dx() * np.sum(self.y * np.conj(self.y),axis=0)
+        shy = self.y.shape
+        nay = len(shy)
+        energy = self.dx() * np.sum(self.y * np.conj(self.y),axis=nay-1)
         return(energy)
 
     def fftshift(self):
@@ -1557,7 +1374,8 @@ class Usignal(Bsignal):
 
             >>> from pylayers.signal.bsignal import *
             >>> from matplotlib.pylab import *
-            >>> ip = EnImpulse()
+            >>> ip = TUsignal()
+            >>> ip.EnImpulse()
             >>> f,a = ip.plot(typ=['v'])
             >>> ip.zlr(-10,10)
             >>> f,a = ip.plot(typ=['v'])
@@ -1566,25 +1384,29 @@ class Usignal(Bsignal):
         dx = self.dx()
         cmin = min(self.x)
         cmax = max(self.x)
+        shy = self.y.shape
+        shyl = shy[0:-1]
         if cmin > xmin:
             xaddl = np.arange(xmin, cmin - dx, dx)
-            yaddl = np.zeros(len(xaddl))
+            nshy = list(shyl)+[len(xaddl)]
+            yaddl = np.zeros(nshy)
             self.x = np.hstack((xaddl, self.x))
-            self.y = np.hstack((yaddl, self.y))
+            self.y = np.concatenate((yaddl, self.y))
         else:
             u = np.nonzero(self.x >= xmin)
             self.x = self.x[u[0]]
-            self.y = self.y[u[0]]
+            self.y = self.y[...,u[0]]
 
         if cmax < xmax:
             xaddr = np.arange(cmax + dx, xmax, dx)
-            yaddr = np.zeros(len(xaddr))
+            nshy = list(shyl)+[len(xaddr)]
+            yaddr = np.zeros(nshy)
             self.x = np.hstack((self.x, xaddr))
-            self.y = np.hstack((self.y, yaddr))
+            self.y = np.concatenate((self.y, yaddr))
         else:
             u = np.nonzero(self.x <= xmax)
             self.x = self.x[u[0]]
-            self.y = self.y[u[0]]
+            self.y = self.y[...,u[0]]
 
     def window(self, win='hamming'):
         """ windowing Usignal
@@ -1750,7 +1572,8 @@ class TBsignal(Bsignal):
 
             >>> from pylayers.signal.bsignal import *
             >>> from matplotlib.pylab import *
-            >>> ip = EnImpulse()
+            >>> ip = TUsignal()
+            >>> ip.EnImpulse()
             >>> ip.translate(-10)
             >>> fig,ax=ip.plot(typ=['v'])
             >>> show()
@@ -1849,6 +1672,43 @@ class TUsignal(TBsignal, Usignal):
     def __init__(self, x=np.array([]), y=np.array([]),label=[]):
         super(TUsignal,self).__init__(x,y,label)
 
+    def __add__(self, u):
+        t = type(u).__name__
+        if ((t == 'int') | (t == 'float')):
+            U = type(self)(self.x, self.y + u)
+        if type(u)==type(self):
+            x,y1,y2 = self.align(u)
+            U = type(self)()
+            U.x = x
+            U.y = y1 + y2
+        return(U)
+
+    def __sub__(self, u):
+        t = type(u).__name__
+        if ((t == 'int') | (t == 'float')):
+            U = type(self)(self.x, self.y - u)
+        if type(u)==type(self):
+            x,y1,y2 = self.align(u)
+            U = type(self)()
+            U.x = x
+            U.y = y1 - y2
+        return(U)
+
+    def __mul__(self, u):
+        t = type(u).__name__
+        if ((t == 'int') | (t == 'float') | (t== 'float64') ):
+            U = type(self)()
+            U.x = self.x
+            U.y = self.y*u
+        if issubclass(type(self),type(u)):
+            x,y1,y2 = self.align(u)
+            U = type(self)()
+            U.x = x
+            U.y = y1 * y2
+
+        return(U)
+
+
     def diff(self):
         """ numerical differentiation
 
@@ -1923,7 +1783,9 @@ class TUsignal(TBsignal, Usignal):
         Examples
         --------
 
-        >>> e = EnImpulse()
+        >>> from pylayers.signal.bsignal import *
+        >>> e = TUsignal()
+        >>> e.EnImpulse()
         >>> E = e.fft()
 
         """
@@ -1969,8 +1831,139 @@ class TUsignal(TBsignal, Usignal):
         S.y = S.y * te
         return(S)
 
-    def idealf(self,fcGHz,BGHz):
-        pass
+
+    def align(self, u2):
+        """ align two Usignal on a same base
+
+        returns a list which contains the two aligned signals
+
+        It is assume that both signal u1 and u2 share the same dx
+        This function can be improved regarding time granularity
+
+        Parameters
+        ----------
+
+        u2 : TUsignal
+
+        Returns
+        -------
+
+        TUsignal y extended TU signal, x bases are adjusted
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> import matplotlib.pylab as plt
+            >>> from pylayers.signal.bsignal import *
+            >>> i1 = TUsignal()
+            >>> i2 = TUsignal()
+            >>> i1.EnImpulse()
+            >>> i2.EnImpulse()
+            >>> i2.translate(-10)
+            >>> i3 = i1.align(i2)
+            >>> fig,ax=i3.plot(typ=['v'])
+            >>> plt.show()
+
+        """
+        # copy object
+        u1 = self
+        u1_start = u1.x[0]
+        u1_stop = u1.x[-1]
+        u2_start = u2.x[0]
+        u2_stop = u2.x[-1]
+        # get dimensions
+        if u1.y.ndim>1:
+            N1 = self.y.shape[0]
+            M1 = self.y.shape[1]
+        else:
+            N1 = 1
+            M1 = len(u1.y)
+            u1.y = u1.y.reshape(1,M1)
+
+        if u2.y.ndim>1:
+            N2 = u2.y.shape[0]
+            M2 = u2.y.shape[1]
+        else:
+            N2 = 1
+            M2 = len(u2.y)
+            u2.y = u2.y.reshape(1,M2)
+
+        bool1 = abs(u1_start - u2_start) < 1e-10
+        bool2 = abs(u1_stop - u2_stop) < 1e-10
+
+        bool = bool1 & bool2
+
+        if (bool):
+        # same x support
+            L = Usignal(u1.x, np.vstack((u1.y,u2.y)))
+        else:
+        # different x support
+            xstart = min(u1_start, u2_start)
+            xstop = max(u1_stop, u2_stop)
+
+            b1i = abs(xstart - u1.x[0]) < 1e-15
+            b2i = abs(xstart - u2.x[0]) < 1e-15
+            b1f = abs(xstop - u1.x[-1]) < 1e-15
+            b2f = abs(xstop - u2.x[-1]) < 1e-15
+
+            if (b1i & b2f):
+            # u1 is left u2 is right
+                dx = u1.dx()
+                T = xstop - xstart
+                N = int(np.floor(T / dx))
+                x = xstart + dx * np.arange(N)
+                Y1 = np.zeros((N1,N), dtype=float)
+                Y2 = np.zeros((N2,N), dtype=float)
+                yleft = u1.y
+                yright = u2.y
+                Nleft = min(N,M1)
+                Nright = min(N,M2)
+                Y1[:,0:Nleft] = yleft[:,0:Nleft]
+                Y2[:,-Nright:] = yright[:,0:Nright]
+                U1 = Usignal(x, Y1[:,0:N])
+                U2 = Usignal(x, Y2[:,0:N])
+
+            if (b2i & b1f):
+            # u2 is left u1 is right
+                dx = u1.dx()
+                T = xstop - xstart
+                N = int(np.floor(T / dx))
+                x = xstart + dx * np.arange(N)
+                Y1 = np.zeros((N1,N), dtype=float)
+                Y2 = np.zeros((N2,N), dtype=float)
+                yleft = u2.y
+                yright = u1.y
+                Nleft = min(N, M2)
+                Nright = min(N, M1)
+                Y2[:,0:Nleft] = yleft[:,0:Nleft]
+                Y1[:,-Nright:] = yright[:,0:Nright]
+                U1 = Usignal(x, Y1[:,0:N])
+                U2 = Usignal(x, Y2[:,0:N])
+
+            if (b1i & b1f):
+            # u2 is included in u1
+                U1 = u1
+                x = u1.x
+                indx = np.nonzero((x >= u2_start) & (x <= u2_stop))[0]
+                U2 = Usignal(x, np.zeros((N2,len(x))))
+                U2.y[:,indx] = u2.y[:, 0:np.shape(indx)[0]]
+
+            if (b2i & b2f):
+            # u1 is included in u2
+                U2 = u2
+                x = u2.x
+                indx = np.nonzero((x >= u1_start) & (x <= u1_stop))[0]
+                U1 = Usignal(x, np.zeros((N1,len(x))))
+                U1.y[:,indx] = u1.y
+
+            #L = [U1, U2]
+            #L   = Usignal()
+            #L.x = U1.x
+            #L.y = np.vstack((U1.y,U2.y))
+        return U1.x,U1.y,U2.y
 
     def filter(self, order=4, wp=0.3, ws=0.4, ftype='butter'):
         """ signal filtering
@@ -2498,7 +2491,6 @@ class FBsignal(Bsignal):
         dB : boolean
             default True
         iy : index of y value to be displayed
-            default [0]  only the first is displayed
         typ : string
             ['l10','l20','d','r','du','ru']
         xlabels
@@ -2662,47 +2654,25 @@ class FUsignal(FBsignal,Usignal):
         s = FBsignal.__repr__(self)
         return(s)
 
-    # def __add__(self, u):
-    #     L = self.align(u)
-    #     u1 = L[0]
-    #     u2 = L[1]
-    #     U = FUsignal(u1.x, u1.y + u2.y)
-    #     #U =FUsignal(self.x,self.y+u.y)
-    #     return(U)
+    def __add__(self, u):
+        x,y1,y2 = self.alignc(u)
+        U = FUsignal(x, y1 + y2)
+        return(U)
 
-    # def __sub__(self, u):
-    #     L = self.align(u)
-    #     u1 = L[0]
-    #     u2 = L[1]
-    #     U = FUsignal(u1.x, u1.y - u2.y)
-    #     #U =FUsignal(self.x,self.y-u.y)
-    #     return(U)
+    def __sub__(self, u):
+        x,y1,y2 = self.alignc(u)
+        U = FUsignal(x, y1 - y2)
+        return(U)
 
-    # def __mul__(self, u):
-    #     L = self.align(u)
-    #     u1 = L[0]
-    #     u2 = L[1]
-    #     #
-    #     # Normalisation 19/05/2009
-    #     Df = u1.x[1] - u1.x[0]
-    #     U = FUsignal(u1.x, u1.y * u2.y)
-    #     #rint shape(self.x)
-    #     #rint shape(self.y)
-    #     #rint shape(u.y)
-    #     # =FUsignal(self.x,self.y*u.y)
-    #     return(U)
+    def __mul__(self, u):
+        x,y1,y2 = self.alignc(u)
+        U = FUsignal(x, y1 * y2)
+        return(U)
 
-    # def __div__(self, u):
-    #     L = self.align(u)
-    #     u1 = L[0]
-    #     u2 = L[1]
-    #     U = FUsignal(u1.x, u1.y / u2.y)
-    #     return(U)
-
-
-
-
-
+    def __div__(self, u):
+        x,y1,y2 = self.alignc(u)
+        U = FUsignal(x, y1 / y2)
+        return(U)
 
 
     def applyFriis(self):
@@ -2725,7 +2695,7 @@ class FUsignal(FBsignal,Usignal):
             self.y = self.y*factor
             self.isFriis = True
 
-    
+
 
     def get(self, k):
         """
@@ -2765,7 +2735,7 @@ class FUsignal(FBsignal,Usignal):
         print 'Duration (ns) :', T
         print 'Frequency sampling step : ', df
 
-    def energy(self,axis=0,Friis=False,mode='mean'):
+    def energy(self,axis=1,Friis=False,mode='mean'):
         r""" calculate energy along given axis
 
         Parameters
@@ -2779,8 +2749,9 @@ class FUsignal(FBsignal,Usignal):
         Examples
         --------
 
-        >>> S = EnImpulse()
-        >>> En1 = S.energy()
+        >>> ip = TUsignal()
+        >>> ip.EnImpulse()
+        >>> En1 = ip.energy()
         >>> assert((En1>0.99) & (En1<1.01))
 
         Notes
@@ -3146,7 +3117,8 @@ class FUsignal(FBsignal,Usignal):
         --------
 
         >>> from pylayers.signal.bsignal import *
-        >>> e  = EnImpulse()
+        >>> e = TUsignal()
+        >>> e.EnImpulse()
         >>> E  = e.fft()
         >>> EU = E.unrex()
 
@@ -3358,10 +3330,12 @@ class FHsignal(FUsignal):
         Examples
         --------
 
-        >>> e  = EnImpulse(fe=200)
+        >>> e  = TUsignal()
+        >>> e.EnImpulse(feGHz=200)
         >>> E  = e.fft()
         >>> ee = E.ifft()
-        >>> assert(abs(sum(e.y-ee.y))<1e-13)
+        >>> assert(abs(sum(e.y-ee.y).all())<1e-13)
+
 
         """
         Np = len(self.x)
@@ -3410,11 +3384,11 @@ class FHsignal(FUsignal):
         # even case
         if np.mod(N, 2) == 0:
             xu = self.x[1:(N + 2) / 2]
-            yu = self.y[:,1:(N + 2) / 2]
+            yu = self.y[...,1:(N + 2) / 2]
         # odd case
         else:
             xu = self.x[1:(N + 1) / 2]
-            yu = self.y[:,1:(N + 1) / 2]
+            yu = self.y[...,1:(N + 1) / 2]
 
         O = FUsignal(x=xu, y=yu)
 
@@ -3598,14 +3572,14 @@ class Noise(TUsignal):
     def amplify(self, GdB, NF):
         sel
 
-    def fgating(self, fcGHz, BGHz, window='rect'):
+    def fgating(self, fcGHz, WGHz, window='rect'):
         """ apply a frequency gating
 
         Parameters
         ----------
 
         fcGHz : float
-        BGHz  : float
+        WGHz  : float
         window : string
             'rect'
 
@@ -3617,8 +3591,8 @@ class Noise(TUsignal):
             parity = 1
         U = N.unrex()
         f = U.x
-        f1 = fcGHz - BGHz / 2.
-        f2 = fcGHz + BGHz / 2.
+        f1 = fcGHz - WGHz / 2.
+        f2 = fcGHz + WGHz / 2.
         u = np.nonzero((f > f1) & (f < f2))[0]
         gate = np.zeros(len(f))
         if window=='rect':
@@ -3632,8 +3606,8 @@ class Noise(TUsignal):
         #fe = 1./(self.x[1]-self.x[0])
         #fN = fe/2
         #print "fN : ",fN
-        #wp = (fcGHz-BGHz/2.)/fN
-        #ws = (fcGHz+BGHz/2.)/fN
+        #wp = (fcGHz-WGHz/2.)/fN
+        #ws = (fcGHz+WGHz/2.)/fN
         #print "fN : ",wp
         #print "fN : ",ws
         #o  = self.iirfilter(order=4,wp=wp,ws=ws)
@@ -3645,7 +3619,8 @@ class Noise(TUsignal):
 def test():
     dx1 = 0.01
     x1 = np.arange(-5, 5, dx1)
-    s1 = EnImpulse(x1, 4, 2, 10)
+    s1 = TUsignal()
+    s1 = s1.EnImpulse(x1, fcGHz=4, WGHz=2, feGHz=10)
 
     S1 = s1.fft()
 

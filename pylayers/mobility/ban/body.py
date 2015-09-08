@@ -1561,8 +1561,8 @@ class Body(PyLayers):
             Ant = {}
             for key in self.dcs.keys():
                 Ant[key]=ant.Antenna(self.dev[key]['file'])
-                if not hasattr(Ant[key],'SqG'):
-                    Ant[key].Fsynth()
+                if not hasattr(Ant[key],'sqG'):
+                    Ant[key].eval()
                 Ant[key]._show3(po=self.dcs[key][:,0],
                                T=self.acs[key],
                                ilog=False,
@@ -2016,10 +2016,10 @@ class Body(PyLayers):
             self.setacs()
 
             for key in devlist:
-                if not hasattr(self.dev[key]['ant'],'SqG'):
-                    self.dev[key]['ant'].Fsynth()
+                if not hasattr(self.dev[key]['ant'],'sqG'):
+                    self.dev[key]['ant'].eval()
                 U = self.dcs[key]
-                V = self.dev[key]['ant'].SqG[kwargs['k'],:,:]
+                V = self.dev[key]['ant'].sqG[kwargs['k'],:,:]
                 T = self.acs[key]
 
                 self.dev[key]['ant']._show3(po=U[:,0],
@@ -2224,7 +2224,7 @@ class Body(PyLayers):
         iframe = kwargs['iframe']
 
         Ant = ant.Antenna(kwargs['fileant'])
-        Ant.Fsynth3()
+        Ant.eval()
 
         if kwargs['lccs']==[]:
             lccs = np.arange(11)
@@ -2324,12 +2324,14 @@ class Body(PyLayers):
             self.setacs()
             for key in self.dcs.keys():
                 Ant =  ant.Antenna(self.dev[key]['file'])
-                if not hasattr(Ant,'SqG'):
-                    Ant.Fsynth3()
+                if not hasattr(Ant,'sqG'):
+                    Ant.eval()
                 U = self.dcs[key]
                 _filepatt = kwargs['tag']+'patt-'+key
                 geo = geu.Geomoff(_filepatt)
-                V = Ant.SqG[kwargs['k'],:,:]
+                if not hasattr(Ant,'sqG'):
+                    Ant.eval()
+                V = Ant.sqG[kwargs['k'],:,:]
                 #T = U[:,1:]
                 #Rab = self.dev[key]['T']
                 #T = np.vstack((U[:,1+DT[0]],U[:,1+DT[1]],U[:,1+DT[2]]))

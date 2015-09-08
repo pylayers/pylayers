@@ -84,6 +84,8 @@ following :
 
     from pylayers.gis.layout import *
     from pylayers.util.project import *
+    %matplotlib inline
+
 
 .. parsed-literal::
 
@@ -103,6 +105,7 @@ environment variable.
 
     print pstruc['DIRSTRUC']
 
+
 .. parsed-literal::
 
     struc/str
@@ -114,6 +117,7 @@ in ``PyLayers``
 .. code:: python
 
     pstruc
+
 
 
 
@@ -164,11 +168,15 @@ The structure of the ``.osm`` file is shown below
         cd $BASENAME/struc
         ls *.osm
 
+
 .. parsed-literal::
 
     DLR.osm
+    MADRID-METIS.osm
     MOCAP2.osm
     MOCAP3.osm
+    MOCAP-small2.osm
+    TA-Office.osm
 
 
 .. code:: python
@@ -178,6 +186,7 @@ The structure of the ``.osm`` file is shown below
         head DLR.osm
         echo '---'
         tail -17 DLR.osm
+
 
 .. parsed-literal::
 
@@ -216,12 +225,20 @@ To read a new layout in osm format :
 .. code:: python
 
     L=Layout('DLR.ini')
+
 .. code:: python
 
     fig,ax=L.showGs()
+
+
+
+.. image:: LayoutEditor_files/LayoutEditor_35_0.png
+
+
 .. code:: python
 
     L.info()
+
 
 .. parsed-literal::
 
@@ -249,6 +266,7 @@ The different graphs associated with the layout are then built
 .. code:: python
 
     L.build()
+
 The topological graph :math:`\mathcal{G}_t` or graph of non overlapping
 cycles.
 
@@ -256,6 +274,12 @@ cycles.
 
     f,a=L.showG('t')
     b=plt.axis('off')
+
+
+
+.. image:: LayoutEditor_files/LayoutEditor_40_0.png
+
+
 The graph of room :math:`\mathcal{G}_r`. Two rooms which share at least
 a wall are connected. Two rooms which share only a corner (punctual
 connection) are not connected
@@ -264,6 +288,12 @@ connection) are not connected
 
     f,a=L.showG('r')
     b=plt.axis('off')
+
+
+
+.. image:: LayoutEditor_files/LayoutEditor_42_0.png
+
+
 The graph of waypath :math:`\mathcal{G}_w`. This graph is used for agent
 mobility. This allows to determine the shortest path between 2 rooms.
 This information could be included in the osm file. This is not the case
@@ -273,12 +303,24 @@ yet
 
     f,a=L.showG('w')
     b=plt.axis('off')
+
+
+
+.. image:: LayoutEditor_files/LayoutEditor_44_0.png
+
+
 The graph of visibility :math:`\mathcal{G_v}`
 
 .. code:: python
 
     f,a=L.showG('v')
     b=plt.axis('off')
+
+
+
+.. image:: LayoutEditor_files/LayoutEditor_46_0.png
+
+
 The graph of interactions :math:`\mathcal{G}_i` used to determine the
 ray signatures.
 
@@ -288,12 +330,19 @@ ray signatures.
     a = f.gca()
     f,a=L.showG('i',fig=f,ax=a)
     b= plt.axis('off')
+
+
+
+.. image:: LayoutEditor_files/LayoutEditor_48_0.png
+
+
 The display options dictionnary
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code:: python
 
     L.info()
+
 
 .. parsed-literal::
 
@@ -323,6 +372,7 @@ are exploited in ``showGs()`` vizualisation method.
 .. code:: python
 
     L.display
+
 
 
 
@@ -374,6 +424,7 @@ are exploited in ``showGs()`` vizualisation method.
      'thin': False,
      'ticksoff': True,
      'title': 'Init',
+     'transition': True,
      'visu': False}
 
 
@@ -419,7 +470,7 @@ Booleans
 -  'ndlabel',boolean, If True display node labels
 -  'ednodes', boolean, True
 
-Interactive editor
+Interactive Editor
 ~~~~~~~~~~~~~~~~~~
 
 The command L.editor() launches an interactive editor. The state machine
@@ -469,6 +520,7 @@ a filename. In that case the file is stored in
 
     L=Layout()
     L.display['fileoverlay']='http://images.wikia.com/theoffice/images/9/9e/Layout.jpg'
+
 .. code:: python
 
     L.display['overlay']=True
@@ -476,18 +528,52 @@ a filename. In that case the file is stored in
     L.display['scaled']=False
     L.display['ticksoff']=False
     L.display['inverse']=True
+
 .. code:: python
 
     plt.figure(figsize=(10,10))
     L.showGs()
 
 
+::
+
+
+    ---------------------------------------------------------------------------
+
+    IOError                                   Traceback (most recent call last)
+
+    <ipython-input-19-9bcb9acc34ba> in <module>()
+          1 plt.figure(figsize=(10,10))
+    ----> 2 L.showGs()
+    
+
+    /home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in showGs(self, **kwargs)
+       4958                 img_file = urllib.urlopen(self.display['fileoverlay'])
+       4959                 im = StringIO(img_file.read())
+    -> 4960                 image = Image.open(im)
+       4961                 imok =True
+       4962             else:
+
+
+    /home/uguen/anaconda/lib/python2.7/site-packages/PIL/Image.pyc in open(fp, mode)
+       2288 
+       2289     raise IOError("cannot identify image file %r"
+    -> 2290                   % (filename if filename else fp))
+       2291 
+       2292 
+
+
+    IOError: cannot identify image file <cStringIO.StringI object at 0x2ac26b04a250>
+
+
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x2aab2c105c50>,
-     <matplotlib.axes.AxesSubplot at 0x2aab2c128d90>)
+    <matplotlib.figure.Figure at 0x2ac26b7c9d90>
 
+
+
+.. image:: LayoutEditor_files/LayoutEditor_77_2.png
 
 
 Scaling the figure overlay
@@ -544,6 +630,12 @@ Vizualisation of the layout
     ax = fig.gca()
     fig,ax = L.showG(fig=fig,ax=ax,graph='s',labels=True,font_size=9,node_size=220,node_color='c')
     a = plt.axis('off')
+
+
+
+.. image:: LayoutEditor_files/LayoutEditor_87_0.png
+
+
 Each node of :math:`\mathcal{G}_s` with a negative index is a point.
 
 Each node of :math:`\mathcal{G}_s` with a positive index corresponds to

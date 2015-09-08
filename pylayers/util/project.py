@@ -15,10 +15,13 @@ import sys
 import shutil
 import pkgutil
 import pdb
+import seaborn as sns
 
 class PyLayers(object):
     """ Generic PyLayers Meta Class
     """
+
+#        sns.set_style("white")
 
     def help(self,letter='az',typ='mt'):
         """ generic help
@@ -28,6 +31,9 @@ class PyLayers(object):
 
         txt : string
             'mb' | 'mt'
+
+            mb :members
+            mt :methods
 
         """
 
@@ -265,5 +271,7 @@ if basename != os.path.join(pylayersdir,'data'):
                         os.path.join(pylayersdir,'data',dl,fi),
                         os.path.join(basename,dl,fi))
 
-
+##
 os.chdir(currentdir)
+## set seaborn style
+sns.set_style("white")

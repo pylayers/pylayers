@@ -294,7 +294,7 @@ class SCPI:
         Y = S.reshape(Npoints,2)
         Y = Y[:,0]+1j*Y[:,1]
         fGHz = self.getfreq()
-        S21 = ch.FUchannel(x=fGHz,y=Y)
+        S21 = ch.Tchannel(x=fGHz,y=Y)
         return S21
 
 if __name__=='__main__':
@@ -328,6 +328,7 @@ if __name__=='__main__':
     N = 100
     fGHz = np.linspace(1.8,2.2,Npoints)
     lt = []
+    tic = time.time()
     for k in range(N):
         S = vna.getdata(Npoints=Npoints)
         lt.append(time.time())
@@ -335,22 +336,9 @@ if __name__=='__main__':
             S21.append(S)
         except:
             S21=S
-    #H = FUchannel(fGHz)
-    #    B = vna.read(com1)
-    #    S = np.frombuffer(B[0:Npoints*16],dtype='>f8')
-    #    H.load(S)
-        #S21 = S[u]+1j*S[v]
-        #try:
-        #    res=np.vstack((res,S21.T))
-        #except:
-        #    res=S21.T
-#
-#
     tab = vna.read(com)
     f = np.frombuffer(tab,'>f8')
     freq = f[1:]
-#    plt.plot(freq)
     vna.close()
-    #plt.imshow(abs(res))
-    #plt.axis('tight')
-    #plt.show()
+    toc = time.time()
+    print toc-tic
