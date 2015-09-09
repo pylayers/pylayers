@@ -63,7 +63,10 @@ class Array(ant.Pattern):
 
     def __repr__(self):
         st = ''
-
+        st = st + 'points :' + str(p) '\n'
+        st = st + 'fmin :' + str(fGHz[0]) '\n'
+        st = st + 'fmax :' + str(fGHz[1]) '\n'
+        st = st + 'ntxru :' + str(ntxru) '\n'
         return(st)
 
 class ULArray(Array):
@@ -204,21 +207,21 @@ class AntArray(Array,ant.Antenna):
          st = st + ant.Antenna.__repr__(self)
          return(st)
 
-# 
-# 
-# 
-# 
-## + We assume X band 
+#
+#
+#
+#
+## + We assume X band
 #
 ## In[2]:
 #
-## Frequency 
+## Frequency
 #fGHz  = 10
 ## Wavelength
 #lam   = 0.3/fGHz
-## Wabve number 
+## Wabve number
 #k     = 2*pi/lam
-## distance between elements 
+## distance between elements
 #d     = lam/2
 ## Number of point along thets
 #Ntheta = 520
@@ -256,18 +259,18 @@ class AntArray(Array,ant.Antenna):
 #title('Dolph-Chebyshev 30')
 #
 #
-## The $N \times N_{\theta}$ steering vectors matrix is given by 
-## 
-## $$\mathbf{S}(\theta) = e^{jkd \mathbf{n}^T . \mathbf{sin(\theta)}}$$ 
-## 
-## $$\mathbf{U}(\theta) = \frac{d}{d\theta}\mathbf{S}(\theta) = jkd \mathbf{n}^T.\mathbf{\cos(\theta)} \odot e^{jkd \mathbf{n}^T . \mathbf{sin(\theta)}}$$ 
+## The $N \times N_{\theta}$ steering vectors matrix is given by
+##
+## $$\mathbf{S}(\theta) = e^{jkd \mathbf{n}^T . \mathbf{sin(\theta)}}$$
+##
+## $$\mathbf{U}(\theta) = \frac{d}{d\theta}\mathbf{S}(\theta) = jkd \mathbf{n}^T.\mathbf{\cos(\theta)} \odot e^{jkd \mathbf{n}^T . \mathbf{sin(\theta)}}$$
 #
-## In 3D these expression becomes. 
-## 
-## Let $\mathbf{r}$ (3xN) be the coordinates associated with each element of the array. 
+## In 3D these expression becomes.
+##
+## Let $\mathbf{r}$ (3xN) be the coordinates associated with each element of the array.
 ## Let define a direction $\mathbf{\hat{s}}(\theta,\phi)$
-## 
-## $$\mathbf{S}(\theta,\phi) = e^{-jk \mathbf{\hat{s}}^T . \mathbf{k}(\theta,\phi)}$$ 
+##
+## $$\mathbf{S}(\theta,\phi) = e^{-jk \mathbf{\hat{s}}^T . \mathbf{k}(\theta,\phi)}$$
 #
 ## In[11]:
 #
@@ -371,7 +374,7 @@ class AntArray(Array,ant.Antenna):
 #print "beamwidth (deg) Dolph-chebyshev moy: ",bwcmoy
 #
 #
-## 
+##
 #
 ## In[8]:
 #
@@ -390,65 +393,65 @@ class AntArray(Array,ant.Antenna):
 #ylabel('dB')
 #
 #
-## 
-## 
-## The figure above demonstates that is possible to have very small variations on the 
-## beamwidth while obtaining a very well controlled modulation (here more than 10dB in very stable 
-## direction on the sidelobes). 
+##
+##
+## The figure above demonstates that is possible to have very small variations on the
+## beamwidth while obtaining a very well controlled modulation (here more than 10dB in very stable
+## direction on the sidelobes).
 ## This could be exploited to send a stealth amplitude modulation schemes with a symbol time $T_s$
 ## which could be defined as a fraction of the radar transmitting duration.
-## 
-## 
-## 
-## Notice that the averaged pattern has exactly the same beamwidth as B-C25 but it is obviously worst regarding 
-## the rejection which is an expected result because Dolph-chebyschev is optimal regarding side lobe 
+##
+##
+##
+## Notice that the averaged pattern has exactly the same beamwidth as B-C25 but it is obviously worst regarding
+## the rejection which is an expected result because Dolph-chebyschev is optimal regarding side lobe
 ## rejection at a specified beamwidth.
-## 
+##
 ## + Q : Is it possible to adaptively and jointly controled the level and the direction of the sidelobes ?
-## 
-## + Q : What is the degree of freedom we have on the modulation of the mainlobe beamwidth. 
-## + Q: What are the typical distances we are interested in both for communication and radar ? 
-## 
-## 
-## It is necessary to define a more precise radar-com scenario with associated propagation model 
-## in order to evaluate the difficulty of both synchronisation and data demodulation both at target 
+##
+## + Q : What is the degree of freedom we have on the modulation of the mainlobe beamwidth.
+## + Q: What are the typical distances we are interested in both for communication and radar ?
+##
+##
+## It is necessary to define a more precise radar-com scenario with associated propagation model
+## in order to evaluate the difficulty of both synchronisation and data demodulation both at target
 ## location and intended receiver.
 #
 ## # Finding a mathematical definition of rejection
-## 
+##
 ## In order to expressed criteria on rejection it is important to give a precise mathematical definition of what exactly rejection is.
-## Let $\mathbf{w}^T$ be the 1xN vector of antenna array weights. The complex array factor is given by : 
-## 
+## Let $\mathbf{w}^T$ be the 1xN vector of antenna array weights. The complex array factor is given by :
+##
 ## $$ \mathbf{F}(\theta)= \mathbf{w}^{\dagger} . \mathbf{S}(\theta) $$
-## 
+##
 ## Let defines the  $N\times N $ matrix $$\mathbf{W}=\mathbf{w}^{\dagger}\mathbf{w}$$
-## 
+##
 ## $$ |F(\theta)|^2 = \textrm{diag}(\mathbf{F}^{\dagger}(\theta)\mathbf{F})$$
 ## $$ |F(\theta)|^2 = \textrm{diag}( \mathbf{S}^{\dagger} \mathbf{W} \mathbf{S} )$$
 ## $$ \frac{d}{d\theta}|F(\theta)|^2 = \textrm{diag}( \mathbf{U}^{\dagger} \mathbf{W}  \mathbf{S} )+\textrm{diag}( \mathbf{S}^{\dagger} \mathbf{W}  \mathbf{U} )$$
-## $$ \frac{d^2}{d\theta^2}|F(\theta)|^2 =\textrm{diag}( \mathbf{R}^{\dagger} \mathbf{W}  \mathbf{S} )+ 
+## $$ \frac{d^2}{d\theta^2}|F(\theta)|^2 =\textrm{diag}( \mathbf{R}^{\dagger} \mathbf{W}  \mathbf{S} )+
 ##                                        \textrm{diag}( \mathbf{U}^{\dagger} \mathbf{W}  \mathbf{U} )+
 ##                                        \textrm{diag}( \mathbf{U}^{\dagger} \mathbf{W}  \mathbf{U})+
 ##                                        \textrm{diag}( \mathbf{S}^{\dagger} \mathbf{W}  \mathbf{R} )$$
-## $$ \frac{d^2}{d\theta^2}|F(\theta)|^2 =\textrm{diag}( \mathbf{R}^{\dagger} \mathbf{W}  \mathbf{S} )+ 
+## $$ \frac{d^2}{d\theta^2}|F(\theta)|^2 =\textrm{diag}( \mathbf{R}^{\dagger} \mathbf{W}  \mathbf{S} )+
 ##                                        2\textrm{diag}( \mathbf{U}^{\dagger} \mathbf{W}  \mathbf{U} )+
 ##                                        \textrm{diag}( \mathbf{S}^{\dagger} \mathbf{W}  \mathbf{R} )$$
 #
 ## In order to expressed criteria on rejection it is important to give a precise mathematical definition of what exactly rejection is.
-## Let $\mathbf{w}^T$ be the 1xN vector of antenna array weights. The complex array factor is given by : 
-## 
+## Let $\mathbf{w}^T$ be the 1xN vector of antenna array weights. The complex array factor is given by :
+##
 ## $$ \mathbf{F}(\theta,\phi)= \mathbf{w}. \mathbf{S}(\theta,\phi) $$
-## 
+##
 ## Let defines the  $N\times N $ matrix $$\mathbf{W}=\mathbf{w}^{\dagger}\mathbf{w}$$
-## 
+##
 ## $$ |F(\theta,\phi)|^2 = \textrm{diag}(\mathbf{F}^{\dagger}(\theta,\phi)\mathbf{F})$$
 ## $$ |F(\theta,\phi)|^2 = \textrm{diag}( \mathbf{S}^{\dagger} \mathbf{W} \mathbf{S} )$$
 ## $$ \frac{d}{d\theta}|F(\theta)|^2 = \textrm{diag}( \mathbf{U}^{\dagger} \mathbf{W}  \mathbf{S} )+\textrm{diag}( \mathbf{S}^{\dagger} \mathbf{W}  \mathbf{U} )$$
-## $$ \frac{d^2}{d\theta^2}|F(\theta)|^2 =\textrm{diag}( \mathbf{R}^{\dagger} \mathbf{W}  \mathbf{S} )+ 
+## $$ \frac{d^2}{d\theta^2}|F(\theta)|^2 =\textrm{diag}( \mathbf{R}^{\dagger} \mathbf{W}  \mathbf{S} )+
 ##                                        \textrm{diag}( \mathbf{U}^{\dagger} \mathbf{W}  \mathbf{U} )+
 ##                                        \textrm{diag}( \mathbf{U}^{\dagger} \mathbf{W}  \mathbf{U})+
 ##                                        \textrm{diag}( \mathbf{S}^{\dagger} \mathbf{W}  \mathbf{R} )$$
-## $$ \frac{d^2}{d\theta^2}|F(\theta)|^2 =\textrm{diag}( \mathbf{R}^{\dagger} \mathbf{W}  \mathbf{S} )+ 
+## $$ \frac{d^2}{d\theta^2}|F(\theta)|^2 =\textrm{diag}( \mathbf{R}^{\dagger} \mathbf{W}  \mathbf{S} )+
 ##                                        2\textrm{diag}( \mathbf{U}^{\dagger} \mathbf{W}  \mathbf{U} )+
 ##                                        \textrm{diag}( \mathbf{S}^{\dagger} \mathbf{W}  \mathbf{R} )$$
 #
@@ -464,7 +467,7 @@ class AntArray(Array,ant.Antenna):
 #    d     : interelement distance (default lambda/2)
 #    thresh : threshold for null first derivative evaluation
 #
-#    Author : B.Uguen 
+#    Author : B.Uguen
 #             December 2011
 #    """
 #    N  = len(w)
@@ -517,7 +520,7 @@ class AntArray(Array,ant.Antenna):
 #
 #
 ## In the figure below we have determined the locus where the absolute value is below a given threshold while the second derivative remains negative.
-## This second criteria authorizes not to be very strict on the null criteria for derivative 
+## This second criteria authorizes not to be very strict on the null criteria for derivative
 ## because on each sub-interval the function is locally convex.
 #
 ## ## Study rejection of different arrays
@@ -562,8 +565,8 @@ class AntArray(Array,ant.Antenna):
 #print rejdB
 #
 #
-## Q: What is the mean rejection when drawing randomly a real weigthing array ? And how is it correlated to beamwidth ? 
-## The beamwith evaluation is imprecise because it is evaluated numerically and is dependant from the angular sampling interval. 
+## Q: What is the mean rejection when drawing randomly a real weigthing array ? And how is it correlated to beamwidth ?
+## The beamwith evaluation is imprecise because it is evaluated numerically and is dependant from the angular sampling interval.
 #
 ## In[20]:
 #
@@ -581,7 +584,7 @@ class AntArray(Array,ant.Antenna):
 #
 ## In[21]:
 #
-#tmp  = hist(trej,50) 
+#tmp  = hist(trej,50)
 #
 #
 ## In[22]:
@@ -589,7 +592,7 @@ class AntArray(Array,ant.Antenna):
 #hist(tbwdeg,20)
 #
 #
-## 
+##
 #
 ## In[23]:
 #
@@ -604,7 +607,7 @@ class AntArray(Array,ant.Antenna):
 #visurej(f,g,h,z,main,rejdB,bwdeg,'Random real 3 :')
 #
 #
-## 
+##
 #
 ## In[9]:
 #
@@ -628,46 +631,46 @@ class AntArray(Array,ant.Antenna):
 #
 #
 ## ## Definition of an averaged radiation pattern
-## 
+##
 ## The averaged radiation pattern is defined as :
-## 
+##
 ## $$ \mathbf{\bar{F}}(\theta)=\frac{1}{K}\sum_{k=1}^{K} \mathbf{F}_k(\theta)= \frac{1}{K}\sum_{k=1}^{K} \mathbf{w_k}^{\dagger} . \mathbf{S}(\theta) $$
 #
-## If we assume a weight encoded with $N_b$ bits, $\mathbf{u_k}$ is equal to 0 or 1 
-## 
+## If we assume a weight encoded with $N_b$ bits, $\mathbf{u_k}$ is equal to 0 or 1
+##
 ## $$\mathbf{w_k} = \mathbf{u_k}(2^{N_b}-1) $$
 #
 ## $$ \mathbf{\bar{F}}_K(\theta) = \frac{2^{N_b}-1}{K}\sum_{k=1}^{K} \mathbf{u_k}^{\dagger} . \mathbf{S}(\theta) $$
 #
 ## $$N_{bit} = \log_2 \left( K (2^{N_b}-1) +1\right) $$
 #
-## Time modulated array 
-## 
+## Time modulated array
+##
 ## $$ \mathbf{F}(\theta,t)=\sum_{l=-\infty}^{+\infty} \textrm{rect}(\frac{t- l T/2}{T})\mathbf{F}_l(\theta) $$
-## 
+##
 #
-## 
-## Time modulated array 
-## 
+##
+## Time modulated array
+##
 ## $$ \mathbf{\bar{F}}(\theta) = \frac{1}{K}\sum_{k=1}^{K} \mathbf{w_k}^{\dagger} . \mathbf{S}(\theta) $$
 #
-## Nombre d'antennes constant  Hopt 
+## Nombre d'antennes constant  Hopt
 #
 ## $$ \frac{1}{KT}\int_{0}^{K T}  \mathbf{F}(\theta,u) du $$
-## 
+##
 ## $$  \frac{1}{KT}\sum_{l=-\infty}^{+\infty} \mathbf{F}_l(\theta) \int_{0}^{K T}\textrm{rect}(\frac{t- l T/2}{T}) dt   $$
-## 
-## 
+##
+#
 ## $$ \mathbf{\bar{F}}_{K}(\theta) = \sum_{l=1}^{K} \mathbf{F}_l(\theta)   $$
 #
-## Time modulated array 
-## 
+## Time modulated array
+##
 ## $$ \mathbf{F}(\theta,t)=\frac{1}{K}\sum_{k=1}^{K} \textrm{rect}(\frac{t- l T_k/2)}{T_k})\mathbf{F}_k(\theta)= \frac{1}{K}\sum_{k=1}^{K} \mathbf{w_k}^{\dagger} . \mathbf{S}(\theta) $$
 #
-## Interférence Radar 
+## Interférence Radar
 #
 ##  ## POSTMA
 #
 #el(dot(conj(U.T),dot(W,S))+dot(conj(S.T),dot(W,U)))
 #    H  =
-#    real(dot(conj(R.T),dot(W,S))+2*dot(conj(U.T),dot(W,U))+dot(conj(S.T),dot(W,R)))# Comparaison petit réseau et grand réseau. 
+#    real(dot(conj(R.T),dot(W,S))+2*dot(conj(U.T),dot(W,U))+dot(conj(S.T),dot(W,R)))# Comparaison petit réseau et grand réseau.
