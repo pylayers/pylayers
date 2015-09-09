@@ -848,11 +848,6 @@ class Pattern(PyLayers):
                 itheta = np.arange(self.nth)
                 iphi1 = np.where(abs(self.phi-kwargs['phd']*dtr)<dphi)[0][0]
                 Np = self.nph
-                # handle parity
-                if np.mod(Np, 2) == 0:
-                    iphi2 = np.mod(iphi1 + Np / 2, Np)
-                else:
-                    iphi2 = np.mod(iphi1 + (Np - 1) / 2, Np)
 
                 #   0 < theta < pi/2
                 #u1 = np.where((self.theta[:,0] <= np.pi / 2) &
@@ -865,16 +860,38 @@ class Pattern(PyLayers):
                 #                                              > np.pi / 2))[0]
                 u3 = np.nonzero((self.theta <= np.pi) & ( self.theta > np.pi / 2))[0]
 
-                if len(self.sqG.shape)==3:
+                #
+                # handling broadcasted axis =1 --> index 0
+                shsqG = self.sqG.shape
+                if shsqG[0]==1:
+                    u1 = 0
+                    u2 = 0
+                    u3 = 0
+                if shsqG[1]==1:
+                    iphi1 = 0
+                    iphi2 = 0
+                if shsqG[2]==1:
+                    ik = 0
+
+                # handle parity
+                if np.mod(Np, 2) == 0:
+                    iphi2 = np.mod(iphi1 + Np / 2, Np)
+                else:
+                    iphi2 = np.mod(iphi1 + (Np - 1) / 2, Np)
+
+                if len(shsqG)==3:
                     arg1 = (u1,iphi1,ik)
                     arg2 = (u2,iphi2,ik)
                     arg3 = (u3,iphi1,ik)
                 else:
+                    if shsqG[3]==1:
+                        u = 0
                     arg1 = (u1,iphi1,ik,u)
                     arg2 = (u2,iphi2,ik,u)
                     arg3 = (u3,iphi1,ik,u)
 
                 # polar diagram
+                pdb.set_trace()
                 if kwargs['polar']:
                     if kwargs['source']=='satimo':
                         r1 = -GmindB + 20 * np.log10(  self.sqG[arg1]+1e-12)
@@ -884,6 +901,13 @@ class Pattern(PyLayers):
                         r1 = -GmindB + 20 * np.log10(  self.sqG[arg1]/np.sqrt(30)+1e-12)
                         r2 = -GmindB + 20 * np.log10( self.sqG[arg2]/np.sqrt(30)+1e-12)
                         r3 = -GmindB + 20 * np.log10(  self.sqG[arg3]/np.sqrt(30)+1e-12)
+
+                    if type(r1)!= np.ndarray:
+                        r1 = np.array([r1])*np.ones(len(self.phi))
+                    if type(r2)!= np.ndarray:
+                        r2 = np.array([r2])*np.ones(len(self.phi))
+                    if type(r3)!= np.ndarray:
+                        r3 = np.array([r3])*np.ones(len(self.phi))
 
                     negr1 = np.nonzero(r1 < 0)
                     negr2 = np.nonzero(r2 < 0)
