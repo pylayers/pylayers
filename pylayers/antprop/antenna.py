@@ -300,10 +300,10 @@ class Pattern(PyLayers):
 
         self.GmaxdB  = self.param['GmaxdB']
         self.pol  = self.param['pol']
-        self.G    = pow(10.,self.GmaxdB/10.) # linear gain
+        G    = pow(10.,self.GmaxdB/10.) # linear gain
         if self.grid:
             # Nth x Nph x Nf
-            self.sqG  = np.array(np.sqrt(self.G))[None,None,None]
+            self.sqG  = np.array(np.sqrt(G))[None,None,None]
             self.evaluated = True
         else:
             # Nd x Nf
@@ -846,10 +846,9 @@ class Pattern(PyLayers):
             # all theta
             if 'phd' in kwargs:
                 itheta = np.arange(self.nth)
-                #iphi1 = np.where(abs(self.phi[0,:]-kwargs['phd']*dtr)<dtheta)[0][0]
                 iphi1 = np.where(abs(self.phi-kwargs['phd']*dtr)<dphi)[0][0]
                 Np = self.nph
-
+                # handle parity
                 if np.mod(Np, 2) == 0:
                     iphi2 = np.mod(iphi1 + Np / 2, Np)
                 else:
@@ -865,80 +864,50 @@ class Pattern(PyLayers):
                 #u3 = np.nonzero((self.theta[:,0] <= np.pi) & ( self.theta[:,0]
                 #                                              > np.pi / 2))[0]
                 u3 = np.nonzero((self.theta <= np.pi) & ( self.theta > np.pi / 2))[0]
-                pdb.set_trace()
+
                 if len(self.sqG.shape)==3:
-                    if kwargs['polar']:
-                        if kwargs['source']=='satimo':
-                            r1 = -GmindB + 20 * np.log10(  self.sqG[u1, iphi1,ik]+1e-12)
-                        if kwargs['source']=='cst':
-                            r1 = -GmindB + 20 * np.log10(  self.sqG[u1, iphi1,ik]/np.sqrt(30)+1e-12)
-
-                        #r1  = self.sqG[k,u1[0],iphi1]
-                        negr1 = np.nonzero(r1 < 0)
-                        r1[negr1[0]] = 0
-                        if kwargs['source']=='satimo':
-                            r2 = -GmindB + 20 * np.log10( self.sqG[ u2, iphi2,ik]+1e-12)
-                        if kwargs['source']=='cst':
-                            r2 = -GmindB + 20 * np.log10( self.sqG[u2,iphi2,ik]/np.sqrt(30)+1e-12)
-                        #r2  = self.sqG[k,u2,iphi2]
-                        negr2 = np.nonzero(r2 < 0)
-                        r2[negr2[0]] = 0
-                        if kwargs['source']=='satimo':
-                            r3 = -GmindB + 20 * np.log10( self.sqG[u3, iphi1,ik]+1e-12)
-                        if kwargs['source']=='cst':
-                            r3 = -GmindB + 20 * np.log10(  self.sqG[u3, iphi1,ik]/np.sqrt(30)+1e-12)
-                        #r3  = self.sqG[k,u3[0],iphi1]
-                        negr3 = np.nonzero(r3 < 0)
-                        r3[negr3[0]] = 0
-                        r = np.hstack((r1[::-1], r2, r3[::-1], r1[-1]))
-
-                        a1 = np.arange(0, 360, 30)
-                        a2 = [90, 60, 30, 0, 330, 300, 270, 240, 210, 180, 150, 120]
-                        rline2, rtext2 = plt.thetagrids(a1, a2)
-
-                    else:
-                        r1 = 20 * np.log10( self.sqG[u1, iphi1,ik]+1e-12)
-                        r2 = 20 * np.log10( self.sqG[u2, iphi2,ik]+1e-12)
-                        r3 = 20 * np.log10( self.sqG[u3, iphi1,ik]+1e-12)
-
-                    r = np.hstack((r1[::-1], r2, r3[::-1], r1[-1]))
+                    arg1 = (u1,iphi1,ik)
+                    arg2 = (u2,iphi2,ik)
+                    arg3 = (u3,iphi1,ik)
                 else:
-                    if kwargs['polar']:
-                        if kwargs['source']=='satimo':
-                            r1 = -GmindB + 20 * np.log10( self.sqG[u1,iphi1,ik,u]+1e-12)
-                        if kwargs['source']=='cst':
-                            r1 = -GmindB + 20 * np.log10(  self.sqG[u1,iphi1,ik,u]/np.sqrt(30)+1e-12)
+                    arg1 = (u1,iphi1,ik,u)
+                    arg2 = (u2,iphi2,ik,u)
+                    arg3 = (u3,iphi1,ik,u)
 
-                        #r1  = self.sqG[k,u1[0],iphi1]
-                        negr1 = np.nonzero(r1 < 0)
-                        r1[negr1[0]] = 0
-                        if kwargs['source']=='satimo':
-                            r2 = -GmindB + 20 * np.log10( self.sqG[u2,iphi2,ik,u]+1e-12)
-                        if kwargs['source']=='cst':
-                            r2 = -GmindB + 20 * np.log10(self.sqG[u2,iphi2,ik,u]/np.sqrt(30)+1e-12)
-                        #r2  = self.sqG[k,u2,iphi2]
-                        negr2 = np.nonzero(r2 < 0)
-                        r2[negr2[0]] = 0
-                        if kwargs['source']=='satimo':
-                            r3 = -GmindB + 20 * np.log10( self.sqG[ u3,iphi1,ik,u]+1e-12)
-                        if kwargs['source']=='cst':
-                            r3 = -GmindB + 20 * np.log10(  self.sqG[ u3,iphi1,ik,u]/np.sqrt(30)+1e-12)
-                        #r3  = self.sqG[k,u3[0],iphi1]
-                        negr3 = np.nonzero(r3 < 0)
-                        r3[negr3[0]] = 0
-                        r = np.hstack((r1[::-1], r2, r3[::-1], r1[-1]))
+                # polar diagram
+                if kwargs['polar']:
+                    if kwargs['source']=='satimo':
+                        r1 = -GmindB + 20 * np.log10(  self.sqG[arg1]+1e-12)
+                        r2 = -GmindB + 20 * np.log10( self.sqG[arg2]+1e-12)
+                        r3 = -GmindB + 20 * np.log10( self.sqG[arg3]+1e-12)
+                    if kwargs['source']=='cst':
+                        r1 = -GmindB + 20 * np.log10(  self.sqG[arg1]/np.sqrt(30)+1e-12)
+                        r2 = -GmindB + 20 * np.log10( self.sqG[arg2]/np.sqrt(30)+1e-12)
+                        r3 = -GmindB + 20 * np.log10(  self.sqG[arg3]/np.sqrt(30)+1e-12)
 
-                        a1 = np.arange(0, 360, 30)
-                        a2 = [90, 60, 30, 0, 330, 300, 270, 240, 210, 180, 150, 120]
-                        rline2, rtext2 = plt.thetagrids(a1, a2)
+                    negr1 = np.nonzero(r1 < 0)
+                    negr2 = np.nonzero(r2 < 0)
+                    negr3 = np.nonzero(r3 < 0)
 
-                    else:
-                        r1 = 20 * np.log10( self.sqG[u1, iphi1,ik,u]+1e-12)
-                        r2 = 20 * np.log10( self.sqG[u2, iphi2,ik,u]+1e-12)
-                        r3 = 20 * np.log10( self.sqG[u3, iphi1,ik,u]+1e-12)
+                    r1[negr1[0]] = 0
+                    r2[negr2[0]] = 0
+                    r3[negr3[0]] = 0
+
                     r = np.hstack((r1[::-1], r2, r3[::-1], r1[-1]))
 
+                    a1 = np.arange(0, 360, 30)
+                    a2 = [90, 60, 30, 0, 330, 300, 270, 240, 210, 180, 150, 120]
+                    rline2, rtext2 = plt.thetagrids(a1, a2)
 
+                # linear diagram
+                else:
+                    r1 = 20 * np.log10( self.sqG[arg1]+1e-12)
+                    r2 = 20 * np.log10( self.sqG[arg2]+1e-12)
+                    r3 = 20 * np.log10( self.sqG[arg3]+1e-12)
+
+                    r = np.hstack((r1[::-1], r2, r3[::-1], r1[-1]))
+
+                # angular basis for phi
                 angle = np.linspace(0, 2 * np.pi, len(r), endpoint=True)
               #  plt.title(u'V plane $\\theta$ (degrees)')
 
@@ -949,8 +918,13 @@ class Pattern(PyLayers):
                 itheta = np.where(abs(self.theta-kwargs['thd']*dtr)<dtheta)[0][0]
                 #angle = self.phi[0,iphi]
                 angle = self.phi[iphi]
+                if len(self.sqG.shape)==3:
+                    arg = (itheta,iphi,ik)
+                else:
+                    arg = (itheta,iphi,ik,u)
+
                 if kwargs['polar']:
-                    r = -GmindB + 20 * np.log10(self.sqG[ik, itheta, iphi])
+                    r = -GmindB + 20 * np.log10(self.sqG[arg])
                     neg = np.nonzero(r < 0)
                     r[neg] = 0
                # plt.title(u'H plane - $\phi$ degrees')
@@ -958,8 +932,9 @@ class Pattern(PyLayers):
                     a2 = [0, 30, 60, 90, 120 , 150 , 180 , 210, 240 , 300 , 330]
                     rline2, rtext2 = plt.thetagrids(a1, a2)
                 else:
-                    r =  20 * np.log10(self.sqG[itheta, iphi,ik])
+                    r =  20 * np.log10(self.sqG[arg])
 
+            # actual plotting
             ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
             if kwargs['polar']:
                 rline1, rtext1 = plt.rgrids(t1, t2)
