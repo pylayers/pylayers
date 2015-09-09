@@ -3908,15 +3908,8 @@ maicher
         Parameters
         ----------
 
-        a : string or antenna array
-            polarization antenna a ( 'theta' | 'phi' | 'ant' )
-            default (theta)
-        b : string or antenna array
-            polarization antenna b ( 'theta' | 'phi' | 'ant' )
-            default (theta)
-
-            0 : theta
-            1 : phi
+        a : antenna a
+        b : antenna b
 
         Ta : np.array(3x3)
            unitary matrice for antenna orientation

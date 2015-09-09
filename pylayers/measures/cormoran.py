@@ -2546,10 +2546,10 @@ bernard
 
         """
         key = 'S'+str(day)+'_'+str(serie)
-        filename = key+'.mat'
-        inter,lks = S.compute_visibility(techno='HKB')
+        filemat = key+'.mat'
         if self.typ=='HKBS':
             links = list(self.hkb.columns)
+            inter,lks = self.compute_visibility(techno='HKB')
             tdec = []
             tratio = []
             maxratio = 0
@@ -2561,11 +2561,13 @@ bernard
                 ix1 = np.where(lks==ls[1])[0]
                 #print ix0,ix1,ls[0],ls[1]
                 Ssh = inter[ix0,ix1,:]
-                Srssi = S.getlink(ls[0],ls[1],techno='HKB')
-                Sdist = S.getlinkd(ls[0],ls[1],techno='HKB')
+                # get RSSI
+                Srssi = self.getlink(ls[0],ls[1],techno='HKB')
+                # get distances between nodes
+                Sdist = self.getlinkd(ls[0],ls[1],techno='HKB')
 
                 z1 = 10*np.log10((1/dist1**2)).values
-                u = np.where(Ssh[0]==1)[0]
+                u  = np.where(Ssh[0]==1)[0]
                 z1[u] = z1[u]-15
                 z1 = z1-np.mean(z1)
                 z2 = Srssi.values
@@ -2582,17 +2584,22 @@ bernard
                     maxratio = ratio
                     linkmax = l
 
+                # rssi
                 d[key][nl]['rssi'] = Srssi.values
+                # dsh
                 d[key][nl]['dsh'] = z1
                 #d['S6'][nl]['rssi_dec'] = np.roll(Srssi.values,-dec)
                 d[key][nl]['sh'] = Ssh
+                # time rssi
                 d[key][nl]['tr'] = np.array(Srssi.index)
-                d[key][nl]['dist']=Sdist.values
-                d[key][nl]['td']= np.array(Sdist.index)
-                d[key][nl]['dec']= dec
-                d[key][nl]['ratio']= ratio
+                # distance
+                d[key][nl]['dist'] = Sdist.values
+                # time mocap
+                d[key][nl]['td'] = np.array(Sdist.index)
+                d[key][nl]['dec'] = dec
+                d[key][nl]['ratio'] = ratio
 
-            io.savemat('serie6.mat',d)
+            io.savemat(filemat,d)
 
 
 

@@ -273,6 +273,9 @@ class Pattern(PyLayers):
 
         self.grid = kwargs['grid']
 
+        #
+        # eval
+        #
         eval('self._Pattern__p'+self.typ)(param=self.param)
 
         self.evaluated = True
@@ -368,11 +371,11 @@ class Pattern(PyLayers):
         """ 3GPP pattern
 
         if pattern
-            self.Ft  nf x nth x nphi
-            self.Fp  nf x nth x nphi
+            self.Ft  nth x nphi x nf
+            self.Fp  nth x nphi x nf
         else
-            self.Ft  nf x ndir (==nth, ==nph)
-            self.Fp  nf x ndir (==nth, ==nph)
+            self.Ft  ndir x nf (==nth, ==nph)
+            self.Fp  ndir x nf (==nth, ==nph)
 
         """
         defaults = {'param' : {'thtilt':0,  # antenna tilt
@@ -381,16 +384,15 @@ class Pattern(PyLayers):
                     'sllv': -18, # side lobe level
                     'fbrh': 30,  # front back ratio
                     'gm': 18,    #
-                    'pol':'h'    # h , v , c
+                    'pol':'p'    # t , p , c
                     }}
 
 
-        if 'param' not in kwargs:
-            kwargs['param']=defaults['param']
+        if 'param' not in kwargs or kwargs['param']=={}:
+            kwargs['param'] = defaults['param']
 
         self.typ = "3gpp"
         self.param = kwargs['param']
-
         thtilt = self.param['thtilt']
         hpbwh = self.param['hpbwh']
         hpbwv = self.param['hpbwv']
@@ -863,6 +865,7 @@ class Pattern(PyLayers):
                 #u3 = np.nonzero((self.theta[:,0] <= np.pi) & ( self.theta[:,0]
                 #                                              > np.pi / 2))[0]
                 u3 = np.nonzero((self.theta <= np.pi) & ( self.theta > np.pi / 2))[0]
+                pdb.set_trace()
                 if len(self.sqG.shape)==3:
                     if kwargs['polar']:
                         if kwargs['source']=='satimo':
