@@ -766,7 +766,7 @@ class Pattern(PyLayers):
         """
 
         if not self.evaluated:
-            self.Fsynth(pattern=True)
+            self.eval(pattern=True)
 
         dtr = np.pi/180.
 
@@ -2006,7 +2006,7 @@ class Antenna(Pattern):
 
 
         if not self.evaluated:
-            self.Fsynth(pattern=True)
+            self.eval(pattern=True)
 
 
         x, y, z, k, scalar  = self._computemesh(**kwargs)
@@ -2158,7 +2158,7 @@ class Antenna(Pattern):
         """
 
         if not self.evaluated:
-            self.Fsynth(pattern=True)
+            self.eval(pattern=True)
 
         f = self.fGHz[k]
 
