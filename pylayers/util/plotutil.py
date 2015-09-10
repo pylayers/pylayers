@@ -39,6 +39,19 @@ def cformat(x,y,**kwargs):
 
     uy : ndarray()
         select rows of y
+    typ : string
+            'm'   : modulus
+            'v'   : value
+            'l10' : dB (10 log10)
+            'l20' : dB (20 log10)
+            'd'   : phase degrees
+            'r'   : phase radians
+            'du'  : phase degrees unwrap
+            'ru'  : phase radians unwrap
+            'gdn' : group delay (ns)
+            'gdm' : group distance (m)
+            're'  : real part
+            'im'  : imaginary part
 
     Returns
     -------
@@ -48,7 +61,7 @@ def cformat(x,y,**kwargs):
     ylabels
 
     """
-    defaults = {'typ':['l20']}
+    defaults = {'typ':'l20'}
 
     for key, value in defaults.items():
         if key not in kwargs:
@@ -98,12 +111,12 @@ def cformat(x,y,**kwargs):
         ylabels='Group delay (ns)'
         df  = x[1]-x[0]
         xn  = x[0:-1]
-        yn  = -np.diff(np.unwrap(np.angle(y[l,c,:])))/(2*np.pi*df)
+        yn  = -np.diff(np.unwrap(np.angle(y[u,:])))/(2*np.pi*df)
     if t=='gdm':
         ylabels='Group distance (m)'
         df  = x[1]-x[0]
         xn  = x[0:-1]
-        yn = -0.3*np.diff(np.unwrap(np.angle(y[l,c,:])))/(2*np.pi*df)
+        yn = -0.3*np.diff(np.unwrap(np.angle(y[u,:])))/(2*np.pi*df)
     if 'ylabels'  in kwargs:
         ylabels = kwargs['ylabels']
 
@@ -149,10 +162,11 @@ def mulcplot(x,y,**kwargs):
 
     Here fig and ax are numpy arrays of matplotlib fig and ax
 
-    If len(y.shape) > 2 the two first axes are used as nlin and ncol this
-    takes the priority over the passed values nlin and ncol
+    If len(y.shape) > 2 the two first axes are used
+    as nlin and ncol this takes the priority over
+    the passed values nlin and ncol
 
-    notice the typ is a list of string and not a string
+    notice that the typ is a list of string and not a string
 
     Examples
     --------
@@ -194,6 +208,8 @@ def mulcplot(x,y,**kwargs):
     # smart placement of legend box
     plt.rcParams['legend.loc'] = 'best'
 
+    # grid mode False default
+    #
     grid = False
     if 'nlin' in kwargs:
         grid=True
@@ -242,6 +258,9 @@ def mulcplot(x,y,**kwargs):
     else:
         ylabels = kwargs['ylabels']
 
+    #
+    # getting kwargs
+    #
     fig = kwargs['fig']
     ax = kwargs['ax']
     nlin = kwargs['nlin']
@@ -268,13 +287,13 @@ def mulcplot(x,y,**kwargs):
             args[k]=kwargs[k]
 
     #
-    # shape of entries
+    # determine shape of entries
     #
     shx = x.shape
     shy = y.shape
 
     #
-    # This is for handling MDA of shape
+    # This is for handling MDA
     #
     if len(shy)>2: # 3
         ydim = shy[0:-1]
@@ -282,7 +301,7 @@ def mulcplot(x,y,**kwargs):
         ncol = ydim[1]
     else:
         if not grid:
-            if len(shy)>1: #2   1 column
+            if len(shy)>1: #2   1 column shy[0] lines
                 nlin = shy[0]
                 ncol = 1
             else:          #0   1 line / 1 column
@@ -291,8 +310,8 @@ def mulcplot(x,y,**kwargs):
                 y = y[np.newaxis,:]
 
 
-    # below is the same axis constraint as for Bsignal object
-    assert(shx[0]==shy[-1]), "plotutil : x,y shape incompatibility"
+    # asserting the same axis constraint as for Bsignal object
+    assert((shx[0]==shy[-1])or (shy[-1]==1)), "plotutil : x,y shape incompatibility"
 
     nfigy = np.prod(np.array(y.shape[0:-1]))
 
