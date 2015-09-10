@@ -63,10 +63,10 @@ class Array(ant.Pattern):
 
     def __repr__(self):
         st = ''
-        st = st + 'points :' + str(p) '\n'
-        st = st + 'fmin :' + str(fGHz[0]) '\n'
-        st = st + 'fmax :' + str(fGHz[1]) '\n'
-        st = st + 'ntxru :' + str(ntxru) '\n'
+        st = st + 'points :' + str(p) + '\n'
+        st = st + 'fmin :' + str(fGHz[0]) + '\n'
+        st = st + 'fmax :' + str(fGHz[1]) + '\n'
+        st = st + 'ntxru :' + str(ntxru) + '\n'
         return(st)
 
 class ULArray(Array):

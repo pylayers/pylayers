@@ -294,9 +294,9 @@ class Pattern(PyLayers):
             kwargs['param']=defaults['param']
 
         self.param = kwargs['param']
-
         self.GmaxdB  = self.param['GmaxdB']
         self.pol  = self.param['pol']
+
         self.G    = pow(10.,self.GmaxdB/10.) # linear gain
         if self.grid:
             # Nth x Nph x Nf
@@ -367,12 +367,24 @@ class Pattern(PyLayers):
     def __p3gpp(self,**kwargs):
         """ 3GPP pattern
 
+        Parameters
+        ----------
+
+        thtilt : theta tilt antenna
+        hpbwv  : half power beamwidth v
+        hpbwh  : half power beamwidth h
+        sllv   : side lobe level
+        fbrh   : front back ratio
+        gm     :
+        pol    : h | v | c
+
+
         if pattern
-            self.Ft  nf x nth x nphi
-            self.Fp  nf x nth x nphi
+            self.Ft  nth x nphi x nf
+            self.Fp  nth x nphi x nf
         else
-            self.Ft  nf x ndir (==nth, ==nph)
-            self.Fp  nf x ndir (==nth, ==nph)
+            self.Ft  ndir x nf (==nth, ==nph)
+            self.Fp  ndir x nf (==nth, ==nph)
 
         """
         defaults = {'param' : {'thtilt':0,  # antenna tilt
@@ -381,23 +393,28 @@ class Pattern(PyLayers):
                     'sllv': -18, # side lobe level
                     'fbrh': 30,  # front back ratio
                     'gm': 18,    #
-                    'pol':'h'    # h , v , c
+                    'pol':'p'    # p , t , c
                     }}
 
 
-        if 'param' not in kwargs:
+        #Do by Mamadou
+        if 'param' not in kwargs or kwargs['param']=={}:
             kwargs['param']=defaults['param']
+
+
+        #if 'param' not in kwargs:
+            #kwargs['param']=defaults['param']
 
         self.typ = "3gpp"
         self.param = kwargs['param']
 
         thtilt = self.param['thtilt']
-        hpbwh = self.param['hpbwh']
-        hpbwv = self.param['hpbwv']
-        sllv = self.param['sllv']
-        fbrh = self.param['fbrh']
-        gm = self.param['gm']
-        self.pol = self.param['pol']
+        hpbwh  = self.param['hpbwh']
+        hpbwv  = self.param['hpbwv']
+        sllv   = self.param['sllv']
+        fbrh   = self.param['fbrh']
+        gm     = self.param['gm']
+        pol    = self.param['pol']
 
         # convert radian to degree
 
@@ -856,6 +873,7 @@ class Pattern(PyLayers):
                 #   0 < theta < pi/2
                 #u1 = np.where((self.theta[:,0] <= np.pi / 2) &
                 #              (self.theta[:,0] >= 0))[0]
+                #pdb.set_trace()
                 u1 = np.where((self.theta <= np.pi / 2.) & (self.theta >= 0))[0]
                 #   0:Nt-1
                 u2 = np.arange(self.nth)
@@ -2238,6 +2256,7 @@ class Antenna(Pattern):
         Th = np.outer(self.theta, vp)
         Ph = np.outer(vt, self.phi)
 
+        #pdb.set_trace()
         X = abs(V) * np.cos(Ph) * np.sin(Th)
         Y = abs(V) * np.sin(Ph) * np.sin(Th)
         Z = abs(V) * np.cos(Th)
