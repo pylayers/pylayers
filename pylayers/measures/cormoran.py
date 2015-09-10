@@ -2579,7 +2579,7 @@ bernard
                 Srssi= self.getlink(ls[0],ls[1],techno='HKB')
                 # get distances between nodes
                 Sdist = self.getlinkd(ls[0],ls[1],techno='HKB')
-                dsh = rssi2dist(Sdist,Ssh,15)
+                dsh = dist_sh2rssi(Sdist,Ssh,15)
                 # rssi
                 d[key]['HKB'][nl]['rssi'] = Srssi.values
                 # dsh
@@ -4935,7 +4935,7 @@ bernard
 
         return df
 
-def rssi2dist(dist,Ssh,offsetdB=15):
+def dist_sh2rssi(dist,Ssh,offsetdB=15):
     """
     Parameters
     ----------
