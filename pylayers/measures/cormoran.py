@@ -269,8 +269,8 @@ class CorSer(PyLayers):
 
         if day == 11:
             if serie in [7,8]:
-                raise AttributeError('Serie '+str(serie) + \
-                                     ' has no hkb data and will not be loaded')
+                print 'Serie '+str(serie) + ' has no hkb data and will not be loaded'
+                exit
         if day ==12:
             if serie in [17,18,19,20]:
                 raise AttributeError('Serie '+str(serie) + \
@@ -664,7 +664,8 @@ bernard
                           's3off':0.}
                  })
 
-
+        # TCR:31 is the coordinator which was not captured.
+        # The position has been determined via optimization
         if ('TCR' in self.typ) or ('FULL' in self.typ):
             self.din.update({'TCR:32':{'p':mpts[9],
                                        'T':np.eye(3),
@@ -683,7 +684,12 @@ bernard
                            # 'T':array([[-0.44807362, -0.89399666,  0.],
                            #           [ 0.89399666, -0.44807362,  0.],
                            #           [ 0.,0.,  1.]]),
-                           's3off':0.1}
+                           's3off':0.1},
+                 'TCR:31':{'p':array([1.7719,-3.2655,1.74]),
+                           # 'T':array([[-0.44807362, -0.89399666,  0.],
+                           #           [ 0.89399666, -0.44807362,  0.],
+                           #           [ 0.,0.,  1.]]),
+                           's3off':0.0}
                  })
 
         if self.day == 12:
@@ -1173,10 +1179,12 @@ bernard
 
         # get all positions
         for ik,i in enumerate(dev_bid) :
-                try:
-                    Mpdev[:,ik,:] = self.devdf[self.devdf['id']==i][['x','y','z']].values.T
-                except:
-                    Mpdev[:,ik,:] = self.din[i]['p'][:,np.newaxis]
+            if i in self.din:
+                Mpdev[:,ik,:] = self.din[i]['p'][:,np.newaxis]
+            else:
+                pts = self.devdf[self.devdf['id']==i][['x','y','z']].values.T
+                if np.prod(pts.shape)!=0:
+                    Mpdev[:,ik,:] = pts
 
         # create A and B from links
         nA = np.array([prefix+ str(dnode[l[0]]) for l in links])
@@ -1674,16 +1682,18 @@ bernard
         ln = []
         uin = []
 
+        # infrastructure nodes
         if ('HK' in self.typ) or ('FULL' in self.typ):
             uin.extend(['HKB:1','HKB:2','HKB:3','HKB:4'])
         if ('TCR' in self.typ) or ('FULL' in self.typ):
-            uin.extend(['TCR:32','TCR:24','TCR:27','TCR:28'])
+            # TCR:31 is the coordinator (1.7719,-3.26)
+            uin.extend(['TCR:32','TCR:24','TCR:27','TCR:28','TCR:31'])
         if self.day == 12:
             if ('BS' in self.typ) or ('FULL' in self.typ):
                 uin.extend(['BS:74','BS:157'])
         ln = uin + bn
         pin = np.array([self.din[d]['p'] for d in uin])
-        pin2=np.empty((pnb.shape[0],pin.shape[0],pin.shape[1]))
+        pin2 = np.empty((pnb.shape[0],pin.shape[0],pin.shape[1]))
         pin2[:,:,:]=pin
         p = np.concatenate((pin2,pnb),axis=1)
         self.dist = np.sqrt(np.sum((p[:,:,np.newaxis,:]-p[:,np.newaxis,:,:])**2,axis=3))
@@ -1693,13 +1703,15 @@ bernard
     def _computedistdf(self):
         """Compute the distance dataframe from distance matrix
         """
-
+        
+        # HIKOB
         if ('HK' in self.typ) or ('FULL' in self.typ):
             devmap = {self.devmapper(k,'hkb')[0]:self.devmapper(k,'hkb')[2] for k in self.dHKB}
             udev = np.array([[self.dist_nodesmap.index(devmap[k.split('-')[0]]),self.dist_nodesmap.index(devmap[k.split('-')[1]])] for k in self.hkb.keys()])
             iudev =np.array([(self.dist_nodesmap[u[0]]+'-'+self.dist_nodesmap[u[1]]) for u in udev])
             df = pd.DataFrame(self.dist[:,udev[:,0],udev[:,1]],columns=iudev,index=self.tmocap)
 
+        # BE Spoon
         if ('BS' in self.typ) or ('FULL' in self.typ):
             devmap = {self.devmapper(k,'BS')[0]:self.devmapper(k,'BS')[2] for k in self.dBS}
             udev = np.array([[self.dist_nodesmap.index(devmap[k.split('-')[0]]),self.dist_nodesmap.index(devmap[k.split('-')[1]])] for k in self.bespo.keys()])
@@ -1710,7 +1722,10 @@ bernard
 
         if ('TCR' in self.typ) or ('FULL' in self.typ):
             devmap = {self.devmapper(k,'tcr')[0]:self.devmapper(k,'tcr')[2] for k in self.dTCR}
-            udev = np.array([[self.dist_nodesmap.index(devmap[k.split('-')[0]]),self.dist_nodesmap.index(devmap[k.split('-')[1]])] for k in self.tcr.keys() if not 'COORD' in k])
+            udev = np.array([[self.dist_nodesmap.index(devmap[k.split('-')[0]]),
+                              self.dist_nodesmap.index(devmap[k.split('-')[1]])]
+                             for k in self.tcr.keys() ])
+            #                 for k in self.tcr.keys() if not 'COORD' in k])
             iudev =np.array([(self.dist_nodesmap[u[0]]+'-'+self.dist_nodesmap[u[1]]) for u in udev])
             dft = pd.DataFrame(self.dist[:,udev[:,0],udev[:,1]],columns=iudev,index=self.tmocap)
             if ('FULL' in self.typ):
@@ -2543,66 +2558,69 @@ bernard
 
 
     def mtlbsave(self):
-        """ matlab save
-
-        Save the serie in matlab format
+        """ Matlab format save
 
         """
-        key = 'S'+str(day)+'_'+str(serie)
+        key = 'S'+str(self.day)+'_'+str(self.serie)
         filemat = key+'.mat'
-        if self.typ=='HKBS':
+        d = {}
+        d[key]={}
+        if ('HKB' in self.typ.upper()) or ('FULL' in self.typ.upper()):
+            d[key]['HKB']={}
             links = list(self.hkb.columns)
             inter,lks = self.compute_visibility(techno='HKB')
-            tdec = []
-            tratio = []
-            maxratio = 0
             for l in links:
                 ls   = l.split('-')
                 nl = ls[0]+'_'+ls[1]
-                d['key'][nl] = {}
+                d[key][nl] = {}
                 ix0 = np.where(lks==ls[0])[0]
                 ix1 = np.where(lks==ls[1])[0]
-                #print ix0,ix1,ls[0],ls[1]
                 Ssh = inter[ix0,ix1,:]
-                # get RSSI
-                Srssi = self.getlink(ls[0],ls[1],techno='HKB')
+                Srssi= self.getlink(ls[0],ls[1],techno='HKB')
                 # get distances between nodes
                 Sdist = self.getlinkd(ls[0],ls[1],techno='HKB')
-
-                z1 = 10*np.log10((1/dist1**2)).values
-                u  = np.where(Ssh[0]==1)[0]
-                z1[u] = z1[u]-15
-                z1 = z1-np.mean(z1)
-                z2 = Srssi.values
-                z2m = np.mean(z2[~np.isnan(z2)])
-                z2[np.isnan(z2)]=z2m
-                z2 = z2-np.mean(z2)
-                z1n = z1/np.sqrt(np.sum(z1*z1))
-                z2n = z2/np.sqrt(np.sum(z2*z2))
-                cn,dec,ratio = resync(z1n,z2n)
-                tdec.append(dec)
-
-                tratio.append(ratio)
-                if ratio>maxratio:
-                    maxratio = ratio
-                    linkmax = l
-
+                dsh = rssi2dist(Sdist,Ssh,15)
                 # rssi
-                d[key][nl]['rssi'] = Srssi.values
+                d[key]['HKB'][nl]['rssi'] = Srssi.values
                 # dsh
-                d[key][nl]['dsh'] = z1
+                d[key]['HKB'][nl]['dsh'] = dsh
                 #d['S6'][nl]['rssi_dec'] = np.roll(Srssi.values,-dec)
-                d[key][nl]['sh'] = Ssh
+                d[key]['HKB'][nl]['sh'] = Ssh
                 # time rssi
-                d[key][nl]['tr'] = np.array(Srssi.index)
+                d[key]['HKB'][nl]['tr'] = np.array(Srssi.index)
                 # distance
-                d[key][nl]['dist'] = Sdist.values
+                d[key]['HKB'][nl]['dist'] = Sdist.values
                 # time mocap
-                d[key][nl]['td'] = np.array(Sdist.index)
-                d[key][nl]['dec'] = dec
-                d[key][nl]['ratio'] = ratio
+                d[key]['HKB'][nl]['td'] = np.array(Sdist.index)
 
-            io.savemat(filemat,d)
+        if ('TCR' in self.typ.upper()) or ('FULL' in self.typ.upper()):
+            d[key]['TCR']={}
+            links = list(self.tcr.columns)
+            inter,lks = self.compute_visibility(techno='TCR')
+            for l in links:
+                ls   = l.split('-')
+                nl = ls[0]+'_'+ls[1]
+                d[key]['TCR'][nl] = {}
+                ix0 = np.where(lks==ls[0])[0]
+                ix1 = np.where(lks==ls[1])[0]
+                # intersection on the link
+                Ssh = inter[ix0,ix1,:]
+                Srange= self.getlink(ls[0],ls[1],techno='TCR')
+                # get distances between nodes
+                Sdist = self.getlinkd(ls[0],ls[1],techno='TCR')
+                # rssi
+                d[key]['TCR'][nl]['range'] = Srange.values
+                # dsh
+                #d['S6'][nl]['rssi_dec'] = np.roll(Srssi.values,-dec)
+                d[key]['TCR'][nl]['sh'] = Ssh
+                # time rssi
+                d[key]['TCR'][nl]['tr'] = np.array(Srange.index)
+                # distance
+                d[key]['TCR'][nl]['dist'] = Sdist.values
+                # time mocap
+                d[key]['TCR'][nl]['td'] = np.array(Sdist.index)
+
+        io.savemat(filemat,d)
 
 
 
@@ -4546,11 +4564,10 @@ bernard
 
         #if a is a bodyid (e.g. 'HKB:16') or a body part (e.g. AnkleRight)
         if isinstance(a,str):
-            
-            # case where body id is given as input 
+            # case where body id is given as input
             if ('HKB' in a) or ('TCR' in a ) or ('BS' in a ) :
 
-                ba = a 
+                ba = a
                 techno, ia = a.split(':')
                 ia=int(ia)
                 try:
@@ -4610,7 +4627,7 @@ bernard
                     if a in self.idHKB.keys() :
                         if techno == '':
                             techno = 'HKB'
-                        else : 
+                        else :
                             raise AttributeError('Please indicate the radio techno in argument : TCR, HKB, BS')
                 if hasattr(self,'idBS'):
                     if a in self.idBS.keys():
@@ -4918,6 +4935,38 @@ bernard
 
         return df
 
+def rssi2dist(dist,Ssh,offsetdB=15):
+    """
+    Parameters
+    ----------
+
+    dist
+    Ssh 
+    offsetdB : float
+
+    """
+    if type(dist)==pd.DataFrame:    
+        z1 = 10*np.log10((1/dist**2)).values
+    else:
+        z1 = 10*np.log10((1/dist**2))
+
+    u = np.where(Ssh[0]==1)[0]
+    z1[u] = z1[u]-offsetdB
+    z1 = z1-np.mean(z1)
+    return(z1)
+
+#    z2 = Srssi.values
+#    z2m = np.mean(z2[~np.isnan(z2)])
+#    z2[np.isnan(z2)]=z2m
+#    z2 = z2-np.mean(z2)
+#    z1n = z1/np.sqrt(np.sum(z1*z1))
+#    z2n = z2/np.sqrt(np.sum(z2*z2))
+#    cn,dec,ratio = resync(z1n,z2n)
+#    tdec.append(dec)
+
+#tratio.append(ratio)
+#if ratio > maxratio:
+#    maxratio =  ratio
 
     # def get_data(self,a,b):
 
