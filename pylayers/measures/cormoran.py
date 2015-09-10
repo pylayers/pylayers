@@ -2572,14 +2572,14 @@ bernard
             for l in links:
                 ls   = l.split('-')
                 nl = ls[0]+'_'+ls[1]
-                d[key][nl] = {}
+                d[key]['HKB'][nl] = {}
                 ix0 = np.where(lks==ls[0])[0]
                 ix1 = np.where(lks==ls[1])[0]
                 Ssh = inter[ix0,ix1,:]
                 Srssi= self.getlink(ls[0],ls[1],techno='HKB')
                 # get distances between nodes
                 Sdist = self.getlinkd(ls[0],ls[1],techno='HKB')
-                dsh = rssi2dist(Sdist,Ssh,15)
+                dsh = dist_sh2rssi(Sdist,Ssh,15)
                 # rssi
                 d[key]['HKB'][nl]['rssi'] = Srssi.values
                 # dsh
@@ -4935,7 +4935,7 @@ bernard
 
         return df
 
-def rssi2dist(dist,Ssh,offsetdB=15):
+def dist_sh2rssi(dist,Ssh,offsetdB=15):
     """
     Parameters
     ----------
@@ -4945,10 +4945,10 @@ def rssi2dist(dist,Ssh,offsetdB=15):
     offsetdB : float
 
     """
-    if type(dist)==pd.DataFrame:    
-        z1 = 10*np.log10((1/dist**2)).values
+    if type(dist)==pd.Series:
+        z1 = 10*np.log10((1./dist**2)).values
     else:
-        z1 = 10*np.log10((1/dist**2))
+        z1 = 10*np.log10((1./dist**2))
 
     u = np.where(Ssh[0]==1)[0]
     z1[u] = z1[u]-offsetdB

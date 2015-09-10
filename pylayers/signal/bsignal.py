@@ -507,7 +507,6 @@ class Bsignal(PyLayers):
             default 'b-'
 
         """
-        ndim = self.y.ndim
         if ndim > 1:
             nl = len(self.y)
             for k in range(nl):
@@ -860,7 +859,7 @@ class Bsignal(PyLayers):
             fig,ax = mulcplot(self.x[u],yx*conversion,**args)
         if ndim == 2:
             yx = self.y[idx[0],u]
-            #fig,ax = mulcplot(self.x[u],yx*conversion,**args)
+            fig,ax = mulcplot(self.x[u],yx*conversion,**args)
         if ndim == 1:
             fig,ax = mulcplot(self.x[u],self.y[u]*conversion,**args)
         #
