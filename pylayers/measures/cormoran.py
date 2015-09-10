@@ -2583,7 +2583,7 @@ bernard
                 # rssi
                 d[key]['HKB'][nl]['rssi'] = Srssi.values
                 # dsh
-                d[key]['HKB'][nl]['dsh'] = dsh.values
+                d[key]['HKB'][nl]['dsh'] = dsh
                 #d['S6'][nl]['rssi_dec'] = np.roll(Srssi.values,-dec)
                 d[key]['HKB'][nl]['sh'] = Ssh
                 # time rssi
@@ -4945,10 +4945,10 @@ def dist_sh2rssi(dist,Ssh,offsetdB=15):
     offsetdB : float
 
     """
-    if type(dist)==pd.DataFrame:    
-        z1 = 10*np.log10((1/dist**2)).values
+    if type(dist)==pd.Series:
+        z1 = 10*np.log10((1./dist**2)).values
     else:
-        z1 = 10*np.log10((1/dist**2))
+        z1 = 10*np.log10((1./dist**2))
 
     u = np.where(Ssh[0]==1)[0]
     z1[u] = z1[u]-offsetdB
