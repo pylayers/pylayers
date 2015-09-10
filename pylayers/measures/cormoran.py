@@ -291,12 +291,15 @@ class CorSer(PyLayers):
 
         self.typ=''
 
+        # HIKOB
         if serie in self.shkb:
             self._loadhkb(serie=serie,day=day,source=source)
 
+        # IR-UWB  TCR
         if serie in self.stcr:
             self._loadTCR(serie=serie,day=day)
 
+        # BeSpoon
         if serie in self.sbs:
             self._loadBS(serie=serie,day=day)
 
@@ -968,7 +971,7 @@ bernard
 
 
         gb = bespo.groupby(['Sensor'])
-        #get device id 
+        #get device id
         devid,idevid = np.unique(bespo['Sensor'],return_index=True)
         # get index of each group
         dgb={d:gb.get_group(d) for d in devid}
@@ -979,9 +982,9 @@ bernard
             npai = time2npa(dti)
             npai = npai - npai[0]
             dgb[i].index=pd.Index(npai)
-            lgb.append(pd.DataFrame(dgb[i]['d'].values,columns=[self.idBS[0]+'-'+self.idBS[i]],index=dgb[74].index))
-        df =lgb[0].join(lgb[1])
-        self.bespo=df
+            lgb.append(pd.DataFrame(dgb[i]['d'].values,columns=[self.idBS[0]+'-'+self.idBS[i]],index=dgb[i].index))
+        df = lgb[0].join(lgb[1])
+        self.bespo = df
 
 
         #self.s157 = self.bespo[self.bespo['Sensor']==157]
