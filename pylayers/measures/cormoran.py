@@ -2572,7 +2572,7 @@ bernard
             for l in links:
                 ls   = l.split('-')
                 nl = ls[0]+'_'+ls[1]
-                d[key][nl] = {}
+                d[key]['HKB'][nl] = {}
                 ix0 = np.where(lks==ls[0])[0]
                 ix1 = np.where(lks==ls[1])[0]
                 Ssh = inter[ix0,ix1,:]
@@ -2583,7 +2583,7 @@ bernard
                 # rssi
                 d[key]['HKB'][nl]['rssi'] = Srssi.values
                 # dsh
-                d[key]['HKB'][nl]['dsh'] = dsh
+                d[key]['HKB'][nl]['dsh'] = dsh.values
                 #d['S6'][nl]['rssi_dec'] = np.roll(Srssi.values,-dec)
                 d[key]['HKB'][nl]['sh'] = Ssh
                 # time rssi
