@@ -269,11 +269,10 @@ class CorSer(PyLayers):
 
         if day == 11:
             if serie in [7,8]:
-                print 'Serie '+str(serie) + ' has no hkb data and will not be loaded'
-                exit
+                raise 'Serie '+str(serie) + ' has no hkb data and will not be loaded'
         if day ==12:
             if serie in [17,18,19,20]:
-                raise AttributeError('Serie '+str(serie) + \
+                raise  AttributeError('Serie '+str(serie) + \
                                      ' has no hkb data and will not be loaded')
         #Measures
         if day==11:
@@ -321,7 +320,7 @@ class CorSer(PyLayers):
         self._loadcam()
 
         #BODY & interferers
-        self.subject = str(self.log['Subject'].values[0]).split(' ')
+        self.subject = str(self.log['Subject'].values[0].replace('jihad','Jihad')).split(' ')
         #filter typos in  self.subject
         self.subject = filter(lambda x : len(x)!=0,self.subject)
         if 'Jihad' in self.subject :
@@ -420,6 +419,11 @@ class CorSer(PyLayers):
             st = st+'TCR : '+self._fileTCR+'\n'
         except:
             pass
+
+        st = st + '----------------------\n\n'
+        for k in self.log.columns:
+            st = st + k + ' :' + str(self.log[k].values)+'\n'
+
         return(st)
 
 
@@ -449,7 +453,7 @@ class CorSer(PyLayers):
         """
 
         title = '{0:21} | {1:7} | {2:8} | {3:10} '.format('Name in Dataframe', 'Real Id', 'Body Id', 'Subject')
-        print title + '\n' + '='*len(title) 
+        print title + '\n' + '='*len(title)
         # access points HKB
         for d in self.din:
             if ('HK' in d) :
@@ -749,7 +753,6 @@ bernard
         assert day in [11,12],"wrong day in _loadbody"
         self.B={}
         color=['LightBlue','YellowGreen','PaleVioletRed','white','white','white','white','white','white','white']
-
         for us,subject in enumerate(self.subject):
             print "\nload ",subject, " body:",
             seriestr = str(self.serie).zfill(3)
@@ -766,7 +769,7 @@ bernard
 
             #
             # Load body cylinder description : "Subject.ini"
-            # Load wearable deviace description (contains antenna filename) :
+            # Load wearable device description (contains antenna filename) :
             #
             self.filebody = os.path.join(baw, subject + '.ini')
             self.filewear = os.path.join(baw,subject + '_'  +str(self.day)+'-06-2014_' + self.typ + '.ini')
@@ -775,6 +778,7 @@ bernard
                 multi_subject=True
             else:
                 multi_subject=False
+            
             self.B.update({subject:Body(_filebody=self.filebody,
                              _filemocap=self.filemocap,unit = 'mm', loop=False,
                              _filewear=self.filewear,
@@ -1694,8 +1698,9 @@ bernard
         ln = uin + bn
         pin = np.array([self.din[d]['p'] for d in uin])
         pin2 = np.empty((pnb.shape[0],pin.shape[0],pin.shape[1]))
-        pin2[:,:,:]=pin
+        pin2[:,:,:] = pin
         p = np.concatenate((pin2,pnb),axis=1)
+        self.points = p
         self.dist = np.sqrt(np.sum((p[:,:,np.newaxis,:]-p[:,np.newaxis,:,:])**2,axis=3))
         self.dist_nodesmap = ln
 
@@ -1703,7 +1708,7 @@ bernard
     def _computedistdf(self):
         """Compute the distance dataframe from distance matrix
         """
-        
+
         # HIKOB
         if ('HK' in self.typ) or ('FULL' in self.typ):
             devmap = {self.devmapper(k,'hkb')[0]:self.devmapper(k,'hkb')[2] for k in self.dHKB}
@@ -2023,7 +2028,7 @@ bernard
             if kwargs['pattern']:
                 for i in range(len(v)):
                     if not hasattr(self.din[v[i][0]]['ant'],'SqG'):
-                        self.din[v[i][0]]['ant'].Fsynth()
+                        self.din[v[i][0]]['ant'].eval()
                     self.din[v[i][0]]['ant']._show3(po=v[i][1]['p'],
                            T=self.din[v[i][0]]['T'],
                            ilog=False,
@@ -2560,11 +2565,23 @@ bernard
     def mtlbsave(self):
         """ Matlab format save
 
+
+        S{say}_{serie}
+            HKB.{linkname}.tr
+            HKB.{linkname}.rssi
+            HKB.{linkname}.td
+            HKB.{linkname}.dist
+            HKB.{linkname}.sh
+            HKB.{linkname}.dsh
+
         """
         key = 'S'+str(self.day)+'_'+str(self.serie)
         filemat = key+'.mat'
         d = {}
         d[key]={}
+        d[key]['node_name']=self.dist_nodesmap
+        d[key]['node_place']=map(lambda x : self.devmapper(x)[0],self.dist_nodesmap)
+        d[key]['node_coord']=self.points
         if ('HKB' in self.typ.upper()) or ('FULL' in self.typ.upper()):
             d[key]['HKB']={}
             links = list(self.hkb.columns)
@@ -2572,6 +2589,7 @@ bernard
             for l in links:
                 ls   = l.split('-')
                 nl = ls[0]+'_'+ls[1]
+                nl=nl.replace('Jihad','J').replace('Nicolas','N').replace('Eric','E')
                 d[key]['HKB'][nl] = {}
                 ix0 = np.where(lks==ls[0])[0]
                 ix1 = np.where(lks==ls[1])[0]
@@ -2599,7 +2617,9 @@ bernard
             inter,lks = self.compute_visibility(techno='TCR')
             for l in links:
                 ls   = l.split('-')
+                # to shorten matlab keys surname are replaced by first letter
                 nl = ls[0]+'_'+ls[1]
+                nl=nl.replace('Jihad','J').replace('Nicolas','N').replace('Eric','E')
                 d[key]['TCR'][nl] = {}
                 ix0 = np.where(lks==ls[0])[0]
                 ix1 = np.where(lks==ls[1])[0]
@@ -2620,6 +2640,7 @@ bernard
                 # time mocap
                 d[key]['TCR'][nl]['td'] = np.array(Sdist.index)
 
+        self.matlab = d
         io.savemat(filemat,d)
 
 
@@ -3776,7 +3797,6 @@ bernard
         phi : float
             pi/2
         ap  : boolean
-            
         """
 
         defaults = { 'fig':[],
@@ -3815,7 +3835,7 @@ bernard
 
         if subjecta != '':
             self.B[subjecta].settopos(t=kwargs['t'])
-            self.B[subjecta].dev[ba]['ant'].Fsynth()
+            self.B[subjecta].dev[ba]['ant'].eval()
             xa,ya,z,sa,v = self.B[subjecta].dev[ba]['ant']._computemesh(po=pa,T=self.B[subjecta].acs[ba],minr=0.01,maxr=0.1,ilog=False)
             p2 = np.where(self.B[subjecta].dev[ba]['ant'].phi<=kwargs['phi'])[0][-1]
 
@@ -3823,7 +3843,7 @@ bernard
             ax.plot(xa[p2,:],ya[p2,:])
 
         else:
-            self.din[ba]['ant'].Fsynth()
+            self.din[ba]['ant'].eval()
             xa,ya,z,sa,v = self.din[ba]['ant']._computemesh(po=self.din[ba]['p'],T=self.din[ba]['T'],minr=0.01,maxr=0.1,ilog=False)
             p2 = np.where(self.din[ba]['ant'].phi<=kwargs['phi'])[0][-1]
             ax.plot(xa[:,p2],ya[:,p2])
@@ -3840,7 +3860,7 @@ bernard
             link index
         b : int
             link index
-        technoa : string 
+        technoa : string
             default 'HKB'|'TCR'|'BS'
         technob
             default 'HKB'|'TCR'|'BS'
@@ -3933,7 +3953,6 @@ bernard
         # #ax.add_patch(ci1015)
         # #its = self.B[subjecta].intersectBody(A[iframe,:],B[iframe,:],topos=False,frameId=iframe)
         # #x.set_title('frameId :'+str(iframe)+' '+str(its.T))
-        
 
 
 
@@ -4376,8 +4395,6 @@ bernard
 
         """
 
-
-
         pa = self.getdevp(a,technoa,t,fId)
         pb = self.getdevp(b,technob,t,fId)
 
@@ -4485,7 +4502,7 @@ bernard
 
         optional :
 
-        t : float | list 
+        t : float | list
             given time |[time_start,time_stop]
 
 
@@ -4524,7 +4541,7 @@ bernard
 
 
         pa = self.devdf[(self.devdf.index >= tstart) &
-                        (self.devdf.index <= tstop) & 
+                        (self.devdf.index <= tstop) &
                         device_select][['x','y','z']]
 
         return pa

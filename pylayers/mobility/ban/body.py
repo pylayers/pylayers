@@ -145,12 +145,13 @@ class Body(PyLayers):
         #         raise AttributeError('Please set the unit of the mocap file mm|cm|m')
         #     self.loadC3D(filename=_filemocap,unit=unit)
         #
-        #  When the motion capture is on the correct glabal coordinate system
+        #  When the motion capture is on the correct global coordinate system
         #  as for example for data coming from the CORMORAN measurement
         #  campaign it is not required to center the body.
-        #  centering makes sense only when using the topos projection
+        #  centering makes sense only when using the topos projection.
         #
         #
+
         self.cylfromc3d(centered=centered)
 
         try:
@@ -582,6 +583,7 @@ class Body(PyLayers):
         ----------
 
         centered : boolean
+
         """
         #
         # motion capture data
@@ -589,13 +591,14 @@ class Body(PyLayers):
         # self.d : 3 x npoints x nframes
         #
 
-        # number of points is determine by the ini file
+        # number of points is determined by the ini file
         self.npoints = len(self.nodes_Id)
 
         # self.d = np.ndarray(shape=(3, self.npoints, self.nframes))
 
         #if self.d[2,:,:].max()>50:
         # extract only known nodes in nodes_Id
+
         self.d = np.zeros((3, self.npoints, self.nframes))
         for i in self.nodes_Id:
             # node name = 4 characters
