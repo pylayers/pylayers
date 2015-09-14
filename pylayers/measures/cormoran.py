@@ -3394,9 +3394,9 @@ bernard
         inverse :False,
             display 1/distance  instead of distance
         log : boolean
-            display log fo distance intead of distance
+            display log for distance intead of distance
         gammma':1.,
-            mulitplication factor for log : gamma*log(distance) 
+            mulitplication factor for log : gamma*log(distance)
             this can be used to fit RSS
         mode : string
             'HKB' | 'TCR' | 'FULL'
@@ -3443,11 +3443,11 @@ bernard
 
 
 
-        t0 =kwargs.pop('t0')
-        t1 =kwargs.pop('t1')
-        if t1 ==-1:
+        #t0 =kwargs.pop('t0')
+        #t1 =kwargs.pop('t1')
+        #if t1 ==-1:
             #t1=self.thkb[-1]
-            t1=self.ttcr[-1]
+        #    t1=self.ttcr[-1]
 
 
         label = a+'-'+b
@@ -3496,7 +3496,11 @@ bernard
                 ibhk = b
                 b = self.idHKB[b]
 
-            var = self.getlink(iahk,ibhk,'HKB').values
+            var = self.getlink(iahk,ibhk,'HKB')
+            #var = U.values
+            #time = U.index
+            #pdb.set_trace()
+
             if inverse:
                 var = 1./(var)
                 ax.set_ylabel(u'$m^{-2}$',fontsize=fontsize)
@@ -3511,8 +3515,8 @@ bernard
                     var = gamma*10*np.log10(var)+gamma
                     ax.set_ylabel(u'$10log_{10}m^{-2}$',fontsize=fontsize)
 
-
-            ax.plot(self.B[subject].time,var,label=label,**kwargs)
+            #ax.plot(self.B[subject].time,var,label=label,**kwargs)
+            var.plot()
         #
         # TCR |Full
         #
@@ -3541,7 +3545,8 @@ bernard
             #        var = gamma*10*np.log10(var)
 
             #pdb.set_trace()
-            ax.plot(self.B[subject].time,var,**kwargs)
+            #ax.plot(self.B[subject].time,var,**kwargs)
+            ax.plot(self.B[subject].ttcr,var,**kwargs)
 
 
         if visibility:
@@ -3568,7 +3573,7 @@ bernard
 
 
     def pltlk(self,a,b,**kwargs):
-        """ plt links
+        """ plot links
 
         Parameters
         ----------
@@ -3968,7 +3973,7 @@ bernard
 
         """
 
-        A,B = self.getlinkp(a,b)
+        A,B = self.getlinkp(a,b,technoa=technoa,technob=technob)
         A=A.values
         B=B.values
         aa,ia,ba,subjecta,technoa= self.devmapper(a,technoa)
@@ -4066,7 +4071,7 @@ bernard
         """ create entries for plu.rectplot
         """
 
-        visi = self.visidev(a,b)
+        visi = self.visidev(a,b,technoa=technoa,technob=technob)
         tv = visi.index.values
         vv = visi.values.astype(int)
         if (not(vv.all()) and vv.any()):
