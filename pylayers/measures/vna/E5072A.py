@@ -308,8 +308,8 @@ if __name__=='__main__':
     #vna.write("SENS:AVER:ON")
     vna.select(param='S21',chan=1)
     vna.setf(startGHz=1.8,stopGHz=2.2)
-    lav = [1,999]
-    lsif = ['1000','300000']
+    lav = [1,999] #average
+    lsif = ['1000','300000'] #IF band
     lS = []
     lt = []
     Npoints = 201

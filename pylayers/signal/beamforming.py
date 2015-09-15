@@ -13,7 +13,7 @@ def weight(N,**kwags):
             kwargs[k]=defaluts[k]
 
     if typ=='uniform':
-        w 
+        w
 def rejection(w,theta,fGHz=10,d=[],thresh=0.1):
     """
     Calculate rejection for a given arbitrary array
@@ -27,36 +27,36 @@ def rejection(w,theta,fGHz=10,d=[],thresh=0.1):
     d     : interelement distance (default lambda/2)
     thresh : threshold for null first derivative evaluation
 
-    Notes 
+    Notes
     -----
 
 
     In order to expressed criteria on rejection it is important to give a precise mathematical definition
     of what exactly rejection is.
-    Let :math:`\mathbf{w}^T` be the 1xN vector of antenna array weights. 
-    The complex array factor is given by : 
+    Let :math:`\mathbf{w}^T` be the 1xN vector of antenna array weights.
+    The complex array factor is given by :
 
-	.. math:: 
+. math::
 
-		\mathbf{F}(\theta)= \mathbf{w}^{\dagger} . \mathbf{S}(\theta) 
+\mathbf{F}(\theta)= \mathbf{w}^{\dagger} . \mathbf{S}(\theta)
 
-	Let defines the  :math:`N\times N` matrix
+Let defines the  :math:`N\times N` matrix
 
-	.. math:: 
+.. math::
 
-		\mathbf{W}=\mathbf{w}^{\dagger}\mathbf{w}
+\mathbf{W}=\mathbf{w}^{\dagger}\mathbf{w}
 
-	..math::  
+..math::
 
-		|F(\theta)|^2 = \textrm{diag}(\mathbf{F}^{\dagger}(\theta)\mathbf{F})
-		|F(\theta)|^2 = \textrm{diag}( \mathbf{S}^{\dagger} \mathbf{W} \mathbf{S} )
-		\frac{d}{d\theta}|F(\theta)|^2 = \textrm{diag}( \mathbf{U}^{\dagger} \mathbf{W}  \mathbf{S} )+\textrm{diag}( \mathbf{S}^{\dagger} \mathbf{W}  \mathbf{U} )$$
-		\frac{d^2}{d\theta^2}|F(\theta)|^2 =\textrm{diag}( \mathbf{R}^{\dagger} \mathbf{W}  \mathbf{S} )+ 
+|F(\theta)|^2 = \textrm{diag}(\mathbf{F}^{\dagger}(\theta)\mathbf{F})
+|F(\theta)|^2 = \textrm{diag}( \mathbf{S}^{\dagger} \mathbf{W} \mathbf{S} )
+\frac{d}{d\theta}|F(\theta)|^2 = \textrm{diag}( \mathbf{U}^{\dagger} \mathbf{W}  \mathbf{S} )+\textrm{diag}( \mathbf{S}^{\dagger} \mathbf{W}  \mathbf{U} )$$
+\frac{d^2}{d\theta^2}|F(\theta)|^2 =\textrm{diag}( \mathbf{R}^{\dagger} \mathbf{W}  \mathbf{S} )+ 
                                        \textrm{diag}( \mathbf{U}^{\dagger} \mathbf{W}  \mathbf{U} )+
                                        \textrm{diag}( \mathbf{U}^{\dagger} \mathbf{W}  \mathbf{U})+
                                        \textrm{diag}( \mathbf{S}^{\dagger} \mathbf{W}  \mathbf{R} )
-		
-		 \frac{d^2}{d\theta^2}|F(\theta)|^2 =\textrm{diag}( \mathbf{R}^{\dagger} \mathbf{W}  \mathbf{S} )+ 
+
+ \frac{d^2}{d\theta^2}|F(\theta)|^2 =\textrm{diag}( \mathbf{R}^{\dagger} \mathbf{W}  \mathbf{S} )+ 
                                        2\textrm{diag}( \mathbf{U}^{\dagger} \mathbf{W}  \mathbf{U} )+
                                        \textrm{diag}( \mathbf{S}^{\dagger} \mathbf{W}  \mathbf{R} )
     """
@@ -66,7 +66,7 @@ def rejection(w,theta,fGHz=10,d=[],thresh=0.1):
     k     = 2*pi/lam
     if d ==[]:
         d     = lam/2
-        
+
     W  = outer(conj(w.T),w)
     u  = 1j*k*d*outer(n,sin(theta))
     v  = 1j*k*d*outer(n,cos(theta))

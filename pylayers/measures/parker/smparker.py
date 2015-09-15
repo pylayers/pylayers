@@ -6,6 +6,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+def gettty():
+    import  os
+    line = os.popen('dmesg | grep tty | tail -1').read() .replace('\n','')
+    tty = line.split('ttyUSB')
+    num = tty[1]
+    port = '/dev/ttyUSB'+num
+    return port 
 
 class Profile(object):
     Accmax = 200
@@ -213,7 +220,12 @@ class Axes(object):
     ddrvflt[8]='Output fault'
 
     #def __init__(self,_id,name,ser,scale=12800,typ='t'):
-    def __init__(self,_id,name,ser,scale,typ):
+    def __init__(self,
+                 _id=1,
+                 name='x',
+                 ser=Serial(port=gettty(),baudrate=9600,timeout=0.05),
+                 scale=12800,
+                 typ ='t'):
         """
         _id  : axes id
         name : axes name
@@ -321,7 +333,7 @@ class Axes(object):
         #st = self.ser.readlines()
         #return(st)
 
-    def com(self,command='R(SN)',verbose=False):
+    def com(self,command='R(SN)',verbose=True):
         """ send command to serial port
 
         Parameters
@@ -332,13 +344,14 @@ class Axes(object):
         verbose :
 
         """
-        
+
         #cst = str(self._id) + command + '\r\n'
         cst = str(self._id) + command + '\r\n'
-        if verbose:
-            print cst
         self.ser.write(cst)
         st = self.ser.readlines()
+        if verbose:
+            print cst
+            print st
         return(st)
 
 
@@ -408,9 +421,10 @@ class Axes(object):
         Examples
         --------
 
-        >>>s.a[1].home() or A.home() #get informations about the status of HOME
-        >>>s.a[1].home('set',vel=15,acc=200) or A.home('set',vel=15,acc=200) #set vel & acc
-        >>>s.a[1].home('go') or A.home('go') #back Home  (material)           
+         >>> s.a[1].home() or A.home() #get informations about the status of HOME
+         >>> s.a[1].home('set',vel=15,acc=200) or A.home('set',vel=15,acc=200) #set vel & acc
+         >>>s.a[1].home('go') or A.home('go') #back Home  (material)           
+
         """
 
         defaults = {'mode':0,
@@ -526,9 +540,10 @@ class Axes(object):
 
         Examples
         --------
-        
+
         >>>A = Axes(1,'x',ser='/dev/ttyUSB0')
         >>>A.add_profile()
+
         """
         defaults = {'num': 0,
                     'aa': 200,
@@ -564,7 +579,7 @@ class Axes(object):
     def set_profile(self,num):
         """
         """
-<<<<<<< HEAD
+
         assert(num<=len(self.lprofile)),"profile number not defined" 
         #self.com(str(self._id)+'USE'+str(num))
         self.com('USE'+str(num))
@@ -580,14 +595,15 @@ class Axes(object):
 
         Examples
         --------
-        >>>A.del_profile(num_profil)
-        
+
+        >>> A.del_profile(num_profil)
+
         """
         self.lprofile.pop(index-1)
-=======
+
         assert(num<=len(self.lprofile)),"profile number not defined"
         self.com(str(self._id)+'USE'+str(num))
->>>>>>> f64cbc42b0d27abd496e3bdda020fecc016e9a8b
+
 
     def reset(self):
         """ reset axis
@@ -625,12 +641,21 @@ class Axes(object):
         pass
 
     def reg(self,typ='ST'):
-        """ read boolean quantities in registers  : ST,UF,DF
+        """ read boolean quantities in registers  : ST, UF, DF
+
+        ST : Status
+        UF : User Faults
+        DF : Drive Faults
 
         Examples
         --------
 
-        >>>A.reg('ST') #scans over axis 1 by given status
+        >>> # To check and parse the axis status
+        >>> from pylayers.measures.parker import smparker
+        >>> port = getty()
+        >>> A = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
+        >>> A.reg('ST')
+        >>> #scans over axis 1 by given status
 
         """
 
@@ -788,11 +813,16 @@ class Scanner(object):
         #array = ensemble de points
         #This fonction contains a cloud of points + noton of scheduling 
 
+
 if __name__=="__main__":
-    pass
+    port = gettty() 
+    X = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
+    Y = Axes(2,'y',typ='t',scale=22800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
+    X.com()
+    # pass
     #s = Scanner('/dev/ttyUSB0')
     #s = Scanner('/dev/ttyUSB2')
-    s = Scanner('/dev/ttyUSB1')
+    #s = Scanner('/dev/ttyUSB1')
     #sm.fromfile('prog1')
     #sm.fromfile('AY')
     #Sc[1].com('ON')
