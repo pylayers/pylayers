@@ -328,6 +328,7 @@ class CorSer(PyLayers):
             self.subject[uj]='Jihan'
 
         if serie in self.mocap :
+            # load bodies from mocap file
             self._loadbody(serie=serie,day=day)
             self._distancematrix()
             self._computedevpdf()
@@ -741,7 +742,7 @@ bernard
 
 
     def _loadbody(self,day=11,serie=''):
-        """ load motion capture file
+        """ load body from motion capture file
 
         Parameters
         ----------
@@ -778,7 +779,7 @@ bernard
                 multi_subject=True
             else:
                 multi_subject=False
-            
+
             self.B.update({subject:Body(_filebody=self.filebody,
                              _filemocap=self.filemocap,unit = 'mm', loop=False,
                              _filewear=self.filewear,
@@ -794,16 +795,16 @@ bernard
                      'Meriem_Cylindre:']
             intertmp=[]
             for ui,i in enumerate(self.interf):
-                try:
-                    print "load ",i, " interfering body:",
-
-                    self.B.update({i:Cylinder(name=i,
-                                              _filemocap=self.filemocap,
-                                              unit = 'mm',
-                                              color = color[ui])})
-                    intertmp.append(i)
-                except:
-                    print "Warning ! load ",i, " FAIL !"
+                #try:
+                print "load ",i, " interfering body:",
+                _filemocap = pyu.getshort(self.filemocap)
+                self.B.update({i:Cylinder(name=i,
+                                          _filemocap=_filemocap,
+                                          unit = 'mm',
+                                          color = color[ui])})
+                intertmp.append(i)
+                #except:
+                #    print "Warning ! load ",i, " FAIL !"
             self.interf=intertmp
         else :
             self.interf=[]

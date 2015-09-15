@@ -16,7 +16,7 @@ class LPRS(object):
 
     Tx session
 
-    >>> from pylayers.measures.easyradio import *
+    >>> from pylayers.measures.easyRadio import *
     >>> Tx=LPRS(0)
     >>> Tx.master()
 

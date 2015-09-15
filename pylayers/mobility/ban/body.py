@@ -645,8 +645,8 @@ class Body(PyLayers):
     def network(self):
         """ evaluate network topology and dynamics
 
-        This function evaluates distance , velocity and acceleration of the
-        radio network
+        This function evaluates distance, velocity and acceleration of the
+        radio network nodes
 
         self.D2 : distances between radio nodes
         self.V2 : velocities between radio nodes
@@ -2878,16 +2878,17 @@ if __name__ == '__main__':
 
 
 class Cylinder(object):
-    """
+    """ Class for handling interfering bodies in CORMORAN measurement data
+        navigation series day 12/06/2014
     """
 
     def __init__(self,name = 'Meriem_Cylindre:',
-                _filemocap='/RAW/12-06-2014/MOCAP/Nav_serie_006.c3d',
+                _filemocap='Nav_serie_006.c3d',
                 unit='mm',
                 color='white'):
         self.name = name
-        filemocap = os.environ('CORMORAN')+ _filemocap
-        self.loadC3D(_filemocap,unit=unit)
+        filemocap = os.environ['CORMORAN']+ '/RAW/12-06-2014/MOCAP/'+ _filemocap
+        self.loadC3D(filemocap,unit=unit)
         self.init_traj()
         self.color=color
         self.settopos(t=0)
@@ -2901,12 +2902,12 @@ class Cylinder(object):
             st = st+ '\nI am nowhere yet\n\n'
         else :
             st = st + '\n@ t=' +str(self.time[self.toposFrameId]) +' (frameID='+ str(self.toposFrameId) +'),\n'+'My centroid position is ' +str(self.pg[:2,self.toposFrameId])+"\n\n"
-        
+
         st = st + '\n'
 
         return(st)
 
-    def loadC3D(self, filename='07_01.c3d', nframes=-1 ,unit='cm'):
+    def loadC3D(self, filename='Nav_serie_006.c3d', nframes=-1 ,unit='cm'):
         """ load nframes of motion capture C3D file
 
         Parameters
@@ -2934,7 +2935,7 @@ class Cylinder(object):
             raise AttributeError(self.name +' is not in the MOCAP file :' +filename)
 
 
-            #in case of multiple body into the mocap file, 
+            #in case of multiple body into the mocap file,
             #mocap is restricted to nodes belonging to a single body.
             #the body is automatically selected by using the self.name
         #
@@ -2942,7 +2943,7 @@ class Cylinder(object):
         self._f =self._f[:,up,:]
         self._s=[s for s in self._s if self.name in s ]
         self._p=[p for p in self._p if self.name in p ]
-            
+
 
 
 
@@ -2972,7 +2973,9 @@ class Cylinder(object):
 
 
         self._f=self._f*self._unit
+        # d node data
         self.d = self._f[0:self.nframes,:,:].T
+        # pg : center of gravity
         self.pg = np.mean(self.d,axis=1)
         self.pg[2,:]=0
         self.radius = np.sqrt(np.sum((self.d[:,0,:]-self.d[:,1,:])**2,axis=0))/2.
@@ -3022,7 +3025,7 @@ class Cylinder(object):
                     'tube_sides' : 6,
                     'opacity':1,
                     'vecdir':True
-                    }       
+                    }
 
         for k in defaults:
             if k not in kwargs:
@@ -3043,11 +3046,10 @@ class Cylinder(object):
         colhex = cold[self.color]
         cyl_color = tuple(pyu.rgb(colhex)/255.)
 
-       
         X=np.vstack((self.top,self.bottom))
-       
+
         connections=(0,1)
-    
+
         s = np.hstack((self.toposradius,self.toposradius))
         #pts = mlab.points3d(X[0,:],X[1,:], X[2,:], 5*s ,
                                              # scale_factor=0.1, resolution=10)
