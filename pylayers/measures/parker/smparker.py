@@ -5,6 +5,7 @@ import pdb
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from pylayers.util.project import *
 
 def gettty():
     import  os
@@ -14,7 +15,7 @@ def gettty():
     port = '/dev/ttyUSB'+num
     return port 
 
-class Profile(object):
+class Profile(PyLayers):
     Accmax = 200
     Vmax = 10
     Dmax = 1500
@@ -141,7 +142,7 @@ class Profile(object):
         plt.legend()
         plt.show()
 
-class Axes(object):
+class Axes(PyLayers):
     svar  = {'BU':'Buffer usage',
             'CQ':'Command queuing',
             'DF':'Drive fault status',
@@ -271,6 +272,7 @@ class Axes(object):
         self.scale = scale
         self.typ = typ
         self.lprofile=[]
+        self.add_profile()
 
 
     def __repr__(self):
@@ -279,6 +281,13 @@ class Axes(object):
         st = st + 'axes_id : ' + str(self._id) + '\n'
         st = st + 'scale : ' + str(self.scale) + '\n'
         st = st + 'typ : ' + str(self.typ) + '\n'
+        st2 = self.reg()
+        st =  st +st2
+        for k,p in enumerate(self.lprofile):
+            st = st + '-----------------\n'
+            st = st + ' Profile '+str(k+1)+'\n'
+            st = st + '-----------------\n'
+            st  = st +  p.__repr__()
         return(st)
 
     def show(self):
@@ -302,7 +311,7 @@ class Axes(object):
         Examples
         --------
   
-        >>>A.getvar('PA') #Get Position absolute 
+        >>> A.getvar('PA') #Get Position absolute 
 
         """
         if lvar == []:
@@ -333,7 +342,7 @@ class Axes(object):
         #st = self.ser.readlines()
         #return(st)
 
-    def com(self,command='R(SN)',verbose=True):
+    def com(self,command='R(SN)',verbose=False):
         """ send command to serial port
 
         Parameters
@@ -342,6 +351,11 @@ class Axes(object):
         prefix : str command prefix (command='R(SN)')
         arg :  command argument
         verbose :
+
+        Examples
+        --------
+
+        >>>  from 
 
         """
 
@@ -423,7 +437,7 @@ class Axes(object):
 
          >>> s.a[1].home() or A.home() #get informations about the status of HOME
          >>> s.a[1].home('set',vel=15,acc=200) or A.home('set',vel=15,acc=200) #set vel & acc
-         >>>s.a[1].home('go') or A.home('go') #back Home  (material)           
+         >>> s.a[1].home('go') or A.home('go') #back Home  (material)
 
         """
 
@@ -468,7 +482,7 @@ class Axes(object):
             else:
                 print 'velocity : -',eval(ans[3].split('V-')[1]), "rps"
 
-            print 'acceleraton : ',eval(ans[4].split('A')[1]), "rps²"
+            print 'acceleration : ',eval(ans[4].split('A')[1]), "rps²"
 
             if '0' in ans[5]:
                 print 'Mode 0: Motor in the active window of the switch(default)'
@@ -541,8 +555,6 @@ class Axes(object):
         Examples
         --------
 
-        >>>A = Axes(1,'x',ser='/dev/ttyUSB0')
-        >>>A.add_profile()
 
         """
         defaults = {'num': 0,
@@ -630,7 +642,9 @@ class Axes(object):
         Examples
         --------
 
-        s.a[1].mvpro(1,1)  # axis 1 , profile 1
+        >>> A = Axes()
+        >>> A.mvpro(1)
+
         """
 
         com = 'USE('+str(id_pro)+')'
@@ -664,21 +678,23 @@ class Axes(object):
         buf = buf[1]
         buf = buf.replace('*','').replace('\r\n','').split('_')
 
+        st =  ''
         for k in range(8):
             for l in range(4):
                 val = eval(buf[k][l])
                 if typ=='ST':
                     self.status[k*4+l] = val
                     if val:
-                        print Axes.dstatus[k*4+l+1]
+                        st = st + Axes.dstatus[k*4+l+1]+'\n'
                 if typ=='UF':
                     self.usrflt[k*4+l] = val
                     if val:
-                        print Axes.dusrflt[k*4+l+1]
+                        st = st +  Axes.dusrflt[k*4+l+1]+'\n'
                 if typ=='DF':
                     self.drvflt[k*4+l] = val
                     if val:
-                        print Axes.ddrvflt[k*4+l+1]
+                        st = st + Axes.ddrvflt[k*4+l+1]+'\n'
+        return(st)
 
     def mv(self,var=0):
         """ move axes in translation or rotation
@@ -691,8 +707,8 @@ class Axes(object):
         Examples
         --------
 
-        >>>A.mv(10) # moves over 10cm on axis 1
-        >>>A.mv(45) # moves over 45° on axis 3
+        >>> A.mv(10) # moves over 10cm on axis 1
+        >>> A.mv(45) # moves over 45° on axis 3
 
         """
         #assert(self.typ=='t'),'Axes is not a linear axes'
@@ -732,7 +748,7 @@ class Axes(object):
         #self.ser.close()
         return(st)
 
-class Scanner(object):
+class Scanner(PyLayers):
     def __init__(self,port):
         """ This class handles scenarios
 
@@ -815,9 +831,10 @@ class Scanner(object):
 
 
 if __name__=="__main__":
-    port = gettty() 
+    port = gettty()
     X = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
     Y = Axes(2,'y',typ='t',scale=22800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
+    R = Axes(3,'r',typ='r',scale=2111.111111111111,ser=Serial(port=port,baudrate=9600,timeout=0.05))
     X.com()
     # pass
     #s = Scanner('/dev/ttyUSB0')
