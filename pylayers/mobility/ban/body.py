@@ -583,6 +583,7 @@ class Body(PyLayers):
         ----------
 
         centered : boolean
+            False
 
         """
         #
@@ -600,10 +601,18 @@ class Body(PyLayers):
         # extract only known nodes in nodes_Id
 
         self.d = np.zeros((3, self.npoints, self.nframes))
+        #print self._p
         for i in self.nodes_Id:
             # node name = 4 characters
             if not isinstance(self.nodes_Id[i],list) :
-                idx = self._p.index(self._mocap_prefix + self.nodes_Id[i])
+                try:
+                    idx = self._p.index(self._mocap_prefix + self.nodes_Id[i])
+                except:
+                    # fixing naming in serie 15 add '_1'
+                    try:
+                        idx = self._p.index(self._mocap_prefix + self.nodes_Id[i]+'_1')
+                    except:
+                        idx = self._p.index(self._mocap_prefix + self.nodes_Id[i]+'_2')
                 self.d[:,i,:] = self._f[0:self.nframes, idx, :].T
             # perform center of mass of the nodes
 
@@ -613,8 +622,14 @@ class Body(PyLayers):
                 for k in range(lnid):
 
                     nodename = self.nodes_Id[i][k].replace(' ','')
-
-                    idx = self._p.index(self._mocap_prefix + nodename)
+                    try:
+                        idx = self._p.index(self._mocap_prefix + nodename)
+                    except:
+                        try:
+                        # fixing naming in serie 15 add '_1'
+                            idx = self._p.index(self._mocap_prefix + nodename+'_1')
+                        except:
+                            idx = self._p.index(self._mocap_prefix + nodename+'_2')
                     try:
                         tmp = tmp +self._f[0:self.nframes, idx, :].T
                     except:
@@ -825,7 +840,7 @@ class Body(PyLayers):
         return ldf
 
     def init_traj(self):
-        """ create trajectory object from given trajectory or mocap 
+        """ create trajectory object from given trajectory or mocap
         """
 
         # speed vector of the gravity centernp.

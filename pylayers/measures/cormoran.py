@@ -286,7 +286,9 @@ class CorSer(PyLayers):
             self.shkb = [9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
             self.sbs  = [9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
             self.mocap =[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
-            self.mocapinterf = [5,6,7,8,13,14,15,16,21,22,23,24,]
+            #self.mocapinterf = [5,6,7,8,13,14,15,16,21,22,23,24,]
+            # Warning : Serie 5 has not the cylinder
+            self.mocapinterf = [6,7,8,13,14,15,16,21,22,23,24,]
 
         self.typ=''
 
@@ -788,7 +790,13 @@ bernard
                              color=color[us])})
 
         if self.serie in self.mocapinterf:
-            self.interf = ['Anis_Cylindre:',
+            if self.serie==13:
+                self.interf = ['Anis_Cylindre:',
+                         'Benoit_Cylindre:',
+                         'Claude_Cylindre:',
+                         'Meriem_Cylindre:']
+            else:
+                self.interf = ['Anis_Cylindre:',
                      'Benoit_Cylindre:',
                      'Bernard_Cylindre:',
                      'Claude_Cylindre:',
@@ -2567,13 +2575,23 @@ bernard
         """ Matlab format save
 
 
-        S{say}_{serie}
+        S{day}_{serie}
+            node_name
+            node_place
+            node_coord
+
             HKB.{linkname}.tr
             HKB.{linkname}.rssi
             HKB.{linkname}.td
             HKB.{linkname}.dist
             HKB.{linkname}.sh
             HKB.{linkname}.dsh
+
+            TCR.{linkname}.tr
+            HKB.{linkname}.range
+            HKB.{linkname}.td
+            HKB.{linkname}.dist
+            HKB.{linkname}.sh
 
         """
         key = 'S'+str(self.day)+'_'+str(self.serie)
@@ -2583,10 +2601,16 @@ bernard
         d[key]['node_name']=self.dist_nodesmap
         d[key]['node_place']=map(lambda x : self.devmapper(x)[0],self.dist_nodesmap)
         d[key]['node_coord']=self.points
+
+        for subject in self.interf:
+            sub = subject.replace(':','')
+            d[key][sub]=np.mean(self.B[subject].d,axis=1)
+
         if ('HKB' in self.typ.upper()) or ('FULL' in self.typ.upper()):
             d[key]['HKB']={}
             links = list(self.hkb.columns)
             inter,lks = self.compute_visibility(techno='HKB')
+
             for l in links:
                 ls   = l.split('-')
                 nl = ls[0]+'_'+ls[1]
@@ -2606,11 +2630,13 @@ bernard
                 #d['S6'][nl]['rssi_dec'] = np.roll(Srssi.values,-dec)
                 d[key]['HKB'][nl]['sh'] = Ssh
                 # time rssi
-                d[key]['HKB'][nl]['tr'] = np.array(Srssi.index)
+                #d[key]['HKB'][nl]['trh'] = np.array(Srssi.index)
+                d[key]['trh'] = np.array(Srssi.index)
                 # distance
                 d[key]['HKB'][nl]['dist'] = Sdist.values
                 # time mocap
-                d[key]['HKB'][nl]['td'] = np.array(Sdist.index)
+                #d[key]['HKB'][nl]['td'] = np.array(Sdist.index)
+                d[key]['tm'] = np.array(Sdist.index)
 
         if ('TCR' in self.typ.upper()) or ('FULL' in self.typ.upper()):
             d[key]['TCR']={}
@@ -2635,11 +2661,13 @@ bernard
                 #d['S6'][nl]['rssi_dec'] = np.roll(Srssi.values,-dec)
                 d[key]['TCR'][nl]['sh'] = Ssh
                 # time rssi
-                d[key]['TCR'][nl]['tr'] = np.array(Srange.index)
+                #d[key]['TCR'][nl]['tr'] = np.array(Srange.index)
+                d[key]['trt'] = np.array(Srange.index)
                 # distance
                 d[key]['TCR'][nl]['dist'] = Sdist.values
                 # time mocap
-                d[key]['TCR'][nl]['td'] = np.array(Sdist.index)
+                #d[key]['TCR'][nl]['td'] = np.array(Sdist.index)
+                d[key]['tm'] = np.array(Sdist.index)
 
         self.matlab = d
         io.savemat(filemat,d)
