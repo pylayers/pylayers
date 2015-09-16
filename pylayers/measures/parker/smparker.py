@@ -334,6 +334,11 @@ class Axes(PyLayers):
             st = st + ' Profile '+str(k+1)+ '\n'
             st = st + '--------------------\n'
             st  = st +  p.__repr__()
+        #for k in enumerate(str(self._id)):
+            #st = st + '---------------------\n'
+            #st = st + 'Info about motion '+' '+'Axe '+str(k[0]+1)+ '\n'
+            #st = st + '---------------------\n'
+            #st1 = self.reg()
 
         return(st)
 
@@ -415,7 +420,6 @@ class Axes(PyLayers):
 
         """
 
-        #cst = str(self._id) + command + '\r\n'
         cst = str(self._id) + command + '\r\n'
         self.ser.write(cst)
         st = self.ser.readlines()
@@ -760,13 +764,15 @@ class Axes(PyLayers):
                         st = st + ' ' + Axes.ddrvflt[k*4+l+1]+'\n'
         return(st)
 
-    def mv(self,var=0):
+    def mv(self,var=0,vel=15,aa=20):
         """ move axes in translation or rotation
 
         Parameters
         ----------
 
         var : distance (cm) | degres (°)
+        vel : velocity (rps)
+        aa  : acceleration (rps²)
 
         Examples
         --------
@@ -783,10 +789,25 @@ class Axes(PyLayers):
         #if typ=='t':
             #nstep = dcm*self.scale
             #com = self.com('D'+str(nstep))
+        #defaults = {'vel': 15, 'aa': 20}
 
-        nstep = int(var*self.scale)
-        scom1 = 'D'+str(nstep)
-        com = self.com(scom1)
+        #for k in defaults:
+            #if k not in kwargs:
+                #kwargs[k]=defaults[k]
+
+        #self.vel = kwargs['vel']
+        #self.aa  = kwargs['aa']
+
+        nstep = int(var*self.scale) #convert num per step
+        scom1 = 'D'+str(nstep) #command
+        scom2 = 'V'+str(vel)   #set velocity
+        scom3 = 'AA'+str(aa)   #set acceleration of motion
+        #
+        #send command
+        #
+        com   = self.com(scom1) 
+        com   = self.com(scom2)
+        com   = self.com(scom3)
         com = self.com('G')
         #com = self.com(scom1,verbose=True)
         #scom2 = 'G'
@@ -795,6 +816,9 @@ class Axes(PyLayers):
         #com = self.com(scom1,verbose=True)
         #com = self.com(scom2,verbose=True)
         #com = self.com(scom3,verbose=True)
+
+
+
 
     def close(self):
         self.ser.close()
