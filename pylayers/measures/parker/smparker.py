@@ -8,12 +8,21 @@ import seaborn as sns
 from pylayers.util.project import *
 
 def gettty():
+    """get tty and handles port conflicts
+
+    Examples
+    --------
+    >>> import  os
+    >>> from pylayers.measures.parker import smparker
+    >>> port = getty()
+
+    """
     import  os
     line = os.popen('dmesg | grep tty | tail -1').read() .replace('\n','')
     tty = line.split('ttyUSB')
     num = tty[1]
     port = '/dev/ttyUSB'+num
-    return port 
+    return port
 
 class Profile(PyLayers):
     Accmax = 200
@@ -143,6 +152,16 @@ class Profile(PyLayers):
         plt.show()
 
 class Axes(PyLayers):
+    """This class allows the control of axes
+
+
+    svar    : system variables
+    dstatus : status bits
+    dusrflt : user faults
+    ddrvflt : drive faults
+
+
+    """
     svar  = {'BU':'Buffer usage',
             'CQ':'Command queuing',
             'DF':'Drive fault status',
@@ -228,17 +247,21 @@ class Axes(PyLayers):
                  scale=12800,
                  typ ='t'):
         """
+
+        Parameters
+        ----------
         _id  : axes id
         name : axes name
         ser  : serial port
         scale : nstep if typ='t'
-        typ : 't'|'r'
+        typ : 't' | 'r'
+
 
         Examples
         --------
-        >>>X = Axes(1,'x',typ='t',scale=12800,ser=Serial(port='/dev/ttyUSB0',baudrate=9600,timeout=0.05))
-        >>>Y = Axes(2,'y',typ='t',scale=22800,ser=Serial(port='/dev/ttyUSB0',baudrate=9600,timeout=0.05))
-        >>>R = Axes(3,'rot',typ='r',scale=(19000/9),ser=Serial(port='/dev/ttyUSB0',baudrate=9600,timeout=0.05))
+        >>> X = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
+        >>> Y = Axes(2,'y',typ='t',scale=22800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
+        >>> R = Axes(3,'r',typ='r',scale=2111.111111111111,ser=Serial(port=port,baudrate=9600,timeout=0.05))
         """
         self.status = [0,0,0,0,
                        0,0,0,0,
@@ -266,9 +289,13 @@ class Axes(PyLayers):
                        0,0,0,0]
         self._id = _id
         self.name = name
+        #
         # serial port
+        #
         self.ser = ser
+        #
         # list of profiles
+        #
         self.scale = scale
         self.typ = typ
         self.lprofile=[]
@@ -278,16 +305,26 @@ class Axes(PyLayers):
     def __repr__(self):
 
         st = ''
+        st = st + '---------------------\n'
+        st = st + ' Parameters ' + '\n'
+        st = st + '---------------------\n'
         st = st + 'axes_id : ' + str(self._id) + '\n'
         st = st + 'scale : ' + str(self.scale) + '\n'
         st = st + 'typ : ' + str(self.typ) + '\n'
-        st2 = self.reg()
-        st =  st +st2
+
+        for k in enumerate(str(self._id)):
+            st = st + '---------------------\n'
+            st = st + ' Status '+' '+'Axe '+str(k[0]+1)+ '\n'
+            st = st + '---------------------\n'
+            st1 = self.reg()
+            st =  st +st1
+
         for k,p in enumerate(self.lprofile):
-            st = st + '-----------------\n'
-            st = st + ' Profile '+str(k+1)+'\n'
-            st = st + '-----------------\n'
+            st = st + '--------------------\n'
+            st = st + ' Profile '+str(k+1)+ '\n'
+            st = st + '--------------------\n'
             st  = st +  p.__repr__()
+
         return(st)
 
     def show(self):
@@ -301,7 +338,7 @@ class Axes(PyLayers):
         #return(st)
 
     def getvar(self,lvar=[]):
-        """allows get state of variables 
+        """allows get state of variables
 
         Parameters
         ----------
@@ -310,8 +347,8 @@ class Axes(PyLayers):
 
         Examples
         --------
-  
-        >>> A.getvar('PA') #Get Position absolute 
+
+        >>> A.getvar('PA') #Get Position absolute
 
         """
         if lvar == []:
@@ -354,8 +391,13 @@ class Axes(PyLayers):
 
         Examples
         --------
+        >>> # Some suitable commands
+        >>> from pylayers.measures.parker import smparker
+        >>> A = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
+        >>> A.com('ON') #Energized motor
+        >>> A.com('LIMITS(1,0,0)') #Disable limit +,limits normally open
+        >>> TODO: change speed,ac,dc
 
-        >>>  from 
 
         """
 
@@ -425,7 +467,7 @@ class Axes(PyLayers):
             self.com(cstr)
 
     def home(self,cmd='get',**kwargs):
-        """ enables back home
+        """ enables back material home for each axe
 
         Parameters
         ----------
@@ -585,14 +627,14 @@ class Axes(PyLayers):
             prof = Profile(**kwargs)
             # update profile
             self.lprofile.append(prof)
-            # send command 
+            # send command
             # self.com(prof.cmd)
 
     def set_profile(self,num):
         """
         """
 
-        assert(num<=len(self.lprofile)),"profile number not defined" 
+        assert(num<=len(self.lprofile)),"profile number not defined"
         #self.com(str(self._id)+'USE'+str(num))
         self.com('USE'+str(num))
         #self.com('G')
@@ -619,6 +661,14 @@ class Axes(PyLayers):
 
     def reset(self):
         """ reset axis
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.parker import smparker
+        >>> A = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
+        >>> A.reset() #reset axis X
+
         """
         self.com('OFF')
         self.com('ON')
@@ -642,6 +692,7 @@ class Axes(PyLayers):
         Examples
         --------
 
+        >>> from pylayers.measures.parker import smparker
         >>> A = Axes()
         >>> A.mvpro(1)
 
@@ -707,6 +758,8 @@ class Axes(PyLayers):
         Examples
         --------
 
+        >>> from pylayers.measures.parker import smparker
+        >>> A = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
         >>> A.mv(10) # moves over 10cm on axis 1
         >>> A.mv(45) # moves over 45° on axis 3
 
@@ -725,13 +778,21 @@ class Axes(PyLayers):
         #com = self.com(scom1,verbose=True)
         #scom2 = 'G'
         #com = self.com(scom2,verbose=True)
-        #print "distance parcourue : ", var+str('cm')  
+        #print "distance parcourue : ", var+str('cm')
         #com = self.com(scom1,verbose=True)
         #com = self.com(scom2,verbose=True)
         #com = self.com(scom3,verbose=True)
 
     def close(self):
         self.ser.close()
+
+    def util(self):
+        """ allows convertion between :
+            m/s | tr/s  <=> rps
+            m/s²        <=> rps²
+        """
+        pass
+
 
 
     def fromfile(self,cmdfile,dirfile='./DriverFiles'):
@@ -749,19 +810,22 @@ class Axes(PyLayers):
         return(st)
 
 class Scanner(PyLayers):
-    def __init__(self,port):
-        """ This class handles scenarios
+    """This class handles scenarios
 
+    """
+
+    def __init__(self,port):
+        """
         Parameters
         ----------
 
-        p  : current position of the scanner
+        p   : current position of the scanner
         phi : current angle of the scanner
-      
+
         Examples
         --------
-        
-        >>>s.a[1].name_of_function()
+
+        >>> s.a[1].name_of_function()
         """
         self.ser = Serial(port = port, baudrate=9600, timeout = 1)
         # p current position of the scanner
@@ -770,8 +834,9 @@ class Scanner(PyLayers):
         self.phi = 0
         self.a  = ['',Axes(1,'x',self.ser,scale=12800,typ='t'),
                       Axes(2,'y',self.ser,scale=22800,typ='t'),
-                      Axes(3,'rot',self.ser,scale=2111.1111111111113,typ='r')] #self.a4  = Axes(4,'z',self.ser,typ='r')
-    
+                      Axes(3,'rot',self.ser,scale=2111.1111111111113,typ='r')]
+                      #self.a4  = Axes(4,'z',self.ser,typ='r')
+
 
     def __repr__(self):
         st = ''
@@ -801,19 +866,19 @@ class Scanner(PyLayers):
         at : target angle
 
         """
-        
+
         #
-        #warphi : values prohibited to phi 
+        #warphi : values prohibited to phi
         #
         warphi=np.arange(180,360)
         for i in warphi:
             assert(self.phi==i),'Error : Out of range'
 
-            
-        #Answers those questions:
+
+        #Answers those questions
         # Ou suis-je ?
         # Ou dois-je aller : p1
-        # Comment y aller : 
+        # Comment y aller :
         #   + fabriquer les profils
         #   + Appliquer les profils
 
@@ -827,7 +892,7 @@ class Scanner(PyLayers):
         pass
 
         #array = ensemble de points
-        #This fonction contains a cloud of points + noton of scheduling 
+        #This fonction contains a cloud of points + noton of scheduling
 
 
 if __name__=="__main__":
