@@ -31,7 +31,6 @@ class Profile(PyLayers):
 
     def __init__(self,**kwargs):
         """
-
         Parameters
         ----------
 
@@ -162,7 +161,7 @@ class Axes(PyLayers):
 
 
     """
-    svar  = {'BU':'Buffer usage',
+    dvar  = {'BU':'Buffer usage',
             'CQ':'Command queuing',
             'DF':'Drive fault status',
             'EI':'Encoder input',
@@ -199,8 +198,8 @@ class Axes(PyLayers):
     dstatus[9]='motor energised'
     dstatus[11]='event trigger active until trigger inputs are reset'
     dstatus[12]='input in LSEL not matching label'
-    dstatus[13]='-ve limit seen during last move'
-    dstatus[14]='+ve limit seen during last move'
+    dstatus[13]='-ve : Fin de course atteint'
+    dstatus[14]='+ve Fin de course atteint'
     dstatus[19]='moving'
     dstatus[20]='stationnary'
     dstatus[21]='no registration signal seen in registration window'
@@ -239,7 +238,6 @@ class Axes(PyLayers):
     ddrvflt[7]='Motor high voltage rail failure'
     ddrvflt[8]='Output fault'
 
-    #def __init__(self,_id,name,ser,scale=12800,typ='t'):
     def __init__(self,
                  _id=1,
                  name='x',
@@ -301,6 +299,19 @@ class Axes(PyLayers):
         self.lprofile=[]
         self.add_profile()
 
+    def info(self):
+        """gives informations about system variables of PARKER
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.parker import smparker
+        >>> A = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
+        >>> A.info()
+        """
+        for k in self.dvar:
+            st = self.com('R('+k+')')
+            print self.dvar[k],st[1].replace('\n','')
 
     def __repr__(self):
 
@@ -318,7 +329,6 @@ class Axes(PyLayers):
             st = st + '---------------------\n'
             st1 = self.reg()
             st =  st +st1
-
         for k,p in enumerate(self.lprofile):
             st = st + '--------------------\n'
             st = st + ' Profile '+str(k+1)+ '\n'
@@ -348,15 +358,17 @@ class Axes(PyLayers):
         Examples
         --------
 
+        >>> from pylayers.measures.parker import smparker
+        >>> A = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
         >>> A.getvar('PA') #Get Position absolute
 
         """
         if lvar == []:
-            lvar = Axes.svar.keys()
+            lvar = Axes.dvar.keys()
         else:
             var = lvar
             st = self.com('R('+var+')')
-            print Axes.svar[var],st[1]
+            print Axes.dvar[var],st[1]
 
 
     #def com(self,command,arg='',verbose=False):
@@ -395,8 +407,10 @@ class Axes(PyLayers):
         >>> from pylayers.measures.parker import smparker
         >>> A = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
         >>> A.com('ON') #Energized motor
-        >>> A.com('LIMITS(1,0,0)') #Disable limit +,limits normally open
-        >>> TODO: change speed,ac,dc
+        >>> A.com('LIMITS(1,0,0)') #Disable limit +,limits normally open, mode 0 stop motion and abort prog
+        >>> A.com('V15') # Change velocity to 15
+        >>> A.com('AA15') # Change acceleration to 15
+        >>> A.com('AD15') # Change deceleration to 15
 
 
         """
@@ -407,7 +421,6 @@ class Axes(PyLayers):
         st = self.ser.readlines()
         if verbose:
             print cst
-            print st
         return(st)
 
 
@@ -429,7 +442,7 @@ class Axes(PyLayers):
 
         for k in defaults:
             if k not in kwargs:
-                kwargs[k]=defaults
+                kwargs[k]=defaults[k]
 
         mask = kwargs['mask']
         typ  = kwargs['typ']
@@ -459,12 +472,12 @@ class Axes(PyLayers):
             else:
                 print "Stop motion when a limit is hit but continue the program, "
 
-            print 'decceleraton : ',eval(ans[3].split('D')[1]), "rps²"
+            print 'deceleration : ',eval(ans[3].split('D')[1]), "rps²"
 
 
         if cmd=='set':
             cstr = 'LIMITS'+'('+str(mask)+','+str(typ)+','+str(mode)+','+str(LD)+')'
-            self.com(cstr)
+            self.com(cstr,verbose=True)
 
     def home(self,cmd='get',**kwargs):
         """ enables back material home for each axe
@@ -484,8 +497,8 @@ class Axes(PyLayers):
         """
 
         defaults = {'mode':0,
-                    'vel':10,
-                    'acc':10,
+                    'vel':15,
+                    'acc':20,
                     'edg':'+',
                     'typ':0,
                     'armed':1
@@ -708,7 +721,7 @@ class Axes(PyLayers):
     def reg(self,typ='ST'):
         """ read boolean quantities in registers  : ST, UF, DF
 
-        ST : Status
+        ST : Status  (default)
         UF : User Faults
         DF : Drive Faults
 
@@ -736,15 +749,15 @@ class Axes(PyLayers):
                 if typ=='ST':
                     self.status[k*4+l] = val
                     if val:
-                        st = st + Axes.dstatus[k*4+l+1]+'\n'
+                        st = st + ' ' + Axes.dstatus[k*4+l+1]+'\n'
                 if typ=='UF':
                     self.usrflt[k*4+l] = val
                     if val:
-                        st = st +  Axes.dusrflt[k*4+l+1]+'\n'
+                        st = st + ' ' + Axes.dusrflt[k*4+l+1]+'\n'
                 if typ=='DF':
                     self.drvflt[k*4+l] = val
                     if val:
-                        st = st + Axes.ddrvflt[k*4+l+1]+'\n'
+                        st = st + ' ' + Axes.ddrvflt[k*4+l+1]+'\n'
         return(st)
 
     def mv(self,var=0):
@@ -814,7 +827,7 @@ class Scanner(PyLayers):
 
     """
 
-    def __init__(self,port):
+    def __init__(self,port=gettty()):
         """
         Parameters
         ----------
@@ -828,18 +841,35 @@ class Scanner(PyLayers):
         >>> s.a[1].name_of_function()
         """
         self.ser = Serial(port = port, baudrate=9600, timeout = 1)
+        #
         # p current position of the scanner
+        #
         self.p = np.array([0,0])
+        #
         # phi current angle of the scanner
+        #
         self.phi = 0
+        self.sx = 12800
+        self.sy = 22800
+        self.sr = 2111.111111111111
         self.a  = ['',Axes(1,'x',self.ser,scale=12800,typ='t'),
                       Axes(2,'y',self.ser,scale=22800,typ='t'),
                       Axes(3,'rot',self.ser,scale=2111.1111111111113,typ='r')]
                       #self.a4  = Axes(4,'z',self.ser,typ='r')
+        self.a[1].limits(mode=1,typ=1,mask=0)
+        self.a[2].limits(mode=1,typ=1,mask=0)
+        self.a[3].limits(mode=1,typ=1,mask=0)
+
+        self.a[1].com('ON')
+        self.a[2].com('ON')
+        self.a[3].com('ON')
 
 
     def __repr__(self):
-        st = ''
+        px = self.a[1].com('R(PA)')[1].replace('*','').replace('\n','')
+        py = self.a[2].com('R(PA)')[1].replace('*','').replace('\n','')
+        pr = self.a[3].com('R(PA)')[1].replace('*','').replace('\n','')
+        st = str(float(px)/self.sx) +',' + str(float(py)/self.sy)  +','+ str(float(pr)/self.sr) +'\n'
         st = st + 'current position : '+ str(self.p) + '\n'
         st = st + 'current angle  : '+ str(self.phi) + '\n'
         return(st)
@@ -850,11 +880,11 @@ class Scanner(PyLayers):
         """
         pass
 
-    def home(self):
+    def home(self,cmd='get'):
         """ allows a return home for 3 axes
         """
         for k in range(1,len(self.a)):
-            self.a[k].home()
+            self.a[k].home(cmd=cmd)
 
     def mv(pt,at,var=0):
         """ move to target point
@@ -899,6 +929,8 @@ if __name__=="__main__":
     port = gettty()
     X = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
     Y = Axes(2,'y',typ='t',scale=22800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
+    X.limits(cmd='set',mode=1)
+    Y.limits(cmd='set',mode=1)
     R = Axes(3,'r',typ='r',scale=2111.111111111111,ser=Serial(port=port,baudrate=9600,timeout=0.05))
     X.com()
     # pass
