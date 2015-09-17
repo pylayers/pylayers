@@ -2,6 +2,8 @@
 #-*- coding:Utf-8 -*-
 from serial import Serial
 import pdb
+import time
+import threading
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -32,7 +34,6 @@ def gettty():
         port = None
         print 'not connected to a serial port'
     return port
-
 
 class Profile(PyLayers):
     Accmax = 200
@@ -390,8 +391,9 @@ class Axes(PyLayers):
             lvar = Axes.dvar.keys()
         else:
             var = lvar
-            st = self.com('R('+var+')')
-            print Axes.dvar[var],st[1]
+            st = self.com('R('+var+')')[1].replace('*','').replace('/n','')
+            print Axes.dvar[var],st
+
 
 
     #def com(self,command,arg='',verbose=False):
@@ -499,7 +501,7 @@ class Axes(PyLayers):
 
         if cmd=='set':
             cstr = 'LIMITS'+'('+str(mask)+','+str(typ)+','+str(mode)+','+str(LD)+')'
-            self.com(cstr,verbose=True)
+            self.com(cstr,verbose=False)
 
     def home(self,cmd='get',**kwargs):
         """ enables back material home for each axe.
@@ -513,9 +515,6 @@ class Axes(PyLayers):
         Examples
         --------
 
-         >>> s.a[1].home() or A.home() #get informations about the status of HOME
-         >>> s.a[1].home('set',vel=15,acc=200) or A.home('set',vel=15,acc=200) #set vel & acc
-         >>> s.a[1].home('go') or A.home('go') #back Home  (material)
 
         """
 
@@ -537,91 +536,80 @@ class Axes(PyLayers):
         self.edg   = kwargs['edg']
         self.typ   = kwargs['typ']
         self.armed = kwargs['armed']
-
-        if cmd=='get':
-            st = self.com('HOME')
-            ans = st[1].split(' ')
-
-
-            print "-------------------"
-            print " arguments of HOME "
-            print "-------------------"
-
-            if '1' in ans[0]:
-                print "armed "
-            else:
-                print "not armed "
-            if '-' in ans[1]:
-                print "reference edge is negative "
-            else:
-                print "reference edge is positive "
-            if '1' in ans[2]:
-                print "home switch normally closed 1 "
-            else:
-                print "home switch normally open 0 (default) "
-
-            if '+' in ans[3]:
-                print 'velocity : +',eval(ans[3].split('V+')[1]), "rps"
-            else:
-                print 'velocity : -',eval(ans[3].split('V-')[1]), "rps"
-
-            print 'acceleration : ',eval(ans[4].split('A')[1]), "rps²"
-
-            if '0' in ans[5]:
-                print 'Mode 0: Motor in the active window of the switch (default)'
-            if '1' in ans[5]:
-                print 'Mode 1: Motor in the position to the edge + or -'
-            if '2' in ans[5]:
-                print 'Mode 2: Improve homing repeatability'
-
-        if cmd=='set':
-
-            if self.vel>0:
-                vel = '+'+str(self.vel)
-            else:
-                vel = '-'+str(self.vel)
+ 
+        if self._id in [1,2]:
+            if cmd=='get':
+                st = self.com('HOME')
+                ans = st[1].split(' ')
 
 
-            cstr = 'HOME'+str(self.armed)+\
-                          '('+self.edg+','+\
-                          str(self.typ)+','+\
-                          vel+','+\
-                          str(self.acc)+','+\
-                          str(self.mode)+')'
-            print cstr
-            self.com(cstr)
+                print "-------------------"
+                print " arguments of HOME "
+                print "-------------------"
 
-        if cmd=='go':
-            #cstr = 'HOME1'
-            cstr = 'HOME'+str(self.armed)
-            self.com(cstr)
-            cstr = 'ARM'+str(self.armed)
-            self.com(cstr)
-            cstr = 'GH'
-            #cstr = 'G'
-            self.com(cstr)
+                if '1' in ans[0]:
+                    print "armed "
+                else:
+                    print "not armed "
+                if '-' in ans[1]:
+                    print "reference edge is negative "
+                else:
+                    print "reference edge is positive "
+                if '1' in ans[2]:
+                    print "home switch normally closed 1 "
+                else:
+                    print "home switch normally open 0 (default) "
 
-        #if lvar == []:
-            #lvar = Axes.svar.keys()
-        #else:
-            #var = lvar['PA']
-        #if cmd=='go':
-            #if lvar <0:
+                if '+' in ans[3]:
+                    print 'velocity : +',eval(ans[3].split('V+')[1]), "rps"
+                else:
+                    print 'velocity : -',eval(ans[3].split('V-')[1]), "rps"
+
+                print 'acceleration : ',eval(ans[4].split('A')[1]), "rps²"
+
+                if '0' in ans[5]:
+                    print 'Mode 0: Motor in the active window of the switch (default)'
+                if '1' in ans[5]:
+                    print 'Mode 1: Motor in the position to the edge + or -'
+                if '2' in ans[5]:
+                    print 'Mode 2: Improve homing repeatability'
+
+            if cmd=='set':
+
+                if self.vel>0:
+                    vel = '+'+str(self.vel)
+                else:
+                    vel = '-'+str(self.vel)
+
+
+                cstr = 'HOME'+str(self.armed)+\
+                              '('+self.edg+','+\
+                              str(self.typ)+','+\
+                              vel+','+\
+                              str(self.acc)+','+\
+                              str(self.mode)+')'
+                print cstr
+                self.com(cstr)
+
+            if cmd=='go':
                 #cstr = 'HOME1'
-                #self.com(cstr)
-                #cstr = 'ARM1'
-                #self.com(cstr)
-                #cstr = 'GH'
-                #self.com(cstr)
-            #else:
-                #cstr = 'HOME1'
-                #self.com(cstr)
-                #cstr = 'ARM1'
-                #self.com(cstr)
-                #cstr = 'H-'
-                #self.com(cstr)
+                cstr = 'HOME'+str(self.armed)
+                self.com(cstr)
+                cstr = 'ARM'+str(self.armed)
+                self.com(cstr)
+                cstr = 'GH'
                 #cstr = 'G'
-                #self.com(cstr)
+                self.com(cstr)
+        
+        # no material origin available on z axisi(4) and rotation axis (3)
+        if self._id in [3,4]:
+            if cmd=='set':
+                self.com('W(PA,0)')
+            if cmd=='get':
+                st =  self.com('R(PA)')
+            if cmd=='go':
+                pa = -int(self.com('R(PA)')[1].replace('*','').replace('\n',''))
+                self.mv(pa/self.scale,vel=self.vel,acc=self.acc)
 
 
     def add_profile(self,**kwargs):
@@ -791,7 +779,7 @@ class Axes(PyLayers):
                         st = st + ' ' + Axes.ddrvflt[k*4+l+1]+'\n'
         return(st)
 
-    def mv(self,var=0,vel=15,aa=20):
+    def mv(self,var=0,vel=15,acc=20):
         """ move axes in translation or rotation
 
         Parameters
@@ -810,41 +798,21 @@ class Axes(PyLayers):
         >>> A.mv(45) # moves over 45° on axis 3
 
         """
-        #assert(self.typ=='t'),'Axes is not a linear axes'
-        #nstep = dcm*self.scale
-        #com = self.com('D'+str(nstep))
-        #if typ=='t':
-            #nstep = dcm*self.scale
-            #com = self.com('D'+str(nstep))
-        #defaults = {'vel': 15, 'aa': 20}
-
-        #for k in defaults:
-            #if k not in kwargs:
-                #kwargs[k]=defaults[k]
-
-        #self.vel = kwargs['vel']
-        #self.aa  = kwargs['aa']
-
         nstep = int(var*self.scale) #convert num per step
         scom1 = 'D'+str(nstep) #command
         scom2 = 'V'+str(vel)   #set velocity
-        scom3 = 'AA'+str(aa)   #set acceleration of motion
+        scom3 = 'AA'+str(acc)   #set acceleration of motion
         #
-        #send command
+        #send commands
         #
-        com   = self.com(scom1) 
+        com   = self.com(scom1)
         com   = self.com(scom2)
         com   = self.com(scom3)
+        tic = time.time()
         com = self.com('G')
-        #com = self.com(scom1,verbose=True)
-        #scom2 = 'G'
-        #com = self.com(scom2,verbose=True)
-        #print "distance parcourue : ", var+str('cm')
-        #com = self.com(scom1,verbose=True)
-        #com = self.com(scom2,verbose=True)
-        #com = self.com(scom3,verbose=True)
-
-
+        print com
+        toc = time.time()
+        print  toc-tic
 
 
     def close(self):
@@ -902,39 +870,60 @@ class Scanner(PyLayers):
         self.phi = 0
         self.sx = 12800
         self.sy = 22800
+        self.sz = 21111.11111111111
         self.sr = 2111.111111111111
-        self.a  = ['',Axes(1,'x',self.ser,scale=12800,typ='t'),
-                      Axes(2,'y',self.ser,scale=22800,typ='t'),
-                      Axes(3,'rot',self.ser,scale=2111.1111111111113,typ='r')]
-                      #self.a4  = Axes(4,'z',self.ser,typ='r')
-        self.a[1].limits(mode=1,typ=1,mask=0)
-        self.a[2].limits(mode=1,typ=1,mask=0)
-        self.a[3].limits(mode=1,typ=1,mask=0)
 
+        self.a  = ['',Axes(1,'x',self.ser,scale=self.sx,typ='t'),
+                      Axes(2,'y',self.ser,scale=self.sy,typ='t'),
+                      Axes(3,'rot',self.ser,scale=self.sr,typ='r'),
+                      Axes(4,'z',self.ser,scale=self.sz,typ='t')]
+
+        # Limits activated on axes X and Y    (mask =0 )
+        # Limits desactivated on axes Z and R (mask =3 )
+        self.a[1].limits(mask=0,typ=1,mode=1,cmd='set')
+        self.a[2].limits(mask=0,typ=1,mode=1,cmd='set')
+        self.a[3].limits(mask=3,typ=1,mode=1,cmd='set')
+        self.a[4].limits(mask=3,typ=1,mode=1,cmd='set')
+
+        # Power ON 
         self.a[1].com('ON')
         self.a[2].com('ON')
         self.a[3].com('ON')
+        self.a[4].com('ON')
+
+        self.home(cmd='set')
+        self.home(cmd='go',init=True)
 
     def __repr__(self):
         px = self.a[1].com('R(PA)')[1].replace('*','').replace('\n','')
         py = self.a[2].com('R(PA)')[1].replace('*','').replace('\n','')
+        pz = self.a[4].com('R(PA)')[1].replace('*','').replace('\n','')
+
         pr = self.a[3].com('R(PA)')[1].replace('*','').replace('\n','')
-        st = str(float(px)/self.sx) +',' + str(float(py)/self.sy)  +','+ str(float(pr)/self.sr) +'\n'
-        st = st + 'current position : '+ str(self.p) + '\n'
-        st = st + 'current angle  : '+ str(self.phi) + '\n'
+        st = 'current position : '+ str(float(px)/self.sx) +',' + str(float(py)/self.sy)  +','+ str(float(pz)/self.sz) +'\n'
+        st = st + 'current angle  : '+ str(float(pr)/self.sr) + '\n'
         return(st)
 
 
     def set_origin():
-        """ 
+        """
         """
         pass
 
-    def home(self,cmd='get'):
+    def home(self,cmd='get',init=False,vel=10):
         """ allows a return home for 3 axes
         """
+        lt = []
         for k in range(1,len(self.a)):
-            self.a[k].home(cmd=cmd)
+            if init:
+                if k in [3,4]:
+                    cmd ='set'
+            lt.append(threading.Thread(name=str(k),target=self.a[k].home(cmd=cmd,vel=10)))
+        for k,t in enumerate(lt):
+            print "starting ",k
+            t.start()
+
+
 
     def mv(pt,at,var=0):
         """ move to target point
@@ -974,19 +963,23 @@ class Scanner(PyLayers):
 
 
 if __name__=="__main__":
-    port = gettty()
-    X = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
-    Y = Axes(2,'y',typ='t',scale=22800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
-    X.limits(cmd='set',mode=1)
-    Y.limits(cmd='set',mode=1)
-    R = Axes(3,'r',typ='r',scale=2111.111111111111,ser=Serial(port=port,baudrate=9600,timeout=0.05))
-    # pass
-    #s = Scanner('/dev/ttyUSB0')
-    #s = Scanner('/dev/ttyUSB2')
-    #s = Scanner('/dev/ttyUSB1')
-    #sm.fromfile('prog1')
-    #sm.fromfile('AY')
-    #Sc[1].com('ON')
-    #st = sm.com(1,'LIMITS',(0,1,1))
-    #st = sm.com(1,'1D-4000')
-    #st = sm.com(1,'G')
+    S = Scanner()
+#    port = gettty()
+#    X = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
+#    Y = Axes(2,'y',typ='t',scale=22800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
+#    X.limits(cmd='set',mask=0)
+#    Y.limits(cmd='set',mask=0)
+#    R = Axes(3,'r',typ='r',scale=2111.111111111111,ser=Serial(port=port,baudrate=9600,timeout=0.05))
+#    Z = Axes(4,'z',typ='t',scale=2111.111111111111,ser=Serial(port=port,baudrate=9600,timeout=0.05))
+#    Z.limits(cmd='set',mask=3)
+#    R.limits(cmd='set',mask=3)
+#    # pass
+#    #s = Scanner('/dev/ttyUSB0')
+#    #s = Scanner('/dev/ttyUSB2')
+#    #s = Scanner('/dev/ttyUSB1')
+#    #sm.fromfile('prog1')
+#    #sm.fromfile('AY')
+#    #Sc[1].com('ON')
+#    #st = sm.com(1,'LIMITS',(0,1,1))
+#    #st = sm.com(1,'1D-4000')
+#    #st = sm.com(1,'G')
