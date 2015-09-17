@@ -269,11 +269,10 @@ class CorSer(PyLayers):
 
         if day == 11:
             if serie in [7,8]:
-                print 'Serie '+str(serie) + ' has no hkb data and will not be loaded'
-                exit
+                raise 'Serie '+str(serie) + ' has no hkb data and will not be loaded'
         if day ==12:
             if serie in [17,18,19,20]:
-                raise AttributeError('Serie '+str(serie) + \
+                raise  AttributeError('Serie '+str(serie) + \
                                      ' has no hkb data and will not be loaded')
         #Measures
         if day==11:
@@ -321,7 +320,7 @@ class CorSer(PyLayers):
         self._loadcam()
 
         #BODY & interferers
-        self.subject = str(self.log['Subject'].values[0]).split(' ')
+        self.subject = str(self.log['Subject'].values[0].replace('jihad','Jihad')).split(' ')
         #filter typos in  self.subject
         self.subject = filter(lambda x : len(x)!=0,self.subject)
         if 'Jihad' in self.subject :
@@ -329,6 +328,7 @@ class CorSer(PyLayers):
             self.subject[uj]='Jihan'
 
         if serie in self.mocap :
+            # load bodies from mocap file
             self._loadbody(serie=serie,day=day)
             self._distancematrix()
             self._computedevpdf()
@@ -420,6 +420,11 @@ class CorSer(PyLayers):
             st = st+'TCR : '+self._fileTCR+'\n'
         except:
             pass
+
+        st = st + '----------------------\n\n'
+        for k in self.log.columns:
+            st = st + k + ' :' + str(self.log[k].values)+'\n'
+
         return(st)
 
 
@@ -449,7 +454,7 @@ class CorSer(PyLayers):
         """
 
         title = '{0:21} | {1:7} | {2:8} | {3:10} '.format('Name in Dataframe', 'Real Id', 'Body Id', 'Subject')
-        print title + '\n' + '='*len(title) 
+        print title + '\n' + '='*len(title)
         # access points HKB
         for d in self.din:
             if ('HK' in d) :
@@ -737,7 +742,7 @@ bernard
 
 
     def _loadbody(self,day=11,serie=''):
-        """ load motion capture file
+        """ load body from motion capture file
 
         Parameters
         ----------
@@ -749,7 +754,6 @@ bernard
         assert day in [11,12],"wrong day in _loadbody"
         self.B={}
         color=['LightBlue','YellowGreen','PaleVioletRed','white','white','white','white','white','white','white']
-
         for us,subject in enumerate(self.subject):
             print "\nload ",subject, " body:",
             seriestr = str(self.serie).zfill(3)
@@ -766,7 +770,7 @@ bernard
 
             #
             # Load body cylinder description : "Subject.ini"
-            # Load wearable deviace description (contains antenna filename) :
+            # Load wearable device description (contains antenna filename) :
             #
             self.filebody = os.path.join(baw, subject + '.ini')
             self.filewear = os.path.join(baw,subject + '_'  +str(self.day)+'-06-2014_' + self.typ + '.ini')
@@ -775,6 +779,7 @@ bernard
                 multi_subject=True
             else:
                 multi_subject=False
+
             self.B.update({subject:Body(_filebody=self.filebody,
                              _filemocap=self.filemocap,unit = 'mm', loop=False,
                              _filewear=self.filewear,
@@ -790,16 +795,16 @@ bernard
                      'Meriem_Cylindre:']
             intertmp=[]
             for ui,i in enumerate(self.interf):
-                try:
-                    print "load ",i, " interfering body:",
-
-                    self.B.update({i:Cylinder(name=i,
-                                              _filemocap=self.filemocap,
-                                              unit = 'mm',
-                                              color = color[ui])})
-                    intertmp.append(i)
-                except:
-                    print "Warning ! load ",i, " FAIL !"
+                #try:
+                print "load ",i, " interfering body:",
+                _filemocap = pyu.getshort(self.filemocap)
+                self.B.update({i:Cylinder(name=i,
+                                          _filemocap=_filemocap,
+                                          unit = 'mm',
+                                          color = color[ui])})
+                intertmp.append(i)
+                #except:
+                #    print "Warning ! load ",i, " FAIL !"
             self.interf=intertmp
         else :
             self.interf=[]
@@ -1694,8 +1699,9 @@ bernard
         ln = uin + bn
         pin = np.array([self.din[d]['p'] for d in uin])
         pin2 = np.empty((pnb.shape[0],pin.shape[0],pin.shape[1]))
-        pin2[:,:,:]=pin
+        pin2[:,:,:] = pin
         p = np.concatenate((pin2,pnb),axis=1)
+        self.points = p
         self.dist = np.sqrt(np.sum((p[:,:,np.newaxis,:]-p[:,np.newaxis,:,:])**2,axis=3))
         self.dist_nodesmap = ln
 
@@ -1703,7 +1709,7 @@ bernard
     def _computedistdf(self):
         """Compute the distance dataframe from distance matrix
         """
-        
+
         # HIKOB
         if ('HK' in self.typ) or ('FULL' in self.typ):
             devmap = {self.devmapper(k,'hkb')[0]:self.devmapper(k,'hkb')[2] for k in self.dHKB}
@@ -2023,7 +2029,7 @@ bernard
             if kwargs['pattern']:
                 for i in range(len(v)):
                     if not hasattr(self.din[v[i][0]]['ant'],'SqG'):
-                        self.din[v[i][0]]['ant'].Fsynth()
+                        self.din[v[i][0]]['ant'].eval()
                     self.din[v[i][0]]['ant']._show3(po=v[i][1]['p'],
                            T=self.din[v[i][0]]['T'],
                            ilog=False,
@@ -2560,18 +2566,47 @@ bernard
     def mtlbsave(self):
         """ Matlab format save
 
+
+        S{day}_{serie}
+            node_name
+            node_place
+            node_coord
+
+            HKB.{linkname}.tr
+            HKB.{linkname}.rssi
+            HKB.{linkname}.td
+            HKB.{linkname}.dist
+            HKB.{linkname}.sh
+            HKB.{linkname}.dsh
+
+            TCR.{linkname}.tr
+            HKB.{linkname}.range
+            HKB.{linkname}.td
+            HKB.{linkname}.dist
+            HKB.{linkname}.sh
+
         """
         key = 'S'+str(self.day)+'_'+str(self.serie)
         filemat = key+'.mat'
         d = {}
         d[key]={}
+        d[key]['node_name']=self.dist_nodesmap
+        d[key]['node_place']=map(lambda x : self.devmapper(x)[0],self.dist_nodesmap)
+        d[key]['node_coord']=self.points
+
+        for subject in self.interf:
+            sub = subject.replace(':','')
+            d[key][sub]=np.mean(self.B[subject].d,axis=1)
+
         if ('HKB' in self.typ.upper()) or ('FULL' in self.typ.upper()):
             d[key]['HKB']={}
             links = list(self.hkb.columns)
             inter,lks = self.compute_visibility(techno='HKB')
+
             for l in links:
                 ls   = l.split('-')
                 nl = ls[0]+'_'+ls[1]
+                nl=nl.replace('Jihad','J').replace('Nicolas','N').replace('Eric','E')
                 d[key]['HKB'][nl] = {}
                 ix0 = np.where(lks==ls[0])[0]
                 ix1 = np.where(lks==ls[1])[0]
@@ -2587,11 +2622,13 @@ bernard
                 #d['S6'][nl]['rssi_dec'] = np.roll(Srssi.values,-dec)
                 d[key]['HKB'][nl]['sh'] = Ssh
                 # time rssi
-                d[key]['HKB'][nl]['tr'] = np.array(Srssi.index)
+                #d[key]['HKB'][nl]['trh'] = np.array(Srssi.index)
+                d[key]['trh'] = np.array(Srssi.index)
                 # distance
                 d[key]['HKB'][nl]['dist'] = Sdist.values
                 # time mocap
-                d[key]['HKB'][nl]['td'] = np.array(Sdist.index)
+                #d[key]['HKB'][nl]['td'] = np.array(Sdist.index)
+                d[key]['tm'] = np.array(Sdist.index)
 
         if ('TCR' in self.typ.upper()) or ('FULL' in self.typ.upper()):
             d[key]['TCR']={}
@@ -2599,7 +2636,9 @@ bernard
             inter,lks = self.compute_visibility(techno='TCR')
             for l in links:
                 ls   = l.split('-')
+                # to shorten matlab keys surname are replaced by first letter
                 nl = ls[0]+'_'+ls[1]
+                nl=nl.replace('Jihad','J').replace('Nicolas','N').replace('Eric','E')
                 d[key]['TCR'][nl] = {}
                 ix0 = np.where(lks==ls[0])[0]
                 ix1 = np.where(lks==ls[1])[0]
@@ -2614,12 +2653,15 @@ bernard
                 #d['S6'][nl]['rssi_dec'] = np.roll(Srssi.values,-dec)
                 d[key]['TCR'][nl]['sh'] = Ssh
                 # time rssi
-                d[key]['TCR'][nl]['tr'] = np.array(Srange.index)
+                #d[key]['TCR'][nl]['tr'] = np.array(Srange.index)
+                d[key]['trt'] = np.array(Srange.index)
                 # distance
                 d[key]['TCR'][nl]['dist'] = Sdist.values
                 # time mocap
-                d[key]['TCR'][nl]['td'] = np.array(Sdist.index)
+                #d[key]['TCR'][nl]['td'] = np.array(Sdist.index)
+                d[key]['tm'] = np.array(Sdist.index)
 
+        self.matlab = d
         io.savemat(filemat,d)
 
 
@@ -3373,9 +3415,9 @@ bernard
         inverse :False,
             display 1/distance  instead of distance
         log : boolean
-            display log fo distance intead of distance
+            display log for distance intead of distance
         gammma':1.,
-            mulitplication factor for log : gamma*log(distance) 
+            mulitplication factor for log : gamma*log(distance)
             this can be used to fit RSS
         mode : string
             'HKB' | 'TCR' | 'FULL'
@@ -3422,11 +3464,11 @@ bernard
 
 
 
-        t0 =kwargs.pop('t0')
-        t1 =kwargs.pop('t1')
-        if t1 ==-1:
+        #t0 =kwargs.pop('t0')
+        #t1 =kwargs.pop('t1')
+        #if t1 ==-1:
             #t1=self.thkb[-1]
-            t1=self.ttcr[-1]
+        #    t1=self.ttcr[-1]
 
 
         label = a+'-'+b
@@ -3475,7 +3517,11 @@ bernard
                 ibhk = b
                 b = self.idHKB[b]
 
-            var = self.getlink(iahk,ibhk,'HKB').values
+            var = self.getlink(iahk,ibhk,'HKB')
+            #var = U.values
+            #time = U.index
+            #pdb.set_trace()
+
             if inverse:
                 var = 1./(var)
                 ax.set_ylabel(u'$m^{-2}$',fontsize=fontsize)
@@ -3490,8 +3536,8 @@ bernard
                     var = gamma*10*np.log10(var)+gamma
                     ax.set_ylabel(u'$10log_{10}m^{-2}$',fontsize=fontsize)
 
-
-            ax.plot(self.B[subject].time,var,label=label,**kwargs)
+            #ax.plot(self.B[subject].time,var,label=label,**kwargs)
+            var.plot()
         #
         # TCR |Full
         #
@@ -3520,7 +3566,8 @@ bernard
             #        var = gamma*10*np.log10(var)
 
             #pdb.set_trace()
-            ax.plot(self.B[subject].time,var,**kwargs)
+            #ax.plot(self.B[subject].time,var,**kwargs)
+            ax.plot(self.B[subject].ttcr,var,**kwargs)
 
 
         if visibility:
@@ -3547,7 +3594,7 @@ bernard
 
 
     def pltlk(self,a,b,**kwargs):
-        """ plt links
+        """ plot links
 
         Parameters
         ----------
@@ -3776,7 +3823,6 @@ bernard
         phi : float
             pi/2
         ap  : boolean
-            
         """
 
         defaults = { 'fig':[],
@@ -3815,7 +3861,7 @@ bernard
 
         if subjecta != '':
             self.B[subjecta].settopos(t=kwargs['t'])
-            self.B[subjecta].dev[ba]['ant'].Fsynth()
+            self.B[subjecta].dev[ba]['ant'].eval()
             xa,ya,z,sa,v = self.B[subjecta].dev[ba]['ant']._computemesh(po=pa,T=self.B[subjecta].acs[ba],minr=0.01,maxr=0.1,ilog=False)
             p2 = np.where(self.B[subjecta].dev[ba]['ant'].phi<=kwargs['phi'])[0][-1]
 
@@ -3823,7 +3869,7 @@ bernard
             ax.plot(xa[p2,:],ya[p2,:])
 
         else:
-            self.din[ba]['ant'].Fsynth()
+            self.din[ba]['ant'].eval()
             xa,ya,z,sa,v = self.din[ba]['ant']._computemesh(po=self.din[ba]['p'],T=self.din[ba]['T'],minr=0.01,maxr=0.1,ilog=False)
             p2 = np.where(self.din[ba]['ant'].phi<=kwargs['phi'])[0][-1]
             ax.plot(xa[:,p2],ya[:,p2])
@@ -3840,7 +3886,7 @@ bernard
             link index
         b : int
             link index
-        technoa : string 
+        technoa : string
             default 'HKB'|'TCR'|'BS'
         technob
             default 'HKB'|'TCR'|'BS'
@@ -3933,7 +3979,6 @@ bernard
         # #ax.add_patch(ci1015)
         # #its = self.B[subjecta].intersectBody(A[iframe,:],B[iframe,:],topos=False,frameId=iframe)
         # #x.set_title('frameId :'+str(iframe)+' '+str(its.T))
-        
 
 
 
@@ -3949,7 +3994,7 @@ bernard
 
         """
 
-        A,B = self.getlinkp(a,b)
+        A,B = self.getlinkp(a,b,technoa=technoa,technob=technob)
         A=A.values
         B=B.values
         aa,ia,ba,subjecta,technoa= self.devmapper(a,technoa)
@@ -4047,7 +4092,7 @@ bernard
         """ create entries for plu.rectplot
         """
 
-        visi = self.visidev(a,b)
+        visi = self.visidev(a,b,technoa=technoa,technob=technob)
         tv = visi.index.values
         vv = visi.values.astype(int)
         if (not(vv.all()) and vv.any()):
@@ -4376,8 +4421,6 @@ bernard
 
         """
 
-
-
         pa = self.getdevp(a,technoa,t,fId)
         pb = self.getdevp(b,technob,t,fId)
 
@@ -4485,7 +4528,7 @@ bernard
 
         optional :
 
-        t : float | list 
+        t : float | list
             given time |[time_start,time_stop]
 
 
@@ -4524,7 +4567,7 @@ bernard
 
 
         pa = self.devdf[(self.devdf.index >= tstart) &
-                        (self.devdf.index <= tstop) & 
+                        (self.devdf.index <= tstop) &
                         device_select][['x','y','z']]
 
         return pa

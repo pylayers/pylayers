@@ -1022,30 +1022,22 @@ class Layout(PyLayers):
         #
         # Calculate the wedge angle of degree 2 points
         #
-<<<<<<< HEAD
-        if 2 in self.degree:
-            wedgea = self.wedge(self.degree[2])
-
-<<<<<<< HEAD
+        #if 2 in self.degree:
+        #    wedgea = self.wedge(self.degree[2])
+        #
         # wedge < 179 (not flat)
-            idiff = filter(lambda x: wedgea[x]<179,range(len(self.degree[2])))
-            self.ldiff = map(lambda x : self.degree[2][x],idiff)
-=======
-=======
+        #    idiff = filter(lambda x: wedgea[x]<179,range(len(self.degree[2])))
+        #    self.ldiff = map(lambda x : self.degree[2][x],idiff)
         wedgea = self.wedge(self.degree[2])
 
->>>>>>> 463393dbe26500855827ea5cb948b6f9e08637ba
         # wedge < 179 deg (not flat)
         idiff = filter(lambda x: wedgea[x]<179,range(len(self.degree[2])))
         self.ldiff = map(lambda x : self.degree[2][x],idiff)
+
         # add degree 1 point
         # This corresponds to degree 2 point with an adjascent airwall
         # (half-plane diffraction)
         self.ldiff = self.ldiff+list(self.degree[1])
-<<<<<<< HEAD
->>>>>>> f64cbc42b0d27abd496e3bdda020fecc016e9a8b
-=======
->>>>>>> 463393dbe26500855827ea5cb948b6f9e08637ba
         # if problem here check file format 'z' should be a string
         self.maxheight = np.max([v[1] for v in nx.get_node_attributes(self.Gs,'z').values()])
 

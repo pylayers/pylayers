@@ -20,9 +20,19 @@ def gettty():
     import  os
     line = os.popen('dmesg | grep tty | tail -1').read() .replace('\n','')
     tty = line.split('ttyUSB')
+
     num = tty[1]
     port = '/dev/ttyUSB'+num
     return port
+
+    if len(tty)>1:
+        num = tty[1]
+        port = '/dev/ttyUSB'+num
+    else:
+        port = None
+        print 'not connected to a serial port'
+    return port
+
 
 class Profile(PyLayers):
     Accmax = 200
@@ -41,15 +51,16 @@ class Profile(PyLayers):
         vmax    : vmax (rps)
         vs      : vstart (rps)
         spr     : steps per round
+        N       : number of point for plotting profile
 
 
         """
 
         defaults = {'num': 1,
-                    'aa': 200,
-                    'ad': 200,
-                    'dstep': 12800,
-                    'vmax': 15,
+                    'aa': 1,
+                    'ad': 1,
+                    'dstep': 16000,
+                    'vmax': 5,
                     'vs': 0,
                     'spr': 4000,
                     'N':100}
@@ -75,7 +86,12 @@ class Profile(PyLayers):
 
         self.drev = self.dstep/(1.0*self.spr)
         #self.T = (self.drev+self.vmax**2/self.aa)/(1.0*self.vmax)
-        self.T = (self.drev+0.5*self.vmax**2/self.aa+0.5*self.vmax**2/self.ad)/(1.0*self.vmax)
+        self.tri = 2*np.sqrt(self.drev/self.aa)
+        self.T = (  self.drev
+                   + 0.5*self.vmax**2/self.aa
+                   + 0.5*self.vmax**2/self.ad)/(1.0*self.vmax)
+        if self.tri<self.T:
+            self.T=self.tri
 
         #assert(0<accmax)
         #assert(0<v<vmax)
@@ -95,14 +111,15 @@ class Profile(PyLayers):
         # t1 : end of acceleration phase
         # t2 : begining of deceleration phase
         #
-        t1 = self.vmax/(1.0*self.aa)
-        t2 = self.T-self.vmax/(1.0*self.ad)
+        self.t1 = min(self.vmax/(1.0*self.aa),self.T/2.0)
+        self.t2 = max(self.T-self.vmax/(1.0*self.ad),self.T/2.0)
 
-        u1 = np.where(self.t<t1)[0]
-        u2 = np.where(self.t>=t2)[0]
+        u1 = np.where(self.t<self.t1)[0]
+        u2 = np.where(self.t>=self.t2)[0]
 
         self.v[u1] = self.t[u1]*self.aa
-        self.v[u2] = -self.t[u2]*self.ad+(self.vmax+self.ad*t2)
+        #self.v[u2] = -self.t[u2]*self.ad+(self.vmax+self.ad*t2)
+        self.v[u2] = -self.t[u2]*self.ad+self.ad*self.T
         #
         # dr : distance in number of revolutions
         # ds : distance in number of steps
@@ -118,14 +135,15 @@ class Profile(PyLayers):
         st = st + 'dstep : '+ str(self.dstep) + '/'+ str(self.ds[-1]) + '\n'
         st = st + 'maximum velocity : '+ str(self.vmax) + '\n'
         st = st + 'starting velocity : '+ str(self.vs) + '\n'
-        st = st + 'spr : '+ str(self.spr) + '\n'
+        st = st + 'step per revolution  : '+ str(self.spr) + '\n'
         st = st + 'N  : '+ str(self.N) + '\n'
         return(st)
 
     def duration(self):
         """
         """
-        self.duration
+        #self.duration
+        pass
 
     def show(self):
         """Enables view profile
@@ -897,7 +915,6 @@ class Scanner(PyLayers):
         self.a[2].com('ON')
         self.a[3].com('ON')
 
-
     def __repr__(self):
         px = self.a[1].com('R(PA)')[1].replace('*','').replace('\n','')
         py = self.a[2].com('R(PA)')[1].replace('*','').replace('\n','')
@@ -909,7 +926,7 @@ class Scanner(PyLayers):
 
 
     def set_origin():
-        """
+        """ 
         """
         pass
 
@@ -938,7 +955,7 @@ class Scanner(PyLayers):
             assert(self.phi==i),'Error : Out of range'
 
 
-        #Answers those questions
+        #Answers those questions:
         # Ou suis-je ?
         # Ou dois-je aller : p1
         # Comment y aller :
@@ -947,8 +964,6 @@ class Scanner(PyLayers):
 
     def array(A):
         """ Implement an Array
-
-
 
 
         """
@@ -965,7 +980,6 @@ if __name__=="__main__":
     X.limits(cmd='set',mode=1)
     Y.limits(cmd='set',mode=1)
     R = Axes(3,'r',typ='r',scale=2111.111111111111,ser=Serial(port=port,baudrate=9600,timeout=0.05))
-    X.com()
     # pass
     #s = Scanner('/dev/ttyUSB0')
     #s = Scanner('/dev/ttyUSB2')
