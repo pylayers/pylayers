@@ -484,7 +484,8 @@ class Axes(PyLayers):
             self.com(cstr,verbose=True)
 
     def home(self,cmd='get',**kwargs):
-        """ enables back material home for each axe
+        """ enables back material home for each axe.
+            for more informations see Parker book page 108.
 
         Parameters
         ----------
@@ -500,11 +501,11 @@ class Axes(PyLayers):
 
         """
 
-        defaults = {'mode':0,
-                    'vel':15,
-                    'acc':20,
-                    'edg':'+',
-                    'typ':0,
+        defaults = {'mode' :0,
+                    'vel'  :15,
+                    'acc'  :20,
+                    'edg'  :'+',
+                    'typ'  :0,
                     'armed':1
                 }
 
@@ -512,21 +513,22 @@ class Axes(PyLayers):
             if k not in kwargs:
                 kwargs[k]=defaults[k]
 
-        self.mode = kwargs['mode']
-        self.vel = kwargs['vel']
-        self.acc = kwargs['acc']
-        self.edg = kwargs['edg']
-        self.typ = kwargs['typ']
+        self.mode  = kwargs['mode']
+        self.vel   = kwargs['vel']
+        self.acc   = kwargs['acc']
+        self.edg   = kwargs['edg']
+        self.typ   = kwargs['typ']
         self.armed = kwargs['armed']
 
         if cmd=='get':
             st = self.com('HOME')
             ans = st[1].split(' ')
 
-            
-            print "-----------------"
-            print " arguments of HOME   "
-            print "-----------------"
+
+            print "-------------------"
+            print " arguments of HOME "
+            print "-------------------"
+
             if '1' in ans[0]:
                 print "armed "
             else:
@@ -568,14 +570,17 @@ class Axes(PyLayers):
                           vel+','+\
                           str(self.acc)+','+\
                           str(self.mode)+')'
+            print cstr
             self.com(cstr)
 
         if cmd=='go':
-            cstr = 'HOME1'
+            #cstr = 'HOME1'
+            cstr = 'HOME'+str(self.armed)
             self.com(cstr)
-            cstr = 'ARM1'
+            cstr = 'ARM'+str(self.armed)
             self.com(cstr)
             cstr = 'GH'
+            #cstr = 'G'
             self.com(cstr)
 
         #if lvar == []:
