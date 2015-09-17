@@ -1022,11 +1022,18 @@ class Layout(PyLayers):
         #
         # Calculate the wedge angle of degree 2 points
         #
+        #if 2 in self.degree:
+        #    wedgea = self.wedge(self.degree[2])
+        #
+        # wedge < 179 (not flat)
+        #    idiff = filter(lambda x: wedgea[x]<179,range(len(self.degree[2])))
+        #    self.ldiff = map(lambda x : self.degree[2][x],idiff)
         wedgea = self.wedge(self.degree[2])
 
         # wedge < 179 deg (not flat)
         idiff = filter(lambda x: wedgea[x]<179,range(len(self.degree[2])))
         self.ldiff = map(lambda x : self.degree[2][x],idiff)
+
         # add degree 1 point
         # This corresponds to degree 2 point with an adjascent airwall
         # (half-plane diffraction)

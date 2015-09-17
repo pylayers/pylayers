@@ -286,9 +286,7 @@ class CorSer(PyLayers):
             self.shkb = [9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
             self.sbs  = [9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
             self.mocap =[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
-            #self.mocapinterf = [5,6,7,8,13,14,15,16,21,22,23,24,]
-            # Warning : Serie 5 has not the cylinder
-            self.mocapinterf = [6,7,8,13,14,15,16,21,22,23,24,]
+            self.mocapinterf = [5,6,7,8,13,14,15,16,21,22,23,24,]
 
         self.typ=''
 
@@ -790,13 +788,7 @@ bernard
                              color=color[us])})
 
         if self.serie in self.mocapinterf:
-            if self.serie==13:
-                self.interf = ['Anis_Cylindre:',
-                         'Benoit_Cylindre:',
-                         'Claude_Cylindre:',
-                         'Meriem_Cylindre:']
-            else:
-                self.interf = ['Anis_Cylindre:',
+            self.interf = ['Anis_Cylindre:',
                      'Benoit_Cylindre:',
                      'Bernard_Cylindre:',
                      'Claude_Cylindre:',
