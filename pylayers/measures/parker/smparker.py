@@ -523,18 +523,22 @@ class Axes(PyLayers):
             st = self.com('HOME')
             ans = st[1].split(' ')
 
+            
+            print "-----------------"
+            print " arguments of HOME   "
+            print "-----------------"
             if '1' in ans[0]:
-                print "armed, "
+                print "armed "
             else:
-                print "not armed, "
+                print "not armed "
             if '-' in ans[1]:
-                print "reference edge is negative, "
+                print "reference edge is negative "
             else:
-                print "reference edge is positive, "
+                print "reference edge is positive "
             if '1' in ans[2]:
-                print "home switch normally closed 1, "
+                print "home switch normally closed 1 "
             else:
-                print "home switch normally open 0 (default),  "
+                print "home switch normally open 0 (default) "
 
             if '+' in ans[3]:
                 print 'velocity : +',eval(ans[3].split('V+')[1]), "rps"
@@ -544,7 +548,7 @@ class Axes(PyLayers):
             print 'acceleration : ',eval(ans[4].split('A')[1]), "rps²"
 
             if '0' in ans[5]:
-                print 'Mode 0: Motor in the active window of the switch(default)'
+                print 'Mode 0: Motor in the active window of the switch (default)'
             if '1' in ans[5]:
                 print 'Mode 1: Motor in the position to the edge + or -'
             if '2' in ans[5]:
