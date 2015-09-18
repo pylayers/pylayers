@@ -8,7 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from pylayers.util.project import *
-
+from pylayers.antprop.aarray import *
 def gettty():
     """get tty and handles port conflicts
 
@@ -366,11 +366,6 @@ class Axes(PyLayers):
         """
         pass
 
-    #def com2(self,com='R(ST)'):
-        #self.ser.write(str(self._id)+com+'\r\n')
-        #st = self.ser.readlines()
-        #return(st)
-
     def getvar(self,lvar=[]):
         """allows get state of variables
 
@@ -395,26 +390,6 @@ class Axes(PyLayers):
             print Axes.dvar[var],st
 
 
-
-    #def com(self,command,arg='',verbose=False):
-        #""" Send command to serial port
-
-        #Parameters
-        #----------
-
-        #command : str command prefix
-        #arg :  command argument
-        #verbose :
-
-        #"""
-        #if arg!='':
-            #cst = str(self._id)+command+str(arg)+'\r\n'
-        #else:
-            #cst = str(self._id)+command+'\r\n'
-            #print cst
-        #self.ser.write(cst)
-        #st = self.ser.readlines()
-        #return(st)
 
     def com(self,command='R(SN)',verbose=False):
         """ send command to serial port
@@ -808,11 +783,10 @@ class Axes(PyLayers):
         com   = self.com(scom1)
         com   = self.com(scom2)
         com   = self.com(scom3)
-        tic = time.time()
+        #tic = time.time()
         com = self.com('G')
-        print com
-        toc = time.time()
-        print  toc-tic
+        #toc = time.time()
+        #print  toc-tic
 
 
     def close(self):
@@ -842,17 +816,20 @@ class Axes(PyLayers):
         return(st)
 
 class Scanner(PyLayers):
-    """This class handles scenarios
+    """This class handles the FACS (Four Axes Channel Scanner)
 
     """
 
-    def __init__(self,port=gettty()):
+    def __init__(self,port=gettty(),anchors={}):
         """
         Parameters
         ----------
 
-        p   : current position of the scanner
-        phi : current angle of the scanner
+        pG  : current position of the scanner in global frame
+        pH  : current position of the scanner in home frame
+        pA  : current position of the scanner in array frame
+        ang : current angle of the scanner
+        anchors : dict of scanner anchor points in global frame
 
         Examples
         --------
@@ -860,17 +837,14 @@ class Scanner(PyLayers):
         >>> s.a[1].name_of_function()
         """
         self.ser = Serial(port = port, baudrate=9600, timeout = 1)
-        #
-        # p current position of the scanner
-        #
-        self.p = np.array([0,0])
+        self.anchors = anchors
         #
         # phi current angle of the scanner
         #
         self.phi = 0
-        self.sx = 12800
-        self.sy = 22800
-        self.sz = 21111.11111111111
+        self.sx = 1280000
+        self.sy = 2280000
+        self.sz = 211111.1111111111
         self.sr = 2111.111111111111
 
         self.a  = ['',Axes(1,'x',self.ser,scale=self.sx,typ='t'),
@@ -878,6 +852,20 @@ class Scanner(PyLayers):
                       Axes(3,'rot',self.ser,scale=self.sr,typ='r'),
                       Axes(4,'z',self.ser,scale=self.sz,typ='t')]
 
+        # p current position of the scanner
+        # ang angle of the rotation axe
+        #
+        # Coordinate of Home Scanner Point in global frame
+        if self.anchors=={}:
+            self.H = np.array([0,0,0.9])
+        else:
+            pass
+            #beware TBD from anchors
+
+        # Coordinate of Array Scanner Point in home frame
+        self.A = np.array([0,0,0.15])
+        self.upd_pos(np.array([0,0,0]))
+        self.ang =  0.
         # Limits activated on axes X and Y    (mask =0 )
         # Limits desactivated on axes Z and R (mask =3 )
         self.a[1].limits(mask=0,typ=1,mode=1,cmd='set')
@@ -885,7 +873,7 @@ class Scanner(PyLayers):
         self.a[3].limits(mask=3,typ=1,mode=1,cmd='set')
         self.a[4].limits(mask=3,typ=1,mode=1,cmd='set')
 
-        # Power ON 
+        # Power ON
         self.a[1].com('ON')
         self.a[2].com('ON')
         self.a[3].com('ON')
@@ -894,7 +882,23 @@ class Scanner(PyLayers):
         self.home(cmd='set')
         self.home(cmd='go',init=True)
 
+
     def __repr__(self):
+        st = 'Home frame : ' + str(self.pH[0])+','\
+                                    + str(self.pH[1])+',' \
+                                    + str(self.pH[2])+'\n'
+        st = st +  'Global frame : '+str(self.pG[0])+','\
+                                    + str(self.pG[1])+',' \
+                                    + str(self.pG[2])+'\n'
+        st = st + 'Array frame : '+str(self.pA[0])+','\
+                                    + str(self.pA[1])+',' \
+                                    + str(self.pA[2])+'\n'
+        st =  st + 'Current angle : '+str(self.ang)+'\n'
+        return(st)
+
+
+
+    def check_pa(self):
         px = self.a[1].com('R(PA)')[1].replace('*','').replace('\n','')
         py = self.a[2].com('R(PA)')[1].replace('*','').replace('\n','')
         pz = self.a[4].com('R(PA)')[1].replace('*','').replace('\n','')
@@ -902,16 +906,26 @@ class Scanner(PyLayers):
         pr = self.a[3].com('R(PA)')[1].replace('*','').replace('\n','')
         st = 'current position : '+ str(float(px)/self.sx) +',' + str(float(py)/self.sy)  +','+ str(float(pz)/self.sz) +'\n'
         st = st + 'current angle  : '+ str(float(pr)/self.sr) + '\n'
-        return(st)
 
 
-    def set_origin():
+    def origin(self,cmd='set',p0=np.array([0,0,0]),ang0=0):
         """
         """
-        pass
+        if cmd=='set':
+            self.p0=p0
+            self.ang0=ang0
 
     def home(self,cmd='get',init=False,vel=10):
         """ allows a return home for 3 axes
+
+        Parameters
+        ----------
+
+        cmd
+        init
+        vel
+        frame
+
         """
         lt = []
         for k in range(1,len(self.a)):
@@ -920,43 +934,61 @@ class Scanner(PyLayers):
                     cmd ='set'
             lt.append(threading.Thread(name=str(k),target=self.a[k].home(cmd=cmd,vel=10)))
         for k,t in enumerate(lt):
-            print "starting ",k
             t.start()
+        self.upd_pos(np.array([0,0,0]))
 
+    def upd_pos(self,ptH):
+        self.pH = ptH
+        self.pA = self.pH - self.A
+        self.pG = self.H + self.pH
 
-
-    def mv(pt,at,var=0):
+    def mv(self,pt=np.array([0.1,0.1,0]),at=0,frame='A',vel=20):
         """ move to target point
 
         Parameters
         ----------
 
-        pt : target position  (pt=np.array([0,0,0]))
+        pt : target position (pt=np.array([0,0,0]))
         at : target angle
+        frame : {'H'|'A'|'G'}
 
         """
 
-        #
-        #warphi : values prohibited to phi
-        #
-        warphi=np.arange(180,360)
-        for i in warphi:
-            assert(self.phi==i),'Error : Out of range'
+        # convert to home frame
+        if frame=='A':
+            ptH = pt + self.A
+        if frame=='G':
+            ptH = pt + self.H
+        if frame=='H':
+            ptH = pt
 
+        vec = ptH-self.pH
+        dx = vec[0]
+        dy = vec[1]
+        dz = vec[2]
+        da = at - self.ang
+        self.a[1].mv(dx,vel=vel)
+        self.a[2].mv(dy,vel=vel)
+        self.a[4].mv(dz,vel=vel)
+        self.a[3].mv(da,vel=vel)
+
+        # update new position
+
+        self.upd_pos(ptH)
 
         #Answers those questions:
-        # Ou suis-je ?
         # Ou dois-je aller : p1
         # Comment y aller :
         #   + fabriquer les profils
         #   + Appliquer les profils
 
-    def array(A):
+    def array(self,A,vel=20):
         """ Implement an Array
 
 
         """
-        pass
+        for k in range(A.p.shape[1]):
+            self.mv(pt=A.p[:,k],vel=vel)
 
         #array = ensemble de points
         #This fonction contains a cloud of points + noton of scheduling
