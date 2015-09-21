@@ -689,7 +689,6 @@ class Layout(PyLayers):
         """
         consistent = True
         nodes = self.Gs.nodes()
-
         #
         # points
         # segments
@@ -1381,6 +1380,7 @@ class Layout(PyLayers):
             self.filefur=config.get('files','furniture')
 
         # convert graph Gs to numpy arrays for faster post processing
+        pdb.set_trace()
         self.g2npy()
 
 
@@ -1453,7 +1453,7 @@ class Layout(PyLayers):
         layout files are stored in the directory pstruc['DIRxxx']
 
         """
-
+        pdb.set_trace()
         filename,ext=os.path.splitext(_filename)
         if ext=='.osm':
             filename = pyu.getlong(_filename,pstruc['DIROSM'])
@@ -4507,7 +4507,7 @@ class Layout(PyLayers):
                 self.savestr2(filename)
                 print "structure saved in ", filename
             if ext == '.ini':
-                self.savestr2(filename)
+                self.saveini(filename)
                 print "structure saved in ", fileini
 
     def saveold(self, filename):
