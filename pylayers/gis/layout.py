@@ -6904,7 +6904,7 @@ class Layout(PyLayers):
         #     if k==4:
         #         fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg,nodes=False,node_size=50,node_color='b')
 
-    def showG(self, graph='r', **kwargs):
+    def showG(self, graph='s', **kwargs):
         u""" show the different graphs
 
         Parameters
@@ -7076,7 +7076,6 @@ class Layout(PyLayers):
         # get color dictionnary from pyutil
 
         cold = pyu.coldict()
-
 
         if isinstance(kwargs['labels'],list):
             labels = kwargs['labels']
