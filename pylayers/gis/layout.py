@@ -689,7 +689,6 @@ class Layout(PyLayers):
         """
         consistent = True
         nodes = self.Gs.nodes()
-
         #
         # points
         # segments
@@ -738,10 +737,9 @@ class Layout(PyLayers):
         ke = self.Gs.pos.keys()
         x = np.array(map(lambda x : x[0], self.Gs.pos.values()))
         y = np.array(map(lambda x : x[1], self.Gs.pos.values()))
-        p = np.vstack((x,y))
+        p   = np.vstack((x,y))
         d1  = p-np.roll(p,1,axis=1)
-
-        sd1= np.sum(d1,axis=0)
+        sd1 = np.sum(np.abs(d1),axis=0)
         if not sd1.all()<>0:
            lu = np.where(sd1==0)[0]
 
@@ -1040,8 +1038,9 @@ class Layout(PyLayers):
         self.ldiff = self.ldiff+list(self.degree[1])
         # if problem here check file format 'z' should be a string
         self.maxheight = np.max([v[1] for v in nx.get_node_attributes(self.Gs,'z').values()])
-
+        # calculate extremum of segments
         self.extrseg()
+
 
     def loadosm(self, _fileosm):
         """ load layout from an osm file 
@@ -1453,7 +1452,6 @@ class Layout(PyLayers):
         layout files are stored in the directory pstruc['DIRxxx']
 
         """
-
         filename,ext=os.path.splitext(_filename)
         if ext=='.osm':
             filename = pyu.getlong(_filename,pstruc['DIROSM'])
@@ -4490,25 +4488,31 @@ class Layout(PyLayers):
 
         return(visi)
 
-    def save(self,filename=[]):
+    def save(self,_filename=[]):
         """ save layout
+
+        Parameters
+        ----------
+
+        _filename : short file name (without path)
+
         """
-        if filename==[]:
+        if _filename==[]:
             racine, ext = os.path.splitext(self.filename)
-            filename = racine + '.str2'
-            fileini = racine + '.ini'
-            self.savestr2(filename)
-            self.saveini(fileini)
-            print "structure saved in ", filename
-            print "structure saved in ", fileini
+            _filename = racine + '.str2'
+            _fileini = racine + '.ini'
+            self.savestr2(_filename)
+            self.saveini(_fileini)
+            print "structure saved in ", _filename
+            print "structure saved in ", _fileini
         else:
-            racine, ext = os.path.splitext(filename)
+            racine, ext = os.path.splitext(_filename)
             if ext == '.str2':
-                self.savestr2(filename)
-                print "structure saved in ", filename
+                self.savestr2(_filename)
+                print "structure saved in ", _filename
             if ext == '.ini':
-                self.savestr2(filename)
-                print "structure saved in ", fileini
+                self.saveini(_filename)
+                print "structure saved in ", _filename
 
     def saveold(self, filename):
         """ save Layout (deprecated)
@@ -6900,7 +6904,7 @@ class Layout(PyLayers):
         #     if k==4:
         #         fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg,nodes=False,node_size=50,node_color='b')
 
-    def showG(self, graph='r', **kwargs):
+    def showG(self, graph='s', **kwargs):
         u""" show the different graphs
 
         Parameters
@@ -7072,7 +7076,6 @@ class Layout(PyLayers):
         # get color dictionnary from pyutil
 
         cold = pyu.coldict()
-
 
         if isinstance(kwargs['labels'],list):
             labels = kwargs['labels']
