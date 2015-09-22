@@ -60,7 +60,7 @@ class MIMO(object):
                 self.calibration()
                 if time:
                     # reshaping for using ift (todo update ift for MDA !!)
-                    Hcal = FUsignal(self.Hcal.x,np.reshape(self.Hcal.y,(Nt*Nr,Nf)))
+                    Hcal = TChannel(x=self.Hcal.x,y=np.reshape(self.Hcal.y,(Nt*Nr,Nf)))
                     hcal = Hcal.ift(Nz=Nz,ffts=1)
                     shh = hcal.y.shape
                     self.hcal = TUsignal(hcal.x,np.reshape(hcal.y,(Nr,Nt,shh[-1])))
@@ -89,7 +89,6 @@ class MIMO(object):
         Module (dB) ;  Angle (Degree)
 
         """
-
         fd  = open(self.filename)
         lis = fd.readlines()
         fd.close()
@@ -136,7 +135,7 @@ class MIMO(object):
 
         self.C = FUsignal(C.freq,tc)
 
-        
+
         self.Hcal = self.H/self.C
 
         del self.H
@@ -257,13 +256,13 @@ class MIMO(object):
 
         # Evaluation of the transfer tensor
         #
-        # HdH : 
+        # HdH :
 
         HdH,U,S,V = self.transfer()
 
         #singular value decomposition of channel tensor (broadcasted along frequency axis)
 
-        
+
         Us,D,Vsh = self.svd()
 
         # Vsh : nf x nt x nt
@@ -319,12 +318,12 @@ class MIMO(object):
 
         Parameters
         ----------
-        
-        Pt : np.array 
-        	Transmitted power
+
+        Pt : np.array
+        Transmitted power
         Tp : float
-        	Noise Temperature
-        	
+        Noise Temperature
+
         """
         fGHz  = self.Hcal.x
         Nf    = len(fGHz)
@@ -363,7 +362,7 @@ class MIMO(object):
         Cbf  = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=1)
         #C   = dfGHz*np.log(la.det(IR[None,...]+(Pt/self.Nt)*HH/(N0*dfGHz)))/np.log(2)
         return(Cbf,Qn)
-        
+
 
 
     def WFcapacity(self,Pt=np.array([1e-3]),Tp=273):
@@ -380,7 +379,7 @@ class MIMO(object):
         -------
 
         C : capacity (bit/s)
-        rho : SNR (in linear scale) 
+        rho : SNR (in linear scale)
 
             log_2(det(It + HH^{H})
 
@@ -414,7 +413,7 @@ class MIMO(object):
 
 
         #
-        # Iterative implementation of Water Filling algorithm 
+        # Iterative implementation of Water Filling algorithm
         #
         pb = N0*dfGHz*1e9*np.ones((self.Nf,self.Nt))
         pt = Pt[None,None,:]/((self.Nf-1)*self.Nt)
@@ -539,18 +538,18 @@ class MIMO(object):
                 if frequency:
                     if not phase:
                         if dB:
-                            #ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[k,:])),color=color) 
-                            ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[iR,iT,:])),color=color) 
+                            #ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[k,:])),color=color)
+                            ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[iR,iT,:])),color=color)
                         else:
-                            #ax[iR,iT].plot(H.x,abs(H.y[k,:]),color='k') 
-                            ax[iR,iT].plot(H.x,abs(H.y[iR,iT,:]),color='k') 
+                            #ax[iR,iT].plot(H.x,abs(H.y[k,:]),color='k')
+                            ax[iR,iT].plot(H.x,abs(H.y[iR,iT,:]),color='k')
                     else:
-                        #ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[k,:])),color=color) 
-                        ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[iR,iT,:])),color=color) 
+                        #ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[k,:])),color=color)
+                        ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[iR,iT,:])),color=color)
                 else:
-                        ax[iR,iT].plot(self.h.x,abs(self.h.y[iR,iT,:]),color=color) 
-                if (iR==7):         
-                    ax[iR,iT].set_xlabel('f (GHz)') 
-                ax[iR,iT].set_title(str(iR+1)+'x'+str(iT+1)) 
+                        ax[iR,iT].plot(self.h.x,abs(self.h.y[iR,iT,:]),color=color)
+                if (iR==7):
+                    ax[iR,iT].set_xlabel('f (GHz)')
+                ax[iR,iT].set_title(str(iR+1)+'x'+str(iT+1))
         return(fig,ax)
 
