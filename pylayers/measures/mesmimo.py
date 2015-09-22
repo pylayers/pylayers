@@ -60,7 +60,7 @@ class MIMO(object):
                 self.calibration()
                 if time:
                     # reshaping for using ift (todo update ift for MDA !!)
-                    Hcal = FUsignal(self.Hcal.x,np.reshape(self.Hcal.y,(Nt*Nr,Nf)))
+                    Hcal = TChannel(self.Hcal.x,np.reshape(self.Hcal.y,(Nt*Nr,Nf)))
                     hcal = Hcal.ift(Nz=Nz,ffts=1)
                     shh = hcal.y.shape
                     self.hcal = TUsignal(hcal.x,np.reshape(hcal.y,(Nr,Nt,shh[-1])))
@@ -68,9 +68,9 @@ class MIMO(object):
 
     def __repr__(self):
         st = 'MIMO Object'+'\n'
-        st = st + 'Nr : '+str(self.Nr)+ '\n'
-        st = st + 'Nt : '+str(self.Nt)+ '\n'
-        st = st + 'Nf : '+str(self.Nf)+ '\n'
+        st = st + 'axe 0  Nr : '+str(self.Nr)+ '\n'
+        st = st + 'axe 1  Nt : '+str(self.Nt)+ '\n'
+        st = st + 'axe 2  Nf : '+str(self.Nf)+ '\n'
         return(st)
 
     def __sub__(self,m):
@@ -112,7 +112,7 @@ class MIMO(object):
         #
         y   = y.reshape(self.Nr,self.Nt,self.Nf)
 
-        self.H = FUsignal(self.freq,y)
+        self.H = TChannel(x=self.freq,y=y)
 
     def calibration(self):
         """ Apply calibration files
@@ -134,9 +134,9 @@ class MIMO(object):
 
         # C.freq , Nf
 
-        self.C = FUsignal(C.freq,tc)
+        self.C = TChannel(x=C.freq,y=tc)
 
-        
+
         self.Hcal = self.H/self.C
 
         del self.H
@@ -244,6 +244,9 @@ class MIMO(object):
         BGHz  = fGHz[-1]-fGHz[0]
         dfGHz = fGHz[1]-fGHz[0]
 
+        if type(Pt)==float:
+            Pt=np.array([Pt])
+
         # White Noise definition
         #
         # Boltzman constantf    = len(fGHz)
@@ -257,14 +260,15 @@ class MIMO(object):
 
         # Evaluation of the transfer tensor
         #
-        # HdH : 
+        # HdH :
 
         HdH,U,S,V = self.transfer()
 
         #singular value decomposition of channel tensor (broadcasted along frequency axis)
 
-        
+
         Us,D,Vsh = self.svd()
+
 
         # Vsh : nf x nt x nt
 
@@ -300,7 +304,7 @@ class MIMO(object):
         #logdetM = np.real(np.log(detM)/np.log(2))
         #C1  = dfGHz*logdetM
 
-        CB  = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=1)
+        #CB  = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=1)
         #CB  = dfGHz*np.sum(np.log(1+rho)/np.log(2))
         CB   = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=1)
         CB1  = dfGHz*np.sum(np.log(1+rho1)/np.log(2),axis=1)
@@ -319,12 +323,12 @@ class MIMO(object):
 
         Parameters
         ----------
-        
-        Pt : np.array 
-        	Transmitted power
+
+        Pt : np.array
+            Transmitted power
         Tp : float
-        	Noise Temperature
-        	
+            Noise Temperature
+
         """
         fGHz  = self.Hcal.x
         Nf    = len(fGHz)
@@ -363,7 +367,7 @@ class MIMO(object):
         Cbf  = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=1)
         #C   = dfGHz*np.log(la.det(IR[None,...]+(Pt/self.Nt)*HH/(N0*dfGHz)))/np.log(2)
         return(Cbf,Qn)
-        
+
 
 
     def WFcapacity(self,Pt=np.array([1e-3]),Tp=273):
@@ -374,13 +378,13 @@ class MIMO(object):
 
         Pt :  the total power to be distributed over the different spatial
             channels using water filling
-        Tp : Receiver Temperature (K)
+        Tp : Receiver Noise Temperature (K)
 
         Returns
         -------
 
         C : capacity (bit/s)
-        rho : SNR (in linear scale) 
+        rho : SNR (in linear scale)
 
             log_2(det(It + HH^{H})
 
@@ -414,7 +418,7 @@ class MIMO(object):
 
 
         #
-        # Iterative implementation of Water Filling algorithm 
+        # Iterative implementation of Water Filling algorithm
         #
         pb = N0*dfGHz*1e9*np.ones((self.Nf,self.Nt))
         pt = Pt[None,None,:]/((self.Nf-1)*self.Nt)
@@ -549,7 +553,7 @@ class MIMO(object):
                         ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[iR,iT,:])),color=color) 
                 else:
                         ax[iR,iT].plot(self.h.x,abs(self.h.y[iR,iT,:]),color=color) 
-                if (iR==7):         
+                if (iR==7):
                     ax[iR,iT].set_xlabel('f (GHz)') 
                 ax[iR,iT].set_title(str(iR+1)+'x'+str(iT+1)) 
         return(fig,ax)
