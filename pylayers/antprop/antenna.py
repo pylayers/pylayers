@@ -134,8 +134,10 @@ Miscellianous  functions
 
 
 """
-
-import mayavi.mlab as mlab
+try:
+    import mayavi.mlab as mlab
+except:
+    pass
 import doctest
 import os
 import glob
@@ -1369,6 +1371,11 @@ class Antenna(Pattern):
         self.phi = d.phi
         self.Ft = d.Ftheta
         self.Fp = d.Fphi
+
+        self.Fp = self.Fp.swapaxes(0, 2)
+        self.Fp = self.Fp.swapaxes(0, 1)
+        self.Ft = self.Ft.swapaxes(0, 2)
+        self.Ft = self.Ft.swapaxes(0, 1)
         Gr = np.real(self.Fp * np.conj(self.Fp) + \
                      self.Ft * np.conj(self.Ft))
         self.sqG = np.sqrt(Gr)
@@ -2397,7 +2404,7 @@ class Antenna(Pattern):
         Parameters
         ----------
 
-        delayCandidates : ndarray
+        delayCandidates : ndarray dalay in (ns)
             default np.arange(-10,10,0.001)
 
         Returns
@@ -2412,7 +2419,7 @@ class Antenna(Pattern):
         if self.evaluated:
             maxPowerInd  = np.unravel_index(np.argmax(abs(self.Ft)),np.shape(self.Ft))
             elD  = delayCandidates[np.argmax(abs(
-                np.dot(self.Ft[:,maxPowerInd[1],maxPowerInd[2]]
+                np.dot(self.Ft[maxPowerInd[0],maxPowerInd[1],:]
                        ,np.exp(2j*np.pi*self.fGHz[:,None]
                                *delayCandidates[None,:]))))]
             #electricalDelay  = delayCandidates[np.argmax(abs(
@@ -4094,5 +4101,4 @@ def show3D(F, theta, phi, k, col=True):
 
 
 if (__name__ == "__main__"):
-    plt.ion()
     doctest.testmod()
