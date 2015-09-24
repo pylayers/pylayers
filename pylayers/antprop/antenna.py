@@ -135,11 +135,7 @@ Miscellianous  functions
 
 """
 
-try:
-    import mayavi.mlab as mlab
-except:
-    print 'mayavi not installed'
-
+import mayavi.mlab as mlab
 import doctest
 import os
 import glob
@@ -1137,6 +1133,7 @@ class Antenna(Pattern):
 
         else:
             self.typ=typ
+            self._filename=typ
             self.eval()
             # If antenna is defined from a pattern function
             # The frequency range can be defined from fmin
@@ -2106,7 +2103,7 @@ class Antenna(Pattern):
         else :
             k = np.where(fGHz>self.fGHz)[0]
 
-        r = self.sqG[k,:,:]
+        r = self.sqG[:,:,k]
         th = self.theta[:,None]
         phi = self.phi[None,:]
 
@@ -2183,20 +2180,20 @@ class Antenna(Pattern):
         # 3 axis : nf x nth x nph
         if len(self.Ft.shape)==3:
             if typ == 'G':
-                V = self.sqG[k, :, :]
+                V = self.sqG[:,:,k]
             if typ == 'Ft':
-                V = self.Ft[k, :, :]
+                V = self.Ft[:,:,k]
             if typ == 'Fp':
-                V = self.Fp[k, :, :]
+                V = self.Fp[:,:,k]
 
         # 4 axis : nf x nth x nph x ntxru
         if len(self.Ft.shape)==4:
             if typ == 'G':
-                V = self.sqG[k, :, :, txru]
+                V = self.sqG[:, :, txru,k]
             if typ == 'Ft':
-                V = self.Ft[k, :, : ,txru]
+                V = self.Ft[:, : ,txru,k]
             if typ == 'Fp':
-                V = self.Fp[k, :, :,txru]
+                V = self.Fp[:, :,txru,k]
 
         if po ==[]:
             po = np.array([0, 0, 0])
@@ -2248,11 +2245,11 @@ class Antenna(Pattern):
         ax = axes3d.Axes3D(fig)
 
         if typ == 'Gain':
-            V = self.sqG[k, :, :]
+            V = self.sqG[:, :,k]
         if typ == 'Ftheta':
-            V = self.Ft[k, :, :]
+            V = self.Ft[:, :,k]
         if typ == 'Fphi':
-            V = self.Fp[k, :, :]
+            V = self.Fp[ :, :,k]
 
         vt = np.ones(self.nth)
         vp = np.ones(self.nph)
@@ -3813,69 +3810,69 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
     Fpho = A.Fphi
 
     # limites module Fthr, Ftho, Fphr, Fpho
-    maxTr = abs(Fthr[k, :, :]).max()
-    maxTo = abs(Ftho[k, :, :]).max()
+    maxTr = abs(Fthr[:, :, k]).max()
+    maxTo = abs(Ftho[:, :, k ]).max()
     MmT = max(maxTr, maxTo)
 
-    minTr = abs(Fthr[k, :, :]).min()
-    minTo = abs(Ftho[k, :, :]).min()
+    minTr = abs(Fthr[ :, :, k ]).min()
+    minTo = abs(Ftho[ :, :, k ]).min()
     mmT = min(minTr, minTo)
 
-    maxPr = abs(Fphr[k, :, :]).max()
-    maxPo = abs(Fpho[k, :, :]).max()
+    maxPr = abs(Fphr[ :, :, k ]).max()
+    maxPo = abs(Fpho[ :, :, k ]).max()
     MmP = max(maxPr, maxPo)
 
-    minPr = abs(Fphr[k, :, :]).min()
-    minPo = abs(Fpho[k, :, :]).min()
+    minPr = abs(Fphr[ :, :, k ]).min()
+    minPo = abs(Fpho[ :, :, k ]).min()
     mmP = min(minPr, minPo)
 
     # limites real Fthr, Ftho, Fphr, Fpho
-    maxTrr = np.real(Fthr[k, :, :]).max()
-    maxTor = np.real(Ftho[k, :, :]).max()
+    maxTrr = np.real(Fthr[ :, :, k ]).max()
+    maxTor = np.real(Ftho[ :, :, k ]).max()
     MrT = max(maxTrr, maxTor)
 
-    minTrr = np.real(Fthr[k, :, :]).min()
-    minTor = np.real(Ftho[k, :, :]).min()
+    minTrr = np.real(Fthr[ :, :, k ]).min()
+    minTor = np.real(Ftho[ :, :, k ]).min()
     mrT = min(minTrr, minTor)
 
-    maxPrr = np.real(Fphr[k, :, :]).max()
-    maxPor = np.real(Fpho[k, :, :]).max()
+    maxPrr = np.real(Fphr[ :, :, k ]).max()
+    maxPor = np.real(Fpho[ :, :, k ]).max()
     MrP = max(maxPrr, maxPor)
 
-    minPrr = np.real(Fphr[k, :, :]).min()
-    minPor = np.real(Fpho[k, :, :]).min()
+    minPrr = np.real(Fphr[ :, :, k ]).min()
+    minPor = np.real(Fpho[ :, :, k ]).min()
     mrP = min(minPrr, minPor)
 
     # limites real Fthr, Ftho, Fphr, Fpho
-    maxTri = np.imag(Fthr[k, :, :]).max()
-    maxToi = np.imag(Ftho[k, :, :]).max()
+    maxTri = np.imag(Fthr[ :, :, k ]).max()
+    maxToi = np.imag(Ftho[ :, :, k ]).max()
     MiT = max(maxTri, maxToi)
 
-    minTri = np.imag(Fthr[k, :, :]).min()
-    minToi = np.imag(Ftho[k, :, :]).min()
+    minTri = np.imag(Fthr[ :, :, k ]).min()
+    minToi = np.imag(Ftho[ :, :, k ]).min()
     miT = min(minTri, minToi)
 
-    maxPri = np.imag(Fphr[k, :, :]).max()
-    maxPoi = np.imag(Fpho[k, :, :]).max()
+    maxPri = np.imag(Fphr[ :, :, k ]).max()
+    maxPoi = np.imag(Fpho[ :, :, k ]).max()
     MiP = max(maxPri, maxPoi)
 
-    minPri = np.imag(Fphr[k, :, :]).min()
-    minPoi = np.imag(Fpho[k, :, :]).min()
+    minPri = np.imag(Fphr[ :, :, k ]).min()
+    minPoi = np.imag(Fpho[ :, :, k ]).min()
     miP = min(minPri, minPoi)
 
     # limithes arg Fth,Fph
-    maxATr = np.angle(Fthr[k, :, :]).max()
-    maxATo = np.angle(Ftho[k, :, :]).max()
+    maxATr = np.angle(Fthr[ :, :, k ]).max()
+    maxATo = np.angle(Ftho[ :, :, k ]).max()
     maT = max(maxATr, maxATo)
-    minATr = np.angle(Fthr[k, :, :]).min()
-    minATo = np.angle(Ftho[k, :, :]).min()
+    minATr = np.angle(Fthr[ :, :, k ]).min()
+    minATo = np.angle(Ftho[ :, :, k ]).min()
     maT0 = min(minATr, minATo)
 
-    maxAPr = np.angle(Fphr[k, :, :]).max()
-    maxAPo = np.angle(Fpho[k, :, :]).max()
+    maxAPr = np.angle(Fphr[ :, :, k ]).max()
+    maxAPo = np.angle(Fpho[ :, :, k ]).max()
     maP = max(maxAPr, maxAPo)
-    minAPr = np.angle(Fphr[k, :, :]).min()
-    minAPo = np.angle(Fpho[k, :, :]).min()
+    minAPr = np.angle(Fphr[ :, :, k ]).min()
+    minAPo = np.angle(Fpho[ :, :, k ]).min()
     maP0 = min(minAPr, minAPo)
 
     ax = plt.axes([0, 0, 360, 180])
@@ -3891,23 +3888,23 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
     #pcolor(A.phi*rtd,A.theta*rtd,abs(Ftho[k,:,:]),cmap=cm.gray_r,vmin=0,vmax=mmT)
             #
     #cmap=cm.hot
-        plt.pcolor(A.phi * rtd, A.theta * rtd, abs(Ftho[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, abs(Ftho[ :, :, k ]),
                    cmap=cm.hot_r, vmin=mmT, vmax=MmT)
         plt.title(r'$|F_{\theta}|$ original', fontsize=fontsize)
 
     if typ == 'real':
         #pcolor(A.phi*rtd,A.theta*rtd,real(Ftho[k,:,:]),cmap=cm.gray_r,vmin=0,vmax=mmT)
-        plt.pcolor(A.phi * rtd, A.theta * rtd, np.real(Ftho[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, np.real(Ftho[ :, :, k ]),
                    cmap=cm.hot_r, vmin=mrT, vmax=MrT)
         title(r'Re ($F_{\theta}$) original', fontsize=fontsize)
     if typ == 'imag':
         #pcolor(A.phi*rtd,A.theta*rtd,imag(Ftho[k,:,:]),cmap=cm.gray_r,vmin=0,vmax=mmT)
-        pcolor(A.phi * rtd, A.theta * rtd, np.imag(Ftho[k, :, :]),
+        pcolor(A.phi * rtd, A.theta * rtd, np.imag(Ftho[ :, :, k ]),
                cmap=cm.hot_r, vmin=miT, vmax=MiT)
         title(r'Im ($F_{\theta}$) original', fontsize=fontsize)
     if typ == 'phase':
         #pcolor(A.phi*rtd,A.theta*rtd,angle(Ftho[k,:,:]),cmap=cm.gray_r,vmin=maT0,vmax=maT)
-        plt.pcolor(A.phi * rtd, A.theta * rtd, np.angle(Ftho[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, np.angle(Ftho[ :, :, k ]),
                    cmap=cm.hot_r, vmin=maT0, vmax=maT)
         if lang == 'french':
             plt.title(r'Arg ($F_{\theta}$) original', fontsize=fontsize)
@@ -3923,19 +3920,19 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
 
     plt.subplot(222)
     if typ == 'modulus':
-        plt.pcolor(A.phi * rtd, A.theta * rtd, abs(Fpho[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, abs(Fpho[:, :, k ]),
                    cmap=cm.hot_r, vmin=mmP, vmax=MmP)
         plt.title('$|F_{\phi}|$ original', fontsize=fontsize)
     if typ == 'real':
-        plt.pcolor(A.phi * rtd, A.theta * rtd, np.real(Fpho[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, np.real(Fpho[ :, :, k ]),
                    cmap=cm.hot_r, vmin=mrP, vmax=MrP)
         plt.title('Re ($F_{\phi}$) original', fontsize=fontsize)
     if typ == 'imag':
-        plt.pcolor(A.phi * rtd, A.theta * rtd, np.imag(Fpho[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, np.imag(Fpho[ :, :, k ]),
                    cmap=cm.hot_r, vmin=miP, vmax=MiP)
         plt.title('Im ($F_{\phi}$) original', fontsize=fontsize)
     if typ == 'phase':
-        plt.pcolor(A.phi * rtd, A.theta * rtd, np.angle(Fpho[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, np.angle(Fpho[ :, :, k ]),
                    cmap=cm.hot_r, vmin=maP0, vmax=maP)
         if lang == 'french':
             plt.title('Arg ($F_{\phi}$) original', fontsize=fontsize)
@@ -3950,28 +3947,28 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
 
     plt.subplot(223)
     if typ == 'modulus':
-        plt.pcolor(ph * rtd, th * rtd, abs(Fthr[k, :, :]),
+        plt.pcolor(ph * rtd, th * rtd, abs(Fthr[:, :, k ]),
                    cmap=cm.hot_r, vmin=mmT, vmax=MmT)
         if lang == 'french':
             plt.title(r'$|F_{\theta}|$ reconstruit', fontsize=fontsize)
         else:
             plt.title(r'$|F_{\theta}|$ reconstructed', fontsize=fontsize)
     if typ == 'real':
-        plt.pcolor(ph * rtd, th * rtd, np.real(Fthr[k, :, :]),
+        plt.pcolor(ph * rtd, th * rtd, np.real(Fthr[:,:,k ]),
                    cmap=cm.hot_r, vmin=mrT, vmax=MrT)
         if lang == 'french':
             title(r'Re ($F_{\theta}$) reconstruit', fontsize=fontsize)
         else:
             title(r'Re ($F_{\theta}$) reconstructed', fontsize=fontsize)
     if typ == 'imag':
-        plt.pcolor(ph * rtd, th * rtd, np.imag(Fthr[k, :, :]),
+        plt.pcolor(ph * rtd, th * rtd, np.imag(Fthr[ :, :, k ]),
                    cmap=cm.hot_r, vmin=miT, vmax=MiT)
         if lang == 'french':
             plt.title(r'Im ($F_{\theta}$) reconstruit', fontsize=fontsize)
         else:
             plt.title(r'Im ($F_{\theta}$) reconstructed', fontsize=fontsize)
     if typ == 'phase':
-        plt.pcolor(A.phi * rtd, A.theta * rtd, np.angle(Fthr[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, np.angle(Fthr[:,:,k]),
                    cmap=cm.hot_r, vmin=maT0, vmax=maT)
         if lang == 'french':
             plt.title(r'Arg ($F_{\theta}$) reconstruit', fontsize=fontsize)
@@ -3988,28 +3985,28 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
 
     plt.subplot(224)
     if typ == 'modulus':
-        plt.pcolor(ph * rtd, th * rtd, abs(Fphr[k, :, :]),
+        plt.pcolor(ph * rtd, th * rtd, abs(Fphr[ :, :,k]),
                    cmap=cm.hot_r, vmin=mmP, vmax=MmP)
         if lang == 'french':
             plt.title('$|F_{\phi}|$ reconstruit', fontsize=fontsize)
         else:
             plt.title('$|F_{\phi}|$ reconstructed', fontsize=fontsize)
     if typ == 'real':
-        plt.pcolor(ph * rtd, th * rtd, np.real(Fphr[k, :, :]),
+        plt.pcolor(ph * rtd, th * rtd, np.real(Fphr[ :, :,k]),
                    cmap=cm.hot_r, vmin=mrP, vmax=MrP)
         if lang == 'french':
             plt.title('Re ($F_{\phi}$) reconstruit', fontsize=fontsize)
         else:
             plt.title('Re ($F_{\phi}$) reconstructed', fontsize=fontsize)
     if typ == 'imag':
-        plt.pcolor(ph * rtd, th * rtd, np.imag(Fphr[k, :, :]),
+        plt.pcolor(ph * rtd, th * rtd, np.imag(Fphr[ :, :,k]),
                    cmap=cm.hot_r, vmin=miP, vmax=MiP)
         if lang == 'french':
             plt.title('Im ($F_{\phi}$) reconstruit', fontsize=fontsize)
         else:
             plt.title('Im ($F_{\phi}$) reconstructed', fontsize=fontsize)
     if typ == 'phase':
-        plt.pcolor(A.phi * rtd, A.theta * rtd, np.angle(Fphr[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, np.angle(Fphr[ :, :,k]),
                    cmap=cm.hot_r, vmin=maP0, vmax=maP)
         if lang == 'french':
             plt.title('Arg ($F_{\phi}$) reconstruit', fontsize=fontsize)
