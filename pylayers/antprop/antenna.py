@@ -517,8 +517,11 @@ class Pattern(PyLayers):
             Ey = np.dot(cy,Y[k])
             Ez = np.dot(cz,Y[k])
             Fth,Fph = CartToSphere(theta, phi, Ex, Ey,Ez, bfreq = True, pattern = True )
-            self.Ft = Fth.reshape(self.nth, self.nph,self.nf)
-            self.Fp = Fph.reshape(self.nth, self.nph,self.nf)
+
+            self.Ft = Fth.transpose()
+            self.Fp = Fph.transpose()
+            self.Ft = self.Ft.reshape(self.nth, self.nph,self.nf)
+            self.Fp = self.Fp.reshape(self.nth, self.nph,self.nf)
         else:
             Ex = np.dot(cx,Y[k])
             Ey = np.dot(cy,Y[k])
@@ -907,7 +910,7 @@ class Pattern(PyLayers):
                     arg3 = (u3,iphi1,ik,u)
 
                 # polar diagram
-                pdb.set_trace()
+                #pdb.set_trace()
                 if kwargs['polar']:
                     if kwargs['source']=='satimo':
                         r1 = -GmindB + 20 * np.log10(  self.sqG[arg1]+1e-12)
@@ -1030,7 +1033,7 @@ class Antenna(Pattern):
     """
 
 
-    def __init__(self,typ='S2R2.sh3',**kwargs):
+    def __init__(self,typ='S1R1.sh3',**kwargs):
         """ class constructor
 
         Parameters

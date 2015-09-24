@@ -1,6 +1,7 @@
 #!/usr/bin/python
 #-*- coding:Utf-8 -*-
 from pylayers.signal.bsignal import *
+from pylayers.antprop.channel import *
 from pylayers.util.project import *
 from pylayers.gis.readvrml import *
 import numpy as np
@@ -11,6 +12,12 @@ import numpy.linalg as la
 # This class handles the data coming from the MIMO Channel Sounder IETR lab
 #
 class MIMO(object):
+    """
+    H    : raw channel matrix in frequencey domain
+    Hcal : calibrated channel matrix in frequency domain
+    hcal : channel matrix in time domain
+
+    """
     def __init__(self,
                  _filename='',
                  rep = '',
@@ -49,18 +56,17 @@ class MIMO(object):
 
         self.Nt = Nt
         self.Nr = Nr
-
         self.Nf = Nf
 
         if _filename <> '':
-            self.filename = mesdir+rep+_filename
+            self.filename = mesdir + rep + _filename
             # load file
             self.loadraw()
             if calibration:
                 self.calibration()
                 if time:
                     # reshaping for using ift (todo update ift for MDA !!)
-                    Hcal = TChannel(self.Hcal.x,np.reshape(self.Hcal.y,(Nt*Nr,Nf)))
+                    Hcal = Tchannel(self.Hcal.x,np.reshape(self.Hcal.y,(Nt*Nr,Nf)))
                     hcal = Hcal.ift(Nz=Nz,ffts=1)
                     shh = hcal.y.shape
                     self.hcal = TUsignal(hcal.x,np.reshape(hcal.y,(Nr,Nt,shh[-1])))
@@ -112,7 +118,7 @@ class MIMO(object):
         #
         y   = y.reshape(self.Nr,self.Nt,self.Nf)
 
-        self.H = TChannel(x=self.freq,y=y)
+        self.H = Tchannel(x=self.freq,y=y)
 
     def calibration(self):
         """ Apply calibration files
@@ -120,8 +126,8 @@ class MIMO(object):
         """
         for iR in range(self.Nr):
             for iT in range(self.Nt):
-                filename = 'Calib'+str(iT+1)+'x'+str(iR+1)+'.txt'
-                C = MIMO(filename,'/calibration/',calibration=False,Nt=self.Nt)
+                _filename = 'Calib'+str(iT+1)+'x'+str(iR+1)+'.txt'
+                C = MIMO(_filename=_filename,rep='/calibration/',calibration=False,Nt=self.Nt)
                 try:
                     #tc = np.vstack((tc,C.H.y[iR*4+iT,:]))
                     tc = np.vstack((tc,C.H.y[iR,iT,:]))
@@ -134,7 +140,7 @@ class MIMO(object):
 
         # C.freq , Nf
 
-        self.C = TChannel(x=C.freq,y=tc)
+        self.C = Tchannel(x=C.freq,y=tc)
 
 
         self.Hcal = self.H/self.C
@@ -225,7 +231,7 @@ class MIMO(object):
         Parameters
         ----------
 
-        Pt : np.array
+        Pt : np.array (,NPt)
             the total power is assumed uniformaly distributed over the whole bandwidth
         Tp : Receiver Temperature (K)
 
@@ -233,7 +239,9 @@ class MIMO(object):
         -------
 
         C   : spectral efficiency (bit/s/Hz)
+            np.array (Nf,NPt)
         rho : SNR
+            np.array (Nf,Nt,NPt)
 
             log_2(det(I+(Et/(N0Nt))HH^{H})
 
@@ -277,26 +285,26 @@ class MIMO(object):
 
         #Ps = (Pt/Nf)/(self.Nt)
         Ps  = Pt/(self.Nt)
-        Ps1 = Pt/(self.Nt*self.Nf)
+        #Ps1 = Pt/(self.Nt*self.Nf)
 
         # equi amplitude vector (nf,nt,1)
-        wu  = np.sqrt(Ps[None,None,None,:]*np.ones((self.Nf,self.Nt))[:,:,None,None]/self.Nf)
+        #wu  = np.sqrt(Ps[None,None,None,:]*np.ones((self.Nf,self.Nt))[:,:,None,None]/self.Nf)
         # spatial subchanel weights (nf,nt,1)
-        Vshwu = np.einsum('kijp,kjlp->kilp',Vsh[:,:,:,None],wu)
+        #Vshwu = np.einsum('kijp,kjlp->kilp',Vsh[:,:,:,None],wu)
         # nf x nt x 1 x power
-        Ps2   = Vshwu*np.conj(Vshwu)
+        # Ps2   = Vshwu*np.conj(Vshwu)
 
         Pb  = N0*BGHz*1e9
 
-        Pb2 = N0*dfGHz*1e9*np.ones((self.Nf,self.Nt))
+        #Pb2 = N0*dfGHz*1e9*np.ones((self.Nf,self.Nt))
 
 
         # rho : nf x nt x power
-        S2 = np.real(D[:,:,None]*np.conj(D[:,:,None]))
+        #S2 = np.real(D[:,:,None]*np.conj(D[:,:,None]))
         #
         rho  = (Ps[None,None,:]/Pb)*S[:,:,None]
-        rho1 = (Ps1[None,None,:]/Pb2[:,:,None])*S[:,:,None]
-        rho2 = (Ps2[:,:,0,:]/Pb2[:,:,None])*S2
+        #rho1 = (Ps1[None,None,:]/Pb2[:,:,None])*S[:,:,None]
+        #rho2 = (Ps2[:,:,0,:]/Pb2[:,:,None])*S2
         #pdb.set_trace()
         #coeff = Ps/Pb
         #M     = It[None,...] + coeff*HdH
@@ -307,10 +315,10 @@ class MIMO(object):
         #CB  = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=1)
         #CB  = dfGHz*np.sum(np.log(1+rho)/np.log(2))
         CB   = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=1)
-        CB1  = dfGHz*np.sum(np.log(1+rho1)/np.log(2),axis=1)
-        CB2  = dfGHz*np.sum(np.log(1+rho2)/np.log(2),axis=1)
+        #CB1  = dfGHz*np.sum(np.log(1+rho1)/np.log(2),axis=1)
+        #CB2  = dfGHz*np.sum(np.log(1+rho2)/np.log(2),axis=1)
         #return(M,detM,logdetM,C1,C2,S)
-        return(rho,CB,CB1,CB2)
+        return(rho,CB)
 
     def Scapacity(self,Pt=1e-3,Tp=273):
         """ equivalent SISO capacity
@@ -324,7 +332,7 @@ class MIMO(object):
         Parameters
         ----------
 
-        Pt : np.array
+        Pt : np.array  (,NPt)
             Transmitted power
         Tp : float
             Noise Temperature
@@ -332,9 +340,15 @@ class MIMO(object):
         """
         fGHz  = self.Hcal.x
         Nf    = len(fGHz)
-        BGHz  = fGHz[-1]-fGHz[0]
-        dfGHz = fGHz[1]-fGHz[0]
+        BGHz  = fGHz[-1]-fGHz[0] # bandwidth
+        dfGHz = fGHz[1]-fGHz[0]  # frequency step
 
+        #
+        # swaping axes
+        #   self.Hcal.y  (Nr,Nt,Nf)
+        #   Hp           (Nr,Nf,Nt)
+        #   H            (Nf,Nr,Nt)
+        #   Hd           (Nf,Nt,Nr)
         Hp  = self.Hcal.y.swapaxes(1,2)
         H   = Hp.swapaxes(0,1)
         Hd  = np.conj(H.swapaxes(1,2))
@@ -356,6 +370,7 @@ class MIMO(object):
         It  = np.eye(self.Nt)
         Ir  = np.eye(self.Nr)
 
+        # pb : Nf x Nt
         pb = N0*dfGHz*1e9*np.ones((self.Nf,self.Nt))
         pt = Pt/((self.Nf-1))*np.array([1,0,0,0])[None,:]
         #print pt.shape
@@ -395,10 +410,6 @@ class MIMO(object):
         BGHz  = fGHz[-1]-fGHz[0]
         dfGHz = fGHz[1]-fGHz[0]
 
-        Hp = self.Hcal.y.swapaxes(1,2)
-        H  = Hp.swapaxes(0,1)
-        Hd = np.conj(H.swapaxes(1,2))
-
         # White Noise definition
         #
         # Boltzman constant
@@ -416,16 +427,15 @@ class MIMO(object):
         It = np.eye(self.Nt)
         Ir = np.eye(self.Nr)
 
-
         #
         # Iterative implementation of Water Filling algorithm
         #
+
         pb = N0*dfGHz*1e9*np.ones((self.Nf,self.Nt))
         pt = Pt[None,None,:]/((self.Nf-1)*self.Nt)
         mu = pt
         Q0 = np.maximum(0,mu-pb[:,:,None]/ld[:,:,None])
         u  = np.where(Q0>0)[0]
-        #Nnz1  = len(u)
 
         Peff = np.sum(np.sum(Q0,axis=0),axis=0)
         deltamu = pt
@@ -437,33 +447,12 @@ class MIMO(object):
             usup = np.where(Peff>Pt)[0]
             mu[:,:,usup] = mu[:,:,usup]- deltamu[:,:,usup]
             deltamu[:,:,usup] = deltamu[:,:,usup]/2.
-        #print Peff
-        #v  = np.where(Q>0)[0]
-        #Nnz2  = len(v)
-        #print self.Nf*self.Nt-Nnz1,self.Nf*self.Nt-Nnz2
-        #Qoptn = Qopt/pb
         Qn   = Q/pb[:,:,None]
         rho  = Qn*ld[:,:,None]
-        #Qn_e = Qn[:,:,None]*It[None,:,:]
-        #pb_e = pb[:,:,None]*It[None,:,:]
-        #print "Q : ",Qn_e.shape
-        #print "Hd : ",Hd.shape
-        #print "H : ",H.shape
-        # k :frequency (i.e 1601)
-        #QHd  = np.einsum('kij,kil->kil',Qn_e,Hd)
-        #QHdH = np.einsum('kil,klj->kij',QHd,H)
-        #print "QHdH : ",QHdH.shape
-        #M = It[None,...] + QHdH
-        # Pt / df ~ J
-        # print 10*np.log10(Ps*np.real(HH[0,0,0])/Pb)
-        #detM  = la.det(M)
-        #logdetM = np.real(np.log(detM)/np.log(2))
-        #C1  = dfGHz*logdetM
+
         Cwf  = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=1)
-        #C   = dfGHz*np.log(la.det(IR[None,...]+(Pt/self.Nt)*HH/(N0*dfGHz)))/np.log(2)
 
 
-        #return(Cwf,Q,Qn)
         return(rho,Cwf)
 
 
@@ -527,34 +516,56 @@ class MIMO(object):
 
         return fig,ax
 
-    def plot(self,frequency=True,phase=False,dB=True,cal=True,fig=[],ax=[],color='k'):
-        """
+    def plot(self,**kwargs):
+        """ plot channel
+
+        Pramaters
+        ---------
+
+        frequency:True
+        phase:True
+        dB:True
+        cal:True
+        fig:[]
+        ax:[]
+        color':'k'
 
         """
-        if fig==[]:
-            fig,ax=plt.subplots(8,self.Nt,sharex=True,sharey=True)
-        if cal:
+        defaults = {'frequency':True,
+                    'phase':False,
+                    'dB':True,
+                    'cal':True,
+                    'color':'k'}
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+        color=kwargs['color']
+
+        fig,ax=plt.subplots(8,self.Nt,sharex=True,sharey=True,figsize=kwargs['figsize'])
+
+        if kwargs['cal']:
             H = self.Hcal
         else:
             H = self.H
         for iR in range(self.Nr):
             for iT in range(self.Nt):
                 k = iR*4+iT
-                if frequency:
-                    if not phase:
-                        if dB:
-                            #ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[k,:])),color=color) 
-                            ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[iR,iT,:])),color=color) 
+                if kwargs['frequency']:
+                    if not kwargs['phase']:
+                        if kwargs['dB']:
+                            #ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[k,:])),color=color)
+                            ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[iR,iT,:])),color=color)
                         else:
-                            #ax[iR,iT].plot(H.x,abs(H.y[k,:]),color='k') 
-                            ax[iR,iT].plot(H.x,abs(H.y[iR,iT,:]),color='k') 
+                            #ax[iR,iT].plot(H.x,abs(H.y[k,:]),color='k')
+                            ax[iR,iT].plot(H.x,abs(H.y[iR,iT,:]),color='k')
                     else:
-                        #ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[k,:])),color=color) 
-                        ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[iR,iT,:])),color=color) 
+                        #ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[k,:])),color=color)
+                        ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[iR,iT,:])),color=color)
                 else:
-                        ax[iR,iT].plot(self.h.x,abs(self.h.y[iR,iT,:]),color=color) 
+                        ax[iR,iT].plot(self.hcal.x,abs(self.hcal.y[iR,iT,:]),color=color)
                 if (iR==7):
-                    ax[iR,iT].set_xlabel('f (GHz)') 
-                ax[iR,iT].set_title(str(iR+1)+'x'+str(iT+1)) 
+                    ax[iR,iT].set_xlabel('Frequency (GHz)')
+                ax[iR,iT].set_title(str(iR+1)+'x'+str(iT+1))
         return(fig,ax)
 
