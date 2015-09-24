@@ -2796,6 +2796,10 @@
 <div class="viewcode-block" id="Tchannel.frombuf"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.frombuf.html#pylayers.antprop.channel.Tchannel.frombuf">[docs]</a>    <span class="k">def</span> <span class="nf">frombuf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">sign</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load a buffer from vna</span>
 
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        S : buffer</span>
 <span class="sd">        sign : int (+1 |-1)  for complex reconstruction</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2813,7 +2817,7 @@
 
 <span class="sd">            Pt : Power transmitted</span>
 <span class="sd">            T : Temperrature Kelvin</span>
-<span class="sd">            mode : string </span>
+<span class="sd">            mode : string</span>
 
 <span class="sd">            Returns</span>
 <span class="sd">            -------</span>
@@ -2841,13 +2845,14 @@
 <span class="sd">        ----------</span>
 
 <span class="sd">        filecal : string</span>
+<span class="sd">            calibration file name  &quot;calibration.mat&quot;</span>
 <span class="sd">        conjugate : boolean</span>
+<span class="sd">            default False</span>
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filecal</span> <span class="o">=</span> <span class="n">filecal</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">calibrated</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">calibrated</span>
-        <span class="n">Hcal</span> <span class="o">=</span> <span class="n">FUchannel</span><span class="p">()</span>
+        <span class="n">Hcal</span> <span class="o">=</span> <span class="n">Tchannel</span><span class="p">()</span>
         <span class="n">Hcal</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filecal</span><span class="p">)</span>
         <span class="k">assert</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">Hcal</span><span class="o">.</span><span class="n">x</span><span class="p">)),</span><span class="s">&quot;calibration file has hot the same number of points&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">calibrated</span><span class="p">:</span>
@@ -2855,11 +2860,13 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">/</span><span class="n">Hcal</span><span class="o">.</span><span class="n">y</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">Hcal</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">calibrated</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">calibrated</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span><span class="p">(</span><span class="n">conjugate</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">Hcal</span><span class="o">.</span><span class="n">y</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">Hcal</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">calibrated</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">calibrated</span>
 </div>
 <div class="viewcode-block" id="Tchannel.pdp"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.pdp.html#pylayers.antprop.channel.Tchannel.pdp">[docs]</a>    <span class="k">def</span> <span class="nf">pdp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">win</span><span class="o">=</span><span class="s">&#39;hamming&#39;</span><span class="p">,</span><span class="n">calibrate</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculates power delay profile</span>
@@ -4040,15 +4047,8 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        a : string or antenna array</span>
-<span class="sd">            polarization antenna a ( &#39;theta&#39; | &#39;phi&#39; | &#39;ant&#39; )</span>
-<span class="sd">            default (theta)</span>
-<span class="sd">        b : string or antenna array</span>
-<span class="sd">            polarization antenna b ( &#39;theta&#39; | &#39;phi&#39; | &#39;ant&#39; )</span>
-<span class="sd">            default (theta)</span>
-
-<span class="sd">            0 : theta</span>
-<span class="sd">            1 : phi</span>
+<span class="sd">        a : antenna a</span>
+<span class="sd">        b : antenna b</span>
 
 <span class="sd">        Ta : np.array(3x3)</span>
 <span class="sd">           unitary matrice for antenna orientation</span>
@@ -4156,7 +4156,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on sept. 07, 2015.
+      Last updated on sept. 24, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

@@ -349,6 +349,7 @@
 <span class="kn">from</span> <span class="nn">pylayers.util.plotutil</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">scipy.io</span> <span class="kn">as</span> <span class="nn">ios</span>
 <span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">cspline1d</span><span class="p">,</span> <span class="n">cspline1d_eval</span><span class="p">,</span> <span class="n">iirfilter</span><span class="p">,</span> <span class="n">iirdesign</span><span class="p">,</span> <span class="n">lfilter</span><span class="p">,</span> <span class="n">firwin</span> <span class="p">,</span> <span class="n">correlate</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="kn">as</span> <span class="nn">sns</span>
 <span class="c">#from sklearn import mixture</span>
 <span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="kn">as</span> <span class="nn">st</span>
 
@@ -645,7 +646,6 @@
 <span class="sd">            default &#39;b-&#39;</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">ndim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">ndim</span>
         <span class="k">if</span> <span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">nl</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nl</span><span class="p">):</span>
@@ -979,7 +979,7 @@
         <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;xmin&#39;</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;xmax&#39;</span><span class="p">]))[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="c">#</span>
-        <span class="c"># conver ns in meter if dist=True</span>
+        <span class="c"># convert ns in meter if dist=True</span>
         <span class="c">#</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;dist&#39;</span><span class="p">]:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">u</span><span class="p">]</span>
@@ -995,12 +995,11 @@
             <span class="n">yx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">u</span><span class="p">]</span>
             <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">mulcplot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">u</span><span class="p">],</span><span class="n">yx</span><span class="o">*</span><span class="n">conversion</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-            <span class="n">yx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">u</span><span class="p">]</span>
             <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">mulcplot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">u</span><span class="p">],</span><span class="n">yx</span><span class="o">*</span><span class="n">conversion</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">yx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">u</span><span class="p">]</span>
             <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">mulcplot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">u</span><span class="p">],</span><span class="n">yx</span><span class="o">*</span><span class="n">conversion</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">ndim</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">mulcplot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">u</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">*</span><span class="n">conversion</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
         <span class="c">#</span>
         <span class="c"># Draw vertical and horizontal lines</span>
@@ -2102,7 +2101,8 @@
             <span class="c">#L   = Usignal()</span>
             <span class="c">#L.x = U1.x</span>
             <span class="c">#L.y = np.vstack((U1.y,U2.y))</span>
-        <span class="k">return</span> <span class="n">U1</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">U1</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">U2</span><span class="o">.</span><span class="n">y</span></div>
+        <span class="k">return</span> <span class="n">U1</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">U1</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">U2</span><span class="o">.</span><span class="n">y</span>
+</div>
 <div class="viewcode-block" id="TUsignal.filter"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.TUsignal.filter.html#pylayers.signal.bsignal.TUsignal.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">wp</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">ws</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">ftype</span><span class="o">=</span><span class="s">&#39;butter&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; signal filtering</span>
 
@@ -2629,7 +2629,6 @@
 <span class="sd">        dB : boolean</span>
 <span class="sd">            default True</span>
 <span class="sd">        iy : index of y value to be displayed</span>
-<span class="sd">            default [0]  only the first is displayed</span>
 <span class="sd">        typ : string</span>
 <span class="sd">            [&#39;l10&#39;,&#39;l20&#39;,&#39;d&#39;,&#39;r&#39;,&#39;du&#39;,&#39;ru&#39;]</span>
 <span class="sd">        xlabels</span>
@@ -3894,7 +3893,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on sept. 07, 2015.
+      Last updated on sept. 24, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

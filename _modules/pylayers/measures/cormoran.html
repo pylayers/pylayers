@@ -408,11 +408,10 @@
 
         <span class="k">if</span> <span class="n">day</span> <span class="o">==</span> <span class="mi">11</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">serie</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">]:</span>
-                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;Serie &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">serie</span><span class="p">)</span> <span class="o">+</span> \
-                                     <span class="s">&#39; has no hkb data and will not be loaded&#39;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="s">&#39;Serie &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">serie</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; has no hkb data and will not be loaded&#39;</span>
         <span class="k">if</span> <span class="n">day</span> <span class="o">==</span><span class="mi">12</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">serie</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">17</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">20</span><span class="p">]:</span>
-                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;Serie &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">serie</span><span class="p">)</span> <span class="o">+</span> \
+                <span class="k">raise</span>  <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;Serie &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">serie</span><span class="p">)</span> <span class="o">+</span> \
                                      <span class="s">&#39; has no hkb data and will not be loaded&#39;</span><span class="p">)</span>
         <span class="c">#Measures</span>
         <span class="k">if</span> <span class="n">day</span><span class="o">==</span><span class="mi">11</span><span class="p">:</span>
@@ -430,12 +429,15 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;&#39;</span>
 
+        <span class="c"># HIKOB</span>
         <span class="k">if</span> <span class="n">serie</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">shkb</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_loadhkb</span><span class="p">(</span><span class="n">serie</span><span class="o">=</span><span class="n">serie</span><span class="p">,</span><span class="n">day</span><span class="o">=</span><span class="n">day</span><span class="p">,</span><span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">)</span>
 
+        <span class="c"># IR-UWB  TCR</span>
         <span class="k">if</span> <span class="n">serie</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">stcr</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_loadTCR</span><span class="p">(</span><span class="n">serie</span><span class="o">=</span><span class="n">serie</span><span class="p">,</span><span class="n">day</span><span class="o">=</span><span class="n">day</span><span class="p">)</span>
 
+        <span class="c"># BeSpoon</span>
         <span class="k">if</span> <span class="n">serie</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sbs</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_loadBS</span><span class="p">(</span><span class="n">serie</span><span class="o">=</span><span class="n">serie</span><span class="p">,</span><span class="n">day</span><span class="o">=</span><span class="n">day</span><span class="p">)</span>
 
@@ -457,7 +459,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_loadcam</span><span class="p">()</span>
 
         <span class="c">#BODY &amp; interferers</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">subject</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">[</span><span class="s">&#39;Subject&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subject</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">[</span><span class="s">&#39;Subject&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;jihad&#39;</span><span class="p">,</span><span class="s">&#39;Jihad&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)</span>
         <span class="c">#filter typos in  self.subject</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">subject</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">)</span>
         <span class="k">if</span> <span class="s">&#39;Jihad&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subject</span> <span class="p">:</span>
@@ -465,6 +467,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">[</span><span class="n">uj</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;Jihan&#39;</span>
 
         <span class="k">if</span> <span class="n">serie</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mocap</span> <span class="p">:</span>
+            <span class="c"># load bodies from mocap file</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_loadbody</span><span class="p">(</span><span class="n">serie</span><span class="o">=</span><span class="n">serie</span><span class="p">,</span><span class="n">day</span><span class="o">=</span><span class="n">day</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_distancematrix</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_computedevpdf</span><span class="p">()</span>
@@ -556,6 +559,11 @@
             <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;TCR : &#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_fileTCR</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">pass</span>
+
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;----------------------</span><span class="se">\n\n</span><span class="s">&#39;</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="s">&#39; :&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
 
 
@@ -585,7 +593,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;{0:21} | {1:7} | {2:8} | {3:10} &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s">&#39;Name in Dataframe&#39;</span><span class="p">,</span> <span class="s">&#39;Real Id&#39;</span><span class="p">,</span> <span class="s">&#39;Body Id&#39;</span><span class="p">,</span> <span class="s">&#39;Subject&#39;</span><span class="p">)</span>
-        <span class="k">print</span> <span class="n">title</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> <span class="s">&#39;=&#39;</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">title</span><span class="p">)</span> 
+        <span class="k">print</span> <span class="n">title</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> <span class="s">&#39;=&#39;</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
         <span class="c"># access points HKB</span>
         <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">din</span><span class="p">:</span>
             <span class="k">if</span> <span class="p">(</span><span class="s">&#39;HK&#39;</span> <span class="ow">in</span> <span class="n">d</span><span class="p">)</span> <span class="p">:</span>
@@ -800,7 +808,8 @@
                           <span class="s">&#39;s3off&#39;</span><span class="p">:</span><span class="mf">0.</span><span class="p">}</span>
                  <span class="p">})</span>
 
-
+        <span class="c"># TCR:31 is the coordinator which was not captured.</span>
+        <span class="c"># The position has been determined via optimization</span>
         <span class="k">if</span> <span class="p">(</span><span class="s">&#39;TCR&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="s">&#39;FULL&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">din</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&#39;TCR:32&#39;</span><span class="p">:{</span><span class="s">&#39;p&#39;</span><span class="p">:</span><span class="n">mpts</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span>
                                        <span class="s">&#39;T&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
@@ -819,7 +828,12 @@
                            <span class="c"># &#39;T&#39;:array([[-0.44807362, -0.89399666,  0.],</span>
                            <span class="c">#           [ 0.89399666, -0.44807362,  0.],</span>
                            <span class="c">#           [ 0.,0.,  1.]]),</span>
-                           <span class="s">&#39;s3off&#39;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">}</span>
+                           <span class="s">&#39;s3off&#39;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">},</span>
+                 <span class="s">&#39;TCR:31&#39;</span><span class="p">:{</span><span class="s">&#39;p&#39;</span><span class="p">:</span><span class="n">array</span><span class="p">([</span><span class="mf">1.7719</span><span class="p">,</span><span class="o">-</span><span class="mf">3.2655</span><span class="p">,</span><span class="mf">1.74</span><span class="p">]),</span>
+                           <span class="c"># &#39;T&#39;:array([[-0.44807362, -0.89399666,  0.],</span>
+                           <span class="c">#           [ 0.89399666, -0.44807362,  0.],</span>
+                           <span class="c">#           [ 0.,0.,  1.]]),</span>
+                           <span class="s">&#39;s3off&#39;</span><span class="p">:</span><span class="mf">0.0</span><span class="p">}</span>
                  <span class="p">})</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">day</span> <span class="o">==</span> <span class="mi">12</span><span class="p">:</span>
@@ -867,7 +881,7 @@
 
 </div>
 <div class="viewcode-block" id="CorSer._loadbody"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer._loadbody.html#pylayers.measures.cormoran.CorSer._loadbody">[docs]</a>    <span class="k">def</span> <span class="nf">_loadbody</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">day</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span><span class="n">serie</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; load motion capture file</span>
+        <span class="sd">&quot;&quot;&quot; load body from motion capture file</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -879,7 +893,6 @@
         <span class="k">assert</span> <span class="n">day</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">],</span><span class="s">&quot;wrong day in _loadbody&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="o">=</span><span class="p">{}</span>
         <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;LightBlue&#39;</span><span class="p">,</span><span class="s">&#39;YellowGreen&#39;</span><span class="p">,</span><span class="s">&#39;PaleVioletRed&#39;</span><span class="p">,</span><span class="s">&#39;white&#39;</span><span class="p">,</span><span class="s">&#39;white&#39;</span><span class="p">,</span><span class="s">&#39;white&#39;</span><span class="p">,</span><span class="s">&#39;white&#39;</span><span class="p">,</span><span class="s">&#39;white&#39;</span><span class="p">,</span><span class="s">&#39;white&#39;</span><span class="p">,</span><span class="s">&#39;white&#39;</span><span class="p">]</span>
-
         <span class="k">for</span> <span class="n">us</span><span class="p">,</span><span class="n">subject</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">):</span>
             <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">load &quot;</span><span class="p">,</span><span class="n">subject</span><span class="p">,</span> <span class="s">&quot; body:&quot;</span><span class="p">,</span>
             <span class="n">seriestr</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">serie</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
@@ -896,7 +909,7 @@
 
             <span class="c">#</span>
             <span class="c"># Load body cylinder description : &quot;Subject.ini&quot;</span>
-            <span class="c"># Load wearable deviace description (contains antenna filename) :</span>
+            <span class="c"># Load wearable device description (contains antenna filename) :</span>
             <span class="c">#</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">filebody</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">baw</span><span class="p">,</span> <span class="n">subject</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">filewear</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">baw</span><span class="p">,</span><span class="n">subject</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span>  <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">day</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;-06-2014_&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span><span class="p">)</span>
@@ -905,6 +918,7 @@
                 <span class="n">multi_subject</span><span class="o">=</span><span class="bp">True</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">multi_subject</span><span class="o">=</span><span class="bp">False</span>
+
             <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">subject</span><span class="p">:</span><span class="n">Body</span><span class="p">(</span><span class="n">_filebody</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filebody</span><span class="p">,</span>
                              <span class="n">_filemocap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filemocap</span><span class="p">,</span><span class="n">unit</span> <span class="o">=</span> <span class="s">&#39;mm&#39;</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
                              <span class="n">_filewear</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filewear</span><span class="p">,</span>
@@ -920,16 +934,16 @@
                      <span class="s">&#39;Meriem_Cylindre:&#39;</span><span class="p">]</span>
             <span class="n">intertmp</span><span class="o">=</span><span class="p">[]</span>
             <span class="k">for</span> <span class="n">ui</span><span class="p">,</span><span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interf</span><span class="p">):</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="k">print</span> <span class="s">&quot;load &quot;</span><span class="p">,</span><span class="n">i</span><span class="p">,</span> <span class="s">&quot; interfering body:&quot;</span><span class="p">,</span>
-
-                    <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">i</span><span class="p">:</span><span class="n">Cylinder</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
-                                              <span class="n">_filemocap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filemocap</span><span class="p">,</span>
-                                              <span class="n">unit</span> <span class="o">=</span> <span class="s">&#39;mm&#39;</span><span class="p">,</span>
-                                              <span class="n">color</span> <span class="o">=</span> <span class="n">color</span><span class="p">[</span><span class="n">ui</span><span class="p">])})</span>
-                    <span class="n">intertmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-                <span class="k">except</span><span class="p">:</span>
-                    <span class="k">print</span> <span class="s">&quot;Warning ! load &quot;</span><span class="p">,</span><span class="n">i</span><span class="p">,</span> <span class="s">&quot; FAIL !&quot;</span>
+                <span class="c">#try:</span>
+                <span class="k">print</span> <span class="s">&quot;load &quot;</span><span class="p">,</span><span class="n">i</span><span class="p">,</span> <span class="s">&quot; interfering body:&quot;</span><span class="p">,</span>
+                <span class="n">_filemocap</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getshort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filemocap</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">i</span><span class="p">:</span><span class="n">Cylinder</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
+                                          <span class="n">_filemocap</span><span class="o">=</span><span class="n">_filemocap</span><span class="p">,</span>
+                                          <span class="n">unit</span> <span class="o">=</span> <span class="s">&#39;mm&#39;</span><span class="p">,</span>
+                                          <span class="n">color</span> <span class="o">=</span> <span class="n">color</span><span class="p">[</span><span class="n">ui</span><span class="p">])})</span>
+                <span class="n">intertmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="c">#except:</span>
+                <span class="c">#    print &quot;Warning ! load &quot;,i, &quot; FAIL !&quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">interf</span><span class="o">=</span><span class="n">intertmp</span>
         <span class="k">else</span> <span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">interf</span><span class="o">=</span><span class="p">[]</span>
@@ -1107,7 +1121,7 @@
 
 
         <span class="n">gb</span> <span class="o">=</span> <span class="n">bespo</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s">&#39;Sensor&#39;</span><span class="p">])</span>
-        <span class="c">#get device id </span>
+        <span class="c">#get device id</span>
         <span class="n">devid</span><span class="p">,</span><span class="n">idevid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">bespo</span><span class="p">[</span><span class="s">&#39;Sensor&#39;</span><span class="p">],</span><span class="n">return_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="c"># get index of each group</span>
         <span class="n">dgb</span><span class="o">=</span><span class="p">{</span><span class="n">d</span><span class="p">:</span><span class="n">gb</span><span class="o">.</span><span class="n">get_group</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">devid</span><span class="p">}</span>
@@ -1118,9 +1132,9 @@
             <span class="n">npai</span> <span class="o">=</span> <span class="n">time2npa</span><span class="p">(</span><span class="n">dti</span><span class="p">)</span>
             <span class="n">npai</span> <span class="o">=</span> <span class="n">npai</span> <span class="o">-</span> <span class="n">npai</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">dgb</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="n">npai</span><span class="p">)</span>
-            <span class="n">lgb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dgb</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;d&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idBS</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s">&#39;-&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">idBS</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span><span class="n">index</span><span class="o">=</span><span class="n">dgb</span><span class="p">[</span><span class="mi">74</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>
-        <span class="n">df</span> <span class="o">=</span><span class="n">lgb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lgb</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bespo</span><span class="o">=</span><span class="n">df</span>
+            <span class="n">lgb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dgb</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;d&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idBS</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s">&#39;-&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">idBS</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span><span class="n">index</span><span class="o">=</span><span class="n">dgb</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">lgb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lgb</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bespo</span> <span class="o">=</span> <span class="n">df</span>
 
 
         <span class="c">#self.s157 = self.bespo[self.bespo[&#39;Sensor&#39;]==157]</span>
@@ -1309,10 +1323,12 @@
 
         <span class="c"># get all positions</span>
         <span class="k">for</span> <span class="n">ik</span><span class="p">,</span><span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dev_bid</span><span class="p">)</span> <span class="p">:</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">Mpdev</span><span class="p">[:,</span><span class="n">ik</span><span class="p">,:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">devdf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">devdf</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span><span class="o">==</span><span class="n">i</span><span class="p">][[</span><span class="s">&#39;x&#39;</span><span class="p">,</span><span class="s">&#39;y&#39;</span><span class="p">,</span><span class="s">&#39;z&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">T</span>
-                <span class="k">except</span><span class="p">:</span>
-                    <span class="n">Mpdev</span><span class="p">[:,</span><span class="n">ik</span><span class="p">,:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">din</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;p&#39;</span><span class="p">][:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">din</span><span class="p">:</span>
+                <span class="n">Mpdev</span><span class="p">[:,</span><span class="n">ik</span><span class="p">,:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">din</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;p&#39;</span><span class="p">][:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">pts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">devdf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">devdf</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span><span class="o">==</span><span class="n">i</span><span class="p">][[</span><span class="s">&#39;x&#39;</span><span class="p">,</span><span class="s">&#39;y&#39;</span><span class="p">,</span><span class="s">&#39;z&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">T</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">pts</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+                    <span class="n">Mpdev</span><span class="p">[:,</span><span class="n">ik</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">pts</span>
 
         <span class="c"># create A and B from links</span>
         <span class="n">nA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">prefix</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dnode</span><span class="p">[</span><span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">links</span><span class="p">])</span>
@@ -1810,18 +1826,21 @@
         <span class="n">ln</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">uin</span> <span class="o">=</span> <span class="p">[]</span>
 
+        <span class="c"># infrastructure nodes</span>
         <span class="k">if</span> <span class="p">(</span><span class="s">&#39;HK&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="s">&#39;FULL&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">):</span>
             <span class="n">uin</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s">&#39;HKB:1&#39;</span><span class="p">,</span><span class="s">&#39;HKB:2&#39;</span><span class="p">,</span><span class="s">&#39;HKB:3&#39;</span><span class="p">,</span><span class="s">&#39;HKB:4&#39;</span><span class="p">])</span>
         <span class="k">if</span> <span class="p">(</span><span class="s">&#39;TCR&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="s">&#39;FULL&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">):</span>
-            <span class="n">uin</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s">&#39;TCR:32&#39;</span><span class="p">,</span><span class="s">&#39;TCR:24&#39;</span><span class="p">,</span><span class="s">&#39;TCR:27&#39;</span><span class="p">,</span><span class="s">&#39;TCR:28&#39;</span><span class="p">])</span>
+            <span class="c"># TCR:31 is the coordinator (1.7719,-3.26)</span>
+            <span class="n">uin</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s">&#39;TCR:32&#39;</span><span class="p">,</span><span class="s">&#39;TCR:24&#39;</span><span class="p">,</span><span class="s">&#39;TCR:27&#39;</span><span class="p">,</span><span class="s">&#39;TCR:28&#39;</span><span class="p">,</span><span class="s">&#39;TCR:31&#39;</span><span class="p">])</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">day</span> <span class="o">==</span> <span class="mi">12</span><span class="p">:</span>
             <span class="k">if</span> <span class="p">(</span><span class="s">&#39;BS&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="s">&#39;FULL&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">):</span>
                 <span class="n">uin</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s">&#39;BS:74&#39;</span><span class="p">,</span><span class="s">&#39;BS:157&#39;</span><span class="p">])</span>
         <span class="n">ln</span> <span class="o">=</span> <span class="n">uin</span> <span class="o">+</span> <span class="n">bn</span>
         <span class="n">pin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">din</span><span class="p">[</span><span class="n">d</span><span class="p">][</span><span class="s">&#39;p&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">uin</span><span class="p">])</span>
-        <span class="n">pin2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">pnb</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pin</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pin</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-        <span class="n">pin2</span><span class="p">[:,:,:]</span><span class="o">=</span><span class="n">pin</span>
+        <span class="n">pin2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">pnb</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pin</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pin</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="n">pin2</span><span class="p">[:,:,:]</span> <span class="o">=</span> <span class="n">pin</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">pin2</span><span class="p">,</span><span class="n">pnb</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">p</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">p</span><span class="p">[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span><span class="o">-</span><span class="n">p</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:,:])</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dist_nodesmap</span> <span class="o">=</span> <span class="n">ln</span>
 
@@ -1830,12 +1849,14 @@
         <span class="sd">&quot;&quot;&quot;Compute the distance dataframe from distance matrix</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="c"># HIKOB</span>
         <span class="k">if</span> <span class="p">(</span><span class="s">&#39;HK&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="s">&#39;FULL&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">):</span>
             <span class="n">devmap</span> <span class="o">=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">devmapper</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="s">&#39;hkb&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]:</span><span class="bp">self</span><span class="o">.</span><span class="n">devmapper</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="s">&#39;hkb&#39;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dHKB</span><span class="p">}</span>
             <span class="n">udev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="bp">self</span><span class="o">.</span><span class="n">dist_nodesmap</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">devmap</span><span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]),</span><span class="bp">self</span><span class="o">.</span><span class="n">dist_nodesmap</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">devmap</span><span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]])]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">hkb</span><span class="o">.</span><span class="n">keys</span><span class="p">()])</span>
             <span class="n">iudev</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="bp">self</span><span class="o">.</span><span class="n">dist_nodesmap</span><span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">+</span><span class="s">&#39;-&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">dist_nodesmap</span><span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">udev</span><span class="p">])</span>
             <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dist</span><span class="p">[:,</span><span class="n">udev</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">udev</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]],</span><span class="n">columns</span><span class="o">=</span><span class="n">iudev</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tmocap</span><span class="p">)</span>
 
+        <span class="c"># BE Spoon</span>
         <span class="k">if</span> <span class="p">(</span><span class="s">&#39;BS&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="s">&#39;FULL&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">):</span>
             <span class="n">devmap</span> <span class="o">=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">devmapper</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="s">&#39;BS&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]:</span><span class="bp">self</span><span class="o">.</span><span class="n">devmapper</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="s">&#39;BS&#39;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dBS</span><span class="p">}</span>
             <span class="n">udev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="bp">self</span><span class="o">.</span><span class="n">dist_nodesmap</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">devmap</span><span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]),</span><span class="bp">self</span><span class="o">.</span><span class="n">dist_nodesmap</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">devmap</span><span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]])]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bespo</span><span class="o">.</span><span class="n">keys</span><span class="p">()])</span>
@@ -1846,7 +1867,10 @@
 
         <span class="k">if</span> <span class="p">(</span><span class="s">&#39;TCR&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="s">&#39;FULL&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">):</span>
             <span class="n">devmap</span> <span class="o">=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">devmapper</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="s">&#39;tcr&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]:</span><span class="bp">self</span><span class="o">.</span><span class="n">devmapper</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="s">&#39;tcr&#39;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dTCR</span><span class="p">}</span>
-            <span class="n">udev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="bp">self</span><span class="o">.</span><span class="n">dist_nodesmap</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">devmap</span><span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]),</span><span class="bp">self</span><span class="o">.</span><span class="n">dist_nodesmap</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">devmap</span><span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]])]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tcr</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;COORD&#39;</span> <span class="ow">in</span> <span class="n">k</span><span class="p">])</span>
+            <span class="n">udev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="bp">self</span><span class="o">.</span><span class="n">dist_nodesmap</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">devmap</span><span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]),</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">dist_nodesmap</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">devmap</span><span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]])]</span>
+                             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tcr</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="p">])</span>
+            <span class="c">#                 for k in self.tcr.keys() if not &#39;COORD&#39; in k])</span>
             <span class="n">iudev</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="bp">self</span><span class="o">.</span><span class="n">dist_nodesmap</span><span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">+</span><span class="s">&#39;-&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">dist_nodesmap</span><span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">udev</span><span class="p">])</span>
             <span class="n">dft</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dist</span><span class="p">[:,</span><span class="n">udev</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">udev</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]],</span><span class="n">columns</span><span class="o">=</span><span class="n">iudev</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tmocap</span><span class="p">)</span>
             <span class="k">if</span> <span class="p">(</span><span class="s">&#39;FULL&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">):</span>
@@ -2144,7 +2168,7 @@
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;pattern&#39;</span><span class="p">]:</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)):</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">din</span><span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;ant&#39;</span><span class="p">],</span><span class="s">&#39;SqG&#39;</span><span class="p">):</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">din</span><span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;ant&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">()</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">din</span><span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;ant&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">din</span><span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;ant&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">po</span><span class="o">=</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;p&#39;</span><span class="p">],</span>
                            <span class="n">T</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">din</span><span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;T&#39;</span><span class="p">],</span>
                            <span class="n">ilog</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
@@ -2677,9 +2701,112 @@
     <span class="c">#     if interactive:</span>
     <span class="c">#         plt.ion()</span>
 
-
-
 </div>
+    <span class="k">def</span> <span class="nf">mtlbsave</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Matlab format save</span>
+
+
+<span class="sd">        S{day}_{serie}</span>
+<span class="sd">            node_name</span>
+<span class="sd">            node_place</span>
+<span class="sd">            node_coord</span>
+
+<span class="sd">            HKB.{linkname}.tr</span>
+<span class="sd">            HKB.{linkname}.rssi</span>
+<span class="sd">            HKB.{linkname}.td</span>
+<span class="sd">            HKB.{linkname}.dist</span>
+<span class="sd">            HKB.{linkname}.sh</span>
+<span class="sd">            HKB.{linkname}.dsh</span>
+
+<span class="sd">            TCR.{linkname}.tr</span>
+<span class="sd">            HKB.{linkname}.range</span>
+<span class="sd">            HKB.{linkname}.td</span>
+<span class="sd">            HKB.{linkname}.dist</span>
+<span class="sd">            HKB.{linkname}.sh</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s">&#39;S&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">day</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;_&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">serie</span><span class="p">)</span>
+        <span class="n">filemat</span> <span class="o">=</span> <span class="n">key</span><span class="o">+</span><span class="s">&#39;.mat&#39;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">=</span><span class="p">{}</span>
+        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;node_name&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dist_nodesmap</span>
+        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;node_place&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">devmapper</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">dist_nodesmap</span><span class="p">)</span>
+        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;node_coord&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span>
+
+        <span class="k">for</span> <span class="n">subject</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">interf</span><span class="p">:</span>
+            <span class="n">sub</span> <span class="o">=</span> <span class="n">subject</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">sub</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="n">subject</span><span class="p">]</span><span class="o">.</span><span class="n">d</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="s">&#39;HKB&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span> <span class="ow">or</span> <span class="p">(</span><span class="s">&#39;FULL&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="o">.</span><span class="n">upper</span><span class="p">()):</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;HKB&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">{}</span>
+            <span class="n">links</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hkb</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+            <span class="n">inter</span><span class="p">,</span><span class="n">lks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_visibility</span><span class="p">(</span><span class="n">techno</span><span class="o">=</span><span class="s">&#39;HKB&#39;</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span>
+                <span class="n">ls</span>   <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span>
+                <span class="n">nl</span> <span class="o">=</span> <span class="n">ls</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s">&#39;_&#39;</span><span class="o">+</span><span class="n">ls</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">nl</span><span class="o">=</span><span class="n">nl</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;Jihad&#39;</span><span class="p">,</span><span class="s">&#39;J&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;Nicolas&#39;</span><span class="p">,</span><span class="s">&#39;N&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;Eric&#39;</span><span class="p">,</span><span class="s">&#39;E&#39;</span><span class="p">)</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;HKB&#39;</span><span class="p">][</span><span class="n">nl</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">ix0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">lks</span><span class="o">==</span><span class="n">ls</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">ix1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">lks</span><span class="o">==</span><span class="n">ls</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">Ssh</span> <span class="o">=</span> <span class="n">inter</span><span class="p">[</span><span class="n">ix0</span><span class="p">,</span><span class="n">ix1</span><span class="p">,:]</span>
+                <span class="n">Srssi</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getlink</span><span class="p">(</span><span class="n">ls</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">ls</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">techno</span><span class="o">=</span><span class="s">&#39;HKB&#39;</span><span class="p">)</span>
+                <span class="c"># get distances between nodes</span>
+                <span class="n">Sdist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getlinkd</span><span class="p">(</span><span class="n">ls</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">ls</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">techno</span><span class="o">=</span><span class="s">&#39;HKB&#39;</span><span class="p">)</span>
+                <span class="n">dsh</span> <span class="o">=</span> <span class="n">dist_sh2rssi</span><span class="p">(</span><span class="n">Sdist</span><span class="p">,</span><span class="n">Ssh</span><span class="p">,</span><span class="mi">15</span><span class="p">)</span>
+                <span class="c"># rssi</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;HKB&#39;</span><span class="p">][</span><span class="n">nl</span><span class="p">][</span><span class="s">&#39;rssi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Srssi</span><span class="o">.</span><span class="n">values</span>
+                <span class="c"># dsh</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;HKB&#39;</span><span class="p">][</span><span class="n">nl</span><span class="p">][</span><span class="s">&#39;dsh&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dsh</span>
+                <span class="c">#d[&#39;S6&#39;][nl][&#39;rssi_dec&#39;] = np.roll(Srssi.values,-dec)</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;HKB&#39;</span><span class="p">][</span><span class="n">nl</span><span class="p">][</span><span class="s">&#39;sh&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ssh</span>
+                <span class="c"># time rssi</span>
+                <span class="c">#d[key][&#39;HKB&#39;][nl][&#39;trh&#39;] = np.array(Srssi.index)</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;trh&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Srssi</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+                <span class="c"># distance</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;HKB&#39;</span><span class="p">][</span><span class="n">nl</span><span class="p">][</span><span class="s">&#39;dist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Sdist</span><span class="o">.</span><span class="n">values</span>
+                <span class="c"># time mocap</span>
+                <span class="c">#d[key][&#39;HKB&#39;][nl][&#39;td&#39;] = np.array(Sdist.index)</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;tm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Sdist</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="s">&#39;TCR&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span> <span class="ow">or</span> <span class="p">(</span><span class="s">&#39;FULL&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="o">.</span><span class="n">upper</span><span class="p">()):</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;TCR&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">{}</span>
+            <span class="n">links</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tcr</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+            <span class="n">inter</span><span class="p">,</span><span class="n">lks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_visibility</span><span class="p">(</span><span class="n">techno</span><span class="o">=</span><span class="s">&#39;TCR&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span>
+                <span class="n">ls</span>   <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span>
+                <span class="c"># to shorten matlab keys surname are replaced by first letter</span>
+                <span class="n">nl</span> <span class="o">=</span> <span class="n">ls</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s">&#39;_&#39;</span><span class="o">+</span><span class="n">ls</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">nl</span><span class="o">=</span><span class="n">nl</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;Jihad&#39;</span><span class="p">,</span><span class="s">&#39;J&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;Nicolas&#39;</span><span class="p">,</span><span class="s">&#39;N&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;Eric&#39;</span><span class="p">,</span><span class="s">&#39;E&#39;</span><span class="p">)</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;TCR&#39;</span><span class="p">][</span><span class="n">nl</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">ix0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">lks</span><span class="o">==</span><span class="n">ls</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">ix1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">lks</span><span class="o">==</span><span class="n">ls</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="c"># intersection on the link</span>
+                <span class="n">Ssh</span> <span class="o">=</span> <span class="n">inter</span><span class="p">[</span><span class="n">ix0</span><span class="p">,</span><span class="n">ix1</span><span class="p">,:]</span>
+                <span class="n">Srange</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getlink</span><span class="p">(</span><span class="n">ls</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">ls</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">techno</span><span class="o">=</span><span class="s">&#39;TCR&#39;</span><span class="p">)</span>
+                <span class="c"># get distances between nodes</span>
+                <span class="n">Sdist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getlinkd</span><span class="p">(</span><span class="n">ls</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">ls</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">techno</span><span class="o">=</span><span class="s">&#39;TCR&#39;</span><span class="p">)</span>
+                <span class="c"># rssi</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;TCR&#39;</span><span class="p">][</span><span class="n">nl</span><span class="p">][</span><span class="s">&#39;range&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Srange</span><span class="o">.</span><span class="n">values</span>
+                <span class="c"># dsh</span>
+                <span class="c">#d[&#39;S6&#39;][nl][&#39;rssi_dec&#39;] = np.roll(Srssi.values,-dec)</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;TCR&#39;</span><span class="p">][</span><span class="n">nl</span><span class="p">][</span><span class="s">&#39;sh&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ssh</span>
+                <span class="c"># time rssi</span>
+                <span class="c">#d[key][&#39;TCR&#39;][nl][&#39;tr&#39;] = np.array(Srange.index)</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;trt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Srange</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+                <span class="c"># distance</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;TCR&#39;</span><span class="p">][</span><span class="n">nl</span><span class="p">][</span><span class="s">&#39;dist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Sdist</span><span class="o">.</span><span class="n">values</span>
+                <span class="c"># time mocap</span>
+                <span class="c">#d[key][&#39;TCR&#39;][nl][&#39;td&#39;] = np.array(Sdist.index)</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;tm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Sdist</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">matlab</span> <span class="o">=</span> <span class="n">d</span>
+        <span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="n">filemat</span><span class="p">,</span><span class="n">d</span><span class="p">)</span>
+
+
+
+
+
 <div class="viewcode-block" id="CorSer.pltvisi"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.cormoran.CorSer.pltvisi.html#pylayers.measures.cormoran.CorSer.pltvisi">[docs]</a>    <span class="k">def</span> <span class="nf">pltvisi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">techno</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot visibility between link a and b</span>
 
@@ -3427,9 +3554,9 @@
 <span class="sd">        inverse :False,</span>
 <span class="sd">            display 1/distance  instead of distance</span>
 <span class="sd">        log : boolean</span>
-<span class="sd">            display log fo distance intead of distance</span>
+<span class="sd">            display log for distance intead of distance</span>
 <span class="sd">        gammma&#39;:1.,</span>
-<span class="sd">            mulitplication factor for log : gamma*log(distance) </span>
+<span class="sd">            mulitplication factor for log : gamma*log(distance)</span>
 <span class="sd">            this can be used to fit RSS</span>
 <span class="sd">        mode : string</span>
 <span class="sd">            &#39;HKB&#39; | &#39;TCR&#39; | &#39;FULL&#39;</span>
@@ -3476,11 +3603,11 @@
 
 
 
-        <span class="n">t0</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;t0&#39;</span><span class="p">)</span>
-        <span class="n">t1</span> <span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;t1&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">t1</span> <span class="o">==-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="c">#t0 =kwargs.pop(&#39;t0&#39;)</span>
+        <span class="c">#t1 =kwargs.pop(&#39;t1&#39;)</span>
+        <span class="c">#if t1 ==-1:</span>
             <span class="c">#t1=self.thkb[-1]</span>
-            <span class="n">t1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ttcr</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c">#    t1=self.ttcr[-1]</span>
 
 
         <span class="n">label</span> <span class="o">=</span> <span class="n">a</span><span class="o">+</span><span class="s">&#39;-&#39;</span><span class="o">+</span><span class="n">b</span>
@@ -3529,7 +3656,11 @@
                 <span class="n">ibhk</span> <span class="o">=</span> <span class="n">b</span>
                 <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">idHKB</span><span class="p">[</span><span class="n">b</span><span class="p">]</span>
 
-            <span class="n">var</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getlink</span><span class="p">(</span><span class="n">iahk</span><span class="p">,</span><span class="n">ibhk</span><span class="p">,</span><span class="s">&#39;HKB&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+            <span class="n">var</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getlink</span><span class="p">(</span><span class="n">iahk</span><span class="p">,</span><span class="n">ibhk</span><span class="p">,</span><span class="s">&#39;HKB&#39;</span><span class="p">)</span>
+            <span class="c">#var = U.values</span>
+            <span class="c">#time = U.index</span>
+            <span class="c">#pdb.set_trace()</span>
+
             <span class="k">if</span> <span class="n">inverse</span><span class="p">:</span>
                 <span class="n">var</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">u&#39;$m^{-2}$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
@@ -3544,8 +3675,8 @@
                     <span class="n">var</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">*</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">var</span><span class="p">)</span><span class="o">+</span><span class="n">gamma</span>
                     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">u&#39;$10log_{10}m^{-2}$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
 
-
-            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="n">subject</span><span class="p">]</span><span class="o">.</span><span class="n">time</span><span class="p">,</span><span class="n">var</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="c">#ax.plot(self.B[subject].time,var,label=label,**kwargs)</span>
+            <span class="n">var</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
         <span class="c">#</span>
         <span class="c"># TCR |Full</span>
         <span class="c">#</span>
@@ -3574,7 +3705,8 @@
             <span class="c">#        var = gamma*10*np.log10(var)</span>
 
             <span class="c">#pdb.set_trace()</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="n">subject</span><span class="p">]</span><span class="o">.</span><span class="n">time</span><span class="p">,</span><span class="n">var</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="c">#ax.plot(self.B[subject].time,var,**kwargs)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="n">subject</span><span class="p">]</span><span class="o">.</span><span class="n">ttcr</span><span class="p">,</span><span class="n">var</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 
         <span class="k">if</span> <span class="n">visibility</span><span class="p">:</span>
@@ -3601,7 +3733,7 @@
 
 </div>
     <span class="k">def</span> <span class="nf">pltlk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; plt links</span>
+        <span class="sd">&quot;&quot;&quot; plot links</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -3830,7 +3962,6 @@
 <span class="sd">        phi : float</span>
 <span class="sd">            pi/2</span>
 <span class="sd">        ap  : boolean</span>
-<span class="sd">            </span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#39;fig&#39;</span><span class="p">:[],</span>
@@ -3869,7 +4000,7 @@
 
         <span class="k">if</span> <span class="n">subjecta</span> <span class="o">!=</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="n">subjecta</span><span class="p">]</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;t&#39;</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="n">subjecta</span><span class="p">]</span><span class="o">.</span><span class="n">dev</span><span class="p">[</span><span class="n">ba</span><span class="p">][</span><span class="s">&#39;ant&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="n">subjecta</span><span class="p">]</span><span class="o">.</span><span class="n">dev</span><span class="p">[</span><span class="n">ba</span><span class="p">][</span><span class="s">&#39;ant&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
             <span class="n">xa</span><span class="p">,</span><span class="n">ya</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">sa</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="n">subjecta</span><span class="p">]</span><span class="o">.</span><span class="n">dev</span><span class="p">[</span><span class="n">ba</span><span class="p">][</span><span class="s">&#39;ant&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">_computemesh</span><span class="p">(</span><span class="n">po</span><span class="o">=</span><span class="n">pa</span><span class="p">,</span><span class="n">T</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="n">subjecta</span><span class="p">]</span><span class="o">.</span><span class="n">acs</span><span class="p">[</span><span class="n">ba</span><span class="p">],</span><span class="n">minr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span><span class="n">maxr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span><span class="n">ilog</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
             <span class="n">p2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="n">subjecta</span><span class="p">]</span><span class="o">.</span><span class="n">dev</span><span class="p">[</span><span class="n">ba</span><span class="p">][</span><span class="s">&#39;ant&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">phi</span><span class="o">&lt;=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;phi&#39;</span><span class="p">])[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
@@ -3877,7 +4008,7 @@
             <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xa</span><span class="p">[</span><span class="n">p2</span><span class="p">,:],</span><span class="n">ya</span><span class="p">[</span><span class="n">p2</span><span class="p">,:])</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">din</span><span class="p">[</span><span class="n">ba</span><span class="p">][</span><span class="s">&#39;ant&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">din</span><span class="p">[</span><span class="n">ba</span><span class="p">][</span><span class="s">&#39;ant&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
             <span class="n">xa</span><span class="p">,</span><span class="n">ya</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">sa</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">din</span><span class="p">[</span><span class="n">ba</span><span class="p">][</span><span class="s">&#39;ant&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">_computemesh</span><span class="p">(</span><span class="n">po</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">din</span><span class="p">[</span><span class="n">ba</span><span class="p">][</span><span class="s">&#39;p&#39;</span><span class="p">],</span><span class="n">T</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">din</span><span class="p">[</span><span class="n">ba</span><span class="p">][</span><span class="s">&#39;T&#39;</span><span class="p">],</span><span class="n">minr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span><span class="n">maxr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span><span class="n">ilog</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
             <span class="n">p2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">din</span><span class="p">[</span><span class="n">ba</span><span class="p">][</span><span class="s">&#39;ant&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">phi</span><span class="o">&lt;=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;phi&#39;</span><span class="p">])[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xa</span><span class="p">[:,</span><span class="n">p2</span><span class="p">],</span><span class="n">ya</span><span class="p">[:,</span><span class="n">p2</span><span class="p">])</span>
@@ -3894,7 +4025,7 @@
 <span class="sd">            link index</span>
 <span class="sd">        b : int</span>
 <span class="sd">            link index</span>
-<span class="sd">        technoa : string </span>
+<span class="sd">        technoa : string</span>
 <span class="sd">            default &#39;HKB&#39;|&#39;TCR&#39;|&#39;BS&#39;</span>
 <span class="sd">        technob</span>
 <span class="sd">            default &#39;HKB&#39;|&#39;TCR&#39;|&#39;BS&#39;</span>
@@ -3987,7 +4118,6 @@
         <span class="c"># #ax.add_patch(ci1015)</span>
         <span class="c"># #its = self.B[subjecta].intersectBody(A[iframe,:],B[iframe,:],topos=False,frameId=iframe)</span>
         <span class="c"># #x.set_title(&#39;frameId :&#39;+str(iframe)+&#39; &#39;+str(its.T))</span>
-        
 
 
 
@@ -4003,7 +4133,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">A</span><span class="p">,</span><span class="n">B</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getlinkp</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">A</span><span class="p">,</span><span class="n">B</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getlinkp</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">technoa</span><span class="o">=</span><span class="n">technoa</span><span class="p">,</span><span class="n">technob</span><span class="o">=</span><span class="n">technob</span><span class="p">)</span>
         <span class="n">A</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">values</span>
         <span class="n">B</span><span class="o">=</span><span class="n">B</span><span class="o">.</span><span class="n">values</span>
         <span class="n">aa</span><span class="p">,</span><span class="n">ia</span><span class="p">,</span><span class="n">ba</span><span class="p">,</span><span class="n">subjecta</span><span class="p">,</span><span class="n">technoa</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">devmapper</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">technoa</span><span class="p">)</span>
@@ -4101,7 +4231,7 @@
         <span class="sd">&quot;&quot;&quot; create entries for plu.rectplot</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">visi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">visidev</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">visi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">visidev</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">technoa</span><span class="o">=</span><span class="n">technoa</span><span class="p">,</span><span class="n">technob</span><span class="o">=</span><span class="n">technob</span><span class="p">)</span>
         <span class="n">tv</span> <span class="o">=</span> <span class="n">visi</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span>
         <span class="n">vv</span> <span class="o">=</span> <span class="n">visi</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
         <span class="k">if</span> <span class="p">(</span><span class="ow">not</span><span class="p">(</span><span class="n">vv</span><span class="o">.</span><span class="n">all</span><span class="p">())</span> <span class="ow">and</span> <span class="n">vv</span><span class="o">.</span><span class="n">any</span><span class="p">()):</span>
@@ -4430,8 +4560,6 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-
-
         <span class="n">pa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getdevp</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">technoa</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">fId</span><span class="p">)</span>
         <span class="n">pb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getdevp</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">technob</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">fId</span><span class="p">)</span>
 
@@ -4539,7 +4667,7 @@
 
 <span class="sd">        optional :</span>
 
-<span class="sd">        t : float | list </span>
+<span class="sd">        t : float | list</span>
 <span class="sd">            given time |[time_start,time_stop]</span>
 
 
@@ -4578,7 +4706,7 @@
 
 
         <span class="n">pa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">devdf</span><span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">devdf</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;=</span> <span class="n">tstart</span><span class="p">)</span> <span class="o">&amp;</span>
-                        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">devdf</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;=</span> <span class="n">tstop</span><span class="p">)</span> <span class="o">&amp;</span> 
+                        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">devdf</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;=</span> <span class="n">tstop</span><span class="p">)</span> <span class="o">&amp;</span>
                         <span class="n">device_select</span><span class="p">][[</span><span class="s">&#39;x&#39;</span><span class="p">,</span><span class="s">&#39;y&#39;</span><span class="p">,</span><span class="s">&#39;z&#39;</span><span class="p">]]</span>
 
         <span class="k">return</span> <span class="n">pa</span>
@@ -4618,11 +4746,10 @@
 
         <span class="c">#if a is a bodyid (e.g. &#39;HKB:16&#39;) or a body part (e.g. AnkleRight)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span>
-            
-            <span class="c"># case where body id is given as input </span>
+            <span class="c"># case where body id is given as input</span>
             <span class="k">if</span> <span class="p">(</span><span class="s">&#39;HKB&#39;</span> <span class="ow">in</span> <span class="n">a</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="s">&#39;TCR&#39;</span> <span class="ow">in</span> <span class="n">a</span> <span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="s">&#39;BS&#39;</span> <span class="ow">in</span> <span class="n">a</span> <span class="p">)</span> <span class="p">:</span>
 
-                <span class="n">ba</span> <span class="o">=</span> <span class="n">a</span> 
+                <span class="n">ba</span> <span class="o">=</span> <span class="n">a</span>
                 <span class="n">techno</span><span class="p">,</span> <span class="n">ia</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)</span>
                 <span class="n">ia</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">ia</span><span class="p">)</span>
                 <span class="k">try</span><span class="p">:</span>
@@ -4682,7 +4809,7 @@
                     <span class="k">if</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">idHKB</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="p">:</span>
                         <span class="k">if</span> <span class="n">techno</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
                             <span class="n">techno</span> <span class="o">=</span> <span class="s">&#39;HKB&#39;</span>
-                        <span class="k">else</span> <span class="p">:</span> 
+                        <span class="k">else</span> <span class="p">:</span>
                             <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;Please indicate the radio techno in argument : TCR, HKB, BS&#39;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;idBS&#39;</span><span class="p">):</span>
                     <span class="k">if</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">idBS</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -4989,7 +5116,39 @@
         <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">cols</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">df</span>
+</div>
+<span class="k">def</span> <span class="nf">dist_sh2rssi</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span><span class="n">Ssh</span><span class="p">,</span><span class="n">offsetdB</span><span class="o">=</span><span class="mi">15</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
 
+<span class="sd">    dist</span>
+<span class="sd">    Ssh </span>
+<span class="sd">    offsetdB : float</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span><span class="o">==</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+        <span class="n">z1</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">((</span><span class="mf">1.</span><span class="o">/</span><span class="n">dist</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">z1</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">((</span><span class="mf">1.</span><span class="o">/</span><span class="n">dist</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Ssh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">z1</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="n">z1</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">-</span><span class="n">offsetdB</span>
+    <span class="n">z1</span> <span class="o">=</span> <span class="n">z1</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">z1</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">z1</span><span class="p">)</span>
+
+<span class="c">#    z2 = Srssi.values</span>
+<span class="c">#    z2m = np.mean(z2[~np.isnan(z2)])</span>
+<span class="c">#    z2[np.isnan(z2)]=z2m</span>
+<span class="c">#    z2 = z2-np.mean(z2)</span>
+<span class="c">#    z1n = z1/np.sqrt(np.sum(z1*z1))</span>
+<span class="c">#    z2n = z2/np.sqrt(np.sum(z2*z2))</span>
+<span class="c">#    cn,dec,ratio = resync(z1n,z2n)</span>
+<span class="c">#    tdec.append(dec)</span>
+
+<span class="c">#tratio.append(ratio)</span>
+<span class="c">#if ratio &gt; maxratio:</span>
+<span class="c">#    maxratio =  ratio</span>
 
     <span class="c"># def get_data(self,a,b):</span>
 
@@ -5026,7 +5185,7 @@
     <span class="c">#     sD = (DHc.index[1]-DHc.index[0])</span>
     <span class="c">#     sf= str(int(sD.microseconds*1e-3)) + &#39;ms&#39;</span>
     <span class="c">#     NHcr = NHc.resample(sf,fill_method=&#39;ffill&#39;)</span>
-    <span class="c">#     return NHcr,DHc</span></div>
+    <span class="c">#     return NHcr,DHc</span>
 </pre></div>
 
           </div>
@@ -5039,7 +5198,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on sept. 07, 2015.
+      Last updated on sept. 24, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

@@ -179,7 +179,7 @@
 <h1>pylayers.simul.simultraj.Simul.evaldeter<a class="headerlink" href="#pylayers-simul-simultraj-simul-evaldeter" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.simul.simultraj.Simul.evaldeter">
-<code class="descclassname">Simul.</code><code class="descname">evaldeter</code><span class="sig-paren">(</span><em>na</em>, <em>nb</em>, <em>wstd</em>, <em>fmod='band'</em>, <em>nf=10</em>, <em>fGHz=[]</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/simul/simultraj.html#Simul.evaldeter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.simultraj.Simul.evaldeter" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Simul.</code><code class="descname">evaldeter</code><span class="sig-paren">(</span><em>na</em>, <em>nb</em>, <em>wstd</em>, <em>fmod='force'</em>, <em>nf=10</em>, <em>fGHz=[]</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/simul/simultraj.html#Simul.evaldeter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.simultraj.Simul.evaldeter" title="Permalink to this definition">¶</a></dt>
 <dd><p>deterministic evaluation of a link</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -201,12 +201,14 @@
 <blockquote>
 <div><p>mode of frequency evaluation
 center : single frequency (center frequency of a channel)
-band : nf points on the whole band</p>
+band : nf points on the whole band
+force : takes directly fGHz</p>
 </div></blockquote>
 <p><strong>nf</strong> : int:</p>
 <blockquote>
 <div><p>number of frequency points (if fmode = &#8216;band&#8217;)</p>
 </div></blockquote>
+<p><strong>**kwargs</strong> : argument of DLink</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(a, t )</strong> :</p>
@@ -222,6 +224,10 @@ band : nf points on the whole band</p>
 </tr>
 </tbody>
 </table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">pylayers.simul.link.DLink</span></code></p>
+</div>
 </dd></dl>
 
 </div>
@@ -237,7 +243,7 @@ band : nf points on the whole band</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on sept. 07, 2015.
+      Last updated on sept. 24, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.simul.simultraj.Simul.evaldeter.txt"

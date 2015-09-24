@@ -828,7 +828,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">consistent</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="n">nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
-
         <span class="c">#</span>
         <span class="c"># points</span>
         <span class="c"># segments</span>
@@ -877,10 +876,9 @@
         <span class="n">ke</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">))</span>
+        <span class="n">p</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">))</span>
         <span class="n">d1</span>  <span class="o">=</span> <span class="n">p</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-        <span class="n">sd1</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">sd1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">d1</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">sd1</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">&lt;&gt;</span><span class="mi">0</span><span class="p">:</span>
            <span class="n">lu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">sd1</span><span class="o">==</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
@@ -1161,19 +1159,27 @@
         <span class="c">#</span>
         <span class="c"># Calculate the wedge angle of degree 2 points</span>
         <span class="c">#</span>
+        <span class="c">#if 2 in self.degree:</span>
+        <span class="c">#    wedgea = self.wedge(self.degree[2])</span>
+        <span class="c">#</span>
+        <span class="c"># wedge &lt; 179 (not flat)</span>
+        <span class="c">#    idiff = filter(lambda x: wedgea[x]&lt;179,range(len(self.degree[2])))</span>
+        <span class="c">#    self.ldiff = map(lambda x : self.degree[2][x],idiff)</span>
         <span class="n">wedgea</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wedge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 
         <span class="c"># wedge &lt; 179 deg (not flat)</span>
         <span class="n">idiff</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">wedgea</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">179</span><span class="p">,</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">[</span><span class="mi">2</span><span class="p">])))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ldiff</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">x</span><span class="p">],</span><span class="n">idiff</span><span class="p">)</span>
+
         <span class="c"># add degree 1 point</span>
         <span class="c"># This corresponds to degree 2 point with an adjascent airwall</span>
         <span class="c"># (half-plane diffraction)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ldiff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ldiff</span><span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
         <span class="c"># if problem here check file format &#39;z&#39; should be a string</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">maxheight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span><span class="s">&#39;z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span>
-
+        <span class="c"># calculate extremum of segments</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">extrseg</span><span class="p">()</span>
+
 </div>
 <div class="viewcode-block" id="Layout.loadosm"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.loadosm.html#pylayers.gis.layout.Layout.loadosm">[docs]</a>    <span class="k">def</span> <span class="nf">loadosm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_fileosm</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load layout from an osm file </span>
@@ -1585,7 +1591,6 @@
 <span class="sd">        layout files are stored in the directory pstruc[&#39;DIRxxx&#39;]</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="n">filename</span><span class="p">,</span><span class="n">ext</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">_filename</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">ext</span><span class="o">==</span><span class="s">&#39;.osm&#39;</span><span class="p">:</span>
             <span class="n">filename</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIROSM&#39;</span><span class="p">])</span>
@@ -4622,25 +4627,31 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">visi</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Layout.save"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.save.html#pylayers.gis.layout.Layout.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="Layout.save"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.save.html#pylayers.gis.layout.Layout.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_filename</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; save layout</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        _filename : short file name (without path)</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">filename</span><span class="o">==</span><span class="p">[]:</span>
+        <span class="k">if</span> <span class="n">_filename</span><span class="o">==</span><span class="p">[]:</span>
             <span class="n">racine</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
-            <span class="n">filename</span> <span class="o">=</span> <span class="n">racine</span> <span class="o">+</span> <span class="s">&#39;.str2&#39;</span>
-            <span class="n">fileini</span> <span class="o">=</span> <span class="n">racine</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">savestr2</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">saveini</span><span class="p">(</span><span class="n">fileini</span><span class="p">)</span>
-            <span class="k">print</span> <span class="s">&quot;structure saved in &quot;</span><span class="p">,</span> <span class="n">filename</span>
-            <span class="k">print</span> <span class="s">&quot;structure saved in &quot;</span><span class="p">,</span> <span class="n">fileini</span>
+            <span class="n">_filename</span> <span class="o">=</span> <span class="n">racine</span> <span class="o">+</span> <span class="s">&#39;.str2&#39;</span>
+            <span class="n">_fileini</span> <span class="o">=</span> <span class="n">racine</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">savestr2</span><span class="p">(</span><span class="n">_filename</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">saveini</span><span class="p">(</span><span class="n">_fileini</span><span class="p">)</span>
+            <span class="k">print</span> <span class="s">&quot;structure saved in &quot;</span><span class="p">,</span> <span class="n">_filename</span>
+            <span class="k">print</span> <span class="s">&quot;structure saved in &quot;</span><span class="p">,</span> <span class="n">_fileini</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">racine</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="n">racine</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">_filename</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s">&#39;.str2&#39;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">savestr2</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-                <span class="k">print</span> <span class="s">&quot;structure saved in &quot;</span><span class="p">,</span> <span class="n">filename</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">savestr2</span><span class="p">(</span><span class="n">_filename</span><span class="p">)</span>
+                <span class="k">print</span> <span class="s">&quot;structure saved in &quot;</span><span class="p">,</span> <span class="n">_filename</span>
             <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s">&#39;.ini&#39;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">savestr2</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-                <span class="k">print</span> <span class="s">&quot;structure saved in &quot;</span><span class="p">,</span> <span class="n">fileini</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">saveini</span><span class="p">(</span><span class="n">_filename</span><span class="p">)</span>
+                <span class="k">print</span> <span class="s">&quot;structure saved in &quot;</span><span class="p">,</span> <span class="n">_filename</span>
 </div>
 <div class="viewcode-block" id="Layout.saveold"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.saveold.html#pylayers.gis.layout.Layout.saveold">[docs]</a>    <span class="k">def</span> <span class="nf">saveold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save Layout (deprecated)</span>
@@ -7032,7 +7043,7 @@
         <span class="c">#     if k==4:</span>
         <span class="c">#         fig,ax = self.showG(&#39;s&#39;,fig=fig,ax=ax,nodelist=ldeg,nodes=False,node_size=50,node_color=&#39;b&#39;)</span>
 </div>
-<div class="viewcode-block" id="Layout.showG"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.showG.html#pylayers.gis.layout.Layout.showG">[docs]</a>    <span class="k">def</span> <span class="nf">showG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Layout.showG"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.showG.html#pylayers.gis.layout.Layout.showG">[docs]</a>    <span class="k">def</span> <span class="nf">showG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="s">&#39;s&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">u&quot;&quot;&quot; show the different graphs</span>
 
 <span class="sd">        Parameters</span>
@@ -7204,7 +7215,6 @@
         <span class="c"># get color dictionnary from pyutil</span>
 
         <span class="n">cold</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">coldict</span><span class="p">()</span>
-
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;labels&#39;</span><span class="p">],</span><span class="nb">list</span><span class="p">):</span>
             <span class="n">labels</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;labels&#39;</span><span class="p">]</span>
@@ -9527,7 +9537,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on sept. 07, 2015.
+      Last updated on sept. 24, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
