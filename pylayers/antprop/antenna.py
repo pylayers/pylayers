@@ -2467,7 +2467,7 @@ class Antenna(Pattern):
             Ftheta = self.Ft
             Fphi = self.Fp
             sh = np.shape(Ftheta)
-            e = np.exp(2 * np.pi * 1j * self.fGHz[:,None,None]* tau)
+            e = np.exp(2 * np.pi * 1j * self.fGHz[None,None,:]* tau)
             #E = np.outer(e, ones(sh[1] * sh[2]))
             #Fth = Ftheta.reshape(sh[0], sh[1] * sh[2])
             #EFth = Fth * E
