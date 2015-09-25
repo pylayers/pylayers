@@ -907,7 +907,7 @@ class Pattern(PyLayers):
                     arg3 = (u3,iphi1,ik,u)
 
                 # polar diagram
-                pdb.set_trace()
+                #pdb.set_trace()
                 if kwargs['polar']:
                     if kwargs['source']=='satimo':
                         r1 = -GmindB + 20 * np.log10(  self.sqG[arg1]+1e-12)
@@ -2177,23 +2177,23 @@ class Antenna(Pattern):
 
         f = self.fGHz[k]
 
-        # 3 axis : nf x nth x nph
+        # 3 axis : nth x nph x nf
         if len(self.Ft.shape)==3:
             if typ == 'G':
-                V = self.sqG[k, :, :]
+                V = self.sqG[:, :,k]
             if typ == 'Ft':
-                V = self.Ft[k, :, :]
+                V = self.Ft[:, :,k]
             if typ == 'Fp':
-                V = self.Fp[k, :, :]
+                V = self.Fp[:, :,k]
 
-        # 4 axis : nf x nth x nph x ntxru
+        # 4 axis : nth x nph x ntxru x nf
         if len(self.Ft.shape)==4:
             if typ == 'G':
-                V = self.sqG[k, :, :, txru]
+                V = self.sqG[:, :, txru,k]
             if typ == 'Ft':
-                V = self.Ft[k, :, : ,txru]
+                V = self.Ft[:, : ,txru,k]
             if typ == 'Fp':
-                V = self.Fp[k, :, :,txru]
+                V = self.Fp[ :, :,txru,k]
 
         if po ==[]:
             po = np.array([0, 0, 0])
@@ -2232,9 +2232,9 @@ class Antenna(Pattern):
 
         k : frequency index
 
-        typ = 'Gain'
-             = 'Ftheta'
-             = 'Fphi'
+        typ =  'Gain'
+            = 'Ftheta'
+            = 'Fphi'
 
         if col  -> color coded plot3D
         else    -> simple plot3D
@@ -2245,18 +2245,18 @@ class Antenna(Pattern):
         ax = axes3d.Axes3D(fig)
 
         if typ == 'Gain':
-            V = self.sqG[k, :, :]
+            V = self.sqG[:, :,k]
         if typ == 'Ftheta':
-            V = self.Ft[k, :, :]
+            V = self.Ft[ :, :,k]
         if typ == 'Fphi':
-            V = self.Fp[k, :, :]
+            V = self.Fp[:, :,k]
 
         vt = np.ones(self.nth)
         vp = np.ones(self.nph)
         Th = np.outer(self.theta, vp)
         Ph = np.outer(vt, self.phi)
 
-        #pdb.set_trace()
+        pdb.set_trace()
         X = abs(V) * np.cos(Ph) * np.sin(Th)
         Y = abs(V) * np.sin(Ph) * np.sin(Th)
         Z = abs(V) * np.cos(Th)

@@ -2,15 +2,17 @@
 #-*- coding:Utf-8 -*-
 from pylayers.signal.bsignal import *
 from pylayers.util.project import *
+from pylayers.antprop.channel import *
 from pylayers.gis.readvrml import *
 import numpy as np
 import matplotlib.pylab as plt
 import matplotlib.animation as animation
 import numpy.linalg as la
-#
-# This class handles the data coming from the MIMO Channel Sounder IETR lab
-#
+
+
 class MIMO(object):
+    """ This class handles the data coming from the MIMO Channel Sounder IETR lab
+    """
     def __init__(self,
                  _filename='',
                  rep = '',
@@ -47,11 +49,13 @@ class MIMO(object):
 
         self.freq = np.linspace(fminGHz,fmaxGHz,Nf)
 
-        self.Nt = Nt
-        self.Nr = Nr
+        self.Nt  = Nt
+        self.Nr  = Nr
 
-        self.Nf = Nf
+        self.Nf  = Nf
+        self.rep = rep
 
+        #pdb.set_trace()
         if _filename <> '':
             self.filename = mesdir+rep+_filename
             # load file
@@ -60,7 +64,8 @@ class MIMO(object):
                 self.calibration()
                 if time:
                     # reshaping for using ift (todo update ift for MDA !!)
-                    Hcal = TChannel(x=self.Hcal.x,y=np.reshape(self.Hcal.y,(Nt*Nr,Nf)))
+                    #Hcal = TChannel(x=self.Hcal.x,y=np.reshape(self.Hcal.y,(Nt*Nr,Nf)))
+                    Hcal = Tchannel(x=self.Hcal.x,y=np.reshape(self.Hcal.y,(Nt*Nr,Nf)))
                     hcal = Hcal.ift(Nz=Nz,ffts=1)
                     shh = hcal.y.shape
                     self.hcal = TUsignal(hcal.x,np.reshape(hcal.y,(Nr,Nt,shh[-1])))
@@ -111,7 +116,9 @@ class MIMO(object):
         #
         y   = y.reshape(self.Nr,self.Nt,self.Nf)
 
-        self.H = FUsignal(self.freq,y)
+        #self.H = FUsignal(self.freq,y)
+        #self.H = TChannel(self.freq,y)
+        self.H = Tchannel(self.freq,y)
 
     def calibration(self):
         """ Apply calibration files
@@ -133,7 +140,9 @@ class MIMO(object):
 
         # C.freq , Nf
 
-        self.C = FUsignal(C.freq,tc)
+        #self.C = FUsignal(C.freq,tc)
+        #self.C = TChannel(C.freq,tc)
+        self.C = Tchannel(C.freq,tc)
 
 
         self.Hcal = self.H/self.C
@@ -189,7 +198,8 @@ class MIMO(object):
 
 
     def transfer(self):
-        """ calculate transfer matrix
+        """ calculate transfer matrix.
+            it involves H and Hd against svd() which acts only over H.
 
         Returns
         -------
