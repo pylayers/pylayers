@@ -616,6 +616,61 @@ class MIMO(object):
 
         return fig,ax
 
+
+    def grid(self,M,
+             OR=np.array([3.4,0.73]),
+             OT=np.array([5.29,6.65]),
+             cT=np.array([-0.07,0]),
+             cR=np.array([0.07,0])):
+        """ Evaluate the data on a grid in the plane
+
+            Parameters
+            ----------
+
+            M : np.array() (Nx x Ny)
+            OR : np.array (,2)
+                Origin of receiver [3.4,0.73]
+            OT : np.array (,2)
+                Origin of transmitter [5.29,6.65]
+            cR : np.array (,2)
+                array receiving vector [0.07,0]
+            cT : np.array (,2)
+                array transmitting vector [-0.07,0]
+
+            Notes
+            -----
+
+           Updated object members
+
+            self.grid : M  (Nx x Ny x 2)
+            self.gloc : TUsignal (x (,ntau) y (Nx x Ny,ntau) )
+
+        """
+
+        aR = cR[0]/np.sqrt(cR[0]**2+cR[1]**2)
+        bR = cR[1]/np.sqrt(cR[0]**2+cR[1]**2)
+
+        aT = cT[0]/np.sqrt(cT[0]**2+cT[1]**2)
+        bT = cT[1]/np.sqrt(cT[0]**2+cT[1]**2)
+        # mapping
+        uT = (aT*(M[...,0]-OT[0])+bT*(M[...,1]-OT[1]))/np.sqrt((M[...,0]-OT[0])**2+(M[...,1]-OT[1])**2)
+        uR = (aR*(M[...,0]-OR[0])+bR*(M[...,1]-OR[1]))/np.sqrt((M[...,0]-OR[0])**2+(M[...,1]-OR[1])**2)
+        # sampling in uR and uT
+        uuR = self.uR
+        uuT = self.uT
+        # index in uR and uT
+        iUr=np.array(map(lambda x : np.where(abs(uuR-x)==(abs(uuR-x)).min())[0][0], np.ravel(uR)))
+        iUt=np.array(map(lambda x : np.where(abs(uuT-x)==(abs(uuT-x)).min())[0][0], np.ravel(uT)))
+
+        self.grid = M
+        shM = M.shape
+        self.gloc = TUsignal(self.h.x,self.h.y[iUr,iUt,:])
+        #self.gloc = self.h[iUr,iUt,:]
+        #shL =  gloc.shape
+        #assert(shL[0]==shM[0]*shM[1])
+        #self.gloc = np.reshape(gloc,(shM[0],shM[1],shL[1]))
+
+
     def plot(self,**kwargs):
         """ plot channel
 
@@ -672,4 +727,262 @@ class MIMO(object):
                     ax[iR,iT].set_xlabel('Frequency (GHz)')
                 ax[iR,iT].set_title(str(iR+1)+'x'+str(iT+1))
         return(fig,ax)
+
+    def showgrid(self,**kwargs):
+        """ show the data on a spatial grid 
+
+        Parameters
+        ----------
+
+        layout:[],
+        s:50,
+        vmin : 0, 
+        vmax: 0.5,
+        linewidth:0,
+        fig:[],
+        ax:[],
+        save:True,
+        filename:'showgrid1',
+        title:'',
+        save:True,
+        dB : False,
+        OR : np.array([3.4,0.73]),
+        OT : np.array([5.29,6.65]),
+        cR : np.array([0.07,0]),
+        cT : np.array([-0.07,0]),
+        target : np.array([]),
+        gating : False,
+        dynamic : 30
+
+
+        Notes 
+        -----
+
+        This function accepts a Layout as input and allows to display 
+        a projection of the spatio-delay volume on a 2D grid. 
+
+
+        """
+        defaults = { 'layout':[],
+                    's':50,
+                    'vmin' : 0, 
+                    'vmax': 0.5,
+                    'linewidth':0,
+                    'fig':[],
+                    'ax':[],
+                    'save':True,
+                    'filename':'showgrid1',
+                    'title':'',
+                    'save':True,
+                    'dB':False,
+                    'OR' : np.array([3.4,0.73]),
+                    'OT' : np.array([5.29,6.65]),
+                    'cR' : np.array([0.07,0]),
+                    'cT' : np.array([-0.07,0]),
+                    'target' : np.array([]),
+                    'gating':False
+                   }
+
+
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+        OR = kwargs['OR']
+        OT = kwargs['OT']
+        cR = kwargs['cR']
+        cT = kwargs['cT']
+
+        ULAR = OR+np.arange(8)[:,np.newaxis]*cR-3.5*cR
+        ULAT = OT+np.arange(4)[:,np.newaxis][::-1]*cT-1.5*cT
+
+        if kwargs['gating']:
+            dTM = np.sqrt((self.grid[...,0]-OT[0])**2+(self.grid[...,1]-OT[1])**2)
+            dRM = np.sqrt((self.grid[...,0]-OR[0])**2+(self.grid[...,1]-OR[1])**2)
+            # dM : Nx,Ny
+            dM  = dTM+dRM 
+            # dM : ,Nx x Ny
+            dM = np.ravel(dM) 
+            # 6 sigma = 1/400MHz
+            # 6 sigma = 2.5ns 
+            # sigma = (2.5/6)
+            # alpha = 1/(2 sigma^2) = 2*(2.5)**2/36 = 0.347
+            #
+            alpha = 0.347
+            # Gaussian gate 
+            # Laplacian gate 
+            # Nx x Ny x Ntau
+            self.gate = np.exp(-alpha*(dM[:,np.newaxis]/0.3-self.gloc.x[np.newaxis,:])**2)
+            data = self.gloc.y*self.gate
+            data = np.sum(abs(data),axis=1)
+        else:
+            data = np.sum(abs(self.gloc.y),axis=1)
+
+        if kwargs['fig']==[]:
+            fig = plt.figure(figsize=(10,10))
+            ax  = fig.add_subplot(111)
+        else:
+            fig=kwargs['fig']
+            ax = kwargs['ax']
+
+        if kwargs['dB']:
+            data = 20*np.log10(data)
+            vmax = data.max()
+            # clipping @ vmax - dynamic 
+            vmin = vmax-kwargs['dynamic']
+        else:
+            vmin = data.min()
+            vmax = data.max()
+
+        scat = ax.scatter(self.grid[...,0],
+                               self.grid[...,1],
+                               c= data,
+                               s=kwargs['s'],
+                               vmin=vmin,
+                               vmax=vmax,
+                               linewidth=kwargs['linewidth'])
+
+        cb = plt.colorbar(scat)
+        if kwargs['dB']:
+            cb.set_label('Level (dB)')
+        else:
+            cb.set_label('Linear Level')
+
+
+        # plot ULAs
+
+        ax.plot(ULAR[:,0],ULAR[:,1],'+b')
+        ax.plot(ULAT[:,0],ULAT[:,1],'+g')  
+        plt.axis('off')
+
+        # plot target
+
+        if kwargs['target']<>[]:
+            target = ax.scatter(kwargs['target'][0],kwargs['target'][1],c='black',s=100)
+
+        # display layout 
+        if kwargs['layout'] <> []:
+            L = kwargs['layout']
+            #fig,ax = L.showG('s',fig=fig,ax=ax,nodes=False)
+            L.display['ednodes']=False
+            L.display['nodes']=False
+            L.display['title']=kwargs['title']
+            fig,ax = L.showG('s',fig=fig,ax=ax,nodes=False)
+
+        if kwargs['save']:
+            fig.savefig(kwargs['filename']+'.pdf')
+            fig.savefig(kwargs['filename']+'.png')
+
+        return fig,ax
+
+    def animgrid(self,**kwargs):
+        """
+        """
+
+        defaults = { 'layout':[],
+                    's':100,
+                    'vmin' : 0, 
+                    'vmax': 0.5,
+                    'linewidth':0,
+                    'fig':[],
+                    'ax':[],
+                    'filename':'animgrid1',
+                    'save':True,
+                    'abs':True,
+                    'title':'',
+                   }
+
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+
+        if kwargs['fig']==[]:
+            fig = plt.figure(figsize=(20,20))
+            ax  = fig.add_subplot(111)
+        
+        if kwargs['layout']<>[]:
+            L = kwargs['layout']
+            fig,ax = L.showG('s',fig=fig,ax=ax,nodes=False)
+
+        Nframe = self.gloc.y.shape[1]
+        if kwargs['abs']:
+            scat = ax.scatter(self.grid[...,0],
+                               self.grid[...,1],
+                               c=abs(self.gloc.y[:,0]),
+                               s=kwargs['s'],
+                               vmin=kwargs['vmin'],
+                               vmax=kwargs['vmax'],
+                               linewidth=kwargs['linewidth'])
+        else:
+            scat = ax.scatter(self.grid[...,0],
+                               self.grid[...,1],
+                               c=self.gloc.y[:,0],
+                               s=kwargs['s'],
+                               vmin=kwargs['vmin'],
+                               vmax=kwargs['vmax'],
+                               linewidth=kwargs['linewidth'])
+
+        title  = ax.text(0.1,0.9,kwargs['title'],transform=ax.transAxes,fontsize=18)
+        cb   = plt.colorbar(scat)
+        delay_template = '%d : tau = %5.2f (ns) d= %5.2f (m)'
+        delay_text  = ax.text(0.1,0.9,'',transform=ax.transAxes,fontsize=18)
+
+        def init():
+            delay_text.set_text('')
+            if kwargs['abs']:
+                scat.set_array(abs(self.gloc.y[:,0]))
+            else:
+                scat.set_array(self.gloc.y[:,0])
+            return scat,delay_text
+        
+        def animate(i):
+            delay_text.set_text(delay_template%(i,self.gloc.x[i],self.gloc.x[i]*0.3))
+            if kwargs['abs']:
+                scat.set_array(abs(self.gloc.y[:,i]))
+            else:
+                scat.set_array(abs(self.gloc.y[:,i]))
+            return scat,delay_text
+
+        anim = animation.FuncAnimation(fig,
+                                       animate,
+                                       init_func=init,
+                                       frames=Nframe,
+                                       interval=1,
+                                       blit=True)
+        if kwargs['save']:
+            anim.save(kwargs['filename']+'.mp4', fps=5)
+        return fig,ax,anim
+
+    def plot(self,frequency=True,phase=False,dB=True,cal=True,fig=[],ax=[],color='k'):
+        """
+
+        """
+        if fig==[]:
+            fig,ax=plt.subplots(8,self.Nt,sharex=True,sharey=True)
+        if cal:
+            H = self.Hcal
+        else:
+            H = self.H
+        for iR in range(self.Nr):
+            for iT in range(self.Nt):
+                k = iR*4+iT
+                if frequency:
+                    if not phase:
+                        if dB:
+                            #ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[k,:])),color=color) 
+                            ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[iR,iT,:])),color=color) 
+                        else:
+                            #ax[iR,iT].plot(H.x,abs(H.y[k,:]),color='k') 
+                            ax[iR,iT].plot(H.x,abs(H.y[iR,iT,:]),color='k') 
+                    else:
+                        #ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[k,:])),color=color) 
+                        ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[iR,iT,:])),color=color) 
+                else:
+                        ax[iR,iT].plot(self.h.x,abs(self.h.y[iR,iT,:]),color=color) 
+                if (iR==7): 
+                    ax[iR,iT].set_xlabel('f (GHz)') 
+                ax[iR,iT].set_title(str(iR+1)+'x'+str(iT+1)) 
+        return(fig,ax)
+
 
