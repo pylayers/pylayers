@@ -13,29 +13,16 @@ import numpy.linalg as la
 
 
 class MIMO(object):
-<<<<<<< HEAD
     """ This class handles the data coming from the MIMO Channel Sounder IETR lab
-    """
-    def __init__(self,
-                 _filename='',
-                 rep = '',
-                 Nf = 1601,
-                 fminGHz = 1.8,
-                 fmaxGHz =2.2,
-             calibration=True,
-                 time=True,
-                 Nz = 100,
-                 Nt = 4,
-                 Nr = 8):
-=======
-    """
+
+    Parameters
+    ----------
     H    : raw channel matrix in frequencey domain
     Hcal : calibrated channel matrix in frequency domain
     hcal : channel matrix in time domain
 
     """
     def __init__(self,**kwargs):
->>>>>>> d95581b8a1460482522dd44eafdb0abdf37e1a58
         """
 
         Parameters
@@ -97,17 +84,10 @@ class MIMO(object):
 
         self.freq = np.linspace(fminGHz,fmaxGHz,Nf)
 
-<<<<<<< HEAD
-        self.Nt  = Nt
-        self.Nr  = Nr
-
         self.Nf  = Nf
         self.rep = rep
-=======
         self.Nt = Nt
         self.Nr = Nr
-        self.Nf = Nf
->>>>>>> d95581b8a1460482522dd44eafdb0abdf37e1a58
 
         #pdb.set_trace()
         if _filename <> '':
@@ -118,12 +98,8 @@ class MIMO(object):
                 self.calibration()
                 if time:
                     # reshaping for using ift (todo update ift for MDA !!)
-<<<<<<< HEAD
                     #Hcal = TChannel(x=self.Hcal.x,y=np.reshape(self.Hcal.y,(Nt*Nr,Nf)))
-                    Hcal = Tchannel(x=self.Hcal.x,y=np.reshape(self.Hcal.y,(Nt*Nr,Nf)))
-=======
                     Hcal = Tchannel(self.Hcal.x,np.reshape(self.Hcal.y,(Nt*Nr,Nf)))
->>>>>>> d95581b8a1460482522dd44eafdb0abdf37e1a58
                     hcal = Hcal.ift(Nz=Nz,ffts=1)
                     shh = hcal.y.shape
                     self.hcal = TUsignal(hcal.x,np.reshape(hcal.y,(Nr,Nt,shh[-1])))
@@ -174,13 +150,7 @@ class MIMO(object):
         #
         y   = y.reshape(self.Nr,self.Nt,self.Nf)
 
-<<<<<<< HEAD
-        #self.H = FUsignal(self.freq,y)
-        #self.H = TChannel(self.freq,y)
-        self.H = Tchannel(self.freq,y)
-=======
         self.H = Tchannel(x=self.freq,y=y)
->>>>>>> d95581b8a1460482522dd44eafdb0abdf37e1a58
 
     def calibration(self):
         """ Apply calibration files
@@ -202,13 +172,7 @@ class MIMO(object):
 
         # C.freq , Nf
 
-<<<<<<< HEAD
-        #self.C = FUsignal(C.freq,tc)
-        #self.C = TChannel(C.freq,tc)
-        self.C = Tchannel(C.freq,tc)
-=======
         self.C = Tchannel(x=C.freq,y=tc)
->>>>>>> d95581b8a1460482522dd44eafdb0abdf37e1a58
 
 
         self.Hcal = self.H/self.C
@@ -474,17 +438,10 @@ class MIMO(object):
         Parameters
         ----------
 
-<<<<<<< HEAD
-        Pt : np.array
-        Transmitted power
-        Tp : float
-        Noise Temperature
-=======
         Pt : np.array  (,NPt)
             Transmitted power
         Tp : float
             Noise Temperature
->>>>>>> d95581b8a1460482522dd44eafdb0abdf37e1a58
 
         """
         fGHz  = self.Hcal.x
@@ -708,29 +665,23 @@ class MIMO(object):
                     if not phase:
                         if dB:
                             #ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[k,:])),color=color)
-<<<<<<< HEAD
                             ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[iR,iT,:])),color=color)
-=======
-                            ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[iR,iT,:])),color='k')
->>>>>>> d95581b8a1460482522dd44eafdb0abdf37e1a58
+                            #ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[iR,iT,:])),color='k')
                         else:
                             #ax[iR,iT].plot(H.x,abs(H.y[k,:]),color='k')
                             ax[iR,iT].plot(H.x,abs(H.y[iR,iT,:]),color='k')
                     else:
                         #ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[k,:])),color=color)
-<<<<<<< HEAD
                         ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[iR,iT,:])),color=color)
                 else:
                         ax[iR,iT].plot(self.h.x,abs(self.h.y[iR,iT,:]),color=color)
                 if (iR==7):
                     ax[iR,iT].set_xlabel('f (GHz)')
-=======
-                        ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[iR,iT,:])),color='k')
+                    ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[iR,iT,:])),color='k')
                 else:
                         ax[iR,iT].plot(self.hcal.x,abs(self.hcal.y[iR,iT,:]),color='k')
                 if (iR==7):
                     ax[iR,iT].set_xlabel('Frequency (GHz)')
->>>>>>> d95581b8a1460482522dd44eafdb0abdf37e1a58
-                ax[iR,iT].set_title(str(iR+1)+'x'+str(iT+1))
+                    ax[iR,iT].set_title(str(iR+1)+'x'+str(iT+1))
         return(fig,ax)
 
