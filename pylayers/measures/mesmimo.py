@@ -2,6 +2,7 @@
 #-*- coding:Utf-8 -*-
 from pylayers.signal.bsignal import *
 from pylayers.antprop.channel import *
+from pylayers.antprop.aarray import *
 from pylayers.util.project import *
 from pylayers.gis.readvrml import *
 import numpy as np
@@ -18,17 +19,7 @@ class MIMO(object):
     hcal : channel matrix in time domain
 
     """
-    def __init__(self,
-                 _filename='',
-                 rep = '',
-                 Nf = 1601,
-                 fminGHz = 1.8,
-                 fmaxGHz =2.2,
-             calibration=True,
-                 time=True,
-                 Nz = 100,
-                 Nt = 4,
-                 Nr = 8):
+    def __init__(self,**kwargs):
         """
 
         Parameters
@@ -51,6 +42,42 @@ class MIMO(object):
         Data are placed in the directory mesdir + rep directory
 
         """
+
+        defaults = { '_filename':'',
+                    'rep':'',
+                    'Nf':1601,
+                    'fminGHz' : 1.8,
+                    'fmaxGHz' :2.2,
+                    'calibration':True,
+                    'time':True,
+                    'Nz' : 100,
+                    'Nt' : 4,
+                    'Nr' : 8,
+                    'Aat': [],
+                    'Aar': []
+                  }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+        _filename = kwargs.pop('_filename')
+        rep = kwargs.pop('rep')
+        Nf =  kwargs.pop('Nf')
+        fminGHz = kwargs.pop('fminGHz')
+        fmaxGHz = kwargs.pop('fmaxGHz')
+        calibration = kwargs.pop('calibration')
+        time = kwargs.pop('time')
+        Nz = kwargs.pop('Nz')
+        Nt = kwargs.pop('Nt')
+        Nr = kwargs.pop('Nr')
+
+        self.Aat = kwargs.pop('Aat')
+        self.Aar = kwargs.pop('Aar')
+        if self.Aar == []:
+            self.Aar = AntArray(N=[8,1,1])
+        if self.Aat == []:
+            self.Aat = AntArray(N=[4,1,1])
 
         self.freq = np.linspace(fminGHz,fmaxGHz,Nf)
 
@@ -148,6 +175,79 @@ class MIMO(object):
         del self.H
         del self.C
 
+
+    def calHa(self,**kwargs):
+        """ calculate the Ha function (angular domain representation)
+
+        fcGHz : float
+        duR   : grid step in uR
+        duT   : grid step in uT
+        time  : boolean
+        taumin  : float 0
+        taumax  : float
+        Nz   : int (20000)
+
+        See : David Tse (7.70 pp 373)
+
+        """
+        defaults = { 'fcGHz':2,
+                    'duR':0.05,
+                    'duT':0.05,
+                    'time':False,
+                    'taumin':0,
+                    'taumax':80,
+                    'Nz':20000
+                    }
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+        fcGHz = kwargs.pop('fcGHz')
+        duR = kwargs.pop('duR')
+        duT = kwargs.pop('duT')
+        time = kwargs.pop('time')
+        taumin = kwargs.pop('taumin')
+        taumax = kwargs.pop('taumax')
+        Nz = kwargs.pop('Nz')
+
+        # f : m x n x uR x f
+        fGHz = self.freq[None,None,None,:]
+        # m : m x n x  uR x f
+        m = np.arange(self.Nr)[:,None,None,None]
+        # uR : m x n x uR x f
+        uR = np.arange(-1,1,duR)[None,None,:,None]
+        # eR : m x n x uR x f
+        eR = np.exp(-1j*np.pi*m*uR*fGHz/fcGHz)
+        # S : m x n x uR x f
+        S  = self.Hcal.y[:,:,None,:] * eR
+        #  SR : n x uR x uT x f
+        SR = np.sum(S,axis=0)[:,:,None,:]
+        # n : n x uR x uT x f
+        n = np.arange(self.Nt)[:,None,None,None]
+        # uT : n x uR x uT x f
+        uT = np.arange(-1,1,duT)[None,None,:,None]
+        # eT : n x uR x uT x f
+        eT = np.exp(-1j*np.pi*n*uT*fGHz/fcGHz)
+        # summation along axix m and n
+        self.Ha = np.sum(SR*eT,axis=0)
+
+        self.uR = np.arange(-1,1,duR)
+        self.uT = np.arange(-1,1,duT)
+
+        NuR = len(self.uR)
+        NuT = len(self.uT)
+        Nf  = len(self.freq)
+
+        if time:
+            #T = fft.ifft(self.h,axis=2)
+            #self.h = abs(fft.fftshift(T,axes=2))
+            Ha = FUsignal(self.freq,np.reshape(self.Ha,(NuR*NuT,Nf)))
+            ha = Ha.ift(Nz=Nz,ffts=1)
+            ut = np.where((h.x>taumin) & (h.x<taumax))[0]
+            xlim = ha.x[ut]
+            ylim = ha.y[...,ut]
+            npts = len(ut)
+            self.ha = TUsignal(xlim,np.reshape(ylim,(NuR,NuT,npts)))
 
     def normalize(self):
         """ Normalization of H
@@ -535,35 +635,39 @@ class MIMO(object):
                     'phase':False,
                     'dB':True,
                     'cal':True,
-                    'color':'k'}
+                    }
 
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]
-        color=kwargs['color']
 
-        fig,ax=plt.subplots(8,self.Nt,sharex=True,sharey=True,figsize=kwargs['figsize'])
+        frequency = kwargs.pop('frequency')
+        phase = kwargs.pop('phase')
+        dB = kwargs.pop('dB')
+        cal = kwargs.pop('cal')
 
-        if kwargs['cal']:
+        fig,ax=plt.subplots(8,self.Nt,sharex=True,sharey=True,**kwargs)
+
+        if cal:
             H = self.Hcal
         else:
             H = self.H
         for iR in range(self.Nr):
             for iT in range(self.Nt):
                 k = iR*4+iT
-                if kwargs['frequency']:
-                    if not kwargs['phase']:
-                        if kwargs['dB']:
+                if frequency:
+                    if not phase:
+                        if dB:
                             #ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[k,:])),color=color)
-                            ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[iR,iT,:])),color=color)
+                            ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[iR,iT,:])),color='k')
                         else:
                             #ax[iR,iT].plot(H.x,abs(H.y[k,:]),color='k')
                             ax[iR,iT].plot(H.x,abs(H.y[iR,iT,:]),color='k')
                     else:
                         #ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[k,:])),color=color)
-                        ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[iR,iT,:])),color=color)
+                        ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[iR,iT,:])),color='k')
                 else:
-                        ax[iR,iT].plot(self.hcal.x,abs(self.hcal.y[iR,iT,:]),color=color)
+                        ax[iR,iT].plot(self.hcal.x,abs(self.hcal.y[iR,iT,:]),color='k')
                 if (iR==7):
                     ax[iR,iT].set_xlabel('Frequency (GHz)')
                 ax[iR,iT].set_title(str(iR+1)+'x'+str(iT+1))

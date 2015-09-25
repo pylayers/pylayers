@@ -601,12 +601,13 @@ class Pattern(PyLayers):
             kwargs['param']=defaults['param']
 
         self.param = kwargs['param']
-        Sc = self.param['Sc']
+        self.Sc = self.param['Sc']
         Np =self.p.shape[1]
-        if Sc==[]:
+        if self.Sc==[]:
             # Sc : Np x Np x Nf
-            #Sc = np.eye(self.p.shape[1])[None,...]
-            Sc = np.random.rand(Np,Np)[...,None]
+            self.Sc = np.eye(self.p.shape[1])[...,None]
+            #Sc2 = np.random.rand(Np,Np)[...,None]
+            #pdb.set_trace()
 
         lamda = (0.3/self.fGHz)
         k     = 2*np.pi/lamda
@@ -671,8 +672,7 @@ class Pattern(PyLayers):
         # Coupling is implemented here
 
         # wp   :  1  x Np x Nu x Nf
-
-        wp = np.einsum('jki,jmi->mki',self.w,Sc)
+        wp = np.einsum('jki,jmi->mki',self.w,self.Sc)
 
         # add direction axis (=0) in w
 
@@ -705,9 +705,11 @@ class Pattern(PyLayers):
         self.Ft = np.sum(self.Ft,axis=1)
         self.Fp = np.sum(self.Fp,axis=1)
 
+
         if self.grid:
-            self.Ft = self.Ft.reshape(self.nth,self.nph,self.ntxru,self.nf)
-            self.Fp = self.Fp.reshape(self.nth,self.nph,self.ntxru,self.nf)
+            sh = self.Ft.shape
+            self.Ft = self.Ft.reshape(self.nth,self.nph,sh[1],sh[2])
+            self.Fp = self.Fp.reshape(self.nth,self.nph,sh[1],sh[2])
 
         self.gain()
 
@@ -790,7 +792,7 @@ class Pattern(PyLayers):
                     'dyn' : 8 ,
                     'phd' : 0,
                     'legend':True,
-                    'GmaxdB':5,
+                    'GmaxdB':20,
                     'polar':True,
                     'topos':False,
                     'source':'satimo',
@@ -1137,55 +1139,6 @@ class Antenna(Pattern):
             self.typ=typ
             self._filename=typ
             self.eval()
-            # If antenna is defined from a pattern function
-            # The frequency range can be defined from fmin
-#            self._filename = typ
-#            self.typ = typ
-#
-#            if typ == 'Gauss':
-#                self.p0 = kwargs['p0']
-#                self.t0 = kwargs['t0']#np.pi/2.
-#                self.p3 = kwargs['p3']#np.pi/6. # 30 degrees
-#                self.t3 = kwargs['t3']#np.pi/6. # 30 degrees
-#                self.G  = 16/(self.t3*self.p3) # gain 16/\theta^{2}
-#                self.GdB = 10*np.log10(self.G)
-#                self.sqG = np.sqrt(self.G)
-#                self.evaluated = False
-#            elif typ == 'WirePlate':
-#                self.p0 = kwargs['p0']
-#                kwargs['t0'] = 5*np.pi/6.
-#                self.t0 =  kwargs['t0']#
-#                self.GdB = 5. # gain
-#                self.G  = pow(10.,self.GdB/10.) # gain
-#                self.sqG = np.sqrt(self.G)
-#                self.evaluated = False
-#            elif typ == 'Omni':
-#                self.GdB  = 0. # gain
-#                self.G    = pow(10.,self.GdB/10.) # gain
-#                self.sqG  = np.sqrt(self.G)
-#                self.evaluated = False
-#
-#            elif typ == 'ssh':
-#                pass
-#            elif typ == 'vsh':
-#                L = kwargs['L']
-#                # initialize a VSHCoeff with zeros
-#
-#                dBr = np.zeros((nf,L+1,L),dtype='complex128')
-#                dBi = np.zeros((nf,L+1,L),dtype='complex128')
-#                dCr = np.zeros((nf,L+1,L),dtype='complex128')
-#                dCi = np.zeros((nf,L+1,L),dtype='complex128')
-#
-#                Br = VCoeff(typ='s1',fmin=fminGHz,fmax=fmaxGHz,data=dBr)
-#                Bi = VCoeff(typ='s1',fmin=fminGHz,fmax=fmaxGHz,data=dBi)
-#                Cr = VCoeff(typ='s1',fmin=fminGHz,fmax=fmaxGHz,data=dCr)
-#                Ci = VCoeff(typ='s1',fmin=fminGHz,fmax=fmaxGHz,data=dCi)
-#
-#                self.C = VSHCoeff(Br,Bi,Cr,Ci)
-#
-#            else:
-#                raise NameError('antenna typ is not known')
-
 
     def __repr__(self):
         st = Pattern.__repr__(self)
@@ -2088,6 +2041,7 @@ class Antenna(Pattern):
                      'minr' : 0.1,
                      'maxr' : 1 ,
                      'tag' : 'Pat',
+                     'txru' : 0,
                      'ilog' : False,
                      'title':True
                      }
@@ -2102,6 +2056,8 @@ class Antenna(Pattern):
         maxr = kwargs['maxr']
         tag  = kwargs['tag']
         ilog = kwargs['ilog']
+        txru = kwargs['txru']
+        
         po = kwargs['po']
         # T is an unitary matrix
         T  = kwargs['T']
@@ -2110,7 +2066,10 @@ class Antenna(Pattern):
         else :
             k = np.where(fGHz>self.fGHz)[0]
 
-        r = self.sqG[:,:,k]
+        if len(self.Ft.shape)==3:
+            r = self.sqG[:,:,k]
+        else:
+            r = self.sqG[:,:,txru,k]
         th = self.theta[:,None]
         phi = self.phi[None,:]
 

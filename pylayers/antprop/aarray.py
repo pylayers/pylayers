@@ -5,9 +5,27 @@ import matplotlib.pyplot as plt
 import pdb
 r"""
 
-.. currentmodule:: pylayers.antprop.array
+.. currentmodule:: pylayers.antprop.aarray
 
 This module handles antenna arrays
+
+Array class
+===========
+
+.. autosummary::
+    :toctree: generated/
+
+ULAarray class
+==============
+
+.. autosummary::
+    :toctree: generated/
+
+AntArray class
+==============
+
+.. autosummary::
+    :toctree: generated/
 
 """
 class TXRU(object):
@@ -150,6 +168,16 @@ class AntArray(Array,ant.Antenna):
     """
 
     def __init__(self,**kwargs):
+        """
+        Examples
+        --------
+
+        ... plot::
+            :include-source:
+        >>> A=AntArray()
+        >>> A.plotG()
+
+        """
         defaults = {'tarr': 'UA',
                     'N'    : [8,1,1],
                     'dm'   : [0.075,0,0],
@@ -207,6 +235,8 @@ class AntArray(Array,ant.Antenna):
          st = st + ant.Antenna.__repr__(self)
          return(st)
 
+if __name__=='__main__':
+    doctest.testmod()
 #
 #
 #
