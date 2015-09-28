@@ -185,7 +185,10 @@ Instrument ID :
 >>> if not switch:
 ...     raise Exception("No device found")
 >>> switch.set_io_mode(0b11111111, 0b11111111, 0b00000000)
-'\x00\x08\x01\x00\x00\x00\x00\x02'
+```
+
+```python
+
 ```
 
 ```python

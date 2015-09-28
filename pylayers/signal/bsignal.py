@@ -827,7 +827,7 @@ class Bsignal(PyLayers):
 
         idx = kwargs['idx']
         # filtering kwargs argument for plot function
-        args ={}
+        args = {}
         for k in kwargs:
             if k not in defaults.keys():
                 args[k]=kwargs[k]
@@ -856,6 +856,8 @@ class Bsignal(PyLayers):
             yx = self.y[idx[0],idx[1],idx[2],u]
             fig,ax = mulcplot(self.x[u],yx*conversion,**args)
         if ndim == 3:
+            shy = self.y.shape
+            yx = self.y.reshape(shy[0]*shy[1],shy[2])[:,u]
             fig,ax = mulcplot(self.x[u],yx*conversion,**args)
         if ndim == 2:
             yx = self.y[idx[0],u]
