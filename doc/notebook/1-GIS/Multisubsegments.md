@@ -13,12 +13,13 @@ This notebook illustrtates a simple ray tracing simulation with diffecent materi
 >>> import matplotlib.pyplot as plt
 >>> %matplotlib inline
 WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
+Warning : OSM Parser seems to be not installed
 ```
 
 Let start by loading a simple layout with 2 single rooms. The multi subsegment appears in the middle with the red vertical lines. Each subsegment is materialized by a  segment.
 
 ```python
->>> L=Layout('defstr3.ini')
+>>> L=Layout('defstr.ini')
 >>> f,a=L.showG('s',subseg=True,figsize=(10,10))
 ```
 
@@ -33,8 +34,8 @@ As the Layout structure has been modified it is required to rebuild the structur
 ```python
 >>> L.build()
 >>> L.save()
-structure saved in  defstr3.str2
-structure saved in  defstr3.ini
+structure saved in  defstr.str2
+structure saved in  defstr.ini
 ```
 
 The $\mathcal{G}_s$ graph dictionnary has the following structure
@@ -108,10 +109,10 @@ The $\mathcal{G}_s$ graph dictionnary has the following structure
   'offset': 0,
   'transition': False,
   'z': (0.0, 3.0)},
- 9: {'connect': [-2, -1],
+ 9: {'connect': [-1, -2],
   'name': 'WALL',
   'ncycles': [2, 0],
-  'norm': array([ 0.00639987, -0.99997952,  0.        ]),
+  'norm': array([-0.00639987,  0.99997952,  0.        ]),
   'offset': 0,
   'transition': False,
   'z': (0.0, 3.0)}}
@@ -133,8 +134,10 @@ We define now two points which are the termination of a radio link.
 ... Aa = Antenna('Omni',fGHz=fGHz)
 >>> Ab = Antenna('Omni',fGHz=fGHz)
 >>> Lk = DLink(L=L,a=tx,b=rx,Aa=Aa,Ab=Ab,fGHz=np.linspace(1,11,100))
-structure saved in  defstr3.str2
-structure saved in  defstr3.ini
+structure saved in  defstr.str2
+structure saved in  defstr.ini
+S1R1.sh3  does not exist
+S1R1.sh3  does not exist
 ```
 
 A link is the set of a layout and 2 termination points.
@@ -151,13 +154,12 @@ Then for evaluating the radio link, simply type:
 checkh5
 Start Signatures
 algo 7
-Stop signature 0.0476150512695
 Signatures'> from 2_1_3 saved
+Stop signature 0.0659000873566
 Start Rays
-Rays'> from 3_2_1 saved
-Stop rays 0.548882961273
-Ctilde'> from 2_1_0 saved
-Tchannel'> from 2_1_0_0_0_0_0 saved
+Rays'> from 3_2_3 saved
+Stop rays 0.408330917358
+Ctilde'> from 2_3_1 saved
 ```
 
 At that point the channel has been evaluated and all the data stored in an `hdf5` file

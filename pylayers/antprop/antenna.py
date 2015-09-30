@@ -501,6 +501,7 @@ class Pattern(PyLayers):
             theta = self.theta
             phi = self.phi
 
+        #pdb.set_trace()
         cx = self.S.Cx.s3
         cy = self.S.Cy.s3
         cz = self.S.Cz.s3
@@ -2057,7 +2058,7 @@ class Antenna(Pattern):
         tag  = kwargs['tag']
         ilog = kwargs['ilog']
         txru = kwargs['txru']
-        
+
         po = kwargs['po']
         # T is an unitary matrix
         T  = kwargs['T']

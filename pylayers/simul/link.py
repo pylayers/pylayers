@@ -1480,7 +1480,7 @@ class DLink(Link):
                         #alpha = RayEnergy
                     else:
                         col = kwargs['col']
-                    
+
                         width = kwargs['width']
                         alpha = kwargs['alpha']
 
