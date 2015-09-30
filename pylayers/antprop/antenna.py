@@ -19,7 +19,7 @@ Examples
     >>> import matplotlib.pyplot as plt
     >>> from pylayers.antprop.antenna import *
     >>> A = Antenna('defant.trx')
-    >>> fig,ax = A.plotG(fGHz=[2,3,4],phd=0)
+    >>> fig,ax = A.plotG(fGHz=[2,3,4],plan='theta',angdeg=0)
 
 Pattern Class
 =============
@@ -649,67 +649,59 @@ class Pattern(PyLayers):
         shF = aFt.shape
         aFt = aFt.reshape(np.prod(shF[0:-1]),shF[-1])
         aFp = aFp.reshape(np.prod(shF[0:-1]),shF[-1])
-        #
-        # add 2 new axis Np (position) Nu (txru)
-        #
-        #    TODO : not yet implemented for different antennas
 
-        aFt = aFt[:,None,None,:]
-        aFp = aFp[:,None,None,:]
+        aFt = aFt[:,None,:]
+        aFp = aFp[:,None,:]
 
         #
         # Nf : frequency
         # Nd : direction
         # Np : points or array element position
-        # Nu : users
+        # Nu : users # Not iumplemented
         #
-        # w  : Np x Nu x Nf
+        # w  : Np x Nf
         # Sc : Np x Np x Nf
         #
         #
-        # w' = w.Sc   Np x Nu x Nf
+        # w' = w.Sc   Np x  Nf
         #
         # Coupling is implemented here
 
-        # wp   :  1  x Np x Nu x Nf
-        wp = np.einsum('jki,jmi->mki',self.w,self.Sc)
+        # Rules : The repeated index k is the common dimension of the product
+        # w    :  Np(k) x Nf(i)
+        # Sc   :  Np(k) x Np(m) x Nf(i)
+        # wp   :  Np(m) x Nf(i)
+        wp = np.einsum('ki,kmi->mi',self.w,self.Sc)
 
         # add direction axis (=0) in w
 
         #if len(.w.shape)==3:
         #    self.wp   = self.wp[None,:,:,:]
 
-        # aFT :  Nd x Np x 1 x Nf
-        # E   :  Nd x Np x 1 x Nf
+        # aFT :  Nd x Np x Nf
+        # E   :  Nd x Np x Nf
 
-        E    = np.exp(1j*k[None,None,None,:]*sdotp[:,:,None,None])
+        E    = np.exp(1j*k[None,None,:]*sdotp[:,:,None])
 
         #
-        # Fp  : Nd x Np x Nu x Nf
-        # Ft  : Nd x Np x Nu x Nf
+        # Fp  : Nd x Np x Nf
+        # Ft  : Nd x Np x Nf
         #
 
         self.Ft = wp*aFt*E
         self.Fp = wp*aFp*E
-        # Those quantities are necessary for receiving mode
-        #
-        # sum over points (axes 2 Np )
-        #
-        #   Nd x Ntxru x Nf
-        #
-        #defaults = {'param':{}}
-
-        #if 'param' not in kwargs or kwargs['param']=={}:
-        #    kwargs['param']=defaults['param']
-
-        self.Ft = np.sum(self.Ft,axis=1)
-        self.Fp = np.sum(self.Fp,axis=1)
-
 
         if self.grid:
+        #
+        # Integrate over the Np points (axis =1)
+        # Fp  : Nd x Nf
+        # Ft  : Nd x Nf
+        #
+            self.Ft = np.sum(self.Ft,axis=1)
+            self.Fp = np.sum(self.Fp,axis=1)
             sh = self.Ft.shape
-            self.Ft = self.Ft.reshape(self.nth,self.nph,sh[1],sh[2])
-            self.Fp = self.Fp.reshape(self.nth,self.nph,sh[1],sh[2])
+            self.Ft = self.Ft.reshape(self.nth,self.nph,sh[1])
+            self.Fp = self.Fp.reshape(self.nth,self.nph,sh[1])
 
         self.gain()
 
@@ -758,8 +750,8 @@ class Pattern(PyLayers):
         ----------
 
         fGHz : frequency
-        phd  : phi in degrees
-        thd  : theta in degrees
+        plan : 'theta' | 'phi' depending on the selected plan to be displayed
+        angdeg : phi or theta in degrees, if plan=='phi' it corresponds to theta
         GmaxdB :  max gain to be displayed
         polar : boolean
 
@@ -778,8 +770,8 @@ class Pattern(PyLayers):
             >>> import matplotlib.pyplot as plt
             >>> from pylayers.antprop.antenna import *
             >>> A = Antenna('defant.trx')
-            >>> fig,ax = A.plotG(fGHz=[2,3,4],phd=0)
-            >>> fig,ax = A.plotG(fGHz=[2,3,4],thd=90)
+            >>> fig,ax = A.plotG(fGHz=[2,3,4],plan='theta',angdeg=0)
+            >>> fig,ax = A.plotG(fGHz=[2,3,4],plan='phi',angdeg=90)
 
         """
 
@@ -790,7 +782,8 @@ class Pattern(PyLayers):
 
         defaults = {'fGHz' : [],
                     'dyn' : 8 ,
-                    'phd' : 0,
+                    'plan': 'phi',
+                    'angdeg' : 90,
                     'legend':True,
                     'GmaxdB':20,
                     'polar':True,
@@ -862,21 +855,16 @@ class Pattern(PyLayers):
             #ik=0
             chaine = 'f = %3.2f GHz' %(self.fGHz[ik])
             # all theta
-            if 'phd' in kwargs:
+            if kwargs['plan']=='theta':
                 itheta = np.arange(self.nth)
-                iphi1 = np.where(abs(self.phi-kwargs['phd']*dtr)<dphi)[0][0]
+                iphi1 = np.where(abs(self.phi-kwargs['angdeg']*dtr)<dphi)[0][0]
                 Np = self.nph
 
-                #   0 < theta < pi/2
-                #u1 = np.where((self.theta[:,0] <= np.pi / 2) &
-                #              (self.theta[:,0] >= 0))[0]
-                #pdb.set_trace()
+                #   0 <= theta  <= pi/2
                 u1 = np.where((self.theta <= np.pi / 2.) & (self.theta >= 0))[0]
-                #   0:Nt-1
+                #   0 < theta < pi
                 u2 = np.arange(self.nth)
-                #   pi/2 < theta < pi
-                #u3 = np.nonzero((self.theta[:,0] <= np.pi) & ( self.theta[:,0]
-                #                                              > np.pi / 2))[0]
+                #   pi/2 < theta  <= pi
                 u3 = np.nonzero((self.theta <= np.pi) & ( self.theta > np.pi / 2))[0]
 
                 #
@@ -889,8 +877,12 @@ class Pattern(PyLayers):
                 if shsqG[1]==1:
                     iphi1 = 0
                     iphi2 = 0
-                if shsqG[2]==1:
-                    ik = 0
+                if len(shsqG)==3:  # if only one frequency point
+                    if shsqG[2]==1:
+                        ik = 0
+                else:
+                    if shsqG[3]==1:
+                        ik = 0
 
                 # handle parity
                 if np.mod(Np, 2) == 0:
@@ -905,9 +897,9 @@ class Pattern(PyLayers):
                 else:
                     if shsqG[3]==1:
                         u = 0
-                    arg1 = (u1,iphi1,ik,u)
-                    arg2 = (u2,iphi2,ik,u)
-                    arg3 = (u3,iphi1,ik,u)
+                    arg1 = (u1,iphi1,u,ik)
+                    arg2 = (u2,iphi2,u,ik)
+                    arg3 = (u3,iphi1,u,ik)
 
                 # polar diagram
                 #pdb.set_trace()
@@ -952,20 +944,16 @@ class Pattern(PyLayers):
 
                 # angular basis for phi
                 angle = np.linspace(0, 2 * np.pi, len(r), endpoint=True)
-              #  plt.title(u'V plane $\\theta$ (degrees)')
+                plt.title(u'$\\theta$ (V) plane $\\theta$ (degrees)')
 
-            if 'thd' in kwargs:
+            if kwargs['plan']=='phi':
                 iphi = np.arange(self.nph)
-                #itheta = np.where(abs(self.theta[:,0]-kwargs['thd']*dtr)<dtheta)[0][0]
-                #angle = self.phi[0,iphi]
-                itheta = np.where(abs(self.theta-kwargs['thd']*dtr)<dtheta)[0][0]
-                #angle = self.phi[0,iphi]
+                itheta = np.where(abs(self.theta-kwargs['angdeg']*dtr)<dtheta)[0][0]
                 angle = self.phi[iphi]
                 if len(self.sqG.shape)==3:
-                    arg = (itheta,iphi,ik)
+                    arg = [itheta,iphi,ik]
                 else:
-                    arg = (itheta,iphi,ik,u)
-
+                    arg = [itheta,iphi,u,ik]
                 if kwargs['polar']:
                     r = -GmindB + 20 * np.log10(self.sqG[arg])
                     neg = np.nonzero(r < 0)
@@ -977,6 +965,7 @@ class Pattern(PyLayers):
                 else:
                     r =  20 * np.log10(self.sqG[arg])
 
+                plt.title(u'$\\phi$ (H) plane $\\phi$ (degrees)')
             # actual plotting
             ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
             if kwargs['polar']:
@@ -1193,7 +1182,7 @@ class Antenna(Pattern):
             # see WHERE1 D4.1 sec 3.1.1.2.2
             if self.source=='cst':
                 GdB = 20*np.log10(S/np.sqrt(30))
-            st = st + "GmaxdB : %4.2f dB \n" % (GdB)
+            #st = st + "GmaxdB : %4.2f dB \n" % (GdB)
             st = st + "   f = %4.2f GHz \n" % (self.fGHz[uf])
             if self.grid:
                 st = st + "   theta = %4.2f (degrees) \n" % (self.theta[ut]*rtd)
@@ -1294,8 +1283,8 @@ class Antenna(Pattern):
             >>> import matplotlib.pyplot as plt
             >>> from pylayers.antprop.antenna import *
             >>> A = Antenna('S1R1.mat',directory='ant/UWBAN/Matfile')
-            >>> f,a = A.plotG(phd=0)
-            >>> f,a = A.plotG(thd=90,fig=f,ax=a)
+            >>> f,a = A.plotG(plan='theta',angdeg=0)
+            >>> f,a = A.plotG(plan='phi',angdeg=90,fig=f,ax=a)
             >>> txt = plt.title('S1R1 antenna : st loadmat')
             >>> plt.show()
 
