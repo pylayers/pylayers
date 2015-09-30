@@ -151,13 +151,12 @@ Then for evaluating the radio link, simply type:
 checkh5
 Start Signatures
 algo 7
-Stop signature 0.0476150512695
 Signatures'> from 2_1_3 saved
+Stop signature 0.0677840709686
 Start Rays
 Rays'> from 3_2_1 saved
-Stop rays 0.548882961273
+Stop rays 0.322803974152
 Ctilde'> from 2_1_0 saved
-Tchannel'> from 2_1_0_0_0_0_0 saved
 ```
 
 At that point the channel has been evaluated and all the data stored in an `hdf5` file
