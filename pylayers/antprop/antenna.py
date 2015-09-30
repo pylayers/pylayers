@@ -304,7 +304,7 @@ class Pattern(PyLayers):
             self.evaluated = True
         else:
             # Nd x Nf
-            self.sqG =  np.array(np.sqrt(self.G))[None,None]
+            self.sqG =  np.array(np.sqrt(G))[None,None]
         self.radF()
 
     def __pGauss(self,**kwargs):

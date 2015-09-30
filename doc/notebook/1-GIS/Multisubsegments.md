@@ -12,8 +12,6 @@ This notebook illustrtates a simple ray tracing simulation with diffecent materi
 >>> from pylayers.simul.simulem import *
 >>> import matplotlib.pyplot as plt
 >>> %matplotlib inline
-WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
-Warning : OSM Parser seems to be not installed
 ```
 
 Let start by loading a simple layout with 2 single rooms. The multi subsegment appears in the middle with the red vertical lines. Each subsegment is materialized by a  segment.
@@ -109,10 +107,10 @@ The $\mathcal{G}_s$ graph dictionnary has the following structure
   'offset': 0,
   'transition': False,
   'z': (0.0, 3.0)},
- 9: {'connect': [-1, -2],
+ 9: {'connect': [-2, -1],
   'name': 'WALL',
   'ncycles': [2, 0],
-  'norm': array([-0.00639987,  0.99997952,  0.        ]),
+  'norm': array([ 0.00639987, -0.99997952,  0.        ]),
   'offset': 0,
   'transition': False,
   'z': (0.0, 3.0)}}
