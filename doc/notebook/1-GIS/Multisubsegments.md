@@ -18,7 +18,7 @@ WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'imp
 Let start by loading a simple layout with 2 single rooms. The multi subsegment appears in the middle with the red vertical lines. Each subsegment is materialized by a  segment.
 
 ```python
->>> L=Layout('defstr3.ini')
+>>> L=Layout('defstr.ini')
 >>> f,a=L.showG('s',subseg=True,figsize=(10,10))
 ```
 
@@ -33,8 +33,8 @@ As the Layout structure has been modified it is required to rebuild the structur
 ```python
 >>> L.build()
 >>> L.save()
-structure saved in  defstr3.str2
-structure saved in  defstr3.ini
+structure saved in  defstr.str2
+structure saved in  defstr.ini
 ```
 
 The $\mathcal{G}_s$ graph dictionnary has the following structure
@@ -112,7 +112,7 @@ The $\mathcal{G}_s$ graph dictionnary has the following structure
   'name': 'WALL',
   'ncycles': [2, 0],
   'norm': array([ 0.00639987, -0.99997952,  0.        ]),
-  'offset': 0,
+  'offset': 10,
   'transition': False,
   'z': (0.0, 3.0)}}
 ```
@@ -133,8 +133,8 @@ We define now two points which are the termination of a radio link.
 ... Aa = Antenna('Omni',fGHz=fGHz)
 >>> Ab = Antenna('Omni',fGHz=fGHz)
 >>> Lk = DLink(L=L,a=tx,b=rx,Aa=Aa,Ab=Ab,fGHz=np.linspace(1,11,100))
-structure saved in  defstr3.str2
-structure saved in  defstr3.ini
+structure saved in  defstr.str2
+structure saved in  defstr.ini
 ```
 
 A link is the set of a layout and 2 termination points.
@@ -152,11 +152,12 @@ checkh5
 Start Signatures
 algo 7
 Signatures'> from 2_1_3 saved
-Stop signature 0.0677840709686
+Stop signature 0.0704510211945
 Start Rays
-Rays'> from 3_2_1 saved
-Stop rays 0.322803974152
-Ctilde'> from 2_1_0 saved
+Rays'> from 3_3_4 saved
+Stop rays 0.543512105942
+Ctilde'> from 3_4_2 saved
+Tchannel'> from 3_4_2_0_0_0_0 saved
 ```
 
 At that point the channel has been evaluated and all the data stored in an `hdf5` file
@@ -171,26 +172,26 @@ Rays3D
 ----------
 1 / 1 : [0]
 2 / 6 : [1 2 3 4 5 6]
-3 / 19 : [ 7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25]
-4 / 40 : [26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50
- 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65]
-5 / 49 : [ 66  67  68  69  70  71  72  73  74  75  76  77  78  79  80  81  82  83
-  84  85  86  87  88  89  90  91  92  93  94  95  96  97  98  99 100 101
- 102 103 104 105 106 107 108 109 110 111 112 113 114]
-6 / 34 : [115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132
- 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148]
-7 / 6 : [149 150 151 152 153 154]
+3 / 18 : [ 7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24]
+4 / 37 : [25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49
+ 50 51 52 53 54 55 56 57 58 59 60 61]
+5 / 45 : [ 62  63  64  65  66  67  68  69  70  71  72  73  74  75  76  77  78  79
+  80  81  82  83  84  85  86  87  88  89  90  91  92  93  94  95  96  97
+  98  99 100 101 102 103 104 105 106]
+6 / 32 : [107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124
+ 125 126 127 128 129 130 131 132 133 134 135 136 137 138]
+7 / 6 : [139 140 141 142 143 144]
 -----
-ni : 721
-nl : 1597
+ni : 674
+nl : 1493
 ```
 
 ```python
 >>> Lk.C
 Ctilde
 ---------
-(155, 100)
-Nray : 155
+(145, 100)
+Nray : 145
 fmin(GHz) : 1.0
 fmax(GHz): 11.0
 Nfreq : 100
@@ -246,18 +247,18 @@ array([  767. ,  1114. ,     1.5])
 ... #Aa = Antenna('Omni',fGHz=fGHz)
 ... ak,tauk=Lk.eval(force=True)
 >>> plt.stem(Lk.H.taud,Lk.H.ak)
-structure saved in  defstr3.str2
-structure saved in  defstr3.ini
+structure saved in  defstr.str2
+structure saved in  defstr.ini
 checkh5
 Start Signatures
 algo 7
-Stop signature 0.0449650287628
 Signatures'> from 2_1_3 saved
+Stop signature 0.0463299751282
 Start Rays
-Rays'> from 3_2_1 saved
-Stop rays 0.557983160019
-Ctilde'> from 2_1_0 saved
-Tchannel'> from 2_1_0_0_0_2_2 saved
+Rays'> from 3_3_4 saved
+Stop rays 0.547375917435
+Ctilde'> from 3_4_0 saved
+Tchannel'> from 3_4_0_0_0_2_2 saved
 <Container object of 3 artists>
 ```
 
@@ -267,8 +268,8 @@ Tchannel'> from 2_1_0_0_0_2_2 saved
 
 ```python
 >>> cirair.plot(typ=['v'],xmin=20,xmax=80)
-(<matplotlib.figure.Figure at 0x7fad347f2ad0>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7fad347f9ad0>]], dtype=object))
+(<matplotlib.figure.Figure at 0x7f94c9dfa450>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f94c856e190>]], dtype=object))
 ```
 
 ```python
@@ -280,20 +281,20 @@ Tchannel'> from 2_1_0_0_0_2_2 saved
 >>> Lk.eval(force=True)
 >>> cirpart = Lk.H.applywavB(wav.sf)
 >>> cirpart.plot(typ=['v'],xmin=20,xmax=80)
-structure saved in  defstr3.str2
-structure saved in  defstr3.ini
+structure saved in  defstr.str2
+structure saved in  defstr.ini
 checkh5
 Start Signatures
 algo 7
-Stop signature 0.0465669631958
 Signatures'> from 2_1_3 saved
+Stop signature 0.0461299419403
 Start Rays
-Rays'> from 3_2_1 saved
-Stop rays 0.558837890625
-Ctilde'> from 2_1_0 saved
-Tchannel'> from 2_1_0_0_0_2_2 saved
-(<matplotlib.figure.Figure at 0x7fad2f51ab10>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7fad3463c7d0>]], dtype=object))
+Rays'> from 3_3_4 saved
+Stop rays 0.543927907944
+Ctilde'> from 3_4_0 saved
+Tchannel'> from 3_4_0_0_0_2_2 saved
+(<matplotlib.figure.Figure at 0x7f94c7a51410>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f94c7971e50>]], dtype=object))
 ```
 
 ```python
@@ -305,20 +306,20 @@ Tchannel'> from 2_1_0_0_0_2_2 saved
 >>> Lk.eval(force=True)
 >>> cirmet = Lk.H.applywavB(wav.sf)
 >>> cirmet.plot(typ=['v'],xmin=20,xmax=80)
-structure saved in  defstr3.str2
-structure saved in  defstr3.ini
+structure saved in  defstr.str2
+structure saved in  defstr.ini
 checkh5
 Start Signatures
 algo 7
-Stop signature 0.0461058616638
 Signatures'> from 2_1_3 saved
+Stop signature 0.046382188797
 Start Rays
-Rays'> from 3_2_1 saved
-Stop rays 0.56045293808
-Ctilde'> from 2_1_0 saved
-Tchannel'> from 2_1_0_0_0_2_2 saved
-(<matplotlib.figure.Figure at 0x7fad3629f190>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7fad3465b790>]], dtype=object))
+Rays'> from 3_3_4 saved
+Stop rays 0.541913986206
+Ctilde'> from 3_4_0 saved
+Tchannel'> from 3_4_0_0_0_2_2 saved
+(<matplotlib.figure.Figure at 0x7f94c7a51a90>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f94ca156f50>]], dtype=object))
 ```
 
 ```python
