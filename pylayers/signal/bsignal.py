@@ -1084,8 +1084,10 @@ class Usignal(Bsignal):
         sh2 = list(u2.y.shape)
         naxis1 = len(sh1)
         naxis2 = len(sh2)
-        if naxis2==naxis1+1:
+        if naxis2==naxis1+1: # Ctt(2) x F(3)
             u1.y=u1.y[:,None,:]
+        elif naxis2==naxis1+2: # w(2) x H (4)
+            u1.y=u1.y[:,None,None,:]
         elif naxis2!=naxis1:
             print "alignement not allowed"
 
@@ -3041,19 +3043,20 @@ class FUsignal(FBsignal,Usignal):
         #
         # nline first dimension of self.y
         #
-        nline = np.shape(U)[0]
+        nline = np.shape(U)[0:-1]
         if ndim > 1:
-            zl   = np.zeros([nline, Nl])
-            zlm1 = np.zeros([nline, Nl-1])
+            zl   = np.zeros(list(nline)+[Nl])
+            zlm1 = np.zeros(list(nline)+[Nl-1])
         else:
             zl = np.zeros(Nl)
             zlm1 = np.zeros(Nl-1)
 
         if  Nz > 0:
             if ndim > 1:
-                zh = np.zeros([nline, Nz])
-                UZ = np.concatenate((U, zh), 1)
-                UZF = np.fliplr(np.conjugate(UZ))
+                zh = np.zeros(list(nline)+[Nz])
+                UZ = np.concatenate((U, zh), -1)
+                #UZF = np.fliplr(np.conjugate(UZ))
+                UZF = np.conjugate(UZ)[...,::-1]
             else:
                 zh = np.zeros(Nz)
                 UZ = np.concatenate((U, zh), 1)
@@ -3069,7 +3072,7 @@ class FUsignal(FBsignal,Usignal):
         fz = np.concatenate((f, fh), 0)
         #Up = np.concatenate((zl, UZ, UZF, zl), 1)
         #fp = np.concatenate((fl, fz, fz + fz[-1], fl + 2 * fz[-1]), 0)
-        Up = np.concatenate((zl, UZ, UZF,zlm1), 1)
+        Up = np.concatenate((zl, UZ, UZF,zlm1), -1)
         fp = np.concatenate((fl, fz, fz + fz[-1], fl[0:-1] + 2 * fz[-1]), 0)
 
         Nfp = len(fp)
