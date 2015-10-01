@@ -1594,6 +1594,7 @@ class Tchannel(bs.FUsignal):
         # return a TUsignal
         #
         Y = self.apply(Wgam)
+        #pdb.set_trace()
         ri = Y.ft1(Nz=500,ffts=1)
 
         return(ri)
