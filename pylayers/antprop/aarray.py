@@ -45,19 +45,18 @@ class Array(ant.Pattern):
 
     """
 
-    def __init__(self,p,w=[],fGHz=np.linspace(1.8,2.2,20),ntxru=1):
+    def __init__(self,p,w=[],fGHz=np.linspace(1.8,2.2,20)):
         """
 
         Parameters
         ----------
 
         p  : set of 3D points (3xNp)   or  3 x Nx x Ny x Nz
-        w  : set of weight Np x Nu x Nf
-                       or  Nx x Ny x Nz x Nu x Nf
+        w  : set of weight Np x Nf
+                       or  Nx x Ny x Nz x Nf
 
         fGhz : np.array
             frequency in GHz
-        ntxru : number of spatial flux
 
         """
         assert type(p)==np.ndarray," Array not an array"
@@ -65,13 +64,12 @@ class Array(ant.Pattern):
 
         self.p = p
         self.fGHz = fGHz
-        self.ntxru = ntxru
         shp = np.shape(p)
 
         # If no excitation choose uniform excitation
-        # Np x Nu x Nf
+        # Np x Nf
         if w == []:
-            w = np.ones((shp[1:]))[...,None,None]
+            w = np.ones((shp[1:]))[...,None]
         self.w = w
 
         self.typ = 'Array'
@@ -84,7 +82,6 @@ class Array(ant.Pattern):
         st = st + 'points :' + str(p) + '\n'
         st = st + 'fmin :' + str(fGHz[0]) + '\n'
         st = st + 'fmax :' + str(fGHz[1]) + '\n'
-        st = st + 'ntxru :' + str(ntxru) + '\n'
         return(st)
 
 class ULArray(Array):
@@ -116,7 +113,6 @@ class ULArray(Array):
                      'dm'   : [0.075,0,0],
                      'w'   : [],
                     'fGHz' : np.linspace(1.8,2.2,10),
-                    'ntxru': 1
                    }
         for k in defaults:
             if k not in kwargs:
@@ -182,7 +178,6 @@ class AntArray(Array,ant.Antenna):
                     'N'    : [8,1,1],
                     'dm'   : [0.075,0,0],
                     'S'    : [],
-                    'Ntxru' : 1,
                     'pattern' : True,
                     #'typant':'S1R1.vsh3',
                     'typant':'Gauss'
@@ -196,7 +191,6 @@ class AntArray(Array,ant.Antenna):
         self.tarr = kwargs.pop('tarr')
         self.N  = np.array(kwargs.pop('N'))
         self.Na = np.prod(self.N)  # number of antennas
-        self.ntxru = kwargs.pop('Ntxru')
         self.dm = np.array(kwargs.pop('dm'))
         self.typant = kwargs.pop('typant')
 

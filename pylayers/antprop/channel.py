@@ -3948,26 +3948,40 @@ maicher
         Fbt = bs.FUsignal(a.fGHz, b.Ft)
         Fbp = bs.FUsignal(a.fGHz, b.Fp)
 
-        # Ctt : r x f
         # Cg2cl should be applied here
         #
 
         #
         #  C  = 2 x 2 x r x f
+        #  Ctt : r x f
         #  Fa = 2 x r x f
         #  Fb = 2 x r x f
 
         t1 = self.Ctt * Fat + self.Ctp * Fap
         t2 = self.Cpt * Fat + self.Cpp * Fap
 
-        alpha = t1 * Fbt + t2 * Fbp
+        T1 = t1.y[:,None,:,:]
+        T2 = t2.y[:,None,:,:]
+        FBt = Fbt.y[:,:,None,:]
+        FBp = Fbp.y[:,:,None,:]
 
-        self.fGHz = alpha.x
+        alpha1 = np.einsum('ljkm,lkim->ljim',FBt,T1)
+        alpha2 = np.einsum('ljkm,lkim->ljim',FBp,T2)
 
-        H = Tchannel(alpha.x, alpha.y, self.tauk, self.tang, self.rang)
+        #alpha = t1 * Fbt + t2 * Fbp
+        # Nd x Nr x Nt x Nf
+        alpha = alpha1 + alpha2
+
+        self.fGHz = t1.x
+
+        H = Tchannel(x = self.fGHz,
+                     y = alpha,
+                     tau = self.tauk,
+                     dod = self.tang,
+                     doa = self.rang)
 
         if debug :
-            H.alpha=alpha.y
+            H.alpha=alpha
             H.Fat=Fat.y
             H.Fap=Fap.y
             H.Fbt=Fbt.y
@@ -3981,7 +3995,7 @@ maicher
             H.applyFriis()
 
         # average w.r.t frequency
-        Nf   = H.y.shape[1]
+        Nf   = H.y.shape[-1]
         H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y)/Nf, axis=1)))
         H.tk = H.taud
 

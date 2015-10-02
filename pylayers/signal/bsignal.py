@@ -1079,16 +1079,39 @@ class Usignal(Bsignal):
 
         """
         u1 = self
+        # shape analysis
+        sh1 = list(u1.y.shape)
+        sh2 = list(u2.y.shape)
+        naxis1 = len(sh1)
+        naxis2 = len(sh2)
+        if naxis2==naxis1+1:
+            u1.y=u1.y[:,None,:]
+        elif naxis2!=naxis1:
+            print "alignement not allowed"
+
+        #   Function to determine iuf 2 shape are compatible
+        #    if naxis1>naxis2:
+        #        shs = sh2
+        #        shl = sh1
+        #    else:
+        #        shs = sh1
+        #        shl = sh2
+        #    for k in range(len(shl)):
+        #        sht = copy.copy(shs)
+        #        sht.insert(k,1)
+        #        g = list(np.array(sht)-np.array(shl)).pop(k)
+        #        if np.sum(np.abs(np.array(g)))==0:
+        #            u1.y = u1.y
+
+
+
+
         # nothing to align
         if len(u1.x)==len(u2.x):
             if (u1.x==u2.x).all():
                 return u1.x,u1.y,u2.y
 
-        sh1 = u1.y.shape
-        sh2 = u2.y.shape
-        naxis1 = len(sh1)
-        naxis2 = len(sh2)
-        assert(naxis1==naxis2),"Problem signal haven't the same number of axis"
+        #assert(naxis1==naxis2),
 
         dx1 = u1.dx()
         dx2 = u2.dx()
