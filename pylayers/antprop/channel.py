@@ -1594,7 +1594,6 @@ class Tchannel(bs.FUsignal):
         # return a TUsignal
         #
         Y = self.apply(Wgam)
-        #pdb.set_trace()
         ri = Y.ft1(Nz=500,ffts=1)
 
         return(ri)
@@ -3977,16 +3976,26 @@ maicher
             FBt = Fbt.y[:,None,None,:]
             FBp = Fbp.y[:,None,None,:]
 
+        # determine the common interval on frequency axis
+        if np.sum(t1.x!=Fbt.x)>0:
+            t1x_int = (np.round(t1.x*100)).astype(int)
+            Fbtx_int = (np.round(Fbt.x*100)).astype(int)
+            inter = np.intersect1d(t1x_int,Fbtx_int)
+            ut = np.in1d(t1x_int,inter)
+            uf = np.in1d(Fbtx_int,inter)
+        else:
+            ut = np.arange(len(t1.x))
+            uf = np.arange(len(Fbt.x))
+        assert(len(t1.x[ut])==len(Fbt.x[uf])),"problem in common index plage calculation"
 
-
-        alpha1 = np.einsum('ljkm,lkim->ljim',FBt,T1)
-        alpha2 = np.einsum('ljkm,lkim->ljim',FBp,T2)
+        alpha1 = np.einsum('ljkm,lkim->ljim',FBt[...,uf],T1[...,ut])
+        alpha2 = np.einsum('ljkm,lkim->ljim',FBp[...,uf],T2[...,ut])
 
         #alpha = t1 * Fbt + t2 * Fbp
         # Nd x Nr x Nt x Nf
         alpha = alpha1 + alpha2
 
-        self.fGHz = t1.x
+        self.fGHz = t1.x[ut]
 
         H = Tchannel(x = self.fGHz,
                      y = alpha,

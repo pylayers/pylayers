@@ -130,8 +130,8 @@ We define now two points which are the termination of a radio link.
 >>> fGHz=np.linspace(1,11,100)
 >>> #Aa = Antenna('S1R1.vsh3')
 ... #Ab = Antenna('S1R1.vsh3')
-... Aa = Antenna('Omni',fGHz=fGHz)
->>> Ab = Antenna('Omni',fGHz=fGHz)
+... Aa = Antenna('Gauss',fGHz=fGHz)
+>>> Ab = Antenna('Gauss',fGHz=fGHz)
 >>> Lk = DLink(L=L,a=tx,b=rx,Aa=Aa,Ab=Ab,fGHz=np.linspace(1,11,100))
 structure saved in  defstr.str2
 structure saved in  defstr.ini
@@ -152,16 +152,17 @@ checkh5
 Start Signatures
 algo 7
 Signatures'> from 2_1_3 saved
-Stop signature 0.0492060184479
+Stop signature 0.428106069565
 Start Rays
 Rays'> from 3_3_4 saved
-Stop rays 0.553744077682
+Stop rays 0.619699001312
 Ctilde'> from 3_4_0 saved
+Tchannel'> from 3_4_0_0_0_4_4 saved
 ```
 
 ```python
->>> Lk.H.y[:,0,0,:].shape
-(145, 100)
+>>> Lk.ir
+TUsignal :  (12971,)  (145, 1, 1, 12971)
 ```
 
 At that point the channel has been evaluated and all the data stored in an `hdf5` file
@@ -250,18 +251,25 @@ array([  767. ,  1114. ,     1.5])
 >>> #Aa = Antenna('Omni',fGHz=fGHz)
 ... #Aa = Antenna('Omni',fGHz=fGHz)
 ... ak,tauk=Lk.eval(force=True)
->>> plt.stem(Lk.H.taud,Lk.H.ak)
+>>> plt.stem(Lk.H.taud,Lk.H.ak[:,0,50])
 structure saved in  defstr.str2
 structure saved in  defstr.ini
 checkh5
 Start Signatures
 algo 7
 Signatures'> from 2_1_3 saved
-Stop signature 0.0479288101196
+Stop signature 0.049017906189
 Start Rays
 Rays'> from 3_3_4 saved
-Stop rays 0.547509908676
+Stop rays 0.564988851547
 Ctilde'> from 3_4_0 saved
+Tchannel'> from 3_4_0_0_0_2_2 saved
+<Container object of 3 artists>
+```
+
+```python
+>>> Lk.H.ak.shape
+(145, 1, 80)
 ```
 
 ```python
@@ -269,9 +277,9 @@ Ctilde'> from 3_4_0 saved
 ```
 
 ```python
->>> cirair.plot(typ=['v'],xmin=20,xmax=80)
-(<matplotlib.figure.Figure at 0x7f7b99b05990>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7f7b99b05d10>]], dtype=object))
+>>> cirair.plot(typ=['v'],xmin=0,xmax=200)
+(<matplotlib.figure.Figure at 0x7fd38338dd50>,
+ array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7fd38338d6d0>]], dtype=object))
 ```
 
 ```python
@@ -282,18 +290,19 @@ Ctilde'> from 3_4_0 saved
 >>> Lk.L.save()
 >>> Lk.eval(force=True)
 >>> cirpart = Lk.H.applywavB(wav.sf)
->>> cirpart.plot(typ=['v'],xmin=20,xmax=80)
+>>> cirpart.plot(typ=['v'],xmin=10,xmax=80)
 structure saved in  defstr.str2
 structure saved in  defstr.ini
 checkh5
 Start Signatures
 algo 7
 Signatures'> from 2_1_3 saved
-Stop signature 0.0472459793091
+Stop signature 0.0490458011627
 Start Rays
 Rays'> from 3_3_4 saved
-Stop rays 0.552500963211
+Stop rays 0.551192998886
 Ctilde'> from 3_4_0 saved
+Tchannel'> from 3_4_0_0_0_2_2 saved
 ```
 
 ```python
