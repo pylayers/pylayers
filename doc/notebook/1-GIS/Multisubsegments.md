@@ -129,8 +129,8 @@ We define now two points which are the termination of a radio link.
 >>> fGHz=np.linspace(1,11,100)
 >>> #Aa = Antenna('S1R1.vsh3')
 ... #Ab = Antenna('S1R1.vsh3')
-... Aa = Antenna('Omni',fGHz=fGHz)
->>> Ab = Antenna('Omni',fGHz=fGHz)
+... Aa = Antenna('Gauss',fGHz=fGHz)
+>>> Ab = Antenna('Gauss',fGHz=fGHz)
 >>> Lk = DLink(L=L,a=tx,b=rx,Aa=Aa,Ab=Ab,fGHz=np.linspace(1,11,100))
 structure saved in  defstr.str2
 structure saved in  defstr.ini
@@ -148,17 +148,11 @@ On the figure above, we can see the Tx and Rx each placed in a different room ap
 Then for evaluating the radio link, simply type:
 
 ```python
->>> ak,tauk=Lk.eval(force=True,a=tx,b=rx)
-checkh5
-Start Signatures
-algo 7
-Signatures'> from 2_1_3 saved
-Stop signature 0.0659000873566
-Start Rays
-Rays'> from 3_2_3 saved
-Stop rays 0.408330917358
-Ctilde'> from 2_3_1 saved
-```
+>>> ak,tauk=Lk.eval(force=True,a=tx,b=rx,applywav=True)
+
+```python
+>>> Lk.ir
+TUsignal :  (12971,)  (145, 1, 1, 12971)
 
 At that point the channel has been evaluated and all the data stored in an `hdf5` file
 
@@ -247,30 +241,16 @@ array([  767. ,  1114. ,     1.5])
 ... #Aa = Antenna('Omni',fGHz=fGHz)
 ... ak,tauk=Lk.eval(force=True)
 >>> plt.stem(Lk.H.taud,Lk.H.ak)
-structure saved in  defstr3.str2
-structure saved in  defstr3.ini
-checkh5
-Start Signatures
-algo 7
-Stop signature 0.0449650287628
-Signatures'> from 2_1_3 saved
-Start Rays
-Rays'> from 3_2_1 saved
-Stop rays 0.557983160019
-Ctilde'> from 2_1_0 saved
-Tchannel'> from 2_1_0_0_0_2_2 saved
-<Container object of 3 artists>
+>>> plt.stem(Lk.H.taud,Lk.H.ak[:,0,50])
+```
+
+```python
+>>> Lk.H.ak.shape
+(145, 1, 80)
 ```
 
 ```python
 >>> cirair = Lk.H.applywavB(wav.sf)
-```
-
-```python
->>> cirair.plot(typ=['v'],xmin=20,xmax=80)
-(<matplotlib.figure.Figure at 0x7fad347f2ad0>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7fad347f9ad0>]], dtype=object))
-```
 
 ```python
 >>> layer = ['PARTITION','PARTITION','PARTITION']
@@ -280,21 +260,7 @@ Tchannel'> from 2_1_0_0_0_2_2 saved
 >>> Lk.L.save()
 >>> Lk.eval(force=True)
 >>> cirpart = Lk.H.applywavB(wav.sf)
->>> cirpart.plot(typ=['v'],xmin=20,xmax=80)
-structure saved in  defstr3.str2
-structure saved in  defstr3.ini
-checkh5
-Start Signatures
-algo 7
-Stop signature 0.0465669631958
-Signatures'> from 2_1_3 saved
-Start Rays
-Rays'> from 3_2_1 saved
-Stop rays 0.558837890625
-Ctilde'> from 2_1_0 saved
-Tchannel'> from 2_1_0_0_0_2_2 saved
-(<matplotlib.figure.Figure at 0x7fad2f51ab10>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7fad3463c7d0>]], dtype=object))
+>>> cirpart.plot(typ=['v'],xmin=10,xmax=80)
 ```
 
 ```python
@@ -306,20 +272,6 @@ Tchannel'> from 2_1_0_0_0_2_2 saved
 >>> Lk.eval(force=True)
 >>> cirmet = Lk.H.applywavB(wav.sf)
 >>> cirmet.plot(typ=['v'],xmin=20,xmax=80)
-structure saved in  defstr3.str2
-structure saved in  defstr3.ini
-checkh5
-Start Signatures
-algo 7
-Stop signature 0.0461058616638
-Signatures'> from 2_1_3 saved
-Start Rays
-Rays'> from 3_2_1 saved
-Stop rays 0.56045293808
-Ctilde'> from 2_1_0 saved
-Tchannel'> from 2_1_0_0_0_2_2 saved
-(<matplotlib.figure.Figure at 0x7fad3629f190>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7fad3465b790>]], dtype=object))
 ```
 
 ```python

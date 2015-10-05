@@ -1084,8 +1084,10 @@ class Usignal(Bsignal):
         sh2 = list(u2.y.shape)
         naxis1 = len(sh1)
         naxis2 = len(sh2)
-        if naxis2==naxis1+1:
+        if naxis2==naxis1+1: # Ctt(2) x F(3)
             u1.y=u1.y[:,None,:]
+        elif naxis2==naxis1+2: # w(2) x H (4)
+            u1.y=u1.y[:,None,None,:]
         elif naxis2!=naxis1:
             print "alignement not allowed"
 
@@ -1894,37 +1896,52 @@ class TUsignal(TBsignal, Usignal):
         """
         # copy object
         u1 = self
+
+        # get the time termination of both signals
         u1_start = u1.x[0]
         u1_stop = u1.x[-1]
+
         u2_start = u2.x[0]
         u2_stop = u2.x[-1]
+
         # get dimensions
-        if u1.y.ndim>1:
-            N1 = self.y.shape[0]
-            M1 = self.y.shape[1]
-        else:
-            N1 = 1
-            M1 = len(u1.y)
-            u1.y = u1.y.reshape(1,M1)
+        #if u1.y.ndim>1:
+        #    N1 = self.y.shape[0]
+        #    M1 = self.y.shape[1]
+        #else:
+        #    N1 = 1
+        #    M1 = len(u1.y)
+        #    u1.y = u1.y.reshape(1,M1)
+        #
+        #if u2.y.ndim>1:
+        #    N2 = u2.y.shape[0]
+        #    M2 = u2.y.shape[1]
+        #else:
+        #    N2 = 1
+        #    M2 = len(u2.y)
+        #    u2.y = u2.y.reshape(1,M2)
 
-        if u2.y.ndim>1:
-            N2 = u2.y.shape[0]
-            M2 = u2.y.shape[1]
-        else:
-            N2 = 1
-            M2 = len(u2.y)
-            u2.y = u2.y.reshape(1,M2)
+        # get left shape and number of points on the last axis (time)
+        shl1 = u1.y.shape[0:-1]
+        M1 = u1.y.shape[-1]
 
+        shl2 = u2.y.shape[0:-1]
+        M2 = u2.y.shape[-1]
+
+        # test wheter both signals share the same time support
         bool1 = abs(u1_start - u2_start) < 1e-10
         bool2 = abs(u1_stop - u2_stop) < 1e-10
 
         bool = bool1 & bool2
 
         if (bool):
-        # same x support
-            L = Usignal(u1.x, np.vstack((u1.y,u2.y)))
+        # same x support (concatenation is direct)
+        #    L = Usignal(u1.x, np.vstack((u1.y,u2.y)))
+            L = Usignal(x = u1.x,
+                        y = np.concatenate((u1.y,u2.y),axis=-1))
         else:
         # different x support
+        # => extension to the largest interval
             xstart = min(u1_start, u2_start)
             xstop = max(u1_stop, u2_stop)
 
@@ -1939,16 +1956,20 @@ class TUsignal(TBsignal, Usignal):
                 T = xstop - xstart
                 N = int(np.floor(T / dx))
                 x = xstart + dx * np.arange(N)
-                Y1 = np.zeros((N1,N), dtype=float)
-                Y2 = np.zeros((N2,N), dtype=float)
-                yleft = u1.y
-                yright = u2.y
-                Nleft = min(N,M1)
+
+                #Y1 = np.zeros((N1,N), dtype=float)
+                #Y2 = np.zeros((N2,N), dtype=float)
+                Y1 = np.zeros(list(shl1)+[N], dtype=float)
+                Y2 = np.zeros(list(shl2)+[N], dtype=float)
+
+                yleft   = u1.y
+                yright  = u2.y
+                Nleft  = min(N,M1)
                 Nright = min(N,M2)
-                Y1[:,0:Nleft] = yleft[:,0:Nleft]
-                Y2[:,-Nright:] = yright[:,0:Nright]
-                U1 = Usignal(x, Y1[:,0:N])
-                U2 = Usignal(x, Y2[:,0:N])
+                Y1[...,0:Nleft] = yleft[...,0:Nleft]
+                Y2[...,-Nright:] = yright[...,0:Nright]
+                U1 = Usignal(x, Y1[...,0:N])
+                U2 = Usignal(x, Y2[...,0:N])
 
             if (b2i & b1f):
             # u2 is left u1 is right
@@ -1956,32 +1977,36 @@ class TUsignal(TBsignal, Usignal):
                 T = xstop - xstart
                 N = int(np.floor(T / dx))
                 x = xstart + dx * np.arange(N)
-                Y1 = np.zeros((N1,N), dtype=float)
-                Y2 = np.zeros((N2,N), dtype=float)
+                Y1 = np.zeros(list(shl1)+[N], dtype=float)
+                Y2 = np.zeros(list(shl2)+[N], dtype=float)
+                #Y1 = np.zeros((N1,N), dtype=float)
+                #Y2 = np.zeros((N2,N), dtype=float)
                 yleft = u2.y
                 yright = u1.y
                 Nleft = min(N, M2)
                 Nright = min(N, M1)
-                Y2[:,0:Nleft] = yleft[:,0:Nleft]
-                Y1[:,-Nright:] = yright[:,0:Nright]
-                U1 = Usignal(x, Y1[:,0:N])
-                U2 = Usignal(x, Y2[:,0:N])
+                Y2[...,0:Nleft] = yleft[...,0:Nleft]
+                Y1[...,-Nright:] = yright[...,0:Nright]
+                U1 = Usignal(x, Y1[...,0:N])
+                U2 = Usignal(x, Y2[...,0:N])
 
             if (b1i & b1f):
             # u2 is included in u1
                 U1 = u1
                 x = u1.x
                 indx = np.nonzero((x >= u2_start) & (x <= u2_stop))[0]
-                U2 = Usignal(x, np.zeros((N2,len(x))))
-                U2.y[:,indx] = u2.y[:, 0:np.shape(indx)[0]]
+                U2 = Usignal(x=x,
+                             y = np.zeros(list(shl2)+[len(x)] ))
+                U2.y[...,indx] = u2.y[..., 0:np.shape(indx)[0]]
 
             if (b2i & b2f):
             # u1 is included in u2
                 U2 = u2
                 x = u2.x
                 indx = np.nonzero((x >= u1_start) & (x <= u1_stop))[0]
-                U1 = Usignal(x, np.zeros((N1,len(x))))
-                U1.y[:,indx] = u1.y
+                U1 = Usignal(x=x,
+                             y = np.zeros(list(shl1)+[len(x)]))
+                U1.y[...,indx] = u1.y
 
             #L = [U1, U2]
             #L   = Usignal()
@@ -3041,19 +3066,20 @@ class FUsignal(FBsignal,Usignal):
         #
         # nline first dimension of self.y
         #
-        nline = np.shape(U)[0]
+        nline = np.shape(U)[0:-1]
         if ndim > 1:
-            zl   = np.zeros([nline, Nl])
-            zlm1 = np.zeros([nline, Nl-1])
+            zl   = np.zeros(list(nline)+[Nl])
+            zlm1 = np.zeros(list(nline)+[Nl-1])
         else:
             zl = np.zeros(Nl)
             zlm1 = np.zeros(Nl-1)
 
         if  Nz > 0:
             if ndim > 1:
-                zh = np.zeros([nline, Nz])
-                UZ = np.concatenate((U, zh), 1)
-                UZF = np.fliplr(np.conjugate(UZ))
+                zh = np.zeros(list(nline)+[Nz])
+                UZ = np.concatenate((U, zh), -1)
+                #UZF = np.fliplr(np.conjugate(UZ))
+                UZF = np.conjugate(UZ)[...,::-1]
             else:
                 zh = np.zeros(Nz)
                 UZ = np.concatenate((U, zh), 1)
@@ -3069,7 +3095,7 @@ class FUsignal(FBsignal,Usignal):
         fz = np.concatenate((f, fh), 0)
         #Up = np.concatenate((zl, UZ, UZF, zl), 1)
         #fp = np.concatenate((fl, fz, fz + fz[-1], fl + 2 * fz[-1]), 0)
-        Up = np.concatenate((zl, UZ, UZF,zlm1), 1)
+        Up = np.concatenate((zl, UZ, UZF,zlm1), -1)
         fp = np.concatenate((fl, fz, fz + fz[-1], fl[0:-1] + 2 * fz[-1]), 0)
 
         Nfp = len(fp)

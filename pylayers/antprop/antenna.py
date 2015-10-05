@@ -578,6 +578,136 @@ class Pattern(PyLayers):
 
         self.gain()
 
+    def __pHertz(self,**kwargs):
+        """ Hertz dipole
+        """
+        defaults = {'param':{'le':np.array([0,0,1])}}
+
+
+        if 'param' not in kwargs or kwargs['param']=={}:
+            kwargs['param']=defaults['param']
+
+        #k = 2*np.pi*self.fGHz[None,None,None,:]/0.3
+        param=kwargs['param']
+
+        if self.grid:
+            le = param['le'][:,None,None]
+            xr = np.sin(self.theta)[None,:,None]*np.cos(self.phi)[None,None,:]
+            yr = np.sin(self.theta)[None,:,None]*np.sin(self.phi)[None,None,:]
+            zr = np.cos(self.theta)[None,:,None]*np.ones(len(self.phi))[None,None,:]
+            r = np.concatenate((xr,yr,zr),axis=0)
+
+            xp = -np.sin(self.phi)[None,None,:]*np.ones(len(self.theta))[None,:,None]
+            yp =  np.cos(self.phi)[None,None,:]*np.ones(len(self.theta))[None,:,None]
+            zp = np.zeros(len(self.phi))[None,None,:]*np.ones(len(self.theta))[None,:,None]
+            ph = np.concatenate((xp,yp,zp),axis=0)
+
+            xt = np.cos(self.theta)[None,:,None]*np.cos(self.phi)[None,None,:]
+            yt = np.cos(self.theta)[None,:,None]*np.sin(self.phi)[None,None,:]
+            zt = -np.sin(self.theta)[None,:,None]*np.ones(len(self.phi))[None,None,:]
+            th = np.concatenate((xt,yt,zt),axis=0)
+
+            vec = le - np.einsum('kij,kij->ij',le,r)[None,...]*r
+            #G = 1j*30*k*vec
+            self.Ft = np.sqrt(3/2.)*np.einsum('kij,kij->ij',vec,th)[...,None]
+            self.Fp = np.sqrt(3/2.)*np.einsum('kij,kij->ij',vec,ph)[...,None]
+        else:
+            le = param['le'][:,None]
+            xr = np.sin(self.theta)*np.cos(self.phi)
+            yr = np.sin(self.theta)*np.sin(self.phi)
+            zr = np.cos(self.theta)
+            r = np.concatenate((xr,yr,zr),axis=0)
+
+            xp = -np.sin(self.phi)
+            yp =  np.cos(self.phi)
+            zp = np.zeros(len(self.phi))
+            ph = np.concatenate((xp,yp,zp),axis=0)
+
+            xt = np.cos(self.theta)*np.cos(self.phi)
+            yt = np.cos(self.theta)*np.sin(self.phi)
+            zt = -np.sin(self.theta)
+            th = np.concatenate((xt,yt,zt),axis=0)
+
+            vec = le - np.einsum('ki,ki->i',le,r)[None,...]*r
+            #G = 1j*30*k*vec
+            self.Ft = np.sqrt(3/2.)*np.einsum('ki,ki->i',vec,th)[...,None]
+            self.Fp = np.sqrt(3/2.)*np.einsum('ki,ki->i',vec,ph)[...,None]
+
+        self.gain()
+
+    def __pHuygens(self,**kwargs):
+        """ Huygens source
+
+        param : dict
+
+        le : direction of electric current
+        n  : normal to aperture
+        """
+        defaults = {'param':{'le':np.array([0,0,1]),
+                             'n':np.array([1,0,0])}}
+
+
+        if 'param' not in kwargs or kwargs['param']=={}:
+            kwargs['param']=defaults['param']
+
+        #k = 2*np.pi*self.fGHz[None,None,None,:]/0.3
+        param=kwargs['param']
+
+        if self.grid:
+            le = param['le'][:,None,None]
+            n  = param['n'][:,None,None]
+            xr = np.sin(self.theta)[None,:,None]*np.cos(self.phi)[None,None,:]
+            yr = np.sin(self.theta)[None,:,None]*np.sin(self.phi)[None,None,:]
+            zr = np.cos(self.theta)[None,:,None]*np.ones(len(self.phi))[None,None,:]
+            r = np.concatenate((xr,yr,zr),axis=0)
+
+            xp = -np.sin(self.phi)[None,None,:]*np.ones(len(self.theta))[None,:,None]
+            yp =  np.cos(self.phi)[None,None,:]*np.ones(len(self.theta))[None,:,None]
+            zp = np.zeros(len(self.phi))[None,None,:]*np.ones(len(self.theta))[None,:,None]
+            ph = np.concatenate((xp,yp,zp),axis=0)
+
+            xt = np.cos(self.theta)[None,:,None]*np.cos(self.phi)[None,None,:]
+            yt = np.cos(self.theta)[None,:,None]*np.sin(self.phi)[None,None,:]
+            zt = -np.sin(self.theta)[None,:,None]*np.ones(len(self.phi))[None,None,:]
+            th = np.concatenate((xt,yt,zt),axis=0)
+
+            vec1 = le - np.einsum('kij,kij->ij',le,r)[None,...]*r
+            cro1 = np.cross(le,n,axisa=0,axisb=0,axisc=0)
+            vec2 = np.cross(cro1,r,axisa=0,axisb=0,axisc=0)
+            vec  = vec1-vec2
+
+            #G = 1j*30*k*vec
+            self.Ft = np.sqrt(3/4.)*np.einsum('kij,kij->ij',vec,th)[...,None]
+            self.Fp = np.sqrt(3/4.)*np.einsum('kij,kij->ij',vec,ph)[...,None]
+            #self.Ft = np.einsum('kij,kij->ij',vec,th)[...,None]
+            #self.Fp = np.einsum('kij,kij->ij',vec,ph)[...,None]
+        else:
+            le = param['le'][:,None]
+            xr = np.sin(self.theta)*np.cos(self.phi)
+            yr = np.sin(self.theta)*np.sin(self.phi)
+            zr = np.cos(self.theta)
+            r = np.concatenate((xr,yr,zr),axis=0)
+
+            xp = -np.sin(self.phi)
+            yp =  np.cos(self.phi)
+            zp = np.zeros(len(self.phi))
+            ph = np.concatenate((xp,yp,zp),axis=0)
+
+            xt = np.cos(self.theta)*np.cos(self.phi)
+            yt = np.cos(self.theta)*np.sin(self.phi)
+            zt = -np.sin(self.theta)
+            th = np.concatenate((xt,yt,zt),axis=0)
+
+            vec1 = le - np.einsum('ki,ki->i',le,r)[None,...]*r
+            cro1 = np.cross(le,n,axisa=0,axisb=0,axisc=0)
+            vec2 = np.cross(cro1,r,axisa=0,axisb=0,axisc=0)
+            vec  = vec1-vec2
+            #G = 1j*30*k*vec
+            self.Ft = np.sqrt(3)*np.einsum('ki,ki->i',vec,th)[...,None]
+            self.Fp = np.sqrt(3)*np.einsum('ki,ki->i',vec,ph)[...,None]
+
+        self.gain()
+
     def __pArray(self,**kwargs):
         """ Array factor
 
@@ -869,7 +999,7 @@ class Pattern(PyLayers):
                 u3 = np.nonzero((self.theta <= np.pi) & ( self.theta > np.pi / 2))[0]
 
                 #
-                # handling broadcasted axis =1 --> index 0
+                # handle broadcasted axis =1 --> index 0
                 shsqG = self.sqG.shape
                 if shsqG[0]==1:
                     u1 = 0
@@ -909,6 +1039,9 @@ class Pattern(PyLayers):
                         r1 = -GmindB + 20 * np.log10(  self.sqG[arg1]+1e-12)
                         r2 = -GmindB + 20 * np.log10( self.sqG[arg2]+1e-12)
                         r3 = -GmindB + 20 * np.log10( self.sqG[arg3]+1e-12)
+                        print max(r1)+GmindB
+                        print max(r2)+GmindB
+                        print max(r3)+GmindB
                     if kwargs['source']=='cst':
                         r1 = -GmindB + 20 * np.log10(  self.sqG[arg1]/np.sqrt(30)+1e-12)
                         r2 = -GmindB + 20 * np.log10( self.sqG[arg2]/np.sqrt(30)+1e-12)

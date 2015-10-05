@@ -1496,7 +1496,7 @@ class Tchannel(bs.FUsignal):
 
         """
 
-        U = self * W
+        U = W * self 
         V = Tchannel(x= U.x, y = U.y, tau = self.taud, dod = self.dod, doa= self.doa)
 
         return(V)
@@ -2523,10 +2523,10 @@ class Tchannel(bs.FUsignal):
 
 
         """
-        tau = self.taud+self.taue
+        tau = self.taud + self.taue
         self.s = self.ift(Nz, ffts)
         x = self.s.x
-        r = bs.TUsignal(x, np.zeros(len(x)))
+        r = bs.TUsignal(x=x, y=np.zeros(self.s.y.shape))
 
         if len(tau) == 1:
             return(self.s)
@@ -3908,8 +3908,8 @@ maicher
         Parameters
         ----------
 
-        a : antenna a
-        b : antenna b
+        a : antenna or array a
+        b : antenna or array b
 
         Ta : np.array(3x3)
            unitary matrice for antenna orientation
@@ -3956,23 +3956,46 @@ maicher
         #  Ctt : r x f
         #  Fa = 2 x r x f
         #  Fb = 2 x r x f
+        #
+        #  (r x f ) (r x Nt x f )
 
         t1 = self.Ctt * Fat + self.Ctp * Fap
         t2 = self.Cpt * Fat + self.Cpp * Fap
 
-        T1 = t1.y[:,None,:,:]
-        T2 = t2.y[:,None,:,:]
-        FBt = Fbt.y[:,:,None,:]
-        FBp = Fbp.y[:,:,None,:]
+        # depending on siso or mimo case
+        if len(t1.y.shape)==3:
+            T1 = t1.y[:,None,:,:]
+            T2 = t2.y[:,None,:,:]
+        else:
+            T1 = t1.y[:,None,None,:]
+            T2 = t2.y[:,None,None,:]
+        if len(Fbt.y.shape)==3:
+            FBt = Fbt.y[:,:,None,:]
+            FBp = Fbp.y[:,:,None,:]
+        else:
+            FBt = Fbt.y[:,None,None,:]
+            FBp = Fbp.y[:,None,None,:]
 
-        alpha1 = np.einsum('ljkm,lkim->ljim',FBt,T1)
-        alpha2 = np.einsum('ljkm,lkim->ljim',FBp,T2)
+        # determine the common interval on frequency axis
+        if np.sum(t1.x!=Fbt.x)>0:
+            t1x_int = (np.round(t1.x*100)).astype(int)
+            Fbtx_int = (np.round(Fbt.x*100)).astype(int)
+            inter = np.intersect1d(t1x_int,Fbtx_int)
+            ut = np.in1d(t1x_int,inter)
+            uf = np.in1d(Fbtx_int,inter)
+        else:
+            ut = np.arange(len(t1.x))
+            uf = np.arange(len(Fbt.x))
+        assert(len(t1.x[ut])==len(Fbt.x[uf])),"problem in common index plage calculation"
+
+        alpha1 = np.einsum('ljkm,lkim->ljim',FBt[...,uf],T1[...,ut])
+        alpha2 = np.einsum('ljkm,lkim->ljim',FBp[...,uf],T2[...,ut])
 
         #alpha = t1 * Fbt + t2 * Fbp
         # Nd x Nr x Nt x Nf
         alpha = alpha1 + alpha2
 
-        self.fGHz = t1.x
+        self.fGHz = t1.x[ut]
 
         H = Tchannel(x = self.fGHz,
                      y = alpha,
