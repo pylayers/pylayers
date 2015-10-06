@@ -392,6 +392,10 @@ def PL(fGHz,pts,p,n=2.0,dB=True):
     n      : float
             path loss exponent (default = 2)
 
+    dB : : boolean
+        return result in dB
+
+
     Returns
     -------
 
@@ -656,10 +660,8 @@ def showfurniture(fig,ax):
     axis('scaled')
 
 
-def two_rays_simpleloss(p0,p1,Gt,Gr,fGHz):
+def two_rays_simpleloss(p0,p1,Gt,Gr,fGHz,gamma= -1.,mode='PL',dB=True):
     """
-
-
     Parameters
     ----------
 
@@ -671,12 +673,23 @@ def two_rays_simpleloss(p0,p1,Gt,Gr,fGHz):
     Gt : Transmitter Antenna Gain (dB)
     Gr : Receiver Antenna Gain (dB)
     fGHz : frequency (GHz)
+    gamma : Reflexion coeff(-1)
+
+    mode : PL | E (default : PL)
+        return Energy (E) or Path loss/power loss (PL)
+    dB : boolean (True)
+        return result in dB
+
 
     Returns
     -------
 
-    PL  : 
-     path loss w.r.t distance and frequency
+    PL : 
+        path loss w.r.t distance and frequency
+
+
+    E  : 
+        energy loss w.r.t distance and frequency
 
     
 
@@ -696,10 +709,10 @@ def two_rays_simpleloss(p0,p1,Gt,Gr,fGHz):
         >>> g0=1
         >>> g1=1
         >>> fGHz=2.4
-        >>> r=two_rays_simpleloss(x,y,g0,g1,fGHz)
-        >>> pp = PL(fGHz,x,y,2)
-        >>> plt.semilogx(10*np.log10(r**2),label='two-ray model')
-        >>> plt.semilogx(-pp[0,:],label='one slope model')
+        >>> PL2R=two_rays_simpleloss(x,y,g0,g1,fGHz)
+        >>> PL1R = PL(fGHz,x,y,2)
+        >>> plt.semilogx(PL2R,label='two-ray model')
+        >>> plt.semilogx(-PL1R[0,:],label='one slope model')
         >>> plt.axis([10,NPT,-150,-50])
         >>> plt.title('Loss 2-rays model vs one slope model')
         >>> plt.xlabel('distance (m)')
@@ -733,21 +746,156 @@ def two_rays_simpleloss(p0,p1,Gt,Gr,fGHz):
     hr = p1[2,:]
 
     dloss = np.sqrt(np.sum((p0-p1)**2,axis=0)) # l0
-    print dloss
     d0 = np.sqrt( dloss**2 - (ht-hr)**2 ) # d0
     dref = np.sqrt(d0**2+(ht+hr)**2) #l0'
 
-
-    gamma= -1
 
     lossterm = np.exp(2.j*np.pi*dloss*fGHz/0.3) / (1.*dloss)
     refterm = np.exp(2.j*np.pi*dref*fGHz/0.3) / (1.*dref)
 
 
-    p0 = np.sqrt(Gt*Gr)*0.3/(4*np.pi*fGHz)* (lossterm + gamma*refterm)
+    E = np.sqrt(Gt*Gr)*0.3/(4*np.pi*fGHz)* (lossterm + gamma*refterm)
 
-    return p0
+    if mode == 'E':
+        return E
+    if mode == 'PL':
+        if dB :
+            return 20*np.log10(E)
+        else:
+            return E**2
 
+
+def reflection_angle(p0,p1,k=4/3.) :
+        """
+        compute reflection angle on a sprherical earth
+
+        Parameters
+        ----------
+    
+
+        Returns
+        -------
+        
+        phy : anle
+        deltaR
+
+
+        References
+        ----------
+        B. R. Mahafza, Radar systems analysis and design using MATLAB, Third edition. Boca Raton ; London: CRC/Taylor & Francis, chapter 8, 2013.
+
+        """
+    
+
+    assert p0.shape[0] == 3, 'p0 is not 3D'
+    assert p1.shape[0] == 3, 'p1 is not 3D'
+
+
+    if len(p0.shape) == 1:
+        p0=p0.reshape(p0.shape[0],1)
+    if len(p1.shape) == 1:
+        p1=p1.reshape(p1.shape[0],1)
+
+
+    re = k*8500e3 # earth radius
+
+    ht = p0[2,:]
+    hr = p1[2,:]
+
+    dloss = np.sqrt(np.sum((p0-p1)**2,axis=0)) # Rd
+
+    # compute Phi : angle between Tx and Rx 
+    num = (ht+re)**2 + (hr+re)**2 - dloss
+    den = 2*(ht+re)*(hr+re)
+    phi = np.arccos(num/den)
+
+    # r = distance curviligne entre TXetRX / geodesic
+
+    # distance of reflection on curved earth
+    r1 = r/2 - p*np.sin(eps/3) # eq 8.44
+
+    p = 2/(np.sqrt(3))*np.sqrt(re*(ht+hr)+(l**2/4.)) # eq 8.45
+    eps = np.arcsin(2*re*l*(ht-hr)/p**3) # eq 8.46
+
+    r2 = r -r1
+
+    phi1 = r1/re # 8.47
+    phi2 = r2/re # 8.48
+
+    R1 = np.sqrt(hr**2+4*re*(re+hr)*(np.sin(phi1/2))**2) # 8.51
+    R2 = np.sqrt(ht**2+4*re*(re+ht)*(np.sin(phi2/2))**2) #8.52
+
+    Rd = np.sqrt((hr+ht)**2+4*(re+ht)*(re+hr)*np.sin((phi1+phi2)/2.)**2) # 8.53
+
+    # tangente angle on earth
+    psy = np.arcsin((ht/R1)-R1/(2*re)) # eq 8.55
+    deltaR = 4*R1*R2*np.sin(psy)**2/(R1+R2+Rd)
+
+    dloss = Rd
+    dref = R1+R2
+    
+    return psy,dloss,dref
+
+def two_ray_curvedearth(p1,p2,k=4/3.,gamma= -1.,mode='PL',dB=True):
+    """
+    Parameters
+    ----------
+
+    p1 : transmitter position
+        (3 x Np1) array or (2,) array
+    p2 : receiver position
+        (3 x Np2) array or (2,) array
+
+    Gt : Transmitter Antenna Gain (dB)
+    Gr : Receiver Antenna Gain (dB)
+    fGHz : frequency (GHz)
+    gamma : Reflexion coeff(-1)
+    k : electromagnetic earth factor
+
+    mode : PL | E (default : PL)
+        return Energy (E) or Path loss/power loss (PL)
+    dB : boolean (True)
+        return result in dB
+
+
+    """'
+
+    assert p0.shape[0] == 3, 'p0 is not 3D'
+    assert p1.shape[0] == 3, 'p1 is not 3D'
+
+
+    if len(p0.shape) == 1:
+        p0=p0.reshape(p0.shape[0],1)
+    if len(p1.shape) == 1:
+        p1=p1.reshape(p1.shape[0],1)
+
+
+
+
+    ht = p0[2,:]
+    hr = p1[2,:]
+
+    psy,dloss,dref = reflection_angle(p0,p1,k=4/3.)
+
+
+    dloss = np.sqrt(np.sum((p0-p1)**2,axis=0)) # l0
+    d0 = np.sqrt( dloss**2 - (ht-hr)**2 ) # d0
+    dref = np.sqrt(d0**2+(ht+hr)**2) #l0'
+
+
+    lossterm = np.exp(2.j*np.pi*dloss*fGHz/0.3) / (1.*dloss)
+    refterm = np.exp(2.j*np.pi*dref*fGHz/0.3) / (1.*dref)
+
+
+    E = np.sqrt(Gt*Gr)*0.3/(4*np.pi*fGHz)* (lossterm + gamma*refterm)
+
+    if mode == 'E':
+        return E
+    if mode == 'PL':
+        if dB :
+            return 20*np.log10(E)
+        else:
+            return E**2
 
 
 def visuPts(S,nu,nd,Pts,Values,fig=[],sp=[],vmin=0,vmax=-1,label=' ',tit='',size=25,colbar=True,xticks=False):

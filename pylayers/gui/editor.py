@@ -598,9 +598,10 @@ class NewLayout(QDialog):    # any super class is okay
 
 
     def new(self):
-        self.parent.L=Layout('void.ini')
+        self.parent.L=Layout('void.ini',check=False)
         self.parent.L.display['overlay']=True
-        self.parent.L.display['fileoverlay']='reverb.png'
+        self.parent.L.display['fileoverlay']='TA-Office.png'
+        self.parent.L.display['overlay']=False
         self.parent.L.display['inverse']=True
         lim = (0., self.width.value(), 0.,self.height.value())
         self.parent.L.boundary(xlim=lim)
