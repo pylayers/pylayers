@@ -37,35 +37,35 @@ def diff(fGHz,phi0,phi,si,sd,N,beta):
     k     = 2*np.pi*fGHz/0.3
     alpha = N*np.sqrt(L*2*k)
     ps4   = np.pi/4
-    ps4   = np.pi
+    pi    = np.pi
 
 
-    xsi11 = (ps4+phi-phi0)/(2*N)
-    xsi12 = (ps4-phi+phi0)/(2*N)
-    xsi21 = (ps4-phi-phi0)/(2*N)
-    #xsi22 = (phi+phi0-(2*N-1)*ps4)/(2*N)
-    xsi22 = (ps4+phi+phi0)/(2*N)
+    xsi11 = (pi+phi-phi0)/(2*N)
+    xsi12 = (pi-phi+phi0)/(2*N)
+    xsi21 = (pi-phi-phi0)/(2*N)
+    xsi22 = (pi+phi0-(2*N-1)*ps4)/(2*N)
+    #xsi22 = (ps4+phi+phi0)/(2*N)
 
     c11m = np.where(xsi11<0)
-    c11p = np.where(xsi11>ps4)
     xsi11[c11m] = xsi11[c11m]*(-1)
+    c11p = np.where(xsi11>ps4)
     xsi11[c11p] = xsi11[c11p]-ps4
 
     c12m = np.where(xsi12<0)
-    c12p = np.where(xsi12>ps4)
     xsi12[c12m]=xsi12[c12m]*(-1)
+    c12p = np.where(xsi12>ps4)
     xsi12[c12p]=xsi12[c12p]-ps4
 
 
     c21m = np.where(xsi21<0)
-    c21p = np.where(xsi21>ps4)
     xsi21[c21m]=xsi21[c21m]*(-1)
+    c21p = np.where(xsi21>ps4)
     xsi21[c21p]=xsi21[c21p]-ps4
 
 
     c22m = np.where(xsi22<0)
-    c22p = np.where(xsi22>ps4)
     xsi22[c22m]=xsi22[c22m]*(-1)
+    c22p = np.where(xsi22>ps4)
     xsi22[c22p]=xsi22[c22p]-ps4
 
 
@@ -105,6 +105,7 @@ def diff(fGHz,phi0,phi,si,sd,N,beta):
     y22[cy22m] = y11[cy22m]*(-1)
     sg22[cy22m] = sg11[cy22m]*(-1)
 
+    pdb.set_trace()
 
     y11c = y11*y11
     cinf11 = np.where(y11c<0.5)
@@ -160,6 +161,7 @@ def diff(fGHz,phi0,phi,si,sd,N,beta):
     g22[cinf22]=ginf22
     g22[csup22]=gsup22
     g22 = g22*np.cos(xsi22)*sg22*(1+1j)
+    pdb.set_trace()
 
     return(g11,g12,g21,g22)
 
@@ -175,7 +177,7 @@ if __name__ == "__main__":
     fGHz = np.linspace(1,10,100)
     phi0 = np.array([np.pi/4.])
     #phi0 = np.linspace(0,N*np.pi,Nphi0)
-    N     = np.array([2])
+    N     = np.array([1.5])
     phi  = np.linspace(0.01,N[0]*np.pi,Nphi)
     si   = np.array([100])
     sd   = np.array([100])
