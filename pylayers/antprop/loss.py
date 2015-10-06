@@ -400,12 +400,11 @@ def PL(fGHz,pts,p,n=2.0,dB=True):
 
     """
     shp = np.shape(p)
-    assert(shp[0]==2)
+    # assert(shp[0]==2)
 
     D = np.sqrt(np.sum((pts-p)**2,axis=0))
-
     # f x grid x ap
-    PL = PL0(fGHz)[:,np.newaxis] + 10*n*np.log10(D)[np.newaxis,:]
+    PL = np.array([PL0(fGHz)])[:,np.newaxis] + 10*n*np.log10(D)[np.newaxis,:]
 
     if not dB:
         PL=10**(-PL/10)
@@ -655,6 +654,101 @@ def showfurniture(fig,ax):
     R9_F.show(fig,ax)
     R9_G.show(fig,ax)
     axis('scaled')
+
+
+def two_rays_simpleloss(p0,p1,Gt,Gr,fGHz):
+    """
+
+
+    Parameters
+    ----------
+
+    p1 : transmitter position
+        (3 x Np1) array or (2,) array
+    p2 : receiver position
+        (3 x Np2) array or (2,) array
+
+    Gt : Transmitter Antenna Gain (dB)
+    Gr : Receiver Antenna Gain (dB)
+    fGHz : frequency (GHz)
+
+    Returns
+    -------
+
+    PL  : 
+     path loss w.r.t distance and frequency
+
+    
+
+    Examples 
+    --------
+    .. plot::
+        :include-source:
+
+        >>> from pylayers.antprop.loss import *
+        >>> NPT=10000
+        >>> x=np.array([0,0,8])
+        >>> x=x.reshape(3,1)
+        >>> y = np.ones((3,NPT))
+        >>> y[0,:]=0
+        >>> y[1,:]=np.arange(NPT)
+        >>> y[2,:]=2
+        >>> g0=1
+        >>> g1=1
+        >>> fGHz=2.4
+        >>> r=two_rays_simpleloss(x,y,g0,g1,fGHz)
+        >>> pp = PL(fGHz,x,y,2)
+        >>> plt.semilogx(10*np.log10(r**2),label='two-ray model')
+        >>> plt.semilogx(-pp[0,:],label='one slope model')
+        >>> plt.axis([10,NPT,-150,-50])
+        >>> plt.title('Loss 2-rays model vs one slope model')
+        >>> plt.xlabel('distance (m)')
+        >>> plt.ylabel('Loss Pr/Pt (dB)')
+        >>> plt.legend()
+        >>> plt.show()
+
+
+
+    References
+    ----------
+
+    https://en.wikipedia.org/wiki/Two-ray_ground-reflection_model#As_a_case_of_log_distance_path_loss_model
+    http://morse.colorado.edu/~tlen5510/text/classwebch3.html#x15-590003.3.3
+
+    """
+
+    assert p0.shape[0] == 3, 'p0 is not 3D'
+    assert p1.shape[0] == 3, 'p1 is not 3D'
+
+
+    if len(p0.shape) == 1:
+        p0=p0.reshape(p0.shape[0],1)
+    if len(p1.shape) == 1:
+        p1=p1.reshape(p1.shape[0],1)
+
+
+
+
+    ht = p0[2,:]
+    hr = p1[2,:]
+
+    dloss = np.sqrt(np.sum((p0-p1)**2,axis=0)) # l0
+    print dloss
+    d0 = np.sqrt( dloss**2 - (ht-hr)**2 ) # d0
+    dref = np.sqrt(d0**2+(ht+hr)**2) #l0'
+
+
+    gamma= -1
+
+    lossterm = np.exp(2.j*np.pi*dloss*fGHz/0.3) / (1.*dloss)
+    refterm = np.exp(2.j*np.pi*dref*fGHz/0.3) / (1.*dref)
+
+
+    p0 = np.sqrt(Gt*Gr)*0.3/(4*np.pi*fGHz)* (lossterm + gamma*refterm)
+
+    return p0
+
+
 
 def visuPts(S,nu,nd,Pts,Values,fig=[],sp=[],vmin=0,vmax=-1,label=' ',tit='',size=25,colbar=True,xticks=False):
     """ visuPt  : Visualization of values a given points
