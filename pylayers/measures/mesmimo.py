@@ -1,7 +1,6 @@
 #!/usr/bin/python
 #-*- coding:Utf-8 -*-
 from pylayers.signal.bsignal import *
-from pylayers.antprop.channel import *
 from pylayers.antprop.aarray import *
 from pylayers.util.project import *
 from pylayers.antprop.channel import *
@@ -741,14 +740,14 @@ class MIMO(object):
         return(fig,ax)
 
     def showgrid(self,**kwargs):
-        """ show the data on a spatial grid 
+        """ show the data on a spatial grid
 
         Parameters
         ----------
 
         layout:[],
         s:50,
-        vmin : 0, 
+        vmin : 0,
         vmax: 0.5,
         linewidth:0,
         fig:[],
@@ -767,17 +766,17 @@ class MIMO(object):
         dynamic : 30
 
 
-        Notes 
+        Notes
         -----
 
-        This function accepts a Layout as input and allows to display 
-        a projection of the spatio-delay volume on a 2D grid. 
+        This function accepts a Layout as input and allows to display
+        a projection of the spatio-delay volume on a 2D grid.
 
 
         """
         defaults = { 'layout':[],
                     's':50,
-                    'vmin' : 0, 
+                    'vmin' : 0,
                     'vmax': 0.5,
                     'linewidth':0,
                     'fig':[],
@@ -812,17 +811,17 @@ class MIMO(object):
             dTM = np.sqrt((self.grid[...,0]-OT[0])**2+(self.grid[...,1]-OT[1])**2)
             dRM = np.sqrt((self.grid[...,0]-OR[0])**2+(self.grid[...,1]-OR[1])**2)
             # dM : Nx,Ny
-            dM  = dTM+dRM 
+            dM  = dTM+dRM
             # dM : ,Nx x Ny
-            dM = np.ravel(dM) 
+            dM = np.ravel(dM)
             # 6 sigma = 1/400MHz
-            # 6 sigma = 2.5ns 
+            # 6 sigma = 2.5ns
             # sigma = (2.5/6)
             # alpha = 1/(2 sigma^2) = 2*(2.5)**2/36 = 0.347
             #
             alpha = 0.347
-            # Gaussian gate 
-            # Laplacian gate 
+            # Gaussian gate
+            # Laplacian gate
             # Nx x Ny x Ntau
             self.gate = np.exp(-alpha*(dM[:,np.newaxis]/0.3-self.gloc.x[np.newaxis,:])**2)
             data = self.gloc.y*self.gate
@@ -840,7 +839,7 @@ class MIMO(object):
         if kwargs['dB']:
             data = 20*np.log10(data)
             vmax = data.max()
-            # clipping @ vmax - dynamic 
+            # clipping @ vmax - dynamic
             vmin = vmax-kwargs['dynamic']
         else:
             vmin = data.min()
@@ -864,7 +863,7 @@ class MIMO(object):
         # plot ULAs
 
         ax.plot(ULAR[:,0],ULAR[:,1],'+b')
-        ax.plot(ULAT[:,0],ULAT[:,1],'+g')  
+        ax.plot(ULAT[:,0],ULAT[:,1],'+g')
         plt.axis('off')
 
         # plot target
@@ -872,7 +871,7 @@ class MIMO(object):
         if kwargs['target']<>[]:
             target = ax.scatter(kwargs['target'][0],kwargs['target'][1],c='black',s=100)
 
-        # display layout 
+        # display layout
         if kwargs['layout'] <> []:
             L = kwargs['layout']
             #fig,ax = L.showG('s',fig=fig,ax=ax,nodes=False)
@@ -912,7 +911,7 @@ class MIMO(object):
         if kwargs['fig']==[]:
             fig = plt.figure(figsize=(20,20))
             ax  = fig.add_subplot(111)
-        
+
         if kwargs['layout']<>[]:
             L = kwargs['layout']
             fig,ax = L.showG('s',fig=fig,ax=ax,nodes=False)
@@ -947,7 +946,7 @@ class MIMO(object):
             else:
                 scat.set_array(self.gloc.y[:,0])
             return scat,delay_text
-        
+
         def animate(i):
             delay_text.set_text(delay_template%(i,self.gloc.x[i],self.gloc.x[i]*0.3))
             if kwargs['abs']:
@@ -982,19 +981,19 @@ class MIMO(object):
                 if frequency:
                     if not phase:
                         if dB:
-                            #ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[k,:])),color=color) 
-                            ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[iR,iT,:])),color=color) 
+                            #ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[k,:])),color=color)
+                            ax[iR,iT].plot(H.x,20*np.log10(abs(H.y[iR,iT,:])),color=color)
                         else:
-                            #ax[iR,iT].plot(H.x,abs(H.y[k,:]),color='k') 
-                            ax[iR,iT].plot(H.x,abs(H.y[iR,iT,:]),color='k') 
+                            #ax[iR,iT].plot(H.x,abs(H.y[k,:]),color='k')
+                            ax[iR,iT].plot(H.x,abs(H.y[iR,iT,:]),color='k')
                     else:
-                        #ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[k,:])),color=color) 
-                        ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[iR,iT,:])),color=color) 
+                        #ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[k,:])),color=color)
+                        ax[iR,iT].plot(H.x,np.unwrap(np.angle(H.y[iR,iT,:])),color=color)
                 else:
-                        ax[iR,iT].plot(self.h.x,abs(self.h.y[iR,iT,:]),color=color) 
-                if (iR==7): 
-                    ax[iR,iT].set_xlabel('f (GHz)') 
-                ax[iR,iT].set_title(str(iR+1)+'x'+str(iT+1)) 
+                        ax[iR,iT].plot(self.h.x,abs(self.h.y[iR,iT,:]),color=color)
+                if (iR==7):
+                    ax[iR,iT].set_xlabel('f (GHz)')
+                ax[iR,iT].set_title(str(iR+1)+'x'+str(iT+1))
         return(fig,ax)
 
 

@@ -5,6 +5,8 @@ This notebook illustrtates a simple ray tracing simulation with diffecent materi
 ```python
 >>> from pylayers.simul.link import *
 >>> from pylayers.antprop.rays import *
+>>> from pylayers.antprop.aarray import *
+>>> from pylayers.antprop.channel import *
 >>> from pylayers.gis.layout import *
 >>> from pylayers.antprop.signature import *
 >>> import pylayers.signal.bsignal as bs
@@ -12,8 +14,6 @@ This notebook illustrtates a simple ray tracing simulation with diffecent materi
 >>> from pylayers.simul.simulem import *
 >>> import matplotlib.pyplot as plt
 >>> %matplotlib inline
-WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
-Warning : OSM Parser seems to be not installed
 ```
 
 Let start by loading a simple layout with 2 single rooms. The multi subsegment appears in the middle with the red vertical lines. Each subsegment is materialized by a  segment.
@@ -133,8 +133,10 @@ We define now two points which are the termination of a radio link.
 >>> fGHz=np.linspace(1,11,100)
 >>> #Aa = Antenna('S1R1.vsh3')
 ... #Ab = Antenna('S1R1.vsh3')
-... Aa = Antenna('Gauss',fGHz=fGHz)
->>> Ab = Antenna('Gauss',fGHz=fGHz)
+... #Aa = Antenna('Gauss',fGHz=fGHz)
+... #Ab = Antenna('Gauss',fGHz=fGHz)
+... Aa = AntArray(N=[8,1,1],fGHz=fGHz)
+>>> Ab = AntArray(N=[4,1,1],fGHz=fGHz)
 >>> Lk = DLink(L=L,a=tx,b=rx,Aa=Aa,Ab=Ab,fGHz=np.linspace(1,11,100))
 structure saved in  defstr.str2
 structure saved in  defstr.ini
@@ -143,11 +145,22 @@ structure saved in  defstr.ini
 A link is the set of a layout and 2 termination points.
 
 ```python
->>> f,a=Lk.show(rays=True)
+>>> Aa.plotG()
+(<matplotlib.figure.Figure at 0x7f84df7fdf90>,
+ <matplotlib.projections.polar.PolarAxes at 0x7f84df808290>)
+```
+
+```python
+>>> #f,a=Lk.show(rays=True)
+... f,a=Lk.show(rays=True)
 ```
 
 On the figure above, we can see the Tx and Rx each placed in a different room appart from a wall with a subsegement placed in the middle.
 Then for evaluating the radio link, simply type:
+
+```python
+
+```
 
 ```python
 >>> ak,tauk=Lk.eval(force=True,a=tx,b=rx,applywav=True)
@@ -155,10 +168,10 @@ checkh5
 Start Signatures
 algo 7
 Signatures'> from 2_1_3 saved
-Stop signature 0.0473918914795
+Stop signature 0.0430910587311
 Start Rays
 Rays'> from 3_2_3 saved
-Stop rays 0.465720891953
+Stop rays 0.462381839752
 Ctilde'> from 2_3_0 saved
 ```
 
