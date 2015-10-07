@@ -212,9 +212,9 @@ class SCPI:
             npoints = eval(self.s.recv(8).replace("\n",""))
             return npoints
         except socket.timeout:
-            print "problem for getteing number of points"
+            print "problem for getting number of points"
 
-    def setnpoint(self,Npoints=201,sens=1,echo=False):
+    def setnpoint(self,Npoints=1601,sens=1,echo=False):
         """Change the number of points
 
         Parameters
@@ -274,7 +274,7 @@ class SCPI:
         return(data)
 
 
-    def getdata(self,chan=1,Npoints=201):
+    def getdata(self,chan=1,Npoints=1601):
         """  getdata
 
         Parameters
@@ -301,44 +301,26 @@ class SCPI:
 if __name__=='__main__':
     vna = SCPI("129.20.33.201",verbose=False)
     ident = vna.getIdent()
-    #lNpoints = [201,401,801,1001,1201,1401,1601]
-    lNpoints = [1601]
+    #lNpoints = ['201','401','601','801','1601']
+
+    #lNpoints = [1601]
     print "Talking to : ",ident
     vna.write("FORM:DATA REAL")
     #vna.write("SENS:AVER:ON")
     vna.select(param='S21',chan=1)
     vna.setf(startGHz=1.8,stopGHz=2.2)
     lav = [1,999] #average
-    lsif = ['1000','300000'] #IF band
+    #lsif = ['1000','300000','500000'] #IF band
+    lsif = ['1000'] #IF band
     lS = []
     lt = []
-    Npoints = 201
+    Npoints = 1601
     #for Npoints in lNpoints:
     for sif in lsif:
-    #for av in lav:
-        #print Npoints
-        #print av
         vna.setnpoint(Npoints=Npoints)
-
         vna.write(":SENS1:BAND "+sif)
-        #vna.write(":SENS1:SWE:POIN 1201")
-        #vna.write("DISP:WIND1:TRAC1:Y:SCAL:AUTO")
-        #vna.s.send(":SENS1:SWE:POIN?\n")
-        #Npoints = eval(vna.s.recv(56).replace('\n',''))
         print "Npoints : ",Npoints
-        # set fmin fmax
-        #vna.write(":SENS1:FREQ:STAR 1.8e9")
-        #vna.write(":SENS1:FREQ:STOP 2.2e9")
-
-
-        #vna.write("TRIG:SING")
-
-        #vna.write("SENS:AVER:"+str(av))
-        #vna.write("SENS:AVER:CLE")
-        #time.sleep(6)
         com1 = ":CALC1:DATA:SDAT?\n"
-        #u = np.arange(0,Npoints)*2
-        #v = np.arange(0,Npoints)*2+1
         N = 100
         fGHz = np.linspace(1.8,2.2,Npoints)
         tic = time.time()
@@ -361,10 +343,25 @@ if __name__=='__main__':
         #freq = f[1:]
 
     vna.close()
-    v0=np.var(lS[0].y,axis=0)
-    v1=np.var(lS[1].y,axis=0)
-    plt.semilogy(v1,'b')
-    plt.semilogy(v0,'r')
+
+    a0 = np.abs(lS[0].y) # N x Npoints ; IF = 100 KHz
+    #a1 = np.abs(lS[1].y) # N x Npoints ; IF = 300 KHz
+    #a2 = np.abs(lS[2].y) # N x Npoints ; IF = 500 KHz
+    plt.plot(a0[0],label='IF 100KHz')
+    #plt.plot(a1[1],label='IF 300KHz')
+    #plt.plot(a2[2],label='IF 500KHz')
+
+    sns.set_style("darkgrid")
+    plt.xlabel('points')
+    plt.ylabel('Amplitude')
+    plt.title('Evolution of S21 over number of points')
+    plt.legend(loc='best')
+
+    #Variance error
+    #v0=np.var(lS[0].y,axis=0) # N x Npoints
+    #v1=np.var(lS[1].y,axis=0)
+    #plt.semilogy(v0,'b')
+    #plt.semilogy(v1,'r')
     #sns.tsplot(data=np.abs(S21.y),time=S21.x,err_style="ci_bars")
     #sns.tsplot(data=np.abs(S21.y),time=S21.x,err_style="ci_band")
 
