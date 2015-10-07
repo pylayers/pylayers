@@ -1391,7 +1391,7 @@ class DLink(Link):
 
         >>> from pylayers.simul.link import *
         >>> L=Link()
-        >>> L.show(ray=True,dB=True)
+        >>> L.show(rays=True,dB=True)
 
         """
 

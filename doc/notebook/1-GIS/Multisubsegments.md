@@ -12,6 +12,8 @@ This notebook illustrtates a simple ray tracing simulation with diffecent materi
 >>> from pylayers.simul.simulem import *
 >>> import matplotlib.pyplot as plt
 >>> %matplotlib inline
+WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
+Warning : OSM Parser seems to be not installed
 ```
 
 Let start by loading a simple layout with 2 single rooms. The multi subsegment appears in the middle with the red vertical lines. Each subsegment is materialized by a  segment.
@@ -119,7 +121,9 @@ The $\mathcal{G}_s$ graph dictionnary has the following structure
 We define now two points which are the termination of a radio link.
 
 ```python
->>> tx=np.array([759,1114,1.5])
+>>> #tx=np.array([759,1114,1.5])
+... #rx=np.array([767,1114,1.5])
+... tx=np.array([759,1114,1.5])
 >>> rx=np.array([767,1114,1.5])
 ```
 
@@ -134,14 +138,12 @@ We define now two points which are the termination of a radio link.
 >>> Lk = DLink(L=L,a=tx,b=rx,Aa=Aa,Ab=Ab,fGHz=np.linspace(1,11,100))
 structure saved in  defstr.str2
 structure saved in  defstr.ini
-S1R1.sh3  does not exist
-S1R1.sh3  does not exist
 ```
 
 A link is the set of a layout and 2 termination points.
 
 ```python
->>> f,a=Lk.show()
+>>> f,a=Lk.show(rays=True)
 ```
 
 On the figure above, we can see the Tx and Rx each placed in a different room appart from a wall with a subsegement placed in the middle.
@@ -149,35 +151,15 @@ Then for evaluating the radio link, simply type:
 
 ```python
 >>> ak,tauk=Lk.eval(force=True,a=tx,b=rx,applywav=True)
-
-```python
->>> Lk.ir
-TUsignal :  (12971,)  (145, 1, 1, 12971)
-
-At that point the channel has been evaluated and all the data stored in an `hdf5` file
-
-## Link members
-
-The Signature of the radio channel is in `Lk.Si`, the 3D rays are in `Lk.R`, the propagation channel is in `Lk.C` and the transmission channel is in `Lk.H`
-
-```python
->>> Lk.R
-Rays3D
-----------
-1 / 1 : [0]
-2 / 6 : [1 2 3 4 5 6]
-3 / 19 : [ 7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25]
-4 / 40 : [26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50
- 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65]
-5 / 49 : [ 66  67  68  69  70  71  72  73  74  75  76  77  78  79  80  81  82  83
-  84  85  86  87  88  89  90  91  92  93  94  95  96  97  98  99 100 101
- 102 103 104 105 106 107 108 109 110 111 112 113 114]
-6 / 34 : [115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132
- 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148]
-7 / 6 : [149 150 151 152 153 154]
------
-ni : 721
-nl : 1597
+checkh5
+Start Signatures
+algo 7
+Signatures'> from 2_1_3 saved
+Stop signature 0.0473918914795
+Start Rays
+Rays'> from 3_2_3 saved
+Stop rays 0.465720891953
+Ctilde'> from 2_3_0 saved
 ```
 
 ```python
