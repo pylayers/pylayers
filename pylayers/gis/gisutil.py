@@ -177,13 +177,13 @@ if __name__=='__main__':
 
 def minsec2dec(old):
     """ 
-    convert minute second latlon to decimal
+    convert latlon from DMS (minute second) to DD (decimal)
 
     Parameters
     ----------
 
     old : string 
-        format : "deg min sec direction"
+        format : DMS format
 
     Example 
     -------
@@ -211,13 +211,13 @@ def distance_on_earth(lat1, long1, lat2, long2):
     Parameters
     ---------
 
-    lat1 : float
+    lat1 : float for  DD format | str for DMS format
         latitude first point 
-    lat2 : float
+    lat2 : float for  DD format | str for DMS format
         latitude second point 
-    lon1 : float
+    lon1 : float for  DD format | str for DMS format
         longitude first point 
-    lon2 : float
+    lon2 : float for  DD format | str for DMS format
         longitude second point 
 
     Return

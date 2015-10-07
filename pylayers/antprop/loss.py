@@ -809,10 +809,12 @@ def lossref_compute(lat0,lon0,lat1,lon1,h0,h1,k=4/3.) :
 
     # r = distance curviligne entre TXetRX / geodesic
     r = gu.distance_on_earth(lat0, lon0, lat1, lon1)
-    
+
 
     p = 2/(np.sqrt(3))*np.sqrt(re*(h0+h1)+(r**2/4.)) # eq 8.45
-    eps = np.arcsin(2*re*r*(h0-h1)/p**3) # eq 8.46
+    eps = np.arcsin(2*re*r*(h1-h0)/p**3) # eq 8.46
+
+
 
     # distance of reflection on curved earth
     r1 = r/2 - p*np.sin(eps/3) # eq 8.44
@@ -822,13 +824,13 @@ def lossref_compute(lat0,lon0,lat1,lon1,h0,h1,k=4/3.) :
     phi1 = r1/re # 8.47
     phi2 = r2/re # 8.48
 
-    R1 = np.sqrt(h1**2+4*re*(re+h1)*(np.sin(phi1/2))**2) # 8.51
-    R2 = np.sqrt(h0**2+4*re*(re+h0)*(np.sin(phi2/2))**2) #8.52
+    R1 = np.sqrt(h0**2+4*re*(re+h0)*(np.sin(phi1/2))**2) # 8.51
+    R2 = np.sqrt(h1**2+4*re*(re+h1)*(np.sin(phi2/2))**2) #8.52
 
-    Rd = np.sqrt((h1+h0)**2+4*(re+h0)*(re+h1)*np.sin((phi1+phi2)/2.)**2) # 8.53
+    Rd = np.sqrt((h1-h0)**2+4*(re+h1)*(re+h0)*np.sin((phi1+phi2)/2.)**2) # 8.53
 
     # tangente angle on earth
-    psy = np.arcsin((h0/R1)-R1/(2*re)) # eq 8.55
+    psy = np.arcsin((h1/R1)-R1/(2*re)) # eq 8.55
     deltaR = 4*R1*R2*np.sin(psy)**2/(R1+R2+Rd)
 
     dloss = Rd
@@ -856,13 +858,18 @@ def two_ray_curvedearth(lat0,lon0,lat1,lon1,h0,h1,fGHz=2.4,**kwargs):
         height of 1st point 
     h1 : float:
         height of 2nd point 
-    k : electromagnetic earth factor
+    fGHz : float
+        frequency (GHz)
 
-    Gt : Transmitter Antenna Gain (dB)
-    Gr : Receiver Antenna Gain (dB)
-    fGHz : frequency (GHz)
-    gamma : Reflexion coeff(-1)
-    k : electromagnetic earth factor
+
+    k : float
+        electromagnetic earth factor
+    Gt : float
+        Transmitter Antenna Gain (dB)
+    Gr : float
+        Receiver Antenna Gain (dB)
+    gamma : 
+        Reflexion coeff(-1)
 
     mode : PL | E (default : PL)
         return Energy (E) or Path loss/power loss (PL)
@@ -894,8 +901,6 @@ def two_ray_curvedearth(lat0,lon0,lat1,lon1,h0,h1,fGHz=2.4,**kwargs):
 
     dloss,dref = lossref_compute(lat0,lon0,lat1,lon1,h0,h1,k)
 
-
-    
 
     lossterm = np.exp(2.j*np.pi*dloss*fGHz/0.3) / (1.*dloss)
     refterm = np.exp(2.j*np.pi*dref*fGHz/0.3) / (1.*dref)

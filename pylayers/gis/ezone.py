@@ -266,7 +266,7 @@ class DEM(PyLayers):
         data = np.fromfile(filelcv,dtype='>i1')
         self.lcv = data.reshape(1201,1201)
 
-    def loadaster(self):
+    def loadaster(self,fileaster=[]):
         """ load Aster files
 
         """
