@@ -38,6 +38,8 @@ from scipy import io
 import matplotlib.pylab as plt
 import pylayers.simul.simulem
 import pylayers.measures.mesuwb
+import pylayers.gis.gisutil as gu
+
 import pdb
 
 def PL0(fGHz,GtdB=0,GrdB=0):
@@ -660,7 +662,7 @@ def showfurniture(fig,ax):
     axis('scaled')
 
 
-def two_rays_simpleloss(p0,p1,Gt,Gr,fGHz,gamma= -1.,mode='PL',dB=True):
+def two_rays_flatearth(p0,p1,Gt,Gr,fGHz,gamma= -1.,mode='PL',dB=True):
     """
     Parameters
     ----------
@@ -709,7 +711,7 @@ def two_rays_simpleloss(p0,p1,Gt,Gr,fGHz,gamma= -1.,mode='PL',dB=True):
         >>> g0=1
         >>> g1=1
         >>> fGHz=2.4
-        >>> PL2R=two_rays_simpleloss(x,y,g0,g1,fGHz)
+        >>> PL2R=two_rays_flatearth(x,y,g0,g1,fGHz)
         >>> PL1R = PL(fGHz,x,y,2)
         >>> plt.semilogx(PL2R,label='two-ray model')
         >>> plt.semilogx(-PL1R[0,:],label='one slope model')
@@ -765,86 +767,96 @@ def two_rays_simpleloss(p0,p1,Gt,Gr,fGHz,gamma= -1.,mode='PL',dB=True):
             return E**2
 
 
-def reflection_angle(p0,p1,k=4/3.) :
-        """
-        compute reflection angle on a sprherical earth
+def lossref_compute(lat0,lon0,lat1,lon1,h0,h1,k=4/3.) :
+    """
+    compute loss and reflection rays on curved earth
 
-        Parameters
-        ----------
+    Parameters
+    ----------
+
+    lat0 : float | string
+        latitude first point (decimal | deg min sec Direction)
+    lat1 : float | string
+        latitude second point (decimal | deg min sec Direction)
+    lon0 : float | string
+        longitude first point (decimal | deg min sec Direction)
+    lon1 : float | string
+        longitude second point (decimal | deg min sec Direction)
+    h0 : float:
+        height of 1st point 
+    h1 : float:
+        height of 2nd point 
+    k : electromagnetic earth factor
+
+
+    Returns
+    -------
     
+    dloss : 
+        length of direct path (meter)
+    dref :
+        length of reflective path (meter)
 
-        Returns
-        -------
-        
-        phy : anle
-        deltaR
+    References
+    ----------
+    B. R. Mahafza, Radar systems analysis and design using MATLAB, Third edition. Boca Raton ; London: CRC/Taylor & Francis, chapter 8, 2013.
 
-
-        References
-        ----------
-        B. R. Mahafza, Radar systems analysis and design using MATLAB, Third edition. Boca Raton ; London: CRC/Taylor & Francis, chapter 8, 2013.
-
-        """
-    
-
-    assert p0.shape[0] == 3, 'p0 is not 3D'
-    assert p1.shape[0] == 3, 'p1 is not 3D'
+    """
 
 
-    if len(p0.shape) == 1:
-        p0=p0.reshape(p0.shape[0],1)
-    if len(p1.shape) == 1:
-        p1=p1.reshape(p1.shape[0],1)
-
-
-    re = k*8500e3 # earth radius
-
-    ht = p0[2,:]
-    hr = p1[2,:]
-
-    dloss = np.sqrt(np.sum((p0-p1)**2,axis=0)) # Rd
-
-    # compute Phi : angle between Tx and Rx 
-    num = (ht+re)**2 + (hr+re)**2 - dloss
-    den = 2*(ht+re)*(hr+re)
-    phi = np.arccos(num/den)
+    r0 = 6371e3 # earth radius
+    re = k*r0 # telecom earth radius
 
     # r = distance curviligne entre TXetRX / geodesic
+    r = gu.distance_on_earth(lat0, lon0, lat1, lon1)
+    
+
+    p = 2/(np.sqrt(3))*np.sqrt(re*(h0+h1)+(r**2/4.)) # eq 8.45
+    eps = np.arcsin(2*re*r*(h0-h1)/p**3) # eq 8.46
 
     # distance of reflection on curved earth
     r1 = r/2 - p*np.sin(eps/3) # eq 8.44
-
-    p = 2/(np.sqrt(3))*np.sqrt(re*(ht+hr)+(l**2/4.)) # eq 8.45
-    eps = np.arcsin(2*re*l*(ht-hr)/p**3) # eq 8.46
 
     r2 = r -r1
 
     phi1 = r1/re # 8.47
     phi2 = r2/re # 8.48
 
-    R1 = np.sqrt(hr**2+4*re*(re+hr)*(np.sin(phi1/2))**2) # 8.51
-    R2 = np.sqrt(ht**2+4*re*(re+ht)*(np.sin(phi2/2))**2) #8.52
+    R1 = np.sqrt(h1**2+4*re*(re+h1)*(np.sin(phi1/2))**2) # 8.51
+    R2 = np.sqrt(h0**2+4*re*(re+h0)*(np.sin(phi2/2))**2) #8.52
 
-    Rd = np.sqrt((hr+ht)**2+4*(re+ht)*(re+hr)*np.sin((phi1+phi2)/2.)**2) # 8.53
+    Rd = np.sqrt((h1+h0)**2+4*(re+h0)*(re+h1)*np.sin((phi1+phi2)/2.)**2) # 8.53
 
     # tangente angle on earth
-    psy = np.arcsin((ht/R1)-R1/(2*re)) # eq 8.55
+    psy = np.arcsin((h0/R1)-R1/(2*re)) # eq 8.55
     deltaR = 4*R1*R2*np.sin(psy)**2/(R1+R2+Rd)
 
     dloss = Rd
     dref = R1+R2
-    
-    return psy,dloss,dref
 
-def two_ray_curvedearth(p1,p2,k=4/3.,gamma= -1.,mode='PL',dB=True):
+    return dloss,dref
+
+def two_ray_curvedearth(lat0,lon0,lat1,lon1,h0,h1,fGHz=2.4,**kwargs):
     """
+
+
     Parameters
     ----------
 
-    p1 : transmitter position
-        (3 x Np1) array or (2,) array
-    p2 : receiver position
-        (3 x Np2) array or (2,) array
+    
+    lat0 : float
+        latitude first point 
+    lat1 : float
+        latitude second point 
+    lon0 : float
+        longitude first point 
+    lon1 : float
+        longitude second point 
+    h0 : float:
+        height of 1st point 
+    h1 : float:
+        height of 2nd point 
+    k : electromagnetic earth factor
 
     Gt : Transmitter Antenna Gain (dB)
     Gr : Receiver Antenna Gain (dB)
@@ -857,31 +869,33 @@ def two_ray_curvedearth(p1,p2,k=4/3.,gamma= -1.,mode='PL',dB=True):
     dB : boolean (True)
         return result in dB
 
-
-    """'
-
-    assert p0.shape[0] == 3, 'p0 is not 3D'
-    assert p1.shape[0] == 3, 'p1 is not 3D'
+    """
 
 
-    if len(p0.shape) == 1:
-        p0=p0.reshape(p0.shape[0],1)
-    if len(p1.shape) == 1:
-        p1=p1.reshape(p1.shape[0],1)
+    defaults = { 'Gt':1,
+                 'Gr':1,
+                 'k':4/3.,
+                 'gamma': -1.,
+                 'mode':'PL',
+                 'dB':True
+               }
+
+    for k in defaults:
+        if k not in kwargs:
+            kwargs[k]=defaults[k]
+
+    Gt=kwargs.pop('Gt')
+    Gr=kwargs.pop('Gr')
+    k=kwargs.pop('k')
+    gamma=kwargs.pop('gamma')
+    
+    
 
 
+    dloss,dref = lossref_compute(lat0,lon0,lat1,lon1,h0,h1,k)
 
 
-    ht = p0[2,:]
-    hr = p1[2,:]
-
-    psy,dloss,dref = reflection_angle(p0,p1,k=4/3.)
-
-
-    dloss = np.sqrt(np.sum((p0-p1)**2,axis=0)) # l0
-    d0 = np.sqrt( dloss**2 - (ht-hr)**2 ) # d0
-    dref = np.sqrt(d0**2+(ht+hr)**2) #l0'
-
+    
 
     lossterm = np.exp(2.j*np.pi*dloss*fGHz/0.3) / (1.*dloss)
     refterm = np.exp(2.j*np.pi*dref*fGHz/0.3) / (1.*dref)
@@ -889,10 +903,10 @@ def two_ray_curvedearth(p1,p2,k=4/3.,gamma= -1.,mode='PL',dB=True):
 
     E = np.sqrt(Gt*Gr)*0.3/(4*np.pi*fGHz)* (lossterm + gamma*refterm)
 
-    if mode == 'E':
+    if kwargs['mode'] == 'E':
         return E
-    if mode == 'PL':
-        if dB :
+    if kwargs['mode'] == 'PL':
+        if kwargs['dB'] :
             return 20*np.log10(E)
         else:
             return E**2
