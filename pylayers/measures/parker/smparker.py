@@ -382,13 +382,21 @@ class Axes(PyLayers):
         >>> A.getvar('PA') #Get Position absolute
 
         """
+
+
         if lvar == []:
             lvar = Axes.dvar.keys()
         else:
             var = lvar
             st = self.com('R('+var+')')[1].replace('*','').replace('/n','')
-            print Axes.dvar[var],st
+            
+            if var == 'MV':
+                if '1' in st[1]:
+                    print "I'm moving"
+                else:
+                    print "I'm stationnary"
 
+            print Axes.dvar[var],st
 
 
     def com(self,command='R(SN)',verbose=False):
@@ -511,7 +519,7 @@ class Axes(PyLayers):
         self.edg   = kwargs['edg']
         self.typ   = kwargs['typ']
         self.armed = kwargs['armed']
- 
+
         if self._id in [1,2]:
             if cmd=='get':
                 st = self.com('HOME')
@@ -575,7 +583,7 @@ class Axes(PyLayers):
                 cstr = 'GH'
                 #cstr = 'G'
                 self.com(cstr)
-        
+
         # no material origin available on z axisi(4) and rotation axis (3)
         if self._id in [3,4]:
             if cmd=='set':
@@ -586,6 +594,132 @@ class Axes(PyLayers):
                 pa = -int(self.com('R(PA)')[1].replace('*','').replace('\n',''))
                 self.mv(pa/self.scale,vel=self.vel,acc=self.acc)
 
+    def parsinfo(self,cmd='HOME'):
+        """ allows get parsing informations. 
+
+        Parameters
+        ----------
+
+        cmd  : 'LSEL' | 'HOME' | 'LIMITS'
+
+        Examples
+        --------
+
+
+        """
+
+        if cmd =='LSEL':
+            st = self.com('LSEL')
+            ans = st[1].split(' ')
+
+            print "-------------------"
+            print " arguments of LSEL "
+            print "-------------------"
+
+            ##########
+            #### ARM 
+            ##########
+            if '1' in ans[0]:
+                print "armed "
+            else:
+                print "not armed "
+
+            ############ 
+            ##### CODE
+            ############
+
+            if '1' in ans[1]:
+                print "Binary (default setting) "
+            else:
+                print "BCD code (Binary Coded Decimal) "
+
+            ############### 
+            ##### INPUTS 
+            ################
+
+            if '5' in ans[2]:
+                print "5 inputs "
+            if '4' in ans[2]:
+                print "4 inputs "
+            if '3' in ans[2]:
+                print "3 inputs "
+            if '2' in ans[2]:
+                print "2 inputs "
+            if '1' in ans[2]:
+                print "1 inputs "
+
+            ##############
+            #### EXECUTION 
+            ##############
+
+            if '0' in ans[3]:
+                print "continuously repeated (default set.) "
+            else:
+                print "re-triggered "
+
+        if cmd=='HOME':
+            st = self.com('HOME')
+            ans = st[1].split(' ')
+
+            print "-------------------"
+            print " arguments of HOME "
+            print "-------------------"
+
+            if '1' in ans[0]:
+                print "armed "
+            else:
+                print "not armed "
+            if '-' in ans[1]:
+                print "reference edge is negative "
+            else:
+                print "reference edge is positive "
+            if '1' in ans[2]:
+                print "home switch normally closed 1 "
+            else:
+                print "home switch normally open 0 (default) "
+
+            if '+' in ans[3]:
+                print 'velocity : +',eval(ans[3].split('V+')[1]), "rps"
+            else:
+                print 'velocity : -',eval(ans[3].split('V-')[1]), "rps"
+                print 'acceleration : ',eval(ans[4].split('A')[1]), "rps²"
+
+            if '0' in ans[5]:
+                print 'Mode 0: Motor in the active window of the switch (default)'
+            if '1' in ans[5]:
+                print 'Mode 1: Motor in the position to the edge + or -'
+            if '2' in ans[5]:
+                print 'Mode 2: Improve homing repeatability'
+
+        if cmd=='LIMITS':
+            st = self.com('LIMITS')
+            ans = st[1].split(' ')
+
+            print "-------------------"
+            print " arguments of LIMITS "
+            print "-------------------"
+
+
+            if '0' in ans[0]:
+                print "Enable limits (default setting), "
+            if '1' in ans[0]:
+                print "Disable limit +, "
+            if '2' in ans[0]:
+                print "Disable limit -, "
+            if '3' in ans[0]:
+                print "Disable limit + & -, "
+
+            if '0' in ans[1]:
+                print "Limits normally closed (default setting), "
+            else:
+                print "Limits normally open, "
+
+            if '0' in ans[2]:
+                print "Stop motion when a limit is hit and abort the program (default setting), "
+            else:
+                print "Stop motion when a limit is hit but continue the program, "
+
+            print 'deceleration : ',eval(ans[3].split('D')[1]), "rps²"
 
     def add_profile(self,**kwargs):
         """ add a new profile to lprofile
@@ -712,6 +846,37 @@ class Axes(PyLayers):
     def read(self):
         pass
 
+
+    def stationnary(self):
+        """ test bit in status ST
+
+        Examples
+        --------
+
+        >>> # To check and parse the axis status
+        >>> from pylayers.measures.parker import smparker
+        >>> port = getty()
+        >>> A = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
+        >>> A.reg('ST')
+
+        >>> from pylayers.measures.parker import smparker
+        >>> S = smparker.Scanner()
+        >>> S.a[1].stationnary()
+        >>> #scans over axis 1 by given status
+
+        """
+
+        buf = self.com('R'+'(ST)')
+        buf = buf[1]
+        buf = buf.replace('*','').replace('\r\n','').split('_')
+        status = eval('0b'+reduce(lambda x,y:  x+y,buf))
+        stationnary_bit = 0b00000000000000000001000000000000
+        if eval(bin(stationnary_bit & status))!=0:
+            return True
+        else:
+            return False
+
+
     def reg(self,typ='ST'):
         """ read boolean quantities in registers  : ST, UF, DF
 
@@ -731,7 +896,6 @@ class Axes(PyLayers):
 
         """
 
-        #buf = self.com('R','('+typ+')')
         buf = self.com('R'+'('+typ+')')
         buf = buf[1]
         buf = buf.replace('*','').replace('\r\n','').split('_')
@@ -754,7 +918,7 @@ class Axes(PyLayers):
                         st = st + ' ' + Axes.ddrvflt[k*4+l+1]+'\n'
         return(st)
 
-    def mv(self,var=0,vel=15,acc=20):
+    def mv(self,var=0,vel=20,acc=30):
         """ move axes in translation or rotation
 
         Parameters
@@ -780,11 +944,20 @@ class Axes(PyLayers):
         #
         #send commands
         #
+        t1 = time.time()
         com   = self.com(scom1)
+        t2 = time.time()
         com   = self.com(scom2)
+        t3 = time.time()
         com   = self.com(scom3)
         #tic = time.time()
+        t4 = time.time()
         com = self.com('G')
+        t5  = time.time()
+        print t2-t1
+        print t3-t2
+        print t4-t3
+        print t5-t4
         #toc = time.time()
         #print  toc-tic
 
@@ -842,9 +1015,9 @@ class Scanner(PyLayers):
         # phi current angle of the scanner
         #
         self.phi = 0
-        self.sx = 1280000
-        self.sy = 2280000
-        self.sz = 211111.1111111111
+        self.sx = 12800
+        self.sy = 22800
+        self.sz = 21111.1111111111
         self.sr = 2111.111111111111
 
         self.a  = ['',Axes(1,'x',self.ser,scale=self.sx,typ='t'),
@@ -982,13 +1155,30 @@ class Scanner(PyLayers):
         #   + fabriquer les profils
         #   + Appliquer les profils
 
-    def array(self,A,vel=20):
+    def array(self,A,vel=25):
         """ Implement an Array
+
+        Parameters
+        ----------
+
+        A : Aarray
 
 
         """
         for k in range(A.p.shape[1]):
             self.mv(pt=A.p[:,k],vel=vel)
+            print self.a[1].stationnary()
+            while not self.a[1].stationnary():
+                print " I am moving"
+            print "I am stationnary  now. You can measure"
+            # while in motion
+            #    pass
+            # data =vna.measure()
+            # thread store(data)
+    def mes1(self,A,vna,vel=25):
+        pass
+
+
 
         #array = ensemble de points
         #This fonction contains a cloud of points + noton of scheduling
@@ -996,6 +1186,18 @@ class Scanner(PyLayers):
 
 if __name__=="__main__":
     S = Scanner()
+    #vna =E()
+
+    #S.a[axe]
+
+
+    #run smparker
+    #S=smparker.Scanner()
+    #from pylayers.antprop.aarrray import *
+    #A=AntArray()
+    #S.array(A)
+
+
 #    port = gettty()
 #    X = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
 #    Y = Axes(2,'y',typ='t',scale=22800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
