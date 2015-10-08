@@ -410,6 +410,7 @@ def PL(fGHz,pts,p,n=2.0,dB=True):
 
     D = np.sqrt(np.sum((pts-p)**2,axis=0))
     # f x grid x ap
+
     PL = np.array([PL0(fGHz)])[:,np.newaxis] + 10*n*np.log10(D)[np.newaxis,:]
 
     if not dB:
@@ -742,7 +743,8 @@ def two_rays_flatearth(p0,p1,Gt,Gr,fGHz,gamma= -1.,mode='PL',dB=True):
         p1=p1.reshape(p1.shape[0],1)
 
 
-
+    Gt = 10**((1.*Gt)/10.)
+    Gr = 10**((1.*Gr)/10.)
 
     ht = p0[2,:]
     hr = p1[2,:]
@@ -767,21 +769,27 @@ def two_rays_flatearth(p0,p1,Gt,Gr,fGHz,gamma= -1.,mode='PL',dB=True):
             return E**2
 
 
-def lossref_compute(lat0,lon0,lat1,lon1,h0,h1,k=4/3.) :
+def lossref_compute(P,h0,h1,k=4/3.) :
     """
     compute loss and reflection rays on curved earth
 
     Parameters
     ----------
 
-    lat0 : float | string
-        latitude first point (decimal | deg min sec Direction)
-    lat1 : float | string
-        latitude second point (decimal | deg min sec Direction)
-    lon0 : float | string
-        longitude first point (decimal | deg min sec Direction)
-    lon1 : float | string
-        longitude second point (decimal | deg min sec Direction)
+    P : float | list 
+
+        if len(P) == 1 => P is a distance
+        if len(P) == 4 => P is a list of [lon0,lat0,lon1,lat1]
+
+        where :
+        lat0 : float | string
+            latitude first point (decimal | deg min sec Direction)
+        lat1 : float | string
+            latitude second point (decimal | deg min sec Direction)
+        lon0 : float | string
+            longitude first point (decimal | deg min sec Direction)
+        lon1 : float | string
+            longitude second point (decimal | deg min sec Direction)
     h0 : float:
         height of 1st point 
     h1 : float:
@@ -792,10 +800,12 @@ def lossref_compute(lat0,lon0,lat1,lon1,h0,h1,k=4/3.) :
     Returns
     -------
     
-    dloss : 
+    dloss : float
         length of direct path (meter)
-    dref :
+    dref : float
         length of reflective path (meter)
+    psy : float
+        Reflection angle
 
     References
     ----------
@@ -804,11 +814,36 @@ def lossref_compute(lat0,lon0,lat1,lon1,h0,h1,k=4/3.) :
     """
 
 
+    if isinstance(P,float) or isinstance(P,int) :
+        # P is a distance
+        r=P
+        mode = 'dist'
+    elif isinstance(P,np.ndarray) or isinstance(P,list):
+        if len(P) == 1:
+            # P is a distance
+            r=P
+            mode = 'dist'
+        elif len(P) == 4:
+            # P is a lonlat
+            lat0=P[0]
+            lon0=P[1]
+            lat1=P[2]
+            lon1=P[2]
+            mode = 'lonlat'
+        else :
+            raise AttributeError('P must be a list [lat0,lon0,lat1,lon0] or a distance')
+    else :
+        raise AttributeError('Invalid P format ( list | ndarray )')
+
     r0 = 6371e3 # earth radius
     re = k*r0 # telecom earth radius
 
-    # r = distance curviligne entre TXetRX / geodesic
-    r = gu.distance_on_earth(lat0, lon0, lat1, lon1)
+
+    if mode == 'lonlat':
+        # r = distance curviligne entre TXetRX / geodesic
+        r = gu.distance_on_earth(lat0, lon0, lat1, lon1)
+    else :
+        r=P
 
 
     p = 2/(np.sqrt(3))*np.sqrt(re*(h0+h1)+(r**2/4.)) # eq 8.45
@@ -836,24 +871,29 @@ def lossref_compute(lat0,lon0,lat1,lon1,h0,h1,k=4/3.) :
     dloss = Rd
     dref = R1+R2
 
-    return dloss,dref
+    return psy,dloss,dref
 
-def two_ray_curvedearth(lat0,lon0,lat1,lon1,h0,h1,fGHz=2.4,**kwargs):
+def two_ray_curvedearth(P,h0,h1,fGHz=2.4,**kwargs):
     """
 
 
     Parameters
     ----------
 
-    
-    lat0 : float
-        latitude first point 
-    lat1 : float
-        latitude second point 
-    lon0 : float
-        longitude first point 
-    lon1 : float
-        longitude second point 
+    P : float | list 
+
+        if len(P) == 1 => P is a distance
+        if len(P) == 4 => P is a list of [lon0,lat0,lon1,lat1]
+
+        where :
+        lat0 : float | string
+            latitude first point (decimal | deg min sec Direction)
+        lat1 : float | string
+            latitude second point (decimal | deg min sec Direction)
+        lon0 : float | string
+            longitude first point (decimal | deg min sec Direction)
+        lon1 : float | string
+            longitude second point (decimal | deg min sec Direction)
     h0 : float:
         height of 1st point 
     h1 : float:
@@ -876,11 +916,39 @@ def two_ray_curvedearth(lat0,lon0,lat1,lon1,h0,h1,fGHz=2.4,**kwargs):
     dB : boolean (True)
         return result in dB
 
+
+    Example
+    -------
+
+    .. plot::
+        :include-source:
+        
+            >>> from pylayers.antprop.loss import *
+            >>> import matplotlib.pyplot as plt
+            >>> fGHz=2.4
+            >>> p0=np.array(([0,0,20]))
+            >>> p1=np.array(([0,1,20]))
+            >>> p0=p0.reshape(3,1)
+            >>> p1=p1.reshape(3,1)
+            >>> OR = [] # One Ray model
+            >>> TRF = [] # Two Ray model on flat earth
+            >>> TRC = [] # Two Ray model on curved earth
+            >>> for d in np.arange(1,10000,1):
+            >>>     p1[1,:]=d
+            >>>     OR.append(-PL(fGHz,p0[:2,:],p1[:2,:],2)[0])
+            >>>     TRF.append(two_rays_flatearth(p0[:,0],p1[:,0],0.,0.,fGHz))
+            >>>     TRC.append(two_ray_curvedearth(d,p0[2,:],p1[2,:],fGHz))
+            >>> plt.semilogx(TRF,label='two-ray model flat earth')
+            >>> plt.semilogx(TRC,label='two-ray model curved earth')
+            >>> plt.semilogx(OR,label='one-ray model')
+            >>> plt.legend()
+            >>> plt.show()
+
     """
 
 
-    defaults = { 'Gt':1,
-                 'Gr':1,
+    defaults = { 'Gt':0.,
+                 'Gr':0.,
                  'k':4/3.,
                  'gamma': -1.,
                  'mode':'PL',
@@ -893,18 +961,20 @@ def two_ray_curvedearth(lat0,lon0,lat1,lon1,h0,h1,fGHz=2.4,**kwargs):
 
     Gt=kwargs.pop('Gt')
     Gr=kwargs.pop('Gr')
+
+    Gt = 10**((1.*Gt)/10.)
+    Gr = 10**((1.*Gr)/10.)
     k=kwargs.pop('k')
     gamma=kwargs.pop('gamma')
     
-    
-
-
-    dloss,dref = lossref_compute(lat0,lon0,lat1,lon1,h0,h1,k)
+    psy,dloss,dref = lossref_compute(P,h0,h1,k)
 
 
     lossterm = np.exp(2.j*np.pi*dloss*fGHz/0.3) / (1.*dloss)
     refterm = np.exp(2.j*np.pi*dref*fGHz/0.3) / (1.*dref)
 
+
+    
 
     E = np.sqrt(Gt*Gr)*0.3/(4*np.pi*fGHz)* (lossterm + gamma*refterm)
 
