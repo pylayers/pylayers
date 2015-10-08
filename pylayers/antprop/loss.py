@@ -675,12 +675,12 @@ def two_rays_simpleloss(p0,p1,Gt,Gr,fGHz):
     Returns
     -------
 
-    PL  : 
+    PL  :
      path loss w.r.t distance and frequency
 
-    
 
-    Examples 
+
+    Examples
     --------
     .. plot::
         :include-source:
