@@ -19,7 +19,7 @@ class DumpBox(Element):
    MultiGridLevel: Request to dump from a multigrid level (default is 0)
                    Note: This only takes effect if the method supports and
                    uses multiple grids!
- 
+
    Warning:
        FDTD Interpolation abnormalities:
          - no-interpolation: fields are located in the mesh by the

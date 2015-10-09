@@ -6407,6 +6407,8 @@ class Layout(PyLayers):
                             else:
                                 if (nstr,cy) in self.Gi.nodes():
                                     li1 = [(nstr,cy)]
+                                else: 
+                                    li1 =[]
                         else:
                             # D
                             li1 =[(nstr,)]
