@@ -663,7 +663,7 @@ def showfurniture(fig,ax):
     axis('scaled')
 
 
-def two_rays_flatearth(p0,p1,Gt,Gr,fGHz,gamma= -1.,mode='PL',dB=True):
+def two_rays_flatearth(p0,p1,Gt,Gr,fGHz,gamma= -1.+0.j,mode='PL',dB=True):
     """
     Parameters
     ----------
@@ -673,15 +673,19 @@ def two_rays_flatearth(p0,p1,Gt,Gr,fGHz,gamma= -1.,mode='PL',dB=True):
     p2 : receiver position
         (3 x Np2) array or (2,) array
 
-    Gt : Transmitter Antenna Gain (dB)
-    Gr : Receiver Antenna Gain (dB)
-    fGHz : frequency (GHz)
-    gamma : Reflexion coeff(-1)
+    Gt : float (0) 
+        Transmitter Antenna Gain (dB)
+    Gr : float(0)
+        Receiver Antenna Gain (dB)
+    fGHz : float (2.4)
+        frequency (GHz)
+    gamma : complex (-1.+0.j)
+        Reflexion coeff
 
     mode : PL | E (default : PL)
         return Energy (E) or Path loss/power loss (PL)
     dB : boolean (True)
-        return result in dB
+        return result in d
 
 
     Returns
@@ -835,6 +839,10 @@ def lossref_compute(P,h0,h1,k=4/3.) :
     else :
         raise AttributeError('Invalid P format ( list | ndarray )')
 
+
+    # if h0<h1:
+    #     h1,h0 = h0,h1
+
     r0 = 6371e3 # earth radius
     re = k*r0 # telecom earth radius
 
@@ -845,7 +853,8 @@ def lossref_compute(P,h0,h1,k=4/3.) :
     else :
         r=P
 
-
+    # import ipdb
+    # ipdb.set_trace()
     p = 2/(np.sqrt(3))*np.sqrt(re*(h0+h1)+(r**2/4.)) # eq 8.45
     eps = np.arcsin(2*re*r*(h1-h0)/p**3) # eq 8.46
 
@@ -908,8 +917,16 @@ def two_ray_curvedearth(P,h0,h1,fGHz=2.4,**kwargs):
         Transmitter Antenna Gain (dB)
     Gr : float
         Receiver Antenna Gain (dB)
-    gamma : 
-        Reflexion coeff(-1)
+    gamma : complex (-1.+0.j)
+        Reflexion coeff if eps and sig are not precised
+
+    'pol': string ('v')
+        polarization ('v'|'h')
+    'eps' : float ([])
+        lossless relative permittivity [],
+    'sig': float (0.)
+        conductivity 
+
 
     mode : PL | E (default : PL)
         return Energy (E) or Path loss/power loss (PL)
@@ -950,7 +967,10 @@ def two_ray_curvedearth(P,h0,h1,fGHz=2.4,**kwargs):
     defaults = { 'Gt':0.,
                  'Gr':0.,
                  'k':4/3.,
-                 'gamma': -1.,
+                 'gamma': -1.+0.j,
+                 'pol':'v',
+                 'eps' :[],
+                 'sig':0.,
                  'mode':'PL',
                  'dB':True
                }
@@ -966,15 +986,25 @@ def two_ray_curvedearth(P,h0,h1,fGHz=2.4,**kwargs):
     Gr = 10**((1.*Gr)/10.)
     k=kwargs.pop('k')
     gamma=kwargs.pop('gamma')
-    
+    pol=kwargs.pop('pol')
+    eps=kwargs.pop('eps')
+    sig=kwargs.pop('sig')
+
+
     psy,dloss,dref = lossref_compute(P,h0,h1,k)
+
+    if eps != []:
+        er = eps  - 60.j*sig*0.3/fGHz
+        if pol == 'v':
+            Z= (1./er)* np.sqrt(er-np.cos(psy)**2)
+        elif pol == 'h':
+            Z= np.sqrt(er-np.cos(psy)**2)
+
+        gamma = (np.sin(psy)-Z)/((np.sin(psy)+Z))
 
 
     lossterm = np.exp(2.j*np.pi*dloss*fGHz/0.3) / (1.*dloss)
     refterm = np.exp(2.j*np.pi*dref*fGHz/0.3) / (1.*dref)
-
-
-    
 
     E = np.sqrt(Gt*Gr)*0.3/(4*np.pi*fGHz)* (lossterm + gamma*refterm)
 
