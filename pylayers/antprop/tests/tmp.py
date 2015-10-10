@@ -325,7 +325,6 @@ import pylayers.gis.gisutil as gu
 
 
 
-
 from pylayers.antprop.loss import *
 import matplotlib.pyplot as plt
 fGHz=3.5
@@ -339,17 +338,18 @@ TRF = [] # Two Ray model on flat earth
 TRC = [] # Two Ray model on curved earth
 Gt=12
 Gr=12
-dr= np.arange(1,1000,1.0)
+T=[]
+dr= np.arange(1,1000,0.1)
 for d in dr:
     p1[1,:]=d
     OR.append(-PL(fGHz,p0[:2,:],p1[:2,:],2)[0]+Gt+Gr)
     TRF.append(two_rays_flatearth(p0[:,0],p1[:,0],Gt=Gt,Gr=Gr,fGHz=fGHz))
     TRC.append(two_ray_curvedearth(d,p0[2,:],p1[2,:],Gt=Gt,Gr=Gr,fGHz=fGHz))
-plt.semilogx(TRF,label='two-ray model flat earth')
-plt.semilogx(dr,20*np.log10(1./dr)+20,label='1/d')
-plt.semilogx(dr,20*np.log10(1./dr**2)+20,label='1/d**2')
-
+# plt.semilogx(TRF+PL0(fGHz),label='two-ray model flat earth')
+plt.semilogx(dr,OR,label='PLmodel')
+plt.semilogx(dr,TRF,label='two-ray model flat earth')
 plt.semilogx(dr,TRC,label='two-ray model curved earth')
-plt.semilogx(dr,OR,label='one-ray model')
+plt.semilogx(dr,20*np.log10(1./dr),label='1/d')
+plt.semilogx(dr,20*np.log10(1./dr**2),label='1/d**2')
 plt.legend()
 plt.show()

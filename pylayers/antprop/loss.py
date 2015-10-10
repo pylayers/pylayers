@@ -663,7 +663,7 @@ def showfurniture(fig,ax):
     axis('scaled')
 
 
-def two_rays_flatearth(p0,p1,Gt,Gr,fGHz,gamma= -1.+0.j,mode='PL',dB=True):
+def two_rays_flatearth(p0,p1,Gt,Gr,fGHz,gamma= -1.+0.j,dB=True):
     """
     Parameters
     ----------
@@ -682,8 +682,7 @@ def two_rays_flatearth(p0,p1,Gt,Gr,fGHz,gamma= -1.+0.j,mode='PL',dB=True):
     gamma : complex (-1.+0.j)
         Reflexion coeff
 
-    mode : PL | E (default : PL)
-        return Energy (E) or Path loss/power loss (PL)
+    
     dB : boolean (True)
         return result in d
 
@@ -691,12 +690,10 @@ def two_rays_flatearth(p0,p1,Gt,Gr,fGHz,gamma= -1.+0.j,mode='PL',dB=True):
     Returns
     -------
 
-    PL : 
-        path loss w.r.t distance and frequency
+    P : 
+        received power
 
 
-    E  : 
-        energy loss w.r.t distance and frequency
 
 
 
@@ -758,19 +755,16 @@ def two_rays_flatearth(p0,p1,Gt,Gr,fGHz,gamma= -1.+0.j,mode='PL',dB=True):
     dref = np.sqrt(d0**2+(ht+hr)**2) #l0'
 
 
-    lossterm = np.exp(2.j*np.pi*dloss*fGHz/0.3) / (1.*dloss)
-    refterm = np.exp(2.j*np.pi*dref*fGHz/0.3) / (1.*dref)
+
+    deltad= dref-dloss
+    deltaphi = 2*np.pi*fGHz*deltad/0.3
+    P = (0.3/(4*np.pi*fGHz) )**2 *abs(np.sqrt(Gt)/dloss + gamma * np.sqrt(Gr)*(np.exp(-1.j*deltaphi))/dref)**2
 
 
-    E = np.sqrt(Gt*Gr)*0.3/(4*np.pi*fGHz)* (lossterm + gamma*refterm)
-
-    if mode == 'E':
-        return E
-    if mode == 'PL':
-        if dB :
-            return 20*np.log10(E)
-        else:
-            return E**2
+    if dB :
+        return 10*np.log10(P)#20*np.log10(E)
+    else:
+        return P
 
 
 def lossref_compute(P,h0,h1,k=4/3.) :
@@ -928,10 +922,16 @@ def two_ray_curvedearth(P,h0,h1,fGHz=2.4,**kwargs):
         conductivity 
 
 
-    mode : PL | E (default : PL)
-        return Energy (E) or Path loss/power loss (PL)
     dB : boolean (True)
         return result in dB
+
+
+    Returns
+    -------
+
+    P : 
+        received power
+
 
 
     Example
@@ -947,17 +947,14 @@ def two_ray_curvedearth(P,h0,h1,fGHz=2.4,**kwargs):
             >>> p1=np.array(([0,1,20]))
             >>> p0=p0.reshape(3,1)
             >>> p1=p1.reshape(3,1)
-            >>> OR = [] # One Ray model
             >>> TRF = [] # Two Ray model on flat earth
             >>> TRC = [] # Two Ray model on curved earth
             >>> for d in np.arange(1,10000,1):
             >>>     p1[1,:]=d
-            >>>     OR.append(-PL(fGHz,p0[:2,:],p1[:2,:],2)[0])
             >>>     TRF.append(two_rays_flatearth(p0[:,0],p1[:,0],0.,0.,fGHz))
             >>>     TRC.append(two_ray_curvedearth(d,p0[2,:],p1[2,:],fGHz))
             >>> plt.semilogx(TRF,label='two-ray model flat earth')
             >>> plt.semilogx(TRC,label='two-ray model curved earth')
-            >>> plt.semilogx(OR,label='one-ray model')
             >>> plt.legend()
             >>> plt.show()
 
@@ -1003,18 +1000,15 @@ def two_ray_curvedearth(P,h0,h1,fGHz=2.4,**kwargs):
         gamma = (np.sin(psy)-Z)/((np.sin(psy)+Z))
 
 
-    lossterm = np.exp(2.j*np.pi*dloss*fGHz/0.3) / (1.*dloss)
-    refterm = np.exp(2.j*np.pi*dref*fGHz/0.3) / (1.*dref)
+    deltad= dref-dloss
+    deltaphi = 2*np.pi*fGHz*deltad/0.3
 
-    E = np.sqrt(Gt*Gr)*0.3/(4*np.pi*fGHz)* (lossterm + gamma*refterm)
+    P = (0.3/(4*np.pi*fGHz) )**2 *abs(np.sqrt(Gt)/dloss + gamma * np.sqrt(Gr)*(np.exp(-1.j*deltaphi))/dref)**2
 
-    if kwargs['mode'] == 'E':
-        return E
-    if kwargs['mode'] == 'PL':
-        if kwargs['dB'] :
-            return 20*np.log10(E)
-        else:
-            return E**2
+    if kwargs['dB'] :
+        return 10*np.log10(P)
+    else:
+        return P
 
 
 def visuPts(S,nu,nd,Pts,Values,fig=[],sp=[],vmin=0,vmax=-1,label=' ',tit='',size=25,colbar=True,xticks=False):
