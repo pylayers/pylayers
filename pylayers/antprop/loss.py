@@ -663,7 +663,7 @@ def showfurniture(fig,ax):
     axis('scaled')
 
 
-def two_rays_flatearth(p0,p1,Gt,Gr,fGHz,gamma= -1.+0.j,dB=True):
+def two_rays_flatearth(p0,p1,fGHz,**kwargs):
     """
     Parameters
     ----------
@@ -673,9 +673,9 @@ def two_rays_flatearth(p0,p1,Gt,Gr,fGHz,gamma= -1.+0.j,dB=True):
     p2 : receiver position
         (3 x Np2) array or (2,) array
 
-    Gt : float (0) 
+    GtdB : float (0) 
         Transmitter Antenna Gain (dB)
-    Gr : float(0)
+    GrdB : float(0)
         Receiver Antenna Gain (dB)
     fGHz : float (2.4)
         frequency (GHz)
@@ -713,7 +713,7 @@ def two_rays_flatearth(p0,p1,Gt,Gr,fGHz,gamma= -1.+0.j,dB=True):
         >>> g0=1
         >>> g1=1
         >>> fGHz=2.4
-        >>> PL2R=two_rays_flatearth(x,y,g0,g1,fGHz)
+        >>> PL2R=two_rays_flatearth(x,y,fGHz,GtdB=g0,GrdB=g1)
         >>> PL1R = PL(fGHz,x,y,2)
         >>> plt.semilogx(PL2R,label='two-ray model')
         >>> plt.semilogx(-PL1R[0,:],label='one slope model')
@@ -734,6 +734,31 @@ def two_rays_flatearth(p0,p1,Gt,Gr,fGHz,gamma= -1.+0.j,dB=True):
 
     """
 
+
+    defaults = { 'GtdB':0.,
+                 'GrdB':0.,
+                 'gamma': -1.+0.j,
+                 'pol':'v',
+                 'eps' :[],
+                 'sig':0.,
+                 'dB':True
+               }
+
+    for k in defaults:
+       if k not in kwargs:
+           kwargs[k]=defaults[k]
+
+    GtdB=kwargs.pop('GtdB')
+    GrdB=kwargs.pop('GrdB')
+
+    Gt = 10**((1.*GtdB)/10.)
+    Gr = 10**((1.*GrdB)/10.)
+    gamma=kwargs.pop('gamma')
+    pol=kwargs.pop('pol')
+    eps=kwargs.pop('eps')
+    sig=kwargs.pop('sig')
+
+
     assert p0.shape[0] == 3, 'p0 is not 3D'
     assert p1.shape[0] == 3, 'p1 is not 3D'
 
@@ -743,6 +768,8 @@ def two_rays_flatearth(p0,p1,Gt,Gr,fGHz,gamma= -1.+0.j,dB=True):
     if len(p1.shape) == 1:
         p1=p1.reshape(p1.shape[0],1)
 
+    p0=1.*p0
+    p1=1.*p1
 
     Gt = 10**((1.*Gt)/10.)
     Gr = 10**((1.*Gr)/10.)
@@ -751,18 +778,31 @@ def two_rays_flatearth(p0,p1,Gt,Gr,fGHz,gamma= -1.+0.j,dB=True):
     hr = p1[2,:]
 
     dloss = np.sqrt(np.sum((p0-p1)**2,axis=0)) # l0
-    d0 = np.sqrt( dloss**2 - (ht-hr)**2 ) # d0
-    dref = np.sqrt(d0**2+(ht+hr)**2) #l0'
+    d0 = np.sqrt( dloss**2 - 1.*(ht-hr)**2 ) # d0
+    dref = np.sqrt(d0**2+1.*(ht+hr)**2) #l0'
+
+
+    if eps != []:
+        psy = np.arcsin((ht+hr)/dref)
+        er = eps  - 60.j*sig*0.3/fGHz
+        if pol == 'v':
+            Z= (1./er)* np.sqrt(er-np.cos(psy)**2)
+        elif pol == 'h':
+            Z= np.sqrt(er-np.cos(psy)**2)
+
+        gamma = (np.sin(psy)-Z)/((np.sin(psy)+Z))
 
 
 
     deltad= dref-dloss
-    deltaphi = 2*np.pi*fGHz*deltad/0.3
-    P = (0.3/(4*np.pi*fGHz) )**2 *abs(np.sqrt(Gt)/dloss + gamma * np.sqrt(Gr)*(np.exp(-1.j*deltaphi))/dref)**2
+    deltaphi = (2*np.pi*fGHz*deltad)/0.3
+    E= (0.3/(4*np.pi*fGHz) ) *(np.sqrt(Gt*Gr)/dloss + gamma * np.sqrt(Gr*Gr)*(np.exp(-1.j*deltaphi))/dref)
+    P = abs(E)**2
 
-
-    if dB :
-        return 10*np.log10(P)#20*np.log10(E)
+    # import ipdb
+    # ipdb.set_trace()
+    if kwargs['dB'] :
+        return 10*np.log10(P)
     else:
         return P
 
@@ -837,15 +877,17 @@ def lossref_compute(P,h0,h1,k=4/3.) :
     # if h0<h1:
     #     h1,h0 = h0,h1
 
-    r0 = 6371e3 # earth radius
+    r0 = 6371.e3 # earth radius
     re = k*r0 # telecom earth radius
 
 
     if mode == 'lonlat':
-        # r = distance curviligne entre TXetRX / geodesic
+        # r = distance curvilignenp.arcsin((h1/R1)-R1/(2.*re)) entre TXetRX / geodesic
         r = gu.distance_on_earth(lat0, lon0, lat1, lon1)
     else :
         r=P
+
+    r=1.*r
 
     # import ipdb
     # ipdb.set_trace()
@@ -866,9 +908,8 @@ def lossref_compute(P,h0,h1,k=4/3.) :
     R2 = np.sqrt(h1**2+4*re*(re+h1)*(np.sin(phi2/2))**2) #8.52
 
     Rd = np.sqrt((h1-h0)**2+4*(re+h1)*(re+h0)*np.sin((phi1+phi2)/2.)**2) # 8.53
-
     # tangente angle on earth
-    psy = np.arcsin((h1/R1)-R1/(2*re)) # eq 8.55
+    psy = np.arcsin((h1/R1)-R1/(2.*re)) # eq 8.55
     deltaR = 4*R1*R2*np.sin(psy)**2/(R1+R2+Rd)
 
     dloss = Rd
@@ -907,9 +948,9 @@ def two_ray_curvedearth(P,h0,h1,fGHz=2.4,**kwargs):
 
     k : float
         electromagnetic earth factor
-    Gt : float
+    GtdB : float
         Transmitter Antenna Gain (dB)
-    Gr : float
+    GrdB : float
         Receiver Antenna Gain (dB)
     gamma : complex (-1.+0.j)
         Reflexion coeff if eps and sig are not precised
@@ -951,7 +992,7 @@ def two_ray_curvedearth(P,h0,h1,fGHz=2.4,**kwargs):
             >>> TRC = [] # Two Ray model on curved earth
             >>> for d in np.arange(1,10000,1):
             >>>     p1[1,:]=d
-            >>>     TRF.append(two_rays_flatearth(p0[:,0],p1[:,0],0.,0.,fGHz))
+            >>>     TRF.append(two_rays_flatearth(p0[:,0],p1[:,0],fGHz,GtdB=0.,GrdB=0.,))
             >>>     TRC.append(two_ray_curvedearth(d,p0[2,:],p1[2,:],fGHz))
             >>> plt.semilogx(TRF,label='two-ray model flat earth')
             >>> plt.semilogx(TRC,label='two-ray model curved earth')
@@ -961,8 +1002,8 @@ def two_ray_curvedearth(P,h0,h1,fGHz=2.4,**kwargs):
     """
 
 
-    defaults = { 'Gt':0.,
-                 'Gr':0.,
+    defaults = { 'GtdB':0.,
+                 'GrdB':0.,
                  'k':4/3.,
                  'gamma': -1.+0.j,
                  'pol':'v',
@@ -976,17 +1017,20 @@ def two_ray_curvedearth(P,h0,h1,fGHz=2.4,**kwargs):
         if k not in kwargs:
             kwargs[k]=defaults[k]
 
-    Gt=kwargs.pop('Gt')
-    Gr=kwargs.pop('Gr')
+    GtdB=kwargs.pop('GtdB')
+    GrdB=kwargs.pop('GrdB')
 
-    Gt = 10**((1.*Gt)/10.)
-    Gr = 10**((1.*Gr)/10.)
+    Gt = 10**((1.*GtdB)/10.)
+    Gr = 10**((1.*GrdB)/10.)
     k=kwargs.pop('k')
     gamma=kwargs.pop('gamma')
     pol=kwargs.pop('pol')
     eps=kwargs.pop('eps')
     sig=kwargs.pop('sig')
 
+
+    h0=1.*h0
+    h1=1.*h1
 
     psy,dloss,dref = lossref_compute(P,h0,h1,k)
 
@@ -999,12 +1043,13 @@ def two_ray_curvedearth(P,h0,h1,fGHz=2.4,**kwargs):
 
         gamma = (np.sin(psy)-Z)/((np.sin(psy)+Z))
 
-
     deltad= dref-dloss
-    deltaphi = 2*np.pi*fGHz*deltad/0.3
+    deltaphi = (2*np.pi*fGHz*deltad)/0.3
+    E= (0.3/(4*np.pi*fGHz) ) *(np.sqrt(Gt*Gr)/dloss + gamma * np.sqrt(Gr*Gr)*(np.exp(-1.j*deltaphi))/dref)
+    P = abs(E)**2
 
-    P = (0.3/(4*np.pi*fGHz) )**2 *abs(np.sqrt(Gt)/dloss + gamma * np.sqrt(Gr)*(np.exp(-1.j*deltaphi))/dref)**2
-
+    # import ipdb
+    # ipdb.set_trace()
     if kwargs['dB'] :
         return 10*np.log10(P)
     else:

@@ -328,13 +328,13 @@ import pylayers.gis.gisutil as gu
 from pylayers.antprop.loss import *
 import matplotlib.pyplot as plt
 fGHz=3.5
-p0=np.array(([0,1,52]))
-
-p1=np.array(([0,0,12]))
+p0=np.array(([0.,0.,52.]))
+p1=np.array(([0.,0.,12.]))
 p0=p0.reshape(3,1)
 p1=p1.reshape(3,1)
 OR = [] # One Ray model
-TRF = [] # Two Ray model on flat earth
+TRFV = [] # Two Ray model on flat earth
+TRFH = [] # Two Ray model on flat earth
 TRC = [] # Two Ray model on curved earth
 Gt=12
 Gr=12
@@ -343,13 +343,24 @@ dr= np.arange(1,1000,0.1)
 for d in dr:
     p1[1,:]=d
     OR.append(-PL(fGHz,p0[:2,:],p1[:2,:],2)[0]+Gt+Gr)
-    TRF.append(two_rays_flatearth(p0[:,0],p1[:,0],Gt=Gt,Gr=Gr,fGHz=fGHz))
-    TRC.append(two_ray_curvedearth(d,p0[2,:],p1[2,:],Gt=Gt,Gr=Gr,fGHz=fGHz))
+    TRFV.append(two_rays_flatearth(p0[:,0],p1[:,0],GtdB=Gt,GrdB=Gr,eps=80.2,sig=5,pol='v',fGHz=fGHz))
+    TRFH.append(two_rays_flatearth(p0[:,0],p1[:,0],GtdB=Gt,GrdB=Gr,eps=80.2,sig=1,pol='h',fGHz=fGHz))
+    # P2=two_rays_flatearth(p0[:,0],p1[:,0],GtdB=Gt,GrdB=Gr,fGHz=fGHz)
+    
+    # TRF2.append(P2)
+
 # plt.semilogx(TRF+PL0(fGHz),label='two-ray model flat earth')
-plt.semilogx(dr,OR,label='PLmodel')
-plt.semilogx(dr,TRF,label='two-ray model flat earth')
-plt.semilogx(dr,TRC,label='two-ray model curved earth')
-plt.semilogx(dr,20*np.log10(1./dr),label='1/d')
-plt.semilogx(dr,20*np.log10(1./dr**2),label='1/d**2')
+# plt.semilogx(dr,OR,label='PLmodel')
+# plt.semilogx(dr,TRF2+PL0(fGHz,Gt,Gr)+6,label='two-ray model flat earth gamma=-1')
+plt.semilogx(dr,TRFV+PL0(fGHz,Gt,Gr)+6,label='two-ray model flat earth gamma sea polar V')
+plt.semilogx(dr,TRFH+PL0(fGHz,Gt,Gr)+6,label='two-ray model flat earth gamma sea polar H')
+# plt.semilogx(dr,-(-10*np.log10(Gt)-10*np.log10(Gr)-20*np.log10(12)-20*np.log10(52)+40*np.log10(dr)),label='ass')
+
+# plt.semilogx(dr,-40*np.log10(dr)+10*np.log10(np.sqrt(Gt*Gr)*52**2*12**2),label='ass')
+# plt.semilogx(dr,TRC+PL0(fGHz,Gt,Gr)+6,label='two-ray model curved earth')
+plt.semilogx(dr,20*np.log10(1./dr)+PL0(fGHz,Gt,Gr),label='1/d')
+plt.semilogx(dr,20*np.log10(1./dr**2)+PL0(fGHz,Gt,Gr),label='1/d**2')
 plt.legend()
+plt.grid()
+# plt.axis([1,1000,-140,20])
 plt.show()
