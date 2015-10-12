@@ -701,6 +701,7 @@ class Polygon(PyLayers,shg.Polygon):
         defaults = {'show': False,
                 'fig': [],
                 'ax': [],
+                'label':False,
                 'color':'#abcdef',
                 'edgecolor':'#000000',
                 'alpha':0.8 ,
@@ -733,8 +734,9 @@ class Polygon(PyLayers,shg.Polygon):
                 color = kwargs['color'],
                 alpha = kwargs['alpha'],
                 ec = kwargs['edgecolor'])
-        for k in range(len(numpt)):
-            ax.text(x[k],y[k],numpt[k])
+        if kwargs['label']:
+            for k in range(len(numpt)):
+                ax.text(x[k],y[k],numpt[k])
 
         if kwargs['show']:
             plt.show()

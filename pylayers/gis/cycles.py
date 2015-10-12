@@ -93,7 +93,7 @@ class Cycles(nx.DiGraph):
 
         update cycle inclusion graph
 
-        inclusion is not a reciprocal relation that is the reason why
+        inclusion is not a reciprocal relation that is why
         we loop twice over the entire cycles list
 
         Algorithm :

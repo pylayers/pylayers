@@ -695,9 +695,9 @@ def two_rays_flatearth(p0,p1,fGHz,**kwargs):
 
 
 
-    
 
-    Examples 
+
+    Examples
     --------
     .. plot::
         :include-source:

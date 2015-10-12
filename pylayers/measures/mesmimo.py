@@ -14,7 +14,7 @@ import numpy.linalg as la
 #
 class MIMO(object):
     """
-    H    : raw channel matrix in frequencey domain
+    H    : raw channel matrix in frequency domain
     Hcal : calibrated channel matrix in frequency domain
     hcal : channel matrix in time domain
 

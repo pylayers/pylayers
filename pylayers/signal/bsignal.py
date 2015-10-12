@@ -1,4 +1,4 @@
-#-*- coding:Utf-8 -*-
+u#-*- coding:Utf-8 -*-
 r"""
 .. currentmodule:: pylayers.signal.bsignal
 
@@ -102,7 +102,7 @@ Fourier Functions
     TUsignal.Yadd_zeros2r
     TUsignal.esd
 
-Visualization Functions
+Visualization functions
 -----------------------
 
 .. autosummary::

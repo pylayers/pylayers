@@ -1,6 +1,6 @@
 # Effect of Modyfiying the Nature of Sub-Segments
 
-This notebook illustrtates a simple ray tracing simulation with diffecent material properties for a single segment separating 2 rooms which contains multi-subsegments. The noteboook illustrates in details the whole steps.
+This notebook illustrates a simple ray tracing simulation with diffeent material properties for a single segment separating 2 rooms which contains multi-subsegments. The noteboook illustrates in details the whole steps.
 
 ```python
 >>> from pylayers.simul.link import *
