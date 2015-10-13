@@ -756,7 +756,6 @@ class Ezone(PyLayers):
         nu   = diff*fac
         num  = maxloc(nu)
         numax = np.max(num,axis=1)
-        pdb.set_trace()
         w = numax -0.1
         L = 6.9 + 20*np.log10(np.sqrt(w**2+1)-w)
         LFS = 32.4 + 20*np.log10(r)+20*np.log10(kwargs['fGHz'])
