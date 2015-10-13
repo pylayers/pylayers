@@ -58,9 +58,9 @@ class Profile(PyLayers):
         """
 
         defaults = {'num': 1,
-                    'aa': 1,
+                    'aa': 5,
                     'ad': 1,
-                    'dstep': 16000,
+                    'dstep': 40000,
                     'vmax': 5,
                     'vs': 0,
                     'spr': 4000,
@@ -343,11 +343,13 @@ class Axes(PyLayers):
         st = st + 'typ : ' + str(self.typ) + '\n'
 
         for k in enumerate(str(self._id)):
+        #for k in range(self._id):
             st = st + '---------------------\n'
             st = st + ' Status '+' '+'Axe '+str(k[0]+1)+ '\n'
+            #st = st + ' Status '+' '+'Axe '+ str(k+1)+ '\n'
             st = st + '---------------------\n'
             st1 = self.reg()
-            st =  st +st1
+            st =  st + st1
         for k,p in enumerate(self.lprofile):
             st = st + '--------------------\n'
             st = st + ' Profile '+str(k+1)+ '\n'
@@ -389,7 +391,6 @@ class Axes(PyLayers):
         else:
             var = lvar
             st = self.com('R('+var+')')[1].replace('*','').replace('/n','')
-            
             if var == 'MV':
                 if '1' in st[1]:
                     print "I'm moving"
@@ -486,14 +487,14 @@ class Axes(PyLayers):
             cstr = 'LIMITS'+'('+str(mask)+','+str(typ)+','+str(mode)+','+str(LD)+')'
             self.com(cstr,verbose=False)
 
-    def home(self,cmd='get',**kwargs):
+    def home(self,cmd='set',**kwargs):
         """ enables back material home for each axe.
             for more informations see Parker book page 108.
 
         Parameters
         ----------
 
-        cmd  : 'get','set','go'
+        cmd  : 'set','go'
 
         Examples
         --------
@@ -502,7 +503,7 @@ class Axes(PyLayers):
         """
 
         defaults = {'mode' :0,
-                    'vel'  :15,
+                    'vel'  :10,
                     'acc'  :20,
                     'edg'  :'+',
                     'typ'  :0,
@@ -521,50 +522,12 @@ class Axes(PyLayers):
         self.armed = kwargs['armed']
 
         if self._id in [1,2]:
-            if cmd=='get':
-                st = self.com('HOME')
-                ans = st[1].split(' ')
-
-
-                print "-------------------"
-                print " arguments of HOME "
-                print "-------------------"
-
-                if '1' in ans[0]:
-                    print "armed "
-                else:
-                    print "not armed "
-                if '-' in ans[1]:
-                    print "reference edge is negative "
-                else:
-                    print "reference edge is positive "
-                if '1' in ans[2]:
-                    print "home switch normally closed 1 "
-                else:
-                    print "home switch normally open 0 (default) "
-
-                if '+' in ans[3]:
-                    print 'velocity : +',eval(ans[3].split('V+')[1]), "rps"
-                else:
-                    print 'velocity : -',eval(ans[3].split('V-')[1]), "rps"
-
-                print 'acceleration : ',eval(ans[4].split('A')[1]), "rps²"
-
-                if '0' in ans[5]:
-                    print 'Mode 0: Motor in the active window of the switch (default)'
-                if '1' in ans[5]:
-                    print 'Mode 1: Motor in the position to the edge + or -'
-                if '2' in ans[5]:
-                    print 'Mode 2: Improve homing repeatability'
-
             if cmd=='set':
-
                 if self.vel>0:
                     vel = '+'+str(self.vel)
                 else:
                     vel = '-'+str(self.vel)
-
-
+                
                 cstr = 'HOME'+str(self.armed)+\
                               '('+self.edg+','+\
                               str(self.typ)+','+\
@@ -588,14 +551,12 @@ class Axes(PyLayers):
         if self._id in [3,4]:
             if cmd=='set':
                 self.com('W(PA,0)')
-            if cmd=='get':
-                st =  self.com('R(PA)')
             if cmd=='go':
                 pa = -int(self.com('R(PA)')[1].replace('*','').replace('\n',''))
                 self.mv(pa/self.scale,vel=self.vel,acc=self.acc)
 
     def parsinfo(self,cmd='HOME'):
-        """ allows get parsing informations. 
+        """ allows get parsing informations.
 
         Parameters
         ----------
@@ -617,14 +578,14 @@ class Axes(PyLayers):
             print "-------------------"
 
             ##########
-            #### ARM 
+            #### ARM
             ##########
             if '1' in ans[0]:
                 print "armed "
             else:
                 print "not armed "
 
-            ############ 
+            ############
             ##### CODE
             ############
 
@@ -633,8 +594,8 @@ class Axes(PyLayers):
             else:
                 print "BCD code (Binary Coded Decimal) "
 
-            ############### 
-            ##### INPUTS 
+            ###############
+            ##### INPUTS
             ################
 
             if '5' in ans[2]:
@@ -649,7 +610,7 @@ class Axes(PyLayers):
                 print "1 inputs "
 
             ##############
-            #### EXECUTION 
+            #### EXECUTION
             ##############
 
             if '0' in ans[3]:
@@ -665,24 +626,52 @@ class Axes(PyLayers):
             print " arguments of HOME "
             print "-------------------"
 
+            ##############
+            #### ARM
+            ##############
             if '1' in ans[0]:
                 print "armed "
             else:
                 print "not armed "
+
+
+            ##################
+            ####REFERENCE EDGE
+            ##################
+
             if '-' in ans[1]:
                 print "reference edge is negative "
             else:
                 print "reference edge is positive "
+
+
+
+            ##############
+            #### TYPE
+            ##############
+
             if '1' in ans[2]:
                 print "home switch normally closed 1 "
             else:
                 print "home switch normally open 0 (default) "
 
+
+
+
+            ##############################
+            #### VELOCITY AND ACCELERATION
+            ##############################
             if '+' in ans[3]:
                 print 'velocity : +',eval(ans[3].split('V+')[1]), "rps"
             else:
                 print 'velocity : -',eval(ans[3].split('V-')[1]), "rps"
                 print 'acceleration : ',eval(ans[4].split('A')[1]), "rps²"
+
+
+
+            ##############
+            #### MODE
+            ##############
 
             if '0' in ans[5]:
                 print 'Mode 0: Motor in the active window of the switch (default)'
@@ -700,6 +689,11 @@ class Axes(PyLayers):
             print "-------------------"
 
 
+            ##############
+            #### MASK
+            ##############
+
+
             if '0' in ans[0]:
                 print "Enable limits (default setting), "
             if '1' in ans[0]:
@@ -709,10 +703,18 @@ class Axes(PyLayers):
             if '3' in ans[0]:
                 print "Disable limit + & -, "
 
+            ##############
+            #### TYPE
+            ##############
+
             if '0' in ans[1]:
                 print "Limits normally closed (default setting), "
             else:
-                print "Limits normally open, "
+                print  "Limits normally open, "
+
+            ##########################
+            #### MODE AND DECELERATION
+            ##########################
 
             if '0' in ans[2]:
                 print "Stop motion when a limit is hit and abort the program (default setting), "
@@ -918,7 +920,7 @@ class Axes(PyLayers):
                         st = st + ' ' + Axes.ddrvflt[k*4+l+1]+'\n'
         return(st)
 
-    def mv(self,var=0,vel=20,acc=30):
+    def mv(self,var=0,vel=10,acc=20):
         """ move axes in translation or rotation
 
         Parameters
@@ -1047,10 +1049,10 @@ class Scanner(PyLayers):
         self.a[4].limits(mask=3,typ=1,mode=1,cmd='set')
 
         # Power ON
-        self.a[1].com('ON')
-        self.a[2].com('ON')
-        self.a[3].com('ON')
-        self.a[4].com('ON')
+        #self.a[1].com('ON')
+        #self.a[2].com('ON')
+        #self.a[3].com('ON')
+        #self.a[4].com('ON')
 
         self.home(cmd='set')
         self.home(cmd='go',init=True)
@@ -1088,7 +1090,7 @@ class Scanner(PyLayers):
             self.p0=p0
             self.ang0=ang0
 
-    def home(self,cmd='get',init=False,vel=10):
+    def home(self,cmd='set',init=False,vel=10):
         """ allows a return home for 3 axes
 
         Parameters
@@ -1115,7 +1117,7 @@ class Scanner(PyLayers):
         self.pA = self.pH - self.A
         self.pG = self.H + self.pH
 
-    def mv(self,pt=np.array([0.1,0.1,0]),at=0,frame='A',vel=20):
+    def mvsc(self,pt=np.array([0.1,0.1,0]),at=0,frame='A',vel=20):
         """ move to target point
 
         Parameters
@@ -1133,6 +1135,7 @@ class Scanner(PyLayers):
         if frame=='G':
             ptH = pt + self.H
         if frame=='H':
+            #ptH = p0
             ptH = pt
 
         vec = ptH-self.pH
@@ -1155,7 +1158,7 @@ class Scanner(PyLayers):
         #   + fabriquer les profils
         #   + Appliquer les profils
 
-    def array(self,A,vel=25):
+    def array(self,A,vel=10):
         """ Implement an Array
 
         Parameters
@@ -1166,16 +1169,17 @@ class Scanner(PyLayers):
 
         """
         for k in range(A.p.shape[1]):
-            self.mv(pt=A.p[:,k],vel=vel)
+            #self.mv(pt=A.p[:,k],vel=vel)
+            self.mvsc(pt=A.p[:,k],vel=vel)
             print self.a[1].stationnary()
-            while not self.a[1].stationnary():
-                print " I am moving"
-            print "I am stationnary  now. You can measure"
+            #while not self.a[1].stationnary():
+                #print " I am moving"
+            #print "I am stationnary  now you can measure"
             # while in motion
             #    pass
             # data =vna.measure()
             # thread store(data)
-    def mes1(self,A,vna,vel=25):
+    def mes1(self,A,vna,vel=10):
         pass
 
 
