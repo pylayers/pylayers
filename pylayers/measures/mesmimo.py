@@ -9,6 +9,8 @@ import numpy as np
 import matplotlib.pylab as plt
 import matplotlib.animation as animation
 import numpy.linalg as la
+from pylayers.measures.vna.E5072A import *
+from time import sleep
 
 
 class MIMO(object):
@@ -431,63 +433,6 @@ class MIMO(object):
 
         pass
 
-    def BFcapacity(self,Pt=np.array([1e-3]),Tp=273):
-        """ calculates the capacity in putting all the power on the more important mode
-
-        Parameters
-        ----------
-
-        Pt : np.array  (,NPt)
-            Transmitted power
-        Tp : float
-            Noise Temperature
-
-        """
-        fGHz  = self.Hcal.x
-        Nf    = len(fGHz)
-        BGHz  = fGHz[-1]-fGHz[0] # bandwidth
-        dfGHz = fGHz[1]-fGHz[0]  # frequency step
-
-        #
-        # swaping axes
-        #   self.Hcal.y  (Nr,Nt,Nf)
-        #   Hp           (Nr,Nf,Nt)
-        #   H            (Nf,Nr,Nt)
-        #   Hd           (Nf,Nt,Nr)
-        Hp  = self.Hcal.y.swapaxes(1,2)
-        H   = Hp.swapaxes(0,1)
-        Hd  = np.conj(H.swapaxes(1,2))
-
-        # White Noise definition
-        #
-        # Boltzman constant
-
-        kB = 1.03806488e-23
-
-        # N0 ~ J ~ W/Hz ~ W.s
-
-        N0 = kB*Tp
-
-        # Evaluation of the transfer tensor
-
-        HdH,U,ld,V = self.transfer()
-
-        It  = np.eye(self.Nt)
-        Ir  = np.eye(self.Nr)
-
-        # pb : Nf x Nt
-        pb = N0*dfGHz*1e9*np.ones((self.Nf,self.Nt))
-        pt = Pt/((self.Nf-1))*np.array([1,0,0,0])[None,:]
-        #print pt.shape
-        Qn   = pt/pb
-        rho  = Qn*ld
-        #print Qn
-        #print Qn.shape
-
-        Cbf  = dfGHz*np.sum(np.log(1+rho)/np.log(2),axis=1)
-        #C   = dfGHz*np.log(la.det(IR[None,...]+(Pt/self.Nt)*HH/(N0*dfGHz)))/np.log(2)
-        return(Cbf,Qn)
-
 
 
     def WFcapacity(self,Pt=np.array([1e-3]),Tp=273):
@@ -559,6 +504,93 @@ class MIMO(object):
 
 
         return(rho,Cwf)
+
+    def meas(self):
+        """ Allows meas from VNA and Scanner
+        """
+
+        defaults = { 'lavrg':'['1','999']',
+                     'lif':'['1000','300000','500000']',
+                     'lpoints' : '[201,401,601,801,1601]',
+                     'Nf':1601,
+                     'fminGHz' : 1.8,
+                     'fmaxGHz' :2.2,
+                     'calibration':True,
+                     'time':True,
+                     'Nmeas' : 100,
+                     'Nt' : 4,
+                     'Nr' : 8,
+                     'Aat': [],
+                     'Aar': []
+                  }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+        fminGHz = kwargs.pop('fminGHz')
+        fmaxGHz = kwargs.pop('fmaxGHz')
+        lavrg   =  kwargs.pop('lavrg')
+        lif     = kwargs.pop('lif')
+        lpoints = kwargs.pop('lpoints')
+        Nmeas = kwargs.pop('Nmeas')
+
+
+        ##################
+        ### VNA
+        #################
+
+
+        # FROM MAIN OF E5072A.py
+        vna = SCPI("129.20.33.201",verbose=False)
+        ident = vna.getIdent()
+        print "Talking to : ",ident
+        vna.write("FORM:DATA REAL")
+        #vna.write("SENS:AVER:ON")
+        vna.select(param='S21',chan=1)
+        print "channel "+str(chan)+ " selected"
+        vna.setf(startGHz=1.8,stopGHz=2.2)
+        print "fstart (GHz) : ",startGHz
+        print "fstop (fGHz) : ",stopGHz
+
+
+        ######
+        vna.setf(fminGHz,fmaxGHz)
+       prefix = 'cal_'
+        S = []
+        lt = []
+
+        tic = time.time()
+
+        for i in lif:
+            vna.write(":SENS1:BAND " + str(i))
+            for n in lpoints:
+                fGHz = np.linspace(startGHz,stopGHz,n)
+                vna.setnpoint(n)
+                com = ":CALC1:DATA:SDAT?\n"
+                npts = vna.getnpoints()
+                print "Nbrs of points : ",npts
+                S = vna.getdata(n)
+                lt.append(time.time())
+                try:
+                    S21.append(S)
+                except:
+                    S21=S
+                S.save(prefix+str(n))
+                #for k in range(Nmeas):
+                    #S = vna.getdata(Npoints=Npoints)
+                    #lt.append(time.time())
+                    #try:
+                        #S21.append(S)
+                    #except:
+                        #S21=S
+        toc = time.time()
+        print toc-tic
+        #lt.append(toc-tic)
+        #lS.append(S21)
+        #del S21
+        #vna.close()
+        #S21.save('calibration.mat')
 
 
     def mulcplot(self,mode,**kwargs):
@@ -892,7 +924,7 @@ class MIMO(object):
 
         defaults = { 'layout':[],
                     's':100,
-                    'vmin' : 0, 
+                    'vmin' : 0,
                     'vmax': 0.5,
                     'linewidth':0,
                     'fig':[],

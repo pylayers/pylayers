@@ -1179,7 +1179,7 @@ class Scanner(PyLayers):
             #    pass
             # data =vna.measure()
             # thread store(data)
-    def mes1(self,A,vna,vel=10):
+    def meas(self):
         pass
 
 
