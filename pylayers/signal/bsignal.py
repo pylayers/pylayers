@@ -1,4 +1,4 @@
-u#-*- coding:Utf-8 -*-
+#-*- coding:Utf-8 -*-
 r"""
 .. currentmodule:: pylayers.signal.bsignal
 

@@ -45,8 +45,8 @@ In this initial phase no data is loaded yet, to load all the data gathered for t
 >>> z
 N48W002
 --------
-[-2 -1 48 49]
-latlon : [ 0.000 73676.623 cartesian :0.000 111194.358 ]
+latlon (deg) : [-2 -1 48 49]
+cartesian (meters) : [0.000 73676.623 0.000 111194.358 ] 
 
 Buildings 
 --------- 
@@ -61,9 +61,9 @@ This object contains the srtm DEM data, the aster data and a filtration of the `
 ```
 
 ```python
->>> z.show(source='srtm',bldg=False,height=True,clim=[0,30],cmap=plt.cm.hot)
-(<matplotlib.figure.Figure at 0x7f65c84c6350>,
- <matplotlib.axes._subplots.AxesSubplot at 0x7f65c864dd10>)
+>>> z.show(source='srtm',bldg=False,height=True,clim=[0,300],cmap=plt.cm.hot,alpha=1)
+(<matplotlib.figure.Figure at 0x7feb6279f4d0>,
+ <matplotlib.axes._subplots.AxesSubplot at 0x7feb626ed450>)
 ```
 
 The `Ezone` object has a member extent which gives [lonmin,lonmax,latmin,latmax]
@@ -89,8 +89,8 @@ The aster DEM can also be shown.
 
 ```python
 >>> z.show(source='aster',bldg=False,clim=[0,320])
-(<matplotlib.figure.Figure at 0x7f65c86884d0>,
- <matplotlib.axes._subplots.AxesSubplot at 0x7f65c84d7250>)
+(<matplotlib.figure.Figure at 0x7feb62c1cfd0>,
+ <matplotlib.axes._subplots.AxesSubplot at 0x7feb60c79210>)
 ```
 
 An earth zone has an attached dictionnary of buildings, which contains the data of all the set of building footprints of the city extracted out of open street map data. Below is shown an example for the city of Rennes in Brittany (France).
@@ -206,8 +206,8 @@ For predicting the radio propagation, it is necessary to retrieve the height pro
 >>> z
 N48W002
 --------
-[-2 -1 48 49]
-latlon : [ 0.000 73676.623 cartesian :0.000 111194.358 ]
+latlon (deg) : [-2 -1 48 49]
+cartesian (meters) : [0.000 73676.623 0.000 111194.358 ] 
 
 Buildings 
 --------- 

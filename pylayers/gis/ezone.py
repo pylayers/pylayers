@@ -336,7 +336,7 @@ class DEM(PyLayers):
         cax = divider.append_axes("right", size="5%", pad=0.05)
         cb = fig.colorbar(im,cax)
         cb.set_label('Height (meters)')
-        return fig,ax
+        return fig,ax,divider
 
 class Ezone(PyLayers):
     """
@@ -717,11 +717,18 @@ class Ezone(PyLayers):
                     'Hr':1.5,
                     'K':1.3333,
                     'fGHz':.3,
+                    'divider':[]
                     }
 
         for key in defaults:
             if key not in kwargs:
                 kwargs[key] = defaults[key]
+
+        if 'fig' not in kwargs:
+            f,a = plt.subplots(1,1)
+        else:
+            f = kwargs['fig']
+            a = kwargs['ax']
 
         pc = kwargs['pc']
         lmbda = 0.3/kwargs['fGHz']
@@ -732,6 +739,9 @@ class Ezone(PyLayers):
         y  = pc[1] + r*np.sin(phi)
         extent_c = np.array([x.min(),x.max(),y.min(),y.max()])
         triang = tri.Triangulation(x.flatten(),y.flatten())
+        lon,lat = self.m(triang.x,triang.y,inverse=True)
+        triang.x = lon
+        triang.y = lat
 
         lon,lat = self.m(x,y,inverse=True)
         rx = np.round((lon - self.extent[0]) / self.lonstep).astype(int)
@@ -763,12 +773,15 @@ class Ezone(PyLayers):
 
         # display coverage region
         #plt.tripcolor(triang, cov.flatten(), shading='gouraud', cmap=plt.cm.jet)
-        #plt.figure(figsize=(10,10))
-        f,a = self.show(contour=False,bldg=True,height=False,coord='cartesian',extent=extent_c)
-        #tc = a.tripcolor(triang, Ltot.flatten(), shading='gouraud', cmap=plt.cm.jet,vmax=-50,vmin=-130)
-        tc = a.tripcolor(triang, w.flatten(), shading='gouraud', cmap=plt.cm.jet,vmax=-50,vmin=-130)
-        divider = make_axes_locatable(a)
-        cax = divider.append_axes("right", size="5%", pad=0.05)
+        #f,a = self.show(fig=f,ax=a,contour=False,bldg=True,height=False,coord='cartesian',extent=extent_c)
+        f,a,d = self.show(fig=f,ax=a,contour=False,bldg=True,height=False,coord='lonlat',extent=self.extent)
+        tc = a.tripcolor(triang, Ltot.flatten(), shading='gouraud', cmap=plt.cm.jet,vmax=-50,vmin=-130)
+        #tc = a.tripcolor(triang, w.flatten(), shading='gouraud', cmap=plt.cm.jet,vmax=-50,vmin=-130)
+        if kwargs['divider']==[]:
+            divider = make_axes_locatable(a)
+        else:
+            divider=kwargs['divider']
+        cax = divider.append_axes("left", size="5%", pad=0.5)
         cb = f.colorbar(tc,cax)
         cb.set_label('Loss(dB)')
         plt.axis('equal')
@@ -869,6 +882,7 @@ class Ezone(PyLayers):
                     'cmap':plt.cm.jet
                    }
 
+        divider = []
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]
@@ -898,7 +912,6 @@ class Ezone(PyLayers):
                 extent = kwargs['extent']
 
 
-        #
         # ploting buildings with collection of polygons
         #
 
@@ -985,7 +998,7 @@ class Ezone(PyLayers):
                             ax=ax)
 
 
-        return(fig,ax)
+        return(fig,ax,divider)
 
     def loadtmp(self,_fileh5='RennesFull.h5'):
         """ load an Ezone from hdf5 file
