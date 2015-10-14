@@ -18,7 +18,7 @@ class MIMO(object):
 
     Parameters
     ----------
-    H    : raw channel matrix in frequencey domain
+    H    : raw channel matrix in frequency domain
     Hcal : calibrated channel matrix in frequency domain
     hcal : channel matrix in time domain
 

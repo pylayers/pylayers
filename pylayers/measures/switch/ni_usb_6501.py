@@ -198,4 +198,6 @@ if __name__ == "__main__":
     #dev.write_port(0, 0b00000001)
     #dev.write_port(1, 0b10101010)
 
-    #print bin(dev.read_port(0))
+    print bin(dev.read_port(0))
+    #print bin(dev.read_port(1))
+    #print bin(dev.read_port(2))

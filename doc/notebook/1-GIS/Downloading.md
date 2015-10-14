@@ -39,9 +39,6 @@ An `Ezone` can be obtained from a point (longitude,Latitude)
 
 ```python
 >>> r=E.getdem()
-Download srtm file
-SRTMDownloader - server= dds.cr.usgs.gov, directory=srtm/version2_1/SRTM3.
-no aster file for this point
 ```
 
 ```python
@@ -55,9 +52,5 @@ no aster file for this point
 ```python
 >>> from IPython.core.display import HTML
 >>> 
->>> def css_styling():
-...     styles = open("../styles/custom.css", "r").read()
-...     return HTML(styles)
->>> css_styling()
-<IPython.core.display.HTML at 0x7f7207397690>
 ```
+

@@ -1,3 +1,5 @@
+# -*- coding:Utf-8 -*-
+
 import numpy as np
 import pdb
 
@@ -171,3 +173,104 @@ if __name__=='__main__':
     ud16 = eqt(lL,lL0)
     un8  = ent(lL,lL0)
     lLb  = dqt(ud16,lL0)
+
+
+def minsec2dec(old):
+    """ 
+    convert latlon from DMS (minute second) to DD (decimal)
+
+    Parameters
+    ----------
+
+    old : string 
+        format : DMS format
+
+    Example 
+    -------
+
+        >>> from pylayers.gis.gisutil import minsec2dec
+        >>> minsec2dec('50 03 59 N')
+         -50.06638888888889
+
+
+    """
+    direction = {'N':-1, 'S':1, 'E': -1, 'W':1}
+    new = old.replace(u'°',' ').replace('\'',' ').replace('"',' ')
+    new = new.split()
+    new_dir = new.pop()
+    return (int(new[0])+int(new[1])/60.0+int(new[2])/3600.0) * direction[new_dir]
+
+
+def distance_on_earth(lat1, long1, lat2, long2):
+    """
+    Compute great circle distance (the shortest distance over the earth’s surface)
+    between 2 points on earth: A(lat1,lon1) and B(lat2,lon2) 
+
+    (This is a John Cook code, thanks to him !)
+
+    Parameters
+    ---------
+
+    lat1 : float for  DD format | str for DMS format
+        latitude first point 
+    lat2 : float for  DD format | str for DMS format
+        latitude second point 
+    lon1 : float for  DD format | str for DMS format
+        longitude first point 
+    lon2 : float for  DD format | str for DMS format
+        longitude second point 
+
+    Return
+    ------
+
+    arc : float
+        length of the arc on a spherical earth
+
+
+    Reference
+    ---------
+
+    http://www.johndcook.com/blog/python_longitude_latitude/
+    http://www.johndcook.com/lat_long_details.html
+
+
+    """
+
+    if isinstance(lat1,str):
+        lat1 = minsec2dec(lat1)
+    if isinstance(lat2,str):
+        lat2 = minsec2dec(lat2)
+    if isinstance(long1,str):
+        long1 = minsec2dec(long1)
+    if isinstance(long2,str):
+        long2 = minsec2dec(long2)
+
+    R = 6371000 # earth radius in meter
+
+    # Convert latitude and longitude to 
+    # spherical coordinates in radians.
+    degrees_to_radians = np.pi/180.0
+         
+    # phi = 90 - latitude
+    phi1 = (90.0 - lat1)*degrees_to_radians
+    phi2 = (90.0 - lat2)*degrees_to_radians
+         
+    # theta = longitude
+    theta1 = long1*degrees_to_radians
+    theta2 = long2*degrees_to_radians
+         
+    # Compute spherical distance from spherical coordinates.
+         
+    # For two locations in spherical coordinates 
+    # (1, theta, phi) and (1, theta', phi')
+    # cosine( arc length ) = 
+    #    sin phi sin phi' cos(theta-theta') + cos phi cos phi'
+    # distance = rho * arc length
+     
+    cos = (np.sin(phi1)*np.sin(phi2)*np.cos(theta1 - theta2) + 
+           np.cos(phi1)*np.cos(phi2))
+    arc = np.arccos( cos )
+ 
+    # Remember to multiply arc by the radius of the earth 
+    # in your favorite set of units to get length.
+    return arc*R

@@ -785,7 +785,7 @@ def getbdg(fileosm,verbose=False):
     coords,nodes,ways,relation,m = osmparse(fileosm,typ='building',verbose=verbose)
     zone = []
     for w in ways.way:
-        zone.append(w.shp)
+        zone.append(ways.way[w].shp)
     return(zone)
 
 def buildingsparse(filename):

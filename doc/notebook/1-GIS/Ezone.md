@@ -61,13 +61,9 @@ This object contains the srtm DEM data, the aster data and a filtration of the `
 ```
 
 ```python
->>> z.show?
-```
-
-```python
->>> z.show(source='srtm',bldg=False,height=True,clim=[200,300],cmap=plt.cm.hot)
-(<matplotlib.figure.Figure at 0x7fd3374241d0>,
- <matplotlib.axes._subplots.AxesSubplot at 0x7fd337468690>)
+>>> z.show(source='srtm',bldg=False,height=True,clim=[0,30],cmap=plt.cm.hot)
+(<matplotlib.figure.Figure at 0x7f65c84c6350>,
+ <matplotlib.axes._subplots.AxesSubplot at 0x7f65c864dd10>)
 ```
 
 The `Ezone` object has a member extent which gives [lonmin,lonmax,latmin,latmax]
@@ -93,8 +89,8 @@ The aster DEM can also be shown.
 
 ```python
 >>> z.show(source='aster',bldg=False,clim=[0,320])
-(<matplotlib.figure.Figure at 0x7fd337110550>,
- <matplotlib.axes._subplots.AxesSubplot at 0x7fd330cf4fd0>)
+(<matplotlib.figure.Figure at 0x7f65c86884d0>,
+ <matplotlib.axes._subplots.AxesSubplot at 0x7f65c84d7250>)
 ```
 
 An earth zone has an attached dictionnary of buildings, which contains the data of all the set of building footprints of the city extracted out of open street map data. Below is shown an example for the city of Rennes in Brittany (France).
@@ -221,4 +217,8 @@ i-latitude  : 19 38
 
 ```python
 >>> a=z.cover(Ht=2,Hr=2,Rmax=10000)
+```
+
+```python
+
 ```

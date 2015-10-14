@@ -1,7 +1,10 @@
 # coding: utf-8
 
-# This notebook is an implementation from the paper ["Fast UTD Diffraction Coefficient Using Only One Suare Root"](http://onlinelibrary.wiley.com/doi/10.1002/mop.28298/pdf) from Jean Franois Legendre and Thierry Marsault.
-# $N$ est compris entre 0 et 1. 0 est la lame de coupeau et 1 est le demi-plan 
+# This notebook is an implementation from the paper ["Fast UTD Diffraction
+# Coefficient Using Only One Suare
+# Root"](http://onlinelibrary.wiley.com/doi/10.1002/mop.28298/pdf) from Jean
+# Francois Legendre and Thierry Marsault.
+# $N$ est compris entre 0 et 1. 0 est la lame de coupeau et 1 est le demi-plan
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -32,39 +35,42 @@ def diff(fGHz,phi0,phi,si,sd,N,beta):
     k     = 2*np.pi*fGHz/0.3
     alpha = N*np.sqrt(L*2*k)
     ps4   = np.pi/4
+    pi    = np.pi
 
 
-    xsi11 = (ps4+phi-phi0)/(2*N)
-    xsi12 = (ps4-phi+phi0)/(2*N)
-    xsi21 = (ps4-phi-phi0)/(2*N)
-    xsi22 = (phi+phi0-(2*N-1)*ps4)/(2*N)
+    xsi11 = (pi+phi-phi0)/(2*N)
+    xsi12 = (pi-phi+phi0)/(2*N)
+    xsi21 = (pi-phi-phi0)/(2*N)
+    xsi22 = (pi+phi0-(2*N-1)*ps4)/(2*N)
+    #xsi22 = (ps4+phi+phi0)/(2*N)
 
     c11m = np.where(xsi11<0)
-    c11p = np.where(xsi11>(ps4))
     xsi11[c11m] = xsi11[c11m]*(-1)
+    c11p = np.where(xsi11>ps4)
     xsi11[c11p] = xsi11[c11p]-ps4
 
     c12m = np.where(xsi12<0)
-    c12p = np.where(xsi12>(ps4))
     xsi12[c12m]=xsi12[c12m]*(-1)
+    c12p = np.where(xsi12>ps4)
     xsi12[c12p]=xsi12[c12p]-ps4
 
 
     c21m = np.where(xsi21<0)
-    c21p = np.where(xsi21>(ps4))
     xsi21[c21m]=xsi21[c21m]*(-1)
+    c21p = np.where(xsi21>ps4)
     xsi21[c21p]=xsi21[c21p]-ps4
 
 
     c22m = np.where(xsi22<0)
-    c22p = np.where(xsi22>(ps4))
     xsi22[c22m]=xsi22[c22m]*(-1)
+    c22p = np.where(xsi22>ps4)
     xsi22[c22p]=xsi22[c22p]-ps4
 
 
     sg11 = np.ones(np.shape(xsi11)[1:3])[np.newaxis,:,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
     sg11[c11m]=-sg11[c11m]
     sg11[c11p]=-sg11[c11p]
+
     y11 = alpha * np.sin(xsi11)
     cy11m = np.where(y11<0)
     y11[cy11m] = y11[cy11m]*(-1)
@@ -73,6 +79,7 @@ def diff(fGHz,phi0,phi,si,sd,N,beta):
     sg12 = np.ones(np.shape(xsi12)[1:3])[np.newaxis,:,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
     sg12[c12m]=-sg12[c12m]
     sg12[c12p]=-sg12[c12p]
+
     y12 = alpha * np.sin(xsi12)
     cy12m = np.where(y12<0)
     y12[cy12m] = y11[cy12m]*(-1)
@@ -81,6 +88,7 @@ def diff(fGHz,phi0,phi,si,sd,N,beta):
     sg21 = np.ones(np.shape(xsi21)[1:3])[np.newaxis,:,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
     sg21[c21m]=-sg21[c21m]
     sg21[c21p]=-sg21[c21p]
+
     y21 = alpha * np.sin(xsi21)
     cy21m = np.where(y21<0)
     y21[cy21m] = y11[cy21m]*(-1)
@@ -89,15 +97,17 @@ def diff(fGHz,phi0,phi,si,sd,N,beta):
     sg22 = np.ones(np.shape(xsi22)[1:3])[np.newaxis,:,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
     sg22[c22m]=-sg22[c22m]
     sg22[c22p]=-sg22[c22p]
+
     y22 = alpha * np.sin(xsi22)
     cy22m = np.where(y22<0)
     y22[cy22m] = y11[cy22m]*(-1)
     sg22[cy22m] = sg11[cy22m]*(-1)
 
+    pdb.set_trace()
 
     y11c = y11*y11
-    cinf11 = np.where(y11c<0.005)
-    csup11 = np.where(y11c>=0.005)
+    cinf11 = np.where(y11c<0.5)
+    csup11 = np.where(y11c>=0.5)
     yinf11 = y11[cinf11]
     ysup11 = y11[csup11]
     ginf11 = -0.5+0.39384228*yinf11*(1+1j)
@@ -106,11 +116,12 @@ def diff(fGHz,phi0,phi,si,sd,N,beta):
     g11 = np.zeros(np.shape(y11),dtype=complex)
     g11[cinf11]=ginf11
     g11[csup11]=gsup11
+
     g11 = g11*np.cos(xsi11)*sg11*(1+1j)
 
     y12c = y12*y12
-    cinf12 = np.where(y12c<0.005)
-    csup12 = np.where(y12c>=0.005)
+    cinf12 = np.where(y12c<0.5)
+    csup12 = np.where(y12c>=0.5)
     yinf12 = y12[cinf12]
     ysup12 = y12[csup12]
     ginf12 = -0.5+0.39384228*yinf12*(1+1j)
@@ -119,11 +130,12 @@ def diff(fGHz,phi0,phi,si,sd,N,beta):
     g12 = np.zeros(np.shape(y12),dtype=complex)
     g12[cinf12]=ginf12
     g12[csup12]=gsup12
+
     g12 = g12*np.cos(xsi12)*sg12*(1+1j)
 
     y21c = y21*y21
-    cinf21 = np.where(y21c<0.005)
-    csup21 = np.where(y21c>=0.005)
+    cinf21 = np.where(y21c<0.5)
+    csup21 = np.where(y21c>=0.5)
     yinf21 = y21[cinf21]
     ysup21 = y21[csup21]
     ginf21 = -0.5+0.39384228*yinf21*(1+1j)
@@ -132,11 +144,12 @@ def diff(fGHz,phi0,phi,si,sd,N,beta):
     g21 = np.zeros(np.shape(y21),dtype=complex)
     g21[cinf21]=ginf21
     g21[csup21]=gsup21
+
     g21 = g21*np.cos(xsi21)*sg21*(1+1j)
 
     y22c = y22*y22
-    cinf22 = np.where(y22c<0.005)
-    csup22 = np.where(y22c>=0.005)
+    cinf22 = np.where(y22c<0.5)
+    csup22 = np.where(y22c>=0.5)
     yinf22 = y22[cinf22]
     ysup22 = y22[csup22]
     ginf22 = -0.5+0.39384228*yinf22*(1+1j)
@@ -146,6 +159,7 @@ def diff(fGHz,phi0,phi,si,sd,N,beta):
     g22[cinf22]=ginf22
     g22[csup22]=gsup22
     g22 = g22*np.cos(xsi22)*sg22*(1+1j)
+    pdb.set_trace()
 
     return(g11,g12,g21,g22)
 
@@ -154,12 +168,12 @@ if __name__ == "__main__":
 
     fGHz = np.linspace(2.4,3.6,10)
     Nphi0 = 100
-    Nphi = 150
+    Nphi = 550
     Nsi = 150
     Nsd = 60
 
     fGHz = np.linspace(1,10,100)
-    phi0 = np.array([np.pi/2.])
+    phi0 = np.array([np.pi/4.])
     #phi0 = np.linspace(0,N*np.pi,Nphi0)
     N     = np.array([1.5])
     phi  = np.linspace(0.01,N[0]*np.pi,Nphi)
@@ -174,6 +188,7 @@ if __name__ == "__main__":
     g11,g12,g21,g22 = diff(fGHz,phi0,phi,si,sd,N,beta)
     D = g11+g12+g21+g22
     plt.plot(phi*180/np.pi,abs(D[0,0,:,0,0,0,0]))
+    plt.plot(phi*180/np.pi,abs(D[10,0,:,0,0,0,0]))
     #plt.plot(phi*180/np.pi,abs(g11[0,0,:,0,0,0,0]))
     #plt.plot(phi*180/np.pi,abs(g12[0,0,:,0,0,0,0]))
     #plt.plot(phi*180/np.pi,abs(g21[0,0,:,0,0,0,0]))
