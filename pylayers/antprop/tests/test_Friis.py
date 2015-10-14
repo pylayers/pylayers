@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import time
 import copy
 print "======================="
-print " start test_rays.py (Ray Tracing numpy) "
+print " start test_Friis.py (Ray Tracing numpy) "
 print "======================="
 S = Simul()
 filestr = 'defstr'
