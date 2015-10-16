@@ -130,7 +130,6 @@ class SCPI(PyLayers):
         return cmd
 
     def write(self, cmd):
-
         try:
             return self._write(cmd + b'\n')
         except IOError as e:
@@ -192,13 +191,13 @@ class SCPI(PyLayers):
             else:
                 raise e
 
-    def parS(self,param='S21',chan=1,cmd='get'):
+    def parS(self,param='S21',chan=1,tr=1,cmd='get'):
         """ set|get the measurement S parameter of a selected channel
 
         Parameters
         ----------
 
-        cmd   : selparam | setparam
+        cmd   : 'get'| 'set'
         param : string
             {'S11','S12','S21','S22'}
         chan : int
@@ -206,11 +205,13 @@ class SCPI(PyLayers):
 
         Examples
         --------
+
         >>> from pylayers.measures.vna.E5072A import *
         >>> vna = SCPI()
-        >>> vna
-        >>> vna.parS(param='S21',cmd='selparS') #Select S            21
-        >>>
+        Agilent Technologies,E5072A,MY51100293,A.01.04
+        <BLANKLINE>
+        >>> vna.parS(param='S21',cmd='set')
+        >>> vna.close()
 
 
         working
@@ -219,10 +220,10 @@ class SCPI(PyLayers):
         self.param = param
         self.chan  = chan
 
-        co = ":CALC"+str(chan)+":PAR:DEF"
+        #co = ":CALC"+str(chan)+":PAR:DEF"
+        co = ":CALC"+str(chan)+":PAR"+str(tr)+":DEF"
         com = co +' '+param
         com1 = com+"\n"
-        com2 = ":CALC"+str(chan)+":PAR "+param+"\n"
 
         if cmd == 'get':
             comg = co+'?\n'
@@ -230,11 +231,8 @@ class SCPI(PyLayers):
             #c = self.read(comg)
             #return(c)
 
-        if cmd=='selparS':
+        if cmd=='set':
             self.s.send(com1)
-
-        if cmd=='setparS':
-            self.s.send(com2)
 
 
     def reset(self):
@@ -246,15 +244,19 @@ class SCPI(PyLayers):
 
         >>> from pylayers.measures.vna.E5072A import *
         >>> vna = SCPI()
-        >>> vna.reset() #allows reset VNA
-        >>> vna
+        Agilent Technologies,E5072A,MY51100293,A.01.04
+        <BLANKLINE>
+        >>> vna.close()
 
         """
+
+        #self.s.send("CALC:PAR:DEL:ALL") #Deletes all measurements on the VNA
         self.s.send(":SYST:PRES\n")
 
-    #def trace(self,chan=1,ntrace=2,cmd='get'):
-    def trace(self,chan=1,param='S21',ntrace=2,cmd='get'):
-        """ get|set the  number of traces
+    def trace(self,chan=1,ntrace=1,cmd='get'):
+        """ allows get|set the  number of traces.
+            traces are a series of measured data points.
+            limits of traces : max nbr of win x max nbr of traces per window (24)
 
         Parameters
         ----------
@@ -266,21 +268,26 @@ class SCPI(PyLayers):
         Examples
         --------
 
-        >>> from pylayers.measures.vna.E5072A import *
-        >>> vna = SCPI()
+        >>> #from pylayers.measures.vna.E5072A import *
+        >>> #vna = SCPI()
+        Agilent Technologies,E5072A,MY51100293,A.01.04
+        <BLANKLINE>
+        >>> #vna.trace(chan=1,param='S21',ntrace=1,cmd='set')
+        >>> #vna.close()
 
 
         """
-        #com = ":CALC"+str(chan)+":PAR:COUN"
-        com = ":CALC"+str(chan)+":PAR!!!:COUN"
+        self.chan  = chan
+
+        #co = ":CALC"+str(chan)+":PAR"+str(tr)+":DEF"
+        com = ":CALC"+str(chan)+":PAR:COUN"
+
         if cmd == 'set':
             coms = com+'  '+str(ntrace)+"\n"
             self.s.send(coms)
         if cmd == 'get':
             comg = com+'?\n'
             self.s.send(comg)
-            #c = self.read(comg)
-            #return(c)
 
     def autoscale(self,win=1,tr=1):
         """ autoscale on window win trace tr
@@ -294,7 +301,7 @@ class SCPI(PyLayers):
         """
         com ="DISP:WIND"+str(win)+":TRAC"+str(tr)+":Y:SCAL:AUTO"
         self.write(com)
-
+    
 
     def points(self,value=1601,cmd='get',sens=1,echo=False):
         """ get|set  number of points
@@ -303,18 +310,17 @@ class SCPI(PyLayers):
         ----------
 
         sens : int
-        cmd  : get | set
+        cmd  : 'get' | 'set'
 
         Examples
         --------
 
         >>> from pylayers.measures.vna.E5072A import *
         >>> vna = SCPI()
-        >>> vna
-        >>> Nbr of freq points : 1601
+        Agilent Technologies,E5072A,MY51100293,A.01.04
+        <BLANKLINE>
         >>> vna.points(201,cmd='set')
-        >>> vna
-        >>> Nbr of freq points : 201
+        >>> vna.close()
 
 
         """
@@ -335,7 +341,6 @@ class SCPI(PyLayers):
                 print coms
             self.write(coms)
 
-    #def freq(self,sens=1,startGHz=1.8,stopGHz=2.2,cmd='get'):
     def freq(self,sens=1,fminGHz=1.8,fmaxGHz=2.2,cmd='get'):
         """ get | set frequency ramp
 
@@ -344,30 +349,23 @@ class SCPI(PyLayers):
 
         sens : 1
         fminGHz : frequency start (float)
-        fmaxGHz  : frequency stop  (float)
-        cmd      : 'get' | 'set'
+        fmaxGHz : frequency stop  (float)
+        cmd     : 'get' | 'set'
 
         Examples
         --------
 
         >>> from pylayers.measures.vna.E5072A import *
         >>> vna = SCPI()
-        >>> vna
-        >>> fmin (GHz)         :1.8
-            fmax (GHz)         :2.2
-            Bandwidth (GHz)    :
+        Agilent Technologies,E5072A,MY51100293,A.01.04
+        <BLANKLINE>
         >>> vna.freq(fminGHz=3.8,fmaxGHz=4.2,cmd='set')
-        >>> vna
-        >>> fmin (GHz)         :3.8
-            fmax (GHz)         :4.2
-            Bandwidth (GHz)    :
+        >>> vna.close()
 
         """
 
         if cmd=='get':
             com1 = ":FORM:DATA REAL"
-            #self.write(com1)
-            #self.s.send(com1) #pas bon du tout
             self.read(com1)
             com2 = ":SENS"+str(sens)+":FREQ:DATA?\n"
             com3 = self.read(com2)
@@ -382,8 +380,6 @@ class SCPI(PyLayers):
             com1 = ":SENS"+str(sens)+":FREQ:START "
             com2 = ":SENS"+str(sens)+":FREQ:STOP "
             self.fGHz = np.linspace(fminGHz,fmaxGHz,self.Nf)
-            #f1 = str(startGHz)+"e9\n"
-            #f2 = str(stopGHz)+"e9\n"
             f1 = str(fminGHz)+"e9\n"
             f2 = str(fmaxGHz)+"e9\n"
 
@@ -392,8 +388,7 @@ class SCPI(PyLayers):
             self.s.send(com2+f2)
 
     def getIdent(self):
-        """
-        get VNA Identification
+        """ get VNA Identification
         """
         self.s.send("*IDN?\n")
         try:
@@ -404,18 +399,19 @@ class SCPI(PyLayers):
             return ""
 
 
-    def getdata(self,chan=1,Nmeas=1):
-        """  getdata
+    def getdata(self,chan=1,Nmeas=10):
+        """ allows getdata from VNA
 
         Parameters
         ----------
         Nmeas : number of times of measures
-        chan : int
-            channel number
+        chan  : int
+               channel number
         """
 
         com = 'CALC'+str(chan)+':DATA:SDAT?'
         for k in  range(Nmeas):
+            tic = time.time()
             buff = ''
             while len(buff)<>(self.Nf*16+8):
                 buff = self.read(com)
@@ -427,10 +423,15 @@ class SCPI(PyLayers):
                 tH = np.vstack((tH,H[None,:]))
             except:
                 tH = H[None,:]
-                print tH.shape
+                #print tH.shape
+            #pdb.set_trace()
+            S21 = ch.Tchannel(x=self.fGHz,y=tH)
+            return S21
+            self.close()
+            #toc = time.time()
+            #t = toc-tic
+            #print "Time measurement (ms) :",t
 
-        S21 = ch.Tchannel(x=self.fGHz,y=tH)
-        return S21
 
 
     def avrg(self,sens=1,b='OFF',navrg=16,cmd='getavrg'):
@@ -451,17 +452,14 @@ class SCPI(PyLayers):
 
         >>> from pylayers.measures.vna.E5072A import *
         >>> vna = SCPI()
+        Agilent Technologies,E5072A,MY51100293,A.01.04
+        <BLANKLINE>
         >>> vna.reset()
-        >>> vna.freq(startGHz=2.8,stopGHz=3.2,cmd='set')
+        >>> vna.freq(fminGHz=2.8,fmaxGHz=3.2,cmd='set')
         >>> vna.avrg()
-        >>> '0' #Average is OFF
         >>> vna.avrg(b='ON',cmd='setavrg')
-        >>> ''
         >>> vna.avrg()
-        >>> '1' #Average is ON
         >>> vna.avrg(navrg=100,cmd='setavrg')
-        >>> vna
-        >>> Nbr of averages    : 100
 
 
         """
@@ -482,20 +480,14 @@ class SCPI(PyLayers):
         if cmd == 'setavrg':
             com = com1+"\n"
             self.s.send(com)
-            #c = self.read(com)
-            #return(c)
 
         if cmd == 'getnavrg':
             com = co2+"?\n"
             self.s.send(com)
-            #c = self.read(com)
-            #return(c)
 
         if cmd == 'setnavrg':
             com = com2+"\n"
             self.s.send(com)
-            #c = self.read(com)
-            #return(c)
 
 
     def ifband(self,sens=1,ifbHz=70000,cmd='get'):
@@ -512,11 +504,10 @@ class SCPI(PyLayers):
 
         >>> from pylayers.measures.vna.E5072A import *
         >>> vna = SCPI()
-        >>> vna
-        >>> IF Bandwidth (Hz) : 70000
-        >>> vna.ifband(ifBHz=300000,cmd='set')
-        >>> vna
-        >>> IF Bandwidth (Hz) : 300000
+        Agilent Technologies,E5072A,MY51100293,A.01.04
+        <BLANKLINE>
+        >>> vna.ifband(sens=1,ifbHz=70000,cmd='set')
+        >>> vna.close()
 
         """
         self.ifbHz   = ifbHz
@@ -527,13 +518,9 @@ class SCPI(PyLayers):
         if cmd == 'get':
             com = co+"?\n"
             self.s.send(com)
-            #c = self.read(com)
-            #return(c)
 
         if cmd == 'set':
             com = com+"\n"
-            #c = self.read(com)
-            #return(c)
             self.s.send(com)
 
 
