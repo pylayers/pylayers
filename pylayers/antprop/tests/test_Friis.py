@@ -16,6 +16,7 @@ S = Simul()
 filestr = 'defstr'
 S.layout(filestr+'.ini','matDB.ini','slabDB.ini')
 S.L.build()
+pdb.set_trace()
 tx=array([759,1114,1.0])
 Ctx = S.L.pt2cy(S.tx.position[:,0])
 Crx = S.L.pt2cy(S.rx.position[:,0])
