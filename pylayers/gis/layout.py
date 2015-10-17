@@ -5437,9 +5437,9 @@ class Layout(PyLayers):
         p2 = p1.difference(self.ma)
         boundary = geu.Polygon(p2)
         boundary.vnodes = self.ma.vnodes
-        self.Gt.add_node(-1,polyg=boundary)
-        self.Gt.add_node(-1, indoor = False)
-        self.Gt.pos[-1]=(self.ax[0],self.ax[2])
+        self.Gt.add_node(0,polyg=boundary)
+        self.Gt.add_node(0, indoor = False)
+        self.Gt.pos[0]=(self.ax[0],self.ax[2])
 
 
         #
@@ -5474,10 +5474,10 @@ class Layout(PyLayers):
         for cy in adjcyair:
             self.Gt.node[cy]['indoor'] = False
             self.Gt.node[cy]['isopen'] = True
-            self.Gt.add_edge(-1,cy)
+            self.Gt.add_edge(0,cy)
 
         for cy in adjcwall:
-            self.Gt.add_edge(-1,cy)
+            self.Gt.add_edge(0,cy)
 
         #
         #   11 -  Construct the list of interactions associated to each cycle

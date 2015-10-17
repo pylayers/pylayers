@@ -142,12 +142,27 @@ degree : degree of nodes
 >>> f,a=L.showG('s',nodes=True,slab=True,subseg=True,figsize=(10,10),labels=True)
 ```
 
+L.ax is  :  (xmin,xmax,ymin,ymax)
+
 ```python
->>> L.build('i')
+>>> L.ax
+(758.49, 768.516, 1111.9, 1115.963)
 ```
 
 ```python
+>>> L.build()
+```
 
+```python
+>>> L.ma
+(763.49,1115.931)
+(768.49,1115.963)
+(768.516,1111.964)
+(763.516,1111.932)
+(758.516,1111.9)
+(758.49,1115.9)
+
+vnodes : (-5 6 -4 7 -3 8 -2 9 -1 4 -6 5 )
 ```
 
 This Layout has 3 cycles. Negative index cycle are outdoor and positive index cycle are indoor. The list of diffraction point for indoor is in ldiffin and the list of diffraction points for outdoor diffraction is in ldiffout. These two listr are
@@ -226,9 +241,7 @@ This Layout has 3 cycles. Negative index cycle are outdoor and positive index cy
    (3, 2, 1),
    (1, 1),
    (1, 1, 2),
-   (1, 2, 1),
-   (-3,),
-   (-4,)],
+   (1, 2, 1)],
   'isopen': False,
   'polyg': (763.506,1113.432)
   (763.516,1111.932)
@@ -261,9 +274,7 @@ This Layout has 3 cycles. Negative index cycle are outdoor and positive index cy
    (3, 1, 2),
    (1, 2),
    (1, 2, 1),
-   (1, 1, 2),
-   (-1,),
-   (-6,)],
+   (1, 1, 2)],
   'isopen': False,
   'polyg': (763.506,1113.432)
   (763.516,1111.932)

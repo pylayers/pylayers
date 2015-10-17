@@ -2547,6 +2547,7 @@ class Signatures(PyLayers,dict):
                 lca.extend(self.L.dca[cy])
             except:
                 pass
+
         metasig = metasig + lca
         metasig = list(np.unique(np.array(metasig)))
 
@@ -2597,7 +2598,6 @@ class Signatures(PyLayers,dict):
             li = li + self.L.Gt.node[ms]['inter']
         li = list(np.unique(np.array(li)))
 
-        pdb.set_trace()
         dpos = {k:self.L.Gi.pos[k] for k in li}
 
         Gi = nx.subgraph(self.L.Gi,li)
