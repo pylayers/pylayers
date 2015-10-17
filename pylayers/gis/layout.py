@@ -50,7 +50,6 @@ Loading and Saving
     Layout.loadfur
     Layout.load
     Layout.loadstr
-    Layout.loadstr2
     Layout.savestr2
     Layout.save
     Layout.saveold
@@ -1982,13 +1981,6 @@ class Layout(PyLayers):
                 segId_1 SlabCode_1 wall_floor_ceil_1 prop_d_1 zmin_1 zmax_1
                 ...
                 segId_Nss SlabCode_Nss wall_floor_ceil_Nss prop_d_Nss zmin_Nss zmax_Nss
-
-            Examples
-            --------
-
-            >>> from pylayers.gis.layout import *
-            >>> L = Layout()
-            >>> L.loadstr2('defstr.str2')
 
         """
 
@@ -4729,6 +4721,7 @@ class Layout(PyLayers):
 
         Parameters
         ----------
+
         name :
         edlist : []
         alpha : float
@@ -5113,9 +5106,9 @@ class Layout(PyLayers):
                 print "Gt"
             self.buildGt()
             if convex:
-                #Make the layout convex in regard of the outddor
+                #Make the layout convex the outddor
                 self._convex_hull()
-                # #Ensure convexity of all cycles
+                # Ensure convexity of all cycles
                 self._convexify()
                 # # re-attach new cycles
                 # self.buildGt()
@@ -5430,12 +5423,12 @@ class Layout(PyLayers):
             else:
                 self.Gt.add_node(k, isopen=False)
         #
-        #    10 - add cycle 0 outside polygon
+        #    10 - add cycle <0 outside polygon
         #
         #   This shapely polygon has an interior ( TODO add hole vizualization
         #   in Polygon object)
         #
-        #    The cycle 0 is not indoor
+        #    Cycles <0 are not indoor
         #
 
         # build a poygon including all the layout + 5 meters
@@ -5444,13 +5437,13 @@ class Layout(PyLayers):
         p2 = p1.difference(self.ma)
         boundary = geu.Polygon(p2)
         boundary.vnodes = self.ma.vnodes
-        self.Gt.add_node(0,polyg=boundary)
-        self.Gt.add_node(0, indoor = False)
-        self.Gt.pos[0]=(self.ax[0],self.ax[2])
+        self.Gt.add_node(-1,polyg=boundary)
+        self.Gt.add_node(-1, indoor = False)
+        self.Gt.pos[-1]=(self.ax[0],self.ax[2])
 
 
         #
-        #   11 - Connect cycle 0 to each cycle connected to the layout
+        #   11 - Connect cycle -1 to each cycle connected to the layout
         #   boundary
         #
 
@@ -5481,10 +5474,10 @@ class Layout(PyLayers):
         for cy in adjcyair:
             self.Gt.node[cy]['indoor'] = False
             self.Gt.node[cy]['isopen'] = True
-            self.Gt.add_edge(0,cy)
+            self.Gt.add_edge(-1,cy)
 
         for cy in adjcwall:
-            self.Gt.add_edge(0,cy)
+            self.Gt.add_edge(-1,cy)
 
         #
         #   11 -  Construct the list of interactions associated to each cycle
@@ -5496,8 +5489,8 @@ class Layout(PyLayers):
         #   tuple (nseg,cy0,cy1) : Transmission from cy0 to cy1 through nseg
         #
         #   At that stage the diffraction points are not included
-        #   not enough information available. The diffraction point are not
-        #   known yet
+        #   not enough information available.
+        #   The diffraction points are not known yet
         #
         self._interlist()
 
@@ -5581,6 +5574,7 @@ class Layout(PyLayers):
         elif not isinstance(nodelist,list):
             nodelist=[nodelist]
 
+        # for all cycles k (node of Gt)
         for k in nodelist:
             #vnodes = self.Gt.node[k]['vnodes']
             vnodes = self.Gt.node[k]['polyg'].vnodes
@@ -6237,6 +6231,10 @@ class Layout(PyLayers):
         Notes
         -----
 
+        A cycle has the following boolean attributes
+
+        indoor
+        isopen
 
         """
 
@@ -6280,7 +6278,8 @@ class Layout(PyLayers):
                 #
                 # Handle diffraction point
                 #
-                if isopen:
+                #if isopen:
+                if indoor:
                     ndiffvalid = filter(lambda x :
                                         filter(lambda y : y in airwalls
                                              ,nx.neighbors(self.Gs,x)),ndiff)
@@ -6407,7 +6406,7 @@ class Layout(PyLayers):
                             else:
                                 if (nstr,cy) in self.Gi.nodes():
                                     li1 = [(nstr,cy)]
-                                else: 
+                                else:
                                     li1 =[]
                         else:
                             # D
@@ -6476,12 +6475,16 @@ class Layout(PyLayers):
 
 
 
-        # updating the list of interaction of a given cycle
+        # updating the list of interactions of a given cycle
         for c in self.Gt.node:
             vnodes = self.Gt.node[c]['polyg'].vnodes
-            indoor = self.Gt.node[c]['indoor']
-            idiff = map(lambda x: x,filter(lambda x : x in
-                                                self.ldiff,vnodes))
+            #indoor = self.Gt.node[c]['indoor']
+            if c >0:
+                idiff = map(lambda x: x,filter(lambda x : x in
+                                                self.ldiffin,vnodes))
+            if c <0:
+                idiff = map(lambda x: x,filter(lambda x : x in
+                                                self.ldiffout,vnodes))
             for k in idiff:
                 self.Gt.node[c]['inter']+= [(k,)]
 
@@ -6873,7 +6876,9 @@ class Layout(PyLayers):
         dse = {k:v for k,v in zip(segments,range(Ne))}
 
         edfilt = list(np.ravel(np.array(map(lambda x : [dse[x]-1,dse[x]],segfilt))))
-        # Warning edgelist is to be understood as edge of graph and not segments of layout
+
+        # edgelist is to be understood as edge of graph and not segments of layout
+
         fig,ax = self.showG('s',nodes=False,edgelist=edfilt)
 
         # display degree 1 nodes
@@ -6889,7 +6894,7 @@ class Layout(PyLayers):
                 node_size=kwargs['node_size'],
                 node_color='r')
 
-        # display degree 4 nodes 
+        # display degree 4 nodes
         if 4 in self.degree:
             ldeg4  = list(self.degree[4])
             fig,ax = self.showG('s',
@@ -7962,7 +7967,7 @@ class Layout(PyLayers):
 
         keys = self.Gr.node.keys()
         for cy in keys:
-            if cy!=0:
+            if cy>0:
                 lseg = self.Gr.node[cy]['cycle'].cycle
                 hasdoor = filter(lambda n : n in ldoors,lseg)
                 if len(hasdoor)>0:
@@ -7974,7 +7979,7 @@ class Layout(PyLayers):
         # Destroy edges which do not share a door
         for e in self.Gr.edges():
             keep = False
-            if (e[0]!=0) & (e[1]!=0):
+            if (e[0]>0) & (e[1]>0):
                 cy1 = self.Gr.node[e[0]]['cycle']
                 cy2 = self.Gr.node[e[1]]['cycle']
                 f,b = cy1.intersect(cy2)
@@ -9384,7 +9389,6 @@ class Layout(PyLayers):
 
 
 if __name__ == "__main__":
-    pass
     #plt.ion()
     doctest.testmod()
     #L = Layout('defstr3.ini')

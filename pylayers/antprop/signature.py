@@ -2485,6 +2485,7 @@ class Signatures(PyLayers,dict):
 
         """
 
+        # cycles on the LOS
         lcil=self.L.cycleinline(self.source,self.target)
 
         if len(lcil) <= 2:
@@ -2514,10 +2515,10 @@ class Signatures(PyLayers,dict):
         self.cutoff   = cutoff
         self.filename = self.L.filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
 
-        try:
-            self.L.dGi
-        except:
-            self.L.buildGi2()
+        #try:
+        #    self.L.dGi
+        #except:
+        #    self.L.buildGi2()
         # all the vnodes >0  from the room
         #
         #NroomTx = self.L.pt2ro(tx)
@@ -2556,15 +2557,17 @@ class Signatures(PyLayers,dict):
         #ndt1 = filter(lambda l: len(eval(l))>2,ndt) # Transmission
         #ndt2 = filter(lambda l: len(eval(l))<3,ndt) # Reflexion
 
-        lisT = filter(lambda l: len(eval(l))>2,lis) # Transmission
-        lisR = filter(lambda l: len(eval(l))<3,lis) # Reflexion
+        lisT = filter(lambda l: len(l)==3,lis) # Transmission
+        lisR = filter(lambda l: len(l)==2,lis) # Reflexion
+        lisD = filter(lambda l: len(l)==1,lis) # Diffraction
 
         # target
         # ndr1 = filter(lambda l: len(eval(l))>2,ndr) # Transmission
         # ndr2 = filter(lambda l: len(eval(l))<3,ndr) # Reflexion
 
-        litT = filter(lambda l: len(eval(l))>2,lit) # Transmission
-        litR = filter(lambda l: len(eval(l))<3,lit) # Reflexion
+        litT = filter(lambda l: len(l)==3,lit) # Transmission
+        litR = filter(lambda l: len(l)==2,lit) # Reflexion
+        litD = filter(lambda l: len(l)==1,lit) # Diffraction
 
         # tx,rx : attaching rule
         #
@@ -2581,22 +2584,20 @@ class Signatures(PyLayers,dict):
         #ndt1 = filter(lambda l: eval(l)[2]<>ncytx,ndt1)
         #ndr1 = filter(lambda l: eval(l)[1]<>ncyrx,ndr1)
 
-        lisT = filter(lambda l: eval(l)[2]<>self.source,lisT)
-        litT = filter(lambda l: eval(l)[1]<>self.target,litT)
+        lisT = filter(lambda l: l[2]<>self.source,lisT)
+        litT = filter(lambda l: l[1]<>self.target,litT)
 
         #ndt = ndt1 + ndt2
         #ndr = ndr1 + ndr2
         lis  = lisT + lisR
         lit  = litT + litR
 
-        #ntr = np.intersect1d(ndt, ndr)
-#        li = np.intersect1d(lis, lit)
-
         li = []
         for ms in metasig:
             li = li + self.L.Gt.node[ms]['inter']
         li = list(np.unique(np.array(li)))
 
+        pdb.set_trace()
         dpos = {k:self.L.Gi.pos[k] for k in li}
 
         Gi = nx.subgraph(self.L.Gi,li)
