@@ -3,6 +3,7 @@
 from serial import Serial
 import pdb
 import time
+import doctest
 import threading
 import numpy as np
 import matplotlib.pyplot as plt
@@ -14,9 +15,9 @@ def gettty():
 
     Examples
     --------
+
     >>> import  os
     >>> from pylayers.measures.parker import smparker
-    >>> port = getty()
 
     """
     import  os
@@ -261,12 +262,13 @@ class Axes(PyLayers):
                  _id=1,
                  name='x',
                  ser=Serial(port=gettty(),baudrate=9600,timeout=0.05),
-                 scale=12800,
+                 scale=1280000,
                  typ ='t'):
         """
 
         Parameters
         ----------
+
         _id  : axes id
         name : axes name
         ser  : serial port
@@ -276,9 +278,10 @@ class Axes(PyLayers):
 
         Examples
         --------
-        >>> X = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
-        >>> Y = Axes(2,'y',typ='t',scale=22800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
-        >>> R = Axes(3,'r',typ='r',scale=2111.111111111111,ser=Serial(port=port,baudrate=9600,timeout=0.05))
+        >>> from pylayers.measures.parker.smparker import *
+        >>> X = Axes(1,'x',typ='t',scale=1280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
+        >>> Y = Axes(2,'y',typ='t',scale=2280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
+        >>> R = Axes(3,'r',typ='r',scale=2111.111111111111,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
         """
         self.status = [0,0,0,0,
                        0,0,0,0,
@@ -317,6 +320,9 @@ class Axes(PyLayers):
         self.typ = typ
         self.lprofile=[]
         self.add_profile()
+        self.step()
+        self.velocity()
+        self.acceleration()
 
     def info(self):
         """gives informations about system variables of PARKER
@@ -325,8 +331,8 @@ class Axes(PyLayers):
         --------
 
         >>> from pylayers.measures.parker import smparker
-        >>> A = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
-        >>> A.info()
+        >>> A = Axes(1,'x',typ='t',scale=1280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
+        >>> st = A.info()
         """
         for k in self.dvar:
             st = self.com('R('+k+')')
@@ -350,6 +356,15 @@ class Axes(PyLayers):
             st = st + '---------------------\n'
             st1 = self.reg()
             st =  st + st1
+            if self.typ=='t':
+                st =  st + 'dist : '+str(self.dist)+' m\n'
+                st =  st + 'vel  : '+str(self.vel)+' rps\n'
+                st =  st + 'acc  : '+str(self.acc)+' rps2\n'
+            if self.typ=='r':
+                st =  st + 'ang (deg) : '+str(self.ang)+' m\n'
+                st =  st + 'vel  : '+str(self.vel)+' rps\n'
+                st =  st + 'acc  : '+str(self.acc)+' rps2\n'
+
         for k,p in enumerate(self.lprofile):
             st = st + '--------------------\n'
             st = st + ' Profile '+str(k+1)+ '\n'
@@ -380,7 +395,7 @@ class Axes(PyLayers):
         --------
 
         >>> from pylayers.measures.parker import smparker
-        >>> A = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
+        >>> A = Axes(1,'x',typ='t',scale=1280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
         >>> A.getvar('PA') #Get Position absolute
 
         """
@@ -412,14 +427,15 @@ class Axes(PyLayers):
 
         Examples
         --------
+
         >>> # Some suitable commands
         >>> from pylayers.measures.parker import smparker
-        >>> A = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
-        >>> A.com('ON') #Energized motor
-        >>> A.com('LIMITS(1,0,0)') #Disable limit +,limits normally open, mode 0 stop motion and abort prog
-        >>> A.com('V15') # Change velocity to 15
-        >>> A.com('AA15') # Change acceleration to 15
-        >>> A.com('AD15') # Change deceleration to 15
+        >>> A = Axes(1,'x',typ='t',scale=1280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
+        >>> st=A.com('ON') #Energized motor
+        >>> st=A.com('LIMITS(1,0,0)') #Disable limit +,limits normally open, mode 0 stop motion and abort prog
+        >>> st=A.com('V15') # Change velocity to 15
+        >>> st=A.com('AA15') # Change acceleration to 15
+        >>> st=A.com('AD15') # Change deceleration to 15
 
 
         """
@@ -499,7 +515,6 @@ class Axes(PyLayers):
         Examples
         --------
 
-
         """
 
         defaults = {'mode' :0,
@@ -527,7 +542,7 @@ class Axes(PyLayers):
                     vel = '+'+str(self.vel)
                 else:
                     vel = '-'+str(self.vel)
-                
+
                 cstr = 'HOME'+str(self.armed)+\
                               '('+self.edg+','+\
                               str(self.typ)+','+\
@@ -538,7 +553,6 @@ class Axes(PyLayers):
                 self.com(cstr)
 
             if cmd=='go':
-                #cstr = 'HOME1'
                 cstr = 'HOME'+str(self.armed)
                 self.com(cstr)
                 cstr = 'ARM'+str(self.armed)
@@ -547,13 +561,16 @@ class Axes(PyLayers):
                 #cstr = 'G'
                 self.com(cstr)
 
-        # no material origin available on z axisi(4) and rotation axis (3)
+        # no material origin available on z axis(4) and rotation axis (3)
         if self._id in [3,4]:
             if cmd=='set':
                 self.com('W(PA,0)')
             if cmd=='go':
+                # to come back to origin the offset is -PA converted in the
+                # proper scale
                 pa = -int(self.com('R(PA)')[1].replace('*','').replace('\n',''))
-                self.mv(pa/self.scale,vel=self.vel,acc=self.acc)
+                self.step(pa/self.scale)
+                self.go()
 
     def parsinfo(self,cmd='HOME'):
         """ allows get parsing informations.
@@ -809,7 +826,7 @@ class Axes(PyLayers):
         --------
 
         >>> from pylayers.measures.parker import smparker
-        >>> A = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
+        >>> A = Axes(1,'x',typ='t',scale=1280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
         >>> A.reset() #reset axis X
 
         """
@@ -857,8 +874,7 @@ class Axes(PyLayers):
 
         >>> # To check and parse the axis status
         >>> from pylayers.measures.parker import smparker
-        >>> port = getty()
-        >>> A = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
+        >>> A = Axes(1,'x',typ='t',scale=1280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
         >>> A.reg('ST')
 
         >>> from pylayers.measures.parker import smparker
@@ -891,8 +907,7 @@ class Axes(PyLayers):
 
         >>> # To check and parse the axis status
         >>> from pylayers.measures.parker import smparker
-        >>> port = getty()
-        >>> A = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
+        >>> A = Axes(1,'x',typ='t',scale=1280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
         >>> A.reg('ST')
         >>> #scans over axis 1 by given status
 
@@ -920,7 +935,99 @@ class Axes(PyLayers):
                         st = st + ' ' + Axes.ddrvflt[k*4+l+1]+'\n'
         return(st)
 
-    def mv(self,var=0,vel=10,acc=20):
+    def step(self,value=0.1,cmd='get'):
+        """  set/get distance
+
+        Parameters
+        ----------
+
+        value : int
+        cmd : string
+            {set | get}
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.parker import smparker
+        >>> A = Axes(1,'x',typ='t',scale=1280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
+        >>> A.velocity(value=10)
+        >>> A.velocity(cmd='get')
+
+        """
+        nstep = int(value*self.scale) #convert num per step
+        if cmd=='set':
+            scom = 'D'+str(nstep)   #set velocity
+            if self.typ=='t':
+                self.dist =  value
+            else:
+                self.ang = value
+
+            com   = self.com(scom)
+        if cmd=='get':
+            scom = 'D'   #get velocity
+            if self.typ=='t':
+                self.dist  = eval(self.com(scom)[1].replace('*',''))/(1.0*self.scale)
+            else:
+                self.ang  = eval(self.com(scom)[1].replace('*',''))/(1.0*self.scale)
+
+
+    def velocity(self,value=10,cmd='get'):
+        """  set/get velocity
+
+        Parameters
+        ----------
+
+        value : int
+        cmd : string
+            {set | get}
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.parker import smparker
+        >>> A = Axes(1,'x',typ='t',scale=1280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
+        >>> A.velocity(value=10)
+        >>> A.velocity(cmd='get')
+
+        """
+        if cmd=='set':
+            scom = 'V'+str(value)   #set velocity
+            self.vel =  value
+            com   = self.com(scom)
+        if cmd=='get':
+            scom = 'V'   #get velocity
+            self.vel  = eval(self.com(scom)[1].replace('*',''))
+
+
+    def acceleration(self,value=10,cmd='get'):
+        """  set/get acceleration
+
+        Parameters
+        ----------
+
+        value : int
+        cmd : string
+            {set | get}
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.parker import smparker
+        >>> A = Axes(1,'x',typ='t',scale=1280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
+        >>> A.velocity(value=10)
+        >>> A.velocity(cmd='get')
+
+        """
+        if cmd=='set':
+            scom = 'AA'+str(value)   #set velocity
+            self.acc =  value
+            com   = self.com(scom)
+        if cmd=='get':
+            scom = 'AA'   #get velocity
+            self.acc  = eval(self.com(scom)[1].replace('*',''))
+
+
+    def go(self):
         """ move axes in translation or rotation
 
         Parameters
@@ -934,34 +1041,14 @@ class Axes(PyLayers):
         --------
 
         >>> from pylayers.measures.parker import smparker
-        >>> A = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
-        >>> A.mv(10) # moves over 10cm on axis 1
-        >>> A.mv(45) # moves over 45° on axis 3
+        >>> A = Axes(1,'x',typ='t',scale=1280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
+        >>> R = Axes(3,'ang',typ='r',scale=2111.1111,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
+        >>> A.step(value=0.1,cmd='set')
+        >>> A.go() # moves over 10cm on axis 1
+        >>> R.go() # moves over 45° on axis 3
 
         """
-        nstep = int(var*self.scale) #convert num per step
-        scom1 = 'D'+str(nstep) #command
-        scom2 = 'V'+str(vel)   #set velocity
-        scom3 = 'AA'+str(acc)   #set acceleration of motion
-        #
-        #send commands
-        #
-        t1 = time.time()
-        com   = self.com(scom1)
-        t2 = time.time()
-        com   = self.com(scom2)
-        t3 = time.time()
-        com   = self.com(scom3)
-        #tic = time.time()
-        t4 = time.time()
         com = self.com('G')
-        t5  = time.time()
-        print t2-t1
-        print t3-t2
-        print t4-t3
-        print t5-t4
-        #toc = time.time()
-        #print  toc-tic
 
 
     def close(self):
@@ -991,11 +1078,11 @@ class Axes(PyLayers):
         return(st)
 
 class Scanner(PyLayers):
-    """This class handles the FACS (Four Axes Channel Scanner)
+    """ This class handles the FACS (Four Axes Channel Scanner)
 
     """
 
-    def __init__(self,port=gettty(),anchors={}):
+    def __init__(self,port=gettty(),anchors={},reset=True):
         """
         Parameters
         ----------
@@ -1017,9 +1104,9 @@ class Scanner(PyLayers):
         # phi current angle of the scanner
         #
         self.phi = 0
-        self.sx = 12800
-        self.sy = 22800
-        self.sz = 21111.1111111111
+        self.sx = 1280000
+        self.sy = 2280000
+        self.sz = 2111111.11111111
         self.sr = 2111.111111111111
 
         self.a  = ['',Axes(1,'x',self.ser,scale=self.sx,typ='t'),
@@ -1032,13 +1119,13 @@ class Scanner(PyLayers):
         #
         # Coordinate of Home Scanner Point in global frame
         if self.anchors=={}:
-            self.H = np.array([0,0,0.9])
+            self.H = np.array([0,0,0])
         else:
             pass
             #beware TBD from anchors
 
         # Coordinate of Array Scanner Point in home frame
-        self.A = np.array([0,0,0.15])
+        self.A = np.array([0,0,0])
         self.upd_pos(np.array([0,0,0]))
         self.ang =  0.
         # Limits activated on axes X and Y    (mask =0 )
@@ -1048,14 +1135,11 @@ class Scanner(PyLayers):
         self.a[3].limits(mask=3,typ=1,mode=1,cmd='set')
         self.a[4].limits(mask=3,typ=1,mode=1,cmd='set')
 
-        # Power ON
-        #self.a[1].com('ON')
-        #self.a[2].com('ON')
-        #self.a[3].com('ON')
-        #self.a[4].com('ON')
 
         self.home(cmd='set')
-        self.home(cmd='go',init=True)
+        self.home(cmd='go',init=False)
+        if reset:
+            self.reset()
 
 
     def __repr__(self):
@@ -1068,7 +1152,7 @@ class Scanner(PyLayers):
         st = st + 'Array frame : '+str(self.pA[0])+','\
                                     + str(self.pA[1])+',' \
                                     + str(self.pA[2])+'\n'
-        st =  st + 'Current angle : '+str(self.ang)+'\n'
+        st = st + 'Current angle : '+str(self.ang)+'\n'
         return(st)
 
 
@@ -1090,34 +1174,48 @@ class Scanner(PyLayers):
             self.p0=p0
             self.ang0=ang0
 
-    def home(self,cmd='set',init=False,vel=10):
+    def reset(self):
+        """ reset and enpower all axes
+        """
+        tic = time.time()
+        for k in range(1,len(self.a)):
+            com = self.a[k].reset()
+        toc = time.time()
+        print "time reset (s) :",toc-tic
+
+
+    def home(self,cmd='set',init=True,vel=10):
         """ allows a return home for 3 axes
 
         Parameters
         ----------
 
-        cmd
-        init
-        vel
-        frame
+        cmd   : set
+        init  : boolean (False)
+        vel   : velocity (10)
+        frame : landmark {'H'|'A'|'G'}
 
         """
-        lt = []
         for k in range(1,len(self.a)):
             if init:
                 if k in [3,4]:
                     cmd ='set'
-            lt.append(threading.Thread(name=str(k),target=self.a[k].home(cmd=cmd,vel=10)))
-        for k,t in enumerate(lt):
-            t.start()
+            self.a[k].home(cmd=cmd,vel=10)
         self.upd_pos(np.array([0,0,0]))
 
     def upd_pos(self,ptH):
+        """ update position
+
+        pH : corrdinate in Home frame
+        pA : coordinate in Array frame
+        pG : coordinate in Global Frame
+
+        """
         self.pH = ptH
         self.pA = self.pH - self.A
         self.pG = self.H + self.pH
 
-    def mvsc(self,pt=np.array([0.1,0.1,0]),at=0,frame='A',vel=20):
+    def mv(self,pt=np.array([0.1,0.1,0]),at=0,frame='A',vel=20):
         """ move to target point
 
         Parameters
@@ -1125,7 +1223,7 @@ class Scanner(PyLayers):
 
         pt : target position (pt=np.array([0,0,0]))
         at : target angle
-        frame : {'H'|'A'|'G'}
+        frame : {'G'|'H'|'A'}
 
         """
 
@@ -1143,10 +1241,22 @@ class Scanner(PyLayers):
         dy = vec[1]
         dz = vec[2]
         da = at - self.ang
-        self.a[1].mv(dx,vel=vel)
-        self.a[2].mv(dy,vel=vel)
-        self.a[4].mv(dz,vel=vel)
-        self.a[3].mv(da,vel=vel)
+        print self.a[1].dist
+        print dx,dy,dz,da
+
+        # move axis only if modification from previous move
+        if dx!=self.a[1].dist:
+            self.a[1].step(value=dx,cmd='set')
+            self.a[1].go()
+        if dx!=self.a[2].dist:
+            self.a[2].step(value=dy,cmd='set')
+            self.a[2].go()
+        if dx!=self.a[4].dist:
+            self.a[4].step(value=dz,cmd='set')
+            self.a[4].go()
+        if dx!=self.a[3].ang:
+            self.a[3].step(value=da,cmd='set')
+            self.a[3].go()
 
         # update new position
 
@@ -1170,8 +1280,9 @@ class Scanner(PyLayers):
         """
         for k in range(A.p.shape[1]):
             #self.mv(pt=A.p[:,k],vel=vel)
-            self.mvsc(pt=A.p[:,k],vel=vel)
-            print self.a[1].stationnary()
+            self.mv(pt=A.p[:,k],vel=vel)
+            #print self.a[1].stationnary()
+            #print self.a[1].getvar('MV')
             #while not self.a[1].stationnary():
                 #print " I am moving"
             #print "I am stationnary  now you can measure"
@@ -1189,7 +1300,8 @@ class Scanner(PyLayers):
 
 
 if __name__=="__main__":
-    S = Scanner()
+    doctest.testmod()
+    #S = Scanner()
     #vna =E()
 
     #S.a[axe]
@@ -1203,12 +1315,12 @@ if __name__=="__main__":
 
 
 #    port = gettty()
-#    X = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
-#    Y = Axes(2,'y',typ='t',scale=22800,ser=Serial(port=port,baudrate=9600,timeout=0.05))
+#    X = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
+#    Y = Axes(2,'y',typ='t',scale=22800,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
 #    X.limits(cmd='set',mask=0)
 #    Y.limits(cmd='set',mask=0)
-#    R = Axes(3,'r',typ='r',scale=2111.111111111111,ser=Serial(port=port,baudrate=9600,timeout=0.05))
-#    Z = Axes(4,'z',typ='t',scale=2111.111111111111,ser=Serial(port=port,baudrate=9600,timeout=0.05))
+#    R = Axes(3,'r',typ='r',scale=2111.111111111111,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
+#    Z = Axes(4,'z',typ='t',scale=2111.111111111111,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
 #    Z.limits(cmd='set',mask=3)
 #    R.limits(cmd='set',mask=3)
 #    # pass

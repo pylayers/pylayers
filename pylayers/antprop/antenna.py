@@ -1285,6 +1285,8 @@ class Antenna(Pattern):
 #
         if self.evaluated:
             st = st + '-----------------------\n'
+            st = st + '      evaluated        \n'
+            st = st + '-----------------------\n'
             st = st + "Ntheta : %d" % (self.nth) + "\n"
             st = st + "Nphi : %d" % (self.nph) + "\n"
 #                kwargs[k] = defaults[k]

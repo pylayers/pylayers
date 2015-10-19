@@ -56,7 +56,6 @@ SCPI Class
 class SCPI(PyLayers):
     PORT = 5025
     _chunk = 128
-    #_chunk = 256
     _verbose = False
     _timeout = 0.150
 
@@ -99,6 +98,7 @@ class SCPI(PyLayers):
         self.parS()
         self.avrg()
         self.ifband()
+        self.getdata()
 
     def __repr__(self):
         st = ''
@@ -115,6 +115,7 @@ class SCPI(PyLayers):
         st = st + "Avering            : " + self.b +'\n'
         st = st + "Nbr of averages    : " + str(self.navrg)+'\n'
         st = st + "IF Bandwidth (Hz)  : " + str(self.ifbHz)+'\n'
+        st = st + "Nbr of measures    : " + str(self.nmeas)+'\n'
         return(st)
 
     def _write(self, cmd):
@@ -261,9 +262,9 @@ class SCPI(PyLayers):
         Parameters
         ----------
 
-        chan : int
+        chan   : int
         ntrace : 2
-        cmd    : get|set
+        cmd    : 'get'|'set'
 
         Examples
         --------
@@ -301,7 +302,7 @@ class SCPI(PyLayers):
         """
         com ="DISP:WIND"+str(win)+":TRAC"+str(tr)+":Y:SCAL:AUTO"
         self.write(com)
-    
+
 
     def points(self,value=1601,cmd='get',sens=1,echo=False):
         """ get|set  number of points
@@ -347,7 +348,7 @@ class SCPI(PyLayers):
         Parameters
         ----------
 
-        sens : 1
+        sens    : 1
         fminGHz : frequency start (float)
         fmaxGHz : frequency stop  (float)
         cmd     : 'get' | 'set'
@@ -399,20 +400,43 @@ class SCPI(PyLayers):
             return ""
 
 
-    def getdata(self,chan=1,Nmeas=10):
+    def getdata(self,chan=1,Nmeas=10,fminGHz=1.8,fmaxGHz=2.2):
         """ allows getdata from VNA
 
         Parameters
         ----------
-        Nmeas : number of times of measures
-        chan  : int
-               channel number
+        Nmeas   : number of times of measures
+        chan    : int
+                  channel number
+        fminGHz : frequency start (float)
+        fmaxGHz : frequency stop  (float)
+        
+        Examples
+        --------
+
+        >>> from pylayers.measures.vna.E5072A import *
+        >>> import matplotlib.pyplot as plt
+        >>> import numpy as np
+        >>> vna = SCPI()
+        Agilent Technologies,E5072A,MY51100293,A.01.04
+        <BLANKLINE>
+        >>> vna.parS(param='S21',cmd='set')
+        >>> S21 = vna.getdata()
+        >>> #plt.plot(np.abs(S21.y)[0])
+        >>> vna.close() 
+
         """
 
+        self.nmeas    = Nmeas
+        self.fGHz[0]  = fminGHz
+        self.fGHz[-1] = fmaxGHz
+        f             = np.linspace(fminGHz,fmaxGHz,self.Nf)
+        
         com = 'CALC'+str(chan)+':DATA:SDAT?'
+        #tic = time.time()
         for k in  range(Nmeas):
-            tic = time.time()
             buff = ''
+            
             while len(buff)<>(self.Nf*16+8):
                 buff = self.read(com)
 
@@ -423,24 +447,20 @@ class SCPI(PyLayers):
                 tH = np.vstack((tH,H[None,:]))
             except:
                 tH = H[None,:]
-                #print tH.shape
-            #pdb.set_trace()
-            S21 = ch.Tchannel(x=self.fGHz,y=tH)
+            S21 = ch.Tchannel(x=f,y=tH)
             return S21
             self.close()
-            #toc = time.time()
-            #t = toc-tic
-            #print "Time measurement (ms) :",t
-
-
+        toc = time.time()
+        t = toc-tic
+        print "Time measurement (ms) :",t
 
     def avrg(self,sens=1,b='OFF',navrg=16,cmd='getavrg'):
         """ allows get|set the point averaging
 
         Parameters
         ----------
-        b      : boolean (ON/OFF)
-        cmd    : getavgr (0 average OFF
+        b        : boolean (ON/OFF)
+        cmd      : getavgr (0 average OFF
                           1 average ON)
                  setavgr
                  getnavgr (preset value = 16)
@@ -460,7 +480,7 @@ class SCPI(PyLayers):
         >>> vna.avrg(b='ON',cmd='setavrg')
         >>> vna.avrg()
         >>> vna.avrg(navrg=100,cmd='setavrg')
-
+        >>> vna.close()
 
         """
         self.b     = b
@@ -496,8 +516,8 @@ class SCPI(PyLayers):
         Parameters
         ----------
 
-        ifbHz  : IF Bandwidth (default : 70000Hz)
-        cmd     : get|set
+        ifbHz   : IF Bandwidth (default : 70000Hz)
+        cmd     : 'get'|'set'
 
         Examples
         --------
