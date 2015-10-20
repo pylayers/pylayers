@@ -189,34 +189,35 @@ This Layout has 3 cycles. Negative index cycle are outdoor and positive index cy
 
 ```python
 >>> L.Gt.node
-{-1: {'indoor': False,
-  'inter': [(6, -1),
-   (6, -1, 0),
-   (6, 0, -1),
-   (7, -1),
-   (7, -1, 0),
-   (7, 0, -1),
-   (8, -1),
-   (8, -1, 0),
-   (8, 0, -1),
-   (9, -1),
-   (9, -1, 0),
-   (9, 0, -1),
-   (4, -1),
-   (4, -1, 0),
-   (4, 0, -1),
-   (5, -1),
-   (5, -1, 0),
-   (5, 0, -1),
+{0: {'indoor': False,
+  'inter': [(6, 0),
+   (6, 0, 1),
+   (6, 1, 0),
+   (7, 0),
+   (7, 0, 1),
+   (7, 1, 0),
+   (8, 0),
+   (8, 0, 1),
+   (8, 1, 0),
+   (9, 0),
+   (9, 0, 2),
+   (9, 2, 0),
+   (4, 0),
+   (4, 0, 2),
+   (4, 2, 0),
+   (5, 0),
+   (5, 0, 2),
+   (5, 2, 0),
    (-4,),
    (-3,),
    (-1,),
    (-6,)],
+  'isopen': True,
   'polyg': (753.49,1106.9)
   (753.49,1120.963)
   (773.516,1120.963)
   (773.516,1106.9)
-
+  
   vnodes : (-5 6 -4 7 -3 8 -2 9 -1 4 -6 5 )},
  1: {'cycle': cycle nstr[-8  2 -2  8 -3  7 -4  6 -5  3 -7  1]
   point number 6
@@ -249,7 +250,7 @@ This Layout has 3 cycles. Negative index cycle are outdoor and positive index cy
   (768.49,1115.963)
   (763.49,1115.931)
   (763.5,1114.432)
-
+  
   vnodes : (-8 2 -2 8 -3 7 -4 6 -5 3 -7 1 )},
  2: {'cycle': cycle nstr[-8  2 -2  9 -1  4 -6  5 -5  3 -7  1]
   point number 6
@@ -282,7 +283,7 @@ This Layout has 3 cycles. Negative index cycle are outdoor and positive index cy
   (758.49,1115.9)
   (763.49,1115.931)
   (763.5,1114.432)
-
+  
   vnodes : (-8 2 -2 9 -1 4 -6 5 -5 3 -7 1 )}}
 ```
 
