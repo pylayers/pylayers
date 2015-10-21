@@ -653,7 +653,7 @@ class Rays(PyLayers,dict):
 
         return(d)
 
-    def to3D(self,L,H=3, N=1): 
+    def to3D(self,L,H=3, N=1):
         """ transform 2D ray to 3D ray
 
         Parameters
@@ -854,14 +854,14 @@ class Rays(PyLayers,dict):
                     # des points de rflexion ceil ou floor
                     #
                     # Afin de tenir compte du rayon et du groupe d'interaction
-                    # concern, il faut passer un tuple qui concatne la valeur
+                    # concerne, il faut passer un tuple qui concatene la valeur
                     # de l'indice d'interaction floor ou ceil et l'indice de
-                    # rayons du groupe associ (d'ou le zip)
+                    # rayons du groupe associe (d'ou le zip)
                     #
-                    # Cette squence d'instruction fixe le bug #133
+                    # Cette sequence d'instruction fixe le bug #133
                     #
-                    # Antrieurement il y avait une hypothse de succession
-                    # immediate d'un point 2D renseign.
+                    # Antrieurement il y avait une hypothese de succession
+                    # immediate d'un point 2D renseigne.
                     #
                     try:
                         iintm_f = map(lambda x : np.where( (siges[1,0:x[0],x[1]]<>4) & (siges[1,0:x[0],x[1]]<>5))[0][-1], zip(iint_f,iray_f))
