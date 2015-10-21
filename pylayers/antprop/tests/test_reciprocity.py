@@ -52,7 +52,7 @@ print "eval field ",tic-toc
 sc1 = C1.prop2tran()
 cir1 = sc1.applywavB(wav.sfg)
 #####
-###### puis dans l'autre 
+###### puis dans l'autre
 ######
 #####print "second rayon"
 r2d2 = r2d.reciprocal()

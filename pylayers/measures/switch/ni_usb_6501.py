@@ -194,7 +194,7 @@ if __name__ == "__main__":
 
     dev.set_io_mode(0b11111111, 0b11111111, 0b00000000)
 
-    #dev.write_port(0, 0b10111111)
+    dev.write_port(0, 0b10111111)
     #dev.write_port(0, 0b00000001)
     #dev.write_port(1, 0b10101010)
 

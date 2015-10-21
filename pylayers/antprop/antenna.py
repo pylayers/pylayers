@@ -501,6 +501,7 @@ class Pattern(PyLayers):
             theta = self.theta
             phi = self.phi
 
+        #pdb.set_trace()
         cx = self.S.Cx.s3
         cy = self.S.Cy.s3
         cz = self.S.Cz.s3
@@ -1283,6 +1284,8 @@ class Antenna(Pattern):
 #
 #
         if self.evaluated:
+            st = st + '-----------------------\n'
+            st = st + '      evaluated        \n'
             st = st + '-----------------------\n'
             st = st + "Ntheta : %d" % (self.nth) + "\n"
             st = st + "Nphi : %d" % (self.nph) + "\n"
@@ -2179,7 +2182,7 @@ class Antenna(Pattern):
         tag  = kwargs['tag']
         ilog = kwargs['ilog']
         txru = kwargs['txru']
-        
+
         po = kwargs['po']
         # T is an unitary matrix
         T  = kwargs['T']
@@ -2265,16 +2268,18 @@ class Antenna(Pattern):
 
         f = self.fGHz[k]
 
-        # 3 axis : nf x nth x nph
+        # 3 axis : nth x nph x nf
         if len(self.Ft.shape)==3:
             if typ == 'G':
-                V = self.sqG[:,:,k]
+                V = self.sqG[:, :,k]
+            if typ == 'Ft':
+                V = self.Ft[:, :,k]
+            if typ == 'Fp':
+                V = self.Fp[:, :,k]
             if typ == 'Ft':
                 V = self.Ft[:,:,k]
-            if typ == 'Fp':
-                V = self.Fp[:,:,k]
 
-        # 4 axis : nf x nth x nph x ntxru
+        # 4 axis : nth x nph x ntxru x nf
         if len(self.Ft.shape)==4:
             if typ == 'G':
                 V = self.sqG[:, :, txru,k]
@@ -2320,9 +2325,9 @@ class Antenna(Pattern):
 
         k : frequency index
 
-        typ = 'Gain'
-             = 'Ftheta'
-             = 'Fphi'
+        typ =  'Gain'
+            = 'Ftheta'
+            = 'Fphi'
 
         if col  -> color coded plot3D
         else    -> simple plot3D
@@ -2335,7 +2340,7 @@ class Antenna(Pattern):
         if typ == 'Gain':
             V = self.sqG[:, :,k]
         if typ == 'Ftheta':
-            V = self.Ft[:, :,k]
+            V = self.Ft[ :, :,k]
         if typ == 'Fphi':
             V = self.Fp[ :, :,k]
 
@@ -2344,7 +2349,7 @@ class Antenna(Pattern):
         Th = np.outer(self.theta, vp)
         Ph = np.outer(vt, self.phi)
 
-        #pdb.set_trace()
+        pdb.set_trace()
         X = abs(V) * np.cos(Ph) * np.sin(Th)
         Y = abs(V) * np.sin(Ph) * np.sin(Th)
         Z = abs(V) * np.cos(Th)

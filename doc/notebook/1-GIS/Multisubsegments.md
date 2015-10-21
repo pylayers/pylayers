@@ -5,6 +5,8 @@ This notebook illustrates a simple ray tracing simulation with diffeent material
 ```python
 >>> from pylayers.simul.link import *
 >>> from pylayers.antprop.rays import *
+>>> from pylayers.antprop.aarray import *
+>>> from pylayers.antprop.channel import *
 >>> from pylayers.gis.layout import *
 >>> from pylayers.antprop.signature import *
 >>> import pylayers.signal.bsignal as bs
@@ -12,7 +14,6 @@ This notebook illustrates a simple ray tracing simulation with diffeent material
 >>> from pylayers.simul.simulem import *
 >>> import matplotlib.pyplot as plt
 >>> %matplotlib inline
-WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
 ```
 
 Let start by loading a simple layout with 2 single rooms. The multi subsegment appears in the middle with the red vertical lines. Each subsegment is materialized by a  segment.
@@ -112,7 +113,7 @@ The $\mathcal{G}_s$ graph dictionnary has the following structure
   'name': 'WALL',
   'ncycles': [2, 0],
   'norm': array([ 0.00639987, -0.99997952,  0.        ]),
-  'offset': 10,
+  'offset': 0,
   'transition': False,
   'z': (0.0, 3.0)}}
 ```
@@ -120,7 +121,9 @@ The $\mathcal{G}_s$ graph dictionnary has the following structure
 We define now two points which are the termination of a radio link.
 
 ```python
->>> tx=np.array([759,1114,1.5])
+>>> #tx=np.array([759,1114,1.5])
+... #rx=np.array([767,1114,1.5])
+... tx=np.array([759,1114,1.5])
 >>> rx=np.array([767,1114,1.5])
 ```
 
@@ -130,8 +133,10 @@ We define now two points which are the termination of a radio link.
 >>> fGHz=np.linspace(1,11,100)
 >>> #Aa = Antenna('S1R1.vsh3')
 ... #Ab = Antenna('S1R1.vsh3')
-... Aa = Antenna('Gauss',fGHz=fGHz)
->>> Ab = Antenna('Gauss',fGHz=fGHz)
+... #Aa = Antenna('Gauss',fGHz=fGHz)
+... #Ab = Antenna('Gauss',fGHz=fGHz)
+... Aa = AntArray(N=[8,1,1],fGHz=fGHz)
+>>> Ab = AntArray(N=[4,1,1],fGHz=fGHz)
 >>> Lk = DLink(L=L,a=tx,b=rx,Aa=Aa,Ab=Ab,fGHz=np.linspace(1,11,100))
 structure saved in  defstr.str2
 structure saved in  defstr.ini
@@ -140,11 +145,22 @@ structure saved in  defstr.ini
 A link is the set of a layout and 2 termination points.
 
 ```python
->>> f,a=Lk.show()
+>>> Aa.plotG()
+(<matplotlib.figure.Figure at 0x7f84df7fdf90>,
+ <matplotlib.projections.polar.PolarAxes at 0x7f84df808290>)
+```
+
+```python
+>>> #f,a=Lk.show(rays=True)
+... f,a=Lk.show(rays=True)
 ```
 
 On the figure above, we can see the Tx and Rx each placed in a different room appart from a wall with a subsegement placed in the middle.
 Then for evaluating the radio link, simply type:
+
+```python
+
+```
 
 ```python
 >>> ak,tauk=Lk.eval(force=True,a=tx,b=rx,applywav=True)
@@ -152,51 +168,19 @@ checkh5
 Start Signatures
 algo 7
 Signatures'> from 2_1_3 saved
-Stop signature 0.428106069565
+Stop signature 0.0430910587311
 Start Rays
-Rays'> from 3_3_4 saved
-Stop rays 0.619699001312
-Ctilde'> from 3_4_0 saved
-Tchannel'> from 3_4_0_0_0_4_4 saved
-```
-
-```python
->>> Lk.ir
-TUsignal :  (12971,)  (145, 1, 1, 12971)
-```
-
-At that point the channel has been evaluated and all the data stored in an `hdf5` file
-
-## Link members
-
-The Signature of the radio channel is in `Lk.Si`, the 3D rays are in `Lk.R`, the propagation channel is in `Lk.C` and the transmission channel is in `Lk.H`
-
-```python
->>> Lk.R
-Rays3D
-----------
-1 / 1 : [0]
-2 / 6 : [1 2 3 4 5 6]
-3 / 18 : [ 7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24]
-4 / 37 : [25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49
- 50 51 52 53 54 55 56 57 58 59 60 61]
-5 / 45 : [ 62  63  64  65  66  67  68  69  70  71  72  73  74  75  76  77  78  79
-  80  81  82  83  84  85  86  87  88  89  90  91  92  93  94  95  96  97
-  98  99 100 101 102 103 104 105 106]
-6 / 32 : [107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124
- 125 126 127 128 129 130 131 132 133 134 135 136 137 138]
-7 / 6 : [139 140 141 142 143 144]
------
-ni : 674
-nl : 1493
+Rays'> from 3_2_3 saved
+Stop rays 0.462381839752
+Ctilde'> from 2_3_0 saved
 ```
 
 ```python
 >>> Lk.C
 Ctilde
 ---------
-(145, 100)
-Nray : 145
+(155, 100)
+Nray : 155
 fmin(GHz) : 1.0
 fmax(GHz): 11.0
 Nfreq : 100
@@ -251,20 +235,8 @@ array([  767. ,  1114. ,     1.5])
 >>> #Aa = Antenna('Omni',fGHz=fGHz)
 ... #Aa = Antenna('Omni',fGHz=fGHz)
 ... ak,tauk=Lk.eval(force=True)
+>>> plt.stem(Lk.H.taud,Lk.H.ak)
 >>> plt.stem(Lk.H.taud,Lk.H.ak[:,0,50])
-structure saved in  defstr.str2
-structure saved in  defstr.ini
-checkh5
-Start Signatures
-algo 7
-Signatures'> from 2_1_3 saved
-Stop signature 0.049017906189
-Start Rays
-Rays'> from 3_3_4 saved
-Stop rays 0.564988851547
-Ctilde'> from 3_4_0 saved
-Tchannel'> from 3_4_0_0_0_2_2 saved
-<Container object of 3 artists>
 ```
 
 ```python
@@ -274,13 +246,6 @@ Tchannel'> from 3_4_0_0_0_2_2 saved
 
 ```python
 >>> cirair = Lk.H.applywavB(wav.sf)
-```
-
-```python
->>> cirair.plot(typ=['v'],xmin=0,xmax=200)
-(<matplotlib.figure.Figure at 0x7fd38338dd50>,
- array([[<matplotlib.axes._subplots.AxesSubplot object at 0x7fd38338d6d0>]], dtype=object))
-```
 
 ```python
 >>> layer = ['PARTITION','PARTITION','PARTITION']
@@ -291,18 +256,6 @@ Tchannel'> from 3_4_0_0_0_2_2 saved
 >>> Lk.eval(force=True)
 >>> cirpart = Lk.H.applywavB(wav.sf)
 >>> cirpart.plot(typ=['v'],xmin=10,xmax=80)
-structure saved in  defstr.str2
-structure saved in  defstr.ini
-checkh5
-Start Signatures
-algo 7
-Signatures'> from 2_1_3 saved
-Stop signature 0.0490458011627
-Start Rays
-Rays'> from 3_3_4 saved
-Stop rays 0.551192998886
-Ctilde'> from 3_4_0 saved
-Tchannel'> from 3_4_0_0_0_2_2 saved
 ```
 
 ```python

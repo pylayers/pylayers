@@ -12,7 +12,6 @@ import pdb
 
 def diff(fGHz,phi0,phi,si,sd,N,beta):
     """
-
     axis 0 : fGHz
     axis 1 : phi0 (incident angle on face 0)
     axis 2 : phi  (diffraction from face 0 )
@@ -20,7 +19,6 @@ def diff(fGHz,phi0,phi,si,sd,N,beta):
     axis 4 : distance sd
     axis 5 : N
     axis 6 : beta
-
     """
 
     # MDA reshaping

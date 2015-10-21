@@ -1,4 +1,5 @@
 from SimPy.SimulationRT import Simulation
+#from simpy.simulation import *
 from pylayers.mobility.transit.Person import Person
 from pylayers.mobility.transit.World import world
 from pylayers.mobility.transit.SteeringBehavior import Seek, Separation, Containment, InterpenetrationConstraint, queue_steering_mind
