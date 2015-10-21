@@ -431,12 +431,12 @@ class SCPI(PyLayers):
         self.fGHz[0]  = fminGHz
         self.fGHz[-1] = fmaxGHz
         f             = np.linspace(fminGHz,fmaxGHz,self.Nf)
-        
+
         com = 'CALC'+str(chan)+':DATA:SDAT?'
         #tic = time.time()
         for k in  range(Nmeas):
             buff = ''
-            
+
             while len(buff)<>(self.Nf*16+8):
                 buff = self.read(com)
 

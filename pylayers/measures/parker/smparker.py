@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from pylayers.util.project import *
 from pylayers.antprop.aarray import *
+from pylayers.measures.vna.E5072A import *
+
 def gettty():
     """get tty and handles port conflicts
 
@@ -339,6 +341,8 @@ class Axes(PyLayers):
             print self.dvar[k],st[1].replace('\n','')
 
     def __repr__(self):
+        """
+        """
 
         st = ''
         st = st + '---------------------\n'
@@ -348,20 +352,32 @@ class Axes(PyLayers):
         st = st + 'scale : ' + str(self.scale) + '\n'
         st = st + 'typ : ' + str(self.typ) + '\n'
 
+        st1 = self.reg()
+        st =  st + st1
+
+        if self.typ=='t':
+            st =  st + 'dist : '+str(self.dist)+' m\n'
+            st =  st + 'vel  : '+str(self.vel)+' rps\n'
+            st =  st + 'acc  : '+str(self.acc)+' rps2\n'
+
+            if self.typ=='r':
+                st =  st + 'ang (deg) : '+str(self.ang)+' \n'
+                st =  st + 'vel  : '+str(self.vel)+' rps\n'
+                st =  st + 'acc  : '+str(self.acc)+' rps2\n'
         for k in enumerate(str(self._id)):
-        #for k in range(self._id):
             st = st + '---------------------\n'
             st = st + ' Status '+' '+'Axe '+str(k[0]+1)+ '\n'
-            #st = st + ' Status '+' '+'Axe '+ str(k+1)+ '\n'
             st = st + '---------------------\n'
             st1 = self.reg()
             st =  st + st1
+
             if self.typ=='t':
                 st =  st + 'dist : '+str(self.dist)+' m\n'
                 st =  st + 'vel  : '+str(self.vel)+' rps\n'
                 st =  st + 'acc  : '+str(self.acc)+' rps2\n'
+
             if self.typ=='r':
-                st =  st + 'ang (deg) : '+str(self.ang)+' m\n'
+                st =  st + 'ang (deg) : '+str(self.ang)+' \n'
                 st =  st + 'vel  : '+str(self.vel)+' rps\n'
                 st =  st + 'acc  : '+str(self.acc)+' rps2\n'
 
@@ -370,11 +386,6 @@ class Axes(PyLayers):
             st = st + ' Profile '+str(k+1)+ '\n'
             st = st + '--------------------\n'
             st  = st +  p.__repr__()
-        #for k in enumerate(str(self._id)):
-            #st = st + '---------------------\n'
-            #st = st + 'Info about motion '+' '+'Axe '+str(k[0]+1)+ '\n'
-            #st = st + '---------------------\n'
-            #st1 = self.reg()
 
         return(st)
 
@@ -511,6 +522,21 @@ class Axes(PyLayers):
         ----------
 
         cmd  : 'set','go'
+        mode : int
+            0 : The indexer positions the motor in the active window of the
+        switch (default setting)
+            1 : The motor is positioned to the required edge of the switch + or -
+            2 : The indexer is set to seek the nearest drive zero phase
+            position to improve homing repetability
+        vel :
+        acc :
+        edg :
+        typ : int
+            used to select the type of switch to be used for homing
+            1 : Home switch normally closed
+            0 : Home switch normally open (default)
+        armed
+
 
         Examples
         --------
@@ -518,8 +544,8 @@ class Axes(PyLayers):
         """
 
         defaults = {'mode' :0,
-                    'vel'  :10,
-                    'acc'  :20,
+                    'vel'  :15,
+                    'acc'  :15,
                     'edg'  :'+',
                     'typ'  :0,
                     'armed':1
@@ -529,33 +555,32 @@ class Axes(PyLayers):
             if k not in kwargs:
                 kwargs[k]=defaults[k]
 
-        self.mode  = kwargs['mode']
-        self.vel   = kwargs['vel']
-        self.acc   = kwargs['acc']
-        self.edg   = kwargs['edg']
-        self.typ   = kwargs['typ']
-        self.armed = kwargs['armed']
+        mode  = kwargs['mode']
+        vel   = kwargs['vel']
+        acc   = kwargs['acc']
+        edg   = kwargs['edg']
+        typ   = kwargs['typ']
+        armed = kwargs['armed']
 
         if self._id in [1,2]:
             if cmd=='set':
                 if self.vel>0:
-                    vel = '+'+str(self.vel)
+                    vel = '+'+str(vel)
                 else:
-                    vel = '-'+str(self.vel)
+                    vel = '-'+str(vel)
 
-                cstr = 'HOME'+str(self.armed)+\
-                              '('+self.edg+','+\
-                              str(self.typ)+','+\
+                cstr = 'HOME'+str(armed)+\
+                              '('+edg+','+\
+                              str(typ)+','+\
                               vel+','+\
-                              str(self.acc)+','+\
-                              str(self.mode)+')'
-                print cstr
+                              str(acc)+','+\
+                              str(mode)+')'
                 self.com(cstr)
 
             if cmd=='go':
-                cstr = 'HOME'+str(self.armed)
+                cstr = 'HOME'+str(armed)
                 self.com(cstr)
-                cstr = 'ARM'+str(self.armed)
+                cstr = 'ARM'+str(armed)
                 self.com(cstr)
                 cstr = 'GH'
                 #cstr = 'G'
@@ -569,7 +594,7 @@ class Axes(PyLayers):
                 # to come back to origin the offset is -PA converted in the
                 # proper scale
                 pa = -int(self.com('R(PA)')[1].replace('*','').replace('\n',''))
-                self.step(pa/self.scale)
+                self.step(value=pa/(1.0*self.scale),cmd='set')
                 self.go()
 
     def parsinfo(self,cmd='HOME'):
@@ -965,10 +990,11 @@ class Axes(PyLayers):
             com   = self.com(scom)
         if cmd=='get':
             scom = 'D'   #get velocity
+            rep =  self.com(scom)[1].replace('*','')
             if self.typ=='t':
-                self.dist  = eval(self.com(scom)[1].replace('*',''))/(1.0*self.scale)
+                self.dist  = eval(rep)/(1.0*self.scale)
             else:
-                self.ang  = eval(self.com(scom)[1].replace('*',''))/(1.0*self.scale)
+                self.ang  = eval(rep)/(1.0*self.scale)
 
 
     def velocity(self,value=10,cmd='get'):
@@ -1049,6 +1075,8 @@ class Axes(PyLayers):
 
         """
         com = self.com('G')
+        while not self.stationnary():
+            pass
 
 
     def close(self):
@@ -1082,7 +1110,7 @@ class Scanner(PyLayers):
 
     """
 
-    def __init__(self,port=gettty(),anchors={},reset=True):
+    def __init__(self,port=gettty(),anchors={},reset=True,vel=15,acc=15):
         """
         Parameters
         ----------
@@ -1104,9 +1132,22 @@ class Scanner(PyLayers):
         # phi current angle of the scanner
         #
         self.phi = 0
+        #
+        #  scale is expressed in step/m for translation axis 1,2,4
+        #  and in step/deg for rotation axis 3
+        #
+        #  alpha : m/tour
+        #  beta  : reduction
+        #  N     : step/tour
+        #  N/alpha  : step/m
+        #
+        #  Axis 1 : 0.003125 m/tr 1   4000 step/tr 1280000 step/m
+        #  Axis 2 : 0.005 m/tr  2.85  4000 step/tr 2280000 step/m
+        #  Axis 4 : 0.004 m/tr  1     4000 step/tr 1000000 step/m
+        #
         self.sx = 1280000
         self.sy = 2280000
-        self.sz = 2111111.11111111
+        self.sz = 1000000
         self.sr = 2111.111111111111
 
         self.a  = ['',Axes(1,'x',self.ser,scale=self.sx,typ='t'),
@@ -1125,39 +1166,79 @@ class Scanner(PyLayers):
             #beware TBD from anchors
 
         # Coordinate of Array Scanner Point in home frame
-        self.A = np.array([0,0,0])
+        self.A = np.array([0,0,0.1])
         self.upd_pos(np.array([0,0,0]))
         self.ang =  0.
         # Limits activated on axes X and Y    (mask =0 )
         # Limits desactivated on axes Z and R (mask =3 )
+        print "setting limits"
         self.a[1].limits(mask=0,typ=1,mode=1,cmd='set')
         self.a[2].limits(mask=0,typ=1,mode=1,cmd='set')
         self.a[3].limits(mask=3,typ=1,mode=1,cmd='set')
         self.a[4].limits(mask=3,typ=1,mode=1,cmd='set')
 
+        #print "reseting axes"
+        #if reset:
+        #    self.reset()
 
-        self.home(cmd='set')
-        self.home(cmd='go',init=False)
-        if reset:
-            self.reset()
+
+        print "setting step"
+        self.a[1].step(0,cmd='set')
+        self.a[2].step(0,cmd='set')
+        self.a[3].step(0,cmd='set')
+        self.a[4].step(0,cmd='set')
+
+        print "setting velocity"
+        self.a[1].velocity(vel,cmd='set')
+        self.a[2].velocity(vel,cmd='set')
+        self.a[3].velocity(vel,cmd='set')
+        self.a[4].velocity(vel,cmd='set')
+
+        print "setting acceleration"
+        self.a[1].acceleration(acc,cmd='set')
+        self.a[2].acceleration(acc,cmd='set')
+        self.a[3].acceleration(acc,cmd='set')
+        self.a[4].acceleration(acc,cmd='set')
+
+        #self.home(cmd='set')
+        #print "home"
+        #self.home(cmd='go',init=True)
 
 
     def __repr__(self):
-        st = 'Home frame : ' + str(self.pH[0])+','\
+        """
+        """
+
+        st = ''
+        st = st + '------------------------\n'
+        st = st + ' Parameters of Scan' + '\n'
+        st = st + '------------------------\n'
+        st = st + 'Home frame : ' + str(self.pH[0])+','\
                                     + str(self.pH[1])+',' \
                                     + str(self.pH[2])+'\n'
-        st = st +  'Global frame : '+str(self.pG[0])+','\
+        st = st + 'Global frame : '+str(self.pG[0])+','\
                                     + str(self.pG[1])+',' \
                                     + str(self.pG[2])+'\n'
         st = st + 'Array frame : '+str(self.pA[0])+','\
                                     + str(self.pA[1])+',' \
                                     + str(self.pA[2])+'\n'
         st = st + 'Current angle : '+str(self.ang)+'\n'
+
+
+        st = st + '------------\n'
+        st = st + 'x (d,v,a)  :'+ str(self.a[1].dist)+' '+str(self.a[1].vel)+' '+str(self.a[1].acc)+'\n'
+        st = st + 'y (d,v,a)  :'+ str(self.a[2].dist)+' '+str(self.a[2].vel)+' '+str(self.a[2].acc)+'\n'
+        st = st + 'z (d,v,a)  :'+ str(self.a[4].dist)+' '+str(self.a[4].vel)+' '+str(self.a[4].acc)+'\n'
+        st = st + '------------\n'
+        st = st + 'rot (a,w,w2) : '+ str(self.a[3].ang)+' ' +str(self.a[3].vel)+''+str(self.a[3].acc)+'\n'
+
         return(st)
 
 
 
     def check_pa(self):
+        """
+        """
         px = self.a[1].com('R(PA)')[1].replace('*','').replace('\n','')
         py = self.a[2].com('R(PA)')[1].replace('*','').replace('\n','')
         pz = self.a[4].com('R(PA)')[1].replace('*','').replace('\n','')
@@ -1203,19 +1284,28 @@ class Scanner(PyLayers):
             self.a[k].home(cmd=cmd,vel=10)
         self.upd_pos(np.array([0,0,0]))
 
-    def upd_pos(self,ptH):
+    def upd_pos(self,pH):
         """ update position
 
-        pH : corrdinate in Home frame
-        pA : coordinate in Array frame
-        pG : coordinate in Global Frame
+        Parameters
+        ----------
+
+        pH : current position in H frame
+
+        Returns
+        -------
+
+        self.pH : corrdinate in Home frame
+        self.pA : coordinate in Array frame
+        self.pG : coordinate in Global Frame
 
         """
-        self.pH = ptH
+
+        self.pH = pH
         self.pA = self.pH - self.A
         self.pG = self.H + self.pH
 
-    def mv(self,pt=np.array([0.1,0.1,0]),at=0,frame='A',vel=20):
+    def mv(self,pt=np.array([0.,0.,0]),at=0,frame='A',vel=20):
         """ move to target point
 
         Parameters
@@ -1224,42 +1314,57 @@ class Scanner(PyLayers):
         pt : target position (pt=np.array([0,0,0]))
         at : target angle
         frame : {'G'|'H'|'A'}
+            determine in which frame is expressed pt (default A)
 
         """
 
         # convert to home frame
-        if frame=='A':
+        # pt : target po
+        # ptH : target point in Home Frame
+        # self.A : [0,0,0.1]_H it means that the array origin is 10 cm above Home frame origin
+        # self.H : [10,10,1.5]_G is the position of origin of Home Frame scanner in Global frame
+        #
+        if frame=='A':  # pt expressed in A
             ptH = pt + self.A
-        if frame=='G':
+        if frame=='G':  # pt expressed in G
             ptH = pt + self.H
         if frame=='H':
-            #ptH = p0
-            ptH = pt
+            ptH = p0
+            #ptH = pt
+
+        # self.pH : current position in Home frame
+        # ptH     : target point in Home Frame
 
         vec = ptH-self.pH
         dx = vec[0]
         dy = vec[1]
         dz = vec[2]
         da = at - self.ang
-        print self.a[1].dist
-        print dx,dy,dz,da
+        #print "source : ",self.pH
+        #print "target : ",ptH
+        #print "dx,dy,dz,da : ",dx,dy,dz,da
+        #print "a1,a2,a4,a3:",self.a[1].dist,self.a[2].dist,self.a[4].dist,self.a[3].ang
+
 
         # move axis only if modification from previous move
-        if dx!=self.a[1].dist:
-            self.a[1].step(value=dx,cmd='set')
+        if dx!=0:
+            if dx!=self.a[1].dist:
+                self.a[1].step(value=dx,cmd='set')
             self.a[1].go()
-        if dx!=self.a[2].dist:
-            self.a[2].step(value=dy,cmd='set')
+        if dy!=0:
+            if dy!=self.a[2].dist:
+                self.a[2].step(value=dy,cmd='set')
             self.a[2].go()
-        if dx!=self.a[4].dist:
-            self.a[4].step(value=dz,cmd='set')
+        if dz!=0:
+            if dz!=self.a[4].dist:
+                self.a[4].step(value=dz,cmd='set')
             self.a[4].go()
-        if dx!=self.a[3].ang:
-            self.a[3].step(value=da,cmd='set')
+        if da!=0:
+            if da!=self.a[4].ang:
+                self.a[3].step(value=da,cmd='set')
             self.a[3].go()
 
         # update new position
-
         self.upd_pos(ptH)
 
         #Answers those questions:
@@ -1268,8 +1373,8 @@ class Scanner(PyLayers):
         #   + fabriquer les profils
         #   + Appliquer les profils
 
-    def array(self,A,vel=10):
-        """ Implement an Array
+    def meas(self,A,vel=10,Nmeas=1):
+        """ Measue over a set of point from AntArray
 
         Parameters
         ----------
@@ -1278,26 +1383,27 @@ class Scanner(PyLayers):
 
 
         """
-        for k in range(A.p.shape[1]):
-            #self.mv(pt=A.p[:,k],vel=vel)
+        vna = SCPI()
+        vna.parS(param='S21',cmd='set')
+        vna.freq(fminGHz=1.8,fmaxGHz=2.2,cmd='set')
+        vna.avrg(b='ON',navrg=900,cmd='set')
+        vna.points(value=201,cmd='set')
+        vna.ifband(ifbHz=100000,cmd='set')
+
+        Npoint = A.p.shape[1]
+        Nf = vna.Nf
+        Smeas = np.empty((Nmeas,Npoint,Nf),dtype=complex)
+        print Smeas.shape
+        for k in np.arange(A.p.shape[1]):
+            print k
+            print A.p[:,k]
+            # TODO
+            # find a rule to retrieve ix,iy,iz,ia from k
             self.mv(pt=A.p[:,k],vel=vel)
-            #print self.a[1].stationnary()
-            #print self.a[1].getvar('MV')
-            #while not self.a[1].stationnary():
-                #print " I am moving"
-            #print "I am stationnary  now you can measure"
-            # while in motion
-            #    pass
-            # data =vna.measure()
-            # thread store(data)
-    def meas(self):
-        pass
-
-
-
-        #array = ensemble de points
-        #This fonction contains a cloud of points + noton of scheduling
-
+            # Nmeas x Nf
+            S = vna.getdata(Nmeas=Nmeas)
+            Smeas[:,k,:]=S.y
+        return(Smeas)
 
 if __name__=="__main__":
     doctest.testmod()
