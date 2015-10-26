@@ -50,7 +50,6 @@ Loading and Saving
     Layout.loadfur
     Layout.load
     Layout.loadstr
-    Layout.loadstr2
     Layout.savestr2
     Layout.save
     Layout.saveold
@@ -1982,13 +1981,6 @@ class Layout(PyLayers):
                 segId_1 SlabCode_1 wall_floor_ceil_1 prop_d_1 zmin_1 zmax_1
                 ...
                 segId_Nss SlabCode_Nss wall_floor_ceil_Nss prop_d_Nss zmin_Nss zmax_Nss
-
-            Examples
-            --------
-
-            >>> from pylayers.gis.layout import *
-            >>> L = Layout()
-            >>> L.loadstr2('defstr.str2')
 
         """
 
@@ -4729,6 +4721,7 @@ class Layout(PyLayers):
 
         Parameters
         ----------
+
         name :
         edlist : []
         alpha : float
@@ -5113,9 +5106,9 @@ class Layout(PyLayers):
                 print "Gt"
             self.buildGt()
             if convex:
-                #Make the layout convex in regard of the outddor
+                #Make the layout convex the outddor
                 self._convex_hull()
-                # #Ensure convexity of all cycles
+                # Ensure convexity of all cycles
                 self._convexify()
                 # # re-attach new cycles
                 # self.buildGt()
@@ -5430,35 +5423,37 @@ class Layout(PyLayers):
             else:
                 self.Gt.add_node(k, isopen=False)
         #
-        #    10 - add cycle 0 outside polygon
+        #    10 - add cycle <0 outside polygon
         #
         #   This shapely polygon has an interior ( TODO add hole vizualization
         #   in Polygon object)
         #
-        #    The cycle 0 is not indoor
-        #
+        #    Cycles < 0 are outdoor
+        #    Cycles > 0 are indoor
+        #    Cycles = 0 exterior cycle (assumed outdoor)
 
-        # build a poygon including all the layout + 5 meters
+        # build a polygon including all the layout + 5 meters
         p1 = geu.Polygon(self.ax,delta=5)
         self.ma = self.mask()
         p2 = p1.difference(self.ma)
         boundary = geu.Polygon(p2)
         boundary.vnodes = self.ma.vnodes
+
         self.Gt.add_node(0,polyg=boundary)
-        self.Gt.add_node(0, indoor = False)
+        self.Gt.add_node(0,indoor=False,isopen=True)
         self.Gt.pos[0]=(self.ax[0],self.ax[2])
 
 
         #
-        #   11 - Connect cycle 0 to each cycle connected to the layout
+        #   11 - Connect cycle -1 to each cycle connected to the layout
         #   boundary
         #
 
-        # all segments of the building boundary
+        # all segments of the Layout boundary
         nseg = filter(lambda x : x >0 , boundary.vnodes)
-        # air segments of the building boundary
+        # air segments of the Layout boundary
         nsegair = filter(lambda x : x in self.name['AIR'],nseg)
-        # wall segments of the building boundary
+        # wall segments of the Layout boundary
         nsegwall = filter(lambda x : x not in self.name['AIR'],nseg)
 
         #
@@ -5496,8 +5491,8 @@ class Layout(PyLayers):
         #   tuple (nseg,cy0,cy1) : Transmission from cy0 to cy1 through nseg
         #
         #   At that stage the diffraction points are not included
-        #   not enough information available. The diffraction point are not
-        #   known yet
+        #   not enough information available.
+        #   The diffraction points are not known yet
         #
         self._interlist()
 
@@ -5581,6 +5576,7 @@ class Layout(PyLayers):
         elif not isinstance(nodelist,list):
             nodelist=[nodelist]
 
+        # for all cycles k (node of Gt)
         for k in nodelist:
             #vnodes = self.Gt.node[k]['vnodes']
             vnodes = self.Gt.node[k]['polyg'].vnodes
@@ -6237,6 +6233,10 @@ class Layout(PyLayers):
         Notes
         -----
 
+        A cycle has the following boolean attributes
+
+        indoor
+        isopen
 
         """
 
@@ -6247,73 +6247,71 @@ class Layout(PyLayers):
         self.dGv = {}  # dict of Gv graph
 
         for icycle in self.Gt.node:
-            if icycle >0:
-                #print "cycle : ",icycle
-                indoor = self.Gt.node[icycle]['indoor']
-                isopen = self.Gt.node[icycle]['isopen']
+            #print "cycle : ",icycle
+            #indoor = self.Gt.node[icycle]['indoor']
+            isopen = self.Gt.node[icycle]['isopen']
 
-                polyg = self.Gt.node[icycle]['polyg']
-                vnodes = polyg.vnodes
+            polyg = self.Gt.node[icycle]['polyg']
+            vnodes = polyg.vnodes
 
-                npt  = filter(lambda x : x<0,vnodes)
-                nseg = filter(lambda x : x>0,vnodes)
+            npt  = filter(lambda x : x<0,vnodes)
+            nseg = filter(lambda x : x>0,vnodes)
 
-                airwalls = filter(lambda x : x in self.name['AIR'],nseg)
-                if indoor:
-                    ndiff = filter(lambda x : x in self.ldiffin,npt)
-                else:
-                    ndiff = filter(lambda x : x in self.ldiffout,npt)
-                #
-                # Create a graph
-                #
-                Gv = nx.Graph()
-                #
-                # in convex case :
-                #    i)  all segments see all segments
-                #    ii) all non adjascent valid diffraction points see each other
-                #    iii) all valid diffraction points see non adjascent
-                #    segments
-                #
-                for nk in combinations(nseg, 2):
-                    Gv.add_edge(nk[0],nk[1])
+            airwalls = filter(lambda x : x in self.name['AIR'],nseg)
+            # indoor (cycles >0)
+            if icycle>0:
+                ndiff = filter(lambda x : x in self.ldiffin,npt)
+            # indoor (cycles <0)
+            if icycle<=0:
+                ndiff = filter(lambda x : x in self.ldiffout,npt)
+            #
+            # Create a graph
+            #
+            Gv = nx.Graph()
+            #
+            # in convex case :
+            #    i)  all segments see all segments
+            #    ii) all non adjascent valid diffraction points see each other
+            #    iii) all valid diffraction points see non adjascent
+            #    segments
+            #
+            for nk in combinations(nseg, 2):
+                Gv.add_edge(nk[0],nk[1])
 
-                #
-                # Handle diffraction point
-                #
-                if isopen:
-                    ndiffvalid = filter(lambda x :
-                                        filter(lambda y : y in airwalls
-                                             ,nx.neighbors(self.Gs,x)),ndiff)
-                    # non adjascent segments see valid diffraction point
-                    #print "diff valid",ndiffvalid
-                    for idiff in ndiffvalid:
-                        # segvalid : not adjascent segment
-                        segvalid = filter(lambda x : x not in
-                                          nx.neighbors(self.Gs,idiff),nseg)
-                        # idiff segment neighbors
-                        nsneigh = nx.neighbors(self.Gs,idiff)
-                        # nbidiff valid
-                        nsneigh =  filter(lambda x : x not in airwalls,nsneigh)
-                        # excluded diffraction points
-                        iptexcluded = reduce(lambda u,v:u+v,map(lambda x :
-                                           nx.neighbors(self.Gs,x),nsneigh))
-                        # pntvalid : not excluded points
-                        pntvalid = filter(lambda x : x not in iptexcluded,ndiff)
-                        for ns in segvalid:
-                            Gv.add_edge(idiff,ns)
+            #
+            # Handle diffraction point
+            #
+            #if isopen:
+            ndiffvalid = filter(lambda x :
+                                filter(lambda y : y in airwalls
+                                     ,nx.neighbors(self.Gs,x)),ndiff)
+            # non adjascent segments see valid diffraction point
+            #print "diff valid",ndiffvalid
+            for idiff in ndiffvalid:
+                # segvalid : not adjascent segment
+                segvalid = filter(lambda x : x not in
+                                  nx.neighbors(self.Gs,idiff),nseg)
+                # idiff segment neighbors
+                nsneigh = nx.neighbors(self.Gs,idiff)
+                # nbidiff valid
+                nsneigh =  filter(lambda x : x not in airwalls,nsneigh)
+                # excluded diffraction points
+                iptexcluded = reduce(lambda u,v:u+v,map(lambda x :
+                                   nx.neighbors(self.Gs,x),nsneigh))
+                # pntvalid : not excluded points
+                pntvalid = filter(lambda x : x not in iptexcluded,ndiff)
+                for ns in segvalid:
+                    Gv.add_edge(idiff,ns)
 
-                        for np in pntvalid:
-                            Gv.add_edge(idiff,np)
-                else:
-                    pass
-                    # outdoor case not implemented
+                for np in pntvalid:
+                    Gv.add_edge(idiff,np)
 
-                #
-                # Graph Gv composition
-                #
+            #
+            # Graph Gv composition
+            #
 
-                self.Gv  = nx.compose(self.Gv, Gv)
-                self.dGv[icycle] = Gv
+            self.Gv  = nx.compose(self.Gv, Gv)
+            self.dGv[icycle] = Gv
 
 
     def buildGi(self):
@@ -6407,7 +6405,7 @@ class Layout(PyLayers):
                             else:
                                 if (nstr,cy) in self.Gi.nodes():
                                     li1 = [(nstr,cy)]
-                                else: 
+                                else:
                                     li1 =[]
                         else:
                             # D
@@ -6476,12 +6474,16 @@ class Layout(PyLayers):
 
 
 
-        # updating the list of interaction of a given cycle
+        # updating the list of interactions of a given cycle
         for c in self.Gt.node:
             vnodes = self.Gt.node[c]['polyg'].vnodes
-            indoor = self.Gt.node[c]['indoor']
-            idiff = map(lambda x: x,filter(lambda x : x in
-                                                self.ldiff,vnodes))
+            #indoor = self.Gt.node[c]['indoor']
+            if c >0:
+                idiff = map(lambda x: x,filter(lambda x : x in
+                                                self.ldiffin,vnodes))
+            if c <=0:
+                idiff = map(lambda x: x,filter(lambda x : x in
+                                                self.ldiffout,vnodes))
             for k in idiff:
                 self.Gt.node[c]['inter']+= [(k,)]
 
@@ -6873,7 +6875,9 @@ class Layout(PyLayers):
         dse = {k:v for k,v in zip(segments,range(Ne))}
 
         edfilt = list(np.ravel(np.array(map(lambda x : [dse[x]-1,dse[x]],segfilt))))
-        # Warning edgelist is to be understood as edge of graph and not segments of layout
+
+        # edgelist is to be understood as edge of graph and not segments of layout
+
         fig,ax = self.showG('s',nodes=False,edgelist=edfilt)
 
         # display degree 1 nodes
@@ -6889,7 +6893,7 @@ class Layout(PyLayers):
                 node_size=kwargs['node_size'],
                 node_color='r')
 
-        # display degree 4 nodes 
+        # display degree 4 nodes
         if 4 in self.degree:
             ldeg4  = list(self.degree[4])
             fig,ax = self.showG('s',
@@ -7962,7 +7966,7 @@ class Layout(PyLayers):
 
         keys = self.Gr.node.keys()
         for cy in keys:
-            if cy!=0:
+            if cy>0:
                 lseg = self.Gr.node[cy]['cycle'].cycle
                 hasdoor = filter(lambda n : n in ldoors,lseg)
                 if len(hasdoor)>0:
@@ -7974,7 +7978,7 @@ class Layout(PyLayers):
         # Destroy edges which do not share a door
         for e in self.Gr.edges():
             keep = False
-            if (e[0]!=0) & (e[1]!=0):
+            if (e[0]>0) & (e[1]>0):
                 cy1 = self.Gr.node[e[0]]['cycle']
                 cy2 = self.Gr.node[e[1]]['cycle']
                 f,b = cy1.intersect(cy2)
@@ -9384,7 +9388,6 @@ class Layout(PyLayers):
 
 
 if __name__ == "__main__":
-    pass
     #plt.ion()
     doctest.testmod()
     #L = Layout('defstr3.ini')

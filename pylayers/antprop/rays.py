@@ -573,6 +573,7 @@ class Rays(PyLayers,dict):
 
         H : float
             ceil height (default 3m)
+            if H=0 only floor reflection is calculated (ootdoor case)
 
         N : int
             handle the number of mirror reflexions
@@ -594,6 +595,15 @@ class Rays(PyLayers,dict):
         >>> d[-1.5]
         array([ 0.55555556])
 
+        Notes
+        -----
+
+        d is a dictionnary whose keys are heights along the vertical from where
+        are emanating the reflected rays. Values of d are the parameterization
+        (0< () <1) along the ray where are situated the different reflection
+        points.
+
+
         """
         km = np.arange(-N+1, N+1, 1)
         kp = np.arange(-N, N+1, 1)
@@ -602,35 +612,39 @@ class Rays(PyLayers,dict):
         #
         ht = self.pTx[2]
         hr = self.pRx[2]
+        assert (hr<H or H==0),"mirror : receiver higher than ceil height"
+        assert (ht<H or H==0),"mirror : transmitter higher than ceil height"
 
         zkp = 2*kp*H + ht
         zkm = 2*km*H - ht
 
         d = {}
+        if H!=0:
+            for zm in zkm:
+                if zm < 0:
+                    bup = H
+                    pas = H
+                    km = int(np.ceil(zm/H))
+                else:
+                    bup = 0
+                    pas = -H
+                    km = int(np.floor(zm/H))
+                thrm = np.arange(km*H, bup, pas)
+                d[zm] = abs(thrm-zm)/abs(hr-zm)
 
-        for zm in zkm:
-            if zm < 0:
-                bup = H
-                pas = H
-                km = int(np.ceil(zm/H))
-            else:
-                bup = 0
-                pas = -H
-                km = int(np.floor(zm/H))
-            thrm = np.arange(km*H, bup, pas)
-            d[zm] = abs(thrm-zm)/abs(hr-zm)
-
-        for zp in zkp:
-            if zp < 0:
-                bup = H
-                pas = H
-                kp = int(np.ceil(zp/H))
-            else:
-                bup = 0
-                pas = -H
-                kp = int(np.floor(zp/H))
-            thrp = np.arange(kp*H, bup, pas)
-            d[zp] = abs(thrp-zp)/abs(hr-zp)
+            for zp in zkp:
+                if zp < 0:
+                    bup = H
+                    pas = H
+                    kp = int(np.ceil(zp/H))
+                else:
+                    bup = 0
+                    pas = -H
+                    kp = int(np.floor(zp/H))
+                thrp = np.arange(kp*H, bup, pas)
+                d[zp] = abs(thrp-zp)/abs(hr-zp)
+        elif H==0:
+            d[-ht] = np.array([ht/(ht+hr)])
 
             # print "zp",zp
             # print "kp",kp
@@ -840,14 +854,14 @@ class Rays(PyLayers,dict):
                     # des points de rflexion ceil ou floor
                     #
                     # Afin de tenir compte du rayon et du groupe d'interaction
-                    # concern, il faut passer un tuple qui concatne la valeur
+                    # concerne, il faut passer un tuple qui concatene la valeur
                     # de l'indice d'interaction floor ou ceil et l'indice de
-                    # rayons du groupe associ (d'ou le zip)
+                    # rayons du groupe associe (d'ou le zip)
                     #
-                    # Cette squence d'instruction fixe le bug #133
+                    # Cette sequence d'instruction fixe le bug #133
                     #
-                    # Antrieurement il y avait une hypothse de succession
-                    # immediate d'un point 2D renseign.
+                    # Antrieurement il y avait une hypothese de succession
+                    # immediate d'un point 2D renseigne.
                     #
                     try:
                         iintm_f = map(lambda x : np.where( (siges[1,0:x[0],x[1]]<>4) & (siges[1,0:x[0],x[1]]<>5))[0][-1], zip(iint_f,iray_f))

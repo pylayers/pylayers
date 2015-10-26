@@ -7,6 +7,10 @@ import os
 import smopy
 from cartopy import config
 import cartopy.crs as ccrs
+print '------------------'
+print 'gis/test/test_cover.py'
+print '------------------'
+
 fig = plt.figure(figsize=(12,12))
 white = np.zeros((10,10))
 ax = fig.add_subplot(111)
@@ -25,7 +29,7 @@ print "lat,lon ES",lat1,lon1
 
 #mp = smopy.Map((lat1,lon0,lat0,lon1),z=zoom)
 mp = smopy.Map((48,-2,49,-1),z=zoom)
-##f,a = z.show(alpha=0.3)
+f,a,divider = z.show(alpha=0.7)
 box_tile = mp.box_tile
 print box_tile
 L_ll,l_ll=smopy.num2deg(box_tile[0],box_tile[1]+1,zoom)
@@ -34,11 +38,11 @@ extent_true = np.array((l_ll,l_ur,L_ll,L_ur))
 print extent_true
 #print extent_true
 ##print z.extent
-f,a = z.show(fig=fig,ax=ax,alpha=0.4)
-#f,a=plt.subplots(1,1)
+#f,a = z.show(fig=fig,ax=ax,alpha=0.4)
+##f,a=plt.subplots(1,1)
 im1 = a.imshow(mp.img,extent=extent_true,alpha=0.6)
-im2 = a.imshow(white,extent=(-2.2,-0.9,47.9,49.1),alpha=0)
-a.plot(p[1],p[0],'ob')
+#im2 = a.imshow(white,extent=(-2.2,-0.9,47.9,49.1),alpha=0)
+#a.plot(p[1],p[0],'ob')
 ###mp.box_tile=(0,0,73000,111000)
 ###mp.h=73000
 ###mp.w=111000
@@ -50,5 +54,5 @@ a.plot(p[1],p[0],'ob')
 ###z.extent_c=(0,1024,0,1280)
 ###z.extent_c=(506,509,351,355)
 ###print z.extent_c
-a = z.cover(Ht=2,Hr=2,Rmax=10000)
+a = z.cover(divider=divider,pc=(11000,45000),fig=f,ax=a,Ht=2,Hr=2,Rmax=10000)
 ##
