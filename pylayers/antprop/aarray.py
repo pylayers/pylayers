@@ -242,6 +242,16 @@ class AntArray(Array,ant.Antenna):
          st = st + ant.Antenna.__repr__(self)
          return(st)
 
+def ktoxyz(ik,Nx=10,Ny=11):
+    iz = ik/(Nx*Ny)
+    iy = (ik-iz*Nx*Ny)/Nx
+    ix = (ik-iz*Nx*Ny-iy*Nx)
+    return(iz,iy,ix)
+def xyztok(iz,iy,ix,Nx=10,Ny=11):
+    ik = iz*Nx*Ny+iy*Nx+ix
+    return(ik)
+
+
 if __name__=='__main__':
     doctest.testmod()
 #

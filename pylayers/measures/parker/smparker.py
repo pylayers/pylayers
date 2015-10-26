@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from pylayers.util.project import *
 from pylayers.antprop.aarray import *
+from pylayers.measures.exploith5 import *
 from pylayers.measures.vna.E5072A import *
 
 def gettty():
@@ -1370,7 +1371,14 @@ class Scanner(PyLayers):
         #   + fabriquer les profils
         #   + Appliquer les profils
 
-    def meash5(self,A,_fileh5,vel=15,Nmeas=1):
+    def meash5(self,
+               A,
+               _fileh5='sdata.h5',
+               ical=1,
+               vel=15,
+               Nmeas=1,
+               comment='',
+               author=''):
         """ Measure over a set of point from AntArray and store in h5
 
         Parameters
@@ -1386,24 +1394,79 @@ class Scanner(PyLayers):
 
 
         """
+
+        # load the file containing the calibration data
+        Dh5 = mesh5(_fileh5)
+        Dh5.open(mode='r')
+        Dh5.saveini(ical=ical)
+        Dh5.close()
+        exp = 'Nf = Dh5.dcal'+str(ical)+"['Nf']"
+        exec(exp)
+        # initialization of vna
         vna = SCPI()
         vna.load_config()
-        fileh5 = pyu.getlong(_fileh5,pstruc['DIRMES'])
-        f = open(fileh5,"r")
 
         Npoint = A.p.shape[1]
+        laxes = []
+        if A.N[0]!=1:
+            laxes.append('x')
+        if A.N[1]!=1:
+            laxes.append('y')
+        if A.N[2]!=1:
+            laxes.append('z')
+        lN =  [ A.N[k] for  k  in range(3) if A.N[k]!=1 ] 
         Nf = vna.Nf
-        Smeas = np.empty((Nmeas,Npoint,Nf),dtype=complex)
-        print Smeas.shape
+
+        Dh5.open('a')
+        try:
+            ldataset = Dh5.f.keys()
+        except:
+            ldataset = []
+        lmes = [ldataset[k] for  k in range(len(ldataset))  if 'mes' in ldataset[k]]
+        mesname = 'mes'+str(len(lmes)+1)
+
+        if  laxes==['x']:
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf),dtype=np.complex64)
+        if  laxes==['y']:
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf),dtype=np.complex64)
+        if  laxes==['z']:
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,ln[0],Nf),dtype=np.complex64)
+        if  laxes==['x','y']:
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,ln[0],ln[1],Nf),dtype=np.complex64)
+        if  laxes==['x','z']:
+            mes =  Dh5.f.create_dataset(mesname,(Nmeas,ln[0],ln[1],Nf),dtype=np.complex64)
+        if  laxes==['y','z']:
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,ln[0],ln[1],Nf),dtype=np.complex64)
+        if  laxes==['x','y','z']:
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,ln[0],ln[1],ln[2],Nf),dtype=np.complex64)
+        mes.attrs['time']=time.ctime()
+        mes.attrs['author']=author
+        mes.attrs['comment']=comment
+        mes.attrs['axes'] = laxes
+        #mes.attrs['min'] = lmin
+        #mes.attrs['max'] = lmax
+        mes.attrs['Nmeas'] = Nmeas
+
         for k in np.arange(A.p.shape[1]):
-            print k
-            print A.p[:,k]
-            # find a rule to retrieve ix,iy,iz,ia from k
             self.mv(pt=A.p[:,k],vel=vel)
-            # Nmeas x Nf
             S = vna.getdata(Nmeas=Nmeas)
-            Smeas[:,k,:]=S.y
-        return(Smeas)
+            if  laxes==['x']:
+                mes[:,k,:]=S
+            if  laxes==['y']:
+                mes[:,k,:]=S
+            if  laxes==['z']:
+                mes[:,k,:]=S
+            if  laxes==['x','y']:
+                ix,iy = ktoxyz(k,Nx=l)
+                mes[:,ix,iy,:]=S
+            if  laxes==['x','z']:
+                mes[:,ix,iz,:]=S
+            if  laxes==['y','z']:
+                mes[:,iy,iz,:]=S
+            if  laxes==['x','y','z']:
+                mes[:,ix,iy,iz,:]=S
+
+        Dh5.close()
 
     def meas(self,A,vel=10,Nmeas=1):
         """ Measure over a set of point from AntArray

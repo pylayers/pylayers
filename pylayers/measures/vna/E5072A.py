@@ -96,7 +96,7 @@ class SCPI(PyLayers):
                 raise e
 
         self.getIdent()
-        #print self.ident
+        print self.ident
         #assert('E5072A' in self.ident), "E5072A not responding"
         self.points()
         self.freq()
@@ -405,8 +405,49 @@ class SCPI(PyLayers):
             return ""
 
 
-    def getdata(self,chan=1,Nmeas=10,fminGHz=1.8,fmaxGHz=2.2):
-        """ allows getdata from VNA
+    def getdata(self,chan=1,Nmeas=10):
+        """ getdata from VNA
+
+        Parameters
+        ----------
+        Nmeas   : number of times of measures
+        chan    : int
+                  channel number
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.vna.E5072A import *
+        >>> import matplotlib.pyplot as plt
+        >>> import numpy as np
+        >>> vna = SCPI()
+        Agilent Technologies,E5072A,MY51100293,A.01.04
+        <BLANKLINE>
+        >>> vna.parS(param='S21',cmd='set')
+        >>> S21 = vna.getdata()
+        >>> vna.close()
+
+        """
+
+        self.nmeas    = Nmeas
+        com = 'CALC'+str(chan)+':DATA:SDAT?'
+        for k in  range(Nmeas):
+            buff = ''
+
+            while len(buff)<>(self.Nf*16+8):
+                buff = self.read(com)
+
+            S = np.frombuffer(buff[8:self.Nf*16+8],dtype='>f8')
+            Y = S.reshape(self.Nf,2)
+            H = Y[:,0]+1j*Y[:,1]
+            try:
+                tH = np.vstack((tH,H[None,:]))
+            except:
+                tH = H[None,:]
+        return tH
+
+    def getchan(self,chan=1,Nmeas=10,fminGHz=1.8,fmaxGHz=2.2):
+        """ get a Tchannel from VNA
 
         Parameters
         ----------
@@ -452,9 +493,8 @@ class SCPI(PyLayers):
                 tH = np.vstack((tH,H[None,:]))
             except:
                 tH = H[None,:]
-            S21 = ch.Tchannel(x=f,y=tH)
-            return S21
-            self.close()
+        S21 = ch.Tchannel(x=f,y=tH)
+        return S21
         #toc = time.time()
         #t   = toc-tic
         #print "Time measurement (ms) :",t
@@ -464,7 +504,8 @@ class SCPI(PyLayers):
                 _filename="vna_config.ini",
                 cables=[],
                 author='',
-                comment=''):
+                comment='',
+                Nmeas = 10):
         """  measure a calibration vector and store in h5 file
 
         Parameters
@@ -477,7 +518,14 @@ class SCPI(PyLayers):
         cables : list of strings
 
         """
+
+        # set config
         self.load_config(_filename=_filename)
+
+        # get Nmeas calibration vector
+        D = self.getdata(chan=1,Nmeas=Nmeas)
+
+        # store calibration vector in a hdf5 file
         fileh5 = pyu.getlong(_fileh5,pstruc['DIRMES'])+'.h5'
         f = h5py.File(fileh5,"w")
         try:
@@ -487,7 +535,7 @@ class SCPI(PyLayers):
         lcal =  filter(lambda x : 'cal' in x,ldataset)
         calname = 'cal'+ str(len(lcal)+1)
 
-        dcal = f.create_dataset(calname,(1,self.Nf),dtype=np.complex64)
+        dcal = f.create_dataset(calname,(Nmeas,self.Nf),dtype=np.complex64)
         dcal.attrs['Nf']=self.Nf
         dcal.attrs['fminGHz']=self.fminGHz
         dcal.attrs['fmaxGHz']=self.fmaxGHz
@@ -495,9 +543,10 @@ class SCPI(PyLayers):
         dcal.attrs['Navrg']=self.navrg
         dcal.attrs['time'] = time.ctime()
         dcal.attrs['author']=  author
-        dcal.attrs['cableref']= cables
+        dcal.attrs['cables']= cables
         dcal.attrs['comment']=comment
         dcal.attrs['param']=self.param
+        dcal[0:Nmeas,0:self.Nf]=D
         f.close()
 
 
@@ -599,7 +648,7 @@ class SCPI(PyLayers):
         _filename : string
                    file name extension .ini
 
-        
+
         Examples
         --------
 
