@@ -177,7 +177,7 @@ import shapely.geometry as shg
 import shapely.ops as sho
 from   descartes.patch import PolygonPatch
 from   shapely.wkt import loads
-from   itertools import combinations
+from   itertools import combinations,permutations
 
 
 COLOR = {
@@ -555,10 +555,15 @@ class Polygon(PyLayers,shg.Polygon):
 
         """
         x,y = self.exterior.xy
-        npts = map(lambda x :
-                   L.ispoint(np.array(x),tol=0.01),zip(x[0:-1],y[0:-1]))
+        # npts = map(lambda x :
+        #            L.ispoint(np.array(x),tol=0.01),zip(x[0:-1],y[0:-1]))
+        npts = [L.ispoint(np.array(xx),tol=0.01) for xx in zip(x[0:-1],y[0:-1])]
         seg = zip(npts,np.roll(npts,-1))
-        nseg = map(lambda x : L.numseg(x[0],x[1]),seg)
+        try:
+            nseg = map(lambda x : L.numseg(x[0],x[1]),seg)
+        except:
+            import ipdb
+            ipdb.set_trace()
         vnodes = np.kron(npts,np.array([1,0]))+np.kron(nseg,np.array([0,1]))
         self.vnodes = vnodes
 
@@ -696,6 +701,7 @@ class Polygon(PyLayers,shg.Polygon):
         defaults = {'show': False,
                 'fig': [],
                 'ax': [],
+                'label':False,
                 'color':'#abcdef',
                 'edgecolor':'#000000',
                 'alpha':0.8 ,
@@ -728,8 +734,9 @@ class Polygon(PyLayers,shg.Polygon):
                 color = kwargs['color'],
                 alpha = kwargs['alpha'],
                 ec = kwargs['edgecolor'])
-        for k in range(len(numpt)):
-            ax.text(x[k]+0.1,y[k]+0.1,numpt[k])
+        if kwargs['label']:
+            for k in range(len(numpt)):
+                ax.text(x[k],y[k],numpt[k])
 
         if kwargs['show']:
             plt.show()
@@ -1516,6 +1523,50 @@ class Polygon(PyLayers,shg.Polygon):
 
         return(fig, ax)
 
+    def ptconvex2(self):
+        """ Determine convex / concave points in the Polygon
+
+            !!! Warning !!! cvex and ccve can be switched
+            depends on the Polygon direction of travel
+        
+        Returns
+        -------
+        cvex : list of convex points
+        ccve : list of concave points
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.util.geomutil import *
+            >>> import shapely.geometry as shg
+            >>> import matplotlib.pyplot as plt
+            >>> points  = shg.MultiPoint([(0, 0), (0, 1), (3.2, 1), (3.2, 0.7), (0.4, 0.7), (0.4, 0)])
+            >>> polyg1   = Polygon(points)
+            >>> cvex,ccave   = polyg.ptconvex2() 
+            >>> points  = shg.MultiPoint([(0, 0), (0, 1), (-3.2, 1), (-3.2, 0.7), (-0.4, 0.7), (-0.4, 0)])
+            >>> polyg1   = Polygon(points)
+            >>> cvex,ccave   = polyg.ptconvex2() 
+
+        """
+        if not hasattr(self,'xy'):
+            self.coorddeter()
+        
+        pts = filter(lambda x: x<0,self.vnodes)
+        A=self.xy[:,:-1]
+        B=np.roll(A,-1)
+        C=np.roll(B,-1)
+        if self.signedarea()>0:
+            cw = ccw(C,B,A)
+        else :
+            cw = ccw(A,B,C)
+        cvex = np.array(pts)[np.roll(cw,+1)]
+        ccve = np.array(pts)[np.roll(~cw,+1)]
+        
+        return cvex.tolist(),ccve.tolist()
+
     def ptconvex(self, display=False):
         """ Return a list of booleans indicating points convexity
 
@@ -2200,6 +2251,7 @@ class Geomoff(Geomview):
         # retrieving dimensions
         Nt = len(theta)#np.shape(theta)[0]
         Np = len(phi)#np.shape(phi)[1]
+
         theta = theta[:,np.newaxis]
         phi = phi[np.newaxis,:]
 
@@ -2211,14 +2263,18 @@ class Geomoff(Geomview):
         #Th = np.outer(theta, np.ones(Np))
         #Ph = np.outer(np.ones(Nt), phi)
 
-        U = (R - R.min()) / (R.max() - R.min())
-        Ry = minr + (maxr-minr) * U
+        if R.min()!=R.max():
+            U = (R - R.min()) / (R.max() - R.min())
+            Ry = minr + (maxr-minr) * U
+        else:
+            Ry = maxr
         # x (Nt,Np)
         # y (Nt,Np)
         # z (Nt,Np)
+
         x = Ry * np.sin(theta) * np.cos(phi)
         y = Ry * np.sin(theta) * np.sin(phi)
-        z = Ry * np.cos(theta)
+        z = Ry * np.cos(theta) * np.ones(phi.shape)
 
         # p : Nt x Np x 3
         p = np.concatenate((x[...,np.newaxis],y[...,np.newaxis],z[...,np.newaxis]),axis=2)
@@ -2242,7 +2298,12 @@ class Geomoff(Geomview):
         colmap = plt.get_cmap()
         Ncol = colmap.N
         cmap = colmap(np.arange(Ncol))
-        g = np.round(U * (Ncol - 1)).astype(int)
+
+        if R.min()!=R.max():
+            g = np.round(U * (Ncol - 1)).astype(int)
+        else:
+            g = np.round(np.ones((Nt,Np))*(Ncol-1)).astype(int)
+
         fd = open(self.filename, 'w')
         fd.write('COFF\n')
         chaine = str(Npoints) + ' ' + str(Nfaces) + ' ' + str(Nedge) + '\n'
@@ -2253,7 +2314,7 @@ class Geomoff(Geomview):
                 cpos = str(q[ii, jj,0]) + ' ' + str(q[ii, jj,1]) + ' ' + str(q[ii, jj,2])
                 cpos = cpos.replace(',', '.')
                 ik = g[ii, jj]
-                
+
                 ccol = str(cmap[ik, 0]) + ' ' + str(cmap[ik, 1]) + \
                     ' ' + str(cmap[ik, 2])
                 ccol = ccol.replace(',', '.')
@@ -2470,6 +2531,7 @@ def isBetween(p1, p2, p, epsilon=1e-5):
 
     Parameters
     ----------
+
     p1 : np.array
     p2 : np.array
     p  : np.array
@@ -3315,7 +3377,8 @@ def angledir(s):
 
 
 def BTB_rx(a_g, T):
-    """ Produce a set of rotation matrices for passage between global and local frame
+    """ Produce a set of rotation matrices for passage between global and
+    local frames
 
     Parameters
     ----------
@@ -3366,10 +3429,8 @@ def BTB_tx(a_g, T):
     Parameters
     ----------
 
-    a_g  :
-        angle in global reference frame      2 x N  :  (theta,phi) x N
-    T    :
-        Tx rotation matrix     3 x 3
+    a_g  : angle in global reference frame      2 x N  :  (theta,phi) x N
+    T    : Tx rotation matrix     3 x 3
 
     """
     G = SphericalBasis(a_g)
@@ -4173,37 +4234,129 @@ def dmin3d(a,b,c,d):
 #             V[:,j] -= np.vdot(V[:,j], V[:,k]) * V[:,k] 
 #     return V 
 
-def qrdecomp(V): 
-    """ 
-    Gram-Schmid orthonormalization of a set of `Nv` vectors, in-place. 
-    using qr decomp
-    Parameters 
-    ---------- 
-    V : array, shape (3,Nv,nf) 
 
-    Notes
-    -----
+def gram_schmidt(Vini,force_direct=True):
+    """
+    Gram-Schmidt orthonormalization of a set of `M` vectors, in-place. 
+
+    Parameters
+    ----------
+
+     Vini : array,
+        shape (3,Nv,nf)  where number of vectors Nv = 3 and nf is an integer
+    force_direct : boolean
+        force basis to be direct (det>0)
+
+    Example
+    -------
+
+    >>> import pylayers.util.geomutil as geu
+    >>> import numpy as np
+    >>> Nv = 3
+    >>> Nframes = 10
+    >>> V = np.random.rand(3,Nv,Nframes)
+    >>> VG = geu.gram_schmid(V)
+    """
+
+
+    # check direct basis
+    if force_direct:
+        per=permutations((0,1,2),3)
+        for p in per:
+            P = np.vstack((Vini[:,p[0],0],Vini[:,p[1],0],Vini[:,p[2],0]))
+            if np.linalg.det(P) >0 :
+                Vini = Vini[:,p,:]
+                break
+
+    v0=Vini[:,0,:]
+    v1=Vini[:,1,:]
+    v2=Vini[:,2,:]
+
+    n0 = np.linalg.norm(v0,axis=0)
+    vn0=v0/n0
+
+    pv10 = np.einsum('ij,ij->j',v1,vn0)
+    v1p = v1 - pv10*vn0
+    nv1 =  np.linalg.norm(v1p,axis=0)
+    vn1 = v1p/nv1
+
+
+    pv20 = np.einsum('ij,ij->j',v2,vn0)
+    pv21 = np.einsum('ij,ij->j',v2,vn1)
+
+    v2p = v2 - pv20*vn0 - pv21*vn1
+    nv2 =  np.linalg.norm(v2p,axis=0)
+    vn2 = v2p/nv2
+
+    V= np.hstack((vn0[:,None,:],vn1[:,None,:],vn2[:,None,:]))
+
+    if force_direct:
+        # assert det >0
+        assert len(np.where(np.linalg.det(np.rollaxis(V,2))<0)[0]) ==0
+    # assert det != 0
+    assert len(np.where(np.linalg.det(np.rollaxis(V,2))==0.)[0]) ==0
+    return V
+
+
+
+def qrdecomp(V):
+    """
+    Gram-Schmid orthonormalization of a set of `Nv` vectors, in-place.
+    using qr decomp
+
+    Parameters
+    ----------
+
+    V : array,
+        shape (3,Nv,nf)  where number of vectors Nv = 3 and nf is an integer
+
+    Returns
+    -------
+
+    V : array,
+
+
+    References
+    ----------
 
     from http://numpy-discussion.10968.n7.nabble.com/Efficient-orthogonalisation-with-scipy-numpy-td23635.html
 
-    """ 
-    # XXX: speed can be improved by using routines from scipy.lib.blas 
-    # XXX: maybe there's an orthonormalization routine in LAPACK, too, 
-    #      apart from QR. too lazy to check... 
+    Example
+    -------
+    >>> import numpy as np
+    >>> import pylayers.util.geomutil as geu
+    >>> u=np.random.rand(3,1,10)
+    >>> v=np.random.rand(3,1,10)
+    >>> w=np.random.rand(3,1,10)
+    >>> V = np.hstack((u,v,w))
+    >>> W = geu.qrdecomp(V)
+    >>> assert np.allclose(abs(np.linalg.det(W[:,:,0])),1.0)
+
+    """
+    #  speed can be improved by using routines from scipy.lib.blas
+    #  maybe there's an orthonormalization routine in LAPACK, too,
+    #      apart from QR. too lazy to check...
+
     import copy
-    nn = np.linalg.norm(V,axis=(1))
-    for i in range(3):
-        V[i,:,:]=V[i,:,:]/nn 
+    # nn = np.linalg.norm(V,axis=(0))
+
+    # # for i in range(3):
+    # #     V[i,:,:]=V[i,:,:]/nn
+
+    # V=V/nn
     lv = np.shape(V)[2]
-    V2=copy.deepcopy(V)
-    for k in xrange(lv): 
+    V2 = copy.deepcopy(V)
+    for k in xrange(lv):
         V[:,:,k],R = np.linalg.qr(V[:,:,k])
     # check where the vector along cylinder axis is colinear with the 1st basis axis
-    col = np.einsum('ij,ij->j',V[:,0,:],V2[:,0,:])
-    ucol = np.where(col < 0)
-    V[:,:,ucol]=-V[:,:,ucol]
-
-    return V 
+    # col = np.einsum('ij,ij->j',V[:,0,:],V2[:,0,:])
+    # ucol = np.where(col < 0)
+    # import ipdb
+    # ipdb.set_trace()
+    # V[:,:,ucol]=-V[:,:,ucol]
+    import ipdb
+    ipdb.set_trace()
+    return V
 
 
 

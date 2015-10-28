@@ -1,5 +1,89 @@
-1. Dependencies 
----------------
+################################
+#       LINUX/OSX Install      #
+################################
+
+The prefer way to install pylayers is to first install the free python distribution Anaconda on your
+platform. ( https://store.continuum.io/cshop/anaconda/ )
+By doing so, you're installing most of the required dependencies.
+
+1 - Download Anaconda from https://store.continuum.io/cshop/anaconda/
+2 - Install Anaconda with the given command ( $bash Anaconda-<version>-<plateform>.sh ) . 
+Important : Say yes to add Anaconda to your path
+3 - Run "./installer_unix" file from the pylayers directory (YOUR FIRST NEED to add exe rights using the command: chmod +x ./installer_unix )
+4 - Set environement Variables :
+
+It is then required to define the two enviroment variables PYLAYERS and BASENAME
+
+On linux platforms, in your .bashrc add those 2 lines 
+
+export PYLAYERS=<path to the directory where pylayers is located>
+export BASENAME=<path to a directory where you want to host your projects>
+
+Note : The PYLAYERS environement variable MUST be set in the directory conatining the setup.py
+
+5- Done
+
+
+############################
+#      Windows Install     #
+############################
+
+
+1 - Download and Install Anaconda from https://store.continuum.io/cshop/anaconda/
+2 - Download the Shapely package corresponding to your platform from http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely *
+3 - Download the Basemap package corresponding to your platform fromhttp://www.lfd.uci.edu/~gohlke/pythonlibs/#basemap
+4 - Install Shapely and Basemap using the downloaded file
+5 - Run installer.bat
+6 - Set environement Variables :
+    Procedure for WinXP :  http://support.microsoft.com/kb/310519/fr-fr
+    Procedure for Vista/windows 7: Start -> Right click on computer -> Properties -> Advanced system parameters -> Environement variables
+
+
+    PYLAYERS=<path to the directory where pylayers is located>
+    BASENAME=<path to a directory where you want to host your projects>
+
+
+
+* Despite shapely is part of the Anaconda distribution, the Windows distibution doesn't contains the libgeos depencies.
+
+
+#################################
+#      Usual install issues     #
+#################################
+
+Most of the issue encountered during the install is due to 
+        1- Multiple python installations
+and/or  2- Multiple installation of some packages ( especially shapely/basemap under windows)
+
+1- Often, multiple python installation co-exists on a same computer, and this can cause complex PyLayers installation issues. To avoid that kind of issue, please,, make sure that you're using the python installation provided by Anaconda ,and not another one.
+To this end, you can check this on unix platform with :
+$ which python
+
+and under windows by opening 'cmd' and using :
+c:\ for %i in (python.exe) do @echo.   %~$PATH:i
+
+If the answer doesn't point to the Anaconda installation directory, you're using the wrong python version.
+You have to update the default python installation. I cannot describe here the detail procedure because it 
+is really depend to your configuration.
+
+
+2- Another source of issues comes from some package conflicts.
+This is especially the case by using a WINDOWS OS, when the shaeply installation has to be perfomed by using an external installer and not the one provided by Anaconda (because it does not contains required dependencies). 
+
+If after the installation, the import of a PyLayers module cause an Error involving shapely and/or basemap, you're probably facing the package conflict issue. 
+
+The easiest way to solve it is to remove the '.egg' of the incriminated package in :
+
+$ <Path to Anaconda>/lib/python2.7/site-packages/   (UNIX)
+
+or 
+c:\<Path to Anaconda>\Lib\site-packages (Windows)
+
+
+
+
+Dependencies 
+------------
 
 The following modules are required to use pylayers 
 
@@ -19,54 +103,9 @@ basemap>=1.0
 pandas >=0.12.0
 mayavi >=4.3.1
 
-2. Recomended way to install
-----------------------------
 
-2.1 Anaconda 
-------------
-------------
-
-The prefer way to install pylayers is to first install the free python distribution Anaconda on your
-platform. ( https://store.continuum.io/cshop/anaconda/ )
-By doing so, you're installing most of the required dependencies.
-
-
-2.2 Install extra packages not provided with the default Anaconda distribution
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-
-conda install mayavi
-conda install basemap
-conda install shapely
-conda install gdal
-
-2.3 Only if you're running Windows 
-----------------------------------
-----------------------------------
-
-If you're using windows, use this shapely package :
-http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely
-
-because the Anaconda shapely distribution for Windows doesn't contains the libgeos depencies.
-
-
-2.4 Set environement variables 
-------------------------------
-------------------------------
-
-It is then required to define the two enviroment variables PYLAYERS and BASENAME
-
-On linux platforms, in your .bashrc add those 2 lines 
-
-export PYLAYERS=<path to the directory where pylayers is located>
-export BASENAME=<path to a directory where you want to host your projects>
-
-Note : The PYLAYERS environement variable MUST be set in the directory conatining the setup.py
-
-
-
-3. Example of installation procedure for ubuntu 12.04
------------------------------------------------------
+Example of installation procedure for ubuntu 12.04 (DEPRECATED)
+---------------------------------------------------------------
 
 The installation of matplotlib basemap requires installation of libraries GEOS
 and PROJ4. The installation procedure is well described in
@@ -109,8 +148,8 @@ http://lipforge.ens-lyon.fr/frs/?group_id=8&release_id=123
 if problem for compilation add 
 CPPFLAGS= -fPIC in scs_lib/Makefile
 
-4.Testing
----------
+Testing
+-------
 
 make test-code
 

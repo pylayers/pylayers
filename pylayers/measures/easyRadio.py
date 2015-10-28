@@ -1,13 +1,37 @@
+#!/usr/bin/python
+#-*- coding:Utf-8 -*-
 import time
 import serial
 import thread
 import pdb
+import os
 
 class LPRS(object):
+    """ Class for handling LPRS module
 
+
+    1) Plug Tx and Rx
+    2) check on which serial port they appear dmesg| grep tty
+    3) Launch an ipython session for each terminal
+
+    Tx session
+
+    >>> from pylayers.measures.easyRadio import *
+    >>> Tx=LPRS(0)
+    >>> Tx.master()
+
+
+    Rx session
+
+    >>> from pylayers.measures.easyradio import *
+    >>> Tx=LPRS(1)
+    >>> Tx.slave()
+
+
+    """
 
     def __init__(self,portId=0,baud='U4'):
-        self.port = '/dev/ttyUSB'+str(portId)
+        self.port = os.path.join('/dev','ttyUSB'+str(portId))
         self.baudrate={'U1':2400,
                   'U2':4800,
                   'U3':9600,
@@ -138,15 +162,20 @@ class LPRS(object):
                 return(out)
 
 
-    def master(self):
-        """
-            master send A and wait for B
+    def master(self,delay=0.005):
+        """ master send A and wait for B
+
+
+        while 1:
+            M(send A) -> S
+            M(Wait for response B)
+
         """
         cpt = 0
         tic = time.time()
         while True:
             self.send('A')
-            time.sleep(0.005)
+            time.sleep(delay)
             resp = ' '
             while (resp[-1]<>'B'):
                 resp = ' '
@@ -154,11 +183,12 @@ class LPRS(object):
                 #time.sleep(0.005)
                     resp += self.ser.read(1)
             # wait for ack
-                if resp[-1]=='B':   
+                if resp[-1]=='B':
                 #print resp[-1]
                     try:
                         rssi = int(self.cmd('T8'),16)
-                        print cpt,rssi
+                        print "count ",cpt
+                        print "rssi  ",rssi
                     except:
                         pass
                     cpt = cpt+1
@@ -166,9 +196,12 @@ class LPRS(object):
                     tic = time.time()
                     break
 
-    def slave(self):
-        """
-            slave wait for A and send B
+    def slave(self,delay=0.005):
+        """ slave wait for A and send B
+
+        Parameters
+        ----------
+
         """
         cpt = 0
         tic = time.time()
@@ -179,6 +212,7 @@ class LPRS(object):
                 #time.sleep(0.005)
                 resp += self.ser.read(1)
             # wait for ack
+            print resp
             if (resp[-1]=='A'):
                 try:
                     rssi = int(self.cmd('T8'),16)
@@ -186,9 +220,31 @@ class LPRS(object):
                 except:
                     pass
                 self.send('B')
-                time.sleep(0.005)
+                time.sleep(delay)
                 cpt = cpt+1
 
+    def STx(self):
+        """ Sounder Tx automate
+
+        Switch Tx antennas
+        VNA Measurement
+
+        """
+        pass
+
+    def SRx(self):
+        """ Sounder Rx automate
+
+        Move scanner
+        Switch Rx antennas
+
+        """
+        state = 'init'
+        while True:
+            resp = ' '
+            while self.ser.inWaiting()>0:
+                #time.sleep(0.005)
+                resp += self.ser.read(1)
 
 
     def send(self,buf='test'):

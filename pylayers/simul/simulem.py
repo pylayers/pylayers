@@ -875,7 +875,8 @@ class Simul(PyLayers):
         try:
             self.load(_filesimul)
         except:
-            self.updcfg()
+            pass
+            #self.updcfg()
         #self.load(self.filesimul)
 
 

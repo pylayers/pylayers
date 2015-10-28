@@ -52,6 +52,7 @@ import matplotlib.collections as mc
 from cStringIO import StringIO
 from matplotlib.collections import LineCollection
 import mpl_toolkits.mplot3d.art3d as cc
+import os 
 import pdb
 
 
@@ -147,7 +148,7 @@ def read_header(_filename='serie_017.c3d'):
     _filename : string
     verbose : boolean
     """
-    FullFileName = pyu.getlong(_filename, 'body/c3d')
+    FullFileName = pyu.getlong(_filename, os.path.join('body','c3d'))
     Markers = []
     VideoFrameRate = 0
     AnalogSignals = []
@@ -177,9 +178,9 @@ def read_header(_filename='serie_017.c3d'):
     proctype, content = getNumber(content, 1)
     proctype = proctype - 83                      # proctype: 1(INTEL-PC); 2(DEC-VAX); 3(MIPS-SUN/SGI)
 
-    print "*************************"
-    print "**** Processor coding ***"
-    print "*************************"
+    # print "*************************"
+    print "**** Processor coding :",
+    # print "*************************"
 
 
     if proctype == 1:
@@ -253,7 +254,7 @@ def read_c3d(_filename='07_01.c3d',verbose=False):
 
     """
 
-    FullFileName = pyu.getlong(_filename, 'body/c3d')
+    FullFileName = pyu.getlong(_filename, os.path.join('body','c3d'))
     Markers = []
     VideoFrameRate = 0
     AnalogSignals = []
@@ -745,11 +746,11 @@ def ReadC3d(_filename='07_01.c3d', verbose=False):
     verbose : boolean
     """
 
-    # check if local or global path
+    #check if local or global path
     if ('/' or '\\') in _filename:
         FullFileName=_filename
     else: 
-        FullFileName = pyu.getlong(_filename, 'body/c3d')
+        FullFileName = pyu.getlong(_filename, os.path.join('body','c3d'))
     Markers = []
     VideoFrameRate = 0
     AnalogSignals = []
@@ -779,9 +780,9 @@ def ReadC3d(_filename='07_01.c3d', verbose=False):
     proctype = proctype - 83                      # proctype: 1(INTEL-PC); 2(DEC-VAX); 3(MIPS-SUN/SGI)
 
     dinfo = {}
-    print "*************************"
-    print "**** Processor coding ***"
-    print "*************************"
+    # print "*************************"
+    print "**** Processor coding :",
+    # print "************************"
 
     if proctype == 1:
         print "Intel-PC"

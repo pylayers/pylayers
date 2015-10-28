@@ -638,7 +638,7 @@ def osmparse(_filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True
     if '/' or '\\' in _filename:
         filename = _filename
     else:
-        filename = pyu.getlong(_filename,'gis/osm')
+        filename = pyu.getlong(_filename,os.path.join('gis','osm'))
     #
     # Read coords and create basemap converter
     #
@@ -785,7 +785,7 @@ def getbdg(fileosm,verbose=False):
     coords,nodes,ways,relation,m = osmparse(fileosm,typ='building',verbose=verbose)
     zone = []
     for w in ways.way:
-        zone.append(w.shp)
+        zone.append(ways.way[w].shp)
     return(zone)
 
 def buildingsparse(filename):

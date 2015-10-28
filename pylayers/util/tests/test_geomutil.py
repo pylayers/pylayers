@@ -18,5 +18,20 @@ class Tesonb(TestCase):
         print T[:,2,:]
         assert_equal(np.shape(T),(4,3,3))
 
+
+    def test_ptconvex2(self):
+        print "testing geomutil.ptconvex2"
+
+        points  = shg.MultiPoint([(0, 0), (0, 1), (3.2, 1), (3.2, 0.7), (0.4, 0.7), (0.4, 0)])
+        polyg   = Polygon(points)
+        cvex,ccave   = polyg.ptconvex2() 
+        assert_equal(cvex,[-5] )
+        assert_equal(ccave,[-1, -2, -3, -4, -6] )
+        points  = shg.MultiPoint([(0, 0), (0, 1), (-3.2, 1), (-3.2, 0.7), (-0.4, 0.7), (-0.4, 0)])
+        polyg   = Polygon(points)
+        cvex,ccave   = polyg.ptconvex2() 
+        assert_equal(cvex,[-5] )
+        assert_equal(ccave,[-1, -2, -3, -4, -6] )
+
 if __name__ == "__main__":
     run_module_suite()

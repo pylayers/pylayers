@@ -15,10 +15,13 @@ import sys
 import shutil
 import pkgutil
 import pdb
+import seaborn as sns
 
 class PyLayers(object):
     """ Generic PyLayers Meta Class
     """
+
+#        sns.set_style("white")
 
     def help(self,letter='az',typ='mt'):
         """ generic help
@@ -28,6 +31,9 @@ class PyLayers(object):
 
         txt : string
             'mb' | 'mt'
+
+            mb :members
+            mt :methods
 
         """
 
@@ -85,7 +91,7 @@ def _writedotpylayers(typ,path):
         #         f.write(l)
 
 
-home = os.path.expanduser('~')
+# home = os.path.expanduser('~')
 currentdir = os.getcwd()
 
 # if .pylayers exists
@@ -114,6 +120,32 @@ else:
 
 
 
+# =======
+# # if os.path.isfile(os.path.join(home,'.pylayers')):
+# #     with open(os.path.join(home,'.pylayers'),'r') as f:
+# #         lines = f.readlines()
+# #     # [:-1] to remove the '\n' character
+# #     pylayersdir = lines[1][:-1]
+# #     basename = lines[3]
+
+# # else :
+# try:
+#     pylayersdir = os.environ['PYLAYERS']
+# except:
+#     pylayersdir = currentdir.split('pylayers')[0] + 'pylayers'
+
+
+# if pylayersdir[-1] == '/' or pylayersdir[-1] == '\\':
+#     pylayersdir = pylayersdir[:-1]
+
+# if len(pylayersdir) == 1:
+#     raise EnvironmentError('Please verify that pylayers sources are into the "pylayers/" directory')
+
+# try:
+#     basename = os.environ['BASENAME']
+# except:
+#     raise EnvironmentError('Please position an environement variable $BASENAME where your pylayers project will be hosted')
+# >>>>>>> master
 
 try:
     mesdir = os.environ['MESDIR']
@@ -132,7 +164,7 @@ except:
 
 
 # Dictionnary which associate PULSRAY environment variable with sub direrories
-# of the project 
+# of the project
 #
 pstruc = {}
 pstruc['DIRSIMUL'] ='ini'
@@ -201,7 +233,15 @@ for nm,nv in pstruc.items():
     else :
 
         if not os.path.isdir(dirname):
-            os.mkdir(dirname)
+            try:
+                os.mkdir(dirname)
+            except:
+                # dictionnary is not necessarly ordonned !
+                # parent directory may not be created
+                dirtmp= os.path.dirname(dirname)
+                os.mkdir(dirtmp)
+                os.mkdir(dirname)
+
             print "create ",dirname
 
 
@@ -288,5 +328,7 @@ if basename != os.path.join(pylayersdir,'data'):
                         os.path.join(pylayersdir,'data',dl,fi),
                         os.path.join(basename,dl,fi))
 
-
+##
 os.chdir(currentdir)
+## set seaborn style
+sns.set_style("white")

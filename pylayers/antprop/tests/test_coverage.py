@@ -3,7 +3,6 @@ from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 from pylayers.util.utilnet import str2bool
 from pylayers.gis.layout import Layout
-from pylayers.antprop.multiwall import *
 from pylayers.antprop.coverage import *
 from pylayers.network.model import *
 

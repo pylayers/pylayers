@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: latin1 -*-
+#-*- coding:Utf-8 -*-
 """
 
 DF Class
@@ -7,17 +7,25 @@ DF Class
 
 This class implements a LTI digital filter
 
+.. currentmodule:: pylayers.signal.DF
+
 .. autosummary::
     :toctree: generated/
 
     DF.__init__
     DF.filter
-    DF.order
+    DF.simplify
+    DF.flipc
     DF.freqz
+    DF.factorize
+    DF.wnxcorr
+    DF.match
+    DF.butter
     DF.ellip_bp
     DF.remez
     DF.zplane
     DF.ir
+
 """
 import numpy as np
 from scipy import io
@@ -42,14 +50,10 @@ class DF(PyLayers):
     def __init__(self,b=np.array([1]),a=np.array([1])):
         self.b = b
         self.a = a
-
-    @property
-    def z(self):
-        return(self._z)
-
-    @property
-    def p(self):
-        return(self._p)
+        #self.z = np.poly1d(self.b).r
+        #self.p = np.poly1d(self.a).r
+        #assert(np.abs(self.b-np.poly1d(self.z,r=True).c).all()<1e-16)
+        #assert(np.abs(self.a-np.poly1d(self.p,r=True).c).all()<1e-16)
 
     @property
     def a(self):
@@ -58,6 +62,14 @@ class DF(PyLayers):
     @property
     def b(self):
         return(self._b)
+
+    @property
+    def z(self):
+        return(self._z)
+
+    @property
+    def p(self):
+        return(self._p)
 
     @a.setter
     def a(self,a):
@@ -73,18 +85,32 @@ class DF(PyLayers):
         self._b = b
         self._z = np.poly1d(b).r
 
-    @p.setter
-    def p(self,p):
-        self._p = p
-        self._a = np.poly1d(p,r=True).c
-
     @z.setter
     def z(self,z):
         self._z = z
         self._b = np.poly1d(z,r=True).c
 
+    @p.setter
+    def p(self,p):
+        self._p = p
+        self._a = np.poly1d(p,r=True).c
+
+    def update(self):
+        self.a =  np.poly1d(self.p,r=True).c
+        self.b =  np.poly1d(self.z,r=True).c
+
+    def __repr__(self):
+        st = ''
+        st = st + 'b : '+str(self.b)+'\n'
+        st = st + 'a : '+str(self.a)+'\n'
+        st = st + 'z : '+str(self.z)+'\n'
+        st = st + 'p : '+str(self.p)+'\n'
+        return(st)
     def __mul__(self,df):
         """
+        extract and stack  poles and zeros
+
+        TODO : handling simplification
         """
 
         b1 = self.b
@@ -105,10 +131,32 @@ class DF(PyLayers):
         F   = DF()
         F.p = np.hstack((rpa1,rpa2))
         F.z = np.hstack((rpb1,rpb2))
+        
+        F.simplify()
 
         return(F)
 
 
+    def simplify(self,tol=1e-16):
+        """ simplify transfer function 
+
+        Parameters
+        ----------
+        tol : float 
+            tolerance for simplification 
+
+        """
+        ip = []
+        iz = []
+        for k,p in enumerate(self.p):
+            for l,z in enumerate(self.z):
+                md = np.real((p-z)*np.conj(p-z))
+                if md<tol:
+                    ip.append(k)
+                    iz.append(l)
+
+        self.p = np.delete(self.p,ip)
+        self.z = np.delete(self.z,iz)
 
     def flipc(self):
         """
@@ -119,40 +167,55 @@ class DF(PyLayers):
         F = DF()
         F.a = self.a[::-1]
         F.b = self.b[::-1]
+        F.update()
         return(F)
 
     def match(self):
-        """ return a match filter
+        r""" return a match filter
+
+
+        if $$H(z)=\frac{1+b_1z^1+...+b_Nz^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$
+
+        if $$H_m(z)=\frac{b_N+b_{N-1}z^1+...+z^{-N}}{1+a_1z^1+...+a_Mz^{-M}}$$
+        
         """
 
         if self.fir:
             MF = DF()
             MF.b = np.conj(self.b[::-1])
             MF.a = self.a
+            MF.z = np.poly1d(MF.b).r
+            MF.p = np.poly1d(MF.a).r
             return(MF)
 
-    def filter(self,x,causal=True):
-        """ filter x
+    def filter(self,s,causal=True):
+        """ filter s
 
         Parameters
         ----------
 
-        x : np.array
+        s : np.array |TUsignal
             input signal
 
         Returns
         -------
 
-        y : np.array
+        y : np.array | TUsignal
             output signal
 
         """
+        if type(s) is bs.TUsignal:
+            x = s.y
+        else:
+            x = s
 
         if not causal:
             x = x[::-1]
         y  = si.lfilter(self.b,self.a,x)
         if not causal:
             y = y[::-1]
+        if type(s) is bs.TUsignal:
+            y = bs.TUsignal(x=s.x,y=y)
         return(y)
 
     def factorize(self):
@@ -168,26 +231,20 @@ class DF(PyLayers):
 
         if self.fir:
             # selectionne les zeros interne et externe
-            internal = np.where(abs(self.z)<=1)[0]
-            external = np.where(abs(self.z)>1)[0]
+            internal = np.where(abs(self.z)<1)[0]
+            external = np.where(abs(self.z)>=1)[0]
             zi = self.z[internal]
             ze = self.z[external]
 
-            pi = np.poly1d(zi,r=True)
-            pe = np.poly1d(ze,r=True)
+            Fmin = DF()
+            Fmin.z = zi
 
-            bi = pi.c
-            be = pe.c
+            Fmax = DF()
+            Fmax.z = ze
 
-            F1 = DF(b=bi)
-            F2 = DF(b=be)
+            return(Fmin,Fmax)
 
-            return(F1,F2)
 
-    def order(self):
-        """ Returns filter order
-        """
-        return self.order
 
     def wnxcorr(self,**kwargs):
         """ filtered noise output autocorrelation
@@ -196,7 +253,7 @@ class DF(PyLayers):
         ---------
 
         var : float
-            input noise variance
+            input noise variance (default = 1)
 
         """
 
@@ -221,31 +278,42 @@ class DF(PyLayers):
         Parameters
         ----------
 
-        display : boolean 
+        display : boolean
             True
+        fsGHz : float
+            if set to 0 (relative frequency)
 
         """
 
-        defaults = {'display':True}
+        defaults = {'display':True,
+                    'fsGHz':0}
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]
 
         (w,h)    = si.freqz(self.b,self.a)
-        self.H   = bs.FUsignal(w/np.pi,h)
 
-        if 'fig' not in kwargs:
-            fig = plt.figure()
+        if kwargs['fsGHz']!=0:
+            fNGHz = kwargs['fsGHz']/2.
+            self.H   = bs.FUsignal(w*fNGHz/np.pi,h)
+            xlabel = 'Frequency (GHz)'
         else:
-            fig = kwargs['fig']
+            self.H   = bs.FUsignal(w/np.pi,h)
+            xlabel = 'Relative frequency'
 
+        
         if kwargs['display']:
+            if 'fig' not in kwargs:
+                fig = plt.figure()
+            else:
+                fig = kwargs['fig']
             ax1 = fig.add_subplot(211)
-            self.H.plot(typ=['l20'],xlabels=['relative frequency'],fig=fig,ax=ax1)
+            self.H.plot(typ=['l20'],xlabels=[xlabel],fig=fig,ax=ax1)
             plt.grid()
             ax2 = fig.add_subplot(212)
-            self.H.plot(typ=['d'],xlabels=['relative frequency'],fig=fig,ax=ax2)
+            self.H.plot(typ=['d'],xlabels=[xlabel],fig=fig,ax=ax2)
             plt.grid()
+
         #show()
     def butter(self,order=5,w=0.25,typ='low'):
         """ Butterwoth digital filter design
@@ -256,16 +324,16 @@ class DF(PyLayers):
         order : int
             filter order
         w : array_like
-            a scalar or length-2 sequnce (relative frequency 0<1  fN <=> 1)
+            a scalar or length-2 sequence (relative frequency 0<1  fN <=> 1)
         typ : string
             'lowpass' | 'highpass' | 'bandpass' | 'bandstop'
 
         Examples
         --------
 
-         >>> from pylayers.signal.bsignal import *
+         >>> from pylayers.signal.DF import *
          >>> flt = DF()
-         >>> flt.butter()
+         >>> flt.butter(order=3,w=0.25,typ='low')
          >>> flt.freqz()
 
         """
@@ -321,24 +389,34 @@ class DF(PyLayers):
         self.a = array([1])
         self.b = remez(numtaps, bands, desired, weight=None, Hz=1, type='bandpass', maxiter=25, grid_density=16)
 
-    def zplane(self):
+    def zplane(self,title='',fontsize=18):
         """ Display filter in the complex plane
 
         Parameters
         ----------
 
         """
-        A  = np.poly1d(self.a)
-        B  = np.poly1d(self.b)
-        ra = A.r
-        rb = B.r
+        rb = self.z
+        ra = self.p
 
         t = np.arange(0,2*np.pi+0.1,0.1)
         plt.plot(np.cos(t),np.sin(t),'k')
 
-        plt.plot(np.real(ra),np.imag(ra),'xr')
-        plt.plot(np.real(rb),np.imag(rb),'ob')
-        plt.axis('equal')
+        plt.plot(np.real(ra),np.imag(ra),'x',color='r')
+        plt.plot(np.real(rb),np.imag(rb),'o',color='b')
+        M1 = -10000
+        M2 = -10000
+        if len(ra)>0:
+            M1 = np.max([np.abs(np.real(ra)),
+                    np.abs(np.imag(ra)),
+                   ])
+        if len(rb)>0:
+            M2 = np.max([np.abs(np.real(rb)),
+                         np.abs(np.imag(rb)),
+                   ])
+        M = 1.6*max(1.2,M1,M2)
+        plt.axis([-M,M,-0.7*M,0.7*M])
+        plt.title(title,fontsize=fontsize)
         plt.show()
 
     def ir(self,N=100,show=False):
@@ -357,6 +435,7 @@ class DF(PyLayers):
         if show:
             plt.stem(np.arange(N),ir)
             plt.show()
+        ir = bs.TUsignal(x=np.arange(len(ir)) , y = ir)
         return(ir)
 
 

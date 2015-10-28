@@ -6,7 +6,9 @@ pylayers.egg-info/SOURCES.txt
 pylayers.egg-info/dependency_links.txt
 pylayers.egg-info/requires.txt
 pylayers.egg-info/top_level.txt
+pylayers/antprop/SalehValenzuela.py
 pylayers/antprop/__init__.py
+pylayers/antprop/aarray.py
 pylayers/antprop/antenna.py
 pylayers/antprop/antssh.py
 pylayers/antprop/antvsh.py
@@ -14,9 +16,11 @@ pylayers/antprop/channel.py
 pylayers/antprop/channelc.py
 pylayers/antprop/coeffModel.py
 pylayers/antprop/coverage.py
+pylayers/antprop/diffmamadou.py
 pylayers/antprop/diffraction.py
 pylayers/antprop/interactions.py
 pylayers/antprop/loss.py
+pylayers/antprop/new.py
 pylayers/antprop/rays.py
 pylayers/antprop/raysc.py
 pylayers/antprop/signature.py
@@ -24,6 +28,23 @@ pylayers/antprop/slab.py
 pylayers/antprop/spharm.py
 pylayers/antprop/statModel.py
 pylayers/antprop/yulei.py
+<<<<<<< HEAD
+=======
+pylayers/em/__init__.py
+pylayers/em/openems/SmoothMeshLine.py
+pylayers/em/openems/__init__.py
+pylayers/em/openems/animfield.py
+pylayers/em/openems/dumpbox.py
+pylayers/em/openems/excitation.py
+pylayers/em/openems/geometry.py
+pylayers/em/openems/matter.py
+pylayers/em/openems/nf2ff.py
+pylayers/em/openems/openems.py
+pylayers/em/openems/probe.py
+pylayers/em/openems/probebox.py
+pylayers/exploit/BER156.py
+>>>>>>> cc5d679edd3a089983b339e23121904014396e01
+pylayers/exploit/CorserS6.py
 pylayers/exploit/__init__.py
 pylayers/exploit/simnet.py
 pylayers/gis/__init__.py
@@ -39,14 +60,26 @@ pylayers/gis/readHGT.py
 pylayers/gis/readvrml.py
 pylayers/gis/selectl.py
 pylayers/gis/srtm.py
+pylayers/gui/__init__.py
+pylayers/gui/editor.py
+pylayers/gui/editor_select.py
 pylayers/location/__init__.py
 pylayers/location/localization.py
 pylayers/location/locarule.py
+pylayers/location/algebraic/PyGraphTool.py
+pylayers/location/algebraic/PyMathTool.py
 pylayers/location/algebraic/__init__.py
 pylayers/location/algebraic/algebraic.py
+pylayers/location/algebraic/crlb.py
+pylayers/location/algebraic/hdf.py
+pylayers/location/algebraic/rss.py
+pylayers/location/algebraic/tdoa.py
+pylayers/location/algebraic/test.py
+pylayers/location/algebraic/toa.py
 pylayers/location/geometric/Scenario_base.py
 pylayers/location/geometric/__init__.py
 pylayers/location/geometric/exploit_CDF.py
+pylayers/location/geometric/test_location_geometric.py
 pylayers/location/geometric/constraints/__init__.py
 pylayers/location/geometric/constraints/cla.py
 pylayers/location/geometric/constraints/constraint.py
@@ -54,9 +87,9 @@ pylayers/location/geometric/constraints/exclude.py
 pylayers/location/geometric/constraints/rss.py
 pylayers/location/geometric/constraints/tdoa.py
 pylayers/location/geometric/constraints/toa.py
-pylayers/location/geometric/util/CDF2.py
 pylayers/location/geometric/util/__init__.py
 pylayers/location/geometric/util/boxn.py
+pylayers/location/geometric/util/cdf2.py
 pylayers/location/geometric/util/geomview.py
 pylayers/location/geometric/util/model.py
 pylayers/location/geometric/util/scene.py
@@ -66,8 +99,34 @@ pylayers/measures/Hikobstart.py
 pylayers/measures/__init__.py
 pylayers/measures/cormoran.py
 pylayers/measures/easyRadio.py
+<<<<<<< HEAD
+pylayers/measures/mes5Gchannel.py
+=======
+pylayers/measures/f1.py
+pylayers/measures/figurepatch.py
+pylayers/measures/gpsstation.py
+>>>>>>> cc5d679edd3a089983b339e23121904014396e01
 pylayers/measures/mesmimo.py
 pylayers/measures/mesuwb.py
+<<<<<<< HEAD
+pylayers/measures/parker/__init__.py
+pylayers/measures/parker/ipython_log.py
+=======
+pylayers/measures/test_cormoran.py
+pylayers/measures/parker/__init__.py
+pylayers/measures/parker/smparker-sauv.py
+>>>>>>> cc5d679edd3a089983b339e23121904014396e01
+pylayers/measures/parker/smparker.py
+pylayers/measures/switch/__init__.py
+pylayers/measures/switch/ni_usb6501n.py
+pylayers/measures/switch/ni_usb_6501.py
+pylayers/measures/vna/E5072A.py
+pylayers/measures/vna/__init__.py
+pylayers/measures/vna/calibration.py
+pylayers/measures/vna/ipython_log.py
+pylayers/measures/vna/measure.py
+pylayers/measures/vna/measures.py
+pylayers/measures/vna/test_cal.py
 pylayers/mobility/__init__.py
 pylayers/mobility/agent.py
 pylayers/mobility/trajectory.py
@@ -92,9 +151,10 @@ pylayers/network/prioritydict.py
 pylayers/network/show.py
 pylayers/network/wsn.py
 pylayers/signal/DF.py
-pylayers/signal/EnergyDetector.py
+pylayers/signal/ED.py
 pylayers/signal/__init__.py
 pylayers/signal/baseband.py
+pylayers/signal/beamforming.py
 pylayers/signal/bsignal.py
 pylayers/signal/detect_quad.py
 pylayers/signal/device.py
@@ -112,6 +172,7 @@ pylayers/simul/simultraj.py
 pylayers/util/CDF.py
 pylayers/util/__init__.py
 pylayers/util/cone.py
+pylayers/util/easygui-back.py
 pylayers/util/easygui.py
 pylayers/util/geomutil.py
 pylayers/util/graphutil.py

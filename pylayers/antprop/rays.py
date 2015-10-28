@@ -164,7 +164,6 @@ class Rays(PyLayers,dict):
                 s = s+'nl : '+str(nl)+'\n'
             else:
                 s = self.__class__.__name__ + '2D\n' + '----------'+'\n'
-
                 nray = np.sum([np.shape(self[i]['sig'])[2] for i in self.keys()])
                 s = 'N2Drays : '+ str(nray) + '\n'
                 s = s + 'from '+ str(self.nb_origin_sig) + ' signatures\n'
@@ -574,6 +573,7 @@ class Rays(PyLayers,dict):
 
         H : float
             ceil height (default 3m)
+            if H=0 only floor reflection is calculated (ootdoor case)
 
         N : int
             handle the number of mirror reflexions
@@ -595,6 +595,15 @@ class Rays(PyLayers,dict):
         >>> d[-1.5]
         array([ 0.55555556])
 
+        Notes
+        -----
+
+        d is a dictionnary whose keys are heights along the vertical from where
+        are emanating the reflected rays. Values of d are the parameterization
+        (0< () <1) along the ray where are situated the different reflection
+        points.
+
+
         """
         km = np.arange(-N+1, N+1, 1)
         kp = np.arange(-N, N+1, 1)
@@ -603,35 +612,39 @@ class Rays(PyLayers,dict):
         #
         ht = self.pTx[2]
         hr = self.pRx[2]
+        assert (hr<H or H==0),"mirror : receiver higher than ceil height"
+        assert (ht<H or H==0),"mirror : transmitter higher than ceil height"
 
         zkp = 2*kp*H + ht
         zkm = 2*km*H - ht
 
         d = {}
+        if H!=0:
+            for zm in zkm:
+                if zm < 0:
+                    bup = H
+                    pas = H
+                    km = int(np.ceil(zm/H))
+                else:
+                    bup = 0
+                    pas = -H
+                    km = int(np.floor(zm/H))
+                thrm = np.arange(km*H, bup, pas)
+                d[zm] = abs(thrm-zm)/abs(hr-zm)
 
-        for zm in zkm:
-            if zm < 0:
-                bup = H
-                pas = H
-                km = int(np.ceil(zm/H))
-            else:
-                bup = 0
-                pas = -H
-                km = int(np.floor(zm/H))
-            thrm = np.arange(km*H, bup, pas)
-            d[zm] = abs(thrm-zm)/abs(hr-zm)
-
-        for zp in zkp:
-            if zp < 0:
-                bup = H
-                pas = H
-                kp = int(np.ceil(zp/H))
-            else:
-                bup = 0
-                pas = -H
-                kp = int(np.floor(zp/H))
-            thrp = np.arange(kp*H, bup, pas)
-            d[zp] = abs(thrp-zp)/abs(hr-zp)
+            for zp in zkp:
+                if zp < 0:
+                    bup = H
+                    pas = H
+                    kp = int(np.ceil(zp/H))
+                else:
+                    bup = 0
+                    pas = -H
+                    kp = int(np.floor(zp/H))
+                thrp = np.arange(kp*H, bup, pas)
+                d[zp] = abs(thrp-zp)/abs(hr-zp)
+        elif H==0:
+            d[-ht] = np.array([ht/(ht+hr)])
 
             # print "zp",zp
             # print "kp",kp
@@ -763,7 +776,7 @@ class Rays(PyLayers,dict):
             for l in d:                     # for each vertical pattern (C,F,CF,FC,....)
                 #print k,l,d[l]
                 Nint = len(d[l])            # number of additional interaction
-                #if ((k==1) & (l==5.0)):
+                #if ((k==1) & (l==5.0)):print
                 #    pdb.set_trace()
                 if Nint > 0:                # if new interaction ==> need extension
                     # a1e : extended horizontal+vertical parameterization
@@ -836,19 +849,19 @@ class Rays(PyLayers,dict):
                     # new ceil or floor point. The case of successive ceil or
                     # floor reflexion make
                     #
-                    # Tous les points précédents qui ne sont pas des Ceils ou
+                    # Tous les points prcdents qui ne sont pas des Ceils ou
                     # des floors et tous les points suivants qui ne sont pas
-                    # des points de réflexion ceil ou floor
+                    # des points de rflexion ceil ou floor
                     #
                     # Afin de tenir compte du rayon et du groupe d'interaction
-                    # concerné, il faut passer un tuple qui concatène la valeur
+                    # concerne, il faut passer un tuple qui concatene la valeur
                     # de l'indice d'interaction floor ou ceil et l'indice de
-                    # rayons du groupe associé (d'ou le zip)
+                    # rayons du groupe associe (d'ou le zip)
                     #
-                    # Cette séquence d'instruction fixe le bug #133
+                    # Cette sequence d'instruction fixe le bug #133
                     #
-                    # Antérieurement il y avait une hypothèse de succession
-                    # immediate d'un point 2D renseigné.
+                    # Antrieurement il y avait une hypothese de succession
+                    # immediate d'un point 2D renseigne.
                     #
                     try:
                         iintm_f = map(lambda x : np.where( (siges[1,0:x[0],x[1]]<>4) & (siges[1,0:x[0],x[1]]<>5))[0][-1], zip(iint_f,iray_f))
@@ -1063,7 +1076,7 @@ class Rays(PyLayers,dict):
         #   sig = [0,0]
         #
 
-        if (self.los) & (np.sum(tx-rx,axis=0)<>0):
+        if (self.los) & (np.sqrt(np.sum((tx-rx)**2)) !=0) :
             r3d[0] = {}
             r3d[0]['sig'] = np.zeros((2,2,1))
             r3d[0]['sig2d'] = np.zeros((2,2,1))
@@ -1157,6 +1170,9 @@ class Rays(PyLayers,dict):
 
         L : Layout
 
+        Notes
+        -----
+
         """
 
         #
@@ -1178,7 +1194,7 @@ class Rays(PyLayers,dict):
         mapping[key] = np.arange(len(key), dtype=int)
 
         #
-        # Structutre number : nstr
+        # Structure number : nstr
         #   the structure number is < 0 for points
         #                           > 0 for segments
         # A segment can have several subsegments (until 100)
@@ -1348,6 +1364,40 @@ class Rays(PyLayers,dict):
                     #print "scpr :",self[k]['scpr'][:,43]
                     #print "theta :",self[k]['scpr'][:,43]
 
+                def fix_colinear():
+                    nw = np.sqrt(np.sum(w*w, axis=0))
+                    
+                    u = np.where(nw==0) 
+
+                    if (u[0].any() or u[1].any()) \
+                        or (u[0].any()==0 or u[1].any()==0):
+                        
+
+                        uu = np.array([u[0],u[1]]).T
+                        #determine which interaction and rays 
+                        #present the colinearity issue
+                        uvv = abs(vn[2,uu[:,0],uu[:,1]])>0.99
+                        # uv : nbi x nbr colinear index
+                        uv = uu[uvv]
+                        # uh : nbi x nbr anti-colinear index
+                        uh = uu[np.logical_not(uvv)]
+                        try:
+                            #fiw w for colinear index
+                            w[:,uv[:,0],uv[:,1]] = np.array(([1,0,0]))[:,np.newaxis]
+                            # update normal
+                            nw[uv[:,0],uv[:,1]] = \
+                                np.sqrt(np.sum(w[:,uv[:,0],uh[:,1]]*w[:,uv[:,0],uv[:,1]],axis=0))
+                        except:
+                            pass
+                        try:
+                            # fix w for anti-colinear index
+                            w[:,uh[:,0],uh[:,1]] = np.array(([0,0,1]))[:,np.newaxis]
+                            # update normal
+                            nw[uh[:,0],uh[:,1]] = \
+                                np.sqrt(np.sum(w[:,uh[:,0],uh[:,1]]*w[:,uh[:,0],uh[:,1]],axis=0))
+                        except:
+                            pass
+                    return w, nw
                 #
                 # Warning need to handle singular case when s_in // vn
                 #
@@ -1356,30 +1406,11 @@ class Rays(PyLayers,dict):
                 # Handling channel reciprocity s_in --> -s_in
                 #
                 #w = np.cross(s_in, vn, axisa=0, axisb=0, axisc=0)
-                w = np.cross(-s_in, vn, axisa=0, axisb=0, axisc=0)
 
+                w = np.cross(-s_in, vn, axisa=0, axisb=0, axisc=0)
                 # nw : i x r
-                #
-                #
-                # to do fix the colinear bug
-                #
-                nw = np.sqrt(np.sum(w*w, axis=0))
-                if (nw.any()==0):
-                    u = np.where(nw==0)
-                    # uv = np.array(filter(lambda x : abs(vn[2,x])>0.99,u))
-                    # # reshape information for the filter
-                    uu = np.array([u[0],u[1]]).T
-                    uv = np.array(filter(lambda x : abs(vn[2,x[:,0],x[:,1]])>0.99,[uu]))
-                    uh = np.setdiff1d(uu,uv)
-                    try:
-                        w[:,uv] = np.array(([1,0,0]))[:,np.newaxis,np.newaxis]
-                    except:
-                        pass
-                    try:
-                        w[:,uh] = np.array(([0,0,1]))[:,np.newaxis,np.newaxis]
-                    except:
-                        pass
-                #assert(nw.all()>0), pdb.set_trace()
+                w, nw = fix_colinear()
+
                 wn = w/nw
                 # Handling channel reciprocity s_in --> -s_in
                 #v = np.cross(wn, s_in, axisa=0, axisb=0, axisc=0)
@@ -1395,7 +1426,9 @@ class Rays(PyLayers,dict):
                 self[k]['Bi'] = np.concatenate((es_in,ew,ev),axis=1)
 
                 w = np.cross(s_out, vn, axisa=0, axisb=0, axisc=0)
-                wn = w/np.sqrt(np.sum(w*w, axis=0))
+
+                w, nw = fix_colinear()
+                #wn = w/np.sqrt(np.sum(w*w, axis=0))
                 v = np.cross(wn, s_out, axisa=0, axisb=0, axisc=0)
 
                 es_out = np.expand_dims(s_out, axis=1)
@@ -2207,8 +2240,7 @@ class Rays(PyLayers,dict):
         else:
             return(filename)
 
-    @mlab.show
-    def _show3(self,L=[],ilist=[],rlist=[],newfig=False):
+    def _show3(self,L=[],ilist=[],rlist=[],newfig=False,**kwargs):
         """ plot 3D rays in environment using Mayavi
 
         Parameters
@@ -2216,7 +2248,7 @@ class Rays(PyLayers,dict):
 
         L : Layout object
             Layout to be displayed
-        ilist : list 
+        ilist : list
             list of group of interactions
         rlist : list
             list of index rays
@@ -2296,9 +2328,9 @@ class Rays(PyLayers,dict):
             Layout to be displayed
         ilist : list of group of interactions
         raylist : list of index rays
-        centered : boolean    
+        centered : boolean
             if True center the layout before display
-        
+
 
         """
 

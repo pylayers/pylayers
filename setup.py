@@ -20,11 +20,9 @@ setup(name='pylayers' ,
         'scipy>=0.10.1',
         'networkx>=1.7',
         'matplotlib>=1.1.0',
-        'basemap>=1.0',
         'SimPy==2.2',
         'PIL>=1.1.5',
         'bitstring>=3.0.2',
-        'shapely>=1.2.14',
         'descartes>=1.0',
         'osmapi>=0.3',
                         ],
@@ -73,3 +71,4 @@ else:
                 f.write(l)
             else :
                 f.write(source+"\n")
+

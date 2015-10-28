@@ -622,7 +622,7 @@ class GrRayTud(PyLayers,dict):
 
         """
 
-        pathname = tuddir + '/*.tud'
+        pathname = os.path.join(tuddir,'/*.tud')
         lfile_l = glob.glob(pathname)
         lfile_tud = []
         for fi in lfile_l:
@@ -630,7 +630,7 @@ class GrRayTud(PyLayers,dict):
             lfile_tud.append(fis)
         lfile_tud.sort()
 
-        pathname = tuddir + '/*.tang'
+        pathname =os.path.join(tuddir,'/*.tang')
         lfile_l = glob.glob(pathname)
         lfile_tang = []
         for fi in lfile_l:
@@ -638,7 +638,7 @@ class GrRayTud(PyLayers,dict):
             lfile_tang.append(fis)
         lfile_tang.sort()
 
-        pathname = tuddir + '/*.rang'
+        pathname =os.path.join(tuddir,'/*.rang')
         lfile_l = glob.glob(pathname)
         lfile_rang = []
         for fi in lfile_l:
@@ -646,7 +646,7 @@ class GrRayTud(PyLayers,dict):
             lfile_rang.append(fis)
         lfile_rang.sort()
 
-        pathname = tuddir + '/*.tauk'
+        pathname =os.path.join( tuddir,'/*.tauk')
         lfile_l = glob.glob(pathname)
         lfile_tauk = []
         for fi in lfile_l:
@@ -1312,7 +1312,7 @@ class GrRay3D(PyLayers):
             limit to a given filestruc
         """
 
-        pathname = tradir + '/*.tra'
+        pathname =os.ppath.join( tradir, '/*.tra')
         lfile_l = glob.glob(pathname)
         lfile_s = []
         for fi in lfile_l:
@@ -1465,7 +1465,7 @@ class GrRay3D(PyLayers):
             self.ray3d = []
 
             for i in range(self.n):
-                # print "Rayon NÂ° : ",i
+                # print "Rayon N : ",i
                 ray3D = Ray3D()
                 start = stop
                 stop = start + 4

@@ -1,4 +1,12 @@
 # -*- coding:Utf-8 -*-
+r"""
+
+.. currentmodule:: pylayers.location.algebraic.algebraic
+
+.. autosummary::
+    :toctree: generated
+
+"""
 #####################################################################
 #PYLAYERS is free software: you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -18,7 +26,6 @@
 #Mohamed LAARAIEDH
 #Bernard Uguen
 #####################################################################
-
 import numpy as np
 import doctest
 import scipy as sp
@@ -57,7 +64,7 @@ class algloc(object):
         + a dictionnary of nodes
         + a dictionnary of location dependent parameters
 
-    
+
     """
 
     def __init__(self, nodes={}, ldp={}):
@@ -139,14 +146,17 @@ class algloc(object):
         return(fig,ax)
 
     def show(self, rss=False, toa=True, tdoa=False):
-        """ Plot scenario
+        """ show scenario
 
         Parameters
         ----------
 
         rss : boolean
+            False
         toa : boolean
+            True 
         tdoa : boolean
+            False
 
         Examples
         --------
@@ -336,7 +346,7 @@ class algloc(object):
                     P = P.reshape(np.shape(rn_toa[:, 0:1]))
                 else:
                     raise ValueError("Data are not sufficient to perform localization")
-                    
+
             elif toa == 0 and tdoa == 0:
                 rn_rss = self.nodes['RN_RSS']
                 rss_db = self.ldp['RSS']
@@ -738,7 +748,7 @@ class algloc(object):
                     P = P.reshape(np.shape(rn_rss[:, 0:1]))
                 else:
                     raise ValueError("Data are not sufficient to perform localization")
-                
+
 
             elif rss == 0:
                 rn_toa = self.nodes['RN_TOA']

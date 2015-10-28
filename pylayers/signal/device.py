@@ -48,7 +48,6 @@ def devicels():
 
 
 class Device(object):
-
     """ Device Class
 
     """
@@ -67,9 +66,9 @@ class Device(object):
             device id
         ant : dict
             dictionnary of used antennas with:
-            key : 
+            key :
                 antenna name
-            values : 
+            values :
                 p : relative position of antenna on the device
                 T : Rotaion matrice of antenna (acs)
         dim : ndarray
@@ -78,7 +77,7 @@ class Device(object):
             type of the device
         wstd : dict
             dictionnary of wireless standards
-            key : 
+            key :
                 wireless standard name
             values : dict of std information (from Wstandard class)
 
@@ -89,6 +88,7 @@ class Device(object):
 
 
         """
+
         self.owner = owner
         self.name = devname
         self.ID = ID
@@ -133,10 +133,12 @@ class Device(object):
         s = s + '\n\nAntennas' + '\n'
         s = s + '========' + '\n'
         for k in self.ant:
-            s = s + str(self.ant[k]['name']) + '\n'
-            s = s + '-'*len(k) + '\n'
-            s = s + 'Antenna Relative position on device: \n' + str(self.ant[k]['p']) + '\n'
-            s = s + 'Antenna Rotation Matrice on device: \n' + str(self.ant[k]['T']) + '\n\n'
+            if k != 'T' and k != 'antenna':
+
+                s = s + str(self.ant[k]['name']) + '\n'
+                s = s + '-'*len(k) + '\n'
+                s = s + 'Antenna Relative position on device: \n' + str(self.ant[k]['p']) + '\n'
+                s = s + 'Antenna Rotation Matrice on device: \n' + str(self.ant[k]['T']) + '\n\n'
 
         return s
 
@@ -149,7 +151,7 @@ class Device(object):
         wstd : string
             worerless standard
         channel : int
-            channel number
+            channel numbern
         """
 
         W = Wstandard(wstd)
@@ -177,15 +179,17 @@ class Device(object):
         dev = json.load(fp)
         fp.close()
 
-        fp = open(pyu.getlong('wstd.json',pstruc['DIRSIMUL']))
-        wstds = json.load(fp)
-        fp.close()
 
+        #fp = open(pyu.getlong('wstd.json',pstruc['DIRSIMUL']))
+        #wstds = json.load(fp)
+        #fp.close()
 
         dim = dev[devname]['dimensions']
         ant = dev[devname]['antennas']
         wstd = dev[devname]['standards']
         # meter conversion
+        # dimension are expressed in mm
+        #
         self.dim = np.array((dim['height'], dim['width'], dim['depth'])) / 1000
         self.ant = {}
 
@@ -195,6 +199,8 @@ class Device(object):
             self.ant[k]['p'] = np.array(ant[k]['p'])
             self.ant[k]['T'] = np.array(eval(ant[k]['T']))
         self.wstd = {}
+
+
         for k in wstd.keys():
             self.wstd[k] = {}
             W = Wstandard(k)

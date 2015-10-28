@@ -6,6 +6,20 @@
 RadioNode Class
 ===============
 
+A radio Node is a data structure which store positions of
+a radio node at several time step.
+
+This data structure is used in DLink.
+
+Members of a radionode are
+
+position    : 3xNt
+time        : 1xNt
+orientation : 3x3xNt
+typ         : 'tx' or 'rx'
+name        : string
+
+
 .. autosummary::
     :toctree: generated/
 
@@ -34,7 +48,6 @@ RadioNode Class
     RadioNode.move
     RadioNode.extract
     RadioNode.loadvsh
-    RadioNode.gantenna
 
 """
 
@@ -45,14 +58,13 @@ import ConfigParser
 import pylayers.util.easygui as eg
 import pylayers.util.pyutil as pyu
 import pylayers.util.geomutil as geo
-from pylayers.antprop.antenna import *
 from pylayers.mobility.trajectory import *
 from pylayers.util.project import *
 import numpy as np
 import scipy as sp
 
 
-class RadioNode(object):
+class RadioNode(PyLayers):
     """ container for a Radio Node
 
      This class manages the spatial and temporal behavior of a radio node
@@ -68,8 +80,6 @@ class RadioNode(object):
         orientation 3x3xn (rotation matrix for each position)
      points
         dictionnary of points (redundant information)
-     antenneid
-        id of the antenna
      type
         0: undefined 1: Tx 2 : Rx
 
@@ -110,8 +120,6 @@ class RadioNode(object):
             2 : rx
         _fileini : string
             file of RadioNode coordinates
-        _fileant : string
-            file of antenna VSH
         _filestr : string
             file of layout structure
 
@@ -160,18 +168,12 @@ class RadioNode(object):
         except:
             pass
 
-        #
-        #print _fileant
-        self.fileant = _fileant
-        try:
-            self.loadvsh() # is it still necessary ? 
-        except:
-            raise NameError('antenna file does not exist')
         self.save()
 
     def __repr__(self):
         """ representation of radio node
-        Only position if shown 
+
+        Only position is shown
         """
         st = ''
         for k in range(self.N):
@@ -196,11 +198,12 @@ class RadioNode(object):
         Parameters
         ----------
 
-        alpha : float 
+        alpha : float
             angle (rad)
         trans : np.array()  (,2)
 
         """
+
         d2r = np.pi/180
         Rot = np.array([[np.cos(d2r*alpha),-np.sin(d2r*alpha)],
                         [np.sin(d2r*alpha),np.cos(d2r*alpha)]])
@@ -415,19 +418,19 @@ class RadioNode(object):
         Parameters
         ----------
 
-        N1 : int 
+        N1 : int
             default 2
-        N2 : int     
+        N2 : int
             default 2
-        p0 : array or list 
-            first point  
-        p1 : array or list 
-            second point  
-        p2 : array or list 
-            third point  
-        mode : string 
+        p0 : array or list
+            first point
+        p1 : array or list
+            second point
+        p2 : array or list
+            third point
+        mode : string
             'subst'
-            'append' 
+            'append'
 
 
         Examples
@@ -556,9 +559,9 @@ class RadioNode(object):
                                            self.points[k].reshape(3,1)))
             except:
                 self.position = self.points[k].reshape(3,1)
-                
-        self.traj=Trajectory(pt=self.position.T)        
-        
+
+        self.traj=Trajectory(pt=self.position.T)
+
     def loadspa(self, _filespa, rep=pstruc['DIRLCH']):
         """ load a spa file
 
@@ -853,17 +856,24 @@ class RadioNode(object):
 #                        fi_spa.write(chaine)
 #                fi_spa.close()
 
-    def show(self, num = [], fig=[], ax =[],linewidth=1,marker='-',color='b'):
+    def show(self, num = [], fig=[], ax =[],size=5,marker='o',color='b'):
         """ Display RadioNode position in the 2D strucure
+
+        Parameters
+        ----------
+
+
         """
         if num ==[]:
             num = np.arange(np.shape(self.position)[1])
+        
         x = self.position[0, num]
         y = self.position[1, num]
+
         if ax == []:
             fig = plt.gcf()
             ax = fig.gca()
-        ax.plot(x, y,marker=marker,color=color,linewidth=linewidth)
+        ax.scatter(x, y,s=size,c=color,linewidth=0)
         return fig,ax
 
     def show3(self, _filestr='DLR.off'):
@@ -955,30 +965,6 @@ class RadioNode(object):
             fi.close()
 
         return u
-
-    def loadvsh(self):
-        """ load an antenna 
-
-
-        """
-        #print self.fileant
-        A = Antenna(self.fileant)
-        self.A = A
-
-    def gantenna(self, mode='subst'):
-        """ get antenna file
-        """
-        import tkFileDialog
-        FD = tkFileDialog
-
-        fileant = FD.askopenfilename(filetypes=[("Fichiers vsh3", "*.vsh3"),
-                                                ("All", "*")],
-                                     title="Please choose an antenna file",
-                                     initialdir=antdir)
-
-        _fileant = os.path.split(fileant)[1]
-        self.fileant = _fileant
-        self.loadvsh()
 
 if (__name__ == "__main__"):
     tx = RadioNode(_fileini='w2m1rx.ini')

@@ -98,7 +98,7 @@ class Save(Process):
             filename = self.filename
 
         out=[0]
-        infile = open(basename+'/' + pstruc['DIRNETSAVE'] +'/'+filename, 'r')
+        infile = open(os.path.join(basename,pstruc['DIRNETSAVE'],filename), 'r')
         while 1:
             try:
                 out.append(pickle.load(infile))
@@ -148,7 +148,7 @@ class Save(Process):
                     except:
                         pass
 
-        spio.savemat(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename,self.savemat)
+        spio.savemat(os.path.join(basename,pstruc['DIRNETSAVE'],self.filename),self.savemat)
         self.save=self.load()
 
     def run(self):
@@ -157,7 +157,7 @@ class Save(Process):
         """
         self.save={}
         self.filename = eval(self.opt['filename'])
-        self.file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename,'write')
+        self.file=open(os.path.join(basename,pstruc['DIRNETSAVE'],self.filename),'write')
         self.save['saveopt'] = {}
         self.save['saveopt']['lpos'] = self.lpos
         self.save['saveopt']['lldp'] = self.lldp
@@ -231,7 +231,7 @@ class Save(Process):
                         except:
                             pass
 
-            self.file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename,'a')
+            self.file=open(os.path.join(basename,pstruc['DIRNETSAVE'],self.filename),'a')
             pickle.dump(self.save, self.file)
             self.file.close()
             self.idx=self.idx+1

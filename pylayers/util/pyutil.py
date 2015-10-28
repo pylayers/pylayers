@@ -1,4 +1,54 @@
-# -*- coding:Utf-8 -*-
+#!/usr/bin/python
+#-*- coding:Utf-8 -*-
+r"""
+.. currentmodule:: pylayers.util.pyutil
+
+.. autosummary::
+    :toctree: generated
+
+    delay
+    lt2idic
+    getlong
+    getshort
+    getdir
+    shp
+    dimcmp
+    tstincl
+    ininter
+    cshift
+    LegFunc
+    ExpFunc
+    InvFunc
+    PowFunc
+    randcol
+    coldict
+    createtrxfile
+    rgb
+    nbint
+    encodmtlb
+    sqrte
+    untie
+    corrcy
+    foo
+    cdf
+    bitreverse
+    timestamp
+    writemeca
+    writenet
+    writenode
+    writeDetails
+    zipd
+    unzipd
+    unzipf
+    rotate_line
+    extract_block_diag
+    fill_block_diag
+    fill_block_diagMDA
+    has_colours
+    printout
+    in_ipynb
+
+"""
 import os
 import numpy as np
 import scipy as sp
@@ -19,7 +69,6 @@ import zipfile
 # shp
 # dimcmp
 # tstincl
-# findpos
 # ininter
 #
 ###################################
@@ -116,7 +165,7 @@ def getlong(shortname,directory):
         logging.critical("BASENAME environment variable should be defined")
         #basename=os.environ['HOME']+"/Pyproject"
 
-    longname = basename+'/'+directory+'/'+shortname
+    longname = os.path.join(basename,directory,shortname)
     return(longname)
 
 def getshort(longname):
@@ -249,28 +298,6 @@ def tstincl(ar1,ar2):
         return(0)
     else:
         return(2)
-
-def findpos(ar,val):
-    """
-    findpos(ar,val)
-
-    return the i position in array ar, such that ar[i] == val 
-    if the value is not find, return 'value not found'
-    """
-    dim=len(ar)
-    i=0
-    find=0
-    while (i<dim):
-        if (ar[i]==val):
-            pos=i
-            find=1
-            i=dim
-        else:
-            i=i+1
-    if (find==1):
-        return(pos)
-    else:
-        return('value not found')
 
 def ininter(ar,val1,val2):
     """
@@ -1090,8 +1117,28 @@ def rgb(valex,out='int'):
 
 
 def nbint(a):
-    """
-        calculate the number of intervals in a sequence of integer
+    """ calculate the number of distinct contiguous sets in a sequence of integer
+
+    Parameters
+    ----------
+
+    a : np.array
+
+    Examples
+    --------
+
+    >>> import numpy as np
+    >>> from pylayers.util.pyutil import *
+    >>> a = np.array([1,2,3,4])
+    >>> nbint(a)
+    1
+    >>> b = np.array([1,2,4,5])
+    >>> nbint(b)
+    2
+    >>> c = np.array([1,2,4,5,7,8,9])
+    >>> nbint(c)
+    3
+
     """
     b = a[1:]-a[0:-1]
     u = np.nonzero(b!=1)[0]
@@ -1105,7 +1152,6 @@ def encodmtlb(lin):
     ----------
 
     lin : input list
-    encodmtlbi(lin) :
 
     Returns
     -------
@@ -1115,10 +1161,10 @@ def encodmtlb(lin):
     Examples
     --------
 
+    >>> import scipy.io as io
     >>> lin = ['aaa','bbbbbbb','ccc','dd']
-    >>> F   = {}
-    >>> F['lin']=encodmtl(lin)
-    >>> print F['lin']
+    >>> F = {}
+    >>> F['lin']=encodmtlb(lin)
     >>> io.savemat('encodmtlb_ex.mat',F)
 
     Notes
@@ -1133,7 +1179,7 @@ def encodmtlb(lin):
 
     N = len(lin)
 
-    # 
+    #
     M  = 0
     lout = []
     str  = ''
@@ -1149,10 +1195,10 @@ def encodmtlb(lin):
             if (j>=m):
                 c = ' '
             else:
-                 c = lin[i][j]    
+                 c = lin[i][j]
 
             str = str + c
-            if mod(k+1,M)==0:
+            if np.mod(k+1,M)==0:
                 lout.append(str)
                 str=''
 
@@ -1430,7 +1476,7 @@ def cdf(x,color='b',label=" ",lw=1,xlabel="x",ylabel="CDF",logx=False):
     plt.ylabel(ylabel)
 
 def bitreverse(N=256,nbit=9):
-    """ 
+    """
     Parameters
     ----------
     N : ideally a power of 2
@@ -1439,7 +1485,7 @@ def bitreverse(N=256,nbit=9):
     -------
     t : list of the N integers in time reverse order
 
-    Notes 
+    Notes
     -----
     This function is used for example in buildGv. 
     One error has been fixed  by forbidding the value 0 
@@ -1450,7 +1496,7 @@ def bitreverse(N=256,nbit=9):
     for k in np.arange(N-1)+1:
         b = BitString(uint=k,length=nbit) 
         b.reverse()
-        b.ror(1)
+        #b.ror(1)
         t.append(b.uint)
     return(np.array(t))
 
@@ -1470,36 +1516,36 @@ def writemeca(ID,time,p,v,a):
 
 
     ### TruePosition
-    if not os.path.isfile(basename+'/' + pstruc['DIRNETSAVE'] +'/TruePosition.txt'):
+    if not os.path.isfile(os.path.join(basename,pstruc['DIRNETSAVE'],'TruePosition.txt')):
         entete = 'TruePositionID,NodeID, Timestamp, X,Y,Z,ReferencePointID\n'
-        file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/TruePosition.txt','w')
+        file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'TruePosition.txt'),'w')
         file.write(entete)
         data = '1,'+str(ID) +','+ str(timestamp(time)) +',' + str(p[0])+',' +str(p[1])+','+',\n'
         file.write(data)
         file.close()
     else:
-        file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/TruePosition.txt','r')
+        file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'TruePosition.txt','r'))
         lst=file.readlines()
         file.close()
         data = str(eval(lst[-1].split(',')[0])+1) +','+str(ID) +','+ str(timestamp(time)) +',' + str(p[0])+ ',' +str(p[1])+','+',\n'
-        file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/TruePosition.txt','a')
+        file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'TruePosition.txt'),'a')
         file.write(data)
         file.close()
 
     ### UWBSensorMeasurements
-    if not os.path.isfile(basename+'/' + pstruc['DIRNETSAVE'] +'/UWBSensorMeasurements.txt'):
+    if not os.path.isfile(os.path.join(basename,pstruc['DIRNETSAVE'],'UWBSensorMeasurements.txt')):
         entete = 'UWBSensorMeasurementsID,NodeID, Timestamp, UWB_MagX,UWB_MagY,UWB_MagZ,UWB_AccX,UWB_AccY,UWB_AccZ,UWB_GyroX,UWB_GyroY,UWB_GyroZ\n'
-        file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/UWBSensorMeasurements.txt','w')
+        file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'UWBSensorMeasurements.txt'),'w')
         file.write(entete)
         data = '1,'+str(ID) +','+ str(timestamp(time)) +',' + str(v[0])+',' +str(v[1])+',,'+str(a[0])+','+str(a[1])+',,,,\n'
         file.write(data)
         file.close()
     else:
-        file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/UWBSensorMeasurements.txt','r')
+        file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'UWBSensorMeasurements.txt'),'r')
         lst=file.readlines()
         file.close()
         data = str(eval(lst[-1].split(',')[0])+1)+',' +str(ID) +','+ str(timestamp(time)) +',' + str(v[0])+',' +str(v[1])+',,'+str(a[0])+','+str(a[1])+',,,,\n'
-        file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/UWBSensorMeasurements.txt','a')
+        file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'UWBSensorMeasurements.txt'),'a')
         file.write(data)
         file.close()
 
@@ -1513,36 +1559,36 @@ def writenet(net,t):
     """
     for e in net.edges_iter(data=True):
         ### ZIGLinkMeasurements
-        if not os.path.isfile(basename+'/' + pstruc['DIRNETSAVE'] +'/ZIGLinkMeasurements.txt'):
+        if not os.path.isfile(os.path.join(basename,pstruc['DIRNETSAVE'],'ZIGLinkMeasurements.txt')):
             entete = 'ZIGLinkMeasurementsID,NodeID, ZIG_PeerID, ZIG_RSSI, Timestamp\n'
-            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/ZIGLinkMeasurements.txt','w')
+            file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'ZIGLinkMeasurements.txt'),'w')
             file.write(entete)
             data = '1,'+ e[0] +','+ e[1] +',' + str(e[2]['Pr'][0]) +',' +timestamp(t.now()) +',\n'
             file.write(data)
             file.close()
         else:
-            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/ZIGLinkMeasurements.txt','r')
+            file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'ZIGLinkMeasurements.txt'),'r')
             lst=file.readlines()
             file.close()
             data = str(eval(lst[-1].split(',')[0])+1)+','+ e[0] +','+ e[1] +',' + str(e[2]['Pr'][0]) +',' +timestamp(t.now()) +',\n'
-            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/ZIGLinkMeasurements.txt','a')
+            file=open(os.path.join(basename,pstruc['DIRNETSAVE'] ,'ZIGLinkMeasurements.txt'),'a')
             file.write(data)
             file.close()
 
         ### UWBLinkMeasurements
-        if not os.path.isfile(basename+'/' + pstruc['DIRNETSAVE'] +'/UWBLinkMeasurements.txt'):
+        if not os.path.isfile(os.path.join(basename,pstruc['DIRNETSAVE'],'UWBLinkMeasurements.txt')):
             entete = 'UWBLinkMeasurementsID, NodeID, Timestamp, UWB_PeerID, UWB_Dist, UWB_BER, UWB_FER, UWB_CIR\n'
-            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/UWBLinkMeasurements.txt','w')
+            file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'UWBLinkMeasurements.txt'),'w')
             file.write(entete)
             data = '1,'+ e[0] +','+ timestamp(t.now()) +',' +e[1] +','+ str(e[2]['d']) +',,,,\n'
             file.write(data)
             file.close()
         else:
-            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/UWBLinkMeasurements.txt','r')
+            file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'UWBLinkMeasurements.txt'),'r')
             lst=file.readlines()
             file.close()
             data = str(eval(lst[-1].split(',')[0])+1)+','+ e[0] +','+ timestamp(t.now()) +',' +e[1] +','+ str(e[2]['d']) +',,,,\n'
-            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/UWBLinkMeasurements.txt','a')
+            file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'UWBLinkMeasurements.txt'),'a')
             file.write(data)
             file.close()
 
@@ -1569,14 +1615,14 @@ def writenode(agent):
     '''
     write Nodes.txt
     '''
-    if not os.path.isfile(basename+'/' + pstruc['DIRNETSAVE'] +'/Nodes.txt'):
+    if not os.path.isfile(os.path.join(basename,pstruc['DIRNETSAVE'],'Nodes.txt')):
         entete = 'NodeID, NodeName, NodeOwner, NodeDescription, NodeOwnerID, Mobile OrAnchor, TrolleyID\n'
-        file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/Nodes.txt','w')
+        file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'Nodes.txt'),'w')
         file.write(entete)
         file.close()
 
     data = str(eval(agent.ID)) +','+ agent.name + ',,,,' + str(agent.MoA) +',\n'
-    file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/Nodes.txt','a')
+    file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'Nodes.txt'),'a')
     file.write(data)
     file.close()
 
@@ -1584,14 +1630,14 @@ def writeDetails(t,description='simulation', location ='Rennes'):
     '''
     write MeasurementsDetails.txt
     '''
-    if not os.path.isfile(basename+'/' + pstruc['DIRNETSAVE'] +'/MeasurementsDetails.txt'):
+    if not os.path.isfile(os.path.join(basename,pstruc['DIRNETSAVE'],'MeasurementsDetails.txt')):
         entete = 'MeasurementsDetailsID, MeasurementsDate, MeasurementsDescription, MeasurementsLocation\n'
-        file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/MeasurementsDetails.txt','w')
+        file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'MeasurementsDetails.txt'),'w')
         file.write(entete)
         file.close()
 
     data = '1' +','+ timestamp(t.now()) + ', ' +description + location +',\n'
-    file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/MeasurementsDetails.txt','a')
+    file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'MeasurementsDetails.txt'),'a')
     file.write(data)
     file.close()
 
@@ -1633,7 +1679,7 @@ def unzipd(path, zipfilename):
 
     for each in zip_file.namelist():
         print each
-        if not each.endswith('/'): 
+        if not each.endswith('/') or not each.endswith('\\'): 
             root, name = os.path.split(each)
             directory = os.path.normpath(os.path.join(path, root))
             if not os.path.isdir(directory):
@@ -1656,7 +1702,7 @@ def unzipf(path, filepath, zipfilename):
         os.makedirs(path)    
 
     for each in zip_file.namelist():
-        if each == filepath and not each.endswith('/'): 
+        if each == filepath and (not each.endswith('/') or not each.endswith('\\')): 
             root, name = os.path.split(each)
             directory = os.path.normpath(os.path.join(path, root))
             if not os.path.isdir(directory):
@@ -1736,6 +1782,30 @@ def fill_block_diag(A, blocks,M,k=0):
     return A
 
 
+def fill_block_diagMDA(A, blocks,M,k=0):
+    """fill A with blocks of size M from the kth diagonal
+    """
+
+    # Check that the matrix can be block divided
+    if A.shape[0] != A.shape[1] or A.shape[0] % M != 0:
+        raise StandardError('Matrix must be square and a multiple of block size')
+
+    # Assign indices for offset from main diagonal
+    if abs(k) > M - 1:
+        raise StandardError('kth diagonal does not exist in matrix')
+    elif k > 0:
+        ro = 0
+        co = abs(k)*M 
+    elif k < 0:
+        ro = abs(k)*M
+        co = 0
+    else:
+        ro = 0
+        co = 0
+    for i in range(0,len(A)-abs(k)*M,M):
+        A[i+ro:i+ro+M,i+co:i+co+M,...]=blocks[:,:,...,int(i/M)] 
+    return A
+
 BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
 
 #following from Python cookbook, #475186
@@ -1761,6 +1831,19 @@ def printout(text, colour=WHITE):
         else:
                 sys.stdout.write(text)
 
+
+def in_ipynb():
+    """
+    check if program is run in ipython notebook
+    """
+    try:
+        cfg = get_ipython().config 
+        if cfg['IPKernelApp']['parent_appname'] == 'ipython-notebook':
+            return True
+        else:
+            return False
+    except NameError:
+        return False
 
 if __name__ == "__main__":
     doctest.testmod()

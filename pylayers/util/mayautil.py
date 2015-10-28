@@ -1,8 +1,7 @@
 # -*- coding:Utf-8 -*-
 
 import numpy as np
-from traits.api import HasTraits, Instance, Array, \
-    on_trait_change
+from traits.api import HasTraits, Instance, Array, on_trait_change
 from traitsui.api import View, Item, HGroup, Group
 
 from tvtk.api import tvtk
@@ -10,8 +9,7 @@ from tvtk.pyface.scene import Scene
 
 from mayavi import mlab
 from mayavi.core.api import PipelineBase, Source
-from mayavi.core.ui.api import SceneEditor, MayaviScene, \
-                                MlabSceneModel
+from mayavi.core.ui.api import SceneEditor, MayaviScene, MlabSceneModel
 
 class VolumeSlicer(HasTraits):
     """ volume slicer
@@ -193,38 +191,32 @@ class VolumeSlicer(HasTraits):
                 )
 
 
-def savefig(filename,mlabview=[],magnification = 3,doc=False):
+def savefig(filename,mlabview=[],magnification = 3):
     """
     Save mayavi figure
 
     Parameters
     ----------
 
-    name : str
+    filename : str
         name of the figure
-    mlabview : [] | (x,y,z, np.array([ xroll,yroll,zroll]))
+    mlabview : [] |(x,y,z, np.array([ xroll,yroll,zroll]))
         specifyy angle of camera view ( see mayavi.view )
     magnification : int
         resolution of the generated image ( see mayavi.savefig)
-    doc : bool
-    if doc, image is supposed to be generated for documentation
 
     """
     import os
 
-    if doc:
-        path = '../maya_images/'
-    else :
-        path = './maya_images/'
 
-
+    path = os.path.dirname(filename)
     if not mlabview == []:
         mlab.view(mlabview)
     if os.path.exists(path):
-        mlab.savefig(path+filename+'.png',magnification=magnification )
+        mlab.savefig(filename+'.png',magnification=magnification )
     else:
         os.mkdir(path)
-        mlab.savefig(path+filename+'.png',magnification=magnification )
+        mlab.savefig(filename+'.png',magnification=magnification )
     mlab.close()
 
 
@@ -240,14 +232,13 @@ def inotshow(filename,**kwargs):
 
     See IPython.display.Image
     """
-
+    import os
 
     defaults = {'mlabview':[],
                 'magnification':3,
                 'width':500,
                 'height':500,
                 'doc':False
-
                 }
 
     for key, value in defaults.items():
@@ -261,15 +252,15 @@ def inotshow(filename,**kwargs):
     doc=kwargs.pop('doc')
 
     if doc:
-        path = '../maya_images/'
+        path = os.path.join('..','maya_images')
     else :
-        path = './maya_images/'
+        path = os.path.join('.','maya_images')
 
-    savefig(filename,mlabview,magnification,doc)
+    savefig(os.path.join(path,filename),mlabview,magnification)
 
     try :
-        inb = Image(filename=path+filename+'.png',**kwargs)
+        inb = Image(filename=os.path.join(path,filename+'.png'),**kwargs)
     except:
         from IPython.display import Image,display
-        inb = Image(filename=path+filename+'.png',**kwargs)
+        inb = Image(filename=os.path.join(path,filename+'.png'),**kwargs)
     display(inb)

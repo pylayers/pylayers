@@ -457,7 +457,7 @@ class IntB(Inter):
 
         data : np.array:
             WARNING np.shape(data) = (ninter x 4)
-            the input matrix 2x2 is rehaped as 1x 4
+            the input matrix 2x2 is reshaped as 1x 4
         idx : list
             index of the corresponding ray and interaction
 
@@ -522,10 +522,10 @@ class IntB(Inter):
             lidx = len(self.idx)
             data = self.data.reshape(lidx, 2, 2)
             #return(self.olf[:, np.newaxis, np.newaxis, np.newaxis]*data[np.newaxis, :, :, :])
-            return(np.ones((len(fGHz),1,1,1))*data[np.newaxis, :, :, :])
+            return(np.ones((len(fGHz),1,1,1))*data[None, :, :, :])
         else:
             print 'no B interaction to evaluate'
-            return(self.data[:, np.newaxis, np.newaxis, np.newaxis])
+            return(self.data[:, None, None, None])
 
 
 class IntL(Inter):
@@ -589,10 +589,10 @@ class IntL(Inter):
 #            return(dis[:,:,np.newaxis,np.newaxis]*self.E[np.newaxis,np.newaxis,:,:])
 #            dis = self.data
             #return(self.olf[:, np.newaxis, np.newaxis, np.newaxis]*self.E[np.newaxis, np.newaxis, :, :])
-            return(np.ones((len(fGHz),1,1,1))*self.E[np.newaxis, np.newaxis, :, :])
+            return(np.ones((len(fGHz),1,1,1))*self.E[None, None, :, :])
         else:
             print 'no L interaction to evaluate'
-            return(self.data[:, np.newaxis, np.newaxis, np.newaxis])
+            return(self.data[:, None, None, None])
 
 
 class IntR(Inter):
@@ -713,7 +713,7 @@ class IntR(Inter):
             self.gamma = np.array(self.gamma*len(self.idx), dtype=complex)
             return(self.A)
         else:
-            self.A = self.data[:, np.newaxis, np.newaxis, np.newaxis]
+            self.A = self.data[:, None, None, None]
             print 'no R interaction to evaluate'
             return(self.A)
 
@@ -821,7 +821,7 @@ class IntT(Inter):
                         gamma = g
 
                     # find the index of angles which satisfied the data
-                    self.slab[m].ev(fGHz=fGHz, theta=ut, RT='T', compensate=False)
+                    self.slab[m].ev(fGHz=fGHz, theta=ut, RT='T', compensate=True)
 
                     try:
                         T = np.concatenate((T, self.slab[m].T), axis=1)
@@ -838,7 +838,7 @@ class IntT(Inter):
 
         else:
             #print 'no T interaction to evaluate'
-            return(self.data[:, np.newaxis, np.newaxis, np.newaxis])
+            return(self.data[:, None, None, None])
 
 
 class IntD(Inter):
@@ -877,11 +877,11 @@ class IntD(Inter):
         self.sinsout()
 
         if len(self.data) != 0:
-            self.A = self.data[:, np.newaxis, np.newaxis, np.newaxis]
+            self.A = self.data[:, None, None, None]
             return(self.A)
             print 'not yet implemented'
         else:
-            self.A = self.data[:, np.newaxis, np.newaxis, np.newaxis]
+            self.A = self.data[:, None, None, None]
             print 'no D interaction to evaluate'
             return(self.A)
 

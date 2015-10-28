@@ -112,6 +112,7 @@ import matplotlib.pylab as plt
 import pylayers.util.pyutil as pyu
 import pylayers.util.geomutil as geu
 import pylayers.signal.bsignal as bs
+import pylayers.antprop.channel as ch
 from   pylayers.util.project import *
 from   scipy import io
 from   scipy import signal, linspace, polyval, polyfit, stats
@@ -136,13 +137,13 @@ def mesname(n, dirname, h=1):
         This function handle filename from WHERE1 M1 measurement campaign
     """
     if (h == 1):
-        mesdir = dirname + '/h1/'
+        mesdir = os.path.join(dirname,'h1')
         if n > 279:
             prefix = 'SIRADEL_08-08-01_P'
         else:
             prefix = 'SIRADEL_08-07-31_P'
     else:
-        mesdir = dirname + '/h2/'
+        mesdir = os.path.join(dirname,'h2')
         prefix = 'SIRADEL_08-08-02_P'
 
     stn = str(n)
@@ -151,7 +152,7 @@ def mesname(n, dirname, h=1):
     if (len(stn) == 2):
         stn = '0' + stn
 
-    filename = mesdir + prefix + stn + '.mat'
+    filename = os.path.join(mesdir, prefix + stn + '.mat')
     return(filename)
 
 def ptw1():
@@ -965,13 +966,13 @@ class Tdd(PyLayers):
     ----------
 
     ch1
-        signal on channel 1 (bs.TUsignal)
+        signal on channel 1 (ch.TUchannel)
     ch2
-        signal on channel 2 (bs.TUsignal)
+        signal on channel 2 (ch.TUchannel)
     ch3
-        signal on channel 3 (bs.TUsignal)
+        signal on channel 3 (ch.TUchannel)
     ch4
-        signal on channel 4 (bs.TUsignal)
+        signal on channel 4 (ch.TUchannel)
     tx
         exitation waveform ( Impulse feeding Tx antenna) (bs.TUsignal)
 
@@ -998,17 +999,17 @@ class Tdd(PyLayers):
             #self.tx   = bs.TUsignal(t,d.TX)
             #self.tx   = bs.TUsignal(t,d.TX[0])
             #####
-            ##### Definitely not obvious , but 
+            ##### Definitely not obvious , but
             ##### this order is the corect one regarding
-            ##### to the measurements !!
+            ##### dhe measurements !!
             #####
             t = d[0][0] * 1e9
-            self.ch3 = bs.TUsignal(t, d[1][0])
-            self.ch4 = bs.TUsignal(t, d[2][0])
-            self.ch1 = bs.TUsignal(t, d[3][0])
-            self.ch2 = bs.TUsignal(t, d[4][0])
+            self.ch3 = ch.TUchannel(x=t, y=d[1][0])
+            self.ch4 = ch.TUchannel(x=t, y=d[2][0])
+            self.ch1 = ch.TUchannel(x=t, y=d[3][0])
+            self.ch2 = ch.TUchannel(x=t, y=d[4][0])
             #self.tx   = bs.TUsignal(t,d.TX)
-            self.tx = bs.TUsignal(t, d[5][0])
+            self.tx = ch.TUchannel(t, d[5][0])
         else:
             pass
 
@@ -1075,9 +1076,9 @@ class Tdd(PyLayers):
 
         return(freq, pl)
 
-    def show(self, delay=np.array([[0], [0], [0], [0]]), display=True,
-             titre=['Rx1', 'Rx2', 'Rx3', 'Rx4'], col=['k', 'b', 'g', 'c'],
-             xmin=0, xmax=200, C=0, NC=1,typ='v'):
+    def show(self, fig = [], delay=np.array([[0], [0], [0], [0]]), display=True,
+             title=['Rx1', 'Rx2', 'Rx3', 'Rx4'], col=['k', 'b', 'g', 'c'],
+             xmin=0, xmax=200,typ='v'):
         """ show the 4 Impulse Radio Impulse responses
 
         Parameters
@@ -1105,76 +1106,35 @@ class Tdd(PyLayers):
 
         """
 
-        fig = plt.gcf()
-        ax = fig.get_axes()
-
-        if (len(ax) < 4) | (NC == 2):
-            createfig = True
+        if fig == []:
+            f = plt.gcf()
         else:
-            createfig = False
-
-        if display:
-            N = 4
-            M = 0
-        else:
-            N = 5
-            M = 1
+            f = fig
+        
         #plt.axis([0,200,-2,2])
         self.ch1.zlr(xmin, xmax)
         self.ch2.zlr(xmin, xmax)
         self.ch3.zlr(xmin, xmax)
         self.ch4.zlr(xmin, xmax)
 
-        if createfig:
-            sp1 = fig.add_subplot(N, NC, NC + C)
-        elif N == 4:
-            sp1 = ax[0]
-        else:
-            sp1 = ax[1]
-
-        self.ch1.plot(color=col[0], vline=np.array([delay[0]]),ax=sp1,typ=typ)
-        #              showlabel=[False, True], unit1='V', unit2='mV', ax=sp1)
-        #self.ch1.plot(col=col[0],unit1='V',unit2='mV',ax=sp1,logx=False,logy=False)
-        #plt.show()
-        #axis([0,200,-2,2])
-        #"sp1.add_title(titre[0])
-        if createfig:
-            sp2 = fig.add_subplot(N, NC, 2 * NC + C,sharex=sp1)
-        elif N == 4:
-            sp2 = ax[1]
-        else:
-            sp2 = ax[2]
-        self.ch2.plot(color=col[1], vline=np.array([delay[1]]),ax=sp2,typ=typ)
-        #              showlabel=[False, True], unit1='V', unit2='mV', ax=sp2)
-        #self.ch2.plot(col=col[1],unit1='V',unit2='mV',ax=sp2,logx=False,logy=False)
-        #plt.show()
-        #plt.axis([0,200,-2,2])
-        #plt.title(titre[1])
-        if createfig:
-            sp3 = fig.add_subplot(N, NC, 3 * NC + C,sharex=sp1)
-        elif N == 4:
-            sp3 = ax[2]
-        else:
-            sp3 = ax[3]
-        self.ch3.plot(color=col[2], vline=np.array([delay[2]]),ax=sp3,typ=typ)
-        #              showlabel=[False, True], unit1='V', unit2='mV', ax=sp3)
-        #self.ch3.plot(col=col[2],unit1='V',unit2='mV',ax=sp3,logx=False,logy=False)
-        #plt.show()
-        #plt.title(titre[2])
-        if createfig:
-            sp4 = fig.add_subplot(N, NC, 4 * NC + C,sharex=sp1)
-        elif N == 4:
-            sp4 = ax[3]
-        else:
-            sp4 = ax[4]
-        self.ch4.plot(color=col[3], vline=np.array([delay[3]]), ax=sp4,typ=typ)
-        #              showlabel=[True, True], unit1='V', unit2='mV', ax=sp4)
-        #self.ch4.plot(col=col[3],unit1='V',unit2='mV',ax=sp4,logx=False,logy=False)
-        #plt.show()
-        #plt.axis([0,200,-2,2])
-        #plt.title(titre[3])
+        
+        a1 = f.add_subplot(4, 1, 1)
+        f,a = self.ch1.plot(color=col[0], vline=np.array([delay[0]]),fig=f,ax=a1,typ=typ,unit2='mV')
+        a1.set_title(title[0])
+        a2 = f.add_subplot(4, 1, 2,sharex=a1)
+        f,a= self.ch2.plot(color=col[1], vline=np.array([delay[1]]),fig=f,ax=a2,typ=typ,unit2='mV')
+        a2.set_title(title[1])
+        a3 = f.add_subplot(4, 1, 3,sharex=a1)
+        f,a = self.ch3.plot(color=col[2], vline=np.array([delay[2]]),fig=f,ax=a3,typ=typ,unit2='mV')
+        a3.set_title(title[2])
+        a4 = f.add_subplot(4, 1, 4,sharex=a1)
+        f,a = self.ch4.plot(color=col[3], vline=np.array([delay[3]]),fig=f, ax=a4,typ=typ,unit2='mV')
+        a4.set_title(title[3])
+        
         if display:
             plt.show()
+
+        return f,a4
 
     def show_span(self, delay=np.array([0, 0, 0, 0]), wide=np.array([0, 0, 0, 0])):
         """ show span
@@ -1747,9 +1707,17 @@ class UWBMeasure(PyLayers):
             self.valid = False
 
 
+    def __repr__(self):
+        st = ''
+        st = st + "Date_Time : " + self.Date_Time[0]+'\n'
+        st = st + "Tx_height : " + self.Tx_height[0]+'\n'
+        st = st + "Tx_position :" +  self.Tx_position[0]+'\n'
+        st = st + "Tx : " + str(self.tx)+'\n'
+        return(st)
+        
     def info(self):
         print "Date_Time :", self.Date_Time
-        print "Operators : ", self.Operators
+        #print "Operators : ", self.Operators
         print "Tx_height :", self.Tx_height
         print "Tx_position :", self.Tx_position
         print "Tx : ", self.tx
@@ -1772,8 +1740,8 @@ class UWBMeasure(PyLayers):
                 print "LQI Meth1", self.LQI['Method1_CH4'], " (dB)"
                 print "LQI Meth2", self.LQI['Method2_CH4'], " (dB)"
 
-    def show(self, delay=np.array([[0], [0], [0], [0]]), display=True,
-             col=['k', 'b', 'g', 'c'], xmin=0, xmax=100, C=0, NC=1,typ='v'):
+    def show(self,fig=[],delay=np.array([[0], [0], [0], [0]]),display=True,
+            col=['k', 'b', 'g', 'c'],xmin=0, xmax=100, C=0, NC=1,typ='v'):
         """ show measurement in time domain
 
         Parameters
@@ -1794,17 +1762,26 @@ class UWBMeasure(PyLayers):
             optional
 
         """
-        titre = []
-        self.tdd.show(delay,
-                      display=display,
-                      titre=['Rx1 ' + 'Tx' + str(self.ntx),
-                             'Rx2', 'Rx3', 'Rx4'],
-                      col=col,
+        
+        if fig ==[]:
+            fig = plt.gcf()
+
+        title = []
+        tit = ['Rx 1 : '+str(self.rx[1,:])+' Tx '+str(self.ntx)+ ': '+str(self.tx),
+               'Rx 2 : '+str(self.rx[2,:]),
+               'Rx 3 : '+str(self.rx[3,:]),
+               'Rx 4 : '+str(self.rx[4,:])
+               ]
+
+        f,a = self.tdd.show(delay=delay,
+                      display = display,
+                      title = tit,
+                      col = col,
                       xmin=xmin,
                       xmax=xmax,
-                      C=C,
-                      NC=NC,
-                     typ='v')
+                      typ='v',
+                      fig=fig)
+        return f,a
 
     def Epercent(self):
 
@@ -1896,8 +1873,15 @@ class UWBMeasure(PyLayers):
             self.tdd.show(toa)
         return toa
 
-    def toa_max(self, n, display=False):
+    def toa_max(self, n=6, display=False):
         """ descendant threshold based toa estimation
+
+        Parameters
+        ----------
+
+        n : integer
+            (default 6)
+
         """
 
         toa1 = self.tdd.ch1.toa_max(nint=n)
@@ -1907,11 +1891,20 @@ class UWBMeasure(PyLayers):
 
         toa = np.array([toa1, toa2, toa3, toa4])
         if display:
-            self.tdd.show(toa)
+            self.tdd.show(delay=toa)
         return toa
 
     def toa_th(self, r, k, display=False):
         """ threshold based toa estimation using energy peak
+
+        Parameters
+        ----------
+
+        r : float
+            threshold los
+        k : float
+            threshold nlos
+
         """
 
         toa1 = self.tdd.ch1.toa_th(visibility=self.type[0], thlos=r, thnlos=k)
@@ -1925,24 +1918,17 @@ class UWBMeasure(PyLayers):
             self.tdd.show(toa)
         return toa
 
-    #def toa_th(self,display=False):
 
-        #"""
-        #threshold based toa estimation using energy pic
-        #"""
-
-        #toa1  = self.tdd.ch1.toa_th_tmtm()
-        #toa2  = self.tdd.ch2.toa_th_tmtm()
-        #toa3  = self.tdd.ch3.toa_th_tmtm()
-         #toa4  = self.tdd.ch4.toa_th_tmtm()
-
-        #toa   = np.array([toa1,toa2,toa3,toa4])
-                #if display ==True:
-            #self.tdd.show(toa)
-        #return toa
 
     def toa_cum(self, n, display=False):
         """ threshold based toa estimation using cumulative energy
+
+        Parameters
+        ----------
+
+        n : int 
+        display : boolean 
+
         """
 
         toa1 = self.tdd.ch1.toa_cum(th=n)
@@ -1955,21 +1941,7 @@ class UWBMeasure(PyLayers):
             self.tdd.show(toa)
         return toa
 
-    #def toa_cum(self,display=False):
-        #"""
-        #threshold based toa estimation using cumulative energy
-        #"""
-
-        #toa1 = self.tdd.ch1.toa_cum_tmt()
-        #toa2 = self.tdd.ch2.toa_cum_tmt()
-        #toa3 = self.tdd.ch3.toa_cum_tmt()
-        #toa4 = self.tdd.ch4.toa_cum_tmt()
-
-        #toa  =  np.array([toa1,toa2,toa3,toa4])
-        #if display:
-            #self.tdd.show(toa)
-        #return toa
-
+    
     def taumax(self):
         """
 

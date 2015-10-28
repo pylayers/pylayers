@@ -13,7 +13,7 @@ Scalar Spherical Harmonics Functions
    CartToSphere
 
 """
-from pylayers.antprop.antenna import *
+#from pylayers.antprop.antenna import *
 #from pylayers.antprop.antvsh import *
 from pylayers.antprop.spharm import *
 
@@ -33,8 +33,8 @@ def SSHFunc(L, theta,phi):
 
     L : integer,
         spherical harmonics order
-    theta: numpy array(1, nth)
-    phi: numpy array(1,nph)
+    theta: numpy array (1,nth)
+    phi: numpy array (1,nph)
 
     Notes
     -----
@@ -259,9 +259,9 @@ def ssh(A,L= 20,dsf=1):
     cz  =  np.dot(Ez,Ypinv)
     lmax = L
 
-    Cx = SCoeff(typ='s2', fmin=A.fa[0], fmax=A.fa[-1],lmax = lmax, data=cx,ind =ssh_index)
-    Cy = SCoeff(typ='s2', fmin=A.fa[0], fmax=A.fa[-1],lmax = lmax, data=cy,ind =ssh_index)
-    Cz = SCoeff(typ='s2', fmin=A.fa[0], fmax=A.fa[-1],lmax = lmax, data=cz,ind =ssh_index)
+    Cx = SCoeff(typ='s2', fmin=A.fGHz[0], fmax=A.fGHz[-1],lmax = lmax, data=cx,ind =ssh_index)
+    Cy = SCoeff(typ='s2', fmin=A.fGHz[0], fmax=A.fGHz[-1],lmax = lmax, data=cy,ind =ssh_index)
+    Cz = SCoeff(typ='s2', fmin=A.fGHz[0], fmax=A.fGHz[-1],lmax = lmax, data=cz,ind =ssh_index)
 
     A.S = SSHCoeff(Cx,Cy,Cz)
 

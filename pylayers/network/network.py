@@ -343,19 +343,25 @@ class Network(PyLayers,nx.MultiDiGraph):
         if not self.isPN:
             s = 'Network information\n*******************\n'
             s = s + 'number of nodes: ' + str(len(self.nodes())) +'\n'
-            title = '{0:7} | {1:15} |{2:7} | {3:4} | {4:17} | {5:10} '.format('ID', 'name', 'group', 'type', 'position (x,y,z)','wstd')
+            title = '{0:7} | {1:15} |{2:7} | {3:4} | {4:17} | {5:10} |  {6:10} '.format('ID', 'name', 'group', 'type', 'position (x,y,z)','antenna', 'wstd')
             s = s + title + '\n' + '-'*len(title) + '\n'
-            for n in self.nodes():
-                # for compliance with simulnet and simultraj
-                # to be merged
-                try:
-                    wstd = self.node[n]['wstd'].keys()
-                except:
-                    wstd = self.node[n]['wstd']
-                s = s + '{0:7} | {1:15} |{2:7} | {3:4} | {4:5.2f} {5:5.2f} {6:5.2f} | {7:10} '\
-                .format(self.node[n]['ID'][:7], self.node[n]['name'][:15],
-                self.node[n]['grp'][:7], self.node[n]['typ'][:4], self.node[n]['p'][0],
-                self.node[n]['p'][1],self.node[n]['p'][2],wstd[:10]) + '\n'
+            subnet = self.SubNet.keys()
+            for sn in subnet:
+                for n in self.SubNet[sn].nodes():
+                    # for compliance with simulnet and simultraj
+                    # to be merged
+                    try:
+                        wstd = self.node[n]['wstd'].keys()
+                    except:
+                        wstd = self.node[n]['wstd']
+                    try:
+                        ant = self.node[n]['ant']['antenna']._filename.split('.')[0]
+                    except:
+                        ant=''
+                    s = s + '{0:7} | {1:15} |{2:7} | {3:4} | {4:5.2f} {5:5.2f} {6:5.2f} | {7:10} | {8:10} '\
+                    .format(self.node[n]['ID'][:7], self.node[n]['name'][:15],
+                    self.node[n]['grp'][:7], self.node[n]['typ'][:4], self.node[n]['p'][0],
+                    self.node[n]['p'][1],self.node[n]['p'][2],ant,wstd[:10]) + '\n'
 
     #             try:
     #                 s = s + 'node ID: ' + str(self.node[n]['ID']) + '\n'
@@ -431,9 +437,9 @@ class Network(PyLayers,nx.MultiDiGraph):
         dev : list
             list of Devices
         p : ndarray (Ndev x 3)
-            np.array of devices' positions
+            np.array of devices positions
         grp : string
-            name of the group of device belong to.
+            name of the group of devices
 
         """
 
@@ -454,7 +460,11 @@ class Network(PyLayers,nx.MultiDiGraph):
                 raise AttributeError('Devices must have a different ID')
 
 
-        # add spectific node informations
+        # determine node type
+        #
+        #  ap : access point
+        #  ag : agent
+        #
         if 'ap' in grp:
             typ = 'ap'
         else :
@@ -466,14 +476,17 @@ class Network(PyLayers,nx.MultiDiGraph):
               'typ':typ,
               'dev':d,
                     }) for ud, d in enumerate(dev)]
-# 
+        #
         # self.add_nodes_from([(d.ID, ldic[ud]) for ud,d in enumerate(dev)])
+        #
         self.add_nodes_from([(d.ID, d.__dict__) for d in dev])
 
         # create personnal network
         for ud, d in enumerate(dev):
             self.node[d.ID]['PN']= Network(owner=d.ID, PN=True)
             self.node[d.ID]['PN'].add_nodes_from([(d.ID,d.__dict__)])
+
+        # get wireless standard
         self._get_wstd()
         # for d in dev:
         #     for s in d.wstd.keys():
@@ -698,7 +711,7 @@ class Network(PyLayers,nx.MultiDiGraph):
 
         >>> from pylayers.network.network import *
         >>> N=Network()
-        >>>    N=Network.Network()
+        >>> N=Network.Network()
         >>> for i in range(3):
                 no = Node(ID=i,wstd=['wifi','bt'])
                 N.add_nodes_from(no.nodes(data=True))
@@ -768,8 +781,9 @@ class Network(PyLayers,nx.MultiDiGraph):
     def _connect(self):
         """ connect nodes
 
-        This method 
-        1) Connect all nodes from the network sharing the same wstd 
+        This method
+
+        1) Connect all nodes from the network sharing the same wstd
         2) Create the associated SubNetworks
         3) Create lists of links : self.links and self.relinks
 
@@ -797,6 +811,7 @@ class Network(PyLayers,nx.MultiDiGraph):
         -----
 
         Fill self.links and self.relinks
+
         """
 
         for wstd in self.wstd.keys():
@@ -849,11 +864,11 @@ class Network(PyLayers,nx.MultiDiGraph):
                     # if e0['grp'] == e1['grp']:
                     self.update_edges({'typ': 'I2I'}, n, e)
                         # print str(e0['ID']),str(e1['ID']),'I2I'
-                else:    
+                else:
                     self.update_edges({'typ': 'B2I'}, n, e)
 
     def _get_grp(self):
-        """ 
+        """
             get group of the nodes of a network
 
         """
@@ -969,9 +984,6 @@ class Network(PyLayers,nx.MultiDiGraph):
             * _get_grp()
             * _connect()
             * _init_PN
-            
-
-
 
         """
 
@@ -1213,14 +1225,14 @@ class Network(PyLayers,nx.MultiDiGraph):
         Parameters
         ----------
 
-        wstd : specify a wstd to display node position. If None, all wstd are displayed    
-        
-        Returns 
-        ------
+        wstd : specify a wstd to display node position. If None, all wstd are displayed
+
+        Returns
+        -------
 
         dictionnary :     key     : node ID
         value     : np.array node position
-        
+
 
         """
         if wstd == None:
@@ -1234,8 +1246,7 @@ class Network(PyLayers,nx.MultiDiGraph):
 
 
     def haspe(self,n):
-        """
-            Test if a node has an estimated point  pe key
+        """ Test if a node has an estimated point  pe key
 
         Parameters
         ----------
@@ -1297,19 +1308,19 @@ class Network(PyLayers,nx.MultiDiGraph):
 
 
 
-    def show(self, wstd=None, legend=False, ion=False, info=False, fig=plt.figure() ,ax=None, name=None):
-        """ 
+    def show(self,**kwargs):
+        """
         Show the network
 
-        Parameters 
+        Parameters
         ----------
 
         wstd     : specify a wstd to display. If None, all wstd are displayed
         legend     : Bool. Toggle display edge legend
-        ion     : interactive mode for matplotlib 
-        info    : plot information on edges 
-        fig     : plt.figure() to plot 
-        ax      : plt.figure.ax to plot 
+        ion     : interactive mode for matplotlib
+        info    : plot information on edges
+        fig     : plt.figure() to plot
+        ax      : plt.figure.ax to plot
         name    : figure name
 
 
@@ -1333,9 +1344,9 @@ class Network(PyLayers,nx.MultiDiGraph):
 
         else :
             if isinstance(wstd,list):
-                rloop = wstd    
+                rloop = wstd
             elif isinstance(wstd,str) :
-                rloop=[wstd]    
+                rloop=[wstd]
             else :
                 raise AttributeError('Arg must be a string or a string list')
 
@@ -1407,7 +1418,7 @@ class Network(PyLayers,nx.MultiDiGraph):
                 [jj.remove() for jj in self.coll_plot['edge'][0] if jj != None]
                 [jj.remove() for jj in self.coll_plot['label'][0]]
             except:
-                pass 
+                pass
             plt.draw()
             self.coll_plot['node'][0]=self.coll_plot['node'][1]
             self.coll_plot['edge'][0]=self.coll_plot['edge'][1]
@@ -1439,14 +1450,14 @@ class Network(PyLayers,nx.MultiDiGraph):
 
         else :
             if isinstance(wstd,list):
-                rloop = wstd    
+                rloop = wstd
             elif isinstance(wstd,str) :
-                rloop=[wstd]    
+                rloop=[wstd]
             else :
                 raise AttributeError('Arg must be a string or a string list')
 
         for ii,rl in enumerate(rloop):
-            
+
             pos = self.get_pos(rl)
             posv = pos.values()
             mp = dict(zip(pos.keys(),range(len(pos.keys()))))
@@ -1467,10 +1478,10 @@ class Network(PyLayers,nx.MultiDiGraph):
     def csv_save(self,filename,S):
         """ save node positions into csv file
 
-        Parameters 
+        Parameters
         ----------
 
-        filename : string 
+        filename : string
                    name of the csv file
         S        : Simulation
                    Scipy.Simulation object
@@ -1635,7 +1646,7 @@ class Network(PyLayers,nx.MultiDiGraph):
 
 #        Attributes:
 #        ----------
-#        
+#
 #        S        : Simulation
 #                   Scipy.Simulation object
 
@@ -1691,12 +1702,12 @@ class Network(PyLayers,nx.MultiDiGraph):
         typ = nx.get_node_attributes(self,'typ')
         if self.idx == 0:
             entete = 'NodeID, True Position x, True Position y, Est Position x, Est Position y, Timestamp\n'
-            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/simulation.txt','write')
+            file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'simulation.txt'),'write')
             file.write(entete)
             file.close()
 
         try:
-            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/simulation.txt','a')
+            file=open(os.path.join(basename,pstruc['DIRNETSAVE'],'simulation.txt'),'a')
             for n in self.nodes():
                 if typ[n] != 'ap':
                     data = n + ',' + str(pos[n][0]) + ',' + str(pos[n][1]) + ',' + str(pe[n][0][0]) + ',' + str(pe[n][0][1]) + ',' +pyu.timestamp(S.now()) +',\n'

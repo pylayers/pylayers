@@ -205,6 +205,10 @@ class Channel(dict):
 
 class Wstandard(dict):
     """ Wireless standard class
+
+    The various available standard are described in a wstd.json file
+    It could be a mongodb database
+
     """
     def __init__(self,stdname='',_filejson='wstd.json'):
         """
@@ -231,8 +235,8 @@ class Wstandard(dict):
             for k in np.sort(self.chan.keys()):
                 st = st + str(k) +' :  '+  self.chan[k].__repr__()
         except:
-            print 'No standard loaded. \
-                   check available standards with ls() method'
+            st = 'No standard loaded \n'
+            st =  st+'Check available standards with ls() method \n'
 
         return(st)
 
@@ -252,7 +256,8 @@ class Wstandard(dict):
 
         """
 
-        fp = open(pyu.getlong('wstd.json',pstruc['DIRSIMUL']))
+        filename=pyu.getlong(_fileini,pstruc['DIRSIMUL'])
+        fp = open(filename)
         stds = json.load(fp)
         fp.close()
         std = stds[stdname]
@@ -275,13 +280,13 @@ class Wstandard(dict):
 
     def ls(self):
         """ list all available standards
-        
+
         Examples
         --------
-        
+
         .. plot::
             :include-source:
-        
+
             >>> from pylayers.signal.standard import *
             >>> W =Wstandard('ieee80211ah')
             >>> W.ls()
@@ -293,18 +298,18 @@ class Wstandard(dict):
             print k + ' , ',
 
     def power(self, band, info ='max', unit='mw'):
-        """ Return inunition for a given channel
-        
+        """ Return  for a given channel
+
         Parameters
         ----------
-        
-        band : int /float/string 
-            'bandnb' : band number 
-            'fghz' : frequency 
+
+        band : int /float/string
+            'bandnb' : band number
+            'fghz' : frequency
             'bandname' : band name
 
         info : string ('max'|'min'|'step')
-            requested information about power 
+            requested information about power
 
         unit : string ('mw'|db)
             miliwatt or db
@@ -396,7 +401,6 @@ class Wstandard(dict):
 
         self.fcghz=np.sort(self.fcghz)
 
-
 class AP(dict):
     """ Access Point
 
@@ -433,6 +437,7 @@ class AP(dict):
             'PtdBm':0,
             'sensdBm': -94,
             'nant':1,
+            'on':True
         }
 
         for k in defaults:
@@ -445,6 +450,7 @@ class AP(dict):
         self['chan'] = kwargs['chan']
         self['sensdBm'] = kwargs['sensdBm']
         self['nant'] = kwargs['nant']
+        self['on'] = kwargs['on']
 
         standard = Wstandard(kwargs['wstd'])
         self.s = standard
@@ -457,11 +463,12 @@ class AP(dict):
         st = 'name : '+str(self['name'])+'\n'
         st = st + 'p : '+str(self['p'])+'\n'
         st = st+ 'PtdBm : '+str(self['PtdBm'])+'\n'
-        st = st+ 'chanels  : '+str(self['chan'])+'   '
+        st = st+ 'channels  : '+str(self['chan'])+'   '
         for k in self['chan']:
            st = st + self.s.chan[k].__repr__()
         st = st+ 'sensdBm : '+str(self['sensdBm'])+'\n'
         st = st+ 'nant : '+str(self['nant'])+'\n'
+        st = st+ 'On : '+str(self['on'])+'\n'
         return(st)
 
 

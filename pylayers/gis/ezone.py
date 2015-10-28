@@ -135,15 +135,15 @@ def dectile(prefix='N48W002'):
 
     """
     if prefix[0]=='N':
-        latmin = eval(prefix[1:3])
+        latmin = int(prefix[1:3])
         latmax = latmin+1
 
     if prefix[3]=='W':
-        lonmin = -eval(prefix[5:7])
+        lonmin = -int(prefix[5:7])
         lonmax = lonmin+1
 
     if prefix[3]=='E':
-        lonmin = eval(prefix[5:7])
+        lonmin = int(prefix[5:7])
         lonmax = lonmin+1
 
     return (lonmin,lonmax,latmin,latmax)
@@ -250,14 +250,14 @@ class DEM(PyLayers):
         self.hgts[self.hgts<0]=0
 
     def loadsrtm(self):
-        """ load hgt and lcv files fro_m srtm directory
+        """ load hgt and lcv files from srtm directory
 
         """
 
         _filehgt = self.prefix+'.HGT'
         _filelcv = self.prefix+'.lcv'
-        filehgt = pyu.getlong(_filehgt,'gis/srtm')
-        filelcv = pyu.getlong(_filelcv,'gis/srtm')
+        filehgt = pyu.getlong(_filehgt,os.path.join('gis','srtm'))
+        filelcv = pyu.getlong(_filelcv,os.path.join('gis','srtm'))
 
 
         data = np.fromfile(filehgt,dtype='>i2')
@@ -266,7 +266,7 @@ class DEM(PyLayers):
         data = np.fromfile(filelcv,dtype='>i1')
         self.lcv = data.reshape(1201,1201)
 
-    def loadaster(self):
+    def loadaster(self,fileaster=[]):
         """ load Aster files
 
         """
@@ -276,7 +276,7 @@ class DEM(PyLayers):
         _fileaster = 'ASTGTM2_'+self.prefix+'_dem.tif'
 
         if fileaster==[]:
-            fileaster = pyu.getlong(_fileaster,'gis/aster')
+            fileaster = pyu.getlong(_fileaster,os.path.join('gis','aster'))
         else:
             _fieleaster = pyu.getshort(fileaster)
 
@@ -308,7 +308,8 @@ class DEM(PyLayers):
 
         """
         defaults ={'cmap': plt.cm.jet,
-                   'source':'srtm'}
+                   'source':'srtm',
+                   'alpha':1}
 
         for k in defaults:
             if k not in kwargs:
@@ -326,15 +327,16 @@ class DEM(PyLayers):
 
         #im = ax.imshow(dem[ilat[0]:(ilat[-1]+1),ilon[0]:(ilon[-1]+1)],extent=(lonmin,lonmax,latmin,latmax))
         if kwargs['source']=='srtm':
-            im = ax.imshow(self.hgts,extent=(self.lonmin,self.lonmax,self.latmin,self.latmax))
+            im = ax.imshow(self.hgts,extent=(self.lonmin,self.lonmax,self.latmin,self.latmax),alpha=kwargs['alpha'])
         if kwargs['source']=='aster':
-            im = ax.imshow(self.hgta,extent=(self.lonmin,self.lonmax,self.latmin,self.latmax))
+            im = ax.imshow(self.hgta,extent=(self.lonmin,self.lonmax,self.latmin,self.latmax),alpha=kwargs['alpha'])
 
         # handling colorbar
         divider = make_axes_locatable(ax)
         cax = divider.append_axes("right", size="5%", pad=0.05)
         cb = fig.colorbar(im,cax)
         cb.set_label('Height (meters)')
+        return fig,ax,divider
 
 class Ezone(PyLayers):
     """
@@ -384,9 +386,11 @@ class Ezone(PyLayers):
         for c in range(ncar):
             st = st+'-'
         st = st+'\n'
-        st = st+str(self.extent)+'\n'
-        st = st+'latlon : [ '+("%2.3f" % self.pll[0])+' '+("%2.3f" % self.pur[0])+' '
-        st = st+'cartesian :'+ ("%2.3f" % self.pll[1])+' '+("%2.3f" % self.pur[1])+' ]\n'
+        st = st+'latlon (deg) : '+str(self.extent)+'\n'
+        st = st+'cartesian (meters) : ' +("[%2.3f" % self.pll[0])+' '\
+                               +("%2.3f" % self.pur[0])+' '\
+                               +("%2.3f" % self.pll[1])+' '\
+                               +("%2.3f ] " % self.pur[1])+'\n'
 
         if 'dbldg' in self.__dict__:
             st = st + '\n'
@@ -430,7 +434,7 @@ class Ezone(PyLayers):
         self.height = th
 
     def ls(self):
-        files = os.listdir(basename+'/gis/h5')
+        files = os.listdir(os.path.join(basename,'gis','h5'))
         for f in files:
             print f
 
@@ -454,9 +458,9 @@ class Ezone(PyLayers):
         _filelcv  = self.prefix+'.lcv'
         _fileaster  = 'ASTGTM2_'+self.prefix+'_dem.tif'
 
-        filehgt = dirsrtm+'/'+_filehgt
-        filelcv = dirsrtm+'/'+_filelcv
-        fileaster = diraster+'/'+_fileaster
+        filehgt = os.path.join(dirsrtm,_filehgt)
+        filelcv = os.path.join(dirsrtm,_filelcv)
+        fileaster = os.path.join(diraster,_fileaster)
 
         if (os.path.isfile(filehgt) & os.path.isfile(filelcv)):
             print "Load srtm file"
@@ -498,7 +502,7 @@ class Ezone(PyLayers):
 
         """
 
-        self.fileh5 = pyu.getlong(_fileh5,'gis/h5')
+        self.fileh5 = pyu.getlong(_fileh5,os.path.join('gis','h5'))
         f = h5py.File(self.fileh5,'a')
         self.extent = f['extent'].value
 
@@ -582,7 +586,7 @@ class Ezone(PyLayers):
         #  |
         #  | y (axis 0)
         #  |
-        lon,lat = self.m(x[np.newaxis,:],y[:,np.newaxis],inverse=True)
+        lon,lat = self.m(x[None,:],y[:,None],inverse=True)
 
         # getting the closest integer index
         rx = np.round((lon - self.extent[0]) / self.lonstep).astype(int)
@@ -667,7 +671,7 @@ class Ezone(PyLayers):
             height = self.hgta[ry,rx] + dh
 
         # seek for local maxima along link profile
-        m = maxloc(height[np.newaxis,:])
+        m = maxloc(height[None,:])
 
         ha = height[0] + kwargs['ha']
         hb = height[-1]+ kwargs['hb']
@@ -675,7 +679,7 @@ class Ezone(PyLayers):
         diff = height-LOS
         fac  = np.sqrt(2*d[-1]/(lmbda*d*d[::-1]))
         nu   = diff*fac
-        num  = maxloc(nu[np.newaxis,:])
+        num  = maxloc(nu[None,:])
 
         #plt.plot(d,dh,'r',d,height,'b',d,m[0,:],d,LOS,'k')
         #plt.figure()
@@ -713,26 +717,36 @@ class Ezone(PyLayers):
                     'Hr':1.5,
                     'K':1.3333,
                     'fGHz':.3,
+                    'divider':[]
                     }
 
         for key in defaults:
             if key not in kwargs:
                 kwargs[key] = defaults[key]
 
+        if 'fig' not in kwargs:
+            f,a = plt.subplots(1,1)
+        else:
+            f = kwargs['fig']
+            a = kwargs['ax']
+
         pc = kwargs['pc']
         lmbda = 0.3/kwargs['fGHz']
-        phi  = np.linspace(0,2*np.pi,kwargs['Nphi'])[:,np.newaxis]
-        r  = np.linspace(0.02,kwargs['Rmax'],kwargs['Nr'])[np.newaxis,:]
+        phi  = np.linspace(0,2*np.pi,kwargs['Nphi'])[:,None]
+        r  = np.linspace(0.02,kwargs['Rmax'],kwargs['Nr'])[None,:]
 
         x  = pc[0] + r*np.cos(phi)
         y  = pc[1] + r*np.sin(phi)
         extent_c = np.array([x.min(),x.max(),y.min(),y.max()])
         triang = tri.Triangulation(x.flatten(),y.flatten())
+        lon,lat = self.m(triang.x,triang.y,inverse=True)
+        triang.x = lon
+        triang.y = lat
 
         lon,lat = self.m(x,y,inverse=True)
         rx = np.round((lon - self.extent[0]) / self.lonstep).astype(int)
         ry = np.round((self.extent[3]-lat) / self.latstep).astype(int)
-        cov = self.hgt[ry,rx]
+        cov = self.hgts[ry,rx]
 
 
         # adding effect of earth equivalent curvature
@@ -741,31 +755,35 @@ class Ezone(PyLayers):
         hearth = (R*B)/(2*kwargs['K']*6375e3)
 
         # ground height + antenna height
-        Ha = kwargs['Ht'] + self.hgt[ry[0,0],rx[0,0]]
+        Ha = kwargs['Ht'] + self.hgts[ry[0,0],rx[0,0]]
         Hb = kwargs['Hr'] + cov
 
-        Hb = Hb[:,np.newaxis,:]
+        Hb = Hb[:,None,:]
         # LOS line
         LOS  = Ha+(Hb-Ha)*R/r.T
         diff = expand(cov)+hearth-LOS
-        fac  = np.sqrt(2*r[...,np.newaxis]/(lmbda*R*B))
+        fac  = np.sqrt(2*r[...,None]/(lmbda*R*B))
         nu   = diff*fac
         num  = maxloc(nu)
         numax = np.max(num,axis=1)
-
-        w = numax -1
+        w = numax -0.1
         L = 6.9 + 20*np.log10(np.sqrt(w**2+1)-w)
-        LFS = 32.4 + 20*np.log10(r/1000)+20*np.log10(kwargs['fGHz']*1000)
+        LFS = 32.4 + 20*np.log10(r)+20*np.log10(kwargs['fGHz'])
         Ltot = -(LFS+L)
 
         # display coverage region
         #plt.tripcolor(triang, cov.flatten(), shading='gouraud', cmap=plt.cm.jet)
-        #plt.figure(figsize=(10,10))
-        f,a = self.show(contour=False,bldg=True,height=False,coord='cartesian',extent=extent_c)
-        plt.tripcolor(triang, Ltot.flatten(), shading='gouraud',
-                      cmap=plt.cm.jet,vmax=-50,vmin=-130)
-        plt.colorbar()
-
+        #f,a = self.show(fig=f,ax=a,contour=False,bldg=True,height=False,coord='cartesian',extent=extent_c)
+        f,a,d = self.show(fig=f,ax=a,contour=False,bldg=True,height=False,coord='lonlat',extent=self.extent)
+        tc = a.tripcolor(triang, Ltot.flatten(), shading='gouraud', cmap=plt.cm.jet,vmax=-50,vmin=-130)
+        #tc = a.tripcolor(triang, w.flatten(), shading='gouraud', cmap=plt.cm.jet,vmax=-50,vmin=-130)
+        if kwargs['divider']==[]:
+            divider = make_axes_locatable(a)
+        else:
+            divider=kwargs['divider']
+        cax = divider.append_axes("left", size="5%", pad=0.5)
+        cb = f.colorbar(tc,cax)
+        cb.set_label('Loss(dB)')
         plt.axis('equal')
 
         return x,y,r,cov,LOS,hearth,diff,fac,num,LFS
@@ -854,18 +872,30 @@ class Ezone(PyLayers):
                     'figsize':(10,10),
                     'height':True,
                     'bldg':False,
-                    'clim':(0,40),
+                    'clim':(0,200),
                     'coord':'lonlat',
                     'extent':[],
                     'contour':False,
                     'source':'srtm',
-                    'facecolor':'black'
+                    'alpha':0.5,
+                    'facecolor':'black',
+                    'cmap':plt.cm.jet
                    }
 
+        divider = []
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]
 
+        if 'fig' in kwargs:
+            fig = kwargs['fig']
+        else:
+            fig = plt.figure(figsize=kwargs['figsize'])
+
+        if 'ax' in kwargs:
+            ax = kwargs['ax']
+        else:
+            ax =  fig.add_subplot(111)
         # get zone limitation
         # lon,lat or cartesian
 
@@ -882,10 +912,6 @@ class Ezone(PyLayers):
                 extent = kwargs['extent']
 
 
-        fig = plt.figure(figsize=kwargs['figsize'])
-        ax  = fig.add_subplot(111)
-
-        #
         # ploting buildings with collection of polygons
         #
 
@@ -936,7 +962,7 @@ class Ezone(PyLayers):
 
             if kwargs['height']:
                 im = ax.imshow(hgt[iy[0]:(iy[-1]+1),ix[0]:(ix[-1]+1)],
-                               extent=extent,clim=kwargs['clim'])
+                               extent=extent,clim=kwargs['clim'],cmap=kwargs['cmap'],alpha=kwargs['alpha'])
                 divider = make_axes_locatable(ax)
                 cax = divider.append_axes("right", size="5%", pad=0.05)
                 cb = fig.colorbar(im,cax)
@@ -972,7 +998,7 @@ class Ezone(PyLayers):
                             ax=ax)
 
 
-        return(fig,ax)
+        return(fig,ax,divider)
 
     def loadtmp(self,_fileh5='RennesFull.h5'):
         """ load an Ezone from hdf5 file
@@ -984,7 +1010,7 @@ class Ezone(PyLayers):
 
         """
 
-        fileh5 = pyu.getlong(_fileh5,'gis/h5')
+        fileh5 = pyu.getlong(_fileh5,os.path.join('gis','h5'))
         f = h5py.File(fileh5,'r',dtype=np.float32)
         self.bdpt = f['osm']['bdpt'].value
         self.bdma = f['osm']['bdma'].value
@@ -1024,7 +1050,7 @@ class Ezone(PyLayers):
 
         """
         _fileh5 = self.prefix+'.h5'
-        fileh5 = pyu.getlong(_fileh5,'gis/h5')
+        fileh5 = pyu.getlong(_fileh5,os.path.join('gis','h5'))
         with h5py.File(fileh5) as fh:
             if 'extent' in fh:
                 self.extent = fh['extent'][:]
@@ -1065,7 +1091,7 @@ class Ezone(PyLayers):
 
         """
         _fileh5 = self.prefix+'.h5'
-        fileh5 = pyu.getlong(_fileh5,'gis/h5')
+        fileh5 = pyu.getlong(_fileh5,os.path.join('gis','h5'))
         # if file exists open it in append mode
         f = h5py.File(fileh5,'a')
 
