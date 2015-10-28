@@ -91,7 +91,7 @@ def _writedotpylayers(typ,path):
         #         f.write(l)
 
 
-# home = os.path.expanduser('~')
+home = os.path.expanduser('~')
 currentdir = os.getcwd()
 
 # if .pylayers exists
@@ -99,8 +99,9 @@ if os.path.isfile(os.path.join(home,'.pylayers')):
     with open(os.path.join(home,'.pylayers'),'r') as f:
         lines = f.readlines()
     # ''.join... to remove the '\n' character
-    pylayersdir = ''.join(lines[1].splitlines) 
-    basename = ''.join(lines[3].splitlines) 
+
+    pylayersdir = ''.join(lines[1].splitlines()) 
+    basename = ''.join(lines[3].splitlines()) 
 
 # BACKWARD COMPATIBILITY MODE (from now .pylayers is create each install)
 else:
@@ -117,7 +118,8 @@ else:
     else :
         raise EnvironmentError('pylayers source path not found. Try to re-run setup.py')
 
-
+import ipdb
+ipdb.set_trace()
 
 
 # =======

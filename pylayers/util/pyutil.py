@@ -160,7 +160,7 @@ def getlong(shortname,directory):
     """
 
     try:
-        basename=os.environ['BASENAME']
+        basename#=os.environ['BASENAME']
     except:
         logging.critical("BASENAME environment variable should be defined")
         #basename=os.environ['HOME']+"/Pyproject"
