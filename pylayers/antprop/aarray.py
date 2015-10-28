@@ -2,6 +2,7 @@
 import numpy as np
 import pylayers.antprop.antenna as ant
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import pdb
 r"""
 
@@ -84,6 +85,15 @@ class Array(ant.Pattern):
         st = st + 'fmax :' + str(fGHz[1]) + '\n'
         return(st)
 
+    def show(self):
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        ax.scatter(self.p[0,:],self.p[1,:],self.p[2,:],s=20)
+        ax.set_xlabel('X axis')
+        ax.set_ylabel('Y axis')
+        ax.set_zlabel('Z axis')
+        plt.show()
+
 class ULArray(Array):
     """ Uniform Linear Array
 
@@ -126,18 +136,21 @@ class ULArray(Array):
         Ny = self.N[1]
         Nz = self.N[2]
 
-        if Nx%2==0:
-            px = self.dm[0]*np.linspace(-Nx/2,Nx/2,Nx)[None,:,None,None] # 1 x Nx x Ny x Nz
-        else:
-            px = self.dm[0]*np.linspace(-(Nx-1)/2,(Nx-1)/2,Nx)[None,:,None,None] # 1 x Nx x Ny x Nz
-        if Ny%2==0:
-            py = self.dm[1]*np.linspace(-Ny/2,Ny/2,Ny)[None,None,:,None] # 1 x Nx x Ny x Nz
-        else:
-            py = self.dm[1]*np.linspace(-(Ny-1)/2,(Ny-1)/2,Ny)[None,None,:,None] # 1 X Nx x Ny x Nz
-        if Nz%2==0:
-            pz = self.dm[2]*np.linspace(-Nz/2,Nz/2,Nz)[None,None,None,:] #  1 x Nx x Ny x Nz
-        else:
-            pz = self.dm[2]*np.linspace(-(Nz-1)/2,(Nz-1)/2,Nz)[None,None,None,:] # 1 x Nx x Ny x Nz
+        px = self.dm[0]*np.linspace(-(Nx-1)/2.,(Nx-1)/2.,Nx)[None,:,None,None] # 1 x Nx x Ny x Nz
+        py = self.dm[1]*np.linspace(-(Ny-1)/2.,(Ny-1)/2.,Ny)[None,None,:,None] # 1 X Nx x Ny x Nz
+        pz = self.dm[2]*np.linspace(-(Nz-1)/2.,(Nz-1)/2.,Nz)[None,None,None,:] # 1 x Nx x Ny x Nz
+        #if Nx%2==0:
+        #    px = self.dm[0]*np.linspace(-Nx/2,Nx/2,Nx)[None,:,None,None] # 1 x Nx x Ny x Nz
+        #else:
+        #    px = self.dm[0]*np.linspace(-(Nx-1)/2,(Nx-1)/2,Nx)[None,:,None,None] # 1 x Nx x Ny x Nz
+        #if Ny%2==0:
+        #    py = self.dm[1]*np.linspace(-Ny/2,Ny/2,Ny)[None,None,:,None] # 1 x Nx x Ny x Nz
+        #else:
+        #    py = self.dm[1]*np.linspace(-(Ny-1)/2,(Ny-1)/2,Ny)[None,None,:,None] # 1 X Nx x Ny x Nz
+        #if Nz%2==0:
+        #    pz = self.dm[2]*np.linspace(-Nz/2,Nz/2,Nz)[None,None,None,:] #  1 x Nx x Ny x Nz
+        #else:
+        #    pz = self.dm[2]*np.linspace(-(Nz-1)/2,(Nz-1)/2,Nz)[None,None,None,:] # 1 x Nx x Ny x Nz
 
         p = np.zeros((3,Nx,Ny,Nz))
         #p = np.zeros((3,Nx*Ny*Nz))
@@ -223,7 +236,7 @@ class AntArray(Array,ant.Antenna):
 
     def __repr__(self):
          st = "Antenna Array : \n"
-         st = st + self.typ+ 'of '+self.typant+'\n'
+         st = st + self.typ + 'of '+self.typant+'\n'
          st = st + 'N : '+str(self.N)+'\n'
          st = st + 'dm : '+str(self.dm)+'\n'
          st = st + ant.Antenna.__repr__(self)

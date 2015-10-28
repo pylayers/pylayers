@@ -411,7 +411,8 @@ def PL(fGHz,pts,p,n=2.0,dB=True):
     D = np.sqrt(np.sum((pts-p)**2,axis=0))
     # f x grid x ap
 
-    PL = np.array([PL0(fGHz)])[:,np.newaxis] + 10*n*np.log10(D)[np.newaxis,:]
+    #PL = np.array([PL0(fGHz)])[:,np.newaxis] + 10*n*np.log10(D)[np.newaxis,:]
+    PL = PL0(fGHz)[:,np.newaxis] + 10*n*np.log10(D)[np.newaxis,:]
 
     if not dB:
         PL=10**(-PL/10)
