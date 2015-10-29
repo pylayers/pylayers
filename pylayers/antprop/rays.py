@@ -1637,6 +1637,7 @@ class Rays(PyLayers,dict):
 
         R.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
         T.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
+        #D.duw
 
         tsl = np.array(())
         rsl = np.array(())
@@ -1803,7 +1804,7 @@ class Rays(PyLayers,dict):
                 T.stack(data=np.array((thetaf[uT], sif[uT], sif[uT+1])).T, idx=idxf[uT])
 
                 ###
-                # Diffraction 
+                # Diffraction
                 #
                 # D.stack(data=np.array(()))
 
