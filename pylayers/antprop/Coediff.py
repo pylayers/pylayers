@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.special as sps
 import matplotlib.pyplot as plt
+import pdb
 def Coediff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2):
     """ Luebbers Diffration coefficient
 
@@ -14,14 +15,14 @@ def Coediff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2):
     >>> import numpy as np
     >>> from pylayers.antprop.slab import *
     >>> fGHz = 2.4
-    >>> phi0 = np.linspace(0,np.pi/4.,10)
-    >>> phi = np.linspace(0,np.pi,20)
+    >>> phi0 = np.linspace(0,3*np.pi/2.,100)
+    >>> phi = np.linspace(0,3*np.pii/2,100)
     >>> N = 1.5
     >>> dm = MatDB()
     >>> mat0 = dm['WOOD']
     >>> matN = dm['WOOD']
-    >>> si = 10
-    >>> sd = 10
+    >>> si = 100
+    >>> sd = 100
     >>> Ds,Dh = Coediff(fGHz,phi0,phi,si,sd,N,mat0,matN)
 
 
@@ -97,8 +98,6 @@ def Coediff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2):
     Rsofto,Rhardo = reflection(tho,k,er0,err0,sigma0,ur0,urr0,deltah0)
     Rsoftn,Rhardn = reflection(thn,k,erN,errN,sigmaN,urN,urrN,deltahN)
 
-    pdb.set_trace()
-
 #--------------------------------------------------
 # grazing angle Go et Gn
 #--------------------------------------------------
@@ -112,67 +111,79 @@ def Coediff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2):
 #--------------------------------------------------
 
     sign  =  1.0
-    D1     = Dfunc(sign,k,N,phi-phi0,si,sd,beta0)
+    D1     = Dfunc(sign,k,N,phi-phi0,si,sd,beta)
 
     sign  =  -1.0
-    D2     = Dfunc(sign,k,N,phi-phi0,si,sd,beta0)
+    D2     = Dfunc(sign,k,N,phi-phi0,si,sd,beta)
 
     sign  =  +1.0
-    D3     = Dfunc(sign,k,N,phi+phi0,si,sd,beta0)
+    D3     = Dfunc(sign,k,N,phi+phi0,si,sd,beta)
 
     sign  =  -1.0
-    D4     = Dfunc(sign,k,N,phi+phi0,si,sd,beta0)
+    D4     = Dfunc(sign,k,N,phi+phi0,si,sd,beta)
 
 #--------------------------------------
 #n>=1 : exterior wedge
 #--------------------------------------
-    if (N >= 1.0):
-        DTsoft = Gsoftn*(D1+Rsoftn*D3)+Gsofto*(D2+Rsofto*D4)
-        DThard = Ghardn*(D1+Rhardn*D3)+Ghardo*(D2+Rhardo*D4)
+    Dsoft =np.empty(np.shape(D1),dtype=complex)
+    Dhard =np.empty(np.shape(D1),dtype=complex)
+
+    #c1 = BN>=1.0
+    Dsoft = Gsoftn*(D1+Rsoftn*D3)+Gsofto*(D2+Rsofto*D4)
+    Dhard = Ghardn*(D1+Rhardn*D3)+Ghardo*(D2+Rhardo*D4)
+    c1 = abs(Gsoftn+1.0) < 1e-6
+    c2 = abs(Gsofto+1.0) < 1e-6
+    c3 = abs(Ghardn+1.0) < 1e-6
+    c4 = abs(Ghardo+1.0) < 1e-6
+
+    Dsoft[c1]= 0.5*(D1[c1]+D3[c1])+Gsofto[c1]*(D2[c1]+Rsofto[c1]*D4[c1])
+    Dsoft[c2]= Gsoftn[c2]*(D1[c2]+Rsoftn[c2]*D3[c2])+0.5*(D2[c2]+D4[c2])
+    Dhard[c3]= 0.5*(D1[c3]+D3[c3])+Ghardo[c3]*(D2[c3]+Rhardo[c3]*D4[c3])
+    Dhard[c4]= Ghardn[c4]*(D1[c4]+Rhardn[c4]*D3[c4])+0.5*(D2[c4]+D4[c4])
 
 #--------------------------------------
 #traitement des cas ou Go (ou Gn) = -1
 #--------------------------------------
 
-        if (abs(Gsoftn+1.0) < 1e-6):
-            DTsoft = 0.5*(D1+D3)+Gsofto*(D2+Rsofto*D4)
+#        if (abs(Gsoftn+1.0) < 1e-6):
+#            DTsoft = 0.5*(D1+D3)+Gsofto*(D2+Rsofto*D4)
+#
+#        if (abs(Gsofto+1.0)<1e-6):
+#            DTsoft = Gsoftn*(D1+Rsoftn*D3)+0.5*(D2+D4)
+#
+#        if (abs(Ghardn+1.0) < 1.0e-6):
+#            DThard = 0.5*(D1+D3)+Ghardo*(D2+Rhardo*D4)
+#
+#        if (abs(Ghardo+1.0)<1e-6):
+#            DThard = Ghardn*(D1+Rhardn*D3)+0.5*(D2+D4)
+#
+##--------------------------------------
+##cas ou n<1 : interior wedge
+##--------------------------------------
+#    else:
+#
+#        thoz  = N*np.pi-tho
+#        thnz  = N*np.pi-thn
+#
+#
+#        [Rsoftnz,Rhardnz] = reflection(thnz,k,ero,erro,condo,uro,deltaho)
+#        [Rsoftoz,Rhardoz] = reflection(thoz,k,ern,errn,condn,urn,deltahn)
+#
+#        DTsoft = Rsoftoz*Rsoftnz*D1+Rsoftn*D3+(Rsofto*Rsoftn*D2+Rsofto*D4)
+#
+#        DThard = Rhardoz*Rhardnz*D1+Rhardn*D3+(Rhardo*Rhardn*D2+Rhardo*D4)
 
-        if (abs(Gsofto+1.0)<1e-6):
-            DTsoft = Gsoftn*(D1+Rsoftn*D3)+0.5*(D2+D4)
-
-        if (abs(Ghardn+1.0) < 1.0e-6):
-            DThard = 0.5*(D1+D3)+Ghardo*(D2+Rhardo*D4)
-
-        if (abs(Ghardo+1.0)<1e-6):
-            DThard = Ghardn*(D1+Rhardn*D3)+0.5*(D2+D4)
-
-#--------------------------------------
-#cas ou n<1 : interior wedge
-#--------------------------------------
-    else:
-
-        thoz  = N*np.pi-tho
-        thnz  = N*np.pi-thn
+    return Dsoft,Dhard
 
 
-        [Rsoftnz,Rhardnz] = reflection(thnz,k,ero,erro,condo,uro,deltaho)
-        [Rsoftoz,Rhardoz] = reflection(thoz,k,ern,errn,condn,urn,deltahn)
-
-        DTsoft = Rsoftoz*Rsoftnz*D1+Rsoftn*D3+(Rsofto*Rsoftn*D2+Rsofto*D4)
-
-        DThard = Rhardoz*Rhardnz*D1+Rhardn*D3+(Rhardo*Rhardn*D2+Rhardo*D4)
-
-    return DTsoft,DThard
-
-
-def G(N,phio,Ro,Rn):
+def G(N,phi0,Ro,Rn):
     """ grazing angle correction
 
     Parameters
     ----------
 
     N : wedge parameter
-    phio : incidence angle (rad)
+    phi0 : incidence angle (rad)
     Ro : reflection coefficient on face o
     Rn : reflection coefficient on face n
 
@@ -180,31 +191,39 @@ def G(N,phio,Ro,Rn):
                 rough lossy wedges"
     """
 
-#----------------------------------------------------
-# phio=0
-#----------------------------------------------------
 
-    Go = 1.0;
-    if (abs(phio) < 1.0e-6 ):
-        if (abs(Ro+1.0)>1.0e-6):
-            Go = 1.0/(1.0+Ro)
-        else:
-            Go = -1.0
-    elif (abs(phio-N*np.pi)<1.0e-6):
-            Go = 0.5
+    if not isinstance(phi0,np.ndarray):
+        phi0 = np.array([phi0])
+    if not isinstance(N,np.ndarray):
+        N = np.array([N])
 
-#----------------------------------------------------
-# phio=N.PI
-#----------------------------------------------------
-    Gn = 1.0
-    if (abs(phio-N*np.pi) < 1.0e-6 ):
-        if (abs(Ro+1.0)>1.0e-6):
-            Gn = 1.0/(1.0+Rn)
-        else:
-            Gn = -1.0
-    elif (abs(phio)<1.0e-6):
-            Gn = 0.5
+    PHI0 = phi0 * np.ones(Ro.shape)
+    BN   = N * np.ones(Ro.shape)
 
+# face o
+
+    Go = np.ones(np.shape(Ro))
+
+    c1 = (abs(PHI0) < 1.0e-6) * (abs(Ro+1.0)>1.0e-6)
+    c2 = (abs(PHI0) < 1.0e-6) * (abs(Ro+1.0)<1.0e-6)
+    c3 = abs(PHI0-BN*np.pi) < 1.0e-6
+
+    Go[c1] = 1.0/(1.0+Ro[c1])
+    Go[c2] = -1
+    Go[c3] = 0.5
+
+# face n
+    Gn = np.ones(np.shape(Rn))
+
+    c1 = (abs(PHI0-BN*np.pi) < 1.0e-6) * (abs(Rn+1.0)>1.0e-6)
+    c2 = (abs(PHI0) < 1.0e-6) * (abs(Rn+1.0)<1.0e-6)
+    c3 = abs(PHI0) < 1.0e-6
+
+    Gn[c1] = 1.0/(1.0+Rn[c1])
+    Gn[c2] = -1
+    Gn[c3] = 0.5
+
+    return Go,Gn
 
 def Dfunc(sign,k,N,dphi,si,sd,beta=np.pi/2):
     """
@@ -230,42 +249,52 @@ def Dfunc(sign,k,N,dphi,si,sd,beta=np.pi/2):
     Notes
     -----
 
-            e-jnp.pi/4	            1 
-    Di= ------------------	*    ----------- * F(kla)    ([1] eq 25)
-        2n*racine(2*np.pi*k)	 np.tan(dphi/n)sin(beta)  
+            e-jnp.pi/4           1
+    Di= ------------------  *  ----------- * F(kla)    ([1] eq 25)
+        2n*racine(2*np.pi*k)    np.tan(dphi/n)sin(beta)
 
     """
 
     cste = (1.0-1.0*1j)*(1.0/(4.0*N*np.sqrt(k*np.pi)*np.sin(beta)))
     rnn = (dphi+np.pi*sign)/(2.0*N*np.pi)
-    nn  = 0.0
+    nn  =  np.zeros(np.shape(rnn))
 
-    if (rnn > 0.5):
-        nn = 1.0
-    if (rnn > 1.5):
-        nn = 2.0
-    if (rnn < -0.5):
-        nn = -1.0
-    if (rnn < -1.5 ):
-        nn  = -2.0
+#    c1 = rnn>0.5
+#    c2 = rnn>1.5
+#    c3 = rnn<-0.5
+#    c4 = rnn<-1.5
 
-# KLA
+    nn[rnn>0.5] = 1
+    nn[rnn>1.5] = 2
+    nn[rnn<-0.5] = -1
+    nn[rnn<-1.5] = -2
+#    if (rnn > 0.5):
+#        nn = 1.0
+#    if (rnn > 1.5):
+#        nn = 2.0
+#    if (rnn < -0.5):
+#        nn = -1.0
+#    if (rnn < -1.5 ):
+#        nn  = -2.0
 
-    # [1] eq 27
+# KLA  ref[1] eq 27
     L   = (si*sd)/(si+sd)
     AC  = np.cos( (2.0*N*nn*np.pi-dphi) / 2.0 )
     A   = 2*AC*AC
     KLA = k * L * A
 
-    epsi    = AC*2.0
-    angle   = (np.pi+sign*dphi)/(2.0*N)
-    cot     = np.tan(angle)
+    epsi  = AC*2.0
+    angle = (np.pi+sign*dphi)/(2.0*N)
+    cot   = np.tan(angle)
 
-    if (abs(cot) > 1e-9 ):
-        Fkla = FreF(KLA)
-        Di   = -cste*Fkla/cot
-    else:
-        Di   = 0.5*np.sqrt(L)
+    Di = np.empty(KLA.shape)
+    Fkla = FreF(KLA)
+    Di = -cste*Fkla/cot
+
+    c5 = np.where(abs(cot)<1e-9)
+    BL = np.ones(Di.shape)*L
+    Di[c5] = 0.5*np.sqrt(BL[c5])
+
     return(Di)
 
 def  FresnelI(x) :
@@ -280,7 +309,7 @@ def  FresnelI(x) :
     """
 
 
-    v  = np.zeros(len(x),dtype=complex)
+    v  = np.zeros(x.shape,dtype=complex)
     y  = np.abs(x)
     z  = .25*y
 
@@ -373,7 +402,7 @@ def FreF(x) :
 
     """
 
-    y     = np.zeros(len(x),dtype=complex)
+    y     = np.zeros(x.shape,dtype=complex)
 
     u1    = np.where(x>10)[0]
     u2    = np.where(x<=10)[0]
@@ -450,19 +479,15 @@ def reflection(th,k,er,err,sigma,ur,urr,deltah):
     --------
 
     >>> import numpy as np
-    >>> th = np.linspace(0,np.pi/2,180)
+    >>> th = np.linspace(0,np.pi/2,180)[None,:]
     >>> fGHz = 0.3
     >>> lamda = 0.3/fGHz
-    >>> k = 2*np.pi/2
+    >>> k = np.array([2*np.pi/2])[:,None]
     >>> Rs,Rh = reflection(th,k,9,0,0.01,1,0,0)
 
     """
 
-    cel = 2.997925e8
-    if not isinstance(k,np.ndarray):
-        k = np.array([k])
-    if not isinstance(th,np.ndarray):
-        th = np.array([th])
+    cel = 299792458
     #--------------------------------------------
     #cas des surfaces dielectriques (sinon er=-1)
     #--------------------------------------------
@@ -495,10 +520,10 @@ def reflection(th,k,er,err,sigma,ur,urr,deltah):
 
         perme   = ur - 1j*urr
 
-        yy      = (permi/perme)[:,None]
+        yy      = (permi/perme)
 
-        st      = np.sin(th)[None,:]
-        ct      = np.cos(th)[None,:]
+        st      = np.sin(th)
+        ct      = np.cos(th)
 
         bb      = np.sqrt(yy-ct**2)
 
@@ -506,8 +531,8 @@ def reflection(th,k,er,err,sigma,ur,urr,deltah):
         Rh  = (yy*st-bb)/(yy*st+bb)
 
     else:
-        Rs = -ones(len(th))[None,:]
-        Rh = ones(len(th))[None,:]
+        Rs = -ones(len(th))
+        Rh = ones(len(th))
 
     roughness = 1.0
 
