@@ -1,58 +1,111 @@
 import numpy as np
 import scipy.special as sps
 import matplotlib.pyplot as plt
-def Coediff(k,N,phi0,phi,si,sd,sf,ero,erro,condo,uro,urro,deltaho,
-            ern,errn,condn,urn,urrn,deltahn,beta0=np.pi/2):
+def Coediff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2):
     """ Luebbers Diffration coefficient
 
 
     Parameters
     ----------
 
-    k      -1
-    N
-    phi0   0
-    phi    1
-    si
-    sd
-    sf
-    ero
-    erro
-    sigmao
-    uro
-    urro
-    deltaho
-    ern
-    errn
-    sigman
-    urn
-    urnn
-    deltahn
+    Examples
+    --------
+
+    >>> import numpy as np
+    >>> from pylayers.antprop.slab import *
+    >>> fGHz = 2.4
+    >>> phi0 = np.linspace(0,np.pi/4.,10)
+    >>> phi = np.linspace(0,np.pi,20)
+    >>> N = 1.5
+    >>> dm = MatDB()
+    >>> mat0 = dm['WOOD']
+    >>> matN = dm['WOOD']
+    >>> si = 10
+    >>> sd = 10
+    >>> Ds,Dh = Coediff(fGHz,phi0,phi,si,sd,N,mat0,matN)
+
 
     """
+
+    if not isinstance(fGHz,np.ndarray):
+        fGHz = np.array([fGHz])
+    if not isinstance(phi0,np.ndarray):
+        phi0 = np.array([phi0])
+    if not isinstance(phi,np.ndarray):
+        phi = np.array([phi])
+    if not isinstance(si,np.ndarray):
+        si = np.array([si])
+    if not isinstance(sd,np.ndarray):
+        sd = np.array([sd])
+    if not isinstance(N,np.ndarray):
+        N = np.array([N])
+    if not isinstance(beta,np.ndarray):
+        beta = np.array([beta])
+
+    fGHz  = fGHz[:,None,None,None,None,None,None]
+    phi0  = phi0[None,:,None,None,None,None,None]
+    phi   = phi[None,None,:,None,None,None,None]
+    si    = si[None,None,None,:,None,None,None]
+    sd    = sd[None,None,None,None,:,None,None]
+    N     = N[None,None,None,None,None,:,None]
+    beta  = beta[None,None,None,None,None,None,:]
+
+    L     = si*sd/(si+sd)
+    k     = 2*np.pi*fGHz/0.3
 
 #--------------------------------------------------
 # reflection on faces 'o' and 'n'
 #--------------------------------------------------
 
-    if (phi > phi0):
-        tho = phi0
-        thn = N*np.pi-phi
-    else:
-        tho = phi
-        thn = N*np.pi-phi0
 
-    Rsofto,Rhardo = reflection(tho,k,ero,erro,sigmao,uro,deltaho)
-    Rsoftn,Rhardn = reflection(thn,k,ern,errn,sigman,urn,deltahn)
+    tho = np.empty((phi0.shape[1],phi.shape[2],N.shape[5]))[None,:,:,None,None,:,None]
+    thn = np.empty((phi0.shape[1],phi.shape[2],N.shape[5]))[None,:,:,None,None,:,None]
+    PHI0  = phi0 * np.ones(phi.shape)*np.ones(N.shape)
+    PHI =  np.ones(phi0.shape)*phi*np.ones(N.shape)
+    BN  =  np.ones(phi0.shape)*np.ones(phi.shape)*N
 
+    c1 = PHI>PHI0
+    c2 = ~c1
+    tho[c1] = PHI0[c1]
+    thn[c1] = BN[c1]*np.pi-PHI[c1]
+    tho[c2] = PHI[c2]
+    thn[c2] = BN[c2]*np.pi-PHI0[c2]
+
+
+#    if (phi > phi0):
+#        tho = phi0
+#        thn = N*np.pi-phi
+#    else:
+#        tho = phi
+#        thn = N*np.pi-phi0
+
+    er0  = np.real(mat0['epr'])
+    err0 = np.imag(mat0['epr'])
+    ur0  = np.real(mat0['mur'])
+    urr0 = np.imag(mat0['mur'])
+    sigma0 = mat0['sigma']
+    deltah0 = mat0['roughness']
+
+    erN  = np.real(matN['epr'])
+    errN = np.imag(matN['epr'])
+    urN  = np.real(mat0['mur'])
+    urrN = np.imag(mat0['mur'])
+    sigmaN = matN['sigma']
+    deltahN = matN['roughness']
+
+
+    Rsofto,Rhardo = reflection(tho,k,er0,err0,sigma0,ur0,urr0,deltah0)
+    Rsoftn,Rhardn = reflection(thn,k,erN,errN,sigmaN,urN,urrN,deltahN)
+
+    pdb.set_trace()
 
 #--------------------------------------------------
 # grazing angle Go et Gn
 #--------------------------------------------------
 
-    Gsofto,Gsoftn = paramG(N,phi0,Rsofto,Rsoftn)
+    Gsofto,Gsoftn = G(N,phi0,Rsofto,Rsoftn)
 
-    Ghardo,Ghardn = paramG(N,phi0,Rhardo,Rhardn)
+    Ghardo,Ghardn = G(N,phi0,Rhardo,Rhardn)
 
 #--------------------------------------------------
 #calcul des 4 termes du coeff diff
@@ -153,7 +206,7 @@ def G(N,phio,Ro,Rn):
             Gn = 0.5
 
 
-def Dfunc(sign,k,N,dphi,si,sd,beta0=np.pi/2):
+def Dfunc(sign,k,N,dphi,si,sd,beta=np.pi/2):
     """
 
     Parameters
@@ -166,6 +219,7 @@ def Dfunc(sign,k,N,dphi,si,sd,beta0=np.pi/2):
     dphi : phi-phi0 or phi+phi0
     si : distance source-D
     sd : distance D-observation
+    beta : skew incidence angle
 
     Reference
     ---------
@@ -178,11 +232,11 @@ def Dfunc(sign,k,N,dphi,si,sd,beta0=np.pi/2):
 
             e-jnp.pi/4	            1 
     Di= ------------------	*    ----------- * F(kla)    ([1] eq 25)
-        2n*racine(2*np.pi*k)	 np.tan(dphi/n)  
+        2n*racine(2*np.pi*k)	 np.tan(dphi/n)sin(beta)  
 
     """
 
-    cste = (1.0-1.0*1j)*(1.0/(4.0*N*np.sqrt(k*np.pi)*np.sin(beta0)))
+    cste = (1.0-1.0*1j)*(1.0/(4.0*N*np.sqrt(k*np.pi)*np.sin(beta)))
     rnn = (dphi+np.pi*sign)/(2.0*N*np.pi)
     nn  = 0.0
 
@@ -409,8 +463,6 @@ def reflection(th,k,er,err,sigma,ur,urr,deltah):
         k = np.array([k])
     if not isinstance(th,np.ndarray):
         th = np.array([th])
-    import ipdb
-    ipdb.set_trace()
     #--------------------------------------------
     #cas des surfaces dielectriques (sinon er=-1)
     #--------------------------------------------
