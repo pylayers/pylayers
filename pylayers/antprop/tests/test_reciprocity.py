@@ -7,7 +7,7 @@ from pylayers.simul.simulem import *
 import matplotlib.pyplot as plt 
 import time
 print "======================="
-print " start test_rays.py (Ray Tracing numpy) "
+print " start test_reciprocity.py "
 print "======================="
 S = Simul()
 filestr = 'defstr'
@@ -19,6 +19,7 @@ S.tx.clear()
 S.rx.clear()
 S.tx.point(tx)
 S.rx.point(rx)
+# get cycle from coordinates
 Ctx = S.L.pt2cy(S.tx.position[:,0])
 Crx = S.L.pt2cy(S.rx.position[:,0])
 fGHz=np.arange(2,11,0.1)
@@ -26,18 +27,32 @@ wav = wvf.Waveform(fcGHz=5,bandGHz=3)
 #
 # Dans un sens
 #
+tic = time.time()
 Si1 = Signatures(S.L,Ctx,Crx)
-Si1.run4(cutoff=5,algo='old')
+#Si1.run4(cutoff=5,algo='old')
+Si1.run5()
+toc = time.time()
+print "signature ",toc-tic
+tic = time.time()
 r2d = Si1.rays(tx,rx)
+print "2D rays ",tic-toc
 r3d1 = r2d.to3D(S.L)
+toc = time.time()
+print "3D rays ",toc-tic
 r3d1.locbas(S.L)
+tic = time.time()
+print "3D rays locbas",tic-toc
 r3d1.fillinter(S.L)
+toc = time.time()
+print "3D fill interaction ",toc-tic
 C1 = r3d1.eval(fGHz)
+tic = time.time()
+print "eval field ",tic-toc
 ###C1.sort()
-sc1 = C1.prop2tran(a='theta',b='theta')
+sc1 = C1.prop2tran()
 cir1 = sc1.applywavB(wav.sfg)
 #####
-###### puis dans l'autre 
+###### puis dans l'autre
 ######
 #####print "second rayon"
 r2d2 = r2d.reciprocal()
@@ -47,7 +62,7 @@ r3d2.locbas(S.L)
 r3d2.fillinter(S.L)
 C2=r3d2.eval(fGHz)
 #####C2.sort()
-sc2=C2.prop2tran(a='theta',b='theta')
+sc2=C2.prop2tran()
 cir2 = sc2.applywavB(wav.sfg)
 ######
 ######print r3d1[2]['sig'][:,:,0]

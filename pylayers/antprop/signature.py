@@ -282,7 +282,8 @@ def edgeout2(L,g):
                     #    plt.show()
                     #    pdb.set_trace()
 
-                isegkeep = isegments[bs]
+                pdb.set_trace()
+                isegkeep = isegments[bs[0]]
                 output = filter(lambda x : x[0] in isegkeep ,i2)
                 # keep all segment above nstr1 and in Cone if T
                 # keep all segment below nstr1 and in Cone if R
@@ -2536,7 +2537,9 @@ class Signatures(PyLayers,dict):
         metasig = nx.neighbors(self.L.Gt,self.source)
         metasig = metasig + nx.neighbors(self.L.Gt,self.target)
         metasig = list(np.unique(np.array(metasig)))
+        metasig.pop(0)
         metasig = metasig + [self.source] + [self.target]
+        # remove external cycle
 
         #print "metasig",metasig
 

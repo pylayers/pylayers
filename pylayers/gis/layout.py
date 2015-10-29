@@ -5428,17 +5428,18 @@ class Layout(PyLayers):
         #   This shapely polygon has an interior ( TODO add hole vizualization
         #   in Polygon object)
         #
-        #    Cycles <0 are not indoor
-        #
+        #    Cycles < 0 are outdoor
+        #    Cycles > 0 are indoor
+        #    Cycles = 0 exterior cycle (assumed outdoor)
 
-        # build a poygon including all the layout + 5 meters
+        # build a polygon including all the layout + 5 meters
         p1 = geu.Polygon(self.ax,delta=5)
         self.ma = self.mask()
         p2 = p1.difference(self.ma)
         boundary = geu.Polygon(p2)
         boundary.vnodes = self.ma.vnodes
         self.Gt.add_node(0,polyg=boundary)
-        self.Gt.add_node(0, indoor = False)
+        self.Gt.add_node(0,indoor=False,isopen=True)
         self.Gt.pos[0]=(self.ax[0],self.ax[2])
 
 
@@ -5447,11 +5448,11 @@ class Layout(PyLayers):
         #   boundary
         #
 
-        # all segments of the building boundary
+        # all segments of the Layout boundary
         nseg = filter(lambda x : x >0 , boundary.vnodes)
-        # air segments of the building boundary
+        # air segments of the Layout boundary
         nsegair = filter(lambda x : x in self.name['AIR'],nseg)
-        # wall segments of the building boundary
+        # wall segments of the Layout boundary
         nsegwall = filter(lambda x : x not in self.name['AIR'],nseg)
 
         #
@@ -6245,74 +6246,71 @@ class Layout(PyLayers):
         self.dGv = {}  # dict of Gv graph
 
         for icycle in self.Gt.node:
-            if icycle >0:
-                #print "cycle : ",icycle
-                indoor = self.Gt.node[icycle]['indoor']
-                isopen = self.Gt.node[icycle]['isopen']
+            #print "cycle : ",icycle
+            #indoor = self.Gt.node[icycle]['indoor']
+            isopen = self.Gt.node[icycle]['isopen']
 
-                polyg = self.Gt.node[icycle]['polyg']
-                vnodes = polyg.vnodes
+            polyg = self.Gt.node[icycle]['polyg']
+            vnodes = polyg.vnodes
 
-                npt  = filter(lambda x : x<0,vnodes)
-                nseg = filter(lambda x : x>0,vnodes)
+            npt  = filter(lambda x : x<0,vnodes)
+            nseg = filter(lambda x : x>0,vnodes)
 
-                airwalls = filter(lambda x : x in self.name['AIR'],nseg)
-                if indoor:
-                    ndiff = filter(lambda x : x in self.ldiffin,npt)
-                else:
-                    ndiff = filter(lambda x : x in self.ldiffout,npt)
-                #
-                # Create a graph
-                #
-                Gv = nx.Graph()
-                #
-                # in convex case :
-                #    i)  all segments see all segments
-                #    ii) all non adjascent valid diffraction points see each other
-                #    iii) all valid diffraction points see non adjascent
-                #    segments
-                #
-                for nk in combinations(nseg, 2):
-                    Gv.add_edge(nk[0],nk[1])
+            airwalls = filter(lambda x : x in self.name['AIR'],nseg)
+            # indoor (cycles >0)
+            if icycle>0:
+                ndiff = filter(lambda x : x in self.ldiffin,npt)
+            # indoor (cycles <0)
+            if icycle<=0:
+                ndiff = filter(lambda x : x in self.ldiffout,npt)
+            #
+            # Create a graph
+            #
+            Gv = nx.Graph()
+            #
+            # in convex case :
+            #    i)  all segments see all segments
+            #    ii) all non adjascent valid diffraction points see each other
+            #    iii) all valid diffraction points see non adjascent
+            #    segments
+            #
+            for nk in combinations(nseg, 2):
+                Gv.add_edge(nk[0],nk[1])
 
-                #
-                # Handle diffraction point
-                #
-                #if isopen:
-                if indoor:
-                    ndiffvalid = filter(lambda x :
-                                        filter(lambda y : y in airwalls
-                                             ,nx.neighbors(self.Gs,x)),ndiff)
-                    # non adjascent segments see valid diffraction point
-                    #print "diff valid",ndiffvalid
-                    for idiff in ndiffvalid:
-                        # segvalid : not adjascent segment
-                        segvalid = filter(lambda x : x not in
-                                          nx.neighbors(self.Gs,idiff),nseg)
-                        # idiff segment neighbors
-                        nsneigh = nx.neighbors(self.Gs,idiff)
-                        # nbidiff valid
-                        nsneigh =  filter(lambda x : x not in airwalls,nsneigh)
-                        # excluded diffraction points
-                        iptexcluded = reduce(lambda u,v:u+v,map(lambda x :
-                                           nx.neighbors(self.Gs,x),nsneigh))
-                        # pntvalid : not excluded points
-                        pntvalid = filter(lambda x : x not in iptexcluded,ndiff)
-                        for ns in segvalid:
-                            Gv.add_edge(idiff,ns)
+            #
+            # Handle diffraction point
+            #
+            #if isopen:
+            ndiffvalid = filter(lambda x :
+                                filter(lambda y : y in airwalls
+                                     ,nx.neighbors(self.Gs,x)),ndiff)
+            # non adjascent segments see valid diffraction point
+            #print "diff valid",ndiffvalid
+            for idiff in ndiffvalid:
+                # segvalid : not adjascent segment
+                segvalid = filter(lambda x : x not in
+                                  nx.neighbors(self.Gs,idiff),nseg)
+                # idiff segment neighbors
+                nsneigh = nx.neighbors(self.Gs,idiff)
+                # nbidiff valid
+                nsneigh =  filter(lambda x : x not in airwalls,nsneigh)
+                # excluded diffraction points
+                iptexcluded = reduce(lambda u,v:u+v,map(lambda x :
+                                   nx.neighbors(self.Gs,x),nsneigh))
+                # pntvalid : not excluded points
+                pntvalid = filter(lambda x : x not in iptexcluded,ndiff)
+                for ns in segvalid:
+                    Gv.add_edge(idiff,ns)
 
-                        for np in pntvalid:
-                            Gv.add_edge(idiff,np)
-                else:
-                    pass
-                    # outdoor case not implemented
+                for np in pntvalid:
+                    Gv.add_edge(idiff,np)
 
-                #
-                # Graph Gv composition
-                #
+            #
+            # Graph Gv composition
+            #
 
-                self.Gv  = nx.compose(self.Gv, Gv)
-                self.dGv[icycle] = Gv
+            self.Gv  = nx.compose(self.Gv, Gv)
+            self.dGv[icycle] = Gv
 
 
     def buildGi(self):
@@ -6482,7 +6480,7 @@ class Layout(PyLayers):
             if c >0:
                 idiff = map(lambda x: x,filter(lambda x : x in
                                                 self.ldiffin,vnodes))
-            if c <0:
+            if c <=0:
                 idiff = map(lambda x: x,filter(lambda x : x in
                                                 self.ldiffout,vnodes))
             for k in idiff:
