@@ -302,12 +302,3 @@ The figure below illustrates the joint frequency and spatial fluctuation for the
 ... #m.configure_traits()
 ```
 
-```python
->>> from IPython.core.display import HTML
->>> 
->>> def css_styling():
-...     styles = open("../styles/custom.css", "r").read()
-...     return HTML(styles)
->>> css_styling()
-<IPython.core.display.HTML at 0x7fafac0b7250>
-```
