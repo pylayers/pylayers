@@ -42,8 +42,8 @@ import pylayers.gis.gisutil as gu
 
 import pdb
 
-def PL0(fGHz,GtdB=0,GrdB=0):
-    """  Path Loss at frequency fGHZ @ 1m 
+def PL0(fGHz,GtdB=0,GrdB=0,R=1):
+    """  Path Loss at frequency fGHZ @ R
 
     Parameters
     ----------
@@ -54,12 +54,15 @@ def PL0(fGHz,GtdB=0,GrdB=0):
           transmitting antenna gain dB (default 0 dB)
     GrdB: float
           receiving antenna gain dB (default 0 dB)
+    R   : float
+        distance in m ( because f is in GHz)
+
 
     Returns
     -------
 
     PL0 : float
-          path @ 1m
+          path @ R
 
     Notes
     -----
@@ -75,8 +78,11 @@ def PL0(fGHz,GtdB=0,GrdB=0):
 
     """
 
+    if not isinstance(fGHz,np.ndarray):
+        fGHz=np.array([fGHz])
+
     ld  = 0.3/fGHz
-    PL0 = -20*np.log10(ld/(4.0*np.pi))-GtdB-GrdB
+    PL0 = -20*np.log10(ld/(4.0*np.pi*R))-GtdB-GrdB
 
     return PL0
 
@@ -380,7 +386,7 @@ def cost2100(pMS,pBS,fGHz,nfloor=1,dB=True):
         pl = 10**(-pl/20.)
     return(pl)
 
-def PL(fGHz,pts,p,n=2.0,dB=True):
+def PL(fGHz,pts,p,n=2.0,dB=True,d0=1):
     """ calculate Free Space Path Loss
 
     Parameters
@@ -410,9 +416,9 @@ def PL(fGHz,pts,p,n=2.0,dB=True):
 
     D = np.sqrt(np.sum((pts-p)**2,axis=0))
     # f x grid x ap
-
     #PL = np.array([PL0(fGHz)])[:,np.newaxis] + 10*n*np.log10(D)[np.newaxis,:]
-    PL = PL0(fGHz)[:,np.newaxis] + 10*n*np.log10(D)[np.newaxis,:]
+
+    PL = PL0(fGHz,d0)[:,np.newaxis] + 10*n*np.log10(D/d0)[np.newaxis,:]
 
     if not dB:
         PL=10**(-PL/10)
