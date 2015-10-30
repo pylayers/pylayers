@@ -1962,7 +1962,7 @@ class SlabDB(dict):
         for i in self.keys():
             st = st + self[i].__repr__()+'\n'
         #    S.info()
-        return(st)    
+        return(st)
 
     def showall(self):
         """ show all slabs
