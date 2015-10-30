@@ -1384,12 +1384,12 @@ class Scanner(PyLayers):
         Parameters
         ----------
 
-        A : Aarray
-        fileh5 : string
+        A       : Aarray
+        _fileh5 : string
             name of the h5 file containing calibration data
-        vel : int
+        vel     : int
             scanner moving velocity
-        Nmeas : int
+        Nmeas   : int
             Number of measurement
 
 
@@ -1430,15 +1430,16 @@ class Scanner(PyLayers):
         if  laxes==['y']:
             mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf),dtype=np.complex64)
         if  laxes==['z']:
-            mes = Dh5.f.create_dataset(mesname,(Nmeas,ln[0],Nf),dtype=np.complex64)
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf),dtype=np.complex64)
         if  laxes==['x','y']:
-            mes = Dh5.f.create_dataset(mesname,(Nmeas,ln[0],ln[1],Nf),dtype=np.complex64)
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[1],Nf),dtype=np.complex64)
         if  laxes==['x','z']:
-            mes =  Dh5.f.create_dataset(mesname,(Nmeas,ln[0],ln[1],Nf),dtype=np.complex64)
+            mes =  Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[2],Nf),dtype=np.complex64)
         if  laxes==['y','z']:
-            mes = Dh5.f.create_dataset(mesname,(Nmeas,ln[0],ln[1],Nf),dtype=np.complex64)
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[1],lN[2],Nf),dtype=np.complex64)
         if  laxes==['x','y','z']:
-            mes = Dh5.f.create_dataset(mesname,(Nmeas,ln[0],ln[1],ln[2],Nf),dtype=np.complex64)
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[1],lN[2],Nf),dtype=np.complex64)
+        
         mes.attrs['time']=time.ctime()
         mes.attrs['author']=author
         mes.attrs['comment']=comment
@@ -1460,10 +1461,13 @@ class Scanner(PyLayers):
                 ix,iy = ktoxyz(k,Nx=l)
                 mes[:,ix,iy,:]=S
             if  laxes==['x','z']:
+                ix,iz = ktoxyz(k,Nx=l)
                 mes[:,ix,iz,:]=S
             if  laxes==['y','z']:
+                iy,iz = ktoxyz(k,Nx=l)
                 mes[:,iy,iz,:]=S
             if  laxes==['x','y','z']:
+                ix,iy,iz = ktoxyz(k,Nx=l)
                 mes[:,ix,iy,iz,:]=S
 
         Dh5.close()
