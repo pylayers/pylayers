@@ -11,6 +11,7 @@ import matplotlib.animation as animation
 import numpy.linalg as la
 from pylayers.measures.vna.E5072A import *
 from time import sleep
+from pylayers.measures.vna.E5072A import *
 
 
 class MIMO(object):
@@ -168,21 +169,16 @@ class MIMO(object):
                     #tc = C.H.y[iR*4+iT,:]
                     tc = C.H.y[iR,iT,:]
 
+        #MIMO
         # Nr x Nt x Nf
         tc = tc.reshape(self.Nr,self.Nt,self.Nf)
-
         # C.freq , Nf
-
         self.C = Tchannel(x=C.freq,y=tc)
-
-
         self.Hcal = self.H/self.C
-
         del self.H
         del self.C
 
-
-    def calHa(self,**kwargs):
+    def  calHa(self,**kwargs):
         """ calculate the Ha function (angular domain representation)
 
         fcGHz : float
@@ -505,92 +501,92 @@ class MIMO(object):
 
         return(rho,Cwf)
 
-    def meas(self):
-        """ Allows meas from VNA and Scanner
-        """
+    # def meas(self):
+    #     """ Allows meas from VNA and Scanner
+    #     """
 
-        defaults = { 'lavrg':'['1','999']',
-                     'lif':'['1000','300000','500000']',
-                     'lpoints' : '[201,401,601,801,1601]',
-                     'Nf':1601,
-                     'fminGHz' : 1.8,
-                     'fmaxGHz' :2.2,
-                     'calibration':True,
-                     'time':True,
-                     'Nmeas' : 100,
-                     'Nt' : 4,
-                     'Nr' : 8,
-                     'Aat': [],
-                     'Aar': []
-                  }
+    #     defaults = { 'lavrg':'['1','999']',
+    #                  'lif':'['1000','300000','500000']',
+    #                  'lpoints' : '[201,401,601,801,1601]',
+    #                  'Nf':1601,
+    #                  'fminGHz' : 1.8,
+    #                  'fmaxGHz' :2.2,
+    #                  'calibration':True,
+    #                  'time':True,
+    #                  'Nmeas' : 100,
+    #                  'Nt' : 4,
+    #                  'Nr' : 8,
+    #                  'Aat': [],
+    #                  'Aar': []
+    #               }
 
-        for k in defaults:
-            if k not in kwargs:
-                kwargs[k]=defaults[k]
+    #     for k in defaults:
+    #         if k not in kwargs:
+    #             kwargs[k]=defaults[k]
 
-        fminGHz = kwargs.pop('fminGHz')
-        fmaxGHz = kwargs.pop('fmaxGHz')
-        lavrg   =  kwargs.pop('lavrg')
-        lif     = kwargs.pop('lif')
-        lpoints = kwargs.pop('lpoints')
-        Nmeas = kwargs.pop('Nmeas')
-
-
-        ##################
-        ### VNA
-        #################
+    #     fminGHz = kwargs.pop('fminGHz')
+    #     fmaxGHz = kwargs.pop('fmaxGHz')
+    #     lavrg   =  kwargs.pop('lavrg')
+    #     lif     = kwargs.pop('lif')
+    #     lpoints = kwargs.pop('lpoints')
+    #     Nmeas = kwargs.pop('Nmeas')
 
 
-        # FROM MAIN OF E5072A.py
-        vna = SCPI("129.20.33.201",verbose=False)
-        ident = vna.getIdent()
-        print "Talking to : ",ident
-        vna.write("FORM:DATA REAL")
-        #vna.write("SENS:AVER:ON")
-        vna.select(param='S21',chan=1)
-        print "channel "+str(chan)+ " selected"
-        vna.setf(startGHz=1.8,stopGHz=2.2)
-        print "fstart (GHz) : ",startGHz
-        print "fstop (fGHz) : ",stopGHz
+    #     ##################
+    #     ### VNA
+    #     #################
 
 
-        ######
-        vna.setf(fminGHz,fmaxGHz)
-       prefix = 'cal_'
-        S = []
-        lt = []
+    #     # FROM MAIN OF E5072A.py
+    #     vna = SCPI("129.20.33.201",verbose=False)
+    #     ident = vna.getIdent()
+    #     print "Talking to : ",ident
+    #     vna.write("FORM:DATA REAL")
+    #     #vna.write("SENS:AVER:ON")
+    #     vna.select(param='S21',chan=1)
+    #     print "channel "+str(chan)+ " selected"
+    #     vna.setf(startGHz=1.8,stopGHz=2.2)
+    #     print "fstart (GHz) : ",startGHz
+    #     print "fstop (fGHz) : ",stopGHz
 
-        tic = time.time()
 
-        for i in lif:
-            vna.write(":SENS1:BAND " + str(i))
-            for n in lpoints:
-                fGHz = np.linspace(startGHz,stopGHz,n)
-                vna.setnpoint(n)
-                com = ":CALC1:DATA:SDAT?\n"
-                npts = vna.getnpoints()
-                print "Nbrs of points : ",npts
-                S = vna.getdata(n)
-                lt.append(time.time())
-                try:
-                    S21.append(S)
-                except:
-                    S21=S
-                S.save(prefix+str(n))
-                #for k in range(Nmeas):
-                    #S = vna.getdata(Npoints=Npoints)
-                    #lt.append(time.time())
-                    #try:
-                        #S21.append(S)
-                    #except:
-                        #S21=S
-        toc = time.time()
-        print toc-tic
-        #lt.append(toc-tic)
-        #lS.append(S21)
-        #del S21
-        #vna.close()
-        #S21.save('calibration.mat')
+    #     ######
+    #     vna.setf(fminGHz,fmaxGHz)
+    #     prefix = 'cal_'
+    #     S = []
+    #     lt = []
+
+    #     tic = time.time()
+
+    #     for i in lif:
+    #         vna.write(":SENS1:BAND " + str(i))
+    #         for n in lpoints:
+    #             fGHz = np.linspace(startGHz,stopGHz,n)
+    #             vna.setnpoint(n)
+    #             com = ":CALC1:DATA:SDAT?\n"
+    #             npts = vna.getnpoints()
+    #             print "Nbrs of points : ",npts
+    #             S = vna.getdata(n)
+    #             lt.append(time.time())
+    #             try:
+    #                 S21.append(S)
+    #             except:
+    #                 S21=S
+    #             S.save(prefix+str(n))
+    #             #for k in range(Nmeas):
+    #                 #S = vna.getdata(Npoints=Npoints)
+    #                 #lt.append(time.time())
+    #                 #try:
+    #                     #S21.append(S)
+    #                 #except:
+    #                     #S21=S
+    #     toc = time.time()
+    #     print toc-tic
+    #     #lt.append(toc-tic)
+    #     #lS.append(S21)
+    #     #del S21
+    #     #vna.close()
+    #     #S21.save('calibration.mat')
 
 
     def mulcplot(self,mode,**kwargs):

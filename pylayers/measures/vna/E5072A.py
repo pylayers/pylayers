@@ -8,13 +8,18 @@ import matplotlib.pyplot as plt
 from types import *
 from numpy import array
 import pdb
+import h5py
 import select
 from pylayers.util.project import  *
 import pylayers.signal.bsignal as bs
 import pylayers.antprop.channel as ch
+from pylayers.util import pyutil as pyu
+
 from time import sleep
 import seaborn as sns
 import os
+import ConfigParser
+
 """
 
 Module to drive the network analyzer E5072A
@@ -92,7 +97,7 @@ class SCPI(PyLayers):
 
         self.getIdent()
         print self.ident
-        assert('E5072A' in self.ident), "E5072A not responding"
+        #assert('E5072A' in self.ident), "E5072A not responding"
         self.points()
         self.freq()
         self.parS()
@@ -305,7 +310,7 @@ class SCPI(PyLayers):
 
 
     def points(self,value=1601,cmd='get',sens=1,echo=False):
-        """ get|set  number of points
+        """ 'get'|'set'  number of points
 
         Parameters
         ----------
@@ -400,8 +405,49 @@ class SCPI(PyLayers):
             return ""
 
 
-    def getdata(self,chan=1,Nmeas=10,fminGHz=1.8,fmaxGHz=2.2):
-        """ allows getdata from VNA
+    def getdata(self,chan=1,Nmeas=10):
+        """ getdata from VNA
+
+        Parameters
+        ----------
+        Nmeas   : number of times of measures
+        chan    : int
+                  channel number
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.vna.E5072A import *
+        >>> import matplotlib.pyplot as plt
+        >>> import numpy as np
+        >>> vna = SCPI()
+        Agilent Technologies,E5072A,MY51100293,A.01.04
+        <BLANKLINE>
+        >>> vna.parS(param='S21',cmd='set')
+        >>> S21 = vna.getdata()
+        >>> vna.close()
+
+        """
+
+        self.nmeas    = Nmeas
+        com = 'CALC'+str(chan)+':DATA:SDAT?'
+        for k in  range(Nmeas):
+            buff = ''
+
+            while len(buff)<>(self.Nf*16+8):
+                buff = self.read(com)
+
+            S = np.frombuffer(buff[8:self.Nf*16+8],dtype='>f8')
+            Y = S.reshape(self.Nf,2)
+            H = Y[:,0]+1j*Y[:,1]
+            try:
+                tH = np.vstack((tH,H[None,:]))
+            except:
+                tH = H[None,:]
+        return tH
+
+    def getchan(self,chan=1,Nmeas=10,fminGHz=1.8,fmaxGHz=2.2):
+        """ get a Tchannel from VNA
 
         Parameters
         ----------
@@ -410,7 +456,7 @@ class SCPI(PyLayers):
                   channel number
         fminGHz : frequency start (float)
         fmaxGHz : frequency stop  (float)
-        
+
         Examples
         --------
 
@@ -447,12 +493,62 @@ class SCPI(PyLayers):
                 tH = np.vstack((tH,H[None,:]))
             except:
                 tH = H[None,:]
-            S21 = ch.Tchannel(x=f,y=tH)
-            return S21
-            self.close()
-        toc = time.time()
-        t = toc-tic
-        print "Time measurement (ms) :",t
+        S21 = ch.Tchannel(x=f,y=tH)
+        return S21
+        #toc = time.time()
+        #t   = toc-tic
+        #print "Time measurement (ms) :",t
+
+    def calibh5(self,
+                _fileh5="sdata",
+                _filename="vna_config.ini",
+                cables=[],
+                author='',
+                comment='',
+                Nmeas = 10):
+        """  measure a calibration vector and store in h5 file
+
+        Parameters
+        ----------
+
+        _filesh5 : string
+            file h5 prefix
+        _filename : string
+            vna configuration file name
+        cables : list of strings
+
+        """
+
+        # set config
+        self.load_config(_filename=_filename)
+
+        # get Nmeas calibration vector
+        D = self.getdata(chan=1,Nmeas=Nmeas)
+
+        # store calibration vector in a hdf5 file
+        fileh5 = pyu.getlong(_fileh5,pstruc['DIRMES'])+'.h5'
+        f = h5py.File(fileh5,"w")
+        try:
+            ldataset = f.keys()
+        except:
+            ldataset = []
+        lcal =  filter(lambda x : 'cal' in x,ldataset)
+        calname = 'cal'+ str(len(lcal)+1)
+
+        dcal = f.create_dataset(calname,(Nmeas,self.Nf),dtype=np.complex64)
+        dcal.attrs['Nf']=self.Nf
+        dcal.attrs['fminGHz']=self.fminGHz
+        dcal.attrs['fmaxGHz']=self.fmaxGHz
+        dcal.attrs['ifbHz']=self.ifbHz
+        dcal.attrs['Navrg']=self.navrg
+        dcal.attrs['time'] = time.ctime()
+        dcal.attrs['author']=  author
+        dcal.attrs['cables']= cables
+        dcal.attrs['comment']=comment
+        dcal.attrs['param']=self.param
+        dcal[0:Nmeas,0:self.Nf]=D
+        f.close()
+
 
     def avrg(self,sens=1,b='OFF',navrg=16,cmd='getavrg'):
         """ allows get|set the point averaging
@@ -543,6 +639,57 @@ class SCPI(PyLayers):
             com = com+"\n"
             self.s.send(com)
 
+    def load_config(self,_filename='vna_config.ini'):
+        """ load a config file from an .ini file
+
+        Parameters
+        ----------
+
+        _filename : string
+                   file name extension .ini
+
+
+        Examples
+        --------
+
+        >>> from pylayers.measures.vna.E5072A import *
+        >>> vna = SCPI()
+        Agilent Technologies,E5072A,MY51100293,A.01.04
+        <BLANKLINE>
+        >>> vna.load_config()
+        >>> vna.close()
+
+        """
+
+        #filename : ~/Pylayers_project/meas
+        filenname = pyu.getlong(_filename,pstruc['DIRMES'])
+        vna_conf  = ConfigParser.ConfigParser()
+        vna_conf.read(filenname)
+        sections  = vna_conf.sections()
+        di        = {}
+        for section in sections:
+            di[section]={}
+            options = vna_conf.options(section)
+            for option in options:
+                # int/float value
+                try:
+                    di[section][option] = eval(vna_conf.get(section,option))
+                # string value
+                except:
+                    di[section][option] = vna_conf.get(section,option)
+
+        #be careful no capital word in the sections
+        self.fminGHz = di['stimulus']['fminghz']
+        self.fmaxGHz = di['stimulus']['fmaxghz'] 
+        self.Nf      = di['stimulus']['nf']
+        self.param   = di['response']['param']
+        self.ifbHz   = di['response']['ifbhz']
+        self.freq(fminGHz=self.fminGHz,fmaxGHz=self.fmaxGHz,cmd='set')
+        self.points(self.Nf,cmd='set')
+        self.parS(param=self.param,cmd='set')
+        self.ifband(ifbHz=self.ifbHz,cmd='set')
+
+
 
 if __name__=='__main__':
     doctest.testmod()
@@ -570,7 +717,8 @@ if __name__=='__main__':
 #        print "Npoints : ",Npoints
 #        com1 = ":CALC1:DATA:SDAT?\n"
 #        N = 100
-#        fGHz = np.linspace(1.8,2.2,Npoints)
+#        fGHz = np.linspace(1.8,2.2,
+#Npoints)
 #        tic = time.time()
 #        for k in range(N):
 #            S = vna.getdata(Npoints=Npoints)

@@ -2866,7 +2866,7 @@ bernard
         if kwargs['ylim'] != ():
             ylim = kwargs['ylim']
         else :
-            axlim = ax.axis() 
+            axlim = ax.axis()
             ylim = [axlim[2],axlim[3]]
 
 
