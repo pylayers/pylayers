@@ -50,8 +50,8 @@ Ets = Ei + Ers + (Ed2-Ed4)
 Eth = Ei + Erh + (Ed2+Ed4)
 Ethf = Ei + Erh + Dh*np.exp(-1j*2*np.pi*fGHz*ds/0.3)
 Etsf = Ei + Ers + Ds*np.exp(-1j*2*np.pi*fGHz*ds/0.3)
-Ec2 = Ed2+Ei
-Ec4 = Ed4+Ers
+Ec2 = Ei + Ed2
+Ec4 = Ers - Ed4
 #Ec24 = Ed2+Ei+Ed4+Ers
 #Eth = Ei+Erh
 #plt.figure()
