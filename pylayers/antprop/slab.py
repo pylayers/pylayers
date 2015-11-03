@@ -636,7 +636,8 @@ class MatInterface(Interface):
         #if not isinstance(theta,np.ndarray):
         # theta=np.array([theta])
         name = '|'.join(mat['name'] for mat in lmat)
-        Interface.__init__(self, fGHz, theta, name=name)
+        # Interface.__init__(self, fGHz, theta, name=name)
+        super(MatInterface,self).__init__(fGHz, theta, name=name)
         self.m1 = lmat[0]
         self.m2 = lmat[1]
         # 2*np.pi* f(GHz)*eps0 = f(Ghz)/18
@@ -1345,7 +1346,8 @@ class Slab(dict,Interface):
 
         """
         # if not specified choose default material database
-        Interface.__init__(self)
+        super(Slab,self).__init__()
+        # Interface.__init__(self)
         if mat==[]:
             self.mat = MatDB()
         else:
@@ -1572,7 +1574,8 @@ class Slab(dict,Interface):
         name1 = '|'.join(mat['name'] for mat in self['lmat'])
         name2 = '|'.join(str(thick) for thick in self['lthick'])
         name = '(' + name1 + ')' + '(' + name2 + ')'
-        Interface.__init__(self, fGHz, theta, name=name)
+        super(Slab,self).__init__(fGHz, theta, name=name)
+        # Interface.__init__(self, fGHz, theta, name=name)
         #self.lmat = lmat
         #self.lthick = lthick
         self.n = len(self['lmat']) + 2
@@ -2445,7 +2448,7 @@ class SlabDB(dict):
 
 
 
-class Wedge(dict,Interface):
+class Wedge(Interface,dict):
     """ Handle a Wedge
 
     Summary
@@ -2468,12 +2471,12 @@ class Wedge(dict,Interface):
         Material name | Material | Slab on face 0
     sn : string | Mat | Slab
         Material name | Material | Slab on face n
-    N : float
-        wedge parameter
+ 
+
     evaluated : Boolean
 
     """
-    def __init__(self, mat=[], s0='WOOD',  sn='WOOD', N=320/180.):
+    def __init__(self, mat=[], s0='WOOD', sn='WOOD',alpha=np.array([])):
         """ class constructor
 
         Parameters
@@ -2494,11 +2497,14 @@ class Wedge(dict,Interface):
         
         """
         # if not specified choose default material database
+
         super(Wedge,self).__init__()
+
         if mat==[]:
             self.mat = MatDB()
         else:
             self.mat = mat
+
 
         # slab 0 is a string name
         if isinstance(s0,str):
@@ -2529,11 +2535,34 @@ class Wedge(dict,Interface):
             elif isinstance(sn,Slab):
                 self['matn']=sn['lmat'][0]
                 self['namen']=sn['lmatname'][0]
-        self['N']=N
         self['color'] = 'black'
         self['linewidth'] = 1.0
         self['evaluated'] = False
+        self['alpha']=alpha
+        self['N']=alpha/np.pi
 
+
+
+
+
+    # def phi0phin(self,u0,un,si,so):
+    #     """
+    #     Compute angle phi_0 and phi_nfrom face 0 regarding
+    #     to unit vectors u0 and un along face 0 and n respectively
+
+    #     Attributes
+    #     ----------
+
+    #     u0 : ndarray (2|3xNp)
+    #         unit vector along Np faces 0
+    #     un : ndarray (2|3xNp)
+    #         unit vector along Np faces n
+    #     si : ndarray (2|3x)
+    #         unit vector along incidence ray
+    #     un : ndarray (2|3xNp)
+    #         unit vector along Np faces n
+
+    #     """
 
 
 def calsig(cval, fGHz, typ='epsr'):

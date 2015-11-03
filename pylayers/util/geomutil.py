@@ -3926,7 +3926,14 @@ def valid_wedge(ps, pw, p1, p2, grazing):
 
 
 def sector(p1, p2, pt):
-    """ angular sector  p1 pt p2
+    """ non signed angular sector  between
+        (p1,pt) and (p2,pt)
+
+    p1 x-----------x pt
+               |  /
+          alpha \/
+                /
+               x p2
 
     Parameters
     ----------

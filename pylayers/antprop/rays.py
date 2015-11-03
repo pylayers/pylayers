@@ -1517,18 +1517,19 @@ class Rays(PyLayers,dict):
                 nbrayt = nbrayt + nbray
                 self.raypt = self.raypt + self[k]['nbrays']
 
-                # ##################
-                # ##### SPEC diffraction processing
-                # #############
-                # diffseg  = nstr[udiff]
-                # # position of diff seg
-                # ptdiff = L.pt[:,diffseg]
+                ##################
+                ##### SPEC diffraction processing
+                #############
+                diffseg  = nstr[udiff]
+                # position of diff seg
+                ptdiff = L.pt[:,diffseg]
 
-                # # get tail head position of diff point
-                # aseg = map(lambda x : filter(lambda y : y not in L.name['AIR'],
-                #                      nx.neighbors(L.Gs,x)),
-                #                      diffseg)
-                # pts = np.array(map(lambda x : L.seg2pts([x[0],x[1]]).reshape(4,2),aseg))
+                # get tail head position of diff point
+                aseg = map(lambda x : filter(lambda y : y not in L.name['AIR'],
+                                     nx.neighbors(L.Gs,x)),
+                                     diffseg)
+                pts = np.array(map(lambda x : L.seg2pts([x[0],x[1]]),aseg))
+
                 # angn=[]
                 # ang0=[]
                 # N = np.shape(pts)[0]

@@ -4049,6 +4049,8 @@ class Layout(PyLayers):
         ptail =  self.pt[:,tahe[0,:]]
         phead = self.pt[:,tahe[1,:]]
         pth = np.vstack((ptail,phead))
+
+        pth = pth.reshape(pth.shape[0],pth.shape[-1])
         return pth
 
     def segpt(self, ptlist=np.array([0])):
