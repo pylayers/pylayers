@@ -3930,6 +3930,59 @@ def sector(p1, p2, pt):
 
     Parameters
     ----------
+    p1 : np.array (3 x Np)
+        point
+    p2 : np.array (3 x Np)
+        point
+    pt : np.array (3 x Np)
+        point
+
+    Returns
+    -------
+
+    alpha : np.array (3 x Np)
+        degree
+
+    Notes
+    -----
+
+    Useful for AAS calculation
+
+
+    """
+
+    if len(p1.shape) == 1:
+        p1=p1.reshape(p1.shape[0],1)
+    if len(p2.shape) == 1:
+        p2=p2.reshape(p2.shape[0],1)
+    if len(pt.shape) == 1:
+        pt=pt.reshape(pt.shape[0],1)
+
+    p1pt = p1 - pt
+    p2pt = p2 - pt
+    u = p1pt / np.sqrt(np.sum((p1pt)*(p1pt),axis=0))
+    v = p2pt / np.sqrt(np.sum((p2pt)*(p2pt),axis=0))
+    # sum(a[i,j,:] * b[k,:,m])
+    alpha = np.arctan2(u[1], u[0])
+    beta = np.arctan2(v[1], v[0])
+    v0 = abs(alpha - beta)
+    v1 = 2 * np.pi - abs(alpha - beta)
+    um0 = v0 < v1
+    um1 = ~um0
+    sector = np.empty(np.shape(u)[1])
+    sector[um0]= v0[um0]
+    sector[um1]= v1[um1]
+    return sector*180/np.pi
+    #if (abs(alpha + sector - sp.mod(beta, 2 * np.pi)) < 1e-3):
+    #    return(np.array([alpha, beta]) * 180 / np.pi)
+    #else:
+    #    return(np.array([beta, alpha]) * 180 / np.pi)
+
+def sectorold(p1, p2, pt):
+    """ angular sector  p1 pt p2
+
+    Parameters
+    ----------
     p1 : np.array
         point
     p2 : np.array
@@ -3940,7 +3993,7 @@ def sector(p1, p2, pt):
     Returns
     -------
 
-    alpha, beta : np.array
+    alpha : np.array
         degree
 
     Notes
@@ -3956,10 +4009,6 @@ def sector(p1, p2, pt):
     beta = np.arctan2(v[1], v[0])
     sector = min(abs(alpha - beta), 2 * np.pi - abs(alpha - beta))
     return sector*180/np.pi
-    #if (abs(alpha + sector - sp.mod(beta, 2 * np.pi)) < 1e-3):
-    #    return(np.array([alpha, beta]) * 180 / np.pi)
-    #else:
-    #    return(np.array([beta, alpha]) * 180 / np.pi)
 
 
 def dist(x,y,ax):
