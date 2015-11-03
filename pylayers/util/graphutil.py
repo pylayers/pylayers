@@ -128,7 +128,6 @@ def draw(G,**kwargs):
             edgelist = filter(lambda x: x not in ea, edgelist)
         except:
             pass
-
     if kwargs['nodes']:
         nx.draw_networkx_nodes(G, G.pos,
                                nodelist = nodelist,

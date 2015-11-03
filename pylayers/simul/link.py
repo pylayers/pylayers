@@ -1548,24 +1548,29 @@ class DLink(Link):
 
 
         if ant :
-            Atx = self.tx.A
-            Arx = self.rx.A
+            Atx = self.Aa
+            Arx = self.Ab
             Ttx = self.tx.orientation
             Trx = self.rx.orientation
 
             # evaluate antenna if required
             if not Atx.evaluated:
-                Atx.Fsynth()
-            elif len(Atx.SqG.shape) == 2 :
-                Atx.Fsynth()
-
-            if not Arx.evaluated:
-                Arx.Fsynth()
-            elif len(Arx.SqG.shape) == 2 :
-                Arx.Fsynth()
-            Atx._show3(T=Ttx.reshape(3,3),po=ptx,
+                Atx.eval()
+            try:
+                Atx._show3(T=Ttx.reshape(3,3),po=ptx,
                 title=False,colorbar=False,newfig=False)
-            Arx._show3(T=Trx.reshape(3,3),po=prx,
+            except:
+                Atx.eval()
+                Atx._show3(T=Ttx.reshape(3,3),po=ptx,
+                title=False,colorbar=False,newfig=False)
+            if not Arx.evaluated:
+                Arx.eval()
+            try:
+                Arx._show3(T=Trx.reshape(3,3),po=prx,
+                title=False,colorbar=False,newfig=False,name = '')
+            except:
+                Arx.eval()
+                Arx._show3(T=Trx.reshape(3,3),po=prx,
                 title=False,colorbar=False,newfig=False,name = '')
 
         if lay:

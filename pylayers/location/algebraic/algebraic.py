@@ -41,30 +41,18 @@ import pdb
 class algloc(object):
     """
     This class regroups algebraic localization algorithms
-
-    Attributes
-    ----------
-
-    nodes : dictionnary
-    ldp : dictionnary
+        All nodes positions are gatherred in nodes dictionnary
+        All location dependent parameters are gathered in ldp dictionnary
 
     Methods
     --------
+    ls_locate : perform least square position evaluation
+    wls_locate : perform weighted least square position evaluation
+    ml_locate : perform maximum likelihood position evaluation
 
     plot : plot scenario
     show : plot scenario
     get_range
-
-
-    Notes
-    -----
-
-    This class gathers various implementation of location algorithms.
-    The object has :
-        + a dictionnary of nodes
-        + a dictionnary of location dependent parameters
-
-
     """
 
     def __init__(self, nodes={}, ldp={}):
@@ -73,10 +61,53 @@ class algloc(object):
         Parameters
         ----------
 
-        nodes : dict
-        
-        ldp : dict
+        dim ( dimension 2 or 3 )
+        N : number of nodes
 
+        nodes : dict
+            the keys of nodes dict :
+            
+
+        nodes['BN'] : blind node position (dim x N)
+        nodes['RN_RSS']= RSS nodes position (dim x N)
+        nodes['RN_TOA']= TOA nodes position (dim x N)
+        nodes['RN_TDOA']= TDOA nodes position (dim x N)
+        nodes['RNr_TDOA']= TDOA reference nodes position (dim x N)
+            you need to repeat along N the reference node ( to be broacasted)
+
+        ldp : dict
+            dictionnary containing the location depend parameters
+            (between parenthesis is the shape of the value)
+
+        ldp['RSS'] = received power value in dB ( N )
+        ldp['RSS_std'] = received power standard ddeviation dB ( N )
+        ldp['RSS_np'] = path loss exponent ( N )
+        ldp['d0'] = reference distance (integer)
+        ldp['PL0'] = path loss @ d0 ( N )
+        ldp['TOA'] = Time of arrival in nano seconds (N)
+        ldp['TOA_std'] = standard ddeviation in ns ( N )
+        ldp['TDOA'] = Time difference of arrival in ns ( N )
+        ldp['TDOA_std'] = Time difference of arrival standard dev. in ns ( N )
+
+
+    Examples
+    --------
+
+    .. plot::
+        :include-source:
+
+
+        >>> from pylayers.location.algebraic.algebraic import *
+        >>> import scipy as sp
+        >>> from pylayers.util.geomutil import dist
+
+        >>> nodes,ldp = scenario()
+        >>> L = algloc()
+        >>> L.nodes=nodes
+        >>> L.ldp=ldp
+
+        >>> print "least square locate RSS + TDOA"
+        >>> L.ls_locate(rss=True,toa= False,tdoa = True)
         """
 
         self.nodes = nodes
@@ -1143,6 +1174,10 @@ def scenario():
     .. plot::
         :include-source:
 
+
+        >>> from pylayers.location.algebraic.algebraic.algloc import *
+        >>> import scipy as sp
+        >>> from pylayers.util.geomutil import dist
         >>> nRN = 4
         >>> dim = 3 # 2 for 2D, 3 for 3D
         >>> L = 20.

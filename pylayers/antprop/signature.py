@@ -2318,7 +2318,6 @@ class Signatures(PyLayers,dict):
         adio = adi[:,3:]
         out=[]
         lsig={}
-
         #initialize loop on the 1st interaction id(0,0,0,X,X,X)
 
         # uinit = np.unique(np.where(adi[:,:3]==0)[0])

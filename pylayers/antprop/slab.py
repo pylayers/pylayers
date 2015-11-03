@@ -2442,6 +2442,100 @@ class SlabDB(dict):
 # self.save(f2)
 
 
+
+
+
+class Wedge(dict,Interface):
+    """ Handle a Wedge
+
+    Summary
+    -------
+
+    A Wedge is a cone with, on its 2 faces :
+
+    - a Material/Slab s0
+    - a Material/slab sn
+
+
+    Attributes
+    ----------
+
+
+    mat : MatDB
+        Associated Material Database 
+
+    s0 : string | Mat | Slab
+        Material name | Material | Slab on face 0
+    sn : string | Mat | Slab
+        Material name | Material | Slab on face n
+    N : float
+        wedge parameter
+    evaluated : Boolean
+
+    """
+    def __init__(self, mat=[], s0='WOOD',  sn='WOOD', N=320/180.):
+        """ class constructor
+
+        Parameters
+        ----------
+
+        mat :
+        name : string
+        Wedge name
+
+
+        Example
+        -------
+        >>> from pylayers.antprop.slab import *
+        >>> SDB=SlabDB()
+        >>> s0 = SDB['3D_WINDOW_GLASS']
+        >>> sn = SDB['PARTITION']
+        >>> W=Wedge(s0=s0,sn=sn)
+        
+        """
+        # if not specified choose default material database
+        super(Wedge,self).__init__()
+        if mat==[]:
+            self.mat = MatDB()
+        else:
+            self.mat = mat
+
+        # slab 0 is a string name
+        if isinstance(s0,str):
+            self['name0']= s0
+            try:
+                self['mat0']=self.mat[s0]
+            except:
+                raise AttributeError('s0 is not a material from MatDB')
+        else: 
+            if isinstance(s0,Mat):
+                self['mat0']=s0
+                self['name0']=s0['name']
+            elif isinstance(s0,Slab):
+                self['mat0']=s0['lmat'][0]
+                self['name0']=s0['lmatname'][0]
+
+        # slab n is a string name
+        if isinstance(sn,str):
+            self['namen']= sn
+            try:
+                self['matn']=self.mat[sn]
+            except:
+                raise AttributeError('sn is not a material from MatDB')
+        else: 
+            if isinstance(sn,Mat):
+                self['matn']=sn
+                self['namen']=sn['name']
+            elif isinstance(sn,Slab):
+                self['matn']=sn['lmat'][0]
+                self['namen']=sn['lmatname'][0]
+        self['N']=N
+        self['color'] = 'black'
+        self['linewidth'] = 1.0
+        self['evaluated'] = False
+
+
+
 def calsig(cval, fGHz, typ='epsr'):
     """ evaluate sigma from epsr or index at a given frequency
 
@@ -2480,6 +2574,8 @@ def calsig(cval, fGHz, typ='epsr'):
     delta = (0.3 / (2 * np.pi * fGHz * n2))
 
     return(epr1, sigma, delta)
+
+
 
 
 if (__name__ == "__main__"):

@@ -864,10 +864,10 @@ class Rays(PyLayers,dict):
                     # immediate d'un point 2D renseigne.
                     #
                     try:
-                        iintm_f = map(lambda x : np.where( (siges[1,0:x[0],x[1]]<>4) & (siges[1,0:x[0],x[1]]<>5))[0][-1], zip(iint_f,iray_f))
-                        iintp_f = map(lambda x : np.where( (siges[1,x[0]:,x[1]]<>4) & (siges[1,x[0]:,x[1]]<>5))[0][0]+x[0], zip(iint_f,iray_f))
-                        iintm_c = map(lambda x : np.where( (siges[1,0:x[0],x[1]]<>4) & (siges[1,0:x[0],x[1]]<>5))[0][-1], zip(iint_c,iray_c))
-                        iintp_c = map(lambda x : np.where( (siges[1,x[0]:,x[1]]<>4) & (siges[1,x[0]:,x[1]]<>5))[0][0]+x[0], zip(iint_c,iray_c))
+                        iintm_f = map(lambda x : np.where( (siges[1,0:x[0],x[1]]!=4) & (siges[1,0:x[0],x[1]]!=5))[0][-1], zip(iint_f,iray_f))
+                        iintp_f = map(lambda x : np.where( (siges[1,x[0]:,x[1]]!=4) & (siges[1,x[0]:,x[1]]!=5))[0][0]+x[0], zip(iint_f,iray_f))
+                        iintm_c = map(lambda x : np.where( (siges[1,0:x[0],x[1]]!=4) & (siges[1,0:x[0],x[1]]!=5))[0][-1], zip(iint_c,iray_c))
+                        iintp_c = map(lambda x : np.where( (siges[1,x[0]:,x[1]]!=4) & (siges[1,x[0]:,x[1]]!=5))[0][0]+x[0], zip(iint_c,iray_c))
                     except:
                         pdb.set_trace()
 
@@ -1213,7 +1213,7 @@ class Rays(PyLayers,dict):
             #
             # k is the number of interactions in the block
             #
-            if k <> 0:
+            if k != 0:
 
                 # structure number (segment or point)
                 # nstr : i x r
@@ -1278,6 +1278,7 @@ class Rays(PyLayers,dict):
 
                 normcheck = np.sum(self[k]['norm']*self[k]['norm'],axis=0)
                 assert normcheck.all()>0.99,pdb.set_trace()
+
 
 
                 # 3 : x,y,z
@@ -1515,6 +1516,53 @@ class Rays(PyLayers,dict):
                 self.ray2nbi[self[k]['rayidx']]  = k
                 nbrayt = nbrayt + nbray
                 self.raypt = self.raypt + self[k]['nbrays']
+
+                # ##################
+                # ##### SPEC diffraction processing
+                # #############
+                # diffseg  = nstr[udiff]
+                # # position of diff seg
+                # ptdiff = L.pt[:,diffseg]
+
+                # # get tail head position of diff point
+                # aseg = map(lambda x : filter(lambda y : y not in L.name['AIR'],
+                #                      nx.neighbors(L.Gs,x)),
+                #                      diffseg)
+                # pts = np.array(map(lambda x : L.seg2pts([x[0],x[1]]).reshape(4,2),aseg))
+                # angn=[]
+                # ang0=[]
+                # N = np.shape(pts)[0]
+                # for k in range(N):
+                #     pt1 = pts[k,0:2,0]
+                #     ph1 = pts[k,2:4,0]
+                #     pt2 = pts[k,0:2,1]
+                #     ph2 = pts[k,2:4,1]
+                #     if (pt1==pt2).all():
+                #         pa = ph1
+                #         pb = ph2
+                #         pt = pt1
+                #     if (pt1==ph2).all():
+                #         pa = ph1
+                #         pb = pt2
+                #         pt = pt1
+                #     if (ph1==pt2).all():
+                #         pa = pt1
+                #         pb = ph2
+                #         pt = ph1
+                #     if (ph1==ph2).all():
+                #         pa = pt1
+                #         pb = pt2
+                #         pt = ph1
+
+                #     import ipdb
+                #     ipdb.set_trace()
+                #     ang0.append(geu.sector(pa,pb,s_in[:2,udiff[0][k],udiff[1][k]]))
+                #     angn.append(geu.sector(pa,pb,s_out[:2,udiff[0][k],udiff[1][k]]))
+                # ######################
+
+
+
+
             # if los exists
             else :
                 self[k]['nstrwall'] = np.array(())
