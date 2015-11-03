@@ -1520,46 +1520,57 @@ class Rays(PyLayers,dict):
                 ##################
                 ##### SPEC diffraction processing
                 #############
-                diffseg  = nstr[udiff]
-                # position of diff seg
-                ptdiff = L.pt[:,diffseg]
+                # if len(udiff[0]) != 0 :
 
-                # get tail head position of diff point
-                aseg = map(lambda x : filter(lambda y : y not in L.name['AIR'],
-                                     nx.neighbors(L.Gs,x)),
-                                     diffseg)
-                pts = np.array(map(lambda x : L.seg2pts([x[0],x[1]]),aseg))
+                #     # diffseg,udiffseg  = np.unique(nstr[udiff],return_inverse=True)
+                #     diffseg=nstr[udiff]
+                #     # position of diff seg (+1 to manage start from 0)
+                #     ptdiff = L.pt[:,diffseg]
 
-                # angn=[]
-                # ang0=[]
-                # N = np.shape(pts)[0]
-                # for k in range(N):
-                #     pt1 = pts[k,0:2,0]
-                #     ph1 = pts[k,2:4,0]
-                #     pt2 = pts[k,0:2,1]
-                #     ph2 = pts[k,2:4,1]
-                #     if (pt1==pt2).all():
-                #         pa = ph1
-                #         pb = ph2
-                #         pt = pt1
-                #     if (pt1==ph2).all():
-                #         pa = ph1
-                #         pb = pt2
-                #         pt = pt1
-                #     if (ph1==pt2).all():
-                #         pa = pt1
-                #         pb = ph2
-                #         pt = ph1
-                #     if (ph1==ph2).all():
-                #         pa = pt1
-                #         pb = pt2
-                #         pt = ph1
-
+                #     # get tail head position of diff point
+                #     aseg = map(lambda x : filter(lambda y : y not in L.name['AIR'],
+                #                          nx.neighbors(L.Gs,x)),
+                #                          diffseg)
+                #     pts = np.array(map(lambda x : L.seg2pts([x[0],x[1]]),aseg))
                 #     import ipdb
                 #     ipdb.set_trace()
-                #     ang0.append(geu.sector(pa,pb,s_in[:2,udiff[0][k],udiff[1][k]]))
-                #     angn.append(geu.sector(pa,pb,s_out[:2,udiff[0][k],udiff[1][k]]))
-                # ######################
+                #     # angn=[]
+                #     # ang0=[]
+                #     # N = np.shape(pts)[0]
+                #     # for k in range(N):
+                #          # pt1 = pts[k,0:2,0]
+                #          # ph1 = pts[k,2:4,0]
+                #          # pt2 = pts[k,0:2,1]
+                #          # ph2 = pts[k,2:4,1]
+                #     try:
+                #         pt1 = pts[:,0:2,0]
+                #         ph1 = pts[:,2:4,0]
+                #         pt2 = pts[:,0:2,1]
+                #         ph2 = pts[:,2:4,1]
+                #     except:
+                #         pass
+                    #     if (pt1==pt2).all():
+                    #         pa = ph1
+                    #         pb = ph2
+                    #         pt = pt1
+                    #     if (pt1==ph2).all():
+                    #         pa = ph1
+                    #         pb = pt2
+                    #         pt = pt1
+                    #     if (ph1==pt2).all():
+                    #         pa = pt1
+                    #         pb = ph2
+                    #         pt = ph1
+                    #     if (ph1==ph2).all():
+                    #         pa = pt1
+                    #         pb = pt2
+                    #         pt = ph1
+
+                    #     import ipdb
+                    #     ipdb.set_trace()
+                    #     ang0.append(geu.sector(pa,pb,s_in[:2,udiff[0][k],udiff[1][k]]))
+                    #     angn.append(geu.sector(pa,pb,s_out[:2,udiff[0][k],udiff[1][k]]))
+                    # ######################
 
 
 
