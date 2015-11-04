@@ -1521,6 +1521,7 @@ class Rays(PyLayers,dict):
                 ##### SPEC diffraction processing
                 #############
                 if len(udiff[0]) != 0 :
+
                     # diffseg,udiffseg  = np.unique(nstr[udiff],return_inverse=True)
                     diffupt=nstr[udiff]
                     # position of diff seg (- because iupnt accept > 0 reference to points)
@@ -1530,6 +1531,9 @@ class Rays(PyLayers,dict):
                     aseg = map(lambda x : filter(lambda y : y not in L.name['AIR'],
                                          nx.neighbors(L.Gs,x)),
                                          diffupt)
+                    # manage flat angle : diffraction by flat segment e.g. door limitation)
+                    [aseg[ix].extend(x) for ix,x in enumerate(aseg) if len(x)==1]
+
                     pts = np.array(map(lambda x : L.seg2pts([x[0],x[1]]),aseg))
 
 
@@ -1622,8 +1626,7 @@ class Rays(PyLayers,dict):
                     beta = np.arccos(np.sum(sid[1:]*vnormz,axis=0))
 
 
-                    import ipdb
-                    ipdb.set_trace()
+
 
                     # phi0 = geu.sector(pa.T,s_in[:2,udiff[0],udiff[1]],pt.T)
                     # phi = geu.sector(pa.T,s_out[:2,udiff[0],udiff[1]],pt.T)
@@ -1737,8 +1740,8 @@ class Rays(PyLayers,dict):
         B  = IntB()
         B0 = IntB()
 
-        # LOS Interaction
-        Los = IntL()
+        # # LOS Interaction
+        # Los = IntL()
 
         # Reflexion
         R = IntR()
@@ -2465,7 +2468,7 @@ class Rays(PyLayers,dict):
 
                 # lines = np.arange(cnbi*nbr).reshape(cnbi,nbr)
                 lines = np.arange(cnbi*nbr).reshape(nbr,cnbi)
-                
+
                 # mesh = tvtk.PolyData(points=pt.T, polys=lines)
                 mesh = tvtk.PolyData(points=pt.T, polys=lines)
                 mlab.pipeline.surface(mlab.pipeline.extract_edges(mesh),
