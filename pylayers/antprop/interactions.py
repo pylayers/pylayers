@@ -93,6 +93,8 @@ import pylayers.util.geomutil as geu
 import pylayers.util.pyutil as pyu
 from pylayers.util.project import *
 from pylayers.antprop.slab import *
+from pylayers.antprop.diffRT import *
+
 
 
 class Inter(PyLayers):

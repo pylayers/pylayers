@@ -1578,11 +1578,16 @@ class DLink(Link):
 
 
         if rays :
-            self.R._show3(**kwargs)
-            # try:
-            #     self.R._show3(**kwargs)
-            # except:
-            #     print 'Rays not computed yet'
+            # check rays with energy
+            # if hasattr(self,'H') and not kwargs.has_key('rlist'):
+            #     urays = np.where(self.H.y!=0)[0]
+            #     kwargs['rlist']=urays
+            #     import ipdb
+            #     ipdb.set_trace()
+            try:
+                self.R._show3(**kwargs)
+            except:
+                print 'Rays not computed yet'
 
 if (__name__ == "__main__"):
     #plt.ion()

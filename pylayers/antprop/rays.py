@@ -1369,35 +1369,35 @@ class Rays(PyLayers,dict):
                     nw = np.sqrt(np.sum(w*w, axis=0))
                     
                     u = np.where(nw==0) 
+                    if len(u[0])!=0:
+                        if (u[0].any() or u[1].any()) \
+                            or (u[0].any()==0 or u[1].any()==0):
+                            
 
-                    if (u[0].any() or u[1].any()) \
-                        or (u[0].any()==0 or u[1].any()==0):
-                        
-
-                        uu = np.array([u[0],u[1]]).T
-                        #determine which interaction and rays 
-                        #present the colinearity issue
-                        uvv = abs(vn[2,uu[:,0],uu[:,1]])>0.99
-                        # uv : nbi x nbr colinear index
-                        uv = uu[uvv]
-                        # uh : nbi x nbr anti-colinear index
-                        uh = uu[np.logical_not(uvv)]
-                        try:
-                            #fiw w for colinear index
-                            w[:,uv[:,0],uv[:,1]] = np.array(([1,0,0]))[:,np.newaxis]
-                            # update normal
-                            nw[uv[:,0],uv[:,1]] = \
-                                np.sqrt(np.sum(w[:,uv[:,0],uh[:,1]]*w[:,uv[:,0],uv[:,1]],axis=0))
-                        except:
-                            pass
-                        try:
-                            # fix w for anti-colinear index
-                            w[:,uh[:,0],uh[:,1]] = np.array(([0,0,1]))[:,np.newaxis]
-                            # update normal
-                            nw[uh[:,0],uh[:,1]] = \
-                                np.sqrt(np.sum(w[:,uh[:,0],uh[:,1]]*w[:,uh[:,0],uh[:,1]],axis=0))
-                        except:
-                            pass
+                            uu = np.array([u[0],u[1]]).T
+                            #determine which interaction and rays 
+                            #present the colinearity issue
+                            uvv = abs(vn[2,uu[:,0],uu[:,1]])>0.99
+                            # uv : nbi x nbr colinear index
+                            uv = uu[uvv]
+                            # uh : nbi x nbr anti-colinear index
+                            uh = uu[np.logical_not(uvv)]
+                            try:
+                                #fiw w for colinear index
+                                w[:,uv[:,0],uv[:,1]] = np.array(([1,0,0]))[:,np.newaxis]
+                                # update normal
+                                nw[uv[:,0],uv[:,1]] = \
+                                    np.sqrt(np.sum(w[:,uv[:,0],uh[:,1]]*w[:,uv[:,0],uv[:,1]],axis=0))
+                            except:
+                                pass
+                            try:
+                                # fix w for anti-colinear index
+                                w[:,uh[:,0],uh[:,1]] = np.array(([0,0,1]))[:,np.newaxis]
+                                # update normal
+                                nw[uh[:,0],uh[:,1]] = \
+                                    np.sqrt(np.sum(w[:,uh[:,0],uh[:,1]]*w[:,uh[:,0],uh[:,1]],axis=0))
+                            except:
+                                pass
                     return w, nw
                 #
                 # Warning need to handle singular case when s_in // vn
@@ -1469,22 +1469,9 @@ class Rays(PyLayers,dict):
                 self[k]['BiN'] = np.concatenate((-si[:,-1,np.newaxis,:],eth[:,np.newaxis,:],
                                                    eph[:,np.newaxis,:]),axis=1)
 
-                #
-                # pasting (Bo0,B,BiN)
-                #
-
-                # B : 3 x 2 x i x r
-
-                Bo = np.concatenate((Bo0[:, :, np.newaxis, :], Bo), axis=2)
-                Bi = np.concatenate((Bi, BiN[:, :, np.newaxis, :]), axis=2)
-
-                # B : 2 x 2 x i x r
-
-                self[k]['B'] = np.einsum('xv...,xw...->vw...', Bi, Bo)
-
-                #BiN = np.array([si[:,-1,:], eth, eph])    # ndim x 3 x Nray
-                #self[k]['BiN']=BiN
-                # self[k]['B']=np.sum(self[k]['Bi'][:2,:2,np.newaxis]*self[k]['Bo'][np.newaxis,:2,:2],axis=1)
+                # Creatinon of B from Bi and Bo
+                # is done after the potential diffraction 
+                # computation
 
                 ## index creation
                 ##################
@@ -1517,25 +1504,26 @@ class Rays(PyLayers,dict):
                 nbrayt = nbrayt + nbray
                 self.raypt = self.raypt + self[k]['nbrays']
 
-                ##################
-                ##### SPEC diffraction processing
-                #############
+                #################################
+                # Start of diffraction specifc process
+                ##############################
                 if len(udiff[0]) != 0 :
 
                     # diffseg,udiffseg  = np.unique(nstr[udiff],return_inverse=True)
                     diffupt=nstr[udiff]
                     # position of diff seg (- because iupnt accept > 0 reference to points)
                     ptdiff = L.pt[:,L.iupnt[-diffupt]]
-
+                    self[k]['diffidx']=udiff
                     # get tail head position of seg associated to diff point
                     aseg = map(lambda x : filter(lambda y : y not in L.name['AIR'],
                                          nx.neighbors(L.Gs,x)),
                                          diffupt)
                     # manage flat angle : diffraction by flat segment e.g. door limitation)
                     [aseg[ix].extend(x) for ix,x in enumerate(aseg) if len(x)==1]
-
+                    # get points positions
                     pts = np.array(map(lambda x : L.seg2pts([x[0],x[1]]),aseg))
-
+                    # get associated slab face_0,face_n
+                    self[k]['diffslabs']=[L.sla[x].tolist() for x in aseg]
 
                     pt1 = pts[:,0:2,0]# tail seg1
                     ph1 = pts[:,2:4,0]# head seg1
@@ -1614,7 +1602,7 @@ class Rays(PyLayers,dict):
 
                     sid = s_in[:,udiff[0],udiff[1]] # s_in restricted to diff
                     sod = s_out[:,udiff[0],udiff[1]] # s_out restricted to diff
-                    vnormz = self[k]['norm'][1:, udiff[0], udiff[1]]
+                    vnormz = self[k]['norm'][:, udiff[0], udiff[1]]
 
 
                     # phi0 = arccos(dot(sid*vpavptn))
@@ -1622,54 +1610,76 @@ class Rays(PyLayers,dict):
                     # phi = arccos(dot(sod*vpavptn))
                     phi = np.arccos(np.sum(sod[:2]*vpaptn,axis=0))
                     # beta
+                    beta = np.arccos(np.sum(sid[1:]*vnormz[1:],axis=0))
 
-                    beta = np.arccos(np.sum(sid[1:]*vnormz,axis=0))
+                    # self[k]['diff'] is (3 x Nb_rays )
+                    # for axis 0 lenght 3 represent :
+                    # 0 => phi0
+                    # 1 => phi
+                    # 2 => beta
+                    # 3 => N (wedge parameter)
+                    self[k]['diff']=np.array((phi0,phi,beta,alpha_w))
 
+                    ######
+                    # Bi diffract
+                    #####
+                    w = np.cross(vnormz,sid, axisa=0, axisb=0, axisc=0)
+                    # nw : i x r
+                    w, nw = fix_colinear()
 
+                    wn = w/nw
+                    # Handling channel reciprocity s_in --> -s_in
+                    #v = np.cross(wn, s_in, axisa=0, axisb=0, axisc=0)
+                    v = np.cross(wn, sid, axisa=0, axisb=0, axisc=0)
 
+                    e_sid = np.expand_dims(sid, axis=1)
+                    ew = np.expand_dims(wn, axis=1)
+                    ev = np.expand_dims(v, axis=1)
 
-                    # phi0 = geu.sector(pa.T,s_in[:2,udiff[0],udiff[1]],pt.T)
-                    # phi = geu.sector(pa.T,s_out[:2,udiff[0],udiff[1]],pt.T)
+                    #  Bid 3 x 2 x (i,r)diff
+                    Bid = np.concatenate((ew, ev), axis=1)
 
+                    # update Bi for diffracted rays
+                    Bi[:,:,udiff[0],udiff[1]] = Bid
+                    ######
+                    # Bo diffract
+                    #####
+                    w = np.cross(vnormz,sod, axisa=0, axisb=0, axisc=0)
 
-                #     # angn=[]
-                #     # ang0=[]
-                #     # N = np.shape(pts)[0]
-                #     # for k in range(N):
-                #          # pt1 = pts[k,0:2,0]
-                #          # ph1 = pts[k,2:4,0]
-                #          # pt2 = pts[k,0:2,1]
-                #          # ph2 = pts[k,2:4,1]
-                #     try:
-                #         pt1 = pts[:,0:2,0]
-                #         ph1 = pts[:,2:4,0]
-                #         pt2 = pts[:,0:2,1]
-                #         ph2 = pts[:,2:4,1]
-                #     except:
-                #         pass
-                    #     if (pt1==pt2).all():
-                    #         pa = ph1
-                    #         pb = ph2
-                    #         pt = pt1
-                    #     if (pt1==ph2).all():
-                    #         pa = ph1
-                    #         pb = pt2
-                    #         pt = pt1
-                    #     if (ph1==pt2).all():
-                    #         pa = pt1
-                    #         pb = ph2
-                    #         pt = ph1
-                    #     if (ph1==ph2).all():
-                    #         pa = pt1
-                    #         pb = pt2
-                    #         pt = ph1
+                    w, nw = fix_colinear()
+                    #wn = w/np.sqrt(np.sum(w*w, axis=0))
+                    v = np.cross(wn, sod, axisa=0, axisb=0, axisc=0)
 
-                    #     import ipdb
-                    #     ipdb.set_trace()
-                    #     ang0.append(geu.sector(pa,pb,s_in[:2,udiff[0][k],udiff[1][k]]))
-                    #     angn.append(geu.sector(pa,pb,s_out[:2,udiff[0][k],udiff[1][k]]))
-                    # ######################
+                    e_sod = np.expand_dims(sod, axis=1)
+                    ew = np.expand_dims(wn, axis=1)
+                    ev = np.expand_dims(v, axis=1)
+                    #  Bod 3 x 2 x (i,r)diff
+                    Bod = np.concatenate((ew, ev), axis=1)
 
+                    import ipdb
+                    ipdb.set_trace()
+                    # update Bo for diffracted rays
+                    Bo[:,:,udiff[0],udiff[1]] = Bod
+                #################################
+                # End of diffraction specifc process
+                ##############################
+
+#
+                # pasting (Bo0,B,BiN)
+                #
+
+                # B : 3 x 2 x i x r
+
+                Bo = np.concatenate((Bo0[:, :, np.newaxis, :], Bo), axis=2)
+                Bi = np.concatenate((Bi, BiN[:, :, np.newaxis, :]), axis=2)
+
+                # B : 2 x 2 x i x r
+
+                self[k]['B'] = np.einsum('xv...,xw...->vw...', Bi, Bo)
+
+                #BiN = np.array([si[:,-1,:], eth, eph])    # ndim x 3 x Nray
+                #self[k]['BiN']=BiN
+                # self[k]['B']=np.sum(self[k]['Bi'][:2,:2,np.newaxis]*self[k]['Bo'][np.newaxis,:2,:2],axis=1)
 
 
 
