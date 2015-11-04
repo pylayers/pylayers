@@ -462,7 +462,11 @@ class Layout(PyLayers):
         if hasattr(self,'isss'):
             st = st + "isss :  sub-segment index above Nsmax"+"\n"
         if hasattr(self,'tgs'):
-            st = st + "tgs : get segment index in tahe from Gs" +"\n"
+            st = st + "tgs : get segment index in tahe from self.Gs" +"\n"
+        if hasattr(self,'upnt'):
+            st = st + "upnt : position of point id give index self.pt"+"\n"
+        if hasattr(self,'iupnt'):
+            st = st + "iupnt : get point index in self.pt from point id  "+"\n"
         if hasattr(self,'lsss'):
             st = st + "lsss : list of segments with sub-segment"+"\n"
         if hasattr(self,'sridess'):
