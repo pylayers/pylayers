@@ -691,8 +691,7 @@ class IntR(Inter):
 
         if np.shape(self.data)[0]!=len(self.idx):
             self.data=self.data.T
-        import ipdb
-        ipdb.set_trace()
+
         if len(self.data) != 0:
             mapp = []
             # loop on all type of materials used for reflexion

@@ -1574,8 +1574,6 @@ class Slab(Interface,dict):
         name1 = '|'.join(mat['name'] for mat in self['lmat'])
         name2 = '|'.join(str(thick) for thick in self['lthick'])
         name = '(' + name1 + ')' + '(' + name2 + ')'
-        import ipdb
-        ipdb.set_trace()
         super(Slab,self).__init__(fGHz=fGHz, theta=theta, name=name)
         # Interface.__init__(self, fGHz, theta, name=name)
         #self.lmat = lmat
