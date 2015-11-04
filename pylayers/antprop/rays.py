@@ -1520,20 +1520,115 @@ class Rays(PyLayers,dict):
                 ##################
                 ##### SPEC diffraction processing
                 #############
-                # if len(udiff[0]) != 0 :
+                if len(udiff[0]) != 0 :
+                    # diffseg,udiffseg  = np.unique(nstr[udiff],return_inverse=True)
+                    diffupt=nstr[udiff]
+                    # position of diff seg (- because iupnt accept > 0 reference to points)
+                    ptdiff = L.pt[:,L.iupnt[-diffupt]]
 
-                #     # diffseg,udiffseg  = np.unique(nstr[udiff],return_inverse=True)
-                #     diffseg=nstr[udiff]
-                #     # position of diff seg (+1 to manage start from 0)
-                #     ptdiff = L.pt[:,diffseg]
+                    # get tail head position of seg associated to diff point
+                    aseg = map(lambda x : filter(lambda y : y not in L.name['AIR'],
+                                         nx.neighbors(L.Gs,x)),
+                                         diffupt)
+                    pts = np.array(map(lambda x : L.seg2pts([x[0],x[1]]),aseg))
 
-                #     # get tail head position of diff point
-                #     aseg = map(lambda x : filter(lambda y : y not in L.name['AIR'],
-                #                          nx.neighbors(L.Gs,x)),
-                #                          diffseg)
-                #     pts = np.array(map(lambda x : L.seg2pts([x[0],x[1]]),aseg))
-                #     import ipdb
-                #     ipdb.set_trace()
+
+                    pt1 = pts[:,0:2,0]# tail seg1
+                    ph1 = pts[:,2:4,0]# head seg1
+                    pt2 = pts[:,0:2,1]# tail seg2
+                    ph2 = pts[:,2:4,1]# head seg2
+
+
+                    # pts is (nb_diffraction_points x 4 x 2)
+                    # - The dimension 4 represent the 2x2 points: t1,h1 and t2,h2
+                    # tail and head of segemnt 1 and 2 respectively
+                    # a segment 
+                    # - The dimension 2 is x,y
+                    #
+                    # The following aims to determine which tails and heads of 
+                    # segments associated to a give diffraction point 
+                    # are connected
+                    #
+                    # 
+
+                    # pt1==pt2
+                    ut1t2 = np.where(np.sum(pt1==pt2,axis=1)==2)[0]
+                    # pt1==ph2
+                    ut1h2 = np.where(np.sum(pt1==ph2,axis=1)==2)[0]
+                    # ph1==pt2
+                    uh1t2 = np.where(np.sum(ph1==pt2,axis=1)==2)[0]
+                    # ph1==ph2
+                    uh1h2 = np.where(np.sum(ph1==ph2,axis=1)==2)[0]
+
+                    # Knowing which point is common of segments,
+                    # it is possible to determine the angle 
+                    # pa is on the 0 face
+                    # pb is on the n face
+                    # pt is the diffraction point
+                    pa = np.empty((len(diffupt),2))
+                    pb = np.empty((len(diffupt),2))
+                    pt = np.empty((len(diffupt),2))
+                    #     if (pt1==pt2).all():
+                    #         pa = ph1
+                    #         pb = ph2
+                    #         pt = pt1
+                    pa[ut1t2]=ph1[ut1t2]
+                    pb[ut1t2]=ph2[ut1t2]
+                    pt[ut1t2]=pt1[ut1t2]
+                    #     if (pt1==ph2).all():
+                    #         pa = ph1
+                    #         pb = pt2
+                    #         pt = pt1
+                    pa[ut1h2]=ph1[ut1h2]
+                    pb[ut1h2]=pt2[ut1h2]
+                    pt[ut1h2]=pt1[ut1h2]
+                    #     if (ph1==pt2).all():
+                    #         pa = pt1
+                    #         pb = ph2
+                    #         pt = ph1
+                    pa[uh1t2]=pt1[uh1t2]
+                    pb[uh1t2]=ph2[uh1t2]
+                    pt[uh1t2]=ph1[uh1t2]
+                    #     if (ph1==ph2).all():
+                    #         pa = pt1
+                    #         pb = pt2
+                    #         pt = ph1
+                    pa[uh1h2]=pt1[uh1h2]
+                    pb[uh1h2]=pt2[uh1h2]
+                    pt[uh1h2]=ph1[uh1h2]
+
+                    # alpha_w : (nb_diffraction_points)
+                    # alpha wegde (a.k.a. wedge parameters, a.k.a wedge aperture)
+                    alpha_w = geu.sector(pa.T,pb.T,pt.T)
+
+                    # angle between face 0, diffraction point and s_in
+                    # s_in[:2,udiff[0],udiff[1]]  : 
+                    # s_in of insteractions udiff (2D) restricted to diffraction points
+
+                    vpapt= pa-pt # papt : direction vector of face 0 
+                    vpaptn = vpapt.T / np.sqrt(np.sum((vpapt)*(vpapt),axis=1))
+
+                    sid = s_in[:,udiff[0],udiff[1]] # s_in restricted to diff
+                    sod = s_out[:,udiff[0],udiff[1]] # s_out restricted to diff
+                    vnormz = self[k]['norm'][1:, udiff[0], udiff[1]]
+
+
+                    # phi0 = arccos(dot(sid*vpavptn))
+                    phi0 = np.arccos(np.sum(sid[:2]*vpaptn,axis=0))
+                    # phi = arccos(dot(sod*vpavptn))
+                    phi = np.arccos(np.sum(sod[:2]*vpaptn,axis=0))
+                    # beta
+
+                    beta = np.arccos(np.sum(sid[1:]*vnormz,axis=0))
+
+
+                    import ipdb
+                    ipdb.set_trace()
+
+                    # phi0 = geu.sector(pa.T,s_in[:2,udiff[0],udiff[1]],pt.T)
+                    # phi = geu.sector(pa.T,s_out[:2,udiff[0],udiff[1]],pt.T)
+
+
                 #     # angn=[]
                 #     # ang0=[]
                 #     # N = np.shape(pts)[0]
@@ -2301,7 +2396,7 @@ class Rays(PyLayers,dict):
         else:
             return(filename)
 
-    def _show3(self,L=[],ilist=[],rlist=[],newfig=False,**kwargs):
+    def _show3(self,L=[],rlist=[],newfig=False,**kwargs):
         """ plot 3D rays in environment using Mayavi
 
         Parameters
@@ -2309,8 +2404,8 @@ class Rays(PyLayers,dict):
 
         L : Layout object
             Layout to be displayed
-        ilist : list
-            list of group of interactions
+
+
         rlist : list
             list of index rays
         newfig : boolean (default: False)
@@ -2333,34 +2428,45 @@ class Rays(PyLayers,dict):
 
             L._show3()
 
-        if ilist == []:
+        if rlist ==[]:
             nbi = self.keys()
-        else :
-            if not isinstance(ilist,list):
-                nbi = np.array(([ilist]))
-            else :
-                nbi = np.array((ilist))
-
-        if not isinstance(rlist,list):
-            rlist=[rlist]
-
-        for i in nbi:
-            if rlist == []:
+            for i in nbi:
                 r = range(np.shape(self[i]['pt'])[2])
-            else :
-                r = np.array((rlist))
+                
+                # number of rays
+                nbr = len(r) 
+                # current number of interactions
+                cnbi = i + 2
+                pt = self[i]['pt'][:,:,r].reshape(3,cnbi*nbr,order='F')
+                # lines = np.arange(cnbi*nbr).reshape(cnbi,nbr)
+                lines = np.arange(cnbi*nbr).reshape(nbr,cnbi)
+                mesh = tvtk.PolyData(points=pt.T, polys=lines)
+                mlab.pipeline.surface(mlab.pipeline.extract_edges(mesh),
+                                                     color=(0, 0, 0), )
+                f.children[-1].name='Rays with ' + str(i) + 'interactions'
+        else :
 
-            # number of rays
-            nbr = len(r) 
-            # current number of interactions
-            cnbi = i + 2
-            pt = self[i]['pt'][:,:,r].reshape(3,cnbi*nbr,order='F')
-            # lines = np.arange(cnbi*nbr).reshape(cnbi,nbr)
-            lines = np.arange(cnbi*nbr).reshape(nbr,cnbi)
-            mesh = tvtk.PolyData(points=pt.T, polys=lines)
-            mlab.pipeline.surface(mlab.pipeline.extract_edges(mesh),
-                                                 color=(0, 0, 0), )
-            f.children[-1].name='Rays with ' + str(i) + 'interactions'
+            nbi = self.ray2nbi[rlist]
+            nr = np.array((nbi,rlist))
+            unb = np.unique(nr[0,:])
+            unr = {int(i):np.where(nr[0,:]==i)[0] for i in unb}
+
+
+
+            for i in unb:
+                raynb = (nr[1,unr[i]]).astype(int)
+                nbr=len(raynb)
+                ptidx = [np.where(self[i]['rayidx']==x)[0][0] for x in raynb]
+                # current number of interactions
+                cnbi = i + 2
+  
+                pt = self[i]['pt'][:,:,ptidx].reshape(3,cnbi*nbr,order='F')
+                # lines = np.arange(cnbi*nbr).reshape(cnbi,nbr)
+                lines = np.arange(cnbi*nbr).reshape(nbr,cnbi)
+                mesh = tvtk.PolyData(points=pt.T, polys=lines)
+                mlab.pipeline.surface(mlab.pipeline.extract_edges(mesh),
+                                                     color=(0, 0, 0), )
+                f.children[-1].name='Rays with ' + str(int(i)) + 'interactions'
 
     def show3(self,
               L=[],
