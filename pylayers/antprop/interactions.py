@@ -854,8 +854,7 @@ class IntD(Inter):
         .. todo to be implemented
     """
     def __init__(self, data=np.array(()), idx=[],fGHz=np.array([2.4])):
-        import ipdb
-        ipdb.set_trace()
+
 #        self.theta = data1[0]
 #        self.thetad = data1[1]
 #        self.si = data1[2]
