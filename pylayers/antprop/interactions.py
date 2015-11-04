@@ -154,10 +154,13 @@ class Inter(PyLayers):
         self.E = np.eye(2)
 
     def __repr__(self):
-        return '%s :  %s  %s' % (
-                self.__class__.__name__,
-                str(np.shape(self.data)),
-                str(np.shape(self.idx)))
+        if self.evaluated:
+            s = self.T.__repr__()
+            s = s + '\n' + self.R.__repr__()
+            s = s + '\n'+ self.D.__repr__()
+            return s
+        else:
+            return 'I not yet evaluated'
 
     def create_dusl(self,a):
         """ create dictionnary of used slab.
@@ -480,8 +483,8 @@ class IntB(Inter):
         Inter.__init__(self, data=data, idx=idx, typ=-1)
 
     def __repr__(self):
-        s = Inter.__repr__(self)
-        return(s)
+        s = str(np.shape(self.data))
+        return s    
 
     def eval(self,fGHz=np.array([2.4])):
         """ evaluation of B interactions
@@ -621,8 +624,8 @@ class IntR(Inter):
         self.gamma = [1]
 
     def __repr__(self):
-        s = Inter.__repr__(self)
-        return(s)
+        s = 'number of R interaction :' + str(np.shape(self.data)[0])
+        return s    
 
     def eval(self,fGHz=np.array([2.4])):
         """ evaluation of reflexion interactions
@@ -746,7 +749,7 @@ class IntT(Inter):
 
 
     def __repr__(self):
-        s = Inter.__repr__(self)
+        s = 'number of T interaction :' + str(np.shape(self.data)[0])
         return(s)
 
     def eval(self,fGHz=np.array([2.4])):
@@ -851,6 +854,8 @@ class IntD(Inter):
         .. todo to be implemented
     """
     def __init__(self, data=np.array(()), idx=[],fGHz=np.array([2.4])):
+        import ipdb
+        ipdb.set_trace()
 #        self.theta = data1[0]
 #        self.thetad = data1[1]
 #        self.si = data1[2]
@@ -861,10 +866,8 @@ class IntD(Inter):
         Inter.__init__(self, data=data, idx=idx, typ=1)
 
     def __repr__(self):
-        return '%s :  %s  %s ' % (
-                self.__class__.__name__,
-                str(np.shape(self.data)),
-                str(np.shape(self.idx)))
+        s = 'number of D interaction :' + str(np.shape(self.data)[0])
+        return s
 
     def eval(self,fGHz=np.array([2.4])):
         """ evaluate diffraction interaction

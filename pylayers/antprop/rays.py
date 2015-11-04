@@ -1508,7 +1508,9 @@ class Rays(PyLayers,dict):
                 # Start of diffraction specifc process
                 ##############################
                 if len(udiff[0]) != 0 :
-
+                    # Boolean to indicate if there is a diffraction
+                    # in blockk
+                    self[k]['diff']=True
                     # diffseg,udiffseg  = np.unique(nstr[udiff],return_inverse=True)
                     diffupt=nstr[udiff]
                     # position of diff seg (- because iupnt accept > 0 reference to points)
@@ -1618,7 +1620,7 @@ class Rays(PyLayers,dict):
                     # 1 => phi
                     # 2 => beta
                     # 3 => N (wedge parameter)
-                    self[k]['diff']=np.array((phi0,phi,beta,alpha_w))
+                    self[k]['diffvect']=np.array((phi0,phi,beta,alpha_w))
 
                     ######
                     # Bi diffract
@@ -1661,6 +1663,8 @@ class Rays(PyLayers,dict):
                 #################################
                 # End of diffraction specifc process
                 ##############################
+                else :
+                    self[k]['diff']=False
 
 #
                 # pasting (Bo0,B,BiN)
@@ -1803,10 +1807,14 @@ class Rays(PyLayers,dict):
 
         R.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
         T.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
-        #D.duw
+        # to be specified and limited to used wedges
+        D.duw = dict.fromkeys(uslv, np.array((), dtype=int))
 
+        # transmission/reflection slab array
         tsl = np.array(())
         rsl = np.array(())
+        # diffraction wedge list
+        dw = []
 
         # loop on group of interactions
         for k in self:
@@ -1827,6 +1835,13 @@ class Rays(PyLayers,dict):
 
                 # (i+1) x r
                 si = self[k]['si']
+                
+                if self[k]['diff']:
+
+                    dvec = self[k]['diffvect']
+                    ldsl = self[k]['diffslabs']
+                    dix = self[k]['diffidx']
+
 
                 ## flatten information
                 ######################
@@ -1919,10 +1934,10 @@ class Rays(PyLayers,dict):
                 # Fill the used slab
                 #####################
 
-
                 tsl = np.hstack((tsl, sl[uT]))
                 rsl = np.hstack((rsl, sl[uR], sl[uRf], sl[uRc]))
-
+                if self[k]['diff']: 
+                    dw.extend(ldsl) 
     ##            for s in uslv:
     ##
     ##                T.dusl[s]=np.hstack((T.dusl[s],len(T.idx) + np.where(sl[uT]==s)[0]))
@@ -1955,6 +1970,8 @@ class Rays(PyLayers,dict):
                 ### Reflexion
                 ############
                 ### wall reflexion
+                # (theta, s_in,s_out)
+
                 R.stack(data=np.array((thetaf[uR], sif[uR], sif[uR+1])).T,
                         idx=idxf[uR])
                 # floor reflexion
@@ -1967,12 +1984,14 @@ class Rays(PyLayers,dict):
                 ### sl[idxf[uT]]
                 # Transmision
                 ############
+                # (theta, s_in,s_out)
                 T.stack(data=np.array((thetaf[uT], sif[uT], sif[uT+1])).T, idx=idxf[uT])
 
                 ###
-                # Diffraction
-                #
-                # D.stack(data=np.array(()))
+                #Diffraction
+                #phi0,phi,si,sd,N,mat0,matN,beta
+                if self[k]['diff']: 
+                    D.stack(data=np.array((self[k]['diffvect'].T)),idx=idxf[uD])
 
             elif self.los:
                 ze = np.array([0])
@@ -1986,17 +2005,18 @@ class Rays(PyLayers,dict):
 
         T.create_dusl(tsl)
         R.create_dusl(rsl)
-
+        D.dusl = dw
         # create interactions structure
         self.I = I
-        self.I.add([T, R])
+        self.I.add([T, R, D])
         # create rotation base B
         self.B = B
         # create rotation base B0
         self.B0 = B0
 
         self.filled = True
-
+        import ipdb
+        ipdb.set_trace()
     def eval(self,fGHz=np.array([2.4]),ib=[]):
         """  docstring for eval
 
