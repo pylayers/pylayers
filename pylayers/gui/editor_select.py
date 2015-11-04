@@ -927,6 +927,9 @@ class SelectL2(object):
         else:
             self.L.display['overlay'] = True
             self.update_state()
+        print self.L.display['overlay']
+        self.fig.canvas.draw()
+
 
     def togglept(self):
         """f' toggle points nodes display
