@@ -1656,8 +1656,6 @@ class Rays(PyLayers,dict):
                     #  Bod 3 x 2 x (i,r)diff
                     Bod = np.concatenate((ew, ev), axis=1)
 
-                    import ipdb
-                    ipdb.set_trace()
                     # update Bo for diffracted rays
                     Bo[:,:,udiff[0],udiff[1]] = Bod
                 #################################
