@@ -464,7 +464,7 @@ class Layout(PyLayers):
         if hasattr(self,'tgs'):
             st = st + "tgs : get segment index in tahe from self.Gs" +"\n"
         if hasattr(self,'upnt'):
-            st = st + "upnt : position of point id give index self.pt"+"\n"
+            st = st + "upnt : get point id index from self.pt"+"\n"
         if hasattr(self,'iupnt'):
             st = st + "iupnt : get point index in self.pt from point id  "+"\n"
         if hasattr(self,'lsss'):

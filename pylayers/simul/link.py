@@ -1578,10 +1578,11 @@ class DLink(Link):
 
 
         if rays :
-            try:
-                self.R._show3(**kwargs)
-            except:
-                print 'Rays not computed yet'
+            self.R._show3(**kwargs)
+            # try:
+            #     self.R._show3(**kwargs)
+            # except:
+            #     print 'Rays not computed yet'
 
 if (__name__ == "__main__"):
     #plt.ion()

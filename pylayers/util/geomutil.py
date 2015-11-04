@@ -3964,7 +3964,6 @@ def sector(p1, p2, pt):
         p2=p2.reshape(p2.shape[0],1)
     if len(pt.shape) == 1:
         pt=pt.reshape(pt.shape[0],1)
-
     p1pt = p1 - pt
     p2pt = p2 - pt
     u = p1pt / np.sqrt(np.sum((p1pt)*(p1pt),axis=0))

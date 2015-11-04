@@ -2461,8 +2461,12 @@ class Rays(PyLayers,dict):
                 cnbi = i + 2
   
                 pt = self[i]['pt'][:,:,ptidx].reshape(3,cnbi*nbr,order='F')
+
+
                 # lines = np.arange(cnbi*nbr).reshape(cnbi,nbr)
                 lines = np.arange(cnbi*nbr).reshape(nbr,cnbi)
+                
+                # mesh = tvtk.PolyData(points=pt.T, polys=lines)
                 mesh = tvtk.PolyData(points=pt.T, polys=lines)
                 mlab.pipeline.surface(mlab.pipeline.extract_edges(mesh),
                                                      color=(0, 0, 0), )

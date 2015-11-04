@@ -1300,7 +1300,7 @@ class MatDB(PyLayers,dict):
         fo.close()
 
 
-class Slab(dict,Interface):
+class Slab(Interface,dict):
     """ Handle a Slab
 
     Summary
@@ -1574,7 +1574,9 @@ class Slab(dict,Interface):
         name1 = '|'.join(mat['name'] for mat in self['lmat'])
         name2 = '|'.join(str(thick) for thick in self['lthick'])
         name = '(' + name1 + ')' + '(' + name2 + ')'
-        super(Slab,self).__init__(fGHz, theta, name=name)
+        import ipdb
+        ipdb.set_trace()
+        super(Slab,self).__init__(fGHz=fGHz, theta=theta, name=name)
         # Interface.__init__(self, fGHz, theta, name=name)
         #self.lmat = lmat
         #self.lthick = lthick
@@ -2542,10 +2544,7 @@ class Wedge(Interface,dict):
         self['N']=alpha/np.pi
 
 
-
-
-
-    # def phi0phin(self,u0,un,si,so):
+    # def phi0phin(self,u0,si,so):
     #     """
     #     Compute angle phi_0 and phi_nfrom face 0 regarding
     #     to unit vectors u0 and un along face 0 and n respectively
@@ -2555,14 +2554,13 @@ class Wedge(Interface,dict):
 
     #     u0 : ndarray (2|3xNp)
     #         unit vector along Np faces 0
-    #     un : ndarray (2|3xNp)
-    #         unit vector along Np faces n
     #     si : ndarray (2|3x)
     #         unit vector along incidence ray
     #     un : ndarray (2|3xNp)
     #         unit vector along Np faces n
-
     #     """
+
+    #     geu.
 
 
 def calsig(cval, fGHz, typ='epsr'):
