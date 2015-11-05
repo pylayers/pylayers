@@ -452,8 +452,6 @@ class Interactions(Inter,dict):
             # self.alpha[self.D.idx] = self.D.alpha
             # self.gamma[self.D.idx] = self.D.gamma
         except:
-            import ipdb
-            ipdb.set_trace()
             print 'Warning : No D interaction Evaluated'
 
         self.evaluated = True

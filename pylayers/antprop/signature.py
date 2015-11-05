@@ -1320,6 +1320,7 @@ class Signatures(PyLayers,dict):
                     path = visited + [target]
                     # M = np.zeros((1,NGs),dtype='bool')
                     out = [i[0] for i in G[visited[-1]][target]['output'].keys()]
+                        
 
                     if Mmap !=[]:
                         M[Mmap[path[-2][0]],Mmap[path[-1][0]],Mmap[out]]=True
@@ -1786,11 +1787,13 @@ class Signatures(PyLayers,dict):
 
                 #for each reverb/diffract interaction,
                 # inside 1st cycle, search the output interactions
-
+                
                 for o in voutT:
                     io={}
                     for i in vinT:
                         io = self.propaths2015_2(sGi,i,o,dout=io,M=M,cutoff=cutoffbound)
+
+
                     di[0,0,0,o[0],o[1],o[2]] = io
                     # add direct signature
                     di[0,0,0,o[0],o[1],o[2]][1]=np.array([o[0],len(o)],ndmin=3)

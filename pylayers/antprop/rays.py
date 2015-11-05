@@ -2268,6 +2268,26 @@ class Rays(PyLayers,dict):
         raypos = np.nonzero(self[self.ray2nbi[r]]['rayidx'] == r)[0]
         return(self[self.ray2nbi[r]]['rays'][:,raypos][:,0])
 
+    def slab_nb(self, r):
+        """ returns the slab numbers of r
+
+        Parameters
+        ----------
+
+        r : integer
+            ray index
+
+        Returns
+        -------
+
+        isl : slabs number
+
+
+        """
+
+        raypos = np.nonzero(self[self.ray2nbi[r]]['rayidx'] == r)[0]
+        return(self[self.ray2nbi[r]]['sig'][0,1:-1,raypos[0]])
+
 
     def typ(self, r):
         """ returns interactions list type of a given ray
@@ -2302,10 +2322,11 @@ class Rays(PyLayers,dict):
 
             ray = self.ray(r)
             typ = self.typ(r)
-            print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format('Index',
+            slabnb = self.slab_nb(r)
+            print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7}, {5:10}, {6:10}'.format('Index',
                                                                         'type',
-                                                                        'slab', 'th(rad)', 'alpha', 'gamma2')
-            print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(r, 'B0', '-', '-', '-', '-')
+                                                                        'slab', 'slab_id' ,'th(rad)', 'alpha', 'gamma2')
+            print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'.format(r, 'B0','-', '-', '-', '-', '-')
             for iidx, i in enumerate(typ):
                 if i == 'T' or i == 'R' or i =='D':
                     I = getattr(self.I, i)
@@ -2315,6 +2336,7 @@ class Rays(PyLayers,dict):
     #                    print midx
                         Iidx = np.array((I.idx))[midx]
                         th = I.data[I.dusl[slab], 0]
+
                         if i != 'D':
                             gamma = I.gamma[midx]
                             alpha = I.alpha[midx]
@@ -2323,10 +2345,10 @@ class Rays(PyLayers,dict):
                             alpha = ['NC']*max(Iidx)
                         for ii, Ii in enumerate(Iidx):
                             if Ii == ray[iidx]:
-                                print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(Ii, i, slab, th[ii], alpha[ii], gamma[ii])
+                                print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'.format(Ii, i, slab, slabnb[iidx], th[ii], alpha[ii], gamma[ii])
 
                 # else:
-                print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(ray[iidx], 'B', '-', '-', '-', '-')
+                print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'.format(ray[iidx], 'B', '-', '-', '-', '-', '-')
                 #              print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format(ray[iidx], i, '-', '-', '-', '-')
 
             print '\n----------------------------------------'

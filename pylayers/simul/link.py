@@ -356,7 +356,8 @@ class DLink(Link):
                    'save_opt':['sig','ray','Ct','H'],
                    'save_idx':0,
                    'force_create':False,
-                   'verbose':True
+                   'verbose':True,
+                   'graph':'tcvirw'
                 }
 
         self._ca=-1
@@ -375,7 +376,6 @@ class DLink(Link):
                     setattr(self,'_'+key,kwargs[key])
                 else :
                     setattr(self,key,kwargs[key])
-
 
         force=self.force_create
         delattr(self,'force_create')
@@ -420,7 +420,7 @@ class DLink(Link):
             self.L.dumpr()
         except:
             print('This is the first time the Layout is used. Graphs have to be built. Please Wait')
-            self.L.build()
+            self.L.build(graph=kwargs['graph'])
             self.L.dumpw()
         #self.L.build()
 
