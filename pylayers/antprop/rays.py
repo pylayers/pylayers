@@ -158,7 +158,7 @@ class Rays(PyLayers,dict):
                     nr = len(r)
                     s = s + str(k)+' / '+str(nr)+ ' : '+str(r)+'\n'
                     ni = ni + nr*k
-                    nl = nl + nr*(DL.e2*k+1)
+                    nl = nl + nr*(2*k+1)
                 s = s + '-----'+'\n'
                 s = s+'ni : '+str(ni)+'\n'
                 s = s+'nl : '+str(nl)+'\n'
