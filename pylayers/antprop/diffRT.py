@@ -13,7 +13,6 @@ def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2):
 
     Nf : number of frequencies
     Nr : number of rays
-    Nb : number of beta
 
     fGHz : np.array (Nf)
     phi0 : np.array (Nr)
@@ -25,6 +24,14 @@ def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2):
     matN : Mat
     beta : np.array (Nb)
         skew incidence angle (rad)
+
+    Return
+    ------
+
+    Ds : numpy array 
+        Diffraction soft
+    Dh : numpy array 
+        Diffraction hard
 
     Examples
     --------
@@ -64,13 +71,13 @@ def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2):
     if not isinstance(beta,np.ndarray):
         beta = np.array([beta])
 
-    fGHz  = fGHz[:,None,None]
-    phi0  = phi0[None,:,None]
-    phi   = phi[None,:,None]
-    si    = si[None,:,None]
-    sd    = sd[None,:,None]
-    N     = N[None,None,:]
-    beta  = beta[None,:,None]
+    fGHz  = fGHz[:,None]
+    phi0  = phi0[None,:]
+    phi   = phi[None,:]
+    si    = si[None,:]
+    sd    = sd[None,:]
+    N     = N[None,:]
+    beta  = beta[None,:]
 
     L     = si*sd/(si+sd)
     k     = 2*np.pi*fGHz/0.3
@@ -80,18 +87,21 @@ def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2):
 #--------------------------------------------------
 
 
-    tho  = np.empty((fGHz.shape[0],phi.shape[1],N.shape[2]))
-    thn  = np.empty((fGHz.shape[0],phi.shape[1],N.shape[2]))
-    PHI0 = phi0 * np.ones(phi.shape)*np.ones(N.shape)
-    PHI  = np.ones(phi0.shape)*phi*np.ones(N.shape)
-    BN   = np.ones(phi0.shape)*np.ones(phi.shape)*N
+    tho  = np.empty((fGHz.shape[0],phi.shape[1]))
+    thn  = np.empty((fGHz.shape[0],phi.shape[1]))
+    # PHI0 = phi0 * np.ones(phi.shape)
+    # PHI  = np.ones(phi0.shape)*phi
+    # BN   = np.ones(phi0.shape)*N
 
-    c1 = PHI>PHI0
+
+
+    c1 = phi>phi0
     c2 = ~c1
-    tho[c1] = PHI0[c1]
-    thn[c1] = BN[c1]*np.pi-PHI[c1]
-    tho[c2] = PHI[c2]
-    thn[c2] = BN[c2]*np.pi-PHI0[c2]
+    tho[:,c1[0,:]] = phi0[:,c1[0,:]]
+    thn[:,c1[0,:]] = N[:,c1[0,:]]*np.pi-phi[:,c1[0,:]]
+    tho[:,c2[0,:]] = phi[:,c2[0,:]]
+    thn[:,c2[0,:]] = N[:,c2[0,:]]*np.pi-phi0[:,c2[0,:]]
+
 
 
     er0  = np.real(mat0['epr'])
@@ -192,7 +202,7 @@ def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2):
 #
 #        DThard = Rhardoz*Rhardnz*D1+Rhardn*D3+(Rhardo*Rhardn*D2+Rhardo*D4)
 
-    return Dsoft,Dhard,D1,D2,D3,D4
+    return Dsoft,Dhard#,D1,D2,D3,D4
 
 
 def G(N,phi0,Ro,Rn):

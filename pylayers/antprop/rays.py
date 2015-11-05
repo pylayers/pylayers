@@ -1209,6 +1209,9 @@ class Rays(PyLayers,dict):
             idxts = 0
             nbrayt = 0
 
+        # list of used wedges
+        luw=[]
+
         for k in self:
             #
             # k is the number of interactions in the block
@@ -1508,6 +1511,8 @@ class Rays(PyLayers,dict):
                 # Start of diffraction specifc process
                 ##############################
                 if len(udiff[0]) != 0 :
+
+
                     # Boolean to indicate if there is a diffraction
                     # in blockk
                     self[k]['diff']=True
@@ -1524,8 +1529,15 @@ class Rays(PyLayers,dict):
                     [aseg[ix].extend(x) for ix,x in enumerate(aseg) if len(x)==1]
                     # get points positions
                     pts = np.array(map(lambda x : L.seg2pts([x[0],x[1]]),aseg))
-                    # get associated slab face_0,face_n
-                    self[k]['diffslabs']=[L.sla[x].tolist() for x in aseg]
+                    # get associated slab index face_0,face_n
+                    # self[k]['diffslabs']=[[L.sl[L.sla[y]]['index'] for y in x] for x in aseg]
+                    # self[k]['diffslabs']=[L.sla[x[0]]+'-'+L.sla[x[1]] for x in aseg]
+                    # diffslab = [ idslab0-idslabn ]
+
+                    self[k]['diffslabs']=[str(L.sl[L.sla[x[0]]]['index'])+'-'+str(L.sl[L.sla[x[1]]]['index']) for x in aseg]
+                    uwl = np.unique(self[k]['diffslabs']).tolist()
+                    luw.extend(uwl)
+
 
                     pt1 = pts[:,0:2,0]# tail seg1
                     ph1 = pts[:,2:4,0]# head seg1
@@ -1614,8 +1626,8 @@ class Rays(PyLayers,dict):
                     # beta
                     beta = np.arccos(np.sum(sid[1:]*vnormz[1:],axis=0))
 
-                    # self[k]['diff'] is (3 x Nb_rays )
-                    # for axis 0 lenght 3 represent :
+                    # self[k]['diffvect'] is (4 x Nb_rays )
+                    # for axis 0 lenght 4 represent :
                     # 0 => phi0
                     # 1 => phi
                     # 2 => beta
@@ -1684,7 +1696,6 @@ class Rays(PyLayers,dict):
                 # self[k]['B']=np.sum(self[k]['Bi'][:2,:2,np.newaxis]*self[k]['Bo'][np.newaxis,:2,:2],axis=1)
 
 
-
             # if los exists
             else :
                 self[k]['nstrwall'] = np.array(())
@@ -1720,8 +1731,8 @@ class Rays(PyLayers,dict):
                 self[k]['rayidx'] = ze
                 self.raypt = 1
                 self.ray2nbi = ze
-
-            self.isbased=True
+        self._luw = np.unique(luw).tolist()
+        self.isbased=True
 
     def fillinter(self,L,append=False):
         """  fill ray interactions
@@ -1808,13 +1819,13 @@ class Rays(PyLayers,dict):
         R.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
         T.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
         # to be specified and limited to used wedges
-        D.duw = dict.fromkeys(uslv, np.array((), dtype=int))
+        D.dusl = dict.fromkeys(self._luw, np.array((), dtype=int))
 
         # transmission/reflection slab array
         tsl = np.array(())
         rsl = np.array(())
         # diffraction wedge list
-        dw = []
+        dw = np.array(())
 
         # loop on group of interactions
         for k in self:
@@ -1937,7 +1948,7 @@ class Rays(PyLayers,dict):
                 tsl = np.hstack((tsl, sl[uT]))
                 rsl = np.hstack((rsl, sl[uR], sl[uRf], sl[uRc]))
                 if self[k]['diff']: 
-                    dw.extend(ldsl) 
+                    dw = np.hstack((dw,self[k]['diffslabs'])) 
     ##            for s in uslv:
     ##
     ##                T.dusl[s]=np.hstack((T.dusl[s],len(T.idx) + np.where(sl[uT]==s)[0]))
@@ -1990,8 +2001,15 @@ class Rays(PyLayers,dict):
                 ###
                 #Diffraction
                 #phi0,phi,si,sd,N,mat0,matN,beta
+                # 
                 if self[k]['diff']: 
-                    D.stack(data=np.array((self[k]['diffvect'].T)),idx=idxf[uD])
+                    # self[k]['diffvect'] = ((phi0,phi,beta,N) x (nb_rayxnb_interactions)   )
+                    # si and so are stacked at the end of self[k]['diffvect'] 
+                    # as well:
+                    # data =  (6 x (nb_rayxnb_interactions) )
+                    # ((phi0,phi,beta,N,sin,sout) x (nb_rayxnb_interactions) )
+                    data = np.vstack((self[k]['diffvect'],sif[uD],sif[uD+1]))
+                    D.stack(data=data.T,idx=idxf[uD])
 
             elif self.los:
                 ze = np.array([0])
@@ -2005,7 +2023,7 @@ class Rays(PyLayers,dict):
 
         T.create_dusl(tsl)
         R.create_dusl(rsl)
-        D.dusl = dw
+        D.create_dusl(dw)
         # create interactions structure
         self.I = I
         self.I.add([T, R, D])
@@ -2289,7 +2307,7 @@ class Rays(PyLayers,dict):
                                                                         'slab', 'th(rad)', 'alpha', 'gamma2')
             print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(r, 'B0', '-', '-', '-', '-')
             for iidx, i in enumerate(typ):
-                if i == 'T' or i == 'R':
+                if i == 'T' or i == 'R' or i =='D':
                     I = getattr(self.I, i)
                     for slab in I.dusl.keys():
     #                    print slab
@@ -2297,8 +2315,12 @@ class Rays(PyLayers,dict):
     #                    print midx
                         Iidx = np.array((I.idx))[midx]
                         th = I.data[I.dusl[slab], 0]
-                        gamma = I.gamma[midx]
-                        alpha = I.alpha[midx]
+                        if i != 'D':
+                            gamma = I.gamma[midx]
+                            alpha = I.alpha[midx]
+                        else : 
+                            gamma = ['NC']*max(Iidx)
+                            alpha = ['NC']*max(Iidx)
                         for ii, Ii in enumerate(Iidx):
                             if Ii == ray[iidx]:
                                 print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(Ii, i, slab, th[ii], alpha[ii], gamma[ii])

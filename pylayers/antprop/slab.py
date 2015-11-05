@@ -636,8 +636,8 @@ class MatInterface(Interface):
         #if not isinstance(theta,np.ndarray):
         # theta=np.array([theta])
         name = '|'.join(mat['name'] for mat in lmat)
-        Interface.__init__(self, fGHz, theta, name=name)
-        #super(MatInterface,self).__init__(fGHz, theta, name=name)
+        # Interface.__init__(self, fGHz, theta, name=name)
+        super(MatInterface,self).__init__(fGHz, theta, name=name)
         self.m1 = lmat[0]
         self.m2 = lmat[1]
         # 2*np.pi* f(GHz)*eps0 = f(Ghz)/18
@@ -1300,7 +1300,7 @@ class MatDB(PyLayers,dict):
         fo.close()
 
 
-class Slab(dict,Interface):
+class Slab(Interface,dict):
     """ Handle a Slab
 
     Summary

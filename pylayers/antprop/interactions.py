@@ -200,12 +200,15 @@ class Inter(PyLayers):
 
         """
 
-        if self.typ in [1, 2, 3]:
+        if self.typ in [2, 3]: # reflection & transmission
             self.si0 = self.data[:, 1]
             self.sout = self.data[:, 2]
-        elif self.typ == 0:
+        elif self.typ == 1: # diffraction
+            self.si0 = self.data[:, 4]
+            self.sout = self.data[:, 5]
+        elif self.typ == 0: # loss
             self.sout = self.data[0]
-        elif self.typ == -1:
+        elif self.typ == -1: # B
             self.sout = np.zeros((len(self.data[:, 0])))
 
     def stack(self, data=np.array(()), idx=0, isdata=True):
@@ -445,9 +448,12 @@ class Interactions(Inter,dict):
             self.I[:, self.D.idx, :, :] = self.D.eval(fGHz=fGHz)
             self.sout[self.D.idx] = self.D.sout
             self.si0[self.D.idx] = self.D.si0
-            self.alpha[self.D.idx] = self.D.alpha
-            self.gamma[self.D.idx] = self.D.gamma
+
+            # self.alpha[self.D.idx] = self.D.alpha
+            # self.gamma[self.D.idx] = self.D.gamma
         except:
+            import ipdb
+            ipdb.set_trace()
             print 'Warning : No D interaction Evaluated'
 
         self.evaluated = True
@@ -855,13 +861,6 @@ class IntD(Inter):
     """
     def __init__(self, data=np.array(()), idx=[],fGHz=np.array([2.4])):
 
-#        self.theta = data1[0]
-#        self.thetad = data1[1]
-#        self.si = data1[2]
-#        self.sd = data1[3]
-#        self.beta = data1[4]
-#        self.N = data1[5]
-#        self.typed = data2[0]
         Inter.__init__(self, data=data, idx=idx, typ=1)
 
     def __repr__(self):
@@ -877,20 +876,49 @@ class IntD(Inter):
         fGHz : np.array
 
         """
-
         self.fGHz=fGHz
         self.nf=len(fGHz)
+        self.A = np.zeros((self.nf, len(self.idx), 2, 2), dtype=complex)
 
-        self.sinsout()
-
-        if len(self.data) != 0:
+        if len(self.data) != 0 :
+            self.phi0 = self.data[:,0]
+            self.phi = self.data[:,1]
+            self.beta = self.data[:,2]
+            self.N = self.data[:,3]
+            self.sinsout()
+            D = np.zeros([self.nf, len(self.phi), 2, 2], dtype=complex)
+            mapp=[]
+            for m in self.dusl.keys():
+                idx = self.dusl[m]
+                mats = m.split('-')
+                mat0name = self.slab.di[eval(mats[0])]
+                matNname = self.slab.di[eval(mats[1])]
+                mat0 = self.slab[mat0name]['lmat'][0]
+                matN = self.slab[matNname]['lmat'][0]
+                Ds,Dh = diff(self.fGHz,self.phi0[idx],self.phi[idx],self.si0[idx],self.sout[idx],self.N[idx],mat0,matN,beta=self.beta[idx])
+                D[:,idx,0,0]=Ds
+                D[:,idx,1,1]=Dh
+                mapp.extend(self.dusl[m])
+                # import ipdb
+                # ipdb.set_trace()
+                # try:
+                #     D = np.concatenate((D, self.slab[m].T), axis=1)
+                #     mapp.extend(self.dusl[m])
+                # except:
+                #     D = np.empty([self.nf, len(idx), 2, 2], dtype=complex)
+                #     D[:,:,0,0]=Ds
+                #     D[:,:,1,1]=Dh
+                #     mapp.extend(self.dusl[m])
+            self.A[:, np.array((mapp)), :, :] = D[:,mapp,:,:]
+            return(self.A)
+        else :
             self.A = self.data[:, None, None, None]
             return(self.A)
             print 'not yet implemented'
-        else:
-            self.A = self.data[:, None, None, None]
-            print 'no D interaction to evaluate'
-            return(self.A)
+        # else:
+        #     self.A = self.data[:, None, None, None]
+        #     print 'no D interaction to evaluate'
+        #     return(self.A)
 
 if (__name__ == "__main__"):
     plt.ion()

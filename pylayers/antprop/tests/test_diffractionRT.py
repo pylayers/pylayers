@@ -2,14 +2,14 @@ import numpy as np
 import pdb
 from pylayers.antprop.slab import *
 from pylayers.antprop.diffRT import *
+
 #
 # Metalic case : MacNamara Page 202
 #
 Nf=3
 Nr=10
-Nb=5
-fGHz = np.linspace(0,10,Nf)
-N = np.linspace(1,10,Nb)#320/180.
+fGHz = np.linspace(1,10,Nf)
+N = np.linspace(1,10,Nr)#320/180.
 phi0 = np.linspace(0.01,2*np.pi-0.01,Nr)#40*np.pi/180.
 phi = np.linspace(0.01,2*np.pi-0.01,Nr)
 #phi = np.linspace(0,3*np.pi/2,10)
@@ -19,7 +19,7 @@ matN = dm['METAL']
 si = 10000.*np.ones(Nr)
 sd = 1.*np.ones(Nr)
 plt.ion()
-Ds,Dh,D1,D2,D3,D4 = diff(fGHz,phi0,phi,si,sd,N,mat0,matN)
+Ds,Dh = diff(fGHz,phi0,phi,si,sd,N,mat0,matN)
 #plt.plot(phi*180/np.pi,np.real(Ds[0,0,:,0,0,0,0]),'b',label='Soft -')
 #plt.plot(phi*180/np.pi,np.imag(Ds[0,0,:,0,0,0,0]),'b.',label='Soft -')
 #plt.plot(phi*180/np.pi,np.real(Dh[0,0,:,0,0,0,0]),'r',label='Hard +')
