@@ -1303,6 +1303,9 @@ class DLink(Link):
             R = r2d.to3D(self.L,H=self.L.maxheight, N=kwargs['ra_number_mirror_cf'])
             R.locbas(self.L)
             # ...and save
+            R.fillinter(self.L)
+            C=Ctilde()
+            C = R.eval(self.fGHz)
             self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])
 
         self.R = R
@@ -1316,15 +1319,15 @@ class DLink(Link):
         # Ctilde
         ############
 
-        C=Ctilde()
 
         if self.dexist['Ct']['exist'] and not ('Ct' in kwargs['force']):
+            C=Ctilde()
             self.load(C,self.dexist['Ct']['grpname'])
 
         else :
-            R.fillinter(self.L)
+            if not hasattr(R,'I'):
             # Ctilde...
-            C = R.eval(self.fGHz)
+                C = R.eval(self.fGHz)
             # ...save Ct
             self.save(C,'Ct',self.dexist['Ct']['grpname'],force = kwargs['force'])
 
