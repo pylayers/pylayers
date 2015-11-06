@@ -1729,6 +1729,11 @@ class Signatures(PyLayers,dict):
         >>> DL.Cb=13
         >>> DL.eval(force=['sig','ray','Ct','H'],alg=2015,si_reverb=3,cutoff=2,ra_vectorized=True)
 
+        Notes
+        -----
+
+        This function makes use of graph Gc. Graph of meged cycles.
+
         """
         if source == -1:
             source = self.source
