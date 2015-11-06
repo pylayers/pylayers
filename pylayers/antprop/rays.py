@@ -2323,11 +2323,37 @@ class Rays(PyLayers,dict):
             ray = self.ray(r)
             typ = self.typ(r)
             slabnb = self.slab_nb(r)
-            print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7}, {5:10}, {6:10}'.format('Index',
-                                                                        'type',
-                                                                        'slab', 'slab_id' ,'th(rad)', 'alpha', 'gamma2')
-            print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'.format(r, 'B0','-', '-', '-', '-', '-')
+            # if there is a diffraction, phi0, phi, beta are shown
+
+            if 'D' in typ:
+                diff =True
+                print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7}, {5:10}, {6:10}, {7:4}, {8:4}, {9:4}'\
+                        .format('Index',
+                                'type',
+                                'slab', 
+                                'slab_id' ,
+                                'th(rad)',
+                                'alpha',
+                                'gamma2',
+                                'phi0',
+                                'phi',
+                                'beta')
+            else :
+                diff =False
+                print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7}, {5:10}, {6:10}'\
+                     .format('Index',
+                        'type',
+                        'slab',
+                        'slab_id',
+                        'th(rad)',
+                        'alpha',
+                        'gamma2')
+            print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'\
+                  .format(r, 'B0','-', '-', '-', '-', '-')
+
             for iidx, i in enumerate(typ):
+                # import ipdb
+                # ipdb.set_trace()
                 if i == 'T' or i == 'R' or i =='D':
                     I = getattr(self.I, i)
                     for slab in I.dusl.keys():
@@ -2335,20 +2361,31 @@ class Rays(PyLayers,dict):
                         midx = I.dusl[slab]
     #                    print midx
                         Iidx = np.array((I.idx))[midx]
-                        th = I.data[I.dusl[slab], 0]
 
                         if i != 'D':
+                            th = I.data[I.dusl[slab], 0]
                             gamma = I.gamma[midx]
                             alpha = I.alpha[midx]
                         else : 
+
+                            th=['-']*max(Iidx)
                             gamma = ['NC']*max(Iidx)
                             alpha = ['NC']*max(Iidx)
+                            udiff = np.where(self.I.D.idx==ray[iidx])[0]
+                            phi0 = self.I.D.phi0[udiff][0]
+                            phi=self.I.D.phi[udiff][0]
+                            beta=self.I.D.beta[udiff][0]
                         for ii, Ii in enumerate(Iidx):
                             if Ii == ray[iidx]:
-                                print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'.format(Ii, i, slab, slabnb[iidx], th[ii], alpha[ii], gamma[ii])
 
-                # else:
-                print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'.format(ray[iidx], 'B', '-', '-', '-', '-', '-')
+                                if diff: 
+                                    print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10}, {6:10}, {7:3.4}, {8:3.4}, {9:3.4}'\
+                                    .format(Ii, i, slab, slabnb[iidx], th[ii], alpha[ii], gamma[ii],phi0,phi,beta)
+                                else:
+                                    print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'\
+                                    .format(Ii, i, slab, slabnb[iidx], th[ii], alpha[ii], gamma[ii])
+                    else:
+                        print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'.format(ray[iidx], 'B', '-', '-', '-', '-', '-')
                 #              print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format(ray[iidx], i, '-', '-', '-', '-')
 
             print '\n----------------------------------------'
