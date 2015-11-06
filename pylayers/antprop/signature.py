@@ -2100,7 +2100,7 @@ class Signatures(PyLayers,dict):
         ###
         ### Find interactions per cycles
         ###
-        
+
         def dido(cy,lcy):
             """ Difraction In Diffraction Out
                 determine, for merged cycles, which diffrxtion
@@ -2124,7 +2124,6 @@ class Signatures(PyLayers,dict):
             """
             if not isinstance(lcy,list):
                 lcy=[lcy]
-
             outR,outT,D = self.L.intercyGc2Gt(cy,typ='source')
             # keep diff points
             D=np.unique(D)
@@ -2156,6 +2155,7 @@ class Signatures(PyLayers,dict):
                 else :
                     insideD.append((d,))
             return insideD,inD,outD,ddin,ddout
+        ##### END dido
 
         for icy,cy in enumerate(lcil):
 

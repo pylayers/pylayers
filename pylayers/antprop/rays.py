@@ -1602,15 +1602,14 @@ class Rays(PyLayers,dict):
 
                     # alpha_w : (nb_diffraction_points)
                     # alpha wegde (a.k.a. wedge parameters, a.k.a wedge aperture)
-                    alpha_w = geu.sector(pa.T,pb.T,pt.T)
+                    # alpha_w = (geu.sector(pa.T,pb.T,pt.T)/180.*np.pi)/np.pi
+                    alpha_w = 2.-geu.sector(pa.T,pb.T,pt.T)/180.
 
                     # angle between face 0, diffraction point and s_in
                     # s_in[:2,udiff[0],udiff[1]]  : 
                     # s_in of insteractions udiff (2D) restricted to diffraction points
-
                     vpapt= pa-pt # papt : direction vector of face 0 
                     vpaptn = vpapt.T / np.sqrt(np.sum((vpapt)*(vpapt),axis=1))
-
                     sid = s_in[:,udiff[0],udiff[1]] # s_in restricted to diff
                     sod = s_out[:,udiff[0],udiff[1]] # s_out restricted to diff
                     vnormz = self[k]['norm'][:, udiff[0], udiff[1]]
@@ -1619,7 +1618,7 @@ class Rays(PyLayers,dict):
                     # phi0 = arccos(dot(sid*vpavptn))
                     phi0 = np.arccos(np.sum(sid[:2]*vpaptn,axis=0))
                     # phi = arccos(dot(sod*vpavptn))
-                    phi = np.arccos(np.sum(sod[:2]*vpaptn,axis=0))
+                    phi = np.arccos(np.sum(-sod[:2]*vpaptn,axis=0))
                     # beta
                     beta = np.arccos(np.sum(sid[1:]*vnormz[1:],axis=0))
 
