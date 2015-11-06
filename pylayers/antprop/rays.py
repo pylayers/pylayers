@@ -1672,8 +1672,7 @@ class Rays(PyLayers,dict):
                 #################################
                 # End of diffraction specifc process
                 ##############################
-                else :
-                    self[k]['diff']=False
+
 
 #
                 # pasting (Bo0,B,BiN)
@@ -2321,7 +2320,6 @@ class Rays(PyLayers,dict):
             typ = self.typ(r)
             slabnb = self.slab_nb(r)
             # if there is a diffraction, phi0, phi, beta are shown
-
             if 'D' in typ:
                 diff =True
                 print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7}, {5:10}, {6:10}, {7:4}, {8:4}, {9:4}'\
