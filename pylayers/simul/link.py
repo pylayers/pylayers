@@ -382,7 +382,6 @@ class DLink(Link):
 
         self._Lname = self._L.filename
 
-
         ###########
         # Transmitter and Receiver positions
         ###########
@@ -420,7 +419,7 @@ class DLink(Link):
             self.L.dumpr()
         except:
             print('This is the first time the Layout is used. Graphs have to be built. Please Wait')
-            self.L.build(graph=kwargs['graph'])
+            self.L.build(graph=self.graph)
             self.L.dumpw()
         #self.L.build()
 

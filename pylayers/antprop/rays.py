@@ -1513,9 +1513,6 @@ class Rays(PyLayers,dict):
                 if len(udiff[0]) != 0 :
 
 
-                    # Boolean to indicate if there is a diffraction
-                    # in blockk
-                    self[k]['diff']=True
                     # diffseg,udiffseg  = np.unique(nstr[udiff],return_inverse=True)
                     diffupt=nstr[udiff]
                     # position of diff seg (- because iupnt accept > 0 reference to points)
@@ -1847,7 +1844,7 @@ class Rays(PyLayers,dict):
                 # (i+1) x r
                 si = self[k]['si']
                 
-                if self[k]['diff']:
+                if self[k].has_key('diffvect'):
 
                     dvec = self[k]['diffvect']
                     ldsl = self[k]['diffslabs']
@@ -1947,7 +1944,7 @@ class Rays(PyLayers,dict):
 
                 tsl = np.hstack((tsl, sl[uT]))
                 rsl = np.hstack((rsl, sl[uR], sl[uRf], sl[uRc]))
-                if self[k]['diff']: 
+                if self[k].has_key('diffvect'): 
                     dw = np.hstack((dw,self[k]['diffslabs'])) 
     ##            for s in uslv:
     ##
@@ -2002,7 +1999,7 @@ class Rays(PyLayers,dict):
                 #Diffraction
                 #phi0,phi,si,sd,N,mat0,matN,beta
                 # 
-                if self[k]['diff']: 
+                if self[k].has_key('diffvect'): 
                     # self[k]['diffvect'] = ((phi0,phi,beta,N) x (nb_rayxnb_interactions)   )
                     # si and so are stacked at the end of self[k]['diffvect'] 
                     # as well:
