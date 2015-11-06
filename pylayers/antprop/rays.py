@@ -372,7 +372,7 @@ class Rays(PyLayers,dict):
         # creating save for Interactions classes
 
         if self.filled:
-            L=Layout(Lfilename)
+            L=Layout(self.Lfilename)
             self.fillinter(L)
 
         if self.evaluated:
@@ -2285,7 +2285,7 @@ class Rays(PyLayers,dict):
         return(self[self.ray2nbi[r]]['sig'][0,1:-1,raypos[0]])
 
 
-    def typ(self, r):
+    def typ(self, r,fromR=True):
         """ returns interactions list type of a given ray
 
         Parameters
@@ -2293,10 +2293,20 @@ class Rays(PyLayers,dict):
 
         r : integer
             ray index
-        """
+        fromR : bool
+            True : get information from signature in R
+            False: get inforation in R.I
 
-        a = self.ray(r)
-        return(self.I.typ[a])
+        """
+        if fromR:
+            di = {1:'D',2:'R',3:'T',4:'R',5:'R'}
+            nbi = self.ray2nbi[r]
+            raypos = np.nonzero(self[nbi]['rayidx'] == r)[0]
+            inter = self[nbi]['sig'][1,1:-1,raypos][0]
+            return [di[i] for i in inter]
+        else:
+            a = self.ray(r)
+            return(self.I.typ[a])
 
     def info(self, r,ifGHz=0):
         """ provides information for a given ray r
