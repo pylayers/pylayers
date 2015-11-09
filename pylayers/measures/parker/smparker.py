@@ -1379,7 +1379,7 @@ class Scanner(PyLayers):
                Nmeas=1,
                comment='',
                author=''):
-        """ Measure over a set of point from AntArray and store in h5
+        """ Measure over a set of point from AntArray and store it in h5
 
         Parameters
         ----------

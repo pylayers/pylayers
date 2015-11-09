@@ -410,7 +410,7 @@ class SCPI(PyLayers):
 
         Parameters
         ----------
-        Nmeas   : number of times of measures
+        Nmeas   : number of measures
         chan    : int
                   channel number
 
@@ -506,7 +506,7 @@ class SCPI(PyLayers):
                 author='',
                 comment='',
                 Nmeas = 10):
-        """  measure a calibration vector and store in h5 file
+        """  measure a calibration vector and store it in h5 file
 
         Parameters
         ----------
