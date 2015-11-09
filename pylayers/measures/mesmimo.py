@@ -9,7 +9,6 @@ import numpy as np
 import matplotlib.pylab as plt
 import matplotlib.animation as animation
 import numpy.linalg as la
-from pylayers.measures.vna.E5072A import *
 from time import sleep
 from pylayers.measures.vna.E5072A import *
 
@@ -84,9 +83,9 @@ class MIMO(object):
         if self.Aat == []:
             self.Aat = AntArray(N=[4,1,1])
 
-        self.freq = np.linspace(fminGHz,fmaxGHz,Nf)
-
+        
         self.Nf  = Nf
+        self.freq = np.linspace(fminGHz,fmaxGHz,Nf)
         self.rep = rep
         self.Nt = Nt
         self.Nr = Nr
@@ -133,8 +132,8 @@ class MIMO(object):
         fd  = open(self.filename)
         lis = fd.readlines()
         fd.close()
-        module  = []
-        phasedeg   = []
+        module   = []
+        phasedeg = []
 
         for l in lis:
             l.replace('\r\n','')

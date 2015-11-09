@@ -74,7 +74,7 @@ class algloc(object):
         ----------
 
         nodes : dict
-
+        
         ldp : dict
 
         """

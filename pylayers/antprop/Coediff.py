@@ -1,7 +1,12 @@
 import numpy as np
 import scipy.special as sps
 import matplotlib.pyplot as plt
-def Coediff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2):
+import pdb
+
+def Coediff(k,N,phi0,phi,si,sd,sf,ero,erro,condo,uro,urro,deltaho,
+            ern,errn,condn,urn,urrn,deltahn,beta0=np.pi/2):
+#def Coediff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2):
+
     """ Luebbers Diffration coefficient
 
 
@@ -234,6 +239,7 @@ def Dfunc(sign,k,N,dphi,si,sd,beta=np.pi/2):
     Di= ------------------	*    ----------- * F(kla)    ([1] eq 25)
         2n*racine(2*np.pi*k)	 np.tan(dphi/n)sin(beta)  
 
+
     """
 
     cste = (1.0-1.0*1j)*(1.0/(4.0*N*np.sqrt(k*np.pi)*np.sin(beta)))
@@ -368,7 +374,7 @@ def FreF(x) :
     >>> import numpy as np
     >>> x = np.logspace(-4,2,400);
     >>> F = FreF(x)
-    >>> plt.semilogx(x,,np.abs(F))
+    >>> plt.semilogx(x,np.abs(F))
     >>> plt.grid()
 
     """
@@ -463,6 +469,7 @@ def reflection(th,k,er,err,sigma,ur,urr,deltah):
         k = np.array([k])
     if not isinstance(th,np.ndarray):
         th = np.array([th])
+
     #--------------------------------------------
     #cas des surfaces dielectriques (sinon er=-1)
     #--------------------------------------------
