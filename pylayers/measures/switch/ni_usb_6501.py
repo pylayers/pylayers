@@ -27,6 +27,7 @@ TODO
 """
 import usb.core
 import usb.util
+import pdb
 
 ID_VENDOR = 0x3923
 ID_PRODUCT = 0x718a
@@ -193,6 +194,7 @@ if __name__ == "__main__":
     if not dev:
         raise Exception("No device found")
 
+    pdb.set_trace()
     dev.set_io_mode(0b11111111, 0b11111111, 0b00000000)
 
     dev.write_port(0, 0b10111111)
