@@ -1289,7 +1289,6 @@ class DLink(Link):
         print "Start Rays"
         tic = time.time()
         R = Rays(self.a,self.b)
-
         if self.dexist['ray']['exist'] and not ('ray' in kwargs['force']):
             self.load(R,self.dexist['ray']['grpname'])
 
