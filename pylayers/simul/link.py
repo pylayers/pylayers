@@ -356,7 +356,8 @@ class DLink(Link):
                    'save_opt':['sig','ray','Ct','H'],
                    'save_idx':0,
                    'force_create':False,
-                   'verbose':True
+                   'verbose':True,
+                   'graph':'tcvirw'
                 }
 
         self._ca=-1
@@ -376,12 +377,10 @@ class DLink(Link):
                 else :
                     setattr(self,key,kwargs[key])
 
-
         force=self.force_create
         delattr(self,'force_create')
 
         self._Lname = self._L.filename
-
 
         ###########
         # Transmitter and Receiver positions
@@ -420,7 +419,7 @@ class DLink(Link):
             self.L.dumpr()
         except:
             print('This is the first time the Layout is used. Graphs have to be built. Please Wait')
-            self.L.build()
+            self.L.build(graph=self.graph)
             self.L.dumpw()
         #self.L.build()
 
@@ -1143,8 +1142,9 @@ class DLink(Link):
             takes into consideration diffraction points
         ra_number_mirror_cf : int
             rays.to3D number of ceil/floor reflexions
-        ra_ceil_height_meter: float,
-            ceil height
+        ra_ceil_height_meter: float, (default [])
+            ceil height . 
+                If [] : Layout max ceil height 
         ra_vectorized: boolean (True)
             if True used the (2015 new) vectorized approach to determine 2drays
 
@@ -1200,7 +1200,7 @@ class DLink(Link):
                    'si_progress':False,
                    'diffraction':False,
                    'ra_vectorized':False,
-                   'ra_ceil_height_meter':3,
+                   'ra_ceil_height_meter':[],
                    'ra_number_mirror_cf':1,
                    'force':[],
                    'alg':7,
@@ -1301,9 +1301,18 @@ class DLink(Link):
             # ... or with original and slow approach ( to be removed in a near future)
             else :
                 r2d = Si.rays(self.a,self.b)
-            R = r2d.to3D(self.L,H=self.L.maxheight, N=kwargs['ra_number_mirror_cf'])
+
+            if kwargs['ra_ceil_height_meter'] == []:
+                ceilheight = self.L.maxheight
+            else:
+                ceilheight = kwargs['ra_ceil_height_meter']
+
+            R = r2d.to3D(self.L,H=ceilheight, N=kwargs['ra_number_mirror_cf'])
             R.locbas(self.L)
             # ...and save
+            R.fillinter(self.L)
+            C=Ctilde()
+            C = R.eval(self.fGHz)
             self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])
 
         self.R = R
@@ -1317,15 +1326,15 @@ class DLink(Link):
         # Ctilde
         ############
 
-        C=Ctilde()
 
         if self.dexist['Ct']['exist'] and not ('Ct' in kwargs['force']):
+            C=Ctilde()
             self.load(C,self.dexist['Ct']['grpname'])
 
         else :
-            R.fillinter(self.L)
+            if not hasattr(R,'I'):
             # Ctilde...
-            C = R.eval(self.fGHz)
+                C = R.eval(self.fGHz)
             # ...save Ct
             self.save(C,'Ct',self.dexist['Ct']['grpname'],force = kwargs['force'])
 

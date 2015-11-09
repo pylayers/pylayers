@@ -848,7 +848,6 @@ class Bsignal(PyLayers):
             x = self.x[u]
 
         ndim = self.y.ndim
-
         #
         # if ndim(y) > 1
         #

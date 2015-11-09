@@ -372,7 +372,7 @@ class Rays(PyLayers,dict):
         # creating save for Interactions classes
 
         if self.filled:
-            L=Layout(Lfilename)
+            L=Layout(self.Lfilename)
             self.fillinter(L)
 
         if self.evaluated:
@@ -1513,9 +1513,6 @@ class Rays(PyLayers,dict):
                 if len(udiff[0]) != 0 :
 
 
-                    # Boolean to indicate if there is a diffraction
-                    # in blockk
-                    self[k]['diff']=True
                     # diffseg,udiffseg  = np.unique(nstr[udiff],return_inverse=True)
                     diffupt=nstr[udiff]
                     # position of diff seg (- because iupnt accept > 0 reference to points)
@@ -1605,15 +1602,14 @@ class Rays(PyLayers,dict):
 
                     # alpha_w : (nb_diffraction_points)
                     # alpha wegde (a.k.a. wedge parameters, a.k.a wedge aperture)
-                    alpha_w = geu.sector(pa.T,pb.T,pt.T)
+                    # alpha_w = (geu.sector(pa.T,pb.T,pt.T)/180.*np.pi)/np.pi
+                    alpha_w = 2.-geu.sector(pa.T,pb.T,pt.T)/180.
 
                     # angle between face 0, diffraction point and s_in
                     # s_in[:2,udiff[0],udiff[1]]  : 
                     # s_in of insteractions udiff (2D) restricted to diffraction points
-
                     vpapt= pa-pt # papt : direction vector of face 0 
                     vpaptn = vpapt.T / np.sqrt(np.sum((vpapt)*(vpapt),axis=1))
-
                     sid = s_in[:,udiff[0],udiff[1]] # s_in restricted to diff
                     sod = s_out[:,udiff[0],udiff[1]] # s_out restricted to diff
                     vnormz = self[k]['norm'][:, udiff[0], udiff[1]]
@@ -1622,7 +1618,7 @@ class Rays(PyLayers,dict):
                     # phi0 = arccos(dot(sid*vpavptn))
                     phi0 = np.arccos(np.sum(sid[:2]*vpaptn,axis=0))
                     # phi = arccos(dot(sod*vpavptn))
-                    phi = np.arccos(np.sum(sod[:2]*vpaptn,axis=0))
+                    phi = np.arccos(np.sum(-sod[:2]*vpaptn,axis=0))
                     # beta
                     beta = np.arccos(np.sum(sid[1:]*vnormz[1:],axis=0))
 
@@ -1675,8 +1671,7 @@ class Rays(PyLayers,dict):
                 #################################
                 # End of diffraction specifc process
                 ##############################
-                else :
-                    self[k]['diff']=False
+
 
 #
                 # pasting (Bo0,B,BiN)
@@ -1847,7 +1842,7 @@ class Rays(PyLayers,dict):
                 # (i+1) x r
                 si = self[k]['si']
                 
-                if self[k]['diff']:
+                if self[k].has_key('diffvect'):
 
                     dvec = self[k]['diffvect']
                     ldsl = self[k]['diffslabs']
@@ -1947,7 +1942,7 @@ class Rays(PyLayers,dict):
 
                 tsl = np.hstack((tsl, sl[uT]))
                 rsl = np.hstack((rsl, sl[uR], sl[uRf], sl[uRc]))
-                if self[k]['diff']: 
+                if self[k].has_key('diffvect'): 
                     dw = np.hstack((dw,self[k]['diffslabs'])) 
     ##            for s in uslv:
     ##
@@ -2002,7 +1997,7 @@ class Rays(PyLayers,dict):
                 #Diffraction
                 #phi0,phi,si,sd,N,mat0,matN,beta
                 # 
-                if self[k]['diff']: 
+                if self[k].has_key('diffvect'): 
                     # self[k]['diffvect'] = ((phi0,phi,beta,N) x (nb_rayxnb_interactions)   )
                     # si and so are stacked at the end of self[k]['diffvect'] 
                     # as well:
@@ -2268,8 +2263,28 @@ class Rays(PyLayers,dict):
         raypos = np.nonzero(self[self.ray2nbi[r]]['rayidx'] == r)[0]
         return(self[self.ray2nbi[r]]['rays'][:,raypos][:,0])
 
+    def slab_nb(self, r):
+        """ returns the slab numbers of r
 
-    def typ(self, r):
+        Parameters
+        ----------
+
+        r : integer
+            ray index
+
+        Returns
+        -------
+
+        isl : slabs number
+
+
+        """
+
+        raypos = np.nonzero(self[self.ray2nbi[r]]['rayidx'] == r)[0]
+        return(self[self.ray2nbi[r]]['sig'][0,1:-1,raypos[0]])
+
+
+    def typ(self, r,fromR=True):
         """ returns interactions list type of a given ray
 
         Parameters
@@ -2277,10 +2292,20 @@ class Rays(PyLayers,dict):
 
         r : integer
             ray index
-        """
+        fromR : bool
+            True : get information from signature in R
+            False: get inforation in R.I
 
-        a = self.ray(r)
-        return(self.I.typ[a])
+        """
+        if fromR:
+            di = {1:'D',2:'R',3:'T',4:'R',5:'R'}
+            nbi = self.ray2nbi[r]
+            raypos = np.nonzero(self[nbi]['rayidx'] == r)[0]
+            inter = self[nbi]['sig'][1,1:-1,raypos][0]
+            return [di[i] for i in inter]
+        else:
+            a = self.ray(r)
+            return(self.I.typ[a])
 
     def info(self, r,ifGHz=0):
         """ provides information for a given ray r
@@ -2302,11 +2327,37 @@ class Rays(PyLayers,dict):
 
             ray = self.ray(r)
             typ = self.typ(r)
-            print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format('Index',
-                                                                        'type',
-                                                                        'slab', 'th(rad)', 'alpha', 'gamma2')
-            print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(r, 'B0', '-', '-', '-', '-')
+            slabnb = self.slab_nb(r)
+            # if there is a diffraction, phi0, phi, beta are shown
+            if 'D' in typ:
+                diff =True
+                print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7}, {5:10}, {6:10}, {7:4}, {8:4}, {9:4}'\
+                        .format('Index',
+                                'type',
+                                'slab', 
+                                'slab_id' ,
+                                'th(rad)',
+                                'alpha',
+                                'gamma2',
+                                'phi0',
+                                'phi',
+                                'beta')
+            else :
+                diff =False
+                print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7}, {5:10}, {6:10}'\
+                     .format('Index',
+                        'type',
+                        'slab',
+                        'slab_id',
+                        'th(rad)',
+                        'alpha',
+                        'gamma2')
+            print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'\
+                  .format(r, 'B0','-', '-', '-', '-', '-')
+
             for iidx, i in enumerate(typ):
+                # import ipdb
+                # ipdb.set_trace()
                 if i == 'T' or i == 'R' or i =='D':
                     I = getattr(self.I, i)
                     for slab in I.dusl.keys():
@@ -2314,19 +2365,31 @@ class Rays(PyLayers,dict):
                         midx = I.dusl[slab]
     #                    print midx
                         Iidx = np.array((I.idx))[midx]
-                        th = I.data[I.dusl[slab], 0]
+
                         if i != 'D':
+                            th = I.data[I.dusl[slab], 0]
                             gamma = I.gamma[midx]
                             alpha = I.alpha[midx]
                         else : 
+
+                            th=['-']*max(Iidx)
                             gamma = ['NC']*max(Iidx)
                             alpha = ['NC']*max(Iidx)
+                            udiff = np.where(self.I.D.idx==ray[iidx])[0]
+                            phi0 = self.I.D.phi0[udiff][0]
+                            phi=self.I.D.phi[udiff][0]
+                            beta=self.I.D.beta[udiff][0]
                         for ii, Ii in enumerate(Iidx):
                             if Ii == ray[iidx]:
-                                print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(Ii, i, slab, th[ii], alpha[ii], gamma[ii])
 
-                # else:
-                print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(ray[iidx], 'B', '-', '-', '-', '-')
+                                if diff: 
+                                    print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10}, {6:10}, {7:3.4}, {8:3.4}, {9:3.4}'\
+                                    .format(Ii, i, slab, slabnb[iidx], th[ii], alpha[ii], gamma[ii],phi0,phi,beta)
+                                else:
+                                    print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'\
+                                    .format(Ii, i, slab, slabnb[iidx], th[ii], alpha[ii], gamma[ii])
+                    else:
+                        print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'.format(ray[iidx], 'B', '-', '-', '-', '-', '-')
                 #              print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format(ray[iidx], i, '-', '-', '-', '-')
 
             print '\n----------------------------------------'

@@ -7868,33 +7868,38 @@ class Layout(PyLayers):
         #  for all conected components
         #  example licy = [[22,78,5],[3,4]] 2 cycles are connected
         #
-
+        merge2c=[]
         for licy in connected:
             root = licy[0]      # pick the first cycle as root
             merged = [root]     # merged cycle is void
             tomerge = licy[-1:0:-1]  # pick the inverse remaining part as tomerge list
+            tomerg
             #for cy in tomerge: #
             while tomerge!=[]:
+
                 ncy = tomerge.pop()
                 #print "ncy = ",ncy
                 # testing cycle contiguity before merging
                 try:
-
                     croot = self.Gc.node[root]['cycle']
                 except:
                     import ipdb
                     ipdb.set_trace()
                 cy = self.Gc.node[ncy]['cycle']
                 flip,path = croot.intersect(cy)
-                if len(path) < 1:
-                    print licy
+
+                if len(path) < 1 and [root,ncy] not in merge2c:
+                    print tomerge,root,ncy,merge2c
                     tomerge.insert(0,ncy)
                 else:
+                    print 'merge' 
+                    import ipdb
+                    ipdb.set_trace()
                     neigh = nx.neighbors(self.Gc,ncy) # all neighbors of 5
                     self.Gc.node[root]['polyg']+=self.Gc.node[ncy]['polyg'] # here the merging
                     self.Gc.node[root]['cycle']+=self.Gc.node[ncy]['cycle'] # here the merging
                     merged.append(ncy)
-
+                    merge2c.append([root,ncy])
                     #print self.Gc.node[root]['polyg'].exterior.xy
                     for k in neigh:
                         if k!= root:
