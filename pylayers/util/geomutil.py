@@ -2340,7 +2340,7 @@ def angular(p1, p2):
     p1
         point p1
     p2
-        point p2
+        point p2 origin
 
     Notes
     -----
@@ -2371,6 +2371,7 @@ def angular(p1, p2):
 
 
     """
+    print DeprecationWarning('DEPRECATION WARNING : geomutil.angular going deprecatd  because wrong')
     if p1[0] < p2[0] and p1[1] < p2[1]:
         angle = np.arctan2((p2[1] - p1[1]), (p2[0] - p1[0])) + np.pi
     elif p1[0] > p2[0] and p1[1] < p2[1]:
@@ -2381,6 +2382,40 @@ def angular(p1, p2):
         angle = np.arctan2((p2[1] - p1[1]), (p2[0] - p1[0])) + np.pi
 
     return(angle)
+
+
+
+def vecang(v1,v2):
+    """ angle between v1 and v2 , result in [0,2*pi]
+
+    Parameters
+    ----------
+    v1 : np.array (3 x Np)
+        vector
+    v2 : np.array (3 x Np)
+        vector
+    Returns
+    -------
+
+    alpha : np.array (3 x Np)
+        radians
+
+
+    """
+    if len(v1.shape) == 1:
+        v1=v1.reshape(v1.shape[0],1)
+    if len(v2.shape) == 1:
+        v2=v2.reshape(v2.shape[0],1)
+
+
+    ang =np.arctan2(v2[1,:], v2[0,:]) - np.arctan2(v1[1,:], v1[0,:])
+    uneg = np.where(ang <0)[0]
+    ang[uneg]= 2*np.pi+ ang[uneg]
+    return ang
+    # if ang <0 :
+    #     return (2*np.pi+ang)
+    # else :
+    #     return ang
 
 
 def SignedArea(p=np.array([[0, 10, 10, 0], [0, 0, -2, -2]])):
@@ -3923,6 +3958,8 @@ def valid_wedge(ps, pw, p1, p2, grazing):
         valid[out_I2] = 1
 
     return(valid)
+
+
 
 
 def sector(p1, p2, pt):

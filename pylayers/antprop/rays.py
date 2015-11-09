@@ -481,9 +481,7 @@ class Rays(PyLayers,dict):
         Parameters
         ----------
 
-        i : list or -1 (default = all groups)
-            list of interaction group numbers
-        r : list or -1 (default = all rays)
+        rlist : list  (default [] = all rays)
             list of indices of ray in interaction group
         graph : string t
             type of graph to be displayed
@@ -505,8 +503,7 @@ class Rays(PyLayers,dict):
             True
 
         """
-        defaults = {'i':-1,
-                   'r':-1,
+        defaults = {'rlist':[],
                    'fig':[],
                    'ax':[],
                     'L':[],
@@ -528,7 +525,10 @@ class Rays(PyLayers,dict):
         #if kwargs['ax'] ==[]:
         #    ax = fig.add_subplot(111)
         if kwargs['layout'] ==True:
-            fig,ax = kwargs['L'].showG(**kwargs)
+            if kwargs['L'] != []:
+                fig,ax = kwargs['L'].showG(**kwargs)
+            else : 
+                raise AttributeError('Please give a Layout file as argument')
         else:
             fig = kwargs['fig']
             ax = kwargs['ax']
@@ -541,28 +541,57 @@ class Rays(PyLayers,dict):
         # i=-1 all rays
         # else block of interactions i
 
-        if kwargs['i']==-1:
-            lgrint = self.keys()
-        else:
-            lgrint = [kwargs['i']]
+        if kwargs['rlist'] == []:
 
-        for i in lgrint:
-            if kwargs['r']==-1:
+            lgrint = self.keys()
+
+            for i in lgrint:
                 lray = range(len(self[i]['pt'][0, 0, :]))
                 if self.filled :
                     ax.set_title('rays index :'+ str(self[i]['rayidx']))
-            else:
-                lray = [kwargs['r']]
-            for j in lray:
-                ray = np.hstack((self.pTx[0:2].reshape((2, 1)),
-                                 np.hstack((self[i]['pt'][0:2, :, j],
-                                 self.pRx[0:2].reshape((2, 1))))
-                                 ))
-                ax.plot(ray[0, :], ray[1, :],
-                        alpha=kwargs['alpharay'],color=kwargs['colray'],linewidth=kwargs['widthray'])
-                ax.axis('off')
-                if self.filled :
-                    ax.set_title('rays index :'+ str(self[i]['rayidx'][lray]))
+                for j in lray:
+                    ray = np.hstack((self.pTx[0:2].reshape((2, 1)),
+                                     np.hstack((self[i]['pt'][0:2, :, j],
+                                     self.pRx[0:2].reshape((2, 1))))
+                                     ))
+                    ax.plot(ray[0, :], ray[1, :],
+                            alpha=kwargs['alpharay'],color=kwargs['colray'],linewidth=kwargs['widthray'])
+                    ax.axis('off')
+                    if self.filled :
+                        ax.set_title('rays index :'+ str(self[i]['rayidx'][lray]))
+        else:
+            rlist = kwargs['rlist']
+            nbi = self.ray2nbi[rlist]
+            nr = np.array((nbi,rlist))
+            unb = np.unique(nr[0,:])
+            unr = {int(i):np.where(nr[0,:]==i)[0] for i in unb}
+
+            for i in unb:
+                raynb = (nr[1,unr[i]]).astype(int)
+                nbr=len(raynb)
+                ptidx = [np.where(self[i]['rayidx']==x)[0][0] for x in raynb]
+                for j in ptidx:
+
+                    ray = np.hstack((self.pTx[0:2].reshape((2, 1)),
+                                     np.hstack((self[i]['pt'][0:2, :, j],
+                                     self.pRx[0:2].reshape((2, 1))))
+                                     ))
+                    ax.plot(ray[0, :], ray[1, :],
+                            alpha=kwargs['alpharay'],color=kwargs['colray'],linewidth=kwargs['widthray'])
+                    ax.axis('off')
+
+
+
+
+                # raynb = (nr[1,unr[i]]).astype(int)
+                # nbr=len(raynb)
+                # ptidx = [np.where(self[i]['rayidx']==x)[0][0] for x in raynb]
+                # # current number of interactions
+                # cnbi = i + 2
+            
+                # pt = self[i]['pt'][:,:,ptidx].reshape(3,cnbi*nbr,order='F')
+
+
         return(fig,ax)
 
     def mirror(self, H=3, N=1):
@@ -1608,19 +1637,31 @@ class Rays(PyLayers,dict):
                     # angle between face 0, diffraction point and s_in
                     # s_in[:2,udiff[0],udiff[1]]  : 
                     # s_in of insteractions udiff (2D) restricted to diffraction points
-                    vpapt= pa-pt # papt : direction vector of face 0 
-                    vpaptn = vpapt.T / np.sqrt(np.sum((vpapt)*(vpapt),axis=1))
+                    vptpa = pt-pa
+                    vptpan = vptpa.T / np.sqrt(np.sum((vptpa)*(vptpa),axis=1))
+                    # vpapt= pa-pt # papt : direction vector of face 0 
+                    # vpaptn = vpapt.T / np.sqrt(np.sum((vpapt)*(vpapt),axis=1))
                     sid = s_in[:,udiff[0],udiff[1]] # s_in restricted to diff
                     sod = s_out[:,udiff[0],udiff[1]] # s_out restricted to diff
                     vnormz = self[k]['norm'][:, udiff[0], udiff[1]]
 
 
                     # phi0 = arccos(dot(sid*vpavptn))
-                    phi0 = np.arccos(np.sum(sid[:2]*vpaptn,axis=0))
+                    # phi0 = geu.vecang(sid[:2],vpaptn)
+                    uleft = geu.isleft(pa.T,pt.T,pb.T)
+                    phi0 = geu.vecang(vptpan,sid[:2])
+                    phi0[~uleft] = geu.vecang(sid[:2,~uleft],vptpan[:,~uleft])
+
+                    # phi0 = np.arccos(np.sum(sid[:2]*vpaptn,axis=0))
+
                     # phi = arccos(dot(sod*vpavptn))
-                    phi = np.arccos(np.sum(-sod[:2]*vpaptn,axis=0))
+                    # phi = np.arccos(np.sum(-sod[:2]*vpaptn,axis=0))
+                    # phi = geu.vecang(sod[:2],vpaptn)
+                    phi = geu.vecang(vptpan,-sod[:2])
+                    phi[~uleft] = geu.vecang(-sod[:2,~uleft],vptpan[:,~uleft])
                     # beta
-                    beta = np.arccos(np.sum(sid[1:]*vnormz[1:],axis=0))
+                    # beta = np.arccos(np.sum(sid[1:]*vnormz[1:],axis=0))
+                    beta = geu.vecang(sid[1:],vnormz[1:])
 
                     # self[k]['diffvect'] is (4 x Nb_rays )
                     # for axis 0 lenght 4 represent :
@@ -2307,7 +2348,7 @@ class Rays(PyLayers,dict):
             a = self.ray(r)
             return(self.I.typ[a])
 
-    def info(self, r,ifGHz=0):
+    def info(self, r,ifGHz=0,B=True,matrix=False):
         """ provides information for a given ray r
 
         Parameters
@@ -2317,7 +2358,10 @@ class Rays(PyLayers,dict):
             ray index
         ifGHz : int
             frequency index
-
+        B: boolean
+            display Basis
+        matrix :
+            display matrix 
         """
 
         if self.evaluated:
@@ -2371,7 +2415,6 @@ class Rays(PyLayers,dict):
                             gamma = I.gamma[midx]
                             alpha = I.alpha[midx]
                         else : 
-
                             th=['-']*max(Iidx)
                             gamma = ['NC']*max(Iidx)
                             alpha = ['NC']*max(Iidx)
@@ -2381,29 +2424,33 @@ class Rays(PyLayers,dict):
                             beta=self.I.D.beta[udiff][0]
                         for ii, Ii in enumerate(Iidx):
                             if Ii == ray[iidx]:
-
-                                if diff: 
+                                if i=='D': 
                                     print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10}, {6:10}, {7:3.4}, {8:3.4}, {9:3.4}'\
                                     .format(Ii, i, slab, slabnb[iidx], th[ii], alpha[ii], gamma[ii],phi0,phi,beta)
                                 else:
                                     print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'\
                                     .format(Ii, i, slab, slabnb[iidx], th[ii], alpha[ii], gamma[ii])
                     else:
-                        print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'.format(ray[iidx], 'B', '-', '-', '-', '-', '-')
+                        if B:
+                            print '{0:5} , {1:4}, {2:10}, {3:7}, {4:7.2}, {5:10.2}, {6:10.2}'.format(ray[iidx], 'B', '-', '-', '-', '-', '-')
                 #              print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format(ray[iidx], i, '-', '-', '-', '-')
 
-            print '\n----------------------------------------'
-            print ' Matrix of ray #', r, 'at f=', self.I.fGHz[ifGHz]
-            print '----------------------------------------'
-
-            print 'rotation matrix#', 'type: B0'
-            print self.B0.data[r,:,:]
-            for iidx, i in enumerate(typ):
-                print 'interaction #', ray[iidx], 'type:', i
-                # f x l x 2 x 2
-                print self.I.I[ifGHz, ray[iidx], :, :]
-                print 'rotation matrix#',[ray[iidx]], 'type: B'
-                print self.B.data[ray[iidx], :, :]
+            if matrix:
+                print '\n----------------------------------------'
+                print ' Matrix of ray #', r, 'at f=', self.I.fGHz[ifGHz]
+                print '----------------------------------------'
+                if B:
+                    print 'rotation matrix#', 'type: B0'
+                    print self.B0.data[r,:,:]
+                for iidx, i in enumerate(typ):
+                    print 'interaction #', ray[iidx], 'type:', i
+                    # f x l x 2 x 2
+                    print self.I.I[ifGHz, ray[iidx], :, :]
+                    if B:
+                        print 'rotation matrix#',[ray[iidx]], 'type: B'
+                        print self.B.data[ray[iidx], :, :]
+            else:
+                print '\nto display matrix, use matrix=True on call'
         else:
             print 'Rays have not been evaluated yet'
 
