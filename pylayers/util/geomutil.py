@@ -2340,7 +2340,7 @@ def angular(p1, p2):
     p1
         point p1
     p2
-        point p2
+        point p2 origin
 
     Notes
     -----
@@ -2371,6 +2371,7 @@ def angular(p1, p2):
 
 
     """
+    print DeprecationWarning('DEPRECATION WARNING : geomutil.angular going deprecatd  because wrong')
     if p1[0] < p2[0] and p1[1] < p2[1]:
         angle = np.arctan2((p2[1] - p1[1]), (p2[0] - p1[0])) + np.pi
     elif p1[0] > p2[0] and p1[1] < p2[1]:
@@ -2381,6 +2382,40 @@ def angular(p1, p2):
         angle = np.arctan2((p2[1] - p1[1]), (p2[0] - p1[0])) + np.pi
 
     return(angle)
+
+
+
+def vecang(v1,v2):
+    """ angle between v1 and v2 , result in [0,2*pi]
+
+    Parameters
+    ----------
+    v1 : np.array (3 x Np)
+        vector
+    v2 : np.array (3 x Np)
+        vector
+    Returns
+    -------
+
+    alpha : np.array (3 x Np)
+        radians
+
+
+    """
+    if len(v1.shape) == 1:
+        v1=v1.reshape(v1.shape[0],1)
+    if len(v2.shape) == 1:
+        v2=v2.reshape(v2.shape[0],1)
+
+
+    ang =np.arctan2(v2[1,:], v2[0,:]) - np.arctan2(v1[1,:], v1[0,:])
+    uneg = np.where(ang <0)[0]
+    ang[uneg]= 2*np.pi+ ang[uneg]
+    return ang
+    # if ang <0 :
+    #     return (2*np.pi+ang)
+    # else :
+    #     return ang
 
 
 def SignedArea(p=np.array([[0, 10, 10, 0], [0, 0, -2, -2]])):
@@ -3925,7 +3960,68 @@ def valid_wedge(ps, pw, p1, p2, grazing):
     return(valid)
 
 
+
+
 def sector(p1, p2, pt):
+    """ non signed angular sector  between
+        (p1,pt) and (p2,pt)
+
+    p1 x-----------x pt
+               |  /
+          alpha \/
+                /
+               x p2
+
+    Parameters
+    ----------
+    p1 : np.array (3 x Np)
+        point
+    p2 : np.array (3 x Np)
+        point
+    pt : np.array (3 x Np)
+        point
+
+    Returns
+    -------
+
+    alpha : np.array (3 x Np)
+        degree
+
+    Notes
+    -----
+
+    Useful for AAS calculation
+
+
+    """
+
+    if len(p1.shape) == 1:
+        p1=p1.reshape(p1.shape[0],1)
+    if len(p2.shape) == 1:
+        p2=p2.reshape(p2.shape[0],1)
+    if len(pt.shape) == 1:
+        pt=pt.reshape(pt.shape[0],1)
+    p1pt = p1 - pt
+    p2pt = p2 - pt
+    u = p1pt / np.sqrt(np.sum((p1pt)*(p1pt),axis=0))
+    v = p2pt / np.sqrt(np.sum((p2pt)*(p2pt),axis=0))
+    # sum(a[i,j,:] * b[k,:,m])
+    alpha = np.arctan2(u[1], u[0])
+    beta = np.arctan2(v[1], v[0])
+    v0 = abs(alpha - beta)
+    v1 = 2 * np.pi - abs(alpha - beta)
+    um0 = v0 < v1
+    um1 = ~um0
+    sector = np.empty(np.shape(u)[1])
+    sector[um0]= v0[um0]
+    sector[um1]= v1[um1]
+    return sector*180/np.pi
+    #if (abs(alpha + sector - sp.mod(beta, 2 * np.pi)) < 1e-3):
+    #    return(np.array([alpha, beta]) * 180 / np.pi)
+    #else:
+    #    return(np.array([beta, alpha]) * 180 / np.pi)
+
+def sectorold(p1, p2, pt):
     """ angular sector  p1 pt p2
 
     Parameters
@@ -3940,7 +4036,7 @@ def sector(p1, p2, pt):
     Returns
     -------
 
-    alpha, beta : np.array
+    alpha : np.array
         degree
 
     Notes
@@ -3956,10 +4052,6 @@ def sector(p1, p2, pt):
     beta = np.arctan2(v[1], v[0])
     sector = min(abs(alpha - beta), 2 * np.pi - abs(alpha - beta))
     return sector*180/np.pi
-    #if (abs(alpha + sector - sp.mod(beta, 2 * np.pi)) < 1e-3):
-    #    return(np.array([alpha, beta]) * 180 / np.pi)
-    #else:
-    #    return(np.array([beta, alpha]) * 180 / np.pi)
 
 
 def dist(x,y,ax):

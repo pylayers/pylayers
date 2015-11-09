@@ -150,6 +150,14 @@ L.ax is  :  (xmin,xmax,ymin,ymax)
 ```
 
 ```python
+=======
+```python
+>>> L.ax
+(758.49, 768.516, 1111.9, 1115.963)
+```
+
+```python
+>>>>>>> master
 >>> L.build()
 ```
 

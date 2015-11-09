@@ -35,3 +35,9 @@ nosetests.xml
 *.o
 doc/_build
 pylayers.egg-info/
+
+# added by GitSavvy
+/pylayers/simul/link.py
+
+# added by GitSavvy
+/pylayers/simul/link.py

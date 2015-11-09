@@ -1414,7 +1414,7 @@ class Scanner(PyLayers):
             laxes.append('y')
         if A.N[2]!=1:
             laxes.append('z')
-        lN =  [ A.N[k] for  k  in range(3) if A.N[k]!=1 ] 
+        lN =  [ A.N[k] for  k  in range(3) if A.N[k]!=1 ]
         Nf = vna.Nf
 
         Dh5.open('a')

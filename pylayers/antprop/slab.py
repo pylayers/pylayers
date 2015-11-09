@@ -636,7 +636,8 @@ class MatInterface(Interface):
         #if not isinstance(theta,np.ndarray):
         # theta=np.array([theta])
         name = '|'.join(mat['name'] for mat in lmat)
-        Interface.__init__(self, fGHz, theta, name=name)
+        # Interface.__init__(self, fGHz, theta, name=name)
+        super(MatInterface,self).__init__(fGHz, theta, name=name)
         self.m1 = lmat[0]
         self.m2 = lmat[1]
         # 2*np.pi* f(GHz)*eps0 = f(Ghz)/18
@@ -1299,7 +1300,7 @@ class MatDB(PyLayers,dict):
         fo.close()
 
 
-class Slab(dict,Interface):
+class Slab(Interface,dict):
     """ Handle a Slab
 
     Summary
@@ -1345,6 +1346,7 @@ class Slab(dict,Interface):
 
         """
         # if not specified choose default material database
+        #super(Slab,self).__init__()
         Interface.__init__(self)
         if mat==[]:
             self.mat = MatDB()
@@ -1572,6 +1574,7 @@ class Slab(dict,Interface):
         name1 = '|'.join(mat['name'] for mat in self['lmat'])
         name2 = '|'.join(str(thick) for thick in self['lthick'])
         name = '(' + name1 + ')' + '(' + name2 + ')'
+        #super(Slab,self).__init__(fGHz=fGHz, theta=theta, name=name)
         Interface.__init__(self, fGHz, theta, name=name)
         #self.lmat = lmat
         #self.lthick = lthick
@@ -2442,6 +2445,122 @@ class SlabDB(dict):
 # self.save(f2)
 
 
+
+
+
+# class Wedge(Interface,dict):
+#     """ Handle a Wedge
+
+#     Summary
+#     -------
+
+#     A Wedge is a cone with, on its 2 faces :
+
+#     - a Material/Slab s0
+#     - a Material/slab sn
+
+
+#     Attributes
+#     ----------
+
+
+#     mat : MatDB
+#         Associated Material Database 
+
+#     s0 : string | Mat | Slab
+#         Material name | Material | Slab on face 0
+#     sn : string | Mat | Slab
+#         Material name | Material | Slab on face n
+ 
+
+#     evaluated : Boolean
+
+#     """
+#     def __init__(self, mat=[], s0='WOOD', sn='WOOD',alpha=np.array([])):
+#         """ class constructor
+
+#         Parameters
+#         ----------
+
+#         mat :
+#         name : string
+#         Wedge name
+
+
+#         Example
+#         -------
+#         >>> from pylayers.antprop.slab import *
+#         >>> SDB=SlabDB()
+#         >>> s0 = SDB['3D_WINDOW_GLASS']
+#         >>> sn = SDB['PARTITION']
+#         >>> W=Wedge(s0=s0,sn=sn)
+        
+#         """
+#         # if not specified choose default material database
+
+#         super(Wedge,self).__init__()
+
+#         if mat==[]:
+#             self.mat = MatDB()
+#         else:
+#             self.mat = mat
+
+
+#         # slab 0 is a string name
+#         if isinstance(s0,str):
+#             self['name0']= s0
+#             try:
+#                 self['mat0']=self.mat[s0]
+#             except:
+#                 raise AttributeError('s0 is not a material from MatDB')
+#         else: 
+#             if isinstance(s0,Mat):
+#                 self['mat0']=s0
+#                 self['name0']=s0['name']
+#             elif isinstance(s0,Slab):
+#                 self['mat0']=s0['lmat'][0]
+#                 self['name0']=s0['lmatname'][0]
+
+#         # slab n is a string name
+#         if isinstance(sn,str):
+#             self['namen']= sn
+#             try:
+#                 self['matn']=self.mat[sn]
+#             except:
+#                 raise AttributeError('sn is not a material from MatDB')
+#         else: 
+#             if isinstance(sn,Mat):
+#                 self['matn']=sn
+#                 self['namen']=sn['name']
+#             elif isinstance(sn,Slab):
+#                 self['matn']=sn['lmat'][0]
+#                 self['namen']=sn['lmatname'][0]
+#         self['color'] = 'black'
+#         self['linewidth'] = 1.0
+#         self['evaluated'] = False
+#         self['alpha']=alpha
+#         self['N']=alpha/np.pi
+
+
+#     # def phi0phin(self,u0,si,so):
+#     #     """
+#     #     Compute angle phi_0 and phi_nfrom face 0 regarding
+#     #     to unit vectors u0 and un along face 0 and n respectively
+
+#     #     Attributes
+#     #     ----------
+
+#     #     u0 : ndarray (2|3xNp)
+#     #         unit vector along Np faces 0
+#     #     si : ndarray (2|3x)
+#     #         unit vector along incidence ray
+#     #     un : ndarray (2|3xNp)
+#     #         unit vector along Np faces n
+#     #     """
+
+#     #     geu.
+
+
 def calsig(cval, fGHz, typ='epsr'):
     """ evaluate sigma from epsr or index at a given frequency
 
@@ -2480,6 +2599,8 @@ def calsig(cval, fGHz, typ='epsr'):
     delta = (0.3 / (2 * np.pi * fGHz * n2))
 
     return(epr1, sigma, delta)
+
+
 
 
 if (__name__ == "__main__"):
