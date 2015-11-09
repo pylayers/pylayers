@@ -3959,7 +3959,57 @@ def valid_wedge(ps, pw, p1, p2, grazing):
 
     return(valid)
 
+def agwed(v,lwe):
+    """
 
+    Parameters:
+    -----------
+    lwe : np.array
+        3x1 wedge vector
+    v   : np.array(3x4)
+        3x4 ( 4 stacked vectors)
+
+        first vector of v is on face 0 perp to lwe
+        second vector of v is on face n perp to lwe
+        third vector is on the direction of incident ray  (-si)
+        fourth vector is on the direction of diffracted ray (sd)
+
+    all vectors of v are defined outgoing from the diffracting point
+
+    Returns
+    -------
+        np.array([N*pi,phi0,phi])
+
+
+    Example
+    -------
+
+    >>> import numpy as np
+    >>> lwe = np.array([0,0,1])
+    >>> u = np.array([1,0,0])
+    >>> v1 = np.array([1,1,0])
+    >>> si = np.array([-1,-1,0])
+    >>> sd = np.array([-1,1,0])
+    >>> v  = np.vstack([u,v1,si,sd]).T
+    >>> M = agwed(v,lwe)
+    >>> print M*180/np.pi
+    [ 315.  135.  225.]
+
+    """
+    # lwe : (,3)
+    lwe = lwe/np.sqrt(np.sum(lwe*lwe,axis=0))
+    # v : (3,4)
+    v  = v/np.sqrt(np.sum(v*v,axis=0))
+    # ps (,4)
+    ps  = np.dot(lwe,v)
+    vp1  = v - v*ps
+    vpn = vp1/np.sqrt(np.sum(vp1*vp1,axis=0))
+    vpt  = vpn[0:2,:].T
+    w = np.vstack((vpt[:,1],-vpt[:,0]))
+    C = np.dot(vpt,w)
+    D = np.dot(vpt,vpt.T)
+    M = np.mod(2*np.pi-np.arctan2(np.dot(vpt,w),np.dot(vpt,vpt.T)),2*np.pi)[0,1:]
+    return M
 
 
 def sector(p1, p2, pt):
