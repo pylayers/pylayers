@@ -4054,7 +4054,8 @@ def agwed(v,lwe):
        [ 225.,   45.]])
 
     """
-
+    import ipdb
+    ipdb.set_trace()
     # lwe : (3,N)
     lwe = lwe/np.sqrt(np.sum(lwe*lwe,axis=0))
     # v : (3,4,N)
