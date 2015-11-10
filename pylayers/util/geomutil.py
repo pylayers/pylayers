@@ -3959,7 +3959,7 @@ def valid_wedge(ps, pw, p1, p2, grazing):
 
     return(valid)
 
-def agwed(v,lwe):
+def agwed_old(v,lwe):
     """
 
     Parameters:
@@ -3985,17 +3985,19 @@ def agwed(v,lwe):
     -------
 
     >>> import numpy as np
+    >>> import pylayers.util.geomutil as geu
     >>> lwe = np.array([0,0,1])
     >>> u = np.array([1,0,0])
     >>> v1 = np.array([1,1,0])
     >>> si = np.array([-1,-1,0])
     >>> sd = np.array([-1,1,0])
     >>> v  = np.vstack([u,v1,si,sd]).T
-    >>> M = agwed(v,lwe)
+    >>> M = geu.agwed(v,lwe)
     >>> print M*180/np.pi
     [ 315.  135.  225.]
 
     """
+    print DeprecationWarning('Please use vectorized version : agwed')
     # lwe : (,3)
     lwe = lwe/np.sqrt(np.sum(lwe*lwe,axis=0))
     # v : (3,4)
@@ -4011,6 +4013,73 @@ def agwed(v,lwe):
     M = np.mod(2*np.pi-np.arctan2(np.dot(vpt,w),np.dot(vpt,vpt.T)),2*np.pi)[0,1:]
     return M
 
+def agwed(v,lwe):
+    """
+
+    Parameters:
+    -----------
+    lwe : np.array
+        3xNp wedge vector
+    v   : np.array(3x4xNp)
+        3x4xNp ( 4 stacked vectors)
+
+        first vector of v is on face 0 perp to lwe
+        second vector of v is on face n perp to lwe
+        third vector is on the direction of incident ray  (-si)
+        fourth vector is on the direction of diffracted ray (sd)
+
+    all vectors of v are defined outgoing from the diffracting point
+
+    Returns
+    -------
+        np.array([[N*pi,phi0,phi],...xNp])
+                (3xNp)
+
+
+    Example
+    -------
+
+    >>> import pylayers.util.geomutil as geu
+    >>> import numpy as np
+    >>> lwe = np.array([[0,0,1],[0,0,1]]).T
+    >>> u = np.array([[1,0,0],[1,0,0]]).T
+    >>> v1 = np.array([[1,1,0],[1,1,0]]).T
+    >>> si = np.array([[-1,-1,0],[-1,1,0]]).T
+    >>> sd = np.array([[-1,1,0],[1,-1,0]]).T
+    >>> v  = np.hstack((u[:,None,:],v1[:,None,:],si[:,None,:],sd[:,None,:]))
+    >>> M = geu.agwed(v,lwe)
+    >>> print M*180/np.pi
+    array([[ 315.,  315.],
+       [ 135.,  225.],
+       [ 225.,   45.]])
+
+    """
+
+    # lwe : (3,N)
+    lwe = lwe/np.sqrt(np.sum(lwe*lwe,axis=0))
+    # v : (3,4,N)
+    v  = v/np.sqrt(np.sum(v*v,axis=0))
+    # ps (4,N)
+    #ps  = np.dot(lwe,v)
+    ps = np.einsum('ik,ijk->jk',lwe,v)
+    vp1  = v - v*ps
+    vpn = vp1/np.sqrt(np.sum(vp1*vp1,axis=0))
+    # vpt = (N,4,2)
+    vpt  = vpn[0:2,:,:]
+
+    # w(4,N,2)
+    w = np.dstack((vpt[1,:,:].T,-vpt[0,:,:].T)).T
+    # C = np.dot(vpt,w)
+    # D = np.dot(vpt,vpt.T)
+
+    #vpt(2,4,N) x w(2,4,N) => C(4,4,N)
+    C = np.einsum('kil,kjl->ijl',vpt,w)
+    # D(4,4,N)
+    D = np.einsum('kil,kjl->ijl',vpt,vpt)
+
+    #M = np.mod(2*np.pi-np.arctan2(np.dot(vpt,w),np.dot(vpt,vpt.T)),2*np.pi)[0,1:]
+    M = np.mod(2*np.pi-np.arctan2(C,D),2*np.pi)[0,1:,:]
+    return M
 
 def sector(p1, p2, pt):
     """ non signed angular sector  between
