@@ -3940,13 +3940,12 @@ maicher
         if b ==[]:
             b = ant.Antenna('Omni',param={'pol':'t','GmaxdB':0},fGHz=self.fGHz)
 
-
         a.eval(th=self.tangl[:, 0], ph=self.tangl[:, 1], grid=False)
         Fat = bs.FUsignal(a.fGHz, a.Ft)
         Fap = bs.FUsignal(a.fGHz, a.Fp)
         b.eval(th=self.rangl[:, 0], ph=self.rangl[:, 1], grid=False)
-        Fbt = bs.FUsignal(a.fGHz, b.Ft)
-        Fbp = bs.FUsignal(a.fGHz, b.Fp)
+        Fbt = bs.FUsignal(b.fGHz, b.Ft)
+        Fbp = bs.FUsignal(b.fGHz, b.Fp)
 
         # Cg2cl should be applied here
         #
@@ -3958,7 +3957,6 @@ maicher
         #  Fb = 2 x r x f
         #
         #  (r x f ) (r x Nt x f )
-
         t1 = self.Ctt * Fat + self.Ctp * Fap
         t2 = self.Cpt * Fat + self.Cpp * Fap
 

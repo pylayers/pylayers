@@ -1672,20 +1672,6 @@ class Rays(PyLayers,dict):
 
                     self[k]['diffvect']=np.array((phi0,phi,beta,alpha_w))
 
-                    import ipdb
-                    ipdb.set_trace()
-                    vptpb = pt-pb
-                    vptpbn = vptpb.T / np.sqrt(np.sum((vptpb)*(vptpb),axis=1))
-                    Z=np.zeros(vptpb.shape[0])
-                    vptpan = np.vstack((vptpan,Z))
-                    vptpbn = np.vstack((vptpbn,Z))
-                    import ipdb
-                    ipdb.set_trace()
-                    X=np.hstack((vptpan[:,None,:],vptpbn[:,None,:],sid[:,None,:],-sod[:,None,:]))
-                    geu.agwed(X,vnormz)
-
-                    
-
                     ######
                     # Bi diffract
                     #####
