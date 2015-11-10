@@ -26,7 +26,7 @@ Module to drive the network analyzer E5072A
 Adapted from  mclib by Thomas Schmid (http://github.com/tschmid/mclib)
 Enhanced by M.D.BALDE and B.UGUEN
 
-.. currentmodule:: pylayers.measures.vna.E4972A
+.. currentmodule:: pylayers.measures.vna.E5072A
 
 .. autosummary::
     :toctree: generated
