@@ -63,12 +63,18 @@ r3d2.fillinter(S.L)
 C2=r3d2.eval(fGHz)
 #####C2.sort()
 sc2=C2.prop2tran()
+chw = sc2.apply(wav.sfg)
+cir = chw.ift(Nz=500,ffts=1)
+plt.imshow(cir.y[:,0,0,:],interpolation='nearest')
+plt.axis('auto')
 cir2 = sc2.applywavB(wav.sfg)
 ######
 ######print r3d1[2]['sig'][:,:,0]
 ######print r3d2[2]['sig'][:,:,1]
 ######
 ######
-r3d1.check_reciprocity(r3d2)
-C1.check_reciprocity(C2)
-plt.plot(cir1.x,cir1.y,'b',cir2.x,cir2.y,'r')
+#r3d1.check_reciprocity(r3d2)
+#C1.check_reciprocity(C2)
+plt.figure()
+plt.plot(cir1.x,cir1.y[0,0,:],'b',cir2.x,cir2.y[0,0,:],'r')
+plt.axis('auto')
