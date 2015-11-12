@@ -33,32 +33,8 @@ Pylayers is distributed in the hope that it will be useful, but WITHOUT ANY WARR
 
 ## Installation Notes
 
-### Linux / OS X
+See the [Install Page](https://github.com/pylayers/pylayers/blob/master/INSTALL.md)
 
-The prefer way to install PyLayers is to first install the free python distribution [Anaconda](https://store.continuum.io/cshop/anaconda/) on your platform. 
-By doing so, you're installing most of the required dependencies.
-
-1. Download [Anaconda](https://store.continuum.io/cshop/anaconda/)
-2. Install Anaconda with the given command ( $bash Anaconda-<version>-<plateform>.sh ). 
-Important : Say yes to add Anaconda to your path
-3. Clone PyLayers : **git clone https://github.com/pylayers/pylayers.git**
-4. Run "./installer_unix" file from the PyLayers directory (YOUR FIRST NEED to add exe rights using the command: chmod +x ./installer_unix )
-5. Done
-
-### Windows Install
-
-
-1. Download and Install [Anaconda](https://store.continuum.io/cshop/anaconda/) 
-2. Download the Shapely package corresponding to your platform from 
-[Unofficial Windows Binaries for Python Extension Packages #Shapely](http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely) *
-3. Download the Basemap package corresponding to your platform from [Unofficial Windows Binaries for Python Extension Packages #Basemap](http://www.lfd.uci.edu/~gohlke/pythonlibs/#basemap)
-4. Install Shapely and Basemap using the downloaded files
-5. 3. Clone PyLayers : **git clone https://github.com/pylayers/pylayers.git**
-6. Run installer.bat
-7. Done
-
-
-* Despite shapely is part of the Anaconda distribution, the Windows distribution doesn't contains the libgeos dependencies.
 
 ## First Run
 
