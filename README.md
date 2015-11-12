@@ -68,7 +68,7 @@ Important : Say yes to add Anaconda to your path
 >>> DL.eval()
 >>> DL._show3()
 ```
-<img src="https://github.com/pylayers/pylayers/blob/master/doc/_static/_show3.png" width="150">
+<img src="https://github.com/pylayers/pylayers/blob/master/doc/_static/_show3.png" width="300">
 
 ## Troubleshooting
 
