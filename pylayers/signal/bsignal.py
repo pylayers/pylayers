@@ -848,7 +848,6 @@ class Bsignal(PyLayers):
             x = self.x[u]
 
         ndim = self.y.ndim
-
         #
         # if ndim(y) > 1
         #
@@ -3058,6 +3057,8 @@ class FUsignal(FBsignal,Usignal):
         """
         f = self.x
         df = self.dx()
+        if df == 0:
+            df = 1.
         U = self.y[:]
         N = len(f)
         Nl = np.int(np.ceil(f[0] / df))

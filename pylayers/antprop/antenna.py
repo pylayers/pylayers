@@ -300,11 +300,11 @@ class Pattern(PyLayers):
         G    = pow(10.,self.GmaxdB/10.) # linear gain
         if self.grid:
             # Nth x Nph x Nf
-            self.sqG  = np.array(np.sqrt(G))[None,None,None]
+            self.sqG  = np.array(np.sqrt(G))*np.ones(len(self.fGHz))[None,None,:]
             self.evaluated = True
         else:
             # Nd x Nf
-            self.sqG =  np.array(np.sqrt(G))[None,None]
+            self.sqG =  np.array(np.sqrt(G))*np.ones(len(self.fGHz))[None,:]
         self.radF()
 
     def __pGauss(self,**kwargs):
@@ -846,15 +846,15 @@ class Pattern(PyLayers):
         if self.pol=='p':
             self.Fp = self.sqG
             if len(self.sqG.shape)==3:
-                self.Ft = np.array([0])[:,None,None]
+                self.Ft = np.array([0])*np.ones(len(self.fGHz))[None,None,:]
             else:
-                self.Ft = np.array([0])[:,None]
+                self.Ft = np.array([0])*np.ones(len(self.fGHz))[None,:]
 
         if self.pol=='t':
             if len(self.sqG.shape)==3:
-                self.Fp = np.array([0])[:,None,None]
+                self.Fp = np.array([0])*np.ones(len(self.fGHz))[None,None,:]
             else:
-                self.Fp = np.array([0])[:,None]
+                self.Fp = np.array([0])*np.ones(len(self.fGHz))[None,:]
             self.Ft = self.sqG
         if self.pol=='c':
             self.Fp = (1./sqrt(2))*self.sqG
@@ -2117,8 +2117,15 @@ class Antenna(Pattern):
         else :
             f=mlab.gcf()
 
+        if kwargs.has_key('opacity'):
+            opacity = kwargs['opacity']
+        else: 
+            opacity = 1
 
-        self._mayamesh = mlab.mesh(x, y, z,scalars= scalar,resolution = 1)
+        self._mayamesh = mlab.mesh(x, y, z,
+                                   scalars= scalar,
+                                   resolution = 1,
+                                   opacity = opacity)
 
         if name == []:
             f.children[-1].name = 'Antenna ' + self._filename
@@ -2211,7 +2218,8 @@ class Antenna(Pattern):
         x = r * np.sin(th) * np.cos(phi)
         y = r * np.sin(th) * np.sin(phi)
         z = r * np.cos(th)
-
+        if z.shape[1] != y.shape[1]:
+            z = z*np.ones(y.shape[1])
         p = np.concatenate((x[...,None],
                             y[...,None],
                             z[...,None]),axis=2)

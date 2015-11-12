@@ -423,7 +423,7 @@ class Layout(PyLayers):
         st = '\n'
         st = st + "----------------\n"
         st = st + self.filename + "\n"
-        if self.display['fileoverlay']<>'':
+        if self.display['fileoverlay']!='':
             filename = pyu.getlong(self.display['fileoverlay'],os.path.join('struc','images'))
             st = st + "Image('"+filename+"')\n"
         st = st + "----------------\n\n"
@@ -462,7 +462,11 @@ class Layout(PyLayers):
         if hasattr(self,'isss'):
             st = st + "isss :  sub-segment index above Nsmax"+"\n"
         if hasattr(self,'tgs'):
-            st = st + "tgs : get segment index in tahe from Gs" +"\n"
+            st = st + "tgs : get segment index in tahe from self.Gs" +"\n"
+        if hasattr(self,'upnt'):
+            st = st + "upnt : get point id index from self.pt"+"\n"
+        if hasattr(self,'iupnt'):
+            st = st + "iupnt : get point index in self.pt from point id  "+"\n"
         if hasattr(self,'lsss'):
             st = st + "lsss : list of segments with sub-segment"+"\n"
         if hasattr(self,'sridess'):
@@ -739,7 +743,7 @@ class Layout(PyLayers):
         p   = np.vstack((x,y))
         d1  = p-np.roll(p,1,axis=1)
         sd1 = np.sum(np.abs(d1),axis=0)
-        if not sd1.all()<>0:
+        if not sd1.all()!=0:
            lu = np.where(sd1==0)[0]
 
            for u in lu:
@@ -2542,7 +2546,7 @@ class Layout(PyLayers):
             ln = list(ln)
 
         # test if list
-        if (type(lp) <> list):
+        if (type(lp) != list):
             lp = [lp]
 
         print "lp : ",lp
@@ -2584,7 +2588,7 @@ class Layout(PyLayers):
         if (type(le) == np.ndarray):
             le = list(le)
 
-        if (type(le) <> list):
+        if (type(le) != list):
             le = [le]
 
         for e in le:
@@ -2899,11 +2903,11 @@ class Layout(PyLayers):
 
         if ns in self.Gs.node.keys():
             if self.Gs.node[ns].has_key('ss_name'):
-                if ss_name<>[]:
+                if ss_name!=[]:
                     self.Gs.node[ns]['ss_name']=ss_name
-                if ss_z<>[]:
+                if ss_z!=[]:
                     self.Gs.node[ns]['ss_z']=ss_z
-                if ss_offset<>[]:
+                if ss_offset!=[]:
                     self.Gs.node[ns]['ss_offset']=ss_offset
                 else:
                     self.Gs.node[ns]['ss_offset']=[0]*len(ss_name)
@@ -2984,13 +2988,13 @@ class Layout(PyLayers):
                 pass
                 # data = {}
                 # val = '1'
-                # while(val<>'0'):
+                # while(val!='0'):
                 #     clear
                 #     print '0 : exit'
                 #     for e,(k,v) in enumerate(zip(de1k,de1v)):
                 #         print str(e+1)+ ' '+k+': '+  str(v)+'\n'
                 #     val = input('Your choice :')
-                #     if val<>'0':
+                #     if val!='0':
                 #         pass
             else:
                 for k in de1k:
@@ -4049,6 +4053,8 @@ class Layout(PyLayers):
         ptail =  self.pt[:,tahe[0,:]]
         phead = self.pt[:,tahe[1,:]]
         pth = np.vstack((ptail,phead))
+
+        pth = pth.reshape(pth.shape[0],pth.shape[-1])
         return pth
 
     def segpt(self, ptlist=np.array([0])):
@@ -4682,7 +4688,7 @@ class Layout(PyLayers):
         cold = pyu.coldict()
 
         # html color or string
-        if kwargs['color'][0]<>'#':
+        if kwargs['color'][0]!='#':
             clrlist.append(cold[kwargs['color']])
         else:
             if color=='#FFFFF0':
@@ -4771,7 +4777,7 @@ class Layout(PyLayers):
             if fGHz==[]:
                 color = slab['color']
             else:
-                if (name<>'METAL') & (name<>'METALIC'):
+                if (name!='METAL') & (name!='METALIC'):
                     color = slab.tocolor(fGHz)
                 else:
                     color = 'black'
@@ -4964,7 +4970,7 @@ class Layout(PyLayers):
                 image = Image.open(im)
                 imok =True
             else:
-                if self.display['fileoverlay']<>'':
+                if self.display['fileoverlay']!='':
                     image = Image.open(os.path.join(basename,pstruc['DIRIMAGE'],self.display['fileoverlay']))
                     imok =True
             if imok:
@@ -5037,7 +5043,7 @@ class Layout(PyLayers):
                 if kwargs['fGHz']==[]:
                     color = self.sl[k]['color']
                 else:
-                    if (k<>'METAL') & (k<>'METALIC'):
+                    if (k!='METAL') & (k!='METALIC'):
                         color = self.sl[k].tocolor(fGHz)
                         #color = 'red'
                     else:
@@ -5438,7 +5444,6 @@ class Layout(PyLayers):
         p2 = p1.difference(self.ma)
         boundary = geu.Polygon(p2)
         boundary.vnodes = self.ma.vnodes
-
         self.Gt.add_node(0,polyg=boundary)
         self.Gt.add_node(0,indoor=False,isopen=True)
         self.Gt.pos[0]=(self.ax[0],self.ax[2])
@@ -5589,7 +5594,7 @@ class Layout(PyLayers):
                     # Reflexion occurs on segment different
                     # from AIR and ABSORBENT  (segment number, cycle)
                     #
-                    if (name<>'AIR') & (name<>'ABSORBENT'):
+                    if (name!='AIR') & (name!='ABSORBENT'):
                         ListInteractions.append((inode, k))
                     #
                     # Transmission requires 2 cycles separated by a
@@ -5597,7 +5602,7 @@ class Layout(PyLayers):
                     #
                     # (segment number, cycle in , cycle out )
                     if len(cy) == 2:
-                        if (name<>'METAL') & (name<>'ABSORBENT'):
+                        if (name!='METAL') & (name!='ABSORBENT'):
                             ncy = list(cy.difference({k}))[0]
                             ListInteractions.append((inode, k, ncy))
                             ListInteractions.append((inode, ncy, k))
@@ -6362,7 +6367,7 @@ class Layout(PyLayers):
                 delta = nl / 10
                 # On AIR or ABSORBENT there is no reflection
                 # except if n is a subsegment
-                if ((name<>'AIR') & (name<>'ABSORBENT')) or (n in self.lsss):
+                if ((name!='AIR') & (name!='ABSORBENT')) or (n in self.lsss):
                     self.Gi.add_node((n,cy0))
                     self.Gi.add_node((n,cy1))
                     self.Gi.pos[(n, cy0)] = tuple(self.Gs.pos[n] + ln * delta)
@@ -6370,9 +6375,13 @@ class Layout(PyLayers):
 
                 # Through METAL or ABSORBENT there is no transmission
                 # except if n is a subsegment
-                if (name<>'METAL') & (name<>'ABSORBENT') or (n in self.lsss):
+                if (name!='METAL') & (name!='ABSORBENT') or (n in self.lsss):
                     self.Gi.add_node((n,cy0,cy1))
                     self.Gi.add_node((n,cy1,cy0))
+                    self.Gi.pos[(n, cy0, cy1)] = tuple(self.Gs.pos[n]+ln*delta/2.)
+                    self.Gi.pos[(n, cy1, cy0)] = tuple(self.Gs.pos[n]-ln*delta/2.)
+
+                else :
                     self.Gi.pos[(n, cy0, cy1)] = tuple(self.Gs.pos[n]+ln*delta/2.)
                     self.Gi.pos[(n, cy1, cy0)] = tuple(self.Gs.pos[n]-ln*delta/2.)
 
@@ -6928,7 +6937,7 @@ class Layout(PyLayers):
             False
         edges : boolean
             True
-        airwalls : boolean
+        airwalls | aw: boolean
             display airwalls (False)
         subseg: boolean
             display subsegments (False)
@@ -7050,6 +7059,7 @@ class Layout(PyLayers):
                     'edges': True,
                     'sllist':[],
                     'airwalls': False,
+                    'aw': [],
                     'subseg': False,
                     'slab': False,
                     'labels': False,
@@ -7075,6 +7085,8 @@ class Layout(PyLayers):
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
+        if kwargs['aw'] != []:
+            kwargs['airwalls']=kwargs['aw']
         # overriding first argument graph
         if 'graph' in kwargs:
             graph = kwargs['graph']
@@ -7166,8 +7178,8 @@ class Layout(PyLayers):
                 # filter out the 0 cycle
                 nodes = G.nodes()
                 edges = G.edges()
-                nodf = filter(lambda x : x<>0,nodes)
-                edf  = filter(lambda x: ((edges[x][0]<>0) & (edges[x][1]<>0)),np.arange(len(edges)))
+                nodf = filter(lambda x : x!=0,nodes)
+                edf  = filter(lambda x: ((edges[x][0]!=0) & (edges[x][1]!=0)),np.arange(len(edges)))
                 kwargs['nodelist']=nodf
                 kwargs['edgelist']=edf
             else :
@@ -7314,9 +7326,10 @@ class Layout(PyLayers):
                 if len(eval(inter))>0:
                     li.append(inter)
                     kwargs['edgelist'] = eval(inter)
-                    ndlist = map(lambda x: self.Gi.edges()[x][0],kwargs['edgelist'])+\
-                             map(lambda x: self.Gi.edges()[x][1],kwargs['edgelist'])
-
+                    # ndlist = map(lambda x: edges[x][0],kwargs['edgelist'])+\
+                    #          map(lambda x: edges[x][1],kwargs['edgelist'])
+                    ndlist = map(lambda x: edges[x][0],kwargs['edgelist'])+\
+                             map(lambda x: edges[x][1],kwargs['edgelist'])
                     # keep only unique interaction
                     unique = []
                     [unique.append(it) for it in ndlist if it not in unique]
@@ -7829,7 +7842,7 @@ class Layout(PyLayers):
             # the sequence of connected nodes
             #
             succ =[]
-            while dn.keys()<>[]:
+            while dn.keys()!=[]:
                 succ = succ+ dn.pop(r)
                 n = succ.pop()
                 if n in dn.keys():
@@ -7855,36 +7868,41 @@ class Layout(PyLayers):
         #  for all conected components
         #  example licy = [[22,78,5],[3,4]] 2 cycles are connected
         #
-
+        merge2c=[]
         for licy in connected:
             root = licy[0]      # pick the first cycle as root
             merged = [root]     # merged cycle is void
             tomerge = licy[-1:0:-1]  # pick the inverse remaining part as tomerge list
+            tomerg
             #for cy in tomerge: #
-            while tomerge<>[]:
+            while tomerge!=[]:
+
                 ncy = tomerge.pop()
                 #print "ncy = ",ncy
                 # testing cycle contiguity before merging
                 try:
-
                     croot = self.Gc.node[root]['cycle']
                 except:
                     import ipdb
                     ipdb.set_trace()
                 cy = self.Gc.node[ncy]['cycle']
                 flip,path = croot.intersect(cy)
-                if len(path) < 1:
-                    print licy
+
+                if len(path) < 1 and [root,ncy] not in merge2c:
+                    print tomerge,root,ncy,merge2c
                     tomerge.insert(0,ncy)
                 else:
+                    print 'merge' 
+                    import ipdb
+                    ipdb.set_trace()
                     neigh = nx.neighbors(self.Gc,ncy) # all neighbors of 5
                     self.Gc.node[root]['polyg']+=self.Gc.node[ncy]['polyg'] # here the merging
                     self.Gc.node[root]['cycle']+=self.Gc.node[ncy]['cycle'] # here the merging
                     merged.append(ncy)
-
+                    merge2c.append([root,ncy])
                     #print self.Gc.node[root]['polyg'].exterior.xy
                     for k in neigh:
-                        if k<> root:
+                        if k!= root:
                             self.Gc.add_edge(root,k)
 
             # keep track of merged convex cycles
@@ -7960,7 +7978,7 @@ class Layout(PyLayers):
         for n in self.Gr.nodes():
             self.Gr.node[n]['transition'] = []
         ltrans = self.listtransition
-        ldoors = filter(lambda x:self.Gs.node[x]['name']<>'AIR',ltrans)
+        ldoors = filter(lambda x:self.Gs.node[x]['name']!='AIR',ltrans)
 
         # Destroy cycles which have no doors
 
@@ -8017,7 +8035,7 @@ class Layout(PyLayers):
         # lairwalls : list of air walls
         lairwalls = filter(lambda x:self.Gs.node[x]['name']=='AIR',ltrans)
         # ldoors : list of doors segment number
-        ldoors = filter(lambda x:self.Gs.node[x]['name']<>'AIR',ltrans)
+        ldoors = filter(lambda x:self.Gs.node[x]['name']!='AIR',ltrans)
         #
         # For all cycles
         #
@@ -8101,7 +8119,7 @@ class Layout(PyLayers):
                 # Merge cycles which are separated by an airwall
                 if len(v) > 0:
                     for kv in v:
-                        ncy  = filter(lambda x : x <>k,self.Gs.node[kv]['ncycles'])[0]
+                        ncy  = filter(lambda x : x !=k,self.Gs.node[kv]['ncycles'])[0]
                         self.Gr.node[rcpt]['cycle'].append(ncy)
                 # increment room counter
                 rcpt += 1
@@ -8641,7 +8659,7 @@ class Layout(PyLayers):
         dikn = {}
         for i in self.Gs.node.keys():
             if i > 0:  # segment
-                if self.Gs.node[i]['name']<>'AIR':
+                if self.Gs.node[i]['name']!='AIR':
                     nebr = self.Gs.neighbors(i)
                     n1 = nebr[0]
                     n2 = nebr[1]
@@ -8808,7 +8826,7 @@ class Layout(PyLayers):
 
         for i in self.Gs.node.keys():
             if i > 0:  # segment
-                if self.Gs.node[i]['name']<>'AIR':
+                if self.Gs.node[i]['name']!='AIR':
                     nebr = self.Gs.neighbors(i)
                     n1 = nebr[0]
                     n2 = nebr[1]
@@ -9347,7 +9365,7 @@ class Layout(PyLayers):
         >>> L.boundary()
 
         """
-        if len(self.Gs.pos.values())<>0:
+        if len(self.Gs.pos.values())!=0:
             xmax = max(p[0] for p in self.Gs.pos.values())
             xmin = min(p[0] for p in self.Gs.pos.values())
             ymax = max(p[1] for p in self.Gs.pos.values())

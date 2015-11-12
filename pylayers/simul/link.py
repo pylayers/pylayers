@@ -346,17 +346,18 @@ class DLink(Link):
         defaults={ 'L':Layout(),
                    'a':np.array(()),
                    'b':np.array(()),
-                   'Aa':Antenna(),
-                   'Ab':Antenna(),
+                   'Aa':Antenna(typ='Omni'),
+                   'Ab':Antenna(typ='Omni'),
                    'Ta':np.eye(3),
                    'Tb':np.eye(3),
-                   'fGHz':np.linspace(2, 11, 181, endpoint=True),
+                   'fGHz':[],
                    'wav':wvf.Waveform(),
                    'cutoff':3,
                    'save_opt':['sig','ray','Ct','H'],
                    'save_idx':0,
                    'force_create':False,
-                   'verbose':True
+                   'verbose':True,
+                   'graph':'tcvirw'
                 }
 
         self._ca=-1
@@ -376,12 +377,19 @@ class DLink(Link):
                 else :
                     setattr(self,key,kwargs[key])
 
-
         force=self.force_create
         delattr(self,'force_create')
 
-        self._Lname = self._L.filename
+        if self.fGHz == []:
+            self.initfreq()
+        else :
+            pass
 
+        try:
+            self._Lname = self._L.filename
+        except:
+            self._L=Layout(self._L)
+            self._Lname = self._L.filename
 
         ###########
         # Transmitter and Receiver positions
@@ -420,7 +428,7 @@ class DLink(Link):
             self.L.dumpr()
         except:
             print('This is the first time the Layout is used. Graphs have to be built. Please Wait')
-            self.L.build()
+            self.L.build(graph=self.graph)
             self.L.dumpw()
         #self.L.build()
 
@@ -666,6 +674,33 @@ class DLink(Link):
             fcGHz = self.fGHz[0]
         L  = 32.4+20*np.log(d)+20*np.log10(fcGHz)
         return s
+
+
+    def initfreq(self):
+        """ Automatic freq determination from 
+            Antennas
+        """
+        fa = self.Aa.fGHz
+        fb = self.Ab.fGHz
+
+        # step
+        try:
+            sa = fa[1]-fa[0]
+        except: # single frequency
+            sa = fa[0]
+        try:
+            sb = fb[1]-fb[0]
+        except:
+            sb = fb[0]
+
+
+
+        minf = max(min(fa),min(fb))
+        maxf = min(max(fa),max(fb))
+
+        sf = min(sa,sb)
+        self.fGHz = np.arange(minf,maxf+sf,sf)
+
 
     def reset_config(self):
         """ reset configuration when a new layout is loaded
@@ -1143,8 +1178,9 @@ class DLink(Link):
             takes into consideration diffraction points
         ra_number_mirror_cf : int
             rays.to3D number of ceil/floor reflexions
-        ra_ceil_height_meter: float,
-            ceil height
+        ra_ceil_height_meter: float, (default [])
+            ceil height . 
+                If [] : Layout max ceil height 
         ra_vectorized: boolean (True)
             if True used the (2015 new) vectorized approach to determine 2drays
 
@@ -1200,7 +1236,7 @@ class DLink(Link):
                    'si_progress':False,
                    'diffraction':False,
                    'ra_vectorized':False,
-                   'ra_ceil_height_meter':3,
+                   'ra_ceil_height_meter':[],
                    'ra_number_mirror_cf':1,
                    'force':[],
                    'alg':7,
@@ -1227,7 +1263,6 @@ class DLink(Link):
         # must be placed after all the init !!!!
         print "checkh5"
         self.checkh5()
-
 
         ############
         # Signatures
@@ -1289,7 +1324,6 @@ class DLink(Link):
         print "Start Rays"
         tic = time.time()
         R = Rays(self.a,self.b)
-
         if self.dexist['ray']['exist'] and not ('ray' in kwargs['force']):
             self.load(R,self.dexist['ray']['grpname'])
 
@@ -1301,9 +1335,18 @@ class DLink(Link):
             # ... or with original and slow approach ( to be removed in a near future)
             else :
                 r2d = Si.rays(self.a,self.b)
-            R = r2d.to3D(self.L,H=self.L.maxheight, N=kwargs['ra_number_mirror_cf'])
+
+            if kwargs['ra_ceil_height_meter'] == []:
+                ceilheight = self.L.maxheight
+            else:
+                ceilheight = kwargs['ra_ceil_height_meter']
+
+            R = r2d.to3D(self.L,H=ceilheight, N=kwargs['ra_number_mirror_cf'])
             R.locbas(self.L)
             # ...and save
+            R.fillinter(self.L)
+            C=Ctilde()
+            C = R.eval(self.fGHz)
             self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])
 
         self.R = R
@@ -1317,15 +1360,15 @@ class DLink(Link):
         # Ctilde
         ############
 
-        C=Ctilde()
 
         if self.dexist['Ct']['exist'] and not ('Ct' in kwargs['force']):
+            C=Ctilde()
             self.load(C,self.dexist['Ct']['grpname'])
 
         else :
-            R.fillinter(self.L)
+            if not hasattr(R,'I'):
             # Ctilde...
-            C = R.eval(self.fGHz)
+                C = R.eval(self.fGHz)
             # ...save Ct
             self.save(C,'Ct',self.dexist['Ct']['grpname'],force = kwargs['force'])
 
@@ -1545,34 +1588,48 @@ class DLink(Link):
             ptx = self.tx.position
             prx = self.rx.position
 
-
-
         if ant :
-            Atx = self.tx.A
-            Arx = self.rx.A
+            Atx = self.Aa
+            Arx = self.Ab
             Ttx = self.tx.orientation
             Trx = self.rx.orientation
 
             # evaluate antenna if required
             if not Atx.evaluated:
-                Atx.Fsynth()
-            elif len(Atx.SqG.shape) == 2 :
-                Atx.Fsynth()
-
-            if not Arx.evaluated:
-                Arx.Fsynth()
-            elif len(Arx.SqG.shape) == 2 :
-                Arx.Fsynth()
-            Atx._show3(T=Ttx.reshape(3,3),po=ptx,
+                Atx.eval()
+            try:
+                Atx._show3(T=Ttx.reshape(3,3),po=ptx,
                 title=False,colorbar=False,newfig=False)
-            Arx._show3(T=Trx.reshape(3,3),po=prx,
+            except:
+                Atx.eval()
+                Atx._show3(T=Ttx.reshape(3,3),po=ptx,
+                title=False,colorbar=False,newfig=False)
+            if not Arx.evaluated:
+                Arx.eval()
+            try:
+                Arx._show3(T=Trx.reshape(3,3),po=prx,
+                title=False,colorbar=False,newfig=False,name = '')
+            except:
+                Arx.eval()
+                Arx._show3(T=Trx.reshape(3,3),po=prx,
                 title=False,colorbar=False,newfig=False,name = '')
 
         if lay:
             self.L._show3(newfig=False,opacity=0.7,centered=centered,**kwargs)
 
-
+        # mlab.text3d(self.a[0],self.a[1],self.a[2],'a',
+        #             scale=1,
+        #             color=(1,0,0))
+        # mlab.text3d(self.b[0],self.b[1],self.b[2],'b',
+        #             scale=1,
+        #             color=(1,0,0))
         if rays :
+            # check rays with energy
+            # if hasattr(self,'H') and not kwargs.has_key('rlist'):
+            #     urays = np.where(self.H.y!=0)[0]
+            #     kwargs['rlist']=urays
+            #     import ipdb
+            #     ipdb.set_trace()
             try:
                 self.R._show3(**kwargs)
             except:

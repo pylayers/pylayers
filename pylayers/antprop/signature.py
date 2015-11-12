@@ -1320,6 +1320,7 @@ class Signatures(PyLayers,dict):
                     path = visited + [target]
                     # M = np.zeros((1,NGs),dtype='bool')
                     out = [i[0] for i in G[visited[-1]][target]['output'].keys()]
+                        
 
                     if Mmap !=[]:
                         M[Mmap[path[-2][0]],Mmap[path[-1][0]],Mmap[out]]=True
@@ -1729,6 +1730,11 @@ class Signatures(PyLayers,dict):
         >>> DL.Cb=13
         >>> DL.eval(force=['sig','ray','Ct','H'],alg=2015,si_reverb=3,cutoff=2,ra_vectorized=True)
 
+        Notes
+        -----
+
+        This function makes use of graph Gc. Graph of meged cycles.
+
         """
         if source == -1:
             source = self.source
@@ -1786,11 +1792,13 @@ class Signatures(PyLayers,dict):
 
                 #for each reverb/diffract interaction,
                 # inside 1st cycle, search the output interactions
-
+                
                 for o in voutT:
                     io={}
                     for i in vinT:
                         io = self.propaths2015_2(sGi,i,o,dout=io,M=M,cutoff=cutoffbound)
+
+
                     di[0,0,0,o[0],o[1],o[2]] = io
                     # add direct signature
                     di[0,0,0,o[0],o[1],o[2]][1]=np.array([o[0],len(o)],ndmin=3)
@@ -2097,7 +2105,7 @@ class Signatures(PyLayers,dict):
         ###
         ### Find interactions per cycles
         ###
-        
+
         def dido(cy,lcy):
             """ Difraction In Diffraction Out
                 determine, for merged cycles, which diffrxtion
@@ -2121,7 +2129,6 @@ class Signatures(PyLayers,dict):
             """
             if not isinstance(lcy,list):
                 lcy=[lcy]
-
             outR,outT,D = self.L.intercyGc2Gt(cy,typ='source')
             # keep diff points
             D=np.unique(D)
@@ -2153,6 +2160,7 @@ class Signatures(PyLayers,dict):
                 else :
                     insideD.append((d,))
             return insideD,inD,outD,ddin,ddout
+        ##### END dido
 
         for icy,cy in enumerate(lcil):
 
@@ -2318,7 +2326,6 @@ class Signatures(PyLayers,dict):
         adio = adi[:,3:]
         out=[]
         lsig={}
-
         #initialize loop on the 1st interaction id(0,0,0,X,X,X)
 
         # uinit = np.unique(np.where(adi[:,:3]==0)[0])
@@ -2550,6 +2557,7 @@ class Signatures(PyLayers,dict):
                 lca.extend(self.L.dca[cy])
             except:
                 pass
+
         metasig = metasig + lca
         metasig = list(np.unique(np.array(metasig)))
 

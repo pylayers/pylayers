@@ -16,10 +16,11 @@ pylayers/antprop/channel.py
 pylayers/antprop/channelc.py
 pylayers/antprop/coeffModel.py
 pylayers/antprop/coverage.py
+pylayers/antprop/diff.py
+pylayers/antprop/diffRT.py
 pylayers/antprop/diffraction.py
 pylayers/antprop/interactions.py
 pylayers/antprop/loss.py
-pylayers/antprop/new.py
 pylayers/antprop/rays.py
 pylayers/antprop/raysc.py
 pylayers/antprop/signature.py
@@ -102,6 +103,7 @@ pylayers/measures/bodycheck.py
 pylayers/measures/check_CorSer.py
 pylayers/measures/cormoran.py
 pylayers/measures/easyRadio.py
+pylayers/measures/exploith5.py
 pylayers/measures/mesmimo.py
 pylayers/measures/mesuwb.py
 pylayers/measures/test_align.py

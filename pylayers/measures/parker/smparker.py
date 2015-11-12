@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from pylayers.util.project import *
 from pylayers.antprop.aarray import *
+from pylayers.measures.exploith5 import *
 from pylayers.measures.vna.E5072A import *
 
 def gettty():
@@ -352,35 +353,21 @@ class Axes(PyLayers):
         st = st + 'scale : ' + str(self.scale) + '\n'
         st = st + 'typ : ' + str(self.typ) + '\n'
 
+        st  = st + '---------------------\n'
         st1 = self.reg()
-        st =  st + st1
+        st  =  st + st1
+        st  = st + '---------------------\n'
 
         if self.typ=='t':
             st =  st + 'dist : '+str(self.dist)+' m\n'
             st =  st + 'vel  : '+str(self.vel)+' rps\n'
             st =  st + 'acc  : '+str(self.acc)+' rps2\n'
 
-            if self.typ=='r':
-                st =  st + 'ang (deg) : '+str(self.ang)+' \n'
-                st =  st + 'vel  : '+str(self.vel)+' rps\n'
-                st =  st + 'acc  : '+str(self.acc)+' rps2\n'
-        for k in enumerate(str(self._id)):
-            st = st + '---------------------\n'
-            st = st + ' Status '+' '+'Axe '+str(k[0]+1)+ '\n'
-            st = st + '---------------------\n'
-            st1 = self.reg()
-            st =  st + st1
-
-            if self.typ=='t':
-                st =  st + 'dist : '+str(self.dist)+' m\n'
-                st =  st + 'vel  : '+str(self.vel)+' rps\n'
-                st =  st + 'acc  : '+str(self.acc)+' rps2\n'
-
-            if self.typ=='r':
-                st =  st + 'ang (deg) : '+str(self.ang)+' \n'
-                st =  st + 'vel  : '+str(self.vel)+' rps\n'
-                st =  st + 'acc  : '+str(self.acc)+' rps2\n'
-
+        if self.typ=='r':
+            st =  st + 'ang (deg) : '+str(self.ang)+' \n'
+            st =  st + 'vel       : '+str(self.vel)+' rps\n'
+            st =  st + 'acc       : '+str(self.acc)+' rps2\n'
+        
         for k,p in enumerate(self.lprofile):
             st = st + '--------------------\n'
             st = st + ' Profile '+str(k+1)+ '\n'
@@ -465,7 +452,19 @@ class Axes(PyLayers):
         Parameters
         ----------
 
-        cmd  :  'get', 'set'
+        cmd   :  'get'|'set'
+        mask  : int
+            0 : Enable limits (default setting)
+            1 : Disable limit +
+            2 : Disable limit -
+            3 : Disable limit + and -
+        typ   : boolean
+            0 : Limits normally closed (default setting)
+            1 : Limits normally open
+        mode  : boolean
+            0 : Stop motion and abort the prog when a limit is hit
+            1 : Stop motion and continue the prog when a limit is hit
+        LD    : sets the required deceleration rate after hitting a limit
 
         """
 
@@ -521,22 +520,23 @@ class Axes(PyLayers):
         Parameters
         ----------
 
-        cmd  : 'set','go'
-        mode : int
+        cmd   : 'set'|'go'
+        mode  : int
             0 : The indexer positions the motor in the active window of the
-        switch (default setting)
+                switch (default setting)
             1 : The motor is positioned to the required edge of the switch + or -
             2 : The indexer is set to seek the nearest drive zero phase
-            position to improve homing repetability
-        vel :
-        acc :
-        edg :
-        typ : int
-            used to select the type of switch to be used for homing
+                position to improve homing repetability
+        vel   : velocity and direction
+        acc   : acceleration (and deceleration)
+        edg   : this parameter is used to to select the required edge of the
+                home switch
+        typ   : boolean used to select the type of switch to be used for homing
             1 : Home switch normally closed
             0 : Home switch normally open (default)
-        armed
-
+        armed : boolean
+            0 : turned OFF
+            1 : turned ON
 
         Examples
         --------
@@ -545,7 +545,7 @@ class Axes(PyLayers):
 
         defaults = {'mode' :0,
                     'vel'  :15,
-                    'acc'  :15,
+                    'acc'  :25,
                     'edg'  :'+',
                     'typ'  :0,
                     'armed':1
@@ -564,7 +564,7 @@ class Axes(PyLayers):
 
         if self._id in [1,2]:
             if cmd=='set':
-                if self.vel>0:
+                if vel>0:
                     vel = '+'+str(vel)
                 else:
                     vel = '-'+str(vel)
@@ -696,8 +696,6 @@ class Axes(PyLayers):
                 print "home switch normally closed 1 "
             else:
                 print "home switch normally open 0 (default) "
-
-
 
 
             ##############################
@@ -1200,7 +1198,7 @@ class Scanner(PyLayers):
         self.a[3].acceleration(acc,cmd='set')
         self.a[4].acceleration(acc,cmd='set')
 
-        #self.home(cmd='set')
+        #self.home(cmd='set',vel=10) #vel = 1 by default
         #print "home"
         #self.home(cmd='go',init=True)
 
@@ -1210,27 +1208,27 @@ class Scanner(PyLayers):
         """
 
         st = ''
-        st = st + '------------------------\n'
-        st = st + ' Parameters of Scan' + '\n'
-        st = st + '------------------------\n'
-        st = st + 'Home frame : ' + str(self.pH[0])+','\
+        st = st + '---------------------------\n'
+        st = st + '    Parameters of Scan' + '\n'
+        st = st + '---------------------------\n'
+        st = st + 'Home frame   : ' + str(self.pH[0])+','\
                                     + str(self.pH[1])+',' \
                                     + str(self.pH[2])+'\n'
         st = st + 'Global frame : '+str(self.pG[0])+','\
                                     + str(self.pG[1])+',' \
                                     + str(self.pG[2])+'\n'
-        st = st + 'Array frame : '+str(self.pA[0])+','\
+        st = st + 'Array frame  : '+str(self.pA[0])+','\
                                     + str(self.pA[1])+',' \
                                     + str(self.pA[2])+'\n'
         st = st + 'Current angle : '+str(self.ang)+'\n'
 
 
-        st = st + '------------\n'
-        st = st + 'x (d,v,a)  :'+ str(self.a[1].dist)+' '+str(self.a[1].vel)+' '+str(self.a[1].acc)+'\n'
-        st = st + 'y (d,v,a)  :'+ str(self.a[2].dist)+' '+str(self.a[2].vel)+' '+str(self.a[2].acc)+'\n'
-        st = st + 'z (d,v,a)  :'+ str(self.a[4].dist)+' '+str(self.a[4].vel)+' '+str(self.a[4].acc)+'\n'
-        st = st + '------------\n'
-        st = st + 'rot (a,w,w2) : '+ str(self.a[3].ang)+' ' +str(self.a[3].vel)+''+str(self.a[3].acc)+'\n'
+        st = st + '-------------------\n'
+        st = st + 'x (d,v,a)     :'+ str(self.a[1].dist)+' '+str(self.a[1].vel)+' '+str(self.a[1].acc)+'\n'
+        st = st + 'y (d,v,a)     :'+ str(self.a[2].dist)+' '+str(self.a[2].vel)+' '+str(self.a[2].acc)+'\n'
+        st = st + 'z (d,v,a)     :'+ str(self.a[4].dist)+' '+str(self.a[4].vel)+' '+str(self.a[4].acc)+'\n'
+        st = st + '------------------\n'
+        st = st + 'rot (a,w,w2)  : '+ str(self.a[3].ang)+' ' +str(self.a[3].vel)+' '+str(self.a[3].acc)+'\n'
 
         return(st)
 
@@ -1373,8 +1371,105 @@ class Scanner(PyLayers):
         #   + fabriquer les profils
         #   + Appliquer les profils
 
+    def meash5(self,
+               A,
+               _fileh5='sdata.h5',
+               ical=1,
+               vel=15,
+               Nmeas=1,
+               comment='',
+               author=''):
+        """ Measure over a set of point from AntArray and store in h5
+
+        Parameters
+        ----------
+
+        A : Aarray
+        fileh5 : string
+            name of the h5 file containing calibration data
+        vel : int
+            scanner moving velocity
+        Nmeas : int
+            Number of measurement
+
+
+        """
+
+        # load the file containing the calibration data
+        Dh5 = mesh5(_fileh5)
+        Dh5.open(mode='r')
+        Dh5.saveini(ical=ical)
+        Dh5.close()
+        exp = 'Nf = Dh5.dcal'+str(ical)+"['Nf']"
+        exec(exp)
+        # initialization of vna
+        vna = SCPI()
+        vna.load_config()
+
+        Npoint = A.p.shape[1]
+        laxes = []
+        if A.N[0]!=1:
+            laxes.append('x')
+        if A.N[1]!=1:
+            laxes.append('y')
+        if A.N[2]!=1:
+            laxes.append('z')
+        lN =  [ A.N[k] for  k  in range(3) if A.N[k]!=1 ]
+        Nf = vna.Nf
+
+        Dh5.open('a')
+        try:
+            ldataset = Dh5.f.keys()
+        except:
+            ldataset = []
+        lmes = [ldataset[k] for  k in range(len(ldataset))  if 'mes' in ldataset[k]]
+        mesname = 'mes'+str(len(lmes)+1)
+
+        if  laxes==['x']:
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf),dtype=np.complex64)
+        if  laxes==['y']:
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf),dtype=np.complex64)
+        if  laxes==['z']:
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,ln[0],Nf),dtype=np.complex64)
+        if  laxes==['x','y']:
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,ln[0],ln[1],Nf),dtype=np.complex64)
+        if  laxes==['x','z']:
+            mes =  Dh5.f.create_dataset(mesname,(Nmeas,ln[0],ln[1],Nf),dtype=np.complex64)
+        if  laxes==['y','z']:
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,ln[0],ln[1],Nf),dtype=np.complex64)
+        if  laxes==['x','y','z']:
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,ln[0],ln[1],ln[2],Nf),dtype=np.complex64)
+        mes.attrs['time']=time.ctime()
+        mes.attrs['author']=author
+        mes.attrs['comment']=comment
+        mes.attrs['axes'] = laxes
+        #mes.attrs['min'] = lmin
+        #mes.attrs['max'] = lmax
+        mes.attrs['Nmeas'] = Nmeas
+
+        for k in np.arange(A.p.shape[1]):
+            self.mv(pt=A.p[:,k],vel=vel)
+            S = vna.getdata(Nmeas=Nmeas)
+            if  laxes==['x']:
+                mes[:,k,:]=S
+            if  laxes==['y']:
+                mes[:,k,:]=S
+            if  laxes==['z']:
+                mes[:,k,:]=S
+            if  laxes==['x','y']:
+                ix,iy = ktoxyz(k,Nx=l)
+                mes[:,ix,iy,:]=S
+            if  laxes==['x','z']:
+                mes[:,ix,iz,:]=S
+            if  laxes==['y','z']:
+                mes[:,iy,iz,:]=S
+            if  laxes==['x','y','z']:
+                mes[:,ix,iy,iz,:]=S
+
+        Dh5.close()
+
     def meas(self,A,vel=10,Nmeas=1):
-        """ Measue over a set of point from AntArray
+        """ Measure over a set of point from AntArray
 
         Parameters
         ----------
@@ -1384,11 +1479,7 @@ class Scanner(PyLayers):
 
         """
         vna = SCPI()
-        vna.parS(param='S21',cmd='set')
-        vna.freq(fminGHz=1.8,fmaxGHz=2.2,cmd='set')
-        vna.avrg(b='ON',navrg=900,cmd='set')
-        vna.points(value=201,cmd='set')
-        vna.ifband(ifbHz=100000,cmd='set')
+        vna.load_config()
 
         Npoint = A.p.shape[1]
         Nf = vna.Nf
@@ -1397,7 +1488,6 @@ class Scanner(PyLayers):
         for k in np.arange(A.p.shape[1]):
             print k
             print A.p[:,k]
-            # TODO
             # find a rule to retrieve ix,iy,iz,ia from k
             self.mv(pt=A.p[:,k],vel=vel)
             # Nmeas x Nf

@@ -63,7 +63,8 @@ class NiUsb6501:
       # start calling adapter.read_port(port) and adapter.write_port(port, values)
     """
     def __init__(self, device):
-        """ used only internally via get_adapter() and find_adapters() """
+        """ used only internally via get_adapter() and find_adapters()
+        """
         self.device = device
         cfg = self.device.get_active_configuration()
         interface_number = cfg[(0,0)].bInterfaceNumber
@@ -73,7 +74,7 @@ class NiUsb6501:
         # set the active configuration. With no arguments, the first
         # configuration will be the active one
         self.device.set_configuration()
-        # This is needed to release interface, otherwise attach_kernel_driver fails 
+        # This is needed to release interface, otherwise attach_kernel_driver fails
         # due to "Resource busy"
         usb.util.dispose_resources(self.device)
 
@@ -195,9 +196,9 @@ if __name__ == "__main__":
     dev.set_io_mode(0b11111111, 0b11111111, 0b00000000)
 
     dev.write_port(0, 0b10111111)
+    print bin(dev.read_port(0))
     #dev.write_port(0, 0b00000001)
     #dev.write_port(1, 0b10101010)
 
-    print bin(dev.read_port(0))
     #print bin(dev.read_port(1))
     #print bin(dev.read_port(2))
