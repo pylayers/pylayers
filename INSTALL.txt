@@ -11,14 +11,14 @@ TOC :
 #       LINUX/OSX Install      #
 ################################
 
-The prefer way to install pylayers is to first install the free python distribution Anaconda on your
+The prefer way to install PyLayers is to first install the free python distribution Anaconda on your
 platform. ( https://store.continuum.io/cshop/anaconda/ )
 By doing so, you're installing most of the required dependencies.
 
 1 - Download Anaconda from https://store.continuum.io/cshop/anaconda/
 2 - Install Anaconda with the given command ( $bash Anaconda-<version>-<plateform>.sh ) . 
 Important : Say yes to add Anaconda to your path
-3 - Run "./installer_unix" file from the pylayers directory (YOUR FIRST NEED to add exe rights using the command: chmod +x ./installer_unix )
+3 - Run "./installer_unix" file from the PyLayers directory (YOUR FIRST NEED to add exe rights using the command: chmod +x ./installer_unix )
 
 5- Done
 
@@ -62,7 +62,7 @@ The default ".pylayers" contains :
     project
     ~/pylayers_project
 
-The source path indicates where the pylayers' source files are located. You generally don't have to modify this path
+The source path indicates where the PyLayers' source files are located. You generally don't have to modify this path
 
 The project path indicates where the configurations files are located.
 If you decide to move your project directory elsewhere, you must change the project path in consequence.
@@ -71,10 +71,10 @@ If you decide to move your project directory elsewhere, you must change the proj
 Notes for previous users of PyLayers:
 ------------------------------------
 
-The environement variables $PYLAYERS and $BASENAME are no longer required.
+The environment variables $PYLAYERS and $BASENAME are no longer required.
 If you try to re-install PyLayers on an existing version:
--the source path of the .pylayers file will be set at the value contained into the $PYLAYERS environement variable
--the project path of the .pylayers file will be set at the value contained into the $BASENAME environement variable
+-the source path of the .pylayers file will be set at the value contained into the $PYLAYERS environment variable
+-the project path of the .pylayers file will be set at the value contained into the $BASENAME environment variable
 
 
 
