@@ -28,7 +28,6 @@ pylayers/antprop/signature_run2015_TMP.py
 pylayers/antprop/slab.py
 pylayers/antprop/spharm.py
 pylayers/antprop/statModel.py
-pylayers/antprop/yulei.py
 pylayers/em/__init__.py
 pylayers/em/openems/SmoothMeshLine.py
 pylayers/em/openems/__init__.py
