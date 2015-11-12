@@ -55,6 +55,7 @@ SCPI Class
     SCPI.getdata
     SCPI.avrg
     SCPI.ifband
+    SCPI.calibh5
 
 """
 
@@ -503,7 +504,7 @@ class SCPI(PyLayers):
                 _fileh5="sdata",
                 _filename="vna_config.ini",
                 cables=[],
-                author='',
+                author='M.D.B and B.U',
                 comment='',
                 Nmeas = 10):
         """  measure a calibration vector and store in h5 file
@@ -537,16 +538,16 @@ class SCPI(PyLayers):
 
         dcal = f.create_dataset(calname,(Nmeas,self.Nf),dtype=np.complex64)
         dcal.attrs['Nf']=self.Nf
-        dcal.attrs['fminGHz']=self.fminGHz
-        dcal.attrs['fmaxGHz']=self.fmaxGHz
-        dcal.attrs['ifbHz']=self.ifbHz
-        dcal.attrs['Navrg']=self.navrg
+        dcal.attrs['fminGHz']= self.fminGHz
+        dcal.attrs['fmaxGHz']= self.fmaxGHz
+        dcal.attrs['ifbHz']= self.ifbHz
+        dcal.attrs['Navrg']= self.navrg
         dcal.attrs['time'] = time.ctime()
-        dcal.attrs['author']=  author
+        dcal.attrs['author']= author
         dcal.attrs['cables']= cables
-        dcal.attrs['comment']=comment
-        dcal.attrs['param']=self.param
-        dcal[0:Nmeas,0:self.Nf]=D
+        dcal.attrs['comment']= comment
+        dcal.attrs['param']= self.param
+        dcal[0:Nmeas,0:self.Nf]= D
         f.close()
 
 

@@ -1,5 +1,79 @@
 #!/usr/bin/python
 #-*- coding:Utf-8 -*-
+
+"""
+
+.. currentmodule:: pylayers.measures.parker
+
+This module handles scanner.
+
+.. autosummary::
+    :toctree: generated
+
+
+Profile Class
+=============
+
+.. autosummary::
+    :toctree: generated/
+
+    Profile.__init__
+    Profile.__repr__
+    Profile.duration
+    Profile.show
+
+
+
+Axes Class
+=============
+
+.. autosummary::
+    :toctree: generated/
+
+    Axes.__init__
+    Axes.__repr__
+    Axes.info
+    Axes.show
+    Axes.getvar
+    Axes.com
+    Axes.limits
+    Axes.home
+    Axes.parsinfo
+    Axes.add_profile
+    Axes.set_profile
+    Axes.del_profile
+    Axes.reset
+    Axes.mvpro
+    Axes.stationnary
+    Axes.reg
+    Axes.step
+    Axes.velocity
+    Axes.acceleration
+    Axes.go
+    Axes.close
+    Axes.fromfile
+
+
+
+Scanner Class
+=============
+
+.. autosummary::
+    :toctree: generated/
+
+    Scanner.__init__
+    Scanner.__repr__
+    Scanner.check_pa
+    Scanner.origin
+    Scanner.reset
+    Scanner.home
+    Scanner.upd_pos
+    Scanner.mv
+    Scanner.meash5
+
+"""
+
+
 from serial import Serial
 import pdb
 import time
@@ -885,8 +959,8 @@ class Axes(PyLayers):
         self.com(com)
         self.com('G')
 
-    def read(self):
-        pass
+    # def read(self):
+    #     pass
 
 
     def stationnary(self):
@@ -972,9 +1046,9 @@ class Axes(PyLayers):
         --------
 
         >>> from pylayers.measures.parker import smparker
-        >>> A = Axes(1,'x',typ='t',scale=1280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
-        >>> A.velocity(value=10)
-        >>> A.velocity(cmd='get')
+        >>> S = Scanner()
+        >>> S.a[4].step(-0.1,cmd='set')
+       
 
         """
         nstep = int(value*self.scale) #convert num per step
@@ -1080,12 +1154,12 @@ class Axes(PyLayers):
     def close(self):
         self.ser.close()
 
-    def util(self):
-        """ allows convertion between :
-            m/s | tr/s  <=> rps
-            m/s²        <=> rps²
-        """
-        pass
+    # def util(self):
+    #     """ allows convertion between :
+    #         m/s | tr/s  <=> rps
+    #         m/s²        <=> rps²
+    #     """
+    #     pass
 
 
 
@@ -1365,12 +1439,6 @@ class Scanner(PyLayers):
         # update new position
         self.upd_pos(ptH)
 
-        #Answers those questions:
-        # Ou dois-je aller : p1
-        # Comment y aller :
-        #   + fabriquer les profils
-        #   + Appliquer les profils
-
     def meash5(self,
                A,
                _fileh5='sdata.h5',
@@ -1378,8 +1446,8 @@ class Scanner(PyLayers):
                vel=15,
                Nmeas=1,
                comment='',
-               author=''):
-        """ Measure over a set of point from AntArray and store in h5
+               author='M.D.B and B.U'):
+        """ measure over a set of point from AntArray and store in h5
 
         Parameters
         ----------
@@ -1392,17 +1460,41 @@ class Scanner(PyLayers):
         Nmeas   : int
             Number of measurement
 
-
         """
 
         # load the file containing the calibration data
         Dh5 = mesh5(_fileh5)
-        Dh5.open(mode='r')
-        Dh5.saveini(ical=ical)
+                
+        # open - sdata analysis
+        Dh5.open('r')
+        
+        try:
+            ldataset = Dh5.f.keys()
+        except:
+            raise IOError('no calibration in h5 file')
+            #print "Error : no calibration in file", _fileh5
+        
+        lcal= [ eval(k.replace('cal','')) for k in ldataset if 'cal' in k ]
+        print lcal        
+        lcal=np.array(lcal)
+
+        if len(lcal)==1:
+           ical = lcal[0]
+        else:
+            if ical not  in lcal:
+                #print "Error calibration  :",ical,"does not exist"
+                raise IOError('Error calibration : File does not exist')
         Dh5.close()
-        exp = 'Nf = Dh5.dcal'+str(ical)+"['Nf']"
-        exec(exp)
+        
+        # read the chosen calibration and save parameters in ini file for VNA
+        
+        Dh5.readcal(ical=ical)
+        Dh5.saveini()
+        
+        # end of read and save
+    
         # initialization of vna
+        
         vna = SCPI()
         vna.load_config()
 
@@ -1414,14 +1506,19 @@ class Scanner(PyLayers):
             laxes.append('y')
         if A.N[2]!=1:
             laxes.append('z')
+        
         lN =  [ A.N[k] for  k  in range(3) if A.N[k]!=1 ]
         Nf = vna.Nf
+        
+        # end of initialization
 
         Dh5.open('a')
+
         try:
             ldataset = Dh5.f.keys()
         except:
             ldataset = []
+        
         lmes = [ldataset[k] for  k in range(len(ldataset))  if 'mes' in ldataset[k]]
         mesname = 'mes'+str(len(lmes)+1)
 
@@ -1441,12 +1538,16 @@ class Scanner(PyLayers):
             mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[1],lN[2],Nf),dtype=np.complex64)
         
         mes.attrs['time']=time.ctime()
-        mes.attrs['author']=author
-        mes.attrs['comment']=comment
+        mes.attrs['author']= author
+        mes.attrs['comment']= comment
         mes.attrs['axes'] = laxes
         #mes.attrs['min'] = lmin
         #mes.attrs['max'] = lmax
         mes.attrs['Nmeas'] = Nmeas
+        
+        # here is the hard link between a measurement and its calibration 
+        
+        mes.attrs['cal'] = "cal"+str(ical)
 
         for k in np.arange(A.p.shape[1]):
             self.mv(pt=A.p[:,k],vel=vel)
@@ -1472,32 +1573,32 @@ class Scanner(PyLayers):
 
         Dh5.close()
 
-    def meas(self,A,vel=10,Nmeas=1):
-        """ Measure over a set of point from AntArray
+    # def meas(self,A,vel=10,Nmeas=1):
+    #     """ Measure over a set of point from AntArray
 
-        Parameters
-        ----------
+    #     Parameters
+    #     ----------
 
-        A : Aarray
+    #     A : Aarray
 
 
-        """
-        vna = SCPI()
-        vna.load_config()
+    #     """
+    #     vna = SCPI()
+    #     vna.load_config()
 
-        Npoint = A.p.shape[1]
-        Nf = vna.Nf
-        Smeas = np.empty((Nmeas,Npoint,Nf),dtype=complex)
-        print Smeas.shape
-        for k in np.arange(A.p.shape[1]):
-            print k
-            print A.p[:,k]
-            # find a rule to retrieve ix,iy,iz,ia from k
-            self.mv(pt=A.p[:,k],vel=vel)
-            # Nmeas x Nf
-            S = vna.getdata(Nmeas=Nmeas)
-            Smeas[:,k,:]=S.y
-        return(Smeas)
+    #     Npoint = A.p.shape[1]
+    #     Nf = vna.Nf
+    #     Smeas = np.empty((Nmeas,Npoint,Nf),dtype=complex)
+    #     print Smeas.shape
+    #     for k in np.arange(A.p.shape[1]):
+    #         print k
+    #         print A.p[:,k]
+    #         # find a rule to retrieve ix,iy,iz,ia from k
+    #         self.mv(pt=A.p[:,k],vel=vel)
+    #         # Nmeas x Nf
+    #         S = vna.getdata(Nmeas=Nmeas)
+    #         Smeas[:,k,:]=S.y
+    #     return(Smeas)
 
 if __name__=="__main__":
     doctest.testmod()
