@@ -118,8 +118,6 @@ else:
     else :
         raise EnvironmentError('pylayers source path not found. Try to re-run setup.py')
 
-import ipdb
-ipdb.set_trace()
 
 
 # =======
