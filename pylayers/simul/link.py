@@ -1588,8 +1588,6 @@ class DLink(Link):
             ptx = self.tx.position
             prx = self.rx.position
 
-
-
         if ant :
             Atx = self.Aa
             Arx = self.Ab
@@ -1619,7 +1617,12 @@ class DLink(Link):
         if lay:
             self.L._show3(newfig=False,opacity=0.7,centered=centered,**kwargs)
 
-
+        # mlab.text3d(self.a[0],self.a[1],self.a[2],'a',
+        #             scale=1,
+        #             color=(1,0,0))
+        # mlab.text3d(self.b[0],self.b[1],self.b[2],'b',
+        #             scale=1,
+        #             color=(1,0,0))
         if rays :
             # check rays with energy
             # if hasattr(self,'H') and not kwargs.has_key('rlist'):

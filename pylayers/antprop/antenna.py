@@ -2117,8 +2117,15 @@ class Antenna(Pattern):
         else :
             f=mlab.gcf()
 
+        if kwargs.has_key('opacity'):
+            opacity = kwargs['opacity']
+        else: 
+            opacity = 1
 
-        self._mayamesh = mlab.mesh(x, y, z,scalars= scalar,resolution = 1)
+        self._mayamesh = mlab.mesh(x, y, z,
+                                   scalars= scalar,
+                                   resolution = 1,
+                                   opacity = opacity)
 
         if name == []:
             f.children[-1].name = 'Antenna ' + self._filename
