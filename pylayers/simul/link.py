@@ -346,11 +346,11 @@ class DLink(Link):
         defaults={ 'L':Layout(),
                    'a':np.array(()),
                    'b':np.array(()),
-                   'Aa':Antenna(),
-                   'Ab':Antenna(),
+                   'Aa':Antenna(typ='Omni'),
+                   'Ab':Antenna(typ='Omni'),
                    'Ta':np.eye(3),
                    'Tb':np.eye(3),
-                   'fGHz':np.linspace(2, 11, 181, endpoint=True),
+                   'fGHz':[],
                    'wav':wvf.Waveform(),
                    'cutoff':3,
                    'save_opt':['sig','ray','Ct','H'],
@@ -380,7 +380,16 @@ class DLink(Link):
         force=self.force_create
         delattr(self,'force_create')
 
-        self._Lname = self._L.filename
+        if self.fGHz == []:
+            self.initfreq()
+        else :
+            pass
+
+        try:
+            self._Lname = self._L.filename
+        except:
+            self._L=Layout(self._L)
+            self._Lname = self._L.filename
 
         ###########
         # Transmitter and Receiver positions
@@ -665,6 +674,33 @@ class DLink(Link):
             fcGHz = self.fGHz[0]
         L  = 32.4+20*np.log(d)+20*np.log10(fcGHz)
         return s
+
+
+    def initfreq(self):
+        """ Automatic freq determination from 
+            Antennas
+        """
+        fa = self.Aa.fGHz
+        fb = self.Ab.fGHz
+
+        # step
+        try:
+            sa = fa[1]-fa[0]
+        except: # single frequency
+            sa = fa[0]
+        try:
+            sb = fb[1]-fb[0]
+        except:
+            sb = fb[0]
+
+
+
+        minf = max(min(fa),min(fb))
+        maxf = min(max(fa),max(fb))
+
+        sf = min(sa,sb)
+        self.fGHz = np.arange(minf,maxf+sf,sf)
+
 
     def reset_config(self):
         """ reset configuration when a new layout is loaded
@@ -1227,7 +1263,6 @@ class DLink(Link):
         # must be placed after all the init !!!!
         print "checkh5"
         self.checkh5()
-
 
         ############
         # Signatures

@@ -3057,6 +3057,8 @@ class FUsignal(FBsignal,Usignal):
         """
         f = self.x
         df = self.dx()
+        if df == 0:
+            df = 1.
         U = self.y[:]
         N = len(f)
         Nl = np.int(np.ceil(f[0] / df))
@@ -3408,7 +3410,7 @@ class FHsignal(FUsignal):
             #print "Nombre de dimensions : ",nd
             #print "shape (y)  : ",shape(y)
             if (nd > 1):
-                s.y = np.real(fft.fftshift(y, axes=[-1]))
+                s.y = np.real(fft.fftshift(y, axes=[1]))
             else:
                 s.y = np.real(fft.fftshift(y))
 
