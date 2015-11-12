@@ -4,9 +4,8 @@
 # PyLayers Installation
 
 
-
-
 ## Linux / OS X
+
 The prefer way to install PyLayers is to first install the free python distribution [Anaconda](https://store.continuum.io/cshop/anaconda/) on your platform. 
 By doing so, you're installing most of the required dependencies.
 
@@ -101,6 +100,7 @@ c:\<Path to Anaconda>\Lib\site-packages (Windows)
 
 
 # Dependencies 
+## heading<a name="headin"></a>
 
 The following modules are required to use PyLayers 
 
@@ -119,5 +119,4 @@ imposm
 basemap>=1.0  
 pandas >=0.12.0  
 mayavi >=4.3.1  
-
 

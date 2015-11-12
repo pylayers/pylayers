@@ -36,7 +36,7 @@ Pylayers is distributed in the hope that it will be useful, but WITHOUT ANY WARR
 See the [Install Page](https://github.com/pylayers/pylayers/blob/master/INSTALL.md)
 
 
-## First Run
+## A Ray-Tracing simulation in 4 lines 
 
 ```python
 >>> from pylayers.simul.link import *
