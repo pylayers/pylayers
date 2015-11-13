@@ -12,7 +12,7 @@ print "======================="
 S = Simul()
 filestr = 'defstr'
 S.layout(filestr+'.ini','matDB.ini','slabDB.ini')
-S.L.build()
+S.L.dumpr()
 tx=array([759,1114,1.0])
 rx=array([767,1114,1.5])
 S.tx.clear()
@@ -59,7 +59,6 @@ print '##############'
 print '# reciprocal #'
 print '##############'
 
-
 r2d2 = r2d.reciprocal()
 ###### get new reciprocal r3d
 r3d2 = r2d2.to3D(S.L)
@@ -79,8 +78,8 @@ cir2 = sc2.applywavB(wav.sfg)
 ######print r3d2[2]['sig'][:,:,1]
 ######
 ######
-#r3d1.check_reciprocity(r3d2)
-#C1.check_reciprocity(C2)
-plt.figure()
-plt.plot(cir1.x,cir1.y[0,0,:],'b',cir2.x,cir2.y[0,0,:],'r')
-plt.axis('auto')
+r3d1.check_reciprocity(r3d2)
+C1.check_reciprocity(C2)
+# plt.figure()
+# plt.plot(cir1.x,cir1.y[0,0,:],'b',cir2.x,cir2.y[0,0,:],'r')
+# plt.axis('auto')
