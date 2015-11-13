@@ -48,17 +48,17 @@ See the [Install Page](https://github.com/pylayers/pylayers/blob/master/INSTALL.
 
 ## Troubleshooting
 
-If you have any trouble during the install process you should first refer to the INSTALL.TXT file.
+If you have any trouble during the install process you should first refer to the [Install Page](https://github.com/pylayers/pylayers/blob/master/INSTALL.md) and particularly to the [Usual Install Issues](https://github.com/pylayers/pylayers/blob/master/INSTALL.md#usual-install-issues) part.
 
-For any problem during the use of the tool, please open an issue on the [github dedicated page](https://github.com/pylayers/pylayers/issues)
+For any problem during the use of the tool, please open an issue on the [dedicated github's page](https://github.com/pylayers/pylayers/issues)
 
 ## Developpers
 
 Pylayers is driven by professor [Bernard Uguen](mailto:bernard.uguen@univ-rennes1.fr) at [University of Rennes 1](www.univ-rennes1.fr), [IETR](www.ietr.fr) laboratory and [ESIR school of engineering](esir.univ-rennes1.fr)
 
-Pylayers is currently developed at IETR by [Bernard Uguen](mailto:bernard.uguen@univ-rennes1.fr) , [Nicolas Amiot](mailto:nicolas.amiot@univ-rennes1.fr), Mohamed Laaraiedh and Meriem Mhedbhi, with the technical support of all the members from the Research Team of the Propagation and Localization team of the IETR (UMR CNRS 6164) lab.
+Pylayers is currently developed at IETR by [Bernard Uguen](mailto:bernard.uguen@univ-rennes1.fr), [Nicolas Amiot](mailto:nicolas.amiot@univ-rennes1.fr) and Mamadou Dialounde Balde, with the technical support of all the members from the Research Team of the Propagation and Localization team of the IETR (UMR CNRS 6164) lab.
 
-Among early pylayers contributors : Friedman Tchoffo Talom, Louis Marie Aubert, Roxana Burghelea, Yu Lei, Taguhi Chaluyman, Stéphane Avrillon and Eric Plouhinec (Saint-Cyr CREC research center).
+Among early pylayers contributors : Friedman Tchoffo Talom, Louis Marie Aubert, Roxana Burghelea, Yu Lei, Taguhi Chaluyman, Stéphane Avrillon, Mohamed Laaraiedh, Meriem Mhedbhi and Eric Plouhinec (Saint-Cyr CREC research center).
 
 ## Acknowledgements
 

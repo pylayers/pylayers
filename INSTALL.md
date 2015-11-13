@@ -1,7 +1,9 @@
-
-
-
 # PyLayers Installation
+
+* Installation notes for [Linux / OS X](https://github.com/pylayers/pylayers/blob/master/INSTALL.md#linux--os-x) and [Windows](https://github.com/pylayers/pylayers/blob/master/INSTALL.md#windows-install)
+* [Source/Project Directories Set-up](https://github.com/pylayers/pylayers/blob/master/INSTALL.md#sourceproject-directories-set-up)
+* [Usual Install Issues](https://github.com/pylayers/pylayers/blob/master/INSTALL.md#usual-install-issues)
+* [Dependencies](https://github.com/pylayers/pylayers/blob/master/INSTALL.md#dependencies)
 
 
 ## Linux / OS X
@@ -63,7 +65,7 @@ If you try to re-install PyLayers on an existing version:
 
 
 
-# Usual Install Issues  
+# Usual Install Issues
 
 Most of the issue encountered during the install is due to 
 1. Multiple python installations and/or  
@@ -120,3 +122,4 @@ basemap>=1.0
 pandas >=0.12.0  
 mayavi >=4.3.1  
 
+# TEST
