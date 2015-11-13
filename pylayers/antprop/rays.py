@@ -1663,10 +1663,9 @@ class Rays(PyLayers,dict):
                     phi[~uleft] = geu.vecang(-sod[:2,~uleft],vptpan[:,~uleft])
                     # beta
                     # beta = np.arccos(np.sum(sid[1:]*vnormz[1:],axis=0))
-                    beta = geu.vecang(sid[1:],vnormz[1:])
-                    beta[~uleft] = geu.vecang(vnormz[1:,~uleft],sid[1:,~uleft])
-
-
+                    beta = geu.vecang(sid[[0,2]],vnormz[[0,2]])
+                    # import ipdb
+                    # ipdb.set_trace()
                     # self[k]['diffvect'] is (4 x Nb_rays )
                     # for axis 0 lenght 4 represent :
                     # 0 => phi0
