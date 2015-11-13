@@ -406,6 +406,7 @@ class Rays(PyLayers,dict):
 
         r : Rays
         """
+
         assert (self.pTx==r.pRx).all()
         assert (self.pRx==r.pTx).all()
         for k in self:

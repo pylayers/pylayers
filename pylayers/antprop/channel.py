@@ -2526,7 +2526,7 @@ class Tchannel(bs.FUsignal):
         tau = self.taud + self.taue
         self.s = self.ift(Nz, ffts)
         x = self.s.x
-        r = bs.TUsignal(x=x, y=np.zeros(self.s.y.shape))
+        r = bs.TUsignal(x=x, y=np.zeros(self.s.y.shape[1:]))
 
         if len(tau) == 1:
             return(self.s)
