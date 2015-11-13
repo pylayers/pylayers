@@ -122,4 +122,3 @@ basemap>=1.0
 pandas >=0.12.0  
 mayavi >=4.3.1  
 
-# TEST
