@@ -399,27 +399,37 @@ class Rays(PyLayers,dict):
 
 
     def check_reciprocity(self,r):
-        """ check ray reciprocity
+        """ check ray reciprocity in comparing two reciprocal rays
 
         Parameters
         ----------
 
-        r : Rays
-        """
+        r : rays reciprocal to self
 
+
+        """
+        # permutation of all termination points
         assert (self.pTx==r.pRx).all()
         assert (self.pRx==r.pTx).all()
+        # for all group of interctions
         for k in self:
+            # same distances
             assert (np.allclose(self[k]['dis'],r[k]['dis']))
+            # same points when reading from right to left
             assert (np.allclose(self[k]['pt'],r[k]['pt'][:,::-1,:]))
+            # same signature reading from right to left
             assert (np.allclose(self[k]['sig'],r[k]['sig'][:,::-1,:]))
+            # if local basis have been evaluated
             if (self.isbased) & (r.isbased):
                 #assert (np.allclose(self[k]['nstrwall'],r[k]['nstrwall'][:,::-1,:]))
                 assert (np.allclose(self[k]['norm'],r[k]['norm'][:,::-1,:]))
                 #assert ((np.mod(self[k]['aoa']-r[k]['aod'],2*np.pi)==0).all())
                 #assert ((np.mod(self[k]['aod']-r[k]['aoa'],2*np.pi)==0).all())
+                # 1st output basis is equal to last input basis of the reciprocal ray
                 assert (np.allclose(self[k]['Bo0'],r[k]['BiN']))
+                # last input basis is equal to 1st output basis of the reciprocal ray
                 assert (np.allclose(self[k]['BiN'],r[k]['Bo0']))
+                # vsi vectors are inversed
                 assert (np.allclose(self[k]['vsi'],-r[k]['vsi'][:,::-1,:]))
                 assert (np.allclose(abs(self[k]['scpr']),abs(r[k]['scpr'][::-1,:])))
                 assert (np.allclose(self[k]['theta'],r[k]['theta'][::-1,:]))
@@ -1400,15 +1410,13 @@ class Rays(PyLayers,dict):
 
                 def fix_colinear():
                     nw = np.sqrt(np.sum(w*w, axis=0))
-                    
-                    u = np.where(nw==0) 
+                    u = np.where(nw==0)
                     if len(u[0])!=0:
                         if (u[0].any() or u[1].any()) \
                             or (u[0].any()==0 or u[1].any()==0):
-                            
 
                             uu = np.array([u[0],u[1]]).T
-                            #determine which interaction and rays 
+                            #determine which interaction and rays
                             #present the colinearity issue
                             uvv = abs(vn[2,uu[:,0],uu[:,1]])>0.99
                             # uv : nbi x nbr colinear index
@@ -1456,7 +1464,7 @@ class Rays(PyLayers,dict):
 
                 #  Bi 3 x 2 x i x r
                 Bi = np.concatenate((ew, ev), axis=1)
-                #  self[k]['Bi'] 3 x 3 x i x r 
+                #  self[k]['Bi'] 3 x 3 x i x r
                 self[k]['Bi'] = np.concatenate((es_in,ew,ev),axis=1)
 
                 w = np.cross(s_out, vn, axisa=0, axisb=0, axisc=0)

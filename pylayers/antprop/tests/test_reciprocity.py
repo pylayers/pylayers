@@ -73,8 +73,9 @@ cir2 = sc2.applywavB(wav.sfg)
 ######print r3d2[2]['sig'][:,:,1]
 ######
 ######
-#r3d1.check_reciprocity(r3d2)
-#C1.check_reciprocity(C2)
+pdb.set_trace()
+r3d1.check_reciprocity(r3d2)
+C1.check_reciprocity(C2)
 plt.figure()
 plt.plot(cir1.x,cir1.y[0,0,:],'b',cir2.x,cir2.y[0,0,:],'r')
 plt.axis('auto')
