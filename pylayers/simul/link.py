@@ -346,11 +346,11 @@ class DLink(Link):
         defaults={ 'L':Layout(),
                    'a':np.array(()),
                    'b':np.array(()),
-                   'Aa':Antenna(),
-                   'Ab':Antenna(),
+                   'Aa':Antenna(typ='Omni'),
+                   'Ab':Antenna(typ='Omni'),
                    'Ta':np.eye(3),
                    'Tb':np.eye(3),
-                   'fGHz':np.linspace(2, 11, 181, endpoint=True),
+                   'fGHz':[],
                    'wav':wvf.Waveform(),
                    'cutoff':3,
                    'save_opt':['sig','ray','Ct','H'],
@@ -380,7 +380,16 @@ class DLink(Link):
         force=self.force_create
         delattr(self,'force_create')
 
-        self._Lname = self._L.filename
+        if self.fGHz == []:
+            self.initfreq()
+        else :
+            pass
+
+        try:
+            self._Lname = self._L.filename
+        except:
+            self._L=Layout(self._L)
+            self._Lname = self._L.filename
 
         ###########
         # Transmitter and Receiver positions
@@ -665,6 +674,33 @@ class DLink(Link):
             fcGHz = self.fGHz[0]
         L  = 32.4+20*np.log(d)+20*np.log10(fcGHz)
         return s
+
+
+    def initfreq(self):
+        """ Automatic freq determination from 
+            Antennas
+        """
+        fa = self.Aa.fGHz
+        fb = self.Ab.fGHz
+
+        # step
+        try:
+            sa = fa[1]-fa[0]
+        except: # single frequency
+            sa = fa[0]
+        try:
+            sb = fb[1]-fb[0]
+        except:
+            sb = fb[0]
+
+
+
+        minf = max(min(fa),min(fb))
+        maxf = min(max(fa),max(fb))
+
+        sf = min(sa,sb)
+        self.fGHz = np.arange(minf,maxf+sf,sf)
+
 
     def reset_config(self):
         """ reset configuration when a new layout is loaded
@@ -1228,7 +1264,6 @@ class DLink(Link):
         print "checkh5"
         self.checkh5()
 
-
         ############
         # Signatures
         ############
@@ -1553,8 +1588,6 @@ class DLink(Link):
             ptx = self.tx.position
             prx = self.rx.position
 
-
-
         if ant :
             Atx = self.Aa
             Arx = self.Ab
@@ -1584,7 +1617,12 @@ class DLink(Link):
         if lay:
             self.L._show3(newfig=False,opacity=0.7,centered=centered,**kwargs)
 
-
+        # mlab.text3d(self.a[0],self.a[1],self.a[2],'a',
+        #             scale=1,
+        #             color=(1,0,0))
+        # mlab.text3d(self.b[0],self.b[1],self.b[2],'b',
+        #             scale=1,
+        #             color=(1,0,0))
         if rays :
             # check rays with energy
             # if hasattr(self,'H') and not kwargs.has_key('rlist'):

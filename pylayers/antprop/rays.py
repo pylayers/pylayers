@@ -406,6 +406,7 @@ class Rays(PyLayers,dict):
 
         r : Rays
         """
+
         assert (self.pTx==r.pRx).all()
         assert (self.pRx==r.pTx).all()
         for k in self:
@@ -414,17 +415,17 @@ class Rays(PyLayers,dict):
             assert (np.allclose(self[k]['sig'],r[k]['sig'][:,::-1,:]))
             if (self.isbased) & (r.isbased):
                 #assert (np.allclose(self[k]['nstrwall'],r[k]['nstrwall'][:,::-1,:]))
-                assert (np.allclose(self[k]['norm'],r[k]['norm'][:,::-1,:]))
+                assert (np.allclose(self[k]['norm'],r[k]['norm'][:,::-1,:])), 'interaction block:' + str(k)
                 #assert ((np.mod(self[k]['aoa']-r[k]['aod'],2*np.pi)==0).all())
                 #assert ((np.mod(self[k]['aod']-r[k]['aoa'],2*np.pi)==0).all())
-                assert (np.allclose(self[k]['Bo0'],r[k]['BiN']))
-                assert (np.allclose(self[k]['BiN'],r[k]['Bo0']))
-                assert (np.allclose(self[k]['vsi'],-r[k]['vsi'][:,::-1,:]))
-                assert (np.allclose(abs(self[k]['scpr']),abs(r[k]['scpr'][::-1,:])))
-                assert (np.allclose(self[k]['theta'],r[k]['theta'][::-1,:]))
-                assert (np.allclose(self[k]['Bi'],r[k]['Bo'][:,:,::-1,:]))
-                assert (np.allclose(self[k]['Bo'],r[k]['Bi'][:,:,::-1,:]))
-                assert (np.allclose(self[k]['B'],r[k]['B'][:,:,::-1,:].swapaxes(0,1)))
+                assert (np.allclose(self[k]['Bo0'],r[k]['BiN'])), 'interaction block:' + str(k)
+                assert (np.allclose(self[k]['BiN'],r[k]['Bo0'])), 'interaction block:' + str(k)
+                assert (np.allclose(self[k]['vsi'],-r[k]['vsi'][:,::-1,:])), 'interaction block:' + str(k)
+                assert (np.allclose(abs(self[k]['scpr']),abs(r[k]['scpr'][::-1,:]))), 'interaction block:' + str(k)
+                assert (np.allclose(self[k]['theta'],r[k]['theta'][::-1,:])), 'interaction block:' + str(k)
+                assert (np.allclose(self[k]['Bi'],r[k]['Bo'][:,:,::-1,:])), 'interaction block:' + str(k)
+                assert (np.allclose(self[k]['Bo'],r[k]['Bi'][:,:,::-1,:])), 'interaction block:' + str(k)
+                assert (np.allclose(self[k]['B'],r[k]['B'][:,:,::-1,:].swapaxes(0,1))), 'interaction block:' + str(k)
 
         if self.evaluated :
 
@@ -1457,11 +1458,13 @@ class Rays(PyLayers,dict):
                 Bi = np.concatenate((ew, ev), axis=1)
                 #  self[k]['Bi'] 3 x 3 x i x r 
                 self[k]['Bi'] = np.concatenate((es_in,ew,ev),axis=1)
-
+                ################################
                 w = np.cross(s_out, vn, axisa=0, axisb=0, axisc=0)
 
                 w, nw = fix_colinear()
                 #wn = w/np.sqrt(np.sum(w*w, axis=0))
+                wn = w/nw
+
                 v = np.cross(wn, s_out, axisa=0, axisb=0, axisc=0)
 
                 es_out = np.expand_dims(s_out, axis=1)
@@ -1472,7 +1475,6 @@ class Rays(PyLayers,dict):
                 Bo = np.concatenate((ew, ev), axis=1)
                 #  self[k]['Bo'] 3 x 3 x i x r 
                 self[k]['Bo'] = np.concatenate((es_out,ew,ev),axis=1)
-
                 #
                 # AOA (rad)
                 #
@@ -1661,43 +1663,49 @@ class Rays(PyLayers,dict):
                     phi[~uleft] = geu.vecang(-sod[:2,~uleft],vptpan[:,~uleft])
                     # beta
                     # beta = np.arccos(np.sum(sid[1:]*vnormz[1:],axis=0))
-                    beta = geu.vecang(sid[1:],vnormz[1:])
-
+                    beta = geu.vecang(sid[[0,2]],vnormz[[0,2]])
+                    # import ipdb
+                    # ipdb.set_trace()
                     # self[k]['diffvect'] is (4 x Nb_rays )
                     # for axis 0 lenght 4 represent :
                     # 0 => phi0
                     # 1 => phi
                     # 2 => beta
                     # 3 => N (wedge parameter)
+
                     self[k]['diffvect']=np.array((phi0,phi,beta,alpha_w))
 
                     ######
                     # Bi diffract
                     #####
-                    w = np.cross(vnormz,sid, axisa=0, axisb=0, axisc=0)
+                    # w is the \perp \soft in diff
+                    w = np.cross(-sid,vnormz, axisa=0, axisb=0, axisc=0)
+
                     # nw : i x r
                     w, nw = fix_colinear()
 
                     wn = w/nw
                     # Handling channel reciprocity s_in --> -s_in
                     #v = np.cross(wn, s_in, axisa=0, axisb=0, axisc=0)
-                    v = np.cross(wn, sid, axisa=0, axisb=0, axisc=0)
+                    v = np.cross(wn, -sid, axisa=0, axisb=0, axisc=0)
 
-                    e_sid = np.expand_dims(sid, axis=1)
+                    e_sid = np.expand_dims(-sid, axis=1)
                     ew = np.expand_dims(wn, axis=1)
                     ev = np.expand_dims(v, axis=1)
 
                     #  Bid 3 x 2 x (i,r)diff
-                    Bid = np.concatenate((ew, ev), axis=1)
+                    Bid = np.concatenate((ev, ew), axis=1)
 
                     # update Bi for diffracted rays
                     Bi[:,:,udiff[0],udiff[1]] = Bid
                     ######
                     # Bo diffract
                     #####
-                    w = np.cross(vnormz,sod, axisa=0, axisb=0, axisc=0)
+                    w = np.cross(sod,vnormz, axisa=0, axisb=0, axisc=0)
 
                     w, nw = fix_colinear()
+                    wn = w/nw
+
                     #wn = w/np.sqrt(np.sum(w*w, axis=0))
                     v = np.cross(wn, sod, axisa=0, axisb=0, axisc=0)
 
@@ -1705,7 +1713,7 @@ class Rays(PyLayers,dict):
                     ew = np.expand_dims(wn, axis=1)
                     ev = np.expand_dims(v, axis=1)
                     #  Bod 3 x 2 x (i,r)diff
-                    Bod = np.concatenate((ew, ev), axis=1)
+                    Bod = np.concatenate((ev, ew), axis=1)
 
                     # update Bo for diffracted rays
                     Bo[:,:,udiff[0],udiff[1]] = Bod
@@ -1882,6 +1890,10 @@ class Rays(PyLayers,dict):
 
                 # (i+1) x r
                 si = self[k]['si']
+                # distance in
+                s_in = si[0:-1,:]
+                # distance in
+                s_out = si[1:,:]
                 
                 if self[k].has_key('diffvect'):
 
@@ -1937,7 +1949,10 @@ class Rays(PyLayers,dict):
                 #  (i+1)xr
                 size2 = si[:, :].size
                 #  ,(i+1)xr
-                sif = si[:, :].reshape(size2,order='F')
+                # sif = si[:, :].reshape(size2,order='F') # TO BE REMOVE
+                s_inf = s_in[:, :].reshape(ityp.size,order='F')
+                s_outf = s_out[:, :].reshape(ityp.size,order='F')
+
                 # 2x2,(i+1)xr
 
                 #
@@ -2019,20 +2034,30 @@ class Rays(PyLayers,dict):
                 ### wall reflexion
                 # (theta, s_in,s_out)
 
-                R.stack(data=np.array((thetaf[uR], sif[uR], sif[uR+1])).T,
+                R.stack(data=np.array((thetaf[uR], s_inf[uR], s_outf[uR])).T,
                         idx=idxf[uR])
                 # floor reflexion
-                R.stack(data=np.array((thetaf[uRf], sif[uRf], sif[uRf+1])).T,
+                R.stack(data=np.array((thetaf[uRf], s_inf[uRf], s_outf[uRf])).T,
                         idx=idxf[uRf])
                 # ceil reflexion
-                R.stack(data=np.array((thetaf[uRc], sif[uRc], sif[uRc+1])).T,
+                R.stack(data=np.array((thetaf[uRc], s_inf[uRc], s_outf[uRc])).T,
                         idx=idxf[uRc])
+
+                # R.stack(data=np.array((thetaf[uR], sif[uR], sif[uR+1])).T,
+                #         idx=idxf[uR])
+                # # floor reflexion
+                # R.stack(data=np.array((thetaf[uRf], sif[uRf], sif[uRf+1])).T,
+                #         idx=idxf[uRf])
+                # # ceil reflexion
+                # R.stack(data=np.array((thetaf[uRc], sif[uRc], sif[uRc+1])).T,
+                #         idx=idxf[uRc])
 
                 ### sl[idxf[uT]]
                 # Transmision
                 ############
                 # (theta, s_in,s_out)
-                T.stack(data=np.array((thetaf[uT], sif[uT], sif[uT+1])).T, idx=idxf[uT])
+                # T.stack(data=np.array((thetaf[uT], sif[uT], sif[uT+1])).T, idx=idxf[uT])
+                T.stack(data=np.array((thetaf[uT], s_inf[uT], s_outf[uT])).T, idx=idxf[uT])
 
                 ###
                 #Diffraction
@@ -2044,7 +2069,8 @@ class Rays(PyLayers,dict):
                     # as well:
                     # data =  (6 x (nb_rayxnb_interactions) )
                     # ((phi0,phi,beta,N,sin,sout) x (nb_rayxnb_interactions) )
-                    data = np.vstack((self[k]['diffvect'],sif[uD],sif[uD+1]))
+
+                    data = np.vstack((self[k]['diffvect'],s_inf[uD],s_outf[uD]))
                     D.stack(data=data.T,idx=idxf[uD])
 
             elif self.los:

@@ -2526,7 +2526,7 @@ class Tchannel(bs.FUsignal):
         tau = self.taud + self.taue
         self.s = self.ift(Nz, ffts)
         x = self.s.x
-        r = bs.TUsignal(x=x, y=np.zeros(self.s.y.shape))
+        r = bs.TUsignal(x=x, y=np.zeros(self.s.y.shape[1:]))
 
         if len(tau) == 1:
             return(self.s)
@@ -3772,10 +3772,17 @@ maicher
         This is not properly implemented
 
         """
+        issue=[]
         assert np.allclose(self.tauk, C.tauk)
         for r in range(self.nray):
-            if np.allclose(self.Ctt.y[r,:], C.Ctt.y[r,:]):
-                print r
+            if not np.allclose(self.Ctt.y[r,:], C.Ctt.y[r,:]):
+                issue.append(r)
+        if len(issue) == 0:
+            print "Channel is reciprocal"
+        else: 
+            print "WARNING Reciprocity issue WARNING"
+            print len(issue),'/',self.nray, 'rays are not reciprocal,'
+            print "rays number with an issue :",issue
 
         # assert np.allclose(self.tang,C.rang)
         # assert np.allclose(self.rang,C.tang)
@@ -3940,13 +3947,12 @@ maicher
         if b ==[]:
             b = ant.Antenna('Omni',param={'pol':'t','GmaxdB':0},fGHz=self.fGHz)
 
-
         a.eval(th=self.tangl[:, 0], ph=self.tangl[:, 1], grid=False)
         Fat = bs.FUsignal(a.fGHz, a.Ft)
         Fap = bs.FUsignal(a.fGHz, a.Fp)
         b.eval(th=self.rangl[:, 0], ph=self.rangl[:, 1], grid=False)
-        Fbt = bs.FUsignal(a.fGHz, b.Ft)
-        Fbp = bs.FUsignal(a.fGHz, b.Fp)
+        Fbt = bs.FUsignal(b.fGHz, b.Ft)
+        Fbp = bs.FUsignal(b.fGHz, b.Fp)
 
         # Cg2cl should be applied here
         #
@@ -3958,7 +3964,6 @@ maicher
         #  Fb = 2 x r x f
         #
         #  (r x f ) (r x Nt x f )
-
         t1 = self.Ctt * Fat + self.Ctp * Fap
         t2 = self.Cpt * Fat + self.Cpp * Fap
 
