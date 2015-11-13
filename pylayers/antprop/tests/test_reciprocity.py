@@ -55,10 +55,16 @@ cir1 = sc1.applywavB(wav.sfg)
 ###### puis dans l'autre
 ######
 #####print "second rayon"
+print '##############'
+print '# reciprocal #'
+print '##############'
+
+
 r2d2 = r2d.reciprocal()
 ###### get new reciprocal r3d
 r3d2 = r2d2.to3D(S.L)
 r3d2.locbas(S.L)
+
 r3d2.fillinter(S.L)
 C2=r3d2.eval(fGHz)
 #####C2.sort()
@@ -71,4 +77,4 @@ cir2 = sc2.applywavB(wav.sfg)
 ######
 r3d1.check_reciprocity(r3d2)
 C1.check_reciprocity(C2)
-plt.plot(cir1.x,cir1.y,'b',cir2.x,cir2.y,'r')
+plt.plot(cir1.x,cir1.y[0,0,0,:],'b',cir2.x,cir2.y[0,0,0,:],'r')

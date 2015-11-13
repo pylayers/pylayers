@@ -3772,10 +3772,17 @@ maicher
         This is not properly implemented
 
         """
+        issue=[]
         assert np.allclose(self.tauk, C.tauk)
         for r in range(self.nray):
-            if np.allclose(self.Ctt.y[r,:], C.Ctt.y[r,:]):
-                print r
+            if not np.allclose(self.Ctt.y[r,:], C.Ctt.y[r,:]):
+                issue.append(r)
+        if len(issue) == 0:
+            print "Channel is reciprocal"
+        else: 
+            print "WARNING Reciprocity issue WARNING"
+            print len(issue),'/',self.nray, 'rays are not reciprocal,'
+            print "rays number with an issue :",issue
 
         # assert np.allclose(self.tang,C.rang)
         # assert np.allclose(self.rang,C.tang)

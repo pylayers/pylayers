@@ -414,17 +414,17 @@ class Rays(PyLayers,dict):
             assert (np.allclose(self[k]['sig'],r[k]['sig'][:,::-1,:]))
             if (self.isbased) & (r.isbased):
                 #assert (np.allclose(self[k]['nstrwall'],r[k]['nstrwall'][:,::-1,:]))
-                assert (np.allclose(self[k]['norm'],r[k]['norm'][:,::-1,:]))
+                assert (np.allclose(self[k]['norm'],r[k]['norm'][:,::-1,:])), 'interaction block:' + str(k)
                 #assert ((np.mod(self[k]['aoa']-r[k]['aod'],2*np.pi)==0).all())
                 #assert ((np.mod(self[k]['aod']-r[k]['aoa'],2*np.pi)==0).all())
-                assert (np.allclose(self[k]['Bo0'],r[k]['BiN']))
-                assert (np.allclose(self[k]['BiN'],r[k]['Bo0']))
-                assert (np.allclose(self[k]['vsi'],-r[k]['vsi'][:,::-1,:]))
-                assert (np.allclose(abs(self[k]['scpr']),abs(r[k]['scpr'][::-1,:])))
-                assert (np.allclose(self[k]['theta'],r[k]['theta'][::-1,:]))
-                assert (np.allclose(self[k]['Bi'],r[k]['Bo'][:,:,::-1,:]))
-                assert (np.allclose(self[k]['Bo'],r[k]['Bi'][:,:,::-1,:]))
-                assert (np.allclose(self[k]['B'],r[k]['B'][:,:,::-1,:].swapaxes(0,1)))
+                assert (np.allclose(self[k]['Bo0'],r[k]['BiN'])), 'interaction block:' + str(k)
+                assert (np.allclose(self[k]['BiN'],r[k]['Bo0'])), 'interaction block:' + str(k)
+                assert (np.allclose(self[k]['vsi'],-r[k]['vsi'][:,::-1,:])), 'interaction block:' + str(k)
+                assert (np.allclose(abs(self[k]['scpr']),abs(r[k]['scpr'][::-1,:]))), 'interaction block:' + str(k)
+                assert (np.allclose(self[k]['theta'],r[k]['theta'][::-1,:])), 'interaction block:' + str(k)
+                assert (np.allclose(self[k]['Bi'],r[k]['Bo'][:,:,::-1,:])), 'interaction block:' + str(k)
+                assert (np.allclose(self[k]['Bo'],r[k]['Bi'][:,:,::-1,:])), 'interaction block:' + str(k)
+                assert (np.allclose(self[k]['B'],r[k]['B'][:,:,::-1,:].swapaxes(0,1))), 'interaction block:' + str(k)
 
         if self.evaluated :
 
@@ -1457,11 +1457,13 @@ class Rays(PyLayers,dict):
                 Bi = np.concatenate((ew, ev), axis=1)
                 #  self[k]['Bi'] 3 x 3 x i x r 
                 self[k]['Bi'] = np.concatenate((es_in,ew,ev),axis=1)
-
+                ################################
                 w = np.cross(s_out, vn, axisa=0, axisb=0, axisc=0)
 
                 w, nw = fix_colinear()
                 #wn = w/np.sqrt(np.sum(w*w, axis=0))
+                wn = w/nw
+
                 v = np.cross(wn, s_out, axisa=0, axisb=0, axisc=0)
 
                 es_out = np.expand_dims(s_out, axis=1)
