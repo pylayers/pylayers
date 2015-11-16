@@ -318,7 +318,6 @@ class CorSer(PyLayers):
 
         # Load cameras
         self._loadcam()
-
         #BODY & interferers
         self.subject = str(self.log['Subject'].values[0].replace('jihad','Jihad')).split(' ')
         #filter typos in  self.subject
@@ -794,6 +793,8 @@ bernard
                      'Claude_Cylindre:',
                      'Meriem_Cylindre:']
             intertmp=[]
+            if self.serie==13:
+                self.interf.remove('Bernard_Cylindre:')
             for ui,i in enumerate(self.interf):
                 #try:
                 print "load ",i, " interfering body:",

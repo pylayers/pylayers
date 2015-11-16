@@ -79,7 +79,6 @@ cir2 = sc2.applywavB(wav.sfg)
 ######print r3d2[2]['sig'][:,:,1]
 ######
 ######
-pdb.set_trace()
 r3d1.check_reciprocity(r3d2)
 C1.check_reciprocity(C2)
 plt.figure()
