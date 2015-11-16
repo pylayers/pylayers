@@ -2140,6 +2140,7 @@ class Signatures(PyLayers,dict):
             inD=[]
             # inside cycle diffraction
             insideD=[]
+
             for d in D:
                 # get cycles involved in diff point d
                 dcy = self.L.ptGs2cy(d)
@@ -2327,7 +2328,6 @@ class Signatures(PyLayers,dict):
         out=[]
         lsig={}
         #initialize loop on the 1st interaction id(0,0,0,X,X,X)
-
         # uinit = np.unique(np.where(adi[:,:3]==0)[0])
         uinit = np.where(np.sum(adi[:,:3]==0,axis=1)==3)[0]
         oldout=uinit
