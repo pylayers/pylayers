@@ -1590,10 +1590,9 @@ class Tchannel(bs.FUsignal):
         pylayers.signal.bsignal.TUDsignal.ft1
 
         """
-        #
-        # return a TUsignal
-        #
+        # product in frequency domain between Channel (self) and waveform
         Y = self.apply(Wgam)
+        # back in time domain
         ri = Y.ft1(Nz=500,ffts=1)
 
         return(ri)
@@ -2527,6 +2526,7 @@ class Tchannel(bs.FUsignal):
         self.s = self.ift(Nz, ffts)
         x = self.s.x
         r = bs.TUsignal(x=x, y=np.zeros(self.s.y.shape[1:]))
+
 
         if len(tau) == 1:
             return(self.s)

@@ -855,7 +855,6 @@ class IntT(Inter):
 
 class IntD(Inter):
     """ diffraction interaction class
-        .. todo to be implemented
     """
     def __init__(self, data=np.array(()), idx=[],fGHz=np.array([2.4])):
 
