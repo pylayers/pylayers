@@ -588,7 +588,7 @@ class DLink(Link):
         #to be removed when radionode will be updated
         self.a = position
         self.Ta = rot
-
+        self.initfreq()
 
     @Ab.setter
     def Ab(self,Ant):
@@ -602,6 +602,8 @@ class DLink(Link):
         #to be removed when radionode will be updated
         self.b = position
         self.Tb = rot
+        self.initfreq()
+
 
     @Ta.setter
     def Ta(self,orientation):
@@ -618,7 +620,10 @@ class DLink(Link):
         if not isinstance(freq,np.ndarray):
             freq=np.array([freq])
         self._fGHz = freq
-
+        if self.Aa.typ == 'Omni':
+            self.Aa.fGHz = self.fGHz
+        if self.Ab.typ == 'Omni':
+            self.Ab.fGHz = self.fGHz
         #if len(freq)>1:
         #    self.fmin = freq[0]
         #    self.fmax = freq[-1]

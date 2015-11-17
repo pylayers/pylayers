@@ -1620,55 +1620,10 @@ class Rays(PyLayers,dict):
                     pb[updph2]= pt2[updph2]
 
                     pt = ptdiff.T
-                    # # pt1==pt2
-                    # ut1t2 = np.where(np.sum(pt1==pt2,axis=1)==2)[0]
-                    # # pt1==ph2
-                    # ut1h2 = np.where(np.sum(pt1==ph2,axis=1)==2)[0]
-                    # # ph1==pt2
-                    # uh1t2 = np.where(np.sum(ph1==pt2,axis=1)==2)[0]
-                    # # ph1==ph2
-                    # uh1h2 = np.where(np.sum(ph1==ph2,axis=1)==2)[0]
-
-                    # # Knowing which point is common of segments,
-                    # # it is possible to determine the angle 
-                    # # pa is on the 0 face
-                    # # pb is on the n face
-                    # # pt is the diffraction point
-                    # pa = np.empty((len(diffupt),2))
-                    # pb = np.empty((len(diffupt),2))
-                    # pt = np.empty((len(diffupt),2))
-                    # #     if (pt1==pt2).all():
-                    # #         pa = ph1
-                    # #         pb = ph2
-                    # #         pt = pt1
-                    # pa[ut1t2]=ph1[ut1t2]
-                    # pb[ut1t2]=ph2[ut1t2]
-                    # pt[ut1t2]=pt1[ut1t2]
-                    # #     if (pt1==ph2).all():
-                    # #         pa = ph1
-                    # #         pb = pt2
-                    # #         pt = pt1
-                    # pa[ut1h2]=ph1[ut1h2]
-                    # pb[ut1h2]=pt2[ut1h2]
-                    # pt[ut1h2]=pt1[ut1h2]
-                    # #     if (ph1==pt2).all():
-                    # #         pa = pt1
-                    # #         pb = ph2
-                    # #         pt = ph1
-                    # pa[uh1t2]=pt1[uh1t2]
-                    # pb[uh1t2]=ph2[uh1t2]
-                    # pt[uh1t2]=ph1[uh1t2]
-                    # #     if (ph1==ph2).all():
-                    # #         pa = pt1
-                    # #         pb = pt2
-                    # #         pt = ph1
-                    # pa[uh1h2]=pt1[uh1h2]
-                    # pb[uh1h2]=pt2[uh1h2]
-                    # pt[uh1h2]=p1[uh1h2]
 
                     # alpha_w : (nb_diffraction_points)
                     # alpha wegde (a.k.a. wedge parameters, a.k.a wedge aperture)
-                    # alpha_w = (geu.sector(pa.T,pb.T,pt.T)/180.*np.pi)/np.pi
+
                     alpha_w = 2.-geu.sector(pa.T,pb.T,pt.T)/180.
 
                     # angle between face 0, diffraction point and s_in
@@ -1688,26 +1643,21 @@ class Rays(PyLayers,dict):
                     uleft = geu.isleft(pa.T,pt.T,pb.T)
                     phi0 = geu.vecang(vptpan,sid[:2])
                     phi0[~uleft] = geu.vecang(sid[:2,~uleft],vptpan[:,~uleft])
-
                     # phi0 = np.arccos(np.sum(sid[:2]*vpaptn,axis=0))
 
                     # phi = arccos(dot(sod*vpavptn))
                     # phi = np.arccos(np.sum(-sod[:2]*vpaptn,axis=0))
-                    # phi = geu.vecang(sod[:2],vpaptn)
                     phi = geu.vecang(vptpan,-sod[:2])
                     phi[~uleft] = geu.vecang(-sod[:2,~uleft],vptpan[:,~uleft])
                     # beta
-                    # beta = np.arccos(np.sum(sid[1:]*vnormz[1:],axis=0))
                     beta = geu.vecang(sid[[0,2]],vnormz[[0,2]])
-                    # import ipdb
-                    # ipdb.set_trace()
+
                     # self[k]['diffvect'] is (4 x Nb_rays )
                     # for axis 0 lenght 4 represent :
                     # 0 => phi0
                     # 1 => phi
                     # 2 => beta
                     # 3 => N (wedge parameter)
-
                     self[k]['diffvect']=np.array((phi0,phi,beta,alpha_w))
 
                     ######
@@ -2107,7 +2057,6 @@ class Rays(PyLayers,dict):
                     # as well:
                     # data =  (6 x (nb_rayxnb_interactions) )
                     # ((phi0,phi,beta,N,sin,sout) x (nb_rayxnb_interactions) )
-
                     data = np.vstack((self[k]['diffvect'],s_inf[uD],s_outf[uD]))
                     D.stack(data=data.T,idx=self[k]['diffidx'])#idxf[uD])
 
