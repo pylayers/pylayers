@@ -2498,6 +2498,56 @@ class Tchannel(bs.FUsignal):
             rf.y[i, :] = r.y
         return rf
 
+    def rir(self, Nz, ffts=0):
+        """  construct ray impulse response
+
+        Parameters
+        ----------
+
+        Nz   : number of zeros for zero padding
+        ffts : fftshift indicator
+            0  no fftshift
+            1  apply fftshift
+
+        Returns
+        -------
+
+        r : TUsignal
+
+
+        See Also
+        --------
+
+        pylayers.signal.bsignal.
+
+
+        """
+        
+        tau = self.taud + self.taue
+        taumin = min(tau) 
+        taumax = max(tau)
+        dtau = (taumax-taumin)
+        self.s = self.ift(Nz, ffts)
+
+
+        shy = self.s.y.shape
+        dx = self.s.x[1]-self.s.x[0]
+        N  = np.ceil(dtau/dx)+shy[-1]
+        itau = np.floor((tau-taumin)/dx).astype(int)
+        
+        U = np.ones((shy[0],shy[-1]),dtype=int)
+        CU = np.cumsum(U,axis=1)
+
+        rir  = np.zeros((shy[0],N))
+        col1 = np.repeat(np.arange(shy[0],dtype=int),shy[-1])
+        col2 = (CU+itau[:,None]).ravel()
+
+        index = np.vstack((col1,col2)).T
+        
+    
+        rir[index[:,0],index[:,1]] = self.s.y.ravel()
+        return(rir)
+
     def ft1(self, Nz, ffts=0):
         """  construct CIR from ifft(RTF)
 
