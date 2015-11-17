@@ -632,7 +632,8 @@ class DLink(Link):
     def wav(self,waveform):
         self._wav = waveform
         if 'H' in dir(self):
-            self.chanreal = self.H.applywavB(self.wav.sfg)
+            if len(self.H.taud[0])!=0:
+                self.chanreal = self.H.get_cir(self.wav.sfg)
 
 
     def __repr__(self):
@@ -1391,9 +1392,9 @@ class DLink(Link):
         self.H = H
         if kwargs['applywav']:
             if self.H.isFriis:
-                self.ir = self.H.applywavB(self.wav.sf)
+                self.ir = self.H.get_cir(self.wav.sf)
             else:
-                self.ir = self.H.applywavB(self.wav.sfg)
+                self.ir = self.H.get_cir(self.wav.sfg)
 
         return self.H.ak, self.H.tk
 

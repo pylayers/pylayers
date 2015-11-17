@@ -1501,8 +1501,78 @@ class Tchannel(bs.FUsignal):
 
         return(V)
 
+
+    def applywav(self, Wgam):
+        """ apply waveform (time domain ) to obtain the
+            rays impulses response
+
+            this is the 2015 vectorized method for applying 
+            wav on Tchannel
+
+        Parameters
+        ----------
+
+        Wgam : waveform
+
+        Returns
+        -------
+
+        rir  : array, 
+            impulse response for each ray separately
+            the size of the array is (nb_rays, support_length)
+            support_length is calculated in regard of the 
+            delays of the channel
+
+            
+
+        Notes
+        ------
+
+            The overall received signal is built in time domain
+
+            Wgam is applied on each Ray Transfer function
+
+        See Also
+        --------
+
+        pylayers.signal.channel.rir
+
+        """
+
+        # product in frequency domain between Channel (self) and waveform
+        Y = self.apply(Wgam)
+        # back in time domain
+        rir = Y.rir(Nz=500,ffts=1)
+        return rir
+
+
+    def get_cir(self,Wgam):
+        """ get Channel impulse response of the channel 
+            for a given waveform
+
+        Parameters
+        ----------
+
+        Wgam : waveform
+
+        Returns
+        -------
+
+        ri  : TUsignal
+
+            impulse response for each ray separately
+
+
+        """
+
+        rir = self.applywav(Wgam)
+        cir = np.sum(rir.y,axis=0)
+        return bs.TUsignal(rir.x, cir)
+        
+
     def applywavC(self, w, dxw):
         """ apply waveform method C
+        DEPRECATED
 
         Parameters
         ----------
@@ -1516,8 +1586,10 @@ class Tchannel(bs.FUsignal):
         The overall received signal is built in time domain
         w is apply on the overall CIR
 
-        """
 
+        """
+        print DeprecationWarning(
+            'WARNING : Tchannel.applywavC is going to be replaced by Tchannel.applywav')
         H = self.H
         h = H.ft1(500, 1)
         dxh = h.dx()
@@ -1565,6 +1637,8 @@ class Tchannel(bs.FUsignal):
     def applywavB(self, Wgam):
         """ apply waveform method B (time domain )
 
+        DEPRECATED
+
         Parameters
         ----------
 
@@ -1590,6 +1664,10 @@ class Tchannel(bs.FUsignal):
         pylayers.signal.bsignal.TUDsignal.ft1
 
         """
+
+        print DeprecationWarning(
+            'WARNING : Tchannel.applywavB is going to be replaced by Tchannel.applywav')
+
         # product in frequency domain between Channel (self) and waveform
         Y = self.apply(Wgam)
         # back in time domain
@@ -1599,6 +1677,8 @@ class Tchannel(bs.FUsignal):
 
     def applywavA(self, Wgam, Tw):
         """ apply waveform method A
+
+        DEPRECATED
 
         Parameters
         ----------
@@ -1614,6 +1694,8 @@ class Tchannel(bs.FUsignal):
         pylayers.signal.bsignal
 
         """
+        print DeprecationWarning(
+            'WARNING : Tchannel.applywavA is going to be replaced by Tchannel.applywav')
         Hab = self.H.ft2(0.001)
         HabW = Hab * Wgam
         RI = HabW.symHz(10000)
@@ -2512,7 +2594,8 @@ class Tchannel(bs.FUsignal):
         Returns
         -------
 
-        r : TUsignal
+
+        rir : TUsignal
 
 
         See Also
@@ -2546,7 +2629,9 @@ class Tchannel(bs.FUsignal):
         
     
         rir[index[:,0],index[:,1]] = self.s.y.ravel()
-        return(rir)
+        t = np.linspace(taumin,taumax,N)
+        return bs.TUsignal(x=t, y=rir)
+
 
     def ft1(self, Nz, ffts=0):
         """  construct CIR from ifft(RTF)
