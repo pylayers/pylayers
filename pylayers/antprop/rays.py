@@ -521,7 +521,7 @@ class Rays(PyLayers,dict):
                    'graph':'s',
                     'color':'black',
                     'alpharay':1,
-                    'widthray':0.1,
+                    'widthray':0.5,
                     'colray':'black',
                     'ms':5,
                     'layout':True,
@@ -572,7 +572,7 @@ class Rays(PyLayers,dict):
                         ax.set_title('rays index :'+ str(self[i]['rayidx'][lray]))
         else:
             rlist = kwargs['rlist']
-            nbi = self.ray2nbi[rlist]
+            nbi = self._ray2nbi[rlist]
             nr = np.array((nbi,rlist))
             unb = np.unique(nr[0,:])
             unr = {int(i):np.where(nr[0,:]==i)[0] for i in unb}
@@ -1483,7 +1483,6 @@ class Rays(PyLayers,dict):
                 Bo = np.concatenate((ew, ev), axis=1)
                 #  self[k]['Bo'] 3 x 3 x i x r 
                 self[k]['Bo'] = np.concatenate((es_out,ew,ev),axis=1)
-
                 #
                 # AOA (rad)
                 #
@@ -1535,15 +1534,15 @@ class Rays(PyLayers,dict):
                 # create a numpy array to relate the ray index to its corresponding
                 # number of interactions
 
-                ray2nbi = np.ones((nbray))
+                _ray2nbi = np.ones((nbray),dtype=int)
 
 
                 try:
-                    self.ray2nbi=np.hstack((self.ray2nbi,ray2nbi))
+                    self._ray2nbi=np.hstack((self._ray2nbi,_ray2nbi))
                 except:
-                    self.ray2nbi=ray2nbi
+                    self._ray2nbi=_ray2nbi
 
-                self.ray2nbi[self[k]['rayidx']]  = k
+                self._ray2nbi[self[k]['rayidx']]  = k
                 nbrayt = nbrayt + nbray
                 self.raypt = self.raypt + self[k]['nbrays']
 
@@ -1551,13 +1550,14 @@ class Rays(PyLayers,dict):
                 # Start of diffraction specifc process
                 ##############################
                 if len(udiff[0]) != 0 :
-
+                    Z=np.where(ityp.T==1)
+                    udiff=Z[1],Z[0]
 
                     # diffseg,udiffseg  = np.unique(nstr[udiff],return_inverse=True)
                     diffupt=nstr[udiff]
                     # position of diff seg (- because iupnt accept > 0 reference to points)
                     ptdiff = L.pt[:,L.iupnt[-diffupt]]
-                    self[k]['diffidx']=udiff
+                    self[k]['diffidx']=idx[udiff[0],udiff[1]]
                     # get tail head position of seg associated to diff point
                     aseg = map(lambda x : filter(lambda y : y not in L.name['AIR'],
                                          nx.neighbors(L.Gs,x)),
@@ -1594,51 +1594,77 @@ class Rays(PyLayers,dict):
                     #
                     # 
 
-                    # pt1==pt2
-                    ut1t2 = np.where(np.sum(pt1==pt2,axis=1)==2)[0]
-                    # pt1==ph2
-                    ut1h2 = np.where(np.sum(pt1==ph2,axis=1)==2)[0]
-                    # ph1==pt2
-                    uh1t2 = np.where(np.sum(ph1==pt2,axis=1)==2)[0]
-                    # ph1==ph2
-                    uh1h2 = np.where(np.sum(ph1==ph2,axis=1)==2)[0]
+                    # point diff is pt1
+                    updpt1 = np.where(np.sum(ptdiff.T==pt1,axis=1))[0]
+                    # point diff is ph1
+                    updph1 = np.where(np.sum(ptdiff.T==ph1,axis=1))[0]
 
-                    # Knowing which point is common of segments,
-                    # it is possible to determine the angle 
-                    # pa is on the 0 face
-                    # pb is on the n face
-                    # pt is the diffraction point
+                    # point diff is pt2
+                    updpt2 = np.where(np.sum(ptdiff.T==pt2,axis=1))[0]
+
+                    # point diff is ph2
+                    updph2 = np.where(np.sum(ptdiff.T==ph2,axis=1))[0]
+
                     pa = np.empty((len(diffupt),2))
                     pb = np.empty((len(diffupt),2))
-                    pt = np.empty((len(diffupt),2))
-                    #     if (pt1==pt2).all():
-                    #         pa = ph1
-                    #         pb = ph2
-                    #         pt = pt1
-                    pa[ut1t2]=ph1[ut1t2]
-                    pb[ut1t2]=ph2[ut1t2]
-                    pt[ut1t2]=pt1[ut1t2]
-                    #     if (pt1==ph2).all():
-                    #         pa = ph1
-                    #         pb = pt2
-                    #         pt = pt1
-                    pa[ut1h2]=ph1[ut1h2]
-                    pb[ut1h2]=pt2[ut1h2]
-                    pt[ut1h2]=pt1[ut1h2]
-                    #     if (ph1==pt2).all():
-                    #         pa = pt1
-                    #         pb = ph2
-                    #         pt = ph1
-                    pa[uh1t2]=pt1[uh1t2]
-                    pb[uh1t2]=ph2[uh1t2]
-                    pt[uh1t2]=ph1[uh1t2]
-                    #     if (ph1==ph2).all():
-                    #         pa = pt1
-                    #         pb = pt2
-                    #         pt = ph1
-                    pa[uh1h2]=pt1[uh1h2]
-                    pb[uh1h2]=pt2[uh1h2]
-                    pt[uh1h2]=ph1[uh1h2]
+
+                    #### seg 1 :
+                    # if pt1 diff point =>  ph1 is the other point
+                    pa[updpt1]= ph1[updpt1]
+                    # if ph1 diff point =>  pt1 is the other point
+                    pa[updph1]= pt1[updph1]
+                    #### seg 2 :
+                    # if pt2 diff point =>  ph2 is the other point
+                    pb[updpt2]= ph2[updpt2]
+                    # if ph2 diff point =>  pt2 is the other point
+                    pb[updph2]= pt2[updph2]
+
+                    pt = ptdiff.T
+                    # # pt1==pt2
+                    # ut1t2 = np.where(np.sum(pt1==pt2,axis=1)==2)[0]
+                    # # pt1==ph2
+                    # ut1h2 = np.where(np.sum(pt1==ph2,axis=1)==2)[0]
+                    # # ph1==pt2
+                    # uh1t2 = np.where(np.sum(ph1==pt2,axis=1)==2)[0]
+                    # # ph1==ph2
+                    # uh1h2 = np.where(np.sum(ph1==ph2,axis=1)==2)[0]
+
+                    # # Knowing which point is common of segments,
+                    # # it is possible to determine the angle 
+                    # # pa is on the 0 face
+                    # # pb is on the n face
+                    # # pt is the diffraction point
+                    # pa = np.empty((len(diffupt),2))
+                    # pb = np.empty((len(diffupt),2))
+                    # pt = np.empty((len(diffupt),2))
+                    # #     if (pt1==pt2).all():
+                    # #         pa = ph1
+                    # #         pb = ph2
+                    # #         pt = pt1
+                    # pa[ut1t2]=ph1[ut1t2]
+                    # pb[ut1t2]=ph2[ut1t2]
+                    # pt[ut1t2]=pt1[ut1t2]
+                    # #     if (pt1==ph2).all():
+                    # #         pa = ph1
+                    # #         pb = pt2
+                    # #         pt = pt1
+                    # pa[ut1h2]=ph1[ut1h2]
+                    # pb[ut1h2]=pt2[ut1h2]
+                    # pt[ut1h2]=pt1[ut1h2]
+                    # #     if (ph1==pt2).all():
+                    # #         pa = pt1
+                    # #         pb = ph2
+                    # #         pt = ph1
+                    # pa[uh1t2]=pt1[uh1t2]
+                    # pb[uh1t2]=ph2[uh1t2]
+                    # pt[uh1t2]=ph1[uh1t2]
+                    # #     if (ph1==ph2).all():
+                    # #         pa = pt1
+                    # #         pb = pt2
+                    # #         pt = ph1
+                    # pa[uh1h2]=pt1[uh1h2]
+                    # pb[uh1h2]=pt2[uh1h2]
+                    # pt[uh1h2]=p1[uh1h2]
 
                     # alpha_w : (nb_diffraction_points)
                     # alpha wegde (a.k.a. wedge parameters, a.k.a wedge aperture)
@@ -1672,8 +1698,9 @@ class Rays(PyLayers,dict):
                     phi[~uleft] = geu.vecang(-sod[:2,~uleft],vptpan[:,~uleft])
                     # beta
                     # beta = np.arccos(np.sum(sid[1:]*vnormz[1:],axis=0))
-                    beta = geu.vecang(sid[1:],vnormz[1:])
-
+                    beta = geu.vecang(sid[[0,2]],vnormz[[0,2]])
+                    # import ipdb
+                    # ipdb.set_trace()
                     # self[k]['diffvect'] is (4 x Nb_rays )
                     # for axis 0 lenght 4 represent :
                     # 0 => phi0
@@ -1686,30 +1713,34 @@ class Rays(PyLayers,dict):
                     ######
                     # Bi diffract
                     #####
-                    w = np.cross(vnormz,sid, axisa=0, axisb=0, axisc=0)
+                    # w is the \perp \soft in diff
+                    w = np.cross(-sid,vnormz, axisa=0, axisb=0, axisc=0)
+
                     # nw : i x r
                     w, nw = fix_colinear()
 
                     wn = w/nw
                     # Handling channel reciprocity s_in --> -s_in
                     #v = np.cross(wn, s_in, axisa=0, axisb=0, axisc=0)
-                    v = np.cross(wn, sid, axisa=0, axisb=0, axisc=0)
+                    v = np.cross(wn, -sid, axisa=0, axisb=0, axisc=0)
 
-                    e_sid = np.expand_dims(sid, axis=1)
+                    e_sid = np.expand_dims(-sid, axis=1)
                     ew = np.expand_dims(wn, axis=1)
                     ev = np.expand_dims(v, axis=1)
 
                     #  Bid 3 x 2 x (i,r)diff
-                    Bid = np.concatenate((ew, ev), axis=1)
+                    Bid = np.concatenate((ev, ew), axis=1)
 
                     # update Bi for diffracted rays
                     Bi[:,:,udiff[0],udiff[1]] = Bid
                     ######
                     # Bo diffract
                     #####
-                    w = np.cross(vnormz,sod, axisa=0, axisb=0, axisc=0)
+                    w = np.cross(sod,vnormz, axisa=0, axisb=0, axisc=0)
 
                     w, nw = fix_colinear()
+                    wn = w/nw
+
                     #wn = w/np.sqrt(np.sum(w*w, axis=0))
                     v = np.cross(wn, sod, axisa=0, axisb=0, axisc=0)
 
@@ -1717,7 +1748,7 @@ class Rays(PyLayers,dict):
                     ew = np.expand_dims(wn, axis=1)
                     ev = np.expand_dims(v, axis=1)
                     #  Bod 3 x 2 x (i,r)diff
-                    Bod = np.concatenate((ew, ev), axis=1)
+                    Bod = np.concatenate((ev, ew), axis=1)
 
                     # update Bo for diffracted rays
                     Bo[:,:,udiff[0],udiff[1]] = Bod
@@ -1778,7 +1809,7 @@ class Rays(PyLayers,dict):
                 self[k]['nbrays'] = 1
                 self[k]['rayidx'] = ze
                 self.raypt = 1
-                self.ray2nbi = ze
+                self._ray2nbi = ze
         self._luw = np.unique(luw).tolist()
         self.isbased=True
 
@@ -1894,6 +1925,10 @@ class Rays(PyLayers,dict):
 
                 # (i+1) x r
                 si = self[k]['si']
+                # distance in
+                s_in = si[0:-1,:]
+                # distance in
+                s_out = si[1:,:]
                 
                 if self[k].has_key('diffvect'):
 
@@ -1915,41 +1950,47 @@ class Rays(PyLayers,dict):
                 thetaf = theta.reshape(size1,order='F')
                 #sif = si[0, :, :].reshape(si[0, :, :].size)
 
-                ## index creation
-                ##################
-                # create index for retrieving interactions
+                # ## index creation / already done in rays.locbas
+                # ##################
+                # # create index for retrieving interactions
 
-                # integer offset : total size idx
+                # # integer offset : total size idx
 
-                idxts = idxts + idx.size
+                # idxts = idxts + idx.size
 
-                idx = idxts + np.arange(ityp.size).reshape(np.shape(ityp),order='F')
+                # idx = idxts + np.arange(ityp.size).reshape(np.shape(ityp),order='F')
 
-                nbray = np.shape(idx)[1]
+                # nbray = np.shape(idx)[1]
 
-                self[k]['rays'] = idx
-                self[k]['nbrays'] = nbray
-                self[k]['rayidx'] = nbrayt + np.arange(nbray)
+                # self[k]['rays'] = idx
+                # self[k]['nbrays'] = nbray
+                # self[k]['rayidx'] = nbrayt + np.arange(nbray)
+                # # create a numpy array to relate the ray index to its corresponding
+                # # number of interactions
 
-                # create a numpy array to relate the ray index to its corresponding
-                # number of interactions
+                # # _ray2nbi = np.ones((nbray))
 
-                # ray2nbi = np.ones((nbray))
+                # #try:
+                # #    self._ray2nbi=np.hstack((self._ray2nbi,_ray2nbi))
+                # #except:
+                # #    self._ray2nbi=_ray2nbi
 
-                #try:
-                #    self.ray2nbi=np.hstack((self.ray2nbi,ray2nbi))
-                #except:
-                #    self.ray2nbi=ray2nbi
+                # #self._ray2nbi[self[k]['rayidx']]  = k
+                # nbrayt = nbrayt + nbray
+                # #self.raypt = self.raypt + self[k]['nbrays']
 
-                #self.ray2nbi[self[k]['rayidx']]  = k
-                nbrayt = nbrayt + nbray
-                #self.raypt = self.raypt + self[k]['nbrays']
-
-                idxf = idx.reshape(idx.size,order='F')
+                idxf = self[k]['rays'].reshape(self[k]['rays'].size,order='F')
                 #  (i+1)xr
+                # 
+
                 size2 = si[:, :].size
+                nbray = self[k]['nbrays']
+
                 #  ,(i+1)xr
-                sif = si[:, :].reshape(size2,order='F')
+                # sif = si[:, :].reshape(size2,order='F') # TO BE REMOVE
+                s_inf = s_in[:, :].reshape(ityp.size,order='F')
+                s_outf = s_out[:, :].reshape(ityp.size,order='F')
+
                 # 2x2,(i+1)xr
 
                 #
@@ -2031,20 +2072,30 @@ class Rays(PyLayers,dict):
                 ### wall reflexion
                 # (theta, s_in,s_out)
 
-                R.stack(data=np.array((thetaf[uR], sif[uR], sif[uR+1])).T,
+                R.stack(data=np.array((thetaf[uR], s_inf[uR], s_outf[uR])).T,
                         idx=idxf[uR])
                 # floor reflexion
-                R.stack(data=np.array((thetaf[uRf], sif[uRf], sif[uRf+1])).T,
+                R.stack(data=np.array((thetaf[uRf], s_inf[uRf], s_outf[uRf])).T,
                         idx=idxf[uRf])
                 # ceil reflexion
-                R.stack(data=np.array((thetaf[uRc], sif[uRc], sif[uRc+1])).T,
+                R.stack(data=np.array((thetaf[uRc], s_inf[uRc], s_outf[uRc])).T,
                         idx=idxf[uRc])
+
+                # R.stack(data=np.array((thetaf[uR], sif[uR], sif[uR+1])).T,
+                #         idx=idxf[uR])
+                # # floor reflexion
+                # R.stack(data=np.array((thetaf[uRf], sif[uRf], sif[uRf+1])).T,
+                #         idx=idxf[uRf])
+                # # ceil reflexion
+                # R.stack(data=np.array((thetaf[uRc], sif[uRc], sif[uRc+1])).T,
+                #         idx=idxf[uRc])
 
                 ### sl[idxf[uT]]
                 # Transmision
                 ############
                 # (theta, s_in,s_out)
-                T.stack(data=np.array((thetaf[uT], sif[uT], sif[uT+1])).T, idx=idxf[uT])
+                # T.stack(data=np.array((thetaf[uT], sif[uT], sif[uT+1])).T, idx=idxf[uT])
+                T.stack(data=np.array((thetaf[uT], s_inf[uT], s_outf[uT])).T, idx=idxf[uT])
 
                 ###
                 #Diffraction
@@ -2056,8 +2107,9 @@ class Rays(PyLayers,dict):
                     # as well:
                     # data =  (6 x (nb_rayxnb_interactions) )
                     # ((phi0,phi,beta,N,sin,sout) x (nb_rayxnb_interactions) )
-                    data = np.vstack((self[k]['diffvect'],sif[uD],sif[uD+1]))
-                    D.stack(data=data.T,idx=idxf[uD])
+
+                    data = np.vstack((self[k]['diffvect'],s_inf[uD],s_outf[uD]))
+                    D.stack(data=data.T,idx=self[k]['diffidx'])#idxf[uD])
 
             elif self.los:
                 ze = np.array([0])
@@ -2065,7 +2117,7 @@ class Rays(PyLayers,dict):
                 #self[k]['nbrays'] = 1
                 #self[k]['rayidx'] = ze
                 #self.raypt = 1
-                #self.ray2nbi=ze
+                #self._ray2nbi=ze
                 B.stack(data=np.eye(2)[np.newaxis,:,:], idx=ze)
                 B0.stack(data=np.eye(2)[np.newaxis,:,:],idx=ze)
 
@@ -2313,8 +2365,44 @@ class Rays(PyLayers,dict):
 
 
         """
-        raypos = np.nonzero(self[self.ray2nbi[r]]['rayidx'] == r)[0]
-        return(self[self.ray2nbi[r]]['rays'][:,raypos][:,0])
+        raypos = np.nonzero(self[self._ray2nbi[r]]['rayidx'] == r)[0]
+        return(self[self._ray2nbi[r]]['rays'][:,raypos][:,0])
+
+    def ray2nbi(self,r):
+        """ Get interaction block/number of interactions of a given ray
+
+        Parameters
+        ----------
+
+        r : integer
+            ray index
+
+        Returns
+        -------
+
+        nbi : int
+            interaction block number
+        """
+        return self._ray2nbi[r]
+
+    def ray2iidx(self,r):
+        """ Get interactions index of a given ray
+
+        Parameters
+        ----------
+
+        r : integer
+            ray index
+
+        Returns
+        -------
+
+        iidx : array
+            interaction index 
+        """
+        unbi = self.ray2nbi(r)
+        ur = np.where(self[unbi]['rayidx']==r)[0]
+        return self[unbi]['rays'][:,ur]
 
     def slab_nb(self, r):
         """ returns the slab numbers of r
@@ -2333,8 +2421,8 @@ class Rays(PyLayers,dict):
 
         """
 
-        raypos = np.nonzero(self[self.ray2nbi[r]]['rayidx'] == r)[0]
-        return(self[self.ray2nbi[r]]['sig'][0,1:-1,raypos[0]])
+        raypos = np.nonzero(self[self._ray2nbi[r]]['rayidx'] == r)[0]
+        return(self[self._ray2nbi[r]]['sig'][0,1:-1,raypos[0]])
 
 
     def typ(self, r,fromR=True):
@@ -2352,7 +2440,7 @@ class Rays(PyLayers,dict):
         """
         if fromR:
             di = {1:'D',2:'R',3:'T',4:'R',5:'R'}
-            nbi = self.ray2nbi[r]
+            nbi = self._ray2nbi[r]
             raypos = np.nonzero(self[nbi]['rayidx'] == r)[0]
             inter = self[nbi]['sig'][1,1:-1,raypos][0]
             return [di[i] for i in inter]
@@ -2620,7 +2708,7 @@ class Rays(PyLayers,dict):
                 f.children[-1].name='Rays with ' + str(i) + 'interactions'
         else :
 
-            nbi = self.ray2nbi[rlist]
+            nbi = self._ray2nbi[rlist]
             nr = np.array((nbi,rlist))
             unb = np.unique(nr[0,:])
             unr = {int(i):np.where(nr[0,:]==i)[0] for i in unb}

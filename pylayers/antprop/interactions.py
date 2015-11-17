@@ -307,7 +307,7 @@ class Interactions(Inter,dict):
         Inter.__init__(self)
         self['B'] = []
         self['L'] = []
-        self['R'] = []
+        self[''] = []
         self['T'] = []
         self['D'] = []
         self.evaluated = False
@@ -893,7 +893,8 @@ class IntD(Inter):
                 matNname = self.slab.di[eval(mats[1])]
                 mat0 = self.slab[mat0name]['lmat'][0]
                 matN = self.slab[matNname]['lmat'][0]
-                Ds,Dh = diff(self.fGHz,self.phi0[idx],self.phi[idx],self.si0[idx],self.sout[idx],self.N[idx],mat0,matN,beta=self.beta[idx])
+                # Ds,Dh = diff(self.fGHz,self.phi0[idx],self.phi[idx],self.si0[idx],self.sout[idx],self.N[idx],mat0,matN,beta=self.beta[idx])
+                Ds,Dh = diff(self.fGHz,self.phi0[idx],self.phi[idx],self.si0[idx],self.sout[idx],self.N[idx],mat0,matN,beta=np.pi/2.)
                 D[:,idx,0,0]=Ds
                 D[:,idx,1,1]=Dh
                 mapp.extend(self.dusl[m])

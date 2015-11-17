@@ -30,11 +30,12 @@ wav = wvf.Waveform(fcGHz=5,bandGHz=3)
 tic = time.time()
 Si1 = Signatures(S.L,Ctx,Crx)
 #Si1.run4(cutoff=5,algo='old')
-Si1.run5()
+# Si1.run5()
+Si1.run2015_2(cutoffbound=2)
 toc = time.time()
 print "signature ",toc-tic
 tic = time.time()
-r2d = Si1.rays(tx,rx)
+r2d = Si1.raysv(tx,rx)
 print "2D rays ",tic-toc
 r3d1 = r2d.to3D(S.L)
 toc = time.time()
@@ -50,7 +51,7 @@ tic = time.time()
 print "eval field ",tic-toc
 ###C1.sort()
 sc1 = C1.prop2tran()
-cir1 = sc1.applywavB(wav.sfg)
+# cir1 = sc1.applywavB(wav.sfg)
 #####
 ###### puis dans l'autre
 ######
@@ -68,21 +69,18 @@ r3d2.fillinter(S.L)
 C2=r3d2.eval(fGHz)
 #####C2.sort()
 sc2=C2.prop2tran()
-chw = sc2.apply(wav.sfg)
-cir = chw.ift(Nz=500,ffts=1)
-plt.imshow(cir.y[:,0,0,:],interpolation='nearest')
-plt.axis('auto')
-cir2 = sc2.applywavB(wav.sfg)
-######
-######print r3d1[2]['sig'][:,:,0]
-######print r3d2[2]['sig'][:,:,1]
-######
-######
+# chw = sc2.apply(wav.sfg)
+# cir = chw.ift(Nz=500,ffts=1)
+# plt.imshow(cir.y[:,0,0,:],interpolation='nearest')
+# plt.axis('auto')
+# cir2 = sc2.applywavB(wav.sfg)
+# ######
+# ######print r3d1[2]['sig'][:,:,0]
+# ######print r3d2[2]['sig'][:,:,1]
+# ######
+# ######
 r3d1.check_reciprocity(r3d2)
 C1.check_reciprocity(C2)
-plt.figure()
-plt.plot(cir1.x,cir1.y[0,0,:],'b',cir2.x,cir2.y[0,0,:],'r')
-plt.axis('auto')
-# plt.figure()
-# plt.plot(cir1.x,cir1.y[0,0,:],'b',cir2.x,cir2.y[0,0,:],'r')
-# plt.axis('auto')
+# # plt.figure()
+# # plt.plot(cir1.x,cir1.y[0,0,:],'b',cir2.x,cir2.y[0,0,:],'r')
+# # plt.axis('auto')
