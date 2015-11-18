@@ -1290,7 +1290,7 @@ class Usignal(Bsignal):
         A = Usignal(self.x, abs(self.y))
         return(A)
 
-    def eprfl(self,axis=1):
+    def eprfl(self,axis=-1):
         r""" Energy profile
 
         Parameters

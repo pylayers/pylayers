@@ -2229,13 +2229,16 @@ class Tchannel(bs.FUsignal):
 
         if typ == 'energy':
             E = self.eprfl()
-            u = np.argsort(E)[::-1]
+            import ipdb
+            ipdb.set_trace()
+            u = np.argsort(E,axis=0)[::-1]
+            u = u[:,0,0]
 
         self.taud = self.taud[u]
         self.taue = self.taue[u]
         self.doa = self.doa[u]
         self.dod = self.dod[u]
-        self.y = self.y[u,:]
+        self.y = self.y[u,...]
 
     def showtap(self,**kwargs):
         """ show tap
@@ -4034,7 +4037,6 @@ maicher
             Ett, Epp, Etp, Ept = self.energy()
             Etot = Ett+Epp+Etp+Ept
             u = np.argsort(Etot)
-
         self.tauk = self.tauk[u]
         self.tang = self.tang[u,:]
         self.rang = self.rang[u,:]

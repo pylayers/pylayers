@@ -7873,7 +7873,6 @@ class Layout(PyLayers):
             root = licy[0]      # pick the first cycle as root
             merged = [root]     # merged cycle is void
             tomerge = licy[-1:0:-1]  # pick the inverse remaining part as tomerge list
-            tomerg
             #for cy in tomerge: #
             while tomerge!=[]:
 
