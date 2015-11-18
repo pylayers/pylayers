@@ -1650,7 +1650,18 @@ class Rays(PyLayers,dict):
                     phi = geu.vecang(vptpan,-sod[:2])
                     phi[~uleft] = geu.vecang(-sod[:2,~uleft],vptpan[:,~uleft])
                     # beta
-                    beta = geu.vecang(sid[[0,2]],vnormz[[0,2]])
+                    # it is important to check if the sid comes from left or right
+                    # to this end assume that sid vector is composed
+                    # of 2 point : (0,0) and sid
+                    # compared to the position of the diffraction point in x
+                    # with an elevation=0
+                    sidxz = sid[[0,2]]
+                    vnormxz = vnormz[[0,2]]
+                    zero = np.zeros((2,ptdiff.shape[1]))
+                    zdiff = np.vstack((ptdiff[0],zero[0]))
+                    left = geu.isleft(zero,sidxz,zdiff)
+
+                    beta = np.arccos(np.sum(vnormz*sid,axis=0))
 
                     # self[k]['diffvect'] is (4 x Nb_rays )
                     # for axis 0 lenght 4 represent :
