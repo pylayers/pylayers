@@ -742,7 +742,7 @@ class Rays(PyLayers,dict):
         # vertical plane
         #
 
-        d = self.mirror(H=H, N=N, a=tx, b=rx)
+        d = self.mirror(H=H, N=N, a=tx[2], b=rx[2])
 
         #
         # Phase 2 : calculate 2D parameterization in the horizontal plane
