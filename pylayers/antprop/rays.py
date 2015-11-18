@@ -605,7 +605,7 @@ class Rays(PyLayers,dict):
 
         return(fig,ax)
 
-    def mirror(self, H=3, N=1, a = np.nan, b= np.nan):
+    def mirror(self, H=3, N=1, a = [], b= []):
         """ mirror a ray termination
 
         Parameters
@@ -660,9 +660,9 @@ class Rays(PyLayers,dict):
         #
         # heights of transmitter and receiver
         #
-        if np.isnan(a):
+        if a == []:
             a=self.pTx[2]
-        if np.isnan(b):
+        if b == []:
             b=self.pRx[2]
         ht = a
         hr = b
