@@ -605,7 +605,7 @@ class Rays(PyLayers,dict):
 
         return(fig,ax)
 
-    def mirror(self, H=3, N=1):
+    def mirror(self, H=3, N=1, a = np.nan, b= np.nan):
         """ mirror a ray termination
 
         Parameters
@@ -617,6 +617,13 @@ class Rays(PyLayers,dict):
 
         N : int
             handle the number of mirror reflexions
+
+        a : float
+            height of the point where the parametrization starts ( e.g. pTx[2])
+
+        b : float
+            height of the point where the parametrization ends ( e.g. pRx[2])
+
 
         Returns
         -------
@@ -645,13 +652,20 @@ class Rays(PyLayers,dict):
 
 
         """
+
+
+
         km = np.arange(-N+1, N+1, 1)
         kp = np.arange(-N, N+1, 1)
         #
         # heights of transmitter and receiver
         #
-        ht = self.pTx[2]
-        hr = self.pRx[2]
+        if np.isnan(a):
+            a=self.pTx[2]
+        if np.isnan(b):
+            b=self.pRx[2]
+        ht = a
+        hr = b
         assert (hr<H or H==0),"mirror : receiver higher than ceil height"
         assert (ht<H or H==0),"mirror : transmitter higher than ceil height"
 
@@ -728,7 +742,7 @@ class Rays(PyLayers,dict):
         # vertical plane
         #
 
-        d = self.mirror(H=H, N=N)
+        d = self.mirror(H=H, N=N, a=tx, b=rx)
 
         #
         # Phase 2 : calculate 2D parameterization in the horizontal plane
