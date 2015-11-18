@@ -1495,7 +1495,8 @@ class Rays(PyLayers,dict):
 
                 #  Bi 3 x 2 x i x r
                 Bo = np.concatenate((ew, ev), axis=1)
-                #  self[k]['Bo'] 3 x 3 x i x r 
+
+                 # self[k]['Bo'] 3 x 3 x i x r 
                 self[k]['Bo'] = np.concatenate((es_out,ew,ev),axis=1)
                 #
                 # AOA (rad)
@@ -1521,6 +1522,7 @@ class Rays(PyLayers,dict):
                 # Bo0 : 3 x 2 x r
                 BiN = np.concatenate((eth[:, np.newaxis, :],
                                       eph[:, np.newaxis, :]), axis=1)
+
 
                 self[k]['BiN'] = np.concatenate((-si[:,-1,np.newaxis,:],eth[:,np.newaxis,:],
                                                    eph[:,np.newaxis,:]),axis=1)
