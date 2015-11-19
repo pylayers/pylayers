@@ -1029,16 +1029,17 @@ class Layout(PyLayers):
         # wedge < 179 (not flat)
         #    idiff = filter(lambda x: wedgea[x]<179,range(len(self.degree[2])))
         #    self.ldiff = map(lambda x : self.degree[2][x],idiff)
-        wedgea = self.wedge(self.degree[2])
 
-        # wedge < 179 deg (not flat)
-        idiff = filter(lambda x: wedgea[x]<179,range(len(self.degree[2])))
-        self.ldiff = map(lambda x : self.degree[2][x],idiff)
 
-        # add degree 1 point
-        # This corresponds to degree 2 point with an adjascent airwall
-        # (half-plane diffraction)
-        self.ldiff = self.ldiff+list(self.degree[1])
+        # wedgea = self.wedge(self.degree[2])
+        # import ipdb
+        # ipdb.set_trace()
+
+        # # wedge < 179 deg (not flat)
+        # idiff = filter(lambda x: wedgea[x]<179,range(len(self.degree[2])))
+        # self.ldiff = map(lambda x : self.degree[2][x],idiff)
+
+
         # if problem here check file format 'z' should be a string
         self.maxheight = np.max([v[1] for v in nx.get_node_attributes(self.Gs,'z').values()])
         # calculate extremum of segments
@@ -2395,6 +2396,207 @@ class Layout(PyLayers):
         if name not in self.display['layers']:
             self.display['layers'].append(name)
         return(num)
+
+    def wedge2(self,apnt):
+        """ calculate wedge angle of a point
+
+        Parameters
+        ----------
+
+        lpnt : array int
+           list of point number
+
+
+        """
+
+        if isinstance(apnt,list):
+            apnt = np.array(apnt)
+
+        ## 0. Find the position of diffraction point
+        ptdiff = self.pt[:,self.iupnt[-apnt]]
+
+        ## 1. Find the associated segments and positions of a diff points
+
+        aseg = map(lambda x : filter(lambda y : y not in self.name['AIR'],
+                                         nx.neighbors(self.Gs,x)),
+                                         apnt)
+        # manage flat angle : diffraction by flat segment e.g. door limitation)
+        [aseg[ix].extend(x) for ix,x in enumerate(aseg) if len(x)==1]
+        # get points positions
+        pts = np.array(map(lambda x : self.seg2pts([x[0],x[1]]),aseg))
+
+
+        pt1 = pts[:,0:2,0]# tail seg1
+        ph1 = pts[:,2:4,0]# head seg1
+        pt2 = pts[:,0:2,1]# tail seg2
+        ph2 = pts[:,2:4,1]# head seg2
+
+
+        ## 2. Make the correct association
+        # pts is (nb_diffraction_points x 4 x 2)
+        # - The dimension 4 represent the 2x2 points: t1,h1 and t2,h2
+        # tail and head of segemnt 1 and 2 respectively
+        # a segment 
+        # - The dimension 2 is x,y
+        #
+        # The following aims to determine which tails and heads of 
+        # segments associated to a give diffraction point 
+        # are connected
+
+        # point diff is pt1
+        updpt1 = np.where(np.sum(ptdiff.T==pt1,axis=1)==2)[0]
+        # point diff is ph1
+        updph1 = np.where(np.sum(ptdiff.T==ph1,axis=1)==2)[0]
+
+        # point diff is pt2
+        updpt2 = np.where(np.sum(ptdiff.T==pt2,axis=1)==2)[0]
+        # point diff is ph2
+        updph2 = np.where(np.sum(ptdiff.T==ph2,axis=1)==2)[0]
+
+        pa = np.empty((len(apnt),2))
+        pb = np.empty((len(apnt),2))
+
+        #### seg 1 :
+        # if pt1 diff point =>  ph1 is the other point
+        pa[updpt1]= ph1[updpt1]
+        # if ph1 diff point =>  pt1 is the other point
+        pa[updph1]= pt1[updph1]
+        #### seg 2 :
+        # if pt2 diff point =>  ph2 is the other point
+        pb[updpt2]= ph2[updpt2]
+        # if ph2 diff point =>  pt2 is the other point
+        pb[updph2]= pt2[updph2]
+        # pt is the diffraction point
+        pt = ptdiff.T
+
+
+
+        vptpa = pt-pa
+        vptpan = vptpa.T / np.sqrt(np.sum((vptpa)*(vptpa),axis=1))
+        vptpb = pt-pb
+        vptpbn = vptpb.T / np.sqrt(np.sum((vptpb)*(vptpb),axis=1))
+        v1=vptpan
+        v2=vptpbn
+
+        import ipdb
+        ipdb.set_trace()
+        ang = geu.vecang(vptpbn,vptpan)
+        ang[~uleft] = geu.vecang(vptpan,vptpan)
+        
+
+    def get_singlGc_angles(self, c, unit= 'rad', inside=True):
+
+        """ find angles of a single Gc cycle of the layout. This is
+            based on merged cycle (cycles of Gc a.k.a. airwall merged
+            cycles) 
+
+        Parameters
+        ----------
+        c : int
+            Gc cyle number
+        unit : str
+            'deg' : degree values
+            'rad' : radian values
+        inside : bollean
+            True :  compute the inside angles of the cycle.
+                    (a.k.a. in regard of the interior of the polygon) 
+            False : compute the outside angles of the cycle.
+                    (a.k.a.  in regard of the exterior of the polygon)
+
+        Return
+        ------
+
+        (u,a)
+        u : int (Np)
+            point number
+        a : float (Np)
+            associated angle to the point
+
+
+        Notes
+        -----
+
+        http://www.mathopenref.com/polygonexteriorangles.html
+
+        """
+
+        if c > 0:
+            cycle = self.Gc.node[c]['cycle'].cycle 
+        else: # handle outdoorcycle 0
+            try:
+                cycle = self.ma.vnodes
+            except:
+                self.ma = self.mask()
+                cycle = self.ma.vnodes
+        upt = cycle[cycle<0]
+
+        # rupt=np.roll(upt,1)         # for debug
+        # rupt2=np.roll(upt,-1)         # for debug
+        pt = self.pt[:,self.iupnt[-upt]]
+        if geu.SignedArea(pt)<0:
+            upt = upt[::-1]
+            pt = pt [:,::-1]
+
+
+        ptroll = np.roll(pt,1,axis=1)
+
+        v = pt-ptroll
+        v = np.hstack((v,v[:,0][:,None]))
+        vn = v / np.sqrt(np.sum((v)*(v),axis=0))
+        v0 = vn[:,:-1]
+        v1 = vn[:,1:]
+        cross = np.cross(v0.T,v1.T)
+        dot = np.sum(v0*v1,axis=0)
+        ang = np.arctan2(cross,dot)
+        uneg = ang <0
+        ang[uneg] = -ang[uneg]+np.pi
+        ang[~uneg] = np.pi-ang[~uneg]
+
+        if not inside : 
+            ang = 2*np.pi-ang
+
+
+        if unit == 'deg':
+            return upt,ang*180/np.pi
+        elif unit == 'rad':
+            return upt,ang
+        # atan2(cross(a,b)), dot(a,b))
+
+
+    def get_Gc_angles(self):
+        """ find angles of all Gc cycles of the layout. This is
+            based on merged cycle (cycles of Gc a.k.a. airwall merged
+            cycles) 
+
+        Parameters
+        ----------
+        None
+
+        Return
+        ------
+
+        (u,a)
+        u : int (Np)
+            point number
+        a : float (Np)
+            associated angle to the point
+
+
+        See Also
+        --------
+
+        pylayer.layout.get_singlGc_angles
+        pylayer.layout.g2npy
+        """
+        dangles = {}
+        for c in self.Gc.nodes():
+            if c >0:
+                uc,ac = self.get_singlGc_angles(c,inside=True)
+                dangles[c]=np.array(([uc,ac]))
+            else:
+                uc,ac = self.get_singlGc_angles(c,inside=False)
+                dangles[c]=np.array(([uc,ac]))
+        return dangles
 
     def wedge(self,lpnt):
         """ calculate wedge angle of a point
@@ -5466,8 +5668,8 @@ class Layout(PyLayers):
         # ldiffout : list of outdoor diffraction points (belong to layout boundary)
         #
 
-        self.ldiffin  = filter(lambda x : x not in boundary.vnodes,self.ldiff)
-        self.ldiffout = filter(lambda x : x in boundary.vnodes,self.ldiff)
+        # self.ldiffin  = filter(lambda x : x not in boundary.vnodes,self.ldiff)
+        # self.ldiffout = filter(lambda x : x in boundary.vnodes,self.ldiff)
 
         #
         # boundary adjascent cycles
@@ -7892,8 +8094,7 @@ class Layout(PyLayers):
                     tomerge.insert(0,ncy)
                 else:
                     print 'merge' 
-                    import ipdb
-                    ipdb.set_trace()
+
                     neigh = nx.neighbors(self.Gc,ncy) # all neighbors of 5
                     self.Gc.node[root]['polyg']+=self.Gc.node[ncy]['polyg'] # here the merging
                     self.Gc.node[root]['cycle']+=self.Gc.node[ncy]['cycle'] # here the merging
@@ -7917,6 +8118,28 @@ class Layout(PyLayers):
                     self.Gc.remove_node(cy)
             # update pos of root cycle with new center of gravity
             self.Gc.pos[root]=tuple(self.Gc.node[root]['cycle'].g)
+
+        # FIND DIFFRACTION POINTS 
+        dangles = self.get_Gc_angles()
+        # look for in the dictionnary 
+        # which points are associated to an angle > pi + epsilon
+        # those are the diffraction point
+        ldi=[dangles[x][0,dangles[x][1,:]>np.pi+0.1].astype(int) for x in dangles]
+        self.ldiff=[]
+        self.ldiffin=[]
+        self.ldiffout=[]
+        # diffin = diff point (degree2)+ half-plane diff (degree1)
+        [self.ldiffin.extend(list(ld)) for ld in ldi[1:]]
+        self.ldiffin.extend(list(self.degree[1]))
+        self.ldiffout=list(ldi[0].astype(int))
+        self.ldiff=self.ldiffin+self.ldiffout
+
+        # add degree 1 point
+        # This corresponds to degree 2 point with an adjascent airwall
+        # (half-plane diffraction)
+        self.ldiff = self.ldiff+list(self.degree[1])
+
+
 
         return(Ga)
 
@@ -9134,6 +9357,8 @@ class Layout(PyLayers):
                             sigarr = np.hstack((sigarr, np.array([[it], [2]])))
 
         return sigarr
+
+
 
     def get_Sg_pos(self, sigarr):
         """ return position of the signatures
