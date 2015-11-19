@@ -49,8 +49,14 @@ C1 = r3d1.eval(fGHz)
 tic = time.time()
 print "eval field ",tic-toc
 ###C1.sort()
+<<<<<<< HEAD
+sc1 = C1.prop2tran()
+chw1 = sc1.apply(wav.sfg)
+rir1 = chw1.rir(Nz=500,ffts=1)
+=======
 # sc1 = C1.prop2tran()
 # cir1 = sc1.applywavB(wav.sfg)
+>>>>>>> 0ecb3dc98d4ba79bcea9a4a4d9753a9ec1fec2a7
 #####
 ###### puis dans l'autre
 ######
@@ -67,6 +73,15 @@ r3d2.locbas(S.L)
 r3d2.fillinter(S.L)
 C2=r3d2.eval(fGHz)
 #####C2.sort()
+sc2=C2.prop2tran()
+sc2.sort()
+chw2 = sc2.apply(wav.sfg)
+rir2 = chw2.rir(Nz=500,ffts=1)
+plt.imshow(rir2,interpolation='nearest',cmap=plt.cm.jet)
+plt.axis('auto')
+plt.figure()
+plt.imshow(np.log10(abs(rir2)),interpolation='nearest',cmap=plt.cm.jet)
+plt.axis('auto')
 # sc2=C2.prop2tran()
 # chw = sc2.apply(wav.sfg)
 # cir = chw.rir(Nz=500,ffts=1)
