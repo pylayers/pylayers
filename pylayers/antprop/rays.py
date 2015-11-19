@@ -1587,7 +1587,7 @@ class Rays(PyLayers,dict):
                     # self[k]['diffslabs']=[L.sla[x[0]]+'-'+L.sla[x[1]] for x in aseg]
                     # diffslab = [ idslab0-idslabn ]
 
-                    self[k]['diffslabs']=[str(L.sl[L.sla[x[0]]]['index'])+'-'+str(L.sl[L.sla[x[1]]]['index']) for x in aseg]
+                    self[k]['diffslabs']=[str(L.sl[L.sla[x[0]]]['index'])+'_'+str(L.sl[L.sla[x[1]]]['index']) for x in aseg]
                     uwl = np.unique(self[k]['diffslabs']).tolist()
                     luw.extend(uwl)
 
@@ -1611,15 +1611,15 @@ class Rays(PyLayers,dict):
                     # 
 
                     # point diff is pt1
-                    updpt1 = np.where(np.sum(ptdiff.T==pt1,axis=1))[0]
+                    updpt1 = np.where(np.sum(ptdiff.T==pt1,axis=1)==2)[0]
                     # point diff is ph1
-                    updph1 = np.where(np.sum(ptdiff.T==ph1,axis=1))[0]
+                    updph1 = np.where(np.sum(ptdiff.T==ph1,axis=1)==2)[0]
 
                     # point diff is pt2
-                    updpt2 = np.where(np.sum(ptdiff.T==pt2,axis=1))[0]
+                    updpt2 = np.where(np.sum(ptdiff.T==pt2,axis=1)==2)[0]
 
                     # point diff is ph2
-                    updph2 = np.where(np.sum(ptdiff.T==ph2,axis=1))[0]
+                    updph2 = np.where(np.sum(ptdiff.T==ph2,axis=1)==2)[0]
 
                     pa = np.empty((len(diffupt),2))
                     pb = np.empty((len(diffupt),2))
@@ -2078,6 +2078,7 @@ class Rays(PyLayers,dict):
                 #Diffraction
                 #phi0,phi,si,sd,N,mat0,matN,beta
                 # 
+
                 if self[k].has_key('diffvect'): 
                     # self[k]['diffvect'] = ((phi0,phi,beta,N) x (nb_rayxnb_interactions)   )
                     # si and so are stacked at the end of self[k]['diffvect'] 

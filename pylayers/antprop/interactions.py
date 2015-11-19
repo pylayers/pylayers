@@ -445,6 +445,7 @@ class Interactions(Inter,dict):
             print 'Warning : No T interaction Evaluated'
         # evaluate D and fill I
         try:
+
             self.I[:, self.D.idx, :, :] = self.D.eval(fGHz=fGHz)
             self.sout[self.D.idx] = self.D.sout
             self.si0[self.D.idx] = self.D.si0
@@ -887,7 +888,7 @@ class IntD(Inter):
             mapp=[]
             for m in self.dusl.keys():
                 idx = self.dusl[m]
-                mats = m.split('-')
+                mats = m.split('_')
                 mat0name = self.slab.di[eval(mats[0])]
                 matNname = self.slab.di[eval(mats[1])]
                 mat0 = self.slab[mat0name]['lmat'][0]
@@ -910,6 +911,7 @@ class IntD(Inter):
                 #     D[:,:,1,1]=Dh
                 #     mapp.extend(self.dusl[m])
             self.A[:, np.array((mapp)), :, :] = D[:,mapp,:,:]
+
             return(self.A)
         else :
             self.A = self.data[:, None, None, None]

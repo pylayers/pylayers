@@ -2521,7 +2521,7 @@ class Layout(PyLayers):
         """
 
         if c > 0:
-            cycle = self.Gc.node[c]['cycle'].cycle 
+            cycle = self.Gc.node[c]['cycle'].cycle
         else: # handle outdoorcycle 0
             try:
                 cycle = self.ma.vnodes

@@ -49,14 +49,10 @@ C1 = r3d1.eval(fGHz)
 tic = time.time()
 print "eval field ",tic-toc
 ###C1.sort()
-<<<<<<< HEAD
 sc1 = C1.prop2tran()
 chw1 = sc1.apply(wav.sfg)
 rir1 = chw1.rir(Nz=500,ffts=1)
-=======
-# sc1 = C1.prop2tran()
-# cir1 = sc1.applywavB(wav.sfg)
->>>>>>> 0ecb3dc98d4ba79bcea9a4a4d9753a9ec1fec2a7
+
 #####
 ###### puis dans l'autre
 ######
