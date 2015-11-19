@@ -588,7 +588,7 @@ class DLink(Link):
         #to be removed when radionode will be updated
         self.a = position
         self.Ta = rot
-
+        self.initfreq()
 
     @Ab.setter
     def Ab(self,Ant):
@@ -602,6 +602,8 @@ class DLink(Link):
         #to be removed when radionode will be updated
         self.b = position
         self.Tb = rot
+        self.initfreq()
+
 
     @Ta.setter
     def Ta(self,orientation):
@@ -618,7 +620,10 @@ class DLink(Link):
         if not isinstance(freq,np.ndarray):
             freq=np.array([freq])
         self._fGHz = freq
-
+        if self.Aa.typ == 'Omni':
+            self.Aa.fGHz = self.fGHz
+        if self.Ab.typ == 'Omni':
+            self.Ab.fGHz = self.fGHz
         #if len(freq)>1:
         #    self.fmin = freq[0]
         #    self.fmax = freq[-1]
@@ -632,7 +637,8 @@ class DLink(Link):
     def wav(self,waveform):
         self._wav = waveform
         if 'H' in dir(self):
-            self.chanreal = self.H.applywavB(self.wav.sfg)
+            if len(self.H.taud[0])!=0:
+                self.chanreal = self.H.get_cir(self.wav.sfg)
 
 
     def __repr__(self):
@@ -1391,9 +1397,9 @@ class DLink(Link):
         self.H = H
         if kwargs['applywav']:
             if self.H.isFriis:
-                self.ir = self.H.applywavB(self.wav.sf)
+                self.ir = self.H.get_cir(self.wav.sf)
             else:
-                self.ir = self.H.applywavB(self.wav.sfg)
+                self.ir = self.H.get_cir(self.wav.sfg)
 
         return self.H.ak, self.H.tk
 

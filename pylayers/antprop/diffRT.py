@@ -294,7 +294,7 @@ def Dfunc(sign,k,N,dphi,si,sd,beta=np.pi/2):
     nn[rnn<-1.5] = -2
 
 # KLA  ref[1] eq 27
-    L   = (si*sd)/(1.*(si+sd))
+    L   = ((si*sd)*np.sin(beta)**2)/(1.*(si+sd))
     AC  = np.cos( (2.0*N*nn*np.pi-dphi) / 2.0 )
     A   = 2*AC**2
     KLA = k * L * A
