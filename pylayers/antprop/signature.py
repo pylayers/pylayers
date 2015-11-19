@@ -4708,6 +4708,27 @@ class Signatures(PyLayers,dict):
 
         rays = Rays(ptx,prx)
 
+
+        # specific los reseach
+        los = shg.LineString(((ptx[0], ptx[1]), (prx[0], prx[1])))
+
+        # convex cycle of each point
+        cyptx = self.L.pt2cy(ptx)
+        cyprx = self.L.pt2cy(prx)
+
+        # merged cycle of each point
+        polyctx = self.L.Gt.node[cyptx]['polyg']
+        polycrx = self.L.Gt.node[cyprx]['polyg']
+
+        dtxrx = np.sum((ptx-prx)*(ptx-prx))
+        if dtxrx>1e-15:
+            if cyptx==cyprx:
+                if polyctx.contains(los):
+                    rays.los = True
+                else:
+                    rays.los = False
+
+
         M = self.image2(ptx)
         R = self.backtrace(ptx,prx,M)
         rays.update(R)
@@ -4755,6 +4776,7 @@ class Signatures(PyLayers,dict):
             rx = rx[:2]
 
         rayp={}
+
         # loop on number of interactions
         for ninter in self.keys():
             signatures = copy.deepcopy(self[ninter])
