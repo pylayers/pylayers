@@ -1651,8 +1651,8 @@ class Rays(PyLayers,dict):
 
                     # alpha_w : (nb_diffraction_points)
                     # alpha wegde (a.k.a. wedge parameters, a.k.a wedge aperture)
-
-                    alpha_w = 2.-geu.sector(pa.T,pb.T,pt.T)/180.
+                    nn = (360.-geu.sector(pa.T,pb.T,pt.T))/180.
+                    alpha_w = (2.-nn)*np.pi
 
                     # angle between face 0, diffraction point and s_in
                     # s_in[:2,udiff[0],udiff[1]]  : 
@@ -1688,7 +1688,6 @@ class Rays(PyLayers,dict):
                     zero = np.zeros((2,ptdiff.shape[1]))
                     zdiff = np.vstack((ptdiff[0],zero[0]))
                     left = geu.isleft(zero,sidxz,zdiff)
-
                     beta = np.arccos(np.sum(vnormz*sid,axis=0))
 
                     # self[k]['diffvect'] is (4 x Nb_rays )
@@ -2503,9 +2502,11 @@ class Rays(PyLayers,dict):
                             gamma = I.gamma[midx]
                             alpha = I.alpha[midx]
                         else : 
-                            th=['-']*max(Iidx)
-                            gamma = ['NC']*max(Iidx)
-                            alpha = ['NC']*max(Iidx)
+                            # from IPython.core.debugger import Tracer
+                            # Tracer()()
+                            th=['-']*max(max(Iidx),1)
+                            gamma = ['NC']*max(max(Iidx),1)
+                            alpha = ['NC']*max(max(Iidx),1)
                             udiff = np.where(self.I.D.idx==ray[iidx])[0]
                             phi0 = self.I.D.phi0[udiff][0]
                             phi=self.I.D.phi[udiff][0]

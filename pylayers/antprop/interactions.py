@@ -450,7 +450,6 @@ whereas Transmission rays found')
 
         if len(self.D.data)!=0:
             try:
-
                 self.I[:, self.D.idx, :, :] = self.D.eval(fGHz=fGHz)
                 self.sout[self.D.idx] = self.D.sout
                 self.si0[self.D.idx] = self.D.si0
@@ -494,7 +493,7 @@ class IntB(Inter):
         Inter.__init__(self, data=data, idx=idx, typ=-1)
 
     def __repr__(self):
-        s = str(np.shape(self.data))
+        s = 'number of B basis :' + str(np.shape(self.data)[0])
         return s    
 
     def eval(self,fGHz=np.array([2.4])):
@@ -899,12 +898,16 @@ class IntD(Inter):
                 matNname = self.slab.di[eval(mats[1])]
                 mat0 = self.slab[mat0name]['lmat'][0]
                 matN = self.slab[matNname]['lmat'][0]
+                # from IPython.core.debugger import Tracer
+                # Tracer()()
                 # Ds,Dh = diff(self.fGHz,self.phi0[idx],self.phi[idx],self.si0[idx],self.sout[idx],self.N[idx],mat0,matN,beta=self.beta[idx])
                 Ds,Dh = diff(self.fGHz,self.phi0[idx],self.phi[idx],
                              self.si0[idx],self.sout[idx],self.N[idx],
                              mat0,matN,beta=self.beta[idx])
                 D[:,idx,0,0]=Ds
                 D[:,idx,1,1]=Dh
+                # from IPython.core.debugger import Tracer
+                # Tracer()()
                 mapp.extend(self.dusl[m])
                 # import ipdb
                 # ipdb.set_trace()
