@@ -2,7 +2,7 @@ import numpy as np
 import scipy.special as sps
 import matplotlib.pyplot as plt
 import pdb
-def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2):
+def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2,debug=False):
     """ Luebbers Diffration coefficient
     for Ray tracing 
 
@@ -201,8 +201,10 @@ def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2):
 #        DTsoft = Rsoftoz*Rsoftnz*D1+Rsoftn*D3+(Rsofto*Rsoftn*D2+Rsofto*D4)
 #
 #        DThard = Rhardoz*Rhardnz*D1+Rhardn*D3+(Rhardo*Rhardn*D2+Rhardo*D4)
-
-    return Dsoft,Dhard#,D1,D2,D3,D4
+    if debug:
+        return Dsoft,Dhard,D1,D2,D3,D4
+    else :
+        return Dsoft,Dhard#,D1,D2,D3,D4
 
 
 def G(N,phi0,Ro,Rn):
@@ -294,7 +296,7 @@ def Dfunc(sign,k,N,dphi,si,sd,beta=np.pi/2):
     nn[rnn<-1.5] = -2
 
 # KLA  ref[1] eq 27
-    L   = (si*sd)/(1.*(si+sd))
+    L   = ((si*sd)*np.sin(beta)**2)/(1.*(si+sd))
     AC  = np.cos( (2.0*N*nn*np.pi-dphi) / 2.0 )
     A   = 2*AC**2
     KLA = k * L * A

@@ -222,6 +222,12 @@ class SelectL(object):
         if event.key == 'alt':
             self.alt_is_held = False
 
+    def OnClickRelease(self, event):
+        pass
+
+    def OnMotion(self, event):
+        pass
+
     def OnClick(self, event):
         """ handle OnClick event
 

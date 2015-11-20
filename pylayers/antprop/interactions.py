@@ -307,7 +307,7 @@ class Interactions(Inter,dict):
         Inter.__init__(self)
         self['B'] = []
         self['L'] = []
-        self['R'] = []
+        self[''] = []
         self['T'] = []
         self['D'] = []
         self.evaluated = False
@@ -424,35 +424,41 @@ class Interactions(Inter,dict):
         #     print 'Warning : No L interaction Evaluated'
 
         # evaluate R and fill I
-        try:
-            self.I[:, self.R.idx, :, :] = self.R.eval(fGHz=fGHz)
-            self.sout[self.R.idx] = self.R.sout
-            self.si0[self.R.idx] = self.R.si0
-            self.alpha[self.R.idx] = self.R.alpha
-            self.gamma[self.R.idx] = self.R.gamma
-        except:
-            print 'Warning : No R interaction Evaluated'
-
+        if len(self.R.data)!=0:
+            try:
+                self.I[:, self.R.idx, :, :] = self.R.eval(fGHz=fGHz)
+                self.sout[self.R.idx] = self.R.sout
+                self.si0[self.R.idx] = self.R.si0
+                self.alpha[self.R.idx] = self.R.alpha
+                self.gamma[self.R.idx] = self.R.gamma
+            except:
+                print Warning('Warning Interaction.eval: No R interaction Evaluated,\
+whereas Reflection rays found')
         # evaluate T and fill I
-        try:
-            self.I[:, self.T.idx, :, :] = self.T.eval(fGHz=fGHz)
-            self.sout[self.T.idx] = self.T.sout
-            self.si0[self.T.idx] = self.T.si0
-            self.alpha[self.T.idx] = self.T.alpha
-            self.gamma[self.T.idx] = self.T.gamma
+        if len(self.T.data)!=0:
+            try:
+                self.I[:, self.T.idx, :, :] = self.T.eval(fGHz=fGHz)
+                self.sout[self.T.idx] = self.T.sout
+                self.si0[self.T.idx] = self.T.si0
+                self.alpha[self.T.idx] = self.T.alpha
+                self.gamma[self.T.idx] = self.T.gamma
 
-        except:
-            print 'Warning : No T interaction Evaluated'
+            except:
+                print Warning('Warning Interaction.eval: No T interaction Evaluated,\
+whereas Transmission rays found')
         # evaluate D and fill I
-        try:
-            self.I[:, self.D.idx, :, :] = self.D.eval(fGHz=fGHz)
-            self.sout[self.D.idx] = self.D.sout
-            self.si0[self.D.idx] = self.D.si0
 
-            # self.alpha[self.D.idx] = self.D.alpha
-            # self.gamma[self.D.idx] = self.D.gamma
-        except:
-            print 'Warning : No D interaction Evaluated'
+        if len(self.D.data)!=0:
+            try:
+                self.I[:, self.D.idx, :, :] = self.D.eval(fGHz=fGHz)
+                self.sout[self.D.idx] = self.D.sout
+                self.si0[self.D.idx] = self.D.si0
+
+                # self.alpha[self.D.idx] = self.D.alpha
+                # self.gamma[self.D.idx] = self.D.gamma
+            except:
+                print Warning('Warning Interaction.eval: No D interaction Evaluated,\
+whereas Diffraction rays found')
 
         self.evaluated = True
 
@@ -487,7 +493,7 @@ class IntB(Inter):
         Inter.__init__(self, data=data, idx=idx, typ=-1)
 
     def __repr__(self):
-        s = str(np.shape(self.data))
+        s = 'number of B basis :' + str(np.shape(self.data)[0])
         return s    
 
     def eval(self,fGHz=np.array([2.4])):
@@ -726,7 +732,7 @@ class IntR(Inter):
             return(self.A)
         else:
             self.A = self.data[:, None, None, None]
-            print 'no R interaction to evaluate'
+            # print 'no R interaction to evaluate'
             return(self.A)
 
 
@@ -855,7 +861,6 @@ class IntT(Inter):
 
 class IntD(Inter):
     """ diffraction interaction class
-        .. todo to be implemented
     """
     def __init__(self, data=np.array(()), idx=[],fGHz=np.array([2.4])):
 
@@ -888,14 +893,21 @@ class IntD(Inter):
             mapp=[]
             for m in self.dusl.keys():
                 idx = self.dusl[m]
-                mats = m.split('-')
+                mats = m.split('_')
                 mat0name = self.slab.di[eval(mats[0])]
                 matNname = self.slab.di[eval(mats[1])]
                 mat0 = self.slab[mat0name]['lmat'][0]
                 matN = self.slab[matNname]['lmat'][0]
-                Ds,Dh = diff(self.fGHz,self.phi0[idx],self.phi[idx],self.si0[idx],self.sout[idx],self.N[idx],mat0,matN,beta=self.beta[idx])
+                # from IPython.core.debugger import Tracer
+                # Tracer()()
+                # Ds,Dh = diff(self.fGHz,self.phi0[idx],self.phi[idx],self.si0[idx],self.sout[idx],self.N[idx],mat0,matN,beta=self.beta[idx])
+                Ds,Dh = diff(self.fGHz,self.phi0[idx],self.phi[idx],
+                             self.si0[idx],self.sout[idx],self.N[idx],
+                             mat0,matN,beta=self.beta[idx])
                 D[:,idx,0,0]=Ds
                 D[:,idx,1,1]=Dh
+                # from IPython.core.debugger import Tracer
+                # Tracer()()
                 mapp.extend(self.dusl[m])
                 # import ipdb
                 # ipdb.set_trace()
@@ -908,6 +920,7 @@ class IntD(Inter):
                 #     D[:,:,1,1]=Dh
                 #     mapp.extend(self.dusl[m])
             self.A[:, np.array((mapp)), :, :] = D[:,mapp,:,:]
+
             return(self.A)
         else :
             self.A = self.data[:, None, None, None]

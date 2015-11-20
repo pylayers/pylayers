@@ -2140,6 +2140,7 @@ class Signatures(PyLayers,dict):
             inD=[]
             # inside cycle diffraction
             insideD=[]
+
             for d in D:
                 # get cycles involved in diff point d
                 dcy = self.L.ptGs2cy(d)
@@ -2327,7 +2328,6 @@ class Signatures(PyLayers,dict):
         out=[]
         lsig={}
         #initialize loop on the 1st interaction id(0,0,0,X,X,X)
-
         # uinit = np.unique(np.where(adi[:,:3]==0)[0])
         uinit = np.where(np.sum(adi[:,:3]==0,axis=1)==3)[0]
         oldout=uinit
@@ -4707,6 +4707,34 @@ class Signatures(PyLayers,dict):
             prx= np.r_[prx,0.5]
 
         rays = Rays(ptx,prx)
+        #
+        # detect LOS situation
+        #
+        #
+        # cycle on a line between 2 cycles
+        # lc  = self.L.cycleinline(self.source,self.target)
+
+        #
+        # if source and target in the same merged cycle
+        # and ptx != prx
+        #
+        los = shg.LineString(((ptx[0], ptx[1]), (prx[0], prx[1])))
+
+        # convex cycle of each point
+        cyptx = self.L.pt2cy(ptx)
+        cyprx = self.L.pt2cy(prx)
+
+
+        polyctx = self.L.Gt.node[cyptx]['polyg']
+        polycrx = self.L.Gt.node[cyprx]['polyg']
+
+        dtxrx = np.sum((ptx-prx)*(ptx-prx))
+        if dtxrx>1e-15:
+            if polyctx.contains(los):
+                rays.los = True
+            else:
+                rays.los = False
+
 
         M = self.image2(ptx)
         R = self.backtrace(ptx,prx,M)
@@ -4755,6 +4783,7 @@ class Signatures(PyLayers,dict):
             rx = rx[:2]
 
         rayp={}
+
         # loop on number of interactions
         for ninter in self.keys():
             signatures = copy.deepcopy(self[ninter])

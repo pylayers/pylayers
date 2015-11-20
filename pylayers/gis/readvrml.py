@@ -795,8 +795,8 @@ class VLayout(PyLayers):
 
 if __name__ == "__main__":
     doctest.testmod()
-    _filename = 'bat11DE1.wrl'
-    filename = pyu.getlong(_filename,'struc')
+    _filename = 'B11D-E1.wrl'
+    filename = pyu.getlong(_filename,'struc/wrl')
     VL = VLayout()
     VL.load(filename)
     dwall = VL.wallanalysis()

@@ -1290,7 +1290,7 @@ class Usignal(Bsignal):
         A = Usignal(self.x, abs(self.y))
         return(A)
 
-    def eprfl(self,axis=1):
+    def eprfl(self,axis=-1):
         r""" Energy profile
 
         Parameters
@@ -3410,7 +3410,7 @@ class FHsignal(FUsignal):
             #print "Nombre de dimensions : ",nd
             #print "shape (y)  : ",shape(y)
             if (nd > 1):
-                s.y = np.real(fft.fftshift(y, axes=[1]))
+                s.y = np.real(fft.fftshift(y, axes=[-1]))
             else:
                 s.y = np.real(fft.fftshift(y))
 
