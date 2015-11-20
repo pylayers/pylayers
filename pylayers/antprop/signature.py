@@ -4707,26 +4707,40 @@ class Signatures(PyLayers,dict):
             prx= np.r_[prx,0.5]
 
         rays = Rays(ptx,prx)
+        #
+        # detect LOS situation
+        #
+        #
+        # cycle on a line between 2 cycles
+        # lc  = self.L.cycleinline(self.source,self.target)
 
-
-        # specific los reseach
+        #
+        # if source and target in the same merged cycle
+        # and ptx != prx
+        #
         los = shg.LineString(((ptx[0], ptx[1]), (prx[0], prx[1])))
 
         # convex cycle of each point
         cyptx = self.L.pt2cy(ptx)
         cyprx = self.L.pt2cy(prx)
 
-        # merged cycle of each point
-        polyctx = self.L.Gt.node[cyptx]['polyg']
-        polycrx = self.L.Gt.node[cyprx]['polyg']
+        if self.L.Gt.node[cyptx].has_key('merged') and \
+            self.L.Gt.node[cyprx].has_key('merged'):
+            cyptx = self.L.Gt.node[cyptx]['merged']
+            cyprx = self.L.Gt.node[cyprx]['merged']
+            polyctx = self.L.Gc.node[cyptx]['polyg']
+            polycrx = self.L.Gc.node[cyprx]['polyg']
+        else : 
+            # merged cycle of each point
+            polyctx = self.L.Gt.node[cyptx]['polyg']
+            polycrx = self.L.Gt.node[cyprx]['polyg']
 
         dtxrx = np.sum((ptx-prx)*(ptx-prx))
         if dtxrx>1e-15:
-            if cyptx==cyprx:
-                if polyctx.contains(los):
-                    rays.los = True
-                else:
-                    rays.los = False
+            if polyctx.contains(los):
+                rays.los = True
+            else:
+                rays.los = False
 
 
         M = self.image2(ptx)
