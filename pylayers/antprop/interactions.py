@@ -424,36 +424,42 @@ class Interactions(Inter,dict):
         #     print 'Warning : No L interaction Evaluated'
 
         # evaluate R and fill I
-        try:
-            self.I[:, self.R.idx, :, :] = self.R.eval(fGHz=fGHz)
-            self.sout[self.R.idx] = self.R.sout
-            self.si0[self.R.idx] = self.R.si0
-            self.alpha[self.R.idx] = self.R.alpha
-            self.gamma[self.R.idx] = self.R.gamma
-        except:
-            print 'Warning : No R interaction Evaluated'
-
+        if len(self.R.data)!=0:
+            try:
+                self.I[:, self.R.idx, :, :] = self.R.eval(fGHz=fGHz)
+                self.sout[self.R.idx] = self.R.sout
+                self.si0[self.R.idx] = self.R.si0
+                self.alpha[self.R.idx] = self.R.alpha
+                self.gamma[self.R.idx] = self.R.gamma
+            except:
+                print Warning('Warning Interaction.eval: No R interaction Evaluated,\
+whereas Reflection rays found')
         # evaluate T and fill I
-        try:
-            self.I[:, self.T.idx, :, :] = self.T.eval(fGHz=fGHz)
-            self.sout[self.T.idx] = self.T.sout
-            self.si0[self.T.idx] = self.T.si0
-            self.alpha[self.T.idx] = self.T.alpha
-            self.gamma[self.T.idx] = self.T.gamma
+        if len(self.T.data)!=0:
+            try:
+                self.I[:, self.T.idx, :, :] = self.T.eval(fGHz=fGHz)
+                self.sout[self.T.idx] = self.T.sout
+                self.si0[self.T.idx] = self.T.si0
+                self.alpha[self.T.idx] = self.T.alpha
+                self.gamma[self.T.idx] = self.T.gamma
 
-        except:
-            print 'Warning : No T interaction Evaluated'
+            except:
+                print Warning('Warning Interaction.eval: No T interaction Evaluated,\
+whereas Transmission rays found')
         # evaluate D and fill I
-        try:
 
-            self.I[:, self.D.idx, :, :] = self.D.eval(fGHz=fGHz)
-            self.sout[self.D.idx] = self.D.sout
-            self.si0[self.D.idx] = self.D.si0
+        if len(self.D.data)!=0:
+            try:
 
-            # self.alpha[self.D.idx] = self.D.alpha
-            # self.gamma[self.D.idx] = self.D.gamma
-        except:
-            print 'Warning : No D interaction Evaluated'
+                self.I[:, self.D.idx, :, :] = self.D.eval(fGHz=fGHz)
+                self.sout[self.D.idx] = self.D.sout
+                self.si0[self.D.idx] = self.D.si0
+
+                # self.alpha[self.D.idx] = self.D.alpha
+                # self.gamma[self.D.idx] = self.D.gamma
+            except:
+                print Warning('Warning Interaction.eval: No D interaction Evaluated,\
+whereas Diffraction rays found')
 
         self.evaluated = True
 
