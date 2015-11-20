@@ -1,15 +1,25 @@
 #!/usr/bin/python
 #-*- coding:Utf-8 -*-
 
+from serial import Serial
+import pdb
+import time
+import doctest
+import threading
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from pylayers.util.project import *
+from pylayers.antprop.aarray import *
+from pylayers.measures.exploith5 import *
+from pylayers.measures.vna.E5072A import *
+import pylayers.measures.switch.ni_usb_6501 as sw
+
 """
 
 .. currentmodule:: pylayers.measures.parker
 
 This module handles scanner.
-
-.. autosummary::
-    :toctree: generated
-
 
 Profile Class
 =============
@@ -22,10 +32,8 @@ Profile Class
     Profile.duration
     Profile.show
 
-
-
 Axes Class
-=============
+==========
 
 .. autosummary::
     :toctree: generated/
@@ -53,8 +61,6 @@ Axes Class
     Axes.close
     Axes.fromfile
 
-
-
 Scanner Class
 =============
 
@@ -72,20 +78,6 @@ Scanner Class
     Scanner.meash5
 
 """
-
-
-from serial import Serial
-import pdb
-import time
-import doctest
-import threading
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-from pylayers.util.project import *
-from pylayers.antprop.aarray import *
-from pylayers.measures.exploith5 import *
-from pylayers.measures.vna.E5072A import *
 
 def gettty():
     """get tty and handles port conflicts
@@ -1441,7 +1433,7 @@ class Scanner(PyLayers):
 
     def meash5(self,
                A,
-               _fileh5='sdata.h5',
+               _fileh5='test.h5',
                ical=1,
                vel=15,
                Nmeas=1,
@@ -1524,22 +1516,29 @@ class Scanner(PyLayers):
 
         if  laxes==['x']:
             mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf),dtype=np.complex64)
+
         if  laxes==['y']:
             mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf),dtype=np.complex64)
+
         if  laxes==['z']:
             mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf),dtype=np.complex64)
+
         if  laxes==['x','y']:
             mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[1],Nf),dtype=np.complex64)
+
         if  laxes==['x','z']:
             mes =  Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[2],Nf),dtype=np.complex64)
+
         if  laxes==['y','z']:
             mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[1],lN[2],Nf),dtype=np.complex64)
+
         if  laxes==['x','y','z']:
             mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[1],lN[2],Nf),dtype=np.complex64)
+
         
-        mes.attrs['time']=time.ctime()
-        mes.attrs['author']= author
-        mes.attrs['comment']= comment
+        mes.attrs['time'] = time.ctime()
+        mes.attrs['author'] = author
+        mes.attrs['comment'] = comment
         mes.attrs['axes'] = laxes
         #mes.attrs['min'] = lmin
         #mes.attrs['max'] = lmax
@@ -1549,29 +1548,84 @@ class Scanner(PyLayers):
         
         mes.attrs['cal'] = "cal"+str(ical)
 
+        # Measure
+        #A.p.shape : Naxis x Npoint (3,8)
+
         for k in np.arange(A.p.shape[1]):
+            # A.p[:,k].shape : (3,)
             self.mv(pt=A.p[:,k],vel=vel)
             S = vna.getdata(Nmeas=Nmeas)
             if  laxes==['x']:
-                mes[:,k,:]=S
+                mes[:,k,:] = S
+
             if  laxes==['y']:
-                mes[:,k,:]=S
+                mes[:,k,:] = S
+
             if  laxes==['z']:
-                mes[:,k,:]=S
+                mes[:,k,:] = S
+
             if  laxes==['x','y']:
                 ix,iy = ktoxyz(k,Nx=l)
-                mes[:,ix,iy,:]=S
+                mes[:,ix,iy,:] = S
+
             if  laxes==['x','z']:
                 ix,iz = ktoxyz(k,Nx=l)
-                mes[:,ix,iz,:]=S
+                mes[:,ix,iz,:] = S
+
             if  laxes==['y','z']:
                 iy,iz = ktoxyz(k,Nx=l)
-                mes[:,iy,iz,:]=S
+                mes[:,iy,iz,:] = S
+
             if  laxes==['x','y','z']:
                 ix,iy,iz = ktoxyz(k,Nx=l)
-                mes[:,ix,iy,iz,:]=S
+                mes[:,ix,iy,iz,:] = S
 
         Dh5.close()
+
+    def measMIMO(self,
+               A,
+               _fileh5='test.h5',
+               ical=1,
+               vel=15,
+               Nmeas=1,
+               comment='',
+               author='M.D.B and B.U'):
+        """ measure MIMO channel over a set of point from AntArray and store in h5
+
+        Parameters
+        ----------
+
+        A       : Aarray
+        _fileh5 : string
+            name of the h5 file containing calibration data
+        vel     : int
+            scanner moving velocity
+        Nmeas   : int
+            Number of measurement
+
+        """
+    
+    #switch
+    switch = sw.get_adapter()
+    reattach=False
+    if not switch:
+        raise Exception("No device found")
+
+    switch.device
+    switch.set_io_mode(0b11111111, 0b11111111, 0b00000000)
+    
+    #for k in range(8):
+        #switch.write_port(0,k)
+        #for  l in range(4):
+            #print k,l
+            #switch.write_port(1,l)
+            #time.sleep(1)
+
+
+
+
+
+
 
     # def meas(self,A,vel=10,Nmeas=1):
     #     """ Measure over a set of point from AntArray
