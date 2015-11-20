@@ -1533,10 +1533,13 @@ class DLink(Link):
                 lr = self.R[i]['rayidx']
                 for r in range(len(lr)):
                     ir = lr[r]
-                    if kwargs['dB']:
-                        RayEnergy=max((20*np.log10(val[ir]/val.max())+kwargs['dyn']),0)/kwargs['dyn']
-                    else:
-                        RayEnergy=val[ir]/val.max()
+                    try:
+                        if kwargs['dB']:
+                            RayEnergy=max((20*np.log10(val[ir]/val.max())+kwargs['dyn']),0)/kwargs['dyn']
+                        else:
+                            RayEnergy=val[ir]/val.max()
+                    except:
+                        pass
                     if kwargs['col']=='cmap':
                         col = clm(RayEnergy)
                         width = RayEnergy

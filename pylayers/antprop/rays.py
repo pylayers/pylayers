@@ -2427,7 +2427,7 @@ class Rays(PyLayers,dict):
 
         """
         if fromR:
-            di = {1:'D',2:'R',3:'T',4:'R',5:'R'}
+            di = {0:'L',1:'D',2:'R',3:'T',4:'R',5:'R'}
             nbi = self._ray2nbi[r]
             raypos = np.nonzero(self[nbi]['rayidx'] == r)[0]
             inter = self[nbi]['sig'][1,1:-1,raypos][0]
