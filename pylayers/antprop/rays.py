@@ -613,8 +613,8 @@ class Rays(PyLayers,dict):
 
         H : float
             ceil height (default 3m)
-            if H=0 only floor reflection is calculated (ootdoor case)
-
+            if H=0 only floor reflection is calculated (outdoor case)
+            if H=-1 floor and ceil reflection are inhibited (2D test case)
         N : int
             handle the number of mirror reflexions
 
@@ -666,14 +666,14 @@ class Rays(PyLayers,dict):
             b=self.pRx[2]
         ht = a
         hr = b
-        assert (hr<H or H==0),"mirror : receiver higher than ceil height"
-        assert (ht<H or H==0),"mirror : transmitter higher than ceil height"
+        assert (hr<H or H==0 or H == -1),"mirror : receiver higher than ceil height"
+        assert (ht<H or H==0 or H == -1),"mirror : transmitter higher than ceil height"
 
         zkp = 2*kp*H + ht
         zkm = 2*km*H - ht
 
         d = {}
-        if H!=0:
+        if H>0:
             for zm in zkm:
                 if zm < 0:
                     bup = H
@@ -699,7 +699,9 @@ class Rays(PyLayers,dict):
                 d[zp] = abs(thrp-zp)/abs(hr-zp)
         elif H==0:
             d[-ht] = np.array([ht/(ht+hr)])
-
+            d[ht] = np.array([])
+        elif H==-1:
+            d[ht] = np.array([])
             # print "zp",zp
             # print "kp",kp
             # print "thrp",thrp
@@ -717,7 +719,8 @@ class Rays(PyLayers,dict):
 
         H : float
             ceil height (default 3m)
-
+            if H=0 only floor reflection is calculated (outdoor case)
+            if H=-1 floor and ceil reflection are inhibited (2D test case)
         N : int
             number of mirror reflexions
 
@@ -812,7 +815,6 @@ class Rays(PyLayers,dict):
             sigsave = copy.copy(sig)
             # add parameterization of tx and rx (0,1)
             a1 = np.concatenate((np.zeros((1, Nrayk)), a1, np.ones((1, Nrayk))))
-
             # reshape signature in adding tx and rx
             sig = np.hstack((np.zeros((2, 1, Nrayk), dtype=int),
                              sig,
@@ -826,12 +828,10 @@ class Rays(PyLayers,dict):
 
             # ndim x k+2 x Nrayk
             pte = np.hstack((Tx, pte, Rx))
-
             for l in d:                     # for each vertical pattern (C,F,CF,FC,....)
                 #print k,l,d[l]
                 Nint = len(d[l])            # number of additional interaction
                 #if ((k==1) & (l==5.0)):print
-                #    pdb.set_trace()
                 if Nint > 0:                # if new interaction ==> need extension
                     # a1e : extended horizontal+vertical parameterization
                     a1e = np.concatenate((a1, d[l].reshape(len(d[l]), 1)*
@@ -988,10 +988,22 @@ class Rays(PyLayers,dict):
                     # ptees[2,iint_f,iray_f]   = 0
                     # ptees[2,iint_c,iray_c]   = H
                     #
-                    z  = np.mod(l+a1es*(rx[2]-l), 2*H)
-                    pz = np.where(z > H)
-                    z[pz] = 2*H-z[pz]
-                    ptees[2, :] = z
+
+                    # 
+                    # case where ceil reflection exists
+
+                    if H != 0:
+                        z  = np.mod(l+a1es*(rx[2]-l), 2*H)
+                        pz = np.where(z > H)
+                        z[pz] = 2*H-z[pz]
+                        ptees[2, :] = z
+                    # case where ceil reflection are inhibited
+                    elif H==0 : 
+                        z  = abs(l+a1es*(rx[2]-l))
+                        # pz = np.where(z > H)
+                        # z[pz] = 2*H-z[pz]
+                        ptees[2, :] = z
+
                 # recopy old 2D parameterization (no extension)
                 else:
                     a1es = a1
@@ -2292,7 +2304,6 @@ class Rays(PyLayers,dict):
 
 
         # To be corrected in a future version
-
         Ct = np.swapaxes(Ct, 1, 0)
 
         c11 = Ct[:,:,0,0]

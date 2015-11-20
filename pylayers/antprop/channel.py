@@ -2627,7 +2627,6 @@ class Tchannel(bs.FUsignal):
         rir  = np.zeros((shy[0],N))
         col1 = np.repeat(np.arange(shy[0],dtype=int),shy[-1])
         col2 = (CU+itau[:,None]).ravel()
-
         index = np.vstack((col1,col2)).T
         
     

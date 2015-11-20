@@ -4724,16 +4724,9 @@ class Signatures(PyLayers,dict):
         cyptx = self.L.pt2cy(ptx)
         cyprx = self.L.pt2cy(prx)
 
-        if self.L.Gt.node[cyptx].has_key('merged') and \
-            self.L.Gt.node[cyprx].has_key('merged'):
-            cyptx = self.L.Gt.node[cyptx]['merged']
-            cyprx = self.L.Gt.node[cyprx]['merged']
-            polyctx = self.L.Gc.node[cyptx]['polyg']
-            polycrx = self.L.Gc.node[cyprx]['polyg']
-        else : 
-            # merged cycle of each point
-            polyctx = self.L.Gt.node[cyptx]['polyg']
-            polycrx = self.L.Gt.node[cyprx]['polyg']
+
+        polyctx = self.L.Gt.node[cyptx]['polyg']
+        polycrx = self.L.Gt.node[cyprx]['polyg']
 
         dtxrx = np.sum((ptx-prx)*(ptx-prx))
         if dtxrx>1e-15:

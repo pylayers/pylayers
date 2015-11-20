@@ -1184,7 +1184,7 @@ class DLink(Link):
             takes into consideration diffraction points
         ra_number_mirror_cf : int
             rays.to3D number of ceil/floor reflexions
-        ra_ceil_height_meter: float, (default [])
+        ra_ceil_H: float, (default [])
             ceil height . 
                 If [] : Layout max ceil height 
         ra_vectorized: boolean (True)
@@ -1242,7 +1242,7 @@ class DLink(Link):
                    'si_progress':False,
                    'diffraction':True,
                    'ra_vectorized':True,
-                   'ra_ceil_height_meter':[],
+                   'ra_ceil_H':[],
                    'ra_number_mirror_cf':1,
                    'force':[],
                    'alg':7,
@@ -1342,10 +1342,10 @@ class DLink(Link):
             else :
                 r2d = Si.rays(self.a,self.b)
 
-            if kwargs['ra_ceil_height_meter'] == []:
+            if kwargs['ra_ceil_H'] == []:
                 ceilheight = self.L.maxheight
             else:
-                ceilheight = kwargs['ra_ceil_height_meter']
+                ceilheight = kwargs['ra_ceil_H']
 
             R = r2d.to3D(self.L,H=ceilheight, N=kwargs['ra_number_mirror_cf'])
             R.locbas(self.L)
