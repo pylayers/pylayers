@@ -1248,6 +1248,7 @@ class DLink(Link):
                    'alg':7,
                    'si_reverb':4,
                    'threshold':0.1,
+                   'verbose':[],
                    }
 
         for key, value in defaults.items():
@@ -1266,37 +1267,47 @@ class DLink(Link):
                 else :
                     kwargs['force'] = []
 
+        if kwargs['verbose'] != []:
+            self.verbose=kwargs['verbose']
+
+
+
         # must be placed after all the init !!!!
-        print "checkh5"
+        if self.verbose :
+            print "checkh5"
         self.checkh5()
 
         ############
         # Signatures
         ############
-
-        print "Start Signatures"
+        if self.verbose :
+            print "Start Signatures"
         tic = time.time()
         Si = Signatures(self.L,self.ca,self.cb,cutoff=kwargs['cutoff'])
 
         if (self.dexist['sig']['exist'] and not ('sig' in kwargs['force'])):
             self.load(Si,self.dexist['sig']['grpname'])
-            print "load signature"
+            if self.verbose :
+                print "load signature"
         else :
             if kwargs['alg']==2015:
                 TMP=Si.run2015(cutoff=kwargs['cutoff'],
                         cutoffbound=kwargs['si_reverb'])
-                print "algo 2015"
+                if self.verbose :
+                    print "algo 2015"
             if kwargs['alg']==20152:
                 TMP=Si.run2015_2(cutoff=kwargs['cutoff'],
                         cutoffbound=kwargs['si_reverb'])
-                print "algo 20152"
+                if self.verbose :
+                    print "algo 20152"
 
             if kwargs['alg']==5:
                 Si.run5(cutoff=kwargs['cutoff'],
                         algo=kwargs['si_algo'],
                         diffraction=kwargs['diffraction'],
                         progress=kwargs['si_progress'])
-                print "algo 5"
+                if self.verbose :
+                    print "algo 5"
             if kwargs['alg']==7:
                 if kwargs['si_mt']==7:
                     Si.run7mt(cutoff=kwargs['cutoff'],
@@ -1304,14 +1315,16 @@ class DLink(Link):
                         diffraction=kwargs['diffraction'],
                         threshold=kwargs['threshold'],
                         progress=kwargs['si_progress'])
-                    print "algo 7 , si_mt"
+                    if self.verbose :
+                        print "algo 7 , si_mt"
                 else :
                     Si.run7(cutoff=kwargs['cutoff'],
                         algo=kwargs['si_algo'],
                         diffraction=kwargs['diffraction'],
                         threshold=kwargs['threshold'],
                         progress=kwargs['si_progress'])
-                    print "algo 7"
+                    if self.verbose :
+                        print "algo 7"
 
         #Si.run6(diffraction=kwargs['diffraction'])
         # save sig
@@ -1319,15 +1332,16 @@ class DLink(Link):
 
         self.Si = Si
         toc = time.time()
-        print "Stop signature",toc-tic
+        if self.verbose :
+            print "Stop signature",toc-tic
 
 
 
         ############
         # Rays
         ############
-
-        print "Start Rays"
+        if self.verbose :
+            print "Start Rays"
         tic = time.time()
         R = Rays(self.a,self.b)
         if self.dexist['ray']['exist'] and not ('ray' in kwargs['force']):
@@ -1357,7 +1371,8 @@ class DLink(Link):
 
         self.R = R
         toc = time.time()
-        print "Stop rays",toc-tic
+        if self.verbose :
+            print "Stop rays",toc-tic
 
         if self.R.nray == 0:
             raise NameError('No rays have been found. Try to re-run the simulation with a higher S.cutoff ')

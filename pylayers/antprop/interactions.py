@@ -727,7 +727,7 @@ class IntR(Inter):
             return(self.A)
         else:
             self.A = self.data[:, None, None, None]
-            print 'no R interaction to evaluate'
+            # print 'no R interaction to evaluate'
             return(self.A)
 
 
