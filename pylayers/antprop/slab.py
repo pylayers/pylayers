@@ -1613,8 +1613,8 @@ class Slab(Interface,dict):
                 Io[:, :, 1, 0] = -1
 # _Io=np.eye(2,dtype=complex)+np.eye(2)-1
                 Ip = np.array(np.ones([self.nf, self.nt, 2, 2]), dtype=complex)
-                Ip[:, :, 0, 1] = -1
-                Ip[:, :, 1, 0] = -1
+                Ip[:, :, 0, 1] = 1
+                Ip[:, :, 1, 0] = 1
 # _Ip=np.eye(2,dtype=complex)+np.eye(2)-1
             else:
                 if i == self.n - 2:
