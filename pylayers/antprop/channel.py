@@ -2057,6 +2057,17 @@ class Tchannel(bs.FUsignal):
             fig,ax = self.plotd(d='dod',fig=fig,ax=ax2,**kwargs)
         return fig,ax
 
+    def field(self):
+
+        tau  = self.tk[:,None,None,None]
+        fGHz = self.x[None,None,None,:]
+        E = np.exp(-2*1j*tau*fGHz)
+        F = self.y*E
+        return np.sum(F,axis=0)
+        #f = bs.FUsignal(x=self.x,y=np.sum(F,axis=0))
+        #return(f)
+
+
     def energy(self,mode='mean',Friis=True,sumray=False):
         """ calculates channel energy including antennas spatial filtering
 

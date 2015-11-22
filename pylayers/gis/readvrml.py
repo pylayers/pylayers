@@ -811,4 +811,8 @@ if __name__ == "__main__":
         else:
             plt.plot(x,y,color='k',linewidth=thick*10,alpha=1)
     plt.axis('scaled')
-
+    for k in dwall:
+        seg = dwall[k]['seg'].xy
+        pta = np.r_[seg[0][0],seg[1][0]]
+        phe = np.r_[seg[0][1],seg[1][1]]
+        print pta,phe
