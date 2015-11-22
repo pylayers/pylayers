@@ -1202,11 +1202,8 @@ class Scanner(PyLayers):
                 kwargs[k]=defaults[k]
 
         time = kwargs.pop('time')
-        Nt   = kwargs.pop('Nt')
-        Nr   = kwargs.pop('Nr')
-
-        self.Nt = Nt
-        self.Nr = Nr
+        self.Nt   = kwargs.pop('Nt')
+        self.Nr   = kwargs.pop('Nr')
 
 
         self.ser = Serial(port = port, baudrate=9600, timeout = 1)
@@ -1606,9 +1603,10 @@ class Scanner(PyLayers):
                _fileh5='test.h5',
                ical=1,
                vel=15,
-               Nmeas=1,
+               Nmeas=100,
                comment='',
-               author='M.D.B and B.U'):
+               author='M.D.B and B.U',
+               **kwargs):
         """ measure MIMO channel over a set of point from AntArray and store in h5
 
         Parameters
@@ -1623,27 +1621,152 @@ class Scanner(PyLayers):
             Number of measurement
 
         """
+  
+        #initializtion of the switch
+
+        switch = sw.get_adapter()
+        reattach=False
+        if not switch:
+            raise Exception("No device found")
+
+        switch.device
+        switch.set_io_mode(0b11111111, 0b11111111, 0b00000000)
+        
+        
+
+        # load the file containing the calibration data
+        Dh5 = mesh5(_fileh5)
+                
+        # open - sdata analysis
+        Dh5.open('r')
+        
+        try:
+            ldataset = Dh5.f.keys()
+        except:
+            raise IOError('no calibration in h5 file')
+        
+        lcal= [ eval(k.replace('cal','')) for k in ldataset if 'cal' in k ]
+        print lcal        
+        lcal=np.array(lcal)
+
+        if len(lcal)==1:
+           ical = lcal[0]
+        else:
+            if ical not  in lcal:
+                raise IOError('Error calibration : File does not exist')
+        Dh5.close()
+        
+        # read the chosen calibration and save parameters in ini file for VNA
+        
+        Dh5.readcal(ical=ical)
+        Dh5.saveini()
+        
+        # end of read and save
     
-    #switch
-    switch = sw.get_adapter()
-    reattach=False
-    if not switch:
-        raise Exception("No device found")
+        # initialization of vna
+        
+        vna = SCPI()
+        vna.load_config()
 
-    switch.device
-    switch.set_io_mode(0b11111111, 0b11111111, 0b00000000)
-    
-    #for k in range(8):
-        #switch.write_port(0,k)
-        #for  l in range(4):
-            #print k,l
-            #switch.write_port(1,l)
-            #time.sleep(1)
+        Npoint = A.p.shape[1]
+        laxes = []
+        if A.N[0]!=1:
+            laxes.append('x')
+        if A.N[1]!=1:
+            laxes.append('y')
+        if A.N[2]!=1:
+            laxes.append('z')
+        
+        lN =  [ A.N[k] for  k  in range(3) if A.N[k]!=1 ]
+        Nf = vna.Nf
+        
+        # end of initialization
+
+        Dh5.open('a')
+
+        try:
+            ldataset = Dh5.f.keys()
+        except:
+            ldataset = []
+        
+        lmes = [ldataset[k] for  k in range(len(ldataset))  if 'mes' in ldataset[k]]
+        mesname = 'mes'+str(len(lmes)+1)
+
+        if  laxes==['x']:
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf,self.Nt,self.Nr),dtype=np.complex64)
+
+        if  laxes==['y']:
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf,self.Nt,self.Nr),dtype=np.complex64)
+
+        if  laxes==['z']:
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf,self.Nt,self.Nr),dtype=np.complex64)
+
+        if  laxes==['x','y']:
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[1],Nf,self.Nt,self.Nr),dtype=np.complex64)
+
+        if  laxes==['x','z']:
+            mes =  Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[2],Nf,self.Nt,self.Nr),dtype=np.complex64)
+
+        if  laxes==['y','z']:
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[1],lN[2],Nf,self.Nt,self.Nr),dtype=np.complex64)
+
+        if  laxes==['x','y','z']:
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[1],lN[2],Nf,self.Nt,self.Nr),dtype=np.complex64)
+
+        
+        mes.attrs['time'] = time.ctime()
+        mes.attrs['author'] = author
+        mes.attrs['comment'] = comment
+        mes.attrs['axes'] = laxes
+        #mes.attrs['min'] = lmin
+        #mes.attrs['max'] = lmax
+        mes.attrs['Nmeas'] = Nmeas
+        
+        # here is the hard link between a measurement and its calibration 
+        
+        mes.attrs['cal'] = "cal"+str(ical)
+
+        # Measure
+        #A.p.shape : Naxis x Npoint (3,8)
 
 
+        for k in np.arange(A.p.shape[1]):
+            # A.p[:,k].shape : (3,)
+            self.mv(pt=A.p[:,k],vel=vel)
+            for iR in range(self.Nr):
+                switch.write_port(0,iR)
+                S = vna.getdata(Nmeas=Nmeas)
+                for iT in range(self.Nt):
+                    print iR,iT
+                    switch.write_port(1,iT)
+                    S = vna.getdata(Nmeas=Nmeas)                             
 
+            if  laxes==['x']:
+                mes[:,k,:] = S
 
+            if  laxes==['y']:
+                mes[:,k,:] = S
 
+            if  laxes==['z']:
+                mes[:,k,:] = S
+
+            if  laxes==['x','y']:
+                ix,iy = ktoxyz(k,Nx=l)
+                mes[:,ix,iy,:] = S
+
+            if  laxes==['x','z']:
+                ix,iz = ktoxyz(k,Nx=l)
+                mes[:,ix,iz,:] = S
+
+            if  laxes==['y','z']:
+                iy,iz = ktoxyz(k,Nx=l)
+                mes[:,iy,iz,:] = S
+
+            if  laxes==['x','y','z']:
+                ix,iy,iz = ktoxyz(k,Nx=l)
+                mes[:,ix,iy,iz,:] = S
+
+        Dh5.close()
 
 
     # def meas(self,A,vel=10,Nmeas=1):

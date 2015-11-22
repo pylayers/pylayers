@@ -627,7 +627,8 @@ class SCPI(PyLayers):
         lcal =  filter(lambda x : 'cal' in x,ldataset)
         calname = 'cal'+ str(len(lcal)+1)
 
-        dcal = f.create_dataset(calname,(Nmeas,self.Nf),dtype=np.complex64)
+        #dcal = f.create_dataset(calname,(Nmeas,self.Nf),dtype=np.complex64)
+        dcal = f.create_dataset(calname,(Nmeas,self.Nf,self.ifbHz),dtype=np.complex64)
         dcal.attrs['Nf']        = self.Nf
         dcal.attrs['fminGHz']   = self.fminGHz
         dcal.attrs['fmaxGHz']   = self.fmaxGHz
@@ -690,10 +691,11 @@ class SCPI(PyLayers):
         # section : stimulus
         self.fminGHz = di['stimulus']['fminghz']
         self.fmaxGHz = di['stimulus']['fmaxghz'] 
-        #self.Nf      = di['stimulus']['nf']
+        
         
         # section : response
         self.param   = di['response']['param']
+        self.navrg   = di['response']['navrg']
         #self.ifbHz   = di['response']['ifbhz']
 
         # values from section configuration set up
