@@ -596,7 +596,7 @@ class SCPI(PyLayers):
                  cables=[],
                  author='M.D.B and B.U',
                  comment='',
-                 Nmeas = 10):
+                 Nmeas = 100):
         """  measure a calibration vector and store in h5 file
 
         Parameters
@@ -643,7 +643,7 @@ class SCPI(PyLayers):
     
 
     def load_config(self,_filename='vna_config.ini'):
-        """ load a config file from an .ini file
+        """ load a vna config file from an .ini file
 
         Parameters
         ----------
@@ -684,22 +684,35 @@ class SCPI(PyLayers):
 
         #be careful no capital word in the sections
         
+        #link between vna and file ini
+
+        # section from  vna_config
+        # section : stimulus
         self.fminGHz = di['stimulus']['fminghz']
         self.fmaxGHz = di['stimulus']['fmaxghz'] 
-        self.Nf      = di['stimulus']['nf']
+        #self.Nf      = di['stimulus']['nf']
+        
+        # section : response
         self.param   = di['response']['param']
-        self.ifbHz   = di['response']['ifbhz']
+        #self.ifbHz   = di['response']['ifbhz']
+
+        # values from section configuration set up
+        self.Nf      = di['conf_201_1']['nf']
+        self.ifbHz   = di['conf_201_1']['ifbhz']
+        self.navrg   = di['conf_201_1']['ifbhz']
+
         
         self.freq(fminGHz=self.fminGHz,fmaxGHz=self.fmaxGHz,cmd='set')
         self.points(self.Nf,cmd='set')
         self.parS(param=self.param,cmd='set')
-        self.ifband(ifbHz=self.ifbHz,cmd='set') 
+        self.ifband(ifbHz=self.ifbHz,cmd='set')
+        self.autoscale()
 
 
 
 if __name__=='__main__':
     doctest.testmod()
-#
+
 #    vna = SCPI(vna_ip,verbose=False)
 #    ident = vna.getIdent()
 #    #lNpoints = ['201','401','601','801','1601']
@@ -723,8 +736,18 @@ if __name__=='__main__':
 #        print "Npoints : ",Npoints
 #        com1 = ":CALC1:DATA:SDAT?\n"
 #        N = 100
-#        fGHz = np.linspace(1.8,2.2,
-#Npoints)
+#        fGHz = np.linspace(1.8,2.2,Npoints)
+
+
+
+
+
+
+
+
+
+
+
 #        tic = time.time()
 #        for k in range(N):
 #            S = vna.getdata(Npoints=Npoints)

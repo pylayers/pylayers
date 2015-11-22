@@ -21,6 +21,8 @@ import pylayers.measures.switch.ni_usb_6501 as sw
 
 This module handles scanner.
 
+Authors : M.D.BALDE and B.UGUEN
+
 Profile Class
 =============
 
@@ -1174,7 +1176,7 @@ class Scanner(PyLayers):
 
     """
 
-    def __init__(self,port=gettty(),anchors={},reset=True,vel=15,acc=15):
+    def __init__(self,port=gettty(),anchors={},reset=True,vel=15,acc=15,**kwargs):
         """
         Parameters
         ----------
@@ -1190,6 +1192,23 @@ class Scanner(PyLayers):
 
         >>> s.a[1].name_of_function()
         """
+
+        defaults = {'time':True,
+                    'Nt' : 4,
+                    'Nr' : 8}
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+        time = kwargs.pop('time')
+        Nt   = kwargs.pop('Nt')
+        Nr   = kwargs.pop('Nr')
+
+        self.Nt = Nt
+        self.Nr = Nr
+
+
         self.ser = Serial(port = port, baudrate=9600, timeout = 1)
         self.anchors = anchors
         #
