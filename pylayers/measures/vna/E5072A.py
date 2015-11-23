@@ -14,6 +14,7 @@ from pylayers.util.project import  *
 import pylayers.signal.bsignal as bs
 import pylayers.antprop.channel as ch
 from pylayers.util import pyutil as pyu
+from  pylayers.measures.parker.smparker import *
 
 from time import sleep
 import seaborn as sns
@@ -64,7 +65,7 @@ class SCPI(PyLayers):
     _verbose = False
     _timeout = 0.150
 
-    def __init__(self,port=PORT,timeout=None,verbose=False):
+    def __init__(self,port=PORT,timeout=None,erbose=False,**kwargs):
         """
         Parameters
         ----------
@@ -94,6 +95,16 @@ class SCPI(PyLayers):
                  print 'SCPI>> connect({:s}:{:d}) failed {:s}',format(host,port,e)
             else:
                 raise e
+
+        defaults = {'Nt' : 4,
+                    'Nr' : 8}
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+        self.Nt   = kwargs.pop('Nt')
+        self.Nr   = kwargs.pop('Nr')
 
         self.getIdent()
         print self.ident
@@ -591,7 +602,7 @@ class SCPI(PyLayers):
 
 
     def calibh5(self,
-                 _fileh5='sdata',
+                 _fileh5='scalib',
                  _filename='vna_config.ini',
                  cables=[],
                  author='M.D.B and B.U',
@@ -602,7 +613,7 @@ class SCPI(PyLayers):
         Parameters
         ----------
 
-        _filesh5 : string
+        _fileh5 : string
             file h5 prefix
         _filename : string
             vna configuration file name
@@ -629,6 +640,7 @@ class SCPI(PyLayers):
 
         #dcal = f.create_dataset(calname,(Nmeas,self.Nf),dtype=np.complex64)
         dcal = f.create_dataset(calname,(Nmeas,self.Nf,self.ifbHz),dtype=np.complex64)
+        
         dcal.attrs['Nf']        = self.Nf
         dcal.attrs['fminGHz']   = self.fminGHz
         dcal.attrs['fmaxGHz']   = self.fmaxGHz
@@ -642,6 +654,73 @@ class SCPI(PyLayers):
         dcal[0:Nmeas,0:self.Nf] = D
         f.close()
     
+
+    def mimocalibh5(self,
+                 _fileh5='scalib',
+                 _filename='vna_config.ini',
+                 cables=[],
+                 author='M.D.B and B.U',
+                 comment='',
+                 Nmeas = 100):
+        """  measure a calibration vector and store in h5 file
+
+        Parameters
+        ----------
+
+        _fileh5 : string
+            file h5 prefix
+        _filename : string
+            vna configuration file name
+        cables : list of strings
+
+        """
+
+        # set config
+        # File from : ~/Pylayers_project/meas
+        self.load_config(_filename=_filename)
+
+        # get Nmeas calibration vector
+        Dmeas = self.getdata(chan=1,Nmeas=Nmeas)
+
+        # store calibration vector in a hdf5 file
+        fileh5 = pyu.getlong(_fileh5,pstruc['DIRMES'])+'.h5'
+        f = h5py.File(fileh5,"w")
+        try:
+            ldataset = f.keys()
+        except:
+            ldataset = []
+        
+        for iR in range(self.Nr):
+            for iT in range(self.Nt):
+                lmimocal =  filter(lambda x : 'mimocal' in x,ldataset)
+                calname = 'mimocal'+ str(len(lmimocal)+1) +'x'+ str(iT+1) +'x'+ str(iR+1)
+
+        dmimocal = f.create_dataset(calname,(Nmeas,self.Nt,self.Nr,self.Nf),dtype=np.complex64)
+        
+        dmimocal.attrs['Nf']        = self.Nf
+        dmimocal.attrs['fminGHz']   = self.fminGHz
+        dmimocal.attrs['fmaxGHz']   = self.fmaxGHz
+        dmimocal.attrs['ifbHz']     = self.ifbHz
+        dmimocal.attrs['Navrg']     = self.navrg
+        dmimocal.attrs['time']      = time.ctime()
+        dmimocal.attrs['author']    = author
+        dmimocal.attrs['cables']    = cables
+        dmimocal.attrs['comment']   = comment
+        dmimocal.attrs['param']     = self.param
+        dmimocal.attrs['Nt']        = self.Nt
+        dmimocal.attrs['Nr']        = self.Nr
+        dmimocal[0:Nmeas,0:self.Nf] = Dmeas
+
+        #S = Scanner()
+             
+        for i in range(self.Nr):
+            for j in range(self.Nt):
+                #Hmeas = S.measMIMO.Smeas.y[i,j,:]
+                #Hcal =  Hmeas/Dmeas[0,0,:]
+                #Dmeas = self.getdata(chan=1,Nmeas=Nmeas)
+                Hcal =  Dmeas[i,j,:]/Dmeas[0,0,:]
+        f.close()
+
 
     def load_config(self,_filename='vna_config.ini'):
         """ load a vna config file from an .ini file
@@ -689,6 +768,7 @@ class SCPI(PyLayers):
 
         # section from  vna_config
         # section : stimulus
+
         self.fminGHz = di['stimulus']['fminghz']
         self.fmaxGHz = di['stimulus']['fmaxghz'] 
         

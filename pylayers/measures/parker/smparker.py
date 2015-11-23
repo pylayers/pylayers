@@ -1496,7 +1496,7 @@ class Scanner(PyLayers):
         
         # read the chosen calibration and save parameters in ini file for VNA
         
-        Dh5.readcal(ical=ical)
+        Dh5.readcal(ical=ical,cmd='SISO')
         Dh5.saveini()
         
         # end of read and save
@@ -1622,7 +1622,7 @@ class Scanner(PyLayers):
 
         """
   
-        #initializtion of the switch
+        #initialization of the switch
 
         switch = sw.get_adapter()
         reattach=False
@@ -1632,8 +1632,6 @@ class Scanner(PyLayers):
         switch.device
         switch.set_io_mode(0b11111111, 0b11111111, 0b00000000)
         
-        
-
         # load the file containing the calibration data
         Dh5 = mesh5(_fileh5)
                 
@@ -1645,20 +1643,20 @@ class Scanner(PyLayers):
         except:
             raise IOError('no calibration in h5 file')
         
-        lcal= [ eval(k.replace('cal','')) for k in ldataset if 'cal' in k ]
-        print lcal        
-        lcal=np.array(lcal)
+        lmimocal= [ eval(k.replace('mimocal','')) for k in ldataset if 'mimocal' in k ]
+        print lmimocal        
+        lmimocal=np.array(lmimocal)
 
-        if len(lcal)==1:
-           ical = lcal[0]
+        if len(lmimocal)==1:
+           imimocal = lmimocal[0]
         else:
-            if ical not  in lcal:
-                raise IOError('Error calibration : File does not exist')
+            if imimocal not in lmimocal:
+                raise IOError('Error calibration MIMO : File does not exist')
         Dh5.close()
         
         # read the chosen calibration and save parameters in ini file for VNA
         
-        Dh5.readcal(ical=ical)
+        Dh5.readcal(imimocal=imimocal,cmd='MIMO')
         Dh5.saveini()
         
         # end of read and save
@@ -1689,82 +1687,84 @@ class Scanner(PyLayers):
         except:
             ldataset = []
         
-        lmes = [ldataset[k] for  k in range(len(ldataset))  if 'mes' in ldataset[k]]
-        mesname = 'mes'+str(len(lmes)+1)
+        for iR in range(self.Nr):
+            for iT in range(self.Nt):
+                lmimomes = [ldataset[k] for  k in range(len(ldataset))  if 'mimomes' in ldataset[k]]
+                mesname = 'mimomes'+str(len(lmimomes)+1) + str(iT+1) +'x'+ str(iR+1) 
 
         if  laxes==['x']:
-            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf,self.Nt,self.Nr),dtype=np.complex64)
+            mimomes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],self.Nt,self.Nr,Nf),dtype=np.complex64)
 
         if  laxes==['y']:
-            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf,self.Nt,self.Nr),dtype=np.complex64)
+            mimomes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],self.Nt,self.Nr,Nf),dtype=np.complex64)
 
         if  laxes==['z']:
-            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf,self.Nt,self.Nr),dtype=np.complex64)
+            mimomes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],self.Nt,self.Nr,Nf),dtype=np.complex64)
 
         if  laxes==['x','y']:
-            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[1],Nf,self.Nt,self.Nr),dtype=np.complex64)
+            mimomes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[1],self.Nt,self.Nr,Nf),dtype=np.complex64)
 
         if  laxes==['x','z']:
-            mes =  Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[2],Nf,self.Nt,self.Nr),dtype=np.complex64)
+            mimomes =  Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[2],self.Nt,self.Nr,Nf),dtype=np.complex64)
 
         if  laxes==['y','z']:
-            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[1],lN[2],Nf,self.Nt,self.Nr),dtype=np.complex64)
+            mimomes = Dh5.f.create_dataset(mesname,(Nmeas,lN[1],lN[2],self.Nt,self.Nr,Nf),dtype=np.complex64)
 
         if  laxes==['x','y','z']:
-            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[1],lN[2],Nf,self.Nt,self.Nr),dtype=np.complex64)
+            mimomes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[1],lN[2],self.Nt,self.Nr,Nf),dtype=np.complex64)
 
         
-        mes.attrs['time'] = time.ctime()
-        mes.attrs['author'] = author
-        mes.attrs['comment'] = comment
-        mes.attrs['axes'] = laxes
+        mimomes.attrs['time'] = time.ctime()
+        mimomes.attrs['author'] = author
+        mimomes.attrs['comment'] = comment
+        mimomes.attrs['axes'] = laxes
         #mes.attrs['min'] = lmin
         #mes.attrs['max'] = lmax
-        mes.attrs['Nmeas'] = Nmeas
+        mimomes.attrs['Nmeas'] = Nmeas
         
         # here is the hard link between a measurement and its calibration 
         
-        mes.attrs['cal'] = "cal"+str(ical)
+        for iR in range(self.Nr):
+            for iT in range(self.Nt):
+                mimomes.attrs['mimocal'] = "mimocal"+str(imimocal)+'x'+str(iT+1)+'x'+str(iR+1)
 
         # Measure
         #A.p.shape : Naxis x Npoint (3,8)
 
-
         for k in np.arange(A.p.shape[1]):
-            # A.p[:,k].shape : (3,)
             self.mv(pt=A.p[:,k],vel=vel)
             for iR in range(self.Nr):
                 switch.write_port(0,iR)
-                S = vna.getdata(Nmeas=Nmeas)
+                #Smeas = vna.getdata(Nmeas=Nmeas)
                 for iT in range(self.Nt):
                     print iR,iT
                     switch.write_port(1,iT)
-                    S = vna.getdata(Nmeas=Nmeas)                             
+                    Smeas = vna.getdata(Nmeas=Nmeas)                             
 
-            if  laxes==['x']:
-                mes[:,k,:] = S
+                    if  laxes==['x']:
+                        mimomes[:,k,:] = Smeas
 
-            if  laxes==['y']:
-                mes[:,k,:] = S
+                    if  laxes==['y']:
+                        mimomes[:,k,:] = Smeas
 
-            if  laxes==['z']:
-                mes[:,k,:] = S
+                    if  laxes==['z']:
+                        mimomes[:,k,:] = Smeas
 
-            if  laxes==['x','y']:
-                ix,iy = ktoxyz(k,Nx=l)
-                mes[:,ix,iy,:] = S
+                    if  laxes==['x','y']:
+                        ix,iy = ktoxyz(k,Nx=l)
+                        mimomes[:,ix,iy,:] = Smeas
 
-            if  laxes==['x','z']:
-                ix,iz = ktoxyz(k,Nx=l)
-                mes[:,ix,iz,:] = S
+                    if  laxes==['x','z']:
+                        ix,iz = ktoxyz(k,Nx=l)
+                        mimomes[:,ix,iz,:] = Smeas
 
-            if  laxes==['y','z']:
-                iy,iz = ktoxyz(k,Nx=l)
-                mes[:,iy,iz,:] = S
+                    if  laxes==['y','z']:
+                        iy,iz = ktoxyz(k,Nx=l)
+                        mimomes[:,iy,iz,:] = Smeas
 
-            if  laxes==['x','y','z']:
-                ix,iy,iz = ktoxyz(k,Nx=l)
-                mes[:,ix,iy,iz,:] = S
+                    if  laxes==['x','y','z']:
+                        ix,iy,iz = ktoxyz(k,Nx=l)
+                        mimomes[:,ix,iy,iz,:] = Smeas
 
         Dh5.close()
 
