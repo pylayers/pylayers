@@ -93,6 +93,8 @@ import pylayers.util.geomutil as geu
 import pylayers.util.pyutil as pyu
 from pylayers.util.project import *
 from pylayers.antprop.slab import *
+from pylayers.antprop.diffRT import *
+
 
 
 class Inter(PyLayers):
@@ -152,10 +154,13 @@ class Inter(PyLayers):
         self.E = np.eye(2)
 
     def __repr__(self):
-        return '%s :  %s  %s' % (
-                self.__class__.__name__,
-                str(np.shape(self.data)),
-                str(np.shape(self.idx)))
+        if self.evaluated:
+            s = self.T.__repr__()
+            s = s + '\n' + self.R.__repr__()
+            s = s + '\n'+ self.D.__repr__()
+            return s
+        else:
+            return 'I not yet evaluated'
 
     def create_dusl(self,a):
         """ create dictionnary of used slab.
@@ -188,17 +193,22 @@ class Inter(PyLayers):
             so : self.data[:,2]
 
         typ = 0
+            LOS
 
         typ = -1
+           Basis
 
         """
 
-        if self.typ in [1, 2, 3]:
+        if self.typ in [2, 3]: # reflection & transmission
             self.si0 = self.data[:, 1]
             self.sout = self.data[:, 2]
-        elif self.typ == 0:
+        elif self.typ == 1: # diffraction
+            self.si0 = self.data[:, 4]
+            self.sout = self.data[:, 5]
+        elif self.typ == 0: # loss
             self.sout = self.data[0]
-        elif self.typ == -1:
+        elif self.typ == -1: # B
             self.sout = np.zeros((len(self.data[:, 0])))
 
     def stack(self, data=np.array(()), idx=0, isdata=True):
@@ -297,7 +307,7 @@ class Interactions(Inter,dict):
         Inter.__init__(self)
         self['B'] = []
         self['L'] = []
-        self['R'] = []
+        self[''] = []
         self['T'] = []
         self['D'] = []
         self.evaluated = False
@@ -314,7 +324,6 @@ class Interactions(Inter,dict):
 
         """
         # determine the total number of interactions
-
         for i in li:
             if i.idx != []:
                 self.nimax = max(self.nimax,max((i.idx)))+1
@@ -334,7 +343,6 @@ class Interactions(Inter,dict):
 
         if not isinstance(self.typ, np.ndarray):
             self.typ = np.zeros((self.nimax), dtype=str)
-
         if i.typ == -1:
             self.B = i
             self['B'] = i.idx
@@ -395,53 +403,62 @@ class Interactions(Inter,dict):
         self.alpha = np.ones((self.nimax), dtype=complex)
         self.gamma = np.ones((self.nimax), dtype=complex)
 
-        # evaluate B and fill I
-        try:
-            self.I[:, self.B.idx, :, :] = self.B.eval(fGHz=fGHz)
-            self.sout[self.B.idx] = self.B.sout
-            self.si0[self.B.idx] = self.B.si0
+        # evaluate B and fill I 
+        # OUT DATED , B MDA are stored outside of I
+        # try:
+        #     self.I[:, self.B.idx, :, :] = self.B.eval(fGHz=fGHz)
+        #     self.sout[self.B.idx] = self.B.sout
+        #     self.si0[self.B.idx] = self.B.si0
 
-        except:
-            pass
+        # except:
+        #     print 'Warning : No B interaction Evaluated'
 
         # evaluate L and fill I
-        try:
-            self.I[:, self.L.idx, :, :] = self.L.eval(fGHz=fGHz)
-            self.sout[self.L.idx] = self.L.sout
-            self.si0[self.L.idx] = self.L.si0
+        # OUT DATED , Los interaction is managed oustside of I
+        # try:
+        #     self.I[:, self.L.idx, :, :] = self.L.eval(fGHz=fGHz)
+        #     self.sout[self.L.idx] = self.L.sout
+        #     self.si0[self.L.idx] = self.L.si0
 
-        except:
-            pass
+        # except:
+        #     print 'Warning : No L interaction Evaluated'
 
         # evaluate R and fill I
-        try:
-            self.I[:, self.R.idx, :, :] = self.R.eval(fGHz=fGHz)
-            self.sout[self.R.idx] = self.R.sout
-            self.si0[self.R.idx] = self.R.si0
-            self.alpha[self.R.idx] = self.R.alpha
-            self.gamma[self.R.idx] = self.R.gamma
-        except:
-            pass
-
+        if len(self.R.data)!=0:
+            try:
+                self.I[:, self.R.idx, :, :] = self.R.eval(fGHz=fGHz)
+                self.sout[self.R.idx] = self.R.sout
+                self.si0[self.R.idx] = self.R.si0
+                self.alpha[self.R.idx] = self.R.alpha
+                self.gamma[self.R.idx] = self.R.gamma
+            except:
+                print Warning('Warning Interaction.eval: No R interaction Evaluated,\
+whereas Reflection rays found')
         # evaluate T and fill I
-        try:
-            self.I[:, self.T.idx, :, :] = self.T.eval(fGHz=fGHz)
-            self.sout[self.T.idx] = self.T.sout
-            self.si0[self.T.idx] = self.T.si0
-            self.alpha[self.T.idx] = self.T.alpha
-            self.gamma[self.T.idx] = self.T.gamma
+        if len(self.T.data)!=0:
+            try:
+                self.I[:, self.T.idx, :, :] = self.T.eval(fGHz=fGHz)
+                self.sout[self.T.idx] = self.T.sout
+                self.si0[self.T.idx] = self.T.si0
+                self.alpha[self.T.idx] = self.T.alpha
+                self.gamma[self.T.idx] = self.T.gamma
 
-        except:
-            pass
+            except:
+                print Warning('Warning Interaction.eval: No T interaction Evaluated,\
+whereas Transmission rays found')
         # evaluate D and fill I
-        try:
-            self.I[:, self.D.idx, :, :] = self.D.eval(fGHz=fGHz)
-            self.sout[self.D.idx] = self.D.sout
-            self.si0[self.D.idx] = self.D.si0
-            self.alpha[self.D.idx] = self.D.alpha
-            self.gamma[self.D.idx] = self.D.gamma
-        except:
-            pass
+
+        if len(self.D.data)!=0:
+            try:
+                self.I[:, self.D.idx, :, :] = self.D.eval(fGHz=fGHz)
+                self.sout[self.D.idx] = self.D.sout
+                self.si0[self.D.idx] = self.D.si0
+
+                # self.alpha[self.D.idx] = self.D.alpha
+                # self.gamma[self.D.idx] = self.D.gamma
+            except:
+                print Warning('Warning Interaction.eval: No D interaction Evaluated,\
+whereas Diffraction rays found')
 
         self.evaluated = True
 
@@ -476,8 +493,8 @@ class IntB(Inter):
         Inter.__init__(self, data=data, idx=idx, typ=-1)
 
     def __repr__(self):
-        s = Inter.__repr__(self)
-        return(s)
+        s = 'number of B basis :' + str(np.shape(self.data)[0])
+        return s    
 
     def eval(self,fGHz=np.array([2.4])):
         """ evaluation of B interactions
@@ -527,72 +544,73 @@ class IntB(Inter):
             print 'no B interaction to evaluate'
             return(self.data[:, None, None, None])
 
+##### Interaction Loss in not used for speed purpose
+# the loss interaction is computed and added after the global computation
+# class IntL(Inter):
+#     """ Loss interaction
 
-class IntL(Inter):
-    """ Loss interaction
+#     (nf ,ninter, 2, 2)
 
-    (nf ,ninter, 2, 2)
+#     Attributes
+#     ----------
 
-    Attributes
-    ----------
+#         data : np.array((ninter x [dist]))
+#         idx : list
+#             index of the corresponding ray and interaction
 
-        data : np.array((ninter x [dist]))
-        idx : list
-            index of the corresponding ray and interaction
+#     """
+#     def __init__(self, data=np.array(()), idx=[]):
+#         Inter.__init__(self, data=data, idx=idx, typ=0)
 
-    """
-    def __init__(self, data=np.array(()), idx=[]):
-        Inter.__init__(self, data=data, idx=idx, typ=0)
+#     def __repr__(self):
+#         s = Inter.__repr__(self)
+#         return(s)
 
-    def __repr__(self):
-        s = Inter.__repr__(self)
-        return(s)
+#     def eval(self,fGHz=np.array([2.4])):
+#         """ evaluation of B interactions
 
-    def eval(self,fGHz=np.array([2.4])):
-        """ evaluation of B interactions
+#         Examples
+#         --------
 
-        Examples
-        --------
+#         >>> from pylayers.antprop.rays import *
+#         >>> d = np.array(([3]))
+#         >>> L = IntL(d,0)
+#         >>> L.data
+#         array([3])
+#         >>> L.stack(d+3,1)
+#         >>> L.data
+#         array([[3],
+#                [6]])
+#         >>> eL=L.eval()
+#         >>> ninter = len(L.idx)
+#         >>> nf = L.nf
+#         >>> np.shape(eL)
+#         (1, 1, 2, 2)
 
-        >>> from pylayers.antprop.rays import *
-        >>> d = np.array(([3]))
-        >>> L = IntL(d,0)
-        >>> L.data
-        array([3])
-        >>> L.stack(d+3,1)
-        >>> L.data
-        array([[3],
-               [6]])
-        >>> eL=L.eval()
-        >>> ninter = len(L.idx)
-        >>> nf = L.nf
-        >>> np.shape(eL)
-        (1, 1, 2, 2)
-
-        """
+#         """
 
 
-        self.fGHz=fGHz
-        self.nf=len(fGHz)
+#         self.fGHz=fGHz
+#         self.nf=len(fGHz)
 
-        self.sinsout()
+#         self.sinsout()
 
-        if len(self.data != 0):
-            try:
-                np.shape(self.data)[1]
-            except:
-                # it means that self.data is not a matrix but a number
-                self.data = self.data.reshape(1, 1)
-            ## Friis formula
-#            self.data=self.data[:,0]
-#            dis = (0.3 / (4*np.pi*self.data[np.newaxis,:]*self.f[:,np.newaxis]))
-#            return(dis[:,:,np.newaxis,np.newaxis]*self.E[np.newaxis,np.newaxis,:,:])
-#            dis = self.data
-            #return(self.olf[:, np.newaxis, np.newaxis, np.newaxis]*self.E[np.newaxis, np.newaxis, :, :])
-            return(np.ones((len(fGHz),1,1,1))*self.E[None, None, :, :])
-        else:
-            print 'no L interaction to evaluate'
-            return(self.data[:, None, None, None])
+#         if len(self.data != 0):
+#             try:
+#                 np.shape(self.data)[1]
+#             except:
+#                 # it means that self.data is not a matrix but a number
+#                 self.data = self.data.reshape(1, 1)
+#             ## Friis formula
+# #            self.data=self.data[:,0]
+# #            dis = (0.3 / (4*np.pi*self.data[np.newaxis,:]*self.f[:,np.newaxis]))
+# #            return(dis[:,:,np.newaxis,np.newaxis]*self.E[np.newaxis,np.newaxis,:,:])
+# #            dis = self.data
+#             #return(self.olf[:, np.newaxis, np.newaxis, np.newaxis]*self.E[np.newaxis, np.newaxis, :, :])
+#             return(np.ones((len(fGHz),1,1,1))*self.E[None, None, :, :])
+#         else:
+#             print 'no L interaction to evaluate'
+#             return(self.data[:, None, None, None])
 
 
 class IntR(Inter):
@@ -616,8 +634,8 @@ class IntR(Inter):
         self.gamma = [1]
 
     def __repr__(self):
-        s = Inter.__repr__(self)
-        return(s)
+        s = 'number of R interaction :' + str(np.shape(self.data)[0])
+        return s    
 
     def eval(self,fGHz=np.array([2.4])):
         """ evaluation of reflexion interactions
@@ -678,7 +696,6 @@ class IntR(Inter):
         data = np.array((ninter x [theta,si,st]))
 
         """
-
         self.sinsout()
 
         self.fGHz=fGHz
@@ -711,10 +728,11 @@ class IntR(Inter):
             self.A[:, np.array((mapp)), :, :] = R
             self.alpha = np.array(self.alpha*len(self.idx), dtype=complex)
             self.gamma = np.array(self.gamma*len(self.idx), dtype=complex)
+
             return(self.A)
         else:
             self.A = self.data[:, None, None, None]
-            print 'no R interaction to evaluate'
+            # print 'no R interaction to evaluate'
             return(self.A)
 
 
@@ -741,7 +759,7 @@ class IntT(Inter):
 
 
     def __repr__(self):
-        s = Inter.__repr__(self)
+        s = 'number of T interaction :' + str(np.shape(self.data)[0])
         return(s)
 
     def eval(self,fGHz=np.array([2.4])):
@@ -843,23 +861,14 @@ class IntT(Inter):
 
 class IntD(Inter):
     """ diffraction interaction class
-        .. todo to be implemented
     """
     def __init__(self, data=np.array(()), idx=[],fGHz=np.array([2.4])):
-#        self.theta = data1[0]
-#        self.thetad = data1[1]
-#        self.si = data1[2]
-#        self.sd = data1[3]
-#        self.beta = data1[4]
-#        self.N = data1[5]
-#        self.typed = data2[0]
+
         Inter.__init__(self, data=data, idx=idx, typ=1)
 
     def __repr__(self):
-        return '%s :  %s  %s ' % (
-                self.__class__.__name__,
-                str(np.shape(self.data)),
-                str(np.shape(self.idx)))
+        s = 'number of D interaction :' + str(np.shape(self.data)[0])
+        return s
 
     def eval(self,fGHz=np.array([2.4])):
         """ evaluate diffraction interaction
@@ -870,20 +879,57 @@ class IntD(Inter):
         fGHz : np.array
 
         """
-
         self.fGHz=fGHz
         self.nf=len(fGHz)
+        self.A = np.zeros((self.nf, len(self.idx), 2, 2), dtype=complex)
 
-        self.sinsout()
+        if len(self.data) != 0 :
+            self.phi0 = self.data[:,0]
+            self.phi = self.data[:,1]
+            self.beta = self.data[:,2]
+            self.N = self.data[:,3]
+            self.sinsout()
+            D = np.zeros([self.nf, len(self.phi), 2, 2], dtype=complex)
+            mapp=[]
+            for m in self.dusl.keys():
+                idx = self.dusl[m]
+                mats = m.split('_')
+                mat0name = self.slab.di[eval(mats[0])]
+                matNname = self.slab.di[eval(mats[1])]
+                mat0 = self.slab[mat0name]['lmat'][0]
+                matN = self.slab[matNname]['lmat'][0]
+                # from IPython.core.debugger import Tracer
+                # Tracer()()
+                # Ds,Dh = diff(self.fGHz,self.phi0[idx],self.phi[idx],self.si0[idx],self.sout[idx],self.N[idx],mat0,matN,beta=self.beta[idx])
+                Ds,Dh = diff(self.fGHz,self.phi0[idx],self.phi[idx],
+                             self.si0[idx],self.sout[idx],self.N[idx],
+                             mat0,matN,beta=self.beta[idx])
+                D[:,idx,0,0]=-Dh
+                D[:,idx,1,1]=Ds
+                # from IPython.core.debugger import Tracer
+                # Tracer()()
+                mapp.extend(self.dusl[m])
+                # import ipdb
+                # ipdb.set_trace()
+                # try:
+                #     D = np.concatenate((D, self.slab[m].T), axis=1)
+                #     mapp.extend(self.dusl[m])
+                # except:
+                #     D = np.empty([self.nf, len(idx), 2, 2], dtype=complex)
+                #     D[:,:,0,0]=Ds
+                #     D[:,:,1,1]=Dh
+                #     mapp.extend(self.dusl[m])
+            self.A[:, np.array((mapp)), :, :] = D[:,mapp,:,:]
 
-        if len(self.data) != 0:
+            return(self.A)
+        else :
             self.A = self.data[:, None, None, None]
             return(self.A)
             print 'not yet implemented'
-        else:
-            self.A = self.data[:, None, None, None]
-            print 'no D interaction to evaluate'
-            return(self.A)
+        # else:
+        #     self.A = self.data[:, None, None, None]
+        #     print 'no D interaction to evaluate'
+        #     return(self.A)
 
 if (__name__ == "__main__"):
     plt.ion()

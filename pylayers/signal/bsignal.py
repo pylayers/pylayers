@@ -848,7 +848,6 @@ class Bsignal(PyLayers):
             x = self.x[u]
 
         ndim = self.y.ndim
-
         #
         # if ndim(y) > 1
         #
@@ -1291,7 +1290,7 @@ class Usignal(Bsignal):
         A = Usignal(self.x, abs(self.y))
         return(A)
 
-    def eprfl(self,axis=1):
+    def eprfl(self,axis=-1):
         r""" Energy profile
 
         Parameters
@@ -3058,6 +3057,8 @@ class FUsignal(FBsignal,Usignal):
         """
         f = self.x
         df = self.dx()
+        if df == 0:
+            df = 1.
         U = self.y[:]
         N = len(f)
         Nl = np.int(np.ceil(f[0] / df))
@@ -3409,7 +3410,7 @@ class FHsignal(FUsignal):
             #print "Nombre de dimensions : ",nd
             #print "shape (y)  : ",shape(y)
             if (nd > 1):
-                s.y = np.real(fft.fftshift(y, axes=[1]))
+                s.y = np.real(fft.fftshift(y, axes=[-1]))
             else:
                 s.y = np.real(fft.fftshift(y))
 

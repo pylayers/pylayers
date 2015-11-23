@@ -250,6 +250,12 @@ def ktoxyz(ik,Nx=10,Ny=11):
 def xyztok(iz,iy,ix,Nx=10,Ny=11):
     ik = iz*Nx*Ny+iy*Nx+ix
     return(ik)
+def weights(nx,nz,kx,kz,Kx,Kz):
+    """
+    Practical Demonstration of Limited Feedback Beamforming for mmWave Systems
+
+    """
+    arg = np.floor((nx*np.mod(kx+(Kx/2),Kx))/(Kx/4))
 
 
 if __name__=='__main__':

@@ -1501,8 +1501,78 @@ class Tchannel(bs.FUsignal):
 
         return(V)
 
+
+    def applywav(self, Wgam):
+        """ apply waveform (time domain ) to obtain the
+            rays impulses response
+
+            this is the 2015 vectorized method for applying 
+            wav on Tchannel
+
+        Parameters
+        ----------
+
+        Wgam : waveform
+
+        Returns
+        -------
+
+        rir  : array, 
+            impulse response for each ray separately
+            the size of the array is (nb_rays, support_length)
+            support_length is calculated in regard of the 
+            delays of the channel
+
+            
+
+        Notes
+        ------
+
+            The overall received signal is built in time domain
+
+            Wgam is applied on each Ray Transfer function
+
+        See Also
+        --------
+
+        pylayers.signal.channel.rir
+
+        """
+
+        # product in frequency domain between Channel (self) and waveform
+        Y = self.apply(Wgam)
+        # back in time domain
+        rir = Y.rir(Nz=500,ffts=1)
+        return rir
+
+
+    def get_cir(self,Wgam):
+        """ get Channel impulse response of the channel 
+            for a given waveform
+
+        Parameters
+        ----------
+
+        Wgam : waveform
+
+        Returns
+        -------
+
+        ri  : TUsignal
+
+            impulse response for each ray separately
+
+
+        """
+
+        rir = self.applywav(Wgam)
+        cir = np.sum(rir.y,axis=0)
+        return bs.TUsignal(rir.x, cir)
+        
+
     def applywavC(self, w, dxw):
         """ apply waveform method C
+        DEPRECATED
 
         Parameters
         ----------
@@ -1516,8 +1586,10 @@ class Tchannel(bs.FUsignal):
         The overall received signal is built in time domain
         w is apply on the overall CIR
 
-        """
 
+        """
+        print DeprecationWarning(
+            'WARNING : Tchannel.applywavC is going to be replaced by Tchannel.applywav')
         H = self.H
         h = H.ft1(500, 1)
         dxh = h.dx()
@@ -1565,6 +1637,8 @@ class Tchannel(bs.FUsignal):
     def applywavB(self, Wgam):
         """ apply waveform method B (time domain )
 
+        DEPRECATED
+
         Parameters
         ----------
 
@@ -1590,16 +1664,21 @@ class Tchannel(bs.FUsignal):
         pylayers.signal.bsignal.TUDsignal.ft1
 
         """
-        #
-        # return a TUsignal
-        #
+
+        print DeprecationWarning(
+            'WARNING : Tchannel.applywavB is going to be replaced by Tchannel.applywav')
+
+        # product in frequency domain between Channel (self) and waveform
         Y = self.apply(Wgam)
+        # back in time domain
         ri = Y.ft1(Nz=500,ffts=1)
 
         return(ri)
 
     def applywavA(self, Wgam, Tw):
         """ apply waveform method A
+
+        DEPRECATED
 
         Parameters
         ----------
@@ -1615,6 +1694,8 @@ class Tchannel(bs.FUsignal):
         pylayers.signal.bsignal
 
         """
+        print DeprecationWarning(
+            'WARNING : Tchannel.applywavA is going to be replaced by Tchannel.applywav')
         Hab = self.H.ft2(0.001)
         HabW = Hab * Wgam
         RI = HabW.symHz(10000)
@@ -1976,6 +2057,17 @@ class Tchannel(bs.FUsignal):
             fig,ax = self.plotd(d='dod',fig=fig,ax=ax2,**kwargs)
         return fig,ax
 
+    def field(self):
+
+        tau  = self.tk[:,None,None,None]
+        fGHz = self.x[None,None,None,:]
+        E = np.exp(-2*1j*tau*fGHz)
+        F = self.y*E
+        return np.sum(F,axis=0)
+        #f = bs.FUsignal(x=self.x,y=np.sum(F,axis=0))
+        #return(f)
+
+
     def energy(self,mode='mean',Friis=True,sumray=False):
         """ calculates channel energy including antennas spatial filtering
 
@@ -2148,13 +2240,16 @@ class Tchannel(bs.FUsignal):
 
         if typ == 'energy':
             E = self.eprfl()
-            u = np.argsort(E)[::-1]
+            import ipdb
+            ipdb.set_trace()
+            u = np.argsort(E,axis=0)[::-1]
+            u = u[:,0,0]
 
         self.taud = self.taud[u]
         self.taue = self.taue[u]
         self.doa = self.doa[u]
         self.dod = self.dod[u]
-        self.y = self.y[u,:]
+        self.y = self.y[u,...]
 
     def showtap(self,**kwargs):
         """ show tap
@@ -2499,6 +2594,57 @@ class Tchannel(bs.FUsignal):
             rf.y[i, :] = r.y
         return rf
 
+    def rir(self, Nz, ffts=0):
+        """  construct ray impulse response
+
+        Parameters
+        ----------
+
+        Nz   : number of zeros for zero padding
+        ffts : fftshift indicator
+            0  no fftshift
+            1  apply fftshift
+
+        Returns
+        -------
+
+
+        rir : TUsignal
+
+
+        See Also
+        --------
+
+        pylayers.signal.bsignal.
+
+
+        """
+
+        tau = self.taud + self.taue
+        taumin = min(tau) 
+        taumax = max(tau)
+        dtau = (taumax-taumin)
+        self.s = self.ift(Nz, ffts)
+
+
+        shy = self.s.y.shape
+        dx = self.s.x[1]-self.s.x[0]
+        N  = np.ceil(dtau/dx)+shy[-1]
+        itau = np.floor((tau-taumin)/dx).astype(int)
+        
+        U = np.ones((shy[0],shy[-1]),dtype=int)
+        CU = np.cumsum(U,axis=1)-1 # -1 to start @ value 0 
+
+        rir  = np.zeros((shy[0],N))
+        col1 = np.repeat(np.arange(shy[0],dtype=int),shy[-1])
+        col2 = (CU+itau[:,None]).ravel()
+        index = np.vstack((col1,col2)).T
+    
+        rir[index[:,0],index[:,1]] = self.s.y.ravel()
+        t = np.linspace(taumin,taumax,N)
+        return bs.TUsignal(x=t, y=rir)
+
+
     def ft1(self, Nz, ffts=0):
         """  construct CIR from ifft(RTF)
 
@@ -2526,7 +2672,8 @@ class Tchannel(bs.FUsignal):
         tau = self.taud + self.taue
         self.s = self.ift(Nz, ffts)
         x = self.s.x
-        r = bs.TUsignal(x=x, y=np.zeros(self.s.y.shape))
+        r = bs.TUsignal(x=x, y=np.zeros(self.s.y.shape[1:]))
+
 
         if len(tau) == 1:
             return(self.s)
@@ -3772,10 +3919,17 @@ maicher
         This is not properly implemented
 
         """
+        issue=[]
         assert np.allclose(self.tauk, C.tauk)
         for r in range(self.nray):
-            if np.allclose(self.Ctt.y[r,:], C.Ctt.y[r,:]):
-                print r
+            if not np.allclose(self.Ctt.y[r,:], C.Ctt.y[r,:]):
+                issue.append(r)
+        if len(issue) == 0:
+            print "Channel is reciprocal"
+        else: 
+            print "WARNING Reciprocity issue WARNING"
+            print len(issue),'/',self.nray, 'rays are not reciprocal,'
+            print "rays number with an issue :",issue
 
         # assert np.allclose(self.tang,C.rang)
         # assert np.allclose(self.rang,C.tang)
@@ -3892,7 +4046,6 @@ maicher
             Ett, Epp, Etp, Ept = self.energy()
             Etot = Ett+Epp+Etp+Ept
             u = np.argsort(Etot)
-
         self.tauk = self.tauk[u]
         self.tang = self.tang[u,:]
         self.rang = self.rang[u,:]
@@ -3940,13 +4093,12 @@ maicher
         if b ==[]:
             b = ant.Antenna('Omni',param={'pol':'t','GmaxdB':0},fGHz=self.fGHz)
 
-
         a.eval(th=self.tangl[:, 0], ph=self.tangl[:, 1], grid=False)
         Fat = bs.FUsignal(a.fGHz, a.Ft)
         Fap = bs.FUsignal(a.fGHz, a.Fp)
         b.eval(th=self.rangl[:, 0], ph=self.rangl[:, 1], grid=False)
-        Fbt = bs.FUsignal(a.fGHz, b.Ft)
-        Fbp = bs.FUsignal(a.fGHz, b.Fp)
+        Fbt = bs.FUsignal(b.fGHz, b.Ft)
+        Fbp = bs.FUsignal(b.fGHz, b.Fp)
 
         # Cg2cl should be applied here
         #
@@ -3958,7 +4110,6 @@ maicher
         #  Fb = 2 x r x f
         #
         #  (r x f ) (r x Nt x f )
-
         t1 = self.Ctt * Fat + self.Ctp * Fap
         t2 = self.Cpt * Fat + self.Cpp * Fap
 

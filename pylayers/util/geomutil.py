@@ -2340,7 +2340,7 @@ def angular(p1, p2):
     p1
         point p1
     p2
-        point p2
+        point p2 origin
 
     Notes
     -----
@@ -2371,6 +2371,7 @@ def angular(p1, p2):
 
 
     """
+    print DeprecationWarning('DEPRECATION WARNING : geomutil.angular going deprecatd  because wrong')
     if p1[0] < p2[0] and p1[1] < p2[1]:
         angle = np.arctan2((p2[1] - p1[1]), (p2[0] - p1[0])) + np.pi
     elif p1[0] > p2[0] and p1[1] < p2[1]:
@@ -2381,6 +2382,40 @@ def angular(p1, p2):
         angle = np.arctan2((p2[1] - p1[1]), (p2[0] - p1[0])) + np.pi
 
     return(angle)
+
+
+
+def vecang(v1,v2):
+    """ angle between v1 and v2 , result in [0,2*pi]
+
+    Parameters
+    ----------
+    v1 : np.array (3 x Np)
+        vector
+    v2 : np.array (3 x Np)
+        vector
+    Returns
+    -------
+
+    alpha : np.array (3 x Np)
+        radians
+
+
+    """
+    if len(v1.shape) == 1:
+        v1=v1.reshape(v1.shape[0],1)
+    if len(v2.shape) == 1:
+        v2=v2.reshape(v2.shape[0],1)
+
+
+    ang =np.arctan2(v2[1,:], v2[0,:]) - np.arctan2(v1[1,:], v1[0,:])
+    uneg = np.where(ang <0)[0]
+    ang[uneg]= 2*np.pi+ ang[uneg]
+    return ang
+    # if ang <0 :
+    #     return (2*np.pi+ang)
+    # else :
+    #     return ang
 
 
 def SignedArea(p=np.array([[0, 10, 10, 0], [0, 0, -2, -2]])):
@@ -3924,8 +3959,189 @@ def valid_wedge(ps, pw, p1, p2, grazing):
 
     return(valid)
 
+def agwed_old(v,lwe):
+    """
+
+    Parameters:
+    -----------
+    lwe : np.array
+        3x1 wedge vector
+    v   : np.array(3x4)
+        3x4 ( 4 stacked vectors)
+
+        first vector of v is on face 0 perp to lwe
+        second vector of v is on face n perp to lwe
+        third vector is on the direction of incident ray  (-si)
+        fourth vector is on the direction of diffracted ray (sd)
+
+    all vectors of v are defined outgoing from the diffracting point
+
+    Returns
+    -------
+        np.array([N*pi,phi0,phi])
+
+
+    Example
+    -------
+
+    >>> import numpy as np
+    >>> import pylayers.util.geomutil as geu
+    >>> lwe = np.array([0,0,1])
+    >>> u = np.array([1,0,0])
+    >>> v1 = np.array([1,1,0])
+    >>> si = np.array([-1,-1,0])
+    >>> sd = np.array([-1,1,0])
+    >>> v  = np.vstack([u,v1,si,sd]).T
+    >>> M = geu.agwed(v,lwe)
+    >>> print M*180/np.pi
+    [ 315.  135.  225.]
+
+    """
+    print DeprecationWarning('Please use vectorized version : agwed')
+    # lwe : (,3)
+    lwe = lwe/np.sqrt(np.sum(lwe*lwe,axis=0))
+    # v : (3,4)
+    v  = v/np.sqrt(np.sum(v*v,axis=0))
+    # ps (,4)
+    ps  = np.dot(lwe,v)
+    vp1  = v - v*ps
+    vpn = vp1/np.sqrt(np.sum(vp1*vp1,axis=0))
+    vpt  = vpn[0:2,:].T
+    w = np.vstack((vpt[:,1],-vpt[:,0]))
+    C = np.dot(vpt,w)
+    D = np.dot(vpt,vpt.T)
+    M = np.mod(2*np.pi-np.arctan2(np.dot(vpt,w),np.dot(vpt,vpt.T)),2*np.pi)[0,1:]
+    return M
+
+def agwed(v,lwe):
+    """
+
+    Parameters:
+    -----------
+    lwe : np.array
+        3xNp wedge vector
+    v   : np.array(3x4xNp)
+        3x4xNp ( 4 stacked vectors)
+
+        first vector of v is on face 0 perp to lwe
+        second vector of v is on face n perp to lwe
+        third vector is on the direction of incident ray  (-si)
+        fourth vector is on the direction of diffracted ray (sd)
+
+    all vectors of v are defined outgoing from the diffracting point
+
+    Returns
+    -------
+        np.array([[N*pi,phi0,phi],...xNp])
+                (3xNp)
+
+
+    Example
+    -------
+
+    >>> import pylayers.util.geomutil as geu
+    >>> import numpy as np
+    >>> lwe = np.array([[0,0,1],[0,0,1]]).T
+    >>> u = np.array([[1,0,0],[1,0,0]]).T
+    >>> v1 = np.array([[1,1,0],[1,1,0]]).T
+    >>> si = np.array([[-1,-1,0],[-1,1,0]]).T
+    >>> sd = np.array([[-1,1,0],[1,-1,0]]).T
+    >>> v  = np.hstack((u[:,None,:],v1[:,None,:],si[:,None,:],sd[:,None,:]))
+    >>> M = geu.agwed(v,lwe)
+    >>> print M*180/np.pi
+    array([[ 315.,  315.],
+       [ 135.,  225.],
+       [ 225.,   45.]])
+
+    """
+    import ipdb
+    ipdb.set_trace()
+    # lwe : (3,N)
+    lwe = lwe/np.sqrt(np.sum(lwe*lwe,axis=0))
+    # v : (3,4,N)
+    v  = v/np.sqrt(np.sum(v*v,axis=0))
+    # ps (4,N)
+    #ps  = np.dot(lwe,v)
+    ps = np.einsum('ik,ijk->jk',lwe,v)
+    vp1  = v - v*ps
+    vpn = vp1/np.sqrt(np.sum(vp1*vp1,axis=0))
+    # vpt = (N,4,2)
+    vpt  = vpn[0:2,:,:]
+
+    # w(4,N,2)
+    w = np.dstack((vpt[1,:,:].T,-vpt[0,:,:].T)).T
+    # C = np.dot(vpt,w)
+    # D = np.dot(vpt,vpt.T)
+
+    #vpt(2,4,N) x w(2,4,N) => C(4,4,N)
+    C = np.einsum('kil,kjl->ijl',vpt,w)
+    # D(4,4,N)
+    D = np.einsum('kil,kjl->ijl',vpt,vpt)
+
+    #M = np.mod(2*np.pi-np.arctan2(np.dot(vpt,w),np.dot(vpt,vpt.T)),2*np.pi)[0,1:]
+    M = np.mod(2*np.pi-np.arctan2(C,D),2*np.pi)[0,1:,:]
+    return M
 
 def sector(p1, p2, pt):
+    """ non signed angular sector  between
+        (p1,pt) and (p2,pt)
+
+    p1 x-----------x pt
+               |  /
+          alpha \/
+                /
+               x p2
+
+    Parameters
+    ----------
+    p1 : np.array (3 x Np)
+        point
+    p2 : np.array (3 x Np)
+        point
+    pt : np.array (3 x Np)
+        point
+
+    Returns
+    -------
+
+    alpha : np.array (3 x Np)
+        degree
+
+    Notes
+    -----
+
+    Useful for AAS calculation
+
+
+    """
+
+    if len(p1.shape) == 1:
+        p1=p1.reshape(p1.shape[0],1)
+    if len(p2.shape) == 1:
+        p2=p2.reshape(p2.shape[0],1)
+    if len(pt.shape) == 1:
+        pt=pt.reshape(pt.shape[0],1)
+    p1pt = p1 - pt
+    p2pt = p2 - pt
+    u = p1pt / np.sqrt(np.sum((p1pt)*(p1pt),axis=0))
+    v = p2pt / np.sqrt(np.sum((p2pt)*(p2pt),axis=0))
+    # sum(a[i,j,:] * b[k,:,m])
+    alpha = np.arctan2(u[1], u[0])
+    beta = np.arctan2(v[1], v[0])
+    v0 = abs(alpha - beta)
+    v1 = 2 * np.pi - abs(alpha - beta)
+    um0 = v0 < v1
+    um1 = ~um0
+    sector = np.empty(np.shape(u)[1])
+    sector[um0]= v0[um0]
+    sector[um1]= v1[um1]
+    return sector*180/np.pi
+    #if (abs(alpha + sector - sp.mod(beta, 2 * np.pi)) < 1e-3):
+    #    return(np.array([alpha, beta]) * 180 / np.pi)
+    #else:
+    #    return(np.array([beta, alpha]) * 180 / np.pi)
+
+def sectorold(p1, p2, pt):
     """ angular sector  p1 pt p2
 
     Parameters
@@ -3940,7 +4156,7 @@ def sector(p1, p2, pt):
     Returns
     -------
 
-    alpha, beta : np.array
+    alpha : np.array
         degree
 
     Notes
@@ -3956,10 +4172,6 @@ def sector(p1, p2, pt):
     beta = np.arctan2(v[1], v[0])
     sector = min(abs(alpha - beta), 2 * np.pi - abs(alpha - beta))
     return sector*180/np.pi
-    #if (abs(alpha + sector - sp.mod(beta, 2 * np.pi)) < 1e-3):
-    #    return(np.array([alpha, beta]) * 180 / np.pi)
-    #else:
-    #    return(np.array([beta, alpha]) * 180 / np.pi)
 
 
 def dist(x,y,ax):
