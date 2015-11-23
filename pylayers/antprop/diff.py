@@ -490,7 +490,7 @@ def R(th,k,er,err,sigma,ur,urr,deltah):
 
     """
 
-    cel = 299792458
+    cel = 2.997925e8
     #--------------------------------------------
     #cas des surfaces dielectriques (sinon er=-1)
     #--------------------------------------------

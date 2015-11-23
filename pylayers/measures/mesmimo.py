@@ -191,7 +191,7 @@ class MIMO(object):
         See : David Tse (7.70 pp 373)
 
         """
-        defaults = { 'fcGHz':2,
+        defaults = {'fcGHz':2,
                     'duR':0.05,
                     'duT':0.05,
                     'time':False,

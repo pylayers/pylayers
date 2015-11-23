@@ -14,6 +14,7 @@ from pylayers.util.project import  *
 import pylayers.signal.bsignal as bs
 import pylayers.antprop.channel as ch
 from pylayers.util import pyutil as pyu
+from  pylayers.measures.parker.smparker import *
 
 from time import sleep
 import seaborn as sns
@@ -21,12 +22,11 @@ import os
 import ConfigParser
 
 """
-
 Module to drive the network analyzer E5072A
 Adapted from  mclib by Thomas Schmid (http://github.com/tschmid/mclib)
 Enhanced by M.D.BALDE and B.UGUEN
 
-.. currentmodule:: pylayers.measures.vna.E4972A
+.. currentmodule:: pylayers.measures.vna.E5072A
 
 .. autosummary::
     :toctree: generated
@@ -55,6 +55,7 @@ SCPI Class
     SCPI.getdata
     SCPI.avrg
     SCPI.ifband
+    SCPI.calibh5
 
 """
 
@@ -64,7 +65,7 @@ class SCPI(PyLayers):
     _verbose = False
     _timeout = 0.150
 
-    def __init__(self,port=PORT,timeout=None,verbose=False):
+    def __init__(self,port=PORT,timeout=None,erbose=False,**kwargs):
         """
         Parameters
         ----------
@@ -94,6 +95,16 @@ class SCPI(PyLayers):
                  print 'SCPI>> connect({:s}:{:d}) failed {:s}',format(host,port,e)
             else:
                 raise e
+
+        defaults = {'Nt' : 4,
+                    'Nr' : 8}
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+        self.Nt   = kwargs.pop('Nt')
+        self.Nr   = kwargs.pop('Nr')
 
         self.getIdent()
         print self.ident
@@ -339,7 +350,8 @@ class SCPI(PyLayers):
             try:
                 self.Nf = eval(self.s.recv(8).replace("\n",""))
             except socket.timeout:
-                print "problem for getting number of points"
+                #print "problem for getting number of points"
+                raise IOError('problem for getting number of points')
 
         if cmd=='set':
             coms = com+' '+str(value)
@@ -499,57 +511,6 @@ class SCPI(PyLayers):
         #t   = toc-tic
         #print "Time measurement (ms) :",t
 
-    def calibh5(self,
-                _fileh5="sdata",
-                _filename="vna_config.ini",
-                cables=[],
-                author='',
-                comment='',
-                Nmeas = 10):
-        """  measure a calibration vector and store it in h5 file
-
-        Parameters
-        ----------
-
-        _filesh5 : string
-            file h5 prefix
-        _filename : string
-            vna configuration file name
-        cables : list of strings
-
-        """
-
-        # set config
-        self.load_config(_filename=_filename)
-
-        # get Nmeas calibration vector
-        D = self.getdata(chan=1,Nmeas=Nmeas)
-
-        # store calibration vector in a hdf5 file
-        fileh5 = pyu.getlong(_fileh5,pstruc['DIRMES'])+'.h5'
-        f = h5py.File(fileh5,"w")
-        try:
-            ldataset = f.keys()
-        except:
-            ldataset = []
-        lcal =  filter(lambda x : 'cal' in x,ldataset)
-        calname = 'cal'+ str(len(lcal)+1)
-
-        dcal = f.create_dataset(calname,(Nmeas,self.Nf),dtype=np.complex64)
-        dcal.attrs['Nf']=self.Nf
-        dcal.attrs['fminGHz']=self.fminGHz
-        dcal.attrs['fmaxGHz']=self.fmaxGHz
-        dcal.attrs['ifbHz']=self.ifbHz
-        dcal.attrs['Navrg']=self.navrg
-        dcal.attrs['time'] = time.ctime()
-        dcal.attrs['author']=  author
-        dcal.attrs['cables']= cables
-        dcal.attrs['comment']=comment
-        dcal.attrs['param']=self.param
-        dcal[0:Nmeas,0:self.Nf]=D
-        f.close()
-
-
     def avrg(self,sens=1,b='OFF',navrg=16,cmd='getavrg'):
         """ allows get|set the point averaging
 
@@ -639,15 +600,136 @@ class SCPI(PyLayers):
             com = com+"\n"
             self.s.send(com)
 
+
+    def calibh5(self,
+                 _fileh5='scalib',
+                 _filename='vna_config.ini',
+                 cables=[],
+                 author='M.D.B and B.U',
+                 comment='',
+                 Nmeas = 100):
+        """  measure a calibration vector and store in h5 file
+
+        Parameters
+        ----------
+
+        _fileh5 : string
+            file h5 prefix
+        _filename : string
+            vna configuration file name
+        cables : list of strings
+
+        """
+
+        # set config
+        # File from : ~/Pylayers_project/meas
+        self.load_config(_filename=_filename)
+
+        # get Nmeas calibration vector
+        D = self.getdata(chan=1,Nmeas=Nmeas)
+
+        # store calibration vector in a hdf5 file
+        fileh5 = pyu.getlong(_fileh5,pstruc['DIRMES'])+'.h5'
+        f = h5py.File(fileh5,"w")
+        try:
+            ldataset = f.keys()
+        except:
+            ldataset = []
+        lcal =  filter(lambda x : 'cal' in x,ldataset)
+        calname = 'cal'+ str(len(lcal)+1)
+
+        #dcal = f.create_dataset(calname,(Nmeas,self.Nf),dtype=np.complex64)
+        dcal = f.create_dataset(calname,(Nmeas,self.Nf,self.ifbHz),dtype=np.complex64)
+        
+        dcal.attrs['Nf']        = self.Nf
+        dcal.attrs['fminGHz']   = self.fminGHz
+        dcal.attrs['fmaxGHz']   = self.fmaxGHz
+        dcal.attrs['ifbHz']     = self.ifbHz
+        dcal.attrs['Navrg']     = self.navrg
+        dcal.attrs['time']      = time.ctime()
+        dcal.attrs['author']    = author
+        dcal.attrs['cables']    = cables
+        dcal.attrs['comment']   = comment
+        dcal.attrs['param']     = self.param
+        dcal[0:Nmeas,0:self.Nf] = D
+        f.close()
+    
+
+    def mimocalibh5(self,
+                 _fileh5='scalib',
+                 _filename='vna_config.ini',
+                 cables=[],
+                 author='M.D.B and B.U',
+                 comment='',
+                 Nmeas = 100):
+        """  measure a calibration vector and store in h5 file
+
+        Parameters
+        ----------
+
+        _fileh5 : string
+            file h5 prefix
+        _filename : string
+            vna configuration file name
+        cables : list of strings
+
+        """
+
+        # set config
+        # File from : ~/Pylayers_project/meas
+        self.load_config(_filename=_filename)
+
+        # get Nmeas calibration vector
+        Dmeas = self.getdata(chan=1,Nmeas=Nmeas)
+
+        # store calibration vector in a hdf5 file
+        fileh5 = pyu.getlong(_fileh5,pstruc['DIRMES'])+'.h5'
+        f = h5py.File(fileh5,"w")
+        try:
+            ldataset = f.keys()
+        except:
+            ldataset = []
+        
+        for iR in range(self.Nr):
+            for iT in range(self.Nt):
+                lmimocal =  filter(lambda x : 'mimocal' in x,ldataset)
+                calname = 'mimocal'+ str(len(lmimocal)+1) +'x'+ str(iT+1) +'x'+ str(iR+1)
+
+        dmimocal = f.create_dataset(calname,(Nmeas,self.Nt,self.Nr,self.Nf),dtype=np.complex64)
+        
+        dmimocal.attrs['Nf']        = self.Nf
+        dmimocal.attrs['fminGHz']   = self.fminGHz
+        dmimocal.attrs['fmaxGHz']   = self.fmaxGHz
+        dmimocal.attrs['ifbHz']     = self.ifbHz
+        dmimocal.attrs['Navrg']     = self.navrg
+        dmimocal.attrs['time']      = time.ctime()
+        dmimocal.attrs['author']    = author
+        dmimocal.attrs['cables']    = cables
+        dmimocal.attrs['comment']   = comment
+        dmimocal.attrs['param']     = self.param
+        dmimocal.attrs['Nt']        = self.Nt
+        dmimocal.attrs['Nr']        = self.Nr
+        dmimocal[0:Nmeas,0:self.Nf] = Dmeas
+
+        #S = Scanner()
+             
+        for i in range(self.Nr):
+            for j in range(self.Nt):
+                #Hmeas = S.measMIMO.Smeas.y[i,j,:]
+                #Hcal =  Hmeas/Dmeas[0,0,:]
+                #Dmeas = self.getdata(chan=1,Nmeas=Nmeas)
+                Hcal =  Dmeas[i,j,:]/Dmeas[0,0,:]
+        f.close()
+
+
     def load_config(self,_filename='vna_config.ini'):
-        """ load a config file from an .ini file
+        """ load a vna config file from an .ini file
 
         Parameters
         ----------
 
         _filename : string
                    file name extension .ini
-
 
         Examples
         --------
@@ -663,12 +745,14 @@ class SCPI(PyLayers):
 
         #filename : ~/Pylayers_project/meas
         filenname = pyu.getlong(_filename,pstruc['DIRMES'])
+        
         vna_conf  = ConfigParser.ConfigParser()
         vna_conf.read(filenname)
+        
         sections  = vna_conf.sections()
         di        = {}
         for section in sections:
-            di[section]={}
+            di[section] = {}
             options = vna_conf.options(section)
             for option in options:
                 # int/float value
@@ -679,21 +763,38 @@ class SCPI(PyLayers):
                     di[section][option] = vna_conf.get(section,option)
 
         #be careful no capital word in the sections
+        
+        #link between vna and file ini
+
+        # section from  vna_config
+        # section : stimulus
+
         self.fminGHz = di['stimulus']['fminghz']
         self.fmaxGHz = di['stimulus']['fmaxghz'] 
-        self.Nf      = di['stimulus']['nf']
+        
+        
+        # section : response
         self.param   = di['response']['param']
-        self.ifbHz   = di['response']['ifbhz']
+        self.navrg   = di['response']['navrg']
+        #self.ifbHz   = di['response']['ifbhz']
+
+        # values from section configuration set up
+        self.Nf      = di['conf_201_1']['nf']
+        self.ifbHz   = di['conf_201_1']['ifbhz']
+        self.navrg   = di['conf_201_1']['ifbhz']
+
+        
         self.freq(fminGHz=self.fminGHz,fmaxGHz=self.fmaxGHz,cmd='set')
         self.points(self.Nf,cmd='set')
         self.parS(param=self.param,cmd='set')
         self.ifband(ifbHz=self.ifbHz,cmd='set')
+        self.autoscale()
 
 
 
 if __name__=='__main__':
     doctest.testmod()
-#
+
 #    vna = SCPI(vna_ip,verbose=False)
 #    ident = vna.getIdent()
 #    #lNpoints = ['201','401','601','801','1601']
@@ -717,8 +818,18 @@ if __name__=='__main__':
 #        print "Npoints : ",Npoints
 #        com1 = ":CALC1:DATA:SDAT?\n"
 #        N = 100
-#        fGHz = np.linspace(1.8,2.2,
-#Npoints)
+#        fGHz = np.linspace(1.8,2.2,Npoints)
+
+
+
+
+
+
+
+
+
+
+
 #        tic = time.time()
 #        for k in range(N):
 #            S = vna.getdata(Npoints=Npoints)
