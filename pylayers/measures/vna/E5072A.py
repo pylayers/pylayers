@@ -1,3 +1,5 @@
+
+#-*- coding:Utf-8 -*-
 import socket
 import doctest
 import time
@@ -14,8 +16,7 @@ from pylayers.util.project import  *
 import pylayers.signal.bsignal as bs
 import pylayers.antprop.channel as ch
 from pylayers.util import pyutil as pyu
-from  pylayers.measures.parker.smparker import *
-
+#from  pylayers.measures.parker.smparker import *
 from time import sleep
 import seaborn as sns
 import os
@@ -65,17 +66,18 @@ class SCPI(PyLayers):
     _verbose = False
     _timeout = 0.150
 
-    def __init__(self,port=PORT,timeout=None,erbose=False,**kwargs):
+    def __init__(self,port=PORT,timeout=None,verbose=False,**kwargs):
         """
         Parameters
         ----------
 
         host : ip address
-        port : port
+        port : port:1
         timeout: float
         verbose : boolean
 
         """
+        self.emulated = False
         if "VNA_IP" in os.environ:
             host = os.environ["VNA_IP"]
         else:
@@ -94,7 +96,7 @@ class SCPI(PyLayers):
             if self._verbose:
                  print 'SCPI>> connect({:s}:{:d}) failed {:s}',format(host,port,e)
             else:
-                raise e
+                self.emulated=True
 
         defaults = {'Nt' : 4,
                     'Nr' : 8}
@@ -236,20 +238,20 @@ class SCPI(PyLayers):
         """
         self.param = param
         self.chan  = chan
+        if not self.emulated:
+            #co = ":CALC"+str(chan)+":PAR:DEF"
+            co = ":CALC"+str(chan)+":PAR"+str(tr)+":DEF"
+            com = co +' '+param
+            com1 = com+"\n"
 
-        #co = ":CALC"+str(chan)+":PAR:DEF"
-        co = ":CALC"+str(chan)+":PAR"+str(tr)+":DEF"
-        com = co +' '+param
-        com1 = com+"\n"
+            if cmd == 'get':
+                comg = co+'?\n'
+                self.s.send(comg)
+                #c = self.read(comg)
+                #return(c)
 
-        if cmd == 'get':
-            comg = co+'?\n'
-            self.s.send(comg)
-            #c = self.read(comg)
-            #return(c)
-
-        if cmd=='set':
-            self.s.send(com1)
+            if cmd=='set':
+                self.s.send(com1)
 
 
     def reset(self):
@@ -343,21 +345,21 @@ class SCPI(PyLayers):
         """
         com = ":SENS"+str(sens)+":SWE:POIN"
         self.Nf = value
+        if not self.emulated:
+            if cmd=='get':
+                comg = com+"?\n"
+                self.s.send(comg)
+                try:
+                    self.Nf = eval(self.s.recv(8).replace("\n",""))
+                except socket.timeout:
+                    #print "problem for getting number of points"
+                    raise IOError('problem for getting number of points')
 
-        if cmd=='get':
-            comg = com+"?\n"
-            self.s.send(comg)
-            try:
-                self.Nf = eval(self.s.recv(8).replace("\n",""))
-            except socket.timeout:
-                #print "problem for getting number of points"
-                raise IOError('problem for getting number of points')
-
-        if cmd=='set':
-            coms = com+' '+str(value)
-            if echo:
-                print coms
-            self.write(coms)
+            if cmd=='set':
+                coms = com+' '+str(value)
+                if echo:
+                    print coms
+                self.write(coms)
 
     def freq(self,sens=1,fminGHz=1.8,fmaxGHz=2.2,cmd='get'):
         """ get | set frequency ramp
@@ -381,40 +383,43 @@ class SCPI(PyLayers):
         >>> vna.close()
 
         """
+        if not self.emulated:
+            if cmd=='get':
+                com1 = ":FORM:DATA REAL"
+                self.read(com1)
+                com2 = ":SENS"+str(sens)+":FREQ:DATA?\n"
+                com3 = self.read(com2)
+                buf = com3[8:(self.Nf-1)*16+8]
+                f = np.frombuffer(buf,'>f8')
+                self.fGHz = f/1e9
+                fminGHz = self.fGHz[0]
+                fmaxGHz = self.fGHz[-1]
+                dfGHz = fmaxGHz - fminGHz
 
-        if cmd=='get':
-            com1 = ":FORM:DATA REAL"
-            self.read(com1)
-            com2 = ":SENS"+str(sens)+":FREQ:DATA?\n"
-            com3 = self.read(com2)
-            buf = com3[8:(self.Nf-1)*16+8]
-            f = np.frombuffer(buf,'>f8')
-            self.fGHz = f/1e9
-            fminGHz = self.fGHz[0]
-            fmaxGHz = self.fGHz[-1]
-            dfGHz = fmaxGHz - fminGHz
+            if cmd=='set':
+                com1 = ":SENS"+str(sens)+":FREQ:START "
+                com2 = ":SENS"+str(sens)+":FREQ:STOP "
+                self.fGHz = np.linspace(fminGHz,fmaxGHz,self.Nf)
+                f1 = str(fminGHz)+"e9\n"
+                f2 = str(fmaxGHz)+"e9\n"
 
-        if cmd=='set':
-            com1 = ":SENS"+str(sens)+":FREQ:START "
-            com2 = ":SENS"+str(sens)+":FREQ:STOP "
-            self.fGHz = np.linspace(fminGHz,fmaxGHz,self.Nf)
-            f1 = str(fminGHz)+"e9\n"
-            f2 = str(fmaxGHz)+"e9\n"
-
-            self.s.send(com1+f1)
-            time.sleep(1)
-            self.s.send(com2+f2)
+                self.s.send(com1+f1)
+                time.sleep(1)
+                self.s.send(com2+f2)
 
     def getIdent(self):
         """ get VNA Identification
         """
-        self.s.send("*IDN?\n")
-        try:
-            #data = self.s.recv(1024)
-            self.ident = self.s.recv(1024)
-            #return data
-        except socket.timeout:
-            return ""
+        if not self.emulated:
+            self.s.send("*IDN?\n")
+            try:
+                #data = self.s.recv(1024)
+                self.ident = self.s.recv(1024)
+                #return data
+            except socket.timeout:
+                return ""
+        else:
+            self.ident = 'emulated vna'
 
 
     def getdata(self,chan=1,Nmeas=10):
@@ -440,22 +445,26 @@ class SCPI(PyLayers):
         >>> vna.close()
 
         """
-
+        
         self.nmeas    = Nmeas
-        com = 'CALC'+str(chan)+':DATA:SDAT?'
-        for k in  range(Nmeas):
-            buff = ''
+        if not self.emulated:
+            com = 'CALC'+str(chan)+':DATA:SDAT?'
+            for k in  range(Nmeas):
+                buff = ''
 
-            while len(buff)<>(self.Nf*16+8):
-                buff = self.read(com)
+                while len(buff)<>(self.Nf*16+8):
+                    buff = self.read(com)
 
-            S = np.frombuffer(buff[8:self.Nf*16+8],dtype='>f8')
-            Y = S.reshape(self.Nf,2)
-            H = Y[:,0]+1j*Y[:,1]
-            try:
-                tH = np.vstack((tH,H[None,:]))
-            except:
-                tH = H[None,:]
+                S = np.frombuffer(buff[8:self.Nf*16+8],dtype='>f8')
+                Y = S.reshape(self.Nf,2)
+                H = Y[:,0]+1j*Y[:,1]
+                try:
+                    tH = np.vstack((tH,H[None,:]))
+                except:
+                    tH = H[None,:]
+        else:
+            tH = np.random.rand(Nmeas,self.Nf,dtype=complex)
+
         return tH
 
     def getchan(self,chan=1,Nmeas=10,fminGHz=1.8,fmaxGHz=2.2):
@@ -489,27 +498,27 @@ class SCPI(PyLayers):
         self.fGHz[0]  = fminGHz
         self.fGHz[-1] = fmaxGHz
         f             = np.linspace(fminGHz,fmaxGHz,self.Nf)
+        if not self.emulated:
+            com = 'CALC'+str(chan)+':DATA:SDAT?'
+            #tic = time.time()
+            for k in  range(Nmeas):
+                buff = ''
 
-        com = 'CALC'+str(chan)+':DATA:SDAT?'
-        #tic = time.time()
-        for k in  range(Nmeas):
-            buff = ''
+                while len(buff)<>(self.Nf*16+8):
+                    buff = self.read(com)
 
-            while len(buff)<>(self.Nf*16+8):
-                buff = self.read(com)
-
-            S = np.frombuffer(buff[8:self.Nf*16+8],dtype='>f8')
-            Y = S.reshape(self.Nf,2)
-            H = Y[:,0]+1j*Y[:,1]
-            try:
-                tH = np.vstack((tH,H[None,:]))
-            except:
-                tH = H[None,:]
-        S21 = ch.Tchannel(x=f,y=tH)
-        return S21
-        #toc = time.time()
-        #t   = toc-tic
-        #print "Time measurement (ms) :",t
+                S = np.frombuffer(buff[8:self.Nf*16+8],dtype='>f8')
+                Y = S.reshape(self.Nf,2)
+                H = Y[:,0]+1j*Y[:,1]
+                try:
+                    tH = np.vstack((tH,H[None,:]))
+                except:
+                    tH = H[None,:]
+            S21 = ch.Tchannel(x=f,y=tH)
+            return S21
+            #toc = time.time()
+            #t   = toc-tic
+            #print "Time measurement (ms) :",t
 
     def avrg(self,sens=1,b='OFF',navrg=16,cmd='getavrg'):
         """ allows get|set the point averaging
@@ -542,29 +551,29 @@ class SCPI(PyLayers):
         """
         self.b     = b
         self.navrg = navrg
+        if not self.emulated:
+            co1  = ":SENS"+str(sens)+":AVER"
+            co2  = ":SENS"+str(sens)+":AVER:COUN"
+            com1 = co1 +' '+b
+            com2 = co2 +' '+str(navrg)
 
-        co1  = ":SENS"+str(sens)+":AVER"
-        co2  = ":SENS"+str(sens)+":AVER:COUN"
-        com1 = co1 +' '+b
-        com2 = co2 +' '+str(navrg)
+            if cmd == 'getavrg':
+                com = co1+"?\n"
+                self.s.send(com)
+                #c = self.read(com)
+                #return(c)
 
-        if cmd == 'getavrg':
-            com = co1+"?\n"
-            self.s.send(com)
-            #c = self.read(com)
-            #return(c)
+            if cmd == 'setavrg':
+                com = com1+"\n"
+                self.s.send(com)
 
-        if cmd == 'setavrg':
-            com = com1+"\n"
-            self.s.send(com)
+            if cmd == 'getnavrg':
+                com = co2+"?\n"
+                self.s.send(com)
 
-        if cmd == 'getnavrg':
-            com = co2+"?\n"
-            self.s.send(com)
-
-        if cmd == 'setnavrg':
-            com = com2+"\n"
-            self.s.send(com)
+            if cmd == 'setnavrg':
+                com = com2+"\n"
+                self.s.send(com)
 
 
     def ifband(self,sens=1,ifbHz=70000,cmd='get'):
@@ -587,18 +596,19 @@ class SCPI(PyLayers):
         >>> vna.close()
 
         """
-        self.ifbHz   = ifbHz
+        if not self.emulated:
+            self.ifbHz   = ifbHz
 
-        co  = ":SENS"+str(sens)+":BAND"
-        com = co +' '+str(ifbHz)
+            co  = ":SENS"+str(sens)+":BAND"
+            com = co +' '+str(ifbHz)
 
-        if cmd == 'get':
-            com = co+"?\n"
-            self.s.send(com)
+            if cmd == 'get':
+                com = co+"?\n"
+                self.s.send(com)
 
-        if cmd == 'set':
-            com = com+"\n"
-            self.s.send(com)
+            if cmd == 'set':
+                com = com+"\n"
+                self.s.send(com)
 
 
     def calibh5(self,
