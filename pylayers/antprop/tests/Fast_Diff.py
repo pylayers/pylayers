@@ -10,6 +10,7 @@
 import numpy as np 
 import matplotlib.pyplot as plt
 from pylayers.antprop.slab import *
+from pylayers.antprop.diffRT import *
 
 
 # In[4]:
@@ -18,13 +19,14 @@ Nf=1
 Nr=1
 fGHz = np.linspace(1,10,Nf)
 N = 320/180.*np.ones(Nr)#320/180.
-phi0 = np.ones(Nr)#np.linspace(0.01,2*np.pi-0.01,Nr)#40*np.pi/180.
-phi = np.linspace(0.01,2*np.pi-0.01,Nr)
+phi0 = np.pi/3.*np.ones(Nr)#np.linspace(0.01,2*np.pi-0.01,Nr)#40*np.pi/180.
+# phi = np.linspace(0.01,2*np.pi-0.01,Nr)
+phi = 260/180*np.pi*np.ones(Nr)#np.linspace(0.01,2*np.pi-0.01,Nr)#40*np.pi/180.
 #phi = np.linspace(0,3*np.pi/2,10)
 dm = MatDB()
 mat0 = dm['METAL']
 matN = dm['METAL']
-si = 10000.*np.ones(Nr)
+si = 1.*np.ones(Nr)
 sd = 1.*np.ones(Nr)
 beta=np.array([np.pi/2.])
 
@@ -48,41 +50,41 @@ sd    = sd[None,:]
 N     = N[None,:]
 beta  = beta[None,:]
 
-L     = si*sd/(si+sd)
+L   = ((si*sd)*np.sin(beta)**2)/(1.*(si+sd))
 
 
 
 
-# tho  = np.empty((fGHz.shape[0],phi.shape[1]))
-# thn  = np.empty((fGHz.shape[0],phi.shape[1]))
-# # PHI0 = phi0 * np.ones(phi.shape)
-# # PHI  = np.ones(phi0.shape)*phi
-# # BN   = np.ones(phi0.shape)*N
+tho  = np.empty((fGHz.shape[0],phi.shape[1]))
+thn  = np.empty((fGHz.shape[0],phi.shape[1]))
+# PHI0 = phi0 * np.ones(phi.shape)
+# PHI  = np.ones(phi0.shape)*phi
+# BN   = np.ones(phi0.shape)*N
 
 
 
-# c1 = phi>phi0
-# c2 = ~c1
-# tho[:,c1[0,:]] = phi0[:,c1[0,:]]
-# thn[:,c1[0,:]] = N[:,c1[0,:]]*np.pi-phi[:,c1[0,:]]
-# tho[:,c2[0,:]] = phi[:,c2[0,:]]
-# thn[:,c2[0,:]] = N[:,c2[0,:]]*np.pi-phi0[:,c2[0,:]]
+c1 = phi>phi0
+c2 = ~c1
+tho[:,c1[0,:]] = phi0[:,c1[0,:]]
+thn[:,c1[0,:]] = N[:,c1[0,:]]*np.pi-phi[:,c1[0,:]]
+tho[:,c2[0,:]] = phi[:,c2[0,:]]
+thn[:,c2[0,:]] = N[:,c2[0,:]]*np.pi-phi0[:,c2[0,:]]
 
 
 
-# er0  = np.real(mat0['epr'])
-# err0 = np.imag(mat0['epr'])
-# ur0  = np.real(mat0['mur'])
-# urr0 = np.imag(mat0['mur'])
-# sigma0 = mat0['sigma']
-# deltah0 = mat0['roughness']
+er0  = np.real(mat0['epr'])
+err0 = np.imag(mat0['epr'])
+ur0  = np.real(mat0['mur'])
+urr0 = np.imag(mat0['mur'])
+sigma0 = mat0['sigma']
+deltah0 = mat0['roughness']
 
-# erN  = np.real(matN['epr'])
-# errN = np.imag(matN['epr'])
-# urN  = np.real(mat0['mur'])
-# urrN = np.imag(mat0['mur'])
-# sigmaN = matN['sigma']
-# deltahN = matN['roughness']
+erN  = np.real(matN['epr'])
+errN = np.imag(matN['epr'])
+urN  = np.real(mat0['mur'])
+urrN = np.imag(mat0['mur'])
+sigmaN = matN['sigma']
+deltahN = matN['roughness']
 
 
 
@@ -96,21 +98,23 @@ alpha = N*np.sqrt(L*2*k)
 def gfunc(xsi):
     sg = np.ones(xsi.shape)
     c1m = xsi<0
-    c1p = xsi>(np.pi/4)
+    c1p = xsi-(np.pi/4.)>0
     xsi[c1m]=-xsi[c1m]
-    xsi[c1p]=xsi[c1p]-np.pi/4
-    sg[c1m]=-1.
-    sg[c1p]=-1.
+    xsi[c1p]=xsi[c1p]-np.pi/4.
+    sg[c1m]=-sg[c1m]
+    sg[c1p]=-sg[c1p]
+
     y = alpha * np.sin(xsi)
     ny = y<0
     y[ny]=-y[ny]
     sg[ny]=-sg[ny]
-    uy = (y**2)<0.005
-    g = np.zeros(y.shape)
-    g[uy] = -0.5 + 0.39384228*y[uy]*(1.+1j)
-    g[~uy] = -0.1994711402/y[~uy] * ((0.5/(y[~uy]**2+1.))+1j*(0.5/(y[~uy]**2-1.)))
-    g = g * np.cos(xsi) * sg * (1.+1j)
 
+    uy = (y**2)<0.005
+    g = np.zeros(y.shape,dtype=complex)
+    g[uy] = -0.5 + 0.39384228*y[uy]*(1.+1j)
+    den = 0.5/y[~uy]**2
+    g[~uy] = -0.1994711402/y[~uy] *((den+1.)+1j*(den-1.))
+    g = g * np.cos(xsi) * sg * (1.+1j)
     return g
 # In[10]:
 
@@ -119,10 +123,16 @@ xsi12 = (np.pi/4-phi+phi0)/(2*N)
 xsi13 = (np.pi/4-phi-phi0)/(2*N)
 xsi14 = (phi+phi0-(2*N-1)*np.pi/4)/(2*N)
 
-Df1 = gfunc(xsi11)*np.sqrt(L)
-Df2 = gfunc(xsi12)*np.sqrt(L)
-Df3 = gfunc(xsi13)*np.sqrt(L)
-Df4 = gfunc(xsi14)*np.sqrt(L)
+DD1 = gfunc(xsi11)*np.sqrt(L)#*np.exp(-1j*k*(sd+si))
+DD2 = gfunc(xsi12)*np.sqrt(L)#*np.exp(-1j*k*(sd+si))
+DD3 = gfunc(xsi13)*np.sqrt(L)#*np.exp(-1j*k*(sd+si))
+DD4 = gfunc(xsi14)*np.sqrt(L)#*np.exp(-1j*k*(sd+si))
+
+Rsofto,Rhardo = R(tho,k,er0,err0,sigma0,ur0,urr0,deltah0)
+Rsoftn,Rhardn = R(thn,k,erN,errN,sigmaN,urN,urrN,deltahN)
+
+Ds = DD1+DD2+Rsoftn*DD3+Rsofto*DD4
+Dh = DD1+DD2+Rhardn*DD3+Rhardo*DD4
 
 # sg11 = np.ones(xsi11.shape)
 # c11m = np.where(xsi11<0)

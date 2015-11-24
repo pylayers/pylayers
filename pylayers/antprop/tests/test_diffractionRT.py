@@ -12,6 +12,7 @@ fGHz = np.linspace(1,10,Nf)
 N = 320/180.*np.ones(Nr)#320/180.
 phi0 = np.ones(Nr)#np.linspace(0.01,2*np.pi-0.01,Nr)#40*np.pi/180.
 phi = np.linspace(0.01,2*np.pi-0.01,Nr)
+
 #phi = np.linspace(0,3*np.pi/2,10)
 dm = MatDB()
 mat0 = dm['METAL']
