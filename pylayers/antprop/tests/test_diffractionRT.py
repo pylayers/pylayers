@@ -7,7 +7,7 @@ from pylayers.antprop.diffRT import *
 # Metalic case : MacNamara Page 202
 #
 Nf=1
-Nr=800
+Nr=80
 fGHz = np.linspace(1,10,Nf)
 N = 320/180.*np.ones(Nr)#320/180.
 phi0 = np.ones(Nr)#np.linspace(0.01,2*np.pi-0.01,Nr)#40*np.pi/180.
