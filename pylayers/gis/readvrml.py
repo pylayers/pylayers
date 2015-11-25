@@ -795,7 +795,8 @@ class VLayout(PyLayers):
 
 if __name__ == "__main__":
     doctest.testmod()
-    _filename = 'B11C-E1.wrl'
+    #_filename = 'B11C-E1.wrl'
+    _filename = 'B2A-R0.wrl'
     filename = pyu.getlong(_filename,'struc/wrl')
     VL = VLayout()
     VL.load(filename)
