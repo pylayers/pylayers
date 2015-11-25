@@ -790,6 +790,24 @@ class SCPI(PyLayers):
         self.ifband(ifbHz=self.ifbHz,cmd='set')
         self.autoscale()
 
+    def config_setup(self,_filename1='vna_config.ini',_filename2='conf_setup.ini'):
+        """ load both vna config and config set up files .ini
+
+        Parameters
+        ----------
+
+        _filename1 : string
+                   file name extension .ini
+
+        _filename2 : string
+                   file name extension .ini
+
+        
+        """
+
+        filenname1 = pyu.getlong(_filename1,pstruc['DIRMES'])
+        filenname2 = pyu.getlong(_filename2,pstruc['DIRMES'])
+
 
 
 if __name__=='__main__':
