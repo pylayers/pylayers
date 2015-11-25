@@ -326,9 +326,9 @@ def  FresnelI(x) :
         real argument
 
     """
+    print x.shape
 
-
-    v  = np.zeros(x.shape,dtype=complex)
+    v  = np.empty(x.shape,dtype=complex)
     y  = np.abs(x)
     z  = .25*y
 
@@ -358,12 +358,14 @@ def  FresnelI(x) :
 
     c1 = (1.0)/c1
     z1  = c1*c1
-
+    # import ipdb
+    # ipdb.set_trace()
     a1=((((((((((
       .23393900e-3*z1 -.12179300e-2)*z1   +.21029670e-2)*z1
       +.2464200e-3)*z1 -.67488730e-2)*z1   +.11948809e-1)*z1
       -.9497136e-2)*z1 +.68989200e-3)*z1   +.57709560e-2)*z1
       +.3936000e-5)*z1 -.24933975e-1)*z1*c1
+    # a1=((((((((((.23393900e-3*z1 -.12179300e-2)*z1+.21029670e-2)*z1+.2464200e-3)*z1 -.67488730e-2)*z1   +.11948809e-1)*z1-.9497136e-2)*z1 +.68989200e-3)*z1   +.57709560e-2)*z1+.3936000e-5)*z1 -.24933975e-1)*z1*c1
 
     b1=(((((((((((
        .838386000e-3*z1  -.55985150e-2)*z1  +.16497308e-1)*z1
@@ -422,7 +424,7 @@ def FreF(x) :
     """
     ejp4  = np.exp(1j*np.pi/4)
     emjp4 = np.exp(-1j*np.pi/4)
-    y     = np.zeros(x.shape,dtype=complex)
+    y     = np.empty(x.shape,dtype=complex)
 
     u1    = np.where(x>10)[0]
     u2    = np.where(x<=10)[0]
@@ -461,7 +463,7 @@ def FreF2(x):
     Not working for large argument
 
     """
-    y     = np.zeros(x.shape,dtype=complex)
+    y     = np.empty(x.shape,dtype=complex)
     u1    = np.where(x>5)[0]
     u2    = np.where(x<=5)[0]
     xu1   = x[u1]
