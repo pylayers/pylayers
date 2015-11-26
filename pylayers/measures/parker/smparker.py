@@ -1,5 +1,6 @@
 #!/usr/bin/python
 #-*- coding:Utf-8 -*-
+
 from serial import Serial
 import pdb
 import time
@@ -12,6 +13,73 @@ from pylayers.util.project import *
 from pylayers.antprop.aarray import *
 from pylayers.measures.exploith5 import *
 from pylayers.measures.vna.E5072A import *
+import pylayers.measures.switch.ni_usb_6501 as sw
+
+"""
+
+.. currentmodule:: pylayers.measures.parker
+
+This module handles scanner.
+
+Authors : M.D.BALDE and B.UGUEN
+
+Profile Class
+=============
+
+.. autosummary::
+    :toctree: generated/
+
+    Profile.__init__
+    Profile.__repr__
+    Profile.duration
+    Profile.show
+
+Axes Class
+==========
+
+.. autosummary::
+    :toctree: generated/
+
+    Axes.__init__
+    Axes.__repr__
+    Axes.info
+    Axes.show
+    Axes.getvar
+    Axes.com
+    Axes.limits
+    Axes.home
+    Axes.parsinfo
+    Axes.add_profile
+    Axes.set_profile
+    Axes.del_profile
+    Axes.reset
+    Axes.mvpro
+    Axes.stationnary
+    Axes.reg
+    Axes.step
+    Axes.velocity
+    Axes.acceleration
+    Axes.go
+    Axes.close
+    Axes.fromfile
+
+Scanner Class
+=============
+
+.. autosummary::
+    :toctree: generated/
+
+    Scanner.__init__
+    Scanner.__repr__
+    Scanner.check_pa
+    Scanner.origin
+    Scanner.reset
+    Scanner.home
+    Scanner.upd_pos
+    Scanner.mv
+    Scanner.meash5
+
+"""
 
 def gettty():
     """get tty and handles port conflicts
@@ -885,8 +953,8 @@ class Axes(PyLayers):
         self.com(com)
         self.com('G')
 
-    def read(self):
-        pass
+    # def read(self):
+    #     pass
 
 
     def stationnary(self):
@@ -972,9 +1040,9 @@ class Axes(PyLayers):
         --------
 
         >>> from pylayers.measures.parker import smparker
-        >>> A = Axes(1,'x',typ='t',scale=1280000,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
-        >>> A.velocity(value=10)
-        >>> A.velocity(cmd='get')
+        >>> S = Scanner()
+        >>> S.a[4].step(-0.1,cmd='set')
+       
 
         """
         nstep = int(value*self.scale) #convert num per step
@@ -1080,12 +1148,12 @@ class Axes(PyLayers):
     def close(self):
         self.ser.close()
 
-    def util(self):
-        """ allows convertion between :
-            m/s | tr/s  <=> rps
-            m/s²        <=> rps²
-        """
-        pass
+    # def util(self):
+    #     """ allows convertion between :
+    #         m/s | tr/s  <=> rps
+    #         m/s²        <=> rps²
+    #     """
+    #     pass
 
 
 
@@ -1108,7 +1176,7 @@ class Scanner(PyLayers):
 
     """
 
-    def __init__(self,port=gettty(),anchors={},reset=True,vel=15,acc=15):
+    def __init__(self,port=gettty(),anchors={},reset=True,vel=15,acc=15,**kwargs):
         """
         Parameters
         ----------
@@ -1124,6 +1192,20 @@ class Scanner(PyLayers):
 
         >>> s.a[1].name_of_function()
         """
+
+        defaults = {'time':True,
+                    'Nt' : 4,
+                    'Nr' : 8}
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+        time = kwargs.pop('time')
+        self.Nt   = kwargs.pop('Nt')
+        self.Nr   = kwargs.pop('Nr')
+
+
         self.ser = Serial(port = port, baudrate=9600, timeout = 1)
         self.anchors = anchors
         #
@@ -1365,43 +1447,53 @@ class Scanner(PyLayers):
         # update new position
         self.upd_pos(ptH)
 
-        #Answers those questions:
-        # Ou dois-je aller : p1
-        # Comment y aller :
-        #   + fabriquer les profils
-        #   + Appliquer les profils
-
     def meash5(self,
                A,
-               _fileh5='sdata.h5',
+               _fileh5='test.h5',
                ical=1,
                vel=15,
                Nmeas=1,
                comment='',
                author=''):
-        """ Measure over a set of point from AntArray and store in h5
+        """ measure over a set of point from AntArray and store in h5
 
         Parameters
         ----------
 
-        A : Aarray
-        fileh5 : string
+        A       : Aarray
+        _fileh5 : string
             name of the h5 file containing calibration data
-        vel : int
+        vel     : int
             scanner moving velocity
-        Nmeas : int
+        Nmeas   : int
             Number of measurement
-
 
         """
 
         # load the file containing the calibration data
         Dh5 = mesh5(_fileh5)
-        Dh5.open(mode='r')
-        Dh5.saveini(ical=ical)
+        # open - sdata analysis
+        Dh5.open('r')
+        try:
+            ldataset = Dh5.f.keys()
+        except:
+            raise IOError('no calibration in h5 file')
+            #print "Error : no calibration in file", _fileh5
+        lcal= [ eval(k.replace('cal','')) for k in ldataset if 'cal' in k ]
+        print lcal
+        lcal=np.array(lcal)
+
+        if len(lcal)==1:
+           ical = lcal[0]
+        else:
+            if ical not  in lcal:
+                #print "Error calibration  :",ical,"does not exist"
+                raise IOError('Error calibration : File does not exist')
         Dh5.close()
-        exp = 'Nf = Dh5.dcal'+str(ical)+"['Nf']"
-        exec(exp)
+        # read the chosen calibration and save parameters in ini file for VNA
+        Dh5.readcal(ical=ical,cmd='SISO')
+        Dh5.saveini()
+        # end of read and save
         # initialization of vna
         vna = SCPI()
         vna.load_config()
@@ -1416,8 +1508,10 @@ class Scanner(PyLayers):
             laxes.append('z')
         lN =  [ A.N[k] for  k  in range(3) if A.N[k]!=1 ]
         Nf = vna.Nf
+        # end of initialization
 
         Dh5.open('a')
+
         try:
             ldataset = Dh5.f.keys()
         except:
@@ -1427,73 +1521,266 @@ class Scanner(PyLayers):
 
         if  laxes==['x']:
             mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf),dtype=np.complex64)
+
         if  laxes==['y']:
             mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf),dtype=np.complex64)
+
         if  laxes==['z']:
-            mes = Dh5.f.create_dataset(mesname,(Nmeas,ln[0],Nf),dtype=np.complex64)
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf),dtype=np.complex64)
+
         if  laxes==['x','y']:
-            mes = Dh5.f.create_dataset(mesname,(Nmeas,ln[0],ln[1],Nf),dtype=np.complex64)
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[1],Nf),dtype=np.complex64)
+
         if  laxes==['x','z']:
-            mes =  Dh5.f.create_dataset(mesname,(Nmeas,ln[0],ln[1],Nf),dtype=np.complex64)
+            mes =  Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[2],Nf),dtype=np.complex64)
+
         if  laxes==['y','z']:
-            mes = Dh5.f.create_dataset(mesname,(Nmeas,ln[0],ln[1],Nf),dtype=np.complex64)
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[1],lN[2],Nf),dtype=np.complex64)
+
         if  laxes==['x','y','z']:
-            mes = Dh5.f.create_dataset(mesname,(Nmeas,ln[0],ln[1],ln[2],Nf),dtype=np.complex64)
-        mes.attrs['time']=time.ctime()
-        mes.attrs['author']=author
-        mes.attrs['comment']=comment
+            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[1],lN[2],Nf),dtype=np.complex64)
+
+        mes.attrs['time'] = time.ctime()
+        mes.attrs['author'] = author
+        mes.attrs['comment'] = comment
         mes.attrs['axes'] = laxes
         #mes.attrs['min'] = lmin
         #mes.attrs['max'] = lmax
         mes.attrs['Nmeas'] = Nmeas
+        # here is the hard link between a measurement and its calibration 
+        mes.attrs['cal'] = "cal"+str(ical)
+
+        # Measure
+        #A.p.shape : Naxis x Npoint (3,8)
 
         for k in np.arange(A.p.shape[1]):
+            # A.p[:,k].shape : (3,)
             self.mv(pt=A.p[:,k],vel=vel)
             S = vna.getdata(Nmeas=Nmeas)
             if  laxes==['x']:
-                mes[:,k,:]=S
+                mes[:,k,:] = S
+
             if  laxes==['y']:
-                mes[:,k,:]=S
+                mes[:,k,:] = S
+
             if  laxes==['z']:
-                mes[:,k,:]=S
+                mes[:,k,:] = S
+
             if  laxes==['x','y']:
                 ix,iy = ktoxyz(k,Nx=l)
-                mes[:,ix,iy,:]=S
+                mes[:,ix,iy,:] = S
+
             if  laxes==['x','z']:
-                mes[:,ix,iz,:]=S
+                ix,iz = ktoxyz(k,Nx=l)
+                mes[:,ix,iz,:] = S
+
             if  laxes==['y','z']:
-                mes[:,iy,iz,:]=S
+                iy,iz = ktoxyz(k,Nx=l)
+                mes[:,iy,iz,:] = S
+
             if  laxes==['x','y','z']:
-                mes[:,ix,iy,iz,:]=S
+                ix,iy,iz = ktoxyz(k,Nx=l)
+                mes[:,ix,iy,iz,:] = S
 
         Dh5.close()
 
-    def meas(self,A,vel=10,Nmeas=1):
-        """ Measure over a set of point from AntArray
+    def measMIMO(self,
+               A,
+               _fileh5='test.h5',
+               ical=1,
+               vel=15,
+               Nmeas=100,
+               comment='',
+               author='M.D.B and B.U',
+               **kwargs):
+        """ measure MIMO channel over a set of point from AntArray and store in h5
 
         Parameters
         ----------
 
-        A : Aarray
-
+        A       : Aarray
+        _fileh5 : string
+            name of the h5 file containing calibration data
+        vel     : int
+            scanner moving velocity
+        Nmeas   : int
+            Number of measurement
 
         """
+  
+        #initialization of the switch
+
+        switch = sw.get_adapter()
+        reattach=False
+        if not switch:
+            raise Exception("No device found")
+
+        switch.device
+        switch.set_io_mode(0b11111111, 0b11111111, 0b00000000)
+        
+        # load the file containing the calibration data
+        Dh5 = mesh5(_fileh5)
+                
+        # open - sdata analysis
+        Dh5.open('r')
+        
+        try:
+            ldataset = Dh5.f.keys()
+        except:
+            raise IOError('no calibration in h5 file')
+        
+        lmimocal= [ eval(k.replace('mimocal','')) for k in ldataset if 'mimocal' in k ]
+        print lmimocal        
+        lmimocal=np.array(lmimocal)
+
+        if len(lmimocal)==1:
+           imimocal = lmimocal[0]
+        else:
+            if imimocal not in lmimocal:
+                raise IOError('Error calibration MIMO : File does not exist')
+        Dh5.close()
+        
+        # read the chosen calibration and save parameters in ini file for VNA
+        
+        Dh5.readcal(imimocal=imimocal,cmd='MIMO')
+        Dh5.saveini()
+        
+        # end of read and save
+    
+        # initialization of vna
+        
         vna = SCPI()
         vna.load_config()
 
         Npoint = A.p.shape[1]
+        laxes = []
+        if A.N[0]!=1:
+            laxes.append('x')
+        if A.N[1]!=1:
+            laxes.append('y')
+        if A.N[2]!=1:
+            laxes.append('z')
+        
+        lN =  [ A.N[k] for  k  in range(3) if A.N[k]!=1 ]
         Nf = vna.Nf
-        Smeas = np.empty((Nmeas,Npoint,Nf),dtype=complex)
-        print Smeas.shape
+
+        # end of initialization
+
+        Dh5.open('a')
+
+        try:
+            ldataset = Dh5.f.keys()
+        except:
+            ldataset = []
+
+        for iR in range(self.Nr):
+            for iT in range(self.Nt):
+                lmimomes = [ldataset[k] for  k in range(len(ldataset))  if 'mimomes' in ldataset[k]]
+                mesname = 'mimomes'+str(len(lmimomes)+1) + str(iT+1) +'x'+ str(iR+1) 
+
+        if  laxes==['x']:
+            mimomes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],self.Nt,self.Nr,Nf),dtype=np.complex64)
+
+        if  laxes==['y']:
+            mimomes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],self.Nt,self.Nr,Nf),dtype=np.complex64)
+
+        if  laxes==['z']:
+            mimomes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],self.Nt,self.Nr,Nf),dtype=np.complex64)
+
+        if  laxes==['x','y']:
+            mimomes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[1],self.Nt,self.Nr,Nf),dtype=np.complex64)
+
+        if  laxes==['x','z']:
+            mimomes =  Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[2],self.Nt,self.Nr,Nf),dtype=np.complex64)
+
+        if  laxes==['y','z']:
+            mimomes = Dh5.f.create_dataset(mesname,(Nmeas,lN[1],lN[2],self.Nt,self.Nr,Nf),dtype=np.complex64)
+
+        if  laxes==['x','y','z']:
+            mimomes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[1],lN[2],self.Nt,self.Nr,Nf),dtype=np.complex64)
+
+
+        mimomes.attrs['time'] = time.ctime()
+        mimomes.attrs['author'] = author
+        mimomes.attrs['comment'] = comment
+        mimomes.attrs['axes'] = laxes
+        #mes.attrs['min'] = lmin
+        #mes.attrs['max'] = lmax
+        mimomes.attrs['Nmeas'] = Nmeas
+
+        # here is the hard link between a measurement and its calibration 
+
+        for iR in range(self.Nr):
+            for iT in range(self.Nt):
+                mimomes.attrs['mimocal'] = "mimocal"+str(imimocal)+'x'+str(iT+1)+'x'+str(iR+1)
+
+        # Measure
+        #A.p.shape : Naxis x Npoint (3,8)
+
         for k in np.arange(A.p.shape[1]):
-            print k
-            print A.p[:,k]
-            # find a rule to retrieve ix,iy,iz,ia from k
             self.mv(pt=A.p[:,k],vel=vel)
-            # Nmeas x Nf
-            S = vna.getdata(Nmeas=Nmeas)
-            Smeas[:,k,:]=S.y
-        return(Smeas)
+            for iR in range(self.Nr):
+                switch.write_port(0,iR)
+                #Smeas = vna.getdata(Nmeas=Nmeas)
+                for iT in range(self.Nt):
+                    print iR,iT
+                    switch.write_port(1,iT)
+                    Smeas = vna.getdata(Nmeas=Nmeas)                             
+
+                    if  laxes==['x']:
+                        mimomes[:,k,:] = Smeas
+
+                    if  laxes==['y']:
+                        mimomes[:,k,:] = Smeas
+
+                    if  laxes==['z']:
+                        mimomes[:,k,:] = Smeas
+
+                    if  laxes==['x','y']:
+                        ix,iy = ktoxyz(k,Nx=l)
+                        mimomes[:,ix,iy,:] = Smeas
+
+                    if  laxes==['x','z']:
+                        ix,iz = ktoxyz(k,Nx=l)
+                        mimomes[:,ix,iz,:] = Smeas
+
+                    if  laxes==['y','z']:
+                        iy,iz = ktoxyz(k,Nx=l)
+                        mimomes[:,iy,iz,:] = Smeas
+
+                    if  laxes==['x','y','z']:
+                        ix,iy,iz = ktoxyz(k,Nx=l)
+                        mimomes[:,ix,iy,iz,:] = Smeas
+
+        Dh5.close()
+
+
+    # def meas(self,A,vel=10,Nmeas=1):
+    #     """ Measure over a set of point from AntArray
+
+    #     Parameters
+    #     ----------
+
+    #     A : Aarray
+
+
+    #     """
+    #     vna = SCPI()
+    #     vna.load_config()
+
+    #     Npoint = A.p.shape[1]
+    #     Nf = vna.Nf
+    #     Smeas = np.empty((Nmeas,Npoint,Nf),dtype=complex)
+    #     print Smeas.shape
+    #     for k in np.arange(A.p.shape[1]):
+    #         print k
+    #         print A.p[:,k]
+    #         # find a rule to retrieve ix,iy,iz,ia from k
+    #         self.mv(pt=A.p[:,k],vel=vel)
+    #         # Nmeas x Nf
+    #         S = vna.getdata(Nmeas=Nmeas)
+    #         Smeas[:,k,:]=S.y
+    #     return(Smeas)
 
 if __name__=="__main__":
     doctest.testmod()

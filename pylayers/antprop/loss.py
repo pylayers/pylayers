@@ -356,9 +356,9 @@ def hata(pMS,pBS,fGHz,hMS,hBS,typ):
        CH = (1.1*np.log10(fGHz*1000)-0.7)*hMS-(1.56*np.log10(fGHz*1000)-0.8)
     if (typ=='big'):
         if fGHz<0.2:
-            CH = 8.29*(np.log10(1.54*h_MS)**2)-1.1
+            CH = 8.29*(np.log10(1.54*hMS)**2)-1.1
         else:# valid until 1.5GHz
-            CH = 3.2*(np.log10(11.75*h_MS)**2)-4.97
+            CH = 3.2*(np.log10(11.75*hMS)**2)-4.97
 
     L = 69.55+26.16*np.log10(fGHz*1000)-13.82*np.log10(hBS)+(44.9-6.55*np.log10(hBS))*np.log10(dm/1000.)-CH
 

@@ -262,6 +262,7 @@ def Dfunc(sign,k,N,dphi,si,sd,beta=np.pi/2):
     Di= ------------------  *  ----------- * F(kla)    ([1] eq 25)
         2n*racine(2*np.pi*k)    np.tan(dphi/n)sin(beta)
 
+
     """
 
     cste = (1.0-1.0*1j)*(1.0/(4.0*N*np.sqrt(k*np.pi)*np.sin(beta)))
@@ -394,7 +395,7 @@ def FreF(x) :
     >>> import numpy as np
     >>> x = np.logspace(-4,2,400);
     >>> F = FreF(x)
-    >>> plt.semilogx(x,,np.abs(F))
+    >>> plt.semilogx(x,np.abs(F))
     >>> plt.grid()
 
     """
@@ -489,7 +490,7 @@ def R(th,k,er,err,sigma,ur,urr,deltah):
 
     """
 
-    cel = 299792458
+    cel = 2.997925e8
     #--------------------------------------------
     #cas des surfaces dielectriques (sinon er=-1)
     #--------------------------------------------

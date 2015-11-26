@@ -23,7 +23,7 @@ The command h5ls allows to see the hierarchical structure of the file
 
 ```python
 >>> !h5ls $BASENAME/gis/h5/N48W002.h5ls
-/home/uguen/Bureau/P1/gis/h5/N48W002.h5ls: unable to open file
+/home/mbalde/Pylayers_project/gis/h5/N48W002.h5ls: unable to open file
 ```
 
 Invoquing an earth zone requires to specify the tile prefix with the same
@@ -46,10 +46,10 @@ In this initial phase no data is loaded yet, to load all the data gathered for t
 N48W002
 --------
 latlon (deg) : [-2 -1 48 49]
-cartesian (meters) : [0.000 73676.623 0.000 111194.358 ] 
+cartesian (meters) : [0.000 73676.623 0.000 111194.358 ]
 
-Buildings 
---------- 
+Buildings
+---------
 i-longitude : 64 96
 i-latitude  : 19 38
 ```
@@ -209,10 +209,10 @@ For predicting the radio propagation, it is necessary to retrieve the height pro
 N48W002
 --------
 latlon (deg) : [-2 -1 48 49]
-cartesian (meters) : [0.000 73676.623 0.000 111194.358 ] 
+cartesian (meters) : [0.000 73676.623 0.000 111194.358 ]
 
-Buildings 
---------- 
+Buildings
+---------
 i-longitude : 64 96
 i-latitude  : 19 38
 ```
