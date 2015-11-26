@@ -2,7 +2,6 @@ import numpy as np
 import scipy.special as sps
 import matplotlib.pyplot as plt
 import pdb
-
 def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2):
     """ Luebbers Diffration coefficient
 

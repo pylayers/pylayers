@@ -1454,7 +1454,7 @@ class Scanner(PyLayers):
                vel=15,
                Nmeas=1,
                comment='',
-               author='M.D.B and B.U'):
+               author=''):
         """ measure over a set of point from AntArray and store in h5
 
         Parameters
@@ -1472,18 +1472,15 @@ class Scanner(PyLayers):
 
         # load the file containing the calibration data
         Dh5 = mesh5(_fileh5)
-                
         # open - sdata analysis
         Dh5.open('r')
-        
         try:
             ldataset = Dh5.f.keys()
         except:
             raise IOError('no calibration in h5 file')
             #print "Error : no calibration in file", _fileh5
-        
         lcal= [ eval(k.replace('cal','')) for k in ldataset if 'cal' in k ]
-        print lcal        
+        print lcal
         lcal=np.array(lcal)
 
         if len(lcal)==1:
@@ -1493,16 +1490,11 @@ class Scanner(PyLayers):
                 #print "Error calibration  :",ical,"does not exist"
                 raise IOError('Error calibration : File does not exist')
         Dh5.close()
-        
         # read the chosen calibration and save parameters in ini file for VNA
-        
         Dh5.readcal(ical=ical,cmd='SISO')
         Dh5.saveini()
-        
         # end of read and save
-    
         # initialization of vna
-        
         vna = SCPI()
         vna.load_config()
 
@@ -1514,10 +1506,8 @@ class Scanner(PyLayers):
             laxes.append('y')
         if A.N[2]!=1:
             laxes.append('z')
-        
         lN =  [ A.N[k] for  k  in range(3) if A.N[k]!=1 ]
         Nf = vna.Nf
-        
         # end of initialization
 
         Dh5.open('a')
@@ -1526,7 +1516,6 @@ class Scanner(PyLayers):
             ldataset = Dh5.f.keys()
         except:
             ldataset = []
-        
         lmes = [ldataset[k] for  k in range(len(ldataset))  if 'mes' in ldataset[k]]
         mesname = 'mes'+str(len(lmes)+1)
 
@@ -1551,7 +1540,6 @@ class Scanner(PyLayers):
         if  laxes==['x','y','z']:
             mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[1],lN[2],Nf),dtype=np.complex64)
 
-        
         mes.attrs['time'] = time.ctime()
         mes.attrs['author'] = author
         mes.attrs['comment'] = comment
@@ -1559,9 +1547,7 @@ class Scanner(PyLayers):
         #mes.attrs['min'] = lmin
         #mes.attrs['max'] = lmax
         mes.attrs['Nmeas'] = Nmeas
-        
         # here is the hard link between a measurement and its calibration 
-        
         mes.attrs['cal'] = "cal"+str(ical)
 
         # Measure
@@ -1677,7 +1663,7 @@ class Scanner(PyLayers):
         
         lN =  [ A.N[k] for  k  in range(3) if A.N[k]!=1 ]
         Nf = vna.Nf
-        
+
         # end of initialization
 
         Dh5.open('a')
@@ -1686,7 +1672,7 @@ class Scanner(PyLayers):
             ldataset = Dh5.f.keys()
         except:
             ldataset = []
-        
+
         for iR in range(self.Nr):
             for iT in range(self.Nt):
                 lmimomes = [ldataset[k] for  k in range(len(ldataset))  if 'mimomes' in ldataset[k]]
@@ -1713,7 +1699,7 @@ class Scanner(PyLayers):
         if  laxes==['x','y','z']:
             mimomes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[1],lN[2],self.Nt,self.Nr,Nf),dtype=np.complex64)
 
-        
+
         mimomes.attrs['time'] = time.ctime()
         mimomes.attrs['author'] = author
         mimomes.attrs['comment'] = comment
@@ -1721,9 +1707,9 @@ class Scanner(PyLayers):
         #mes.attrs['min'] = lmin
         #mes.attrs['max'] = lmax
         mimomes.attrs['Nmeas'] = Nmeas
-        
+
         # here is the hard link between a measurement and its calibration 
-        
+
         for iR in range(self.Nr):
             for iT in range(self.Nt):
                 mimomes.attrs['mimocal'] = "mimocal"+str(imimocal)+'x'+str(iT+1)+'x'+str(iR+1)
