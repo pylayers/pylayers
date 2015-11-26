@@ -2,7 +2,7 @@ import numpy as np
 import scipy.special as sps
 import matplotlib.pyplot as plt
 import pdb
-def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2,debug=False):
+def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2,mode='tab',debug=False):
     """ Luebbers Diffration coefficient
     for Ray tracing 
 
@@ -24,6 +24,12 @@ def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2,debug=False):
     matN : Mat
     beta : np.array (Nb)
         skew incidence angle (rad)
+    mode : str ( 'tab','exact')
+        if 'tab': the Fresnel function is interpolated 
+        ( increase speed)
+        if 'exact': the Fresnel function is computed for each values 
+        ( increase accuracy)
+        (see FreF)
 
     Return
     ------
@@ -133,17 +139,24 @@ def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2,debug=False):
 #--------------------------------------------------
 #calcul des 4 termes du coeff diff
 #--------------------------------------------------
+    if mode == 'tab':
+        xF = np.logspace(-4,3,1000)
+        F = FreF(xF)[0]
+    else :
+        xF = []
+        F=[]
+
     sign  =  1.0
-    D1     = Dfunc(sign,k,N,phi-phi0,si,sd,beta)
+    D1     = Dfunc(sign,k,N,phi-phi0,si,sd,xF,F,beta)
 
     sign  =  -1.0
-    D2     = Dfunc(sign,k,N,phi-phi0,si,sd,beta)
+    D2     = Dfunc(sign,k,N,phi-phi0,si,sd,xF,F,beta)
 
     sign  =  +1.0
-    D3     = Dfunc(sign,k,N,phi+phi0,si,sd,beta)
+    D3     = Dfunc(sign,k,N,phi+phi0,si,sd,xF,F,beta)
 
     sign  =  -1.0
-    D4     = Dfunc(sign,k,N,phi+phi0,si,sd,beta)
+    D4     = Dfunc(sign,k,N,phi+phi0,si,sd,xF,F,beta)
 
 #--------------------------------------
 #n>=1 : exterior wedge
@@ -256,7 +269,7 @@ def G(N,phi0,Ro,Rn):
 
     return Go,Gn
 
-def Dfunc(sign,k,N,dphi,si,sd,beta=np.pi/2):
+def Dfunc(sign,k,N,dphi,si,sd,xF=[],F=[],beta=np.pi/2):
     """
 
     Parameters
@@ -270,7 +283,12 @@ def Dfunc(sign,k,N,dphi,si,sd,beta=np.pi/2):
     si : distance source-D
     sd : distance D-observation
     beta : skew incidence angle
-
+    xF : array
+        support of Fresnel function. 
+    F : array
+        Values of Fresnel function in regard of support
+        if F =[], fresnel function is computed
+        otherwise the pass interpolation F is used.
     Reference
     ---------
 
@@ -307,7 +325,11 @@ def Dfunc(sign,k,N,dphi,si,sd,beta=np.pi/2):
     tan   = np.tan(angle)
 
     Di = np.empty(KLA.shape)
-    Fkla,ys,yL = FreF(KLA)
+    if F == []:
+        Fkla,ys,yL = FreF(KLA)
+    else : 
+        uF = (np.abs(KLA[:,:]-xF[:,None,None])).argmin(axis=0)
+        Fkla = F[uF]
     # 4.56 Mac Namara
     Di = -cste*Fkla/tan
 
@@ -327,7 +349,6 @@ def  FresnelI(x) :
         real argument
 
     """
-    print x.shape
 
     v  = np.empty(x.shape,dtype=complex)
     y  = np.abs(x)

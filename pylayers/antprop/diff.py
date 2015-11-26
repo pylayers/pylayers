@@ -263,6 +263,7 @@ def Dfunc(sign,k,N,dphi,si,sd,beta=np.pi/2):
         2n*racine(2*np.pi*k)    np.tan(dphi/n)sin(beta)
 
     """
+    
 
     cste = (1.0-1.0*1j)*(1.0/(4.0*N*np.sqrt(k*np.pi)*np.sin(beta)))
     rnn = (dphi+np.pi*sign)/(2.0*N*np.pi)
