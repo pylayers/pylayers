@@ -5613,7 +5613,7 @@ class Signature(object):
         #return(typ)
 
 
-    def image(self, tx):
+    def image_old(self, tx):
         """ compute the tx's images with respect to the signature segments
 
         Parameters

@@ -503,7 +503,7 @@ class IntB(Inter):
         ----------
 
         fGHz : np.array()
-            freqeuncy range
+            frequency range
 
         Returns
         -------
