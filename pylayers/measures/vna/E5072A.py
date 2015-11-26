@@ -601,7 +601,7 @@ class SCPI(PyLayers):
                  _fileh5='scalib',
                  _filename='vna_config.ini',
                  cables=[],
-                 author='M.D.B and B.U',
+                 author='',
                  comment='',
                  Nmeas = 100):
         """  measure a calibration vector and store in h5 file
@@ -655,7 +655,7 @@ class SCPI(PyLayers):
                  _fileh5='scalib',
                  _filename='vna_config.ini',
                  cables=[],
-                 author='M.D.B and B.U',
+                 author='',
                  comment='',
                  Nmeas = 100):
         """  measure a calibration vector and store in h5 file
