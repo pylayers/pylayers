@@ -1,4 +1,3 @@
-
 #-*- coding:Utf-8 -*-
 import socket
 import doctest
@@ -16,7 +15,7 @@ from pylayers.util.project import  *
 import pylayers.signal.bsignal as bs
 import pylayers.antprop.channel as ch
 from pylayers.util import pyutil as pyu
-#from  pylayers.measures.parker.smparker import *
+# from  pylayers.measures.parker.smparker import *
 from time import sleep
 import seaborn as sns
 import os
@@ -25,7 +24,7 @@ import ConfigParser
 """
 Module to drive the network analyzer E5072A
 Adapted from  mclib by Thomas Schmid (http://github.com/tschmid/mclib)
-Enhanced by M.D.BALDE and B.UGUEN
+Enhanced by M.D.BALDE
 
 .. currentmodule:: pylayers.measures.vna.E5072A
 
@@ -66,7 +65,7 @@ class SCPI(PyLayers):
     _verbose = False
     _timeout = 0.150
 
-    def __init__(self,port=PORT,timeout=None,verbose=False,**kwargs):
+    def __init__(self, port=PORT, timeout=None, verbose=False, **kwargs):
         """
         Parameters
         ----------
@@ -94,23 +93,23 @@ class SCPI(PyLayers):
             self.s.connect((host, port))
         except socket.error as e:
             if self._verbose:
-                 print 'SCPI>> connect({:s}:{:d}) failed {:s}',format(host,port,e)
+                print 'SCPI>> connect({:s}:{:d}) failed {:s}', format(host, port, e)
             else:
-                self.emulated=True
+                self.emulated = True
 
         defaults = {'Nt' : 4,
                     'Nr' : 8}
 
         for k in defaults:
             if k not in kwargs:
-                kwargs[k]=defaults[k]
+                kwargs[k] = defaults[k]
 
         self.Nt   = kwargs.pop('Nt')
         self.Nr   = kwargs.pop('Nr')
 
         self.getIdent()
-        print self.ident
-        #assert('E5072A' in self.ident), "E5072A not responding"
+        #print self.ident
+        # assert('E5072A' in self.ident), "E5072A not responding"
         self.points()
         self.freq()
         self.parS()
@@ -124,13 +123,13 @@ class SCPI(PyLayers):
         st = st + '      PARAMETERS            '+'\n'
         st = st + '----------------------------'+'\n'
         st = st + "Talking to         : " + str(self.ident)+'\n'
-        st = st + "Channel            : " + str(self.chan) +'\n'
-        st = st + "S Parameter        : " + self.param +'\n'
+        st = st + "Channel            : " + str(self.chan) + '\n'
+        st = st + "S Parameter        : " + self.param + '\n'
         st = st + "fmin (GHz)         : " + str(self.fGHz[0])+'\n'
-        st = st + "fmax (GHz)         : " +str(self.fGHz[-1])+'\n'
+        st = st + "fmax (GHz)         : " + str(self.fGHz[-1])+'\n'
         st = st + "Bandwidth (GHz)    : " + str(self.fGHz[-1]-self.fGHz[0])+'\n'
         st = st + "Nbr of freq points : " + str(self.Nf)+'\n'
-        st = st + "Avering            : " + self.b +'\n'
+        st = st + "Avering            : " + self.b + '\n'
         st = st + "Nbr of averages    : " + str(self.navrg)+'\n'
         st = st + "IF Bandwidth (Hz)  : " + str(self.ifbHz)+'\n'
         st = st + "Nbr of measures    : " + str(self.nmeas)+'\n'
@@ -139,11 +138,14 @@ class SCPI(PyLayers):
     def _write(self, cmd):
         """ socket write
         """
-        if self.s is None: raise IOError('disconnected')
+        if self.s is None:
+            raise IOError('disconnected')
 
         for i in xrange(0, len(cmd), self._chunk):
-            if (i+self._chunk) > len(cmd): idx = slice(i, len(cmd))
-            else: idx = slice(i, i+self._chunk)
+            if (i+self._chunk) > len(cmd):
+                idx = slice(i, len(cmd))
+            else:
+                idx = slice(i, i+self._chunk)
             self.s.sendall(cmd[idx])
 
         return cmd
@@ -160,7 +162,7 @@ class SCPI(PyLayers):
 #    def write(self,com):
 #        self.s.send(com+"\n")
 
-    def ask(self,com):
+    def ask(self, com):
         com1 = com+"?\n"
         self.s.send(com1)
         try:
@@ -176,11 +178,12 @@ class SCPI(PyLayers):
         self.s.close()
 
     def _read(self):
-        if self.s is None: raise IOError('disconnected')
+        if self.s is None:
+            raise IOError('disconnected')
         buf = bytearray()
         data = True
         while data:
-            r,w,e = select.select([self.s], [], [self.s], self._timeout)
+            r, w, e = select.select([self.s], [], [self.s], self._timeout)
 
             if r: # socket readable
                 data = self.s.recv(self._chunk)
@@ -210,7 +213,7 @@ class SCPI(PyLayers):
             else:
                 raise e
 
-    def parS(self,param='S21',chan=1,tr=1,cmd='get'):
+    def parS(self, param='S21', chan=1, tr=1, cmd='get'):
         """ set|get the measurement S parameter of a selected channel
 
         Parameters
@@ -227,8 +230,6 @@ class SCPI(PyLayers):
 
         >>> from pylayers.measures.vna.E5072A import *
         >>> vna = SCPI()
-        Agilent Technologies,E5072A,MY51100293,A.01.04
-        <BLANKLINE>
         >>> vna.parS(param='S21',cmd='set')
         >>> vna.close()
 
@@ -239,18 +240,18 @@ class SCPI(PyLayers):
         self.param = param
         self.chan  = chan
         if not self.emulated:
-            #co = ":CALC"+str(chan)+":PAR:DEF"
+            # co = ":CALC"+str(chan)+":PAR:DEF"
             co = ":CALC"+str(chan)+":PAR"+str(tr)+":DEF"
-            com = co +' '+param
+            com = co + ' '+param
             com1 = com+"\n"
 
             if cmd == 'get':
                 comg = co+'?\n'
                 self.s.send(comg)
-                #c = self.read(comg)
-                #return(c)
+                # c = self.read(comg)
+                # return(c)
 
-            if cmd=='set':
+            if cmd == 'set':
                 self.s.send(com1)
 
 
@@ -263,16 +264,15 @@ class SCPI(PyLayers):
 
         >>> from pylayers.measures.vna.E5072A import *
         >>> vna = SCPI()
-        Agilent Technologies,E5072A,MY51100293,A.01.04
-        <BLANKLINE>
         >>> vna.close()
 
         """
 
-        #self.s.send("CALC:PAR:DEL:ALL") #Deletes all measurements on the VNA
-        self.s.send(":SYST:PRES\n")
+        # self.s.send("CALC:PAR:DEL:ALL") #Deletes all measurements on the VNA
+        if not self.emulated:
+            self.s.send(":SYST:PRES\n")
 
-    def trace(self,chan=1,ntrace=1,cmd='get'):
+    def trace(self, chan=1, ntrace=1, cmd='get'):
         """ allows get|set the  number of traces.
             traces are a series of measured data points.
             limits of traces : max nbr of win x max nbr of traces per window (24)
@@ -289,8 +289,6 @@ class SCPI(PyLayers):
 
         >>> #from pylayers.measures.vna.E5072A import *
         >>> #vna = SCPI()
-        Agilent Technologies,E5072A,MY51100293,A.01.04
-        <BLANKLINE>
         >>> #vna.trace(chan=1,param='S21',ntrace=1,cmd='set')
         >>> #vna.close()
 
@@ -298,7 +296,7 @@ class SCPI(PyLayers):
         """
         self.chan  = chan
 
-        #co = ":CALC"+str(chan)+":PAR"+str(tr)+":DEF"
+        # co = ":CALC"+str(chan)+":PAR"+str(tr)+":DEF"
         com = ":CALC"+str(chan)+":PAR:COUN"
 
         if cmd == 'set':
@@ -308,7 +306,7 @@ class SCPI(PyLayers):
             comg = com+'?\n'
             self.s.send(comg)
 
-    def autoscale(self,win=1,tr=1):
+    def autoscale(self, win=1, tr=1):
         """ autoscale on window win trace tr
 
         Parameters
@@ -318,11 +316,11 @@ class SCPI(PyLayers):
         tr  : integer
 
         """
-        com ="DISP:WIND"+str(win)+":TRAC"+str(tr)+":Y:SCAL:AUTO"
+        com = "DISP:WIND"+str(win)+":TRAC"+str(tr)+":Y:SCAL:AUTO"
         self.write(com)
 
 
-    def points(self,value=1601,cmd='get',sens=1,echo=False):
+    def points(self, value=1601, cmd='get', sens=1, echo=False):
         """ 'get'|'set'  number of points
 
         Parameters
@@ -336,8 +334,6 @@ class SCPI(PyLayers):
 
         >>> from pylayers.measures.vna.E5072A import *
         >>> vna = SCPI()
-        Agilent Technologies,E5072A,MY51100293,A.01.04
-        <BLANKLINE>
         >>> vna.points(201,cmd='set')
         >>> vna.close()
 
@@ -346,22 +342,22 @@ class SCPI(PyLayers):
         com = ":SENS"+str(sens)+":SWE:POIN"
         self.Nf = value
         if not self.emulated:
-            if cmd=='get':
+            if cmd == 'get':
                 comg = com+"?\n"
                 self.s.send(comg)
                 try:
-                    self.Nf = eval(self.s.recv(8).replace("\n",""))
+                    self.Nf = eval(self.s.recv(8).replace("\n", ""))
                 except socket.timeout:
-                    #print "problem for getting number of points"
+                    # print "problem for getting number of points"
                     raise IOError('problem for getting number of points')
 
-            if cmd=='set':
+            if cmd == 'set':
                 coms = com+' '+str(value)
                 if echo:
                     print coms
                 self.write(coms)
 
-    def freq(self,sens=1,fminGHz=1.8,fmaxGHz=2.2,cmd='get'):
+    def freq(self, sens=1, fminGHz=1.8, fmaxGHz=2.2, cmd='get'):
         """ get | set frequency ramp
 
         Parameters
@@ -377,29 +373,27 @@ class SCPI(PyLayers):
 
         >>> from pylayers.measures.vna.E5072A import *
         >>> vna = SCPI()
-        Agilent Technologies,E5072A,MY51100293,A.01.04
-        <BLANKLINE>
         >>> vna.freq(fminGHz=3.8,fmaxGHz=4.2,cmd='set')
         >>> vna.close()
 
         """
         if not self.emulated:
-            if cmd=='get':
+            if cmd == 'get':
                 com1 = ":FORM:DATA REAL"
                 self.read(com1)
                 com2 = ":SENS"+str(sens)+":FREQ:DATA?\n"
                 com3 = self.read(com2)
                 buf = com3[8:(self.Nf-1)*16+8]
-                f = np.frombuffer(buf,'>f8')
+                f = np.frombuffer(buf, '>f8')
                 self.fGHz = f/1e9
                 fminGHz = self.fGHz[0]
                 fmaxGHz = self.fGHz[-1]
                 dfGHz = fmaxGHz - fminGHz
 
-            if cmd=='set':
+            if cmd == 'set':
                 com1 = ":SENS"+str(sens)+":FREQ:START "
                 com2 = ":SENS"+str(sens)+":FREQ:STOP "
-                self.fGHz = np.linspace(fminGHz,fmaxGHz,self.Nf)
+                self.fGHz = np.linspace(fminGHz, fmaxGHz, self.Nf)
                 f1 = str(fminGHz)+"e9\n"
                 f2 = str(fmaxGHz)+"e9\n"
 
@@ -413,16 +407,16 @@ class SCPI(PyLayers):
         if not self.emulated:
             self.s.send("*IDN?\n")
             try:
-                #data = self.s.recv(1024)
+                # data = self.s.recv(1024)
                 self.ident = self.s.recv(1024)
-                #return data
+                # return data
             except socket.timeout:
                 return ""
         else:
             self.ident = 'emulated vna'
 
 
-    def getdata(self,chan=1,Nmeas=10):
+    def getdata(self, chan=1, Nmeas=10):
         """ getdata from VNA
 
         Parameters
@@ -438,32 +432,30 @@ class SCPI(PyLayers):
         >>> import matplotlib.pyplot as plt
         >>> import numpy as np
         >>> vna = SCPI()
-        Agilent Technologies,E5072A,MY51100293,A.01.04
-        <BLANKLINE>
         >>> vna.parS(param='S21',cmd='set')
         >>> S21 = vna.getdata()
         >>> vna.close()
 
         """
-        
+
         self.nmeas    = Nmeas
         if not self.emulated:
             com = 'CALC'+str(chan)+':DATA:SDAT?'
             for k in  range(Nmeas):
                 buff = ''
 
-                while len(buff)<>(self.Nf*16+8):
+                while len(buff) <> (self.Nf*16+8):
                     buff = self.read(com)
 
-                S = np.frombuffer(buff[8:self.Nf*16+8],dtype='>f8')
-                Y = S.reshape(self.Nf,2)
-                H = Y[:,0]+1j*Y[:,1]
+                S = np.frombuffer(buff[8:self.Nf*16+8], dtype='>f8')
+                Y = S.reshape(self.Nf, 2)
+                H = Y[:, 0]+1j*Y[:, 1]
                 try:
-                    tH = np.vstack((tH,H[None,:]))
+                    tH = np.vstack((tH, H[None,:]))
                 except:
                     tH = H[None,:]
         else:
-            tH = np.random.rand(Nmeas,self.Nf,dtype=complex)
+            tH = np.random.rand(Nmeas,self.Nf)+1j*np.random.rand(Nmeas,self.Nf)
 
         return tH
 
@@ -485,40 +477,38 @@ class SCPI(PyLayers):
         >>> import matplotlib.pyplot as plt
         >>> import numpy as np
         >>> vna = SCPI()
-        Agilent Technologies,E5072A,MY51100293,A.01.04
-        <BLANKLINE>
         >>> vna.parS(param='S21',cmd='set')
         >>> S21 = vna.getdata()
         >>> #plt.plot(np.abs(S21.y)[0])
-        >>> vna.close() 
+        >>> vna.close()
 
         """
 
         self.nmeas    = Nmeas
         self.fGHz[0]  = fminGHz
         self.fGHz[-1] = fmaxGHz
-        f             = np.linspace(fminGHz,fmaxGHz,self.Nf)
+        f             = np.linspace(fminGHz, fmaxGHz, self.Nf)
         if not self.emulated:
             com = 'CALC'+str(chan)+':DATA:SDAT?'
-            #tic = time.time()
+            # tic = time.time()
             for k in  range(Nmeas):
                 buff = ''
 
-                while len(buff)<>(self.Nf*16+8):
+                while len(buff) <> (self.Nf*16+8):
                     buff = self.read(com)
 
-                S = np.frombuffer(buff[8:self.Nf*16+8],dtype='>f8')
-                Y = S.reshape(self.Nf,2)
-                H = Y[:,0]+1j*Y[:,1]
+                S = np.frombuffer(buff[8:self.Nf*16+8], dtype='>f8')
+                Y = S.reshape(self.Nf, 2)
+                H = Y[:, 0]+1j*Y[:, 1]
                 try:
-                    tH = np.vstack((tH,H[None,:]))
+                    tH = np.vstack((tH, H[None,:]))
                 except:
                     tH = H[None,:]
-            S21 = ch.Tchannel(x=f,y=tH)
+            S21 = ch.Tchannel(x=f, y=tH)
             return S21
-            #toc = time.time()
-            #t   = toc-tic
-            #print "Time measurement (ms) :",t
+            # toc = time.time()
+            # t   = toc-tic
+            # print "Time measurement (ms) :",t
 
     def avrg(self,sens=1,b='OFF',navrg=16,cmd='getavrg'):
         """ allows get|set the point averaging
@@ -538,8 +528,6 @@ class SCPI(PyLayers):
 
         >>> from pylayers.measures.vna.E5072A import *
         >>> vna = SCPI()
-        Agilent Technologies,E5072A,MY51100293,A.01.04
-        <BLANKLINE>
         >>> vna.reset()
         >>> vna.freq(fminGHz=2.8,fmaxGHz=3.2,cmd='set')
         >>> vna.avrg()
@@ -554,14 +542,14 @@ class SCPI(PyLayers):
         if not self.emulated:
             co1  = ":SENS"+str(sens)+":AVER"
             co2  = ":SENS"+str(sens)+":AVER:COUN"
-            com1 = co1 +' '+b
-            com2 = co2 +' '+str(navrg)
+            com1 = co1 + ' '+b
+            com2 = co2 + ' '+str(navrg)
 
             if cmd == 'getavrg':
                 com = co1+"?\n"
                 self.s.send(com)
-                #c = self.read(com)
-                #return(c)
+                # c = self.read(com)
+                # return(c)
 
             if cmd == 'setavrg':
                 com = com1+"\n"
@@ -590,8 +578,6 @@ class SCPI(PyLayers):
 
         >>> from pylayers.measures.vna.E5072A import *
         >>> vna = SCPI()
-        Agilent Technologies,E5072A,MY51100293,A.01.04
-        <BLANKLINE>
         >>> vna.ifband(sens=1,ifbHz=70000,cmd='set')
         >>> vna.close()
 
@@ -600,7 +586,7 @@ class SCPI(PyLayers):
             self.ifbHz   = ifbHz
 
             co  = ":SENS"+str(sens)+":BAND"
-            com = co +' '+str(ifbHz)
+            com = co + ' '+str(ifbHz)
 
             if cmd == 'get':
                 com = co+"?\n"
@@ -636,21 +622,21 @@ class SCPI(PyLayers):
         self.load_config(_filename=_filename)
 
         # get Nmeas calibration vector
-        D = self.getdata(chan=1,Nmeas=Nmeas)
+        D = self.getdata(chan=1, Nmeas=Nmeas)
 
         # store calibration vector in a hdf5 file
-        fileh5 = pyu.getlong(_fileh5,pstruc['DIRMES'])+'.h5'
-        f = h5py.File(fileh5,"w")
+        fileh5 = pyu.getlong(_fileh5, pstruc['DIRMES'])+'.h5'
+        f = h5py.File(fileh5, "w")
         try:
             ldataset = f.keys()
         except:
             ldataset = []
-        lcal =  filter(lambda x : 'cal' in x,ldataset)
-        calname = 'cal'+ str(len(lcal)+1)
+        lcal =  filter(lambda x : 'cal' in x, ldataset)
+        calname = 'cal' + str(len(lcal)+1)
 
-        #dcal = f.create_dataset(calname,(Nmeas,self.Nf),dtype=np.complex64)
-        dcal = f.create_dataset(calname,(Nmeas,self.Nf,self.ifbHz),dtype=np.complex64)
-        
+        # dcal = f.create_dataset(calname,(Nmeas,self.Nf),dtype=np.complex64)
+        dcal = f.create_dataset(calname, (Nmeas, self.Nf, self.ifbHz), dtype=np.complex64)
+
         dcal.attrs['Nf']        = self.Nf
         dcal.attrs['fminGHz']   = self.fminGHz
         dcal.attrs['fmaxGHz']   = self.fmaxGHz
@@ -661,9 +647,9 @@ class SCPI(PyLayers):
         dcal.attrs['cables']    = cables
         dcal.attrs['comment']   = comment
         dcal.attrs['param']     = self.param
-        dcal[0:Nmeas,0:self.Nf] = D
+        dcal[0:Nmeas, 0:self.Nf] = D
         f.close()
-    
+
 
     def mimocalibh5(self,
                  _fileh5='scalib',
@@ -690,23 +676,23 @@ class SCPI(PyLayers):
         self.load_config(_filename=_filename)
 
         # get Nmeas calibration vector
-        Dmeas = self.getdata(chan=1,Nmeas=Nmeas)
+        Dmeas = self.getdata(chan=1, Nmeas=Nmeas)
 
         # store calibration vector in a hdf5 file
-        fileh5 = pyu.getlong(_fileh5,pstruc['DIRMES'])+'.h5'
-        f = h5py.File(fileh5,"w")
+        fileh5 = pyu.getlong(_fileh5, pstruc['DIRMES'])+'.h5'
+        f = h5py.File(fileh5, "w")
         try:
             ldataset = f.keys()
         except:
             ldataset = []
-        
+
         for iR in range(self.Nr):
             for iT in range(self.Nt):
-                lmimocal =  filter(lambda x : 'mimocal' in x,ldataset)
-                calname = 'mimocal'+ str(len(lmimocal)+1) +'x'+ str(iT+1) +'x'+ str(iR+1)
+                lmimocal =  filter(lambda x : 'mimocal' in x, ldataset)
+                calname = 'mimocal' + str(len(lmimocal)+1) + 'x' + str(iT+1) + 'x' + str(iR+1)
 
-        dmimocal = f.create_dataset(calname,(Nmeas,self.Nt,self.Nr,self.Nf),dtype=np.complex64)
-        
+        dmimocal = f.create_dataset(calname, (Nmeas, self.Nt, self.Nr, self.Nf), dtype=np.complex64)
+
         dmimocal.attrs['Nf']        = self.Nf
         dmimocal.attrs['fminGHz']   = self.fminGHz
         dmimocal.attrs['fmaxGHz']   = self.fmaxGHz
@@ -719,16 +705,16 @@ class SCPI(PyLayers):
         dmimocal.attrs['param']     = self.param
         dmimocal.attrs['Nt']        = self.Nt
         dmimocal.attrs['Nr']        = self.Nr
-        dmimocal[0:Nmeas,0:self.Nf] = Dmeas
+        dmimocal[0:Nmeas, 0:self.Nf] = Dmeas
 
-        #S = Scanner()
-             
+        # S = Scanner()
+
         for i in range(self.Nr):
             for j in range(self.Nt):
-                #Hmeas = S.measMIMO.Smeas.y[i,j,:]
-                #Hcal =  Hmeas/Dmeas[0,0,:]
-                #Dmeas = self.getdata(chan=1,Nmeas=Nmeas)
-                Hcal =  Dmeas[i,j,:]/Dmeas[0,0,:]
+                # Hmeas = S.measMIMO.Smeas.y[i,j,:]
+                # Hcal =  Hmeas/Dmeas[0,0,:]
+                # Dmeas = self.getdata(chan=1,Nmeas=Nmeas)
+                Hcal =  Dmeas[i, j,:]/Dmeas[0, 0,:]
         f.close()
 
 
@@ -746,19 +732,17 @@ class SCPI(PyLayers):
 
         >>> from pylayers.measures.vna.E5072A import *
         >>> vna = SCPI()
-        Agilent Technologies,E5072A,MY51100293,A.01.04
-        <BLANKLINE>
         >>> vna.load_config()
         >>> vna.close()
 
         """
 
-        #filename : ~/Pylayers_project/meas
-        filenname = pyu.getlong(_filename,pstruc['DIRMES'])
-        
+        # filename : ~/Pylayers_project/meas
+        filenname = pyu.getlong(_filename, pstruc['DIRMES'])
+
         vna_conf  = ConfigParser.ConfigParser()
         vna_conf.read(filenname)
-        
+
         sections  = vna_conf.sections()
         di        = {}
         for section in sections:
@@ -767,61 +751,62 @@ class SCPI(PyLayers):
             for option in options:
                 # int/float value
                 try:
-                    di[section][option] = eval(vna_conf.get(section,option))
+                    di[section][option] = eval(vna_conf.get(section, option))
                 # string value
                 except:
-                    di[section][option] = vna_conf.get(section,option)
+                    di[section][option] = vna_conf.get(section, option)
 
-        #be careful no capital word in the sections
-        
-        #link between vna and file ini
+        # be careful no capital word in the sections
+        # link between vna and file ini
 
         # section from  vna_config
         # section : stimulus
 
         self.fminGHz = di['stimulus']['fminghz']
-        self.fmaxGHz = di['stimulus']['fmaxghz'] 
-        
-        
+        self.fmaxGHz = di['stimulus']['fmaxghz']
+
+
         # section : response
         self.param   = di['response']['param']
         self.navrg   = di['response']['navrg']
-        #self.ifbHz   = di['response']['ifbhz']
+        # self.ifbHz   = di['response']['ifbhz']
 
         # values from section configuration set up
         self.Nf      = di['conf_201_1']['nf']
         self.ifbHz   = di['conf_201_1']['ifbhz']
         self.navrg   = di['conf_201_1']['ifbhz']
 
-        
-        self.freq(fminGHz=self.fminGHz,fmaxGHz=self.fmaxGHz,cmd='set')
-        self.points(self.Nf,cmd='set')
-        self.parS(param=self.param,cmd='set')
-        self.ifband(ifbHz=self.ifbHz,cmd='set')
-        self.autoscale()
+
+        # apply configuration setup
+        if not self.emulated:
+            self.freq(fminGHz=self.fminGHz, fmaxGHz=self.fmaxGHz, cmd='set')
+            self.points(self.Nf, cmd='set')
+            self.parS(param=self.param, cmd='set')
+            self.ifband(ifbHz=self.ifbHz, cmd='set')
+            self.autoscale()
 
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     doctest.testmod()
 
 #    vna = SCPI(vna_ip,verbose=False)
 #    ident = vna.getIdent()
-#    #lNpoints = ['201','401','601','801','1601']
+# lNpoints = ['201','401','601','801','1601']
 #
-#    #lNpoints = [1601]
+# lNpoints = [1601]
 #    print "Talking to : ",ident
 #    vna.write("FORM:DATA REAL")
-#    #vna.write("SENS:AVER:ON")
+# vna.write("SENS:AVER:ON")
 #    vna.select(param='S21',chan=1)
 #    vna.setf(startGHz=1.8,stopGHz=2.2)
-#    lav = [1,999] #average
-#    #lsif = ['1000','300000','500000'] #IF band
-#    lsif = ['1000'] #IF band
+# lav = [1,999] #average
+# lsif = ['1000','300000','500000'] #IF band
+# lsif = ['1000'] #IF band
 #    lS = []
 #    lt = []
 #    Npoints = 1601
-#    #for Npoints in lNpoints:
+# for Npoints in lNpoints:
 #    for sif in lsif:
 #        vna.point(value=Npoints,cmd='set')
 #        vna.write(":SENS1:BAND "+sif)
@@ -853,20 +838,20 @@ if __name__=='__main__':
 #        lt.append(toc-tic)
 #        lS.append(S21)
 #        del S21
-#        #get frequency range
-#        #com = ":SENS1:FREQ:DATA?\n"
-#        #tab = vna.read(com)
-#        #f = np.frombuffer(tab,'>f8')
-#        #freq = f[1:]
+# get frequency range
+# com = ":SENS1:FREQ:DATA?\n"
+# tab = vna.read(com)
+# f = np.frombuffer(tab,'>f8')
+# freq = f[1:]
 #
 #    vna.close()
 #
-#    a0 = np.abs(lS[0].y) # N x Npoints ; IF = 100 KHz
-#    #a1 = np.abs(lS[1].y) # N x Npoints ; IF = 300 KHz
-#    #a2 = np.abs(lS[2].y) # N x Npoints ; IF = 500 KHz
+# a0 = np.abs(lS[0].y) # N x Npoints ; IF = 100 KHz
+# a1 = np.abs(lS[1].y) # N x Npoints ; IF = 300 KHz
+# a2 = np.abs(lS[2].y) # N x Npoints ; IF = 500 KHz
 #    plt.plot(a0[0],label='IF 100KHz')
-#    #plt.plot(a1[1],label='IF 300KHz')
-#    #plt.plot(a2[2],label='IF 500KHz')
+# plt.plot(a1[1],label='IF 300KHz')
+# plt.plot(a2[2],label='IF 500KHz')
 #
 #    sns.set_style("darkgrid")
 #    plt.xlabel('points')
@@ -874,11 +859,11 @@ if __name__=='__main__':
 #    plt.title('Evolution of S21 over number of points')
 #    plt.legend(loc='best')
 #
-#    #Variance error
-#    #v0=np.var(lS[0].y,axis=0) # N x Npoints
-#    #v1=np.var(lS[1].y,axis=0)
-#    #plt.semilogy(v0,'b')
-#    #plt.semilogy(v1,'r')
-#    #sns.tsplot(data=np.abs(S21.y),time=S21.x,err_style="ci_bars")
-#    #sns.tsplot(data=np.abs(S21.y),time=S21.x,err_style="ci_band")
+# Variance error
+# v0=np.var(lS[0].y,axis=0) # N x Npoints
+# v1=np.var(lS[1].y,axis=0)
+# plt.semilogy(v0,'b')
+# plt.semilogy(v1,'r')
+# sns.tsplot(data=np.abs(S21.y),time=S21.x,err_style="ci_bars")
+# sns.tsplot(data=np.abs(S21.y),time=S21.x,err_style="ci_band")
 #
