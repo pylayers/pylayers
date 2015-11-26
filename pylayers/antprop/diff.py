@@ -2,15 +2,8 @@ import numpy as np
 import scipy.special as sps
 import matplotlib.pyplot as plt
 import pdb
-<<<<<<< HEAD:pylayers/antprop/Coediff.py
 
-def Coediff(k,N,phi0,phi,si,sd,sf,ero,erro,condo,uro,urro,deltaho,
-            ern,errn,condn,urn,urrn,deltahn,beta0=np.pi/2):
-#def Coediff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2):
-
-=======
 def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2):
->>>>>>> 6a260ca3c2a690f747039d04f03b5a03626e9975:pylayers/antprop/diff.py
     """ Luebbers Diffration coefficient
 
     Parameters
@@ -498,16 +491,7 @@ def R(th,k,er,err,sigma,ur,urr,deltah):
 
     """
 
-<<<<<<< HEAD:pylayers/antprop/Coediff.py
-    cel = 2.997925e8
-    if not isinstance(k,np.ndarray):
-        k = np.array([k])
-    if not isinstance(th,np.ndarray):
-        th = np.array([th])
-
-=======
     cel = 299792458
->>>>>>> 6a260ca3c2a690f747039d04f03b5a03626e9975:pylayers/antprop/diff.py
     #--------------------------------------------
     #cas des surfaces dielectriques (sinon er=-1)
     #--------------------------------------------
