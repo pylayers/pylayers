@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: latin1 -*-
 import numpy as np
 import scipy.special as sps
 import matplotlib.pyplot as plt
@@ -139,8 +141,14 @@ def diff(fGHz,phi0,phi,si,sd,N,mat0,matN,beta=np.pi/2,mode='tab',debug=False):
 #--------------------------------------------------
 #calcul des 4 termes du coeff diff
 #--------------------------------------------------
+    # by construction
+    # 0 < KLA < 2*k*L
+    klamax = 2*np.max(k)*np.max(L)
     if mode == 'tab':
-        xF = np.logspace(-4,3,1000)
+        xF0 = np.logspace(-6,-2,1000)
+        xF1 = np.logspace(-2,np.log10(klamax),1000)
+        xF = np.hstack((xF0,xF1))
+        # xF = np.logspace(-6,np.log10(klamax),1000)
         F = FreF(xF)[0]
     else :
         xF = []
@@ -330,6 +338,8 @@ def Dfunc(sign,k,N,dphi,si,sd,xF=[],F=[],beta=np.pi/2):
     else : 
         uF = (np.abs(KLA[:,:]-xF[:,None,None])).argmin(axis=0)
         Fkla = F[uF]
+        if np.max(Fkla) > 1:
+            Warning('diffRT : Fkla tab probably wrong')
     # 4.56 Mac Namara
     Di = -cste*Fkla/tan
 
