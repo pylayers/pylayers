@@ -598,9 +598,10 @@ class NewLayout(QDialog):    # any super class is okay
 
 
     def new(self):
-        self.parent.L=Layout('void.ini')
+        self.parent.L=Layout('void.ini',check=False)
         self.parent.L.display['overlay']=True
-        self.parent.L.display['fileoverlay']='reverb.png'
+        self.parent.L.display['fileoverlay']='TA-Office.png'
+        self.parent.L.display['overlay']=False
         self.parent.L.display['inverse']=True
         lim = (0., self.width.value(), 0.,self.height.value())
         self.parent.L.boundary(xlim=lim)
@@ -730,6 +731,7 @@ class AppForm(QMainWindow):
 
         # self.setgrid()
 
+
     def save(self,force=False):
 
         if self.filename == '' or force:
@@ -754,6 +756,22 @@ class AppForm(QMainWindow):
         except:
             pass
 
+    def chgover(self):
+        """ change overlay file
+        """
+        filename = QFileDialog.getOpenFileName(self,'Open Pylayers Layout File',pyu.getlong('',pstruc['DIRIMAGE']),'(*.png);;(*.jpg)')
+
+        if filename != '':
+            _filename= pyu.getshort(str(filename))
+            self.L.display['fileoverlay']=_filename
+            print 'loaded overlay'
+
+    def toggleoverl(self):
+        """ toggle overlay
+        """
+        self.selectl.toggleoverlay()
+        self.fig.canvas.draw()
+        
     def closel(self,exit=False):
         dial_res=''
         self.sq = SaveQuitWin(parent=self,exit=exit)
@@ -1081,7 +1099,10 @@ class AppForm(QMainWindow):
             shortcut='3', slot=self.toggleshow3,
             tip='Display 3D view',checkable=True)
 
-
+        chgoverlay_action = self.create_action("&Choose overlay", slot=self.chgover,
+        shortcut="", tip="Choose ovelay")
+        toggleover_action = self.create_action("&Toggle overlay", slot=self.toggleoverl,
+        shortcut="", tip="Toggle ovelay display")
 
         self.add_actions(self.file_menu,
             ( new_action,open_action,None,save_action,saveas_action,None,close_action,quit_action,))
@@ -1089,7 +1110,7 @@ class AppForm(QMainWindow):
         self.add_actions(self.edit_menu,
             ( select_action,draw_action,properties,None,gridset_action,snapongrid_action,gridtg_action,None,refresh))
 
-        self.add_actions(self.view_menu, (view3D_action,))
+        self.add_actions(self.view_menu, (view3D_action,chgoverlay_action,toggleover_action))
 
 
         self.add_actions(self.help_menu, (about_action,))

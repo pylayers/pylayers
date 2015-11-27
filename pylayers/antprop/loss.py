@@ -38,10 +38,12 @@ from scipy import io
 import matplotlib.pylab as plt
 import pylayers.simul.simulem
 import pylayers.measures.mesuwb
+import pylayers.gis.gisutil as gu
+
 import pdb
 
-def PL0(fGHz,GtdB=0,GrdB=0):
-    """  Path Loss at frequency fGHZ @ 1m 
+def PL0(fGHz,GtdB=0,GrdB=0,R=1):
+    """  Path Loss at frequency fGHZ @ R
 
     Parameters
     ----------
@@ -52,12 +54,15 @@ def PL0(fGHz,GtdB=0,GrdB=0):
           transmitting antenna gain dB (default 0 dB)
     GrdB: float
           receiving antenna gain dB (default 0 dB)
+    R   : float
+        distance in m ( because f is in GHz)
+
 
     Returns
     -------
 
     PL0 : float
-          path @ 1m
+          path @ R
 
     Notes
     -----
@@ -73,8 +78,11 @@ def PL0(fGHz,GtdB=0,GrdB=0):
 
     """
 
+    if not isinstance(fGHz,np.ndarray):
+        fGHz=np.array([fGHz])
+
     ld  = 0.3/fGHz
-    PL0 = -20*np.log10(ld/(4.0*np.pi))-GtdB-GrdB
+    PL0 = -20*np.log10(ld/(4.0*np.pi*R))-GtdB-GrdB
 
     return PL0
 
@@ -348,9 +356,9 @@ def hata(pMS,pBS,fGHz,hMS,hBS,typ):
        CH = (1.1*np.log10(fGHz*1000)-0.7)*hMS-(1.56*np.log10(fGHz*1000)-0.8)
     if (typ=='big'):
         if fGHz<0.2:
-            CH = 8.29*(np.log10(1.54*h_MS)**2)-1.1
+            CH = 8.29*(np.log10(1.54*hMS)**2)-1.1
         else:# valid until 1.5GHz
-            CH = 3.2*(np.log10(11.75*h_MS)**2)-4.97
+            CH = 3.2*(np.log10(11.75*hMS)**2)-4.97
 
     L = 69.55+26.16*np.log10(fGHz*1000)-13.82*np.log10(hBS)+(44.9-6.55*np.log10(hBS))*np.log10(dm/1000.)-CH
 
@@ -378,7 +386,7 @@ def cost2100(pMS,pBS,fGHz,nfloor=1,dB=True):
         pl = 10**(-pl/20.)
     return(pl)
 
-def PL(fGHz,pts,p,n=2.0,dB=True):
+def PL(fGHz,pts,p,n=2.0,dB=True,d0=1):
     """ calculate Free Space Path Loss
 
     Parameters
@@ -392,6 +400,10 @@ def PL(fGHz,pts,p,n=2.0,dB=True):
     n      : float
             path loss exponent (default = 2)
 
+    dB : : boolean
+        return result in dB
+
+
     Returns
     -------
 
@@ -400,12 +412,13 @@ def PL(fGHz,pts,p,n=2.0,dB=True):
 
     """
     shp = np.shape(p)
-    assert(shp[0]==2)
+    # assert(shp[0]==2)
 
     D = np.sqrt(np.sum((pts-p)**2,axis=0))
-
     # f x grid x ap
-    PL = PL0(fGHz)[:,np.newaxis] + 10*n*np.log10(D)[np.newaxis,:]
+    #PL = np.array([PL0(fGHz)])[:,np.newaxis] + 10*n*np.log10(D)[np.newaxis,:]
+
+    PL = PL0(fGHz,d0)[:,np.newaxis] + 10*n*np.log10(D/d0)[np.newaxis,:]
 
     if not dB:
         PL=10**(-PL/10)
@@ -655,6 +668,400 @@ def showfurniture(fig,ax):
     R9_F.show(fig,ax)
     R9_G.show(fig,ax)
     axis('scaled')
+
+
+def two_rays_flatearth(p0,p1,fGHz,**kwargs):
+    """
+    Parameters
+    ----------
+
+    p1 : transmitter position
+        (3 x Np1) array or (2,) array
+    p2 : receiver position
+        (3 x Np2) array or (2,) array
+
+    GtdB : float (0) 
+        Transmitter Antenna Gain (dB)
+    GrdB : float(0)
+        Receiver Antenna Gain (dB)
+    fGHz : float (2.4)
+        frequency (GHz)
+    gamma : complex (-1.+0.j)
+        Reflexion coeff
+
+    
+    dB : boolean (True)
+        return result in d
+
+
+    Returns
+    -------
+
+    P : 
+        received power
+
+
+
+
+
+    Examples
+    --------
+    .. plot::
+        :include-source:
+
+        >>> from pylayers.antprop.loss import *
+        >>> NPT=10000
+        >>> x=np.array([0,0,8])
+        >>> x=x.reshape(3,1)
+        >>> y = np.ones((3,NPT))
+        >>> y[0,:]=0
+        >>> y[1,:]=np.arange(NPT)
+        >>> y[2,:]=2
+        >>> g0=1
+        >>> g1=1
+        >>> fGHz=2.4
+        >>> PL2R=two_rays_flatearth(x,y,fGHz,GtdB=g0,GrdB=g1)
+        >>> PL1R = PL(fGHz,x,y,2)
+        >>> plt.semilogx(PL2R,label='two-ray model')
+        >>> plt.semilogx(-PL1R[0,:],label='one slope model')
+        >>> plt.axis([10,NPT,-150,-50])
+        >>> plt.title('Loss 2-rays model vs one slope model')
+        >>> plt.xlabel('distance (m)')
+        >>> plt.ylabel('Loss Pr/Pt (dB)')
+        >>> plt.legend()
+        >>> plt.show()
+
+
+
+    References
+    ----------
+
+    https://en.wikipedia.org/wiki/Two-ray_ground-reflection_model#As_a_case_of_log_distance_path_loss_model
+    http://morse.colorado.edu/~tlen5510/text/classwebch3.html#x15-590003.3.3
+
+    """
+
+
+    defaults = { 'GtdB':0.,
+                 'GrdB':0.,
+                 'gamma': -1.+0.j,
+                 'pol':'v',
+                 'eps' :[],
+                 'sig':0.,
+                 'dB':True
+               }
+
+    for k in defaults:
+       if k not in kwargs:
+           kwargs[k]=defaults[k]
+
+    GtdB=kwargs.pop('GtdB')
+    GrdB=kwargs.pop('GrdB')
+
+    Gt = 10**((1.*GtdB)/10.)
+    Gr = 10**((1.*GrdB)/10.)
+    gamma=kwargs.pop('gamma')
+    pol=kwargs.pop('pol')
+    eps=kwargs.pop('eps')
+    sig=kwargs.pop('sig')
+
+
+    assert p0.shape[0] == 3, 'p0 is not 3D'
+    assert p1.shape[0] == 3, 'p1 is not 3D'
+
+
+    if len(p0.shape) == 1:
+        p0=p0.reshape(p0.shape[0],1)
+    if len(p1.shape) == 1:
+        p1=p1.reshape(p1.shape[0],1)
+
+    p0=1.*p0
+    p1=1.*p1
+
+    Gt = 10**((1.*Gt)/10.)
+    Gr = 10**((1.*Gr)/10.)
+
+    ht = p0[2,:]
+    hr = p1[2,:]
+
+    dloss = np.sqrt(np.sum((p0-p1)**2,axis=0)) # l0
+    d0 = np.sqrt( dloss**2 - 1.*(ht-hr)**2 ) # d0
+    dref = np.sqrt(d0**2+1.*(ht+hr)**2) #l0'
+
+
+    if eps != []:
+        psy = np.arcsin((ht+hr)/dref)
+        er = eps  - 60.j*sig*0.3/fGHz
+        if pol == 'v':
+            Z= (1./er)* np.sqrt(er-np.cos(psy)**2)
+        elif pol == 'h':
+            Z= np.sqrt(er-np.cos(psy)**2)
+
+        gamma = (np.sin(psy)-Z)/((np.sin(psy)+Z))
+
+
+
+    deltad= dref-dloss
+    deltaphi = (2*np.pi*fGHz*deltad)/0.3
+    E= (0.3/(4*np.pi*fGHz) ) *(np.sqrt(Gt*Gr)/dloss + gamma * np.sqrt(Gr*Gr)*(np.exp(-1.j*deltaphi))/dref)
+    P = abs(E)**2
+
+    # import ipdb
+    # ipdb.set_trace()
+    if kwargs['dB'] :
+        return 10*np.log10(P)
+    else:
+        return P
+
+
+def lossref_compute(P,h0,h1,k=4/3.) :
+    """
+    compute loss and reflection rays on curved earth
+
+    Parameters
+    ----------
+
+    P : float | list 
+
+        if len(P) == 1 => P is a distance
+        if len(P) == 4 => P is a list of [lon0,lat0,lon1,lat1]
+
+        where :
+        lat0 : float | string
+            latitude first point (decimal | deg min sec Direction)
+        lat1 : float | string
+            latitude second point (decimal | deg min sec Direction)
+        lon0 : float | string
+            longitude first point (decimal | deg min sec Direction)
+        lon1 : float | string
+            longitude second point (decimal | deg min sec Direction)
+    h0 : float:
+        height of 1st point 
+    h1 : float:
+        height of 2nd point 
+    k : electromagnetic earth factor
+
+
+    Returns
+    -------
+    
+    dloss : float
+        length of direct path (meter)
+    dref : float
+        length of reflective path (meter)
+    psy : float
+        Reflection angle
+
+    References
+    ----------
+    B. R. Mahafza, Radar systems analysis and design using MATLAB, Third edition. Boca Raton ; London: CRC/Taylor & Francis, chapter 8, 2013.
+
+    """
+
+
+    if isinstance(P,float) or isinstance(P,int) :
+        # P is a distance
+        r=P
+        mode = 'dist'
+    elif isinstance(P,np.ndarray) or isinstance(P,list):
+        if len(P) == 1:
+            # P is a distance
+            r=P
+            mode = 'dist'
+        elif len(P) == 4:
+            # P is a lonlat
+            lat0=P[0]
+            lon0=P[1]
+            lat1=P[2]
+            lon1=P[2]
+            mode = 'lonlat'
+        else :
+            raise AttributeError('P must be a list [lat0,lon0,lat1,lon0] or a distance')
+    else :
+        raise AttributeError('Invalid P format ( list | ndarray )')
+
+
+    # if h0<h1:
+    #     h1,h0 = h0,h1
+
+    r0 = 6371.e3 # earth radius
+    re = k*r0 # telecom earth radius
+
+
+    if mode == 'lonlat':
+        # r = distance curvilignenp.arcsin((h1/R1)-R1/(2.*re)) entre TXetRX / geodesic
+        r = gu.distance_on_earth(lat0, lon0, lat1, lon1)
+    else :
+        r=P
+
+    r=1.*r
+
+    # import ipdb
+    # ipdb.set_trace()
+    p = 2/(np.sqrt(3))*np.sqrt(re*(h0+h1)+(r**2/4.)) # eq 8.45
+    eps = np.arcsin(2*re*r*(h1-h0)/p**3) # eq 8.46
+
+
+
+    # distance of reflection on curved earth
+    r1 = r/2 - p*np.sin(eps/3) # eq 8.44
+
+    r2 = r -r1
+
+    phi1 = r1/re # 8.47
+    phi2 = r2/re # 8.48
+
+    R1 = np.sqrt(h0**2+4*re*(re+h0)*(np.sin(phi1/2))**2) # 8.51
+    R2 = np.sqrt(h1**2+4*re*(re+h1)*(np.sin(phi2/2))**2) #8.52
+
+    Rd = np.sqrt((h1-h0)**2+4*(re+h1)*(re+h0)*np.sin((phi1+phi2)/2.)**2) # 8.53
+    # tangente angle on earth
+    psy = np.arcsin((h1/R1)-R1/(2.*re)) # eq 8.55
+    deltaR = 4*R1*R2*np.sin(psy)**2/(R1+R2+Rd)
+
+    dloss = Rd
+    dref = R1+R2
+
+    return psy,dloss,dref
+
+def two_ray_curvedearth(P,h0,h1,fGHz=2.4,**kwargs):
+    """
+
+
+    Parameters
+    ----------
+
+    P : float | list 
+
+        if len(P) == 1 => P is a distance
+        if len(P) == 4 => P is a list of [lon0,lat0,lon1,lat1]
+
+        where :
+        lat0 : float | string
+            latitude first point (decimal | deg min sec Direction)
+        lat1 : float | string
+            latitude second point (decimal | deg min sec Direction)
+        lon0 : float | string
+            longitude first point (decimal | deg min sec Direction)
+        lon1 : float | string
+            longitude second point (decimal | deg min sec Direction)
+    h0 : float:
+        height of 1st point 
+    h1 : float:
+        height of 2nd point 
+    fGHz : float
+        frequency (GHz)
+
+
+    k : float
+        electromagnetic earth factor
+    GtdB : float
+        Transmitter Antenna Gain (dB)
+    GrdB : float
+        Receiver Antenna Gain (dB)
+    gamma : complex (-1.+0.j)
+        Reflexion coeff if eps and sig are not precised
+
+    'pol': string ('v')
+        polarization ('v'|'h')
+    'eps' : float ([])
+        lossless relative permittivity [],
+    'sig': float (0.)
+        conductivity 
+
+
+    dB : boolean (True)
+        return result in dB
+
+
+    Returns
+    -------
+
+    P : 
+        received power
+
+
+
+    Example
+    -------
+
+    .. plot::
+        :include-source:
+        
+            >>> from pylayers.antprop.loss import *
+            >>> import matplotlib.pyplot as plt
+            >>> fGHz=2.4
+            >>> p0=np.array(([0,0,20]))
+            >>> p1=np.array(([0,1,20]))
+            >>> p0=p0.reshape(3,1)
+            >>> p1=p1.reshape(3,1)
+            >>> TRF = [] # Two Ray model on flat earth
+            >>> TRC = [] # Two Ray model on curved earth
+            >>> for d in np.arange(1,10000,1):
+            >>>     p1[1,:]=d
+            >>>     TRF.append(two_rays_flatearth(p0[:,0],p1[:,0],fGHz,GtdB=0.,GrdB=0.,))
+            >>>     TRC.append(two_ray_curvedearth(d,p0[2,:],p1[2,:],fGHz))
+            >>> plt.semilogx(TRF,label='two-ray model flat earth')
+            >>> plt.semilogx(TRC,label='two-ray model curved earth')
+            >>> plt.legend()
+            >>> plt.show()
+
+    """
+
+
+    defaults = { 'GtdB':0.,
+                 'GrdB':0.,
+                 'k':4/3.,
+                 'gamma': -1.+0.j,
+                 'pol':'v',
+                 'eps' :[],
+                 'sig':0.,
+                 'mode':'PL',
+                 'dB':True
+               }
+
+    for k in defaults:
+        if k not in kwargs:
+            kwargs[k]=defaults[k]
+
+    GtdB=kwargs.pop('GtdB')
+    GrdB=kwargs.pop('GrdB')
+
+    Gt = 10**((1.*GtdB)/10.)
+    Gr = 10**((1.*GrdB)/10.)
+    k=kwargs.pop('k')
+    gamma=kwargs.pop('gamma')
+    pol=kwargs.pop('pol')
+    eps=kwargs.pop('eps')
+    sig=kwargs.pop('sig')
+
+
+    h0=1.*h0
+    h1=1.*h1
+
+    psy,dloss,dref = lossref_compute(P,h0,h1,k)
+
+    if eps != []:
+        er = eps  - 60.j*sig*0.3/fGHz
+        if pol == 'v':
+            Z= (1./er)* np.sqrt(er-np.cos(psy)**2)
+        elif pol == 'h':
+            Z= np.sqrt(er-np.cos(psy)**2)
+
+        gamma = (np.sin(psy)-Z)/((np.sin(psy)+Z))
+
+    deltad= dref-dloss
+    deltaphi = (2*np.pi*fGHz*deltad)/0.3
+    E= (0.3/(4*np.pi*fGHz) ) *(np.sqrt(Gt*Gr)/dloss + gamma * np.sqrt(Gr*Gr)*(np.exp(-1.j*deltaphi))/dref)
+    P = abs(E)**2
+
+    # import ipdb
+    # ipdb.set_trace()
+    if kwargs['dB'] :
+        return 10*np.log10(P)
+    else:
+        return P
+
 
 def visuPts(S,nu,nd,Pts,Values,fig=[],sp=[],vmin=0,vmax=-1,label=' ',tit='',size=25,colbar=True,xticks=False):
     """ visuPt  : Visualization of values a given points

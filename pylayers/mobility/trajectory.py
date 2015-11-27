@@ -727,7 +727,7 @@ class Trajectory(PyLayers,pd.DataFrame):
         else:
             mlab.plot3d(X[:,0],X[:,1],X[:,2],color=(0,0,0))
 
-    def plot(self, fig=[], ax=[], Nlabels=5, typ='plot', L=[]):
+    def plot(self, fig=[], ax=[],tmin=0,tmax=None,Nlabels=5, typ='plot', L=[]):
         """ plot trajectory
 
         Parameters
@@ -754,7 +754,7 @@ class Trajectory(PyLayers,pd.DataFrame):
             >>> z = 0*t
             >>> pt =np.vstack((x,y,z)).T
             >>> traj = Trajectory()
-            >>> traj.generate(t,pt)
+            >>> traj.generate(t=t,pt=pt)
             >>> f,a = traj.plot()
             >>> plt.show()
 
@@ -769,14 +769,27 @@ class Trajectory(PyLayers,pd.DataFrame):
             if isinstance(L,Layout):
                 fig, ax = L.showGs(fig=fig, ax=ax)
 
+        tt = self.time()
+
+        if tmax == None:
+            tmax = tt[-1]
+
+        assert(tmax>=tmin)
+        assert(tmax<=tt[-1])
+        assert(tmin>=tt[0])
+
+        tk = np.where((tt>=tmin)&(tt<=tmax))[0]
+        kmin = tk[0]
+        kmax = tk[-1]
+
+
         if typ == 'plot':
-            ax.plot(self['x'], self['y'])
+            ax.plot(self['x'][tk], self['y'][tk])
         elif typ == 'scatter':
-            ax.scatter(self['x'], self['y'])
+            ax.scatter(self['x'][tk], self['y'][tk])
 
-        for k in np.linspace(0, len(self), Nlabels, endpoint=False):
-            k = int(k)
 
+        for k in np.linspace(kmin, kmax, Nlabels, endpoint=False,dtype=int):
             ax.text(self['x'][k], self['y'][k], str(self.index[k].strftime("%M:%S")))
             ax.plot(self['x'][k], self['y'][k], '*r')
 

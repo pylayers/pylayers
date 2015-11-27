@@ -2,12 +2,31 @@
 import numpy as np
 import pylayers.antprop.antenna as ant
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import pdb
 r"""
 
-.. currentmodule:: pylayers.antprop.array
+.. currentmodule:: pylayers.antprop.aarray
 
 This module handles antenna arrays
+
+Array class
+===========
+
+.. autosummary::
+    :toctree: generated/
+
+ULAarray class
+==============
+
+.. autosummary::
+    :toctree: generated/
+
+AntArray class
+==============
+
+.. autosummary::
+    :toctree: generated/
 
 """
 class TXRU(object):
@@ -19,29 +38,61 @@ class TXRU(object):
     def __init__(self):
         pass
 
-class Array(object):
+class Array(ant.Pattern):
     """ Array class
+
+    An array is defined as the association of a set of points and a set of
+    exitations
+
     """
 
-    def __init__(self,p):
+    def __init__(self,p,w=[],fGHz=np.linspace(1.8,2.2,20)):
         """
 
         Parameters
         ----------
 
-        p  : set of 3D points (3xN) or 3x Nx x Ny x Nz
+        p  : set of 3D points (3xNp)   or  3 x Nx x Ny x Nz
+        w  : set of weight Np x Nf
+                       or  Nx x Ny x Nz x Nf
 
+        fGhz : np.array
+            frequency in GHz
 
         """
         assert type(p)==np.ndarray," Array not an array"
         assert p.shape[0]==3," Array not a 3D point"
 
         self.p = p
+        self.fGHz = fGHz
+        shp = np.shape(p)
+
+        # If no excitation choose uniform excitation
+        # Np x Nf
+        if w == []:
+            w = np.ones((shp[1:]))[...,None]
+        self.w = w
+
+        self.typ = 'Array'
+        self.param={'param':{}}
+
+        ant.Pattern.__init__(self)
 
     def __repr__(self):
         st = ''
-
+        st = st + 'points :' + str(p) + '\n'
+        st = st + 'fmin :' + str(fGHz[0]) + '\n'
+        st = st + 'fmax :' + str(fGHz[1]) + '\n'
         return(st)
+
+    def show(self):
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        ax.scatter(self.p[0,:],self.p[1,:],self.p[2,:],s=20)
+        ax.set_xlabel('X axis')
+        ax.set_ylabel('Y axis')
+        ax.set_zlabel('Z axis')
+        plt.show()
 
 class ULArray(Array):
     """ Uniform Linear Array
@@ -49,12 +100,19 @@ class ULArray(Array):
     An uniform array is centered on the origin.
     It has Nx, Ny, Nz antennas placed respectively along the x,y,z axis.
 
+
+    The assumed mapping between the antenna port index ik and the spatial indexing
+    (ix,iy,iz) is
+
+    ik = iz Nx Ny + iy Nx + ix
+
     """
     def __init__(self,**kwargs):
         """
 
         Parameters
         ----------
+
         N  : list
             [Nx,Ny,Nz]  don't use 0 the total number of antennas is Nx*Ny*Nz
         dm : list of floats
@@ -62,32 +120,37 @@ class ULArray(Array):
 
         """
         defaults = { 'N'    : [8,1,1],
-                     'dm'   : [0.075,0,0]
+                     'dm'   : [0.075,0,0],
+                     'w'   : [],
+                    'fGHz' : np.linspace(1.8,2.2,10),
                    }
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]
 
-        self.N  = kwargs['N']
-        self.dm = np.array(kwargs['dm'])
+        self.N  = kwargs.pop('N')
+        self.dm = np.array(kwargs.pop('dm'))
         self.Na = np.prod(self.N)
 
         Nx = self.N[0]
         Ny = self.N[1]
         Nz = self.N[2]
 
-        if Nx%2==0:
-            px = self.dm[0]*np.linspace(-Nx/2,Nx/2,Nx)[None,:,None,None] # 1 x Nx x Ny x Nz
-        else:
-            px = self.dm[0]*np.linspace(-(Nx-1)/2,(Nx-1)/2,Nx)[None,:,None,None] # 1 x Nx x Ny x Nz
-        if Ny%2==0:
-            py = self.dm[1]*np.linspace(-Ny/2,Ny/2,Ny)[None,None,:,None] # 1 x Nx x Ny x Nz
-        else:
-            py = self.dm[1]*np.linspace(-(Ny-1)/2,(Ny-1)/2,Ny)[None,None,:,None] # 1 X Nx x Ny x Nz
-        if Nz%2==0:
-            pz = self.dm[2]*np.linspace(-Nz/2,Nz/2,Nz)[None,None,None,:] #  1 x Nx x Ny x Nz
-        else:
-            pz = self.dm[2]*np.linspace(-(Nz-1)/2,(Nz-1)/2,Nz)[None,None,None,:] # 1 x Nx x Ny x Nz
+        px = self.dm[0]*np.linspace(-(Nx-1)/2.,(Nx-1)/2.,Nx)[None,:,None,None] # 1 x Nx x Ny x Nz
+        py = self.dm[1]*np.linspace(-(Ny-1)/2.,(Ny-1)/2.,Ny)[None,None,:,None] # 1 X Nx x Ny x Nz
+        pz = self.dm[2]*np.linspace(-(Nz-1)/2.,(Nz-1)/2.,Nz)[None,None,None,:] # 1 x Nx x Ny x Nz
+        #if Nx%2==0:
+        #    px = self.dm[0]*np.linspace(-Nx/2,Nx/2,Nx)[None,:,None,None] # 1 x Nx x Ny x Nz
+        #else:
+        #    px = self.dm[0]*np.linspace(-(Nx-1)/2,(Nx-1)/2,Nx)[None,:,None,None] # 1 x Nx x Ny x Nz
+        #if Ny%2==0:
+        #    py = self.dm[1]*np.linspace(-Ny/2,Ny/2,Ny)[None,None,:,None] # 1 x Nx x Ny x Nz
+        #else:
+        #    py = self.dm[1]*np.linspace(-(Ny-1)/2,(Ny-1)/2,Ny)[None,None,:,None] # 1 X Nx x Ny x Nz
+        #if Nz%2==0:
+        #    pz = self.dm[2]*np.linspace(-Nz/2,Nz/2,Nz)[None,None,None,:] #  1 x Nx x Ny x Nz
+        #else:
+        #    pz = self.dm[2]*np.linspace(-(Nz-1)/2,(Nz-1)/2,Nz)[None,None,None,:] # 1 x Nx x Ny x Nz
 
         p = np.zeros((3,Nx,Ny,Nz))
         #p = np.zeros((3,Nx*Ny*Nz))
@@ -98,7 +161,7 @@ class ULArray(Array):
 
         q = p.reshape((3,Nx*Ny*Nz))
 
-        super(ULArray,self).__init__(p=q)
+        Array.__init__(self,p=q,**kwargs)
 
 class UCArray(Array):
     """ Uniform Circular Array
@@ -114,31 +177,26 @@ class AntArray(Array,ant.Antenna):
     """
 
     def __init__(self,**kwargs):
+        """
+        Examples
+        --------
+
+        ... plot::
+            :include-source:
+        >>> A=AntArray()
+        >>> A.plotG()
+
+        """
         defaults = {'tarr': 'UA',
                     'N'    : [8,1,1],
                     'dm'   : [0.075,0,0],
-                    'Ntxru' : 1,
+                    'S'    : [],
                     'pattern' : True,
-                    'typ':'Omni',
-                    'directory': 'ant',
-                    'nf':104,
-                    'pol':'v',
-                    'source':'satimo',
-                    'ntheta':90,
-                    'nphi':181,
-                    'p0':0,
-                    't0':np.pi/2.,
-                    'p3':np.pi/6.,
-                    't3':np.pi/6.,
-                    'L':90,
-                    'fmin':0.8,
-                    'fmax':5.95,
-                    'gm': 18,
-                    'sllv':-18,
-                    'hpbwv':6.2,
-                    'hpbwh':65,
-                    'fbrh':30,
-                    'thtilt':0}
+                    #'typant':'S1R1.vsh3',
+                    'typant':'Gauss'
+                    }
+
+
         for k in defaults:
             if k not in kwargs:
                 kwargs[k]=defaults[k]
@@ -146,143 +204,77 @@ class AntArray(Array,ant.Antenna):
         self.tarr = kwargs.pop('tarr')
         self.N  = np.array(kwargs.pop('N'))
         self.Na = np.prod(self.N)  # number of antennas
-        self.Ntxru = kwargs.pop('Ntxru')
         self.dm = np.array(kwargs.pop('dm'))
-        self.typ = kwargs.pop('typ')
+        self.typant = kwargs.pop('typant')
+
+        if type(self.typant)==list:
+            self.sameAnt=False
+            assert len(self.typant)==self.Na,"Wrong number of antennas"
+        else:
+            self.sameAnt=True
+
 
         if self.tarr=='UA':
            UA = ULArray(N = self.N,dm = self.dm)
 
-
+        #
+        # Add the antennas of the array, either 1 (same for all points), or Na
+        # (array size)
+        #
+        typ = 'Array'
         # init Antenna parent
-        ant.Antenna.__init__(self,typ=self.typ,**kwargs)
+        self.la = []
+        if self.sameAnt:
+            self.la.append(ant.Antenna(typ=self.typant))
+        else:
+            for t in self.typant:
+                self.la.append(ant.Antenna(typ=t))
 
-        super(AntArray,self).__init__(p=UA.p)
+        super(AntArray,self).__init__(p=UA.p,fGHz=self.la[0].fGHz)
+        ant.Antenna.__init__(self,typ=typ,**kwargs)
 
 
     def __repr__(self):
          st = "Antenna Array : \n"
-         st = st + 'typ : '+self.typ+'\n'
+         st = st + self.typ + 'of '+self.typant+'\n'
          st = st + 'N : '+str(self.N)+'\n'
          st = st + 'dm : '+str(self.dm)+'\n'
          st = st + ant.Antenna.__repr__(self)
          return(st)
 
-    def calF(self,**kwargs):
-        """ calculates array factor
+def ktoxyz(ik,Nx=10,Ny=11):
+    iz = ik/(Nx*Ny)
+    iy = (ik-iz*Nx*Ny)/Nx
+    ix = (ik-iz*Nx*Ny-iy*Nx)
+    return(iz,iy,ix)
+def xyztok(iz,iy,ix,Nx=10,Ny=11):
+    ik = iz*Nx*Ny+iy*Nx+ix
+    return(ik)
+def weights(nx,nz,kx,kz,Kx,Kz):
+    """
+    Practical Demonstration of Limited Feedback Beamforming for mmWave Systems
 
-         Parameters
-         ----------
-
-         ang : np.array(Nkx2) [theta,phi]
-            array direction angles in radians
-
-         w :  complex weight  (Nf x Nant x Ntxru)
-
-         Examples
-         --------
-
-         >>> Nd = 180
-         >>> theta = np.pi*np.ones(Nk)/2.
-         >>> phi = np.linspace(0,np.pi,Nd)
-         >>> ang = np.vstack((theta,phi)).T
-         >>> A = AntArray()
-         >>> A.calF(ang)
-
-        """
-
-        defaults = { 'w' : [],
-                     'th' :[],
-                     'ph': [],
-                     'pattern':True
-                   }
-
-        for k in defaults:
-            if k not in kwargs:
-                kwargs[k]=defaults[k]
+    """
+    arg = np.floor((nx*np.mod(kx+(Kx/2),Kx))/(Kx/4))
 
 
-        if (kwargs['th'] == []) and (kwargs['ph'] == []):
-            self.theta = np.linspace(0,np.pi,self.Nt)
-            self.phi = np.linspace(0,2*np.pi,self.Np,endpoint=False)
-        else:
-            self.theta = th
-            self.phi = ph
-
-        if kwargs['w']==[]:
-            w = np.ones((self.Nf,1,self.Na,self.Ntxru))
-        else:
-            pass
-
-        lamda = (0.3/self.fGHz)
-        k     = 2*np.pi/lamda
-
-        # Nd number of directions
-
-        if kwargs['pattern']:
-            sx = np.sin(self.theta[:,None])*np.cos(self.phi[None,:])    # Ntheta x Nphi
-            sy = np.sin(self.theta[:,None])*np.sin(self.phi[None,:])    # Ntheta x Nphi
-            sz = np.cos(self.theta[:,None])*np.ones(len(self.phi))[None,:]   # Ntheta x Nphi
-            sx = sx.reshape(self.Nt*self.Np)
-            sy = sy.reshape(self.Nt*self.Np)
-            sz = sz.reshape(self.Nt*self.Np)
-        else:
-            sx = np.sin(self.theta)*np.cos(self.phi)    # Nd x 1
-            sy = np.sin(self.theta)*np.sin(self.phi)    # Nd x 1
-            sz = np.cos(self.theta)                     # Nd x 1
-
-        self.s  = np.vstack((sx,sy,sz)).T         # Nd x 3
-
-
-        #
-        # F = exp(+jk s.p)
-        #
-
-        # s : Nd x 3
-        # p : 3 x Na
-        # w : 1 x Na
-        # sdotp : Nd x Na
-
-        sdotp  = np.dot(self.s,self.p)   # s . p
-
-        #
-        # E : Nf x Nd x Na x 1
-        # w : Nf x 1  x Na x Nt
-        # wE : f x Nd x Na x Nt
-
-        self.wE = w*np.exp(1j*k[:,None,None]*sdotp[None,:,:])[:,:,:,None]
-
-        #
-        # sum over antennas (axes 2 Na )
-        #
-        # Nf x Nd x Ntxru
-        # or
-        # Nf x Ntheta x Nphi x Ntxru
-        #
-
-        self.F = np.sum(self.wE,axis=2)
-        if kwargs['pattern']:
-            self.Ftheta = self.F.reshape(self.Nf,self.Nt,self.Np,self.Ntxru)
-            self.Fphi = self.F.reshape(self.Nf,self.Nt,self.Np,self.Ntxru)
-
-
-
-
-# 
-# 
-# 
-# 
-## + We assume X band 
+if __name__=='__main__':
+    doctest.testmod()
+#
+#
+#
+#
+## + We assume X band
 #
 ## In[2]:
 #
-## Frequency 
+## Frequency
 #fGHz  = 10
 ## Wavelength
 #lam   = 0.3/fGHz
-## Wabve number 
+## Wabve number
 #k     = 2*pi/lam
-## distance between elements 
+## distance between elements
 #d     = lam/2
 ## Number of point along thets
 #Ntheta = 520
@@ -320,18 +312,18 @@ class AntArray(Array,ant.Antenna):
 #title('Dolph-Chebyshev 30')
 #
 #
-## The $N \times N_{\theta}$ steering vectors matrix is given by 
-## 
-## $$\mathbf{S}(\theta) = e^{jkd \mathbf{n}^T . \mathbf{sin(\theta)}}$$ 
-## 
-## $$\mathbf{U}(\theta) = \frac{d}{d\theta}\mathbf{S}(\theta) = jkd \mathbf{n}^T.\mathbf{\cos(\theta)} \odot e^{jkd \mathbf{n}^T . \mathbf{sin(\theta)}}$$ 
+## The $N \times N_{\theta}$ steering vectors matrix is given by
+##
+## $$\mathbf{S}(\theta) = e^{jkd \mathbf{n}^T . \mathbf{sin(\theta)}}$$
+##
+## $$\mathbf{U}(\theta) = \frac{d}{d\theta}\mathbf{S}(\theta) = jkd \mathbf{n}^T.\mathbf{\cos(\theta)} \odot e^{jkd \mathbf{n}^T . \mathbf{sin(\theta)}}$$
 #
-## In 3D these expression becomes. 
-## 
-## Let $\mathbf{r}$ (3xN) be the coordinates associated with each element of the array. 
+## In 3D these expression becomes.
+##
+## Let $\mathbf{r}$ (3xN) be the coordinates associated with each element of the array.
 ## Let define a direction $\mathbf{\hat{s}}(\theta,\phi)$
-## 
-## $$\mathbf{S}(\theta,\phi) = e^{-jk \mathbf{\hat{s}}^T . \mathbf{k}(\theta,\phi)}$$ 
+##
+## $$\mathbf{S}(\theta,\phi) = e^{-jk \mathbf{\hat{s}}^T . \mathbf{k}(\theta,\phi)}$$
 #
 ## In[11]:
 #
@@ -435,7 +427,7 @@ class AntArray(Array,ant.Antenna):
 #print "beamwidth (deg) Dolph-chebyshev moy: ",bwcmoy
 #
 #
-## 
+##
 #
 ## In[8]:
 #
@@ -454,65 +446,65 @@ class AntArray(Array,ant.Antenna):
 #ylabel('dB')
 #
 #
-## 
-## 
-## The figure above demonstates that is possible to have very small variations on the 
-## beamwidth while obtaining a very well controlled modulation (here more than 10dB in very stable 
-## direction on the sidelobes). 
+##
+##
+## The figure above demonstates that is possible to have very small variations on the
+## beamwidth while obtaining a very well controlled modulation (here more than 10dB in very stable
+## direction on the sidelobes).
 ## This could be exploited to send a stealth amplitude modulation schemes with a symbol time $T_s$
 ## which could be defined as a fraction of the radar transmitting duration.
-## 
-## 
-## 
-## Notice that the averaged pattern has exactly the same beamwidth as B-C25 but it is obviously worst regarding 
-## the rejection which is an expected result because Dolph-chebyschev is optimal regarding side lobe 
+##
+##
+##
+## Notice that the averaged pattern has exactly the same beamwidth as B-C25 but it is obviously worst regarding
+## the rejection which is an expected result because Dolph-chebyschev is optimal regarding side lobe
 ## rejection at a specified beamwidth.
-## 
+##
 ## + Q : Is it possible to adaptively and jointly controled the level and the direction of the sidelobes ?
-## 
-## + Q : What is the degree of freedom we have on the modulation of the mainlobe beamwidth. 
-## + Q: What are the typical distances we are interested in both for communication and radar ? 
-## 
-## 
-## It is necessary to define a more precise radar-com scenario with associated propagation model 
-## in order to evaluate the difficulty of both synchronisation and data demodulation both at target 
+##
+## + Q : What is the degree of freedom we have on the modulation of the mainlobe beamwidth.
+## + Q: What are the typical distances we are interested in both for communication and radar ?
+##
+##
+## It is necessary to define a more precise radar-com scenario with associated propagation model
+## in order to evaluate the difficulty of both synchronisation and data demodulation both at target
 ## location and intended receiver.
 #
 ## # Finding a mathematical definition of rejection
-## 
+##
 ## In order to expressed criteria on rejection it is important to give a precise mathematical definition of what exactly rejection is.
-## Let $\mathbf{w}^T$ be the 1xN vector of antenna array weights. The complex array factor is given by : 
-## 
+## Let $\mathbf{w}^T$ be the 1xN vector of antenna array weights. The complex array factor is given by :
+##
 ## $$ \mathbf{F}(\theta)= \mathbf{w}^{\dagger} . \mathbf{S}(\theta) $$
-## 
+##
 ## Let defines the  $N\times N $ matrix $$\mathbf{W}=\mathbf{w}^{\dagger}\mathbf{w}$$
-## 
+##
 ## $$ |F(\theta)|^2 = \textrm{diag}(\mathbf{F}^{\dagger}(\theta)\mathbf{F})$$
 ## $$ |F(\theta)|^2 = \textrm{diag}( \mathbf{S}^{\dagger} \mathbf{W} \mathbf{S} )$$
 ## $$ \frac{d}{d\theta}|F(\theta)|^2 = \textrm{diag}( \mathbf{U}^{\dagger} \mathbf{W}  \mathbf{S} )+\textrm{diag}( \mathbf{S}^{\dagger} \mathbf{W}  \mathbf{U} )$$
-## $$ \frac{d^2}{d\theta^2}|F(\theta)|^2 =\textrm{diag}( \mathbf{R}^{\dagger} \mathbf{W}  \mathbf{S} )+ 
+## $$ \frac{d^2}{d\theta^2}|F(\theta)|^2 =\textrm{diag}( \mathbf{R}^{\dagger} \mathbf{W}  \mathbf{S} )+
 ##                                        \textrm{diag}( \mathbf{U}^{\dagger} \mathbf{W}  \mathbf{U} )+
 ##                                        \textrm{diag}( \mathbf{U}^{\dagger} \mathbf{W}  \mathbf{U})+
 ##                                        \textrm{diag}( \mathbf{S}^{\dagger} \mathbf{W}  \mathbf{R} )$$
-## $$ \frac{d^2}{d\theta^2}|F(\theta)|^2 =\textrm{diag}( \mathbf{R}^{\dagger} \mathbf{W}  \mathbf{S} )+ 
+## $$ \frac{d^2}{d\theta^2}|F(\theta)|^2 =\textrm{diag}( \mathbf{R}^{\dagger} \mathbf{W}  \mathbf{S} )+
 ##                                        2\textrm{diag}( \mathbf{U}^{\dagger} \mathbf{W}  \mathbf{U} )+
 ##                                        \textrm{diag}( \mathbf{S}^{\dagger} \mathbf{W}  \mathbf{R} )$$
 #
 ## In order to expressed criteria on rejection it is important to give a precise mathematical definition of what exactly rejection is.
-## Let $\mathbf{w}^T$ be the 1xN vector of antenna array weights. The complex array factor is given by : 
-## 
+## Let $\mathbf{w}^T$ be the 1xN vector of antenna array weights. The complex array factor is given by :
+##
 ## $$ \mathbf{F}(\theta,\phi)= \mathbf{w}. \mathbf{S}(\theta,\phi) $$
-## 
+##
 ## Let defines the  $N\times N $ matrix $$\mathbf{W}=\mathbf{w}^{\dagger}\mathbf{w}$$
-## 
+##
 ## $$ |F(\theta,\phi)|^2 = \textrm{diag}(\mathbf{F}^{\dagger}(\theta,\phi)\mathbf{F})$$
 ## $$ |F(\theta,\phi)|^2 = \textrm{diag}( \mathbf{S}^{\dagger} \mathbf{W} \mathbf{S} )$$
 ## $$ \frac{d}{d\theta}|F(\theta)|^2 = \textrm{diag}( \mathbf{U}^{\dagger} \mathbf{W}  \mathbf{S} )+\textrm{diag}( \mathbf{S}^{\dagger} \mathbf{W}  \mathbf{U} )$$
-## $$ \frac{d^2}{d\theta^2}|F(\theta)|^2 =\textrm{diag}( \mathbf{R}^{\dagger} \mathbf{W}  \mathbf{S} )+ 
+## $$ \frac{d^2}{d\theta^2}|F(\theta)|^2 =\textrm{diag}( \mathbf{R}^{\dagger} \mathbf{W}  \mathbf{S} )+
 ##                                        \textrm{diag}( \mathbf{U}^{\dagger} \mathbf{W}  \mathbf{U} )+
 ##                                        \textrm{diag}( \mathbf{U}^{\dagger} \mathbf{W}  \mathbf{U})+
 ##                                        \textrm{diag}( \mathbf{S}^{\dagger} \mathbf{W}  \mathbf{R} )$$
-## $$ \frac{d^2}{d\theta^2}|F(\theta)|^2 =\textrm{diag}( \mathbf{R}^{\dagger} \mathbf{W}  \mathbf{S} )+ 
+## $$ \frac{d^2}{d\theta^2}|F(\theta)|^2 =\textrm{diag}( \mathbf{R}^{\dagger} \mathbf{W}  \mathbf{S} )+
 ##                                        2\textrm{diag}( \mathbf{U}^{\dagger} \mathbf{W}  \mathbf{U} )+
 ##                                        \textrm{diag}( \mathbf{S}^{\dagger} \mathbf{W}  \mathbf{R} )$$
 #
@@ -528,7 +520,7 @@ class AntArray(Array,ant.Antenna):
 #    d     : interelement distance (default lambda/2)
 #    thresh : threshold for null first derivative evaluation
 #
-#    Author : B.Uguen 
+#    Author : B.Uguen
 #             December 2011
 #    """
 #    N  = len(w)
@@ -581,7 +573,7 @@ class AntArray(Array,ant.Antenna):
 #
 #
 ## In the figure below we have determined the locus where the absolute value is below a given threshold while the second derivative remains negative.
-## This second criteria authorizes not to be very strict on the null criteria for derivative 
+## This second criteria authorizes not to be very strict on the null criteria for derivative
 ## because on each sub-interval the function is locally convex.
 #
 ## ## Study rejection of different arrays
@@ -626,8 +618,8 @@ class AntArray(Array,ant.Antenna):
 #print rejdB
 #
 #
-## Q: What is the mean rejection when drawing randomly a real weigthing array ? And how is it correlated to beamwidth ? 
-## The beamwith evaluation is imprecise because it is evaluated numerically and is dependant from the angular sampling interval. 
+## Q: What is the mean rejection when drawing randomly a real weigthing array ? And how is it correlated to beamwidth ?
+## The beamwith evaluation is imprecise because it is evaluated numerically and is dependant from the angular sampling interval.
 #
 ## In[20]:
 #
@@ -645,7 +637,7 @@ class AntArray(Array,ant.Antenna):
 #
 ## In[21]:
 #
-#tmp  = hist(trej,50) 
+#tmp  = hist(trej,50)
 #
 #
 ## In[22]:
@@ -653,7 +645,7 @@ class AntArray(Array,ant.Antenna):
 #hist(tbwdeg,20)
 #
 #
-## 
+##
 #
 ## In[23]:
 #
@@ -668,7 +660,7 @@ class AntArray(Array,ant.Antenna):
 #visurej(f,g,h,z,main,rejdB,bwdeg,'Random real 3 :')
 #
 #
-## 
+##
 #
 ## In[9]:
 #
@@ -692,44 +684,46 @@ class AntArray(Array,ant.Antenna):
 #
 #
 ## ## Definition of an averaged radiation pattern
-## 
+##
 ## The averaged radiation pattern is defined as :
-## 
+##
 ## $$ \mathbf{\bar{F}}(\theta)=\frac{1}{K}\sum_{k=1}^{K} \mathbf{F}_k(\theta)= \frac{1}{K}\sum_{k=1}^{K} \mathbf{w_k}^{\dagger} . \mathbf{S}(\theta) $$
 #
-## If we assume a weight encoded with $N_b$ bits, $\mathbf{u_k}$ is equal to 0 or 1 
-## 
+## If we assume a weight encoded with $N_b$ bits, $\mathbf{u_k}$ is equal to 0 or 1
+##
 ## $$\mathbf{w_k} = \mathbf{u_k}(2^{N_b}-1) $$
 #
 ## $$ \mathbf{\bar{F}}_K(\theta) = \frac{2^{N_b}-1}{K}\sum_{k=1}^{K} \mathbf{u_k}^{\dagger} . \mathbf{S}(\theta) $$
 #
 ## $$N_{bit} = \log_2 \left( K (2^{N_b}-1) +1\right) $$
 #
-## Time modulated array 
-## 
+## Time modulated array
+##
 ## $$ \mathbf{F}(\theta,t)=\sum_{l=-\infty}^{+\infty} \textrm{rect}(\frac{t- l T/2}{T})\mathbf{F}_l(\theta) $$
-## 
+##
 #
-## 
-## Time modulated array 
-## 
+##
+## Time modulated array
+##
 ## $$ \mathbf{\bar{F}}(\theta) = \frac{1}{K}\sum_{k=1}^{K} \mathbf{w_k}^{\dagger} . \mathbf{S}(\theta) $$
 #
-## Nombre d'antennes constant  Hopt 
+## Nombre d'antennes constant  Hopt
 #
 ## $$ \frac{1}{KT}\int_{0}^{K T}  \mathbf{F}(\theta,u) du $$
-## 
+##
 ## $$  \frac{1}{KT}\sum_{l=-\infty}^{+\infty} \mathbf{F}_l(\theta) \int_{0}^{K T}\textrm{rect}(\frac{t- l T/2}{T}) dt   $$
-## 
-## 
+##
+#
 ## $$ \mathbf{\bar{F}}_{K}(\theta) = \sum_{l=1}^{K} \mathbf{F}_l(\theta)   $$
 #
-## Time modulated array 
-## 
+## Time modulated array
+##
 ## $$ \mathbf{F}(\theta,t)=\frac{1}{K}\sum_{k=1}^{K} \textrm{rect}(\frac{t- l T_k/2)}{T_k})\mathbf{F}_k(\theta)= \frac{1}{K}\sum_{k=1}^{K} \mathbf{w_k}^{\dagger} . \mathbf{S}(\theta) $$
 #
-## Interférence Radar 
+## Interférence Radar
 #
 ##  ## POSTMA
 #
-## Comparaison petit réseau et grand réseau. 
+#el(dot(conj(U.T),dot(W,S))+dot(conj(S.T),dot(W,U)))
+#    H  =
+#    real(dot(conj(R.T),dot(W,S))+2*dot(conj(U.T),dot(W,U))+dot(conj(S.T),dot(W,R)))# Comparaison petit réseau et grand réseau.

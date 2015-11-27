@@ -6,10 +6,12 @@
     import numpy as np
     import os
     %matplotlib inline
+
 .. code:: python
 
     prefix=ez.enctile(-1.5,47.5)
     print prefix
+
 
 .. parsed-literal::
 
@@ -19,9 +21,11 @@
 .. code:: python
 
     E=ez.Ezone(prefix)
+
 .. code:: python
 
     E
+
 
 
 
@@ -38,6 +42,7 @@
 
     E.getdem()
 
+
 .. parsed-literal::
 
     Load srtm file
@@ -50,10 +55,11 @@
 
 
 
+
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x2b3359a23610>,
-     <matplotlib.axes.AxesSubplot at 0x2b3359a3d190>)
+    (<matplotlib.figure.Figure at 0x2b6eb5f7a210>,
+     <matplotlib.axes._subplots.AxesSubplot at 0x2b6ee9172190>)
 
 
 
@@ -67,12 +73,12 @@
 
 
 
+
 .. parsed-literal::
 
     N47W002
     --------
     (-2, -1, 47, 48)
     latlon : [ -0.000 75118.790 cartesian :0.000 111194.505 ]
-
 
 

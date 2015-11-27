@@ -795,8 +795,10 @@ class VLayout(PyLayers):
 
 if __name__ == "__main__":
     doctest.testmod()
-    _filename = 'bat11DE1.wrl'
-    filename = pyu.getlong(_filename,'struc')
+    #_filename = 'B11C-E1.wrl'
+    _filename = 'B2A-R0.wrl'
+    #_filename = 'B11C-E1.wrl'
+    filename = pyu.getlong(_filename,'struc/wrl')
     VL = VLayout()
     VL.load(filename)
     dwall = VL.wallanalysis()
@@ -810,4 +812,8 @@ if __name__ == "__main__":
         else:
             plt.plot(x,y,color='k',linewidth=thick*10,alpha=1)
     plt.axis('scaled')
-
+    for k in dwall:
+        seg = dwall[k]['seg'].xy
+        pta = np.r_[seg[0][0],seg[1][0]]
+        phe = np.r_[seg[0][1],seg[1][1]]
+        print pta,phe

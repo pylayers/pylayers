@@ -3,6 +3,7 @@
 >>> from pylayers.gis.gisutil import ent,ext2qt
 >>> import matplotlib.pyplot as plt
 >>> import numpy as np
+>>> import seaborn as sns
 ```
 
 ```python
@@ -22,7 +23,7 @@ The command h5ls allows to see the hierarchical structure of the file
 
 ```python
 >>> !h5ls $BASENAME/gis/h5/N48W002.h5ls
-/home/mbalde/Pylayers_project/gis/h5/N48W002.h5: unable to open file
+/home/mbalde/Pylayers_project/gis/h5/N48W002.h5ls: unable to open file
 ```
 
 Invoquing an earth zone requires to specify the tile prefix with the same
@@ -42,6 +43,15 @@ In this initial phase no data is loaded yet, to load all the data gathered for t
 
 ```python
 >>> z
+N48W002
+--------
+latlon (deg) : [-2 -1 48 49]
+cartesian (meters) : [0.000 73676.623 0.000 111194.358 ]
+
+Buildings
+---------
+i-longitude : 64 96
+i-latitude  : 19 38
 ```
 
 This object contains the srtm DEM data, the aster data and a filtration of the `open street map` database selecting only the ways with `building` attribute. Let's have a look to the data with the `show` method.
@@ -51,9 +61,10 @@ This object contains the srtm DEM data, the aster data and a filtration of the `
 ```
 
 ```python
->>> z.show(source='srtm',bldg=False,height=True,clim=[80,120])
-(<matplotlib.figure.Figure at 0x7fce8f60b450>,
- <matplotlib.axes.AxesSubplot at 0x7fce8f60b890>)
+>>> z.show(source='srtm',bldg=False,height=True,clim=[150,350],cmap=plt.cm.hot,alpha=1)
+(<matplotlib.figure.Figure at 0x7f08d26f4a50>,
+ <matplotlib.axes._subplots.AxesSubplot at 0x7f08cb5f2e90>,
+ <mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f08cb58c490>)
 ```
 
 The `Ezone` object has a member extent which gives [lonmin,lonmax,latmin,latmax]
@@ -78,9 +89,10 @@ The shape of hgta data is larger (3601,3601) than the srtm data (1201,1201)
 The aster DEM can also be shown.
 
 ```python
->>> z.show(source='aster',bldg=False,clim=[0,120])
-(<matplotlib.figure.Figure at 0x7fce913fe650>,
- <matplotlib.axes.AxesSubplot at 0x7fce916e64d0>)
+>>> z.show(source='aster',bldg=False,clim=[0,320])
+(<matplotlib.figure.Figure at 0x7f08e57e1850>,
+ <matplotlib.axes._subplots.AxesSubplot at 0x7f08e5827a10>,
+ <mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f08e5768090>)
 ```
 
 An earth zone has an attached dictionnary of buildings, which contains the data of all the set of building footprints of the city extracted out of open street map data. Below is shown an example for the city of Rennes in Brittany (France).
@@ -159,7 +171,7 @@ Let zoom to the University of Rennes 1 campus in the North-East region of the ci
 ```
 
 ```python
->>> f,a = z.show(title='Beaulieu Campus',
+>>> buguenf,a = z.show(title='Beaulieu Campus',
 ...              extent=extent2_cart,
 ...              coord='cartesian',
 ...              bldg=True,
@@ -196,8 +208,8 @@ For predicting the radio propagation, it is necessary to retrieve the height pro
 >>> z
 N48W002
 --------
-[-2 -1 48 49]
-latlon : [ 0.000 73676.623 cartesian :0.000 111194.358 ]
+latlon (deg) : [-2 -1 48 49]
+cartesian (meters) : [0.000 73676.623 0.000 111194.358 ]
 
 Buildings
 ---------
@@ -207,6 +219,33 @@ i-latitude  : 19 38
 
 ```python
 >>> a=z.cover(Ht=2,Hr=2,Rmax=10000)
-/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/delaunay/triangulate.py:104: DuplicatePointWarning: Input data contains duplicate x,y points; some values are ignored.
-  DuplicatePointWarning,
+```
+
+```python
+>>> 20000*20000/(2*(4/3.)*6370*1e3)
+23.547880690737838
+```
+
+```python
+>>> (5.77+23.54)*np.sqrt(3*(1/20000.+1/20000.))
+0.50766409169843796
+```
+
+```python
+>>> 6.9+20*np.log10(np.sqrt(1+0.407**2)+0.407)
+10.344187901280684
+```
+
+```python
+>>> 0.01/(2*np.pi*9*8.85e-4)
+0.19981788209905252
+```
+
+```python
+>>> np.sqrt(9+0.2*1j)
+(3.0001851566146316+0.033331276164581342j)
+```
+
+```python
+
 ```

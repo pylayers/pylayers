@@ -282,7 +282,8 @@ def edgeout2(L,g):
                     #    plt.show()
                     #    pdb.set_trace()
 
-                isegkeep = isegments[bs]
+                pdb.set_trace()
+                isegkeep = isegments[bs[0]]
                 output = filter(lambda x : x[0] in isegkeep ,i2)
                 # keep all segment above nstr1 and in Cone if T
                 # keep all segment below nstr1 and in Cone if R
@@ -557,6 +558,15 @@ class Signatures(PyLayers,dict):
 
     def _saveh5(self,filenameh5,grpname):
         """ Save in hdf5 compliant with Links
+
+        Parameters
+        ----------
+
+        filenameh5
+        hrpname
+
+        Notes
+        -----
         """
 
 
@@ -1310,6 +1320,7 @@ class Signatures(PyLayers,dict):
                     path = visited + [target]
                     # M = np.zeros((1,NGs),dtype='bool')
                     out = [i[0] for i in G[visited[-1]][target]['output'].keys()]
+                        
 
                     if Mmap !=[]:
                         M[Mmap[path[-2][0]],Mmap[path[-1][0]],Mmap[out]]=True
@@ -1719,6 +1730,11 @@ class Signatures(PyLayers,dict):
         >>> DL.Cb=13
         >>> DL.eval(force=['sig','ray','Ct','H'],alg=2015,si_reverb=3,cutoff=2,ra_vectorized=True)
 
+        Notes
+        -----
+
+        This function makes use of graph Gc. Graph of meged cycles.
+
         """
         if source == -1:
             source = self.source
@@ -1776,11 +1792,13 @@ class Signatures(PyLayers,dict):
 
                 #for each reverb/diffract interaction,
                 # inside 1st cycle, search the output interactions
-
+                
                 for o in voutT:
                     io={}
                     for i in vinT:
                         io = self.propaths2015_2(sGi,i,o,dout=io,M=M,cutoff=cutoffbound)
+
+
                     di[0,0,0,o[0],o[1],o[2]] = io
                     # add direct signature
                     di[0,0,0,o[0],o[1],o[2]][1]=np.array([o[0],len(o)],ndmin=3)
@@ -2087,7 +2105,7 @@ class Signatures(PyLayers,dict):
         ###
         ### Find interactions per cycles
         ###
-        
+
         def dido(cy,lcy):
             """ Difraction In Diffraction Out
                 determine, for merged cycles, which diffrxtion
@@ -2111,7 +2129,6 @@ class Signatures(PyLayers,dict):
             """
             if not isinstance(lcy,list):
                 lcy=[lcy]
-
             outR,outT,D = self.L.intercyGc2Gt(cy,typ='source')
             # keep diff points
             D=np.unique(D)
@@ -2123,6 +2140,7 @@ class Signatures(PyLayers,dict):
             inD=[]
             # inside cycle diffraction
             insideD=[]
+
             for d in D:
                 # get cycles involved in diff point d
                 dcy = self.L.ptGs2cy(d)
@@ -2143,6 +2161,7 @@ class Signatures(PyLayers,dict):
                 else :
                     insideD.append((d,))
             return insideD,inD,outD,ddin,ddout
+        ##### END dido
 
         for icy,cy in enumerate(lcil):
 
@@ -2308,9 +2327,7 @@ class Signatures(PyLayers,dict):
         adio = adi[:,3:]
         out=[]
         lsig={}
-
         #initialize loop on the 1st interaction id(0,0,0,X,X,X)
-
         # uinit = np.unique(np.where(adi[:,:3]==0)[0])
         uinit = np.where(np.sum(adi[:,:3]==0,axis=1)==3)[0]
         oldout=uinit
@@ -2476,6 +2493,7 @@ class Signatures(PyLayers,dict):
 
         """
 
+        # cycles on the LOS
         lcil=self.L.cycleinline(self.source,self.target)
 
         if len(lcil) <= 2:
@@ -2505,10 +2523,10 @@ class Signatures(PyLayers,dict):
         self.cutoff   = cutoff
         self.filename = self.L.filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
 
-        try:
-            self.L.dGi
-        except:
-            self.L.buildGi2()
+        #try:
+        #    self.L.dGi
+        #except:
+        #    self.L.buildGi2()
         # all the vnodes >0  from the room
         #
         #NroomTx = self.L.pt2ro(tx)
@@ -2526,7 +2544,9 @@ class Signatures(PyLayers,dict):
         metasig = nx.neighbors(self.L.Gt,self.source)
         metasig = metasig + nx.neighbors(self.L.Gt,self.target)
         metasig = list(np.unique(np.array(metasig)))
+        metasig.pop(0)
         metasig = metasig + [self.source] + [self.target]
+        # remove external cycle
 
         #print "metasig",metasig
 
@@ -2537,6 +2557,7 @@ class Signatures(PyLayers,dict):
                 lca.extend(self.L.dca[cy])
             except:
                 pass
+
         metasig = metasig + lca
         metasig = list(np.unique(np.array(metasig)))
 
@@ -2547,15 +2568,17 @@ class Signatures(PyLayers,dict):
         #ndt1 = filter(lambda l: len(eval(l))>2,ndt) # Transmission
         #ndt2 = filter(lambda l: len(eval(l))<3,ndt) # Reflexion
 
-        lisT = filter(lambda l: len(eval(l))>2,lis) # Transmission
-        lisR = filter(lambda l: len(eval(l))<3,lis) # Reflexion
+        lisT = filter(lambda l: len(l)==3,lis) # Transmission
+        lisR = filter(lambda l: len(l)==2,lis) # Reflexion
+        lisD = filter(lambda l: len(l)==1,lis) # Diffraction
 
         # target
         # ndr1 = filter(lambda l: len(eval(l))>2,ndr) # Transmission
         # ndr2 = filter(lambda l: len(eval(l))<3,ndr) # Reflexion
 
-        litT = filter(lambda l: len(eval(l))>2,lit) # Transmission
-        litR = filter(lambda l: len(eval(l))<3,lit) # Reflexion
+        litT = filter(lambda l: len(l)==3,lit) # Transmission
+        litR = filter(lambda l: len(l)==2,lit) # Reflexion
+        litD = filter(lambda l: len(l)==1,lit) # Diffraction
 
         # tx,rx : attaching rule
         #
@@ -2572,16 +2595,13 @@ class Signatures(PyLayers,dict):
         #ndt1 = filter(lambda l: eval(l)[2]<>ncytx,ndt1)
         #ndr1 = filter(lambda l: eval(l)[1]<>ncyrx,ndr1)
 
-        lisT = filter(lambda l: eval(l)[2]<>self.source,lisT)
-        litT = filter(lambda l: eval(l)[1]<>self.target,litT)
+        lisT = filter(lambda l: l[2]<>self.source,lisT)
+        litT = filter(lambda l: l[1]<>self.target,litT)
 
         #ndt = ndt1 + ndt2
         #ndr = ndr1 + ndr2
         lis  = lisT + lisR
         lit  = litT + litR
-
-        #ntr = np.intersect1d(ndt, ndr)
-#        li = np.intersect1d(lis, lit)
 
         li = []
         for ms in metasig:
@@ -4687,6 +4707,34 @@ class Signatures(PyLayers,dict):
             prx= np.r_[prx,0.5]
 
         rays = Rays(ptx,prx)
+        #
+        # detect LOS situation
+        #
+        #
+        # cycle on a line between 2 cycles
+        # lc  = self.L.cycleinline(self.source,self.target)
+
+        #
+        # if source and target in the same merged cycle
+        # and ptx != prx
+        #
+        los = shg.LineString(((ptx[0], ptx[1]), (prx[0], prx[1])))
+
+        # convex cycle of each point
+        cyptx = self.L.pt2cy(ptx)
+        cyprx = self.L.pt2cy(prx)
+
+
+        polyctx = self.L.Gt.node[cyptx]['polyg']
+        polycrx = self.L.Gt.node[cyprx]['polyg']
+
+        dtxrx = np.sum((ptx-prx)*(ptx-prx))
+        if dtxrx>1e-15:
+            if polyctx.contains(los):
+                rays.los = True
+            else:
+                rays.los = False
+
 
         M = self.image2(ptx)
         R = self.backtrace(ptx,prx,M)
@@ -4735,6 +4783,7 @@ class Signatures(PyLayers,dict):
             rx = rx[:2]
 
         rayp={}
+
         # loop on number of interactions
         for ninter in self.keys():
             signatures = copy.deepcopy(self[ninter])
@@ -5564,7 +5613,7 @@ class Signature(object):
         #return(typ)
 
 
-    def image(self, tx):
+    def image_old(self, tx):
         """ compute the tx's images with respect to the signature segments
 
         Parameters

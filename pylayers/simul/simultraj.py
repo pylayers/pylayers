@@ -301,6 +301,10 @@ class Simul(PyLayers):
             techno,ID=ap.split(':')
             if techno == 'HKB':
                 techno = 'hikob'
+            if techno == 'TCR':
+                techno = 'tcr'
+            if techno == 'BS':
+                techno = 'bespoon'
 
 
             self.dap.update({ap: {'pos': source.din[ap]['p'],
@@ -329,6 +333,9 @@ class Simul(PyLayers):
 
         """
 
+        #
+        # Create Network
+        #
         N = Network()
         #
         # get devices on bodies
@@ -369,7 +376,7 @@ class Simul(PyLayers):
         fig, ax = self.N.show(fig=fig, ax=ax)
         return fig, ax
 
-    def evaldeter(self, na, nb, wstd, fmode='band',nf=10,fGHz=[], **kwargs):
+    def evaldeter(self, na, nb, wstd, fmod='force',nf=10,fGHz=[], **kwargs):
         """ deterministic evaluation of a link
 
         Parameters
@@ -381,12 +388,14 @@ class Simul(PyLayers):
             node b id in self.N (Network)
         wstd : string:
             wireless standard used for commmunication between na and nb
-        fmode : string ('center'|'band')
+        fmode : string ('center'|'band'|'force')
             mode of frequency evaluation
             center : single frequency (center frequency of a channel)
             band : nf points on the whole band
+            force : takes directly fGHz
         nf : int:
             number of frequency points (if fmode = 'band')
+        **kwargs : argument of DLink
 
         Returns
         -------
@@ -397,6 +406,11 @@ class Simul(PyLayers):
             alpha_k
         t : ndarray
             tau_k
+
+        See Also
+        --------
+
+        pylayers.simul.link.DLink
 
         """
 
@@ -416,15 +430,15 @@ class Simul(PyLayers):
         #  if fmode == 'center'
         #      only center frequency is calculated
         #
-        #
-        if fmode == 'center':
+        #'
+        if fmod == 'center':
             self.DL.fGHz = self.N.node[na]['wstd'][wstd]['fcghz']
-        if fmode == 'band':
+        if fmod == 'band':
             fminGHz = self.N.node[na]['wstd'][wstd]['fbminghz']
             fmaxGHz = self.N.node[na]['wstd'][wstd]['fbmaxghz']
             self.DL.fGHz = np.linspace(fminGHz, fmaxGHz, nf)
-        if fmode == 'force':
-            assert fGHz!=[],"fGHz has not been defined"
+        if fmod == 'force':
+            assert len(fGHz)>0,"fGHz has not been defined"
             self.DL.fGHz = fGHz
 
         a, t = self.DL.eval(**kwargs)
@@ -507,6 +521,8 @@ class Simul(PyLayers):
             if True , reference id of all already simulated link will be erased
                 and replace by new simulation id
 
+        fGHz : np.array
+            frequency in GHz
 
 
         Examples
@@ -533,6 +549,8 @@ class Simul(PyLayers):
                     'btr':True,
                     'DLkwargs':{},
                     'replace_data':True,
+                    'fmod':'force',
+                    'fGHz':np.array([2.45])
                     }
 
         for k in defaults:
@@ -546,6 +564,9 @@ class Simul(PyLayers):
         B2B = kwargs.pop('B2B')
         B2I = kwargs.pop('B2I')
         I2I = kwargs.pop('I2I')
+        fmod = kwargs.pop('fmod')
+        self.fGHz = kwargs.pop('fGHz')
+
         self.todo.update({'OB':OB,'B2B':B2B,'B2I':B2I,'I2I':I2I})
 
 
@@ -663,7 +684,12 @@ class Simul(PyLayers):
                         #  node : nb
                         #  wstd : w
                         #
-                        self.evaldeter(na, nb, w, applywav=False, fmod=fmod, fGHz=fGHz, **DLkwargs)
+                        self.evaldeter(na, nb,
+                                       w,
+                                       applywav=False,
+                                       fmod = fmod,
+                                       fGHz = self.fGHz,
+                                       **DLkwargs)
                         # if typ == 'OB':
                         #     self.evalstat(na, nb)
                         #     eng = self.SL.eng
@@ -693,9 +719,9 @@ class Simul(PyLayers):
                                     'typ': typ,
                                     'wstd': w,
                                     'fcghz': self.N.node[na]['wstd'][w]['fcghz'],
-                                    'fbminghz': self.DL.fmin,
-                                    'fbmaxghz': self.DL.fmax,
-                                    'fstep': self.DL.fstep,
+                                    'fbminghz': self.fGHz[0],
+                                    'fbmaxghz': self.fGHz[-1],
+                                    'nf': len(self.fGHz),
                                     'aktk_id':aktk_id,
                                     'sig_id': self.DL.dexist['sig']['grpname'],
                                     'ray_id': self.DL.dexist['ray']['grpname'],
@@ -841,19 +867,21 @@ class Simul(PyLayers):
         if ((self.todo['OB']) or (self.todo['B2B']) or (self.todo['B2I'])):
             nodeid = []
             pos = []
+            devlist = []
             orient = []
             for up, person in enumerate(self.dpersons.values()):
                 person.settopos(self._traj[up], t=t, cs=True)
                 name = person.name
                 dev = person.dev.keys()
+                devlist.extend(dev)
                 #nodeid.extend([n + '_' + name for n in dev])
                 pos.extend([person.dcs[d][:, 0] for d in dev])
                 orient.extend([person.acs[d] for d in dev])
             # TODO !!!!!!!!!!!!!!!!!!!!
             # in a future version , the network update must also update
-            # antenna positon in the device coordinate system
-            self.N.update_pos(dev, pos, now=t)
-            self.N.update_orient(dev, orient, now=t)
+            # antenna position in the device coordinate system
+            self.N.update_pos(devlist, pos, now=t)
+            self.N.update_orient(devlist, orient, now=t)
         self.N.update_dis()
 
 

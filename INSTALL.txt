@@ -1,25 +1,24 @@
+TOC :
+
+- Linux/OSX Install
+- Windows Install
+- Source and project directories
+- Usual Install issues
+
+
+
 ################################
 #       LINUX/OSX Install      #
 ################################
 
-The prefer way to install pylayers is to first install the free python distribution Anaconda on your
+The prefer way to install PyLayers is to first install the free python distribution Anaconda on your
 platform. ( https://store.continuum.io/cshop/anaconda/ )
 By doing so, you're installing most of the required dependencies.
 
 1 - Download Anaconda from https://store.continuum.io/cshop/anaconda/
 2 - Install Anaconda with the given command ( $bash Anaconda-<version>-<plateform>.sh ) . 
 Important : Say yes to add Anaconda to your path
-3 - Run "./installer_unix" file from the pylayers directory (YOUR FIRST NEED to add exe rights using the command: chmod +x ./installer_unix )
-4 - Set environement Variables :
-
-It is then required to define the two enviroment variables PYLAYERS and BASENAME
-
-On linux platforms, in your .bashrc ( .bash_profile if you're using OSX ) add those 2 lines 
-
-export PYLAYERS=<path to the directory where pylayers is located>
-export BASENAME=<path to a directory where you want to host your projects>
-
-Note : The PYLAYERS environement variable MUST be set in the directory conatining the setup.py
+3 - Run "./installer_unix" file from the PyLayers directory (YOUR FIRST NEED to add exe rights using the command: chmod +x ./installer_unix )
 
 5- Done
 
@@ -44,7 +43,39 @@ Note : The PYLAYERS environement variable MUST be set in the directory conatinin
 
 
 
-* Despite shapely is part of the Anaconda distribution, the Windows distibution doesn't contains the libgeos depencies.
+* Despite shapely is part of the Anaconda distribution, the Windows distribution doesn't contains the libgeos dependencies.
+
+
+#######################################
+#      Source/project Directories     #
+#######################################
+
+The source and Project directory path are automatically filled into a ".pylayers" file during the install. The .pylayers file is stored at the root of user's home (~/).
+
+- The source directory, gathers all the source files.
+- The project directory , gathers configuration files.
+
+The default ".pylayers" contains :
+
+    source
+    /the/path/where/installer/has/been/run/pylayers
+    project
+    ~/pylayers_project
+
+The source path indicates where the PyLayers' source files are located. You generally don't have to modify this path
+
+The project path indicates where the configurations files are located.
+If you decide to move your project directory elsewhere, you must change the project path in consequence.
+
+
+Notes for previous users of PyLayers:
+------------------------------------
+
+The environment variables $PYLAYERS and $BASENAME are no longer required.
+If you try to re-install PyLayers on an existing version:
+-the source path of the .pylayers file will be set at the value contained into the $PYLAYERS environment variable
+-the project path of the .pylayers file will be set at the value contained into the $BASENAME environment variable
+
 
 
 #################################
@@ -68,7 +99,7 @@ is really depend to your configuration.
 
 
 2- Another source of issues comes from some package conflicts.
-This is especially the case by using a WINDOWS OS, when the shaeply installation has to be perfomed by using an external installer and not the one provided by Anaconda (because it does not contains required dependencies). 
+This is especially the case by using a WINDOWS OS, when the shapely installation has to be perfomed by using an external installer and not the one provided by Anaconda (because it does not contains required dependencies). 
 
 If after the installation, the import of a PyLayers module cause an Error involving shapely and/or basemap, you're probably facing the package conflict issue. 
 
@@ -102,6 +133,10 @@ imposm
 basemap>=1.0
 pandas >=0.12.0
 mayavi >=4.3.1
+
+
+
+
 
 
 Example of installation procedure for ubuntu 12.04 (DEPRECATED)

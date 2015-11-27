@@ -8,6 +8,7 @@ Vector Spherical Harmonics Representation of Antennas
     from pylayers.antprop.antvsh import *
     %matplotlib inline
 
+
 .. parsed-literal::
 
     WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
@@ -18,6 +19,7 @@ Loading an Antenna from a Matlab file
 .. code:: python
 
     A = Antenna('S2R2.mat',directory='ant/UWBAN/Matfile')
+
 The shape of the :math:`F_{\phi}` functions indicates :
 
 -  :math:`N_f= 104`
@@ -29,11 +31,18 @@ The shape of the :math:`F_{\phi}` functions indicates :
     np.shape(A.Fphi)
 
 
+::
 
-.. parsed-literal::
 
-    (104, 91, 180)
+    ---------------------------------------------------------------------------
 
+    AttributeError                            Traceback (most recent call last)
+
+    <ipython-input-3-706142716bed> in <module>()
+    ----> 1 np.shape(A.Fphi)
+    
+
+    AttributeError: 'Antenna' object has no attribute 'Fphi'
 
 
 The frequency array is expressed in :math:`GHz` and delays are expressed
@@ -42,6 +51,22 @@ in :math:`ns`
 .. code:: python
 
     fGHz = A.fa.reshape(104,1,1)
+
+
+::
+
+
+    ---------------------------------------------------------------------------
+
+    AttributeError                            Traceback (most recent call last)
+
+    <ipython-input-4-9c2d4af17123> in <module>()
+    ----> 1 fGHz = A.fa.reshape(104,1,1)
+    
+
+    AttributeError: 'Antenna' object has no attribute 'fa'
+
+
 Then an electrical delay of :math:`4.185ns` is applied on the
 :math:`F_{\theta}`
 
@@ -58,19 +83,22 @@ Then an electrical delay of :math:`4.185ns` is applied on the
     plt.xlabel('f index')
 
 
-
-.. parsed-literal::
-
-    <matplotlib.text.Text at 0x2b8cfe6c77d0>
+::
 
 
+    ---------------------------------------------------------------------------
+
+    AttributeError                            Traceback (most recent call last)
+
+    <ipython-input-5-087f4a8fccdb> in <module>()
+    ----> 1 I = A.Ftheta[:,:,:]
+          2 plt.figure(figsize=(10,8))
+          3 plt.imshow(np.unwrap(np.angle(I[:,45,:])))
+          4 plt.title(r'Unwrapped phase of $F_{\theta}$ w.r.t frequency and phi for $\theta=\frac{pi}{2}$')
+          5 plt.ylabel('f index')
 
 
-.. image:: AntennaVSH_files/AntennaVSH_10_1.png
-
-
-
-.. image:: AntennaVSH_files/AntennaVSH_10_2.png
+    AttributeError: 'Antenna' object has no attribute 'Ftheta'
 
 
 .. code:: python
@@ -78,19 +106,20 @@ Then an electrical delay of :math:`4.185ns` is applied on the
     tau=4.185
     I = A.Ftheta[:,:,:]*exp(-2*1j*pi*fGHz*tau)
 
+
 ::
 
 
     ---------------------------------------------------------------------------
 
-    NameError                                 Traceback (most recent call last)
+    AttributeError                            Traceback (most recent call last)
 
     <ipython-input-6-6b2a5143fb58> in <module>()
           1 tau=4.185
     ----> 2 I = A.Ftheta[:,:,:]*exp(-2*1j*pi*fGHz*tau)
     
 
-    NameError: name 'exp' is not defined
+    AttributeError: 'Antenna' object has no attribute 'Ftheta'
 
 
 .. code:: python
@@ -103,15 +132,22 @@ Then an electrical delay of :math:`4.185ns` is applied on the
     plt.plot(fGHz[:,0,0],np.unwrap(np.angle(I[:,45,85])))
 
 
-
-.. parsed-literal::
-
-    [<matplotlib.lines.Line2D at 0x2b8cfb170a10>]
+::
 
 
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-7-f05e7b6eaa51> in <module>()
+    ----> 1 plt.imshow(np.unwrap(np.angle(I[:,45,:])))
+          2 plt.title(r'Unwrapped phase of $F_{\theta}$ w.r.t frequency and phi for $\theta=\frac{pi}{2}$')
+          3 plt.ylabel('f index')
+          4 plt.colorbar()
+          5 
 
 
-.. image:: AntennaVSH_files/AntennaVSH_12_1.png
+    NameError: name 'I' is not defined
 
 
 Display of the radiation pattern for all frequencies
@@ -124,7 +160,26 @@ Display of the radiation pattern for all frequencies
         plt.polar(A.phi,abs(A.Ftheta[nf,45,:]))
 
 
-.. image:: AntennaVSH_files/AntennaVSH_14_0.png
+::
+
+
+    ---------------------------------------------------------------------------
+
+    AttributeError                            Traceback (most recent call last)
+
+    <ipython-input-8-dcc0dc965307> in <module>()
+          1 plt.figure(figsize=(10,10))
+          2 for nf in range(104):
+    ----> 3     plt.polar(A.phi,abs(A.Ftheta[nf,45,:]))
+    
+
+    AttributeError: 'Antenna' object has no attribute 'Ftheta'
+
+
+
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x2af56d0b7510>
 
 
 .. code:: python
@@ -133,20 +188,35 @@ Display of the radiation pattern for all frequencies
     print 'Nphi',A.Np
     print 'Nf',A.Nf
 
+
 .. parsed-literal::
 
-    Ntheta 91
-    Nphi 180
-    Nf 104
+    Ntheta
+
+::
+
+
+    ---------------------------------------------------------------------------
+
+    AttributeError                            Traceback (most recent call last)
+
+    <ipython-input-9-9a627edc728e> in <module>()
+    ----> 1 print 'Ntheta',A.Nt
+          2 print 'Nphi',A.Np
+          3 print 'Nf',A.Nf
+
+
+    AttributeError: 'Antenna' object has no attribute 'Nt'
 
 
 .. code:: python
 
     A.info()
 
+
 .. parsed-literal::
 
-    S2R2.mat
+     S2R2.mat
     type :  mat
     S2R2
     Th1
@@ -169,9 +239,11 @@ At that stage we compute the Vector Spherical Harmonics coefficients
 .. code:: python
 
     A=vsh(A)
+
 .. code:: python
 
     A.info()
+
 
 .. parsed-literal::
 
@@ -193,9 +265,11 @@ At that stage we compute the Vector Spherical Harmonics coefficients
 .. code:: python
 
     A.C.s1tos2(30)
+
 .. code:: python
 
     A.C
+
 
 
 
@@ -237,15 +311,18 @@ At that stage we compute the Vector Spherical Harmonics coefficients
     A.C.show('s2',k=300)
 
 
+
 .. image:: AntennaVSH_files/AntennaVSH_23_0.png
 
 
 .. code:: python
 
     A.C.s2tos3()
+
 .. code:: python
 
     A.C
+
 
 
 
@@ -290,6 +367,7 @@ At that stage we compute the Vector Spherical Harmonics coefficients
     fig = plt.figure(figsize=(8,8))
     A.C.show('s3')
     plt.tight_layout()
+
 
 
 .. image:: AntennaVSH_files/AntennaVSH_26_0.png

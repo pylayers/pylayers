@@ -239,7 +239,6 @@ def inotshow(filename,**kwargs):
                 'width':500,
                 'height':500,
                 'doc':False
-
                 }
 
     for key, value in defaults.items():

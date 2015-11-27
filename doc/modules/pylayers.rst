@@ -10,7 +10,7 @@ Simulations
 In this section are described the different high level module 
 in charge of the different simulations. 
 
-+ Dlink is for the deterministic simulation 
++ Dlink class handles the deterministic simulation 
 
 
 .. toctree::

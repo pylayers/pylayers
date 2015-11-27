@@ -145,12 +145,13 @@ class Body(PyLayers):
         #         raise AttributeError('Please set the unit of the mocap file mm|cm|m')
         #     self.loadC3D(filename=_filemocap,unit=unit)
         #
-        #  When the motion capture is on the correct glabal coordinate system
+        #  When the motion capture is on the correct global coordinate system
         #  as for example for data coming from the CORMORAN measurement
         #  campaign it is not required to center the body.
-        #  centering makes sense only when using the topos projection
+        #  centering makes sense only when using the topos projection.
         #
         #
+
         self.cylfromc3d(centered=centered)
 
         try:
@@ -318,7 +319,9 @@ class Body(PyLayers):
             pass
         self.dev={}
 
-
+        #
+        # parse section wearables :
+        #
         # read default in ini file
         if _filewear == []:
             devfilename = pyu.getlong(di['wearable']['file'],pstruc['DIRWEAR'])
@@ -355,7 +358,13 @@ class Body(PyLayers):
                 except:
                     self.dev[section][option]=devconf.get(section,option)
                 if option == 'file':
-                    self.dev[section]['ant']=ant.Antenna(self.dev[section]['file'])
+                    #
+                    # For each device load the antenna from the filename
+                    #
+                    # TODO : Modify antenna class in order to load an antenna
+                    # from a pattern function
+                    #
+                    self.dev[section]['ant'] = ant.Antenna(self.dev[section]['file'])
 
 
         try:
@@ -498,7 +507,7 @@ class Body(PyLayers):
 
         self._f=self._f*self._unit
 
-        self.Tmocap = self.nframes / info['VideoFrameRate']
+        self.Tmocap = (self.nframes-1) / info['VideoFrameRate']
 
         # time base of the motion capture file (sec)
         self.time = np.linspace(0,self.Tmocap,self.nframes)
@@ -574,6 +583,8 @@ class Body(PyLayers):
         ----------
 
         centered : boolean
+            False
+
         """
         #
         # motion capture data
@@ -581,18 +592,27 @@ class Body(PyLayers):
         # self.d : 3 x npoints x nframes
         #
 
-        # number of points is determine by the ini file
+        # number of points is determined by the ini file
         self.npoints = len(self.nodes_Id)
 
         # self.d = np.ndarray(shape=(3, self.npoints, self.nframes))
 
         #if self.d[2,:,:].max()>50:
         # extract only known nodes in nodes_Id
+
         self.d = np.zeros((3, self.npoints, self.nframes))
+        #print self._p
         for i in self.nodes_Id:
             # node name = 4 characters
             if not isinstance(self.nodes_Id[i],list) :
-                idx = self._p.index(self._mocap_prefix + self.nodes_Id[i])
+                try:
+                    idx = self._p.index(self._mocap_prefix + self.nodes_Id[i])
+                except:
+                    # fixing naming in serie 15 add '_1'
+                    try:
+                        idx = self._p.index(self._mocap_prefix + self.nodes_Id[i]+'_1')
+                    except:
+                        idx = self._p.index(self._mocap_prefix + self.nodes_Id[i]+'_2')
                 self.d[:,i,:] = self._f[0:self.nframes, idx, :].T
             # perform center of mass of the nodes
 
@@ -602,8 +622,14 @@ class Body(PyLayers):
                 for k in range(lnid):
 
                     nodename = self.nodes_Id[i][k].replace(' ','')
-
-                    idx = self._p.index(self._mocap_prefix + nodename)
+                    try:
+                        idx = self._p.index(self._mocap_prefix + nodename)
+                    except:
+                        try:
+                        # fixing naming in serie 15 add '_1'
+                            idx = self._p.index(self._mocap_prefix + nodename+'_1')
+                        except:
+                            idx = self._p.index(self._mocap_prefix + nodename+'_2')
                     try:
                         tmp = tmp +self._f[0:self.nframes, idx, :].T
                     except:
@@ -634,8 +660,8 @@ class Body(PyLayers):
     def network(self):
         """ evaluate network topology and dynamics
 
-        This function evaluates distance , velocity and acceleration of the
-        radio network
+        This function evaluates distance, velocity and acceleration of the
+        radio network nodes
 
         self.D2 : distances between radio nodes
         self.V2 : velocities between radio nodes
@@ -814,7 +840,7 @@ class Body(PyLayers):
         return ldf
 
     def init_traj(self):
-        """ create trajectory object from given trajectory or mocap 
+        """ create trajectory object from given trajectory or mocap
         """
 
         # speed vector of the gravity centernp.
@@ -1553,8 +1579,8 @@ class Body(PyLayers):
             Ant = {}
             for key in self.dcs.keys():
                 Ant[key]=ant.Antenna(self.dev[key]['file'])
-                if not hasattr(Ant[key],'SqG'):
-                    Ant[key].Fsynth()
+                if not hasattr(Ant[key],'sqG'):
+                    Ant[key].eval()
                 Ant[key]._show3(po=self.dcs[key][:,0],
                                T=self.acs[key],
                                ilog=False,
@@ -2008,10 +2034,10 @@ class Body(PyLayers):
             self.setacs()
 
             for key in devlist:
-                if not hasattr(self.dev[key]['ant'],'SqG'):
-                    self.dev[key]['ant'].Fsynth()
+                if not hasattr(self.dev[key]['ant'],'sqG'):
+                    self.dev[key]['ant'].eval()
                 U = self.dcs[key]
-                V = self.dev[key]['ant'].SqG[kwargs['k'],:,:]
+                V = self.dev[key]['ant'].sqG[kwargs['k'],:,:]
                 T = self.acs[key]
 
                 self.dev[key]['ant']._show3(po=U[:,0],
@@ -2216,7 +2242,7 @@ class Body(PyLayers):
         iframe = kwargs['iframe']
 
         Ant = ant.Antenna(kwargs['fileant'])
-        Ant.Fsynth3()
+        Ant.eval()
 
         if kwargs['lccs']==[]:
             lccs = np.arange(11)
@@ -2316,12 +2342,14 @@ class Body(PyLayers):
             self.setacs()
             for key in self.dcs.keys():
                 Ant =  ant.Antenna(self.dev[key]['file'])
-                if not hasattr(Ant,'SqG'):
-                    Ant.Fsynth3()
+                if not hasattr(Ant,'sqG'):
+                    Ant.eval()
                 U = self.dcs[key]
                 _filepatt = kwargs['tag']+'patt-'+key
                 geo = geu.Geomoff(_filepatt)
-                V = Ant.SqG[kwargs['k'],:,:]
+                if not hasattr(Ant,'sqG'):
+                    Ant.eval()
+                V = Ant.sqG[kwargs['k'],:,:]
                 #T = U[:,1:]
                 #Rab = self.dev[key]['T']
                 #T = np.vstack((U[:,1+DT[0]],U[:,1+DT[1]],U[:,1+DT[2]]))
@@ -2865,16 +2893,17 @@ if __name__ == '__main__':
 
 
 class Cylinder(object):
-    """
+    """ Class for handling interfering bodies in CORMORAN measurement data
+        navigation series day 12/06/2014
     """
 
     def __init__(self,name = 'Meriem_Cylindre:',
-                _filemocap='/RAW/12-06-2014/MOCAP/Nav_serie_006.c3d',
+                _filemocap='Nav_serie_006.c3d',
                 unit='mm',
                 color='white'):
         self.name = name
-        filemocap = os.environ('CORMORAN')+ _filemocap
-        self.loadC3D(_filemocap,unit=unit)
+        filemocap = os.environ['CORMORAN']+ '/RAW/12-06-2014/MOCAP/'+ _filemocap
+        self.loadC3D(filemocap,unit=unit)
         self.init_traj()
         self.color=color
         self.settopos(t=0)
@@ -2888,12 +2917,12 @@ class Cylinder(object):
             st = st+ '\nI am nowhere yet\n\n'
         else :
             st = st + '\n@ t=' +str(self.time[self.toposFrameId]) +' (frameID='+ str(self.toposFrameId) +'),\n'+'My centroid position is ' +str(self.pg[:2,self.toposFrameId])+"\n\n"
-        
+
         st = st + '\n'
 
         return(st)
 
-    def loadC3D(self, filename='07_01.c3d', nframes=-1 ,unit='cm'):
+    def loadC3D(self, filename='Nav_serie_006.c3d', nframes=-1 ,unit='cm'):
         """ load nframes of motion capture C3D file
 
         Parameters
@@ -2921,7 +2950,7 @@ class Cylinder(object):
             raise AttributeError(self.name +' is not in the MOCAP file :' +filename)
 
 
-            #in case of multiple body into the mocap file, 
+            #in case of multiple body into the mocap file,
             #mocap is restricted to nodes belonging to a single body.
             #the body is automatically selected by using the self.name
         #
@@ -2929,7 +2958,7 @@ class Cylinder(object):
         self._f =self._f[:,up,:]
         self._s=[s for s in self._s if self.name in s ]
         self._p=[p for p in self._p if self.name in p ]
-            
+
 
 
 
@@ -2959,7 +2988,9 @@ class Cylinder(object):
 
 
         self._f=self._f*self._unit
+        # d node data
         self.d = self._f[0:self.nframes,:,:].T
+        # pg : center of gravity
         self.pg = np.mean(self.d,axis=1)
         self.pg[2,:]=0
         self.radius = np.sqrt(np.sum((self.d[:,0,:]-self.d[:,1,:])**2,axis=0))/2.
@@ -3009,7 +3040,7 @@ class Cylinder(object):
                     'tube_sides' : 6,
                     'opacity':1,
                     'vecdir':True
-                    }       
+                    }
 
         for k in defaults:
             if k not in kwargs:
@@ -3030,11 +3061,10 @@ class Cylinder(object):
         colhex = cold[self.color]
         cyl_color = tuple(pyu.rgb(colhex)/255.)
 
-       
         X=np.vstack((self.top,self.bottom))
-       
+
         connections=(0,1)
-    
+
         s = np.hstack((self.toposradius,self.toposradius))
         #pts = mlab.points3d(X[0,:],X[1,:], X[2,:], 5*s ,
                                              # scale_factor=0.1, resolution=10)

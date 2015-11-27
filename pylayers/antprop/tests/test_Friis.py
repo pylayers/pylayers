@@ -1,3 +1,6 @@
+from environ import *
+import os
+print os.environ['BASENAME']
 from pylayers.antprop.rays import *
 from pylayers.antprop.antenna import *
 from pylayers.gis.layout import *
@@ -9,9 +12,11 @@ from pylayers.simul.simulem import *
 import matplotlib.pyplot as plt
 import time
 import copy
+
 print "======================="
-print " start test_rays.py (Ray Tracing numpy) "
-print "======================="
+print " start test_Friis.py (Ray Tracing numpy) "
+print "====================="
+
 S = Simul()
 filestr = 'defstr'
 S.layout(filestr+'.ini','matDB.ini','slabDB.ini')
@@ -27,13 +32,16 @@ S.rx.point(rx)
 fGHz=np.arange(2,11,0.1)
 wav = wvf.Waveform(fcGHz=5,bandGHz=3)
 Si1 = Signatures(S.L,Ctx,Crx)
-Si1.run4(cutoff=5,algo='old')
-#
-# To test Friis Formula we loop on the x coordinate of the receiver.
-# We start at 1 m from the transmitter and move away from it along x axis
-# on 9 m
-# loop on rx
-#
+tic = time.time()
+Si1.run5()
+##Si1.run4(cutoff=5,algo='old')
+##Si1.run4(cutoff=5,algo='old')
+###
+### To test Friis Formula we loop on the x coordinate of the receiver.
+### We start at 1 m from the transmitter and move away from it along x axis
+### on 9 m
+### loop on rx
+###
 tEtt =[]
 tEpp =[]
 tEtp =[]
@@ -41,8 +49,8 @@ tEpt =[]
 tsc =[]
 dist = np.arange(1,9,1)
 vx    = dist+759
-A = Antenna('def.vsh3')
-A.Fsynth3(fGHz)
+A = Antenna('defant.vsh3')
+A.eval()
 for x in vx:
     rx=array([x,1114,1.0])
     print "Rx :",rx
@@ -54,7 +62,8 @@ for x in vx:
         print "new signature"
         Crx = Crx2
         Si1 = Signatures(S.L,Ctx,Crx)
-        Si1.run4(cutoff=5,algo='old')
+        #Si1.run5(cutoff=5,algo='old')
+        Si1.run5(cutoff=5,algo='old')
     r2d = Si1.rays(tx,rx)
     r3d1 = r2d.to3D(S.L)
     r3d1.locbas(S.L)
@@ -68,8 +77,8 @@ for x in vx:
     tEpp.append(Epp)
     tEtp.append(Etp)
     tEpt.append(Ept)
-    tsc.append(Esc)
-#np.save('tEtt',np.array(tEtt))
-#np.save('tEtp',np.array(tEtp))
-#np.save('tEpt',np.array(tEpt))
-#np.save('tEpp',np.array(tEpp))
+    tsc.append(sc)
+np.save('tEtt',np.array(tEtt))
+np.save('tEtp',np.array(tEtp))
+np.save('tEpt',np.array(tEpt))
+np.save('tEpp',np.array(tEpp))

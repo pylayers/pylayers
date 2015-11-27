@@ -27,6 +27,8 @@ TODO
 """
 import usb.core
 import usb.util
+import pdb
+import time
 
 ID_VENDOR = 0x3923
 ID_PRODUCT = 0x718a
@@ -36,24 +38,26 @@ def get_adapter(**kwargs):
     Returns NiUsb6501 handler if only single adapter is connected to PC.
     Forwards all parameters to pyusb (http://pyusb.sourceforge.net/docs/1.0/tutorial.html)
     """
+
+    #find NI Instruments Corp. 
     device = usb.core.find(idVendor=ID_VENDOR, idProduct=ID_PRODUCT, **kwargs)
+    
+    #was it found?
     if not device:
         raise ValueError('Device not found')
 
     return NiUsb6501(device)
+    
+#def find_adapters(**kwargs):
+    #"""
+    #Returns NiUsb6501 handle for every adapter that is connected to PC.
+    #Forwards all parameters to pyusb (http://pyusb.sourceforge.net/docs/1.0/tutorial.html)
+    #"""
+    #devices = usb.core.find(find_all=True, idVendor=ID_VENDOR, idProduct=ID_PRODUCT, **kwargs)
+    #if not devices:
+        #raise ValueError('Device not found')
 
-
-    """
-    Returns NiUsb6501 handle for every adapter that is connected to PC.
-    Forwards all parameters to pyusb (http://pyusb.sourceforge.net/docs/1.0/tutorial.html)
-    """
-def find_adapters(**kwargs):
-    devices = usb.core.find(find_all=True, idVendor=ID_VENDOR, idProduct=ID_PRODUCT, **kwargs)
-    if not devices:
-        raise ValueError('Device not found')
-
-    return [NiUsb6501(dev) for dev in devices]
-
+    #return [NiUsb6501(dev) for dev in devices]
 
 class NiUsb6501:
     """
@@ -63,19 +67,42 @@ class NiUsb6501:
       # start calling adapter.read_port(port) and adapter.write_port(port, values)
     """
     def __init__(self, device):
-        """ used only internally via get_adapter() and find_adapters() """
+        """ used only internally via get_adapter() and find_adapters()
+        """
         self.device = device
+        #pdb.set_trace()
         cfg = self.device.get_active_configuration()
         interface_number = cfg[(0,0)].bInterfaceNumber
-
+        print "interface_number",interface_number
+        #reattach = False
+        print " active : ", self.device.is_kernel_driver_active(interface_number)
+        print self.device
         if self.device.is_kernel_driver_active(interface_number):
+        #if self.device.is_kernel_driver_active(0):
+            #reattach = True
+            print "kernel driver is active "
             self.device.detach_kernel_driver(interface_number)
+            #self.device.detach_kernel_driver(0)
+        
         # set the active configuration. With no arguments, the first
         # configuration will be the active one
-        self.device.set_configuration()
-        # This is needed to release interface, otherwise attach_kernel_driver fails 
-        # due to "Resource busy"
+        
+        #if self.device.is_kernel_driver_active(1):
+            #self.device.detach_kernel_driver(1)
+
+        #self.device.set_configuration()
+        
+        print self.device._ctx
+
         usb.util.dispose_resources(self.device)
+        # This is needed to release interface, otherwise attach_kernel_driver fails
+        # due to "Resource busy" 
+        
+        #if reattach:
+            #self.device.attach_kernel_driver(0)
+
+    #def __del__(self):
+        #print "Destructor called"
 
     def set_io_mode(self, port0, port1, port2):
         """
@@ -89,7 +116,6 @@ class NiUsb6501:
         buf[7] = chr(port1)
         buf[8] = chr(port2)
         buf = ''.join(buf)
-
         return self.send_request(0x12, buf)
 
     def read_port(self, port):
@@ -132,6 +158,7 @@ class NiUsb6501:
     ##########################################################
     # TODO: COUNTERS ARE NOT YET IMPLEMENTED
     ##########################################################
+
     def read_counter(self):
         pass
 
@@ -147,9 +174,11 @@ class NiUsb6501:
     ##########################################################
     # INTERNAL UTILITY FUNCTIONS
     ##########################################################
+
     EP_IN, EP_OUT = 0x81, 0x01
     HEADER_PACKET, HEADER_DATA = 4, 4
     INTERFACE = 0
+
 
     def send_request(self, cmd, request):
         if len(request) + self.HEADER_PACKET + self.HEADER_DATA > 255:
@@ -162,8 +191,9 @@ class NiUsb6501:
         buf[7] = chr(cmd)
 
         buf = ''.join(buf) + request
-
+                
         assert self.device.write(self.EP_OUT, buf, self.INTERFACE) == len(buf)
+        #pdb.set_trace()
 
         ret = self.device.read(self.EP_IN, len(buf), self.INTERFACE)
 
@@ -187,15 +217,68 @@ class NiUsb6501:
 
 #USAGE EXAMPLE
 if __name__ == "__main__":
-    dev = get_adapter()
-
-    if not dev:
+    
+    switch = get_adapter()
+    
+    if not switch:
         raise Exception("No device found")
 
-    dev.set_io_mode(0b11111111, 0b11111111, 0b00000000)
+    #switch.device
+    #switch.set_io_mode(0b11111111, 0b11111111, 0b00000000)
 
+
+    
+    
+    #print "Port 0",bin(switch.read_port(0))
+    #print "Port 1",bin(switch.read_port(1))
+
+    #reattach=False
+    
+    #if switch.device.is_kernel_driver_active(0):
+        #reattach = True
+        #switch.detach_kernel_driver(0)
+    
+    #usb.util.dispose_resources(switch.device)
+
+    # It may raise USBError if there's e.g. no kernel driver loaded at all
+    #if reattach:
+        #switch.device.attach_kernel_driver(0)
+    
+    # import time
+    # for k in range(8):
+    #     switch.write_port(0,k)
+    #     for  l in range(4):
+    #     #switch.write_port(0,0b00000000)
+    #         print k,l
+    #         switch.write_port(1,l)
+    #         time.sleep(1)
+
+    #dev.set_io_mode(0b11111111, 0b11111111, 0b00000000)
+    #dev.write_port(0, 0b00001111) # 3 bits needed to set up 8 antennas
+    #dev.write_port(1, 0b00000111) # 2 bits needed to set up 4 antennas
+    #dev.write_port(2, 0b00000000)
+    
+    #dev.set_io_mode(0b00001111, 0b00000111, 0b00000000)
+    
+
+    #if switch.device.is_kernel_driver_active(0):
+    #    switch.device.detach_kernel_driver(0)
+    
+    
+
+
+    #print "Port 2",bin(dev.read_port(2))
+    #dev.write_port(0, 0b00000001)
+    #dev.write_port(1, 0b00000001)
+
+    #pdb.set_trace()
+    #set IO : port (port 0, port 1, port 2)
+    #dev.set_io_mode(0b11111111, 0b11111111, 0b00000000)
     #dev.write_port(0, 0b10111111)
-    dev.write_port(0, 0b00000001)
+    #print bin(dev.read_port(0))
+    
+    #dev.write_port(0, 0b00000001)
     #dev.write_port(1, 0b10101010)
 
-    print bin(dev.read_port(0))
+    #print bin(dev.read_port(1))
+    #print bin(dev.read_port(2))

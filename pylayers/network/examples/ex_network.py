@@ -2,7 +2,7 @@ from pylayers.gis.layout import *
 from pylayers.mobility.agent import *
 from pylayers.network.network import *
 from pylayers.network.emsolver import *
-
+import matplotlib.pyplot as plt
 
 # ## Layout Creation
 #

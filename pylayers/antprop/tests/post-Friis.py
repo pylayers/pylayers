@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 fGHz=np.arange(2,11,0.1)
 fcenter = fGHz[len(fGHz)/2]
-dist = np.arange(1,9,0.2)
+dist = np.arange(1,9,0.1)
 LFS = -32.44 -20*np.log10(fcenter)-20*np.log10(dist)
 tEtt = np.load('tEtt.npy')
 tEtp = np.load('tEtp.npy')
