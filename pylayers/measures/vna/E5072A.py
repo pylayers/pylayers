@@ -769,12 +769,12 @@ class SCPI(PyLayers):
         # section : response
         self.param   = di['response']['param']
         self.navrg   = di['response']['navrg']
-        # self.ifbHz   = di['response']['ifbhz']
+        self.ifbHz   = di['response']['ifbhz']
 
         # values from section configuration set up
-        self.Nf      = di['conf_201_1']['nf']
-        self.ifbHz   = di['conf_201_1']['ifbhz']
-        self.navrg   = di['conf_201_1']['ifbhz']
+        #self.Nf      = di['conf_201_1']['nf']
+        #self.ifbHz   = di['conf_201_1']['ifbhz']
+        #self.navrg   = di['conf_201_1']['ifbhz']
 
 
         # apply configuration setup
