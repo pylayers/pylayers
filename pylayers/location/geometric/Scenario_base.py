@@ -320,10 +320,10 @@ class Scenario(object):
             errli   = []
             Constraint.C_Id = 0         # reset constraint Id for each BN
 
-            print "                    Blind Node N°",ibn+1,"/",Nbn
+            print "                    Blind Node N",ibn+1,"/",Nbn
             atv=[]
             pbn = self.bn[ibn]
-            #print "Blind Node N° ",ibn,pbn
+            #print "Blind Node N ",ibn,pbn
 
             self.tic_ensemblist=time.time()
             cla = CLA(self.parmsh)
@@ -344,7 +344,7 @@ class Scenario(object):
 
 
             for ian in range(lbcl):    # for each AN or couple of AN (TDOA)
-                #print "Anchor Node N° ",ian
+                #print "Anchor Node N ",ian
 
 
                 try :

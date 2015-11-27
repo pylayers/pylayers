@@ -11,7 +11,7 @@ class LPRS(object):
 
 
     1) Plug Tx and Rx
-    2) check on which serial port they appear dmesg | grep tty
+    2) check on which serial port they appear dmesg| grep tty
     3) Launch an ipython session for each terminal
 
     Tx session

@@ -508,15 +508,15 @@ class SelectL(object):
         'b'  : edit segment keyboard
         'CTRL + t'  : translate  structure
         'h'  : add subsegment
-        'd | Del'  : delete subsegment
-        'r | F5'  : refresh
+        'd |Del'  : delete subsegment
+        'r |F5'  : refresh
         'o'  : toggle overlay (<> CP mode)
                set origin (CP mode) 
         'm'  : toggle mode (point or segment)
         'n'  : toggle node label display 
         'z'  : change display parameters
         'CTRL+q'  : quit
-        'x | CTRL+s'  : save .str2 and .ini file
+        'x |CTRL+s'  : save .str2 and .ini file
         'w'  : display all layers
         'v'  : flip layout w.r.t y axis
         'f'  : toggle points nodes display
@@ -1192,7 +1192,7 @@ class SelectL(object):
                 toggle_selector.RS.set_active(True)
         
         if self.evt == 'f1':
-            # avoid conflict between zoom and selection 
+            #avoid conflict between zoom and selection 
             # fm=plt.get_current_fig_manager()
             # if fm.toolbar._active == 'PAN':
             #     fm.toolbar.pan()

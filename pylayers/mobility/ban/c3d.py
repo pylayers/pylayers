@@ -746,7 +746,7 @@ def ReadC3d(_filename='07_01.c3d', verbose=False):
     verbose : boolean
     """
 
-    # check if local or global path
+    #check if local or global path
     if ('/' or '\\') in _filename:
         FullFileName=_filename
     else: 

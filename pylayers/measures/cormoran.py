@@ -159,7 +159,7 @@ import numpy.ma as ma
 import scipy.io as io
 from pylayers.util.project import *
 from pylayers.util.pyutil import *
-import  pylayers.util.mayautil as myu
+#import  pylayers.util.mayautil as myu
 from pylayers.mobility.ban.body import *
 from pylayers.gis.layout import *
 import pylayers.antprop.antenna as antenna
@@ -697,7 +697,7 @@ bernard
                           's3off':-0.2}      ,
                  })
 
-        # load extra  information from inifile (antenna, rotation matrix,...)
+        #load extra  information from inifile (antenna, rotation matrix,...)
 
         inifile = os.path.join(self.rootdir,'POST-TREATED',str(self.day)+'-06-2014','BodyandWear','AccesPoints.ini')
         config = ConfigParser.ConfigParser()
@@ -1288,14 +1288,15 @@ bernard
         """  imshow visibility mda
 
 
-        Parameters 
+        Parameters
         ----------
+
         techno : (HKB|TCR)
         t : float
             time in second
 
-        Example 
-        -------
+        Examples
+        --------
 
         >>> from pylayers.measures.cormoran import *
         >>> import matplotlib.pyplot as plt

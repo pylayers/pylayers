@@ -569,7 +569,7 @@ class DLink(Link):
                             _fileant = Ant._filename
                             )
         self._Aa = Ant
-        # to be removed when radionode will be updated
+        #to be removed when radionode will be updated
         self.a = position
         self.Ta = rot
 
@@ -584,7 +584,7 @@ class DLink(Link):
                             _fileant = Ant._filename,
                             )
         self._Ab = Ant
-        # to be removed when radionode will be updated
+        #to be removed when radionode will be updated
         self.b = position
         self.Tb = rot
 
@@ -1148,7 +1148,7 @@ class DLink(Link):
             signature.run algo type
             'old' : call propaths2
             'new' : call procone2
-        alg : 5 | 7
+        alg : 5|7
             version of run for signature
         si_mt: boolean
             Multi thread version of algo version 7

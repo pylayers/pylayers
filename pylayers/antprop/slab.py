@@ -1044,7 +1044,7 @@ class MatDB(PyLayers,dict):
             M['sigma'] = -M['epr2'] * M['fGHz'] / 18.
         #
         # Terahertz Dielectric Properties of Polymers Yun-Sik Jin
-        # Terahertz characterization of building materials (R.Piesiewicz) El.Jou Jan 2005 Vol 41 N°18
+        # Terahertz characterization of building materials (R.Piesiewicz) El.Jou Jan 2005 Vol 41 N18
         #
         if kwargs['typ'] == 'THz':
             M['n'] = kwargs['cval']
@@ -1592,8 +1592,8 @@ class Slab(dict,Interface):
         Cp[:, :, 1, 1] = 1
 # _Cp = np.eye(2,dtype=complex)
         #
-        # Boucle sur les n-1 matériaux
-        # lmat[0] est toujours l'air (à modifier)
+        # Boucle sur les n-1 matriaux
+        # lmat[0] est toujours l'air ( modifier)
         #
         for i in range(self.n - 1):
             if i == 0: # first material is AIR

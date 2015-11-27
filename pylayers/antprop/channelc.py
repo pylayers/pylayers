@@ -487,7 +487,7 @@ class ScalChannel(object):
         #
         Y = self.apply(Wgam)
         #ri      = Y.ft1(500,0)
-        # Le fftshift est activé
+        # Le fftshift est activ
         ri = Y.ft1(500, 1)
         return(ri)
 

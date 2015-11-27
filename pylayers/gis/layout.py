@@ -296,7 +296,7 @@ class Layout(PyLayers):
 
     Gs     : Structure graph
     Gt     : Topological graph  (indicates topological relationships between rooms)
-    Gr     : Graph of room
+    Gr     : Graph of rooms
     Gv     : Graph of visibility
     Gc     : Connection graph (indicates visbility relationships)
     Nnode  : Number of nodes of Gs
@@ -399,6 +399,9 @@ class Layout(PyLayers):
         self.display['box'] = (-50,50,-50,50)
         self.name = {}
 
+
+        self.zmin = 0
+
         for k in self.sl.keys():
             self.name[k] = []
 
@@ -437,7 +440,7 @@ class Layout(PyLayers):
         st = st + "\n"
         st = st + "xrange :"+ str(self.ax[0:2])+"\n"
         st = st + "yrange :"+ str(self.ax[2:])+"\n"
-        st = st + "\nUseful dictionnaries"+"\n----------------\n"
+        st = st + "\nUseful dictionnaries" + "\n----------------\n"
         if hasattr(self,'dca'):
             st = st + "dca {cycle : []} cycle with an airwall" +"\n"
         if hasattr(self,'di'):
@@ -469,6 +472,76 @@ class Layout(PyLayers):
             st = st + "degree : degree of nodes " +"\n"
 
         return(st)
+
+    def __add__(self, other):
+        Ls = copy.deepcopy(self)
+        if type(other)==np.ndarray:
+            for k in Ls.Gs.pos:
+                Ls.Gs.pos[k]=Ls.Gs.pos[k]+other[0:2]
+        else:
+            offp = -min(Ls.Gs.nodes())
+            offs = max(Ls.Gs.nodes())
+            other.offset_index(offp=offp,offs=offs)
+            Ls.Gs.node.update(other.Gs.node)
+            Ls.Gs.edge.update(other.Gs.edge)
+            Ls.Gs.adj.update(other.Gs.adj)
+            Ls.Gs.pos.update(other.Gs.pos)
+            Ls.Np = Ls.Np+other.Np
+            Ls.Ns = Ls.Ns+other.Ns
+            Ls.Nss = Ls.Nss+other.Nss
+
+        return(Ls)
+
+
+    def __mul__(self,alpha):
+        """ scale the layout 
+
+        other : scaling factor (np.array or int or float)
+
+        Returns
+        -------
+
+        Ls : Layout
+            scaled layout
+
+        """
+        Ls = copy.deepcopy(self)
+        Gs = Ls.Gs
+        if type(alpha) != np.ndarray:
+            assert((type(alpha) == float) or (type(alpha) == int)), " not float"
+            alpha=np.array([alpha, alpha, alpha])
+        else:
+            assert(len(alpha)==3), " not 3D"
+        #
+        # scaling x & y
+        #
+        x = np.array(Gs.pos.values())[:,0]
+        xc = np.mean(x)
+        x = (x-xc)*alpha[0] + xc
+
+        y = np.array(Gs.pos.values())[:,1]
+        yc = np.mean(y)
+        y = (y-yc)*alpha[1] + yc
+
+        xy = np.vstack((x,y)).T
+        Ls.Gs.pos = dict(zip(Gs.pos.keys(),tuple(xy)))
+
+        #
+        # scaling z
+        #
+
+        nseg = filter(lambda x : x>0, Gs.nodes())
+        for k in nseg:
+            Ls.Gs.node[k]['z'] = tuple((np.array(Ls.Gs.node[k]['z'])-self.zmin)*alpha[2]+self.zmin)
+            if Ls.Gs.node[k].has_key('ss_z'):
+                Ls.Gs.node[k]['ss_z'] = list((np.array(Ls.Gs.node[k]['ss_z'])-self.zmin)*alpha[2]+self.zmin)
+
+        #
+        # updating numpy array from graph
+        #
+
+        Ls.g2npy()
+        return Ls
 
     def ls(self, typ='ini'):
         """ list the available file in dirstruc
@@ -535,6 +608,49 @@ class Layout(PyLayers):
         self.Gs = nx.Graph()
         self.Gc = nx.Graph()
         self.Gm = nx.Graph()
+
+    def offset_index(self,offp=0,offs=0):
+        """ offset points and segment index
+
+        Parameters
+        ----------
+        offp : offset points
+        offs : offset segments
+
+        """
+
+        newpoint = dict( (k-offp,v) for k,v in self.Gs.node.items() if k <0)
+        assert (np.array(newpoint.keys())<0).all()
+        newseg =   dict( (k+offs,v) for k,v in self.Gs.node.items() if k > 0)
+        assert (np.array(newseg.keys())>0).all()
+        newpoint.update(newseg)
+        self.Gs.node = newpoint
+
+        newppoint = dict( (k-offp,v) for k,v in self.Gs.pos.items() if k <0)
+        newpseg =   dict( (k+offs,v) for k,v in self.Gs.pos.items() if k > 0)
+        newppoint.update(newpseg)
+        self.Gs.pos =  newppoint
+
+        # adjascence list of segments
+        ladjs = [self.Gs.adj[k] for k in self.Gs.adj.keys() if k > 0 ]
+        # adjascence list of points
+        ladjp = [self.Gs.adj[k] for k in self.Gs.adj.keys() if k < 0 ]
+
+        nladjs = map(lambda x: dict((k-offp,v) for k,v in x.items()),ladjs)
+        nladjp = map(lambda x: dict((k+offs,v) for k,v in x.items()),ladjp)
+
+        lpt  = [k-offp for k in self.Gs.adj.keys() if k <0 ]
+        lseg = [k+offs for k in self.Gs.adj.keys() if k >0 ]
+
+        dpt  = dict(zip(lpt,nladjp))
+        dseg = dict(zip(lseg,nladjs))
+        dseg.update(dpt)
+        self.Gs.adj =  dseg
+        self.Gs.edge = dseg
+        #pdb.set_trace()
+        #dict(zip(self.Gs.keys(),))
+        #self.Gs.adj = newapoint
+
 
     def check(self,level=0):
         """ Check Layout consistency
@@ -717,7 +833,6 @@ class Layout(PyLayers):
 
 
         nodes = self.Gs.nodes()
-
         # nodes include points and segments
 
         #segment index
@@ -2475,49 +2590,37 @@ class Layout(PyLayers):
 
     def mask(self):
         """  returns the polygonal mask of the building
-        """
-        p  = self.Gt.node[1]['polyg']
-        ps = sh.Polygon(p.exterior)
-        for k in self.Gt.node:
-            if (k!=0) & (k!=-1):
-                p = self.Gt.node[k]['polyg']
-                ps = ps.union(sh.Polygon(p.exterior))
-        mask = geu.Polygon(ps)
-        mask.setvnodes(self)
-        return(mask)
-
-    def scale(self,alpha=[1,1,1]):
-        """ scale the layout
-        alpha : scaling factor
 
         Returns
         -------
 
-        Ls : Layout
-            scaled layout
+        mask : geu.Polygon
+
+        Notes
+        -----
+
+        This function assumes graph Gt has been generated
+
         """
-        Ls = copy.deepcopy(self)
-        Gs = Ls.Gs
+        # takes the 1st cycle polygon
+        p = self.Gt.node[1]['polyg']
+        # get the exterior of the polygon
+        ps = sh.Polygon(p.exterior)
+        # make the union of the exterior of all the cycles
         #
-        # scaling x & y
+        # cycle : -1 exterior
+        #          0 ??
         #
-        x = np.array(Gs.pos.values())[:,0]*alpha[0]
-        y = np.array(Gs.pos.values())[:,1]*alpha[1]
-        xy = np.vstack((x,y)).T
-        Ls.Gs.pos = dict(zip(Gs.pos.keys(),tuple(xy)))
-        #
-        # scaling z
-        #
-        nseg = filter(lambda x : x>0, Gs.nodes())
-        for k in nseg:
-            Ls.Gs.node[k]['z'] = np.array(Ls.Gs.node[k]['z'])*alpha[2]
-        for k in Ls.lsss:
-            Ls.Gs.node[k]['ss_z'] = np.array(Ls.Gs.node[k]['ss_z'])*alpha[2]
-        #
-        # updating numpy array from graph
-        #
-        Ls.g2npy()
-        return Ls
+
+        for k in self.Gt.node:
+            if (k!=0) & (k!=-1):
+                p = self.Gt.node[k]['polyg']
+                ps = ps.union(sh.Polygon(p.exterior))
+
+        mask = geu.Polygon(ps)
+        mask.setvnodes(self)
+        return(mask)
+
 
     def translate(self,vec):
         """ translate layout
@@ -2859,7 +2962,7 @@ class Layout(PyLayers):
                                 self.name[data[i]] = [e1]
                     i = i + 1
             except:
-                # if cancel
+                #if cancel
                 pass
         else:
             if outdata=={}:
@@ -5575,9 +5678,9 @@ class Layout(PyLayers):
             if a cycle is tagged as non convex
 
             1- find its polygon
-            2- partion polygon into convex polygons (Delaunay)
-            3- try to merge partioned polygon in order to obtain
-               the minimal number of convex polygon
+            2- partition polygon into convex polygons (Delaunay)
+            3- try to merge partitioned polygons in order to obtain
+               the minimal number of convex polygons
             4- re-number/re-create Gt by creating  new 'convex' cycles
                from those convex polygons
 
