@@ -599,12 +599,13 @@ class SCPI(PyLayers):
 
     def calibh5(self,
                  _fileh5='scalib',
-                 _filename='vna_config.ini',
+                 _filecal='cal_config.ini',
+                 _filevna='vna_config.ini',
                  cables=[],
-                 author='M.D.B and B.U',
+                 author='',
                  comment='',
                  Nmeas = 100):
-        """  measure a calibration vector and store in h5 file
+        """  measure a calibration vector and store it in a hdf5 file
 
         Parameters
         ----------
@@ -618,8 +619,13 @@ class SCPI(PyLayers):
         """
 
         # set config
-        # File from : ~/Pylayers_project/meas
-        self.load_config(_filename=_filename)
+        # file read from : ~/Pylayers_project/meas
+
+        self.load_config(_filename=_filevna)
+        dcal = self.load_calconfig(_filename=_filecal)
+
+        for k in dcal:
+            print dcal[k]
 
         # get Nmeas calibration vector
         D = self.getdata(chan=1, Nmeas=Nmeas)
@@ -718,6 +724,28 @@ class SCPI(PyLayers):
         f.close()
 
 
+    def load_calconfig(self,_filename='cal_config.ini'):
+        """ load the whole set of calibration config
+        """
+        filename = pyu.getlong(_filename, pstruc['DIRMES'])
+        cal_conf  = ConfigParser.ConfigParser()
+        cal_conf.read(filename)
+        pdb.set_trace()
+        sections  = cal_conf.sections()
+        di        = {}
+        for section in sections:
+            di[section] = {}
+            options = cal_conf.options(section)
+            for option in options:
+                # int/float value
+                try:
+                    di[section][option] = eval(cal_conf.get(section, option))
+                # string value
+                except:
+                    di[section][option] = cal_conf.get(section, option)
+
+        return(di)
+
     def load_config(self,_filename='vna_config.ini'):
         """ load a vna config file from an .ini file
 
@@ -738,10 +766,10 @@ class SCPI(PyLayers):
         """
 
         # filename : ~/Pylayers_project/meas
-        filenname = pyu.getlong(_filename, pstruc['DIRMES'])
+        filename = pyu.getlong(_filename, pstruc['DIRMES'])
 
         vna_conf  = ConfigParser.ConfigParser()
-        vna_conf.read(filenname)
+        vna_conf.read(filename)
 
         sections  = vna_conf.sections()
         di        = {}
@@ -756,7 +784,8 @@ class SCPI(PyLayers):
                 except:
                     di[section][option] = vna_conf.get(section, option)
 
-        # be careful no capital word in the sections
+
+                # be careful no capital word in the sections
         # link between vna and file ini
 
         # section from  vna_config
@@ -770,12 +799,6 @@ class SCPI(PyLayers):
         self.param   = di['response']['param']
         self.navrg   = di['response']['navrg']
         self.ifbHz   = di['response']['ifbhz']
-
-        # values from section configuration set up
-        #self.Nf      = di['conf_201_1']['nf']
-        #self.ifbHz   = di['conf_201_1']['ifbhz']
-        #self.navrg   = di['conf_201_1']['ifbhz']
-
 
         # apply configuration setup
         if not self.emulated:
