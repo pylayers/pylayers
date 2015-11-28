@@ -103,7 +103,7 @@ except:
     print 'h5py is not installed: Ctilde(object cannot be saved)'
 
 class TBchannel(bs.TBsignal):
-    """ Uniform channel in delay domain
+    """ radio channel in non uniform delay domain
     """
     def __init__(self, x=np.array([]), y=np.array([]),label=[]):
         #super(TUsignal,self).__init__(x,y,label)
@@ -257,6 +257,20 @@ class TBchannel(bs.TBsignal):
 
         return(taurms)
 
+    def toFD(self,N=300,fGHz=np.linspace(2,5,256)):
+        """ Transform to Frequency domain
+
+        Returns
+        -------
+
+        H : Tchannel
+
+        """
+
+        z = np.sum(self.y[:,None]*np.exp(-2*1j*fGHz[None,:]*np.pi*self.x[:,None]),axis=0)
+        H = Tchannel(x=fGHz,y=z,tau=self.x)
+        return H
+
     def SalehValenzuela(self,**kwargs):
         """ generic Saleh and Valenzuela Model
 
@@ -269,6 +283,13 @@ class TBchannel(bs.TBsignal):
         gam : rays exponential decay factor
         T   : observation duration
 
+        Examples
+        --------
+
+        >>> from pylayers.antprop.channel import *
+        >>> C=TBchannel()
+        >>> C.SalehValenzuela()
+        >>> C.stem()
 
         """
         defaults = { 'Lam' : .1,
@@ -290,24 +311,30 @@ class TBchannel(bs.TBsignal):
         Nc  = 1.2*T/lam
         e1 = st.expon(1./Lam)
         e2 = st.expon(1./lam)
+
         # cluster time of arrival
         tc   = np.cumsum(e1.rvs(Nr))
         tc   = tc[np.where(tc<T)]
         Nc   = len(tc)
         tauc = np.kron(tc,np.ones((1,Nr)))[0,:]
+
         # rays time of arrival
         taur = np.cumsum(e2.rvs((Nr,Nc)),axis=0).ravel()
+
         # exponential decays of cluster and rays
         etc = np.exp(-tauc/(1.0*Gam))
         etr = np.exp(-taur/(1.0*gam))
         et = etc*etr
         tau = tauc+taur
+
         # filtering < T and reordering in delay domain
         tau = tau[np.where(tau<T)]
         et = et[np.where(tau<T)]
         u = np.argsort(tau)
         taus = tau[u]
         ets  = et[u]*np.sign(np.random.rand(len(u))-0.5)
+
+        # delays and amplitudes
         self.x = taus
         self.y = ets
 
