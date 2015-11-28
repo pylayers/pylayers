@@ -89,7 +89,7 @@
 	    >Modules
 	    <br>
 	    <span class="smallrellink">
-	    Python Module In...
+	    Python Module...
 	    </span>
 	    <span class="hiddenrellink">
 	    Python Module Index
@@ -421,7 +421,8 @@
                     <span class="c">#    plt.show()</span>
                     <span class="c">#    pdb.set_trace()</span>
 
-                <span class="n">isegkeep</span> <span class="o">=</span> <span class="n">isegments</span><span class="p">[</span><span class="n">bs</span><span class="p">]</span>
+                <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+                <span class="n">isegkeep</span> <span class="o">=</span> <span class="n">isegments</span><span class="p">[</span><span class="n">bs</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
                 <span class="n">output</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">isegkeep</span> <span class="p">,</span><span class="n">i2</span><span class="p">)</span>
                 <span class="c"># keep all segment above nstr1 and in Cone if T</span>
                 <span class="c"># keep all segment below nstr1 and in Cone if R</span>
@@ -1458,6 +1459,7 @@
                     <span class="n">path</span> <span class="o">=</span> <span class="n">visited</span> <span class="o">+</span> <span class="p">[</span><span class="n">target</span><span class="p">]</span>
                     <span class="c"># M = np.zeros((1,NGs),dtype=&#39;bool&#39;)</span>
                     <span class="n">out</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">G</span><span class="p">[</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]][</span><span class="n">target</span><span class="p">][</span><span class="s">&#39;output&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+                        
 
                     <span class="k">if</span> <span class="n">Mmap</span> <span class="o">!=</span><span class="p">[]:</span>
                         <span class="n">M</span><span class="p">[</span><span class="n">Mmap</span><span class="p">[</span><span class="n">path</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]],</span><span class="n">Mmap</span><span class="p">[</span><span class="n">path</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]],</span><span class="n">Mmap</span><span class="p">[</span><span class="n">out</span><span class="p">]]</span><span class="o">=</span><span class="bp">True</span>
@@ -1867,6 +1869,11 @@
 <span class="sd">        &gt;&gt;&gt; DL.Cb=13</span>
 <span class="sd">        &gt;&gt;&gt; DL.eval(force=[&#39;sig&#39;,&#39;ray&#39;,&#39;Ct&#39;,&#39;H&#39;],alg=2015,si_reverb=3,cutoff=2,ra_vectorized=True)</span>
 
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        This function makes use of graph Gc. Graph of meged cycles.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">source</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span>
@@ -1924,11 +1931,13 @@
 
                 <span class="c">#for each reverb/diffract interaction,</span>
                 <span class="c"># inside 1st cycle, search the output interactions</span>
-
+                
                 <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">voutT</span><span class="p">:</span>
                     <span class="n">io</span><span class="o">=</span><span class="p">{}</span>
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">vinT</span><span class="p">:</span>
                         <span class="n">io</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">propaths2015_2</span><span class="p">(</span><span class="n">sGi</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">o</span><span class="p">,</span><span class="n">dout</span><span class="o">=</span><span class="n">io</span><span class="p">,</span><span class="n">M</span><span class="o">=</span><span class="n">M</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="n">cutoffbound</span><span class="p">)</span>
+
+
                     <span class="n">di</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">o</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">o</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">o</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span> <span class="o">=</span> <span class="n">io</span>
                     <span class="c"># add direct signature</span>
                     <span class="n">di</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">o</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">o</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">o</span><span class="p">[</span><span class="mi">2</span><span class="p">]][</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">o</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nb">len</span><span class="p">(</span><span class="n">o</span><span class="p">)],</span><span class="n">ndmin</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
@@ -2235,7 +2244,7 @@
         <span class="c">###</span>
         <span class="c">### Find interactions per cycles</span>
         <span class="c">###</span>
-        
+
         <span class="k">def</span> <span class="nf">dido</span><span class="p">(</span><span class="n">cy</span><span class="p">,</span><span class="n">lcy</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot; Difraction In Diffraction Out</span>
 <span class="sd">                determine, for merged cycles, which diffrxtion</span>
@@ -2259,7 +2268,6 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">lcy</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
                 <span class="n">lcy</span><span class="o">=</span><span class="p">[</span><span class="n">lcy</span><span class="p">]</span>
-
             <span class="n">outR</span><span class="p">,</span><span class="n">outT</span><span class="p">,</span><span class="n">D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">intercyGc2Gt</span><span class="p">(</span><span class="n">cy</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;source&#39;</span><span class="p">)</span>
             <span class="c"># keep diff points</span>
             <span class="n">D</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
@@ -2271,6 +2279,7 @@
             <span class="n">inD</span><span class="o">=</span><span class="p">[]</span>
             <span class="c"># inside cycle diffraction</span>
             <span class="n">insideD</span><span class="o">=</span><span class="p">[]</span>
+
             <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">D</span><span class="p">:</span>
                 <span class="c"># get cycles involved in diff point d</span>
                 <span class="n">dcy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">ptGs2cy</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
@@ -2291,6 +2300,7 @@
                 <span class="k">else</span> <span class="p">:</span>
                     <span class="n">insideD</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">d</span><span class="p">,))</span>
             <span class="k">return</span> <span class="n">insideD</span><span class="p">,</span><span class="n">inD</span><span class="p">,</span><span class="n">outD</span><span class="p">,</span><span class="n">ddin</span><span class="p">,</span><span class="n">ddout</span>
+        <span class="c">#####END dido</span>
 
         <span class="k">for</span> <span class="n">icy</span><span class="p">,</span><span class="n">cy</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lcil</span><span class="p">):</span>
 
@@ -2456,9 +2466,7 @@
         <span class="n">adio</span> <span class="o">=</span> <span class="n">adi</span><span class="p">[:,</span><span class="mi">3</span><span class="p">:]</span>
         <span class="n">out</span><span class="o">=</span><span class="p">[]</span>
         <span class="n">lsig</span><span class="o">=</span><span class="p">{}</span>
-
         <span class="c">#initialize loop on the 1st interaction id(0,0,0,X,X,X)</span>
-
         <span class="c"># uinit = np.unique(np.where(adi[:,:3]==0)[0])</span>
         <span class="n">uinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">adi</span><span class="p">[:,:</span><span class="mi">3</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="mi">3</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">oldout</span><span class="o">=</span><span class="n">uinit</span>
@@ -2624,6 +2632,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="c"># cycles on the LOS</span>
         <span class="n">lcil</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">cycleinline</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lcil</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">:</span>
@@ -2653,10 +2662,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span>   <span class="o">=</span> <span class="n">cutoff</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span> <span class="o">+</span><span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span> <span class="o">+</span><span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">)</span> <span class="o">+</span><span class="s">&#39;.sig&#39;</span>
 
-        <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dGi</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">buildGi2</span><span class="p">()</span>
+        <span class="c">#try:</span>
+        <span class="c">#    self.L.dGi</span>
+        <span class="c">#except:</span>
+        <span class="c">#    self.L.buildGi2()</span>
         <span class="c"># all the vnodes &gt;0  from the room</span>
         <span class="c">#</span>
         <span class="c">#NroomTx = self.L.pt2ro(tx)</span>
@@ -2674,7 +2683,9 @@
         <span class="n">metasig</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span>
         <span class="n">metasig</span> <span class="o">=</span> <span class="n">metasig</span> <span class="o">+</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
         <span class="n">metasig</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">metasig</span><span class="p">)))</span>
+        <span class="n">metasig</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">metasig</span> <span class="o">=</span> <span class="n">metasig</span> <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">]</span>
+        <span class="c"># remove external cycle</span>
 
         <span class="c">#print &quot;metasig&quot;,metasig</span>
 
@@ -2685,6 +2696,7 @@
                 <span class="n">lca</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dca</span><span class="p">[</span><span class="n">cy</span><span class="p">])</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="k">pass</span>
+
         <span class="n">metasig</span> <span class="o">=</span> <span class="n">metasig</span> <span class="o">+</span> <span class="n">lca</span>
         <span class="n">metasig</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">metasig</span><span class="p">)))</span>
 
@@ -2695,15 +2707,17 @@
         <span class="c">#ndt1 = filter(lambda l: len(eval(l))&gt;2,ndt) # Transmission</span>
         <span class="c">#ndt2 = filter(lambda l: len(eval(l))&lt;3,ndt) # Reflexion</span>
 
-        <span class="n">lisT</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">l</span><span class="p">))</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">,</span><span class="n">lis</span><span class="p">)</span> <span class="c"># Transmission</span>
-        <span class="n">lisR</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">l</span><span class="p">))</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">,</span><span class="n">lis</span><span class="p">)</span> <span class="c"># Reflexion</span>
+        <span class="n">lisT</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">==</span><span class="mi">3</span><span class="p">,</span><span class="n">lis</span><span class="p">)</span> <span class="c"># Transmission</span>
+        <span class="n">lisR</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">,</span><span class="n">lis</span><span class="p">)</span> <span class="c"># Reflexion</span>
+        <span class="n">lisD</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">,</span><span class="n">lis</span><span class="p">)</span> <span class="c"># Diffraction</span>
 
         <span class="c"># target</span>
         <span class="c"># ndr1 = filter(lambda l: len(eval(l))&gt;2,ndr) # Transmission</span>
         <span class="c"># ndr2 = filter(lambda l: len(eval(l))&lt;3,ndr) # Reflexion</span>
 
-        <span class="n">litT</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">l</span><span class="p">))</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">,</span><span class="n">lit</span><span class="p">)</span> <span class="c"># Transmission</span>
-        <span class="n">litR</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">l</span><span class="p">))</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">,</span><span class="n">lit</span><span class="p">)</span> <span class="c"># Reflexion</span>
+        <span class="n">litT</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">==</span><span class="mi">3</span><span class="p">,</span><span class="n">lit</span><span class="p">)</span> <span class="c"># Transmission</span>
+        <span class="n">litR</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">,</span><span class="n">lit</span><span class="p">)</span> <span class="c"># Reflexion</span>
+        <span class="n">litD</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">,</span><span class="n">lit</span><span class="p">)</span> <span class="c"># Diffraction</span>
 
         <span class="c"># tx,rx : attaching rule</span>
         <span class="c">#</span>
@@ -2720,16 +2734,13 @@
         <span class="c">#ndt1 = filter(lambda l: eval(l)[2]&lt;&gt;ncytx,ndt1)</span>
         <span class="c">#ndr1 = filter(lambda l: eval(l)[1]&lt;&gt;ncyrx,ndr1)</span>
 
-        <span class="n">lisT</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">eval</span><span class="p">(</span><span class="n">l</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span><span class="o">&lt;&gt;</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span><span class="n">lisT</span><span class="p">)</span>
-        <span class="n">litT</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">eval</span><span class="p">(</span><span class="n">l</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;&gt;</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span><span class="n">litT</span><span class="p">)</span>
+        <span class="n">lisT</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="n">l</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&lt;&gt;</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span><span class="n">lisT</span><span class="p">)</span>
+        <span class="n">litT</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;&gt;</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span><span class="n">litT</span><span class="p">)</span>
 
         <span class="c">#ndt = ndt1 + ndt2</span>
         <span class="c">#ndr = ndr1 + ndr2</span>
         <span class="n">lis</span>  <span class="o">=</span> <span class="n">lisT</span> <span class="o">+</span> <span class="n">lisR</span>
         <span class="n">lit</span>  <span class="o">=</span> <span class="n">litT</span> <span class="o">+</span> <span class="n">litR</span>
-
-        <span class="c">#ntr = np.intersect1d(ndt, ndr)</span>
-<span class="c">#        li = np.intersect1d(lis, lit)</span>
 
         <span class="n">li</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">ms</span> <span class="ow">in</span> <span class="n">metasig</span><span class="p">:</span>
@@ -4835,6 +4846,34 @@
             <span class="n">prx</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">prx</span><span class="p">,</span><span class="mf">0.5</span><span class="p">]</span>
 
         <span class="n">rays</span> <span class="o">=</span> <span class="n">Rays</span><span class="p">(</span><span class="n">ptx</span><span class="p">,</span><span class="n">prx</span><span class="p">)</span>
+        <span class="c">#</span>
+        <span class="c"># detect LOS situation</span>
+        <span class="c">#</span>
+        <span class="c">#</span>
+        <span class="c"># cycle on a line between 2 cycles</span>
+        <span class="c"># lc  = self.L.cycleinline(self.source,self.target)</span>
+
+        <span class="c">#</span>
+        <span class="c"># if source and target in the same merged cycle</span>
+        <span class="c"># and ptx != prx</span>
+        <span class="c">#</span>
+        <span class="n">los</span> <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">LineString</span><span class="p">(((</span><span class="n">ptx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ptx</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="p">(</span><span class="n">prx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">prx</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+
+        <span class="c"># convex cycle of each point</span>
+        <span class="n">cyptx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">ptx</span><span class="p">)</span>
+        <span class="n">cyprx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">prx</span><span class="p">)</span>
+
+
+        <span class="n">polyctx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">cyptx</span><span class="p">][</span><span class="s">&#39;polyg&#39;</span><span class="p">]</span>
+        <span class="n">polycrx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">cyprx</span><span class="p">][</span><span class="s">&#39;polyg&#39;</span><span class="p">]</span>
+
+        <span class="n">dtxrx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">ptx</span><span class="o">-</span><span class="n">prx</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">ptx</span><span class="o">-</span><span class="n">prx</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">dtxrx</span><span class="o">&gt;</span><span class="mf">1e-15</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">polyctx</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">los</span><span class="p">):</span>
+                <span class="n">rays</span><span class="o">.</span><span class="n">los</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">rays</span><span class="o">.</span><span class="n">los</span> <span class="o">=</span> <span class="bp">False</span>
+
 
         <span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image2</span><span class="p">(</span><span class="n">ptx</span><span class="p">)</span>
         <span class="n">R</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backtrace</span><span class="p">(</span><span class="n">ptx</span><span class="p">,</span><span class="n">prx</span><span class="p">,</span><span class="n">M</span><span class="p">)</span>
@@ -4883,6 +4922,7 @@
             <span class="n">rx</span> <span class="o">=</span> <span class="n">rx</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
 
         <span class="n">rayp</span><span class="o">=</span><span class="p">{}</span>
+
         <span class="c"># loop on number of interactions</span>
         <span class="k">for</span> <span class="n">ninter</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">signatures</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">ninter</span><span class="p">])</span>
@@ -5712,7 +5752,7 @@
         <span class="c">#return(typ)</span>
 
 </div>
-<div class="viewcode-block" id="Signature.image"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signature.image.html#pylayers.antprop.signature.Signature.image">[docs]</a>    <span class="k">def</span> <span class="nf">image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tx</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">image_old</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; compute the tx&#39;s images with respect to the signature segments</span>
 
 <span class="sd">        Parameters</span>
@@ -5794,7 +5834,7 @@
         <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]))</span>
 
         <span class="k">return</span> <span class="n">M</span>
-</div>
+
 <div class="viewcode-block" id="Signature.backtrace"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signature.backtrace.html#pylayers.antprop.signature.Signature.backtrace">[docs]</a>    <span class="k">def</span> <span class="nf">backtrace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tx</span><span class="p">,</span> <span class="n">rx</span><span class="p">,</span> <span class="n">M</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; backtrace given image, tx, and rx</span>
 
@@ -6271,7 +6311,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on sept. 24, 2015.
+      Last updated on nov. 28, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

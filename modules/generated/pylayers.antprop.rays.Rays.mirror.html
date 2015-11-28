@@ -91,7 +91,7 @@
 	    accesskey="P">Previous
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.antprop...
+	    pylayers.antp...
 	    </span>
 	    <span class="hiddenrellink">
 	    pylayers.antprop.rays.Rays.extract
@@ -108,7 +108,7 @@
 	    accesskey="N">Next
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.antprop...
+	    pylayers.antp...
 	    </span>
 	    <span class="hiddenrellink">
 	    pylayers.antprop.rays.Rays.to3D
@@ -125,7 +125,7 @@
 	    >Modules
 	    <br>
 	    <span class="smallrellink">
-	    Python Module In...
+	    Python Module...
 	    </span>
 	    <span class="hiddenrellink">
 	    Python Module Index
@@ -142,7 +142,7 @@
 	Up
 	<br>
 	<span class="smallrellink">
-	pylayers.antprop...
+	pylayers.antp...
 	</span>
 	<span class="hiddenrellink">
 	pylayers.antprop.rays
@@ -179,7 +179,7 @@
 <h1>pylayers.antprop.rays.Rays.mirror<a class="headerlink" href="#pylayers-antprop-rays-rays-mirror" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.antprop.rays.Rays.mirror">
-<code class="descclassname">Rays.</code><code class="descname">mirror</code><span class="sig-paren">(</span><em>H=3</em>, <em>N=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/rays.html#Rays.mirror"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.mirror" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Rays.</code><code class="descname">mirror</code><span class="sig-paren">(</span><em>H=3</em>, <em>N=1</em>, <em>a=[]</em>, <em>b=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/rays.html#Rays.mirror"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.mirror" title="Permalink to this definition">¶</a></dt>
 <dd><p>mirror a ray termination</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -187,11 +187,21 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>H</strong> : float</p>
 <blockquote>
-<div><p>ceil height (default 3m)</p>
+<div><p>ceil height (default 3m)
+if H=0 only floor reflection is calculated (outdoor case)
+if H=-1 floor and ceil reflection are inhibited (2D test case)</p>
 </div></blockquote>
 <p><strong>N</strong> : int</p>
 <blockquote>
 <div><p>handle the number of mirror reflexions</p>
+</div></blockquote>
+<p><strong>a</strong> : float</p>
+<blockquote>
+<div><p>height of the point where the parametrization starts ( e.g. pTx[2])</p>
+</div></blockquote>
+<p><strong>b</strong> : float</p>
+<blockquote>
+<div><p>height of the point where the parametrization ends ( e.g. pRx[2])</p>
 </div></blockquote>
 </td>
 </tr>
@@ -204,6 +214,11 @@ k : zp  v: alphap</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<p>d is a dictionnary whose keys are heights along the vertical from where
+are emanating the reflected rays. Values of d are the parameterization
+(0&lt; () &lt;1) along the ray where are situated the different reflection
+points.</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ptx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mf">1.2</span><span class="p">])</span>
@@ -228,7 +243,7 @@ k : zp  v: alphap</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on sept. 07, 2015.
+      Last updated on nov. 28, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.antprop.rays.Rays.mirror.txt"

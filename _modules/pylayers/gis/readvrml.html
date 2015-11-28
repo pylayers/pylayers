@@ -89,7 +89,7 @@
 	    >Modules
 	    <br>
 	    <span class="smallrellink">
-	    Python Module In...
+	    Python Module...
 	    </span>
 	    <span class="hiddenrellink">
 	    Python Module Index
@@ -934,8 +934,10 @@
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
-    <span class="n">_filename</span> <span class="o">=</span> <span class="s">&#39;bat11DE1.wrl&#39;</span>
-    <span class="n">filename</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span><span class="s">&#39;struc&#39;</span><span class="p">)</span>
+    <span class="c">#_filename = &#39;B11C-E1.wrl&#39;</span>
+    <span class="n">_filename</span> <span class="o">=</span> <span class="s">&#39;B2A-R0.wrl&#39;</span>
+    <span class="c">#_filename = &#39;B11C-E1.wrl&#39;</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span><span class="s">&#39;struc/wrl&#39;</span><span class="p">)</span>
     <span class="n">VL</span> <span class="o">=</span> <span class="n">VLayout</span><span class="p">()</span>
     <span class="n">VL</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
     <span class="n">dwall</span> <span class="o">=</span> <span class="n">VL</span><span class="o">.</span><span class="n">wallanalysis</span><span class="p">()</span>
@@ -949,6 +951,11 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="n">thick</span><span class="o">*</span><span class="mi">10</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;scaled&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">dwall</span><span class="p">:</span>
+        <span class="n">seg</span> <span class="o">=</span> <span class="n">dwall</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;seg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">xy</span>
+        <span class="n">pta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">phe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">seg</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">seg</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="k">print</span> <span class="n">pta</span><span class="p">,</span><span class="n">phe</span>
 </pre></div>
 
           </div>
@@ -961,7 +968,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on sept. 24, 2015.
+      Last updated on nov. 28, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

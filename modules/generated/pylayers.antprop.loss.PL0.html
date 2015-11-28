@@ -91,7 +91,7 @@
 	    accesskey="P">Previous
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.antprop...
+	    pylayers.antp...
 	    </span>
 	    <span class="hiddenrellink">
 	    pylayers.antprop.loss.cdf
@@ -108,7 +108,7 @@
 	    accesskey="N">Next
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.antprop...
+	    pylayers.antp...
 	    </span>
 	    <span class="hiddenrellink">
 	    pylayers.antprop.loss.PL
@@ -125,7 +125,7 @@
 	    >Modules
 	    <br>
 	    <span class="smallrellink">
-	    Python Module In...
+	    Python Module...
 	    </span>
 	    <span class="hiddenrellink">
 	    Python Module Index
@@ -142,7 +142,7 @@
 	Up
 	<br>
 	<span class="smallrellink">
-	pylayers.antprop...
+	pylayers.antp...
 	</span>
 	<span class="hiddenrellink">
 	pylayers.antprop.loss
@@ -179,8 +179,8 @@
 <h1>pylayers.antprop.loss.PL0<a class="headerlink" href="#pylayers-antprop-loss-pl0" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pylayers.antprop.loss.PL0">
-<code class="descclassname">pylayers.antprop.loss.</code><code class="descname">PL0</code><span class="sig-paren">(</span><em>fGHz</em>, <em>GtdB=0</em>, <em>GrdB=0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/loss.html#PL0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.loss.PL0" title="Permalink to this definition">¶</a></dt>
-<dd><p>Path Loss at frequency fGHZ &#64; 1m</p>
+<code class="descclassname">pylayers.antprop.loss.</code><code class="descname">PL0</code><span class="sig-paren">(</span><em>fGHz</em>, <em>GtdB=0</em>, <em>GrdB=0</em>, <em>R=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/antprop/loss.html#PL0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.loss.PL0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path Loss at frequency fGHZ &#64; R</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -197,11 +197,15 @@
 <blockquote>
 <div><p>receiving antenna gain dB (default 0 dB)</p>
 </div></blockquote>
+<p><strong>R</strong> : float</p>
+<blockquote>
+<div><p>distance in m ( because f is in GHz)</p>
+</div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>PL0</strong> : float</p>
 <blockquote class="last">
-<div><p>path &#64; 1m</p>
+<div><p>path &#64; R</p>
 </div></blockquote>
 </td>
 </tr>
@@ -229,7 +233,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on sept. 07, 2015.
+      Last updated on nov. 28, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.antprop.loss.PL0.txt"

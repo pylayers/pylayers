@@ -91,7 +91,7 @@
 	    accesskey="P">Previous
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.util.ge...
+	    pylayers.util...
 	    </span>
 	    <span class="hiddenrellink">
 	    pylayers.util.geomutil.valid_wedge
@@ -108,7 +108,7 @@
 	    accesskey="N">Next
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.util.ge...
+	    pylayers.util...
 	    </span>
 	    <span class="hiddenrellink">
 	    pylayers.util.geomutil.dist
@@ -125,7 +125,7 @@
 	    >Modules
 	    <br>
 	    <span class="smallrellink">
-	    Python Module In...
+	    Python Module...
 	    </span>
 	    <span class="hiddenrellink">
 	    Python Module Index
@@ -142,7 +142,7 @@
 	Up
 	<br>
 	<span class="smallrellink">
-	pylayers.util.ge...
+	pylayers.util...
 	</span>
 	<span class="hiddenrellink">
 	pylayers.util.geomutil
@@ -180,26 +180,43 @@
 <dl class="function">
 <dt id="pylayers.util.geomutil.sector">
 <code class="descclassname">pylayers.util.geomutil.</code><code class="descname">sector</code><span class="sig-paren">(</span><em>p1</em>, <em>p2</em>, <em>pt</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pylayers/util/geomutil.html#sector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.sector" title="Permalink to this definition">¶</a></dt>
-<dd><p>angular sector  p1 pt p2</p>
+<dd><dl class="docutils">
+<dt>non signed angular sector  between</dt>
+<dd>(p1,pt) and (p2,pt)</dd>
+<dt>p1 x&#8212;&#8212;&#8212;&#8211;x pt</dt>
+<dd><blockquote class="first">
+<div><div class="line-block">
+<div class="line">/</div>
+</div>
+</div></blockquote>
+<dl class="last docutils">
+<dt>alpha /</dt>
+<dd><blockquote class="first">
+<div>/</div></blockquote>
+<p class="last">x p2</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p1</strong> : np.array</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p1</strong> : np.array (3 x Np)</p>
 <blockquote>
 <div><p>point</p>
 </div></blockquote>
-<p><strong>p2</strong> : np.array</p>
+<p><strong>p2</strong> : np.array (3 x Np)</p>
 <blockquote>
 <div><p>point</p>
 </div></blockquote>
-<p><strong>pt</strong> : np.array</p>
+<p><strong>pt</strong> : np.array (3 x Np)</p>
 <blockquote>
 <div><p>point</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>alpha, beta</strong> : np.array</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>alpha</strong> : np.array (3 x Np)</p>
 <blockquote class="last">
 <div><p>degree</p>
 </div></blockquote>
@@ -224,7 +241,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on sept. 24, 2015.
+      Last updated on nov. 28, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.util.geomutil.sector.txt"

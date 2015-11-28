@@ -89,7 +89,7 @@
 	    >Modules
 	    <br>
 	    <span class="smallrellink">
-	    Python Module In...
+	    Python Module...
 	    </span>
 	    <span class="hiddenrellink">
 	    Python Module Index
@@ -840,6 +840,7 @@
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;show&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
                 <span class="s">&#39;fig&#39;</span><span class="p">:</span> <span class="p">[],</span>
                 <span class="s">&#39;ax&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s">&#39;label&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
                 <span class="s">&#39;color&#39;</span><span class="p">:</span><span class="s">&#39;#abcdef&#39;</span><span class="p">,</span>
                 <span class="s">&#39;edgecolor&#39;</span><span class="p">:</span><span class="s">&#39;#000000&#39;</span><span class="p">,</span>
                 <span class="s">&#39;alpha&#39;</span><span class="p">:</span><span class="mf">0.8</span> <span class="p">,</span>
@@ -872,8 +873,9 @@
                 <span class="n">color</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;color&#39;</span><span class="p">],</span>
                 <span class="n">alpha</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alpha&#39;</span><span class="p">],</span>
                 <span class="n">ec</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edgecolor&#39;</span><span class="p">])</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">numpt</span><span class="p">)):</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">k</span><span class="p">],</span><span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="p">],</span><span class="n">numpt</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;label&#39;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">numpt</span><span class="p">)):</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">k</span><span class="p">],</span><span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="p">],</span><span class="n">numpt</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;show&#39;</span><span class="p">]:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -2477,7 +2479,7 @@
 <span class="sd">    p1</span>
 <span class="sd">        point p1</span>
 <span class="sd">    p2</span>
-<span class="sd">        point p2</span>
+<span class="sd">        point p2 origin</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
@@ -2508,6 +2510,7 @@
 
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">print</span> <span class="ne">DeprecationWarning</span><span class="p">(</span><span class="s">&#39;DEPRECATION WARNING : geomutil.angular going deprecatd  because wrong&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
         <span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">((</span><span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="p">(</span><span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
     <span class="k">elif</span> <span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
@@ -2519,7 +2522,41 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
 
+
 </div>
+<span class="k">def</span> <span class="nf">vecang</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; angle between v1 and v2 , result in [0,2*pi]</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    v1 : np.array (3 x Np)</span>
+<span class="sd">        vector</span>
+<span class="sd">    v2 : np.array (3 x Np)</span>
+<span class="sd">        vector</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    alpha : np.array (3 x Np)</span>
+<span class="sd">        radians</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v1</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">v1</span><span class="o">=</span><span class="n">v1</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">v1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v2</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">v2</span><span class="o">=</span><span class="n">v2</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">v2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span>
+
+
+    <span class="n">ang</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">v2</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span> <span class="n">v2</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">v1</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span> <span class="n">v1</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span>
+    <span class="n">uneg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ang</span> <span class="o">&lt;</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">ang</span><span class="p">[</span><span class="n">uneg</span><span class="p">]</span><span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">+</span> <span class="n">ang</span><span class="p">[</span><span class="n">uneg</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">ang</span>
+    <span class="c"># if ang &lt;0 :</span>
+    <span class="c">#     return (2*np.pi+ang)</span>
+    <span class="c"># else :</span>
+    <span class="c">#     return ang</span>
+
+
 <div class="viewcode-block" id="SignedArea"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.SignedArea.html#pylayers.util.geomutil.SignedArea">[docs]</a><span class="k">def</span> <span class="nf">SignedArea</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">]])):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
@@ -4060,9 +4097,190 @@
         <span class="n">valid</span><span class="p">[</span><span class="n">out_I2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
     <span class="k">return</span><span class="p">(</span><span class="n">valid</span><span class="p">)</span>
-
 </div>
+<span class="k">def</span> <span class="nf">agwed_old</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">lwe</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    lwe : np.array</span>
+<span class="sd">        3x1 wedge vector</span>
+<span class="sd">    v   : np.array(3x4)</span>
+<span class="sd">        3x4 ( 4 stacked vectors)</span>
+
+<span class="sd">        first vector of v is on face 0 perp to lwe</span>
+<span class="sd">        second vector of v is on face n perp to lwe</span>
+<span class="sd">        third vector is on the direction of incident ray  (-si)</span>
+<span class="sd">        fourth vector is on the direction of diffracted ray (sd)</span>
+
+<span class="sd">    all vectors of v are defined outgoing from the diffracting point</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        np.array([N*pi,phi0,phi])</span>
+
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; import pylayers.util.geomutil as geu</span>
+<span class="sd">    &gt;&gt;&gt; lwe = np.array([0,0,1])</span>
+<span class="sd">    &gt;&gt;&gt; u = np.array([1,0,0])</span>
+<span class="sd">    &gt;&gt;&gt; v1 = np.array([1,1,0])</span>
+<span class="sd">    &gt;&gt;&gt; si = np.array([-1,-1,0])</span>
+<span class="sd">    &gt;&gt;&gt; sd = np.array([-1,1,0])</span>
+<span class="sd">    &gt;&gt;&gt; v  = np.vstack([u,v1,si,sd]).T</span>
+<span class="sd">    &gt;&gt;&gt; M = geu.agwed(v,lwe)</span>
+<span class="sd">    &gt;&gt;&gt; print M*180/np.pi</span>
+<span class="sd">    [ 315.  135.  225.]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">print</span> <span class="ne">DeprecationWarning</span><span class="p">(</span><span class="s">&#39;Please use vectorized version : agwed&#39;</span><span class="p">)</span>
+    <span class="c"># lwe : (,3)</span>
+    <span class="n">lwe</span> <span class="o">=</span> <span class="n">lwe</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">lwe</span><span class="o">*</span><span class="n">lwe</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="c"># v : (3,4)</span>
+    <span class="n">v</span>  <span class="o">=</span> <span class="n">v</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">v</span><span class="o">*</span><span class="n">v</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="c"># ps (,4)</span>
+    <span class="n">ps</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">lwe</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+    <span class="n">vp1</span>  <span class="o">=</span> <span class="n">v</span> <span class="o">-</span> <span class="n">v</span><span class="o">*</span><span class="n">ps</span>
+    <span class="n">vpn</span> <span class="o">=</span> <span class="n">vp1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">vp1</span><span class="o">*</span><span class="n">vp1</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">vpt</span>  <span class="o">=</span> <span class="n">vpn</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,:]</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">vpt</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="o">-</span><span class="n">vpt</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vpt</span><span class="p">,</span><span class="n">w</span><span class="p">)</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vpt</span><span class="p">,</span><span class="n">vpt</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vpt</span><span class="p">,</span><span class="n">w</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vpt</span><span class="p">,</span><span class="n">vpt</span><span class="o">.</span><span class="n">T</span><span class="p">)),</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="k">return</span> <span class="n">M</span>
+
+<span class="k">def</span> <span class="nf">agwed</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">lwe</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    lwe : np.array</span>
+<span class="sd">        3xNp wedge vector</span>
+<span class="sd">    v   : np.array(3x4xNp)</span>
+<span class="sd">        3x4xNp ( 4 stacked vectors)</span>
+
+<span class="sd">        first vector of v is on face 0 perp to lwe</span>
+<span class="sd">        second vector of v is on face n perp to lwe</span>
+<span class="sd">        third vector is on the direction of incident ray  (-si)</span>
+<span class="sd">        fourth vector is on the direction of diffracted ray (sd)</span>
+
+<span class="sd">    all vectors of v are defined outgoing from the diffracting point</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        np.array([[N*pi,phi0,phi],...xNp])</span>
+<span class="sd">                (3xNp)</span>
+
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &gt;&gt;&gt; import pylayers.util.geomutil as geu</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; lwe = np.array([[0,0,1],[0,0,1]]).T</span>
+<span class="sd">    &gt;&gt;&gt; u = np.array([[1,0,0],[1,0,0]]).T</span>
+<span class="sd">    &gt;&gt;&gt; v1 = np.array([[1,1,0],[1,1,0]]).T</span>
+<span class="sd">    &gt;&gt;&gt; si = np.array([[-1,-1,0],[-1,1,0]]).T</span>
+<span class="sd">    &gt;&gt;&gt; sd = np.array([[-1,1,0],[1,-1,0]]).T</span>
+<span class="sd">    &gt;&gt;&gt; v  = np.hstack((u[:,None,:],v1[:,None,:],si[:,None,:],sd[:,None,:]))</span>
+<span class="sd">    &gt;&gt;&gt; M = geu.agwed(v,lwe)</span>
+<span class="sd">    &gt;&gt;&gt; print M*180/np.pi</span>
+<span class="sd">    array([[ 315.,  315.],</span>
+<span class="sd">       [ 135.,  225.],</span>
+<span class="sd">       [ 225.,   45.]])</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">ipdb</span>
+    <span class="n">ipdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+    <span class="c"># lwe : (3,N)</span>
+    <span class="n">lwe</span> <span class="o">=</span> <span class="n">lwe</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">lwe</span><span class="o">*</span><span class="n">lwe</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="c"># v : (3,4,N)</span>
+    <span class="n">v</span>  <span class="o">=</span> <span class="n">v</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">v</span><span class="o">*</span><span class="n">v</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="c"># ps (4,N)</span>
+    <span class="c">#ps  = np.dot(lwe,v)</span>
+    <span class="n">ps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">&#39;ik,ijk-&gt;jk&#39;</span><span class="p">,</span><span class="n">lwe</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+    <span class="n">vp1</span>  <span class="o">=</span> <span class="n">v</span> <span class="o">-</span> <span class="n">v</span><span class="o">*</span><span class="n">ps</span>
+    <span class="n">vpn</span> <span class="o">=</span> <span class="n">vp1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">vp1</span><span class="o">*</span><span class="n">vp1</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="c"># vpt = (N,4,2)</span>
+    <span class="n">vpt</span>  <span class="o">=</span> <span class="n">vpn</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,:,:]</span>
+
+    <span class="c"># w(4,N,2)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">((</span><span class="n">vpt</span><span class="p">[</span><span class="mi">1</span><span class="p">,:,:]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="o">-</span><span class="n">vpt</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:]</span><span class="o">.</span><span class="n">T</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+    <span class="c"># C = np.dot(vpt,w)</span>
+    <span class="c"># D = np.dot(vpt,vpt.T)</span>
+
+    <span class="c">#vpt(2,4,N) x w(2,4,N) =&gt; C(4,4,N)</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">&#39;kil,kjl-&gt;ijl&#39;</span><span class="p">,</span><span class="n">vpt</span><span class="p">,</span><span class="n">w</span><span class="p">)</span>
+    <span class="c"># D(4,4,N)</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">&#39;kil,kjl-&gt;ijl&#39;</span><span class="p">,</span><span class="n">vpt</span><span class="p">,</span><span class="n">vpt</span><span class="p">)</span>
+
+    <span class="c">#M = np.mod(2*np.pi-np.arctan2(np.dot(vpt,w),np.dot(vpt,vpt.T)),2*np.pi)[0,1:]</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">C</span><span class="p">,</span><span class="n">D</span><span class="p">),</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">:,:]</span>
+    <span class="k">return</span> <span class="n">M</span>
+
 <div class="viewcode-block" id="sector"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.sector.html#pylayers.util.geomutil.sector">[docs]</a><span class="k">def</span> <span class="nf">sector</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">pt</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; non signed angular sector  between</span>
+<span class="sd">        (p1,pt) and (p2,pt)</span>
+
+<span class="sd">    p1 x-----------x pt</span>
+<span class="sd">               |  /</span>
+<span class="sd">          alpha \/</span>
+<span class="sd">                /</span>
+<span class="sd">               x p2</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    p1 : np.array (3 x Np)</span>
+<span class="sd">        point</span>
+<span class="sd">    p2 : np.array (3 x Np)</span>
+<span class="sd">        point</span>
+<span class="sd">    pt : np.array (3 x Np)</span>
+<span class="sd">        point</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    alpha : np.array (3 x Np)</span>
+<span class="sd">        degree</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+
+<span class="sd">    Useful for AAS calculation</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">p1</span><span class="o">=</span><span class="n">p1</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">p2</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">p2</span><span class="o">=</span><span class="n">p2</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">p2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pt</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">pt</span><span class="o">=</span><span class="n">pt</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">pt</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">p1pt</span> <span class="o">=</span> <span class="n">p1</span> <span class="o">-</span> <span class="n">pt</span>
+    <span class="n">p2pt</span> <span class="o">=</span> <span class="n">p2</span> <span class="o">-</span> <span class="n">pt</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">p1pt</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">p1pt</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">p1pt</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">p2pt</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">p2pt</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">p2pt</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="c"># sum(a[i,j,:] * b[k,:,m])</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">v0</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">alpha</span> <span class="o">-</span> <span class="n">beta</span><span class="p">)</span>
+    <span class="n">v1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="nb">abs</span><span class="p">(</span><span class="n">alpha</span> <span class="o">-</span> <span class="n">beta</span><span class="p">)</span>
+    <span class="n">um0</span> <span class="o">=</span> <span class="n">v0</span> <span class="o">&lt;</span> <span class="n">v1</span>
+    <span class="n">um1</span> <span class="o">=</span> <span class="o">~</span><span class="n">um0</span>
+    <span class="n">sector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">u</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">sector</span><span class="p">[</span><span class="n">um0</span><span class="p">]</span><span class="o">=</span> <span class="n">v0</span><span class="p">[</span><span class="n">um0</span><span class="p">]</span>
+    <span class="n">sector</span><span class="p">[</span><span class="n">um1</span><span class="p">]</span><span class="o">=</span> <span class="n">v1</span><span class="p">[</span><span class="n">um1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">sector</span><span class="o">*</span><span class="mi">180</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+    <span class="c">#if (abs(alpha + sector - sp.mod(beta, 2 * np.pi)) &lt; 1e-3):</span>
+    <span class="c">#    return(np.array([alpha, beta]) * 180 / np.pi)</span>
+    <span class="c">#else:</span>
+    <span class="c">#    return(np.array([beta, alpha]) * 180 / np.pi)</span>
+</div>
+<span class="k">def</span> <span class="nf">sectorold</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">pt</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; angular sector  p1 pt p2</span>
 
 <span class="sd">    Parameters</span>
@@ -4077,7 +4295,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 
-<span class="sd">    alpha, beta : np.array</span>
+<span class="sd">    alpha : np.array</span>
 <span class="sd">        degree</span>
 
 <span class="sd">    Notes</span>
@@ -4093,12 +4311,8 @@
     <span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">sector</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">alpha</span> <span class="o">-</span> <span class="n">beta</span><span class="p">),</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="nb">abs</span><span class="p">(</span><span class="n">alpha</span> <span class="o">-</span> <span class="n">beta</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">sector</span><span class="o">*</span><span class="mi">180</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
-    <span class="c">#if (abs(alpha + sector - sp.mod(beta, 2 * np.pi)) &lt; 1e-3):</span>
-    <span class="c">#    return(np.array([alpha, beta]) * 180 / np.pi)</span>
-    <span class="c">#else:</span>
-    <span class="c">#    return(np.array([beta, alpha]) * 180 / np.pi)</span>
 
-</div>
+
 <div class="viewcode-block" id="dist"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.dist.html#pylayers.util.geomutil.dist">[docs]</a><span class="k">def</span> <span class="nf">dist</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">ax</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculates distance between two arrays along a given axis</span>
 
@@ -4512,7 +4726,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on sept. 24, 2015.
+      Last updated on nov. 28, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

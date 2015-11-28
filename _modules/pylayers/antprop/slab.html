@@ -89,7 +89,7 @@
 	    >Modules
 	    <br>
 	    <span class="smallrellink">
-	    Python Module In...
+	    Python Module...
 	    </span>
 	    <span class="hiddenrellink">
 	    Python Module Index
@@ -775,7 +775,8 @@
         <span class="c">#if not isinstance(theta,np.ndarray):</span>
         <span class="c"># theta=np.array([theta])</span>
         <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mat</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">mat</span> <span class="ow">in</span> <span class="n">lmat</span><span class="p">)</span>
-        <span class="n">Interface</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="c"># Interface.__init__(self, fGHz, theta, name=name)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MatInterface</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m1</span> <span class="o">=</span> <span class="n">lmat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m2</span> <span class="o">=</span> <span class="n">lmat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="c"># 2*np.pi* f(GHz)*eps0 = f(Ghz)/18</span>
@@ -1438,7 +1439,7 @@
         <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 </div>
-<span class="k">class</span> <span class="nc">Slab</span><span class="p">(</span><span class="nb">dict</span><span class="p">,</span><span class="n">Interface</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Slab</span><span class="p">(</span><span class="n">Interface</span><span class="p">,</span><span class="nb">dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Handle a Slab</span>
 
 <span class="sd">    Summary</span>
@@ -1484,6 +1485,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c"># if not specified choose default material database</span>
+        <span class="c">#super(Slab,self).__init__()</span>
         <span class="n">Interface</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">mat</span><span class="o">==</span><span class="p">[]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mat</span> <span class="o">=</span> <span class="n">MatDB</span><span class="p">()</span>
@@ -1711,6 +1713,7 @@
         <span class="n">name1</span> <span class="o">=</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mat</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">mat</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;lmat&#39;</span><span class="p">])</span>
         <span class="n">name2</span> <span class="o">=</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">thick</span><span class="p">)</span> <span class="k">for</span> <span class="n">thick</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;lthick&#39;</span><span class="p">])</span>
         <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;(&#39;</span> <span class="o">+</span> <span class="n">name1</span> <span class="o">+</span> <span class="s">&#39;)&#39;</span> <span class="o">+</span> <span class="s">&#39;(&#39;</span> <span class="o">+</span> <span class="n">name2</span> <span class="o">+</span> <span class="s">&#39;)&#39;</span>
+        <span class="c">#super(Slab,self).__init__(fGHz=fGHz, theta=theta, name=name)</span>
         <span class="n">Interface</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
         <span class="c">#self.lmat = lmat</span>
         <span class="c">#self.lthick = lthick</span>
@@ -1749,8 +1752,8 @@
                 <span class="n">Io</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 <span class="c"># _Io=np.eye(2,dtype=complex)+np.eye(2)-1</span>
                 <span class="n">Ip</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">nf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nt</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
-                <span class="n">Ip</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-                <span class="n">Ip</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="n">Ip</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">Ip</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="c"># _Ip=np.eye(2,dtype=complex)+np.eye(2)-1</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">:</span>
@@ -2101,7 +2104,7 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="c">#    S.info()</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>    
+        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SlabDB.showall"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.showall.html#pylayers.antprop.slab.SlabDB.showall">[docs]</a>    <span class="k">def</span> <span class="nf">showall</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show all slabs</span>
@@ -2580,6 +2583,122 @@
 <span class="c"># f2 = _filename.replace(&#39;.sl&#39;, pstruc[&#39;DIRSLAB&#39;])</span>
 <span class="c"># self.save(f2)</span>
 
+
+
+
+
+<span class="c"># class Wedge(Interface,dict):</span>
+<span class="c">#     &quot;&quot;&quot; Handle a Wedge</span>
+
+<span class="c">#     Summary</span>
+<span class="c">#     -------</span>
+
+<span class="c">#     A Wedge is a cone with, on its 2 faces :</span>
+
+<span class="c">#     - a Material/Slab s0</span>
+<span class="c">#     - a Material/slab sn</span>
+
+
+<span class="c">#     Attributes</span>
+<span class="c">#     ----------</span>
+
+
+<span class="c">#     mat : MatDB</span>
+<span class="c">#         Associated Material Database </span>
+
+<span class="c">#     s0 : string |Mat | Slab</span>
+<span class="c">#         Material name |Material |Slab on face 0</span>
+<span class="c">#     sn : string |Mat | Slab</span>
+<span class="c">#         Material name |Material |Slab on face n</span>
+ 
+
+<span class="c">#     evaluated : Boolean</span>
+
+<span class="c">#     &quot;&quot;&quot;</span>
+<span class="c">#     def __init__(self, mat=[], s0=&#39;WOOD&#39;, sn=&#39;WOOD&#39;,alpha=np.array([])):</span>
+<span class="c">#         &quot;&quot;&quot; class constructor</span>
+
+<span class="c">#         Parameters</span>
+<span class="c">#         ----------</span>
+
+<span class="c">#         mat :</span>
+<span class="c">#         name : string</span>
+<span class="c">#         Wedge name</span>
+
+
+<span class="c">#         Example</span>
+<span class="c">#         -------</span>
+<span class="c">#         &gt;&gt;&gt; from pylayers.antprop.slab import *</span>
+<span class="c">#         &gt;&gt;&gt; SDB=SlabDB()</span>
+<span class="c">#         &gt;&gt;&gt; s0 = SDB[&#39;3D_WINDOW_GLASS&#39;]</span>
+<span class="c">#         &gt;&gt;&gt; sn = SDB[&#39;PARTITION&#39;]</span>
+<span class="c">#         &gt;&gt;&gt; W=Wedge(s0=s0,sn=sn)</span>
+        
+<span class="c">#         &quot;&quot;&quot;</span>
+<span class="c">#         # if not specified choose default material database</span>
+
+<span class="c">#         super(Wedge,self).__init__()</span>
+
+<span class="c">#         if mat==[]:</span>
+<span class="c">#             self.mat = MatDB()</span>
+<span class="c">#         else:</span>
+<span class="c">#             self.mat = mat</span>
+
+
+<span class="c">#         # slab 0 is a string name</span>
+<span class="c">#         if isinstance(s0,str):</span>
+<span class="c">#             self[&#39;name0&#39;]= s0</span>
+<span class="c">#             try:</span>
+<span class="c">#                 self[&#39;mat0&#39;]=self.mat[s0]</span>
+<span class="c">#             except:</span>
+<span class="c">#                 raise AttributeError(&#39;s0 is not a material from MatDB&#39;)</span>
+<span class="c">#         else: </span>
+<span class="c">#             if isinstance(s0,Mat):</span>
+<span class="c">#                 self[&#39;mat0&#39;]=s0</span>
+<span class="c">#                 self[&#39;name0&#39;]=s0[&#39;name&#39;]</span>
+<span class="c">#             elif isinstance(s0,Slab):</span>
+<span class="c">#                 self[&#39;mat0&#39;]=s0[&#39;lmat&#39;][0]</span>
+<span class="c">#                 self[&#39;name0&#39;]=s0[&#39;lmatname&#39;][0]</span>
+
+<span class="c">#         # slab n is a string name</span>
+<span class="c">#         if isinstance(sn,str):</span>
+<span class="c">#             self[&#39;namen&#39;]= sn</span>
+<span class="c">#             try:</span>
+<span class="c">#                 self[&#39;matn&#39;]=self.mat[sn]</span>
+<span class="c">#             except:</span>
+<span class="c">#                 raise AttributeError(&#39;sn is not a material from MatDB&#39;)</span>
+<span class="c">#         else: </span>
+<span class="c">#             if isinstance(sn,Mat):</span>
+<span class="c">#                 self[&#39;matn&#39;]=sn</span>
+<span class="c">#                 self[&#39;namen&#39;]=sn[&#39;name&#39;]</span>
+<span class="c">#             elif isinstance(sn,Slab):</span>
+<span class="c">#                 self[&#39;matn&#39;]=sn[&#39;lmat&#39;][0]</span>
+<span class="c">#                 self[&#39;namen&#39;]=sn[&#39;lmatname&#39;][0]</span>
+<span class="c">#         self[&#39;color&#39;] = &#39;black&#39;</span>
+<span class="c">#         self[&#39;linewidth&#39;] = 1.0</span>
+<span class="c">#         self[&#39;evaluated&#39;] = False</span>
+<span class="c">#         self[&#39;alpha&#39;]=alpha</span>
+<span class="c">#         self[&#39;N&#39;]=alpha/np.pi</span>
+
+
+<span class="c">#     # def phi0phin(self,u0,si,so):</span>
+<span class="c">#     #     &quot;&quot;&quot;</span>
+<span class="c">#     #     Compute angle phi_0 and phi_nfrom face 0 regarding</span>
+<span class="c">#     #     to unit vectors u0 and un along face 0 and n respectively</span>
+
+<span class="c">#     #     Attributes</span>
+<span class="c">#     #     ----------</span>
+
+<span class="c">#     #     u0 : ndarray (2|3xNp)</span>
+<span class="c">#     #         unit vector along Np faces 0</span>
+<span class="c">#     #     si : ndarray (2|3x)</span>
+<span class="c">#     #         unit vector along incidence ray</span>
+<span class="c">#     #     un : ndarray (2|3xNp)</span>
+<span class="c">#     #         unit vector along Np faces n</span>
+<span class="c">#     #     &quot;&quot;&quot;</span>
+
+<span class="c">#     #     geu.</span>
+
 </div>
 <div class="viewcode-block" id="calsig"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.calsig.html#pylayers.antprop.slab.calsig">[docs]</a><span class="k">def</span> <span class="nf">calsig</span><span class="p">(</span><span class="n">cval</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;epsr&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; evaluate sigma from epsr or index at a given frequency</span>
@@ -2620,6 +2739,8 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">epr1</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span>
 
+
+
 </div>
 <span class="k">if</span> <span class="p">(</span><span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">):</span>
     <span class="c">#plt.ion()</span>
@@ -2639,7 +2760,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on sept. 24, 2015.
+      Last updated on nov. 28, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">

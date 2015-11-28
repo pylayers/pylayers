@@ -89,7 +89,7 @@
 	    >Modules
 	    <br>
 	    <span class="smallrellink">
-	    Python Module In...
+	    Python Module...
 	    </span>
 	    <span class="hiddenrellink">
 	    Python Module Index
@@ -485,17 +485,18 @@
         <span class="n">defaults</span><span class="o">=</span><span class="p">{</span> <span class="s">&#39;L&#39;</span><span class="p">:</span><span class="n">Layout</span><span class="p">(),</span>
                    <span class="s">&#39;a&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span>
                    <span class="s">&#39;b&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span>
-                   <span class="s">&#39;Aa&#39;</span><span class="p">:</span><span class="n">Antenna</span><span class="p">(),</span>
-                   <span class="s">&#39;Ab&#39;</span><span class="p">:</span><span class="n">Antenna</span><span class="p">(),</span>
+                   <span class="s">&#39;Aa&#39;</span><span class="p">:</span><span class="n">Antenna</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;Omni&#39;</span><span class="p">),</span>
+                   <span class="s">&#39;Ab&#39;</span><span class="p">:</span><span class="n">Antenna</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;Omni&#39;</span><span class="p">),</span>
                    <span class="s">&#39;Ta&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
                    <span class="s">&#39;Tb&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
-                   <span class="s">&#39;fGHz&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">181</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+                   <span class="s">&#39;fGHz&#39;</span><span class="p">:[],</span>
                    <span class="s">&#39;wav&#39;</span><span class="p">:</span><span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(),</span>
                    <span class="s">&#39;cutoff&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span>
                    <span class="s">&#39;save_opt&#39;</span><span class="p">:[</span><span class="s">&#39;sig&#39;</span><span class="p">,</span><span class="s">&#39;ray&#39;</span><span class="p">,</span><span class="s">&#39;Ct&#39;</span><span class="p">,</span><span class="s">&#39;H&#39;</span><span class="p">],</span>
                    <span class="s">&#39;save_idx&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
                    <span class="s">&#39;force_create&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
-                   <span class="s">&#39;verbose&#39;</span><span class="p">:</span><span class="bp">True</span>
+                   <span class="s">&#39;verbose&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                   <span class="s">&#39;graph&#39;</span><span class="p">:</span><span class="s">&#39;tcvirw&#39;</span>
                 <span class="p">}</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_ca</span><span class="o">=-</span><span class="mi">1</span>
@@ -515,12 +516,19 @@
                 <span class="k">else</span> <span class="p">:</span>
                     <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
 
-
         <span class="n">force</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">force_create</span>
         <span class="nb">delattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;force_create&#39;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_Lname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_L</span><span class="o">.</span><span class="n">filename</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">initfreq</span><span class="p">()</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">pass</span>
 
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_Lname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_L</span><span class="o">.</span><span class="n">filename</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_L</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_Lname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_L</span><span class="o">.</span><span class="n">filename</span>
 
         <span class="c">###########</span>
         <span class="c"># Transmitter and Receiver positions</span>
@@ -559,7 +567,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">print</span><span class="p">(</span><span class="s">&#39;This is the first time the Layout is used. Graphs have to be built. Please Wait&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
         <span class="c">#self.L.build()</span>
 
@@ -719,7 +727,7 @@
         <span class="c">#to be removed when radionode will be updated</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">position</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ta</span> <span class="o">=</span> <span class="n">rot</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">initfreq</span><span class="p">()</span>
 
     <span class="nd">@Ab.setter</span>
     <span class="k">def</span> <span class="nf">Ab</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Ant</span><span class="p">):</span>
@@ -733,6 +741,8 @@
         <span class="c">#to be removed when radionode will be updated</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">position</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Tb</span> <span class="o">=</span> <span class="n">rot</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initfreq</span><span class="p">()</span>
+
 
     <span class="nd">@Ta.setter</span>
     <span class="k">def</span> <span class="nf">Ta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">orientation</span><span class="p">):</span>
@@ -749,7 +759,10 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
             <span class="n">freq</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">freq</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fGHz</span> <span class="o">=</span> <span class="n">freq</span>
-
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;Omni&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="o">.</span><span class="n">fGHz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;Omni&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="o">.</span><span class="n">fGHz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span>
         <span class="c">#if len(freq)&gt;1:</span>
         <span class="c">#    self.fmin = freq[0]</span>
         <span class="c">#    self.fmax = freq[-1]</span>
@@ -763,7 +776,8 @@
     <span class="k">def</span> <span class="nf">wav</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">waveform</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_wav</span> <span class="o">=</span> <span class="n">waveform</span>
         <span class="k">if</span> <span class="s">&#39;H&#39;</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">chanreal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">chanreal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">get_cir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="DLink.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.__repr__.html#pylayers.simul.link.DLink.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -805,7 +819,34 @@
             <span class="n">fcGHz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">L</span>  <span class="o">=</span> <span class="mf">32.4</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fcGHz</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">s</span>
+
 </div>
+    <span class="k">def</span> <span class="nf">initfreq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Automatic freq determination from </span>
+<span class="sd">            Antennas</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Aa</span><span class="o">.</span><span class="n">fGHz</span>
+        <span class="n">fb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ab</span><span class="o">.</span><span class="n">fGHz</span>
+
+        <span class="c"># step</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sa</span> <span class="o">=</span> <span class="n">fa</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span> <span class="c">#single frequency</span>
+            <span class="n">sa</span> <span class="o">=</span> <span class="n">fa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sb</span> <span class="o">=</span> <span class="n">fb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">sb</span> <span class="o">=</span> <span class="n">fb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+
+
+        <span class="n">minf</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">fa</span><span class="p">),</span><span class="nb">min</span><span class="p">(</span><span class="n">fb</span><span class="p">))</span>
+        <span class="n">maxf</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">fa</span><span class="p">),</span><span class="nb">max</span><span class="p">(</span><span class="n">fb</span><span class="p">))</span>
+
+        <span class="n">sf</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">sa</span><span class="p">,</span><span class="n">sb</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">minf</span><span class="p">,</span><span class="n">maxf</span><span class="o">+</span><span class="n">sf</span><span class="p">,</span><span class="n">sf</span><span class="p">)</span>
+
+
 <div class="viewcode-block" id="DLink.reset_config"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.link.DLink.reset_config.html#pylayers.simul.link.DLink.reset_config">[docs]</a>    <span class="k">def</span> <span class="nf">reset_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; reset configuration when a new layout is loaded</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1282,8 +1323,9 @@
 <span class="sd">            takes into consideration diffraction points</span>
 <span class="sd">        ra_number_mirror_cf : int</span>
 <span class="sd">            rays.to3D number of ceil/floor reflexions</span>
-<span class="sd">        ra_ceil_height_meter: float,</span>
-<span class="sd">            ceil height</span>
+<span class="sd">        ra_ceil_H: float, (default [])</span>
+<span class="sd">            ceil height . </span>
+<span class="sd">                If [] : Layout max ceil height </span>
 <span class="sd">        ra_vectorized: boolean (True)</span>
 <span class="sd">            if True used the (2015 new) vectorized approach to determine 2drays</span>
 
@@ -1337,14 +1379,15 @@
                    <span class="s">&#39;si_algo&#39;</span><span class="p">:</span><span class="s">&#39;old&#39;</span><span class="p">,</span>
                    <span class="s">&#39;si_mt&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
                    <span class="s">&#39;si_progress&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
-                   <span class="s">&#39;diffraction&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
-                   <span class="s">&#39;ra_vectorized&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
-                   <span class="s">&#39;ra_ceil_height_meter&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span>
+                   <span class="s">&#39;diffraction&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                   <span class="s">&#39;ra_vectorized&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                   <span class="s">&#39;ra_ceil_H&#39;</span><span class="p">:[],</span>
                    <span class="s">&#39;ra_number_mirror_cf&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
                    <span class="s">&#39;force&#39;</span><span class="p">:[],</span>
                    <span class="s">&#39;alg&#39;</span><span class="p">:</span><span class="mi">7</span><span class="p">,</span>
                    <span class="s">&#39;si_reverb&#39;</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span>
                    <span class="s">&#39;threshold&#39;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span>
+                   <span class="s">&#39;verbose&#39;</span><span class="p">:[],</span>
                    <span class="p">}</span>
 
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -1363,38 +1406,47 @@
                 <span class="k">else</span> <span class="p">:</span>
                     <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="c"># must be placed after all the init !!!!</span>
-        <span class="k">print</span> <span class="s">&quot;checkh5&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">checkh5</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;verbose&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="p">[]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;verbose&#39;</span><span class="p">]</span>
 
+
+
+        <span class="c"># must be placed after all the init !!!!</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;checkh5&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">checkh5</span><span class="p">()</span>
 
         <span class="c">############</span>
         <span class="c"># Signatures</span>
         <span class="c">############</span>
-
-        <span class="k">print</span> <span class="s">&quot;Start Signatures&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Start Signatures&quot;</span>
         <span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="n">Si</span> <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ca</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">cb</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;sig&#39;</span><span class="p">][</span><span class="s">&#39;exist&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="s">&#39;sig&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">])):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">Si</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;sig&#39;</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">])</span>
-            <span class="k">print</span> <span class="s">&quot;load signature&quot;</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
+                <span class="k">print</span> <span class="s">&quot;load signature&quot;</span>
         <span class="k">else</span> <span class="p">:</span>
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alg&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">2015</span><span class="p">:</span>
                 <span class="n">TMP</span><span class="o">=</span><span class="n">Si</span><span class="o">.</span><span class="n">run2015</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">],</span>
                         <span class="n">cutoffbound</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_reverb&#39;</span><span class="p">])</span>
-                <span class="k">print</span> <span class="s">&quot;algo 2015&quot;</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
+                    <span class="k">print</span> <span class="s">&quot;algo 2015&quot;</span>
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alg&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">20152</span><span class="p">:</span>
                 <span class="n">TMP</span><span class="o">=</span><span class="n">Si</span><span class="o">.</span><span class="n">run2015_2</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">],</span>
                         <span class="n">cutoffbound</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_reverb&#39;</span><span class="p">])</span>
-                <span class="k">print</span> <span class="s">&quot;algo 20152&quot;</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
+                    <span class="k">print</span> <span class="s">&quot;algo 20152&quot;</span>
 
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alg&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">5</span><span class="p">:</span>
                 <span class="n">Si</span><span class="o">.</span><span class="n">run5</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">],</span>
                         <span class="n">algo</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_algo&#39;</span><span class="p">],</span>
                         <span class="n">diffraction</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;diffraction&#39;</span><span class="p">],</span>
                         <span class="n">progress</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_progress&#39;</span><span class="p">])</span>
-                <span class="k">print</span> <span class="s">&quot;algo 5&quot;</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
+                    <span class="k">print</span> <span class="s">&quot;algo 5&quot;</span>
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alg&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">7</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_mt&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">7</span><span class="p">:</span>
                     <span class="n">Si</span><span class="o">.</span><span class="n">run7mt</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">],</span>
@@ -1402,14 +1454,16 @@
                         <span class="n">diffraction</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;diffraction&#39;</span><span class="p">],</span>
                         <span class="n">threshold</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;threshold&#39;</span><span class="p">],</span>
                         <span class="n">progress</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_progress&#39;</span><span class="p">])</span>
-                    <span class="k">print</span> <span class="s">&quot;algo 7 , si_mt&quot;</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
+                        <span class="k">print</span> <span class="s">&quot;algo 7 , si_mt&quot;</span>
                 <span class="k">else</span> <span class="p">:</span>
                     <span class="n">Si</span><span class="o">.</span><span class="n">run7</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">],</span>
                         <span class="n">algo</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_algo&#39;</span><span class="p">],</span>
                         <span class="n">diffraction</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;diffraction&#39;</span><span class="p">],</span>
                         <span class="n">threshold</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;threshold&#39;</span><span class="p">],</span>
                         <span class="n">progress</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;si_progress&#39;</span><span class="p">])</span>
-                    <span class="k">print</span> <span class="s">&quot;algo 7&quot;</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
+                        <span class="k">print</span> <span class="s">&quot;algo 7&quot;</span>
 
         <span class="c">#Si.run6(diffraction=kwargs[&#39;diffraction&#39;])</span>
         <span class="c"># save sig</span>
@@ -1417,18 +1471,18 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">Si</span> <span class="o">=</span> <span class="n">Si</span>
         <span class="n">toc</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-        <span class="k">print</span> <span class="s">&quot;Stop signature&quot;</span><span class="p">,</span><span class="n">toc</span><span class="o">-</span><span class="n">tic</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Stop signature&quot;</span><span class="p">,</span><span class="n">toc</span><span class="o">-</span><span class="n">tic</span>
 
 
 
         <span class="c">############</span>
         <span class="c"># Rays</span>
         <span class="c">############</span>
-
-        <span class="k">print</span> <span class="s">&quot;Start Rays&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Start Rays&quot;</span>
         <span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="n">R</span> <span class="o">=</span> <span class="n">Rays</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;ray&#39;</span><span class="p">][</span><span class="s">&#39;exist&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="s">&#39;ray&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">]):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">R</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;ray&#39;</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">])</span>
 
@@ -1440,14 +1494,24 @@
             <span class="c"># ... or with original and slow approach ( to be removed in a near future)</span>
             <span class="k">else</span> <span class="p">:</span>
                 <span class="n">r2d</span> <span class="o">=</span> <span class="n">Si</span><span class="o">.</span><span class="n">rays</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
-            <span class="n">R</span> <span class="o">=</span> <span class="n">r2d</span><span class="o">.</span><span class="n">to3D</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">H</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">maxheight</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ra_number_mirror_cf&#39;</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ra_ceil_H&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="p">[]:</span>
+                <span class="n">ceilheight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">maxheight</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ceilheight</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ra_ceil_H&#39;</span><span class="p">]</span>
+
+            <span class="n">R</span> <span class="o">=</span> <span class="n">r2d</span><span class="o">.</span><span class="n">to3D</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">H</span><span class="o">=</span><span class="n">ceilheight</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ra_number_mirror_cf&#39;</span><span class="p">])</span>
             <span class="n">R</span><span class="o">.</span><span class="n">locbas</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
             <span class="c"># ...and save</span>
+            <span class="n">R</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+            <span class="n">C</span><span class="o">=</span><span class="n">Ctilde</span><span class="p">()</span>
+            <span class="n">C</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">R</span><span class="p">,</span><span class="s">&#39;ray&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;ray&#39;</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">],</span><span class="n">force</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">])</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">R</span>
         <span class="n">toc</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-        <span class="k">print</span> <span class="s">&quot;Stop rays&quot;</span><span class="p">,</span><span class="n">toc</span><span class="o">-</span><span class="n">tic</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Stop rays&quot;</span><span class="p">,</span><span class="n">toc</span><span class="o">-</span><span class="n">tic</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">nray</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;No rays have been found. Try to re-run the simulation with a higher S.cutoff &#39;</span><span class="p">)</span>
@@ -1456,15 +1520,15 @@
         <span class="c"># Ctilde</span>
         <span class="c">############</span>
 
-        <span class="n">C</span><span class="o">=</span><span class="n">Ctilde</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;Ct&#39;</span><span class="p">][</span><span class="s">&#39;exist&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="s">&#39;Ct&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">]):</span>
+            <span class="n">C</span><span class="o">=</span><span class="n">Ctilde</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">C</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;Ct&#39;</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">])</span>
 
         <span class="k">else</span> <span class="p">:</span>
-            <span class="n">R</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">R</span><span class="p">,</span><span class="s">&#39;I&#39;</span><span class="p">):</span>
             <span class="c"># Ctilde...</span>
-            <span class="n">C</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+                <span class="n">C</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
             <span class="c"># ...save Ct</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">C</span><span class="p">,</span><span class="s">&#39;Ct&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dexist</span><span class="p">[</span><span class="s">&#39;Ct&#39;</span><span class="p">][</span><span class="s">&#39;grpname&#39;</span><span class="p">],</span><span class="n">force</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">])</span>
 
@@ -1487,9 +1551,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="n">H</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;applywav&#39;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">isFriis</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">get_cir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">get_cir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ak</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">tk</span>
 </div>
@@ -1530,7 +1594,7 @@
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.simul.link import *</span>
 <span class="sd">        &gt;&gt;&gt; L=Link()</span>
-<span class="sd">        &gt;&gt;&gt; L.show(ray=True,dB=True)</span>
+<span class="sd">        &gt;&gt;&gt; L.show(rays=True,dB=True)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1608,10 +1672,13 @@
                 <span class="n">lr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;rayidx&#39;</span><span class="p">]</span>
                 <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lr</span><span class="p">)):</span>
                     <span class="n">ir</span> <span class="o">=</span> <span class="n">lr</span><span class="p">[</span><span class="n">r</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;dB&#39;</span><span class="p">]:</span>
-                        <span class="n">RayEnergy</span><span class="o">=</span><span class="nb">max</span><span class="p">((</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="n">ir</span><span class="p">]</span><span class="o">/</span><span class="n">val</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="o">+</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;dyn&#39;</span><span class="p">]),</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;dyn&#39;</span><span class="p">]</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">RayEnergy</span><span class="o">=</span><span class="n">val</span><span class="p">[</span><span class="n">ir</span><span class="p">]</span><span class="o">/</span><span class="n">val</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;dB&#39;</span><span class="p">]:</span>
+                            <span class="n">RayEnergy</span><span class="o">=</span><span class="nb">max</span><span class="p">((</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="n">ir</span><span class="p">]</span><span class="o">/</span><span class="n">val</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="o">+</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;dyn&#39;</span><span class="p">]),</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;dyn&#39;</span><span class="p">]</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">RayEnergy</span><span class="o">=</span><span class="n">val</span><span class="p">[</span><span class="n">ir</span><span class="p">]</span><span class="o">/</span><span class="n">val</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="k">pass</span>
                     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;col&#39;</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;cmap&#39;</span><span class="p">:</span>
                         <span class="n">col</span> <span class="o">=</span> <span class="n">clm</span><span class="p">(</span><span class="n">RayEnergy</span><span class="p">)</span>
                         <span class="n">width</span> <span class="o">=</span> <span class="n">RayEnergy</span>
@@ -1619,7 +1686,7 @@
                         <span class="c">#alpha = RayEnergy</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">col</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;col&#39;</span><span class="p">]</span>
-                    
+
                         <span class="n">width</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;width&#39;</span><span class="p">]</span>
                         <span class="n">alpha</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alpha&#39;</span><span class="p">]</span>
 
@@ -1684,34 +1751,48 @@
             <span class="n">ptx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span>
             <span class="n">prx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span>
 
-
-
         <span class="k">if</span> <span class="n">ant</span> <span class="p">:</span>
-            <span class="n">Atx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span>
-            <span class="n">Arx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">A</span>
+            <span class="n">Atx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Aa</span>
+            <span class="n">Arx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ab</span>
             <span class="n">Ttx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">orientation</span>
             <span class="n">Trx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">orientation</span>
 
             <span class="c"># evaluate antenna if required</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">Atx</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
-                <span class="n">Atx</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">()</span>
-            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">Atx</span><span class="o">.</span><span class="n">SqG</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="p">:</span>
-                <span class="n">Atx</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">()</span>
-
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">Arx</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
-                <span class="n">Arx</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">()</span>
-            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">Arx</span><span class="o">.</span><span class="n">SqG</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="p">:</span>
-                <span class="n">Arx</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">()</span>
-            <span class="n">Atx</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">T</span><span class="o">=</span><span class="n">Ttx</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">po</span><span class="o">=</span><span class="n">ptx</span><span class="p">,</span>
+                <span class="n">Atx</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">Atx</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">T</span><span class="o">=</span><span class="n">Ttx</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">po</span><span class="o">=</span><span class="n">ptx</span><span class="p">,</span>
                 <span class="n">title</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">colorbar</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-            <span class="n">Arx</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">T</span><span class="o">=</span><span class="n">Trx</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">po</span><span class="o">=</span><span class="n">prx</span><span class="p">,</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">Atx</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+                <span class="n">Atx</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">T</span><span class="o">=</span><span class="n">Ttx</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">po</span><span class="o">=</span><span class="n">ptx</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">colorbar</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">Arx</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
+                <span class="n">Arx</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">Arx</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">T</span><span class="o">=</span><span class="n">Trx</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">po</span><span class="o">=</span><span class="n">prx</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">colorbar</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">Arx</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+                <span class="n">Arx</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">T</span><span class="o">=</span><span class="n">Trx</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">po</span><span class="o">=</span><span class="n">prx</span><span class="p">,</span>
                 <span class="n">title</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">colorbar</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">lay</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">opacity</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="n">centered</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-
+        <span class="c"># mlab.text3d(self.a[0],self.a[1],self.a[2],&#39;a&#39;,</span>
+        <span class="c">#             scale=1,</span>
+        <span class="c">#             color=(1,0,0))</span>
+        <span class="c"># mlab.text3d(self.b[0],self.b[1],self.b[2],&#39;b&#39;,</span>
+        <span class="c">#             scale=1,</span>
+        <span class="c">#             color=(1,0,0))</span>
         <span class="k">if</span> <span class="n">rays</span> <span class="p">:</span>
+            <span class="c"># check rays with energy</span>
+            <span class="c"># if hasattr(self,&#39;H&#39;) and not kwargs.has_key(&#39;rlist&#39;):</span>
+            <span class="c">#     urays = np.where(self.H.y!=0)[0]</span>
+            <span class="c">#     kwargs[&#39;rlist&#39;]=urays</span>
+            <span class="c">#     import ipdb</span>
+            <span class="c">#     ipdb.set_trace()</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">_show3</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="k">except</span><span class="p">:</span>
@@ -1732,7 +1813,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on sept. 24, 2015.
+      Last updated on nov. 28, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
