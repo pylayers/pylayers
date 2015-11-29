@@ -108,10 +108,7 @@
     <a href="../../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">Effect of Modyfiying the Nature of Sub-Segments</a><ul>
-<li><a class="reference internal" href="#link-members">Link members</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">Effect of Modyfiying the Nature of Sub-Segments</a></li>
 </ul>
 
     
@@ -127,12 +124,14 @@
             
   <div class="section" id="effect-of-modyfiying-the-nature-of-sub-segments">
 <h1>Effect of Modyfiying the Nature of Sub-Segments<a class="headerlink" href="#effect-of-modyfiying-the-nature-of-sub-segments" title="Permalink to this headline">¶</a></h1>
-<p>This notebook illustrtates a simple ray tracing simulation with
-diffecent material properties for a single segment separating 2 rooms
-which contains multi-subsegments. The noteboook illustrates in details
-the whole steps.</p>
+<p>This notebook illustrates a simple ray tracing simulation with diffeent
+material properties for a single segment separating 2 rooms which
+contains multi-subsegments. The noteboook illustrates in details the
+whole steps.</p>
 <div class="code python highlight-python"><div class="highlight"><pre>from pylayers.simul.link import *
 from pylayers.antprop.rays import *
+from pylayers.antprop.aarray import *
+from pylayers.antprop.channel import *
 from pylayers.gis.layout import *
 from pylayers.antprop.signature import *
 import pylayers.signal.bsignal as bs
@@ -148,11 +147,38 @@ import matplotlib.pyplot as plt
 <p>Let start by loading a simple layout with 2 single rooms. The multi
 subsegment appears in the middle with the red vertical lines. Each
 subsegment is materialized by a segment.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;defstr3.ini&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;defstr.ini&#39;</span><span class="p">)</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">subseg</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_4_0.png" src="../../_images/Multisubsegments_4_0.png" />
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+AssertionError                            Traceback (most recent call last)
+
+&lt;ipython-input-2-ba9e7d1397c8&gt; in &lt;module&gt;()
+----&gt; 1 L=Layout(&#39;defstr.ini&#39;)
+      2 f,a=L.showG(&#39;s&#39;,subseg=True,figsize=(10,10))
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in __init__(self, _filename, _filematini, _fileslabini, _filefur, force, check)
+    410         # check layout integrity (default)
+    411         if check:
+--&gt; 412             self.check()
+    413         #self.boundary()
+    414
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in check(self, level)
+    719             deg0 = filter(lambda x: nx.degree(self.Gs,x)==0,upnt)
+    720             deg1 = filter(lambda x: nx.degree(self.Gs,x)==1,upnt)
+--&gt; 721             assert (len(deg0)==0), &quot;It exists degree 0 points :  %r&quot; % deg0
+    722             assert (len(deg1)==0), &quot;It exists degree 1 points : %r&quot; % deg1
+    723
+
+
+AssertionError: It exists degree 0 points :  [-18, -17, -16, -15, -14]
+</pre></div>
+</div>
 <p>The studied configuration is composed of a simple 2 rooms building
 separated by a subsegment which has a multi subsegment attribute. The
 attribute of the subsegment can be changed with the method
@@ -162,98 +188,54 @@ attribute of the subsegment can be changed with the method
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;WOOD&#39;</span><span class="p">],</span><span class="n">ss_z</span> <span class="o">=</span><span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">2.7</span><span class="p">),(</span><span class="mf">2.7</span><span class="p">,</span><span class="mf">2.8</span><span class="p">),(</span><span class="mf">2.8</span><span class="p">,</span><span class="mi">3</span><span class="p">)],</span><span class="n">ss_offset</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-3-5d060b38fe5b&gt; in &lt;module&gt;()
+----&gt; 1 L.chgmss(1,ss_name=[&#39;WOOD&#39;,&#39;AIR&#39;,&#39;WOOD&#39;],ss_z =[(0.0,2.7),(2.7,2.8),(2.8,3)],ss_offset=[0,0,0])
+
+
+NameError: name &#39;L&#39; is not defined
+</pre></div>
+</div>
 <p>As the Layout structure has been modified it is required to rebuild the
 structure.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="n">L</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>structure saved in  defstr3.str2
-structure saved in  defstr3.ini
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-4-de0401164687&gt; in &lt;module&gt;()
+----&gt; 1 L.build()
+      2 L.save()
+
+
+NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
 <p>The <img src="../../_images/mathmpl/math-8d9bbde6dd.png" style="position: relative; bottom: -7px"/> graph dictionnary has the following structure</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="o">-</span><span class="mi">8</span><span class="p">:</span> <span class="p">{},</span>
- <span class="o">-</span><span class="mi">7</span><span class="p">:</span> <span class="p">{},</span>
- <span class="o">-</span><span class="mi">6</span><span class="p">:</span> <span class="p">{},</span>
- <span class="o">-</span><span class="mi">5</span><span class="p">:</span> <span class="p">{},</span>
- <span class="o">-</span><span class="mi">4</span><span class="p">:</span> <span class="p">{},</span>
- <span class="o">-</span><span class="mi">3</span><span class="p">:</span> <span class="p">{},</span>
- <span class="o">-</span><span class="mi">2</span><span class="p">:</span> <span class="p">{},</span>
- <span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="p">{},</span>
- <span class="mi">1</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">7</span><span class="p">],</span>
-  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;PARTITION&#39;</span><span class="p">,</span>
-  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.999982</span>  <span class="p">,</span> <span class="o">-</span><span class="mf">0.00599989</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
-  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-  <span class="s">&#39;ss_name&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">,</span> <span class="s">&#39;AIR&#39;</span><span class="p">,</span> <span class="s">&#39;WOOD&#39;</span><span class="p">],</span>
-  <span class="s">&#39;ss_offset&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-  <span class="s">&#39;ss_z&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.7</span><span class="p">),</span> <span class="p">(</span><span class="mf">2.7</span><span class="p">,</span> <span class="mf">2.8</span><span class="p">),</span> <span class="p">(</span><span class="mf">2.8</span><span class="p">,</span> <span class="mi">3</span><span class="p">)],</span>
-  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
- <span class="mi">2</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span>
-  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
-  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.99997778</span><span class="p">,</span>  <span class="mf">0.00666652</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
-  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
- <span class="mi">3</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">],</span>
-  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
-  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.99997775</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00667097</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
-  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
- <span class="mi">4</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
-  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.99997888</span><span class="p">,</span>  <span class="mf">0.00649986</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
-  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
- <span class="mi">5</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">],</span>
-  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
-  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.00619988</span><span class="p">,</span>  <span class="mf">0.99998078</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
-  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
- <span class="mi">6</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">],</span>
-  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
-  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.00639987</span><span class="p">,</span>  <span class="mf">0.99997952</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
-  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
- <span class="mi">7</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">],</span>
-  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
-  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.99997887</span><span class="p">,</span>  <span class="mf">0.00650149</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
-  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
- <span class="mi">8</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span>
-  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
-  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.00639987</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.99997952</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
-  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
- <span class="mi">9</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span>
-  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
-  <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.00639987</span><span class="p">,</span>  <span class="mf">0.99997952</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
-  <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-  <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-  <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)}}</span>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-5-ef5d55244e1c&gt; in &lt;module&gt;()
+----&gt; 1 L.Gs.node
+
+
+NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
 <p>We define now two points which are the termination of a radio link.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">tx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">759</span><span class="p">,</span><span class="mi">1114</span><span class="p">,</span><span class="mf">1.5</span><span class="p">])</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#tx=np.array([759,1114,1.5])</span>
+<span class="c">#rx=np.array([767,1114,1.5])</span>
+<span class="n">tx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">759</span><span class="p">,</span><span class="mi">1114</span><span class="p">,</span><span class="mf">1.5</span><span class="p">])</span>
 <span class="n">rx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">767</span><span class="p">,</span><span class="mi">1114</span><span class="p">,</span><span class="mf">1.5</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -262,88 +244,115 @@ structure saved in  defstr3.ini
 <span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
 <span class="c">#Aa = Antenna(&#39;S1R1.vsh3&#39;)</span>
 <span class="c">#Ab = Antenna(&#39;S1R1.vsh3&#39;)</span>
-<span class="n">Aa</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Omni&#39;</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span><span class="p">)</span>
-<span class="n">Ab</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Omni&#39;</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span><span class="p">)</span>
+<span class="c">#Aa = Antenna(&#39;Gauss&#39;,fGHz=fGHz)</span>
+<span class="c">#Ab = Antenna(&#39;Gauss&#39;,fGHz=fGHz)</span>
+<span class="n">Aa</span> <span class="o">=</span> <span class="n">AntArray</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span><span class="p">)</span>
+<span class="n">Ab</span> <span class="o">=</span> <span class="n">AntArray</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span><span class="p">)</span>
 <span class="n">Lk</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">tx</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">rx</span><span class="p">,</span><span class="n">Aa</span><span class="o">=</span><span class="n">Aa</span><span class="p">,</span><span class="n">Ab</span><span class="o">=</span><span class="n">Ab</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>structure saved in  defstr3.str2
-structure saved in  defstr3.ini
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-7-fd2986e5b29e&gt; in &lt;module&gt;()
+----&gt; 1 L.chgmss(1,ss_name=[&#39;WOOD&#39;,&#39;AIR&#39;,&#39;WOOD&#39;],ss_z =[(0.0,2.7),(2.7,2.8),(2.8,3)],ss_offset=[0,0,0])
+      2 L.save()
+      3 fGHz=np.linspace(1,11,100)
+      4 #Aa = Antenna(&#39;S1R1.vsh3&#39;)
+      5 #Ab = Antenna(&#39;S1R1.vsh3&#39;)
+
+
+NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
 <p>A link is the set of a layout and 2 termination points.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Aa</span><span class="o">.</span><span class="n">plotG</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_15_0.png" src="../../_images/Multisubsegments_15_0.png" />
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-8-5cb5df1cbc48&gt; in &lt;module&gt;()
+----&gt; 1 Aa.plotG()
+
+
+NameError: name &#39;Aa&#39; is not defined
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#f,a=Lk.show(rays=True)</span>
+<span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">rays</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-9-7ecd8f980a4c&gt; in &lt;module&gt;()
+      1 #f,a=Lk.show(rays=True)
+----&gt; 2 f,a=Lk.show(rays=True)
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
 <p>On the figure above, we can see the Tx and Rx each placed in a different
 room appart from a wall with a subsegement placed in the middle. Then
 for evaluating the radio link, simply type:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">ak</span><span class="p">,</span><span class="n">tauk</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">tx</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">rx</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">ak</span><span class="p">,</span><span class="n">tauk</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">tx</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">rx</span><span class="p">,</span><span class="n">applywav</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>checkh5
-Start Signatures
-algo 7
-Signatures&#39;&gt; from 2_1_3 saved
-Stop signature 0.0472140312195
-Start Rays
-Rays&#39;&gt; from 3_2_1 saved
-Stop rays 0.546607017517
-Ctilde&#39;&gt; from 2_1_0 saved
-Tchannel&#39;&gt; from 2_1_0_0_0_0_0 saved
-</pre></div>
-</div>
-<p>At that point the channel has been evaluated and all the data stored in
-an <code class="docutils literal"><span class="pre">hdf5</span></code> file</p>
-<div class="section" id="link-members">
-<h2>Link members<a class="headerlink" href="#link-members" title="Permalink to this headline">¶</a></h2>
-<p>The Signature of the radio channel is in <code class="docutils literal"><span class="pre">Lk.Si</span></code>, the 3D rays are in
-<code class="docutils literal"><span class="pre">Lk.R</span></code>, the propagation channel is in <code class="docutils literal"><span class="pre">Lk.C</span></code> and the transmission
-channel is in <code class="docutils literal"><span class="pre">Lk.H</span></code></p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">R</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>Rays3D
-----------
-1 / 1 : [0]
-2 / 6 : [1 2 3 4 5 6]
-3 / 19 : [ 7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25]
-4 / 40 : [26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50
- 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65]
-5 / 46 : [ 66  67  68  69  70  71  72  73  74  75  76  77  78  79  80  81  82  83
-  84  85  86  87  88  89  90  91  92  93  94  95  96  97  98  99 100 101
- 102 103 104 105 106 107 108 109 110 111]
-6 / 28 : [112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129
- 130 131 132 133 134 135 136 137 138 139]
------
-ni : 628
-nl : 1396
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-10-d9efa0c5005d&gt; in &lt;module&gt;()
+----&gt; 1 ak,tauk=Lk.eval(force=True,a=tx,b=rx,applywav=True)
+
+
+NameError: name &#39;Lk&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">C</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Ctilde
----------
-(140, 100)
-Nray : 140
-fmin(GHz) : 1.0
-fmax(GHz): 11.0
-Nfreq : 100
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-11-08f49e889d34&gt; in &lt;module&gt;()
+----&gt; 1 Lk.C
+
+
+NameError: name &#39;Lk&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;l20&#39;</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">120</span><span class="p">,</span><span class="n">vmax</span><span class="o">=-</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_23_0.png" src="../../_images/Multisubsegments_23_0.png" />
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-12-ef1e84aff51a&gt; in &lt;module&gt;()
+      1 f = plt.figure(figsize=(10,10))
+----&gt; 2 f,a=Lk.C.show(cmap=&#39;jet&#39;,fig=f,typ=&#39;l20&#39;,vmin=-120,vmax=-10)
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x2b33fec56690&gt;
+</pre></div>
+</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="n">fcGHz</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">bandGHz</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
 <span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_24_0.png" src="../../_images/Multisubsegments_24_0.png" />
+<img alt="../../_images/Multisubsegments_22_0.png" src="../../_images/Multisubsegments_22_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">wav</span><span class="o">.</span><span class="n">st</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
@@ -353,25 +362,71 @@ Nfreq : 100
 <div class="code python highlight-python"><div class="highlight"><pre><span class="nb">len</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="mi">100</span>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-15-00ef4b2c8627&gt; in &lt;module&gt;()
+----&gt; 1 len(Lk.fGHz)
+
+
+NameError: name &#39;Lk&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">tx</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">rx</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-16-8ec0715e9a54&gt; in &lt;module&gt;()
+----&gt; 1 Lk = DLink(L=L,a=tx,b=rx)
+
+
+NameError: name &#39;L&#39; is not defined
+</pre></div>
+</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">a</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span>  <span class="mf">759.</span> <span class="p">,</span>  <span class="mf">1114.</span> <span class="p">,</span>     <span class="mf">1.5</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-17-7f012f925fcc&gt; in &lt;module&gt;()
+----&gt; 1 Lk.a
+
+
+NameError: name &#39;Lk&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">b</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span>  <span class="mf">767.</span> <span class="p">,</span>  <span class="mf">1114.</span> <span class="p">,</span>     <span class="mf">1.5</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-18-6142b9bad81d&gt; in &lt;module&gt;()
+----&gt; 1 Lk.b
+
+
+NameError: name &#39;Lk&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">cir</span> <span class="o">=</span> <span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-19-74e87499760f&gt; in &lt;module&gt;()
+----&gt; 1 cir = Lk.H.applywavB(wav.sf)
+
+
+NameError: name &#39;Lk&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">layer</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">]</span>
@@ -384,66 +439,52 @@ Nfreq : 100
 <span class="c">#Aa = Antenna(&#39;Omni&#39;,fGHz=fGHz)</span>
 <span class="n">ak</span><span class="p">,</span><span class="n">tauk</span><span class="o">=</span><span class="n">Lk</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ak</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ak</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">50</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>structure saved in  defstr3.str2
-structure saved in  defstr3.ini
-checkh5
-Start Signatures
-algo 7
-Signatures&#39;&gt; from 2_1_3 saved
-Stop signature 0.0257730484009
-Start Rays
-Rays&#39;&gt; from 3_2_1 saved
-Stop rays 0.311182022095
-Ctilde&#39;&gt; from 2_1_0 saved
-Tchannel&#39;&gt; from 2_1_0_0_0_2_2 saved
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-20-ae5fc4f64f59&gt; in &lt;module&gt;()
+      1 layer = [&#39;AIR&#39;,&#39;AIR&#39;,&#39;AIR&#39;]
+----&gt; 2 Lk.L.chgmss(1,ss_name=layer)
+      3 Lk.L.Gs.node[1][&#39;ss_name&#39;]=layer
+      4 Lk.L.g2npy()
+      5 Lk.L.save()
+
+
+NameError: name &#39;Lk&#39; is not defined
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;Container object of 3 artists&gt;
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">ak</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_31_2.png" src="../../_images/Multisubsegments_31_2.png" />
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-21-1ef58d341060&gt; in &lt;module&gt;()
+----&gt; 1 Lk.H.ak.shape
+
+
+NameError: name &#39;Lk&#39; is not defined
+</pre></div>
+</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">cirair</span> <span class="o">=</span> <span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">cirair</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">],</span><span class="n">xmin</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">xmax</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-22-c6ef9fd0c1d5&gt; in &lt;module&gt;()
+----&gt; 1 cirair = Lk.H.applywavB(wav.sf)
+
+
+NameError: name &#39;Lk&#39; is not defined
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b73a37a9950&gt;,
- array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2b73a37b2050&gt;]], dtype=object))
-</pre></div>
-</div>
-<img alt="../../_images/Multisubsegments_33_1.png" src="../../_images/Multisubsegments_33_1.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">layer</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;PARTITION&#39;</span><span class="p">,</span><span class="s">&#39;PARTITION&#39;</span><span class="p">,</span><span class="s">&#39;PARTITION&#39;</span><span class="p">]</span>
-<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="n">layer</span><span class="p">)</span>
-<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">layer</span>
-<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">g2npy</span><span class="p">()</span>
-<span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-<span class="n">Lk</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="n">cirpart</span> <span class="o">=</span> <span class="n">Lk</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="p">)</span>
-<span class="n">cirpart</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">],</span><span class="n">xmin</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">xmax</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>structure saved in  defstr3.str2
-structure saved in  defstr3.ini
-checkh5
-Start Signatures
-algo 7
-Signatures&#39;&gt; from 2_1_3 saved
-Stop signature 0.0452868938446
-Start Rays
-Rays&#39;&gt; from 3_2_1 saved
-Stop rays 0.529342889786
-Ctilde&#39;&gt; from 2_1_0 saved
-Tchannel&#39;&gt; from 2_1_0_0_0_2_2 saved
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b73a300e150&gt;,
- array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2b73a8818090&gt;]], dtype=object))
-</pre></div>
-</div>
-<img alt="../../_images/Multisubsegments_34_2.png" src="../../_images/Multisubsegments_34_2.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">layer</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;METAL&#39;</span><span class="p">,</span><span class="s">&#39;METAL&#39;</span><span class="p">,</span><span class="s">&#39;METAL&#39;</span><span class="p">]</span>
 <span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="n">layer</span><span class="p">)</span>
 <span class="n">Lk</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">layer</span>
@@ -454,25 +495,21 @@ Tchannel&#39;&gt; from 2_1_0_0_0_2_2 saved
 <span class="n">cirmet</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">],</span><span class="n">xmin</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">xmax</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>structure saved in  defstr3.str2
-structure saved in  defstr3.ini
-checkh5
-Start Signatures
-algo 7
-Signatures&#39;&gt; from 2_1_3 saved
-Stop signature 0.0311608314514
-Start Rays
-Rays&#39;&gt; from 3_2_1 saved
-Stop rays 0.318943977356
-Ctilde&#39;&gt; from 2_1_0 saved
-Tchannel&#39;&gt; from 2_1_0_0_0_2_2 saved
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-23-02ef6687144f&gt; in &lt;module&gt;()
+      1 layer = [&#39;METAL&#39;,&#39;METAL&#39;,&#39;METAL&#39;]
+----&gt; 2 Lk.L.chgmss(1,ss_name=layer)
+      3 Lk.L.Gs.node[1][&#39;ss_name&#39;]=layer
+      4 Lk.L.g2npy()
+      5 Lk.L.save()
+
+
+NameError: name &#39;Lk&#39; is not defined
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b73a876e410&gt;,
- array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x2b73a3764b50&gt;]], dtype=object))
-</pre></div>
-</div>
-<img alt="../../_images/Multisubsegments_35_2.png" src="../../_images/Multisubsegments_35_2.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c">#fig2=plt.figure()</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">cirair</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;l20&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span><span class="o">-</span><span class="mi">40</span><span class="p">])</span>
@@ -486,18 +523,26 @@ Tchannel&#39;&gt; from 2_1_0_0_0_2_2 saved
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s">&#39;metal&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.legend.Legend at 0x2b73a2802510&gt;
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-24-e1d90729636b&gt; in &lt;module&gt;()
+      1 #fig2=plt.figure()
+----&gt; 2 f,a=cirair.plot(typ=[&#39;l20&#39;],color=&#39;b&#39;)
+      3 plt.axis([0,120,-120,-40])
+      4 plt.title(&#39;A simple illustration of shadowing effect&#39;)
+      5 plt.legend([&#39;air&#39;])
+
+
+NameError: name &#39;cirair&#39; is not defined
 </pre></div>
 </div>
-<img alt="../../_images/Multisubsegments_36_1.png" src="../../_images/Multisubsegments_36_1.png" />
-<img alt="../../_images/Multisubsegments_36_2.png" src="../../_images/Multisubsegments_36_2.png" />
-<img alt="../../_images/Multisubsegments_36_3.png" src="../../_images/Multisubsegments_36_3.png" />
 <p>We have modified successively the nature of the 3 surfaces in the sub
 segment placed in the sepataion partition. The first was AIR, the second
 WOOD and the third METAL. As the subsegment is placed on the LOS path
 the blockage effect is clearly visible. The chosen antennas were
 omnidirectional <code class="docutils literal"><span class="pre">Antenna('Omni')</span></code></p>
-</div>
 </div>
 
 
@@ -511,7 +556,7 @@ omnidirectional <code class="docutils literal"><span class="pre">Antenna('Omni')
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 28, 2015.
+      Last updated on nov. 29, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/1-GIS/Multisubsegments.txt"

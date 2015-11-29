@@ -389,7 +389,7 @@
 <span class="kn">from</span> <span class="nn">shapely.ops</span> <span class="kn">import</span> <span class="n">cascaded_union</span>
 <span class="kn">from</span> <span class="nn">descartes.patch</span> <span class="kn">import</span> <span class="n">PolygonPatch</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span>
-<span class="kn">import</span> <span class="nn">Image</span>
+<span class="kn">import</span> <span class="nn">PIL.Image</span> <span class="kn">as</span> <span class="nn">Image</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">urllib2</span> <span class="kn">as</span> <span class="nn">urllib</span>
 <span class="kn">from</span> <span class="nn">cStringIO</span> <span class="kn">import</span> <span class="n">StringIO</span>
@@ -549,7 +549,7 @@
         <span class="c"># check layout integrity (default)</span>
         <span class="k">if</span> <span class="n">check</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="p">()</span>
+        <span class="c">#self.boundary()</span>
 
         <span class="c"># If the layout has already been built then load the built structure</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">force</span><span class="p">:</span>
@@ -642,7 +642,7 @@
 
 
     <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">alpha</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; scale the layout </span>
+        <span class="sd">&quot;&quot;&quot; scale the layout</span>
 
 <span class="sd">        other : scaling factor (np.array or int or float)</span>
 
@@ -664,12 +664,10 @@
         <span class="c"># scaling x &amp; y</span>
         <span class="c">#</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">values</span><span class="p">())[:,</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">xc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">xc</span><span class="p">)</span><span class="o">*</span><span class="n">alpha</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">xc</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">*</span><span class="n">alpha</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">values</span><span class="p">())[:,</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">yc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="o">-</span><span class="n">yc</span><span class="p">)</span><span class="o">*</span><span class="n">alpha</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">yc</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">*</span><span class="n">alpha</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="n">xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
         <span class="n">Ls</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="nb">tuple</span><span class="p">(</span><span class="n">xy</span><span class="p">)))</span>
@@ -1458,6 +1456,7 @@
             <span class="k">except</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">di</span><span class="p">[</span><span class="s">&#39;display&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;box&#39;</span><span class="p">]</span>
 
         <span class="c"># update points section</span>
         <span class="k">for</span> <span class="n">nn</span> <span class="ow">in</span> <span class="n">di</span><span class="p">[</span><span class="s">&#39;points&#39;</span><span class="p">]:</span>
@@ -2098,7 +2097,7 @@
         <span class="c">#</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Layout.loadstr2"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.loadstr2.html#pylayers.gis.layout.Layout.loadstr2">[docs]</a>    <span class="k">def</span> <span class="nf">loadstr2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="p">,</span> <span class="n">_filematini</span><span class="o">=</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span> <span class="n">_fileslabini</span><span class="o">=</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">loadstr2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="p">,</span> <span class="n">_filematini</span><span class="o">=</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span> <span class="n">_fileslabini</span><span class="o">=</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load a Graph from a str2 file</span>
 
 <span class="sd">            Parameters</span>
@@ -2294,7 +2293,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">tahe</span> <span class="o">=</span> <span class="n">tahe</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;activelayer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
         <span class="c">#self.boundary(1,1)</span>
-</div>
+
 <div class="viewcode-block" id="Layout.subseg"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.subseg.html#pylayers.gis.layout.Layout.subseg">[docs]</a>    <span class="k">def</span> <span class="nf">subseg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; establishes the association : name &lt;-&gt;  edgelist</span>
 
@@ -5304,6 +5303,7 @@
 
         <span class="c"># display overlay image</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;overlay&#39;</span><span class="p">]:</span>
+            <span class="c"># imok : Image is OK</span>
             <span class="n">imok</span> <span class="o">=</span> <span class="bp">False</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;fileoverlay&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;http:&#39;</span><span class="p">))</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
                 <span class="n">img_file</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;fileoverlay&#39;</span><span class="p">])</span>
@@ -8692,7 +8692,7 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot;geomfile (.off) has no been generated&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="p">()</span>
+        <span class="c">#self.boundary()</span>
         <span class="k">print</span> <span class="s">&quot;boundaries &quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span>
         <span class="k">print</span> <span class="s">&quot;number of Points :&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Np</span>
         <span class="k">print</span> <span class="s">&quot;number of Segments :&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ns</span>
@@ -9695,7 +9695,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="p">()</span>
+        <span class="c">#self.boundary()</span>
 
         <span class="n">Tx_x</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
         <span class="n">Tx_y</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
@@ -9748,6 +9748,32 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;box&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span>
 
 </div>
+    <span class="k">def</span> <span class="nf">offbnd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">dy</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; offset boundary</span>
+
+<span class="sd">        Paramaters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        dx : float</span>
+<span class="sd">        dy : float</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">dx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">dx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">dy</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="n">dy</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;box&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span>
+
+    <span class="k">def</span> <span class="nf">sclbnd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="n">ay</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; scale boundary</span>
+
+<span class="sd">        Paramaters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        ax : float</span>
+<span class="sd">        ay : float</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">ax</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">ax</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">ay</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="n">ay</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;box&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span>
+
 <div class="viewcode-block" id="Layout.get_paths"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.get_paths.html#pylayers.gis.layout.Layout.get_paths">[docs]</a>    <span class="k">def</span> <span class="nf">get_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">nd_in</span><span class="p">,</span> <span class="n">nd_fin</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; returns the possible paths of graph Gs between two nodes.</span>
 
@@ -9784,7 +9810,7 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 28, 2015.
+      Last updated on nov. 29, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
