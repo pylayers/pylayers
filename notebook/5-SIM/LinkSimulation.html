@@ -140,123 +140,75 @@ Output) SISO link.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">DLink</span><span class="p">()</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+AssertionError                            Traceback (most recent call last)
+
+&lt;ipython-input-2-8d488aedce1d&gt; in &lt;module&gt;()
+----&gt; 1 L=DLink()
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/simul/link.pyc in __init__(self, **kwargs)
+    344         Link.__init__(self)
+    345
+--&gt; 346         defaults={ &#39;L&#39;:Layout(),
+    347                    &#39;a&#39;:np.array(()),
+    348                    &#39;b&#39;:np.array(()),
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in __init__(self, _filename, _filematini, _fileslabini, _filefur, force, check)
+    410         # check layout integrity (default)
+    411         if check:
+--&gt; 412             self.check()
+    413         #self.boundary()
+    414
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in check(self, level)
+    719             deg0 = filter(lambda x: nx.degree(self.Gs,x)==0,upnt)
+    720             deg1 = filter(lambda x: nx.degree(self.Gs,x)==1,upnt)
+--&gt; 721             assert (len(deg0)==0), &quot;It exists degree 0 points :  %r&quot; % deg0
+    722             assert (len(deg1)==0), &quot;It exists degree 1 points : %r&quot; % deg1
+    723
+
+
+AssertionError: It exists degree 0 points :  [-18, -17, -16, -15, -14]
+</pre></div>
+</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b2136c1b5d0&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x2b20c91d1f90&gt;)
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-3-58cf57214d72&gt; in &lt;module&gt;()
+----&gt; 1 L.show()
+
+
+NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
-<img alt="../../_images/LinkSimulation_4_1.png" src="../../_images/LinkSimulation_4_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>filename: Links_0_defstr.ini.h5
-Link Parameters :
-------- --------
-Layout : defstr.ini
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
 
-Node a
-------
-position : [  766.00300113  1113.94747911     1.2       ]
-Antenna : sh3
-Rotation matrice :
- [[ 1.  0.  0.]
- [ 0.  1.  0.]
- [ 0.  0.  1.]]
+NameError                                 Traceback (most recent call last)
 
-Node b
-------
-position : [  761.0028967   1113.91576981     1.2       ]
-Antenna : sh3
-Rotation matrice :
- [[ 1.  0.  0.]
- [ 0.  1.  0.]
- [ 0.  0.  1.]]
+&lt;ipython-input-4-42f463c84796&gt; in &lt;module&gt;()
+----&gt; 1 L
 
-Link evaluation information :
------------------------------
-distance :  5.000 m
-delay : 16.667 ns
-fmin (fGHz) : 2.0
-fmax (fGHz) : 11.0
-fstep (fGHz) : 0.05
-Nf : 181
+
+NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre>L.eval?
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>checkh5
-Start Signatures
-Signatures&#39;&gt; from 1_2_3 loaded
-load signature
-Stop signature 0.121777057648
-Start Rays
-Rays&#39;&gt; from 3_0_2 loaded
-Stop rays 0.152944087982
-Ctilde&#39;&gt; from 0_2_0 loaded
-Tchannel&#39;&gt; from 0_2_0_0_0_2_2 loaded
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="n">array</span><span class="p">([</span>  <span class="mf">8.74446418e-05</span><span class="p">,</span>   <span class="mf">1.46698690e-04</span><span class="p">,</span>   <span class="mf">0.00000000e+00</span><span class="p">,</span>
-          <span class="mf">3.14995445e-06</span><span class="p">,</span>   <span class="mf">1.51702810e-04</span><span class="p">,</span>   <span class="mf">7.29356204e-05</span><span class="p">,</span>
-          <span class="mf">5.90710148e-05</span><span class="p">,</span>   <span class="mf">2.46454264e-05</span><span class="p">,</span>   <span class="mf">2.44450202e-05</span><span class="p">,</span>
-          <span class="mf">4.87319705e-06</span><span class="p">,</span>   <span class="mf">1.75686332e-04</span><span class="p">,</span>   <span class="mf">7.13675689e-06</span><span class="p">,</span>
-          <span class="mf">7.47211694e-05</span><span class="p">,</span>   <span class="mf">6.74741489e-08</span><span class="p">,</span>   <span class="mf">1.95936070e-06</span><span class="p">,</span>
-          <span class="mf">2.23741852e-07</span><span class="p">,</span>   <span class="mf">2.26646476e-06</span><span class="p">,</span>   <span class="mf">4.14435099e-06</span><span class="p">,</span>
-          <span class="mf">3.00650318e-06</span><span class="p">,</span>   <span class="mf">3.00698950e-06</span><span class="p">,</span>   <span class="mf">2.61297158e-05</span><span class="p">,</span>
-          <span class="mf">2.70506446e-05</span><span class="p">,</span>   <span class="mf">0.00000000e+00</span><span class="p">,</span>   <span class="mf">0.00000000e+00</span><span class="p">,</span>
-          <span class="mf">7.97779088e-08</span><span class="p">,</span>   <span class="mf">2.38562292e-06</span><span class="p">,</span>   <span class="mf">4.04156289e-08</span><span class="p">,</span>
-          <span class="mf">2.64709912e-06</span><span class="p">,</span>   <span class="mf">9.07630898e-08</span><span class="p">,</span>   <span class="mf">1.12916970e-06</span><span class="p">,</span>
-          <span class="mf">1.22492177e-07</span><span class="p">,</span>   <span class="mf">1.33692589e-06</span><span class="p">,</span>   <span class="mf">8.04381204e-06</span><span class="p">,</span>
-          <span class="mf">8.49458480e-06</span><span class="p">,</span>   <span class="mf">6.14904213e-05</span><span class="p">,</span>   <span class="mf">5.66523749e-05</span><span class="p">,</span>
-          <span class="mf">4.67849894e-06</span><span class="p">,</span>   <span class="mf">3.68188625e-06</span><span class="p">,</span>   <span class="mf">3.68423370e-06</span><span class="p">,</span>
-          <span class="mf">0.00000000e+00</span><span class="p">,</span>   <span class="mf">3.88676042e-06</span><span class="p">,</span>   <span class="mf">3.88632416e-06</span><span class="p">,</span>
-          <span class="mf">2.23404583e-07</span><span class="p">,</span>   <span class="mf">5.46676503e-06</span><span class="p">,</span>   <span class="mf">1.02274728e-05</span><span class="p">,</span>
-          <span class="mf">1.00586800e-05</span><span class="p">,</span>   <span class="mf">1.07393894e-05</span><span class="p">,</span>   <span class="mf">9.71108468e-06</span><span class="p">,</span>
-          <span class="mf">9.25607532e-08</span><span class="p">,</span>   <span class="mf">1.62695253e-07</span><span class="p">,</span>   <span class="mf">4.71935354e-07</span><span class="p">,</span>
-          <span class="mf">1.21853846e-06</span><span class="p">,</span>   <span class="mf">1.61900680e-07</span><span class="p">,</span>   <span class="mf">1.01020395e-07</span><span class="p">,</span>
-          <span class="mf">1.47301403e-06</span><span class="p">,</span>   <span class="mf">6.52210803e-07</span><span class="p">,</span>   <span class="mf">4.42388951e-06</span><span class="p">,</span>
-          <span class="mf">6.41935326e-06</span><span class="p">,</span>   <span class="mf">5.64142360e-06</span><span class="p">,</span>   <span class="mf">3.84647619e-06</span><span class="p">,</span>
-          <span class="mf">3.84739961e-06</span><span class="p">,</span>   <span class="mf">5.64145807e-06</span><span class="p">,</span>   <span class="mf">3.27350264e-06</span><span class="p">,</span>
-          <span class="mf">3.34549293e-06</span><span class="p">,</span>   <span class="mf">9.67273293e-08</span><span class="p">,</span>   <span class="mf">1.64206449e-07</span><span class="p">,</span>
-          <span class="mf">2.35671508e-07</span><span class="p">,</span>   <span class="mf">6.21878652e-06</span><span class="p">,</span>   <span class="mf">1.36855910e-07</span><span class="p">,</span>
-          <span class="mf">3.45202976e-06</span><span class="p">,</span>   <span class="mf">2.66614869e-07</span><span class="p">,</span>   <span class="mf">9.25499264e-07</span><span class="p">,</span>
-          <span class="mf">9.77377034e-07</span><span class="p">,</span>   <span class="mf">0.00000000e+00</span><span class="p">,</span>   <span class="mf">0.00000000e+00</span><span class="p">,</span>
-          <span class="mf">1.01308828e-07</span><span class="p">,</span>   <span class="mf">1.36303838e-07</span><span class="p">,</span>   <span class="mf">0.00000000e+00</span><span class="p">,</span>
-          <span class="mf">0.00000000e+00</span><span class="p">,</span>   <span class="mf">1.91570108e-07</span><span class="p">,</span>   <span class="mf">2.77178941e-07</span><span class="p">,</span>
-          <span class="mf">3.40906186e-06</span><span class="p">,</span>   <span class="mf">5.08162922e-06</span><span class="p">,</span>   <span class="mf">2.75700486e-07</span><span class="p">,</span>
-          <span class="mf">0.00000000e+00</span><span class="p">,</span>   <span class="mf">1.71902246e-06</span><span class="p">,</span>   <span class="mf">1.71676236e-06</span><span class="p">,</span>
-          <span class="mf">1.68408980e-06</span><span class="p">,</span>   <span class="mf">1.76350549e-06</span><span class="p">,</span>   <span class="mf">1.12834353e-07</span><span class="p">,</span>
-          <span class="mf">3.06875167e-08</span><span class="p">,</span>   <span class="mf">1.41120249e-07</span><span class="p">,</span>   <span class="mf">3.95694440e-08</span><span class="p">,</span>
-          <span class="mf">3.54499281e-07</span><span class="p">,</span>   <span class="mf">4.25309327e-07</span><span class="p">]),</span>
- <span class="n">array</span><span class="p">([</span> <span class="mf">16.66734994</span><span class="p">,</span>  <span class="mf">18.48784882</span><span class="p">,</span>  <span class="mf">20.53778357</span><span class="p">,</span>  <span class="mf">33.33365909</span><span class="p">,</span>
-         <span class="mf">33.3343511</span> <span class="p">,</span>  <span class="mf">26.03460301</span><span class="p">,</span>  <span class="mf">26.03460301</span><span class="p">,</span>  <span class="mf">31.44237961</span><span class="p">,</span>
-         <span class="mf">31.44261404</span><span class="p">,</span>  <span class="mf">34.28021045</span><span class="p">,</span>  <span class="mf">34.28088335</span><span class="p">,</span>  <span class="mf">35.42785385</span><span class="p">,</span>
-         <span class="mf">35.42850495</span><span class="p">,</span>  <span class="mf">35.89995802</span><span class="p">,</span>  <span class="mf">35.89997275</span><span class="p">,</span>  <span class="mf">35.90181477</span><span class="p">,</span>
-         <span class="mf">35.90184832</span><span class="p">,</span>  <span class="mf">50.00066032</span><span class="p">,</span>  <span class="mf">50.0013426</span> <span class="p">,</span>  <span class="mf">50.00136179</span><span class="p">,</span>
-         <span class="mf">32.44415565</span><span class="p">,</span>  <span class="mf">32.44438284</span><span class="p">,</span>  <span class="mf">33.65446829</span><span class="p">,</span>  <span class="mf">33.65468731</span><span class="p">,</span>
-         <span class="mf">36.78052454</span><span class="p">,</span>  <span class="mf">36.78053892</span><span class="p">,</span>  <span class="mf">36.78233685</span><span class="p">,</span>  <span class="mf">36.78236959</span><span class="p">,</span>
-         <span class="mf">37.85243698</span><span class="p">,</span>  <span class="mf">37.85245096</span><span class="p">,</span>  <span class="mf">37.85419797</span><span class="p">,</span>  <span class="mf">37.85422979</span><span class="p">,</span>
-         <span class="mf">38.87329197</span><span class="p">,</span>  <span class="mf">38.87329197</span><span class="p">,</span>  <span class="mf">38.87388536</span><span class="p">,</span>  <span class="mf">38.87388536</span><span class="p">,</span>
-         <span class="mf">50.63660763</span><span class="p">,</span>  <span class="mf">50.63728134</span><span class="p">,</span>  <span class="mf">50.63730029</span><span class="p">,</span>  <span class="mf">51.42048261</span><span class="p">,</span>
-         <span class="mf">51.42114606</span><span class="p">,</span>  <span class="mf">51.42116471</span><span class="p">,</span>  <span class="mf">66.66765177</span><span class="p">,</span>  <span class="mf">66.66836297</span><span class="p">,</span>
-         <span class="mf">37.26423534</span><span class="p">,</span>  <span class="mf">37.26423534</span><span class="p">,</span>  <span class="mf">37.26443315</span><span class="p">,</span>  <span class="mf">37.26443315</span><span class="p">,</span>
-         <span class="mf">41.09509686</span><span class="p">,</span>  <span class="mf">41.09509686</span><span class="p">,</span>  <span class="mf">41.09510973</span><span class="p">,</span>  <span class="mf">41.09510973</span><span class="p">,</span>
-         <span class="mf">41.0967189</span> <span class="p">,</span>  <span class="mf">41.0967189</span> <span class="p">,</span>  <span class="mf">41.0967482</span> <span class="p">,</span>  <span class="mf">41.0967482</span> <span class="p">,</span>
-         <span class="mf">53.85226116</span><span class="p">,</span>  <span class="mf">53.85226116</span><span class="p">,</span>  <span class="mf">53.85289465</span><span class="p">,</span>  <span class="mf">53.85289465</span><span class="p">,</span>
-         <span class="mf">53.85291246</span><span class="p">,</span>  <span class="mf">53.85291246</span><span class="p">,</span>  <span class="mf">55.86686011</span><span class="p">,</span>  <span class="mf">55.8671227</span> <span class="p">,</span>
-         <span class="mf">56.66325336</span><span class="p">,</span>  <span class="mf">56.66785273</span><span class="p">,</span>  <span class="mf">67.14592909</span><span class="p">,</span>  <span class="mf">67.14663522</span><span class="p">,</span>
-         <span class="mf">67.7390271</span> <span class="p">,</span>  <span class="mf">67.73972705</span><span class="p">,</span>  <span class="mf">83.33535519</span><span class="p">,</span>  <span class="mf">56.43674387</span><span class="p">,</span>
-         <span class="mf">56.43700381</span><span class="p">,</span>  <span class="mf">57.14110656</span><span class="p">,</span>  <span class="mf">57.14136329</span><span class="p">,</span>  <span class="mf">57.2252067</span> <span class="p">,</span>
-         <span class="mf">57.2297609</span> <span class="p">,</span>  <span class="mf">57.91998171</span><span class="p">,</span>  <span class="mf">57.92448129</span><span class="p">,</span>  <span class="mf">69.60298696</span><span class="p">,</span>
-         <span class="mf">69.60298696</span><span class="p">,</span>  <span class="mf">69.60366816</span><span class="p">,</span>  <span class="mf">69.60366816</span><span class="p">,</span>  <span class="mf">83.71846526</span><span class="p">,</span>
-         <span class="mf">84.19490142</span><span class="p">,</span>  <span class="mf">59.33890847</span><span class="p">,</span>  <span class="mf">59.33890847</span><span class="p">,</span>  <span class="mf">59.3391557</span> <span class="p">,</span>
-         <span class="mf">59.3391557</span> <span class="p">,</span>  <span class="mf">60.08930256</span><span class="p">,</span>  <span class="mf">60.08930256</span><span class="p">,</span>  <span class="mf">60.09363971</span><span class="p">,</span>
-         <span class="mf">60.09363971</span><span class="p">,</span>  <span class="mf">85.70170024</span><span class="p">,</span>  <span class="mf">85.70170024</span><span class="p">]))</span>
-</pre></div>
-</div>
+<pre class="literal-block">
+Object <cite>L.eval</cite> not found.
+</pre>
 <p>To evaluate a link there is the <code class="docutils literal"><span class="pre">eval</span></code> method. This method takes as
 argument + a list of the desired outputs, + the type of algorithm being
 used, + the ceil heigh + the number of multi reflection between ceil and
@@ -264,69 +216,75 @@ floor.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b2136dfc190&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x2b2136dfc710&gt;)
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-6-9af88b4b0cbf&gt; in &lt;module&gt;()
+----&gt; 1 L.R.show(L=L.L,figsize=(10,10))
+
+
+NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
-<img alt="../../_images/LinkSimulation_8_1.png" src="../../_images/LinkSimulation_8_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">taud</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span> <span class="mf">16.66734994</span><span class="p">,</span>  <span class="mf">18.48784882</span><span class="p">,</span>  <span class="mf">20.53778357</span><span class="p">,</span>  <span class="mf">33.33365909</span><span class="p">,</span>
-        <span class="mf">33.3343511</span> <span class="p">,</span>  <span class="mf">26.03460301</span><span class="p">,</span>  <span class="mf">26.03460301</span><span class="p">,</span>  <span class="mf">31.44237961</span><span class="p">,</span>
-        <span class="mf">31.44261404</span><span class="p">,</span>  <span class="mf">34.28021045</span><span class="p">,</span>  <span class="mf">34.28088335</span><span class="p">,</span>  <span class="mf">35.42785385</span><span class="p">,</span>
-        <span class="mf">35.42850495</span><span class="p">,</span>  <span class="mf">35.89995802</span><span class="p">,</span>  <span class="mf">35.89997275</span><span class="p">,</span>  <span class="mf">35.90181477</span><span class="p">,</span>
-        <span class="mf">35.90184832</span><span class="p">,</span>  <span class="mf">50.00066032</span><span class="p">,</span>  <span class="mf">50.0013426</span> <span class="p">,</span>  <span class="mf">50.00136179</span><span class="p">,</span>
-        <span class="mf">32.44415565</span><span class="p">,</span>  <span class="mf">32.44438284</span><span class="p">,</span>  <span class="mf">33.65446829</span><span class="p">,</span>  <span class="mf">33.65468731</span><span class="p">,</span>
-        <span class="mf">36.78052454</span><span class="p">,</span>  <span class="mf">36.78053892</span><span class="p">,</span>  <span class="mf">36.78233685</span><span class="p">,</span>  <span class="mf">36.78236959</span><span class="p">,</span>
-        <span class="mf">37.85243698</span><span class="p">,</span>  <span class="mf">37.85245096</span><span class="p">,</span>  <span class="mf">37.85419797</span><span class="p">,</span>  <span class="mf">37.85422979</span><span class="p">,</span>
-        <span class="mf">38.87329197</span><span class="p">,</span>  <span class="mf">38.87329197</span><span class="p">,</span>  <span class="mf">38.87388536</span><span class="p">,</span>  <span class="mf">38.87388536</span><span class="p">,</span>
-        <span class="mf">50.63660763</span><span class="p">,</span>  <span class="mf">50.63728134</span><span class="p">,</span>  <span class="mf">50.63730029</span><span class="p">,</span>  <span class="mf">51.42048261</span><span class="p">,</span>
-        <span class="mf">51.42114606</span><span class="p">,</span>  <span class="mf">51.42116471</span><span class="p">,</span>  <span class="mf">66.66765177</span><span class="p">,</span>  <span class="mf">66.66836297</span><span class="p">,</span>
-        <span class="mf">37.26423534</span><span class="p">,</span>  <span class="mf">37.26423534</span><span class="p">,</span>  <span class="mf">37.26443315</span><span class="p">,</span>  <span class="mf">37.26443315</span><span class="p">,</span>
-        <span class="mf">41.09509686</span><span class="p">,</span>  <span class="mf">41.09509686</span><span class="p">,</span>  <span class="mf">41.09510973</span><span class="p">,</span>  <span class="mf">41.09510973</span><span class="p">,</span>
-        <span class="mf">41.0967189</span> <span class="p">,</span>  <span class="mf">41.0967189</span> <span class="p">,</span>  <span class="mf">41.0967482</span> <span class="p">,</span>  <span class="mf">41.0967482</span> <span class="p">,</span>
-        <span class="mf">53.85226116</span><span class="p">,</span>  <span class="mf">53.85226116</span><span class="p">,</span>  <span class="mf">53.85289465</span><span class="p">,</span>  <span class="mf">53.85289465</span><span class="p">,</span>
-        <span class="mf">53.85291246</span><span class="p">,</span>  <span class="mf">53.85291246</span><span class="p">,</span>  <span class="mf">55.86686011</span><span class="p">,</span>  <span class="mf">55.8671227</span> <span class="p">,</span>
-        <span class="mf">56.66325336</span><span class="p">,</span>  <span class="mf">56.66785273</span><span class="p">,</span>  <span class="mf">67.14592909</span><span class="p">,</span>  <span class="mf">67.14663522</span><span class="p">,</span>
-        <span class="mf">67.7390271</span> <span class="p">,</span>  <span class="mf">67.73972705</span><span class="p">,</span>  <span class="mf">83.33535519</span><span class="p">,</span>  <span class="mf">56.43674387</span><span class="p">,</span>
-        <span class="mf">56.43700381</span><span class="p">,</span>  <span class="mf">57.14110656</span><span class="p">,</span>  <span class="mf">57.14136329</span><span class="p">,</span>  <span class="mf">57.2252067</span> <span class="p">,</span>
-        <span class="mf">57.2297609</span> <span class="p">,</span>  <span class="mf">57.91998171</span><span class="p">,</span>  <span class="mf">57.92448129</span><span class="p">,</span>  <span class="mf">69.60298696</span><span class="p">,</span>
-        <span class="mf">69.60298696</span><span class="p">,</span>  <span class="mf">69.60366816</span><span class="p">,</span>  <span class="mf">69.60366816</span><span class="p">,</span>  <span class="mf">83.71846526</span><span class="p">,</span>
-        <span class="mf">84.19490142</span><span class="p">,</span>  <span class="mf">59.33890847</span><span class="p">,</span>  <span class="mf">59.33890847</span><span class="p">,</span>  <span class="mf">59.3391557</span> <span class="p">,</span>
-        <span class="mf">59.3391557</span> <span class="p">,</span>  <span class="mf">60.08930256</span><span class="p">,</span>  <span class="mf">60.08930256</span><span class="p">,</span>  <span class="mf">60.09363971</span><span class="p">,</span>
-        <span class="mf">60.09363971</span><span class="p">,</span>  <span class="mf">85.70170024</span><span class="p">,</span>  <span class="mf">85.70170024</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-7-13b539339ef6&gt; in &lt;module&gt;()
+----&gt; 1 L.H.taud
+
+
+NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">aktk</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="p">[],</span> <span class="n">output</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;sig&#39;</span><span class="p">,</span><span class="s">&#39;ray&#39;</span><span class="p">,</span><span class="s">&#39;Ct&#39;</span><span class="p">,</span><span class="s">&#39;H&#39;</span><span class="p">],</span>
             <span class="n">si_algo</span><span class="o">=</span><span class="s">&#39;old&#39;</span><span class="p">,</span><span class="n">ra_ceil_height_meter</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">ra_number_mirror_cf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>checkh5
-Start Signatures
-Signatures&#39;&gt; from 1_2_3 loaded
-load signature
-Stop signature 0.12762093544
-Start Rays
-Rays&#39;&gt; from 3_0_2 loaded
-Stop rays 0.0357868671417
-Ctilde&#39;&gt; from 0_2_0 loaded
-Tchannel&#39;&gt; from 0_2_0_0_0_2_2 loaded
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-8-4725e09794ec&gt; in &lt;module&gt;()
+----&gt; 1 aktk=L.eval(force=[], output=[&#39;sig&#39;,&#39;ray&#39;,&#39;Ct&#39;,&#39;H&#39;],
+      2             si_algo=&#39;old&#39;,ra_ceil_height_meter=3,ra_number_mirror_cf=1)
+
+
+NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">aktk</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">aktk</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;Container object of 3 artists&gt;
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-9-54a8ce6633a9&gt; in &lt;module&gt;()
+----&gt; 1 plt.stem(aktk[1],aktk[0])
+
+
+NameError: name &#39;aktk&#39; is not defined
 </pre></div>
 </div>
-<img alt="../../_images/LinkSimulation_11_1.png" src="../../_images/LinkSimulation_11_1.png" />
 <p>The propagation channel (without antenna) can be vizualized on a ray by
 ray mode.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="nb">type</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">C</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">pylayers</span><span class="o">.</span><span class="n">antprop</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">Ctilde</span>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-10-6365d47278c3&gt; in &lt;module&gt;()
+----&gt; 1 type(L.C)
+
+
+NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c">#L._show3()sns.set_style(&quot;dark&quot;)</span>
@@ -337,13 +295,36 @@ ray mode.</p>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s">&#39;jet&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;l10&#39;</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span><span class="n">vmax</span><span class="o">=-</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/LinkSimulation_15_0.png" src="../../_images/LinkSimulation_15_0.png" />
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-12-33da1547e63a&gt; in &lt;module&gt;()
+      1 fig = plt.figure(figsize=(8,8))
+----&gt; 2 C = L.C
+      3 f,a = C.show(cmap=&#39;jet&#39;,fig=fig,typ=&#39;l10&#39;,vmin=-100,vmax=-10)
+
+
+NameError: name &#39;L&#39; is not defined
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x2b2dd5566bd0&gt;
+</pre></div>
+</div>
 <p>It is possible to look at individual ray transfer function, as
 illustrated below.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">95</span><span class="p">,</span> <span class="mi">181</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-13-692d6a37642f&gt; in &lt;module&gt;()
+----&gt; 1 C.Ctt.y.shape
+
+
+NameError: name &#39;C&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">ir</span> <span class="o">=</span> <span class="mi">80</span>
@@ -353,10 +334,21 @@ illustrated below.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Modulus of the ray &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; transfer function&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b2137988c90&gt;
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-14-b982fe6f7874&gt; in &lt;module&gt;()
+      1 ir = 80
+----&gt; 2 plt.plot(C.Ctt.x,abs(C.Ctt.y[ir,:]))
+      3 plt.xlabel(&#39;Frequency (GHz)&#39;)
+      4 plt.ylabel(&#39;Level (linear)&#39;)
+      5 plt.title(&#39;Modulus of the ray &#39;+str(ir)+&#39; transfer function&#39;)
+
+
+NameError: name &#39;C&#39; is not defined
 </pre></div>
 </div>
-<img alt="../../_images/LinkSimulation_18_1.png" src="../../_images/LinkSimulation_18_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">ir</span> <span class="o">=</span> <span class="mi">30</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">ir</span><span class="p">,:]))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Frequency (GHz)&#39;</span><span class="p">)</span>
@@ -364,24 +356,38 @@ illustrated below.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Modulus of the ray &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ir</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; transfer function&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b21380bc790&gt;
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-15-cc3e93bb836b&gt; in &lt;module&gt;()
+      1 ir = 30
+----&gt; 2 plt.plot(C.Ctt.x,abs(C.Ctt.y[ir,:]))
+      3 plt.xlabel(&#39;Frequency (GHz)&#39;)
+      4 plt.ylabel(&#39;Level (linear)&#39;)
+      5 plt.title(&#39;Modulus of the ray &#39;+str(ir)+&#39; transfer function&#39;)
+
+
+NameError: name &#39;C&#39; is not defined
 </pre></div>
 </div>
-<img alt="../../_images/LinkSimulation_19_1.png" src="../../_images/LinkSimulation_19_1.png" />
 <p>In the link we also have the transmission channel accounting for the
 effect of antennas and Friis factor. If the ray transfer function is
 scaled with <img src="../../_images/mathmpl/math-2568d81340.png" style="position: relative; bottom: -7px"/></p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">*</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">x</span><span class="o">/</span><span class="mf">0.3</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>/home/uguen/anaconda/lib/python2.7/site-packages/numpy/core/numeric.py:462: ComplexWarning: Casting complex values to real discards the imaginary part
-  return array(a, dtype, copy=False, order=order)
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-16-68e484174013&gt; in &lt;module&gt;()
+----&gt; 1 plt.plot(L.H.x,L.H.y[0,:]*4*np.pi*L.H.x/0.3)
+
+
+NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2b2138189fd0&gt;]
-</pre></div>
-</div>
-<img alt="../../_images/LinkSimulation_21_2.png" src="../../_images/LinkSimulation_21_2.png" />
 <p>Notice that in this case the frequency</p>
 <p>The infinite bandwidth channel impulse response is plotted below from
 the extrated set <img src="../../_images/mathmpl/math-4187fb41bb.png" style="position: relative; bottom: -7px"/>.</p>
@@ -391,61 +397,124 @@ the extrated set <img src="../../_images/mathmpl/math-4187fb41bb.png" style="pos
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;amplitude (linear scale&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x2b2137946cd0&gt;
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-17-fed48e39015b&gt; in &lt;module&gt;()
+----&gt; 1 plt.stem(aktk[1],aktk[0])
+      2 plt.title(&#39;Infinite bandwith Channel Impulse response&#39;)
+      3 plt.xlabel(&#39;delay (ns)&#39;)
+      4 plt.ylabel(&#39;amplitude (linear scale&#39;)
+
+
+NameError: name &#39;aktk&#39; is not defined
 </pre></div>
 </div>
-<img alt="../../_images/LinkSimulation_24_1.png" src="../../_images/LinkSimulation_24_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pylayers.simul.simulnet</span> <span class="kn">as</span> <span class="nn">sn</span>
 <span class="kn">import</span> <span class="nn">pylayers.simul.simultraj</span> <span class="kn">as</span> <span class="nn">st</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+AssertionError                            Traceback (most recent call last)
+
+&lt;ipython-input-18-f6ed6fa7963a&gt; in &lt;module&gt;()
+----&gt; 1 import pylayers.simul.simulnet as sn
+      2 import pylayers.simul.simultraj as st
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/simul/simulnet.py in &lt;module&gt;()
+     62 import pylayers.util.pyutil as pyu
+     63
+---&gt; 64 from pylayers.network.network import Network, Node, PNetwork
+     65 from pylayers.network.communication import Gcom
+     66 from pylayers.network.show import ShowNet, ShowTable
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/network/network.py in &lt;module&gt;()
+    151 #from PyLayers.Network.Node import Node
+    152 import pylayers.util.pyutil as pyu
+--&gt; 153 from pylayers.network.emsolver import EMSolver
+    154 from pylayers.network.show import ShowNet,ShowTable
+    155 #from pylayers.util.pymysqldb import Database
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/network/emsolver.py in &lt;module&gt;()
+     42
+     43
+---&gt; 44 class EMSolver(object):
+     45     &quot;&quot;&quot; Invoque an electromagnetic solver
+     46
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/network/emsolver.py in EMSolver()
+     71     &quot;&quot;&quot;
+     72
+---&gt; 73     def __init__(self,L=Layout()):
+     74
+     75         self.config  = ConfigParser.ConfigParser()
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in __init__(self, _filename, _filematini, _fileslabini, _filefur, force, check)
+    410         # check layout integrity (default)
+    411         if check:
+--&gt; 412             self.check()
+    413         #self.boundary()
+    414
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in check(self, level)
+    719             deg0 = filter(lambda x: nx.degree(self.Gs,x)==0,upnt)
+    720             deg1 = filter(lambda x: nx.degree(self.Gs,x)==1,upnt)
+--&gt; 721             assert (len(deg0)==0), &quot;It exists degree 0 points :  %r&quot; % deg0
+    722             assert (len(deg1)==0), &quot;It exists degree 1 points : %r&quot; % deg1
+    723
+
+
+AssertionError: It exists degree 0 points :  [-18, -17, -16, -15, -14]
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">=</span><span class="n">sn</span><span class="o">.</span><span class="n">Simul</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Layout graphs are loaded from /home/uguen/Bureau/P1/struc/ini
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-19-550d145b7b04&gt; in &lt;module&gt;()
+----&gt; 1 S=sn.Simul()
+
+
+NameError: name &#39;sn&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>----------------
-TA-Office.ini
-Image(&#39;/home/uguen/Bureau/P1/struc/images/DLR4991.png&#39;)
-----------------
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
 
-Number of points  : 71
-Number of segments  : 87
-Number of sub segments  : 16
-Number of cycles  : 18
-Number of rooms  : 17
-degree 0 : []
-degree 1 : []
-number of node point of degree 2 : 39
-number of node point of degree 3 : 32
+NameError                                 Traceback (most recent call last)
 
-xrange :(0.0, 40.0)
-yrange :(0.0, 15.0)
+&lt;ipython-input-20-225e20c8deb9&gt; in &lt;module&gt;()
+----&gt; 1 S.L
 
-Useful dictionnaries
-----------------
-dca {cycle : []} cycle with an airwall
-sl {slab name : slab dictionary}
-name :  {slab :seglist}
 
-Useful arrays
-----------------
-pt : numpy array of points
-normal : numpy array of normal
-offset : numpy array of offset
-tsg : get segment index in Gs from tahe
-isss :  sub-segment index above Nsmax
-tgs : get segment index in tahe from Gs
-lsss : list of segments with sub-segment
-sla : list of all slab names (Nsmax+Nss+1)
-degree : degree of nodes
+NameError: name &#39;S&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">runsimul</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-21-e96c93b86265&gt; in &lt;module&gt;()
+----&gt; 1 S.runsimul()
+
+
+NameError: name &#39;S&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">dB</span><span class="o">=</span><span class="bp">True</span>
@@ -459,64 +528,32 @@ default loads the file &#8216;.h5&#8217; generated by
 <span class="n">T</span><span class="o">.</span><span class="n">loadh5</span><span class="p">()</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-23-c93f9b6c2ae9&gt; in &lt;module&gt;()
+      1 T=Trajectories()
+----&gt; 2 T.loadh5()
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/mobility/trajectory.pyc in loadh5(self, _filename, append)
+    143             fil = pd.HDFStore(filename)
+    144         else:
+--&gt; 145             raise NameError(filename + &#39; not found&#39;)
+    146         if not append:
+    147             [self.pop(0) for i in range(len(self))]
+
+
+NameError: /home/uguen/Bureau/P1/netsave/simulnet_TA-Office.h5 not found
+</pre></div>
+</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">T</span>
 </pre></div>
 </div>
-<pre class="literal-block">
-Trajectories performed in Layout : TA-Office.ini
-
-Trajectory of agent John with ID 1
-----------------------------------
-t (s) : 0.00 : 0.20 : 119.80
-dtot (m) : 406.09
-Vmoy (m/s) : 3.39
-                                 x         y        vx        vy        ax  t
-1970-01-01 00:00:00.000  18.907750  2.528547  0.038749  0.155237  0.193744
-1970-01-01 00:00:00.200  18.921699  2.584433  0.069748  0.279427  0.154995
-
-                               ay      s
-t
-1970-01-01 00:00:00.000  0.776185  0.160
-1970-01-01 00:00:00.200  0.620948  0.448
-
-Trajectory of agent Alex with ID 2
-----------------------------------
-t (s) : 0.00 : 0.20 : 119.80
-dtot (m) : 361.43
-Vmoy (m/s) : 3.02
-                                 x          y        vx        vy        ax  t
-1970-01-01 00:00:00.000  24.306132  12.467593  0.030661 -0.157035  0.153303
-1970-01-01 00:00:00.200  24.317170  12.411061  0.055189 -0.282663  0.122642
-
-                               ay      s
-t
-1970-01-01 00:00:00.000 -0.785174  0.160
-1970-01-01 00:00:00.200 -0.628139  0.448
-
-Access point Router with ID 6
------------------------------
-t (s) : 0.00
-Vmoy (m/s) : 0.0
-              x  y    z  vx  vy  ax  ay  s
-t
-1970-01-01  0.5  2  2.5   0   0   0   0  0
-
-Access point Router with ID 7
------------------------------
-t (s) : 0.00
-Vmoy (m/s) : 0.0
-              x   y    z  vx  vy  ax  ay  s
-t
-1970-01-01  0.7  14  2.5   0   0   0   0  0
-
-Access point Router with ID 8
------------------------------
-t (s) : 0.00
-Vmoy (m/s) : 0.0
-             x   y    z  vx  vy  ax  ay  s
-t
-1970-01-01  39  13  2.5   0   0   0   0  0
-</pre>
+<div class="highlight-python"><div class="highlight"><pre>Issue in Trajectories. Are you sure any Trajectory is loaded ?
+</pre></div>
+</div>
 <p>A SimulTraj object is derived from a trajectory calculated previously in
 simulnet and a body agent description. The Simultraj object get the
 trajectories from the <code class="docutils literal"><span class="pre">simultaj.ini</span></code> file.</p>
@@ -525,29 +562,13 @@ trajectories from the <code class="docutils literal"><span class="pre">simultaj.
 </div>
 <div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
 
-AttributeError                            Traceback (most recent call last)
+NameError                                 Traceback (most recent call last)
 
 &lt;ipython-input-25-ae27233a0375&gt; in &lt;module&gt;()
 ----&gt; 1 St=st.Simul(verbose=False)
 
 
-/home/uguen/Documents/rch/devel/pylayers/pylayers/simul/simultraj.pyc in __init__(self, source, verbose)
-    152         if isinstance(source,str):
-    153             self.filetraj = source
---&gt; 154             self.load_simul(source)
-    155             self.source = &#39;simul&#39;
-    156         elif &#39;pylayers&#39; in source.__module__:
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/simul/simultraj.pyc in load_simul(self, source)
-    237         if not os.path.isfile(source):
-    238             raise AttributeError(&#39;Trajectory file&#39;+source+&#39;has not been found.\
---&gt; 239              Please make sure you have run a simulnet simulation before runining simultraj.&#39;)
-    240
-    241         # get the trajectory
-
-
-AttributeError: Trajectory filesimulnet_TA-Office.h5has not been found.             Please make sure you have run a simulnet simulation before runining simultraj.
+NameError: name &#39;st&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c">#St.run(t=list(np.arange(0,1,0.1)),OB=True,B2B=True,B2I=True)</span>
@@ -596,7 +617,7 @@ NameError: name &#39;St&#39; is not defined
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 28, 2015.
+      Last updated on nov. 29, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/5-SIM/LinkSimulation.txt"

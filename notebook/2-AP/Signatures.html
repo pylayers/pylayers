@@ -147,91 +147,116 @@ from pylayers.antprop.rays import *
 <span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre>new file defstr3.ini
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+ValueError                                Traceback (most recent call last)
+
+&lt;ipython-input-2-1b28416d0633&gt; in &lt;module&gt;()
+----&gt; 1 L = Layout(&#39;defstr3.ini&#39;)
+      2 L.build()
+      3 L.dumpw()
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in __init__(self, _filename, _filematini, _fileslabini, _filefur, force, check)
+    410         # check layout integrity (default)
+    411         if check:
+--&gt; 412             self.check()
+    413         #self.boundary()
+    414
+
+
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in check(self, level)
+    709         #
+    710         degpnt = map(lambda x : nx.degree(self.Gs,x),upnt)  # points absolute degrees
+--&gt; 711         degmin = min(degpnt)
+    712         degmax = max(degpnt)
+    713
+
+
+ValueError: min() arg is an empty sequence
+</pre></div>
+</div>
 <p>Showing the graph of rooms with 2 rooms separated by a DOOR segment</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;sv&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
 <span class="n">a</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Signatures_6_0.png" src="../../_images/Signatures_6_0.png" />
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-3-69f89247822d&gt; in &lt;module&gt;()
+----&gt; 1 L.showG(&#39;sv&#39;,figsize=(8,8))
+      2 a=plt.axis(&#39;off&#39;)
+
+
+NameError: name &#39;L&#39; is not defined
+</pre></div>
+</div>
 <p>The graph of interactions is shown below.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;si&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">a</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Signatures_8_0.png" src="../../_images/Signatures_8_0.png" />
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-4-5c11869b119b&gt; in &lt;module&gt;()
+----&gt; 1 L.showG(&#39;si&#39;,figsize=(10,5))
+      2 a=plt.axis(&#39;off&#39;)
+
+
+NameError: name &#39;L&#39; is not defined
+</pre></div>
+</div>
 <p>All the interactions of a given cycle are stored as meta information in
 nodes of <code class="docutils literal"><span class="pre">Gt</span></code></p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">node</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="p">{},</span>
- <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="p">{}}</span>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-5-048d5ca8b31b&gt; in &lt;module&gt;()
+----&gt; 1 L.Gi.node
+
+
+NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;inter&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">[(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
- <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
- <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
- <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
- <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
- <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
- <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
- <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
- <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
- <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
- <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
- <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
- <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
- <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
- <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
- <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
- <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
- <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
- <span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,),</span>
- <span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,),</span>
- <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,),</span>
- <span class="p">(</span><span class="o">-</span><span class="mi">6</span><span class="p">,)]</span>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-6-522db6c4d9d9&gt; in &lt;module&gt;()
+----&gt; 1 L.Gt.node[0][&#39;inter&#39;]
+
+
+NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
 <p>The signature is calculated with as parameters the Layout object and two
 cycle numbers. In example below it is 0 and 1.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Si</span> <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-7-e66f0bac9490&gt; in &lt;module&gt;()
+----&gt; 1 Si = Signatures(L,0,1)
+
+
+NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
 <p>The cold start determination of the signature is done with a <code class="docutils literal"><span class="pre">run</span></code>
@@ -242,14 +267,31 @@ The mitigation of graph exploration depth is done in setting a
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">Si</span><span class="o">.</span><span class="n">run5</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">diffraction</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">algo</span><span class="o">=</span><span class="s">&#39;old&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-8-d547d93e7556&gt; in &lt;module&gt;()
+----&gt; 1 Si.run5(cutoff=5,diffraction=False,algo=&#39;old&#39;)
+
+
+NameError: name &#39;Si&#39; is not defined
+</pre></div>
+</div>
 <p>The representation method of a signature gives informations about the
 different signatures. Signatures are grouped by number of interactions.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">pos</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="p">(</span><span class="mf">758.49</span><span class="p">,</span> <span class="mf">1111.9</span><span class="p">),</span>
- <span class="mi">1</span><span class="p">:</span> <span class="p">(</span><span class="mf">766.00300113353387</span><span class="p">,</span> <span class="mf">1113.947479109665</span><span class="p">),</span>
- <span class="mi">2</span><span class="p">:</span> <span class="p">(</span><span class="mf">761.00289669547806</span><span class="p">,</span> <span class="mf">1113.915769812613</span><span class="p">)}</span>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-9-090fdd712360&gt; in &lt;module&gt;()
+----&gt; 1 L.Gt.pos
+
+
+NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">ptx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
@@ -258,8 +300,18 @@ different signatures. Signatures are grouped by number of interactions.</p>
 <span class="k">print</span> <span class="n">prx</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[  758.53994658  1112.31559265]
-[  766.04084206  1114.61159219]
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-10-0e40550ac708&gt; in &lt;module&gt;()
+----&gt; 1 ptx = np.array(L.Gt.pos[0])+np.random.rand(2)
+      2 prx = np.array(L.Gt.pos[1])+np.random.rand(2)
+      3 print ptx
+      4 print prx
+
+
+NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -275,7 +327,7 @@ different signatures. Signatures are grouped by number of interactions.</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 28, 2015.
+      Last updated on nov. 29, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/2-AP/Signatures.txt"

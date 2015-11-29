@@ -182,7 +182,13 @@ coordinates described as 1x2 <code class="docutils literal"><span class="pre">nu
 <span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/MultiWall_11_0.png" src="../../_images/MultiWall_11_0.png" />
+<div class="highlight-python"><div class="highlight"><pre>/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/collections.py:650: FutureWarning: elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison
+  if self._edgecolors_original != str(&#39;face&#39;):
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/collections.py:590: FutureWarning: elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison
+  if self._edgecolors == str(&#39;face&#39;):
+</pre></div>
+</div>
+<img alt="../../_images/MultiWall_11_1.png" src="../../_images/MultiWall_11_1.png" />
 <div class="section" id="finding-the-intersection-between-the-direct-path-and-the-walls">
 <h3>Finding the intersection between the &#8220;direct&#8221; path and the walls<a class="headerlink" href="#finding-the-intersection-between-the-direct-path-and-the-walls" title="Permalink to this headline">¶</a></h3>
 <p>The function <code class="docutils literal"><span class="pre">angleonlink</span></code> returns the list of intersected segments
@@ -242,14 +248,14 @@ Image(&#39;/home/uguen/Bureau/P1/struc/images/DLR4991.png&#39;)
 ----------------
 
 Number of points  : 71
-Number of segments  : 94
+Number of segments  : 87
 Number of sub segments  : 16
-Number of cycles  : 25
-Number of rooms  : 24
+Number of cycles  : 18
+Number of rooms  : 17
 degree 0 : []
 degree 1 : []
-degree 2 : 39
-degree 3 : 32
+number of node point of degree 2 : 39
+number of node point of degree 3 : 32
 
 xrange :(0.0, 40.0)
 yrange :(0.0, 15.0)
@@ -267,7 +273,9 @@ normal : numpy array of normal
 offset : numpy array of offset
 tsg : get segment index in Gs from tahe
 isss :  sub-segment index above Nsmax
-tgs : get segment index in tahe from Gs
+tgs : get segment index in tahe from self.Gs
+upnt : get point id index from self.pt
+iupnt : get point index in self.pt from point id
 lsss : list of segments with sub-segment
 sla : list of all slab names (Nsmax+Nss+1)
 degree : degree of nodes
@@ -286,7 +294,7 @@ file</p>
 <span class="k">print</span> <span class="s">&#39;Coverage performed in &#39;</span><span class="p">,</span> <span class="n">t2</span><span class="o">-</span><span class="n">t1</span><span class="p">,</span> <span class="s">&#39;s&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Coverage performed in  3.12195301056 s
+<div class="highlight-python"><div class="highlight"><pre>Coverage performed in  1.68883395195 s
 </pre></div>
 </div>
 <p>For Orthogonal polarization</p>
@@ -315,7 +323,7 @@ file</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 28, 2015.
+      Last updated on nov. 29, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/2-AP/MultiWall.txt"

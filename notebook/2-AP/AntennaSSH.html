@@ -138,28 +138,27 @@ from pylayers.antprop.antssh import *
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>FileName : S1R1.mat
------------------------
+<div class="highlight-python"><div class="highlight"><pre>Antenna type : mat
+------------------------
+file name : S1R1.mat
 fmin : 0.80GHz
 fmax : 5.95GHz
 step : 50.00MHz
 Nf : 104
 -----------------------
+      evaluated
+-----------------------
 Ntheta : 91
 Nphi : 180
-GmaxdB : 2.23 dB
    f = 5.60 GHz
    theta = 70.00 (degrees)
    phi = 272.00  (degrees)
-antenna name : Th1
-date : 04/12/12
-time : 15:55
-Notes : Mohamed at the log
-
-Serie : 1
-Run : 1
-Nb theta (lat) : 91
-Nb phi (lon) :180
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">nf</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">104</span>
 </pre></div>
 </div>
 <p>To calculate scalar spherical harmonics use method <code class="docutils literal"><span class="pre">ssh(A,L)</span></code></p>
@@ -170,37 +169,30 @@ Nb phi (lon) :180
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>FileName : S1R1.mat
------------------------
+<div class="highlight-python"><div class="highlight"><pre>Antenna type : mat
+------------------------
+file name : S1R1.mat
 fmin : 0.80GHz
 fmax : 5.95GHz
 step : 50.00MHz
 Nf : 104
 -----------------------
+      evaluated
+-----------------------
 Ntheta : 91
 Nphi : 180
-GmaxdB : 2.23 dB
    f = 5.60 GHz
    theta = 70.00 (degrees)
    phi = 272.00  (degrees)
-antenna name : Th1
-date : 04/12/12
-time : 15:55
-Notes : Mohamed at the log
-
-Serie : 1
-Run : 1
-Nb theta (lat) : 91
-Nb phi (lon) :180
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s2</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2b81e3a10450&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2ae854b3f890&gt;]
 </pre></div>
 </div>
-<img alt="../../_images/AntennaSSH_7_1.png" src="../../_images/AntennaSSH_7_1.png" />
+<img alt="../../_images/AntennaSSH_8_1.png" src="../../_images/AntennaSSH_8_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">savesh2</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -213,20 +205,20 @@ Nb phi (lon) :180
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s2</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2b81e3b175d0&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2ae854c2db90&gt;]
 </pre></div>
 </div>
-<img alt="../../_images/AntennaSSH_10_1.png" src="../../_images/AntennaSSH_10_1.png" />
+<img alt="../../_images/AntennaSSH_11_1.png" src="../../_images/AntennaSSH_11_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">s2tos3</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s3</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2b81e3be4550&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2ae854cfb2d0&gt;]
 </pre></div>
 </div>
-<img alt="../../_images/AntennaSSH_12_1.png" src="../../_images/AntennaSSH_12_1.png" />
+<img alt="../../_images/AntennaSSH_13_1.png" src="../../_images/AntennaSSH_13_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">ind2</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
@@ -242,55 +234,57 @@ Nb phi (lon) :180
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s2</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2b81e3ca3b90&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2ae854dac8d0&gt;]
 </pre></div>
 </div>
-<img alt="../../_images/AntennaSSH_15_1.png" src="../../_images/AntennaSSH_15_1.png" />
+<img alt="../../_images/AntennaSSH_16_1.png" src="../../_images/AntennaSSH_16_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">loadsh3</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s3</span><span class="p">[</span><span class="mi">100</span><span class="p">]))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2b81e3d6e210&gt;]
-</pre></div>
-</div>
-<img alt="../../_images/AntennaSSH_17_1.png" src="../../_images/AntennaSSH_17_1.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s2</span><span class="p">[</span><span class="mi">100</span><span class="p">]))</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2b81e3e3a050&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2ae854e6c6d0&gt;]
 </pre></div>
 </div>
 <img alt="../../_images/AntennaSSH_18_1.png" src="../../_images/AntennaSSH_18_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s2</span><span class="p">[</span><span class="mi">100</span><span class="p">]))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x2ae854f36250&gt;]
+</pre></div>
+</div>
+<img alt="../../_images/AntennaSSH_19_1.png" src="../../_images/AntennaSSH_19_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;tau&#39;</span><span class="p">,</span>
- <span class="s">&#39;Nf&#39;</span><span class="p">,</span>
  <span class="s">&#39;PhotoFile&#39;</span><span class="p">,</span>
- <span class="s">&#39;Np&#39;</span><span class="p">,</span>
- <span class="s">&#39;Nt&#39;</span><span class="p">,</span>
+ <span class="s">&#39;nf&#39;</span><span class="p">,</span>
+ <span class="s">&#39;Fp&#39;</span><span class="p">,</span>
  <span class="s">&#39;Run&#39;</span><span class="p">,</span>
  <span class="s">&#39;source&#39;</span><span class="p">,</span>
  <span class="s">&#39;_filename&#39;</span><span class="p">,</span>
+ <span class="s">&#39;param&#39;</span><span class="p">,</span>
  <span class="s">&#39;Serie&#39;</span><span class="p">,</span>
- <span class="s">&#39;Ftheta&#39;</span><span class="p">,</span>
+ <span class="s">&#39;Date&#39;</span><span class="p">,</span>
  <span class="s">&#39;theta&#39;</span><span class="p">,</span>
  <span class="s">&#39;fromfile&#39;</span><span class="p">,</span>
+ <span class="s">&#39;fGHz&#39;</span><span class="p">,</span>
  <span class="s">&#39;phi&#39;</span><span class="p">,</span>
- <span class="s">&#39;Fphi&#39;</span><span class="p">,</span>
+ <span class="s">&#39;nph&#39;</span><span class="p">,</span>
  <span class="s">&#39;Notes&#39;</span><span class="p">,</span>
- <span class="s">&#39;fa&#39;</span><span class="p">,</span>
+ <span class="s">&#39;nth&#39;</span><span class="p">,</span>
  <span class="s">&#39;S&#39;</span><span class="p">,</span>
  <span class="s">&#39;AntennaName&#39;</span><span class="p">,</span>
+ <span class="s">&#39;grid&#39;</span><span class="p">,</span>
+ <span class="s">&#39;Ft&#39;</span><span class="p">,</span>
  <span class="s">&#39;typ&#39;</span><span class="p">,</span>
  <span class="s">&#39;DataFile&#39;</span><span class="p">,</span>
  <span class="s">&#39;evaluated&#39;</span><span class="p">,</span>
- <span class="s">&#39;Date&#39;</span><span class="p">,</span>
  <span class="s">&#39;ext&#39;</span><span class="p">,</span>
  <span class="s">&#39;StartTime&#39;</span><span class="p">,</span>
- <span class="s">&#39;SqG&#39;</span><span class="p">]</span>
+ <span class="s">&#39;sqG&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
@@ -322,7 +316,7 @@ Ncoeff s3 : 143
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 28, 2015.
+      Last updated on nov. 29, 2015.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/2-AP/AntennaSSH.txt"

@@ -211,8 +211,8 @@
         <span class="c">#</span>
         <span class="c"># Real part</span>
         <span class="c">#</span>
-        <span class="n">Fpr</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Fp</span><span class="p">[</span><span class="n">k</span><span class="p">][::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">]</span><span class="o">.</span><span class="n">real</span>
-        <span class="n">Ftr</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Ft</span><span class="p">[</span><span class="n">k</span><span class="p">][::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">]</span><span class="o">.</span><span class="n">real</span>
+        <span class="n">Fpr</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Fp</span><span class="p">[::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">real</span>
+        <span class="n">Ftr</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Ft</span><span class="p">[::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">real</span>
         <span class="c">#</span>
         <span class="c"># Fpr     Ntheta,Nphi</span>
         <span class="c">#</span>
@@ -223,8 +223,8 @@
         <span class="c">#</span>
         <span class="c"># Imaginary part</span>
         <span class="c">#</span>
-        <span class="n">Fpi</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Fp</span><span class="p">[</span><span class="n">k</span><span class="p">][::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">]</span><span class="o">.</span><span class="n">imag</span>
-        <span class="n">Fti</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Ft</span><span class="p">[</span><span class="n">k</span><span class="p">][::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">]</span><span class="o">.</span><span class="n">imag</span>
+        <span class="n">Fpi</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Fp</span><span class="p">[::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">imag</span>
+        <span class="n">Fti</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Ft</span><span class="p">[::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">imag</span>
         <span class="n">bri</span><span class="p">,</span> <span class="n">bii</span><span class="p">,</span> <span class="n">cri</span><span class="p">,</span> <span class="n">cii</span> <span class="o">=</span> <span class="n">gridComp</span><span class="o">.</span><span class="n">vha</span><span class="p">(</span><span class="n">nth</span><span class="p">,</span> <span class="n">nph</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
                                           <span class="n">lvha</span><span class="p">,</span> <span class="n">wvha</span><span class="p">,</span>
                                           <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Fpi</span><span class="p">),</span>
