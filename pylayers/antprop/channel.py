@@ -2660,7 +2660,7 @@ class Tchannel(bs.FUsignal):
         itau = np.floor((tau-taumin)/dx).astype(int)
         
         U = np.ones((shy[0],shy[-1]),dtype=int)
-        CU = np.cumsum(U,axis=1)-1 # -1 to start @ value 0 
+        CU = np.cumsum(U,axis=1)-1 #-1 to start @ value 0 
 
         rir  = np.zeros((shy[0],N))
         col1 = np.repeat(np.arange(shy[0],dtype=int),shy[-1])

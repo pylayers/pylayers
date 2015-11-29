@@ -299,7 +299,7 @@ class Pattern(PyLayers):
         self.pol  = self.param['pol']
         G    = pow(10.,self.GmaxdB/10.) # linear gain
         if self.grid:
-            # Nth x Nph x Nf
+            # Nth x Nphx Nf
             self.sqG  = np.array(np.sqrt(G))*np.ones(len(self.fGHz))[None,None,:]
             self.evaluated = True
         else:
@@ -393,7 +393,7 @@ class Pattern(PyLayers):
                     'sllv': -18, # side lobe level
                     'fbrh': 30,  # front back ratio
                     'gm': 18,    #
-                    'pol':'p'    # t , p , c
+                    'pol':'p'    #t , p , c
                     }}
 
 
@@ -414,20 +414,21 @@ class Pattern(PyLayers):
         gm     = self.param['gm']
         pol    = self.param['pol']
 
+        self.pol = pol
         # convert radian to degree
 
         phi   = self.phi*180/np.pi-180
         theta = self.theta*180/np.pi-90
 
         if self.grid:
-            # Nth x Nph x Nf
-            GvdB = np.maximum(-12*((theta-thtilt)/hpbwv)**2,sllv)[None,:,None]
-            GhdB = (-np.minimum(12*(phi/hpbwh)**2,fbrh)+gm)[None,None,:]
+            #Nth x Nph x Nf
+            GvdB = np.maximum(-12*((theta-thtilt)/hpbwv)**2,sllv)[:,None,None]
+            GhdB = (-np.minimum(12*(phi/hpbwh)**2,fbrh)+gm)[None,:,None]
             GdB  = GhdB+GvdB
-            self.sqG = np.sqrt(10**(GdB/10.))*np.ones(self.nf)[:,None,None]
+            self.sqG = np.sqrt(10**(GdB/10.))*np.ones(self.nf)[None,None,:]
             self.evaluated = True
         else:
-            # Nd x Nf
+            #Nd x Nf
             GvdB = np.maximum(-12*((theta-thtilt)/hpbwv)**2,sllv)[:,None]
             GhdB = (-np.minimum(12*(phi/hpbwh)**2,fbrh)+gm)[:,None]
             GdB  = GhdB+GvdB
@@ -769,8 +770,8 @@ class Pattern(PyLayers):
 
         for a in self.la:
             a.eval()
-            # aFt : Nt x Np x Nf  | Nd x Nf
-            # aFp : Nt x Np x Nf  | Nd x Nf
+            # aFt : Nt x Np x Nf  |Nd x Nf
+            # aFp : Nt x Np x Nf  |Nd x Nf
             aFt = a.Ft
             aFp = a.Fp
         #
@@ -900,7 +901,7 @@ class Pattern(PyLayers):
 
             >>> import matplotlib.pyplot as plt
             >>> from pylayers.antprop.antenna import *
-            >>> A = Antenna('defant.trx')
+            >>> A = Antenna('defant.vsh3')
             >>> fig,ax = A.plotG(fGHz=[2,3,4],plan='theta',angdeg=0)
             >>> fig,ax = A.plotG(fGHz=[2,3,4],plan='phi',angdeg=90)
 
@@ -1039,9 +1040,9 @@ class Pattern(PyLayers):
                         r1 = -GmindB + 20 * np.log10(  self.sqG[arg1]+1e-12)
                         r2 = -GmindB + 20 * np.log10( self.sqG[arg2]+1e-12)
                         r3 = -GmindB + 20 * np.log10( self.sqG[arg3]+1e-12)
-                        print max(r1)+GmindB
-                        print max(r2)+GmindB
-                        print max(r3)+GmindB
+                        #print max(r1)+GmindB
+                        #print max(r2)+GmindB
+                        #print max(r3)+GmindB
                     if kwargs['source']=='cst':
                         r1 = -GmindB + 20 * np.log10(  self.sqG[arg1]/np.sqrt(30)+1e-12)
                         r2 = -GmindB + 20 * np.log10( self.sqG[arg2]/np.sqrt(30)+1e-12)
@@ -1089,22 +1090,28 @@ class Pattern(PyLayers):
                 else:
                     arg = [itheta,iphi,u,ik]
                 if kwargs['polar']:
-                    r = -GmindB + 20 * np.log10(self.sqG[arg])
-                    neg = np.nonzero(r < 0)
-                    r[neg] = 0
+                    if np.prod(self.sqG.shape)!=1:
+                        r = -GmindB + 20 * np.log10(self.sqG[arg])
+                        neg = np.nonzero(r < 0)
+                        r[neg] = 0
+                    else:
+                        r = -GmindB+ 20*np.log10(self.sqG[0,0,0]*np.ones(np.shape(angle)))
                # plt.title(u'H plane - $\phi$ degrees')
                     a1 = np.arange(0, 360, 30)
                     a2 = [0, 30, 60, 90, 120 , 150 , 180 , 210, 240 , 300 , 330]
-                    rline2, rtext2 = plt.thetagrids(a1, a2)
+                    #rline2, rtext2 = plt.thetagrids(a1, a2)
                 else:
                     r =  20 * np.log10(self.sqG[arg])
 
                 plt.title(u'$\\phi$ (H) plane $\\phi$ (degrees)')
             # actual plotting
             ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
-            if kwargs['polar']:
-                rline1, rtext1 = plt.rgrids(t1, t2)
             cpt = cpt + 1
+
+        if kwargs['polar']:
+            rline1, rtext1 = plt.rgrids(t1, t2)
+            #ax.set_rmax(t1[-1])
+            #ax.set_rmin(t1[0])
         if kwargs['legend']:
             ax.legend()
         if kwargs['show']:
@@ -1324,7 +1331,7 @@ class Antenna(Pattern):
                 st = st + "   theta = %4.2f (degrees) \n" % (self.theta[ut]*rtd)
                 st = st + "   phi = %4.2f  (degrees) \n" % (self.phi[up]*rtd)
             else:
-                st = st + " Ray n° :" + str(ud)+' \n'
+                st = st + " Ray n :" + str(ud)+' \n'
         else:
             st = st + 'Not evaluated\n'
 #
@@ -1466,6 +1473,7 @@ class Antenna(Pattern):
             self.nf = len(self.fGHz)
 
         self.evaluated = True
+        self.grid = True
 
     def load_trx(self, directory="ant", nf=104, ntheta=181, nphi=90, ncol=6):
         """ load a trx file (deprecated)
@@ -2418,7 +2426,7 @@ class Antenna(Pattern):
                                   np.sin(phi) * np.sin(theta),
                                   np.cos(theta)))
                 fd.write('{\n')
-                geu.ellipse(fd, p, B[0, :], B[1, :], self.Ft[k, n, m], self.Fp[k, n, m], N)
+                geu.ellipse(fd, p, B[0, :], B[1, :], self.Ft[n, m , k], self.Fp[n, m , k], N)
                 fd.write('}\n')
         fd.close()
         if not silent:

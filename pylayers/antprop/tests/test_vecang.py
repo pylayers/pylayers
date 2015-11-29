@@ -22,7 +22,7 @@ vCB = (B-C)/ np.sqrt(np.sum((B-C)*(B-C)))
 vCD = (D-C)/ np.sqrt(np.sum((D-C)*(D-C)))
 vDC = (C-D)/ np.sqrt(np.sum((C-D)*(C-D)))
 
-# input
+#input
 vBDu = np.array([-1,1])
 vBDu = (vBDu)/ np.sqrt(np.sum((vBDu)*(vBDu)))
 
@@ -36,14 +36,14 @@ vDBu = np.array([1,-1])
 vDBu = (vDBu)/ np.sqrt(np.sum((vDBu)*(vDBu)))
 
 
-# point A
-# diff dict : keys are diffraction point
-# values are the 2 possible 0 or n associated face
+#point A
+#diff dict : keys are diffraction point
+#values are the 2 possible 0 or n associated face
 diff={'A':['vBA','vDA'],
       'B':['vAB','vCB'],
       'C':['vDC','vBC'],
       'D':['vCD','vAD'] }   
-# tri is the associated edge pa--pt--pb
+#tri is the associated edge pa--pt--pb
 tri = {'A':['BAD','DAB'],
        'B':['ABC','CBA'],
        'C':['DCB','BCD'],
@@ -63,7 +63,7 @@ for d in diff.keys():
         x=eval(t[0])
         y=eval(t[1])
         z=eval(t[2])
-        # is left(a,b,c) (Test point c is at left of the vector a-->b)
+        #is left(a,b,c) (Test point c is at left of the vector a-->b)
         uleft = geu.isleft(x[:,None],y[:,None],z[:,None])[0]
         if uleft : 
             print t[2],' is  at left of vect ',t[0],t[1]

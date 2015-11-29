@@ -250,7 +250,7 @@ import shapely.geometry as sh
 from shapely.ops import cascaded_union
 from descartes.patch import PolygonPatch
 from numpy import array
-import Image
+import PIL.Image as Image
 import logging
 import urllib2 as urllib
 from cStringIO import StringIO
@@ -410,7 +410,7 @@ class Layout(PyLayers):
         # check layout integrity (default)
         if check:
             self.check()
-        self.boundary()
+        #self.boundary()
 
         # If the layout has already been built then load the built structure
         if not force:
@@ -503,7 +503,7 @@ class Layout(PyLayers):
 
 
     def __mul__(self,alpha):
-        """ scale the layout 
+        """ scale the layout
 
         other : scaling factor (np.array or int or float)
 
@@ -525,12 +525,10 @@ class Layout(PyLayers):
         # scaling x & y
         #
         x = np.array(Gs.pos.values())[:,0]
-        xc = np.mean(x)
-        x = (x-xc)*alpha[0] + xc
+        x = x*alpha[0]
 
         y = np.array(Gs.pos.values())[:,1]
-        yc = np.mean(y)
-        y = (y-yc)*alpha[1] + yc
+        y = y*alpha[1]
 
         xy = np.vstack((x,y)).T
         Ls.Gs.pos = dict(zip(Gs.pos.keys(),tuple(xy)))
@@ -1319,6 +1317,7 @@ class Layout(PyLayers):
             except:
                 self.display[k]=di['display'][k]
 
+        self.ax=self.display['box']
 
         # update points section
         for nn in di['points']:
@@ -2412,32 +2411,32 @@ class Layout(PyLayers):
         if isinstance(apnt,list):
             apnt = np.array(apnt)
 
-        ## 0. Find the position of diffraction point
+        ##0. Find the position of diffraction point
         ptdiff = self.pt[:,self.iupnt[-apnt]]
 
-        ## 1. Find the associated segments and positions of a diff points
+        ##1. Find the associated segments and positions of a diff points
 
         aseg = map(lambda x : filter(lambda y : y not in self.name['AIR'],
                                          nx.neighbors(self.Gs,x)),
                                          apnt)
-        # manage flat angle : diffraction by flat segment e.g. door limitation)
+        #manage flat angle : diffraction by flat segment e.g. door limitation)
         [aseg[ix].extend(x) for ix,x in enumerate(aseg) if len(x)==1]
         # get points positions
         pts = np.array(map(lambda x : self.seg2pts([x[0],x[1]]),aseg))
 
 
-        pt1 = pts[:,0:2,0]# tail seg1
-        ph1 = pts[:,2:4,0]# head seg1
-        pt2 = pts[:,0:2,1]# tail seg2
-        ph2 = pts[:,2:4,1]# head seg2
+        pt1 = pts[:,0:2,0]#tail seg1
+        ph1 = pts[:,2:4,0]#head seg1
+        pt2 = pts[:,0:2,1]#tail seg2
+        ph2 = pts[:,2:4,1]#head seg2
 
 
-        ## 2. Make the correct association
-        # pts is (nb_diffraction_points x 4 x 2)
-        # - The dimension 4 represent the 2x2 points: t1,h1 and t2,h2
+        ##2. Make the correct association
+        #pts is (nb_diffraction_points x 4 x 2)
+        #- The dimension 4 represent the 2x2 points: t1,h1 and t2,h2
         # tail and head of segemnt 1 and 2 respectively
-        # a segment 
-        # - The dimension 2 is x,y
+        #a segment 
+        #- The dimension 2 is x,y
         #
         # The following aims to determine which tails and heads of 
         # segments associated to a give diffraction point 
@@ -2456,17 +2455,17 @@ class Layout(PyLayers):
         pa = np.empty((len(apnt),2))
         pb = np.empty((len(apnt),2))
 
-        #### seg 1 :
-        # if pt1 diff point =>  ph1 is the other point
+        ####seg 1 :
+        #if pt1 diff point =>  ph1 is the other point
         pa[updpt1]= ph1[updpt1]
-        # if ph1 diff point =>  pt1 is the other point
+        #if ph1 diff point =>  pt1 is the other point
         pa[updph1]= pt1[updph1]
-        #### seg 2 :
-        # if pt2 diff point =>  ph2 is the other point
+        ####seg 2 :
+        #if pt2 diff point =>  ph2 is the other point
         pb[updpt2]= ph2[updpt2]
-        # if ph2 diff point =>  pt2 is the other point
+        #if ph2 diff point =>  pt2 is the other point
         pb[updph2]= pt2[updph2]
-        # pt is the diffraction point
+        #pt is the diffraction point
         pt = ptdiff.T
 
 
@@ -2522,7 +2521,7 @@ class Layout(PyLayers):
 
         if c > 0:
             cycle = self.Gc.node[c]['cycle'].cycle
-        else: # handle outdoorcycle 0
+        else: #handle outdoorcycle 0
             try:
                 cycle = self.ma.vnodes
             except:
@@ -5165,6 +5164,7 @@ class Layout(PyLayers):
 
         # display overlay image
         if self.display['overlay']:
+            # imok : Image is OK
             imok = False
             if len(self.display['fileoverlay'].split('http:'))>1:
                 img_file = urllib.urlopen(self.display['fileoverlay'])
@@ -8119,11 +8119,11 @@ class Layout(PyLayers):
             # update pos of root cycle with new center of gravity
             self.Gc.pos[root]=tuple(self.Gc.node[root]['cycle'].g)
 
-        # FIND DIFFRACTION POINTS 
+        #FIND DIFFRACTION POINTS 
         dangles = self.get_Gc_angles()
         # look for in the dictionnary 
-        # which points are associated to an angle > pi + epsilon
-        # those are the diffraction point
+        #which points are associated to an angle > pi + epsilon
+        #those are the diffraction point
         ldi=[dangles[x][0,dangles[x][1,:]>np.pi+0.1].astype(int) for x in dangles]
         self.ldiff=[]
         self.ldiffin=[]
@@ -8553,7 +8553,7 @@ class Layout(PyLayers):
         except:
             print "geomfile (.off) has no been generated"
 
-        self.boundary()
+        #self.boundary()
         print "boundaries ",self.ax
         print "number of Points :", self.Np
         print "number of Segments :", self.Ns
@@ -9556,7 +9556,7 @@ class Layout(PyLayers):
 
         """
 
-        self.boundary()
+        #self.boundary()
 
         Tx_x = rd.uniform(self.ax[0], self.ax[1])
         Tx_y = rd.uniform(self.ax[2], self.ax[3])
@@ -9608,6 +9608,32 @@ class Layout(PyLayers):
         self.ax = (xmin - dx, xmax + dx, ymin - dy, ymax + dy)
         self.display['box']=self.ax
 
+
+    def offbnd(self,dx=0,dy=0):
+        """ offset boundary
+
+        Paramaters
+        ----------
+
+        dx : float
+        dy : float
+
+        """
+        self.ax = (self.ax[0]+dx,self.ax[1]+dx,self.ax[2]+dy,self.ax[3]+dy)
+        self.display['box']=self.ax
+
+    def sclbnd(self,ax=1.0,ay=1.0):
+        """ scale boundary
+
+        Paramaters
+        ----------
+
+        ax : float
+        ay : float
+
+        """
+        self.ax = (self.ax[0]*ax,self.ax[1]*ax,self.ax[2]*ay,self.ax[3]*ay)
+        self.display['box']=self.ax
 
     def get_paths(self,nd_in, nd_fin):
         """ returns the possible paths of graph Gs between two nodes.

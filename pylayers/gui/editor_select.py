@@ -874,7 +874,10 @@ class SelectL2(object):
 
         Parameters
         ----------
-        parameter O|x|y
+
+        parameter : string
+            'O'|'x'|'y'
+
         """
         offx = self.ptsel[0]
         offy = self.ptsel[1]
@@ -1707,11 +1710,12 @@ class SelectL2(object):
             self.toggleoverlay()
             return
 
-        if self.evt == 'o' :
-            self.set_origin=True
+        if self.evt == 'f4' :
+            self.setorigin(parameter='O')
+            return
 
 
-        # if self.evt == 'f2':
+        if self.evt == 'f2':
             self.modeCP()
             return
         #
@@ -1815,6 +1819,7 @@ class SelectL2(object):
                 self.modeIni()
                 self.selseg()
                 return
+        #
         # Right clic and selected node is a point
         #
 
