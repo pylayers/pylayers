@@ -138,9 +138,10 @@ core class <strong>``Slab``</strong>. Notice that, the same core <strong>``Slab`
 is used for Ray tracing and MultiWall model approaches.</p>
 <p>Let&#8217;s see, how it works. First let&#8217;s import the <code class="docutils literal"><span class="pre">coverage</span></code> module. And
 the <code class="docutils literal"><span class="pre">time</span></code> module for performance evaluation.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">time</span>
+<div class="code python highlight-python"><div class="highlight"><pre>from pylayers.antprop.coverage import *
+from matplotlib.pyplot import *
+%matplotlib inline
+import time
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
@@ -280,34 +281,43 @@ ny : 20
 </div>
 <div class="highlight-python"><div class="highlight"><pre>/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/collections.py:650: FutureWarning: elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison
   if self._edgecolors_original != str(&#39;face&#39;):
+/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/collections.py:590: FutureWarning: elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison
+  if self._edgecolors == str(&#39;face&#39;):
 </pre></div>
 </div>
+<img alt="../../_images/Coverage_21_1.png" src="../../_images/Coverage_21_1.png" />
 <p>The shadowing map coverage results can be displayed by invoquing various
 functions.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;pr&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<img alt="../../_images/Coverage_23_0.png" src="../../_images/Coverage_23_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;pr&#39;</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
+<img alt="../../_images/Coverage_24_0.png" src="../../_images/Coverage_24_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;pr&#39;</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
+<img alt="../../_images/Coverage_25_0.png" src="../../_images/Coverage_25_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;best&#39;</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
+<img alt="../../_images/Coverage_26_0.png" src="../../_images/Coverage_26_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;best&#39;</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
+<img alt="../../_images/Coverage_27_0.png" src="../../_images/Coverage_27_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">f</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;sinr&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<img alt="../../_images/Coverage_28_0.png" src="../../_images/Coverage_28_0.png" />
 <p>As you have noticed the calculation has been done for all the center
 frequencies of the selected standard. This is done in prevision of
 further channel optimizations.</p>
@@ -320,6 +330,10 @@ further channel optimizations.</p>
 <span class="n">f</span><span class="o">=</span><span class="n">C2</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">ftyp</span><span class="o">=</span><span class="s">&#39;pr&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x2b04fea5d950&gt;
+</pre></div>
+</div>
+<img alt="../../_images/Coverage_32_1.png" src="../../_images/Coverage_32_1.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">snro</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
@@ -330,10 +344,11 @@ further channel optimizations.</p>
 <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;capacity&#39;</span><span class="p">,</span><span class="n">dB</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b65aeaa53d0&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x2b65af1c0310&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b04ff253490&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x2b04fa39c650&gt;)
 </pre></div>
 </div>
+<img alt="../../_images/Coverage_34_1.png" src="../../_images/Coverage_34_1.png" />
 <p>All simulated quantities are stored in linear scale.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">C2</span><span class="o">.</span><span class="n">Lwo</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
