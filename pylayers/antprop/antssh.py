@@ -156,9 +156,9 @@ def SphereToCart (theta, phi, eth, eph, bfreq ):
         ec = ndarray(shape = (3, len(theta),len(phi)) , dtype  = complex  )
 
     else:
-        PHI = phi.reshape((1,1,len(phi)))
-        THETA = theta.reshape((1,len(theta),1))
-        ec = np.ndarray(shape = (3, eth.shape[0], len(theta),len(phi)) , dtype  = complex  )
+        PHI = phi.reshape((1,len(phi),1))
+        THETA = theta.reshape((len(theta),1,1))
+        ec = np.ndarray(shape = (3, len(theta),len(phi),eth.shape[-1] ) , dtype  = complex  )
 
 
     ec[0] = np.cos(THETA)*np.cos(PHI)*eth -np.sin(PHI)*eph
@@ -229,7 +229,7 @@ def ssh(A,L= 20,dsf=1):
     ph = A.phi[::dsf]
     nth = len(th)
     nph = len(ph)
-    nf = A.Nf
+    nf = A.nf
 
     if (nph % 2) == 1:
         mdab = min(nth, (nph + 1) / 2)
@@ -239,20 +239,21 @@ def ssh(A,L= 20,dsf=1):
     ndab = nth
 
 
-    Etheta  =  A.Ftheta[:,::dsf,::dsf]
-    Ephi    =  A.Fphi [:,::dsf,::dsf]
+    Etheta  =  A.Ft[::dsf,::dsf,:]
+    Ephi    =  A.Fp[::dsf,::dsf,:]
 
-    # compute the spherical harmonics fucntions at the order L
+    # compute the spherical harmonics functions at the order L
     Y,ssh_index  = SSHFunc(L,th,ph)
     # Compute the pseudo inverse of Y
     Ypinv = sp.linalg.pinv(Y)
 
     # convert the field from spherical to cartesian coordinates system
-    Ex, Ey,Ez =SphereToCart (th, ph, Etheta, Ephi, True)
+    Ex, Ey,Ez = SphereToCart (th, ph, Etheta, Ephi, True)
     #
     Ex = Ex.reshape((nf,nth*nph))
     Ey = Ey.reshape((nf,nth*nph))
     Ez = Ez.reshape((nf,nth*nph))
+
     #pdb.set_trace()
     cx  =  np.dot(Ex,Ypinv)
     cy  =  np.dot(Ey,Ypinv)

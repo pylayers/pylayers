@@ -664,7 +664,7 @@ if __name__=='__main__':
 #
 ## In[9]:
 #
-#w†.w        = rand(N)+1j*rand(N)
+#w.w        = rand(N)+1j*rand(N)
 #f,g,h,z,main,rejdB,bwdeg = rejection(w,theta)
 #visurej(f,g,h,z,main,rejdB,bwdeg,'Random complex 1 :')
 #
@@ -720,10 +720,10 @@ if __name__=='__main__':
 ##
 ## $$ \mathbf{F}(\theta,t)=\frac{1}{K}\sum_{k=1}^{K} \textrm{rect}(\frac{t- l T_k/2)}{T_k})\mathbf{F}_k(\theta)= \frac{1}{K}\sum_{k=1}^{K} \mathbf{w_k}^{\dagger} . \mathbf{S}(\theta) $$
 #
-## Interférence Radar
+## Interfrence Radar
 #
 ##  ## POSTMA
 #
 #el(dot(conj(U.T),dot(W,S))+dot(conj(S.T),dot(W,U)))
 #    H  =
-#    real(dot(conj(R.T),dot(W,S))+2*dot(conj(U.T),dot(W,U))+dot(conj(S.T),dot(W,R)))# Comparaison petit réseau et grand réseau.
+#    real(dot(conj(R.T),dot(W,S))+2*dot(conj(U.T),dot(W,U))+dot(conj(S.T),dot(W,R)))# Comparaison petit rseau et grand rseau.

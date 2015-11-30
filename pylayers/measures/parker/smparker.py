@@ -574,7 +574,7 @@ class Axes(PyLayers):
             else:
                 print "Stop motion when a limit is hit but continue the program, "
 
-            print 'deceleration : ',eval(ans[3].split('D')[1]), "rps²"
+            print 'deceleration : ',eval(ans[3].split('D')[1]), "rps"
 
 
         if cmd=='set':
@@ -773,7 +773,7 @@ class Axes(PyLayers):
                 print 'velocity : +',eval(ans[3].split('V+')[1]), "rps"
             else:
                 print 'velocity : -',eval(ans[3].split('V-')[1]), "rps"
-                print 'acceleration : ',eval(ans[4].split('A')[1]), "rps²"
+                print 'acceleration : ',eval(ans[4].split('A')[1]), "rps"
 
 
 
@@ -829,7 +829,7 @@ class Axes(PyLayers):
             else:
                 print "Stop motion when a limit is hit but continue the program, "
 
-            print 'deceleration : ',eval(ans[3].split('D')[1]), "rps²"
+            print 'deceleration : ',eval(ans[3].split('D')[1]), "rps"
 
     def add_profile(self,**kwargs):
         """ add a new profile to lprofile
@@ -1125,9 +1125,9 @@ class Axes(PyLayers):
         Parameters
         ----------
 
-        var : distance (cm) | degres (°)
+        var : distance (cm) | degres ()
         vel : velocity (rps)
-        aa  : acceleration (rps²)
+        aa  : acceleration (rps)
 
         Examples
         --------
@@ -1137,7 +1137,7 @@ class Axes(PyLayers):
         >>> R = Axes(3,'ang',typ='r',scale=2111.1111,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
         >>> A.step(value=0.1,cmd='set')
         >>> A.go() # moves over 10cm on axis 1
-        >>> R.go() # moves over 45° on axis 3
+        >>> R.go() # moves over 45 on axis 3
 
         """
         com = self.com('G')
@@ -1151,7 +1151,7 @@ class Axes(PyLayers):
     # def util(self):
     #     """ allows convertion between :
     #         m/s | tr/s  <=> rps
-    #         m/s²        <=> rps²
+    #         m/s        <=> rps
     #     """
     #     pass
 

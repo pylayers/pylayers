@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# This notebook is an implementation from the paper "Fast UTD Diffraction Coefficient Using Only One Suare Root" from Jean Francçois Legendre and Thierry Marsault.
+# This notebook is an implementation from the paper "Fast UTD Diffraction Coefficient Using Only One Suare Root" from Jean Francois Legendre and Thierry Marsault.
 
 # $N$ est compris entre 0 et 1. 0 est la lame de coupeau et 1 est le demi-plan 
 
