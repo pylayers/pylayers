@@ -5641,7 +5641,7 @@ class Layout(PyLayers):
         #    Cycles = 0 exterior cycle (assumed outdoor)
 
         # build a polygon including all the layout + 5 meters
-        p1 = geu.Polygon(self.ax,delta=5)
+        p1 = geu.Polygon(tuple(self.ax),delta=5)
         self.ma = self.mask()
         p2 = p1.difference(self.ma)
         boundary = geu.Polygon(p2)
