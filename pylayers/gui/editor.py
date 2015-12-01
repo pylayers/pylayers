@@ -698,7 +698,8 @@ class GridSet(QDialog):    # any super class is okay
 
 class AppForm(QMainWindow):
     def __init__(self, parent=None):
-        QMainWindow.__init__(self, parent)
+        super(AppForm,self).__init__()
+        # QMainWindow.__init__(self, parent)
         self.setWindowTitle('Pylayers : Stand Alone Editor (Beta)')
         self.filename=''
 
@@ -1041,7 +1042,10 @@ class AppForm(QMainWindow):
         esc.setKey("escape")
         self.connect(esc, SIGNAL("activated()"), self.selectnodes)
 
-
+    def refresh(self):
+        f5 = QShortcut(self)
+        f5.setKey("F5")
+        self.connect(f5, SIGNAL("activated()"), self.selectl.refresh)
 
 
     def create_menu(self):
@@ -1246,8 +1250,8 @@ def main():
     form = AppForm()
     # form.setGeometry(100,100,300,300)
     form.show()
-    app.exec_()
-
+    ret = app.exec_()
+    sys.exit(ret)
 
 if __name__ == "__main__":
     main()

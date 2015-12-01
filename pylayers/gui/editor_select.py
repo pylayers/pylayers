@@ -842,6 +842,7 @@ class SelectL2(object):
         self.fig.canvas.draw()
         self.update_state()
         self.bundo=False
+        self.refresh()
 
     def toggle(self):
         """ self.evt=='t'
