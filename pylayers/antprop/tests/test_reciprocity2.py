@@ -23,7 +23,7 @@ DL2.b=np.array([767,1114,1.5])
 DL2.fGHz=np.arange(2,11,0.1)
 DL2.wav = wvf.Waveform(fcGHz=5,bandGHz=3)
 # ##########################################################################
-# # !!never use the following part except for this particular test file !!!!
+# #!!never use the following part except for this particular test file !!!!
 # ##########################################################################
 DL2.load(DL2.Si,DL.dexist['sig']['grpname'])
 r = DL2.Si.raysv(DL2.a,DL2.b)

@@ -16,7 +16,7 @@ import os
 import zipfile
 import array
 import math
-import ipdb
+import pdb
 
 class NoSuchTileError(Exception):
     """Raised when there is no tile for a region."""

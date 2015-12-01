@@ -721,9 +721,9 @@ class AppForm(QMainWindow):
         filename = QFileDialog.getOpenFileName(self,'Open Pylayers Layout File',pyu.getlong('',pstruc['DIRINI']),'(*.ini);;(*.osm)')
 
         if filename != '':
-            _filename= pyu.getshort(str(filename))
-            self.L=Layout(_filename)
-            self.filename=self.L.filename
+            _filename = pyu.getshort(str(filename))
+            self.L = Layout(_filename)
+            self.filename = self.L.filename
             self.create_main_frame()
             self.on_draw()
             self.setWindowTitle(self.L.filename + '- Pylayers : Stand Alone Editor (Beta)')
@@ -772,7 +772,7 @@ class AppForm(QMainWindow):
         """
         self.selectl.toggleoverlay()
         self.fig.canvas.draw()
-        
+
     def closel(self,exit=False):
         dial_res=''
         self.sq = SaveQuitWin(parent=self,exit=exit)

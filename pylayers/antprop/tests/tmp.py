@@ -30,17 +30,17 @@ def doe(r,h0,h1,k=4/3.) :
 
     # r = distance curviligne entre TXetRX / geodesic
 
-    p = 2/(np.sqrt(3))*np.sqrt(re*(h0+h1)+(r**2/4.)) # eq 8.45
+    p = 2/(np.sqrt(3))*np.sqrt(re*(h0+h1)+(r**2/4.)) #eq 8.45
     eps = np.arcsin(2*re*r*(h1-h0)/p**3) # eq 8.46
 
 
 
-    # distance of reflection on curved earth
-    r1 = r/2 - p*np.sin(eps/3) # eq 8.44
+    #distance of reflection on curved earth
+    r1 = r/2 - p*np.sin(eps/3) #eq 8.44
 
     r2 = r -r1
 
-    phi1 = r1/re # 8.47
+    phi1 = r1/re #8.47
     phi2 = r2/re # 8.48
 
     R1 = np.sqrt(h0**2+4*re*(re+h0)*(np.sin(phi1/2))**2) # 8.51
@@ -49,7 +49,7 @@ def doe(r,h0,h1,k=4/3.) :
     Rd = np.sqrt((h1-h0)**2+4*(re+h1)*(re+h0)*np.sin((phi1+phi2)/2.)**2) # 8.53
 
     # tangente angle on earth
-    psy = np.arcsin((h1/R1)-R1/(2*re)) # eq 8.55
+    psy = np.arcsin((h1/R1)-R1/(2*re)) #eq 8.55
     deltaR = 4*R1*R2*np.sin(psy)**2/(R1+R2+Rd)
 
     dloss = Rd
@@ -97,20 +97,20 @@ import pylayers.gis.gisutil as gu
 #     Parameters
 #     ----------
 
-#     P : float | list 
+#     P : float |list 
 
 #         if len(P) == 1 => P is a distance
 #         if len(P) == 4 => P is a list of [lon0,lat0,lon1,lat1]
 
 #         where :
-#         lat0 : float | string
-#             latitude first point (decimal | deg min sec Direction)
-#         lat1 : float | string
-#             latitude second point (decimal | deg min sec Direction)
-#         lon0 : float | string
-#             longitude first point (decimal | deg min sec Direction)
-#         lon1 : float | string
-#             longitude second point (decimal | deg min sec Direction)
+#         lat0 : float |string
+#             latitude first point (decimal |deg min sec Direction)
+#         lat1 : float |string
+#             latitude second point (decimal |deg min sec Direction)
+#         lon0 : float |string
+#             longitude first point (decimal |deg min sec Direction)
+#         lon1 : float |string
+#             longitude second point (decimal |deg min sec Direction)
 #     h0 : float:
 #         height of 1st point 
 #     h1 : float:
@@ -128,22 +128,22 @@ import pylayers.gis.gisutil as gu
 
 #     References
 #     ----------
-#     B. R. Mahafza, Radar systems analysis and design using MATLAB, Third edition. Boca Raton ; London: CRC/Taylor & Francis, chapter 8, 2013.
+#     B. R. Mahafza, Radar systems analysis and design using MATLAB, Third edition. Boca Raton; London: CRC/Taylor & Francis, chapter 8, 2013.
 
 #     """
 
 
 #     if isinstance(P,float) or isinstance(P,int) :
-#         # P is a distance
+#         #P is a distance
 #         r=P
 #         mode = 'dist'
 #     elif isinstance(P,np.ndarray) or isinstance(P,list):
 #         if len(P) == 1:
-#             # P is a distance
+#             #P is a distance
 #             r=P
 #             mode = 'dist'
 #         elif len(P) == 4:
-#             # P is a lonlat
+#             #P is a lonlat
 #             lat0=P[0]
 #             lon0=P[1]
 #             lat1=P[2]
@@ -152,7 +152,7 @@ import pylayers.gis.gisutil as gu
 #         else :
 #             raise AttributeError('P must be a list [lat0,lon0,lat1,lon0] or a distance')
 #     else :
-#         raise AttributeError('Invalid P format ( list | ndarray )')
+#         raise AttributeError('Invalid P format ( list |ndarray )')
 
 #     r0 = 6371e3 # earth radius
 #     re = k*r0 # telecom earth radius
@@ -165,17 +165,17 @@ import pylayers.gis.gisutil as gu
 #         r=P
 
 
-#     p = 2/(np.sqrt(3))*np.sqrt(re*(h0+h1)+(r**2/4.)) # eq 8.45
+#     p = 2/(np.sqrt(3))*np.sqrt(re*(h0+h1)+(r**2/4.)) #eq 8.45
 #     eps = np.arcsin(2*re*r*(h1-h0)/p**3) # eq 8.46
 
 
 
-#     # distance of reflection on curved earth
-#     r1 = r/2 - p*np.sin(eps/3) # eq 8.44
+#     #distance of reflection on curved earth
+#     r1 = r/2 - p*np.sin(eps/3) #eq 8.44
 
 #     r2 = r -r1
 
-#     phi1 = r1/re # 8.47
+#     phi1 = r1/re #8.47
 #     phi2 = r2/re # 8.48
 
 #     R1 = np.sqrt(h0**2+4*re*(re+h0)*(np.sin(phi1/2))**2) # 8.51
@@ -184,7 +184,7 @@ import pylayers.gis.gisutil as gu
 #     Rd = np.sqrt((h1-h0)**2+4*(re+h1)*(re+h0)*np.sin((phi1+phi2)/2.)**2) # 8.53
 
 #     # tangente angle on earth
-#     psy = np.arcsin((h1/R1)-R1/(2*re)) # eq 8.55
+#     psy = np.arcsin((h1/R1)-R1/(2*re)) #eq 8.55
 #     deltaR = 4*R1*R2*np.sin(psy)**2/(R1+R2+Rd)
 
 #     dloss = Rd
@@ -199,20 +199,20 @@ import pylayers.gis.gisutil as gu
 #     Parameters
 #     ----------
 
-#     P : float | list 
+#     P : float |list 
 
 #         if len(P) == 1 => P is a distance
 #         if len(P) == 4 => P is a list of [lon0,lat0,lon1,lat1]
 
 #         where :
-#         lat0 : float | string
-#             latitude first point (decimal | deg min sec Direction)
-#         lat1 : float | string
-#             latitude second point (decimal | deg min sec Direction)
-#         lon0 : float | string
-#             longitude first point (decimal | deg min sec Direction)
-#         lon1 : float | string
-#             longitude second point (decimal | deg min sec Direction)
+#         lat0 : float |string
+#             latitude first point (decimal |deg min sec Direction)
+#         lat1 : float |string
+#             latitude second point (decimal |deg min sec Direction)
+#         lon0 : float |string
+#             longitude first point (decimal |deg min sec Direction)
+#         lon1 : float |string
+#             longitude second point (decimal |deg min sec Direction)
 #     h0 : float:
 #         height of 1st point 
 #     h1 : float:
@@ -230,7 +230,7 @@ import pylayers.gis.gisutil as gu
 #     gamma : 
 #         Reflexion coeff(-1)
 
-#     mode : PL | E (default : PL)
+#     mode : PL|E (default : PL)
 #         return Energy (E) or Path loss/power loss (PL)
 #     dB : boolean (True)
 #         return result in dB
@@ -332,10 +332,10 @@ p0=np.array(([0.,0.,52.]))
 p1=np.array(([0.,0.,12.]))
 p0=p0.reshape(3,1)
 p1=p1.reshape(3,1)
-OR = [] # One Ray model
-TRFV = [] # Two Ray model on flat earth
-TRFH = [] # Two Ray model on flat earth
-TRC = [] # Two Ray model on curved earth
+OR = [] #One Ray model
+TRFV = [] #Two Ray model on flat earth
+TRFH = [] #Two Ray model on flat earth
+TRC = [] #Two Ray model on curved earth
 Gt=12
 Gr=12
 T=[]

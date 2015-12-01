@@ -692,7 +692,7 @@ class DLink(Link):
         # step
         try:
             sa = fa[1]-fa[0]
-        except: # single frequency
+        except: #single frequency
             sa = fa[0]
         try:
             sb = fb[1]-fb[0]

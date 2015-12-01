@@ -132,7 +132,6 @@ class SelectL(object):
             'delete' :'delete selected',
             '$'  :' decrement layer '}
 
-        
 
     def show(self,fig,ax,clear=False, dnodes=True, dedges=True,  font_size=14, title=''):
         """ show layout
@@ -164,13 +163,13 @@ class SelectL(object):
         ----------
 
             pt : list
-            list of points or segmetns to plot
+                list of points or segments to plot
+
         """
         if len(pt)>0:
-            
             pts = np.array([self.L.Gs.pos[x] for x in pt])
-            p1 = self.ax.plot(pts[:,0], pts[:,1],marker=marker, 
-                                visible=True, 
+            p1 = self.ax.plot(pts[:,0], pts[:,1],marker=marker,
+                                visible=True,
                                 color =color,
                                 ms=10,
                                 alpha=0.4)
@@ -649,6 +648,7 @@ class SelectL(object):
             index = self.L.display['layerset'].index(self.L.display['activelayer'])
             self.L.display['activelayer'] = self.L.display['layerset'][(index-1) % N]
             self.current_layer = self.L.display['activelayer']
+            print self.current_layer
             self.update_state()
             return
         #
@@ -716,7 +716,7 @@ class SelectL(object):
                 self.update_state()
                 return
 
-            
+
         #
         # "b" : enter a segment node value with keyboard
         #
@@ -733,12 +733,10 @@ class SelectL(object):
         #
         if self.evt == 'j':
             if self.state == 'Init':
-                vscale,hscale = offsetbox(text1='Enter scaling values',
-                                          text2=('vscale','hscale'),
-                                          default=('1.0','1.0')
-                                          )
+                vscale = eval(enterbox('enter vscale',argDefaultText='1.0'))
+                hscale = eval(enterbox('enter hscale',argDefaultText='1.0'))
                 for n in self.L.Gs.pos:
-                    self.L.Gs.pos[n]=(self.L.Gs.pos[n][0],self.L.Gs.pos[n][1]*vscale)
+                    self.L.Gs.pos[n]=(self.L.Gs.pos[n][0]*hscale,self.L.Gs.pos[n][1]*vscale)
                 plt.axis('tight')
                 self.fig,self.ax = self.show(self.fig,self.ax,clear=True)
                 self.update_state()
@@ -840,7 +838,9 @@ class SelectL(object):
         if self.evt == 'o' :
             self.set_origin = True
 
-
+        #
+        # F2 : Create point
+        #
         if self.evt == 'f2':
             self.state = "CP"
             self.update_state()
