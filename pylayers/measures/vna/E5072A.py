@@ -8,7 +8,7 @@ import sqlite3
 import matplotlib.pyplot as plt
 from types import *
 from numpy import array
-import pdb
+import ipdb
 import h5py
 import select
 from pylayers.util.project import  *
@@ -109,7 +109,7 @@ class SCPI(PyLayers):
 
         self.getIdent()
         #print self.ident
-        # assert('E5072A' in self.ident), "E5072A not responding"
+        #assert('E5072A' in self.ident), "E5072A not responding"
         self.points()
         self.freq()
         self.parS()
@@ -400,6 +400,8 @@ class SCPI(PyLayers):
                 self.s.send(com1+f1)
                 time.sleep(1)
                 self.s.send(com2+f2)
+        else:
+            self.fGHz = np.linspace(fminGHz,fmaxGHz,self.Nf)
 
     def getIdent(self):
         """ get VNA Identification
@@ -582,9 +584,8 @@ class SCPI(PyLayers):
         >>> vna.close()
 
         """
+        self.ifbHz   = ifbHz
         if not self.emulated:
-            self.ifbHz   = ifbHz
-
             co  = ":SENS"+str(sens)+":BAND"
             com = co + ' '+str(ifbHz)
 
@@ -595,6 +596,7 @@ class SCPI(PyLayers):
             if cmd == 'set':
                 com = com+"\n"
                 self.s.send(com)
+
 
 
     def calibh5(self,
@@ -621,47 +623,56 @@ class SCPI(PyLayers):
         # set config
         # file read from : ~/Pylayers_project/meas
 
-        self.load_config(_filename=_filevna)
-        dcal = self.load_calconfig(_filename=_filecal)
-
-        for k in dcal:
-            print dcal[k]
-
-        # get Nmeas calibration vector
-        D = self.getdata(chan=1, Nmeas=Nmeas)
-
-        # store calibration vector in a hdf5 file
         fileh5 = pyu.getlong(_fileh5, pstruc['DIRMES'])+'.h5'
-        f = h5py.File(fileh5, "w")
+        #ipdb.set_trace()
+        f = h5py.File(fileh5, "a")
         try:
             ldataset = f.keys()
         except:
             ldataset = []
         lcal =  filter(lambda x : 'cal' in x, ldataset)
         calname = 'cal' + str(len(lcal)+1)
+        cal = f.create_group(calname)
 
-        # dcal = f.create_dataset(calname,(Nmeas,self.Nf),dtype=np.complex64)
-        dcal = f.create_dataset(calname, (Nmeas, self.Nf, self.ifbHz), dtype=np.complex64)
+        self.load_config_vna(_filename=_filevna)
+        dcal = self.load_calconfig(_filename=_filecal)
 
-        dcal.attrs['Nf']        = self.Nf
-        dcal.attrs['fminGHz']   = self.fminGHz
-        dcal.attrs['fmaxGHz']   = self.fmaxGHz
-        dcal.attrs['ifbHz']     = self.ifbHz
-        dcal.attrs['Navrg']     = self.navrg
-        dcal.attrs['time']      = time.ctime()
-        dcal.attrs['author']    = author
-        dcal.attrs['cables']    = cables
-        dcal.attrs['comment']   = comment
-        dcal.attrs['param']     = self.param
-        dcal[0:Nmeas, 0:self.Nf] = D
+        cal.attrs['fminGHz']   = self.fminGHz
+        cal.attrs['fmaxGHz']   = self.fmaxGHz
+        cal.attrs['time']      = time.ctime()
+        cal.attrs['author']    = author
+        cal.attrs['cables']    = cables
+        cal.attrs['comment']   = comment
+        cal.attrs['param']     = self.param
+
+        for k in dcal:
+            time.sleep(2)
+            for k2 in dcal[k]:
+                if k2=='nf':
+                    print dcal[k]['nf']
+                    self.points(dcal[k]['nf'], cmd='set')
+                if k2=='ifbhz':
+                    print dcal[k]['ifbhz']
+                    self.ifband(ifbHz=dcal[k]['ifbhz'], cmd='set')
+                if k2=='navrg':
+                    print dcal[k]['navrg']
+                    self.avrg(navrg=dcal[k]['navrg'],cmd='setavrg')
+            #get Nmeas calibration vector
+            Dk = self.getdata(chan=1, Nmeas=dcal[k]['nmeas'])
+
+            dcalk = cal.create_dataset(k,(Nmeas,self.Nf),dtype=np.complex64, data = Dk)
+            dcalk.attrs['Nf']        = self.Nf
+            dcalk.attrs['ifbHz']     = self.ifbHz
+            dcalk.attrs['Navrg']     = self.navrg
         f.close()
 
 
     def mimocalibh5(self,
-                 _fileh5='scalib',
-                 _filename='vna_config.ini',
+                 _fileh5='mcalib',
+                 _filecal='cal_config.ini',
+                 _filevna='vna_config.ini',
                  cables=[],
-                 author='M.D.B and B.U',
+                 author='',
                  comment='',
                  Nmeas = 100):
         """  measure a calibration vector and store in h5 file
@@ -679,48 +690,62 @@ class SCPI(PyLayers):
 
         # set config
         # File from : ~/Pylayers_project/meas
-        self.load_config(_filename=_filename)
+        
+        self.load_config_vna(_filename=_filevna)
+        dcal = self.load_calconfig(_filename=_filecal)
 
-        # get Nmeas calibration vector
-        Dmeas = self.getdata(chan=1, Nmeas=Nmeas)
 
         # store calibration vector in a hdf5 file
         fileh5 = pyu.getlong(_fileh5, pstruc['DIRMES'])+'.h5'
-        f = h5py.File(fileh5, "w")
+        f = h5py.File(fileh5, "a")
         try:
             ldataset = f.keys()
         except:
             ldataset = []
 
+        
+        lmimocal =  filter(lambda x : 'mimocal' in x, ldataset)
+        calname = 'mimocal' + str(len(lmimocal)+1)
+        mimo = f.create_group(calname)
+        
+
         for iR in range(self.Nr):
+            print "connect receiver :", iR +1
             for iT in range(self.Nt):
-                lmimocal =  filter(lambda x : 'mimocal' in x, ldataset)
-                calname = 'mimocal' + str(len(lmimocal)+1) + 'x' + str(iT+1) + 'x' + str(iR+1)
+                print "connect transmitter :", iT + 1 
+                c = ""
+                while "g" not in c:
+                    c = raw_input("Hit return key ")
+                for k in dcal:
+                    time.sleep(2)
+                    for k2 in dcal[k]:
+                        if k2=='nf':
+                            self.points(dcal[k]['nf'], cmd='set')
+                        if k2=='ifbhz':
+                            self.ifband(ifbHz=dcal[k]['ifbhz'], cmd='set')
+                        if k2=='navrg':
+                            self.avrg(navrg=dcal[k]['navrg'],cmd='setavrg')
 
-        dmimocal = f.create_dataset(calname, (Nmeas, self.Nt, self.Nr, self.Nf), dtype=np.complex64)
+                    # get Nmeas calibration vector
+                    Dmeas = self.getdata(chan=1, Nmeas=dcal[k]['nmeas'])
+                    if ((iR==0) and (iT==0)):
+                        mimo.create_dataset(k, (dcal[k]['nmeas'], self.Nr, self.Nt, self.Nf), dtype=np.complex64)
+                        mimo[k].attrs['fminGHz']   = self.fminGHz
+                        mimo[k].attrs['fmaxGHz']   = self.fmaxGHz
+                        mimo[k].attrs['time']      = time.ctime()
+                        mimo[k].attrs['author']    = author
+                        mimo[k].attrs['cables']    = cables
+                        mimo[k].attrs['comment']   = comment
+                        mimo[k].attrs['param']     = self.param
+                        mimo[k].attrs['Nt']        = self.Nt
+                        mimo[k].attrs['Nr']        = self.Nr
+                    #ipdb.set_trace()
+                    mimo[k][:,iR,iT,:] = Dmeas
+                    mimo[k].attrs['Nf']        = self.Nf
+                    mimo[k].attrs['ifbHz']     = self.ifbHz
+                    mimo[k].attrs['Navrg']     = self.navrg
 
-        dmimocal.attrs['Nf']        = self.Nf
-        dmimocal.attrs['fminGHz']   = self.fminGHz
-        dmimocal.attrs['fmaxGHz']   = self.fmaxGHz
-        dmimocal.attrs['ifbHz']     = self.ifbHz
-        dmimocal.attrs['Navrg']     = self.navrg
-        dmimocal.attrs['time']      = time.ctime()
-        dmimocal.attrs['author']    = author
-        dmimocal.attrs['cables']    = cables
-        dmimocal.attrs['comment']   = comment
-        dmimocal.attrs['param']     = self.param
-        dmimocal.attrs['Nt']        = self.Nt
-        dmimocal.attrs['Nr']        = self.Nr
-        dmimocal[0:Nmeas, 0:self.Nf] = Dmeas
 
-        # S = Scanner()
-
-        for i in range(self.Nr):
-            for j in range(self.Nt):
-                # Hmeas = S.measMIMO.Smeas.y[i,j,:]
-                # Hcal =  Hmeas/Dmeas[0,0,:]
-                # Dmeas = self.getdata(chan=1,Nmeas=Nmeas)
-                Hcal =  Dmeas[i, j,:]/Dmeas[0, 0,:]
         f.close()
 
 
@@ -730,7 +755,7 @@ class SCPI(PyLayers):
         filename = pyu.getlong(_filename, pstruc['DIRMES'])
         cal_conf  = ConfigParser.ConfigParser()
         cal_conf.read(filename)
-        pdb.set_trace()
+        #pdb.set_trace()
         sections  = cal_conf.sections()
         di        = {}
         for section in sections:
@@ -746,7 +771,7 @@ class SCPI(PyLayers):
 
         return(di)
 
-    def load_config(self,_filename='vna_config.ini'):
+    def load_config_vna(self,_filename='vna_config.ini'):
         """ load a vna config file from an .ini file
 
         Parameters
@@ -758,10 +783,6 @@ class SCPI(PyLayers):
         Examples
         --------
 
-        >>> from pylayers.measures.vna.E5072A import *
-        >>> vna = SCPI()
-        >>> vna.load_config()
-        >>> vna.close()
 
         """
 
@@ -785,7 +806,7 @@ class SCPI(PyLayers):
                     di[section][option] = vna_conf.get(section, option)
 
 
-                # be careful no capital word in the sections
+        # be careful no capital word in the sections
         # link between vna and file ini
 
         # section from  vna_config
@@ -798,6 +819,7 @@ class SCPI(PyLayers):
         # section : response
         self.param   = di['response']['param']
         self.navrg   = di['response']['navrg']
+        
         self.ifbHz   = di['response']['ifbhz']
 
         # apply configuration setup
@@ -807,24 +829,6 @@ class SCPI(PyLayers):
             self.parS(param=self.param, cmd='set')
             self.ifband(ifbHz=self.ifbHz, cmd='set')
             self.autoscale()
-
-    def config_setup(self,_filename1='vna_config.ini',_filename2='conf_setup.ini'):
-        """ load both vna config and config set up files .ini
-
-        Parameters
-        ----------
-
-        _filename1 : string
-                   file name extension .ini
-
-        _filename2 : string
-                   file name extension .ini
-
-        
-        """
-
-        filenname1 = pyu.getlong(_filename1,pstruc['DIRMES'])
-        filenname2 = pyu.getlong(_filename2,pstruc['DIRMES'])
 
 
 
