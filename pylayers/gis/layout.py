@@ -393,7 +393,7 @@ class Layout(PyLayers):
         self.display['activelayer'] = self.sl.keys()[0]
         self.display['layers'] = []
         self.display['overlay'] = False
-        self.display['inverse'] = False
+        self.display['overlay_flip'] = ""
         #self.display['fileoverlay']="/home/buguen/Pyproject/data/image/"
         self.display['fileoverlay'] = ""
         self.display['layerset'] = self.sl.keys()
@@ -690,90 +690,91 @@ class Layout(PyLayers):
         """
         consistent = True
         nodes = self.Gs.nodes()
-        #
-        # points
-        # segments
-        # degree of segments
-        useg  = filter(lambda x : x>0,nodes)
-        upnt  = filter(lambda x : x<0,nodes)
-        degseg  = map(lambda x : nx.degree(self.Gs,x),useg)
+        if len(nodes)>0:
+            #
+            # points
+            # segments
+            # degree of segments
+            useg  = filter(lambda x : x>0,nodes)
+            upnt  = filter(lambda x : x<0,nodes)
+            degseg  = map(lambda x : nx.degree(self.Gs,x),useg)
 
-        #
-        # 1)   all segments have degree 2
-        #
-        assert(np.all(array(degseg)==2))
+            #
+            # 1)   all segments have degree 2
+            #
+            assert(np.all(array(degseg)==2))
 
-        #
-        # degree of points
-        # maximum degree of points
-        #
-        degpnt = map(lambda x : nx.degree(self.Gs,x),upnt)  # points absolute degrees
-        degmin = min(degpnt)
-        degmax = max(degpnt)
+            #
+            # degree of points
+            # maximum degree of points
+            #
+            degpnt = map(lambda x : nx.degree(self.Gs,x),upnt)  # points absolute degrees
+            degmin = min(degpnt)
+            degmax = max(degpnt)
 
-        #
-        #  No isolated points (degree 0)
-        #  No points of degree 1
-        #
-        if (degmin<=1):
-            deg0 = filter(lambda x: nx.degree(self.Gs,x)==0,upnt)
-            deg1 = filter(lambda x: nx.degree(self.Gs,x)==1,upnt)
-            assert (len(deg0)==0), "It exists degree 0 points :  %r" % deg0
-            assert (len(deg1)==0), "It exists degree 1 points : %r" % deg1
+            #
+            #  No isolated points (degree 0)
+            #  No points of degree 1
+            #
+            if (degmin<=1):
+                deg0 = filter(lambda x: nx.degree(self.Gs,x)==0,upnt)
+                deg1 = filter(lambda x: nx.degree(self.Gs,x)==1,upnt)
+                assert (len(deg0)==0), "It exists degree 0 points :  %r" % deg0
+                assert (len(deg1)==0), "It exists degree 1 points : %r" % deg1
 
-        self.deg={}
-        for deg in range(degmax+1):
-            num = filter(lambda x : degpnt[x]==deg,range(len(degpnt))) # position of degree 1 point
-            npt = map(lambda x : upnt[x],num)  # number of degree 1 points
-            self.deg[deg] = npt
-
-
-        #
-        # check if there is duplicate points or segments
-        #
-        # TODO argsort x coordinate
-        #
+            self.deg={}
+            for deg in range(degmax+1):
+                num = filter(lambda x : degpnt[x]==deg,range(len(degpnt))) # position of degree 1 point
+                npt = map(lambda x : upnt[x],num)  # number of degree 1 points
+                self.deg[deg] = npt
 
 
-        ke = self.Gs.pos.keys()
-        x = np.array(map(lambda x : x[0], self.Gs.pos.values()))
-        y = np.array(map(lambda x : x[1], self.Gs.pos.values()))
-        p   = np.vstack((x,y))
-        d1  = p-np.roll(p,1,axis=1)
-        sd1 = np.sum(np.abs(d1),axis=0)
-        if not sd1.all()!=0:
-           lu = np.where(sd1==0)[0]
-
-           for u in lu:
-               if ke[u]>0:
-                   self.del_segment(ke[u])
-               if ke[u]<0:
-                   self.del_points(ke[u])
-
-           nodes = self.Gs.nodes()
-           useg  = filter(lambda x : x>0,nodes)
-           upnt  = filter(lambda x : x<0,nodes)
+            #
+            # check if there is duplicate points or segments
+            #
+            # TODO argsort x coordinate
+            #
 
 
-        for s in useg:
-            n1, n2 = np.array(self.Gs.neighbors(s))  # node s neighbors
-            p1 = np.array(self.Gs.pos[n1])           # p1 --- p2
-            p2 = np.array(self.Gs.pos[n2])           #     s
-            for n in upnt:
-                if (n < 0) & (n1 != n) & (n2 != n):
-                    p = np.array(self.Gs.pos[n])
-                    if geu.isBetween(p1, p2, p):
-                        print p1
-                        print p
-                        print p2
-                        logging.critical("segment %d contains point %d",s,n)
-                        consistent =False
-            if level>0:
-                cycle = self.Gs.node[s]['ncycles']
-                if len(cycle)==0:
-                    logging.critical("segment %d has no cycle",s)
-                if len(cycle)==3:
-                    logging.critical("segment %d has cycle %s",s,str(cycle))
+            ke = self.Gs.pos.keys()
+            x = np.array(map(lambda x : x[0], self.Gs.pos.values()))
+            y = np.array(map(lambda x : x[1], self.Gs.pos.values()))
+            p   = np.vstack((x,y))
+            d1  = p-np.roll(p,1,axis=1)
+            sd1 = np.sum(np.abs(d1),axis=0)
+            if not sd1.all()!=0:
+               lu = np.where(sd1==0)[0]
+
+               for u in lu:
+                   if ke[u]>0:
+                       self.del_segment(ke[u])
+                   if ke[u]<0:
+                       self.del_points(ke[u])
+
+               nodes = self.Gs.nodes()
+               useg  = filter(lambda x : x>0,nodes)
+               upnt  = filter(lambda x : x<0,nodes)
+
+
+            for s in useg:
+                n1, n2 = np.array(self.Gs.neighbors(s))  # node s neighbors
+                p1 = np.array(self.Gs.pos[n1])           # p1 --- p2
+                p2 = np.array(self.Gs.pos[n2])           #     s
+                for n in upnt:
+                    if (n < 0) & (n1 != n) & (n2 != n):
+                        p = np.array(self.Gs.pos[n])
+                        if geu.isBetween(p1, p2, p):
+                            print p1
+                            print p
+                            print p2
+                            logging.critical("segment %d contains point %d",s,n)
+                            consistent =False
+                if level>0:
+                    cycle = self.Gs.node[s]['ncycles']
+                    if len(cycle)==0:
+                        logging.critical("segment %d has no cycle",s)
+                    if len(cycle)==3:
+                        logging.critical("segment %d has cycle %s",s,str(cycle))
 
         return(consistent)
 
@@ -2992,7 +2993,7 @@ class Layout(PyLayers):
                                    'scaled',
                                    'overlay',
                                    'fileoverlay',
-                                   'inverse',
+                                   'overlay_flip',
                                    'alpha'),
                                   (self.filename,
                                    int(self.display['nodes']),
@@ -3006,7 +3007,7 @@ class Layout(PyLayers):
                                    int(self.display['scaled']),
                                    int(self.display['overlay']),
                                    self.display['fileoverlay'],
-                                   bool(self.display['inverse']),
+                                   self.display['overlay_flip'],
                                    self.display['alpha']))
         if displaygui is not None:
             self.filename = displaygui[0]
@@ -3021,7 +3022,7 @@ class Layout(PyLayers):
             self.display['scaled'] = bool(eval(displaygui[9]))
             self.display['overlay'] = bool(eval(displaygui[10]))
             self.display['fileoverlay'] = displaygui[11]
-            self.display['inverse'] = eval(displaygui[12])
+            self.display['overlay_flip'] = eval(displaygui[12])
             self.display['alpha'] = eval(displaygui[14])
 
     def info_segment(self, s1):
@@ -5176,10 +5177,11 @@ class Layout(PyLayers):
                     image = Image.open(os.path.join(basename,pstruc['DIRIMAGE'],self.display['fileoverlay']))
                     imok =True
             if imok:
-                if self.display['inverse']:
-                    ax.imshow(image, extent=self.ax, alpha=self.display['alpha'])
-                else:
-                    ax.imshow(image, extent=self.ax,alpha=self.display['alpha'],origin='lower')
+                if 'v' or 'V' in self.display['overlay_flip']:
+                    image = image.transpose(Image.FLIP_LEFT_RIGHT)
+                if 'h' or 'H' in self.display['overlay_flip']:
+                    image = image.transpose(Image.FLIP_TOP_BOTTOM)
+                ax.imshow(image, extent=self.ax,alpha=self.display['alpha'],origin='lower')
 
         if kwargs['ndlist'] == []:
             tn = np.array(self.Gs.node.keys())
@@ -5289,6 +5291,7 @@ class Layout(PyLayers):
 
         if kwargs['show']:
             plt.show()
+
 
         return fig,ax
 
@@ -7219,7 +7222,8 @@ class Layout(PyLayers):
                     'colorcy':'abcdef',
                     'linter' : ['RR','TT','RT','TR','RD','DR','TD','DT','DD'],
                     'show0':False,
-                    'axis':False
+                    'axis':False,
+                    'overlay':False
                     }
 
 
@@ -7281,7 +7285,8 @@ class Layout(PyLayers):
                     'lvis' : ['nn','ne','ee'],
                     'linter' : ['RR','TT','RT','TR','RD','DR','TD','DT','DD'],
                     'show0':False,
-                    'axis':False
+                    'axis':False,
+                    'overlay':False
                     }
 
         for key, value in defaults.items():
@@ -7579,6 +7584,18 @@ class Layout(PyLayers):
         if not kwargs['axis']:
             kwargs['ax'].axis('off')
 
+
+        if kwargs['overlay']:
+            imok = False
+            if self.display['fileoverlay']!='':
+                image = Image.open(os.path.join(basename,pstruc['DIRIMAGE'],self.display['fileoverlay']))
+                imok =True
+            if imok:
+                if 'v' or 'V' in self.display['overlay_flip']:
+                    image = image.transpose(Image.FLIP_LEFT_RIGHT)
+                if 'h' or 'H' in self.display['overlay_flip']:
+                    image = image.transpose(Image.FLIP_TOP_BOTTOM)
+                ax.imshow(image, extent=self.ax,alpha=self.display['alpha'],origin='lower')
 
 
         if kwargs['show']:
