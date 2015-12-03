@@ -393,7 +393,7 @@ class Layout(PyLayers):
         self.display['activelayer'] = self.sl.keys()[0]
         self.display['layers'] = []
         self.display['overlay'] = False
-        self.display['inverse'] = False
+        self.display['overlay_flip'] = ""
         #self.display['fileoverlay']="/home/buguen/Pyproject/data/image/"
         self.display['fileoverlay'] = ""
         self.display['layerset'] = self.sl.keys()
@@ -2993,7 +2993,7 @@ class Layout(PyLayers):
                                    'scaled',
                                    'overlay',
                                    'fileoverlay',
-                                   'inverse',
+                                   'overlay_flip',
                                    'alpha'),
                                   (self.filename,
                                    int(self.display['nodes']),
@@ -3007,7 +3007,7 @@ class Layout(PyLayers):
                                    int(self.display['scaled']),
                                    int(self.display['overlay']),
                                    self.display['fileoverlay'],
-                                   bool(self.display['inverse']),
+                                   self.display['overlay_flip'],
                                    self.display['alpha']))
         if displaygui is not None:
             self.filename = displaygui[0]
@@ -3022,7 +3022,7 @@ class Layout(PyLayers):
             self.display['scaled'] = bool(eval(displaygui[9]))
             self.display['overlay'] = bool(eval(displaygui[10]))
             self.display['fileoverlay'] = displaygui[11]
-            self.display['inverse'] = eval(displaygui[12])
+            self.display['overlay_flip'] = eval(displaygui[12])
             self.display['alpha'] = eval(displaygui[14])
 
     def info_segment(self, s1):
@@ -5177,10 +5177,11 @@ class Layout(PyLayers):
                     image = Image.open(os.path.join(basename,pstruc['DIRIMAGE'],self.display['fileoverlay']))
                     imok =True
             if imok:
-                if self.display['inverse']:
-                    ax.imshow(image, extent=self.ax, alpha=self.display['alpha'])
-                else:
-                    ax.imshow(image, extent=self.ax,alpha=self.display['alpha'],origin='lower')
+                if 'v' or 'V' in self.display['overlay_flip']:
+                    image = image.transpose(Image.FLIP_LEFT_RIGHT)
+                if 'h' or 'H' in self.display['overlay_flip']:
+                    image = image.transpose(Image.FLIP_TOP_BOTTOM)
+                ax.imshow(image, extent=self.ax,alpha=self.display['alpha'],origin='lower')
 
         if kwargs['ndlist'] == []:
             tn = np.array(self.Gs.node.keys())
@@ -7590,10 +7591,11 @@ class Layout(PyLayers):
                 image = Image.open(os.path.join(basename,pstruc['DIRIMAGE'],self.display['fileoverlay']))
                 imok =True
             if imok:
-                if self.display['inverse']:
-                    kwargs['ax'].imshow(image, extent=self.ax, alpha=self.display['alpha'])
-                else:
-                    kwargs['ax'].imshow(image, extent=self.ax,alpha=self.display['alpha'],origin='lower')
+                if 'v' or 'V' in self.display['overlay_flip']:
+                    image = image.transpose(Image.FLIP_LEFT_RIGHT)
+                if 'h' or 'H' in self.display['overlay_flip']:
+                    image = image.transpose(Image.FLIP_TOP_BOTTOM)
+                ax.imshow(image, extent=self.ax,alpha=self.display['alpha'],origin='lower')
 
 
         if kwargs['show']:
