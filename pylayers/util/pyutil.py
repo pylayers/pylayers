@@ -159,12 +159,14 @@ def getlong(shortname,directory):
 
     """
 
-    try:
-        basename=os.environ['BASENAME']
-    except:
-        logging.critical("BASENAME environment variable should be defined")
-        #basename=os.environ['HOME']+"/Pyproject"
 
+    try:
+        basename
+    except:
+        raise AttributeError('BASENAME environment variable should be defined. Please\
+            check that source in your ~/.pylayers file correspond to the git cloned directory')
+        # logging.critical("BASENAME environment variable should be defined")
+        #basename=os.environ['HOME']+"/Pyproject"
     longname = os.path.join(basename,directory,shortname)
     return(longname)
 
