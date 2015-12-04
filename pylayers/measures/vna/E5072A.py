@@ -745,7 +745,6 @@ class SCPI(PyLayers):
                     mimo[k].attrs['ifbHz']     = self.ifbHz
                     mimo[k].attrs['Navrg']     = self.navrg
 
-
         f.close()
 
 
