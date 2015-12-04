@@ -257,7 +257,7 @@ class TBchannel(bs.TBsignal):
 
         return(taurms)
 
-    def toFD(self,N=300,fGHz=np.linspace(2,5,256)):
+    def toFD(self,fGHz=np.linspace(2,5,256)):
         """ Transform to Frequency domain
 
         Returns
