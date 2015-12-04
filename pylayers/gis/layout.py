@@ -5192,9 +5192,9 @@ class Layout(PyLayers):
                     image = Image.open(os.path.join(basename,pstruc['DIRIMAGE'],self.display['overlay_file']))
                     imok =True
             if imok:
-                if 'v' or 'V' in self.display['overlay_flip']:
+                if 'v' in self.display['overlay_flip']:
                     image = image.transpose(Image.FLIP_LEFT_RIGHT)
-                if 'h' or 'H' in self.display['overlay_flip']:
+                if 'h' in self.display['overlay_flip']:
                     image = image.transpose(Image.FLIP_TOP_BOTTOM)
                 ax.imshow(image, extent=self.display['overlay_axis'],alpha=self.display['alpha'],origin='lower')
 
@@ -7365,7 +7365,6 @@ class Layout(PyLayers):
                 else:
                    kwargs['labels']=False
                 kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
-
             kwargs['nodelist'] = nodelistbkup
             kwargs['width'] = widthbkup
             kwargs['edge_color'] = nodecolbkup

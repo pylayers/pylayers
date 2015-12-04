@@ -536,10 +536,10 @@ class SaveQuitWin(QDialog):    # any super class is okay
 class NewLayout(QDialog):    # any super class is okay
     def __init__(self,parent=None,overlay={}):
         super(NewLayout, self).__init__(parent)
-        self.setWindowTitle('New Layout')
         self.parent=parent
         self.doverlay=overlay
         if self.doverlay == {}:
+            self.setWindowTitle('New Layout')
             self._init_choices()
             self._init_layoutwin()
         else : 
@@ -614,17 +614,15 @@ class NewLayout(QDialog):    # any super class is okay
             if self.doverlay['fliph']:
                 flip = flip + 'h'
             axis = self.doverlay['ax'].axis()
-            dx = self.doverlay['origin'][0]
-            dy = self.doverlay['origin'][1]
             ax = self.doverlay['ratiox']
             ay = self.doverlay['ratioy']
-            axis = (axis[0]+dx,axis[1]+dx,axis[2]+dy,axis[3]+dy)
-            axis = (axis[0]*ax,axis[1]*ax,axis[2]*ay,axis[3]*ay)
+            dx = self.doverlay['origin'][0]*ax
+            dy = self.doverlay['origin'][1]*ay
+            axis = (-dx,(axis[1]*ax)-dx,-dy,(axis[3]*ay)-dy)
             self.parent.L.display['overlay_axis'] = axis
             self.parent.L.boundary(xlim=self.parent.L.display['overlay_axis'])
             self.parent.L.display['overlay_flip']=flip
             self.parent.L.display['overlay']=True
-            # self.parent.axes.axis(self.parent.L.display['overlay_axis'])
 
         else : 
             self.parent.L.display['overlay_file']=''
@@ -639,7 +637,7 @@ class NewLayout(QDialog):    # any super class is okay
         self.parent.setWindowTitle(self.parent.L.filename + '- Pylayers : Stand Alone Editor (Beta)')
         self.parent.resize(self.parent.fig.canvas.width(),self.parent.fig.canvas.height())
         self.close()
-        self.close()
+
 
 
     def cancel(self):
@@ -1280,7 +1278,10 @@ class AppForm(QMainWindow):
         # work.
         #
         self.axes = self.fig.add_subplot(111)
-
+        try:
+            self.axes.axis(self.L.display['overlay_axis'])
+        except:
+            self.axes.axis(self.L.display['box'])
 
         # Bind the 'pick' event for clicking on one of the bars
         #
@@ -1301,6 +1302,7 @@ class AppForm(QMainWindow):
                                            self.on_release)
         self.canvas.setFocusPolicy( Qt.ClickFocus )
         self.canvas.setFocus()
+
 
 
         #Create the navigation toolbar, tied to the canvas
