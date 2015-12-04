@@ -94,17 +94,20 @@ def gettty():
     import  os
     line = os.popen('dmesg | grep tty | tail -1').read() .replace('\n','')
     tty = line.split('ttyUSB')
-
-    num = tty[1]
-    port = '/dev/ttyUSB'+num
-    return port
-
     if len(tty)>1:
         num = tty[1]
         port = '/dev/ttyUSB'+num
+        return port
+
+        if len(tty)>1:
+            num = tty[1]
+            port = '/dev/ttyUSB'+num
+        else:
+            port = None
+            print 'not connected to a serial port'
     else:
-        port = None
-        print 'not connected to a serial port'
+        port = "not connected"
+
     return port
 
 class Profile(PyLayers):

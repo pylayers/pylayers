@@ -106,12 +106,12 @@ class SCPI(PyLayers):
 
         self.Nt   = kwargs.pop('Nt')
         self.Nr   = kwargs.pop('Nr')
-
+        self.Nf   = 201
         self.getIdent()
         #print self.ident
         #assert('E5072A' in self.ident), "E5072A not responding"
-        self.points()
         self.freq()
+        self.points()
         self.parS()
         self.avrg()
         self.ifband()
@@ -341,6 +341,7 @@ class SCPI(PyLayers):
         """
         com = ":SENS"+str(sens)+":SWE:POIN"
         self.Nf = value
+        self.fGHz = np.linspace(self.fGHz[0],self.fGHz[-1],self.Nf)
         if not self.emulated:
             if cmd == 'get':
                 comg = com+"?\n"
@@ -457,7 +458,13 @@ class SCPI(PyLayers):
                 except:
                     tH = H[None,:]
         else:
-            tH = np.random.rand(Nmeas,self.Nf)+1j*np.random.rand(Nmeas,self.Nf)
+           h = ch.TBchannel()
+           h.SalehValenzuela()
+           H = h.toFD(fGHz=self.fGHz)
+           EH = np.sum(H.y*np.conj(H.y),axis=1)/self.Nf
+           stn = np.sqrt(EH)/10.
+           N = stn*(np.random.rand(Nmeas,self.Nf)+1j*np.random.rand(Nmeas,self.Nf))
+           tH = H.y+N
 
         return tH
 
@@ -605,8 +612,7 @@ class SCPI(PyLayers):
                  _filevna='vna_config.ini',
                  cables=[],
                  author='',
-                 comment='',
-                 Nmeas = 100):
+                comment=''):
         """  measure a calibration vector and store it in a hdf5 file
 
         Parameters
@@ -659,9 +665,9 @@ class SCPI(PyLayers):
                     self.avrg(navrg=dcal[k]['navrg'],cmd='setavrg')
             #get Nmeas calibration vector
             Dk = self.getdata(chan=1, Nmeas=dcal[k]['nmeas'])
-
-            dcalk = cal.create_dataset(k,(Nmeas,self.Nf),dtype=np.complex64, data = Dk)
+            dcalk = cal.create_dataset(k,(dcal[k]['nmeas'],self.Nf),dtype=np.complex64, data = Dk)
             dcalk.attrs['Nf']        = self.Nf
+            dcalk.attrs['Nmeas']     = dcal[k]['nmeas']
             dcalk.attrs['ifbHz']     = self.ifbHz
             dcalk.attrs['Navrg']     = self.navrg
         f.close()
