@@ -614,9 +614,13 @@ class NewLayout(QDialog):    # any super class is okay
             if self.doverlay['fliph']:
                 flip = flip + 'h'
             axis = self.doverlay['ax'].axis()
+            dx = self.doverlay['origin'][0]
+            dy = self.doverlay['origin'][1]
             ax = self.doverlay['ratiox']
             ay = self.doverlay['ratioy']
-            self.parent.L.display['overlay_axis'] = (axis[0]*ax,axis[1]*ax,axis[2]*ay,axis[3]*ay)
+            axis = (axis[0]+dx,axis[1]+dx,axis[2]+dy,axis[3]+dy)
+            axis = (axis[0]*ax,axis[1]*ax,axis[2]*ay,axis[3]*ay)
+            self.parent.L.display['overlay_axis'] = axis
             self.parent.L.boundary(xlim=self.parent.L.display['overlay_axis'])
             self.parent.L.display['overlay_flip']=flip
             self.parent.L.display['overlay']=True
