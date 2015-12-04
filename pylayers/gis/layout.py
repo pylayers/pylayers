@@ -394,8 +394,9 @@ class Layout(PyLayers):
         self.display['layers'] = []
         self.display['overlay'] = False
         self.display['overlay_flip'] = ""
-        #self.display['fileoverlay']="/home/buguen/Pyproject/data/image/"
-        self.display['fileoverlay'] = ""
+        #self.display['overlay_file']="/home/buguen/Pyproject/data/image/"
+        self.display['overlay_file'] = ""
+        self.display['overlay_axis'] = ""
         self.display['layerset'] = self.sl.keys()
         self.display['box'] = (-50,50,-50,50)
         self.name = {}
@@ -423,8 +424,8 @@ class Layout(PyLayers):
         st = '\n'
         st = st + "----------------\n"
         st = st + self.filename + "\n"
-        if self.display['fileoverlay']!='':
-            filename = pyu.getlong(self.display['fileoverlay'],os.path.join('struc','images'))
+        if self.display['overlay_file']!='':
+            filename = pyu.getlong(self.display['overlay_file'],os.path.join('struc','images'))
             st = st + "Image('"+filename+"')\n"
         st = st + "----------------\n\n"
         st = st + "Number of points  : "+ str(self.Np)+"\n"
@@ -1275,6 +1276,7 @@ class Layout(PyLayers):
         _fileini : string
             file name extension .ini
 
+
         """
         self.filename=_fileini
         di = {}
@@ -1318,7 +1320,7 @@ class Layout(PyLayers):
             except:
                 self.display[k]=di['display'][k]
 
-        self.ax=self.display['box']
+        self.ax = self.display['box']
 
         # update points section
         for nn in di['points']:
@@ -1383,8 +1385,21 @@ class Layout(PyLayers):
             self.fileslabini=config.get('files','slab')
             self.filefur=config.get('files','furniture')
 
+        # In this section we handle the ini file format evolution
+
+        if self.display.has_key('fileoverlay'):
+            self.display['overlay_file'] = self.display.pop('fileoverlay')
+            self.display['overlay_axis'] = self.display['box'] 
+            self.saveini(_fileini)
+
+        if self.display.has_key('inverse'):
+            self.display['overlay_flip'] = ""
+            self.display.pop('inverse')
+
+            self.saveini(_fileini)
         # convert graph Gs to numpy arrays for faster post processing
         self.g2npy()
+        # 
 
 
     def loadfur(self, _filefur):
@@ -2992,7 +3007,7 @@ class Layout(PyLayers):
                                    'thin',
                                    'scaled',
                                    'overlay',
-                                   'fileoverlay',
+                                   'overlay_file',
                                    'overlay_flip',
                                    'alpha'),
                                   (self.filename,
@@ -3006,7 +3021,7 @@ class Layout(PyLayers):
                                    int(self.display['thin']),
                                    int(self.display['scaled']),
                                    int(self.display['overlay']),
-                                   self.display['fileoverlay'],
+                                   self.display['overlay_file'],
                                    self.display['overlay_flip'],
                                    self.display['alpha']))
         if displaygui is not None:
@@ -3021,7 +3036,7 @@ class Layout(PyLayers):
             self.display['thin'] = bool(eval(displaygui[8]))
             self.display['scaled'] = bool(eval(displaygui[9]))
             self.display['overlay'] = bool(eval(displaygui[10]))
-            self.display['fileoverlay'] = displaygui[11]
+            self.display['overlay_file'] = displaygui[11]
             self.display['overlay_flip'] = eval(displaygui[12])
             self.display['alpha'] = eval(displaygui[14])
 
@@ -5167,21 +5182,21 @@ class Layout(PyLayers):
         if self.display['overlay']:
             # imok : Image is OK
             imok = False
-            if len(self.display['fileoverlay'].split('http:'))>1:
-                img_file = urllib.urlopen(self.display['fileoverlay'])
+            if len(self.display['overlay_file'].split('http:'))>1:
+                img_file = urllib.urlopen(self.display['overlay_file'])
                 im = StringIO(img_file.read())
                 image = Image.open(im)
                 imok =True
             else:
-                if self.display['fileoverlay']!='':
-                    image = Image.open(os.path.join(basename,pstruc['DIRIMAGE'],self.display['fileoverlay']))
+                if self.display['overlay_file']!='':
+                    image = Image.open(os.path.join(basename,pstruc['DIRIMAGE'],self.display['overlay_file']))
                     imok =True
             if imok:
                 if 'v' or 'V' in self.display['overlay_flip']:
                     image = image.transpose(Image.FLIP_LEFT_RIGHT)
                 if 'h' or 'H' in self.display['overlay_flip']:
                     image = image.transpose(Image.FLIP_TOP_BOTTOM)
-                ax.imshow(image, extent=self.ax,alpha=self.display['alpha'],origin='lower')
+                ax.imshow(image, extent=self.display['overlay_axis'],alpha=self.display['alpha'],origin='lower')
 
         if kwargs['ndlist'] == []:
             tn = np.array(self.Gs.node.keys())
@@ -7587,15 +7602,17 @@ class Layout(PyLayers):
 
         if kwargs['overlay']:
             imok = False
-            if self.display['fileoverlay']!='':
-                image = Image.open(os.path.join(basename,pstruc['DIRIMAGE'],self.display['fileoverlay']))
+            if self.display['overlay_file']!='':
+                image = Image.open(os.path.join(basename,pstruc['DIRIMAGE'],self.display['overlay_file']))
                 imok =True
             if imok:
-                if 'v' or 'V' in self.display['overlay_flip']:
+                if 'v' in self.display['overlay_flip']:
+                    print "flip v"
                     image = image.transpose(Image.FLIP_LEFT_RIGHT)
-                if 'h' or 'H' in self.display['overlay_flip']:
+                if 'h' in self.display['overlay_flip']:
                     image = image.transpose(Image.FLIP_TOP_BOTTOM)
-                ax.imshow(image, extent=self.ax,alpha=self.display['alpha'],origin='lower')
+                    print "flip h"
+                kwargs['ax'].imshow(image, extent=self.display['overlay_axis'],alpha=self.display['alpha'],origin='lower')
 
 
         if kwargs['show']:
@@ -9623,11 +9640,11 @@ class Layout(PyLayers):
             ymax = xlim[3]
 
         self.ax = (xmin - dx, xmax + dx, ymin - dy, ymax + dy)
-        self.display['box']=self.ax
+        self.display['box'] = self.ax
 
 
-    def offbnd(self,dx=0,dy=0):
-        """ offset boundary
+    def off_overlay(self,dx=0,dy=0):
+        """ offset overlay image
 
         Paramaters
         ----------
@@ -9636,11 +9653,11 @@ class Layout(PyLayers):
         dy : float
 
         """
-        self.ax = (self.ax[0]+dx,self.ax[1]+dx,self.ax[2]+dy,self.ax[3]+dy)
-        self.display['box']=self.ax
+        axis = (self.ax[0]+dx,self.ax[1]+dx,self.ax[2]+dy,self.ax[3]+dy)
+        self.display['overlay_axis'] = axis
 
-    def sclbnd(self,ax=1.0,ay=1.0):
-        """ scale boundary
+    def scl_overlay(self,ax=1.0,ay=1.0):
+        """ scale overlay image
 
         Paramaters
         ----------
@@ -9649,8 +9666,8 @@ class Layout(PyLayers):
         ay : float
 
         """
-        self.ax = (self.ax[0]*ax,self.ax[1]*ax,self.ax[2]*ay,self.ax[3]*ay)
-        self.display['box']=self.ax
+        axis = (self.ax[0]*ax,self.ax[1]*ax,self.ax[2]*ay,self.ax[3]*ay)
+        self.display['overlay_axis'] = axis
 
     def get_paths(self,nd_in, nd_fin):
         """ returns the possible paths of graph Gs between two nodes.
