@@ -605,32 +605,36 @@ class NewLayout(QDialog):    # any super class is okay
 
     def new(self):
         self.parent.L=Layout('void.ini',check=False)
-        self.parent.L.display['overlay']=True
-        if self.doverlay.has_key('fileoverlay'):
-            self.parent.L.display['fileoverlay']=self.doverlay['fileoverlay']
+
+        if self.doverlay.has_key('overlay_file'):
+            self.parent.L.display['overlay_file']=self.doverlay['overlay_file']
             flip =''
             if self.doverlay['flipv']:
                 flip = flip + 'v'
             if self.doverlay['fliph']:
                 flip = flip + 'h'
-            lim = self.doverlay['ax'].axis()
-            self.parent.L.boundary(xlim=lim)
+            axis = self.doverlay['ax'].axis()
+            ax = self.doverlay['ratiox']
+            ay = self.doverlay['ratioy']
+            self.parent.L.display['overlay_axis'] = (axis[0]*ax,axis[1]*ax,axis[2]*ay,axis[3]*ay)
+            self.parent.L.boundary(xlim=self.parent.L.display['overlay_axis'])
             self.parent.L.display['overlay_flip']=flip
-            self.parent.L.offbnd(dx = self.doverlay['origin'][0], dy = self.doverlay['origin'][1])
-            self.parent.L.sclbnd(ax = self.doverlay['ratiox'], ay = self.doverlay['ratioy'])
+            self.parent.L.display['overlay']=True
+            # self.parent.axes.axis(self.parent.L.display['overlay_axis'])
+
         else : 
-            self.parent.L.display['fileoverlay']=''
+            self.parent.L.display['overlay_file']=''
             self.parent.L.display['overlay_flip']=''
             lim = (0., self.width.value(), 0.,self.height.value())
             self.parent.L.boundary(xlim=lim)
-        self.parent.L.display['overlay']=False
+            self.parent.L.display['overlay']=False
 
         self.parent.filename=''
         self.parent.create_main_frame()
         self.parent.on_draw()
         self.parent.setWindowTitle(self.parent.L.filename + '- Pylayers : Stand Alone Editor (Beta)')
         self.parent.resize(self.parent.fig.canvas.width(),self.parent.fig.canvas.height())
-
+        self.close()
         self.close()
 
 
@@ -866,18 +870,24 @@ class Overset(QMainWindow):
 
 
     def compute_values(self):
-        self.ratiox = abs((self.x0[0]-self.x))/self.da.value()
-        self.ratioy = abs((self.x0[1]-self.y))/self.db.value()
+        self.ratiox = self.da.value()/abs((self.x0[0]-self.x))
+        self.ratioy = self.db.value()/abs((self.x0[1]-self.y))
 
 
     def cancel(self):
         self.close()
 
     def new(self):
+        self.figure.canvas.mpl_disconnect(self.kpress)
+        self.figure.canvas.mpl_disconnect(self.mpress)
+        self.figure.canvas.mpl_disconnect(self.mrelea)
+        self.figure.canvas.mpl_disconnect(self.kmove)
+
+        
         self.compute_values()
         doverlay={'flipv':self.flipv,
                   'fliph':self.fliph,
-                  'fileoverlay':self._fileoverlay,
+                  'overlay_file':self._fileoverlay,
                   'origin':self.x0,
                   'ratiox':self.ratiox,
                   'ratioy':self.ratioy,
@@ -973,12 +983,12 @@ class AppForm(QMainWindow):
         self.filename=''
 
         self.create_menu()
-        # self.create_status_bar()
-        # self.shortcuts()
-        # if 'darwin' in sys.platform:
-        #     self.create_toolbar()
+        self.create_status_bar()
+        self.shortcuts()
+        if 'darwin' in sys.platform:
+            self.create_toolbar()
 
-        # self.show3On = False
+        self.show3On = False
 
 
     def new(self):
@@ -1059,7 +1069,8 @@ class AppForm(QMainWindow):
             self.selectl.fig.canvas.mpl_disconnect(self.cid5)
             self.selectl.fig.canvas.mpl_disconnect(self.cid6)
         except:
-            pass
+            pass        
+
         QApplication.quit()
 
     def edit_properties(self):
@@ -1402,7 +1413,7 @@ class AppForm(QMainWindow):
         ### Toolbar
         ###############################
         # get icons path
-        iconpath = os.path.join(os.environ['PYLAYERS'],'pylayers','gui','ico')
+        iconpath = os.path.join(pylayersdir,'pylayers','gui','ico')
         # exit
         exitAction = QAction(QIcon(os.path.join(iconpath,'gnome_application_exit.png')), 'Quit', self)
         # exitAction.triggered.connect(lambda x=True:self.closel(x))
