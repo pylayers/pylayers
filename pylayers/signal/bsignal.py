@@ -1607,38 +1607,6 @@ class TBsignal(Bsignal):
         """
         self.x = self.x + tau
 
-    def b2fud(self, N=300):
-        r""" conversion into a FUDsignal
-
-
-        Parameters
-        ----------
-
-        N :
-
-        Notes
-        -----
-
-        This method is assuming that each element of TBsignal is a delta function.
-
-        $$ h = \sum__k y \delta(x-x_k)$$
-
-        $$ H = \sum__k y \exp(2j\pi f x_k)$$
-
-        """
-        # difference of times 
-        dtau = self.x[1:]-self.x[0:-1]
-        # determine the minimum value
-        mindtau = np.min(dtau)
-        # fix maximum frequency as the inverse of the minimum delay between
-        # delta functions
-        fmax  = 1./mindtau
-        # create an uniform frequency base
-        f = np.linspace(fmax/(1.0*N),fmax,N)
-        z = np.sum(self.y[:,None]*np.exp(-2*1j*f[None,:]*np.pi*self.x[:,None]),axis=0)
-        H = FUDsignal(f,z,taud=self.x)
-        return H
-
     def b2tu(self, N):
         """ conversion into a TUsignal
 

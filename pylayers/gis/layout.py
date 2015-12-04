@@ -250,7 +250,7 @@ import shapely.geometry as sh
 from shapely.ops import cascaded_union
 from descartes.patch import PolygonPatch
 from numpy import array
-import Image
+import PIL.Image as Image
 import logging
 import urllib2 as urllib
 from cStringIO import StringIO
@@ -393,9 +393,10 @@ class Layout(PyLayers):
         self.display['activelayer'] = self.sl.keys()[0]
         self.display['layers'] = []
         self.display['overlay'] = False
-        self.display['inverse'] = False
-        #self.display['fileoverlay']="/home/buguen/Pyproject/data/image/"
-        self.display['fileoverlay'] = ""
+        self.display['overlay_flip'] = ""
+        #self.display['overlay_file']="/home/buguen/Pyproject/data/image/"
+        self.display['overlay_file'] = ""
+        self.display['overlay_axis'] = ""
         self.display['layerset'] = self.sl.keys()
         self.display['box'] = (-50,50,-50,50)
         self.name = {}
@@ -410,7 +411,7 @@ class Layout(PyLayers):
         # check layout integrity (default)
         if check:
             self.check()
-        self.boundary()
+        #self.boundary()
 
         # If the layout has already been built then load the built structure
         if not force:
@@ -423,8 +424,8 @@ class Layout(PyLayers):
         st = '\n'
         st = st + "----------------\n"
         st = st + self.filename + "\n"
-        if self.display['fileoverlay']!='':
-            filename = pyu.getlong(self.display['fileoverlay'],os.path.join('struc','images'))
+        if self.display['overlay_file']!='':
+            filename = pyu.getlong(self.display['overlay_file'],os.path.join('struc','images'))
             st = st + "Image('"+filename+"')\n"
         st = st + "----------------\n\n"
         st = st + "Number of points  : "+ str(self.Np)+"\n"
@@ -503,7 +504,7 @@ class Layout(PyLayers):
 
 
     def __mul__(self,alpha):
-        """ scale the layout 
+        """ scale the layout
 
         other : scaling factor (np.array or int or float)
 
@@ -525,12 +526,10 @@ class Layout(PyLayers):
         # scaling x & y
         #
         x = np.array(Gs.pos.values())[:,0]
-        xc = np.mean(x)
-        x = (x-xc)*alpha[0] + xc
+        x = x*alpha[0]
 
         y = np.array(Gs.pos.values())[:,1]
-        yc = np.mean(y)
-        y = (y-yc)*alpha[1] + yc
+        y = y*alpha[1]
 
         xy = np.vstack((x,y)).T
         Ls.Gs.pos = dict(zip(Gs.pos.keys(),tuple(xy)))
@@ -692,90 +691,91 @@ class Layout(PyLayers):
         """
         consistent = True
         nodes = self.Gs.nodes()
-        #
-        # points
-        # segments
-        # degree of segments
-        useg  = filter(lambda x : x>0,nodes)
-        upnt  = filter(lambda x : x<0,nodes)
-        degseg  = map(lambda x : nx.degree(self.Gs,x),useg)
+        if len(nodes)>0:
+            #
+            # points
+            # segments
+            # degree of segments
+            useg  = filter(lambda x : x>0,nodes)
+            upnt  = filter(lambda x : x<0,nodes)
+            degseg  = map(lambda x : nx.degree(self.Gs,x),useg)
 
-        #
-        # 1)   all segments have degree 2
-        #
-        assert(np.all(array(degseg)==2))
+            #
+            # 1)   all segments have degree 2
+            #
+            assert(np.all(array(degseg)==2))
 
-        #
-        # degree of points
-        # maximum degree of points
-        #
-        degpnt = map(lambda x : nx.degree(self.Gs,x),upnt)  # points absolute degrees
-        degmin = min(degpnt)
-        degmax = max(degpnt)
+            #
+            # degree of points
+            # maximum degree of points
+            #
+            degpnt = map(lambda x : nx.degree(self.Gs,x),upnt)  # points absolute degrees
+            degmin = min(degpnt)
+            degmax = max(degpnt)
 
-        #
-        #  No isolated points (degree 0)
-        #  No points of degree 1
-        #
-        if (degmin<=1):
-            deg0 = filter(lambda x: nx.degree(self.Gs,x)==0,upnt)
-            deg1 = filter(lambda x: nx.degree(self.Gs,x)==1,upnt)
-            assert (len(deg0)==0), "It exists degree 0 points :  %r" % deg0
-            assert (len(deg1)==0), "It exists degree 1 points : %r" % deg1
+            #
+            #  No isolated points (degree 0)
+            #  No points of degree 1
+            #
+            if (degmin<=1):
+                deg0 = filter(lambda x: nx.degree(self.Gs,x)==0,upnt)
+                deg1 = filter(lambda x: nx.degree(self.Gs,x)==1,upnt)
+                assert (len(deg0)==0), "It exists degree 0 points :  %r" % deg0
+                assert (len(deg1)==0), "It exists degree 1 points : %r" % deg1
 
-        self.deg={}
-        for deg in range(degmax+1):
-            num = filter(lambda x : degpnt[x]==deg,range(len(degpnt))) # position of degree 1 point
-            npt = map(lambda x : upnt[x],num)  # number of degree 1 points
-            self.deg[deg] = npt
-
-
-        #
-        # check if there is duplicate points or segments
-        #
-        # TODO argsort x coordinate
-        #
+            self.deg={}
+            for deg in range(degmax+1):
+                num = filter(lambda x : degpnt[x]==deg,range(len(degpnt))) # position of degree 1 point
+                npt = map(lambda x : upnt[x],num)  # number of degree 1 points
+                self.deg[deg] = npt
 
 
-        ke = self.Gs.pos.keys()
-        x = np.array(map(lambda x : x[0], self.Gs.pos.values()))
-        y = np.array(map(lambda x : x[1], self.Gs.pos.values()))
-        p   = np.vstack((x,y))
-        d1  = p-np.roll(p,1,axis=1)
-        sd1 = np.sum(np.abs(d1),axis=0)
-        if not sd1.all()!=0:
-           lu = np.where(sd1==0)[0]
-
-           for u in lu:
-               if ke[u]>0:
-                   self.del_segment(ke[u])
-               if ke[u]<0:
-                   self.del_points(ke[u])
-
-           nodes = self.Gs.nodes()
-           useg  = filter(lambda x : x>0,nodes)
-           upnt  = filter(lambda x : x<0,nodes)
+            #
+            # check if there is duplicate points or segments
+            #
+            # TODO argsort x coordinate
+            #
 
 
-        for s in useg:
-            n1, n2 = np.array(self.Gs.neighbors(s))  # node s neighbors
-            p1 = np.array(self.Gs.pos[n1])           # p1 --- p2
-            p2 = np.array(self.Gs.pos[n2])           #     s
-            for n in upnt:
-                if (n < 0) & (n1 != n) & (n2 != n):
-                    p = np.array(self.Gs.pos[n])
-                    if geu.isBetween(p1, p2, p):
-                        print p1
-                        print p
-                        print p2
-                        logging.critical("segment %d contains point %d",s,n)
-                        consistent =False
-            if level>0:
-                cycle = self.Gs.node[s]['ncycles']
-                if len(cycle)==0:
-                    logging.critical("segment %d has no cycle",s)
-                if len(cycle)==3:
-                    logging.critical("segment %d has cycle %s",s,str(cycle))
+            ke = self.Gs.pos.keys()
+            x = np.array(map(lambda x : x[0], self.Gs.pos.values()))
+            y = np.array(map(lambda x : x[1], self.Gs.pos.values()))
+            p   = np.vstack((x,y))
+            d1  = p-np.roll(p,1,axis=1)
+            sd1 = np.sum(np.abs(d1),axis=0)
+            if not sd1.all()!=0:
+               lu = np.where(sd1==0)[0]
+
+               for u in lu:
+                   if ke[u]>0:
+                       self.del_segment(ke[u])
+                   if ke[u]<0:
+                       self.del_points(ke[u])
+
+               nodes = self.Gs.nodes()
+               useg  = filter(lambda x : x>0,nodes)
+               upnt  = filter(lambda x : x<0,nodes)
+
+
+            for s in useg:
+                n1, n2 = np.array(self.Gs.neighbors(s))  # node s neighbors
+                p1 = np.array(self.Gs.pos[n1])           # p1 --- p2
+                p2 = np.array(self.Gs.pos[n2])           #     s
+                for n in upnt:
+                    if (n < 0) & (n1 != n) & (n2 != n):
+                        p = np.array(self.Gs.pos[n])
+                        if geu.isBetween(p1, p2, p):
+                            print p1
+                            print p
+                            print p2
+                            logging.critical("segment %d contains point %d",s,n)
+                            consistent =False
+                if level>0:
+                    cycle = self.Gs.node[s]['ncycles']
+                    if len(cycle)==0:
+                        logging.critical("segment %d has no cycle",s)
+                    if len(cycle)==3:
+                        logging.critical("segment %d has cycle %s",s,str(cycle))
 
         return(consistent)
 
@@ -1276,6 +1276,7 @@ class Layout(PyLayers):
         _fileini : string
             file name extension .ini
 
+
         """
         self.filename=_fileini
         di = {}
@@ -1319,6 +1320,7 @@ class Layout(PyLayers):
             except:
                 self.display[k]=di['display'][k]
 
+        self.ax = self.display['box']
 
         # update points section
         for nn in di['points']:
@@ -1383,8 +1385,21 @@ class Layout(PyLayers):
             self.fileslabini=config.get('files','slab')
             self.filefur=config.get('files','furniture')
 
+        # In this section we handle the ini file format evolution
+
+        if self.display.has_key('fileoverlay'):
+            self.display['overlay_file'] = self.display.pop('fileoverlay')
+            self.display['overlay_axis'] = self.display['box'] 
+            self.saveini(_fileini)
+
+        if self.display.has_key('inverse'):
+            self.display['overlay_flip'] = ""
+            self.display.pop('inverse')
+
+            self.saveini(_fileini)
         # convert graph Gs to numpy arrays for faster post processing
         self.g2npy()
+        # 
 
 
     def loadfur(self, _filefur):
@@ -2412,32 +2427,32 @@ class Layout(PyLayers):
         if isinstance(apnt,list):
             apnt = np.array(apnt)
 
-        ## 0. Find the position of diffraction point
+        ##0. Find the position of diffraction point
         ptdiff = self.pt[:,self.iupnt[-apnt]]
 
-        ## 1. Find the associated segments and positions of a diff points
+        ##1. Find the associated segments and positions of a diff points
 
         aseg = map(lambda x : filter(lambda y : y not in self.name['AIR'],
                                          nx.neighbors(self.Gs,x)),
                                          apnt)
-        # manage flat angle : diffraction by flat segment e.g. door limitation)
+        #manage flat angle : diffraction by flat segment e.g. door limitation)
         [aseg[ix].extend(x) for ix,x in enumerate(aseg) if len(x)==1]
         # get points positions
         pts = np.array(map(lambda x : self.seg2pts([x[0],x[1]]),aseg))
 
 
-        pt1 = pts[:,0:2,0]# tail seg1
-        ph1 = pts[:,2:4,0]# head seg1
-        pt2 = pts[:,0:2,1]# tail seg2
-        ph2 = pts[:,2:4,1]# head seg2
+        pt1 = pts[:,0:2,0]#tail seg1
+        ph1 = pts[:,2:4,0]#head seg1
+        pt2 = pts[:,0:2,1]#tail seg2
+        ph2 = pts[:,2:4,1]#head seg2
 
 
-        ## 2. Make the correct association
-        # pts is (nb_diffraction_points x 4 x 2)
-        # - The dimension 4 represent the 2x2 points: t1,h1 and t2,h2
+        ##2. Make the correct association
+        #pts is (nb_diffraction_points x 4 x 2)
+        #- The dimension 4 represent the 2x2 points: t1,h1 and t2,h2
         # tail and head of segemnt 1 and 2 respectively
-        # a segment 
-        # - The dimension 2 is x,y
+        #a segment 
+        #- The dimension 2 is x,y
         #
         # The following aims to determine which tails and heads of 
         # segments associated to a give diffraction point 
@@ -2456,17 +2471,17 @@ class Layout(PyLayers):
         pa = np.empty((len(apnt),2))
         pb = np.empty((len(apnt),2))
 
-        #### seg 1 :
-        # if pt1 diff point =>  ph1 is the other point
+        ####seg 1 :
+        #if pt1 diff point =>  ph1 is the other point
         pa[updpt1]= ph1[updpt1]
-        # if ph1 diff point =>  pt1 is the other point
+        #if ph1 diff point =>  pt1 is the other point
         pa[updph1]= pt1[updph1]
-        #### seg 2 :
-        # if pt2 diff point =>  ph2 is the other point
+        ####seg 2 :
+        #if pt2 diff point =>  ph2 is the other point
         pb[updpt2]= ph2[updpt2]
-        # if ph2 diff point =>  pt2 is the other point
+        #if ph2 diff point =>  pt2 is the other point
         pb[updph2]= pt2[updph2]
-        # pt is the diffraction point
+        #pt is the diffraction point
         pt = ptdiff.T
 
 
@@ -2522,7 +2537,7 @@ class Layout(PyLayers):
 
         if c > 0:
             cycle = self.Gc.node[c]['cycle'].cycle
-        else: # handle outdoorcycle 0
+        else: #handle outdoorcycle 0
             try:
                 cycle = self.ma.vnodes
             except:
@@ -2992,8 +3007,8 @@ class Layout(PyLayers):
                                    'thin',
                                    'scaled',
                                    'overlay',
-                                   'fileoverlay',
-                                   'inverse',
+                                   'overlay_file',
+                                   'overlay_flip',
                                    'alpha'),
                                   (self.filename,
                                    int(self.display['nodes']),
@@ -3006,8 +3021,8 @@ class Layout(PyLayers):
                                    int(self.display['thin']),
                                    int(self.display['scaled']),
                                    int(self.display['overlay']),
-                                   self.display['fileoverlay'],
-                                   bool(self.display['inverse']),
+                                   self.display['overlay_file'],
+                                   self.display['overlay_flip'],
                                    self.display['alpha']))
         if displaygui is not None:
             self.filename = displaygui[0]
@@ -3021,8 +3036,8 @@ class Layout(PyLayers):
             self.display['thin'] = bool(eval(displaygui[8]))
             self.display['scaled'] = bool(eval(displaygui[9]))
             self.display['overlay'] = bool(eval(displaygui[10]))
-            self.display['fileoverlay'] = displaygui[11]
-            self.display['inverse'] = eval(displaygui[12])
+            self.display['overlay_file'] = displaygui[11]
+            self.display['overlay_flip'] = eval(displaygui[12])
             self.display['alpha'] = eval(displaygui[14])
 
     def info_segment(self, s1):
@@ -5165,21 +5180,23 @@ class Layout(PyLayers):
 
         # display overlay image
         if self.display['overlay']:
+            # imok : Image is OK
             imok = False
-            if len(self.display['fileoverlay'].split('http:'))>1:
-                img_file = urllib.urlopen(self.display['fileoverlay'])
+            if len(self.display['overlay_file'].split('http:'))>1:
+                img_file = urllib.urlopen(self.display['overlay_file'])
                 im = StringIO(img_file.read())
                 image = Image.open(im)
                 imok =True
             else:
-                if self.display['fileoverlay']!='':
-                    image = Image.open(os.path.join(basename,pstruc['DIRIMAGE'],self.display['fileoverlay']))
+                if self.display['overlay_file']!='':
+                    image = Image.open(os.path.join(basename,pstruc['DIRIMAGE'],self.display['overlay_file']))
                     imok =True
             if imok:
-                if self.display['inverse']:
-                    ax.imshow(image, extent=self.ax, alpha=self.display['alpha'])
-                else:
-                    ax.imshow(image, extent=self.ax,alpha=self.display['alpha'],origin='lower')
+                if 'v' or 'V' in self.display['overlay_flip']:
+                    image = image.transpose(Image.FLIP_LEFT_RIGHT)
+                if 'h' or 'H' in self.display['overlay_flip']:
+                    image = image.transpose(Image.FLIP_TOP_BOTTOM)
+                ax.imshow(image, extent=self.display['overlay_axis'],alpha=self.display['alpha'],origin='lower')
 
         if kwargs['ndlist'] == []:
             tn = np.array(self.Gs.node.keys())
@@ -5289,6 +5306,7 @@ class Layout(PyLayers):
 
         if kwargs['show']:
             plt.show()
+
 
         return fig,ax
 
@@ -5641,7 +5659,7 @@ class Layout(PyLayers):
         #    Cycles = 0 exterior cycle (assumed outdoor)
 
         # build a polygon including all the layout + 5 meters
-        p1 = geu.Polygon(self.ax,delta=5)
+        p1 = geu.Polygon(tuple(self.ax),delta=5)
         self.ma = self.mask()
         p2 = p1.difference(self.ma)
         boundary = geu.Polygon(p2)
@@ -7219,7 +7237,8 @@ class Layout(PyLayers):
                     'colorcy':'abcdef',
                     'linter' : ['RR','TT','RT','TR','RD','DR','TD','DT','DD'],
                     'show0':False,
-                    'axis':False
+                    'axis':False,
+                    'overlay':False
                     }
 
 
@@ -7281,7 +7300,8 @@ class Layout(PyLayers):
                     'lvis' : ['nn','ne','ee'],
                     'linter' : ['RR','TT','RT','TR','RD','DR','TD','DT','DD'],
                     'show0':False,
-                    'axis':False
+                    'axis':False,
+                    'overlay':False
                     }
 
         for key, value in defaults.items():
@@ -7579,6 +7599,20 @@ class Layout(PyLayers):
         if not kwargs['axis']:
             kwargs['ax'].axis('off')
 
+
+        if kwargs['overlay']:
+            imok = False
+            if self.display['overlay_file']!='':
+                image = Image.open(os.path.join(basename,pstruc['DIRIMAGE'],self.display['overlay_file']))
+                imok =True
+            if imok:
+                if 'v' in self.display['overlay_flip']:
+                    print "flip v"
+                    image = image.transpose(Image.FLIP_LEFT_RIGHT)
+                if 'h' in self.display['overlay_flip']:
+                    image = image.transpose(Image.FLIP_TOP_BOTTOM)
+                    print "flip h"
+                kwargs['ax'].imshow(image, extent=self.display['overlay_axis'],alpha=self.display['alpha'],origin='lower')
 
 
         if kwargs['show']:
@@ -8119,11 +8153,11 @@ class Layout(PyLayers):
             # update pos of root cycle with new center of gravity
             self.Gc.pos[root]=tuple(self.Gc.node[root]['cycle'].g)
 
-        # FIND DIFFRACTION POINTS 
+        #FIND DIFFRACTION POINTS 
         dangles = self.get_Gc_angles()
         # look for in the dictionnary 
-        # which points are associated to an angle > pi + epsilon
-        # those are the diffraction point
+        #which points are associated to an angle > pi + epsilon
+        #those are the diffraction point
         ldi=[dangles[x][0,dangles[x][1,:]>np.pi+0.1].astype(int) for x in dangles]
         self.ldiff=[]
         self.ldiffin=[]
@@ -8553,7 +8587,7 @@ class Layout(PyLayers):
         except:
             print "geomfile (.off) has no been generated"
 
-        self.boundary()
+        #self.boundary()
         print "boundaries ",self.ax
         print "number of Points :", self.Np
         print "number of Segments :", self.Ns
@@ -9556,7 +9590,7 @@ class Layout(PyLayers):
 
         """
 
-        self.boundary()
+        #self.boundary()
 
         Tx_x = rd.uniform(self.ax[0], self.ax[1])
         Tx_y = rd.uniform(self.ax[2], self.ax[3])
@@ -9606,8 +9640,34 @@ class Layout(PyLayers):
             ymax = xlim[3]
 
         self.ax = (xmin - dx, xmax + dx, ymin - dy, ymax + dy)
-        self.display['box']=self.ax
+        self.display['box'] = self.ax
 
+
+    def off_overlay(self,dx=0,dy=0):
+        """ offset overlay image
+
+        Paramaters
+        ----------
+
+        dx : float
+        dy : float
+
+        """
+        axis = (self.ax[0]+dx,self.ax[1]+dx,self.ax[2]+dy,self.ax[3]+dy)
+        self.display['overlay_axis'] = axis
+
+    def scl_overlay(self,ax=1.0,ay=1.0):
+        """ scale overlay image
+
+        Paramaters
+        ----------
+
+        ax : float
+        ay : float
+
+        """
+        axis = (self.ax[0]*ax,self.ax[1]*ax,self.ax[2]*ay,self.ax[3]*ay)
+        self.display['overlay_axis'] = axis
 
     def get_paths(self,nd_in, nd_fin):
         """ returns the possible paths of graph Gs between two nodes.

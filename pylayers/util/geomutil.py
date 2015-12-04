@@ -394,6 +394,7 @@ class Polygon(PyLayers,shg.Polygon):
             2xNp np.array
             shg.MultiPoint
             shg.Polygon
+            tuple : self.ax
         vnodes : list of alternating points and segments numbers
             default = [] in this case a regular ordered sequence
             is generated.

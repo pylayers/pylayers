@@ -2467,10 +2467,10 @@ class SlabDB(dict):
 #     mat : MatDB
 #         Associated Material Database 
 
-#     s0 : string | Mat | Slab
-#         Material name | Material | Slab on face 0
-#     sn : string | Mat | Slab
-#         Material name | Material | Slab on face n
+#     s0 : string |Mat | Slab
+#         Material name |Material |Slab on face 0
+#     sn : string |Mat | Slab
+#         Material name |Material |Slab on face n
  
 
 #     evaluated : Boolean

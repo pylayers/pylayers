@@ -492,7 +492,7 @@ class Rays(PyLayers,dict):
         Parameters
         ----------
 
-        rlist : list  (default [] = all rays)
+        rlist : list  (default []= all rays)
             list of indices of ray in interaction group
         graph : string t
             type of graph to be displayed
@@ -989,7 +989,7 @@ class Rays(PyLayers,dict):
                     # ptees[2,iint_c,iray_c]   = H
                     #
 
-                    # 
+                    #
                     # case where ceil reflection exists
 
                     if H != 0:
@@ -1539,7 +1539,7 @@ class Rays(PyLayers,dict):
                 self[k]['BiN'] = np.concatenate((-si[:,-1,np.newaxis,:],eth[:,np.newaxis,:],
                                                    eph[:,np.newaxis,:]),axis=1)
 
-                # Creatinon of B from Bi and Bo
+                #Creatinon of B from Bi and Bo
                 # is done after the potential diffraction 
                 # computation
 
@@ -1590,31 +1590,31 @@ class Rays(PyLayers,dict):
                     aseg = map(lambda x : filter(lambda y : y not in L.name['AIR'],
                                          nx.neighbors(L.Gs,x)),
                                          diffupt)
-                    # manage flat angle : diffraction by flat segment e.g. door limitation)
+                    #manage flat angle : diffraction by flat segment e.g. door limitation)
                     [aseg[ix].extend(x) for ix,x in enumerate(aseg) if len(x)==1]
                     # get points positions
                     pts = np.array(map(lambda x : L.seg2pts([x[0],x[1]]),aseg))
                     # get associated slab index face_0,face_n
                     # self[k]['diffslabs']=[[L.sl[L.sla[y]]['index'] for y in x] for x in aseg]
                     # self[k]['diffslabs']=[L.sla[x[0]]+'-'+L.sla[x[1]] for x in aseg]
-                    # diffslab = [ idslab0-idslabn ]
+                    #diffslab = [ idslab0-idslabn ]
 
                     self[k]['diffslabs']=[str(L.sl[L.sla[x[0]]]['index'])+'_'+str(L.sl[L.sla[x[1]]]['index']) for x in aseg]
                     uwl = np.unique(self[k]['diffslabs']).tolist()
                     luw.extend(uwl)
 
 
-                    pt1 = pts[:,0:2,0]# tail seg1
-                    ph1 = pts[:,2:4,0]# head seg1
-                    pt2 = pts[:,0:2,1]# tail seg2
-                    ph2 = pts[:,2:4,1]# head seg2
+                    pt1 = pts[:,0:2,0]#tail seg1
+                    ph1 = pts[:,2:4,0]#head seg1
+                    pt2 = pts[:,0:2,1]#tail seg2
+                    ph2 = pts[:,2:4,1]#head seg2
 
 
-                    # pts is (nb_diffraction_points x 4 x 2)
-                    # - The dimension 4 represent the 2x2 points: t1,h1 and t2,h2
+                    #pts is (nb_diffraction_points x 4 x 2)
+                    #- The dimension 4 represent the 2x2 points: t1,h1 and t2,h2
                     # tail and head of segemnt 1 and 2 respectively
-                    # a segment 
-                    # - The dimension 2 is x,y
+                    #a segment 
+                    #- The dimension 2 is x,y
                     #
                     # The following aims to determine which tails and heads of 
                     # segments associated to a give diffraction point 
@@ -1636,15 +1636,15 @@ class Rays(PyLayers,dict):
                     pa = np.empty((len(diffupt),2))
                     pb = np.empty((len(diffupt),2))
 
-                    #### seg 1 :
-                    # if pt1 diff point =>  ph1 is the other point
+                    ####seg 1 :
+                    #if pt1 diff point =>  ph1 is the other point
                     pa[updpt1]= ph1[updpt1]
-                    # if ph1 diff point =>  pt1 is the other point
+                    #if ph1 diff point =>  pt1 is the other point
                     pa[updph1]= pt1[updph1]
-                    #### seg 2 :
-                    # if pt2 diff point =>  ph2 is the other point
+                    ####seg 2 :
+                    #if pt2 diff point =>  ph2 is the other point
                     pb[updpt2]= ph2[updpt2]
-                    # if ph2 diff point =>  pt2 is the other point
+                    #if ph2 diff point =>  pt2 is the other point
                     pb[updph2]= pt2[updph2]
 
                     pt = ptdiff.T
@@ -1654,33 +1654,33 @@ class Rays(PyLayers,dict):
                     nn = (360.-geu.sector(pa.T,pb.T,pt.T))/180.
                     alpha_w = (2.-nn)*np.pi
 
-                    # angle between face 0, diffraction point and s_in
-                    # s_in[:2,udiff[0],udiff[1]]  : 
+                    #angle between face 0, diffraction point and s_in
+                    #s_in[:2,udiff[0],udiff[1]]  : 
                     # s_in of insteractions udiff (2D) restricted to diffraction points
                     vptpa = pt-pa
                     vptpan = vptpa.T / np.sqrt(np.sum((vptpa)*(vptpa),axis=1))
                     # vpapt= pa-pt # papt : direction vector of face 0 
                     # vpaptn = vpapt.T / np.sqrt(np.sum((vpapt)*(vpapt),axis=1))
-                    sid = s_in[:,udiff[0],udiff[1]] # s_in restricted to diff
-                    sod = s_out[:,udiff[0],udiff[1]] # s_out restricted to diff
+                    sid = s_in[:,udiff[0],udiff[1]] #s_in restricted to diff
+                    sod = s_out[:,udiff[0],udiff[1]] #s_out restricted to diff
                     vnormz = self[k]['norm'][:, udiff[0], udiff[1]]
 
 
-                    # phi0 = arccos(dot(sid*vpavptn))
+                    #phi0 = arccos(dot(sid*vpavptn))
                     # phi0 = geu.vecang(sid[:2],vpaptn)
                     uleft = geu.isleft(pa.T,pt.T,pb.T)
                     phi0 = geu.vecang(vptpan,sid[:2])
                     phi0[~uleft] = geu.vecang(sid[:2,~uleft],vptpan[:,~uleft])
                     # phi0 = np.arccos(np.sum(sid[:2]*vpaptn,axis=0))
 
-                    # phi = arccos(dot(sod*vpavptn))
+                    #phi = arccos(dot(sod*vpavptn))
                     # phi = np.arccos(np.sum(-sod[:2]*vpaptn,axis=0))
                     phi = geu.vecang(vptpan,-sod[:2])
                     phi[~uleft] = geu.vecang(-sod[:2,~uleft],vptpan[:,~uleft])
                     # beta
-                    # it is important to check if the sid comes from left or right
-                    # to this end assume that sid vector is composed
-                    # of 2 point : (0,0) and sid
+                    #it is important to check if the sid comes from left or right
+                    #to this end assume that sid vector is composed
+                    #of 2 point : (0,0) and sid
                     # compared to the position of the diffraction point in x
                     # with an elevation=0
                     sidxz = sid[[0,2]]
@@ -1699,9 +1699,9 @@ class Rays(PyLayers,dict):
                     self[k]['diffvect']=np.array((phi0,phi,beta,alpha_w))
 
                     ######
-                    # Bi diffract
+                    #Bi diffract
                     #####
-                    # w is the \perp \soft in diff
+                    #w is the \perp \soft in diff
                     w = np.cross(-sid,vnormz, axisa=0, axisb=0, axisc=0)
 
                     # nw : i x r
@@ -1719,10 +1719,10 @@ class Rays(PyLayers,dict):
                     #  Bid 3 x 2 x (i,r)diff
                     Bid = np.concatenate((ev, ew), axis=1)
 
-                    # update Bi for diffracted rays
+                    #update Bi for diffracted rays
                     Bi[:,:,udiff[0],udiff[1]] = Bid
                     ######
-                    # Bo diffract
+                    #Bo diffract
                     #####
                     w = np.cross(sod,vnormz, axisa=0, axisb=0, axisc=0)
 
@@ -1738,7 +1738,7 @@ class Rays(PyLayers,dict):
                     #  Bod 3 x 2 x (i,r)diff
                     Bod = np.concatenate((ev, ew), axis=1)
 
-                    # update Bo for diffracted rays
+                    #update Bo for diffracted rays
                     Bo[:,:,udiff[0],udiff[1]] = Bod
                 #################################
                 # End of diffraction specifc process
@@ -1885,7 +1885,7 @@ class Rays(PyLayers,dict):
 
         R.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
         T.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
-        # to be specified and limited to used wedges
+        #to be specified and limited to used wedges
         D.dusl = dict.fromkeys(self._luw, np.array((), dtype=int))
 
         # transmission/reflection slab array
@@ -2058,7 +2058,7 @@ class Rays(PyLayers,dict):
                 ### Reflexion
                 ############
                 ### wall reflexion
-                # (theta, s_in,s_out)
+                #(theta, s_in,s_out)
 
                 R.stack(data=np.array((thetaf[uR], s_inf[uR], s_outf[uR])).T,
                         idx=idxf[uR])
@@ -2092,9 +2092,9 @@ class Rays(PyLayers,dict):
 
                 if self[k].has_key('diffvect'): 
                     # self[k]['diffvect'] = ((phi0,phi,beta,N) x (nb_rayxnb_interactions)   )
-                    # si and so are stacked at the end of self[k]['diffvect'] 
-                    # as well:
-                    # data =  (6 x (nb_rayxnb_interactions) )
+                    #si and so are stacked at the end of self[k]['diffvect'] 
+                    #as well:
+                    #data =  (6 x (nb_rayxnb_interactions) )
                     # ((phi0,phi,beta,N,sin,sout) x (nb_rayxnb_interactions) )
                     data = np.vstack((self[k]['diffvect'],s_inf[uD],s_outf[uD]))
                     D.stack(data=data.T,idx=self[k]['diffidx'])#idxf[uD])

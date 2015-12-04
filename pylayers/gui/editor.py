@@ -10,7 +10,7 @@ from PyQt4.QtGui import *
 
 import matplotlib
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as NavigationToolbar
+from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 
@@ -534,12 +534,18 @@ class SaveQuitWin(QDialog):    # any super class is okay
 
 
 class NewLayout(QDialog):    # any super class is okay
-    def __init__(self,parent=None):
+    def __init__(self,parent=None,overlay={}):
         super(NewLayout, self).__init__(parent)
         self.setWindowTitle('New Layout')
         self.parent=parent
-        self._init_choices()
-        self._init_layoutwin()
+        self.doverlay=overlay
+        if self.doverlay == {}:
+            self._init_choices()
+            self._init_layoutwin()
+        else : 
+            self.new()
+
+
 
 
 
@@ -600,11 +606,25 @@ class NewLayout(QDialog):    # any super class is okay
     def new(self):
         self.parent.L=Layout('void.ini',check=False)
         self.parent.L.display['overlay']=True
-        self.parent.L.display['fileoverlay']='TA-Office.png'
+        if self.doverlay.has_key('fileoverlay'):
+            self.parent.L.display['fileoverlay']=self.doverlay['fileoverlay']
+            flip =''
+            if self.doverlay['flipv']:
+                flip = flip + 'v'
+            if self.doverlay['fliph']:
+                flip = flip + 'h'
+            lim = self.doverlay['ax'].axis()
+            self.parent.L.boundary(xlim=lim)
+            self.parent.L.display['overlay_flip']=flip
+            self.parent.L.offbnd(dx = self.doverlay['origin'][0], dy = self.doverlay['origin'][1])
+            self.parent.L.sclbnd(ax = self.doverlay['ratiox'], ay = self.doverlay['ratioy'])
+        else : 
+            self.parent.L.display['fileoverlay']=''
+            self.parent.L.display['overlay_flip']=''
+            lim = (0., self.width.value(), 0.,self.height.value())
+            self.parent.L.boundary(xlim=lim)
         self.parent.L.display['overlay']=False
-        self.parent.L.display['inverse']=True
-        lim = (0., self.width.value(), 0.,self.height.value())
-        self.parent.L.boundary(xlim=lim)
+
         self.parent.filename=''
         self.parent.create_main_frame()
         self.parent.on_draw()
@@ -615,6 +635,255 @@ class NewLayout(QDialog):    # any super class is okay
 
 
     def cancel(self):
+        self.close()
+
+class Overset(QMainWindow):
+    def __init__(self,parent=None):
+        super(Overset, self).__init__(parent)
+        self.setWindowTitle('Set Overlay')
+        self.x0=np.array([0,0])
+        self.x0selected=False
+        self.xselected=False
+        self.xselected=False
+        self.click=False
+        self.parent=parent
+        self.toolbar()
+        self.openoverlay()
+        self.showfig()
+        self.flipv=False
+        self.fliph=False
+
+    def openoverlay(self):
+        filename = QFileDialog.getOpenFileName(self,'Open Layout Overlay',pyu.getlong('',pstruc['DIRIMAGE']),'(*.png);;(*.jpg);;(*.jpeg)')
+
+        if filename != '':
+            self._fileoverlay = pyu.getshort(str(filename))
+            print 'overlay loaded'
+
+
+
+    def toolbar(self):
+        ###############################
+        ### Toolbar
+        ###############################
+        # origin
+        self.xx0 = QDoubleSpinBox()
+        self.xx0.setObjectName("x0 [m]")
+        self.xx0.setSingleStep(0.01)
+        self.xx0.setRange(-1000., 1000.)
+        self.xx0.setValue(0)
+        self.connect(self.xx0, SIGNAL('valueChanged(double)'), self.refresh)
+
+
+        self.yy0 = QDoubleSpinBox()
+        self.yy0.setObjectName("y0 [m]")
+        self.yy0.setSingleStep(0.01)
+        self.yy0.setRange(-1000., 1000.)
+        self.yy0.setValue(0)
+        self.connect(self.yy0, SIGNAL('valueChanged(double)'), self.refresh)
+
+
+        self.da = QDoubleSpinBox()
+        self.da.setObjectName("d_a [m]")
+        self.da.setSingleStep(0.01)
+        self.da.setRange(1, 10000.)
+        self.da.setValue(10)
+
+
+        self.db = QDoubleSpinBox()
+        self.db.setObjectName("d_b [m]")
+        self.db.setSingleStep(0.01)
+        self.db.setRange(1, 10000.)
+        self.db.setValue(10)
+        self.connect(self.da, SIGNAL('valueChanged(double)'), self.refresh)
+
+        vbox = QVBoxLayout()
+
+        # Indicate Ceil
+        hboxlabel = QHBoxLayout()
+        x0 = QLabel('origin x')
+        y0 = QLabel('origin y')
+        da = QLabel('x')
+        db = QLabel('y')
+        self.connect(self.db, SIGNAL('valueChanged(double)'), self.refresh)
+
+
+
+        self.toolbar0 = QToolBar(self)
+        self.toolbar0.addWidget(x0)
+        self.toolbar0.addWidget(self.xx0)
+        self.toolbar0.addWidget(y0)
+        self.toolbar0.addWidget(self.yy0)
+        self.toolbara = QToolBar(self)
+
+        self.toolbara.addWidget(da)
+        self.toolbara.addWidget(self.da)
+        self.toolbarb = QToolBar(self)
+
+        self.toolbarb.addWidget(db)
+        self.toolbarb.addWidget(self.db)
+        
+        # validation
+
+        self.toolbarval = QToolBar(self)
+
+        # Indicate Ceil
+        buttonn=QPushButton("Start Editing")
+        buttonc=QPushButton("Cancel")
+        buttonn.setAutoDefault(True)
+        buttonn.setDefault(True)
+        buttonn.clicked.connect(self.new)
+        buttonc.clicked.connect(self.cancel)
+
+        self.toolbarval.addWidget(buttonn)
+        self.toolbarval.addWidget(buttonc)
+
+
+    def showfig(self):
+        self.main_frame = QWidget()
+        self.figure = plt.figure()
+        self.ax = self.figure.add_subplot(111)
+        # this is the Canvas Widget that displays the `figure`
+        # it takes the `figure` instance as a parameter to __init__
+        self.canvas = FigureCanvas(self.figure)
+        self.canvas.setParent(self.main_frame)
+
+        self.kpress = self.figure.canvas.mpl_connect('key_press_event', self.flip)
+
+        self.mpress = self.figure.canvas.mpl_connect('button_press_event', self.on_press)
+        self.mrelea = self.figure.canvas.mpl_connect('button_release_event', self.on_release)
+        self.kmove = self.figure.canvas.mpl_connect('motion_notify_event', self.on_motion)
+
+
+        self.canvas.setFocusPolicy( Qt.ClickFocus )
+        self.canvas.setFocus()
+
+
+        self.navtoolbar = NavigationToolbar(self.canvas, self.main_frame)
+        self.image = Image.open(os.path.join(basename,pstruc['DIRIMAGE'],self._fileoverlay))
+        self.overlay = self.ax.imshow(self.image,origin='lower')
+        # set the layout
+        layout = QVBoxLayout()
+        layout.addWidget(self.navtoolbar)
+        layout.addWidget(self.canvas)
+
+        # layout.addWidget(self.toolbar)
+        self.addToolBar(Qt.ToolBarArea(Qt.BottomToolBarArea), self.toolbar0)
+        self.addToolBarBreak()
+        self.addToolBar(Qt.ToolBarArea(Qt.BottomToolBarArea), self.toolbara)
+        self.addToolBarBreak()
+        self.addToolBar(Qt.ToolBarArea(Qt.BottomToolBarArea), self.toolbarb)
+        self.addToolBarBreak()
+        self.addToolBar(Qt.ToolBarArea(Qt.BottomToolBarArea), self.toolbarval)
+        # layout.addWidget(self.button)
+        self.main_frame.setLayout(layout)
+        self.setCentralWidget(self.main_frame)
+
+        self.axis = self.ax.axis()
+        self.x = self.axis[1]*0.1
+        self.y = self.axis[3]*0.1
+
+
+        self.refresh()
+        self.canvas.draw()
+
+
+    def flip(self,event):
+        if (event.key == 'v') or (event.key == 'V'):
+            self.image = self.image.transpose(Image.FLIP_LEFT_RIGHT)
+            self.flipv = ~self.flipv
+        if (event.key == 'h') or (event.key == 'H'):
+            self.image = self.image.transpose(Image.FLIP_TOP_BOTTOM )
+            self.fliph = ~self.fliph
+        if (event.key == 'v') or (event.key == 'V') or (event.key == 'h') or (event.key == 'H'):
+            self.overlay.remove()
+            self.overlay = self.ax.imshow(self.image,origin='lower')
+            self.refresh()
+
+
+    def on_press(self,event):
+        mouse  = np.array([event.xdata,event.ydata])
+
+        dx = abs(self.x0[0]-self.x)
+        dy = abs(self.x0[1]-self.y)
+        if event.button == 1:
+            self.click=True
+            if np.sqrt((mouse[0]-self.x0[0])**2+(mouse[1]-self.x0[1])**2)<10:
+                self.x0selected=True
+            elif np.sqrt((mouse[0]-self.x)**2+(mouse[1]-self.x0[1])**2)<0.3*dx:
+                self.xselected=True
+            elif np.sqrt((mouse[0]-self.x0[0])**2+(mouse[1]-self.y)**2)<0.3*dy:
+                self.yselected=True
+
+
+    def on_motion(self,event):
+        if self.click:
+            if self.x0selected:
+                self.xx0.setValue(event.xdata)
+                self.yy0.setValue(event.ydata)
+            if self.xselected:
+                self.x = event.xdata
+            if self.yselected:
+                self.y = event.ydata
+        self.refresh()
+
+
+    def on_release(self,event):
+        self.click=False
+        self.x0selected=False
+        self.xselected=False
+        self.yselected=False
+        self.refresh()
+
+
+    def refresh(self):
+
+        ptrm = ['p0','p00','p1','p2','a0','a1','b0','b1']
+        for pt in ptrm:
+            try:
+                eval('self.'+pt+'.remove()')
+            except: 
+                pass
+        
+        self.x0  = np.array([self.xx0.value(),self.yy0.value()])
+
+        self.p00 = self.ax.scatter(self.x0[0],self.x0[1],marker='o',s=300,linewidths=8, facecolors='None', edgecolors='r')
+        self.p0 = self.ax.scatter(self.x0[0],self.x0[1],marker='+',c='k',s=100,linewidths=5)
+        self.p1 = self.ax.scatter(self.x,self.x0[1],marker='x',c='r',s=100,linewidths=5)
+        self.p2 = self.ax.scatter(self.x0[0],self.y,marker='x',c='b',s=100,linewidths=5)
+
+        mx = (self.x0[0] + self.x)/2.
+        my = (self.x0[1] + self.y)/2.
+        # da
+        self.a0 = self.ax.annotate('', xy=(self.x0[0], self.x0[1]), xycoords='data',xytext=(self.x, self.x0[1]), textcoords='data',arrowprops={'arrowstyle': '<->'})
+        # self.a1 = self.ax.annotate('a'+str(self.da.value()) + ' m', xy=(mx, self.x0[1]-100), xycoords='data',xytext=(5, 0), textcoords='offset points')
+        self.a1 = self.ax.text(mx, self.x0[1]-50, 'x='+str(self.da.value()) + ' m', fontsize=15)
+        # db
+        self.b0 =self.ax.annotate('', xy=(self.x0[0], self.x0[1]), xycoords='data',xytext=(self.x0[0], self.y), textcoords='data',arrowprops={'arrowstyle': '<->'})
+        # self.b1 =self.ax.annotate('b'+str(self.db.value()) + ' m', xy=(self.x0[0]-100,my), xycoords='data',xytext=(5, 0), textcoords='offset points')
+        self.b1 = self.ax.text(self.x0[0]-50,my, 'y='+str(self.db.value()) + ' m', fontsize=15,rotation=90)
+        self.canvas.draw()
+
+
+    def compute_values(self):
+        self.ratiox = abs((self.x0[0]-self.x))/self.da.value()
+        self.ratioy = abs((self.x0[1]-self.y))/self.db.value()
+
+
+    def cancel(self):
+        self.close()
+
+    def new(self):
+        self.compute_values()
+        doverlay={'flipv':self.flipv,
+                  'fliph':self.fliph,
+                  'fileoverlay':self._fileoverlay,
+                  'origin':self.x0,
+                  'ratiox':self.ratiox,
+                  'ratioy':self.ratioy,
+                  'ax':self.ax}
+        self.parent.newlayout=NewLayout(parent=self.parent,overlay=doverlay)
+        self.parent.newlayout.show()
         self.close()
 
 
@@ -647,7 +916,7 @@ class GridSet(QDialog):    # any super class is okay
         hboxlabel = QHBoxLayout()
         yspacing = QLabel('y spacing')
         xspacing = QLabel('x spacing')
-        # ceillabel.setStyleSheet("font: bold 14px;")
+        # ceillabel.setStyleSheet("font: bold 14px;"
         hboxlabel.addWidget(xspacing)
         hboxlabel.addWidget(yspacing)
         # hboxlabel.setAlignment(Qt.AlignCenter)
@@ -698,7 +967,8 @@ class GridSet(QDialog):    # any super class is okay
 
 class AppForm(QMainWindow):
     def __init__(self, parent=None):
-        QMainWindow.__init__(self, parent)
+        super(AppForm,self).__init__()
+        # QMainWindow.__init__(self, parent)
         self.setWindowTitle('Pylayers : Stand Alone Editor (Beta)')
         self.filename=''
 
@@ -716,13 +986,17 @@ class AppForm(QMainWindow):
         self.newlayout.show()
 
 
+    def newover(self):
+        self.overset = Overset(parent=self)
+        self.overset.show()
+
     def open(self):
         filename = QFileDialog.getOpenFileName(self,'Open Pylayers Layout File',pyu.getlong('',pstruc['DIRINI']),'(*.ini);;(*.osm)')
 
         if filename != '':
-            _filename= pyu.getshort(str(filename))
-            self.L=Layout(_filename)
-            self.filename=self.L.filename
+            _filename = pyu.getshort(str(filename))
+            self.L = Layout(_filename)
+            self.filename = self.L.filename
             self.create_main_frame()
             self.on_draw()
             self.setWindowTitle(self.L.filename + '- Pylayers : Stand Alone Editor (Beta)')
@@ -730,8 +1004,6 @@ class AppForm(QMainWindow):
             print 'loaded'
 
         # self.setgrid()
-
-
     def save(self,force=False):
 
         if self.filename == '' or force:
@@ -771,7 +1043,7 @@ class AppForm(QMainWindow):
         """
         self.selectl.toggleoverlay()
         self.fig.canvas.draw()
-        
+
     def closel(self,exit=False):
         dial_res=''
         self.sq = SaveQuitWin(parent=self,exit=exit)
@@ -1041,7 +1313,10 @@ class AppForm(QMainWindow):
         esc.setKey("escape")
         self.connect(esc, SIGNAL("activated()"), self.selectnodes)
 
-
+    def refresh(self):
+        f5 = QShortcut(self)
+        f5.setKey("F5")
+        self.connect(f5, SIGNAL("activated()"), self.selectl.refresh)
 
 
     def create_menu(self):
@@ -1055,6 +1330,8 @@ class AppForm(QMainWindow):
         #     tip="Save the plot")
         new_action = self.create_action("&New Layout", slot=self.new,
         shortcut="Ctrl+n", tip="new layout")
+        new_overlay = self.create_action("&New Overlay", slot=self.newover,
+        shortcut="Ctrl+Shift+n", tip="new layout from overlay")
         open_action = self.create_action("&Open", slot=self.open,
         shortcut="Ctrl+o", tip="Open Layout")
         save_action = self.create_action("&Save", slot=self.save,
@@ -1105,7 +1382,7 @@ class AppForm(QMainWindow):
         shortcut="", tip="Toggle ovelay display")
 
         self.add_actions(self.file_menu,
-            ( new_action,open_action,None,save_action,saveas_action,None,close_action,quit_action,))
+            ( new_action,new_overlay,open_action,None,save_action,saveas_action,None,close_action,quit_action,))
 
         self.add_actions(self.edit_menu,
             ( select_action,draw_action,properties,None,gridset_action,snapongrid_action,gridtg_action,None,refresh))
@@ -1246,8 +1523,8 @@ def main():
     form = AppForm()
     # form.setGeometry(100,100,300,300)
     form.show()
-    app.exec_()
-
+    ret = app.exec_()
+    sys.exit(ret)
 
 if __name__ == "__main__":
     main()

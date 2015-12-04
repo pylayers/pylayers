@@ -38,16 +38,6 @@ IntB Class
     IntB.__repr__
     IntB.eval
 
-IntL Class
-===========
-
-.. autosummary::
-    :toctree: generated/
-
-    IntL.__init__
-    IntL.__repr__
-    IntL.eval
-
 IntR Class
 ===========
 
@@ -200,7 +190,7 @@ class Inter(PyLayers):
 
         """
 
-        if self.typ in [2, 3]: # reflection & transmission
+        if self.typ in [2, 3]: #reflection & transmission
             self.si0 = self.data[:, 1]
             self.sout = self.data[:, 2]
         elif self.typ == 1: # diffraction
@@ -404,7 +394,7 @@ class Interactions(Inter,dict):
         self.gamma = np.ones((self.nimax), dtype=complex)
 
         # evaluate B and fill I 
-        # OUT DATED , B MDA are stored outside of I
+        #OUT DATED , B MDA are stored outside of I
         # try:
         #     self.I[:, self.B.idx, :, :] = self.B.eval(fGHz=fGHz)
         #     self.sout[self.B.idx] = self.B.sout
@@ -544,8 +534,8 @@ class IntB(Inter):
             print 'no B interaction to evaluate'
             return(self.data[:, None, None, None])
 
-##### Interaction Loss in not used for speed purpose
-# the loss interaction is computed and added after the global computation
+#####Interaction Loss in not used for speed purpose
+#the loss interaction is computed and added after the global computation
 # class IntL(Inter):
 #     """ Loss interaction
 
@@ -903,7 +893,7 @@ class IntD(Inter):
                 # Ds,Dh = diff(self.fGHz,self.phi0[idx],self.phi[idx],self.si0[idx],self.sout[idx],self.N[idx],mat0,matN,beta=self.beta[idx])
                 Ds,Dh = diff(self.fGHz,self.phi0[idx],self.phi[idx],
                              self.si0[idx],self.sout[idx],self.N[idx],
-                             mat0,matN,beta=self.beta[idx])
+                             mat0,matN,mode='tab',beta=self.beta[idx])
                 D[:,idx,0,0]=-Dh
                 D[:,idx,1,1]=Ds
                 # from IPython.core.debugger import Tracer
