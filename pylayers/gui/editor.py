@@ -973,12 +973,12 @@ class AppForm(QMainWindow):
         self.filename=''
 
         self.create_menu()
-        self.create_status_bar()
-        self.shortcuts()
-        if 'darwin' in sys.platform:
-            self.create_toolbar()
+        # self.create_status_bar()
+        # self.shortcuts()
+        # if 'darwin' in sys.platform:
+        #     self.create_toolbar()
 
-        self.show3On = False
+        # self.show3On = False
 
 
     def new(self):
@@ -1523,8 +1523,7 @@ def main():
     form = AppForm()
     # form.setGeometry(100,100,300,300)
     form.show()
-    ret = app.exec_()
-    sys.exit(ret)
+    sys.exit(app.exec_())
 
 if __name__ == "__main__":
     main()
