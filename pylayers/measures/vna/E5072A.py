@@ -31,35 +31,35 @@ Enhanced by M.D.BALDE
 .. autosummary::
     :toctree: generated
 
-SCPI Class
+VNA Class
 ==========
 
 .. autosummary::
     :toctree: generated/
 
-    SCPI.__init__
-    SCPI.__repr__
-    SCPI._write
-    SCPI._read
-    SCPI.write
-    SCPI.read
-    SCPI.ask
-    SCPI.close
-    SCPI.parS
-    SCPI.reset
-    SCPI.trace
-    SCPI.autoscale
-    SCPI.points
-    SCPI.freq
-    SCPI.getIdent
-    SCPI.getdata
-    SCPI.avrg
-    SCPI.ifband
-    SCPI.calibh5
+    VNA.__init__
+    VNA.__repr__
+    VNA._write
+    VNA._read
+    VNA.write
+    VNA.read
+    VNA.ask
+    VNA.close
+    VNA.parS
+    VNA.reset
+    VNA.trace
+    VNA.autoscale
+    VNA.points
+    VNA.freq
+    VNA.getIdent
+    VNA.getdata
+    VNA.avrg
+    VNA.ifband
+    VNA.calibh5
 
 """
 
-class SCPI(PyLayers):
+class VNA(PyLayers):
     PORT = 5025
     _chunk = 128
     _verbose = False
@@ -93,7 +93,7 @@ class SCPI(PyLayers):
             self.s.connect((host, port))
         except socket.error as e:
             if self._verbose:
-                print 'SCPI>> connect({:s}:{:d}) failed {:s}', format(host, port, e)
+                print 'VNA>> connect({:s}:{:d}) failed {:s}', format(host, port, e)
             else:
                 self.emulated = True
 
@@ -155,7 +155,7 @@ class SCPI(PyLayers):
             return self._write(cmd + b'\n')
         except IOError as e:
             if self._verbose:
-                print 'SCPI>> write({:s}) failed: {:s}'.format(cmd.strip(), e)
+                print 'VNA>> write({:s}) failed: {:s}'.format(cmd.strip(), e)
             else:
                 raise e
 
@@ -209,7 +209,7 @@ class SCPI(PyLayers):
             return str(ans.strip())
         except IOError as e:
             if self._verbose:
-                print 'SCPI>> ask({:s}) failed: {:s}'.format(cmd.strip(), e)
+                print 'VNA>> ask({:s}) failed: {:s}'.format(cmd.strip(), e)
             else:
                 raise e
 
@@ -229,7 +229,7 @@ class SCPI(PyLayers):
         --------
 
         >>> from pylayers.measures.vna.E5072A import *
-        >>> vna = SCPI()
+        >>> vna = VNA()
         >>> vna.parS(param='S21',cmd='set')
         >>> vna.close()
 
@@ -263,7 +263,7 @@ class SCPI(PyLayers):
         --------
 
         >>> from pylayers.measures.vna.E5072A import *
-        >>> vna = SCPI()
+        >>> vna = VNA()
         >>> vna.close()
 
         """
@@ -288,7 +288,7 @@ class SCPI(PyLayers):
         --------
 
         >>> #from pylayers.measures.vna.E5072A import *
-        >>> #vna = SCPI()
+        >>> #vna = VNA()
         >>> #vna.trace(chan=1,param='S21',ntrace=1,cmd='set')
         >>> #vna.close()
 
@@ -333,7 +333,7 @@ class SCPI(PyLayers):
         --------
 
         >>> from pylayers.measures.vna.E5072A import *
-        >>> vna = SCPI()
+        >>> vna = VNA()
         >>> vna.points(201,cmd='set')
         >>> vna.close()
 
@@ -373,7 +373,7 @@ class SCPI(PyLayers):
         --------
 
         >>> from pylayers.measures.vna.E5072A import *
-        >>> vna = SCPI()
+        >>> vna = VNA()
         >>> vna.freq(fminGHz=3.8,fmaxGHz=4.2,cmd='set')
         >>> vna.close()
 
@@ -434,7 +434,7 @@ class SCPI(PyLayers):
         >>> from pylayers.measures.vna.E5072A import *
         >>> import matplotlib.pyplot as plt
         >>> import numpy as np
-        >>> vna = SCPI()
+        >>> vna = VNA()
         >>> vna.parS(param='S21',cmd='set')
         >>> S21 = vna.getdata()
         >>> vna.close()
@@ -485,7 +485,7 @@ class SCPI(PyLayers):
         >>> from pylayers.measures.vna.E5072A import *
         >>> import matplotlib.pyplot as plt
         >>> import numpy as np
-        >>> vna = SCPI()
+        >>> vna = VNA()
         >>> vna.parS(param='S21',cmd='set')
         >>> S21 = vna.getdata()
         >>> #plt.plot(np.abs(S21.y)[0])
@@ -536,7 +536,7 @@ class SCPI(PyLayers):
         --------
 
         >>> from pylayers.measures.vna.E5072A import *
-        >>> vna = SCPI()
+        >>> vna = VNA()
         >>> vna.reset()
         >>> vna.freq(fminGHz=2.8,fmaxGHz=3.2,cmd='set')
         >>> vna.avrg()
@@ -586,7 +586,7 @@ class SCPI(PyLayers):
         --------
 
         >>> from pylayers.measures.vna.E5072A import *
-        >>> vna = SCPI()
+        >>> vna = VNA()
         >>> vna.ifband(sens=1,ifbHz=70000,cmd='set')
         >>> vna.close()
 
@@ -631,7 +631,7 @@ class SCPI(PyLayers):
 
         fileh5 = pyu.getlong(_fileh5, pstruc['DIRMES'])+'.h5'
         #ipdb.set_trace()
-        f = h5py.File(fileh5, "a")
+        f = h5py.File(fileh5, "w")
         try:
             ldataset = f.keys()
         except:
@@ -703,7 +703,7 @@ class SCPI(PyLayers):
 
         # store calibration vector in a hdf5 file
         fileh5 = pyu.getlong(_fileh5, pstruc['DIRMES'])+'.h5'
-        f = h5py.File(fileh5, "a")
+        f = h5py.File(fileh5, "w")
         try:
             ldataset = f.keys()
         except:
@@ -840,7 +840,7 @@ class SCPI(PyLayers):
 if __name__ == '__main__':
     doctest.testmod()
 
-#    vna = SCPI(vna_ip,verbose=False)
+#    vna = VNA(vna_ip,verbose=False)
 #    ident = vna.getIdent()
 # lNpoints = ['201','401','601','801','1601']
 #
