@@ -12,7 +12,7 @@ import seaborn as sns
 from pylayers.util.project import *
 from pylayers.antprop.aarray import *
 from pylayers.measures.exploith5 import *
-from pylayers.measures.vna.analyzer.py *
+from pylayers.measures.vna.analyzer import *
 import pylayers.measures.switch.ni_usb_6501 as sw
 
 """

@@ -77,11 +77,13 @@ class VNA(PyLayers):
 
         """
         self.emulated = False
-        if "VNA_IP" in os.environ:
-            host = os.environ["VNA_IP"]
-        else:
-            print "VNA IP not defined"
-            exit
+        host = "192.168.1.8"
+        #ipdb.set_trace()
+        #if "VNA_IP" in os.environ:
+            #host = os.environ["VNA_IP"]
+        #else:
+            #print "VNA IP not defined"
+            #exit
         try:
             self.host = host
             self._verbose = verbose
@@ -116,23 +118,26 @@ class VNA(PyLayers):
         self.avrg()
         self.ifband()
         self.getdata()
+        self.filename = pyu.getlong('vna_config.ini', pstruc['DIRMES'])
 
     def __repr__(self):
         st = ''
-        st = st + '----------------------------'+'\n'
-        st = st + '      PARAMETERS            '+'\n'
-        st = st + '----------------------------'+'\n'
-        st = st + "Talking to         : " + str(self.ident)+'\n'
-        st = st + "Channel            : " + str(self.chan) + '\n'
-        st = st + "S Parameter        : " + self.param + '\n'
-        st = st + "fmin (GHz)         : " + str(self.fGHz[0])+'\n'
-        st = st + "fmax (GHz)         : " + str(self.fGHz[-1])+'\n'
-        st = st + "Bandwidth (GHz)    : " + str(self.fGHz[-1]-self.fGHz[0])+'\n'
-        st = st + "Nbr of freq points : " + str(self.Nf)+'\n'
-        st = st + "Avering            : " + self.b + '\n'
-        st = st + "Nbr of averages    : " + str(self.navrg)+'\n'
-        st = st + "IF Bandwidth (Hz)  : " + str(self.ifbHz)+'\n'
-        st = st + "Nbr of measures    : " + str(self.nmeas)+'\n'
+        st = st + '------------------------------------'+'\n'
+        st = st + '              PARAMETERS            '+'\n'
+        st = st + '------------------------------------'+'\n'
+        st = st + "Talking to               : " + str(self.ident)+'\n'
+        st = st + "Channel                  : " + str(self.chan) + '\n'
+        st = st + "S Parameter              : " + self.param + '\n'
+        st = st + "fmin (GHz)               : " + str(self.fGHz[0])+'\n'
+        st = st + "fmax (GHz)               : " + str(self.fGHz[-1])+'\n'
+        st = st + "Bandwidth (GHz)          : " + str(self.fGHz[-1]-self.fGHz[0])+'\n'
+        st = st + "Nbr of freq points       : " + str(self.Nf)+'\n'
+        st = st + "Averaging                : " + self.b + '\n'
+        st = st + "Nbr of averages          : " + str(self.navrg)+'\n'
+        st = st + "IF Bandwidth (Hz)        : " + str(self.ifbHz)+'\n'
+        st = st + "Nbr of measures          : " + str(self.nmeas)+'\n'
+        st = st + "Repertory of ini files   : " + str(self.filename)+'\n'
+
         return(st)
 
     def _write(self, cmd):
@@ -240,7 +245,7 @@ class VNA(PyLayers):
         self.param = param
         self.chan  = chan
         if not self.emulated:
-            # co = ":CALC"+str(chan)+":PAR:DEF"
+            #co = ":CALC"+str(chan)+":PAR:DEF"
             co = ":CALC"+str(chan)+":PAR"+str(tr)+":DEF"
             com = co + ' '+param
             com1 = com+"\n"
@@ -349,7 +354,7 @@ class VNA(PyLayers):
                 try:
                     self.Nf = eval(self.s.recv(8).replace("\n", ""))
                 except socket.timeout:
-                    # print "problem for getting number of points"
+                    #print "problem for getting number of points"
                     raise IOError('problem for getting number of points')
 
             if cmd == 'set':
@@ -410,16 +415,16 @@ class VNA(PyLayers):
         if not self.emulated:
             self.s.send("*IDN?\n")
             try:
-                # data = self.s.recv(1024)
+                #data = self.s.recv(1024)
                 self.ident = self.s.recv(1024)
-                # return data
+                #return data
             except socket.timeout:
                 return ""
         else:
             self.ident = 'emulated vna'
 
 
-    def getdata(self, chan=1, Nmeas=10):
+    def getdata(self, chan=1, Nmeas=100):
         """ getdata from VNA
 
         Parameters
@@ -653,15 +658,18 @@ class VNA(PyLayers):
 
         for k in dcal:
             time.sleep(2)
+            print "-------------------------------------------------------------------------"
+            print "Configuration Parameters : ",dcal[k]
+            print "-------------------------------------------------------------------------"
             for k2 in dcal[k]:
                 if k2=='nf':
-                    print dcal[k]['nf']
+                    print "set number of frequency :", dcal[k]['nf']
                     self.points(dcal[k]['nf'], cmd='set')
                 if k2=='ifbhz':
-                    print dcal[k]['ifbhz']
+                    print "set number of ifbHz :",dcal[k]['ifbhz']
                     self.ifband(ifbHz=dcal[k]['ifbhz'], cmd='set')
                 if k2=='navrg':
-                    print dcal[k]['navrg']
+                    print "set number of average :",dcal[k]['navrg']
                     self.avrg(navrg=dcal[k]['navrg'],cmd='setavrg')
             #get Nmeas calibration vector
             Dk = self.getdata(chan=1, Nmeas=dcal[k]['nmeas'])
@@ -670,6 +678,9 @@ class VNA(PyLayers):
             dcalk.attrs['Nmeas']     = dcal[k]['nmeas']
             dcalk.attrs['ifbHz']     = self.ifbHz
             dcalk.attrs['Navrg']     = self.navrg
+        print "-------------------------------------"
+        print "         END of calibration          "
+        print "-------------------------------------"
         f.close()
 
 
@@ -716,23 +727,26 @@ class VNA(PyLayers):
         
 
         for iR in range(self.Nr):
-            print "connect receiver :", iR +1
+            print "Connect Receiver :", iR +1
             for iT in range(self.Nt):
-                print "connect transmitter :", iT + 1 
+                print "Connect Transmitter :", iT + 1 
                 c = ""
                 while "g" not in c:
                     c = raw_input("Hit return key ")
                 for k in dcal:
                     time.sleep(2)
+                    print "-------------------------------------------------------------------------"
+                    print "Configuration Parameters : ",dcal[k]
+                    print "-------------------------------------------------------------------------"
                     for k2 in dcal[k]:
                         if k2=='nf':
-                            self.points(dcal[k]['nf'], cmd='set')
+                            print "set number of number :",self.points(dcal[k]['nf'], cmd='set')
                         if k2=='ifbhz':
-                            self.ifband(ifbHz=dcal[k]['ifbhz'], cmd='set')
+                            print "set number of ifbHz :",self.ifband(ifbHz=dcal[k]['ifbhz'], cmd='set')
                         if k2=='navrg':
-                            self.avrg(navrg=dcal[k]['navrg'],cmd='setavrg')
+                            print "set number of average :",self.avrg(navrg=dcal[k]['navrg'],cmd='setavrg')
 
-                    # get Nmeas calibration vector
+                    #get Nmeas calibration vector
                     Dmeas = self.getdata(chan=1, Nmeas=dcal[k]['nmeas'])
                     if ((iR==0) and (iT==0)):
                         mimo.create_dataset(k, (dcal[k]['nmeas'], self.Nr, self.Nt, self.Nf), dtype=np.complex64)
@@ -750,7 +764,9 @@ class VNA(PyLayers):
                     mimo[k].attrs['Nf']        = self.Nf
                     mimo[k].attrs['ifbHz']     = self.ifbHz
                     mimo[k].attrs['Navrg']     = self.navrg
-
+        print "-------------------------------------"
+        print "         END of calibration          "
+        print "-------------------------------------"
         f.close()
 
 
@@ -791,7 +807,7 @@ class VNA(PyLayers):
 
         """
 
-        # filename : ~/Pylayers_project/meas
+        #filename : ~/Pylayers_project/meas
         filename = pyu.getlong(_filename, pstruc['DIRMES'])
 
         vna_conf  = ConfigParser.ConfigParser()
@@ -834,6 +850,23 @@ class VNA(PyLayers):
             self.parS(param=self.param, cmd='set')
             self.ifband(ifbHz=self.ifbHz, cmd='set')
             self.autoscale()
+
+    def showcal(self,_fileh5='mytest.h5',ical=1,ncal=0):
+        """show calibration from vna
+
+        Parameters
+        ----------
+
+        ical : int
+        ncal : int
+
+        """
+        f = h5py.File("mytest.h5","r")
+
+        plt.plot(np.abs(f['cal'+str(ical)][ncal,:]))
+        plt.show()
+        
+        f.close()
 
 
 
