@@ -588,10 +588,10 @@ class Axes(PyLayers):
 
             print 'deceleration : ',eval(ans[3].split('D')[1]), "rps"
 
-
-        if cmd=='set':
-            cstr = 'LIMITS'+'('+str(mask)+','+str(typ)+','+str(mode)+','+str(LD)+')'
-            self.com(cstr,verbose=False)
+        if not self.emulated:
+            if cmd=='set':
+                cstr = 'LIMITS'+'('+str(mask)+','+str(typ)+','+str(mode)+','+str(LD)+')'
+                self.com(cstr,verbose=False)
 
     def home(self,cmd='set',**kwargs):
         """ enables back material home for each axe.
@@ -1064,8 +1064,8 @@ class Axes(PyLayers):
                 self.dist =  value
             else:
                 self.ang = value
-
-            com   = self.com(scom)
+            if not self.emulated: 
+                com   = self.com(scom)
         if cmd=='get':
             scom = 'D'   #get velocity
             rep =  self.com(scom)[1].replace('*','')
@@ -1097,7 +1097,8 @@ class Axes(PyLayers):
         if cmd=='set':
             scom = 'V'+str(value)   #set velocity
             self.vel =  value
-            com   = self.com(scom)
+            if not self.emulated:
+                com   = self.com(scom)
         if cmd=='get':
             scom = 'V'   #get velocity
             self.vel  = eval(self.com(scom)[1].replace('*',''))
@@ -1125,7 +1126,8 @@ class Axes(PyLayers):
         if cmd=='set':
             scom = 'AA'+str(value)   #set velocity
             self.acc =  value
-            com   = self.com(scom)
+            if not self.emulated:
+                com   = self.com(scom)
         if cmd=='get':
             scom = 'AA'   #get velocity
             self.acc  = eval(self.com(scom)[1].replace('*',''))
@@ -1152,9 +1154,10 @@ class Axes(PyLayers):
         >>> R.go() # moves over 45 on axis 3
 
         """
-        com = self.com('G')
-        while not self.stationnary():
-            pass
+        if not self.emulated:
+            com = self.com('G')
+            while not self.stationnary():
+                pass
 
 
     def close(self):
@@ -1224,7 +1227,6 @@ class Scanner(PyLayers):
         else:
             self.ser = 'emulated'
         self.anchors = anchors
-        
 
 
         #
@@ -1271,35 +1273,35 @@ class Scanner(PyLayers):
         # Limits activated on axes X and Y    (mask =0 )
         # Limits desactivated on axes Z and R (mask =3 )
         
-        if not self.emulated:
-            print "setting limits"
-            self.a[1].limits(mask=0,typ=1,mode=1,cmd='set')
-            self.a[2].limits(mask=0,typ=1,mode=1,cmd='set')
-            self.a[3].limits(mask=3,typ=1,mode=1,cmd='set')
-            self.a[4].limits(mask=3,typ=1,mode=1,cmd='set')
+        #if not self.emulated:
+        print "setting limits"
+        self.a[1].limits(mask=0,typ=1,mode=1,cmd='set')
+        self.a[2].limits(mask=0,typ=1,mode=1,cmd='set')
+        self.a[3].limits(mask=3,typ=1,mode=1,cmd='set')
+        self.a[4].limits(mask=3,typ=1,mode=1,cmd='set')
 
-        #print "reseting axes"
-        #if reset:
-        #    self.reset()
+    #print "reseting axes"
+    #if reset:
+    #    self.reset()
 
 
-            print "setting step"
-            self.a[1].step(0,cmd='set')
-            self.a[2].step(0,cmd='set')
-            self.a[3].step(0,cmd='set')
-            self.a[4].step(0,cmd='set')
+        print "setting step"
+        self.a[1].step(0,cmd='set')
+        self.a[2].step(0,cmd='set')
+        self.a[3].step(0,cmd='set')
+        self.a[4].step(0,cmd='set')
 
-            print "setting velocity"
-            self.a[1].velocity(vel,cmd='set')
-            self.a[2].velocity(vel,cmd='set')
-            self.a[3].velocity(vel,cmd='set')
-            self.a[4].velocity(vel,cmd='set')
+        print "setting velocity"
+        self.a[1].velocity(vel,cmd='set')
+        self.a[2].velocity(vel,cmd='set')
+        self.a[3].velocity(vel,cmd='set')
+        self.a[4].velocity(vel,cmd='set')
 
-            print "setting acceleration"
-            self.a[1].acceleration(acc,cmd='set')
-            self.a[2].acceleration(acc,cmd='set')
-            self.a[3].acceleration(acc,cmd='set')
-            self.a[4].acceleration(acc,cmd='set')
+        print "setting acceleration"
+        self.a[1].acceleration(acc,cmd='set')
+        self.a[2].acceleration(acc,cmd='set')
+        self.a[3].acceleration(acc,cmd='set')
+        self.a[4].acceleration(acc,cmd='set')
 
         #self.home(cmd='set',vel=10) #vel = 1 by default
         #print "home"
@@ -1416,7 +1418,8 @@ class Scanner(PyLayers):
         at : target angle
         frame : {'G'|'H'|'A'}
             determine in which frame is expressed pt (default A)
-
+        vel : int
+            velocity 
         """
 
         # convert to home frame
@@ -1425,18 +1428,18 @@ class Scanner(PyLayers):
         # self.A : [0,0,0.1]_H it means that the array origin is 10 cm above Home frame origin
         # self.H : [10,10,1.5]_G is the position of origin of Home Frame scanner in Global frame
         #
-        if frame=='A':  # pt expressed in A
+        if frame == 'A':  # pt expressed in A
             ptH = pt + self.A
-        if frame=='G':  # pt expressed in G
+        if frame == 'G':  # pt expressed in G
             ptH = pt + self.H
-        if frame=='H':
+        if frame == 'H':
             ptH = p0
             #ptH = pt
 
         # self.pH : current position in Home frame
         # ptH     : target point in Home Frame
 
-        vec = ptH-self.pH
+        vec = ptH - self.pH
         dx = vec[0]
         dy = vec[1]
         dz = vec[2]
@@ -1447,7 +1450,7 @@ class Scanner(PyLayers):
         #print "a1,a2,a4,a3:",self.a[1].dist,self.a[2].dist,self.a[4].dist,self.a[3].ang
 
 
-        # move axis only if modification from previous move
+        # move axis only if there is a modification from the previous move
         if dx!=0:
             if dx!=self.a[1].dist:
                 self.a[1].step(value=dx,cmd='set')
@@ -1471,12 +1474,13 @@ class Scanner(PyLayers):
     def meash5(self,
                A,
                _fileh5='test.h5',
+               gcal=1,
                ical=1,
                vel=15,
                Nmeas=1,
                comment='',
                author=''):
-        """ measure over a set of point from AntArray and store in h5
+        """ measure over a set of points from AntArray and store in h5
 
         Parameters
         ----------
@@ -1484,14 +1488,21 @@ class Scanner(PyLayers):
         A       : Aarray
         _fileh5 : string
             name of the h5 file containing calibration data
+        ical    : calibration group
         vel     : int
             scanner moving velocity
         Nmeas   : int
             Number of measurement
 
+        Examples
+        --------
+
         """
 
         # load the file containing the calibration data
+        if '.h5' not in _fileh5:
+            _fileh5 = _fileh5+'.h5'
+
         Dh5 = mesh5(_fileh5)
         # open - sdata analysis
         Dh5.open('r')
@@ -1499,25 +1510,23 @@ class Scanner(PyLayers):
             ldataset = Dh5.f.keys()
         except:
             raise IOError('no calibration in h5 file')
-            #print "Error : no calibration in file", _fileh5
         lcal= [ eval(k.replace('cal','')) for k in ldataset if 'cal' in k ]
-        print lcal
         lcal=np.array(lcal)
 
         if len(lcal)==1:
            ical = lcal[0]
         else:
             if ical not  in lcal:
-                #print "Error calibration  :",ical,"does not exist"
                 raise IOError('Error calibration : File does not exist')
         Dh5.close()
         # read the chosen calibration and save parameters in ini file for VNA
-        Dh5.readcal(ical=ical,cmd='SISO')
+        Dh5.readcal(gcal=gcal,ical=ical)
+        # update vna_config.ini
         Dh5.saveini()
         # end of read and save
         # initialization of vna
         vna = SCPI()
-        vna.load_config()
+        vna.load_config_vna()
 
         Npoint = A.p.shape[1]
         laxes = []
@@ -1569,7 +1578,9 @@ class Scanner(PyLayers):
         #mes.attrs['max'] = lmax
         mes.attrs['Nmeas'] = Nmeas
         # here is the hard link between a measurement and its calibration 
-        mes.attrs['cal'] = "cal"+str(ical)
+        mes.attrs['gcal'] = "cal"+str(gcal)
+        mes.attrs['ical'] = str(ical)
+
 
         # Measure
         #A.p.shape : Naxis x Npoint (3,8)
@@ -1649,8 +1660,8 @@ class Scanner(PyLayers):
             ldataset = Dh5.f.keys()
         except:
             raise IOError('no calibration in h5 file')
-        
-        lmimocal= [ eval(k.replace('cal','')) for k in ldataset if 'cal' in k ]        
+
+        lmimocal= [ eval(k.replace('cal','')) for k in ldataset if 'cal' in k ]
         lmimocal=np.array(lmimocal)
 
         if len(lmimocal)==1:
@@ -1659,14 +1670,14 @@ class Scanner(PyLayers):
             if imimocal not in lmimocal:
                 raise IOError('Error calibration MIMO : File does not exist')
         Dh5.close()
-        
+
         # read the chosen calibration and save parameters in ini file for VNA
-        
-        Dh5.readcal(imimocal=imimocal,cmd='MIMO')
+
+        Dh5.readcal(imimocal=imimocal)
         Dh5.saveini()
-        
+
         # end of read and save
-    
+
         # initialization of vna
 
         vna = SCPI()
