@@ -65,7 +65,7 @@ class VNA(PyLayers):
     _verbose = False
     _timeout = 0.150
 
-    def __init__(self, port=PORT, timeout=None, verbose=False, **kwargs):
+    def __init__(self, port=PORT, timeout=None, verbose=False,Nr=1,Nt=1):
         """
         Parameters
         ----------
@@ -97,15 +97,7 @@ class VNA(PyLayers):
             else:
                 self.emulated = True
 
-        defaults = {'Nt' : 4,
-                    'Nr' : 8}
-
-        for k in defaults:
-            if k not in kwargs:
-                kwargs[k] = defaults[k]
-
-        self.Nt   = kwargs.pop('Nt')
-        self.Nr   = kwargs.pop('Nr')
+        
         self.Nf   = 201
         self.getIdent()
         #print self.ident
@@ -117,6 +109,15 @@ class VNA(PyLayers):
         self.ifband()
         self.getdata()
         self.filename = pyu.getlong('vna_config.ini', pstruc['DIRMES'])
+        #initialization of the switch
+        if (Nr!=1) and (Nt!=1) and not self.emulated:
+            self.switch = sw.get_adapter()
+            reattach=False
+            if not self.switch:
+                raise Exception("No device found")
+
+            self.switch.device
+            self.switch.set_io_mode(0b11111111, 0b11111111, 0b00000000)
 
     def __repr__(self):
         st = ''
@@ -319,8 +320,9 @@ class VNA(PyLayers):
         tr  : integer
 
         """
-        com = "DISP:WIND"+str(win)+":TRAC"+str(tr)+":Y:SCAL:AUTO"
-        self.write(com)
+        if not self.emulated:
+            com = "DISP:WIND"+str(win)+":TRAC"+str(tr)+":Y:SCAL:AUTO"
+            self.write(com)
 
 
     def points(self, value=1601, cmd='get', sens=1, echo=False):
@@ -422,7 +424,8 @@ class VNA(PyLayers):
             self.ident = 'emulated vna'
 
 
-    def getdata(self, chan=1, Nmeas=100):
+    #def getdata(self, chan=1, Nmeas=100):
+    def getdata(self, chan=1,Nr=1, Nt=1, Nmeas=10):
         """ getdata from VNA
 
         Parameters
@@ -466,8 +469,8 @@ class VNA(PyLayers):
            H = h.toFD(fGHz=self.fGHz)
            EH = np.sum(H.y*np.conj(H.y),axis=1)/self.Nf
            stn = np.sqrt(EH)/10.
-           N = stn*(np.random.rand(Nmeas,self.Nf)+1j*np.random.rand(Nmeas,self.Nf))
-           tH = H.y+N
+           N = stn*(np.random.rand(Nmeas,Nr,Nt,self.Nf)+1j*np.random.rand(Nmeas,Nr,Nt,self.Nf))
+           tH = H.y[:,None,None,:]+N
 
         return tH
 
@@ -526,7 +529,7 @@ class VNA(PyLayers):
         """ allows get|set the point averaging
 
         Parameters
-        ----------
+        ----------    def ifband(self,sens=1,ifbHz=70000,cmd='get'):
         b        : boolean (ON/OFF)
         cmd      : getavgr (0 average OFF
                           1 average ON)
@@ -689,6 +692,8 @@ class VNA(PyLayers):
                  cables=[],
                  author='',
                  comment='',
+                 Nr = 8,
+                 Nt = 4,
                  Nmeas = 100):
         """  measure a calibration vector and store in h5 file
 
@@ -728,6 +733,10 @@ class VNA(PyLayers):
             print "Connect Receiver :", iR +1
             for iT in range(self.Nt):
                 print "Connect Transmitter :", iT + 1 
+        for iR in range(Nr):
+            print "connect receiver :", iR +1
+            for iT in range(Nt):
+                print "connect transmitter :", iT + 1 
                 c = ""
                 while "g" not in c:
                     c = raw_input("Hit return key ")
@@ -747,7 +756,7 @@ class VNA(PyLayers):
                     #get Nmeas calibration vector
                     Dmeas = self.getdata(chan=1, Nmeas=dcal[k]['nmeas'])
                     if ((iR==0) and (iT==0)):
-                        mimo.create_dataset(k, (dcal[k]['nmeas'], self.Nr, self.Nt, self.Nf), dtype=np.complex64)
+                        mimo.create_dataset(k, (dcal[k]['nmeas'], Nr, Nt, self.Nf), dtype=np.complex64)
                         mimo[k].attrs['fminGHz']   = self.fminGHz
                         mimo[k].attrs['fmaxGHz']   = self.fmaxGHz
                         mimo[k].attrs['time']      = time.ctime()
@@ -755,8 +764,8 @@ class VNA(PyLayers):
                         mimo[k].attrs['cables']    = cables
                         mimo[k].attrs['comment']   = comment
                         mimo[k].attrs['param']     = self.param
-                        mimo[k].attrs['Nt']        = self.Nt
-                        mimo[k].attrs['Nr']        = self.Nr
+                        mimo[k].attrs['Nt']        = Nt
+                        mimo[k].attrs['Nr']        = Nr
                     #ipdb.set_trace()
                     mimo[k][:,iR,iT,:] = Dmeas
                     mimo[k].attrs['Nf']        = self.Nf
@@ -830,24 +839,24 @@ class VNA(PyLayers):
 
         # section from  vna_config
         # section : stimulus
+    
 
         self.fminGHz = di['stimulus']['fminghz']
         self.fmaxGHz = di['stimulus']['fmaxghz']
-
+        self.Nf = di['stimulus']['nf']
 
         # section : response
         self.param   = di['response']['param']
         self.navrg   = di['response']['navrg']
-        
         self.ifbHz   = di['response']['ifbhz']
 
         # apply configuration setup
-        if not self.emulated:
-            self.freq(fminGHz=self.fminGHz, fmaxGHz=self.fmaxGHz, cmd='set')
-            self.points(self.Nf, cmd='set')
-            self.parS(param=self.param, cmd='set')
-            self.ifband(ifbHz=self.ifbHz, cmd='set')
-            self.autoscale()
+        
+        self.freq(fminGHz=self.fminGHz, fmaxGHz=self.fmaxGHz, cmd='set')
+        self.points(self.Nf, cmd='set')
+        self.parS(param=self.param, cmd='set')
+        self.ifband(ifbHz=self.ifbHz, cmd='set')
+        self.autoscale()
 
     def showcal(self,_fileh5='mytest.h5',ical=1,ncal=0):
         """show calibration from vna
