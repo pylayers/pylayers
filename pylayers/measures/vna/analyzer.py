@@ -656,18 +656,18 @@ class VNA(PyLayers):
 
         for k in dcal:
             time.sleep(2)
-            print "-------------------------------------------------------------------------"
+            print "----------------------------------------------------------------------------"
             print "Configuration Parameters : ",dcal[k]
-            print "-------------------------------------------------------------------------"
+            print "----------------------------------------------------------------------------"
             for k2 in dcal[k]:
                 if k2=='nf':
                     print "set number of frequency :", dcal[k]['nf']
                     self.points(dcal[k]['nf'], cmd='set')
                 if k2=='ifbhz':
-                    print "set number of ifbHz :",dcal[k]['ifbhz']
+                    print "set number of ifbHz     :",dcal[k]['ifbhz']
                     self.ifband(ifbHz=dcal[k]['ifbhz'], cmd='set')
                 if k2=='navrg':
-                    print "set number of average :",dcal[k]['navrg']
+                    print "set number of average   :",dcal[k]['navrg']
                     self.avrg(navrg=dcal[k]['navrg'],cmd='setavrg')
             #get Nmeas calibration vector
             Dk = self.getdata(chan=1, Nmeas=dcal[k]['nmeas'])
@@ -733,14 +733,14 @@ class VNA(PyLayers):
                     c = raw_input("Hit return key ")
                 for k in dcal:
                     time.sleep(2)
-                    print "-------------------------------------------------------------------------"
+                    print "-----------------------------------------------------------------------------"
                     print "Configuration Parameters : ",dcal[k]
-                    print "-------------------------------------------------------------------------"
+                    print "-----------------------------------------------------------------------------"
                     for k2 in dcal[k]:
                         if k2=='nf':
-                            print "set number of number :",self.points(dcal[k]['nf'], cmd='set')
+                            print "set number of number  :",self.points(dcal[k]['nf'], cmd='set')
                         if k2=='ifbhz':
-                            print "set number of ifbHz :",self.ifband(ifbHz=dcal[k]['ifbhz'], cmd='set')
+                            print "set number of ifbHz   :",self.ifband(ifbHz=dcal[k]['ifbhz'], cmd='set')
                         if k2=='navrg':
                             print "set number of average :",self.avrg(navrg=dcal[k]['navrg'],cmd='setavrg')
 
@@ -859,7 +859,7 @@ class VNA(PyLayers):
         ncal : int
 
         """
-        f = h5py.File("mytest.h5","a")
+        f = h5py.File("mytest.h5","r")
 
         plt.plot(np.abs(f['cal'+str(ical)][ncal,:]))
         plt.show()
