@@ -1541,7 +1541,6 @@ class Scanner(PyLayers):
         # end of initialization
 
         Dh5.open('a')
-
         try:
             ldataset = Dh5.f.keys()
         except:

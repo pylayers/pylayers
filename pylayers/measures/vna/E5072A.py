@@ -97,15 +97,7 @@ class SCPI(PyLayers):
             else:
                 self.emulated = True
 
-        defaults = {'Nt' : 4,
-                    'Nr' : 8}
-
-        for k in defaults:
-            if k not in kwargs:
-                kwargs[k] = defaults[k]
-
-        self.Nt   = kwargs.pop('Nt')
-        self.Nr   = kwargs.pop('Nr')
+        
         self.Nf   = 201
         self.getIdent()
         #print self.ident
@@ -523,7 +515,7 @@ class SCPI(PyLayers):
         """ allows get|set the point averaging
 
         Parameters
-        ----------
+        ----------    def ifband(self,sens=1,ifbHz=70000,cmd='get'):
         b        : boolean (ON/OFF)
         cmd      : getavgr (0 average OFF
                           1 average ON)
@@ -680,6 +672,8 @@ class SCPI(PyLayers):
                  cables=[],
                  author='',
                  comment='',
+                 Nr = 8,
+                 Nt = 4,
                  Nmeas = 100):
         """  measure a calibration vector and store in h5 file
 
@@ -715,9 +709,9 @@ class SCPI(PyLayers):
         mimo = f.create_group(calname)
         
 
-        for iR in range(self.Nr):
+        for iR in range(Nr):
             print "connect receiver :", iR +1
-            for iT in range(self.Nt):
+            for iT in range(Nt):
                 print "connect transmitter :", iT + 1 
                 c = ""
                 while "g" not in c:
@@ -735,7 +729,7 @@ class SCPI(PyLayers):
                     # get Nmeas calibration vector
                     Dmeas = self.getdata(chan=1, Nmeas=dcal[k]['nmeas'])
                     if ((iR==0) and (iT==0)):
-                        mimo.create_dataset(k, (dcal[k]['nmeas'], self.Nr, self.Nt, self.Nf), dtype=np.complex64)
+                        mimo.create_dataset(k, (dcal[k]['nmeas'], Nr, Nt, self.Nf), dtype=np.complex64)
                         mimo[k].attrs['fminGHz']   = self.fminGHz
                         mimo[k].attrs['fmaxGHz']   = self.fmaxGHz
                         mimo[k].attrs['time']      = time.ctime()
@@ -743,8 +737,8 @@ class SCPI(PyLayers):
                         mimo[k].attrs['cables']    = cables
                         mimo[k].attrs['comment']   = comment
                         mimo[k].attrs['param']     = self.param
-                        mimo[k].attrs['Nt']        = self.Nt
-                        mimo[k].attrs['Nr']        = self.Nr
+                        mimo[k].attrs['Nt']        = Nt
+                        mimo[k].attrs['Nr']        = Nr
                     #ipdb.set_trace()
                     mimo[k][:,iR,iT,:] = Dmeas
                     mimo[k].attrs['Nf']        = self.Nf
@@ -817,15 +811,15 @@ class SCPI(PyLayers):
 
         # section from  vna_config
         # section : stimulus
+    
 
         self.fminGHz = di['stimulus']['fminghz']
         self.fmaxGHz = di['stimulus']['fmaxghz']
-
+        self.Nf = di['stimulus']['nf']
 
         # section : response
         self.param   = di['response']['param']
         self.navrg   = di['response']['navrg']
-        
         self.ifbHz   = di['response']['ifbhz']
 
         # apply configuration setup
