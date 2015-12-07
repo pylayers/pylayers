@@ -77,13 +77,11 @@ class VNA(PyLayers):
 
         """
         self.emulated = False
-        host = "192.168.1.8"
-        #ipdb.set_trace()
-        #if "VNA_IP" in os.environ:
-            #host = os.environ["VNA_IP"]
-        #else:
-            #print "VNA IP not defined"
-            #exit
+        if "VNA_IP" in os.environ:
+            host = os.environ["VNA_IP"]
+        else:
+            print "VNA IP not defined"
+            exit
         try:
             self.host = host
             self._verbose = verbose
@@ -861,7 +859,7 @@ class VNA(PyLayers):
         ncal : int
 
         """
-        f = h5py.File("mytest.h5","r")
+        f = h5py.File("mytest.h5","a")
 
         plt.plot(np.abs(f['cal'+str(ical)][ncal,:]))
         plt.show()
