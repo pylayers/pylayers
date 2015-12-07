@@ -1531,13 +1531,10 @@ class Scanner(PyLayers):
         Dh5.saveini()
         # end of read and save
         # initialization of vna
-<<<<<<< HEAD
         vna = VNA()
         vna.load_config()
-=======
         vna = SCPI()
         vna.load_config_vna()
->>>>>>> af51b5f50ee897fe665933ad51b8419282bf04b8
 
         Npoint = A.p.shape[1]
         Nf = vna.Nf
