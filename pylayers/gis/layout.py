@@ -401,7 +401,6 @@ class Layout(PyLayers):
         self.display['box'] = (-50,50,-50,50)
         self.name = {}
 
-
         self.zmin = 0
 
         for k in self.sl.keys():
@@ -2376,7 +2375,6 @@ class Layout(PyLayers):
         else:
             print "add_segment : error not a node", n1, n2
             return
-
         transition = False
         if name == 'AIR':
             transition=True
@@ -5310,7 +5308,7 @@ class Layout(PyLayers):
 
         return fig,ax
 
-    def build(self, graph='tcvirw',verbose=False,convex=False):
+    def build(self, graph='tcvirw',verbose=False,convex=True):
         """ build graphs
 
         Parameters
@@ -5331,13 +5329,17 @@ class Layout(PyLayers):
             if verbose:
                 print "Gt"
             self.buildGt()
-            if convex:
+            if convex :
                 #Make the layout convex the outddor
                 self._convex_hull()
                 # Ensure convexity of all cycles
                 self._convexify()
                 # # re-attach new cycles
-                # self.buildGt()
+                # complete rebuild is not the best option
+                # but the partial rebuild coded & comment at the end in _convexify
+                # causes crash in buildGc at 2nd run of build(convex=True) on the layout
+                #
+                self.buildGt()
 
             self.lbltg.extend('t')
 
@@ -5754,6 +5756,7 @@ class Layout(PyLayers):
                             logging.warning('A segment cannot relate more than 2 cycles')
 
 
+
     def _addoutcy(self):
         """ add outside cycle (absorbant region index 0 )
         #   if ncycles is a list which has only one element then the adjascent
@@ -5899,6 +5902,7 @@ class Layout(PyLayers):
 
                 #5 - Update Gs
                 for v in filter(lambda x: x>0,p.vnodes):
+
                     # add new ncycle to Gs for the new airwall
                     #that new airwall always separate the new created cycle
                     #and the outdoor cycle
@@ -6005,7 +6009,6 @@ class Layout(PyLayers):
                                                    cp.vnodes[np.mod(i+1,lvn)]
                                                    ,name='AIR'))
                                     polys.append(cp)
-
                         #
                         # 3. merge delaunay triangulation in order to obtain
                         #   the larger convex polygons partioning
@@ -6100,37 +6103,36 @@ class Layout(PyLayers):
                             self.Gt.node[cyid]['isopen']=True
                             self.Gt.pos[cyid] = tuple(cy.g)
 
+        # for k in combinations(self.Gt.nodes(), 2):
+        #     if not 0 in k:
+        #         vnodes0 = np.array(self.Gt.node[k[0]]['cycle'].cycle)
+        #         vnodes1 = np.array(self.Gt.node[k[1]]['cycle'].cycle)
+        #         #
+        #         # Connect Cycles if they share at least one segments
+        #         #
+        #         intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
 
-        for k in combinations(self.Gt.nodes(), 2):
-            if not 0 in k:
-                vnodes0 = np.array(self.Gt.node[k[0]]['cycle'].cycle)
-                vnodes1 = np.array(self.Gt.node[k[1]]['cycle'].cycle)
-                #
-                # Connect Cycles if they share at least one segments
-                #
-                intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
+        #         if len(intersection_vnodes) > 1:
+        #             segment = intersection_vnodes[np.where(intersection_vnodes>0)]
+        #             self.Gt.add_edge(k[0], k[1],segment= segment)
+        #     else:
 
-                if len(intersection_vnodes) > 1:
-                    segment = intersection_vnodes[np.where(intersection_vnodes>0)]
-                    self.Gt.add_edge(k[0], k[1],segment= segment)
-            else:
+        #         vnodes0 = self.Gt.node[k[0]]['polyg'].vnodes
+        #         vnodes1 = self.Gt.node[k[1]]['polyg'].vnodes
+        #         intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
 
-                vnodes0 = self.Gt.node[k[0]]['polyg'].vnodes
-                vnodes1 = self.Gt.node[k[1]]['polyg'].vnodes
-                intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
-
-                if len(intersection_vnodes) > 1:
-                    segment = intersection_vnodes[np.where(intersection_vnodes>0)]
-                    self.Gt.add_edge(k[0], k[1],segment= segment)
-
+        #         if len(intersection_vnodes) > 1:
+        #             segment = intersection_vnodes[np.where(intersection_vnodes>0)]
+        #             self.Gt.add_edge(k[0], k[1],segment= segment)
 
 
-        # #update self.Gs.node[x]['ncycles']
+        # # #update self.Gs.node[x]['ncycles']
         # self._updGsncy()
-        # #add outside cycle to Gs.node[x]['ncycles']
+        # # #add outside cycle to Gs.node[x]['ncycles']
         # self._addoutcy()
-        # #update interaction list into Gt.nodes (cycles)
+        # # #update interaction list into Gt.nodes (cycles)
         # self._interlist(nodelist=lacy)
+
 
     def buildGw(self):
         """ build Graph of waypaths
@@ -6570,10 +6572,12 @@ class Layout(PyLayers):
             if n > 0: # R | T
                 cy = self.Gs.node[n]['ncycles']
                 name = self.Gs.node[n]['name']
-
-                cy0 = cy[0]
-                cy1 = cy[1]
-
+                try:
+                    cy0 = cy[0]
+                    cy1 = cy[1]
+                except:
+                    import ipdb
+                    ipdb.set_trace()
                 nei = self.Gs.neighbors(n)  # get neighbor
                 np1 = nei[0]
                 np2 = nei[1]
