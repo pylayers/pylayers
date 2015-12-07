@@ -242,14 +242,32 @@ class AntArray(Array,ant.Antenna):
          st = st + ant.Antenna.__repr__(self)
          return(st)
 
-def ktoxyz(ik,Nx=10,Ny=11):
-    iz = ik/(Nx*Ny)
-    iy = (ik-iz*Nx*Ny)/Nx
-    ix = (ik-iz*Nx*Ny-iy*Nx)
-    return(iz,iy,ix)
+def ktoxyz(ik,N1=10,N2=11):
+    """ 
+
+    Parameters
+    ----------
+
+    ik : full index starting at 0 
+    N1 : number of points along first axis 
+    N2 : number of points along second axis 
+
+    Returns
+    -------
+    
+    i2 , i1 , i0 : index starting at 0  
+
+
+    """
+    i2 = ik/(N1*N2)
+    i1 = (ik-i2*N1*N2)/N1
+    i0 = (ik-i2*N1*N2-i1*N1)
+    return(i2,i1,i0)
+
 def xyztok(iz,iy,ix,Nx=10,Ny=11):
     ik = iz*Nx*Ny+iy*Nx+ix
     return(ik)
+
 def weights(nx,nz,kx,kz,Kx,Kz):
     """
     Practical Demonstration of Limited Feedback Beamforming for mmWave Systems

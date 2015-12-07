@@ -1272,7 +1272,7 @@ class Scanner(PyLayers):
         self.ang =  0.
         # Limits activated on axes X and Y    (mask =0 )
         # Limits desactivated on axes Z and R (mask =3 )
-        
+
         #if not self.emulated:
         print "setting limits"
         self.a[1].limits(mask=0,typ=1,mode=1,cmd='set')
@@ -1471,15 +1471,16 @@ class Scanner(PyLayers):
         # update new position
         self.upd_pos(ptH)
 
+
     def meash5(self,
                A,
                _fileh5='test.h5',
-               gcal=1,
-               ical=1,
-               vel=15,
-               Nmeas=1,
-               comment='',
-               author=''):
+               gcal = 1,
+               ical = 1,
+               vel = 15,
+               Nmeas = 1,
+               comment = '',
+               author = ''):
         """ measure over a set of points from AntArray and store in h5
 
         Parameters
@@ -1488,7 +1489,8 @@ class Scanner(PyLayers):
         A       : Aarray
         _fileh5 : string
             name of the h5 file containing calibration data
-        ical    : calibration group
+        gcal    : calibration group
+        ical    : calibration index
         vel     : int
             scanner moving velocity
         Nmeas   : int
@@ -1498,7 +1500,7 @@ class Scanner(PyLayers):
         --------
 
         """
-
+        
         # load the file containing the calibration data
         if '.h5' not in _fileh5:
             _fileh5 = _fileh5+'.h5'
@@ -1514,12 +1516,13 @@ class Scanner(PyLayers):
         lcal=np.array(lcal)
 
         if len(lcal)==1:
-           ical = lcal[0]
+           gcal = lcal[0]
         else:
-            if ical not  in lcal:
+            if gcal not  in lcal:
                 raise IOError('Error calibration : File does not exist')
         Dh5.close()
         # read the chosen calibration and save parameters in ini file for VNA
+        
         Dh5.readcal(gcal=gcal,ical=ical)
         # update vna_config.ini
         Dh5.saveini()
@@ -1529,6 +1532,8 @@ class Scanner(PyLayers):
         vna.load_config_vna()
 
         Npoint = A.p.shape[1]
+        Nf = vna.Nf
+
         laxes = []
         if A.N[0]!=1:
             laxes.append('x')
@@ -1537,8 +1542,9 @@ class Scanner(PyLayers):
         if A.N[2]!=1:
             laxes.append('z')
         lN =  [ A.N[k] for  k  in range(3) if A.N[k]!=1 ]
-        Nf = vna.Nf
-        # end of initialization
+
+        
+        # # end of initialization
 
         Dh5.open('a')
         try:
@@ -1548,73 +1554,210 @@ class Scanner(PyLayers):
         lmes = [ldataset[k] for  k in range(len(ldataset))  if 'mes' in ldataset[k]]
         mesname = 'mes'+str(len(lmes)+1)
 
-        if  laxes==['x']:
-            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf),dtype=np.complex64)
-
-        if  laxes==['y']:
-            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf),dtype=np.complex64)
-
-        if  laxes==['z']:
-            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf),dtype=np.complex64)
-
-        if  laxes==['x','y']:
-            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[1],Nf),dtype=np.complex64)
-
-        if  laxes==['x','z']:
-            mes =  Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[2],Nf),dtype=np.complex64)
-
-        if  laxes==['y','z']:
-            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[1],lN[2],Nf),dtype=np.complex64)
-
-        if  laxes==['x','y','z']:
-            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[1],lN[2],Nf),dtype=np.complex64)
+        mes = Dh5.f.create_group(mesname)   
 
         mes.attrs['time'] = time.ctime()
         mes.attrs['author'] = author
         mes.attrs['comment'] = comment
         mes.attrs['axes'] = laxes
-        #mes.attrs['min'] = lmin
-        #mes.attrs['max'] = lmax
+        mes.attrs['axesN'] = lN
         mes.attrs['Nmeas'] = Nmeas
         # here is the hard link between a measurement and its calibration 
         mes.attrs['gcal'] = "cal"+str(gcal)
         mes.attrs['ical'] = str(ical)
 
-
+        Nr = 1
+        Nt = 1
         # Measure
         #A.p.shape : Naxis x Npoint (3,8)
-
+        #pdb.set_trace()
         for k in np.arange(A.p.shape[1]):
-            # A.p[:,k].shape : (3,)
+        #    i2,i1,i0 = ktoxyz(k,N1=lN[0],N2=lN[1])
+        #     # A.p[:,k].shape : (3,)
             self.mv(pt=A.p[:,k],vel=vel)
             S = vna.getdata(Nmeas=Nmeas)
-            if  laxes==['x']:
-                mes[:,k,:] = S
+            if  len(lN)==1:
+                mes.create_dataset(str(k+1),(Nmeas,Nr,Nt,Nf),dtype=np.complex64, data = S)
+                mes[str(k+1)].attrs['pt']=A.p[:,k]
 
-            if  laxes==['y']:
-                mes[:,k,:] = S
+            if  len(lN)==2:
+                i2,i1,i0 = ktoxyz(k,N1=lN[1],N2=lN[0])
+                try:
+                    mes.create_group(str(i1+1))
+                    mes[str(i1+1)].create_dataset(str(i0+1),(Nmeas,Nr,Nt,Nf),dtype=np.complex64, data = S)
+                except:
+                    mes[str(i1+1)].create_dataset(str(i0+1),(Nmeas,Nr,Nt,Nf),dtype=np.complex64, data = S)
+                mes[str(i1+1)][str(i0+1)].attrs['pt']=A.p[:,k]   
 
-            if  laxes==['z']:
-                mes[:,k,:] = S
+            # if  laxes==['y']:
+            #     mes[:,k,:] = S
 
-            if  laxes==['x','y']:
-                ix,iy = ktoxyz(k,Nx=l)
-                mes[:,ix,iy,:] = S
+            # if  laxes==['z']:
+            #     mes[:,k,:] = S
 
-            if  laxes==['x','z']:
-                ix,iz = ktoxyz(k,Nx=l)
-                mes[:,ix,iz,:] = S
+            # if  laxes==['x','y']:
+            #     i2,i1,i0 = ktoxyz(k,N1=lN[0],N2=lN[1])
+            #     mes[:,i0,i1,:] = S
 
-            if  laxes==['y','z']:
-                iy,iz = ktoxyz(k,Nx=l)
-                mes[:,iy,iz,:] = S
+            # if  laxes==['x','z']:
+            #     i2,i1,i0 = ktoxyz(k,N1=lN[0],N2=lN[2])
+            #     mes[:,i0,i1,:] = S
 
-            if  laxes==['x','y','z']:
-                ix,iy,iz = ktoxyz(k,Nx=l)
-                mes[:,ix,iy,iz,:] = S
+            # if  laxes==['y','z']:
+            #     i2,i1,i0 = ktoxyz(k,N1=lN[1],N2=lN[2])
+            #     mes[:,i0,i1,:] = S
+
+            # if  laxes==['x','y','z']:
+            #     i2,i1,i0 = ktoxyz(k,N1=lN[0],N2=lN[1])
+            #     mes[:,i0,i1,i2,:] = S
 
         Dh5.close()
-
+#
+#    def meash5(self,
+#               A,
+#               _fileh5='test.h5',
+#               gcal=1,
+#               ical=1,
+#               vel=15,
+#               Nmeas=1,
+#               comment='',
+#               author=''):
+#        """ measure over a set of points from AntArray and store in h5
+#
+#        Parameters
+#        ----------
+#
+#        A       : Aarray
+#        _fileh5 : string
+#            name of the h5 file containing calibration data
+#        ical    : calibration group
+#        vel     : int
+#            scanner moving velocity
+#        Nmeas   : int
+#            Number of measurement
+#
+#        Examples
+#        --------
+#
+#        """
+#
+#        # load the file containing the calibration data
+#        if '.h5' not in _fileh5:
+#            _fileh5 = _fileh5+'.h5'
+#
+#        Dh5 = mesh5(_fileh5)
+#        # open - sdata analysis
+#        Dh5.open('r')
+#        try:
+#            ldataset = Dh5.f.keys()
+#        except:
+#            raise IOError('no calibration in h5 file')
+#        lcal= [ eval(k.replace('cal','')) for k in ldataset if 'cal' in k ]
+#        lcal=np.array(lcal)
+#
+#        if len(lcal)==1:
+#           ical = lcal[0]
+#        else:
+#            if ical not  in lcal:
+#                raise IOError('Error calibration : File does not exist')
+#        Dh5.close()
+#        # read the chosen calibration and save parameters in ini file for VNA
+#        Dh5.readcal(gcal=gcal,ical=ical)
+#        # update vna_config.ini
+#        Dh5.saveini()
+#        # end of read and save
+#        # initialization of vna
+#        vna = SCPI()
+#        vna.load_config_vna()
+#
+#        Npoint = A.p.shape[1]
+#        laxes = []
+#        if A.N[0]!=1:
+#            laxes.append('x')
+#        if A.N[1]!=1:
+#            laxes.append('y')
+#        if A.N[2]!=1:
+#            laxes.append('z')
+#        lN =  [ A.N[k] for  k  in range(3) if A.N[k]!=1 ]
+#        
+#        pdb.set_trace()
+#        Nf = vna.Nf
+#        # end of initialization
+#
+#        Dh5.open('a')
+#        try:
+#            ldataset = Dh5.f.keys()
+#        except:
+#            ldataset = []
+#        lmes = [ldataset[k] for  k in range(len(ldataset))  if 'mes' in ldataset[k]]
+#        mesname = 'mes'+str(len(lmes)+1)
+#
+#        if  laxes==['x']:
+#            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf),dtype=np.complex64)
+#
+#        if  laxes==['y']:
+#            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf),dtype=np.complex64)
+#
+#        if  laxes==['z']:
+#            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],Nf),dtype=np.complex64)
+#
+#        if  laxes==['x','y']:
+#            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[1],Nf),dtype=np.complex64)
+#
+#        if  laxes==['x','z']:
+#            mes =  Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[2],Nf),dtype=np.complex64)
+#
+#        if  laxes==['y','z']:
+#            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[1],lN[2],Nf),dtype=np.complex64)
+#
+#        if  laxes==['x','y','z']:
+#            mes = Dh5.f.create_dataset(mesname,(Nmeas,lN[0],lN[1],lN[2],Nf),dtype=np.complex64)
+#
+#        mes.attrs['time'] = time.ctime()
+#        mes.attrs['author'] = author
+#        mes.attrs['comment'] = comment
+#        mes.attrs['axes'] = laxes
+#        #mes.attrs['min'] = lmin
+#        #mes.attrs['max'] = lmax
+#        mes.attrs['Nmeas'] = Nmeas
+#        # here is the hard link between a measurement and its calibration 
+#        mes.attrs['gcal'] = "cal"+str(gcal)
+#        mes.attrs['ical'] = str(ical)
+#
+#
+#        # Measure
+#        #A.p.shape : Naxis x Npoint (3,8)
+#
+#        for k in np.arange(A.p.shape[1]):
+#            # A.p[:,k].shape : (3,)
+#            self.mv(pt=A.p[:,k],vel=vel)
+#            S = vna.getdata(Nmeas=Nmeas)
+#            if  laxes==['x']:
+#                mes[:,k,:] = S
+#
+#            if  laxes==['y']:
+#                mes[:,k,:] = S
+#
+#            if  laxes==['z']:
+#                mes[:,k,:] = S
+#
+#            if  laxes==['x','y']:
+#                ix,iy = ktoxyz(k,Nx=l)
+#                mes[:,ix,iy,:] = S
+#
+#            if  laxes==['x','z']:
+#                ix,iz = ktoxyz(k,Nx=l)
+#                mes[:,ix,iz,:] = S
+#
+#            if  laxes==['y','z']:
+#                iy,iz = ktoxyz(k,Nx=l)
+#                mes[:,iy,iz,:] = S
+#
+#            if  laxes==['x','y','z']:
+#                ix,iy,iz = ktoxyz(k,Nx=l)
+#                mes[:,ix,iy,iz,:] = S
+#
+#        Dh5.close()
     def measMIMO(self,
                A,
                _fileh5='test.h5',

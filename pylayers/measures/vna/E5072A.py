@@ -65,7 +65,7 @@ class SCPI(PyLayers):
     _verbose = False
     _timeout = 0.150
 
-    def __init__(self, port=PORT, timeout=None, verbose=False, **kwargs):
+    def __init__(self, port=PORT, timeout=None, verbose=False,Nr=1,Nt=1):
         """
         Parameters
         ----------
@@ -108,6 +108,15 @@ class SCPI(PyLayers):
         self.avrg()
         self.ifband()
         self.getdata()
+        #initialization of the switch
+        if (Nr!=1) and (Nt!=1) and not self.emulated:
+            self.switch = sw.get_adapter()
+            reattach=False
+            if not self.switch:
+                raise Exception("No device found")
+
+            self.switch.device
+            self.switch.set_io_mode(0b11111111, 0b11111111, 0b00000000)
 
     def __repr__(self):
         st = ''
@@ -308,8 +317,9 @@ class SCPI(PyLayers):
         tr  : integer
 
         """
-        com = "DISP:WIND"+str(win)+":TRAC"+str(tr)+":Y:SCAL:AUTO"
-        self.write(com)
+        if not self.emulated:
+            com = "DISP:WIND"+str(win)+":TRAC"+str(tr)+":Y:SCAL:AUTO"
+            self.write(com)
 
 
     def points(self, value=1601, cmd='get', sens=1, echo=False):
@@ -411,7 +421,7 @@ class SCPI(PyLayers):
             self.ident = 'emulated vna'
 
 
-    def getdata(self, chan=1, Nmeas=10):
+    def getdata(self, chan=1,Nr=1, Nt=1, Nmeas=10):
         """ getdata from VNA
 
         Parameters
@@ -455,8 +465,8 @@ class SCPI(PyLayers):
            H = h.toFD(fGHz=self.fGHz)
            EH = np.sum(H.y*np.conj(H.y),axis=1)/self.Nf
            stn = np.sqrt(EH)/10.
-           N = stn*(np.random.rand(Nmeas,self.Nf)+1j*np.random.rand(Nmeas,self.Nf))
-           tH = H.y+N
+           N = stn*(np.random.rand(Nmeas,Nr,Nt,self.Nf)+1j*np.random.rand(Nmeas,Nr,Nt,self.Nf))
+           tH = H.y[:,None,None,:]+N
 
         return tH
 
@@ -823,12 +833,12 @@ class SCPI(PyLayers):
         self.ifbHz   = di['response']['ifbhz']
 
         # apply configuration setup
-        if not self.emulated:
-            self.freq(fminGHz=self.fminGHz, fmaxGHz=self.fmaxGHz, cmd='set')
-            self.points(self.Nf, cmd='set')
-            self.parS(param=self.param, cmd='set')
-            self.ifband(ifbHz=self.ifbHz, cmd='set')
-            self.autoscale()
+        
+        self.freq(fminGHz=self.fminGHz, fmaxGHz=self.fmaxGHz, cmd='set')
+        self.points(self.Nf, cmd='set')
+        self.parS(param=self.param, cmd='set')
+        self.ifband(ifbHz=self.ifbHz, cmd='set')
+        self.autoscale()
 
 
 
