@@ -17,7 +17,7 @@ scanner = Scanner()
 #A1 = AntArray(N=[8,1,1],dm=[0.075,0,0])
 #scanner.meash5(A1, _fileh5=_fileh5,gcal=1,ical=1)
 A2 = AntArray(N=[8,4,1],dm=[0.075,0.075,0])
-scanner.meash5(A2, _fileh5=_fileh5,gcal=1,ical=7)
+scanner.meash5(A2, _fileh5=_fileh5,gcal=1,ical=7,Nt=4,Nr=4)
 #A3 = AntArray(N=[8,8,4],dm=[0.075,0.075,0.075])
 #scanner.meash5(A3, _fileh5=_fileh5,gcal=1,ical=7)
 #

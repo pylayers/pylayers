@@ -1263,7 +1263,7 @@ class Scanner(PyLayers):
         if self.anchors=={}:
             self.H = np.array([0,0,0])
         else:
-            pass
+            self.H = (anchors['p1']+anchors['p2']+anchors['p3'])/3.
             #beware TBD from anchors
 
         # Coordinate of Array Scanner Point in home frame
@@ -1368,7 +1368,7 @@ class Scanner(PyLayers):
         print "time reset (s) :",toc-tic
 
 
-    def home(self,cmd='set',init=True,vel=10):
+    def home(self,cmd='set',init=True,vel=10):'p1':np.array([1.7,1,0.05]),
         """ allows a return home for 3 axes
 
         Parameters
@@ -1479,6 +1479,9 @@ class Scanner(PyLayers):
                ical = 1,
                vel = 15,
                Nmeas = 1,
+               Nr = 1,
+               Nt = 1,
+               pAnt = np.array([1.6,5.2,1.6])
                comment = '',
                author = ''):
         """ measure over a set of points from AntArray and store in h5
@@ -1561,13 +1564,18 @@ class Scanner(PyLayers):
         mes.attrs['comment'] = comment
         mes.attrs['axes'] = laxes
         mes.attrs['axesN'] = lN
+        mes.attrs['Nr'] = self.Nr
+        mes.attrs['Nt'] = self.Nt
+        mes.attrs['AntS']='ULA4-Tx'
+        mes.attrs['Ant']='ULA8-Rx'
         mes.attrs['Nmeas'] = Nmeas
+        mes.attrs['pAnt'] = pAnt
+        mes.attrs['anchors']= self.anchors
         # here is the hard link between a measurement and its calibration 
         mes.attrs['gcal'] = "cal"+str(gcal)
         mes.attrs['ical'] = str(ical)
 
-        Nr = 1
-        Nt = 1
+    
         # Measure
         #A.p.shape : Naxis x Npoint (3,8)
         #pdb.set_trace()
@@ -1575,41 +1583,44 @@ class Scanner(PyLayers):
         #    i2,i1,i0 = ktoxyz(k,N1=lN[0],N2=lN[1])
         #     # A.p[:,k].shape : (3,)
             self.mv(pt=A.p[:,k],vel=vel)
-            S = vna.getdata(Nmeas=Nmeas)
+            S = vna.getdata(Nmeas=Nmeas,Nr=self.Nr,Nt=self.Nt)
             if  len(lN)==1:
-                mes.create_dataset(str(k+1),(Nmeas,Nr,Nt,Nf),dtype=np.complex64, data = S)
+                mes.create_dataset(str(k+1),(Nmeas,self.Nr,self.Nt,Nf),dtype=np.complex64, data = S)
                 mes[str(k+1)].attrs['pt']=A.p[:,k]
+               gcal = 1,
+                mes[str(k+1)].attrs['pG']=self.pG
+                mes[str(k+1)].attrs['pA']=self.pA
 
             if  len(lN)==2:
                 i2,i1,i0 = ktoxyz(k,N1=lN[1],N2=lN[0])
                 try:
                     mes.create_group(str(i1+1))
-                    mes[str(i1+1)].create_dataset(str(i0+1),(Nmeas,Nr,Nt,Nf),dtype=np.complex64, data = S)
+                    mes[str(i1+1)].create_dataset(str(i0+1),(Nmeas,self.Nr,self.Nt,Nf),dtype=np.complex64, data = S)
                 except:
-                    mes[str(i1+1)].create_dataset(str(i0+1),(Nmeas,Nr,Nt,Nf),dtype=np.complex64, data = S)
-                mes[str(i1+1)][str(i0+1)].attrs['pt']=A.p[:,k]   
+                    mes[str(i1+1)].create_dataset(str(i0+1),(Nmeas,self.Nr,self.Nt,Nf),dtype=np.complex64, data = S)
+                mes[str(i1+1)][str(i0+1)].attrs['pt']=A.p[:,k]
+                mes[str(i1+1)][str(i0+1)].attrs['pG']=self.pG
+                mes[str(i1+1)][str(i0+1)].attrs['pA']=self.pA
 
-            # if  laxes==['y']:
-            #     mes[:,k,:] = S
-
-            # if  laxes==['z']:
-            #     mes[:,k,:] = S
-
-            # if  laxes==['x','y']:
-            #     i2,i1,i0 = ktoxyz(k,N1=lN[0],N2=lN[1])
-            #     mes[:,i0,i1,:] = S
-
-            # if  laxes==['x','z']:
-            #     i2,i1,i0 = ktoxyz(k,N1=lN[0],N2=lN[2])
-            #     mes[:,i0,i1,:] = S
-
-            # if  laxes==['y','z']:
-            #     i2,i1,i0 = ktoxyz(k,N1=lN[1],N2=lN[2])
-            #     mes[:,i0,i1,:] = S
-
-            # if  laxes==['x','y','z']:
-            #     i2,i1,i0 = ktoxyz(k,N1=lN[0],N2=lN[1])
-            #     mes[:,i0,i1,i2,:] = S
+            if  len(lN)==3:
+                i2,i1,i0 = ktoxyz(k,N1=lN[1],N2=lN[0])
+                try: 
+                    mes.create_group(str(i2+1))
+                    try:
+                        mes[str(i2+1)].create_group(str(i1+1))
+                        mes[str(i2+1)][str(i1+1)].create_dataset(str(i0+1),(Nmeas,self.Nr,self.Nt,Nf),dtype=np.complex64, data = S)
+                    except:
+                        mes[str(i2+1)][str(i1+1)].create_dataset(str(i0+1),(Nmeas,self.Nr,self.Nt,Nf),dtype=np.complex64, data = S)
+                except:
+                    try:
+                        mes[str(i2+1)].create_group(str(i1+1))
+                        mes[str(i2+1)][str(i1+1)].create_dataset(str(i0+1),(Nmeas,self.Nr,self.Nt,Nf),dtype=np.complex64, data = S)
+                    except:
+                        mes[str(i2+1)][str(i1+1)].create_dataset(str(i0+1),(Nmeas,self.Nr,self.Nt,Nf),dtype=np.complex64, data = S)
+                mes[str(i2+1)][str(i1+1)][str(i0+1)].attrs['pt']=A.p[:,k]
+                mes[str(i2+1)][str(i1+1)][str(i0+1)].attrs['pG']=self.pG  
+                mes[str(i2+1)][str(i1+1)][str(i0+1)].attrs['pA']=self.pA    
+        
 
         Dh5.close()
 #
