@@ -16,7 +16,7 @@ class Baseband(bs.TUsignal):
             seq :
             Tns : symbol duration (ns)
             """
-            N = len(seq)
+            N = len(seqbin)
             x = np.linspace(0,(N-1)*Tns,N)
             bs.TUsignal.__init__(self,x,seqbin)
 

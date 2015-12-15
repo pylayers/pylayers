@@ -42,13 +42,14 @@ import pylayers.gis.srtm as srtm
 from mpl_toolkits.basemap import Basemap
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-def maxloc(f,threshold=-0.7):
-    """ determine local maximum
+def maxloc(f,threshold=-np.sqrt(2)):
+    """ determine local maximum above a threshold
 
     Parameters
     ----------
 
     f : np.array
+    threshold : float
 
     Returns
     -------
@@ -59,10 +60,10 @@ def maxloc(f,threshold=-0.7):
     f_decr = np.roll(f,1,axis=1)
     f_decl = np.roll(f,-1,axis=1)
     ind = np.where((f>f_decr)&(f>f_decl)&(f>threshold))
-    g = np.zeros(np.shape(f))
+    g = threshold*np.ones(np.shape(f))
     #
     g[ind] = f[ind]
-    return(g)
+    return(g,ind)
 
 def enctile(lon,lat):
     """ encode tile prefix from (lon,lat)
@@ -149,12 +150,21 @@ def dectile(prefix='N48W002'):
     return (lonmin,lonmax,latmin,latmax)
 
 def expand(A):
+    """ expand numpy array
+
+    Parameters
+    ----------
+
+    A : np.array (MxN)
+
+    """
     M,N = A.shape
     t = np.kron(A.flatten(),np.ones(N))
     u = np.triu(np.ones((N,N))).flatten()
     v = np.kron(np.ones(M),u)
     w  = t *  v
-    return(w.reshape(M,N,N).swapaxes(1,2))
+    return(w.reshape(M,N,N).swapaxes(1,2)[:,1:,:])
+    #return(w.reshape(M,N,N).swapaxes(1,2))
 
 def conv(extent,m,mode='tocart'):
     """ convert zone to cartesian or lon lat
@@ -671,7 +681,7 @@ class Ezone(PyLayers):
             height = self.hgta[ry,rx] + dh
 
         # seek for local maxima along link profile
-        m = maxloc(height[None,:])
+        m,ind = maxloc(height[None,:])
 
         ha = height[0] + kwargs['ha']
         hb = height[-1]+ kwargs['hb']
@@ -679,13 +689,96 @@ class Ezone(PyLayers):
         diff = height-LOS
         fac  = np.sqrt(2*d[-1]/(lmbda*d*d[::-1]))
         nu   = diff*fac
-        num  = maxloc(nu[None,:])
+        num,ind  = maxloc(nu[None,:])
 
         #plt.plot(d,dh,'r',d,height,'b',d,m[0,:],d,LOS,'k')
         #plt.figure()
         #plt.plot(d,nu,num)
 
         return(height,d,dh,nu,num,m,LOS)
+
+    def cov(self,**kwargs):
+        """ coverage around a point
+
+        Parameters
+        ----------
+
+        pc : np.array
+            center point in cartesian coordinates
+        Nphi : int
+            Number of angular direction
+        Nr : int
+            Number of points along radius
+        Rmax : float
+            Radius maximum (meters)
+        Hr : float
+            Receiver height
+        Ht : float
+            Transmitter height
+        K : float
+            K factor
+
+        """
+        defaults = {'pc':(27000,12000),
+                    'Nphi':'360',
+                    'Nr':200,
+                    'Rmax':4000,
+                    'Ht':30,
+                    'Hr':1.5,
+                    'K':1.3333,
+                    'fGHz':.3,
+                    'divider':[]
+                    }
+
+        for key in defaults:
+            if key not in kwargs:
+                kwargs[key] = defaults[key]
+
+        pc = kwargs['pc']
+        lmbda = 0.3/kwargs['fGHz']
+        phi  = np.linspace(0,2*np.pi,kwargs['Nphi'])[:,None]
+        r  = np.linspace(0.02,kwargs['Rmax'],kwargs['Nr'])[None,:]
+
+        # cartesian
+        x  = pc[0] + r*np.cos(phi)
+        y  = pc[1] + r*np.sin(phi)
+        extent_c = np.array([x.min(),x.max(),y.min(),y.max()])
+
+        # back to lon lat
+        lon,lat = self.m(x,y,inverse=True)
+
+        rx = np.round((lon - self.extent[0]) / self.lonstep).astype(int)
+        ry = np.round((self.extent[3]-lat) / self.latstep).astype(int)
+
+        # dem
+        dem = self.hgts[ry,rx]
+
+
+        # adding effect of earth equivalent curvature
+        R = expand(r)
+        B = r.T-R
+        h_earth = (R*B)/(2*kwargs['K']*6375e3)
+
+        # ground height + antenna height
+        Ha = kwargs['Ht'] + self.hgts[ry[0,0],rx[0,0]]
+        Hb = kwargs['Hr'] + dem
+
+        # Nphi x Nr x Nr
+        Hb = Hb[:,None,:]
+        # LOS line
+        LOS  = Ha+(Hb-Ha)*R/r.T
+        diff = expand(dem)+h_earth-LOS
+        fac  = np.sqrt(2*r[...,None]/(lmbda*R*B))
+        nu   = diff*fac
+        #num,ind  = maxloc(nu)
+        numax = np.max(nu,axis=2)
+        w = numax -0.1
+        L = 6.9 + 20*np.log10(np.sqrt(w**2+1)-w)
+        LFS = 32.4 + 20*np.log10(r)+20*np.log10(kwargs['fGHz'])
+        Ltot = LFS+L
+
+        return x,y,r,R,dem,LOS,h_earth,diff,fac,nu,numax,LFS,Ltot
+
 
     def cover(self,**kwargs):
         """ coverage around a point
@@ -738,30 +831,37 @@ class Ezone(PyLayers):
         x  = pc[0] + r*np.cos(phi)
         y  = pc[1] + r*np.sin(phi)
         extent_c = np.array([x.min(),x.max(),y.min(),y.max()])
+
+        # Triangulation
         triang = tri.Triangulation(x.flatten(),y.flatten())
         lon,lat = self.m(triang.x,triang.y,inverse=True)
+        # back in lon,lat coordinates
         triang.x = lon
         triang.y = lat
 
         lon,lat = self.m(x,y,inverse=True)
+
         rx = np.round((lon - self.extent[0]) / self.lonstep).astype(int)
         ry = np.round((self.extent[3]-lat) / self.latstep).astype(int)
+
         cov = self.hgts[ry,rx]
 
 
         # adding effect of earth equivalent curvature
         R = expand(r)
         B = r.T-R
-        hearth = (R*B)/(2*kwargs['K']*6375e3)
+        h_earth = (R*B)/(2*kwargs['K']*6375e3)
 
         # ground height + antenna height
         Ha = kwargs['Ht'] + self.hgts[ry[0,0],rx[0,0]]
         Hb = kwargs['Hr'] + cov
 
+        pdb.set_trace()
+        # Nphi x Nr x Nr
         Hb = Hb[:,None,:]
         # LOS line
         LOS  = Ha+(Hb-Ha)*R/r.T
-        diff = expand(cov)+hearth-LOS
+        diff = expand(cov)+h_earth-LOS
         fac  = np.sqrt(2*r[...,None]/(lmbda*R*B))
         nu   = diff*fac
         num  = maxloc(nu)
@@ -786,7 +886,7 @@ class Ezone(PyLayers):
         cb.set_label('Loss(dB)')
         plt.axis('equal')
 
-        return x,y,r,cov,LOS,hearth,diff,fac,num,LFS
+        return x,y,r,cov,LOS,h_earth,diff,fac,num,LFS
 
 
     def rennes(self):
