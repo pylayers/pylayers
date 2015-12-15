@@ -114,13 +114,13 @@ class ULArray(Array):
         ----------
 
         N  : list
-            [Nx,Ny,Nz]  don't use 0 the total number of antennas is Nx*Ny*Nz
+            [Nx,Ny,Nz,Na]  don't use 0 the total number of antennas is Nx*Ny*Nz*Na
         dm : list of floats
             [dxm,dym,dzm] distance are expressed in meters
 
         """
-        defaults = { 'N'    : [8,1,1],
-                     'dm'   : [0.075,0,0],
+        defaults = { 'N'    : [8,1,1,1],
+                     'dm'   : [0.075,0,0,0],
                      'w'   : [],
                     'fGHz' : np.linspace(1.8,2.2,10),
                    }
@@ -188,8 +188,8 @@ class AntArray(Array,ant.Antenna):
 
         """
         defaults = {'tarr': 'UA',
-                    'N'    : [8,1,1],
-                    'dm'   : [0.075,0,0],
+                    'N'    : [8,1,1,1],
+                    'dm'   : [0.075,0,0,0],
                     'S'    : [],
                     'pattern' : True,
                     #'typant':'S1R1.vsh3',
@@ -242,27 +242,37 @@ class AntArray(Array,ant.Antenna):
          st = st + ant.Antenna.__repr__(self)
          return(st)
 
-def ktoxyz(ik,N1=10,N2=11):
+
+def k2xyza(ik,sh):
     """ 
 
     Parameters
     ----------
 
     ik : full index starting at 0 
-    N1 : number of points along first axis 
-    N2 : number of points along second axis 
+    sh : list of [Nx,Ny,Nz,Na]
 
     Returns
     -------
     
-    i2 , i1 , i0 : index starting at 0  
+    ix , iy , iz , ia : index starting at 0  
 
 
     """
-    i2 = ik/(N1*N2)
-    i1 = (ik-i2*N1*N2)/N1
-    i0 = (ik-i2*N1*N2-i1*N1)
-    return(i2,i1,i0)
+    assert(len(sh)==4)
+    assert(len(ik)==np.prod(np.array(sh)))
+
+    Nx = sh[0]
+    Ny = sh[1]
+    Nz = sh[2]
+    Na = sh[3]
+
+    ix = ik/(Ny*Nz*Na)
+    iy = (ik-ix*Ny*Nz*Na)/(Nz*Na)
+    iz = (ik-ix*Ny*Nz*Na-iy*Nz*Na)/Na
+    ia = ik-ix*Ny*Nz*Na-iy*Nz*Na-iz*Na
+
+    return(ix,iy,iz,ia)
 
 def xyztok(iz,iy,ix,Nx=10,Ny=11):
     ik = iz*Nx*Ny+iy*Nx+ix

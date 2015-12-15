@@ -624,6 +624,13 @@ class Bsignal(PyLayers):
                 dt = self.y[us:uf,ik,vs:vf]
             if ((ax[0]==1) & (ax[1]==2)):
                 dt = self.y[ik,us:uf,vs:vf]
+        elif naxy==4:
+            if ((ax[0]==0) & (ax[1]==1)):
+                dt = self.y[0,us:uf,vs:vf,ik]
+            if ((ax[0]==0) & (ax[1]==2)):
+                dt = self.y[0,us:uf,ik,vs:vf]
+            if ((ax[0]==1) & (ax[1]==2)):
+                dt = self.y[0,ik,us:uf,vs:vf]
 
         if t=='m':
             ylabels='Magnitude'
