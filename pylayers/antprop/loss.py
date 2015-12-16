@@ -669,7 +669,6 @@ def showfurniture(fig,ax):
     R9_G.show(fig,ax)
     axis('scaled')
 
-
 def two_rays_flatearth(p0,p1,fGHz,**kwargs):
     """
     Parameters
@@ -812,7 +811,6 @@ def two_rays_flatearth(p0,p1,fGHz,**kwargs):
         return 10*np.log10(P)
     else:
         return P
-
 
 def lossref_compute(P,h0,h1,k=4/3.) :
     """
