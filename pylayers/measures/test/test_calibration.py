@@ -4,7 +4,7 @@ from pylayers.antprop.channel import *
 import pdb
 
 vna = SCPI()
-_fileh5 = 'test15Dec'
+_fileh5 = 'test16Dec'
 # 1. perform a new SISO calibration with the VNA
 vna.calibh5(_fileh5=_fileh5,
         _filecal='cal_config.ini',

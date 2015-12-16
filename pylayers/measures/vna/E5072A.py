@@ -656,19 +656,20 @@ class SCPI(PyLayers):
         tic = time.time()
         for k in dcal:
             time.sleep(2)
-            print "----------------------------------------------------------------------------"
-            print "Configuration Parameters : ",dcal[k]
-            print "----------------------------------------------------------------------------"
+            print "---------------------------------------------------------------------"
+            print "                 Configuration Parameters                            "
+            print   dcal[k]
+            print "---------------------------------------------------------------------"
             for k2 in dcal[k]:
                 if k2=='nf':
-                    print dcal[k]['nf']
                     self.points(dcal[k]['nf'], cmd='set')
+                    print "set number of number  :",dcal[k]['nf']
                 if k2=='ifbhz':
-                    print dcal[k]['ifbhz']
                     self.ifband(ifbHz=dcal[k]['ifbhz'], cmd='set')
+                    print "set number of ifbHz   :",dcal[k]['ifbhz']
                 if k2=='navrg':
-                    print dcal[k]['navrg']
                     self.avrg(navrg=dcal[k]['navrg'],cmd='setavrg')
+                    print "set number of average :",dcal[k]['navrg']
             #get Nmeas calibration vector
             Dk = self.getdata(chan=1, Nmeas=dcal[k]['nmeas'])
             dcalk = cal.create_dataset(k,(dcal[k]['nmeas'],self.Nf),dtype=np.complex64, data = Dk)
@@ -676,11 +677,11 @@ class SCPI(PyLayers):
             dcalk.attrs['Nmeas']     = dcal[k]['nmeas']
             dcalk.attrs['ifbHz']     = self.ifbHz
             dcalk.attrs['Navrg']     = self.navrg
-        print "-------------------------------------"
-        print "         END of calibration          "
-        print "-------------------------------------"
         toc = time.time()
-        print "measurement time (ms): ",toc-tic
+        print "------------------------------------------------"
+        print "         END of calibration          "
+        print " measurement time (s): ",toc-tic
+        print "------------------------------------------------"
         f.close()
 
 
@@ -737,16 +738,20 @@ class SCPI(PyLayers):
                     c = raw_input("Hit return key ")
                 for k in dcal:
                     time.sleep(2)
-                    print "-----------------------------------------------------------------------------"
-                    print "Configuration Parameters : ",dcal[k]
-                    print "-----------------------------------------------------------------------------"
+                    print "---------------------------------------------------------------------"
+                    print "                 Configuration Parameters                            "
+                    print   dcal[k]
+                    print "---------------------------------------------------------------------"
                     for k2 in dcal[k]:
                         if k2=='nf':
-                            print "set number of number  :",self.points(dcal[k]['nf'], cmd='set')
+                            self.points(dcal[k]['nf'], cmd='set')
+                            print "set number of number  :",dcal[k]['nf']
                         if k2=='ifbhz':
-                            print "set number of ifbHz   :",self.ifband(ifbHz=dcal[k]['ifbhz'], cmd='set')
+                            self.ifband(ifbHz=dcal[k]['ifbhz'], cmd='set')
+                            print "set number of ifbHz   :",dcal[k]['ifbhz']
                         if k2=='navrg':
-                            print "set number of average :",self.avrg(navrg=dcal[k]['navrg'],cmd='setavrg')
+                            self.avrg(navrg=dcal[k]['navrg'],cmd='setavrg')
+                            print "set number of average :",dcal[k]['navrg']
 
                     # get Nmeas calibration vector
                     Dmeas = self.getdata(chan=1, Nmeas=dcal[k]['nmeas'])
@@ -767,10 +772,11 @@ class SCPI(PyLayers):
                     mimo[k].attrs['ifbHz']     = self.ifbHz
                     mimo[k].attrs['Navrg']     = self.navrg
 
-        print "-------------------------------------"
+        toc = time.time()
+        print "------------------------------------------"
         print "         END of calibration          "
-        print "-------------------------------------"
-        print "measurement time (ms): ",toc-tic
+        print " measurement time (s): ",toc-tic
+        print "------------------------------------------"
         f.close()
 
 
