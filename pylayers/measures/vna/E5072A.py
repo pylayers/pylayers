@@ -31,35 +31,35 @@ Enhanced by M.D.BALDE
 .. autosummary::
     :toctree: generated
 
-VNA Class
+SCPI Class
 ==========
 
 .. autosummary::
     :toctree: generated/
 
-    VNA.__init__
-    VNA.__repr__
-    VNA._write
-    VNA._read
-    VNA.write
-    VNA.read
-    VNA.ask
-    VNA.close
-    VNA.parS
-    VNA.reset
-    VNA.trace
-    VNA.autoscale
-    VNA.points
-    VNA.freq
-    VNA.getIdent
-    VNA.getdata
-    VNA.avrg
-    VNA.ifband
-    VNA.calibh5
+    SCPI.__init__
+    SCPI.__repr__
+    SCPI._write
+    SCPI._read
+    SCPI.write
+    SCPI.read
+    SCPI.ask
+    SCPI.close
+    SCPI.parS
+    SCPI.reset
+    SCPI.trace
+    SCPI.autoscale
+    SCPI.points
+    SCPI.freq
+    SCPI.getIdent
+    SCPI.getdata
+    SCPI.avrg
+    SCPI.ifband
+    SCPI.calibh5
 
 """
 
-class VNA(PyLayers):
+class SCPI(PyLayers):
     PORT = 5025
     _chunk = 128
     _verbose = False
@@ -93,7 +93,7 @@ class VNA(PyLayers):
             self.s.connect((host, port))
         except socket.error as e:
             if self._verbose:
-                print 'VNA>> connect({:s}:{:d}) failed {:s}', format(host, port, e)
+                print 'SCPI>> connect({:s}:{:d}) failed {:s}', format(host, port, e)
             else:
                 self.emulated = True
 
@@ -108,7 +108,6 @@ class VNA(PyLayers):
         self.avrg()
         self.ifband()
         self.getdata()
-        self.filename = pyu.getlong('vna_config.ini', pstruc['DIRMES'])
         #initialization of the switch
         if (Nr!=1) and (Nt!=1) and not self.emulated:
             self.switch = sw.get_adapter()
@@ -121,22 +120,20 @@ class VNA(PyLayers):
 
     def __repr__(self):
         st = ''
-        st = st + '------------------------------------'+'\n'
-        st = st + '              PARAMETERS            '+'\n'
-        st = st + '------------------------------------'+'\n'
-        st = st + "Talking to               : " + str(self.ident)+'\n'
-        st = st + "Channel                  : " + str(self.chan) + '\n'
-        st = st + "S Parameter              : " + self.param + '\n'
-        st = st + "fmin (GHz)               : " + str(self.fGHz[0])+'\n'
-        st = st + "fmax (GHz)               : " + str(self.fGHz[-1])+'\n'
-        st = st + "Bandwidth (GHz)          : " + str(self.fGHz[-1]-self.fGHz[0])+'\n'
-        st = st + "Nbr of freq points       : " + str(self.Nf)+'\n'
-        st = st + "Averaging                : " + self.b + '\n'
-        st = st + "Nbr of averages          : " + str(self.navrg)+'\n'
-        st = st + "IF Bandwidth (Hz)        : " + str(self.ifbHz)+'\n'
-        st = st + "Nbr of measures          : " + str(self.nmeas)+'\n'
-        st = st + "Repertory of ini files   : " + str(self.filename)+'\n'
-
+        st = st + '----------------------------'+'\n'
+        st = st + '      PARAMETERS            '+'\n'
+        st = st + '----------------------------'+'\n'
+        st = st + "Talking to         : " + str(self.ident)+'\n'
+        st = st + "Channel            : " + str(self.chan) + '\n'
+        st = st + "S Parameter        : " + self.param + '\n'
+        st = st + "fmin (GHz)         : " + str(self.fGHz[0])+'\n'
+        st = st + "fmax (GHz)         : " + str(self.fGHz[-1])+'\n'
+        st = st + "Bandwidth (GHz)    : " + str(self.fGHz[-1]-self.fGHz[0])+'\n'
+        st = st + "Nbr of freq points : " + str(self.Nf)+'\n'
+        st = st + "Avering            : " + self.b + '\n'
+        st = st + "Nbr of averages    : " + str(self.navrg)+'\n'
+        st = st + "IF Bandwidth (Hz)  : " + str(self.ifbHz)+'\n'
+        st = st + "Nbr of measures    : " + str(self.nmeas)+'\n'
         return(st)
 
     def _write(self, cmd):
@@ -159,7 +156,7 @@ class VNA(PyLayers):
             return self._write(cmd + b'\n')
         except IOError as e:
             if self._verbose:
-                print 'VNA>> write({:s}) failed: {:s}'.format(cmd.strip(), e)
+                print 'SCPI>> write({:s}) failed: {:s}'.format(cmd.strip(), e)
             else:
                 raise e
 
@@ -213,7 +210,7 @@ class VNA(PyLayers):
             return str(ans.strip())
         except IOError as e:
             if self._verbose:
-                print 'VNA>> ask({:s}) failed: {:s}'.format(cmd.strip(), e)
+                print 'SCPI>> ask({:s}) failed: {:s}'.format(cmd.strip(), e)
             else:
                 raise e
 
@@ -233,7 +230,7 @@ class VNA(PyLayers):
         --------
 
         >>> from pylayers.measures.vna.E5072A import *
-        >>> vna = VNA()
+        >>> vna = SCPI()
         >>> vna.parS(param='S21',cmd='set')
         >>> vna.close()
 
@@ -244,7 +241,7 @@ class VNA(PyLayers):
         self.param = param
         self.chan  = chan
         if not self.emulated:
-            #co = ":CALC"+str(chan)+":PAR:DEF"
+            # co = ":CALC"+str(chan)+":PAR:DEF"
             co = ":CALC"+str(chan)+":PAR"+str(tr)+":DEF"
             com = co + ' '+param
             com1 = com+"\n"
@@ -267,7 +264,7 @@ class VNA(PyLayers):
         --------
 
         >>> from pylayers.measures.vna.E5072A import *
-        >>> vna = VNA()
+        >>> vna = SCPI()
         >>> vna.close()
 
         """
@@ -292,7 +289,7 @@ class VNA(PyLayers):
         --------
 
         >>> #from pylayers.measures.vna.E5072A import *
-        >>> #vna = VNA()
+        >>> #vna = SCPI()
         >>> #vna.trace(chan=1,param='S21',ntrace=1,cmd='set')
         >>> #vna.close()
 
@@ -338,7 +335,7 @@ class VNA(PyLayers):
         --------
 
         >>> from pylayers.measures.vna.E5072A import *
-        >>> vna = VNA()
+        >>> vna = SCPI()
         >>> vna.points(201,cmd='set')
         >>> vna.close()
 
@@ -354,7 +351,7 @@ class VNA(PyLayers):
                 try:
                     self.Nf = eval(self.s.recv(8).replace("\n", ""))
                 except socket.timeout:
-                    #print "problem for getting number of points"
+                    # print "problem for getting number of points"
                     raise IOError('problem for getting number of points')
 
             if cmd == 'set':
@@ -378,7 +375,7 @@ class VNA(PyLayers):
         --------
 
         >>> from pylayers.measures.vna.E5072A import *
-        >>> vna = VNA()
+        >>> vna = SCPI()
         >>> vna.freq(fminGHz=3.8,fmaxGHz=4.2,cmd='set')
         >>> vna.close()
 
@@ -415,16 +412,15 @@ class VNA(PyLayers):
         if not self.emulated:
             self.s.send("*IDN?\n")
             try:
-                #data = self.s.recv(1024)
+                # data = self.s.recv(1024)
                 self.ident = self.s.recv(1024)
-                #return data
+                # return data
             except socket.timeout:
                 return ""
         else:
             self.ident = 'emulated vna'
 
 
-    #def getdata(self, chan=1, Nmeas=100):
     def getdata(self, chan=1,Nr=1, Nt=1, Nmeas=10):
         """ getdata from VNA
 
@@ -440,7 +436,7 @@ class VNA(PyLayers):
         >>> from pylayers.measures.vna.E5072A import *
         >>> import matplotlib.pyplot as plt
         >>> import numpy as np
-        >>> vna = VNA()
+        >>> vna = SCPI()
         >>> vna.parS(param='S21',cmd='set')
         >>> S21 = vna.getdata()
         >>> vna.close()
@@ -491,7 +487,7 @@ class VNA(PyLayers):
         >>> from pylayers.measures.vna.E5072A import *
         >>> import matplotlib.pyplot as plt
         >>> import numpy as np
-        >>> vna = VNA()
+        >>> vna = SCPI()
         >>> vna.parS(param='S21',cmd='set')
         >>> S21 = vna.getdata()
         >>> #plt.plot(np.abs(S21.y)[0])
@@ -542,7 +538,7 @@ class VNA(PyLayers):
         --------
 
         >>> from pylayers.measures.vna.E5072A import *
-        >>> vna = VNA()
+        >>> vna = SCPI()
         >>> vna.reset()
         >>> vna.freq(fminGHz=2.8,fmaxGHz=3.2,cmd='set')
         >>> vna.avrg()
@@ -592,7 +588,7 @@ class VNA(PyLayers):
         --------
 
         >>> from pylayers.measures.vna.E5072A import *
-        >>> vna = VNA()
+        >>> vna = SCPI()
         >>> vna.ifband(sens=1,ifbHz=70000,cmd='set')
         >>> vna.close()
 
@@ -637,7 +633,7 @@ class VNA(PyLayers):
 
         fileh5 = pyu.getlong(_fileh5, pstruc['DIRMES'])+'.h5'
         #ipdb.set_trace()
-        f = h5py.File(fileh5, "w")
+        f = h5py.File(fileh5, "a")
         try:
             ldataset = f.keys()
         except:
@@ -665,13 +661,13 @@ class VNA(PyLayers):
             print "----------------------------------------------------------------------------"
             for k2 in dcal[k]:
                 if k2=='nf':
-                    print "set number of frequency :", dcal[k]['nf']
+                    print dcal[k]['nf']
                     self.points(dcal[k]['nf'], cmd='set')
                 if k2=='ifbhz':
-                    print "set number of ifbHz     :",dcal[k]['ifbhz']
+                    print dcal[k]['ifbhz']
                     self.ifband(ifbHz=dcal[k]['ifbhz'], cmd='set')
                 if k2=='navrg':
-                    print "set number of average   :",dcal[k]['navrg']
+                    print dcal[k]['navrg']
                     self.avrg(navrg=dcal[k]['navrg'],cmd='setavrg')
             #get Nmeas calibration vector
             Dk = self.getdata(chan=1, Nmeas=dcal[k]['nmeas'])
@@ -720,7 +716,7 @@ class VNA(PyLayers):
 
         # store calibration vector in a hdf5 file
         fileh5 = pyu.getlong(_fileh5, pstruc['DIRMES'])+'.h5'
-        f = h5py.File(fileh5, "w")
+        f = h5py.File(fileh5, "a")
         try:
             ldataset = f.keys()
         except:
@@ -731,8 +727,7 @@ class VNA(PyLayers):
         calname = 'mimocal' + str(len(lmimocal)+1)
         mimo = f.create_group(calname)
         
-
-         
+        tic = time.time()
         for iR in range(Nr):
             print "connect receiver :", iR +1
             for iT in range(Nt):
@@ -753,7 +748,7 @@ class VNA(PyLayers):
                         if k2=='navrg':
                             print "set number of average :",self.avrg(navrg=dcal[k]['navrg'],cmd='setavrg')
 
-                    #get Nmeas calibration vector
+                    # get Nmeas calibration vector
                     Dmeas = self.getdata(chan=1, Nmeas=dcal[k]['nmeas'])
                     if ((iR==0) and (iT==0)):
                         mimo.create_dataset(k, (dcal[k]['nmeas'], Nr, Nt, self.Nf), dtype=np.complex64)
@@ -771,10 +766,10 @@ class VNA(PyLayers):
                     mimo[k].attrs['Nf']        = self.Nf
                     mimo[k].attrs['ifbHz']     = self.ifbHz
                     mimo[k].attrs['Navrg']     = self.navrg
+
         print "-------------------------------------"
         print "         END of calibration          "
         print "-------------------------------------"
-        toc = time.time()
         print "measurement time (ms): ",toc-tic
         f.close()
 
@@ -816,7 +811,7 @@ class VNA(PyLayers):
 
         """
 
-        #filename : ~/Pylayers_project/meas
+        # filename : ~/Pylayers_project/meas
         filename = pyu.getlong(_filename, pstruc['DIRMES'])
 
         vna_conf  = ConfigParser.ConfigParser()
@@ -860,29 +855,12 @@ class VNA(PyLayers):
         self.ifband(ifbHz=self.ifbHz, cmd='set')
         self.autoscale()
 
-    def showcal(self,_fileh5='mytest.h5',ical=1,ncal=0):
-        """show calibration from vna
-
-        Parameters
-        ----------
-
-        ical : int
-        ncal : int
-
-        """
-        f = h5py.File("mytest.h5","r")
-
-        plt.plot(np.abs(f['cal'+str(ical)][ncal,:]))
-        plt.show()
-        
-        f.close()
-
 
 
 if __name__ == '__main__':
     doctest.testmod()
 
-#    vna = VNA(vna_ip,verbose=False)
+#    vna = SCPI(vna_ip,verbose=False)
 #    ident = vna.getIdent()
 # lNpoints = ['201','401','601','801','1601']
 #
