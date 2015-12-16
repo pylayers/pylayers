@@ -55,3 +55,8 @@ class OFDM(Baseband):
         """
         """
         pass
+
+    def modulate(self,sync):
+        """
+        """
+        pass
