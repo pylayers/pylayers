@@ -12,7 +12,7 @@ import seaborn as sns
 from pylayers.util.project import *
 from pylayers.antprop.aarray import *
 from pylayers.measures.exploith5 import *
-from pylayers.measures.vna.analyzer import *
+from pylayers.measures.vna.E5072A import *
 import pylayers.measures.switch.ni_usb_6501 as sw
 
 """
@@ -1534,8 +1534,6 @@ class Scanner(PyLayers):
         Dh5.saveini()
         # end of read and save
         # initialization of vna
-        vna = VNA()
-        vna.load_config()
         vna = SCPI()
         vna.load_config_vna()
 
@@ -1856,7 +1854,7 @@ class Scanner(PyLayers):
 
         # initialization of vna
 
-        vna = VNA()
+        vna = SCPI()
         vna.load_config_vna()
 
         Npoint = A.p.shape[1]

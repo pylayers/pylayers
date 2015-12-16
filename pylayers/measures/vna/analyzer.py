@@ -657,6 +657,7 @@ class VNA(PyLayers):
         cal.attrs['comment']   = comment
         cal.attrs['param']     = self.param
 
+        tic = time.time()
         for k in dcal:
             time.sleep(2)
             print "----------------------------------------------------------------------------"
@@ -682,6 +683,8 @@ class VNA(PyLayers):
         print "-------------------------------------"
         print "         END of calibration          "
         print "-------------------------------------"
+        toc = time.time()
+        print "measurement time (ms): ",toc-tic
         f.close()
 
 
@@ -729,10 +732,7 @@ class VNA(PyLayers):
         mimo = f.create_group(calname)
         
 
-        for iR in range(self.Nr):
-            print "Connect Receiver :", iR +1
-            for iT in range(self.Nt):
-                print "Connect Transmitter :", iT + 1 
+         
         for iR in range(Nr):
             print "connect receiver :", iR +1
             for iT in range(Nt):
@@ -774,6 +774,8 @@ class VNA(PyLayers):
         print "-------------------------------------"
         print "         END of calibration          "
         print "-------------------------------------"
+        toc = time.time()
+        print "measurement time (ms): ",toc-tic
         f.close()
 
 
