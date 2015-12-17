@@ -1,0 +1,60 @@
+VC file,Scenario,Meas Serie,Meas Run,Subject,techno,video file,photo file,Radio file,Date,Start time,Short Notes,notes pendant mesures
+1,2.0,1,1,Bernard,TCR,,100-0010,SC2.0_S1_R1_TCR_single,11/06/14,15:44,Subject Walk circularly,Scénario 2.0 : calibration validation .Vc file correspond au fichier de capture  Run annulé  :problème de capture  vitesse de marche élevé
+2,2.0,2,2,Bernard ,TCR,,100-0020,SC2.0_S2_R2_TCR_single,11/06/14,15:46,Subject Walk circularly,diminuer la vitesse de marche  
+3,2.0,3,3,Bernard ,TCR,,100-0022,SC2.0_S3_R3_TCR_single,11/06/14,15:49,Subject Walk circularly,Un peu plus à l’intérieur du champ de la camera 
+4,2.0,4,4,Bernard ,TCR,,100-0024,SC2.0_S4_R4_TCR_single,11/06/14,15:51,Subject Walk circularly,champ du camera préservé + gratter la joue 
+5,2.0,5,1,Nicolas,HKB+BS,,100-0030,SC2.0_S5_R1_HKB_single,11/06/14,16:06,Subject Walk circularly,Nicolas équipé du bespoon  à la main droite 
+6,2.0,6,2,Nicolas,HKB+BS,,100-0040,SC2.0_S6_R2_HKB_single,11/06/14,16:12,Subject Walk circularly,même chose ras 
+7,2.0,7,3,Nicolas,HKB+BS,,100-0042,SC2.0_S7_R3_HKB_single,11/06/14,16:15,Subject Walk circularly,même chose ras 
+8,2.0,8,4,Nicolas,HKB+BS,,100-0044,SC2.0_S8_R4_HKB_single,11/06/14,16:17,Subject Walk circularly,même chose ras 
+9,2.1a,9,1,Bernard,TCR,,100-0047,SC2.1a_S9_R1_TCR_single,11/06/14,16:27,INTERRUPTED  Subject Walk circularly ++ speed,augmentation de la vitesse par segment. Run interrompue  
+10,2.1a,10,2,Bernard ,TCR,,100-0048,SC2.1a_S10_R2_TCR_single,11/06/14,16:29,Subject Walk circularly ++ speed,
+11,2.1a,11,3,Bernard,TCR,,100-0050,SC2.1a_S11_R3_TCR_single,11/06/14,16:31,Subject Walk circularly ++ speed,
+12,2.1a,12,4,Bernard,TCR,,100-0051,SC2.1a_S12_R4_TCR_single,11/06/14,16:33,Subject Walk circularly ++ speed,
+13,2.1a,13,1,Nicolas,HKB+BS,,100-0052,SC2.1a_S13_R1_HKB_single,11/06/14,16:37,Subject Walk circularly without looking BS phone half-way,Nicolas avec le bespoon  a la main  il fait la moitié du trajet avec tel en main et la moitié en mode navigation 
+14,2.1a,14,2,Nicolas,HKB+BS,,100-0054,SC2.1a_S14_R2_HKB_single,11/06/14,,Subject Walk circularly + Navigation movement,Nicolas fait des gestes liés à la navigation(recherche de position)
+15,2.1a,15,3,Nicolas,HKB+BS,,100-0056,SC2.1a_S15_R3_HKB_single,11/06/14,16:42,Subject Walk slowly without looking BS phone half-way,ne pas regarder le portable pour la marche lente 
+16,2.1a,16,4,Nicolas ,HKB+BS,,100-0057,SC2.1a_S16_R4_HKB_single,11/06/14,16:45,Subject Walk slowly without looking BS phone half-way,
+17,2.1b,17,1,Bernard,TCR,,100-0058,SC2.1b_S17_R1_TCR_single,11/06/14,16:52,Static subject pointing corners then yoga postures ,Statique Commande gestuelles  + détection de posture: yoga. 
+18,2.1b,18,2,Bernard,TCR,,100-0063,SC2.1b_S18_R2_TCR_single,11/06/14,16:54,Static subject pointing corners then yoga postures,
+19,2.1b,19,3,Bernard,TCR,,100-0064,SC2.1b_S19_R3_TCR_single,11/06/14,16:57,Static subject pointing corners then yoga postures,
+20,2.1b,20,4,Bernard,TCR,,100-0065,SC2.1b_S20_R4_TCR_single,11/06/14,17:00,Static subject pointing corners then yoga postures,
+21,2.1b,21,1,Nicolas,HKB+BS,,100-0066,SC2.1b_S21_R1_HKB_single,11/06/14,17:06,Static subject pointing corners (withphone) then yoga postures,Nicolas pointe avec le téléphone en main gauche  pour les commandes.
+22,2.1b,22,2,Nicolas,HKB+BS,,100-0070,SC2.1b_S22_R2_HKB_single,11/06/14,17:08,Static subject pointing corners (withphone) then yoga postures,
+23,2.1b,23,3,Nicolas,HKB+BS,,100-0072,SC2.1b_S23_R3_HKB_single,11/06/14,17:11,INTERRUPTED Static subject pointing corners (withphone) then yoga postures,Plantage et refaire le début du run. Capteur détaché run interrompu.
+24,2.1b,24,4,Nicolas,HKB+BS,,100-0073,SC2.1b_S24_R4_HKB_single,11/06/14,17:13,Static subject pointing corners (withphone) then yoga postures,même vidéo que la S23R3
+25,2.1c,25,1,Bernard,TCR,,100-0074,SC2.1c_S25_R1_TCR_single,11/06/14,17:22,Kung-fu Kata,Kung-fu  
+26,2.1c,26,2,Bernard,TCR,,100-0076,SC2.1c_S26_R2_TCR_single,11/06/14,17:28,Kung-fu Kata with lost sensor,Remettre des capteurs détachés. Fixer un capteur au cours du run.  Perte d'un capteur.
+27,2.1d,27,1,Nicolas,HKB+BS,,100-0077,SC2.1d_S27_R1_HKB_single,11/06/14,17:47,"subject open door, sit, type on leyboard, take a cofee","gestes usuelle : ouvrir la porte, s’asseoir, taper sur clavier et prendre un café "
+28,2.1d,28,2,Nicolas,HKB+BS,,100-0078,SC2.1d_S28_R2_HKB_single,11/06/14,17:48,"subject open door, sit, type on leyboard, take a cofee",même chose ras 
+29,2.1e,29,1,Nicolas,HKB+BS,,100-0079,SC2.1e_S29_R1_HKB_single,11/06/14,17:51,Crossfade Yoga Posture with  phone BS left hand,refaire les mouvement de yoga enchaînés avec téléphone en main gauche 
+30,2.1e,30,2,Nicolas,HKB+BS,,100-0080,SC2.1e_S30_R2_HKB_single,11/06/14,17:53,Crossfade SLOW Yoga Posture with  phone BS left hand,même gestes de yoga plus ralentis
+31,2.0,31,5,Nicolas,HKB+BS,,100-0081,SC2.0_S31_R5_HKB_single,11/06/14,18:00,Subject Walk circularly,refaire marche classique  S5R5
+32,2.1a,32,1,Nicolas,TCR+HKB+BS,,100-0082,SC2.1a_S32_R1_TCR_joint,11/06/14,18:21,3 turns  circularly inc. speed sequentially,3 trois de marche augmentation graduelle de la vitesse avec tel en main gauche et puis mode navigation et marche aléatoire 
+33,2.1a,33,2,Nicolas,TCR+HKB+BS,,100-0087,SC2.1a_S33_R2_TCR_joint,11/06/14,18:26,3 turns  circularly inc. speed sequentially,
+34,2.1a,34,3,Nicolas,TCR+HKB+BS,,100-0088,SC2.1a_S34_R3_TCR_joint,11/06/14,18:32,3 turns  circularly inc. Speed + muscle-building exercises  ,accélération jusqu'au trottinement enfin mouvement de muscul au centre et spoon phone sur le corps
+35,2.1a,35,4,Nicolas,TCR+HKB+BS,,100-0090,SC2.1a_S35_R4_TCR_joint,11/06/14,18:35,3 turns  circularly inc. Speed + muscle-building exercises  ,perte d'un  nœud TCR (genou) en fin du trottinement 
+1,2.2a,1,1,Nicolas Jihad Eric,TCR,,100-0091,SC2.2a_S1_R1_TCR_single,12/06/14,11:17,DATA ISSUE 3 FireMen Nav ,"Série de navigation de groupe qui commence par un tour de marche ordinaire et puis un comportement de pompier  et finalement un trottinement type footing. Test de capture  chaque sujet à  son tour. Nicolas leader, Eric à droite et Jihad à gauche.Run interrompue problème radio "
+2,2.2a,2,2,Nicolas Jihad Eric,TCR,,100-0118,SC2.2a_S2_R2_TCR_single,12/06/14,11:25,3 FireMen Nav (possible mocap issue),
+3,2.2a,3,3,Nicolas jihad Eric,TCR,,100-0119,SC2.2a_S3_R3_TCR_single,12/06/14,11:28,3 FireMen Nav (possible mocap issue),Jihad a perdu des tag optique.
+4,2.2a,4,4,Nicolas Jihad Eric,TCR,,100-0123,SC2.2a_S4_R4_TCR_single,12/06/14,11:35,INTERRUPTED 3 FireMen Nav ,Remettre les tag optiques de Jihad. Run annulé et refaire avec sujet un peu plus  éloigné (problème radio) .
+5,2.2b,5,1,Nicolas Jihad Eric,TCR,,100-0128,SC2.2b_S5_R1_TCR_single,12/06/14,11:44,subjects Random walk + new interfering subject every 30s,marche aléatoire et entrée de sujet  équipés de tags optiques uniquement toutes (un sujet toutes les 20s)
+6,2.2b,6,2,Nicolas Jihad Eric,TCR,,100-0142,SC2.2b_S6_R2_TCR_single,12/06/14,11:47,subjects Random walk + new interfering subject every 30s,Serie 5 sur video 
+7,2.2b,7,3,Nicolas Jihad Eric,TCR,,100-0150,SC2.2b_S7_R3_TCR_single,12/06/14,11:51,subjects slow Random walk + interfering subject every 30s,sujet équipés marchent plus lentement 
+8,2.2b,8,4,Nicolas Jihad Eric,TCR,,100-0159,SC2.2b_S8_R4_TCR_single,12/06/14,11:55,subjects slow Random walk + interfering subject every 30s,
+9,2.2a,9,1,Nicolas Jihad Eric,TCR+HKB+BS,,100-0167,SC2.2a_S9_R1_TCR_joint,12/06/14, 12:34,Subject Slow motion: Indoor Nav then Firemen then jogging,équiper les sujet de la techno KHB.3 trois de marche augmentation graduelle de la vitesse avec tel en main gauche et puis mode navigation et marche aléatoire. Spoon phone à la main gauche de Nicolas. mouvement ralenti.
+10,2.2a,10,2,Nicolas Jihad Eric,TCR+HKB+BS,,100-0196,SC2.2a_S10_R2_TCR_joint,12/06/14,12:39,Subject Slow motion: Indoor Nav then Firemen then jogging,mouvement ralenti
+11,2.2a,11,3,Nicolas Jihad Eric,TCR+HKB+BS,,100-0198,SC2.2a_S11_R3_TCR_joint,12/06/14,12:43,Subject normal speed: Indoor Nav then Firemen then jogging,mouvement à vitesse normale 
+12,2.2a,12,4,Nicolas Jihad Eric,TCR+HKB+BS,,100-0200,SC2.2a_S12_R4_TCR_joint,12/06/14,12:48,Subject normal speed: Indoor Nav then Firemen then jogging,mouvement du pompier : avancer deux en avant et un qui suit 
+13,2.2b,13,1,Nicolas Jihad Eric,TCR+HKB+BS,,100-0204,SC2.2b_S13_R1_TCR_joint,12/06/14,12:53,subjects Random walk + new interfering subject every 30s,Bernard absent  (4 sujet avec des tag optique toutes les 20s)
+14,2.2b,14,2,Nicolas Jihad Eric,TCR+HKB+BS,,100-0214,SC2.2b_S14_R2_TCR_joint,12/06/14,12:56,subjects Random walk + new interfering subject every 30s,Bernard revient 
+15,2.2b,15,3,Nicolas Jihad Eric,TCR+HKB+BS,,100-0218,SC2.2b_S15_R3_TCR_joint,12/06/14,12:59,subjects Random walk + new interfering subject every 30s,
+16,2.2b,16,4,Nicolas Jihad Eric,TCR+HKB+BS,,100-0220,SC2.2b_S16_R4_TCR_joint,12/06/14,13:02,subjects Random walk + new interfering subject every 30s,
+17,2.2a,17,1,Nicolas Jihad Eric,HKB+BS,,100-0221,SC2.2a_S17_R1_HKB_single,12/06/14,13:06,NO HKB Subject normal speed: Indoor Nav then Firemen then jogging,"marche pompier et footing, mouvement ralenti "
+18,2.2a,18,2,Nicolas Jihad Eric,HKB+BS,,100-0223,SC2.2a_S18_R2_HKB_single,12/06/14,13:15,NO HKB Subject normal speed: Indoor Nav then Firemen then jogging,Changer un nœud HKB mort . Mouvement ralenti. Problème de carte SD. 
+19,2.2a,19,3,Nicolas Jihad Eric,HKB+BS,,100-0225,SC2.2a_S19_R3_HKB_single,12/06/14,13:24,NO HKB Subject normal speed: Indoor Nav then Firemen then jogging,reprendre marche normale.
+20,2.2a,20,4,Nicolas Jihad Eric,HKB+BS,,100-0227,SC2.2a_S20_R4_HKB_single,12/06/14,13:27,NO HKB Subject normal speed: Indoor Nav then Firemen then jogging,
+21,2.2b,21,1,Nicolas Jihad Eric,HKB+BS,,100-0228,SC2.2b_S21_R1_HKB_single,12/06/14,13:30,subjects Random walk + new interfering subject every 30s,
+22,2.2b,22,2,Nicolas Jihad Eric,HKB+BS,,100-0230,SC2.2b_S22_R2_HKB_single,12/06/14,13:33,subjects Random walk + new interfering subject every 30s,
+23,2.2b,23,3,Nicolas Jihad Eric,HKB+BS,,100-0233,SC2.2b_S23_R3_HKB_single,12/06/14,13:36,subjects Random walk + new interfering subject every 30s,
+24,2.2b,24,4,Nicolas Jihad Eric,HKB+BS,,100-0234,SC2.2a_S24_R4_HKB_single,12/06/14,13:39,subjects Random walk + new interfering subject every 30s,
