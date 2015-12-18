@@ -1480,8 +1480,8 @@ class Scanner(PyLayers):
                vel = 15,
                Nmeas = 1,
                pAnt = np.array([1.6,5.2,1.6]),
-               comment = '',
-               author = ''):
+               comment = 'test',
+               author = 'mamadou'):
         """ measure over a set of points from AntArray and store in h5
 
         Parameters
