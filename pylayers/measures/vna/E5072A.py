@@ -710,7 +710,6 @@ class SCPI(PyLayers):
 
         # set config
         # File from : ~/Pylayers_project/meas
-        
         self.load_config_vna(_filename=_filevna)
         dcal = self.load_calconfig(_filename=_filecal)
 
@@ -723,16 +722,14 @@ class SCPI(PyLayers):
         except:
             ldataset = []
 
-        
         lmimocal =  filter(lambda x : 'mimocal' in x, ldataset)
         calname = 'mimocal' + str(len(lmimocal)+1)
         mimo = f.create_group(calname)
-        
         tic = time.time()
         for iR in range(Nr):
             print "connect receiver :", iR +1
             for iT in range(Nt):
-                print "connect transmitter :", iT + 1 
+                print "connect transmitter :", iT + 1
                 c = ""
                 while "g" not in c:
                     c = raw_input("Hit return key ")
@@ -766,8 +763,7 @@ class SCPI(PyLayers):
                         mimo[k].attrs['param']     = self.param
                         mimo[k].attrs['Nt']        = Nt
                         mimo[k].attrs['Nr']        = Nr
-                    #ipdb.set_trace()
-                    mimo[k][:,iR,iT,:] = Dmeas
+                    mimo[k][:,iR,iT,:] = Dmeas[:,0,0,:]
                     mimo[k].attrs['Nf']        = self.Nf
                     mimo[k].attrs['ifbHz']     = self.ifbHz
                     mimo[k].attrs['Navrg']     = self.navrg

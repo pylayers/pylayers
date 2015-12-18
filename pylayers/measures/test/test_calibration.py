@@ -14,7 +14,7 @@ vna.calibh5(_fileh5=_fileh5,
          comment='test')
 
 # 2. Initialize the scanner
-scanner = Scanner(Nt=1,Nr=1)
+scanner = Scanner(Nt=4,Nr=4)
 
 #A1 = AntArray(N=[8,1,1],dm=[0.075,0,0])
 #scanner.meash5(A1, _fileh5=_fileh5,gcal=1,ical=1)

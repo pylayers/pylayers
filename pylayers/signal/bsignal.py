@@ -859,8 +859,15 @@ class Bsignal(PyLayers):
         # if ndim(y) > 1
         #
         if ndim == 4:
-            yx = self.y[idx[0],idx[1],idx[2],u]
-            fig,ax = mulcplot(self.x[u],yx*conversion,**args)
+            Nmeas = self.y.shape[0]
+            Nr = self.y.shape[1]
+            Nt = self.y.shape[2]
+            fig,ax = plt.subplots(Nr,Nt)
+            for k in range(Nt):
+                for l in range(Nt):
+                    yx = self.y[idx[0],k,l,u]
+                    fig,a = mulcplot(self.x[u],yx*conversion,fig=fig,ax=ax[k,l],**args)
+
         if ndim == 3:
             shy = self.y.shape
             yx = self.y.reshape(shy[0]*shy[1],shy[2])[:,u]

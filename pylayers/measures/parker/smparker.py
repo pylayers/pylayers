@@ -1480,6 +1480,7 @@ class Scanner(PyLayers):
                vel = 15,
                Nmeas = 1,
                pAnt = np.array([1.6,5.2,1.6]),
+               vAnt = np.array([1.0,0.0,0.0]),
                comment = 'test',
                author = 'mamadou'):
         """ measure over a set of points from AntArray and store in h5
@@ -1496,12 +1497,10 @@ class Scanner(PyLayers):
             scanner moving velocity
         Nmeas   : int
             Number of measurement
-        Nr : int
-            Number of receiving antenna
-        Nt : int
-            Number of transmitting antenna
         pAnt : np.array(,3)
-            Coordinates of antenna phase center
+            Coordinates of non scanner antenna phase center
+        vAnt : np.array(,3)
+            Coordinates of non scanner antenna unitary vector
 
         Examples
         --------
@@ -1573,6 +1572,7 @@ class Scanner(PyLayers):
         mes.attrs['Nt'] = self.Nt
         mes.attrs['Nmeas'] = Nmeas
         mes.attrs['pAnt'] = pAnt
+        mes.attrs['vAnt'] = vAnt
         #mes.attrs['anchors']= self.anchors
         # here is the hard link between a measurement and its calibration 
         mes.attrs['gcal'] = "cal"+str(gcal)
