@@ -15,6 +15,7 @@ from pylayers.util.project import  *
 import pylayers.signal.bsignal as bs
 import pylayers.antprop.channel as ch
 from pylayers.util import pyutil as pyu
+from pylayers.measures.exploith5 import Mesh5 
 # from  pylayers.measures.parker.smparker import *
 from time import sleep
 import seaborn as sns
@@ -421,7 +422,7 @@ class SCPI(PyLayers):
             self.ident = 'emulated vna'
 
 
-    def getdata(self, chan=1,Nr=1, Nt=1, Nmeas=10):
+    def getdata(self, chan=1,Nr=1, Nt=1, Nmeas=10,calibration=False):
         """ getdata from VNA
 
         Parameters
@@ -460,13 +461,17 @@ class SCPI(PyLayers):
                 except:
                     tH = H[None,:]
         else:
-           h = ch.TBchannel()
-           h.SalehValenzuela()
-           H = h.toFD(fGHz=self.fGHz)
-           EH = np.sum(H.y*np.conj(H.y),axis=1)/self.Nf
-           stn = np.sqrt(EH)/10.
-           N = stn*(np.random.rand(Nmeas,Nr,Nt,self.Nf)+1j*np.random.rand(Nmeas,Nr,Nt,self.Nf))
-           tH = H.y[:,None,None,:]+N
+            if not calibration:
+                h = ch.TBchannel()
+                h.SalehValenzuela()
+                H = h.toFD(fGHz=self.fGHz)
+                EH = np.sum(H.y*np.conj(H.y),axis=1)/self.Nf
+                stn = np.sqrt(EH)/10.
+                N = stn*(np.random.rand(Nmeas,Nr,Nt,self.Nf)+1j*np.random.rand(Nmeas,Nr,Nt,self.Nf))
+                tH = H.y[:,None,None,:]+N
+                tH = tH*np.exp(-2*1j*np.pi*self.fGHz*300)[None,None,None,:]
+            else:
+                tH = np.exp(-2*1j*np.pi*self.fGHz*300)[None,None,None,:]
 
         return tH
 
@@ -607,132 +612,101 @@ class SCPI(PyLayers):
                 self.s.send(com)
 
 
-
     def calibh5(self,
-                 _fileh5='scalib',
-                 _filecal='cal_config.ini',
+                 Nr = 8,
+                 Nt = 4,
+                 _filemesh5 = 'measure',
+                 _filecalh5 = 'mcalib',
+                 _filecal = 'cal_config.ini',
                  _filevna='vna_config.ini',
-                 cables=[],
-                 author='',
-                comment=''):
-        """  measure a calibration vector and store it in a hdf5 file
-
-        Parameters
-        ----------
-
-        _fileh5 : string
-            file h5 prefix
-        _filename : string
-            vna configuration file name
-        cables : list of strings
-
-        """
-
-        # set config
-        # file read from : ~/Pylayers_project/meas
-
-        fileh5 = pyu.getlong(_fileh5, pstruc['DIRMES'])+'.h5'
-        #ipdb.set_trace()
-        f = h5py.File(fileh5, "a")
-        try:
-            ldataset = f.keys()
-        except:
-            ldataset = []
-        lcal =  filter(lambda x : 'cal' in x, ldataset)
-        calname = 'cal' + str(len(lcal)+1)
-        cal = f.create_group(calname)
-
-        self.load_config_vna(_filename=_filevna)
-        dcal = self.load_calconfig(_filename=_filecal)
-
-        cal.attrs['fminGHz']   = self.fminGHz
-        cal.attrs['fmaxGHz']   = self.fmaxGHz
-        cal.attrs['time']      = time.ctime()
-        cal.attrs['author']    = author
-        cal.attrs['cables']    = cables
-        cal.attrs['comment']   = comment
-        cal.attrs['param']     = self.param
-
-        tic = time.time()
-        for k in dcal:
-            time.sleep(2)
-            print "---------------------------------------------------------------------"
-            print "                 Configuration Parameters                            "
-            print   dcal[k]
-            print "---------------------------------------------------------------------"
-            for k2 in dcal[k]:
-                if k2=='nf':
-                    self.points(dcal[k]['nf'], cmd='set')
-                    print "set number of number  :",dcal[k]['nf']
-                if k2=='ifbhz':
-                    self.ifband(ifbHz=dcal[k]['ifbhz'], cmd='set')
-                    print "set number of ifbHz   :",dcal[k]['ifbhz']
-                if k2=='navrg':
-                    self.avrg(navrg=dcal[k]['navrg'],cmd='setavrg')
-                    print "set number of average :",dcal[k]['navrg']
-            #get Nmeas calibration vector
-            Dk = self.getdata(chan=1, Nmeas=dcal[k]['nmeas'])
-            dcalk = cal.create_dataset(k,(dcal[k]['nmeas'],self.Nf),dtype=np.complex64, data = Dk)
-            dcalk.attrs['Nf']        = self.Nf
-            dcalk.attrs['Nmeas']     = dcal[k]['nmeas']
-            dcalk.attrs['ifbHz']     = self.ifbHz
-            dcalk.attrs['Navrg']     = self.navrg
-        toc = time.time()
-        print "------------------------------------------------"
-        print "         END of calibration          "
-        print " measurement time (s): ",toc-tic
-        print "------------------------------------------------"
-        f.close()
-
-
-    def mimocalibh5(self,
-                 _fileh5='mcalib',
-                 _filecal='cal_config.ini',
-                 _filevna='vna_config.ini',
+                 typ = 'full',
+                 gcal = 1,
                  cables=[],
                  author='',
                  comment='',
-                 Nr = 8,
-                 Nt = 4,
-                 Nmeas = 100):
+                 ):
         """  measure a calibration vector and store in h5 file
 
         Parameters
         ----------
 
-        _fileh5 : string
-            file h5 prefix
-        _filename : string
-            vna configuration file name
+        Nr : int
+        Nt : int
+        _filemesh5 : string
+            measurement data file prefix
+        _filecalh5 : string
+            multi antenna calibration data file prefix
+        _filecal : string
+            variable parameters calibration .ini configuration file name
+        _filevna : string
+            vna .ini configuration file name
+        typ : string
+            'full' | 'single'
+        gcal : int
+            selected calibration group of _filecalh5 (used only if typ=='full')
         cables : list of strings
+        author
+        comment
 
         """
 
         # set config
         # File from : ~/Pylayers_project/meas
-        self.load_config_vna(_filename=_filevna)
-        dcal = self.load_calconfig(_filename=_filecal)
+
 
 
         # store calibration vector in a hdf5 file
-        fileh5 = pyu.getlong(_fileh5, pstruc['DIRMES'])+'.h5'
-        f = h5py.File(fileh5, "a")
+
+        # SISO case
+        #     + calibration is saved in the measurement file
+        #     + calibration variable parameters are read in _filecal
+        #
+        # MIMO case
+        #     if typ is 'full'
+        #       + calibration are saved in the calibration file
+        #       + calibration variable parameters are read in _filecal
+        #     else
+        #       + a single channel calibration is saved in the measurement file
+        #       + calibration variable parameters are read in _filecalh5
+        #
+        Mr = Nr
+        Mt = Nt
+        if (Nr==1) and (Nt==1):
+            fileh5w = pyu.getlong(_filemesh5, pstruc['DIRMES'])+'.h5'
+            self.load_config_vna(_filename=_filevna)
+            dcal = self.load_calconfig(_filename=_filecal)
+        else:
+            if typ=='full':
+                fileh5w = pyu.getlong(_filecalh5, pstruc['DIRMES'])+'.h5'
+                self.load_config_vna(_filename=_filevna)
+                dcal = self.load_calconfig(_filename=_filecal)
+            if typ=='single':
+                Mr = 1
+                Mt = 1
+                fileh5w = pyu.getlong(_filemesh5, pstruc['DIRMES'])+'.h5'
+                # dcal is obtained from _filecalh5 and gcal
+                #pdb.set_trace()
+                dcal = Mesh5(_filecalh5).get_dcal(gcal)
+
+        f = h5py.File(fileh5w, "a")
         try:
             ldataset = f.keys()
         except:
             ldataset = []
 
-        lmimocal =  filter(lambda x : 'mimocal' in x, ldataset)
-        calname = 'mimocal' + str(len(lmimocal)+1)
-        mimo = f.create_group(calname)
+        lcal =  filter(lambda x : 'cal' in x, ldataset)
+        calname = 'cal' + str(len(lcal)+1)
+        cal = f.create_group(calname)
+
         tic = time.time()
-        for iR in range(Nr):
+        
+        for iR in range(Mr):
             print "connect receiver :", iR +1
-            for iT in range(Nt):
+            for iT in range(Mt):
                 print "connect transmitter :", iT + 1
                 c = ""
                 while "g" not in c:
-                    c = raw_input("Hit return key ")
+                    c = raw_input("Hit g key ")
                 for k in dcal:
                     time.sleep(2)
                     print "---------------------------------------------------------------------"
@@ -751,22 +725,28 @@ class SCPI(PyLayers):
                             print "set number of average :",dcal[k]['navrg']
 
                     # get Nmeas calibration vector
-                    Dmeas = self.getdata(chan=1, Nmeas=dcal[k]['nmeas'])
+                    #pdb.set_trace()
+                    Dmeas = self.getdata(chan=1,Nmeas=dcal[k]['nmeas'],calibration=True)
+
                     if ((iR==0) and (iT==0)):
-                        mimo.create_dataset(k, (dcal[k]['nmeas'], Nr, Nt, self.Nf), dtype=np.complex64)
-                        mimo[k].attrs['fminGHz']   = self.fminGHz
-                        mimo[k].attrs['fmaxGHz']   = self.fmaxGHz
-                        mimo[k].attrs['time']      = time.ctime()
-                        mimo[k].attrs['author']    = author
-                        mimo[k].attrs['cables']    = cables
-                        mimo[k].attrs['comment']   = comment
-                        mimo[k].attrs['param']     = self.param
-                        mimo[k].attrs['Nt']        = Nt
-                        mimo[k].attrs['Nr']        = Nr
-                    mimo[k][:,iR,iT,:] = Dmeas[:,0,0,:]
-                    mimo[k].attrs['Nf']        = self.Nf
-                    mimo[k].attrs['ifbHz']     = self.ifbHz
-                    mimo[k].attrs['Navrg']     = self.navrg
+                        cal.create_dataset(k, (dcal[k]['nmeas'], Mr, Mt, self.Nf), dtype=np.complex64)
+                        cal[k].attrs['fminghz']   = self.fGHz[0]
+                        cal[k].attrs['fmaxghz']   = self.fGHz[-1]
+                        cal[k].attrs['time']      = time.ctime()
+                        cal[k].attrs['author']    = author
+                        cal[k].attrs['cables']    = cables
+                        cal[k].attrs['comment']   = comment
+                        cal[k].attrs['param']     = self.param
+                        cal[k].attrs['nt']        = Nt
+                        cal[k].attrs['nr']        = Nr
+                        cal[k].attrs['nmeas']     = dcal[k]['nmeas']
+                        if typ=='single':
+                            cal[k].attrs['filecalh5']=_filecalh5 
+                            
+                    cal[k][:,iR,iT,:] = Dmeas[:,0,0,:]
+                    cal[k].attrs['nf']        = self.Nf
+                    cal[k].attrs['ifbhz']     = self.ifbHz
+                    cal[k].attrs['navrg']     = self.navrg
 
         toc = time.time()
         print "------------------------------------------"
