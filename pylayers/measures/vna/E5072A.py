@@ -450,7 +450,7 @@ class SCPI(PyLayers):
             for k in  range(Nmeas):
                 buff = ''
 
-                while len(buff) <> (self.Nf*16+8):
+                while len(buff) != (self.Nf*16+8):
                     buff = self.read(com)
 
                 S = np.frombuffer(buff[8:self.Nf*16+8], dtype='>f8')
@@ -620,7 +620,7 @@ class SCPI(PyLayers):
                  _filecal = 'cal_config.ini',
                  _filevna='vna_config.ini',
                  typ = 'full',
-                 gcal = 1,
+                 gcalm = 1,
                  cables=[],
                  author='',
                  comment='',
@@ -642,8 +642,8 @@ class SCPI(PyLayers):
             vna .ini configuration file name
         typ : string
             'full' | 'single'
-        gcal : int
-            selected calibration group of _filecalh5 (used only if typ=='full')
+        gcalm : int
+            selected calibration group of _filecalh5 (used only if typ=='single')
         cables : list of strings
         author
         comment
@@ -686,7 +686,7 @@ class SCPI(PyLayers):
                 fileh5w = pyu.getlong(_filemesh5, pstruc['DIRMES'])+'.h5'
                 # dcal is obtained from _filecalh5 and gcal
                 #pdb.set_trace()
-                dcal = Mesh5(_filecalh5).get_dcal(gcal)
+                dcal = Mesh5(_filecalh5).get_dcal(gcalm)
 
         f = h5py.File(fileh5w, "a")
         try:
@@ -741,7 +741,8 @@ class SCPI(PyLayers):
                         cal[k].attrs['nr']        = Nr
                         cal[k].attrs['nmeas']     = dcal[k]['nmeas']
                         if typ=='single':
-                            cal[k].attrs['filecalh5']=_filecalh5 
+                            cal[k].attrs['_filecalh5'] =_filecalh5 
+                            cal[k].attrs['gcalm']= gcalm
                             
                     cal[k][:,iR,iT,:] = Dmeas[:,0,0,:]
                     cal[k].attrs['nf']        = self.Nf

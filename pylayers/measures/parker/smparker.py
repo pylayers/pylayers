@@ -1472,160 +1472,6 @@ class Scanner(PyLayers):
         self.upd_pos(ptH)
 
 
-    def meash5(self,
-               A,
-               _fileh5='test.h5',
-               gcal = 1,
-               ical = 1,
-               vel = 15,
-               Nmeas = 1,
-               pAnt = np.array([1.6,5.2,1.6]),
-               vAnt = np.array([1.0,0.0,0.0]),
-               comment = 'test',
-               author = 'mamadou'):
-        """ measure over a set of points from AntArray and store in h5
-
-        Parameters
-        ----------
-
-        A       : Aarray
-        _fileh5 : string
-            name of the h5 file containing calibration data
-        gcal    : calibration group
-        ical    : calibration index
-        vel     : int
-            scanner moving velocity
-        Nmeas   : int
-            Number of measurement
-        pAnt : np.array(,3)
-            Coordinates of non scanner antenna phase center
-        vAnt : np.array(,3)
-            Coordinates of non scanner antenna unitary vector
-
-        Examples
-        --------
-
-        """
-        # load the file containing the calibration data
-        if '.h5' not in _fileh5:
-            _fileh5 = _fileh5+'.h5'
-
-        Dh5 = Mesh5(_fileh5)
-        # open - sdata analysis
-        Dh5.open('r')
-        try:
-            ldataset = Dh5.f.keys()
-        except:
-            raise IOError('no calibration in h5 file')
-        lcal= [ eval(k.replace('cal','')) for k in ldataset if 'cal' in k ]
-        lcal=np.array(lcal)
-
-        if len(lcal)==1:
-           gcal = lcal[0]
-        else:
-            if gcal not  in lcal:
-                raise IOError('Error calibration : File does not exist')
-        Dh5.close()
-        # read the chosen calibration and save parameters in ini file for VNA
-
-        Dh5.readcal(gcal=gcal,ical=ical)
-        # update vna_config.ini
-        Dh5.saveini()
-        # end of read and save
-        # initialization of vna
-        vna = SCPI()
-        vna.load_config_vna()
-
-        Npoint = A.p.shape[1]
-        Nf = vna.Nf
-
-        laxes = []
-        if A.N[0]!=1:
-            laxes.append('x')
-        if A.N[1]!=1:
-            laxes.append('y')
-        if A.N[2]!=1:
-            laxes.append('z')
-        if A.N[3]!=1:
-            laxes.append('a')
-        lN =  [ A.N[k] for  k  in range(4) if A.N[k]!=1 ]
-
-        # end of initialization
-
-        Dh5.open('a')
-        try:
-            ldataset = Dh5.f.keys()
-        except:
-            ldataset = []
-        lmes = [ldataset[k] for  k in range(len(ldataset))  if 'mes' in ldataset[k]]
-        mesname = 'mes'+str(len(lmes)+1)
-
-        mes = Dh5.f.create_group(mesname)
-
-        mes.attrs['time'] = time.ctime()
-        mes.attrs['author'] = author
-        mes.attrs['comment'] = comment
-        mes.attrs['axes'] = laxes
-        mes.attrs['axesn'] = lN
-        mes.attrs['nr'] = self.Nr
-        mes.attrs['nt'] = self.Nt
-        mes.attrs['nmeas'] = Nmeas
-        mes.attrs['pant'] = pAnt
-        mes.attrs['vant'] = vAnt
-        #mes.attrs['anchors']= self.anchors
-        # here is the hard link between a measurement and its calibration 
-        mes.attrs['gcal'] = "cal"+str(gcal)
-        mes.attrs['ical'] = str(ical)
-
-
-        # Measure
-        ik = np.arange(A.p.shape[1])
-        ix,iy,iz,ia = k2xyza(ik,(A.N[0],A.N[1],A.N[2],A.N[3]))
-
-        # k iterates on the total number of points
-
-        for k in ik:
-            self.mv(pt=A.p[:,k],vel=vel)
-            # call vna for measurement
-
-            S = vna.getdata(Nmeas=Nmeas,Nr=self.Nr,Nt=self.Nt)
-
-            try:
-                mes.create_group(str(ix[k]))
-                try:
-                    mes[str(ix[k])].create_group(str(iy[k]))
-                    try: 
-                        mes[str(ix[k])][str(iy[k])].create_group(str(iz[k]))
-                        mes[str(ix[k])][str(iy[k])][str(iz[k])].create_dataset(str(ia[k]),(Nmeas,self.Nr,self.Nt,Nf),dtype=np.complex64, data = S)
-                    except:
-                        mes[str(ix[k])][str(iy[k])][str(iz[k])].create_dataset(str(ia[k]),(Nmeas,self.Nr,self.Nt,Nf),dtype=np.complex64, data = S)
-                except:
-                    try: 
-                        mes[str(ix[k])][str(iy[k])].create_group(str(iz[k]))
-                        mes[str(ix[k])][str(iy[k])][str(iz[k])].create_dataset(str(ia[k]),(Nmeas,self.Nr,self.Nt,Nf),dtype=np.complex64, data = S)
-                    except:
-                        mes[str(ix[k])][str(iy[k])][str(iz[k])].create_dataset(str(ia[k]),(Nmeas,self.Nr,self.Nt,Nf),dtype=np.complex64, data = S)
-            except:
-                try:
-                    mes[str(ix[k])].create_group(str(iy[k]))
-                    try: 
-                        mes[str(ix[k])][str(iy[k])].create_group(str(iz[k]))
-                        mes[str(ix[k])][str(iy[k])][str(iz[k])].create_dataset(str(ia[k]),(Nmeas,self.Nr,self.Nt,Nf),dtype=np.complex64, data = S)
-                    except:
-                        mes[str(ix[k])][str(iy[k])][str(iz[k])].create_dataset(str(ia[k]),(Nmeas,self.Nr,self.Nt,Nf),dtype=np.complex64, data = S)
-                except:
-                    try: 
-                        mes[str(ix[k])][str(iy[k])].create_group(str(iz[k]))
-                        mes[str(ix[k])][str(iy[k])][str(iz[k])].create_dataset(str(ia[k]),(Nmeas,self.Nr,self.Nt,Nf),dtype=np.complex64, data = S)
-                    except:
-                        mes[str(ix[k])][str(iy[k])][str(iz[k])].create_dataset(str(ia[k]),(Nmeas,self.Nr,self.Nt,Nf),dtype=np.complex64, data = S)
-
-            mes[str(ix[k])][str(iy[k])][str(iz[k])][str(ia[k])].attrs['pt']=A.p[:,k]
-            mes[str(ix[k])][str(iy[k])][str(iz[k])][str(ia[k])].attrs['pG']=self.pG
-            mes[str(ix[k])][str(iy[k])][str(iz[k])][str(ia[k])].attrs['pA']=self.pA
-
-        Dh5.close()
-
     def meas(self,
                A,
                _fileh5='test.h5',
@@ -1656,7 +1502,6 @@ class Scanner(PyLayers):
             Coordinates of non scanner antenna phase center
         vAnt : np.array(,3)
             Coordinates of non scanner antenna unitary vector
-        mulcal : multi antenna calibration file if required
 
         """
 
@@ -1682,7 +1527,7 @@ class Scanner(PyLayers):
             raise IOError('no calibration in h5 file')
 
         lcal= [ eval(k.replace('cal','')) for k in ldataset if 'cal' in k ]
-        lcal=np.array(lmimocal)
+        lcal=np.array(lcal)
 
         if len(lcal)==1:
            gcal = lcal[0]
@@ -1695,7 +1540,7 @@ class Scanner(PyLayers):
 
         Dh5.readcal(gcal=gcal,ical=ical)
         # update vna_config.ini
-        Dh5.saveini()
+        Dh5.saveini(ical=ical)
         # end of read and save
         # initialization of vna
         vna = SCPI()
@@ -1754,7 +1599,7 @@ class Scanner(PyLayers):
         for k in ik:
             self.mv(pt=A.p[:,k],vel=vel)
             # call vna for measurement
-            S = np.empty(Nmeas,self.Nr,self.Nt,self.Nf)
+            S = np.empty((Nmeas,self.Nr,self.Nt,Nf),dtype=complex)
             for iT in range(self.Nt):
                 switch.write_port(0,iT)
                 print iT
@@ -1762,7 +1607,7 @@ class Scanner(PyLayers):
                     print " ",iR
                     switch.write_port(1,iR)
                     S21 = vna.getdata(Nmeas=Nmeas)
-                    S[:,iR,iT,:]=S21
+                    S[:,iR,iT,:] = S21[:,0,0,:]
                     time.sleep(1)
 
 
