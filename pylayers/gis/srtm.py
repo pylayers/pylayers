@@ -17,6 +17,8 @@ import zipfile
 import array
 import math
 import pdb
+import matplotlib.pyplot as plt
+import numpy as np 
 
 class NoSuchTileError(Exception):
     """Raised when there is no tile for a region."""
@@ -176,6 +178,7 @@ class SRTMDownloader:
             only returns SRTM3 objects."""
         try:
             continent, filename = self.filelist[(int(lat), int(lon))]
+            print filename
         except KeyError:
             raise NoSuchTileError(lat, lon)
         if not os.path.exists(os.path.join(self.cachedir,filename)):
@@ -377,5 +380,13 @@ class parseHTMLDirectoryListing(HTMLParser):
 if __name__ == '__main__':
     downloader = SRTMDownloader()
     downloader.loadFileList()
-    tile = downloader.getTile(48,3)
+    latitude = raw_input("latitude : ")
+    longitude = raw_input("longitude : ")
+    tile = downloader.getTile(latitude,longitude)
+    I = np.array(tile.data).reshape(1201,1201)
+    n = np.where(I<0)
+    I[n]=0
+    plt.imshow(I)
+    plt.colorbar()
+    plt.show()
     #tile.getAltitudeFromLatLon(49.1234, 12.56789)

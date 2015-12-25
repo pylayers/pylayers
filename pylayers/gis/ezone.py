@@ -138,13 +138,16 @@ def dectile(prefix='N48W002'):
     if prefix[0]=='N':
         latmin = int(prefix[1:3])
         latmax = latmin+1
+    if prefix[0]=='S':
+        latmin = -int(prefix[1:3])
+        latmax = latmin+1
 
     if prefix[3]=='W':
-        lonmin = -int(prefix[5:7])
+        lonmin = -int(prefix[5:])
         lonmax = lonmin+1
 
     if prefix[3]=='E':
-        lonmin = int(prefix[5:7])
+        lonmin = int(prefix[5:])
         lonmax = lonmin+1
 
     return (lonmin,lonmax,latmin,latmax)
@@ -362,7 +365,7 @@ class Ezone(PyLayers):
             dictionnary of cities
         pll    : point lower left
         pur    : point upper right
-        m      : Basemap coordinates converter 
+        m      : Basemap coordinates converter
 
 
     """
