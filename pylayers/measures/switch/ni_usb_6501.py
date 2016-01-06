@@ -271,10 +271,10 @@ if __name__ == "__main__":
     tic = time.time()
 
     for k in range(8):
-        print "switch Transmiter :",k
+        print " Transmiter : select output number ",k
         switch.write_port(0,k)
         for  l in range(4):
-            print "switch Receiver :",l
+            print "Receiver : select output number ",l
             switch.write_port(1,l)
             time.sleep(1) #time waiting of the switch between antennas
     toc = time.time()
