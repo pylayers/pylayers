@@ -118,7 +118,7 @@ class SCPI(PyLayers):
             if not self.switch:
                 raise Exception("No device found")
 
-            self.switch.device
+            #self.switch.device
             self.switch.set_io_mode(0b11111111, 0b11111111, 0b00000000)
 
     def __repr__(self):
@@ -659,6 +659,7 @@ class SCPI(PyLayers):
         reattach=False
         if not switch:
             raise Exception("No device found")
+        switch.set_io_mode(0b11111111, 0b11111111, 0b00000000) #set the NI USB mode in order to use
 
 
         # store calibration vector in a hdf5 file
@@ -709,9 +710,9 @@ class SCPI(PyLayers):
 
         for iR in range(Mr):
             print "connect receiver :", iR +1
-            switch.write_port(1,iR)
+            switch.write_port(0,iR)
             for iT in range(Mt):
-                switch.write_port(0,iT)
+                switch.write_port(1,iT)
                 print "connect transmitter :", iT + 1
                 c = ""
                 while "g" not in c:
