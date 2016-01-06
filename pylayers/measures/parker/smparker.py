@@ -1601,11 +1601,11 @@ class Scanner(PyLayers):
             # call vna for measurement
             S = np.empty((Nmeas,self.Nr,self.Nt,Nf),dtype=complex)
             for iT in range(self.Nt):
-                switch.write_port(0,iT)
+                switch.write_port(1,iT)
                 print iT
                 for iR in range(self.Nr):
                     print " ",iR
-                    switch.write_port(1,iR)
+                    switch.write_port(0,iR)
                     S21 = vna.getdata(Nmeas=Nmeas)
                     S[:,iR,iT,:] = S21[:,0,0,:]
                     time.sleep(1)
