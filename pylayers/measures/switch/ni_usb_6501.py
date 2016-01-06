@@ -233,67 +233,53 @@ class NiUsb6501:
 #USAGE EXAMPLE
 if __name__ == "__main__":
 
-    switch = get_adapter()
+    import time
 
+    switch = get_adapter()
     if not switch:
         raise Exception("No device found")
 
-    #switch.device
-    #switch.set_io_mode(0b11111111, 0b11111111, 0b00000000)
+    
+    #
+    #very important : to use at the beginning of the initialization of the switch
+    #for each measurements, set up the NI USB 6501 mode : bit 1 means write and bit 0 read
+    #
+
+    switch.set_io_mode(0b11111111, 0b11111111, 0b00000000) 
+    
+    #
+    #SISO case
+    #
+    
+    #example for use the switch 1 to 4
+    #switch 1 to 4 : port 1 is allowed
+
+    switch.write_port(1, 1) #select output 2 of the switch 1-4
+    switch.write_port(1, 2) #select output 3 of the switch 1-4
+
+    #example for use the switch 1 to 8
+    #switch 1 to 8 : port 0 is allowed    
+
+    switch.write_port(0, 4) #select channel 5 of the switch 1-8
+    switch.write_port(0, 5) #select channel 6 of the switch 1-8
 
 
+    #
+    #MIMO case
+    #
+    
+    tic = time.time()
 
+    for k in range(8):
+        print "switch Transmiter :",k
+        switch.write_port(0,k)
+        for  l in range(4):
+            print "switch Receiver :",l
+            switch.write_port(1,l)
+            time.sleep(1) #time waiting of the switch between antennas
+    toc = time.time()
+    t = toc - tic
+    print "Measurement time (s) with switching :",t
 
     #print "Port 0",bin(switch.read_port(0))
     #print "Port 1",bin(switch.read_port(1))
-
-    #reattach=False
-
-    #if switch.device.is_kernel_driver_active(0):
-        #reattach = True
-        #switch.detach_kernel_driver(0)
-
-    #usb.util.dispose_resources(switch.device)
-
-    # It may raise USBError if there's e.g. no kernel driver loaded at all
-    #if reattach:
-        #switch.device.attach_kernel_driver(0)
-
-    # import time
-    # for k in range(8):
-    #     switch.write_port(0,k)
-    #     for  l in range(4):
-    #     #switch.write_port(0,0b00000000)
-    #         print k,l
-    #         switch.write_port(1,l)
-    #         time.sleep(1)
-
-    #dev.set_io_mode(0b11111111, 0b11111111, 0b00000000)
-    #dev.write_port(0, 0b00001111) # 3 bits needed to set up 8 antennas
-    #dev.write_port(1, 0b00000111) # 2 bits needed to set up 4 antennas
-    #dev.write_port(2, 0b00000000)
-
-    #dev.set_io_mode(0b00001111, 0b00000111, 0b00000000)
-
-
-    #if switch.device.is_kernel_driver_active(0):
-    #    switch.device.detach_kernel_driver(0)
-    
-    
-
-
-    #print "Port 2",bin(dev.read_port(2))
-    #dev.write_port(0, 0b00000001)
-    #dev.write_port(1, 0b00000001)
-
-    #pdb.set_trace()
-    #set IO : port (port 0, port 1, port 2)
-    #dev.set_io_mode(0b11111111, 0b11111111, 0b00000000)
-    #dev.write_port(0, 0b10111111)
-    #print bin(dev.read_port(0))
-    
-    #dev.write_port(0, 0b00000001)
-    #dev.write_port(1, 0b10101010)
-
-    #print bin(dev.read_port(1))
-    #print bin(dev.read_port(2))

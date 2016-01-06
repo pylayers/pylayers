@@ -16,6 +16,7 @@ import pylayers.signal.bsignal as bs
 import pylayers.antprop.channel as ch
 from pylayers.util import pyutil as pyu
 from pylayers.measures.exploith5 import Mesh5 
+import pylayers.measures.switch.ni_usb_6501 as sw
 # from  pylayers.measures.parker.smparker import *
 from time import sleep
 import seaborn as sns
@@ -96,7 +97,8 @@ class SCPI(PyLayers):
             if self._verbose:
                 print 'SCPI>> connect({:s}:{:d}) failed {:s}', format(host, port, e)
             else:
-                self.emulated = True
+                #self.emulated = True
+                self.emulated = False
 
         
         self.Nf   = 201
@@ -653,6 +655,10 @@ class SCPI(PyLayers):
         # set config
         # File from : ~/Pylayers_project/meas
 
+        switch = sw.get_adapter()
+        reattach=False
+        if not switch:
+            raise Exception("No device found")
 
 
         # store calibration vector in a hdf5 file
@@ -669,6 +675,7 @@ class SCPI(PyLayers):
         #       + a single channel calibration is saved in the measurement file
         #       + calibration variable parameters are read in _filecalh5
         #
+
         Mr = Nr
         Mt = Nt
         if (Nr==1) and (Nt==1):
@@ -699,10 +706,12 @@ class SCPI(PyLayers):
         cal = f.create_group(calname)
 
         tic = time.time()
-        
+
         for iR in range(Mr):
             print "connect receiver :", iR +1
+            switch.write_port(1,iR)
             for iT in range(Mt):
+                switch.write_port(0,iT)
                 print "connect transmitter :", iT + 1
                 c = ""
                 while "g" not in c:
