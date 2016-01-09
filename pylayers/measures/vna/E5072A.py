@@ -422,7 +422,7 @@ class SCPI(PyLayers):
             self.ident = 'emulated vna'
 
 
-    def getdata(self, chan=1,Nr=1, Nt=1, Nmeas=10,calibration=False):
+    def getdata(self, chan=1,Nr=1, Nt=1, Nmeas=10,calibration=False,seed=0):
         """ getdata from VNA
 
         Parameters
@@ -462,6 +462,8 @@ class SCPI(PyLayers):
                     tH = H[None,:]
         else:
             if not calibration:
+                np.random.seed(seed)
+                tau = 300 + 10*np.random.rand(Nr,Nt)
                 h = ch.TBchannel()
                 h.SalehValenzuela()
                 H = h.toFD(fGHz=self.fGHz)
@@ -469,9 +471,13 @@ class SCPI(PyLayers):
                 stn = np.sqrt(EH)/10.
                 N = stn*(np.random.rand(Nmeas,Nr,Nt,self.Nf)+1j*np.random.rand(Nmeas,Nr,Nt,self.Nf))
                 tH = H.y[:,None,None,:]+N
-                tH = tH*np.exp(-2*1j*np.pi*self.fGHz*300)[None,None,None,:]
+                tH = tH*np.exp(-2*1j*np.pi*self.fGHz[None,None,None,:]*tau[None,:,:,None])
             else:
-                tH = np.exp(-2*1j*np.pi*self.fGHz*300)[None,None,None,:]
+                np.random.seed(seed)
+                tau = 300 + 10*np.random.rand(Nr,Nt)
+                tH = np.exp(-2*1j*np.pi*self.fGHz[None,None,None,:]*tau[None,:,:,None])
+                dtau = 7*np.random.rand()
+                tH = tH* np.exp(-2*1j*np.pi*self.fGHz[None,None,None,:]*dtau)
 
         return tH
 

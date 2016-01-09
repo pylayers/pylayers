@@ -148,7 +148,7 @@ class SRTMDownloader:
                 self.filelist[self.parseFilename(filename)] = (
                             continent, filename)
 
-            print self.filelist
+            #print self.filelist
         # Add meta info
         self.filelist["server"] = self.server
         self.filelist["directory"] = self.directory

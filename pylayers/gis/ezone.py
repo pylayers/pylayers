@@ -143,11 +143,20 @@ def dectile(prefix='N48W002'):
         latmax = latmin+1
 
     if prefix[3]=='W':
-        lonmin = -int(prefix[5:])
+        st = prefix[4:]
+        if st[0]=='0':
+            lonmin = -int(st[1:])
+        else:
+            lonmin = -int(st)
         lonmax = lonmin+1
 
     if prefix[3]=='E':
-        lonmin = int(prefix[5:])
+        st = prefix[4:]
+        if st[0]=='0':
+            lonmin = int(st[1:])
+        else:
+            lonmin = int(st)
+
         lonmax = lonmin+1
 
     return (lonmin,lonmax,latmin,latmax)
@@ -340,9 +349,9 @@ class DEM(PyLayers):
 
         #im = ax.imshow(dem[ilat[0]:(ilat[-1]+1),ilon[0]:(ilon[-1]+1)],extent=(lonmin,lonmax,latmin,latmax))
         if kwargs['source']=='srtm':
-            im = ax.imshow(self.hgts,extent=(self.lonmin,self.lonmax,self.latmin,self.latmax),alpha=kwargs['alpha'])
+            im = ax.imshow(self.hgts,extent=(self.extent[0],self.extent[1],self.extent[2],self.extent[3]),alpha=kwargs['alpha'])
         if kwargs['source']=='aster':
-            im = ax.imshow(self.hgta,extent=(self.lonmin,self.lonmax,self.latmin,self.latmax),alpha=kwargs['alpha'])
+            im = ax.imshow(self.hgta,extent=(self.extent[0],self.extent[1],self.extent[2],self.extent[3]),alpha=kwargs['alpha'])
 
         # handling colorbar
         divider = make_axes_locatable(ax)
@@ -646,7 +655,8 @@ class Ezone(PyLayers):
                     'ha':30,
                     'hb':1.5,
                     'K':1.3333,
-                    'fGHz':.3}
+                    'fGHz':.3,
+                    'source':'srtm'}
 
         for key in defaults:
             if key not in kwargs:

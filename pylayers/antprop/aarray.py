@@ -2,8 +2,7 @@
 import numpy as np
 import pylayers.antprop.antenna as ant
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-import pdb
+import doctest
 r"""
 
 .. currentmodule:: pylayers.antprop.aarray
@@ -80,9 +79,9 @@ class Array(ant.Pattern):
 
     def __repr__(self):
         st = ''
-        st = st + 'points :' + str(p) + '\n'
-        st = st + 'fmin :' + str(fGHz[0]) + '\n'
-        st = st + 'fmax :' + str(fGHz[1]) + '\n'
+        st = st + 'points :' + str(self.p) + '\n'
+        st = st + 'fmin :' + str(self.fGHz[0]) + '\n'
+        st = st + 'fmax :' + str(self.fGHz[1]) + '\n'
         return(st)
 
     def show(self):
@@ -244,25 +243,24 @@ class AntArray(Array,ant.Antenna):
 
 
 def k2xyza(ik,sh):
-    """ 
+    """
 
     Parameters
     ----------
 
-    ik : full index starting at 0 
+    ik : full index starting at 0
     sh : list of [Nx,Ny,Nz,Na]
 
     Returns
     -------
-    
-    ix , iy , iz , ia : index starting at 0  
+
+    ix , iy , iz , ia : index starting at 0
 
 
     """
     assert(len(sh)==4)
     assert(len(ik)==np.prod(np.array(sh)))
 
-    Nx = sh[0]
     Ny = sh[1]
     Nz = sh[2]
     Na = sh[3]
