@@ -46,7 +46,6 @@ def get_adapter(**kwargs):
     if not device:
         print("Device not found")
 
-
     return NiUsb6501(device)
 
 #def find_adapters(**kwargs):
@@ -105,9 +104,23 @@ class NiUsb6501:
         
         #if reattach:
             #self.device.attach_kernel_driver(0)
+        
 
-    #def __del__(self):
-        #print "Destructor called"
+    def __repr__(self):
+        
+        switch = get_adapter()
+        #self.device = usb.core.find(idVendor=ID_VENDOR, idProduct=ID_PRODUCT)
+        #device = self.device
+        st = ''
+        st = st + '--------------------------------------'+'\n'
+        st = st + '            NI USB PARAMETERS         '+'\n'
+        st = st + '--------------------------------------'+'\n'
+        st = st + "product              : " + str(switch.device.product)+'\n'
+        st = st + "serial number        : " + str(switch.device.serial_number)+'\n'
+        st = st + "size packet (bytes)  : " + str(switch.device.bMaxPacketSize0)+'\n'
+        
+
+        return(st)
 
     def set_io_mode(self, port0, port1, port2):
         """
@@ -232,12 +245,13 @@ class NiUsb6501:
 
 #USAGE EXAMPLE
 if __name__ == "__main__":
+    sw = get_adapter()
 
-    import time
+    #import time
 
-    switch = get_adapter()
-    if not switch:
-        raise Exception("No device found")
+    #switch = get_adapter()
+    #if not switch:
+        #raise Exception("No device found")
 
     
     #
@@ -245,7 +259,7 @@ if __name__ == "__main__":
     #for each measurements, set up the NI USB 6501 mode : bit 1 means write and bit 0 read
     #
 
-    switch.set_io_mode(0b11111111, 0b11111111, 0b00000000) 
+    #switch.set_io_mode(0b11111111, 0b11111111, 0b00000000) 
     
     #
     #SISO case
@@ -254,32 +268,32 @@ if __name__ == "__main__":
     #example for use the switch 1 to 4
     #switch 1 to 4 : port 1 is allowed
 
-    switch.write_port(1, 1) #select output 2 of the switch 1-4
-    switch.write_port(1, 2) #select output 3 of the switch 1-4
+    #switch.write_port(1, 1) #select output 2 of the switch 1-4
+    #switch.write_port(1, 2) #select output 3 of the switch 1-4
 
     #example for use the switch 1 to 8
     #switch 1 to 8 : port 0 is allowed    
 
-    switch.write_port(0, 4) #select channel 5 of the switch 1-8
-    switch.write_port(0, 5) #select channel 6 of the switch 1-8
+    #switch.write_port(0, 4) #select channel 5 of the switch 1-8
+    #switch.write_port(0, 5) #select channel 6 of the switch 1-8
 
 
     #
     #MIMO case
     #
     
-    tic = time.time()
+    # tic = time.time()
 
-    for k in range(8):
-        print " Transmiter : select output number ",k
-        switch.write_port(0,k)
-        for  l in range(4):
-            print "Receiver : select output number ",l
-            switch.write_port(1,l)
-            time.sleep(1) #time waiting of the switch between antennas
-    toc = time.time()
-    t = toc - tic
-    print "Measurement time (s) with switching :",t
+    # for k in range(8):
+    #     print " Transmiter : select output number ",k
+    #     switch.write_port(0,k)
+    #     for  l in range(4):
+    #         print "Receiver : select output number ",l
+    #         switch.write_port(1,l)
+    #         time.sleep(1) #time waiting of the switch between antennas
+    # toc = time.time()
+    # t = toc - tic
+    # print "Measurement time (s) with switching :",t
 
     #print "Port 0",bin(switch.read_port(0))
     #print "Port 1",bin(switch.read_port(1))

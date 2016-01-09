@@ -38,4 +38,3 @@ grid = AntArray(N=[1,2,2,1],dm=[0.075,0.075,0.075,0])
 scanner.meas(grid,_fileh5=_filemesh5,gcal=1,ical=7)
 #A3 = AntArray(N=[8,8,4],dm=[0.075,0.075,0.075])
 #scanner.meash5(A3, _fileh5=_fileh5,gcal=1,ical=7)
-#

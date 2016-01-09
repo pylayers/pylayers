@@ -17,7 +17,7 @@ import pylayers.antprop.channel as ch
 from pylayers.util import pyutil as pyu
 from pylayers.measures.exploith5 import Mesh5 
 import pylayers.measures.switch.ni_usb_6501 as sw
-# from  pylayers.measures.parker.smparker import *
+#from  pylayers.measures.parker.smparker import *
 from time import sleep
 import seaborn as sns
 import os
@@ -462,6 +462,7 @@ class SCPI(PyLayers):
                     tH = np.vstack((tH, H[None,:]))
                 except:
                     tH = H[None,:]
+            tH = tH[:,None,None,:]
         else:
             if not calibration:
                 h = ch.TBchannel()
@@ -656,7 +657,6 @@ class SCPI(PyLayers):
         # File from : ~/Pylayers_project/meas
 
         switch = sw.get_adapter()
-        reattach=False
         if not switch:
             raise Exception("No device found")
         switch.set_io_mode(0b11111111, 0b11111111, 0b00000000) #set the NI USB mode in order to use
@@ -708,17 +708,17 @@ class SCPI(PyLayers):
 
         tic = time.time()
 
-        for iR in range(Mr):
-            print "connect receiver :", iR +1
-            switch.write_port(0,iR)
-            for iT in range(Mt):
-                switch.write_port(1,iT)
-                print "connect transmitter :", iT + 1
+        for iT in range(Mt):
+            print "connect transmitter :", iT +1
+            switch.write_port(0,iT)
+            for iR in range(Mr):
+                switch.write_port(1,iR)
+                print "connect receiver :", iR + 1
                 c = ""
                 while "g" not in c:
                     c = raw_input("Hit g key ")
                 for k in dcal:
-                    time.sleep(2)
+                    time.sleep(1)
                     print "---------------------------------------------------------------------"
                     print "                 Configuration Parameters                            "
                     print   dcal[k]
@@ -734,10 +734,9 @@ class SCPI(PyLayers):
                             self.avrg(navrg=dcal[k]['navrg'],cmd='setavrg')
                             print "set number of average :",dcal[k]['navrg']
 
-                    # get Nmeas calibration vector
+                    #get Nmeas calibration vector
                     #pdb.set_trace()
                     Dmeas = self.getdata(chan=1,Nmeas=dcal[k]['nmeas'],calibration=True)
-
                     if ((iR==0) and (iT==0)):
                         cal.create_dataset(k, (dcal[k]['nmeas'], Mr, Mt, self.Nf), dtype=np.complex64)
                         cal[k].attrs['fminghz']   = self.fGHz[0]
