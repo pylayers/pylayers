@@ -863,7 +863,7 @@ class Bsignal(PyLayers):
             Nr = self.y.shape[1]
             Nt = self.y.shape[2]
             fig,ax = plt.subplots(Nr,Nt)
-            for k in range(Nt):
+            for k in range(Nr):
                 for l in range(Nt):
                     yx = self.y[idx[0],k,l,u]
                     fig,a = mulcplot(self.x[u],yx*conversion,fig=fig,ax=ax[k,l],**args)
