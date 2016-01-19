@@ -1607,42 +1607,39 @@ class Scanner(PyLayers):
         mes.attrs['gcal'] = "cal"+str(gcal)
         mes.attrs['ical'] = str(ical)
 
+        # Metadata of measurement run (max(imes)+1) are stored
+        Dh5.close()
 
-        # Measure
+        # Handling of spatial indexes and measurement number
         ik = np.arange(A.p.shape[1])
         ix,iy,iz,ia = k2xyza(ik,(A.N[0],A.N[1],A.N[2],A.N[3]))
 
         # k iterates on the total number of points
-
+        
         for k in ik:
+            # move the scanner to next position k
             self.mv(pt=A.p[:,k],vel=vel)
-            #print "Position : ",k
+            # Waiting for a while
             time.sleep(1)
             # call vna for measurement
             tic = time.time()
-            #lt = []
+            # Allocating required memory for storing data
             S = np.empty((Nmeas,self.Nr,self.Nt,Nf),dtype=complex)
+            # Start of double loop over transmitting and receiving antennas
             for iT in range(self.Nt):
-                #t1 = time.time()
                 switch.write_port(1,iT)
-                #lt.append([t1])
-                #print "transmitter select :", iT +1
                 for iR in range(self.Nr):
-                    #t2 = time.time()
-                    #print "receiver select :",iR + 1
                     switch.write_port(0,iR)
-                    #vna.trigger(cmd='go')
-                    #vna.trigger(cmd='test')
-                    #t3 = time.time()
                     time.sleep(0.1)
+
                     S21 = vna.getdata(Nmeas=Nmeas)
-                    t4 = time.time()
+                   
                     S[:,iR,iT,:] = S21[:,0,0,:]
-                    #lt.append([t2,t3,t4])
+                    
+            # saving the MIMO matrix in append mode
 
-            toc = time.time()
-            print "Time measurement (s) : ",toc-tic
-
+            Dh5.open('a')
+            mes = Dh5.f[mesname]
             try:
                 mes.create_group(str(ix[k]))
                 try:
@@ -1677,9 +1674,9 @@ class Scanner(PyLayers):
             mes[str(ix[k])][str(iy[k])][str(iz[k])][str(ia[k])].attrs['pg']=self.pG  
             mes[str(ix[k])][str(iy[k])][str(iz[k])][str(ia[k])].attrs['pa']=self.pA    
         
-
-        Dh5.close()
-        #return(lt)
+            Dh5.close()
+            # end saving data
+        
 
 if __name__=="__main__":
     doctest.testmod()

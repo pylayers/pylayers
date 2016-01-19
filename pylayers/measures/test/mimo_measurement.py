@@ -17,29 +17,42 @@ from pylayers.antprop.aarray import *
 #          comment='test MIMO calibration RF without nf=1601')
 
 
-_filecalh5 = 'MIMO_8_4_14janv_V2'
+Nr = input ("Number of receiving antennas : ")
+Nt = input ("Number of transmitting antennas : ")
+author = 'bu'
+comment = 'no comment'
+_filecalh5 = 'calMIMO_'+str(Nr)+'_'+str(Nt)
+_filemesh5 = 'mesMIMO_'+str(Nr)+'_'+str(Nt)
 
-_filemesh5 = 'mes_8_4_15janv'
-mimocal = False
-calibration=False
-measure=True
+emulated = True
+mimocal = True
+calibration = True
+measure = True
 
 if mimocal:
-	#vna = SCPI()
-    vna.calibh5(Nr = 4,
-          Nt = 8,
+    print "Phase 1: MIMO full calibration"
+    #author = input('author : ')
+    #comment  = input('comment : ')
+    vna = SCPI(emulated=emulated)
+    vna.calibh5(Nr = Nr,
+          Nt = Nt,
           _filecalh5=_filecalh5,
           _filecal='cal_config.ini',
           _filevna='vna_config.ini',
           typ='full',
-          cables=['CN27','CN29','RF-OPT','OPT-RF','CN3'],
-          author='Mamadou',
-          comment='MIMO calibration RF-OPT without nf=1601 swept mode')
+          cables = ['CN27','CN29','RF-OPT','OPT-RF','CN3'],
+          author = author,
+          comment = comment)
+    vna.close()
+
 
 if calibration:
-	#vna = SCPI()
-    vna.calibh5(Nr = 4,
-             Nt = 8,
+    print "Phase 2 : MIMO single channel calibration"
+    #author = input('author : ')
+    #comment  = input('comment : ')
+    vna = SCPI(emulated=emulated)
+    vna.calibh5(Nr = Nr,
+             Nt = Nt,
              _filecalh5=_filecalh5,
              _filemesh5=_filemesh5,
              _filecal='cal_config.ini',
@@ -47,12 +60,16 @@ if calibration:
              typ='single',
              gcalm = '1',
              cables=['CN27','CN29','RF-OPT','OPT-RF','CN3'],
-             author='Mamadou',
-             comment='MIMO calibration RF-OPT  801 pt')
+             author=author,
+             comment=comment)
+    vna.close()
 if measure:
+    print "Phase 3 : MIMO single channel calibration"
     print  "Measure started !"
-# 2. Initialize the scanner
-    scanner = Scanner(Nt=8,Nr=4)
+    #author = input('author : ')
+    #comment  = input('comment : ')
+    # 2. Initialize the scanner
+    scanner = Scanner(Nr=Nr,Nt=Nt)
     #A1 = AntArray(N=[20,1,1,1],dm=[0.01,0,0])
 
     A1 = AntArray(N=[1000,1,1,1],max=[0.35,0,0,0],min=[-0.35,0,0,0],mode='grid')

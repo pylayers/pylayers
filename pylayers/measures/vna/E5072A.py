@@ -67,7 +67,7 @@ class SCPI(PyLayers):
     _verbose = False
     _timeout = 1
 
-    def __init__(self, port=PORT, timeout=None, verbose=False,Nr=1,Nt=1):
+    def __init__(self, port=PORT, timeout=None, verbose=False,Nr=1,Nt=1,emulated = False):
         """
         Parameters
         ----------
@@ -78,7 +78,7 @@ class SCPI(PyLayers):
         verbose : boolean
 
         """
-        self.emulated = False
+        self.emulated = emulated
         if "VNA_IP" in os.environ:
             host = os.environ["VNA_IP"]
         else:
@@ -97,9 +97,9 @@ class SCPI(PyLayers):
             if self._verbose:
                 print 'SCPI>> connect({:s}:{:d}) failed {:s}', format(host, port, e)
             else:
+                pass
                 #self.emulated = True
-                self.emulated = False
-
+            
         
         self.Nf   = 201
         self.getIdent()
@@ -450,7 +450,7 @@ class SCPI(PyLayers):
             except socket.timeout:
                 return ""
         else:
-            self.ident = 'emulated vna'
+            self.ident = 'E5072A emulated vna'
 
 
     def getdata(self, chan=1,Nr=1, Nt=1, Nmeas=10,calibration=False,seed=0):
