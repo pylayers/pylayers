@@ -455,7 +455,9 @@ class Pattern(PyLayers):
         M = mBr.max()
 
         # vector spherical harmonics basis functions
+
 #:x        V, W = VW(lBr, mBr, theta, phi)
+
         V, W = VW(lBr, mBr, theta, phi)
 
         Fth = np.dot(Br, np.real(V.T)) - \

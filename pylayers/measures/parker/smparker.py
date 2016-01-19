@@ -1208,10 +1208,15 @@ class Scanner(PyLayers):
         >>> s.a[1].name_of_function()
         """
 
+        # defaults = {'time':True,
+        #             'Nt' : 8,
+        #             'Nr' : 4,
+        #             'emulated' :True}
+
         defaults = {'time':True,
-                    'Nt' : 4,
-                    'Nr' : 8,
-                    'emulated' :True}
+                    'Nt' : 8,
+                    'Nr' : 4,
+                    'emulated' :False}
 
         for k in defaults:
             if k not in kwargs:
@@ -1267,7 +1272,7 @@ class Scanner(PyLayers):
             #beware TBD from anchors
 
         # Coordinate of Array Scanner Point in home frame
-        self.A = np.array([0,0,0.1])
+        self.A = np.array([0,0,0.0])
         self.upd_pos(np.array([0,0,0]))
         self.ang =  0.
         # Limits activated on axes X and Y    (mask =0 )
@@ -1337,8 +1342,6 @@ class Scanner(PyLayers):
 
         return(st)
 
-
-
     def check_pa(self):
         """
         """
@@ -1360,6 +1363,13 @@ class Scanner(PyLayers):
 
     def reset(self):
         """ reset and enpower all axes
+
+        Examples
+        --------
+        >>> from pylayers.measures.parker import smparker 
+        >>> S = smparker.Scanner()
+        >>> S.reset()
+
         """
         tic = time.time()
         for k in range(1,len(self.a)):
@@ -1378,6 +1388,13 @@ class Scanner(PyLayers):
         init  : boolean (False)
         vel   : velocity (10)
         frame : landmark {'H'|'A'|'G'}
+        
+        Examples
+        --------
+        >>> from pylayers.measures.parker import smparker 
+        >>> S = smparker.Scanner()
+        >>> S.home('go')
+
 
         """
         for k in range(1,len(self.a)):
@@ -1415,6 +1432,7 @@ class Scanner(PyLayers):
         ----------
 
         pt : target position (pt=np.array([0,0,0]))
+            for axe z, if value is positif (+), it moves up and else moves down
         at : target angle
         frame : {'G'|'H'|'A'}
             determine in which frame is expressed pt (default A)
@@ -1478,7 +1496,7 @@ class Scanner(PyLayers):
                gcal = 1,
                ical = 1,
                vel = 15,
-               Nmeas = 100,
+               Nmeas = 1,
                pAnt = np.array([1.6,5.2,1.6]),
                vAnt = np.array([1.0,0.0,0.0]),
                comment = 'test',
@@ -1561,8 +1579,6 @@ class Scanner(PyLayers):
 
         lN =  [ A.N[k] for  k  in range(4) if A.N[k]!=1 ]
 
-
-
         Dh5.open('a')
         try:
             ldataset = Dh5.f.keys()
@@ -1570,7 +1586,9 @@ class Scanner(PyLayers):
             ldataset = []
 
         lmes = [ldataset[k] for  k in range(len(ldataset))  if 'mes' in ldataset[k]]
-        mesname = 'mes'+str(len(lmes)+1)
+        imes = [eval(k.replace('mes','')) for k in lmes]
+        mesname = 'mes'+str((max(imes)+1))
+        
 
         mes = Dh5.f.create_group(mesname)
 
@@ -1598,18 +1616,32 @@ class Scanner(PyLayers):
 
         for k in ik:
             self.mv(pt=A.p[:,k],vel=vel)
+            #print "Position : ",k
+            time.sleep(1)
             # call vna for measurement
+            tic = time.time()
+            #lt = []
             S = np.empty((Nmeas,self.Nr,self.Nt,Nf),dtype=complex)
             for iT in range(self.Nt):
+                #t1 = time.time()
                 switch.write_port(1,iT)
-                print iT
+                #lt.append([t1])
+                #print "transmitter select :", iT +1
                 for iR in range(self.Nr):
-                    print " ",iR
+                    #t2 = time.time()
+                    #print "receiver select :",iR + 1
                     switch.write_port(0,iR)
+                    #vna.trigger(cmd='go')
+                    #vna.trigger(cmd='test')
+                    #t3 = time.time()
+                    time.sleep(0.1)
                     S21 = vna.getdata(Nmeas=Nmeas)
+                    t4 = time.time()
                     S[:,iR,iT,:] = S21[:,0,0,:]
-                    time.sleep(1)
+                    #lt.append([t2,t3,t4])
 
+            toc = time.time()
+            print "Time measurement (s) : ",toc-tic
 
             try:
                 mes.create_group(str(ix[k]))
@@ -1647,41 +1679,13 @@ class Scanner(PyLayers):
         
 
         Dh5.close()
-
-
-    
+        #return(lt)
 
 if __name__=="__main__":
     doctest.testmod()
-    #S = Scanner()
-    #vna =E()
-
-    #S.a[axe]
-
 
     #run smparker
     #S=smparker.Scanner()
     #from pylayers.antprop.aarrray import *
     #A=AntArray()
-    #S.array(A)
-
-
-#    port = gettty()
-#    X = Axes(1,'x',typ='t',scale=12800,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
-#    Y = Axes(2,'y',typ='t',scale=22800,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
-#    X.limits(cmd='set',mask=0)
-#    Y.limits(cmd='set',mask=0)
-#    R = Axes(3,'r',typ='r',scale=2111.111111111111,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
-#    Z = Axes(4,'z',typ='t',scale=2111.111111111111,ser=Serial(port=gettty(),baudrate=9600,timeout=0.05))
-#    Z.limits(cmd='set',mask=3)
-#    R.limits(cmd='set',mask=3)
-#    # pass
-#    #s = Scanner('/dev/ttyUSB0')
-#    #s = Scanner('/dev/ttyUSB2')
-#    #s = Scanner('/dev/ttyUSB1')
-#    #sm.fromfile('prog1')
-#    #sm.fromfile('AY')
-#    #Sc[1].com('ON')
-#    #st = sm.com(1,'LIMITS',(0,1,1))
-#    #st = sm.com(1,'1D-4000')
-#    #st = sm.com(1,'G')
+    #S.aarray(A)

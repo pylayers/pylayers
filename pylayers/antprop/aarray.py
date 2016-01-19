@@ -189,10 +189,13 @@ class AntArray(Array,ant.Antenna):
         defaults = {'tarr': 'UA',
                     'N'    : [8,1,1,1],
                     'dm'   : [0.075,0,0,0],
+                    'min'  : [0,0,0,0],
+                    'max'  : [0,0,0,0],
                     'S'    : [],
                     'pattern' : True,
                     #'typant':'S1R1.vsh3',
-                    'typant':'Gauss'
+                    'typant':'Gauss',
+                    'mode' : 'grid'
                     }
 
 
@@ -202,9 +205,18 @@ class AntArray(Array,ant.Antenna):
 
         self.tarr = kwargs.pop('tarr')
         self.N  = np.array(kwargs.pop('N'))
+        self.max  = np.array(kwargs.pop('max'))
+        self.min  = np.array(kwargs.pop('min'))
         self.Na = np.prod(self.N)  # number of antennas
         self.dm = np.array(kwargs.pop('dm'))
         self.typant = kwargs.pop('typant')
+
+        if kwargs['mode'] == 'grid':
+            for  k in range(len(self.N)):
+                if self.N[k]==1:
+                    self.dm[k]=self.max[k]
+                else:
+                    self.dm[k]= (self.max[k]-self.min[k])/(self.N[k]-1.0)
 
         if type(self.typant)==list:
             self.sameAnt=False

@@ -90,6 +90,7 @@ import scipy as sp
 import pylab as plt
 import struct as stru
 import scipy.stats as st
+import numpy.fft as fft
 import pylayers.util.pyutil as pyu
 import pylayers.signal.bsignal as bs
 import pylayers.util.geomutil as geu
