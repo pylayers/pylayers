@@ -14,8 +14,9 @@ DL.b=np.array([767,1114,1.5])
 DL.fGHz=np.arange(2,11,0.1)
 DL.wav = wvf.Waveform(fcGHz=5,bandGHz=3)
 # DL.eval(diffraction=True,force=True,ra_vectorized=True,alg=20152,si_reverb=2)
-DL.eval(diffraction=True,force=True,ra_vectorized=False,alg=5,cutoff=2,applywav=True)
+ra_vectorized = False
 
+DL.eval(diffraction=True,force=True,ra_vectorized=ra_vectorized,alg=5,cutoff=2,applywav=True)
 DL2=DLink(L='defstr.ini')
 
 DL2.a=np.array([759,1114,1.0])
@@ -26,10 +27,11 @@ DL2.wav = wvf.Waveform(fcGHz=5,bandGHz=3)
 # #!!never use the following part except for this particular test file !!!!
 # ##########################################################################
 DL2.load(DL2.Si,DL.dexist['sig']['grpname'])
-r = DL2.Si.raysv(DL2.a,DL2.b)
+if ra_vectorized:
+    r = DL2.Si.raysv(DL2.a,DL2.b)
+else:
+    r = DL2.Si.rays(DL2.a,DL2.b)
 rr=r.reciprocal()
-import ipdb
-ipdb.set_trace()
 DL2.R = rr.to3D(DL2.L)
 DL2.R.locbas(DL2.L)
 DL2.R.fillinter(DL2.L)
