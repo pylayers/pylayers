@@ -683,23 +683,23 @@ class DLink(Link):
 
 
     def initfreq(self):
-        """ Automatic freq determination from 
+        """ Automatic freq determination from
             Antennas
         """
         fa = self.Aa.fGHz
         fb = self.Ab.fGHz
-
-        # step
+    
+        if len(fa)==0 or len(fb)==0:
+            raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz") 
         try:
             sa = fa[1]-fa[0]
         except: #single frequency
             sa = fa[0]
+            # step
         try:
             sb = fb[1]-fb[0]
         except:
             sb = fb[0]
-
-
 
         minf = max(min(fa),min(fb))
         maxf = min(max(fa),max(fb))

@@ -15,5 +15,4 @@ rst: $(RST)
 
 %.rst: %.ipynb
 	runipy -o --skip-exception $<  >/dev/null 2> /dev/null
-	ipython nbconvert $< --to rst 
-	rm $<
+	jupyter nbconvert $< --to rst 

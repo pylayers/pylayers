@@ -5613,7 +5613,7 @@ class Signature(object):
         #return(typ)
 
 
-    def image_old(self, tx):
+    def image(self, tx):
         """ compute the tx's images with respect to the signature segments
 
         Parameters
@@ -5880,6 +5880,7 @@ class Signature(object):
         # necessary for image calculation
         self.ev(L)
         # calculates images from pTx
+
         M = self.image(pTx)
         #print self
         #if np.array_equal(self.seq,np.array([5,7,4])):

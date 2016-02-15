@@ -1,6 +1,6 @@
 from pylayers.antprop.rays import *
 from pylayers.gis.layout import *
-from pylayers.antprop.signature import *
+from pylayers.antprop.signature import Signatures
 import pylayers.signal.bsignal as bs
 import pylayers.signal.waveform as wvf 
 from pylayers.simul.simulem import *
@@ -30,7 +30,7 @@ wav = wvf.Waveform(fcGHz=5,bandGHz=3)
 tic = time.time()
 Si1 = Signatures(S.L,Ctx,Crx)
 #Si1.run4(cutoff=5,algo='old')
-Si1.run5()
+Si1.run5(diffraction=False)
 toc = time.time()
 print "signature ",toc-tic
 tic = time.time()

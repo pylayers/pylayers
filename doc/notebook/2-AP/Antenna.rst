@@ -24,7 +24,9 @@ module which is placed in the ``antprop`` module.
 .. parsed-literal::
 
     WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
-
+    /home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/__init__.py:872: UserWarning: axes.color_cycle is deprecated and replaced with axes.prop_cycle; please use the latter.
+      warnings.warn(self.msg_depr % (key, alt_key))
+    WARNING: 
 
 .. parsed-literal::
 
@@ -33,7 +35,7 @@ module which is placed in the ``antprop`` module.
 
 .. parsed-literal::
 
-    WARNING: pylab import has clobbered these variables: ['plt', 'mlab', 'rc']
+    pylab import has clobbered these variables: ['plt', 'mlab', 'f', 'rc']
     `%matplotlib` prevents importing * from pylab and numpy
 
 
@@ -110,11 +112,11 @@ different type
 
 .. parsed-literal::
 
-    Number of antenna in .vsh3 format :  66
-    Number of antenna in .sh3 format :  56
-    ['S1R1.vsh3', 'S1R10.vsh3', 'S1R11.vsh3', 'S1R12.vsh3', 'S1R13.vsh3']
-    ['3GPP_AnkleLeft_7.sh3', '3GPP_AnkleRight_7.sh3', '3GPP_BackCenter_7.sh3', '3GPP_BackCenter_8.sh3', '3GPP_ElbowLeft_7.sh3']
-    ['S1R1.mat']
+    Number of antenna in .vsh3 format :  2
+    Number of antenna in .sh3 format :  4
+    ['S1R1.vsh3', 'defant.vsh3']
+    ['S17R1.sh3', 'S17R2m.sh3', 'S1R1.sh3', 'S2R2.sh3']
+    []
 
 
 As already mentionned, the radiation pattern of the antenna has not yet
@@ -201,10 +203,14 @@ degree) is specified the diagram is given as a function of :math:`\phi`
 
     f = plt.figure(figsize=(15,15))
     a1 = f.add_subplot(121,polar=True)
-    f1,a1 = A.polar(fGHz=[3,4,5.6],phd=0,GmaxdB=5,fig=f,ax=a1)
+    f1,a1 = A.plotG(fGHz=[3,4,5.6],phd=0,GmaxdB=5,fig=f,ax=a1)
     a2 = f.add_subplot(122,polar=True)
-    f2,a2 = A.polar(fGHz=[3,4,5.6],thd=90,GmaxdB=5,fig=f,ax=a2)
+    f2,a2 = A.plotG(fGHz=[3,4,5.6],thd=90,GmaxdB=5,fig=f,ax=a2)
     plt.tight_layout()
+
+
+
+.. image:: Antenna_files/Antenna_27_0.png
 
 
 ::
@@ -212,31 +218,54 @@ degree) is specified the diagram is given as a function of :math:`\phi`
 
     ---------------------------------------------------------------------------
 
-    AttributeError                            Traceback (most recent call last)
+    RuntimeError                              Traceback (most recent call last)
 
-    <ipython-input-8-6ad8bdbb6278> in <module>()
-          1 f = plt.figure(figsize=(15,15))
-          2 a1 = f.add_subplot(121,polar=True)
-    ----> 3 f1,a1 = A.polar(fGHz=[3,4,5.6],phd=0,GmaxdB=5,fig=f,ax=a1)
+    <ipython-input-8-49cdf02bf2fa> in <module>()
+          3 f1,a1 = A.plotG(fGHz=[3,4,5.6],phd=0,GmaxdB=5,fig=f,ax=a1)
           4 a2 = f.add_subplot(122,polar=True)
-          5 f2,a2 = A.polar(fGHz=[3,4,5.6],thd=90,GmaxdB=5,fig=f,ax=a2)
+    ----> 5 f2,a2 = A.plotG(fGHz=[3,4,5.6],thd=90,GmaxdB=5,fig=f,ax=a2)
+          6 plt.tight_layout()
 
 
-    AttributeError: 'Antenna' object has no attribute 'polar'
+    /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/antenna.pyc in plotG(self, **kwargs)
+       1109 
+       1110         if kwargs['polar']:
+    -> 1111             rline1, rtext1 = plt.rgrids(t1, t2)
+       1112             #ax.set_rmax(t1[-1])
+       1113             #ax.set_rmin(t1[0])
+
+
+    /home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/pyplot.pyc in rgrids(*args, **kwargs)
+       1775     ax = gca()
+       1776     if not isinstance(ax, PolarAxes):
+    -> 1777         raise RuntimeError('rgrids only defined for polar axes')
+       1778     if len(args)==0:
+       1779         lines = ax.yaxis.get_gridlines()
+
+
+    RuntimeError: rgrids only defined for polar axes
 
 
 
-.. image:: Antenna_files/Antenna_27_1.png
+.. image:: Antenna_files/Antenna_27_2.png
 
 
 .. code:: python
 
     f = plt.figure(figsize=(15,15))
     a1 = f.add_subplot(121)
-    f1,a1 = A.polar(fGHz=[3,4,5.6],phd=0,GmaxdB=5,fig=f,ax=a1,polar=False)
+    f1,a1 = A.plotG(fGHz=[3,4,5.6],phd=0,GmaxdB=5,fig=f,ax=a1,polar=False)
     a2 = f.add_subplot(122)
-    f2,a2 = A.polar(fGHz=[3,4,5.6],thd=90,GmaxdB=5,fig=f,ax=a2,polar=False)
+    f2,a2 = A.plotG(fGHz=[3,4,5.6],thd=90,GmaxdB=5,fig=f,ax=a2,polar=False)
     plt.tight_layout()
+
+
+
+.. image:: Antenna_files/Antenna_28_0.png
+
+
+
+.. image:: Antenna_files/Antenna_28_1.png
 
 
 ::
@@ -244,21 +273,45 @@ degree) is specified the diagram is given as a function of :math:`\phi`
 
     ---------------------------------------------------------------------------
 
-    AttributeError                            Traceback (most recent call last)
+    ValueError                                Traceback (most recent call last)
 
-    <ipython-input-9-792ccb0daa6e> in <module>()
-          1 f = plt.figure(figsize=(15,15))
-          2 a1 = f.add_subplot(121)
-    ----> 3 f1,a1 = A.polar(fGHz=[3,4,5.6],phd=0,GmaxdB=5,fig=f,ax=a1,polar=False)
+    <ipython-input-9-d57b1501e535> in <module>()
           4 a2 = f.add_subplot(122)
-          5 f2,a2 = A.polar(fGHz=[3,4,5.6],thd=90,GmaxdB=5,fig=f,ax=a2,polar=False)
+          5 f2,a2 = A.plotG(fGHz=[3,4,5.6],thd=90,GmaxdB=5,fig=f,ax=a2,polar=False)
+    ----> 6 plt.tight_layout()
+    
+
+    /home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/pyplot.pyc in tight_layout(pad, h_pad, w_pad, rect)
+       1377 
+       1378     fig = gcf()
+    -> 1379     fig.tight_layout(pad=pad, h_pad=h_pad, w_pad=w_pad, rect=rect)
+       1380 
+       1381 
 
 
-    AttributeError: 'Antenna' object has no attribute 'polar'
+    /home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/figure.pyc in tight_layout(self, renderer, pad, h_pad, w_pad, rect)
+       1726                                          renderer,
+       1727                                          pad=pad, h_pad=h_pad, w_pad=w_pad,
+    -> 1728                                          rect=rect)
+       1729 
+       1730         self.subplots_adjust(**kwargs)
+
+
+    /home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/tight_layout.pyc in get_tight_layout_figure(fig, axes_list, subplotspec_list, renderer, pad, h_pad, w_pad, rect)
+        320         subplots.append(ax)
+        321 
+    --> 322     max_nrows = max(nrows_list)
+        323     max_ncols = max(ncols_list)
+        324 
+
+
+    ValueError: max() arg is an empty sequence
 
 
 
-.. image:: Antenna_files/Antenna_28_1.png
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x2ba85d1a7b90>
 
 
 .. code:: python
@@ -296,29 +349,6 @@ degree) is specified the diagram is given as a function of :math:`\phi`
 .. code:: python
 
     A.pol3d(R=5,St=8,Sp=8)
-
-
-::
-
-
-    ---------------------------------------------------------------------------
-
-    IndexError                                Traceback (most recent call last)
-
-    <ipython-input-12-7638e69ff747> in <module>()
-    ----> 1 A.pol3d(R=5,St=8,Sp=8)
-    
-
-    /home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/antenna.pyc in pol3d(self, k, R, St, Sp, silent)
-       2281                                   np.cos(theta)))
-       2282                 fd.write('{\n')
-    -> 2283                 geu.ellipse(fd, p, B[0, :], B[1, :], self.Ft[k, n, m], self.Fp[k, n, m], N)
-       2284                 fd.write('}\n')
-       2285         fd.close()
-
-
-    IndexError: index 104 is out of bounds for axis 2 with size 104
-
 
 The vector spherical coefficients can be dispalayed as follows
 

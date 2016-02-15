@@ -8,44 +8,42 @@ Scalar Spherical Harmonics
     from pylayers.antprop.antssh import *
     %matplotlib inline
 
+
 .. parsed-literal::
 
     WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, 'the 'implements' class advisor has been deprecated. Use the 'provides' class decorator.
+    /home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/__init__.py:872: UserWarning: axes.color_cycle is deprecated and replaced with axes.prop_cycle; please use the latter.
+      warnings.warn(self.msg_depr % (key, alt_key))
 
 
 .. code:: python
 
     A = Antenna('S1R1.mat',directory='ant/UWBAN/Matfile')
+
 .. code:: python
 
     A
 
 
 
+
 .. parsed-literal::
 
-    FileName : S1R1.mat
-    -----------------------
+    Antenna type : mat
+    ------------------------
+    file name : S1R1.mat
     fmin : 0.80GHz
     fmax : 5.95GHz
     step : 50.00MHz
     Nf : 104
     -----------------------
+          evaluated        
+    -----------------------
     Ntheta : 91
     Nphi : 180
-    GmaxdB : 2.23 dB 
        f = 5.60 GHz 
        theta = 70.00 (degrees) 
        phi = 272.00  (degrees) 
-    antenna name : Th1
-    date : 04/12/12
-    time : 15:55
-    Notes : Mohamed at the log
-    
-    Serie : 1
-    Run : 1
-    Nb theta (lat) : 91
-    Nb phi (lon) :180
 
 
 
@@ -55,36 +53,31 @@ To calculate scalar spherical harmonics use method ``ssh(A,L)``
 
     L = 5
     A = ssh(A,L=5)
+
 .. code:: python
 
     A
 
 
 
+
 .. parsed-literal::
 
-    FileName : S1R1.mat
-    -----------------------
+    Antenna type : mat
+    ------------------------
+    file name : S1R1.mat
     fmin : 0.80GHz
     fmax : 5.95GHz
     step : 50.00MHz
     Nf : 104
     -----------------------
+          evaluated        
+    -----------------------
     Ntheta : 91
     Nphi : 180
-    GmaxdB : 2.23 dB 
        f = 5.60 GHz 
        theta = 70.00 (degrees) 
        phi = 272.00  (degrees) 
-    antenna name : Th1
-    date : 04/12/12
-    time : 15:55
-    Notes : Mohamed at the log
-    
-    Serie : 1
-    Run : 1
-    Nb theta (lat) : 91
-    Nb phi (lon) :180
 
 
 
@@ -94,9 +87,10 @@ To calculate scalar spherical harmonics use method ``ssh(A,L)``
 
 
 
+
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x2b81e3a10450>]
+    [<matplotlib.lines.Line2D at 0x2baa04f55a10>]
 
 
 
@@ -108,6 +102,7 @@ To calculate scalar spherical harmonics use method ``ssh(A,L)``
 
     A.savesh2()
 
+
 .. parsed-literal::
 
     /home/uguen/Bureau/P1/ant/S1R1.sh2  already exist
@@ -116,15 +111,17 @@ To calculate scalar spherical harmonics use method ``ssh(A,L)``
 .. code:: python
 
     A.loadsh2()
+
 .. code:: python
 
     plt.plot(abs(A.S.Cx.s2[0]))
 
 
 
+
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x2b81e3b175d0>]
+    [<matplotlib.lines.Line2D at 0x2baa05055f10>]
 
 
 
@@ -135,15 +132,17 @@ To calculate scalar spherical harmonics use method ``ssh(A,L)``
 .. code:: python
 
     A.S.s2tos3()
+
 .. code:: python
 
     plt.plot(abs(A.S.Cx.s3[0]))
 
 
 
+
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x2b81e3be4550>]
+    [<matplotlib.lines.Line2D at 0x2baa0511c290>]
 
 
 
@@ -157,6 +156,7 @@ To calculate scalar spherical harmonics use method ``ssh(A,L)``
 
 
 
+
 .. parsed-literal::
 
     (36, 2)
@@ -166,6 +166,7 @@ To calculate scalar spherical harmonics use method ``ssh(A,L)``
 .. code:: python
 
     A.savesh3()
+
 
 .. parsed-literal::
 
@@ -178,9 +179,10 @@ To calculate scalar spherical harmonics use method ``ssh(A,L)``
 
 
 
+
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x2b81e3ca3b90>]
+    [<matplotlib.lines.Line2D at 0x2baa051cccd0>]
 
 
 
@@ -191,15 +193,17 @@ To calculate scalar spherical harmonics use method ``ssh(A,L)``
 .. code:: python
 
     A.loadsh3()
+
 .. code:: python
 
     plt.plot(abs(A.S.Cx.s3[100]))
 
 
 
+
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x2b81e3d6e210>]
+    [<matplotlib.lines.Line2D at 0x2baa05286ed0>]
 
 
 
@@ -213,9 +217,10 @@ To calculate scalar spherical harmonics use method ``ssh(A,L)``
 
 
 
+
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x2b81e3e3a050>]
+    [<matplotlib.lines.Line2D at 0x2baa05350a90>]
 
 
 
@@ -229,39 +234,43 @@ To calculate scalar spherical harmonics use method ``ssh(A,L)``
 
 
 
+
 .. parsed-literal::
 
     ['tau',
-     'Nf',
      'PhotoFile',
-     'Np',
-     'Nt',
+     'nf',
+     'Fp',
      'Run',
      'source',
      '_filename',
+     'param',
      'Serie',
-     'Ftheta',
+     'Date',
      'theta',
      'fromfile',
+     'fGHz',
      'phi',
-     'Fphi',
+     'nph',
      'Notes',
-     'fa',
+     'nth',
      'S',
      'AntennaName',
+     'grid',
+     'Ft',
      'typ',
      'DataFile',
      'evaluated',
-     'Date',
      'ext',
      'StartTime',
-     'SqG']
+     'sqG']
 
 
 
 .. code:: python
 
     A.S.Cx.__dict__.keys()
+
 
 
 
@@ -274,6 +283,7 @@ To calculate scalar spherical harmonics use method ``ssh(A,L)``
 .. code:: python
 
     A.S.Cx
+
 
 
 

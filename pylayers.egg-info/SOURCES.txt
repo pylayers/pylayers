@@ -1,6 +1,5 @@
 setup.py
 pylayers/__init__.py
-pylayers/f1.py
 pylayers.egg-info/.SOURCES.txt.swp
 pylayers.egg-info/PKG-INFO
 pylayers.egg-info/SOURCES.txt
@@ -20,6 +19,7 @@ pylayers/antprop/channelc.py
 pylayers/antprop/coeffHS.py
 pylayers/antprop/coeffModel.py
 pylayers/antprop/coverage.py
+pylayers/antprop/deygout.py
 pylayers/antprop/diff.py
 pylayers/antprop/diffRT.py
 pylayers/antprop/diffraction.py

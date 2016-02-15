@@ -1,13 +1,14 @@
 from pylayers.simul.link import *
+import pdb
 
 DL=DLink(L=Layout('defstr.ini'))
-DL.fGHz=np.arange(2.41,2.43,0.01)
-DL.b=DL.b+1
 DL.Aa=Antenna(typ='Omni')
 DL.Ab=Antenna(typ='Omni')
-DL.eval() 
+DL.fGHz=np.arange(2.41,2.43,0.01)
+DL.b=DL.b+1
+DL.eval(force=['sig','ray','Ct','H'])
 dist_a_b = np.sqrt(np.sum((DL.a-DL.b)**2))
-
+#
 if DL.R.los:
     ak0 = DL.H.ak[0]
     tk0 = DL.H.tk[0]

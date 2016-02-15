@@ -1,19 +1,5 @@
----
-!!python/unicode 'celltoolbar': !!python/unicode 'Slideshow'
-!!python/unicode 'latex_envs':
-  !!python/unicode 'bibliofile': !!python/unicode 'biblio.bib'
-  !!python/unicode 'cite_by': !!python/unicode 'apalike'
-  !!python/unicode 'current_citInitial': 1
-  !!python/unicode 'eqLabelWithNumbers': true
-  !!python/unicode 'eqNumInitial': 0
----
-
 # Vector Spherical Harmonics Representation of Antennas
 
----
-!!python/unicode 'slideshow':
-  !!python/unicode 'slide_type': !!python/unicode 'skip'
-...
 
 ```python
 >>> from pylayers.antprop.antenna import *
