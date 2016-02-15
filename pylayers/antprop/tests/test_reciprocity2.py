@@ -40,6 +40,6 @@ DL2.a,DL2.b = DL2.b,DL2.a
 
 # ##########################################################################
 
-# DL.R.check_reciprocity(DL2.R)
-# DL.C.check_reciprocity(DL2.C)
+DL.R.check_reciprocity(DL2.R)
+DL.C.check_reciprocity(DL2.C)
 
