@@ -4,6 +4,7 @@ from pylayers.antprop.channel import *
 import pdb
 
 vna = SCPI()
+
 _filecalh5 = 'mimocal8_4_V1'
 # 1. perform a new SISO calibration with the VNA
 vna.calibh5(Nr = 4,
@@ -12,6 +13,7 @@ vna.calibh5(Nr = 4,
          _filecal='cal_config.ini',
          _filevna='vna_config.ini',
          typ='full',
+
          cables=['CN14','CN27'],
          author='Mamadou',
          comment='first MIMO calibration RF')

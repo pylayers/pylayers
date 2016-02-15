@@ -1578,7 +1578,6 @@ class Scanner(PyLayers):
             laxes.append('a')
 
         lN =  [ A.N[k] for  k  in range(4) if A.N[k]!=1 ]
-
         Dh5.open('a')
         try:
             ldataset = Dh5.f.keys()
@@ -1673,6 +1672,7 @@ class Scanner(PyLayers):
             mes[str(ix[k])][str(iy[k])][str(iz[k])][str(ia[k])].attrs['pt']=A.p[:,k]
             mes[str(ix[k])][str(iy[k])][str(iz[k])][str(ia[k])].attrs['pg']=self.pG  
             mes[str(ix[k])][str(iy[k])][str(iz[k])][str(ia[k])].attrs['pa']=self.pA    
+
         
             Dh5.close()
             # end saving data

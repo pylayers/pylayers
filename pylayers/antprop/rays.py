@@ -1649,10 +1649,11 @@ class Rays(PyLayers,dict):
 
                     pt = ptdiff.T
 
-                    # alpha_w : (nb_diffraction_points)
+                    # NN : (nb_diffraction_points)
                     # alpha wegde (a.k.a. wedge parameters, a.k.a wedge aperture)
-                    nn = (360.-geu.sector(pa.T,pb.T,pt.T))/180.
-                    alpha_w = (2.-nn)*np.pi
+
+                    NN = (360.-geu.sector(pa.T,pb.T,pt.T))/180.
+                    # NN = (2.-NN)*np.pi
 
                     #angle between face 0, diffraction point and s_in
                     #s_in[:2,udiff[0],udiff[1]]  : 
@@ -1696,7 +1697,7 @@ class Rays(PyLayers,dict):
                     # 1 => phi
                     # 2 => beta
                     # 3 => N (wedge parameter)
-                    self[k]['diffvect']=np.array((phi0,phi,beta,alpha_w))
+                    self[k]['diffvect']=np.array((phi0,phi,beta,NN))
 
                     ######
                     #Bi diffract

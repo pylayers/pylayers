@@ -349,9 +349,9 @@ class DEM(PyLayers):
 
         #im = ax.imshow(dem[ilat[0]:(ilat[-1]+1),ilon[0]:(ilon[-1]+1)],extent=(lonmin,lonmax,latmin,latmax))
         if kwargs['source']=='srtm':
-            im = ax.imshow(self.hgts,extent=(self.extent[0],self.extent[1],self.extent[2],self.extent[3]),alpha=kwargs['alpha'])
+            im = ax.imshow(self.hgts,extent=(self.extent[0],self.extent[1],self.extent[2],self.extent[3]),alpha=kwargs['alpha'],cmap=kwargs['cmap'])
         if kwargs['source']=='aster':
-            im = ax.imshow(self.hgta,extent=(self.extent[0],self.extent[1],self.extent[2],self.extent[3]),alpha=kwargs['alpha'])
+            im = ax.imshow(self.hgta,extent=(self.extent[0],self.extent[1],self.extent[2],self.extent[3]),alpha=kwargs['alpha'],cmap=kwargs['cmap'])
 
         # handling colorbar
         divider = make_axes_locatable(ax)
@@ -568,11 +568,11 @@ class Ezone(PyLayers):
         #self.latstep = (self.extent[3]-self.extent[2])/(Nlat-1)
         #self.tocart(Nx=Nlon,Ny=Nlat)
 
-    def rebase(self,source='srtm'):
+    def rebase(self,source):
         """ reevaluate base
 
         """
-        if source=='srtm':
+        if source =='srtm':
             Nlat,Nlon = self.hgts.shape
         else:
             Nlat,Nlon = self.hgta.shape

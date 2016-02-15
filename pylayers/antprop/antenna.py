@@ -303,6 +303,7 @@ class Pattern(PyLayers):
             self.sqG =  np.array(np.sqrt(G))*np.ones(len(self.fGHz))[None,:]
         self.radF()
 
+
     def __pGauss(self,**kwargs):
         """ Gauss pattern
 
