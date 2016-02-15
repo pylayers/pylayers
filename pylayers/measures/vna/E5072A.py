@@ -17,7 +17,6 @@ import pylayers.antprop.channel as ch
 from pylayers.util import pyutil as pyu
 from pylayers.measures.exploith5 import Mesh5 
 import pylayers.measures.switch.ni_usb_6501 as sw
-# from  pylayers.measures.parker.smparker import *
 from time import sleep
 import seaborn as sns
 import os
@@ -65,9 +64,9 @@ class SCPI(PyLayers):
     PORT = 5025
     _chunk = 128
     _verbose = False
-    _timeout = 0.150
+    _timeout = 1
 
-    def __init__(self, port=PORT, timeout=None, verbose=False,Nr=1,Nt=1):
+    def __init__(self, port=PORT, timeout=None, verbose=False,Nr=1,Nt=1,emulated = False):
         """
         Parameters
         ----------
@@ -78,7 +77,7 @@ class SCPI(PyLayers):
         verbose : boolean
 
         """
-        self.emulated = False
+        self.emulated = emulated
         if "VNA_IP" in os.environ:
             host = os.environ["VNA_IP"]
         else:
@@ -100,17 +99,20 @@ class SCPI(PyLayers):
                 #self.emulated = True
                 self.emulated = False
 
+
         
         self.Nf   = 201
         self.getIdent()
-        #print self.ident
-        #assert('E5072A' in self.ident), "E5072A not responding"
+        print self.ident
+        assert('E5072A' in self.ident), "E5072A not responding"
         self.freq()
         self.points()
         self.parS()
         self.avrg()
         self.ifband()
-        self.getdata()
+        
+        #self.getdata()
+
         #initialization of the switch
         if (Nr!=1) and (Nt!=1) and not self.emulated:
             self.switch = sw.get_adapter()
@@ -324,6 +326,33 @@ class SCPI(PyLayers):
             com = "DISP:WIND"+str(win)+":TRAC"+str(tr)+":Y:SCAL:AUTO"
             self.write(com)
 
+    def trigger(self, cmd = 'bus'):
+        """ configure the trigger that control the acquisition of the measurements
+
+        Parameters
+        ----------
+
+        cmd : string
+            'bus' : actives the trigger via the BUS
+            'go'   : generates a trigger immediately and executes a measurement, regardless of the setting 
+                     of the trigger mode.
+            'test' : when all of pending operations complete, *OPC returns 1.
+        
+
+        """
+        if not self.emulated:            
+            if cmd == 'bus':
+                com = ":TRIG:SOUR BUS"
+                self.read(com)
+
+            if cmd == 'go':
+                com = ":TRIG:SING"
+                self.read(com)
+
+            if cmd == 'test':
+                com = "*OPC?"
+                self.read(com)
+
 
     def points(self, value=1601, cmd='get', sens=1, echo=False):
         """ 'get'|'set'  number of points
@@ -421,7 +450,7 @@ class SCPI(PyLayers):
             except socket.timeout:
                 return ""
         else:
-            self.ident = 'emulated vna'
+            self.ident = 'E5072A emulated vna'
 
 
     def getdata(self, chan=1,Nr=1, Nt=1, Nmeas=10,calibration=False,seed=0):
@@ -447,14 +476,22 @@ class SCPI(PyLayers):
         """
 
         self.nmeas    = Nmeas
+        #ipdb.set_trace()
+        #print "Nmeas vna",self.nmeas
         if not self.emulated:
-            com = 'CALC'+str(chan)+':DATA:SDAT?'
+            com = 'CALC'+str(chan)+':DATA:SDAT?'  #This command sets/gets the corrected data array.
             for k in  range(Nmeas):
                 buff = ''
+<<<<<<< HEAD
 
                 while len(buff) != (self.Nf*16+8):
+=======
+                while len(buff) != (self.Nf*16+8):
+                    self.trigger(cmd='test')
+>>>>>>> 1c9780440e143894caf09e713b1795cfce395b49
                     buff = self.read(com)
-
+                    #print"buffer size :",len(buff)
+                #ipdb.set_trace()
                 S = np.frombuffer(buff[8:self.Nf*16+8], dtype='>f8')
                 Y = S.reshape(self.Nf, 2)
                 H = Y[:, 0]+1j*Y[:, 1]
@@ -462,6 +499,7 @@ class SCPI(PyLayers):
                     tH = np.vstack((tH, H[None,:]))
                 except:
                     tH = H[None,:]
+            tH = tH[:,None,None,:]
         else:
             if not calibration:
                 np.random.seed(seed)
@@ -534,7 +572,7 @@ class SCPI(PyLayers):
             # t   = toc-tic
             # print "Time measurement (ms) :",t
 
-    def avrg(self,sens=1,b='OFF',navrg=16,cmd='getavrg'):
+    def avrg(self,sens=1,b='OFF',navrg=20,cmd='getavrg'):
         """ allows get|set the point averaging
 
         Parameters
@@ -568,12 +606,17 @@ class SCPI(PyLayers):
             co2  = ":SENS"+str(sens)+":AVER:COUN"
             com1 = co1 + ' '+b
             com2 = co2 + ' '+str(navrg)
+            co3 = ":SENS"+str(sens)+":AVER:CLE"
 
             if cmd == 'getavrg':
                 com = co1+"?\n"
                 self.s.send(com)
                 # c = self.read(com)
                 # return(c)
+
+            if cmd == 'clear':
+                com3 = co3
+                self.s.send(com3)
 
             if cmd == 'setavrg':
                 com = com1+"\n"
@@ -608,7 +651,7 @@ class SCPI(PyLayers):
         """
         self.ifbHz   = ifbHz
         if not self.emulated:
-            co  = ":SENS"+str(sens)+":BAND"
+            co  = ":SENS"+str(sens)+":bandwidth"
             com = co + ' '+str(ifbHz)
 
             if cmd == 'get':
@@ -620,10 +663,31 @@ class SCPI(PyLayers):
                 self.s.send(com)
 
 
+<<<<<<< HEAD
     def calibh5(self,
                  Nr = 8,
                  Nt = 4,
                  _filemesh5 = 'measure',
+=======
+    def sweep_mode(self,sens=1,cmd='get'):
+        """ 
+        """
+        
+        if not self.emulated:
+    
+            if cmd == 'get':
+                com  = ":SENS"+str(sens)+":SWE:GEN?"
+                self.s.send(com)
+
+            # if cmd == 'set':
+            #     com = com+"\n"
+            #     self.s.send(com)
+
+    def calibh5(self,
+                 Nr = 8,
+                 Nt = 4,
+                 _filemesh5 = 'measures',
+>>>>>>> 1c9780440e143894caf09e713b1795cfce395b49
                  _filecalh5 = 'mcalib',
                  _filecal = 'cal_config.ini',
                  _filevna='vna_config.ini',
@@ -662,7 +726,10 @@ class SCPI(PyLayers):
         # File from : ~/Pylayers_project/meas
 
         switch = sw.get_adapter()
+<<<<<<< HEAD
         reattach=False
+=======
+>>>>>>> 1c9780440e143894caf09e713b1795cfce395b49
         if not switch:
             raise Exception("No device found")
         switch.set_io_mode(0b11111111, 0b11111111, 0b00000000) #set the NI USB mode in order to use
@@ -697,10 +764,21 @@ class SCPI(PyLayers):
             if typ=='single':
                 Mr = 1
                 Mt = 1
+<<<<<<< HEAD
                 fileh5w = pyu.getlong(_filemesh5, pstruc['DIRMES'])+'.h5'
                 # dcal is obtained from _filecalh5 and gcal
                 #pdb.set_trace()
                 dcal = Mesh5(_filecalh5).get_dcal(gcalm)
+=======
+
+                fileh5w = pyu.getlong(_filemesh5, pstruc['DIRMES'])+'.h5'
+                # dcal is obtained from _filecalh5 and gcal
+                dcal = Mesh5(_filecalh5).get_dcal(gcalm)
+                # In a future version it would be better to load from the 
+                # parameter which are in the MIMO calibration file instead 
+                # of thevna_config
+                self.load_config_vna(_filename=_filevna)
+>>>>>>> 1c9780440e143894caf09e713b1795cfce395b49
 
         f = h5py.File(fileh5w, "a")
         try:
@@ -714,6 +792,7 @@ class SCPI(PyLayers):
 
         tic = time.time()
 
+<<<<<<< HEAD
         for iR in range(Mr):
             print "connect receiver :", iR +1
             switch.write_port(0,iR)
@@ -725,10 +804,24 @@ class SCPI(PyLayers):
                     c = raw_input("Hit g key ")
                 for k in dcal:
                     time.sleep(2)
+=======
+        for iT in range(Mt):
+            print "connect transmitter :", iT +1
+            switch.write_port(0,iT)
+            for iR in range(Mr):
+                switch.write_port(1,iR)
+                print "connect receiver :", iR + 1
+                c = ""
+                while "g" not in c:
+                    c = raw_input("Hit g key ")
+
+                for k in dcal:
+>>>>>>> 1c9780440e143894caf09e713b1795cfce395b49
                     print "---------------------------------------------------------------------"
                     print "                 Configuration Parameters                            "
                     print   dcal[k]
                     print "---------------------------------------------------------------------"
+<<<<<<< HEAD
                     for k2 in dcal[k]:
                         if k2=='nf':
                             self.points(dcal[k]['nf'], cmd='set')
@@ -743,6 +836,59 @@ class SCPI(PyLayers):
                     # get Nmeas calibration vector
                     #pdb.set_trace()
                     Dmeas = self.getdata(chan=1,Nmeas=dcal[k]['nmeas'],calibration=True)
+=======
+                    
+                    t1 = time.time()
+                    for k2 in dcal[k]:
+                        if k2=='nf':
+                            self.points(dcal[k]['nf'], cmd='set')
+                            print "set number of points  :",dcal[k]['nf']
+                        if k2=='ifbhz':
+                            self.ifband(ifbHz=dcal[k]['ifbhz'], cmd='set')
+                            print "set number of ifbHz   :",dcal[k]['ifbhz']
+                        
+                    #print "activation of the trigger via the BUS"
+                    #get Nmeas calibration vector
+
+                    tic_Dmeas = time.time()
+                    print "beginning of the acquisition"
+                    time.sleep(2)
+                    Dmeas = self.getdata(chan=1,Nmeas=dcal[k]['nmeas'],calibration=True)
+                    toc_Dmeas = time.time()
+                    print "end of the acquisition (s) :",toc_Dmeas-tic_Dmeas
+
+                    if ((iR==0) and (iT==0)):
+                        cal.create_dataset(k, (dcal[k]['nmeas'], Mr, Mt, self.Nf), dtype=np.complex64)
+                        cal[k].attrs['fminghz']   = self.fGHz[0]
+                        cal[k].attrs['fmaxghz']   = self.fGHz[-1]
+                        cal[k].attrs['time']      = time.ctime()
+                        cal[k].attrs['author']    = author
+                        cal[k].attrs['cables']    = cables
+                        cal[k].attrs['comment']   = comment
+                        cal[k].attrs['param']     = self.param
+                        cal[k].attrs['nt']        = Nt
+                        cal[k].attrs['nr']        = Nr
+                        cal[k].attrs['nmeas']     = dcal[k]['nmeas']
+                        if typ=='single':
+                            cal[k].attrs['_filecalh5'] =_filecalh5 
+                            cal[k].attrs['gcalm']= gcalm
+                            
+                    cal[k][:,iR,iT,:] = Dmeas[:,0,0,:]
+                    cal[k].attrs['nf']        = self.Nf
+                    cal[k].attrs['ifbhz']     = self.ifbHz
+                    cal[k].attrs['navrg']     = self.navrg
+            
+
+                    t2 =  time.time()
+                    print "duration set up (s) :",t2-t1
+
+        toc = time.time()
+
+        print "---------------------------------------------------------"
+        print "                   END of calibration                    "
+        print " measurement time (s)                     :",toc-tic
+        print "---------------------------------------------------------"
+>>>>>>> 1c9780440e143894caf09e713b1795cfce395b49
 
                     if ((iR==0) and (iT==0)):
                         cal.create_dataset(k, (dcal[k]['nmeas'], Mr, Mt, self.Nf), dtype=np.complex64)
@@ -771,6 +917,38 @@ class SCPI(PyLayers):
         print " measurement time (s): ",toc-tic
         print "------------------------------------------"
         f.close()
+
+    def meastime(self):
+        """
+        """
+        lNf = [201,401,801,1601]
+        lIF = np.arange(1000,300000,1000)
+        #lNf = [201]
+        #lIF = [1000,2000,30000]
+        #lIF = [1000]
+        tval = np.empty((len(lNf),len(lIF)),dtype=np.float64)
+        Pb = np.empty((len(lNf),len(lIF)),dtype=np.float64)
+        for kf,f in enumerate(lNf):
+            print f 
+            for ki,i in enumerate(lIF):
+                print i
+                self.points(f,cmd='set')
+                self.ifband(ifbHz=i,cmd='set')
+                time.sleep(3)
+                tic = time.time()
+                Dmeas = self.getdata(chan=1,Nmeas=10)
+                toc = time.time()
+                H  = Dmeas[:,0,0,:]
+                Hm = np.mean(H,axis=0)
+                Hc = H - Hm
+                var = np.mean(np.abs(Hc*np.conj(Hc)),axis=0)
+                var2  = np.mean(var)
+                print "Time :",toc-tic
+                print "Noise Power dB:",10*np.log10(var2)
+                tval[kf,ki]=toc-tic
+                Pb[kf,ki]= var2
+        return(tval,Pb)
+
 
 
     def load_calconfig(self,_filename='cal_config.ini'):
@@ -852,8 +1030,28 @@ class SCPI(PyLayers):
         self.points(self.Nf, cmd='set')
         self.parS(param=self.param, cmd='set')
         self.ifband(ifbHz=self.ifbHz, cmd='set')
-        self.autoscale()
+        self.avrg(b='ON',navrg=self.navrg,cmd='setavrg')
 
+
+        #toc_freq = time.time()
+        #print "time measurement for frequency set up (s) :", tic-toc_freq
+        #time.sleep(1)
+        
+        #tic = time.time()
+        #self.points(self.Nf, cmd='set')
+        #toc_pts = time.time()
+        #print "time measurement for points set up (s) :", tic-toc_pts
+        #time.sleep(1)
+        
+        #self.parS(param=self.param, cmd='set')
+        #toc_parS = time.time()
+        #print "time measurement for parS set up (s) :", tic-toc_parS
+        #time.sleep(1)
+        
+        #self.ifband(ifbHz=self.ifbHz, cmd='set')
+        
+        
+        self.autoscale()
 
 
 if __name__ == '__main__':

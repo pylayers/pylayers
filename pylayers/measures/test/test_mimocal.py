@@ -4,17 +4,19 @@ from pylayers.antprop.channel import *
 import pdb
 
 vna = SCPI()
-_filecalh5 = 'mimocal'
+
+_filecalh5 = 'mimocal8_4_V1'
 # 1. perform a new SISO calibration with the VNA
-vna.calibh5(Nr = 2,
-         Nt = 2,
+vna.calibh5(Nr = 4,
+         Nt = 8,
          _filecalh5=_filecalh5,
          _filecal='cal_config.ini',
          _filevna='vna_config.ini',
          typ='full',
-         cables=['CN1','T','CN3'],
+
+         cables=['CN14','CN27'],
          author='Mamadou',
-         comment='test')
+         comment='first MIMO calibration RF')
 
 # 2. Initialize the scanner
 #scanner = Scanner(Nt=4,Nr=4)

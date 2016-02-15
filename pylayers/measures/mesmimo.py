@@ -401,7 +401,7 @@ class MIMO(object):
         # nf x nt x 1 x power
         # Ps2   = Vshwu*np.conj(Vshwu)
 
-        Pb  = N0*BGHz*1e9
+        Pb  = N0*BGHz*1e9   # Watt
 
         #Pb2 = N0*dfGHz*1e9*np.ones((self.Nf,self.Nt))
 
@@ -457,7 +457,9 @@ class MIMO(object):
 
         fGHz  = self.Hcal.x
         Nf    = len(fGHz)
+        # Bandwidth
         BGHz  = fGHz[-1]-fGHz[0]
+        # Frequency step
         dfGHz = fGHz[1]-fGHz[0]
 
         # White Noise definition
@@ -474,6 +476,9 @@ class MIMO(object):
         # Evaluation of the transfer tensor
 
         HdH,U,ld,V = self.transfer()
+
+        # Identity matrices
+
         It = np.eye(self.Nt)
         Ir = np.eye(self.Nr)
 
@@ -481,7 +486,9 @@ class MIMO(object):
         # Iterative implementation of Water Filling algorithm
         #
 
+        # pb : (nf,nt)   noise power (Watt)
         pb = N0*dfGHz*1e9*np.ones((self.Nf,self.Nt))
+        # pt : (nf,nt,power)  Total power uniformly spread over (nt*nf-1)
         pt = Pt[None,None,:]/((self.Nf-1)*self.Nt)
         mu = pt
         Q0 = np.maximum(0,mu-pb[:,:,None]/ld[:,:,None])
@@ -1124,3 +1131,4 @@ class MIMO(object):
                     ax[iR,iT].set_xlabel('f (GHz)')
                 ax[iR,iT].set_title(str(iR+1)+'x'+str(iT+1))
         return(fig,ax)
+
