@@ -2889,7 +2889,7 @@ class Tchannel(bs.FUsignal):
         self.filecal = filecal
         Hcal = Tchannel()
         Hcal.load(filecal)
-        assert (len(self.x) == len(Hcal.x)),"calibration file has hot the same number of points"
+        assert (len(self.x) == len(Hcal.x)),"calibration file has not the same number of points"
         if not self.calibrated:
             if not(conjugate):
                 self.y = self.y/Hcal.y

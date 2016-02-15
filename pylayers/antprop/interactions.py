@@ -891,9 +891,7 @@ class IntD(Inter):
                 # from IPython.core.debugger import Tracer
                 # Tracer()()
                 # Ds,Dh = diff(self.fGHz,self.phi0[idx],self.phi[idx],self.si0[idx],self.sout[idx],self.N[idx],mat0,matN,beta=self.beta[idx])
-                Ds,Dh = diff(self.fGHz,self.phi0[idx],self.phi[idx],
-                             self.si0[idx],self.sout[idx],self.N[idx],
-                             mat0,matN,mode='tab',beta=self.beta[idx])
+                Ds,Dh = diff(self.fGHz,self.phi0[idx],self.phi[idx],self.si0[idx],self.sout[idx],self.N[idx],mat0,matN,mode='tab',beta=self.beta[idx])
                 D[:,idx,0,0]=-Dh
                 D[:,idx,1,1]=Ds
                 # from IPython.core.debugger import Tracer

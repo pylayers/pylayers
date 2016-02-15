@@ -4,7 +4,8 @@ from pylayers.measures.parker.smparker import *
 from pylayers.antprop.channel import *
 from pylayers.measures.exploith5 import *
 
-M = Mesh5('measDec')
+M = Mesh5('mimocal')
+dcal = M.get_dcal(1)
 #M.plot(cmd='mes',mes='mes1',lg=[2,0,1,0])
 #M.plot(cmd='cal',mes='mes1',lg=[2,0,1,0])
 #M.plot(cmd='ri',mes='mes1',lg=[2,0,1,0])

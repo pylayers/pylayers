@@ -24,7 +24,7 @@ Examples
 Pattern Class
 =============
 
-.. autosummary::
+.. autosummary
     :toctree: generated/
 
     Pattern.eval
@@ -142,13 +142,10 @@ import doctest
 import os
 import glob
 import re
-import sys
 import pdb
 import Image
 import numpy as np
-import scipy as sp
 import scipy.linalg as la
-import scipy.special as special
 from scipy import io
 import pylayers.util.pyutil as pyu
 import pylayers.util.geomutil as geu
@@ -156,7 +153,6 @@ from pylayers.util.project import *
 from pylayers.antprop.spharm import *
 from pylayers.antprop.antssh import SSHFunc2, SSHFunc, SSHCoeff, CartToSphere
 from pylayers.antprop.coeffModel import *
-from matplotlib.font_manager import FontProperties
 from matplotlib import rc
 from matplotlib import cm # colormaps
 from mpl_toolkits.mplot3d import axes3d
@@ -306,6 +302,7 @@ class Pattern(PyLayers):
             # Nd x Nf
             self.sqG =  np.array(np.sqrt(G))*np.ones(len(self.fGHz))[None,:]
         self.radF()
+
 
     def __pGauss(self,**kwargs):
         """ Gauss pattern

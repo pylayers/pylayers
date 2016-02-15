@@ -78,8 +78,12 @@ class Trajectories(PyLayers,list):
         """
         """
 
-        try:
+        if hasattr(self,'Lfilename'):
             s = 'Trajectories performed in Layout : ' + self.Lfilename + '\n\n'
+        else:
+            s = ''
+
+        try:
             for a in self:
                 s = s + a.__repr__()
                 s = s + '\n'
@@ -410,10 +414,12 @@ class Trajectory(PyLayers,pd.DataFrame):
             T = self.tmax-self.tmin
             st = ''
             typ = self.typ
+            if not isinstance(self.ID,str):
+                ID = str(self.ID)
             if typ == 'ag':
-                string ='Trajectory of agent ' + self.name + ' with ID ' + self.ID
+                string ='Trajectory of agent ' + self.name + ' with ID ' + ID
             else :
-                string ='Access point ' + self.name + ' with ID ' + self.ID
+                string ='Access point ' + self.name + ' with ID ' + ID
             st = st + string + '\n'
             st = st + '-'*len(string) + '\n'
 
