@@ -99,8 +99,8 @@ class SCPI(PyLayers):
             else:
                 pass
                 #self.emulated = True
-            
-        
+
+
         self.Nf   = 201
         self.getIdent()
         print self.ident
@@ -110,7 +110,7 @@ class SCPI(PyLayers):
         self.parS()
         self.avrg()
         self.ifband()
-        
+
         #self.getdata()
 
         #initialization of the switch
@@ -659,11 +659,16 @@ class SCPI(PyLayers):
 
 
     def sweep_mode(self,sens=1,cmd='get'):
-        """ 
+        """ iactivate sweep mode
+
+        Parameters
+        ----------
+
+        sens : int
+        cmd  : string
+            'get' | 'set'
         """
-        
         if not self.emulated:
-    
             if cmd == 'get':
                 com  = ":SENS"+str(sens)+":SWE:GEN?"
                 self.s.send(com)
@@ -849,7 +854,7 @@ class SCPI(PyLayers):
         tval = np.empty((len(lNf),len(lIF)),dtype=np.float64)
         Pb = np.empty((len(lNf),len(lIF)),dtype=np.float64)
         for kf,f in enumerate(lNf):
-            print f 
+            print f
             for ki,i in enumerate(lIF):
                 print i
                 self.points(f,cmd='set')
