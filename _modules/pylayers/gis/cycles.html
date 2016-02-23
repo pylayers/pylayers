@@ -137,7 +137,7 @@
           <div class="body" role="main">
             
   <h1>Source code for pylayers.gis.cycles</h1><div class="highlight"><pre>
-<span class="c"># -*- coding:Utf-8 -*-</span>
+<span></span><span class="c1"># -*- coding:Utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 
@@ -176,11 +176,11 @@
 <span class="sd">    Cycle.show</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="c">#</span>
-<span class="c">#</span>
-<span class="c"># Author : B.Uguen</span>
-<span class="c">#  2nd implementation : April 2013</span>
-<span class="c">#</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># Author : B.Uguen</span>
+<span class="c1">#  2nd implementation : April 2013</span>
+<span class="c1">#</span>
 <span class="kn">import</span> <span class="nn">doctest</span>
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
 <span class="kn">import</span> <span class="nn">shapely.geometry</span> <span class="kn">as</span> <span class="nn">sh</span>
@@ -206,24 +206,24 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            graph of cycle</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-</div>
+        <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Cycles.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycles.__repr__.html#pylayers.gis.cycles.Cycles.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; object representation</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Number of cycles :&#39;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">))</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;Number of cycles :&#39;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
-            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-</div>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;cycle&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">s</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Cycles.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycles.info.html#pylayers.gis.cycles.Cycles.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get info from Cycles object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">print</span> <span class="s">&quot;Number of cycles : &quot;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s2">&quot;Number of cycles : &quot;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gi</span><span class="p">:</span>
-            <span class="k">print</span> <span class="n">k</span> <span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
-</div>
+            <span class="k">print</span> <span class="n">k</span> <span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">k</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Cycles.inclusion"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycles.inclusion.html#pylayers.gis.cycles.Cycles.inclusion">[docs]</a>    <span class="k">def</span> <span class="nf">inclusion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">full</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  Inform the inclusion relations between cycles</span>
 
@@ -261,24 +261,24 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">l1</span>     <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">l2</span>     <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Area2</span>  <span class="o">=</span> <span class="p">[]</span>
-        <span class="c">#</span>
-        <span class="c"># the list of cycles is either the whole set of nodes</span>
-        <span class="c"># or only connected nodes (nodes with degree &gt; 0)</span>
-        <span class="c">#</span>
+        <span class="c1">#</span>
+        <span class="c1"># the list of cycles is either the whole set of nodes</span>
+        <span class="c1"># or only connected nodes (nodes with degree &gt; 0)</span>
+        <span class="c1">#</span>
         <span class="k">if</span> <span class="n">full</span><span class="p">:</span>
             <span class="n">lcyt</span> <span class="o">=</span> <span class="p">[</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">lcyt</span> <span class="o">=</span> <span class="p">[</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span> <span class="k">if</span> <span class="n">nx</span><span class="o">.</span><span class="n">degree</span><span class="p">(</span><span class="bp">self</span><span class="p">)[</span><span class="n">k</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span>
-        <span class="c">#print lcyt</span>
-        <span class="c">#</span>
-        <span class="c"># loop on all cycle in list of cycles</span>
+        <span class="c1">#print lcyt</span>
+        <span class="c1">#</span>
+        <span class="c1"># loop on all cycle in list of cycles</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">lcyt</span><span class="p">:</span>
-            <span class="n">ck</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span>
+            <span class="n">ck</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;cycle&#39;</span><span class="p">]</span>
             <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">l</span><span class="o">!=</span><span class="n">k</span><span class="p">:</span>
-                    <span class="n">cl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span>
-                    <span class="c"># test inclusion of cl(small) by ck(big)</span>
-                    <span class="c"># non reciprocal</span>
+                    <span class="n">cl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="s1">&#39;cycle&#39;</span><span class="p">]</span>
+                    <span class="c1"># test inclusion of cl(small) by ck(big)</span>
+                    <span class="c1"># non reciprocal</span>
                     <span class="n">incl</span><span class="p">,</span><span class="n">path</span> <span class="o">=</span> <span class="n">ck</span><span class="o">.</span><span class="n">inclusion</span><span class="p">(</span><span class="n">cl</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">incl</span><span class="p">:</span>
                         <span class="k">try</span><span class="p">:</span>
@@ -290,7 +290,7 @@
                         <span class="k">except</span><span class="p">:</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">contained_in</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
 
-        <span class="c"># check transitivity</span>
+        <span class="c1"># check transitivity</span>
         <span class="k">for</span> <span class="n">ncy1</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">contained_by</span><span class="p">:</span>
             <span class="n">lcy1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">contained_by</span><span class="p">[</span><span class="n">ncy1</span><span class="p">]</span>
             <span class="k">for</span> <span class="n">ncy2</span> <span class="ow">in</span> <span class="n">lcy1</span><span class="p">:</span>
@@ -298,21 +298,21 @@
                     <span class="n">lcy2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">contained_by</span><span class="p">[</span><span class="n">ncy2</span><span class="p">]</span>
                     <span class="k">for</span> <span class="n">ncy2</span> <span class="ow">in</span> <span class="n">lcy2</span><span class="p">:</span>
                         <span class="k">if</span> <span class="n">ncy2</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">lcy1</span><span class="p">:</span>
-                            <span class="c">##print &quot;adding &quot;,ncy2,&quot; in &quot;,ncy1</span>
+                            <span class="c1">##print &quot;adding &quot;,ncy2,&quot; in &quot;,ncy1</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">contained_by</span><span class="p">[</span><span class="n">ncy1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ncy2</span><span class="p">)</span>
 
-        <span class="c">#</span>
-        <span class="c"># l1 : dictionnary</span>
-        <span class="c">#      key : cycle index   value : number of included cycles</span>
-        <span class="c">#</span>
+        <span class="c1">#</span>
+        <span class="c1"># l1 : dictionnary</span>
+        <span class="c1">#      key : cycle index   value : number of included cycles</span>
+        <span class="c1">#</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">lcyt</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">l1</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>       <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">contained_by</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">l1</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>       <span class="o">=</span> <span class="mi">0</span>
-        <span class="c"># l2 : dictionnary</span>
-        <span class="c">#      key : number of included cycles  value : cycle index</span>
-        <span class="c">#</span>
+        <span class="c1"># l2 : dictionnary</span>
+        <span class="c1">#      key : number of included cycles  value : cycle index</span>
+        <span class="c1">#</span>
 
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">l1</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">l1</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
@@ -320,114 +320,112 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">l2</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">l2</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-        <span class="c">#pdb.set_trace()</span>
-        <span class="c"># for all inclusion length (starting in 0) </span>
+        <span class="c1">#pdb.set_trace()</span>
+        <span class="c1"># for all inclusion length (starting in 0) </span>
         <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">l2</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="c"># retrieve the list of included cycles of length l</span>
+            <span class="c1"># retrieve the list of included cycles of length l</span>
             <span class="n">lnode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">l2</span><span class="p">[</span><span class="n">l</span><span class="p">]</span>
             <span class="k">for</span> <span class="n">cy1</span> <span class="ow">in</span> <span class="n">lnode</span><span class="p">:</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">contained_in</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="n">cy1</span><span class="p">):</span>
                     <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">contained_in</span><span class="p">[</span><span class="n">cy1</span><span class="p">]</span>
-                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;cycle </span><span class="si">%d</span><span class="s"> is included in cycles </span><span class="si">%s</span><span class="s">&quot;</span><span class="p">,</span><span class="n">cy1</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> 
-                    <span class="n">cmin</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="c"># ???</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;cycle </span><span class="si">%d</span><span class="s2"> is included in cycles </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">cy1</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> 
+                    <span class="n">cmin</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="c1"># ???</span>
                     <span class="k">for</span> <span class="n">cy2</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
-                        <span class="c"># seek the including cycle of minimal length</span>
+                        <span class="c1"># seek the including cycle of minimal length</span>
                         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">l1</span><span class="p">[</span><span class="n">cy2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">cmin</span><span class="p">:</span>
                             <span class="n">c</span>    <span class="o">=</span> <span class="n">cy2</span>
                             <span class="n">cmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">l1</span><span class="p">[</span><span class="n">cy2</span><span class="p">]</span>
-                    <span class="c"># c includes cy1</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">cy1</span><span class="p">)</span>
+                    <span class="c1"># c includes cy1</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">cy1</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="Cycles.decompose"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycles.decompose.html#pylayers.gis.cycles.Cycles.decompose">[docs]</a>    <span class="k">def</span> <span class="nf">decompose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; recursive function to transform the cycle basis</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c">#</span>
-        <span class="c"># root if degree == number of successors</span>
-        <span class="c">#</span>
+        <span class="c1">#</span>
+        <span class="c1"># root if degree == number of successors</span>
+        <span class="c1">#</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lcyroot</span> <span class="o">=</span><span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">nx</span><span class="o">.</span><span class="n">degree</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
                   <span class="k">if</span> <span class="p">(((</span><span class="n">nx</span><span class="o">.</span><span class="n">degree</span><span class="p">(</span><span class="bp">self</span><span class="p">)[</span><span class="n">k</span><span class="p">]</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">k</span><span class="p">))))</span> <span class="ow">and</span>
                   <span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">degree</span><span class="p">(</span><span class="bp">self</span><span class="p">)[</span><span class="n">k</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">))]</span>
 
-        <span class="c">#for ncyroot in lcyroot:</span>
+        <span class="c1">#for ncyroot in lcyroot:</span>
         <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lcyroot</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-            <span class="c"># get big cycle</span>
+            <span class="c1"># get big cycle</span>
             <span class="n">ncyroot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lcyroot</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
-            <span class="n">cybig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ncyroot</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span>
-            <span class="c"># get the list of the successor cycle indices</span>
+            <span class="n">cybig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ncyroot</span><span class="p">][</span><span class="s1">&#39;cycle&#39;</span><span class="p">]</span>
+            <span class="c1"># get the list of the successor cycle indices</span>
             <span class="n">lninc</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ncyroot</span><span class="p">)</span>
-            <span class="c">#</span>
-            <span class="c"># reduce to the smallest cycle</span>
-            <span class="c">#</span>
-            <span class="c"># when a punctual contact is detected, the simplification order is important</span>
-            <span class="c">#</span>
+            <span class="c1">#</span>
+            <span class="c1"># reduce to the smallest cycle</span>
+            <span class="c1">#</span>
+            <span class="c1"># when a punctual contact is detected, the simplification order is important</span>
+            <span class="c1">#</span>
             <span class="n">reloop</span> <span class="o">=</span> <span class="bp">False</span>
-            <span class="c">#</span>
-            <span class="c"># first attempt</span>
-            <span class="c">#</span>
+            <span class="c1">#</span>
+            <span class="c1"># first attempt</span>
+            <span class="c1">#</span>
             <span class="k">for</span> <span class="n">ninc</span> <span class="ow">in</span> <span class="n">lninc</span><span class="p">:</span>
-                <span class="n">cyinc1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ninc</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span> <span class="c"># cycle included</span>
-                <span class="n">punctual</span><span class="p">,</span><span class="n">cyinc2</span> <span class="o">=</span> <span class="n">cybig</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">cyinc1</span><span class="p">)</span> <span class="c"># small cycle</span>
+                <span class="n">cyinc1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ninc</span><span class="p">][</span><span class="s1">&#39;cycle&#39;</span><span class="p">]</span> <span class="c1"># cycle included</span>
+                <span class="n">punctual</span><span class="p">,</span><span class="n">cyinc2</span> <span class="o">=</span> <span class="n">cybig</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">cyinc1</span><span class="p">)</span> <span class="c1"># small cycle</span>
                 <span class="k">if</span> <span class="n">punctual</span><span class="p">:</span>
                     <span class="n">reloop</span> <span class="o">=</span> <span class="bp">True</span>
-                    <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;punctual contact detected proceed in reverse order&quot;</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">cyinc2</span> <span class="o">!=</span><span class="bp">None</span><span class="p">:</span> <span class="c"># divide again with updated big cycle</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;punctual contact detected proceed in reverse order&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">cyinc2</span> <span class="o">!=</span><span class="bp">None</span><span class="p">:</span> <span class="c1"># divide again with updated big cycle</span>
                     <span class="n">cybig</span> <span class="o">=</span> <span class="n">cyinc2</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">pass</span>
-                    <span class="c">#print &quot;None&quot;</span>
-            <span class="c">#</span>
-            <span class="c"># second attempt if a punctual contact has been detected</span>
-            <span class="c">#</span>
+                    <span class="c1">#print &quot;None&quot;</span>
+            <span class="c1">#</span>
+            <span class="c1"># second attempt if a punctual contact has been detected</span>
+            <span class="c1">#</span>
             <span class="k">if</span> <span class="n">reloop</span><span class="p">:</span>
                 <span class="n">lninc</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
                 <span class="n">reloop</span><span class="o">=</span><span class="bp">False</span>
                 <span class="k">for</span> <span class="n">ninc</span> <span class="ow">in</span> <span class="n">lninc</span><span class="p">:</span>
-                    <span class="n">cyinc1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ninc</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span> <span class="c"># cycle included</span>
-                    <span class="n">punctual</span><span class="p">,</span><span class="n">cyinc2</span> <span class="o">=</span> <span class="n">cybig</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">cyinc1</span><span class="p">)</span> <span class="c"># small cycle</span>
+                    <span class="n">cyinc1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ninc</span><span class="p">][</span><span class="s1">&#39;cycle&#39;</span><span class="p">]</span> <span class="c1"># cycle included</span>
+                    <span class="n">punctual</span><span class="p">,</span><span class="n">cyinc2</span> <span class="o">=</span> <span class="n">cybig</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">cyinc1</span><span class="p">)</span> <span class="c1"># small cycle</span>
                     <span class="k">if</span> <span class="n">punctual</span><span class="p">:</span>
-                        <span class="kn">import</span> <span class="nn">ipdb</span>
-                        <span class="n">ipdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
-                        <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s">&quot;contact detected reconsider the layout description &quot;</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">cyinc2</span> <span class="o">!=</span><span class="bp">None</span><span class="p">:</span> <span class="c"># divide again with updated big cycle</span>
+                        <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot;contact detected reconsider the layout description &quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">cyinc2</span> <span class="o">!=</span><span class="bp">None</span><span class="p">:</span> <span class="c1"># divide again with updated big cycle</span>
                         <span class="n">cybig</span> <span class="o">=</span> <span class="n">cyinc2</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="k">pass</span>
-                        <span class="c">#print &quot;None&quot;</span>
+                        <span class="c1">#print &quot;None&quot;</span>
 
             <span class="k">if</span> <span class="n">cyinc2</span><span class="o">==</span><span class="bp">None</span><span class="p">:</span>
                 <span class="n">cyinc2</span> <span class="o">=</span> <span class="n">cybig</span>
-            <span class="c">#</span>
-            <span class="c"># split cycle :  cybig = cyinc \cup cysmall</span>
-            <span class="c">#</span>
-            <span class="c">#a1 = abs(cyinc1.area)</span>
-            <span class="c">#a2 = abs(cyinc2.area)</span>
-            <span class="c">#if a1&lt;a2:</span>
-            <span class="c">#    cysmall = cyinc1</span>
-            <span class="c">#else:</span>
+            <span class="c1">#</span>
+            <span class="c1"># split cycle :  cybig = cyinc \cup cysmall</span>
+            <span class="c1">#</span>
+            <span class="c1">#a1 = abs(cyinc1.area)</span>
+            <span class="c1">#a2 = abs(cyinc2.area)</span>
+            <span class="c1">#if a1&lt;a2:</span>
+            <span class="c1">#    cysmall = cyinc1</span>
+            <span class="c1">#else:</span>
             <span class="n">cysmall</span> <span class="o">=</span> <span class="n">cyinc2</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ncyroot</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">cysmall</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ncyroot</span><span class="p">][</span><span class="s1">&#39;cycle&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">cysmall</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">ncyroot</span><span class="p">]</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">cysmall</span><span class="o">.</span><span class="n">g</span><span class="p">)</span>
-            <span class="c">#plt.figure()</span>
-            <span class="c">#plt.title(str(ncyroot))</span>
-            <span class="c">#cysmall.show(&#39;r&#39;)</span>
-            <span class="c">#plt.show()</span>
+            <span class="c1">#plt.figure()</span>
+            <span class="c1">#plt.title(str(ncyroot))</span>
+            <span class="c1">#cysmall.show(&#39;r&#39;)</span>
+            <span class="c1">#plt.show()</span>
             <span class="k">for</span> <span class="n">ninc</span> <span class="ow">in</span> <span class="n">lninc</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">remove_edge</span><span class="p">(</span><span class="n">ncyroot</span><span class="p">,</span><span class="n">ninc</span><span class="p">)</span>
 
-            <span class="c">#</span>
-            <span class="c"># recursive call</span>
-            <span class="c">#</span>
+            <span class="c1">#</span>
+            <span class="c1"># recursive call</span>
+            <span class="c1">#</span>
             <span class="bp">self</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decompose</span><span class="p">()</span>
-            <span class="c">#</span>
-            <span class="c"># Two lines to kill the monster</span>
-            <span class="c">#</span>
+            <span class="c1">#</span>
+            <span class="c1"># Two lines to kill the monster</span>
+            <span class="c1">#</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lcyroot</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
                 <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-</div></div>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
+
 <span class="k">class</span> <span class="nc">Cycle</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Graph cycle class</span>
 
@@ -440,26 +438,26 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Cycle.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycle.__init__.html#pylayers.gis.cycles.Cycle.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">G</span><span class="p">,</span><span class="n">lnode</span><span class="o">=</span><span class="p">[]):</span>
-        <span class="c"># This call to cycle_basis is to obtained an ordered cycle</span>
+        <span class="c1"># This call to cycle_basis is to obtained an ordered cycle</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">G</span>  <span class="o">=</span> <span class="n">G</span>
         <span class="n">cycle</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">algorithms</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">cycle_basis</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">G</span>  <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">subgraph</span><span class="p">(</span><span class="n">cycle</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">update</span><span class="p">({</span> <span class="n">node</span> <span class="p">:</span> <span class="n">G</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">cycle</span><span class="p">})</span>
-        <span class="c">#for node in cycle:</span>
-        <span class="c">#    self.G.pos[node] = G.pos[node]</span>
+        <span class="c1">#for node in cycle:</span>
+        <span class="c1">#    self.G.pos[node] = G.pos[node]</span>
         <span class="k">if</span> <span class="n">lnode</span> <span class="o">==</span> <span class="p">[]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cycle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cycle</span><span class="p">)</span>
         <span class="k">else</span> <span class="p">:</span>
-            <span class="c">#lnodes allow to give the order of the cycle</span>
-            <span class="c"># used in Layout._convexify</span>
+            <span class="c1">#lnodes allow to give the order of the cycle</span>
+            <span class="c1"># used in Layout._convexify</span>
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">lnode</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">cycle</span><span class="p">)</span>
             <span class="n">uc</span> <span class="o">=</span><span class="n">cycle</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">lnode</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="n">rcycle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">cycle</span><span class="p">,</span><span class="o">-</span><span class="n">uc</span><span class="p">)</span>
             <span class="k">assert</span> <span class="nb">sum</span><span class="p">(</span><span class="n">rcycle</span><span class="o">-</span><span class="n">lnode</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cycle</span><span class="o">=</span><span class="n">rcycle</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="Cycle.__add__"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycle.__add__.html#pylayers.gis.cycles.Cycle.__add__">[docs]</a>    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; addition of 2 disjoint cycles is not a cycle</span>
 
@@ -479,34 +477,34 @@
             <span class="k">if</span> <span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
                 <span class="n">g1</span>  <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
                 <span class="n">g2</span>  <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">cy</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
-                <span class="c">#</span>
+                <span class="c1">#</span>
                 <span class="n">pt</span>  <span class="o">=</span> <span class="n">g1</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-                <span class="c">#</span>
+                <span class="c1">#</span>
                 <span class="n">n1</span>  <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">g1</span><span class="p">,</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                 <span class="n">n2</span>  <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">g2</span><span class="p">,</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                <span class="c">#</span>
+                <span class="c1">#</span>
                 <span class="n">g1</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                 <span class="n">g2</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                <span class="c">#</span>
+                <span class="c1">#</span>
                 <span class="n">g1</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="o">-</span><span class="mi">1000000</span><span class="p">)</span>
                 <span class="n">g1</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="o">-</span><span class="mi">1000001</span><span class="p">)</span>
                 <span class="n">g2</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="o">-</span><span class="mi">1000002</span><span class="p">)</span>
                 <span class="n">g2</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="o">-</span><span class="mi">1000003</span><span class="p">)</span>
-                <span class="c">#</span>
+                <span class="c1">#</span>
                 <span class="n">g1</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">n1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="o">-</span><span class="mi">1000000</span><span class="p">)</span>
                 <span class="n">g1</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">n1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="o">-</span><span class="mi">1000001</span><span class="p">)</span>
                 <span class="n">g2</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">n2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="o">-</span><span class="mi">1000002</span><span class="p">)</span>
                 <span class="n">g2</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">n2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="o">-</span><span class="mi">1000003</span><span class="p">)</span>
-                <span class="c">#</span>
-                <span class="c"># Need to check an intersection for determining  proper connection</span>
-                <span class="c">#</span>
+                <span class="c1">#</span>
+                <span class="c1"># Need to check an intersection for determining  proper connection</span>
+                <span class="c1">#</span>
                 <span class="n">p10</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">g1</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n1</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
                 <span class="n">p11</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">g1</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n1</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
                 <span class="n">p20</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">g2</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n2</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
                 <span class="n">p21</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">g2</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n2</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-                <span class="c">#</span>
+                <span class="c1">#</span>
                 <span class="n">boolinter</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">p10</span><span class="p">,</span><span class="n">p20</span><span class="p">,</span><span class="n">p11</span><span class="p">,</span><span class="n">p21</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="c">#</span>
+                <span class="c1">#</span>
                 <span class="n">Gc</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
                 <span class="n">Gc</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">compose</span><span class="p">(</span><span class="n">g1</span><span class="p">,</span><span class="n">g2</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">boolinter</span><span class="p">:</span>
@@ -539,9 +537,9 @@
                 <span class="n">newcy</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
                 <span class="k">return</span><span class="p">(</span><span class="n">newcy</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span>
+            <span class="k">return</span></div>
 
-</div>
+
 <div class="viewcode-block" id="Cycle.update"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycle.update.html#pylayers.gis.cycles.Cycle.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; update</span>
 
@@ -563,21 +561,21 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">p</span>  <span class="o">=</span> <span class="n">pt</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">area</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">SignedArea</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">g</span>    <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">Centroid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">g</span>    <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">Centroid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Cycle.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycle.__repr__.html#pylayers.gis.cycles.Cycle.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;cycle nstr&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cycle</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;point number &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nv</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;segment number &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ne</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;area : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;centroid : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="c">#s = s + &#39;G :&#39;+str(self.G.nodes())</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;cycle nstr&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cycle</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;point number &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nv</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;segment number &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ne</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;area : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;centroid : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="c1">#s = s + &#39;G :&#39;+str(self.G.nodes())</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">s</span><span class="p">)</span></div>
 
-</div>
+
     <span class="k">def</span> <span class="nf">reverberation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">L</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate reverberation time of the cycle</span>
 
@@ -585,44 +583,44 @@
 <span class="sd">        where $\eta$ is the absorbtion coefficient  </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># get the sequence of segments </span>
-        <span class="c"># handle subsegments</span>
+        <span class="c1"># get the sequence of segments </span>
+        <span class="c1"># handle subsegments</span>
         <span class="n">lseg</span>  <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycle</span><span class="p">)</span>
         <span class="n">S1</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">S2</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">AS2</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">AS1</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c"># S cycle Area</span>
-        <span class="c"># P cycle Perimeter</span>
-        <span class="c"># A room Area</span>
-        <span class="c"># V room Volume</span>
-        <span class="c"># H room Height</span>
+        <span class="c1"># S cycle Area</span>
+        <span class="c1"># P cycle Perimeter</span>
+        <span class="c1"># A room Area</span>
+        <span class="c1"># V room Volume</span>
+        <span class="c1"># H room Height</span>
 
         <span class="n">S</span>  <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="p">)</span>
         <span class="n">P</span>  <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">lseg</span><span class="p">:</span>
-            <span class="n">npt</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;connect&#39;</span><span class="p">]</span>
-            <span class="n">slname</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+            <span class="n">npt</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;connect&#39;</span><span class="p">]</span>
+            <span class="n">slname</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
             <span class="n">sl</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">slname</span><span class="p">]</span>
-            <span class="c"># calculate Loss</span>
+            <span class="c1"># calculate Loss</span>
             <span class="n">Lo</span><span class="p">,</span><span class="n">Lp</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">loss0</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
             <span class="n">Abs</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">Lo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span>
-            <span class="c">#print slname,Abs</span>
+            <span class="c1">#print slname,Abs</span>
             <span class="n">n1</span> <span class="o">=</span> <span class="n">npt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">n2</span> <span class="o">=</span> <span class="n">npt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">p1</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n1</span><span class="p">]</span>
             <span class="n">p2</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n2</span><span class="p">]</span>
             <span class="n">Lseg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
             <span class="n">P</span> <span class="o">=</span> <span class="n">P</span><span class="o">+</span><span class="n">Lseg</span>
-            <span class="n">H</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;z&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;z&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;ss_z&#39;</span><span class="p">):</span>
+            <span class="n">H</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;z&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;z&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;ss_z&#39;</span><span class="p">):</span>
                 <span class="n">SS</span> <span class="o">=</span> <span class="mi">0</span>
-                <span class="k">for</span> <span class="n">k2</span><span class="p">,</span><span class="n">ss</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;ss_z&#39;</span><span class="p">]):</span>
-                    <span class="n">ssname</span> <span class="o">=</span>  <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">][</span><span class="n">k2</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">k2</span><span class="p">,</span><span class="n">ss</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;ss_z&#39;</span><span class="p">]):</span>
+                    <span class="n">ssname</span> <span class="o">=</span>  <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;ss_name&#39;</span><span class="p">][</span><span class="n">k2</span><span class="p">]</span>
                     <span class="n">sssl</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">ssname</span><span class="p">]</span>
                     <span class="n">Loss</span><span class="p">,</span><span class="n">Lpss</span> <span class="o">=</span> <span class="n">sssl</span><span class="o">.</span><span class="n">loss0</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
                     <span class="n">Absss</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">Loss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span>
-                    <span class="c">#print ssname,Absss</span>
+                    <span class="c1">#print ssname,Absss</span>
                     <span class="n">val</span> <span class="o">=</span> <span class="n">Lseg</span><span class="o">*</span><span class="p">(</span><span class="n">ss</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">ss</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                     <span class="n">SS</span> <span class="o">=</span> <span class="n">SS</span><span class="o">+</span><span class="n">val</span>
                     <span class="n">S1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
@@ -637,8 +635,8 @@
                 <span class="n">AS2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">H</span><span class="o">*</span><span class="n">Lseg</span><span class="o">*</span><span class="n">Abs</span><span class="p">)</span>
         <span class="n">V</span> <span class="o">=</span> <span class="n">S</span><span class="o">*</span><span class="n">H</span>
         <span class="n">A</span> <span class="o">=</span> <span class="n">P</span><span class="o">*</span><span class="n">H</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">S</span>
-        <span class="n">sfloor</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;FLOOR&#39;</span><span class="p">]</span>
-        <span class="n">sceil</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;CEIL&#39;</span><span class="p">]</span>
+        <span class="n">sfloor</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s1">&#39;FLOOR&#39;</span><span class="p">]</span>
+        <span class="n">sceil</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s1">&#39;CEIL&#39;</span><span class="p">]</span>
         <span class="n">Lofloor</span><span class="p">,</span><span class="n">Lpfloor</span> <span class="o">=</span> <span class="n">sfloor</span><span class="o">.</span><span class="n">loss0</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
         <span class="n">Loceil</span><span class="p">,</span><span class="n">Lpceil</span> <span class="o">=</span> <span class="n">sceil</span><span class="o">.</span><span class="n">loss0</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
         <span class="n">etaFloor</span> <span class="o">=</span> <span class="n">S</span><span class="o">*</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">Lofloor</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span>
@@ -654,8 +652,8 @@
         <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span>
         <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span>
         <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
-        <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">area</span>
-</div>
+        <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">area</span></div>
+
 <div class="viewcode-block" id="Cycle.flip"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycle.flip.html#pylayers.gis.cycles.Cycle.flip">[docs]</a>    <span class="k">def</span> <span class="nf">flip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; flip the Cycle</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -663,8 +661,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">edges</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p</span>        <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">[:,::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">area</span>     <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">SignedArea</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">area</span>     <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">SignedArea</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Cycle.inclusion"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycle.inclusion.html#pylayers.gis.cycles.Cycle.inclusion">[docs]</a>    <span class="k">def</span> <span class="nf">inclusion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Cy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  Return True if self includes Cy</span>
 
@@ -691,21 +689,21 @@
         <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="p">)</span><span class="o">&gt;</span><span class="nb">abs</span><span class="p">(</span><span class="n">Cy</span><span class="o">.</span><span class="n">area</span><span class="p">):</span>
             <span class="n">flip</span><span class="p">,</span><span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">Cy</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span> <span class="c"># cycles share a segments</span>
+                <span class="k">if</span> <span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span> <span class="c1"># cycles share a segments</span>
                     <span class="n">s1</span> <span class="o">=</span> <span class="n">Cy</span><span class="o">.</span><span class="n">area</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">area</span>
-                    <span class="k">if</span> <span class="n">flip</span><span class="p">:</span>  <span class="c"># sens oppose</span>
+                    <span class="k">if</span> <span class="n">flip</span><span class="p">:</span>  <span class="c1"># sens oppose</span>
                         <span class="k">if</span> <span class="n">s1</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
                             <span class="k">return</span> <span class="bp">False</span><span class="p">,</span><span class="n">path</span>
                         <span class="k">else</span><span class="p">:</span>
                             <span class="k">return</span> <span class="bp">True</span><span class="p">,</span><span class="n">path</span>
-                    <span class="k">else</span><span class="p">:</span>     <span class="c"># meme sens</span>
+                    <span class="k">else</span><span class="p">:</span>     <span class="c1"># meme sens</span>
                         <span class="k">if</span> <span class="n">s1</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
                             <span class="k">return</span> <span class="bp">True</span><span class="p">,</span><span class="n">path</span>
                         <span class="k">else</span><span class="p">:</span>
                             <span class="k">return</span> <span class="bp">False</span><span class="p">,</span><span class="n">path</span>
-                <span class="k">else</span><span class="p">:</span> <span class="c">#cycles share a point </span>
+                <span class="k">else</span><span class="p">:</span> <span class="c1">#cycles share a point </span>
                     <span class="n">areabig</span>   <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="p">)</span>
-                    <span class="c">#areasmall = abs(Cy.area)</span>
+                    <span class="c1">#areasmall = abs(Cy.area)</span>
                     <span class="n">cycomb</span>    <span class="o">=</span> <span class="bp">self</span> <span class="o">+</span> <span class="n">Cy</span>
                     <span class="n">areacomb</span>  <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">cycomb</span><span class="o">.</span><span class="n">area</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">areacomb</span> <span class="o">&lt;</span> <span class="n">areabig</span><span class="p">:</span>
@@ -715,8 +713,8 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">False</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">False</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
-</div>
+            <span class="k">return</span> <span class="bp">False</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span></div>
+
 <div class="viewcode-block" id="Cycle.simplify"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycle.simplify.html#pylayers.gis.cycles.Cycle.simplify">[docs]</a>    <span class="k">def</span> <span class="nf">simplify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; simplify cycles</span>
 
@@ -735,8 +733,8 @@
             <span class="n">b</span><span class="p">,</span><span class="n">p</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">inclusion</span><span class="p">(</span><span class="n">Cy</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">b</span><span class="p">:</span>
                 <span class="n">T</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">Cy</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
-</div>
+        <span class="k">return</span><span class="p">(</span><span class="n">T</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Cycle.intersect"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycle.intersect.html#pylayers.gis.cycles.Cycle.intersect">[docs]</a>    <span class="k">def</span> <span class="nf">intersect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Cy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Find intersection with an other cycle</span>
 
@@ -764,25 +762,25 @@
 <span class="sd">        path is the common path along the cycle</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c">#</span>
-        <span class="c"># segment number</span>
-        <span class="c">#</span>
+        <span class="c1">#</span>
+        <span class="c1"># segment number</span>
+        <span class="c1">#</span>
         <span class="n">e1</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span>
         <span class="n">e2</span>  <span class="o">=</span> <span class="n">Cy</span><span class="o">.</span><span class="n">edges</span>
-        <span class="c">#</span>
-        <span class="c"># point number</span>
-        <span class="c">#</span>
+        <span class="c1">#</span>
+        <span class="c1"># point number</span>
+        <span class="c1">#</span>
         <span class="n">v1</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span>
         <span class="n">v2</span>  <span class="o">=</span> <span class="n">Cy</span><span class="o">.</span><span class="n">vertices</span>
-        <span class="c">#</span>
-        <span class="c"># intersection of segments and vertices</span>
-        <span class="c">#</span>
+        <span class="c1">#</span>
+        <span class="c1"># intersection of segments and vertices</span>
+        <span class="c1">#</span>
         <span class="n">u</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">e1</span><span class="p">,</span><span class="n">e2</span><span class="p">)</span>
         <span class="n">v</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">)</span>
-        <span class="c">#</span>
+        <span class="c1">#</span>
         <span class="n">Nis</span>  <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
         <span class="n">Nip</span>  <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-        <span class="c">#print Nis,&quot; segments en commun&quot;</span>
+        <span class="c1">#print Nis,&quot; segments en commun&quot;</span>
         <span class="k">if</span> <span class="n">Nis</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">Nis</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
                 <span class="n">brin1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycle</span>
@@ -808,10 +806,10 @@
                 <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">dtk2</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
                     <span class="n">dtk2</span> <span class="o">=</span> <span class="o">-</span><span class="n">dtk2</span>
                 <span class="k">if</span> <span class="n">dtk1</span><span class="o">*</span><span class="n">dtk2</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-                <span class="c">#    print &quot;meme sens&quot;</span>
+                <span class="c1">#    print &quot;meme sens&quot;</span>
                     <span class="n">flip</span> <span class="o">=</span> <span class="bp">False</span>
                 <span class="k">else</span><span class="p">:</span>
-                <span class="c">#    print &quot;sens oppose&quot;</span>
+                <span class="c1">#    print &quot;sens oppose&quot;</span>
                     <span class="n">flip</span> <span class="o">=</span> <span class="bp">True</span>
 
                 <span class="n">brin</span> <span class="o">=</span> <span class="n">u</span>
@@ -822,9 +820,9 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">brin</span>  <span class="o">=</span> <span class="n">v</span>
 
-        <span class="k">return</span><span class="p">(</span><span class="n">flip</span><span class="p">,</span><span class="n">brin</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">flip</span><span class="p">,</span><span class="n">brin</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="Cycle.split"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycle.split.html#pylayers.gis.cycles.Cycle.split">[docs]</a>    <span class="k">def</span> <span class="nf">split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cyin</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; split cycle</span>
 
@@ -848,13 +846,13 @@
         <span class="n">e1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span>
         <span class="n">e2</span> <span class="o">=</span> <span class="n">cyin</span><span class="o">.</span><span class="n">edges</span>
         <span class="n">Gunion</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">compose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">,</span><span class="n">cyin</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
-        <span class="c"># inform nodes position</span>
+        <span class="c1"># inform nodes position</span>
         <span class="n">Gunion</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">Gunion</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">node</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">})</span>
         <span class="n">Gunion</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">node</span><span class="p">:</span><span class="n">cyin</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">cyin</span><span class="o">.</span><span class="n">G</span><span class="p">})</span>
         <span class="n">incl</span><span class="p">,</span><span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inclusion</span><span class="p">(</span><span class="n">cyin</span><span class="p">)</span>
-        <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">path</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c"># test share segment condition</span>
-        <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">path</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c"># test share point condition</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">path</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># test share segment condition</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">path</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># test share point condition</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">incl</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">):</span>
             <span class="n">ee1</span>   <span class="o">=</span> <span class="n">e1</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">e1</span><span class="p">,</span><span class="n">path</span><span class="p">)]</span>
             <span class="n">ee2</span>   <span class="o">=</span> <span class="n">e2</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">e2</span><span class="p">,</span><span class="n">path</span><span class="p">)]</span>
@@ -864,23 +862,23 @@
                 <span class="n">nb</span> <span class="o">=</span> <span class="n">Gunion</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">kt</span><span class="p">)</span>
                 <span class="n">cycle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">cycle</span><span class="p">,</span><span class="n">nb</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">kt</span><span class="p">,</span><span class="n">nb</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
             <span class="n">cycle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">cycle</span><span class="p">)</span>
-            <span class="c"># extract subgraph from cycle</span>
+            <span class="c1"># extract subgraph from cycle</span>
             <span class="n">G</span>     <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">subgraph</span><span class="p">(</span><span class="n">Gunion</span><span class="p">,</span><span class="n">cycle</span><span class="p">)</span>
             <span class="n">G</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="n">G</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">node</span><span class="p">:</span> <span class="n">Gunion</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">Gunion</span><span class="p">})</span>
             <span class="n">cyout</span> <span class="o">=</span> <span class="n">Cycle</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
             <span class="n">diffarea</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="p">)</span><span class="o">-</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">cyin</span><span class="o">.</span><span class="n">area</span><span class="p">)</span><span class="o">+</span><span class="nb">abs</span><span class="p">(</span><span class="n">cyout</span><span class="o">.</span><span class="n">area</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">diffarea</span><span class="o">&gt;</span><span class="mf">1e-10</span><span class="p">:</span>
-                <span class="k">print</span> <span class="s">&quot;area error&quot;</span><span class="p">,</span><span class="n">diffarea</span>
+                <span class="k">print</span> <span class="s2">&quot;area error&quot;</span><span class="p">,</span><span class="n">diffarea</span>
                 <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
 
             <span class="k">return</span><span class="p">(</span><span class="bp">False</span><span class="p">,</span><span class="n">cyout</span><span class="p">)</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">incl</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">):</span>
             <span class="k">return</span><span class="p">(</span><span class="bp">True</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span><span class="p">(</span><span class="bp">False</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">(</span><span class="bp">False</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="Cycle.corrcy"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycle.corrcy.html#pylayers.gis.cycles.Cycle.corrcy">[docs]</a>    <span class="k">def</span> <span class="nf">corrcy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Cy</span><span class="p">,</span><span class="n">flip</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; cyclic matching correlation</span>
 
@@ -896,7 +894,7 @@
         <span class="n">e2</span> <span class="o">=</span> <span class="n">Cy</span><span class="o">.</span><span class="n">edges</span>
         <span class="n">u</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">e1</span><span class="p">,</span><span class="n">e2</span><span class="p">)</span>
         <span class="n">Ni</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
-        <span class="k">print</span> <span class="n">Ni</span><span class="p">,</span><span class="s">&quot; intersections&quot;</span>
+        <span class="k">print</span> <span class="n">Ni</span><span class="p">,</span><span class="s2">&quot; intersections&quot;</span>
         <span class="n">v1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span>
         <span class="n">v2</span> <span class="o">=</span> <span class="n">Cy</span><span class="o">.</span><span class="n">vertices</span>
         <span class="n">n1</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">e1</span><span class="p">)</span>
@@ -968,24 +966,24 @@
                     <span class="n">flip</span> <span class="o">=</span> <span class="bp">False</span>
 
 
-        <span class="k">return</span><span class="p">(</span><span class="n">flip</span><span class="p">,</span><span class="n">brin</span><span class="p">,</span><span class="n">tk1</span><span class="p">,</span><span class="n">tk2</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">flip</span><span class="p">,</span><span class="n">brin</span><span class="p">,</span><span class="n">tk1</span><span class="p">,</span><span class="n">tk2</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="Cycle.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycle.show.html#pylayers.gis.cycles.Cycle.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show cycle</span>
 
 <span class="sd">        acceleration can be obtained if the polygon is calculated once</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c">#nx.draw_networkx_edges(self.G,self.G.pos,width=2,edge_color=color,alpha=0.4)</span>
+        <span class="c1">#nx.draw_networkx_edges(self.G,self.G.pos,width=2,edge_color=color,alpha=0.4)</span>
         <span class="n">npoints</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span> <span class="o">&lt;</span><span class="mi">0</span> <span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">cycle</span><span class="p">)</span>
         <span class="n">coords</span>  <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">x</span><span class="p">],</span><span class="n">npoints</span><span class="p">)</span>
         <span class="n">poly</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">sh</span><span class="o">.</span><span class="n">MultiPoint</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">coords</span><span class="p">)),</span><span class="bp">self</span><span class="o">.</span><span class="n">cycle</span><span class="p">)</span>
         <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
-        <span class="c">#plt.draw ()</span>
-</div>
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span></div>
+        <span class="c1">#plt.draw ()</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 </pre></div>
 
@@ -999,8 +997,8 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 29, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on févr. 23, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
     

@@ -138,11 +138,11 @@ spherical harmonics decomposition.</p>
 illustrated. The <code class="docutils literal"><span class="pre">Antenna</span></code> class is stored in the
 <a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.antprop.antenna.html">antenna.py</a>
 module which is placed in the <code class="docutils literal"><span class="pre">antprop</span></code> module.</p>
-<div class="code python highlight-python"><div class="highlight"><pre>from pylayers.antprop.antenna import *
+<div class="code python highlight-python"><div class="highlight"><pre><span></span>from pylayers.antprop.antenna import *
 %matplotlib inline
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
+<div class="highlight-python"><div class="highlight"><pre><span></span>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
 </pre></div>
 </div>
 <p>An antenna object can not be loaded in specifying an existing antenna
@@ -150,14 +150,14 @@ file name as argument of the constructor. Lets start by loading an
 antenna from a <code class="docutils literal"><span class="pre">vsh3</span></code> file which correspond to a vector spherical
 harmonics representation of an antenna measured in SATIMO near field
 chamber.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;S1R1.vsh3&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s1">&#39;S1R1.vsh3&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The object antenna can show itself just by typing it&#8217;s name.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">A</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Antenna type : vsh3
+<div class="highlight-python"><div class="highlight"><pre><span></span>Antenna type : vsh3
 ------------------------
 file name : S1R1.vsh3
 fmin : 0.80GHz
@@ -177,25 +177,25 @@ the project it is possible to invoke the <code class="docutils literal"><span cl
 <p>Antenna files should be stored in the sub-directory <code class="docutils literal"><span class="pre">ant</span></code> of the
 current project. The current project is located with the <code class="docutils literal"><span class="pre">$BASENAME</span></code>
 environment variable.</p>
-<div class="code python highlight-python"><div class="highlight"><pre>!echo $BASENAME
+<div class="code python highlight-python"><div class="highlight"><pre><span></span>!echo $BASENAME
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>/home/uguen/Bureau/P1
+<div class="highlight-python"><div class="highlight"><pre><span></span>/home/uguen/Bureau/P1
 </pre></div>
 </div>
 <p>We can use the <code class="docutils literal"><span class="pre">ls</span></code> method to determine the number of files of
 different type</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">lvsh3</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s">&#39;vsh3&#39;</span><span class="p">)</span>
-<span class="n">lssh3</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s">&#39;sh3&#39;</span><span class="p">)</span>
-<span class="n">lmat</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s">&#39;mat&#39;</span><span class="p">)</span>
-<span class="k">print</span> <span class="s">&quot;Number of antenna in .vsh3 format : &quot;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">lvsh3</span><span class="p">)</span>
-<span class="k">print</span> <span class="s">&quot;Number of antenna in .sh3 format : &quot;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">lssh3</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">lvsh3</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s1">&#39;vsh3&#39;</span><span class="p">)</span>
+<span class="n">lssh3</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s1">&#39;sh3&#39;</span><span class="p">)</span>
+<span class="n">lmat</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s1">&#39;mat&#39;</span><span class="p">)</span>
+<span class="k">print</span> <span class="s2">&quot;Number of antenna in .vsh3 format : &quot;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">lvsh3</span><span class="p">)</span>
+<span class="k">print</span> <span class="s2">&quot;Number of antenna in .sh3 format : &quot;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">lssh3</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">lvsh3</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
 <span class="k">print</span> <span class="n">lssh3</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
 <span class="k">print</span> <span class="n">lmat</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Number of antenna in .vsh3 format :  2
+<div class="highlight-python"><div class="highlight"><pre><span></span>Number of antenna in .vsh3 format :  2
 Number of antenna in .sh3 format :  4
 [&#39;S1R1.vsh3&#39;, &#39;defant.vsh3&#39;]
 [&#39;S17R1.sh3&#39;, &#39;S17R2m.sh3&#39;, &#39;S1R1.sh3&#39;, &#39;S2R2.sh3&#39;]
@@ -223,10 +223,10 @@ synthesis has been numpyfied in the
 module.</p>
 <p><a class="reference external" href="./AntennaVSH.html">Description of Vector Spherical Harmonics</a></p>
 <p>The coefficients of the antenna also have a <strong>repr</strong></p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">.</span><span class="n">C</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Br
+<div class="highlight-python"><div class="highlight"><pre><span></span>Br
 -------------
 Nf   : 104
 fmin (GHz) : 0.8
@@ -258,13 +258,13 @@ Ncoeff s3 : 72
 <div class="section" id="synthesis-of-the-radiation-pattern">
 <h2>Synthesis of the radiation pattern<a class="headerlink" href="#synthesis-of-the-radiation-pattern" title="Permalink to this headline">¶</a></h2>
 <p>The radiation pattern is synthetized with the following call</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="mi">20</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">sqG</span><span class="p">))</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="mi">20</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">sqG</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
 
@@ -279,48 +279,48 @@ NameError: name &#39;log10&#39; is not defined
 of frequencies <code class="docutils literal"><span class="pre">fGHz</span></code> + If <code class="docutils literal"><span class="pre">phd</span></code> (phi in degree) is specified the
 diagram is given as a function of <img src="../../_images/mathmpl/math-5dc8912759.png" style="position: relative; bottom: -3px"/> + If <code class="docutils literal"><span class="pre">thd</span></code> (theta in
 degree) is specified the diagram is given as a function of <img src="../../_images/mathmpl/math-e22cc525ec.png" style="position: relative; bottom: -7px"/></p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-<span class="n">a1</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">,</span><span class="n">projection</span><span class="o">=</span><span class="s">&#39;polar&#39;</span><span class="p">)</span>
-<span class="n">f1</span><span class="p">,</span><span class="n">a1</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">plotG</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mf">5.6</span><span class="p">],</span><span class="n">plan</span><span class="o">=</span><span class="s">&#39;theta&#39;</span><span class="p">,</span><span class="n">angdeg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">GmaxdB</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a1</span><span class="p">,</span><span class="n">show</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="n">a2</span> <span class="o">=</span> <span class="n">f1</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">,</span><span class="n">projection</span><span class="o">=</span><span class="s">&#39;polar&#39;</span><span class="p">)</span>
-<span class="n">f2</span><span class="p">,</span><span class="n">a2</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">plotG</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mf">5.6</span><span class="p">],</span><span class="n">plan</span><span class="o">=</span><span class="s">&#39;phi&#39;</span><span class="p">,</span><span class="n">angdeg</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span><span class="n">GmaxdB</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a2</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">a1</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">,</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;polar&#39;</span><span class="p">)</span>
+<span class="n">f1</span><span class="p">,</span><span class="n">a1</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">plotG</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mf">5.6</span><span class="p">],</span><span class="n">plan</span><span class="o">=</span><span class="s1">&#39;theta&#39;</span><span class="p">,</span><span class="n">angdeg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">GmaxdB</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a1</span><span class="p">,</span><span class="n">show</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">a2</span> <span class="o">=</span> <span class="n">f1</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">,</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;polar&#39;</span><span class="p">)</span>
+<span class="n">f2</span><span class="p">,</span><span class="n">a2</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">plotG</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mf">5.6</span><span class="p">],</span><span class="n">plan</span><span class="o">=</span><span class="s1">&#39;phi&#39;</span><span class="p">,</span><span class="n">angdeg</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span><span class="n">GmaxdB</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a2</span><span class="p">)</span>
 <span class="n">f2</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="../../_images/Antenna_29_0.png" src="../../_images/Antenna_29_0.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">a1</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
-<span class="n">f1</span><span class="p">,</span><span class="n">a1</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">plotG</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mf">5.6</span><span class="p">],</span><span class="n">plan</span><span class="o">=</span><span class="s">&#39;theta&#39;</span><span class="p">,</span><span class="n">angdeg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a1</span><span class="p">,</span><span class="n">show</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">f1</span><span class="p">,</span><span class="n">a1</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">plotG</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mf">5.6</span><span class="p">],</span><span class="n">plan</span><span class="o">=</span><span class="s1">&#39;theta&#39;</span><span class="p">,</span><span class="n">angdeg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a1</span><span class="p">,</span><span class="n">show</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="n">a2</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
-<span class="n">f2</span><span class="p">,</span><span class="n">a2</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">plotG</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mf">5.6</span><span class="p">],</span><span class="n">plan</span><span class="o">=</span><span class="s">&#39;phi&#39;</span><span class="p">,</span><span class="n">angdeg</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span><span class="n">GmaxdB</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f1</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a2</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">f2</span><span class="p">,</span><span class="n">a2</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">plotG</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mf">5.6</span><span class="p">],</span><span class="n">plan</span><span class="o">=</span><span class="s1">&#39;phi&#39;</span><span class="p">,</span><span class="n">angdeg</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span><span class="n">GmaxdB</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f1</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a2</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="n">f2</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="../../_images/Antenna_30_0.png" src="../../_images/Antenna_30_0.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">96</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">96</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="mf">5.6000000000000005</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mf">5.6000000000000005</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">plotG</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mf">5.6</span><span class="p">],</span><span class="n">plan</span><span class="o">=</span><span class="s">&#39;phi&#39;</span><span class="p">,</span><span class="n">angdeg</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span><span class="n">GmaxdB</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">.</span><span class="n">plotG</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mf">5.6</span><span class="p">],</span><span class="n">plan</span><span class="o">=</span><span class="s1">&#39;phi&#39;</span><span class="p">,</span><span class="n">angdeg</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span><span class="n">GmaxdB</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../../_images/Antenna_32_0.png" src="../../_images/Antenna_32_0.png" />
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b6bf1044810&gt;,
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b6bf1044810&gt;,
  &lt;matplotlib.projections.polar.PolarAxes at 0x2b6bf1075390&gt;)
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">pol3d</span><span class="p">(</span><span class="n">R</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">St</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">Sp</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">.</span><span class="n">pol3d</span><span class="p">(</span><span class="n">R</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">St</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">Sp</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The vector spherical coefficients can be dispalayed as follows</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
-<span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s3&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;s3&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/collections.py:590: FutureWarning: elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison
+<div class="highlight-python"><div class="highlight"><pre><span></span>/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/collections.py:590: FutureWarning: elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison
   if self._edgecolors == str(&#39;face&#39;):
 </pre></div>
 </div>
@@ -330,36 +330,36 @@ degree) is specified the diagram is given as a function of <img src="../../_imag
 <h2>Defining Antenna gain from analytic formulas<a class="headerlink" href="#defining-antenna-gain-from-analytic-formulas" title="Permalink to this headline">¶</a></h2>
 <p>An antenna can also be defined from closed-form expressions. Available
 antennas are the following + Omni + Gauss + WirePlate + 3GPP</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Ag</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;Gauss&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Ag</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;Gauss&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Ag</span><span class="o">.</span><span class="n">plotG</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Ag</span><span class="o">.</span><span class="n">plotG</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="../../_images/Antenna_39_0.png" src="../../_images/Antenna_39_0.png" />
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b6bf1aced50&gt;,
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b6bf1aced50&gt;,
  &lt;matplotlib.projections.polar.PolarAxes at 0x2b6bf4d14550&gt;)
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Ao</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Omni&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Ao</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s1">&#39;Omni&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Ao</span><span class="o">.</span><span class="n">plotG</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Ao</span><span class="o">.</span><span class="n">plotG</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="../../_images/Antenna_41_0.png" src="../../_images/Antenna_41_0.png" />
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b6bf4d4c350&gt;,
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b6bf4d4c350&gt;,
  &lt;matplotlib.projections.polar.PolarAxes at 0x2b6bf4d93210&gt;)
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A3</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;3gpp&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">A3</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s1">&#39;3gpp&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">A3</span><span class="o">.</span><span class="n">plotG</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">A3</span><span class="o">.</span><span class="n">plotG</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="../../_images/Antenna_43_0.png" src="../../_images/Antenna_43_0.png" />
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b6bf4e4b8d0&gt;,
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2b6bf4e4b8d0&gt;,
  &lt;matplotlib.projections.polar.PolarAxes at 0x2b6bf4e35710&gt;)
 </pre></div>
 </div>
@@ -377,8 +377,8 @@ antennas are the following + Omni + Gauss + WirePlate + 3GPP</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 29, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on févr. 23, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/2-AP/Antenna.txt"
 	    rel="nofollow">Show this page source</a>

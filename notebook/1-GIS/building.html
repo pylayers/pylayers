@@ -121,54 +121,59 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="code python highlight-python"><div class="highlight"><pre>import pylayers.gis.ezone as ez
+  <div class="code python highlight-python"><div class="highlight"><pre><span></span>import pylayers.gis.ezone as ez
 import matplotlib.pyplot as plt
 import numpy as np
 import os
 %matplotlib inline
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">prefix</span><span class="o">=</span><span class="n">ez</span><span class="o">.</span><span class="n">enctile</span><span class="p">(</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span><span class="mf">47.5</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span>/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/__init__.py:872: UserWarning: axes.color_cycle is deprecated and replaced with axes.prop_cycle; please use the latter.
+  warnings.warn(self.msg_depr % (key, alt_key))
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">prefix</span><span class="o">=</span><span class="n">ez</span><span class="o">.</span><span class="n">enctile</span><span class="p">(</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span><span class="mf">47.5</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">prefix</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">N47W002</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">N47W002</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">E</span><span class="o">=</span><span class="n">ez</span><span class="o">.</span><span class="n">Ezone</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">E</span><span class="o">=</span><span class="n">ez</span><span class="o">.</span><span class="n">Ezone</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">E</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">E</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>N47W002
+<div class="highlight-python"><div class="highlight"><pre><span></span>N47W002
 --------
-(-2, -1, 47, 48)
-latlon : [ -0.000 75118.790 cartesian :0.000 111194.505 ]
+latlon (deg) : (-2, -1, 47, 48)
+cartesian (meters) : [-0.000 75118.790 0.000 111194.505 ]
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">E</span><span class="o">.</span><span class="n">getdem</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">E</span><span class="o">.</span><span class="n">getdem</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Load srtm file
+<div class="highlight-python"><div class="highlight"><pre><span></span>Load srtm file
 no aster file for this point
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">E</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="mi">180</span><span class="p">])</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">E</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="mi">180</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x2b6eb5f7a210&gt;,
- &lt;matplotlib.axes._subplots.AxesSubplot at 0x2b6ee9172190&gt;)
+<div class="highlight-python"><div class="highlight"><pre><span></span>(&lt;matplotlib.figure.Figure at 0x2ba9bf1cae10&gt;,
+ &lt;matplotlib.axes._subplots.AxesSubplot at 0x2baa01b2fd90&gt;,
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x2baa02150310&gt;)
 </pre></div>
 </div>
 <img alt="../../_images/building_5_1.png" src="../../_images/building_5_1.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">E</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">E</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>N47W002
+<div class="highlight-python"><div class="highlight"><pre><span></span>N47W002
 --------
-(-2, -1, 47, 48)
-latlon : [ -0.000 75118.790 cartesian :0.000 111194.505 ]
+latlon (deg) : (-2, -1, 47, 48)
+cartesian (meters) : [-0.000 75118.790 0.000 111194.505 ]
 </pre></div>
 </div>
 
@@ -183,8 +188,8 @@ latlon : [ -0.000 75118.790 cartesian :0.000 111194.505 ]
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 28, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on févr. 23, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/1-GIS/building.txt"
 	    rel="nofollow">Show this page source</a>

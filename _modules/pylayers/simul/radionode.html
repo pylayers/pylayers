@@ -137,8 +137,8 @@
           <div class="body" role="main">
             
   <h1>Source code for pylayers.simul.radionode</h1><div class="highlight"><pre>
-<span class="c">#/usr/bin/python</span>
-<span class="c"># -*- coding: utf-8 -*-</span>
+<span></span><span class="c1">#/usr/bin/python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 
@@ -241,11 +241,11 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="RadioNode.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.__init__.html#pylayers.simul.radionode.RadioNode.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;undefined&#39;</span><span class="p">,</span>
-                 <span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;radionode.ini&#39;</span><span class="p">,</span>
-                 <span class="n">_filetraj</span><span class="o">=</span><span class="s">&#39;pos.csv&#39;</span><span class="p">,</span>
-                 <span class="n">_fileant</span><span class="o">=</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">,</span>
-                 <span class="n">_filestr</span><span class="o">=</span><span class="s">&#39;defstr.str2&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.__init__.html#pylayers.simul.radionode.RadioNode.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;undefined&#39;</span><span class="p">,</span>
+                 <span class="n">_fileini</span><span class="o">=</span><span class="s1">&#39;radionode.ini&#39;</span><span class="p">,</span>
+                 <span class="n">_filetraj</span><span class="o">=</span><span class="s1">&#39;pos.csv&#39;</span><span class="p">,</span>
+                 <span class="n">_fileant</span><span class="o">=</span><span class="s1">&#39;defant.vsh3&#39;</span><span class="p">,</span>
+                 <span class="n">_filestr</span><span class="o">=</span><span class="s1">&#39;defstr.str2&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        the _fileini file must be placed in the ini directory</span>
@@ -277,51 +277,51 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">=</span> <span class="n">typ</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="n">name</span>
-        <span class="c">#</span>
-        <span class="c"># clean existing .ini file</span>
-        <span class="c">#</span>
-        <span class="k">if</span> <span class="n">_fileini</span> <span class="o">==</span> <span class="s">&#39;radionode.ini&#39;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;tx&#39;</span><span class="p">:</span>
-                <span class="n">_fileini</span> <span class="o">=</span> <span class="n">_fileini</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;node&#39;</span><span class="p">,</span> <span class="s">&#39;tx&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;rx&#39;</span><span class="p">:</span>
-                <span class="n">_fileini</span> <span class="o">=</span> <span class="n">_fileini</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;node&#39;</span><span class="p">,</span> <span class="s">&#39;rx&#39;</span><span class="p">)</span>
-            <span class="n">fileini</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_fileini</span><span class="p">,</span> <span class="s">&#39;ini&#39;</span><span class="p">)</span>
-            <span class="c"># delete radionode.ini if it exists</span>
+        <span class="c1">#</span>
+        <span class="c1"># clean existing .ini file</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="n">_fileini</span> <span class="o">==</span> <span class="s1">&#39;radionode.ini&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s1">&#39;tx&#39;</span><span class="p">:</span>
+                <span class="n">_fileini</span> <span class="o">=</span> <span class="n">_fileini</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;node&#39;</span><span class="p">,</span> <span class="s1">&#39;tx&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s1">&#39;rx&#39;</span><span class="p">:</span>
+                <span class="n">_fileini</span> <span class="o">=</span> <span class="n">_fileini</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;node&#39;</span><span class="p">,</span> <span class="s1">&#39;rx&#39;</span><span class="p">)</span>
+            <span class="n">fileini</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_fileini</span><span class="p">,</span> <span class="s1">&#39;ini&#39;</span><span class="p">)</span>
+            <span class="c1"># delete radionode.ini if it exists</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fileini</span><span class="p">)</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="k">pass</span>
 
-        <span class="n">prefix</span> <span class="o">=</span> <span class="n">_fileini</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
-        <span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.spa&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fileini</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">filespa</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="s">&#39;.spa&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">filegeom</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="s">&#39;.vect&#39;</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="n">_fileini</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.ini&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.spa&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fileini</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="s1">&#39;.ini&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filespa</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="s1">&#39;.spa&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filegeom</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="s1">&#39;.vect&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filestr</span> <span class="o">=</span> <span class="n">_filestr</span>
-        <span class="n">fileini</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fileini</span><span class="p">,</span><span class="s">&#39;ini&#39;</span><span class="p">)</span>
-        <span class="c"># if file _fileini exists it is loaded</span>
+        <span class="n">fileini</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fileini</span><span class="p">,</span><span class="s1">&#39;ini&#39;</span><span class="p">)</span>
+        <span class="c1"># if file _fileini exists it is loaded</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileini</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+            <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileini</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
             <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">loadini</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fileini</span><span class="p">,</span> <span class="s">&#39;ini&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loadini</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fileini</span><span class="p">,</span> <span class="s1">&#39;ini&#39;</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">pass</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="RadioNode.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.__repr__.html#pylayers.simul.radionode.RadioNode.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; representation of radio node</span>
 
 <span class="sd">        Only position is shown</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">):</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">+</span> <span class="s">&#39; : &#39;</span> \
-                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span><span class="o">/</span><span class="mf">1000.</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> \
-                      <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span><span class="o">/</span><span class="mf">1000.</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> \
-                      <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span><span class="o">/</span><span class="mf">1000.</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
-</div>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">+</span> <span class="s1">&#39; : &#39;</span> \
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span><span class="o">/</span><span class="mf">1000.</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> \
+                      <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span><span class="o">/</span><span class="mf">1000.</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> \
+                      <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span><span class="o">/</span><span class="mf">1000.</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="RadioNode.pos2pt"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.pos2pt.html#pylayers.simul.radionode.RadioNode.pos2pt">[docs]</a>    <span class="k">def</span> <span class="nf">pos2pt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; convert position to points dict</span>
 
@@ -329,8 +329,8 @@
         <span class="n">npt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">npt</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span>
-</div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span></div>
+
 <div class="viewcode-block" id="RadioNode.transform"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.transform.html#pylayers.simul.radionode.RadioNode.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">trans</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; tranform position rotation + translation</span>
 
@@ -347,26 +347,26 @@
         <span class="n">Rot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">d2r</span><span class="o">*</span><span class="n">alpha</span><span class="p">),</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">d2r</span><span class="o">*</span><span class="n">alpha</span><span class="p">)],</span>
                         <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">d2r</span><span class="o">*</span><span class="n">alpha</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">d2r</span><span class="o">*</span><span class="n">alpha</span><span class="p">)]])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Rot</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,:])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,:]</span><span class="o">+</span><span class="n">trans</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,:]</span><span class="o">+</span><span class="n">trans</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span></div>
+
 <div class="viewcode-block" id="RadioNode.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.info.html#pylayers.simul.radionode.RadioNode.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; display RadioNodes informations</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">print</span> <span class="s">&quot;npos       : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span>
-        <span class="k">print</span> <span class="s">&quot;position   : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span>
-        <span class="k">print</span> <span class="s">&quot;name       : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
-        <span class="c">#print &quot;orientation : &quot;, self.orientation</span>
-        <span class="k">print</span> <span class="s">&quot;type       : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span>
-        <span class="k">print</span> <span class="s">&quot;fileini    : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileini</span>
-        <span class="k">print</span> <span class="s">&quot;filespa    : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filespa</span>
-        <span class="k">print</span> <span class="s">&quot;filegeom   : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filegeom</span>
-        <span class="k">print</span> <span class="s">&quot;fileant    : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileant</span>
+        <span class="k">print</span> <span class="s2">&quot;npos       : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span>
+        <span class="k">print</span> <span class="s2">&quot;position   : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span>
+        <span class="k">print</span> <span class="s2">&quot;name       : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+        <span class="c1">#print &quot;orientation : &quot;, self.orientation</span>
+        <span class="k">print</span> <span class="s2">&quot;type       : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span>
+        <span class="k">print</span> <span class="s2">&quot;fileini    : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileini</span>
+        <span class="k">print</span> <span class="s2">&quot;filespa    : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filespa</span>
+        <span class="k">print</span> <span class="s2">&quot;filegeom   : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filegeom</span>
+        <span class="k">print</span> <span class="s2">&quot;fileant    : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileant</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s">&quot;filestr    : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filestr</span>
+            <span class="k">print</span> <span class="s2">&quot;filestr    : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filestr</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="k">pass</span>
-</div>
+            <span class="k">pass</span></div>
+
 <div class="viewcode-block" id="RadioNode.clear"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.clear.html#pylayers.simul.radionode.RadioNode.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; clear positions</span>
 
@@ -375,8 +375,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="mi">1</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="mi">1</span></div>
+
 <div class="viewcode-block" id="RadioNode.points"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.points.html#pylayers.simul.radionode.RadioNode.points">[docs]</a>    <span class="k">def</span> <span class="nf">points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pt</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]])):</span>
         <span class="sd">&quot;&quot;&quot; add a set of points to RadioNode</span>
 
@@ -392,9 +392,9 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">pt</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-</div>
-<div class="viewcode-block" id="RadioNode.point"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.point.html#pylayers.simul.radionode.RadioNode.point">[docs]</a>    <span class="k">def</span> <span class="nf">point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">orientation</span><span class="o">=</span><span class="p">[],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="RadioNode.point"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.point.html#pylayers.simul.radionode.RadioNode.point">[docs]</a>    <span class="k">def</span> <span class="nf">point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">orientation</span><span class="o">=</span><span class="p">[],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;subst&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add a position to RadioNode</span>
 
 <span class="sd">        The new RadioNode is saved in .spa</span>
@@ -435,7 +435,7 @@
         <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
         <span class="n">pt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;subst&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;subst&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">time</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">pt</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span> <span class="o">=</span> <span class="n">orientation</span>
@@ -450,9 +450,9 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span> <span class="o">=</span> <span class="n">orientation</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">pos2pt</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-</div>
-<div class="viewcode-block" id="RadioNode.linevect"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.linevect.html#pylayers.simul.radionode.RadioNode.linevect">[docs]</a>    <span class="k">def</span> <span class="nf">linevect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">npt</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">1.0</span> <span class="p">,</span> <span class="n">ptt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">vec</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="RadioNode.linevect"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.linevect.html#pylayers.simul.radionode.RadioNode.linevect">[docs]</a>    <span class="k">def</span> <span class="nf">linevect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">npt</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">1.0</span> <span class="p">,</span> <span class="n">ptt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">vec</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;subst&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create a line along a direction </span>
 
 <span class="sd">        Parameters</span>
@@ -488,20 +488,20 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">npt</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;npt should be greater than 1&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;npt should be greater than 1&#39;</span><span class="p">)</span>
         <span class="n">ptt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ptt</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">npt</span><span class="p">)</span>
         <span class="n">pt</span> <span class="o">=</span> <span class="n">ptt</span> <span class="o">+</span> <span class="n">k</span><span class="o">*</span><span class="n">step</span><span class="o">*</span><span class="n">vec</span>
-        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;subst&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;subst&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">pt</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pos2pt</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-    </div>
-<div class="viewcode-block" id="RadioNode.line"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.line.html#pylayers.simul.radionode.RadioNode.line">[docs]</a>    <span class="k">def</span> <span class="nf">line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">npt</span><span class="p">,</span> <span class="n">ptt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">pth</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="RadioNode.line"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.line.html#pylayers.simul.radionode.RadioNode.line">[docs]</a>    <span class="k">def</span> <span class="nf">line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">npt</span><span class="p">,</span> <span class="n">ptt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">pth</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;subst&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; build a line trajectory for a RadioNode</span>
 
 <span class="sd">        Parameters</span>
@@ -535,21 +535,21 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pth</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">pth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pth</span><span class="p">)</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">npt</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;npt should be greater than 1&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;npt should be greater than 1&#39;</span><span class="p">)</span>
         <span class="n">ptt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ptt</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">pth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">pth</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">pas</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">npt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">pas</span><span class="p">,</span> <span class="n">pas</span><span class="p">)</span>
         <span class="n">pt</span> <span class="o">=</span> <span class="n">ptt</span> <span class="o">+</span> <span class="n">k</span> <span class="o">*</span> <span class="p">(</span><span class="n">pth</span><span class="o">-</span><span class="n">ptt</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;subst&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;subst&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">pt</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pos2pt</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-</div>
-<div class="viewcode-block" id="RadioNode.surface"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.surface.html#pylayers.simul.radionode.RadioNode.surface">[docs]</a>    <span class="k">def</span> <span class="nf">surface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N1</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">N2</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p1</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p2</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="RadioNode.surface"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.surface.html#pylayers.simul.radionode.RadioNode.surface">[docs]</a>    <span class="k">def</span> <span class="nf">surface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N1</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">N2</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p1</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p2</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;subst&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add a surface to RadioNode</span>
 
 <span class="sd">        add a surface with basis (p0p1,p0p2)</span>
@@ -597,15 +597,15 @@
         <span class="n">kk1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n2</span><span class="p">),</span> <span class="n">k1</span><span class="p">)</span>
         <span class="n">kk2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">k2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n1</span><span class="p">))</span>
         <span class="n">pt</span> <span class="o">=</span> <span class="n">p0</span> <span class="o">+</span> <span class="n">kk1</span> <span class="o">*</span> <span class="p">(</span><span class="n">p1</span> <span class="o">-</span> <span class="n">p0</span><span class="p">)</span> <span class="o">+</span> <span class="n">kk2</span> <span class="o">*</span> <span class="p">(</span><span class="n">p2</span> <span class="o">-</span> <span class="n">p0</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;subst&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;subst&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">pt</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pos2pt</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-</div>
-<div class="viewcode-block" id="RadioNode.volume"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.volume.html#pylayers.simul.radionode.RadioNode.volume">[docs]</a>    <span class="k">def</span> <span class="nf">volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">N1</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">N2</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">N3</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">p0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span><span class="n">p1</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p2</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p3</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="RadioNode.volume"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.volume.html#pylayers.simul.radionode.RadioNode.volume">[docs]</a>    <span class="k">def</span> <span class="nf">volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">N1</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">N2</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">N3</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">p0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span><span class="n">p1</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p2</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p3</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;subst&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add a volume to RadioNode</span>
 
 <span class="sd">        build a volume with edges : p0p1, p0p2, p0p3</span>
@@ -663,15 +663,15 @@
         <span class="n">kk2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n1</span><span class="p">),</span> <span class="n">k2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n3</span><span class="p">))</span>
         <span class="n">kk3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">k3</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n1</span> <span class="o">*</span> <span class="n">n2</span><span class="p">))</span>
         <span class="n">pt</span> <span class="o">=</span> <span class="n">p0</span> <span class="o">+</span> <span class="n">kk1</span> <span class="o">*</span> <span class="p">(</span><span class="n">p1</span> <span class="o">-</span> <span class="n">p0</span><span class="p">)</span> <span class="o">+</span> <span class="n">kk2</span> <span class="o">*</span> <span class="p">(</span><span class="n">p2</span> <span class="o">-</span> <span class="n">p0</span><span class="p">)</span> <span class="o">+</span> <span class="n">kk3</span> <span class="o">*</span> <span class="p">(</span><span class="n">p3</span> <span class="o">-</span> <span class="n">p0</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;subst&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;subst&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">pt</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pos2pt</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-</div>
-<div class="viewcode-block" id="RadioNode.loadini"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.loadini.html#pylayers.simul.radionode.RadioNode.loadini">[docs]</a>    <span class="k">def</span> <span class="nf">loadini</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filespa</span><span class="p">,</span> <span class="n">rep</span><span class="o">=</span><span class="s">&#39;ini&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="RadioNode.loadini"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.loadini.html#pylayers.simul.radionode.RadioNode.loadini">[docs]</a>    <span class="k">def</span> <span class="nf">loadini</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filespa</span><span class="p">,</span> <span class="n">rep</span><span class="o">=</span><span class="s1">&#39;ini&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load an .ini file</span>
 
 <span class="sd">        Parameters</span>
@@ -684,11 +684,11 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">filespa</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filespa</span><span class="p">,</span> <span class="n">rep</span><span class="p">)</span>
-        <span class="c">#print filespa+  &quot;   loadini&quot;</span>
+        <span class="c1">#print filespa+  &quot;   loadini&quot;</span>
         <span class="n">space</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
         <span class="n">space</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">filespa</span><span class="p">)</span>
 
-        <span class="n">points</span> <span class="o">=</span> <span class="n">space</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&quot;coordinates&quot;</span><span class="p">)</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="n">space</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s2">&quot;coordinates&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">lt2idic</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span>
@@ -699,9 +699,9 @@
             <span class="k">except</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">traj</span><span class="o">=</span><span class="n">Trajectory</span><span class="p">(</span><span class="n">pt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="RadioNode.loadspa"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.loadspa.html#pylayers.simul.radionode.RadioNode.loadspa">[docs]</a>    <span class="k">def</span> <span class="nf">loadspa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filespa</span><span class="p">,</span> <span class="n">rep</span><span class="o">=</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLCH&#39;</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">traj</span><span class="o">=</span><span class="n">Trajectory</span><span class="p">(</span><span class="n">pt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">T</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RadioNode.loadspa"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.loadspa.html#pylayers.simul.radionode.RadioNode.loadspa">[docs]</a>    <span class="k">def</span> <span class="nf">loadspa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filespa</span><span class="p">,</span> <span class="n">rep</span><span class="o">=</span><span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIRLCH&#39;</span><span class="p">]):</span>
         <span class="sd">&quot;&quot;&quot; load a spa file</span>
 
 <span class="sd">        Parameters</span>
@@ -721,7 +721,7 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">fid</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filespa</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s">&quot;filespa does not exist&quot;</span>
+            <span class="k">print</span> <span class="s2">&quot;filespa does not exist&quot;</span>
             <span class="k">return</span><span class="p">()</span>
 
         <span class="n">lig</span> <span class="o">=</span> <span class="n">fid</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
@@ -740,8 +740,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">nnpt</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nnpt</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ident</span>
-        <span class="n">fid</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</div>
+        <span class="n">fid</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="RadioNode.save"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.save.html#pylayers.simul.radionode.RadioNode.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save RadioNode in  .ini, .spa, .vect file</span>
 
@@ -754,83 +754,83 @@
         
         <span class="n">_filespa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filespa</span>
         <span class="n">_fileini</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileini</span>
-        <span class="n">fileini</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_fileini</span><span class="p">,</span> <span class="s">&#39;ini&#39;</span><span class="p">)</span>
+        <span class="n">fileini</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_fileini</span><span class="p">,</span> <span class="s1">&#39;ini&#39;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileini</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span>
+            <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileini</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="k">print</span> <span class="n">fileini</span> <span class="o">+</span> <span class="s">&#39; does not exist&#39;</span>
+            <span class="k">print</span> <span class="n">fileini</span> <span class="o">+</span> <span class="s1">&#39; does not exist&#39;</span>
 
         <span class="n">space</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
-        <span class="n">space</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s">&quot;coordinates&quot;</span><span class="p">)</span>
+        <span class="n">space</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s2">&quot;coordinates&quot;</span><span class="p">)</span>
         <span class="n">npt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">npt</span><span class="p">):</span>
             <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
             <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
             <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
-            <span class="n">space</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;coordinates&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span>
-                      <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">z</span><span class="p">))</span>
+            <span class="n">space</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;coordinates&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span>
+                      <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">z</span><span class="p">))</span>
         <span class="n">space</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
         <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-        <span class="n">points</span> <span class="o">=</span> <span class="n">space</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&quot;coordinates&quot;</span><span class="p">)</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="n">space</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s2">&quot;coordinates&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;undefined&#39;</span><span class="p">:</span>
-            <span class="n">filespa</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filespa</span><span class="p">,</span> <span class="s">&#39;ini&#39;</span><span class="p">)</span>
-            <span class="n">colorname</span> <span class="o">=</span> <span class="s">&#39;green&#39;</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;tx&#39;</span><span class="p">:</span>
-            <span class="n">filespa</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filespa</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLCH&#39;</span><span class="p">])</span>
-            <span class="n">colorname</span> <span class="o">=</span> <span class="s">&#39;red&#39;</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;rx&#39;</span><span class="p">:</span>
-            <span class="n">filespa</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filespa</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRTRA&#39;</span><span class="p">])</span>
-            <span class="n">colorname</span> <span class="o">=</span> <span class="s">&#39;blue&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s1">&#39;undefined&#39;</span><span class="p">:</span>
+            <span class="n">filespa</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filespa</span><span class="p">,</span> <span class="s1">&#39;ini&#39;</span><span class="p">)</span>
+            <span class="n">colorname</span> <span class="o">=</span> <span class="s1">&#39;green&#39;</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s1">&#39;tx&#39;</span><span class="p">:</span>
+            <span class="n">filespa</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filespa</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIRLCH&#39;</span><span class="p">])</span>
+            <span class="n">colorname</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s1">&#39;rx&#39;</span><span class="p">:</span>
+            <span class="n">filespa</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filespa</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIRTRA&#39;</span><span class="p">])</span>
+            <span class="n">colorname</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span>
 
-        <span class="c"># save points in GeomVect container</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filegeom</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.vect&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.off&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="c1"># save points in GeomVect container</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filegeom</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.vect&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.off&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span> 
 
             <span class="n">gv</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">Geomoff</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
             <span class="n">ant</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span>
-            <span class="c"># if not hasattr(ant,&#39;theta&#39;):</span>
+            <span class="c1"># if not hasattr(ant,&#39;theta&#39;):</span>
             <span class="k">if</span> <span class="n">ant</span><span class="o">.</span><span class="n">fromfile</span><span class="p">:</span>
                 <span class="n">ant</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span> 
                 <span class="n">ant</span><span class="o">.</span><span class="n">Fpatt</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
             <span class="n">V</span> <span class="o">=</span> <span class="n">ant</span><span class="o">.</span><span class="n">SqG</span><span class="p">[</span><span class="n">ant</span><span class="o">.</span><span class="n">Nf</span><span class="o">/</span><span class="mi">2</span><span class="p">,:,:]</span>
  
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;position&#39;</span><span class="p">):</span>
-                <span class="k">print</span> <span class="s">&quot;no position available&quot;</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;position&#39;</span><span class="p">):</span>
+                <span class="k">print</span> <span class="s2">&quot;no position available&quot;</span>
             <span class="n">T</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">orientation</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
             <span class="n">gv</span><span class="o">.</span><span class="n">pattern</span><span class="p">(</span><span class="n">ant</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span><span class="n">ant</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="n">po</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">,</span><span class="n">T</span><span class="o">=</span><span class="n">T</span><span class="p">,</span><span class="n">ilog</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">minr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span><span class="n">maxr</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">filegeom</span><span class="o">=</span><span class="n">filename</span> <span class="o">+</span> <span class="s">&#39;.off&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filegeom</span><span class="o">=</span><span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.off&#39;</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="c">#pdb.set_trace()</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;position&#39;</span><span class="p">):</span>
+            <span class="c1">#pdb.set_trace()</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;position&#39;</span><span class="p">):</span>
                 <span class="k">pass</span>
-            <span class="c">#    problem gv is not a geomvect    </span>
-            <span class="c">#    gv.points(self.position, colorname)</span>
+            <span class="c1">#    problem gv is not a geomvect    </span>
+            <span class="c1">#    gv.points(self.position, colorname)</span>
             <span class="k">else</span> <span class="p">:</span>
-                <span class="k">print</span> <span class="s">&quot; no position available &quot;</span>
+                <span class="k">print</span> <span class="s2">&quot; no position available &quot;</span>
 
-        <span class="k">if</span> <span class="n">_filespa</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;spa&#39;</span><span class="p">:</span>
-            <span class="n">fi_spa</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filespa</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">_filespa</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;spa&#39;</span><span class="p">:</span>
+            <span class="n">fi_spa</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filespa</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
             <span class="n">npt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">snpt</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">npt</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
-            <span class="n">snpt2</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">npt</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">npt</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">npt</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
-            <span class="n">fi_spa</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;0</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+            <span class="n">snpt</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">npt</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">snpt2</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">npt</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">npt</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">npt</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">fi_spa</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;0</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">fi_spa</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">snpt</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">npt</span><span class="p">):</span>
-                <span class="n">x</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)</span>
-                <span class="n">y</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)</span>
-                <span class="n">z</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)</span>
-                <span class="n">chaine</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">z</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
-                <span class="n">chaine2</span> <span class="o">=</span> <span class="n">chaine</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
+                <span class="n">z</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
+                <span class="n">chaine</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">z</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="n">chaine2</span> <span class="o">=</span> <span class="n">chaine</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
                 <span class="n">fi_spa</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
 
-            <span class="n">fi_spa</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</div>
-<div class="viewcode-block" id="RadioNode.gpoint"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.gpoint.html#pylayers.simul.radionode.RadioNode.gpoint">[docs]</a>    <span class="k">def</span> <span class="nf">gpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+            <span class="n">fi_spa</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="RadioNode.gpoint"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.gpoint.html#pylayers.simul.radionode.RadioNode.gpoint">[docs]</a>    <span class="k">def</span> <span class="nf">gpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; gui point </span>
 
 <span class="sd">        Parameters</span>
@@ -847,9 +847,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">point</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">mode</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span>
-</div>
-<div class="viewcode-block" id="RadioNode.gline"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.gline.html#pylayers.simul.radionode.RadioNode.gline">[docs]</a>    <span class="k">def</span> <span class="nf">gline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="RadioNode.gline"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.gline.html#pylayers.simul.radionode.RadioNode.gline">[docs]</a>    <span class="k">def</span> <span class="nf">gline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; gui line</span>
 
 <span class="sd">        A line is built between the first point and the gui point</span>
@@ -868,9 +868,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">N1</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span>
-</div>
-<div class="viewcode-block" id="RadioNode.gsurface"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.gsurface.html#pylayers.simul.radionode.RadioNode.gsurface">[docs]</a>    <span class="k">def</span> <span class="nf">gsurface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="RadioNode.gsurface"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.gsurface.html#pylayers.simul.radionode.RadioNode.gsurface">[docs]</a>    <span class="k">def</span> <span class="nf">gsurface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; gui surface</span>
 
 <span class="sd">        Parameters</span>
@@ -883,15 +883,15 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
-        <span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">N1</span><span class="p">)</span> <span class="o">=</span> <span class="n">eg</span><span class="o">.</span><span class="n">pointbox</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="s">&#39;Enter Surface second point&#39;</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">N1</span><span class="p">)</span> <span class="o">=</span> <span class="n">eg</span><span class="o">.</span><span class="n">pointbox</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;Enter Surface second point&#39;</span><span class="p">)</span>
 
-        <span class="p">(</span><span class="n">p2</span><span class="p">,</span> <span class="n">N2</span><span class="p">)</span> <span class="o">=</span> <span class="n">eg</span><span class="o">.</span><span class="n">pointbox</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="s">&#39;Enter Surface third point&#39;</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">p2</span><span class="p">,</span> <span class="n">N2</span><span class="p">)</span> <span class="o">=</span> <span class="n">eg</span><span class="o">.</span><span class="n">pointbox</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;Enter Surface third point&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span>
-</div>
-<div class="viewcode-block" id="RadioNode.gvolume"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.gvolume.html#pylayers.simul.radionode.RadioNode.gvolume">[docs]</a>    <span class="k">def</span> <span class="nf">gvolume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="RadioNode.gvolume"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.gvolume.html#pylayers.simul.radionode.RadioNode.gvolume">[docs]</a>    <span class="k">def</span> <span class="nf">gvolume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; gui volume </span>
 
 <span class="sd">        Parameters</span>
@@ -904,98 +904,98 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
-        <span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">N1</span><span class="p">)</span> <span class="o">=</span> <span class="n">eg</span><span class="o">.</span><span class="n">pointbox</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="s">&#39;Enter Volume second point&#39;</span><span class="p">)</span>
-        <span class="p">(</span><span class="n">p2</span><span class="p">,</span> <span class="n">N2</span><span class="p">)</span> <span class="o">=</span> <span class="n">eg</span><span class="o">.</span><span class="n">pointbox</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="s">&#39;Enter Volume third point&#39;</span><span class="p">)</span>
-        <span class="p">(</span><span class="n">p3</span><span class="p">,</span> <span class="n">N3</span><span class="p">)</span> <span class="o">=</span> <span class="n">eg</span><span class="o">.</span><span class="n">pointbox</span><span class="p">(</span><span class="n">p2</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="s">&#39;Enter Volume fourth point&#39;</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">N1</span><span class="p">)</span> <span class="o">=</span> <span class="n">eg</span><span class="o">.</span><span class="n">pointbox</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;Enter Volume second point&#39;</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">p2</span><span class="p">,</span> <span class="n">N2</span><span class="p">)</span> <span class="o">=</span> <span class="n">eg</span><span class="o">.</span><span class="n">pointbox</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;Enter Volume third point&#39;</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">p3</span><span class="p">,</span> <span class="n">N3</span><span class="p">)</span> <span class="o">=</span> <span class="n">eg</span><span class="o">.</span><span class="n">pointbox</span><span class="p">(</span><span class="n">p2</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;Enter Volume fourth point&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="p">(</span><span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">N3</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span>
-<span class="c">#        def savevect(self):</span>
-<span class="c">#                &quot;&quot;&quot;</span>
-<span class="c">#                Create a .vect file</span>
-<span class="c">#                Le type de format est 0 . Coordonnees explicites de tous les points.</span>
-<span class="c">#</span>
-<span class="c">#       save(_filespa)</span>
-<span class="c">#</span>
-<span class="c">#       _filespa : file short name</span>
-<span class="c">#</span>
-<span class="c">#               &quot;&quot;&quot;</span>
-<span class="c">#</span>
-<span class="c">#                if self.typ==0:</span>
-<span class="c">#                        self.filegeom=&quot;RadioNode.vect&quot;</span>
-<span class="c">#                        filegeom   = pyu.getlong(&quot;RadioNode.vect&quot;,&quot;geom&quot;)</span>
-<span class="c">#                elif self.typ==1:</span>
-<span class="c">#                        self.filegeom = &quot;RadioTx.vect&quot;</span>
-<span class="c">#                        filegeom   = pyu.getlong(&quot;RadioTx.vect&quot;,&quot;geom&quot;)</span>
-<span class="c">#                elif self.typ==2:</span>
-<span class="c">#                        self.filegeom = &quot;RadioRx.vect&quot;</span>
-<span class="c">#                        filegeom   = pyu.getlong(&quot;RadioRx.vect&quot;,&quot;geom&quot;)</span>
-<span class="c">#</span>
-<span class="c">#                fi_geom = open(filegeom,&#39;w&#39;)</span>
-<span class="c">#</span>
-<span class="c">#                npt = shape(self.position)[1]</span>
-<span class="c">#                snpt2 = str(npt)+&quot; &quot;+str(npt)+&quot; &quot;+str(npt)+&quot;\n&quot;</span>
-<span class="c">#                if npt&gt;1:</span>
-<span class="c">#                        fi_geom.write(&quot;appearance{\n&quot;)</span>
-<span class="c">#                        fi_geom.write(&quot;linewidth 8}\n&quot;)</span>
-<span class="c">#                        fi_geom.write(&quot;VECT\n&quot;)</span>
-<span class="c">#                        fi_geom.write(snpt2)</span>
-<span class="c">#                        fi_geom.write(&quot;1 &quot;*npt+&quot;\n&quot;)</span>
-<span class="c">#                        fi_geom.write(&quot;1 &quot;*npt+&quot;\n&quot;)</span>
-<span class="c">#                else:</span>
-<span class="c">#                        fi_geom.write(&quot;ESPHERE\n&quot;)</span>
-<span class="c">#                        fi_geom.write(&quot;0.2\n&quot;)</span>
-<span class="c">#</span>
-<span class="c">#                for i in range(npt):</span>
-<span class="c">#                        x = str(self.position[0,i])</span>
-<span class="c">#                        y = str(self.position[1,i])</span>
-<span class="c">#                        z = str(self.position[2,i])</span>
-<span class="c">#                        chaine = x+&quot; &quot;+y+&quot; &quot;+z+&quot;\n&quot;</span>
-<span class="c">#                        fi_geom.write(chaine)</span>
-<span class="c">#                if npt&gt;1:</span>
-<span class="c">#                        if self.typ==0:</span>
-<span class="c">#                                fi_geom.write(npt*&quot;0 0 1 1\n&quot;)</span>
-<span class="c">#                        elif self.typ==1:</span>
-<span class="c">#                                fi_geom.write(npt*&quot;1 0 0 1\n&quot;)</span>
-<span class="c">#                        elif self.typ==2:</span>
-<span class="c">#                                fi_geom.write(npt*&quot;0 1 0 1\n&quot;)</span>
-<span class="c">#                fi_geom.close()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span></div>
+<span class="c1">#        def savevect(self):</span>
+<span class="c1">#                &quot;&quot;&quot;</span>
+<span class="c1">#                Create a .vect file</span>
+<span class="c1">#                Le type de format est 0 . Coordonnees explicites de tous les points.</span>
+<span class="c1">#</span>
+<span class="c1">#       save(_filespa)</span>
+<span class="c1">#</span>
+<span class="c1">#       _filespa : file short name</span>
+<span class="c1">#</span>
+<span class="c1">#               &quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1">#                if self.typ==0:</span>
+<span class="c1">#                        self.filegeom=&quot;RadioNode.vect&quot;</span>
+<span class="c1">#                        filegeom   = pyu.getlong(&quot;RadioNode.vect&quot;,&quot;geom&quot;)</span>
+<span class="c1">#                elif self.typ==1:</span>
+<span class="c1">#                        self.filegeom = &quot;RadioTx.vect&quot;</span>
+<span class="c1">#                        filegeom   = pyu.getlong(&quot;RadioTx.vect&quot;,&quot;geom&quot;)</span>
+<span class="c1">#                elif self.typ==2:</span>
+<span class="c1">#                        self.filegeom = &quot;RadioRx.vect&quot;</span>
+<span class="c1">#                        filegeom   = pyu.getlong(&quot;RadioRx.vect&quot;,&quot;geom&quot;)</span>
+<span class="c1">#</span>
+<span class="c1">#                fi_geom = open(filegeom,&#39;w&#39;)</span>
+<span class="c1">#</span>
+<span class="c1">#                npt = shape(self.position)[1]</span>
+<span class="c1">#                snpt2 = str(npt)+&quot; &quot;+str(npt)+&quot; &quot;+str(npt)+&quot;\n&quot;</span>
+<span class="c1">#                if npt&gt;1:</span>
+<span class="c1">#                        fi_geom.write(&quot;appearance{\n&quot;)</span>
+<span class="c1">#                        fi_geom.write(&quot;linewidth 8}\n&quot;)</span>
+<span class="c1">#                        fi_geom.write(&quot;VECT\n&quot;)</span>
+<span class="c1">#                        fi_geom.write(snpt2)</span>
+<span class="c1">#                        fi_geom.write(&quot;1 &quot;*npt+&quot;\n&quot;)</span>
+<span class="c1">#                        fi_geom.write(&quot;1 &quot;*npt+&quot;\n&quot;)</span>
+<span class="c1">#                else:</span>
+<span class="c1">#                        fi_geom.write(&quot;ESPHERE\n&quot;)</span>
+<span class="c1">#                        fi_geom.write(&quot;0.2\n&quot;)</span>
+<span class="c1">#</span>
+<span class="c1">#                for i in range(npt):</span>
+<span class="c1">#                        x = str(self.position[0,i])</span>
+<span class="c1">#                        y = str(self.position[1,i])</span>
+<span class="c1">#                        z = str(self.position[2,i])</span>
+<span class="c1">#                        chaine = x+&quot; &quot;+y+&quot; &quot;+z+&quot;\n&quot;</span>
+<span class="c1">#                        fi_geom.write(chaine)</span>
+<span class="c1">#                if npt&gt;1:</span>
+<span class="c1">#                        if self.typ==0:</span>
+<span class="c1">#                                fi_geom.write(npt*&quot;0 0 1 1\n&quot;)</span>
+<span class="c1">#                        elif self.typ==1:</span>
+<span class="c1">#                                fi_geom.write(npt*&quot;1 0 0 1\n&quot;)</span>
+<span class="c1">#                        elif self.typ==2:</span>
+<span class="c1">#                                fi_geom.write(npt*&quot;0 1 0 1\n&quot;)</span>
+<span class="c1">#                fi_geom.close()</span>
 
-<span class="c">#        def savespa(self):</span>
-<span class="c">#                &quot;&quot;&quot;</span>
-<span class="c">#                Create a  .spa file</span>
-<span class="c">#                Le type de format est 0 . Coordonnees explicites de tous les points.</span>
-<span class="c">#</span>
-<span class="c">#       savespa(_filespa)</span>
-<span class="c">#</span>
-<span class="c">#       _filespa : file short name</span>
-<span class="c">#</span>
-<span class="c">#                &quot;&quot;&quot;</span>
-<span class="c">#</span>
-<span class="c">#               _filespa = self.filespa</span>
-<span class="c">#</span>
-<span class="c">#                elif self.typ==1:</span>
-<span class="c">#                        filespa    = pyu.getlong(_filespa,&#39;launch&#39;)</span>
-<span class="c">#                elif self.typ==2:</span>
-<span class="c">#                        filespa    = pyu.getlong(_filespa,&#39;trace&#39;)</span>
-<span class="c">#</span>
-<span class="c">#                fi_spa  = open(filespa,&#39;w&#39;)</span>
-<span class="c">#</span>
-<span class="c">#                npt = shape(self.position)[1]</span>
-<span class="c">#                snpt = str(npt)+&quot;\n&quot;</span>
-<span class="c">#</span>
-<span class="c">#                fi_spa.write(&quot;0\n&quot;)</span>
-<span class="c">#                fi_spa.write(snpt)</span>
-<span class="c">#                for i in range(npt):</span>
-<span class="c">#                        x = str(self.position[0,i])</span>
-<span class="c">#                        y = str(self.position[1,i])</span>
-<span class="c">#                        z = str(self.position[2,i])</span>
-<span class="c">#                        chaine = x+&quot; &quot;+y+&quot; &quot;+z+&quot;\n&quot;</span>
-<span class="c">#                        fi_spa.write(chaine)</span>
-<span class="c">#                fi_spa.close()</span>
-</div>
-<div class="viewcode-block" id="RadioNode.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.show.html#pylayers.simul.radionode.RadioNode.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">fig</span><span class="o">=</span><span class="p">[],</span> <span class="n">ax</span> <span class="o">=</span><span class="p">[],</span><span class="n">size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">):</span>
+<span class="c1">#        def savespa(self):</span>
+<span class="c1">#                &quot;&quot;&quot;</span>
+<span class="c1">#                Create a  .spa file</span>
+<span class="c1">#                Le type de format est 0 . Coordonnees explicites de tous les points.</span>
+<span class="c1">#</span>
+<span class="c1">#       savespa(_filespa)</span>
+<span class="c1">#</span>
+<span class="c1">#       _filespa : file short name</span>
+<span class="c1">#</span>
+<span class="c1">#                &quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1">#               _filespa = self.filespa</span>
+<span class="c1">#</span>
+<span class="c1">#                elif self.typ==1:</span>
+<span class="c1">#                        filespa    = pyu.getlong(_filespa,&#39;launch&#39;)</span>
+<span class="c1">#                elif self.typ==2:</span>
+<span class="c1">#                        filespa    = pyu.getlong(_filespa,&#39;trace&#39;)</span>
+<span class="c1">#</span>
+<span class="c1">#                fi_spa  = open(filespa,&#39;w&#39;)</span>
+<span class="c1">#</span>
+<span class="c1">#                npt = shape(self.position)[1]</span>
+<span class="c1">#                snpt = str(npt)+&quot;\n&quot;</span>
+<span class="c1">#</span>
+<span class="c1">#                fi_spa.write(&quot;0\n&quot;)</span>
+<span class="c1">#                fi_spa.write(snpt)</span>
+<span class="c1">#                for i in range(npt):</span>
+<span class="c1">#                        x = str(self.position[0,i])</span>
+<span class="c1">#                        y = str(self.position[1,i])</span>
+<span class="c1">#                        z = str(self.position[2,i])</span>
+<span class="c1">#                        chaine = x+&quot; &quot;+y+&quot; &quot;+z+&quot;\n&quot;</span>
+<span class="c1">#                        fi_spa.write(chaine)</span>
+<span class="c1">#                fi_spa.close()</span>
+
+<div class="viewcode-block" id="RadioNode.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.show.html#pylayers.simul.radionode.RadioNode.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">fig</span><span class="o">=</span><span class="p">[],</span> <span class="n">ax</span> <span class="o">=</span><span class="p">[],</span><span class="n">size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Display RadioNode position in the 2D strucure</span>
 
 <span class="sd">        Parameters</span>
@@ -1013,9 +1013,9 @@
             <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="n">size</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
-</div>
-<div class="viewcode-block" id="RadioNode.show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.show3.html#pylayers.simul.radionode.RadioNode.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filestr</span><span class="o">=</span><span class="s">&#39;DLR.off&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span></div>
+
+<div class="viewcode-block" id="RadioNode.show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.show3.html#pylayers.simul.radionode.RadioNode.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filestr</span><span class="o">=</span><span class="s1">&#39;DLR.off&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; display RadioNode position in geomview</span>
 
 <span class="sd">        Parameters</span>
@@ -1024,22 +1024,22 @@
 <span class="sd">        _filestr : string</span>
 <span class="sd">            structure file</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&quot;strucRN.off&quot;</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRGEOM&#39;</span><span class="p">])</span>
-        <span class="n">fo</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span>
-        <span class="n">filegeom</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filegeom</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRGEOM&#39;</span><span class="p">])</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s2">&quot;strucRN.off&quot;</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIRGEOM&#39;</span><span class="p">])</span>
+        <span class="n">fo</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+        <span class="n">filegeom</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filegeom</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIRGEOM&#39;</span><span class="p">])</span>
 
-        <span class="c"># get .off filename from .str or .str2 filename</span>
+        <span class="c1"># get .off filename from .str or .str2 filename</span>
         <span class="n">_fileoff</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filestr</span><span class="p">)</span>
-        <span class="n">_fileoff</span> <span class="o">=</span> <span class="n">_fileoff</span> <span class="o">+</span> <span class="s">&#39;.off&#39;</span>
-        <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;LIST</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_fileoff</span><span class="p">,</span><span class="s">&#39;geom&#39;</span><span class="p">)):</span>
-            <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;{&lt;&quot;</span> <span class="o">+</span> <span class="n">_fileoff</span> <span class="o">+</span> <span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
-        <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;{&lt;&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">filegeom</span> <span class="o">+</span> <span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
-        <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;{&lt;/usr/share/geomview/geom/xyz.vect}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="n">_fileoff</span> <span class="o">=</span> <span class="n">_fileoff</span> <span class="o">+</span> <span class="s1">&#39;.off&#39;</span>
+        <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;LIST</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_fileoff</span><span class="p">,</span><span class="s1">&#39;geom&#39;</span><span class="p">)):</span>
+            <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;{&lt;&quot;</span> <span class="o">+</span> <span class="n">_fileoff</span> <span class="o">+</span> <span class="s2">&quot;}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;{&lt;&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">filegeom</span> <span class="o">+</span> <span class="s2">&quot;}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;{&lt;/usr/share/geomview/geom/xyz.vect}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="n">chaine</span> <span class="o">=</span> <span class="s">&quot;geomview -nopanel -b 1 1 1 &quot;</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s">&quot; 2&gt;/dev/null &amp;&quot;</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
-</div>
+        <span class="n">chaine</span> <span class="o">=</span> <span class="s2">&quot;geomview -nopanel -b 1 1 1 &quot;</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot; 2&gt;/dev/null &amp;&quot;</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="RadioNode.move"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.move.html#pylayers.simul.radionode.RadioNode.move">[docs]</a>    <span class="k">def</span> <span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; move RadioNode with a specified offset over each cartesian axis</span>
 
@@ -1053,8 +1053,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="n">dx</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="n">dy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="n">dz</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="RadioNode.extract"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.extract.html#pylayers.simul.radionode.RadioNode.extract">[docs]</a>    <span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; extract the i-th radionode component </span>
 
@@ -1071,42 +1071,42 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;undefined&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s1">&#39;undefined&#39;</span><span class="p">:</span>
             <span class="n">u</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filestr</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;tx&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s1">&#39;tx&#39;</span><span class="p">:</span>
             <span class="n">u</span> <span class="o">=</span> <span class="n">RadioTx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filestr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;rx&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s1">&#39;rx&#39;</span><span class="p">:</span>
             <span class="n">u</span> <span class="o">=</span> <span class="n">RadioRx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filestr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bandwidth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">NF</span><span class="p">)</span>
 
         <span class="n">u</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span>
-<span class="c">#</span>
-<span class="c">#</span>
-<span class="c">#       u.time        = self.time[i]</span>
-<span class="c">#       u.orientation = self.orientation[:,:,i]</span>
-        <span class="n">u</span><span class="o">.</span><span class="n">filespa</span> <span class="o">=</span> <span class="s">&quot;filespa.spa&quot;</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#       u.time        = self.time[i]</span>
+<span class="c1">#       u.orientation = self.orientation[:,:,i]</span>
+        <span class="n">u</span><span class="o">.</span><span class="n">filespa</span> <span class="o">=</span> <span class="s2">&quot;filespa.spa&quot;</span>
 
-<span class="c">#</span>
-<span class="c"># Write the RadioNode Coordinate in filespa</span>
-<span class="c">#</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">!=</span> <span class="s">&#39;undefined&#39;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;tx&#39;</span><span class="p">:</span>
-                <span class="n">filespa</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&quot;filespa.spa&quot;</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLCH&#39;</span><span class="p">])</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;rx&#39;</span><span class="p">:</span>
-                <span class="n">filespa</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&quot;filespa.spa&quot;</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRTRA&#39;</span><span class="p">])</span>
-            <span class="n">fi</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filespa</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
-            <span class="n">fi</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;0</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
-            <span class="n">fi</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;1</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># Write the RadioNode Coordinate in filespa</span>
+<span class="c1">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">!=</span> <span class="s1">&#39;undefined&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s1">&#39;tx&#39;</span><span class="p">:</span>
+                <span class="n">filespa</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s2">&quot;filespa.spa&quot;</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIRLCH&#39;</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s1">&#39;rx&#39;</span><span class="p">:</span>
+                <span class="n">filespa</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s2">&quot;filespa.spa&quot;</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIRTRA&#39;</span><span class="p">])</span>
+            <span class="n">fi</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filespa</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+            <span class="n">fi</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;0</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">fi</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;1</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">x</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span>
             <span class="n">y</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span>
             <span class="n">z</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span>
-            <span class="n">chaine</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">z</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+            <span class="n">chaine</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">z</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="n">fi</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
             <span class="n">fi</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-        <span class="k">return</span> <span class="n">u</span>
-</div>
-<span class="k">if</span> <span class="p">(</span><span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">):</span>
-    <span class="n">tx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;w2m1rx.ini&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">u</span></div>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">):</span>
+    <span class="n">tx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">_fileini</span><span class="o">=</span><span class="s1">&#39;w2m1rx.ini&#39;</span><span class="p">)</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 </pre></div>
 
@@ -1120,8 +1120,8 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 29, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on févr. 23, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
     

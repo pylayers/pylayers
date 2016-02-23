@@ -194,22 +194,22 @@
 <p class="last">ALWAYS use self._get_wstd() BEFORE !</p>
 </div>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.network.network</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.network.network</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">N</span><span class="o">=</span><span class="n">Network</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
 <span class="go">        no = Node.Node(ID=i,wstd=[&#39;wifi&#39;,&#39;bt&#39;])</span>
 <span class="go">        N.add_nodes_from(no.nodes(data=True))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">no</span> <span class="o">=</span> <span class="n">Node</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">ID</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">wstd</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;wifi&#39;</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">no</span> <span class="o">=</span> <span class="n">Node</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">ID</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">wstd</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;wifi&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span>   <span class="n">N</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">no</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">N</span><span class="o">.</span><span class="n">_get_wstd</span><span class="p">()</span> <span class="c"># VERY IMPORTANT </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">N</span><span class="o">.</span><span class="n">_get_wstd</span><span class="p">()</span> <span class="c1"># VERY IMPORTANT </span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">N</span><span class="o">.</span><span class="n">_get_SubNet</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">N</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="s">&#39;bt&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">N</span><span class="o">.</span><span class="n">_get_SubNet</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">N</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="s1">&#39;bt&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
 <span class="go">[0, 1]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">N</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="s">&#39;wifi&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">N</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="s1">&#39;wifi&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
 <span class="go">[0, 1, 2]</span>
 </pre></div>
 </div>
@@ -228,8 +228,8 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 29, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on févr. 23, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/modules/generated/pylayers.network.network.Network._get_SubNet.txt"
 	    rel="nofollow">Show this page source</a>

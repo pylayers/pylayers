@@ -139,23 +139,23 @@ Indoor environment. It contathe different graphs helping the
 implementation of the ray tracing. The class is implemented in the
 <code class="docutils literal"><span class="pre">`layout.py</span></code> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/modules/pylayers.gis.layout.html">http://pylayers.github.io/pylayers/modules/pylayers.gis.layout.html</a>&gt;`__
 module.ins</p>
-<div class="code python highlight-python"><div class="highlight"><pre>from pylayers.gis.layout import *
+<div class="code python highlight-python"><div class="highlight"><pre><span></span>from pylayers.gis.layout import *
 from IPython.display import Image
 import os
 %matplotlib inline
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
+<div class="highlight-python"><div class="highlight"><pre><span></span>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
 </pre></div>
 </div>
 <div class="section" id="getting-the-list-of-all-available-layouts-the-ls-method">
 <h2>Getting the list of all available Layouts : the <code class="docutils literal"><span class="pre">ls()</span></code> method<a class="headerlink" href="#getting-the-list-of-all-available-layouts-the-ls-method" title="Permalink to this headline">¶</a></h2>
 <p>Creating a default Layout is as simple as :</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">()</span>
 <span class="n">L</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 AssertionError                            Traceback (most recent call last)
 
@@ -184,10 +184,10 @@ AssertionError: It exists degree 0 points :  [-18, -17, -16, -15, -14]
 </pre></div>
 </div>
 <p>Querying the file name associated with the Layout</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">filename</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">filename</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
 
@@ -203,10 +203,10 @@ the layout files which are available in the <code class="docutils literal"><span
 current project, which is set up via the $BASENAME environment variable
 which is crucial to be early defined in order PyLayers find its way to
 the good directories.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s">&#39;ini&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s1">&#39;ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
 
@@ -217,10 +217,10 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;defstr.ini&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;defstr.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 AssertionError                            Traceback (most recent call last)
 
@@ -247,10 +247,10 @@ AssertionError                            Traceback (most recent call last)
 AssertionError: It exists degree 0 points :  [-18, -17, -16, -15, -14]
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
 
@@ -261,10 +261,10 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">nodes</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">slab</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">subseg</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="n">labels</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">nodes</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">slab</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">subseg</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="n">labels</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
 
@@ -276,10 +276,10 @@ NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
 <p>L.ax is : (xmin,xmax,ymin,ymax)</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">ax</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">ax</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
 
@@ -290,11 +290,11 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">master</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">master</span>
 <span class="go">L.build()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
 
@@ -306,10 +306,10 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;master&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">ma</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">ma</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
 
@@ -324,10 +324,10 @@ NameError: name &#39;L&#39; is not defined
 index cycle are indoor. The list of diffraction point for indoor is in
 ldiffin and the list of diffraction points for outdoor diffraction is in
 ldiffout. These two listr are</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">Gv</span><span class="o">.</span><span class="n">node</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">Gv</span><span class="o">.</span><span class="n">node</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
 
@@ -338,10 +338,10 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">ldiff</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">ldiff</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
 
@@ -352,10 +352,10 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">ldiffin</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">ldiffin</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
 
@@ -366,10 +366,10 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">ldiffout</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">ldiffout</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
 
@@ -380,10 +380,10 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
 
@@ -394,10 +394,10 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
 
@@ -408,13 +408,13 @@ NameError                                 Traceback (most recent call last)
 NameError: name &#39;L&#39; is not defined
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;DLR.ini&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;DLR.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/collections.py:650: FutureWarning: elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison
+<div class="highlight-python"><div class="highlight"><pre><span></span>/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/collections.py:650: FutureWarning: elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison
   if self._edgecolors_original != str(&#39;face&#39;):
 /home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/collections.py:590: FutureWarning: elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison
   if self._edgecolors == str(&#39;face&#39;):
@@ -422,13 +422,13 @@ NameError: name &#39;L&#39; is not defined
 </div>
 <img alt="../../_images/Layout_26_1.png" src="../../_images/Layout_26_1.png" />
 <p>To check which are the used slabs :</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Slabs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">sla</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Slabs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">sla</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">Slabs</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">:</span>
         <span class="k">print</span> <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>3D_WINDOW_GLASS : GLASS | AIR | GLASS | [0.005, 0.005, 0.005]
+<div class="highlight-python"><div class="highlight"><pre><span></span>3D_WINDOW_GLASS : GLASS | AIR | GLASS | [0.005, 0.005, 0.005]
 
 AIR : AIR | [0.02]
 
@@ -442,18 +442,18 @@ WALL : BRICK | [0.07]
 </pre></div>
 </div>
 <p>Let&#8217;s load an other layout</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;WHERE1.ini&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;WHERE1.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The showG method provides many vizualization of the layout</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">airwalls</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">airwalls</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
 <img alt="../../_images/Layout_32_0.png" src="../../_images/Layout_32_0.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;W2PTIN.ini&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;W2PTIN.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 AssertionError                            Traceback (most recent call last)
 
@@ -480,7 +480,7 @@ AssertionError                            Traceback (most recent call last)
 AssertionError: It exists degree 0 points :  [-110, -109, -108, -103]
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../../_images/Layout_34_0.png" src="../../_images/Layout_34_0.png" />
@@ -505,15 +505,15 @@ numpy array which are mostly used internally.</p>
 <h3><code class="docutils literal"><span class="pre">pt</span></code> the array of points<a class="headerlink" href="#pt-the-array-of-points" title="Permalink to this headline">¶</a></h3>
 <p>The point coordinates are stored in two different places (which in
 principle is a bad thing to do !).</p>
-<div class="highlight-python"><div class="highlight"><pre>L.Gs.pos : in a dictionnary form (key is the point negative index)
+<div class="highlight-python"><div class="highlight"><pre><span></span>L.Gs.pos : in a dictionnary form (key is the point negative index)
 L.pt : in a numpy array
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">pt</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">pt</span><span class="p">)</span>
 <span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">278</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">278</span><span class="p">)</span>
 <span class="mi">278</span>
 </pre></div>
 </div>
@@ -524,14 +524,14 @@ calculated at the end of the edition in the <code class="docutils literal"><span
 </div>
 <div class="section" id="tahe-tail-head">
 <h3>tahe (tail-head)<a class="headerlink" href="#tahe-tail-head" title="Permalink to this headline">¶</a></h3>
-<p><code class="docutils literal"><span class="pre">tahe</span></code> is a <img src="../../_images/mathmpl/math-884534ff0d.png" style="position: relative; bottom: -8px"/> where <img src="../../_images/mathmpl/math-9a741fc6d9.png" style="position: relative; bottom: -7px"/> denotes the
+<p><code class="docutils literal"><span class="pre">tahe</span></code> is a <img src="../../_images/mathmpl/math-884534ff0d.png" style="position: relative; bottom: -8px"/> where <img src="../../_images/mathmpl/math-9a741fc6d9.png" style="position: relative; bottom: -6px"/> denotes the
 number of segment. The first line is the tail index of the segment
 <img src="../../_images/mathmpl/math-21e8759df3.png" style="position: relative; bottom: -3px"/> and the second line is the head of the segment <img src="../../_images/mathmpl/math-21e8759df3.png" style="position: relative; bottom: -3px"/>.
 Where <img src="../../_images/mathmpl/math-21e8759df3.png" style="position: relative; bottom: -3px"/> is the index of a given segment (starting in 0).</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">merge</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">merge</span>
 <span class="n">merge</span>
 <span class="n">merge</span>
 <span class="n">merge</span>
@@ -546,22 +546,22 @@ Where <img src="../../_images/mathmpl/math-21e8759df3.png" style="position: rela
 </pre></div>
 </div>
 <p>The figure below illustrates a Layout and a surimposition of the graph
-of cycles <img src="../../_images/mathmpl/math-7ab57d2327.png" style="position: relative; bottom: -7px"/>. Those cycles are automatically
+of cycles <img src="../../_images/mathmpl/math-7ab57d2327.png" style="position: relative; bottom: -6px"/>. Those cycles are automatically
 extracted from a well defined layout. This concept of <strong>cycles</strong> is
 central in the ray determination algorithm which is implemented in
 PyLayers. Notice that the exterior region is the cycle indexed by 0. All
 the rooms which have a common frontier with the exterior cycle are here
 connected to the origin (corresponding to exterior cycle).</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
 <span class="n">nx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gc</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gc</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../../_images/Layout_47_0.png" src="../../_images/Layout_47_0.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_nodes</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span><span class="n">node_color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span><span class="n">node_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span><span class="n">node_color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span><span class="n">node_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_nodes</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span><span class="n">node_color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="n">node_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span><span class="n">node_color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="n">node_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.collections.LineCollection at 0x2b181feccf10&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.LineCollection at 0x2b181feccf10&gt;
 </pre></div>
 </div>
 <img alt="../../_images/Layout_48_1.png" src="../../_images/Layout_48_1.png" />
@@ -569,98 +569,98 @@ connected to the origin (corresponding to exterior cycle).</p>
 </div>
 <div class="section" id="tgs-trancodage-from-graph-indexing-to-numpy-array-indexing">
 <h2><code class="docutils literal"><span class="pre">tgs</span></code> : trancodage from graph indexing to numpy array indexing<a class="headerlink" href="#tgs-trancodage-from-graph-indexing-to-numpy-array-indexing" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal"><span class="pre">tgs</span></code> is an array with length <img src="../../_images/mathmpl/math-9a741fc6d9.png" style="position: relative; bottom: -7px"/>+1. The index 0 is not used
+<p><code class="docutils literal"><span class="pre">tgs</span></code> is an array with length <img src="../../_images/mathmpl/math-9a741fc6d9.png" style="position: relative; bottom: -6px"/>+1. The index 0 is not used
 because none segment has 0 as an index.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">ns</span> <span class="o">=</span> <span class="mi">5</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">ns</span> <span class="o">=</span> <span class="mi">5</span>
 <span class="n">utahe</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">tgs</span><span class="p">[</span><span class="n">ns</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">tahe</span> <span class="o">=</span>  <span class="n">L</span><span class="o">.</span><span class="n">tahe</span><span class="p">[:,</span><span class="n">utahe</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">tahe</span> <span class="o">=</span>  <span class="n">L</span><span class="o">.</span><span class="n">tahe</span><span class="p">[:,</span><span class="n">utahe</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">ptail</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">pt</span><span class="p">[:,</span><span class="n">tahe</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">ptail</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">pt</span><span class="p">[:,</span><span class="n">tahe</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
 <span class="n">phead</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">pt</span><span class="p">[:,</span><span class="n">tahe</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">ptail</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">ptail</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[-28.081  10.923]
+<div class="highlight-python"><div class="highlight"><pre><span></span>[-28.081  10.923]
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">phead</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">phead</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[-28.118  14.857]
+<div class="highlight-python"><div class="highlight"><pre><span></span>[-28.118  14.857]
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">286</span><span class="p">,</span> <span class="o">-</span><span class="mi">292</span><span class="p">],</span>
- <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;CONCRETE_20CM3D&#39;</span><span class="p">,</span>
- <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
- <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.99995577</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00940477</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
- <span class="s">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
- <span class="s">&#39;ss_name&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">],</span>
- <span class="s">&#39;ss_offset&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
- <span class="s">&#39;ss_z&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">)],</span>
- <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
- <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)}</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">286</span><span class="p">,</span> <span class="o">-</span><span class="mi">292</span><span class="p">],</span>
+ <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;CONCRETE_20CM3D&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+ <span class="s1">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.99995577</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00940477</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
+ <span class="s1">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+ <span class="s1">&#39;ss_name&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;ss_offset&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+ <span class="s1">&#39;ss_z&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">)],</span>
+ <span class="s1">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+ <span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)}</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">]</span>
 <span class="k">print</span> <span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="o">-</span><span class="mi">139</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mf">31.687</span><span class="p">,</span> <span class="mf">11.252</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mf">31.687</span><span class="p">,</span> <span class="mf">11.252</span><span class="p">)</span>
 <span class="p">(</span><span class="mf">5.037</span><span class="p">,</span> <span class="mf">10.963</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">aseg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">134</span><span class="p">])</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">aseg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">134</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">aseg</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">aseg</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">pt</span>  <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">tahe</span><span class="p">[:,</span><span class="n">L</span><span class="o">.</span><span class="n">tgs</span><span class="p">[</span><span class="n">aseg</span><span class="p">]][</span><span class="mi">0</span><span class="p">,:]</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">pt</span>  <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">tahe</span><span class="p">[:,</span><span class="n">L</span><span class="o">.</span><span class="n">tgs</span><span class="p">[</span><span class="n">aseg</span><span class="p">]][</span><span class="mi">0</span><span class="p">,:]</span>
 <span class="n">ph</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">tahe</span><span class="p">[:,</span><span class="n">L</span><span class="o">.</span><span class="n">tgs</span><span class="p">[</span><span class="n">aseg</span><span class="p">]][</span><span class="mi">1</span><span class="p">,:]</span>
 <span class="n">pth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">pt</span><span class="p">,</span><span class="n">ph</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">pth</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">pth</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="layout-seg2pts-a-function-for-getting-points-coordinates-from-segment-number-array">
 <h2><code class="docutils literal"><span class="pre">Layout.seg2pts</span></code> a function for getting points coordinates from segment number array<a class="headerlink" href="#layout-seg2pts-a-function-for-getting-points-coordinates-from-segment-number-array" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">seg2pts</span><span class="p">(</span><span class="n">aseg</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">seg2pts</span><span class="p">(</span><span class="n">aseg</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">28.081</span><span class="p">,</span> <span class="o">-</span><span class="mf">27.833</span><span class="p">,</span>   <span class="mf">0.454</span><span class="p">],</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">28.081</span><span class="p">,</span> <span class="o">-</span><span class="mf">27.833</span><span class="p">,</span>   <span class="mf">0.454</span><span class="p">],</span>
        <span class="p">[</span> <span class="mf">10.923</span><span class="p">,</span>  <span class="mf">10.686</span><span class="p">,</span>   <span class="mf">4.805</span><span class="p">],</span>
        <span class="p">[</span><span class="o">-</span><span class="mf">27.836</span><span class="p">,</span> <span class="o">-</span><span class="mf">27.835</span><span class="p">,</span>   <span class="mf">0.457</span><span class="p">],</span>
        <span class="p">[</span> <span class="mf">10.926</span><span class="p">,</span>  <span class="mf">10.891</span><span class="p">,</span>   <span class="mf">4.529</span><span class="p">]])</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">aseg</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">nodes</span><span class="p">()))</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">aseg</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">nodes</span><span class="p">()))</span>
 <span class="n">pth</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">seg2pts</span><span class="p">(</span><span class="n">aseg</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.util.plotutil</span> <span class="kn">import</span> <span class="n">displot</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pylayers.util.plotutil</span> <span class="kn">import</span> <span class="n">displot</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">displot</span><span class="p">(</span><span class="n">pth</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,:],</span><span class="n">pth</span><span class="p">[</span><span class="mi">2</span><span class="p">:,:])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">displot</span><span class="p">(</span><span class="n">pth</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,:],</span><span class="n">pth</span><span class="p">[</span><span class="mi">2</span><span class="p">:,:])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">30.0</span><span class="p">,</span> <span class="mf">40.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">18.0</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">-</span><span class="mf">30.0</span><span class="p">,</span> <span class="mf">40.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">18.0</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../../_images/Layout_66_1.png" src="../../_images/Layout_66_1.png" />
@@ -678,8 +678,8 @@ because none segment has 0 as an index.</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 29, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on févr. 23, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/1-GIS/Layout.txt"
 	    rel="nofollow">Show this page source</a>

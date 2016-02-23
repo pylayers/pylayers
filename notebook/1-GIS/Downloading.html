@@ -121,106 +121,67 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="code python highlight-python"><div class="highlight"><pre>from pylayers.gis.ezone import *
+  <div class="code python highlight-python"><div class="highlight"><pre><span></span>from pylayers.gis.ezone import *
 %matplotlib inline
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span>/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/__init__.py:872: UserWarning: axes.color_cycle is deprecated and replaced with axes.prop_cycle; please use the latter.
+  warnings.warn(self.msg_depr % (key, alt_key))
 </pre></div>
 </div>
 <p>An Ezone is an objet which gathers vector and raster information from a
 1 degree by 1 degree tile of earth</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">prefix</span><span class="o">=</span><span class="n">enctile</span><span class="p">(</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span><span class="mf">10.5</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">prefix</span><span class="o">=</span><span class="n">enctile</span><span class="p">(</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span><span class="mf">10.5</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">prefix</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">N10W002</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">N10W002</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">prefix</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">prefix</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;N10W002&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s1">&#39;N10W002&#39;</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">dectile</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">dectile</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="nb">int</span><span class="p">(</span><span class="s">&#39;08&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="nb">int</span><span class="p">(</span><span class="s1">&#39;08&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="mi">8</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mi">8</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">E</span><span class="o">=</span><span class="n">Ezone</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">E</span><span class="o">=</span><span class="n">Ezone</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">E</span><span class="o">.</span><span class="n">prefix</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">E</span><span class="o">.</span><span class="n">prefix</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;N10W002&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s1">&#39;N10W002&#39;</span>
 </pre></div>
 </div>
 <p>An <code class="docutils literal"><span class="pre">Ezone</span></code> can be obtained from a point (longitude,Latitude)</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">r</span><span class="o">=</span><span class="n">E</span><span class="o">.</span><span class="n">getdem</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">r</span><span class="o">=</span><span class="n">E</span><span class="o">.</span><span class="n">getdem</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Download srtm file
+<div class="highlight-python"><div class="highlight"><pre><span></span>Download srtm file
 SRTMDownloader - server= dds.cr.usgs.gov, directory=srtm/version2_1/SRTM3.
+N10W002.hgt.zip
 no aster file for this point
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">E</span><span class="o">.</span><span class="n">saveh5</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">E</span><span class="o">.</span><span class="n">saveh5</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
-
-IOError                                   Traceback (most recent call last)
-
-&lt;ipython-input-9-d237fad350bf&gt; in &lt;module&gt;()
-----&gt; 1 E.saveh5()
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/ezone.pyc in saveh5(self)
-   1094         fileh5 = pyu.getlong(_fileh5,os.path.join(&#39;gis&#39;,&#39;h5&#39;))
-   1095         # if file exists open it in append mode
--&gt; 1096         f = h5py.File(fileh5,&#39;a&#39;)
-   1097
-   1098         # create missing groups
-
-
-/home/uguen/anaconda/lib/python2.7/site-packages/h5py/_hl/files.pyc in __init__(self, name, mode, driver, libver, userblock_size, swmr, **kwds)
-    258
-    259                 fapl = make_fapl(driver, libver, **kwds)
---&gt; 260                 fid = make_fid(name, mode, userblock_size, fapl, swmr=swmr)
-    261
-    262                 if swmr_support:
-
-
-/home/uguen/anaconda/lib/python2.7/site-packages/h5py/_hl/files.pyc in make_fid(name, mode, userblock_size, fapl, fcpl, swmr)
-    101             fid = h5f.open(name, h5f.ACC_RDWR, fapl=fapl)
-    102         except IOError:
---&gt; 103             fid = h5f.create(name, h5f.ACC_EXCL, fapl=fapl, fcpl=fcpl)
-    104     elif mode is None:
-    105         # Try to open in append mode (read/write).
-
-
-h5py/_objects.pyx in h5py._objects.with_phil.wrapper (-------src-dir-------/h5py/_objects.c:2458)()
-
-
-h5py/_objects.pyx in h5py._objects.with_phil.wrapper (-------src-dir-------/h5py/_objects.c:2415)()
-
-
-h5py/h5f.pyx in h5py.h5f.create (-------src-dir-------/h5py/h5f.c:1965)()
-
-
-IOError: Unable to create file (Unable to open file: name = &#39;/home/uguen/bureau/p1/gis/h5/n10w002.h5&#39;, errno = 2, error message = &#39;no such file or directory&#39;, flags = 15, o_flags = c2)
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">E</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s1">&#39;srtm&#39;</span><span class="p">,</span><span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">500</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">E</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s">&#39;srtm&#39;</span><span class="p">,</span><span class="n">clim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">500</span><span class="p">])</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
 
 ValueError                                Traceback (most recent call last)
 
@@ -231,12 +192,8 @@ ValueError                                Traceback (most recent call last)
 ValueError: too many values to unpack
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/collections.py:590: FutureWarning: elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison
-  if self._edgecolors == str(&#39;face&#39;):
-</pre></div>
-</div>
-<img alt="../../_images/Downloading_11_2.png" src="../../_images/Downloading_11_2.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
+<img alt="../../_images/Downloading_11_1.png" src="../../_images/Downloading_11_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
 </pre></div>
 </div>
 
@@ -251,8 +208,8 @@ ValueError: too many values to unpack
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 29, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on févr. 23, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/1-GIS/Downloading.txt"
 	    rel="nofollow">Show this page source</a>

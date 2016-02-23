@@ -28,7 +28,7 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="top" title="Python 1 documentation" href="../index.html" />
     <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.simul.simultraj.Simul.__init__" href="generated/pylayers.simul.simultraj.Simul.__init__.html" />
+    <link rel="next" title="pylayers.antprop.antenna" href="pylayers.antprop.antenna.html" />
     <link rel="prev" title="pylayers.simul.simulnet.Simul.runsimul" href="generated/pylayers.simul.simulnet.Simul.runsimul.html" />
 <script type="text/javascript">
 
@@ -104,14 +104,14 @@
 	    </div>
 	
 	<div class="rellink">
-	<a href="generated/pylayers.simul.simultraj.Simul.__init__.html" title="pylayers.simul.simultraj.Simul.__init__"
+	<a href="pylayers.antprop.antenna.html" title="pylayers.antprop.antenna"
 	    accesskey="N">Next
 	    <br>
 	    <span class="smallrellink">
-	    pylayers.simu...
+	    pylayers.antp...
 	    </span>
 	    <span class="hiddenrellink">
-	    pylayers.simul.simultraj.Simul.__init__
+	    pylayers.antprop.antenna
 	    </span>
 	    
 	    </a>
@@ -161,17 +161,7 @@
     <a href="../about.html#citing-pylayers">citing pylayers</a>.</p>
     <h3>This page</h3>
 	<ul>
-<li><a class="reference internal" href="#">pylayers.simul.simultraj</a><ul>
-<li><a class="reference internal" href="#simul-class">Simul class</a><ul>
-<li><a class="reference internal" href="#run-simulation-and-data-exploitation">Run simulation and data exploitation</a></li>
-<li><a class="reference internal" href="#loading-and-saving">Loading and Saving</a></li>
-<li><a class="reference internal" href="#extraction">Extraction</a></li>
-<li><a class="reference internal" href="#miscellanous">Miscellanous</a></li>
-<li><a class="reference internal" href="#see-also">See Also</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">pylayers.simul.simultraj</a></li>
 </ul>
 
     
@@ -187,116 +177,6 @@
             
   <div class="section" id="pylayers-simul-simultraj">
 <h1>pylayers.simul.simultraj<a class="headerlink" href="#pylayers-simul-simultraj" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="simul-class">
-<h2>Simul class<a class="headerlink" href="#simul-class" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-</tbody>
-</table>
-<div class="section" id="run-simulation-and-data-exploitation">
-<h3>Run simulation and data exploitation<a class="headerlink" href="#run-simulation-and-data-exploitation" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.__init__.html#pylayers.simul.simultraj.Simul.__init__" title="pylayers.simul.simultraj.Simul.__init__"><code class="xref py py-obj docutils literal"><span class="pre">Simul.__init__</span></code></a>([source,&nbsp;verbose])</td>
-<td>object constructor</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.run.html#pylayers.simul.simultraj.Simul.run" title="pylayers.simul.simultraj.Simul.run"><code class="xref py py-obj docutils literal"><span class="pre">Simul.run</span></code></a>(**kwargs)</td>
-<td>run the link evaluation along a trajectory</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul._gen_net.html#pylayers.simul.simultraj.Simul._gen_net" title="pylayers.simul.simultraj.Simul._gen_net"><code class="xref py py-obj docutils literal"><span class="pre">Simul._gen_net</span></code></a>()</td>
-<td>generate Network and associated links</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.evaldeter.html#pylayers.simul.simultraj.Simul.evaldeter" title="pylayers.simul.simultraj.Simul.evaldeter"><code class="xref py py-obj docutils literal"><span class="pre">Simul.evaldeter</span></code></a>(na,&nbsp;nb,&nbsp;wstd[,&nbsp;fmod,&nbsp;nf,&nbsp;fGHz])</td>
-<td>deterministic evaluation of a link</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.evalstat.html#pylayers.simul.simultraj.Simul.evalstat" title="pylayers.simul.simultraj.Simul.evalstat"><code class="xref py py-obj docutils literal"><span class="pre">Simul.evalstat</span></code></a>(na,&nbsp;nb)</td>
-<td>statistical evaluation of a link</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.show.html#pylayers.simul.simultraj.Simul.show" title="pylayers.simul.simultraj.Simul.show"><code class="xref py py-obj docutils literal"><span class="pre">Simul.show</span></code></a>()</td>
-<td>show actual simlulation configuration</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="loading-and-saving">
-<h3>Loading and Saving<a class="headerlink" href="#loading-and-saving" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul._saveh5.html#pylayers.simul.simultraj.Simul._saveh5" title="pylayers.simul.simultraj.Simul._saveh5"><code class="xref py py-obj docutils literal"><span class="pre">Simul._saveh5</span></code></a>(ut,&nbsp;ida,&nbsp;idb,&nbsp;wstd)</td>
-<td>Save in h5py format</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul._loadh5.html#pylayers.simul.simultraj.Simul._loadh5" title="pylayers.simul.simultraj.Simul._loadh5"><code class="xref py py-obj docutils literal"><span class="pre">Simul._loadh5</span></code></a>(grpname)</td>
-<td>Load in h5py format</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.savepd.html#pylayers.simul.simultraj.Simul.savepd" title="pylayers.simul.simultraj.Simul.savepd"><code class="xref py py-obj docutils literal"><span class="pre">Simul.savepd</span></code></a>(df)</td>
-<td>save data information of a simulation</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.loadpd.html#pylayers.simul.simultraj.Simul.loadpd" title="pylayers.simul.simultraj.Simul.loadpd"><code class="xref py py-obj docutils literal"><span class="pre">Simul.loadpd</span></code></a>()</td>
-<td>load data from previous simulations</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="extraction">
-<h3>Extraction<a class="headerlink" href="#extraction" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.get_link.html#pylayers.simul.simultraj.Simul.get_link" title="pylayers.simul.simultraj.Simul.get_link"><code class="xref py py-obj docutils literal"><span class="pre">Simul.get_link</span></code></a>(**kwargs)</td>
-<td>retrieve a Link specific time from a simultraj</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.get_value.html#pylayers.simul.simultraj.Simul.get_value" title="pylayers.simul.simultraj.Simul.get_value"><code class="xref py py-obj docutils literal"><span class="pre">Simul.get_value</span></code></a>(**kwargs)</td>
-<td>retrieve output parameter at a specific time</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="miscellanous">
-<h3>Miscellanous<a class="headerlink" href="#miscellanous" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Simul.setttime</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.replace_data.html#pylayers.simul.simultraj.Simul.replace_data" title="pylayers.simul.simultraj.Simul.replace_data"><code class="xref py py-obj docutils literal"><span class="pre">Simul.replace_data</span></code></a>(df)</td>
-<td>check if a dataframe df already exists in self.data</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.check_exist.html#pylayers.simul.simultraj.Simul.check_exist" title="pylayers.simul.simultraj.Simul.check_exist"><code class="xref py py-obj docutils literal"><span class="pre">Simul.check_exist</span></code></a>(df)</td>
-<td>check if a dataframe df already exists in self.data</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.get_df_from_link.html#pylayers.simul.simultraj.Simul.get_df_from_link" title="pylayers.simul.simultraj.Simul.get_df_from_link"><code class="xref py py-obj docutils literal"><span class="pre">Simul.get_df_from_link</span></code></a>(id_a,&nbsp;id_b[,&nbsp;wstd])</td>
-<td>Return a restricted data frame for a specific link</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.update_pos.html#pylayers.simul.simultraj.Simul.update_pos" title="pylayers.simul.simultraj.Simul.update_pos"><code class="xref py py-obj docutils literal"><span class="pre">Simul.update_pos</span></code></a>(t)</td>
-<td>update positions of devices and bodies for a given time index</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="see-also">
-<h3>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h3>
-<p>pylayers.simul.link</p>
-</div>
-</div>
 </div>
 
 
@@ -310,8 +190,8 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 29, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on févr. 23, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../_sources/modules/pylayers.simul.simultraj.txt"
 	    rel="nofollow">Show this page source</a>
@@ -325,7 +205,7 @@
       </a>  
     </div>
     <div class="buttonNext">
-      <a href="generated/pylayers.simul.simultraj.Simul.__init__.html">
+      <a href="pylayers.antprop.antenna.html">
         Next
       </a>  
     </div>

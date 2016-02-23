@@ -137,7 +137,7 @@
           <div class="body" role="main">
             
   <h1>Source code for pylayers.antprop.coverage</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">Class Coverage</span>
 <span class="sd">==============</span>
@@ -155,12 +155,14 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="c">#from pylayers.measures.mesuwb import *</span>
+<span class="c1">#from pylayers.measures.mesuwb import *</span>
 <span class="kn">from</span> <span class="nn">pylayers.simul.radionode</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.utilnet</span> <span class="kn">import</span> <span class="n">str2bool</span>
 <span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
 <span class="kn">import</span> <span class="nn">pylayers.antprop.loss</span> <span class="kn">as</span> <span class="nn">loss</span>
+<span class="kn">import</span> <span class="nn">pylayers.antprop.deygout</span> <span class="kn">as</span> <span class="nn">dg</span>
+<span class="kn">import</span> <span class="nn">pylayers.gis.ezone</span> <span class="kn">as</span> <span class="nn">ez</span>
 <span class="kn">import</span> <span class="nn">pylayers.signal.standard</span> <span class="kn">as</span> <span class="nn">std</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.cm</span>  <span class="kn">as</span> <span class="nn">cm</span>
@@ -178,7 +180,7 @@
     <span class="kn">from</span> <span class="nn">tvtk.tools</span> <span class="kn">import</span> <span class="n">visual</span>
 
 <span class="k">except</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">&#39;mayavi not installed&#39;</span>
+    <span class="k">print</span> <span class="s1">&#39;mayavi not installed&#39;</span>
 
 
 <span class="k">class</span> <span class="nc">Coverage</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
@@ -217,7 +219,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="Coverage.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.__init__.html#pylayers.antprop.coverage.Coverage.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;coverage.ini&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Coverage.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.__init__.html#pylayers.antprop.coverage.Coverage.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_fileini</span><span class="o">=</span><span class="s1">&#39;coverage.ini&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; object constructor</span>
 
 <span class="sd">        Parameters</span>
@@ -236,82 +238,89 @@
 
 
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_fileini</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRSIMUL&#39;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_fileini</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s1">&#39;DIRSIMUL&#39;</span><span class="p">]))</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">layoutopt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;layout&#39;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gridopt</span>   <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;grid&#39;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">apopt</span>     <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;ap&#39;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rxopt</span>     <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;rx&#39;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">showopt</span>   <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;show&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layoutopt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;layout&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gridopt</span>   <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;grid&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">apopt</span>     <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;ap&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rxopt</span>     <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;rx&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showopt</span>   <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s1">&#39;show&#39;</span><span class="p">))</span>
 
-        <span class="c"># get the Layout</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layoutopt</span><span class="p">[</span><span class="s">&#39;filename&#39;</span><span class="p">])</span>
+        <span class="c1"># get the Layout</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layoutopt</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;ini&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">=</span> <span class="s1">&#39;indoor&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 
-        <span class="c"># get the receiving grid</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nx</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridopt</span><span class="p">[</span><span class="s">&#39;nx&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ny</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridopt</span><span class="p">[</span><span class="s">&#39;ny&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridopt</span><span class="p">[</span><span class="s">&#39;mode&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridopt</span><span class="p">[</span><span class="s">&#39;boundary&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">filespa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridopt</span><span class="p">[</span><span class="s">&#39;file&#39;</span><span class="p">]</span>
+            <span class="c1"># get the receiving grid</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nx</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridopt</span><span class="p">[</span><span class="s1">&#39;nx&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ny</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridopt</span><span class="p">[</span><span class="s1">&#39;ny&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridopt</span><span class="p">[</span><span class="s1">&#39;mode&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridopt</span><span class="p">[</span><span class="s1">&#39;boundary&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filespa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridopt</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]</span>
+            <span class="c1">#</span>
+            <span class="c1"># create grid</span>
+            <span class="c1">#</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">creategrid</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span><span class="n">boundary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="p">,</span><span class="n">_fileini</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filespa</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dap</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">apopt</span><span class="p">:</span>
+                <span class="n">kwargs</span>  <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apopt</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+                <span class="n">ap</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">AP</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="nb">eval</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span> <span class="o">=</span> <span class="n">ap</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
 
-        <span class="c">#</span>
-        <span class="c"># create grid</span>
-        <span class="c">#</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">creategrid</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span><span class="n">boundary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="p">,</span><span class="n">_fileini</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filespa</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">dap</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">apopt</span><span class="p">:</span>
-            <span class="n">kwargs</span>  <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apopt</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
-            <span class="n">ap</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">AP</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="nb">eval</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span> <span class="o">=</span> <span class="n">ap</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;outdoor&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">E</span> <span class="o">=</span> <span class="n">ez</span><span class="o">.</span><span class="n">Ezone</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">E</span><span class="o">.</span><span class="n">loadh5</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">E</span><span class="o">.</span><span class="n">rebase</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
-        <span class="c">#self.fGHz = eval(self.txopt[&#39;fghz&#39;])</span>
-        <span class="c">#self.tx = np.array((eval(self.txopt[&#39;x&#39;]),eval(self.txopt[&#39;y&#39;])))</span>
-        <span class="c">#self.ptdbm = eval(self.txopt[&#39;ptdbm&#39;])</span>
-        <span class="c">#self.framelengthbytes = eval(self.txopt[&#39;framelengthbytes&#39;])</span>
+        <span class="c1">#self.fGHz = eval(self.txopt[&#39;fghz&#39;])</span>
+        <span class="c1">#self.tx = np.array((eval(self.txopt[&#39;x&#39;]),eval(self.txopt[&#39;y&#39;])))</span>
+        <span class="c1">#self.ptdbm = eval(self.txopt[&#39;ptdbm&#39;])</span>
+        <span class="c1">#self.framelengthbytes = eval(self.txopt[&#39;framelengthbytes&#39;])</span>
 
-        <span class="c"># receiver section</span>
-        <span class="c">#self.rxsens = eval(self.rxopt[&#39;sensitivity&#39;])</span>
+        <span class="c1"># receiver section</span>
+        <span class="c1">#self.rxsens = eval(self.rxopt[&#39;sensitivity&#39;])</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">temperaturek</span>  <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rxopt</span><span class="p">[</span><span class="s">&#39;temperaturek&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">noisefactordb</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rxopt</span><span class="p">[</span><span class="s">&#39;noisefactordb&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temperaturek</span>  <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rxopt</span><span class="p">[</span><span class="s1">&#39;temperaturek&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">noisefactordb</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rxopt</span><span class="p">[</span><span class="s1">&#39;noisefactordb&#39;</span><span class="p">])</span>
 
-        <span class="c"># show section</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bshow</span> <span class="o">=</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showopt</span><span class="p">[</span><span class="s">&#39;show&#39;</span><span class="p">])</span>
+        <span class="c1"># show section</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bshow</span> <span class="o">=</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">showopt</span><span class="p">[</span><span class="s1">&#39;show&#39;</span><span class="p">])</span></div>
 
-        <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="k">pass</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
-
-</div>
 <div class="viewcode-block" id="Coverage.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.__repr__.html#pylayers.antprop.coverage.Coverage.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">st</span><span class="o">=</span><span class="s">&#39;&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;Layout file : &#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;-----list of Access Points ------&#39;</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">:</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;-----Rx------&#39;</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;temperature (K) : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temperaturek</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;noisefactor (dB) : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noisefactordb</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;--- Grid ----&#39;</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;mode : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">&lt;&gt;</span><span class="s">&#39;file&#39;</span><span class="p">:</span>
-            <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;nx : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-            <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;ny : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s">&#39;zone&#39;</span><span class="p">:</span>
-            <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;boundary (xmin,ymin,xmax,ymax) : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s">&#39;file&#39;</span><span class="p">:</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39; filename : &#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">filespa</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Coverage.creategrid"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.creategrid.html#pylayers.antprop.coverage.Coverage.creategrid">[docs]</a>    <span class="k">def</span> <span class="nf">creategrid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;full&#39;</span><span class="p">,</span><span class="n">boundary</span><span class="o">=</span><span class="p">[],</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+        <span class="n">st</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="o">==</span><span class="s1">&#39;indoor&#39;</span><span class="p">:</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s1">&#39;Layout file : &#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s1">&#39;-----list of Access Points ------&#39;</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">:</span>
+                <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s1">&#39;-----Rx------&#39;</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s1">&#39;temperature (K) : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temperaturek</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s1">&#39;noisefactor (dB) : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noisefactordb</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s1">&#39;--- Grid ----&#39;</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s1">&#39;mode : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">&lt;&gt;</span><span class="s1">&#39;file&#39;</span><span class="p">:</span>
+                <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s1">&#39;nx : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s1">&#39;ny : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;zone&#39;</span><span class="p">:</span>
+                <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s1">&#39;boundary (xmin,ymin,xmax,ymax) : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;file&#39;</span><span class="p">:</span>
+                <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s1">&#39; filename : &#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">filespa</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Coverage.creategrid"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.creategrid.html#pylayers.antprop.coverage.Coverage.creategrid">[docs]</a>    <span class="k">def</span> <span class="nf">creategrid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">,</span><span class="n">boundary</span><span class="o">=</span><span class="p">[],</span><span class="n">_fileini</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create a grid</span>
 
 <span class="sd">        Parameters</span>
@@ -323,17 +332,17 @@
 <span class="sd">            if full is False the boundary argument is used</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">mode</span><span class="o">==</span><span class="s">&quot;file&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">RN</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span>
-                               <span class="n">typ</span><span class="o">=</span><span class="s">&#39;rx&#39;</span><span class="p">,</span>
+        <span class="k">if</span> <span class="n">mode</span><span class="o">==</span><span class="s2">&quot;file&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">RN</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                               <span class="n">typ</span><span class="o">=</span><span class="s1">&#39;rx&#39;</span><span class="p">,</span>
                                <span class="n">_fileini</span> <span class="o">=</span> <span class="n">_fileini</span><span class="p">,</span>
-                               <span class="n">_fileant</span> <span class="o">=</span> <span class="s">&#39;def.vsh3&#39;</span><span class="p">)</span>
+                               <span class="n">_fileant</span> <span class="o">=</span> <span class="s1">&#39;def.vsh3&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">RN</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,:]</span><span class="o">.</span><span class="n">T</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">mode</span><span class="o">==</span><span class="s">&quot;full&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">mode</span><span class="o">==</span><span class="s2">&quot;full&quot;</span><span class="p">:</span>
                 <span class="n">mi</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">+</span><span class="mf">0.01</span>
                 <span class="n">ma</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">-</span><span class="mf">0.01</span>
-            <span class="k">if</span> <span class="n">mode</span><span class="o">==</span><span class="s">&quot;zone&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">mode</span><span class="o">==</span><span class="s2">&quot;zone&quot;</span><span class="p">:</span>
                 <span class="k">assert</span> <span class="n">boundary</span><span class="o">&lt;&gt;</span><span class="p">[]</span>
                 <span class="n">mi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">boundary</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">boundary</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
                 <span class="n">ma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">boundary</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">boundary</span><span class="p">[</span><span class="mi">3</span><span class="p">]])</span>
@@ -343,8 +352,8 @@
 
             <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)))))</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">ng</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ng</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
     <span class="k">def</span> <span class="nf">where1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Unfinished : Not sure this is the right place (too specific)</span>
@@ -355,10 +364,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">=</span><span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;p&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">M1</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s">&#39;p&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">M1</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="s">&#39;p&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">M1</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="s">&#39;p&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">M1</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;p&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">M1</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s1">&#39;p&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">M1</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="s1">&#39;p&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">M1</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="s1">&#39;p&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">M1</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">300</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">M</span> <span class="o">=</span> <span class="n">UWBMeasure</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
@@ -382,8 +391,8 @@
                     <span class="n">tt2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">tt2</span><span class="p">,</span><span class="n">Etot</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
                     <span class="n">tt3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">tt3</span><span class="p">,</span><span class="n">Etot</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
                     <span class="n">tt4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">tt4</span><span class="p">,</span><span class="n">Etot</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
-                    <span class="c">#tdist = np.hstack((tdist,dist))</span>
-                    <span class="c">#te = np.hstack((te,Emax))</span>
+                    <span class="c1">#tdist = np.hstack((tdist,dist))</span>
+                    <span class="c1">#te = np.hstack((te,Emax))</span>
                 <span class="k">except</span><span class="p">:</span>
                     <span class="n">td1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dist</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                     <span class="n">td2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dist</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -451,9 +460,9 @@
 <span class="sd">        pylayers.antprop.loss.PL</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c">#</span>
-        <span class="c"># select active AP</span>
-        <span class="c">#</span>
+        <span class="c1">#</span>
+        <span class="c1"># select active AP</span>
+        <span class="c1">#</span>
         <span class="n">lactiveAP</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">aap</span>
@@ -461,42 +470,42 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">pass</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">kB</span> <span class="o">=</span> <span class="mf">1.3806503e-23</span> <span class="c"># Boltzmann constant</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kB</span> <span class="o">=</span> <span class="mf">1.3806503e-23</span> <span class="c1"># Boltzmann constant</span>
         <span class="k">for</span> <span class="n">iap</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">][</span><span class="s">&#39;on&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">][</span><span class="s1">&#39;on&#39;</span><span class="p">]:</span>
                 <span class="n">lactiveAP</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">iap</span><span class="p">)</span>
                 <span class="n">fGHz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">fcghz</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span><span class="n">fGHz</span><span class="p">)))</span>
-                <span class="n">apchan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">][</span><span class="s">&#39;chan&#39;</span><span class="p">]</span>
+                <span class="n">apchan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">][</span><span class="s1">&#39;chan&#39;</span><span class="p">]</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">aap</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">aap</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">][</span><span class="s">&#39;p&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]))</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">][</span><span class="s">&#39;PtdBm&#39;</span><span class="p">]))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">aap</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">aap</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">][</span><span class="s1">&#39;p&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">][</span><span class="s1">&#39;PtdBm&#39;</span><span class="p">]))</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">bmhz</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">bmhz</span><span class="p">,</span>
-                                 <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">chan</span><span class="p">[</span><span class="n">apchan</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;BMHz&#39;</span><span class="p">]))</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">chan</span><span class="p">[</span><span class="n">apchan</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;BMHz&#39;</span><span class="p">]))</span>
                 <span class="k">except</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">aap</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">][</span><span class="s">&#39;p&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">][</span><span class="s">&#39;PtdBm&#39;</span><span class="p">])</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">bmhz</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">chan</span><span class="p">[</span><span class="n">apchan</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;BMHz&#39;</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">aap</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">][</span><span class="s1">&#39;p&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">][</span><span class="s1">&#39;PtdBm&#39;</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">bmhz</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">iap</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">chan</span><span class="p">[</span><span class="n">apchan</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;BMHz&#39;</span><span class="p">])</span>
 
         <span class="n">PnW</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noisefactordb</span><span class="o">/</span><span class="mf">10.</span><span class="p">))</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">kB</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">temperaturek</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">bmhz</span><span class="o">*</span><span class="mf">1e6</span><span class="p">)</span>
-        <span class="c"># Evaluate Noise Power (in dBm)</span>
+        <span class="c1"># Evaluate Noise Power (in dBm)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">PnW</span><span class="p">)</span><span class="o">+</span><span class="mi">30</span><span class="p">)</span>
-        <span class="c">#lchan = map(lambda x: self.dap[x][&#39;chan&#39;],lap)</span>
-        <span class="c">#apchan = zip(self.dap.keys(),lchan)</span>
-        <span class="c">#self.bmhz = np.array(map(lambda x: self.dap[x[0]].s.chan[x[1][0]][&#39;BMHz&#39;]*len(x[1]),apchan))</span>
+        <span class="c1">#lchan = map(lambda x: self.dap[x][&#39;chan&#39;],lap)</span>
+        <span class="c1">#apchan = zip(self.dap.keys(),lchan)</span>
+        <span class="c1">#self.bmhz = np.array(map(lambda x: self.dap[x[0]].s.chan[x[1][0]][&#39;BMHz&#39;]*len(x[1]),apchan))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span><span class="o">.</span><span class="n">T</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span><span class="o">.</span><span class="n">T</span>
-        <span class="c"># creating all links</span>
+        <span class="c1"># creating all links</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ng</span><span class="p">),</span><span class="n">lactiveAP</span><span class="p">)</span>
-        <span class="c">#</span>
-        <span class="c"># pa : access point</span>
-        <span class="c"># pg : grid point</span>
-        <span class="c">#</span>
-        <span class="c"># 1 x na</span>
+        <span class="c1">#</span>
+        <span class="c1"># pa : access point</span>
+        <span class="c1"># pg : grid point</span>
+        <span class="c1">#</span>
+        <span class="c1"># 1 x na</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">p</span><span class="p">:</span>
             <span class="n">pg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">],:]</span>
-            <span class="n">pa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s">&#39;p&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">pa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s1">&#39;p&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">pa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="p">,</span><span class="n">pa</span><span class="p">))</span>
             <span class="k">except</span><span class="p">:</span>
@@ -510,7 +519,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">pg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pg</span><span class="o">.</span><span class="n">T</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
 
-        <span class="c"># retrieving dimensions along the 3 axis</span>
+        <span class="c1"># retrieving dimensions along the 3 axis</span>
         <span class="n">na</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lactiveAP</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">na</span> <span class="o">=</span> <span class="n">na</span>
         <span class="n">ng</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ng</span>
@@ -525,10 +534,10 @@
         <span class="n">freespace</span> <span class="o">=</span> <span class="n">loss</span><span class="o">.</span><span class="n">PL</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">pg</span><span class="p">,</span><span class="n">dB</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">freespace</span> <span class="o">=</span> <span class="n">freespace</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nf</span><span class="p">,</span><span class="n">ng</span><span class="p">,</span><span class="n">na</span><span class="p">)</span>
 
-        <span class="c"># transmitting power</span>
-        <span class="c"># f x g x a</span>
+        <span class="c1"># transmitting power</span>
+        <span class="c1"># f x g x a</span>
 
-        <span class="c"># CmW : Received Power coverage in mW</span>
+        <span class="c1"># CmW : Received Power coverage in mW</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">CmWo</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="o">...</span><span class="p">]</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">Lwo</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">freespace</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">CmWp</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="o">...</span><span class="p">]</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">Lwp</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">freespace</span>
 
@@ -538,8 +547,8 @@
         <span class="k">if</span> <span class="n">sinr</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">evsinr</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">best</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">evbestsv</span><span class="p">()</span>
-</div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">evbestsv</span><span class="p">()</span></div>
+
     <span class="k">def</span> <span class="nf">evsnr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculates snr</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -554,12 +563,17 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="c1"># na : number of access point</span>
         <span class="n">na</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">na</span>
 
+        <span class="c1"># U : 1 x 1 x na x na</span>
         <span class="n">U</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">na</span><span class="p">,</span><span class="n">na</span><span class="p">))</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">na</span><span class="p">))[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:,:]</span>
 
-        <span class="n">ImWo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">&#39;ijkl,ijl-&gt;ijk&#39;</span><span class="p">,</span><span class="n">U</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">CmWo</span><span class="p">)</span>
-        <span class="n">ImWp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">&#39;ijkl,ijl-&gt;ijk&#39;</span><span class="p">,</span><span class="n">U</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">CmWp</span><span class="p">)</span>
+        <span class="c1"># CmWo : received power in mW orthogonal polarization</span>
+        <span class="c1"># CmWp : received power in mW parallel polarization</span>
+
+        <span class="n">ImWo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;ijkl,ijl-&gt;ijk&#39;</span><span class="p">,</span><span class="n">U</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">CmWo</span><span class="p">)</span>
+        <span class="n">ImWp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;ijkl,ijl-&gt;ijk&#39;</span><span class="p">,</span><span class="n">U</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">CmWp</span><span class="p">)</span>
 
 
         <span class="n">NmW</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span><span class="o">/</span><span class="mf">10.</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
@@ -568,7 +582,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sinrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmWp</span><span class="o">/</span><span class="p">(</span><span class="n">ImWp</span><span class="o">+</span><span class="n">NmW</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">evbestsv</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; determine best server map</span>
+        <span class="sd">&quot;&quot;&quot; determine the best server map</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
@@ -579,7 +593,7 @@
         <span class="n">na</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">na</span>
         <span class="n">ng</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ng</span>
         <span class="n">nf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nf</span>
-        <span class="c"># find best server regions</span>
+        <span class="c1"># find best server regions</span>
         <span class="n">Vo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmWo</span>
         <span class="n">Vp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmWp</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bestsvo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nf</span><span class="o">*</span><span class="n">ng</span><span class="o">*</span><span class="n">na</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nf</span><span class="p">,</span><span class="n">ng</span><span class="p">,</span><span class="n">na</span><span class="p">)</span>
@@ -594,314 +608,314 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">bestsvp</span><span class="p">[</span><span class="n">kf</span><span class="p">,</span><span class="n">up</span><span class="p">,</span><span class="n">ka</span><span class="p">]</span><span class="o">=</span><span class="n">ka</span><span class="o">+</span><span class="mi">1</span>
 
 
-<span class="c">#    def showEd(self,polar=&#39;o&#39;,**kwargs):</span>
-<span class="c">#        &quot;&quot;&quot; shows a map of direct path excess delay</span>
-<span class="c">#</span>
-<span class="c">#        Parameters</span>
-<span class="c">#        ----------</span>
-<span class="c">#</span>
-<span class="c">#        polar : string</span>
-<span class="c">#        &#39;o&#39; | &#39;p&#39;</span>
-<span class="c">#</span>
-<span class="c">#        Examples</span>
-<span class="c">#        --------</span>
-<span class="c">#</span>
-<span class="c">#        .. plot::</span>
-<span class="c">#            :include-source:</span>
-<span class="c">#</span>
-<span class="c">#            &gt;&gt; from pylayers.antprop.coverage import *</span>
-<span class="c">#            &gt;&gt; C = Coverage()</span>
-<span class="c">#            &gt;&gt; C.cover()</span>
-<span class="c">#            &gt;&gt; C.showEd(polar=&#39;o&#39;)</span>
-<span class="c">#</span>
-<span class="c">#        &quot;&quot;&quot;</span>
-<span class="c">#</span>
-<span class="c">#        if not kwargs.has_key(&#39;alphacy&#39;):</span>
-<span class="c">#            kwargs[&#39;alphacy&#39;]=0.0</span>
-<span class="c">#        if not kwargs.has_key(&#39;colorcy&#39;):</span>
-<span class="c">#            kwargs[&#39;colorcy&#39;]=&#39;w&#39;</span>
-<span class="c">#        if not kwargs.has_key(&#39;nodes&#39;):</span>
-<span class="c">#            kwargs[&#39;nodes&#39;]=False</span>
-<span class="c">#</span>
-<span class="c">#        fig,ax = self.L.showG(&#39;s&#39;,**kwargs)</span>
-<span class="c">#        l = self.grid[0,0]</span>
-<span class="c">#        r = self.grid[-1,0]</span>
-<span class="c">#        b = self.grid[0,1]</span>
-<span class="c">#        t = self.grid[-1,-1]</span>
-<span class="c">#</span>
-<span class="c">#        cdict = {</span>
-<span class="c">#        &#39;red&#39;  :  ((0., 0.5, 0.5), (1., 1., 1.)),</span>
-<span class="c">#        &#39;green&#39;:  ((0., 0.5, 0.5), (1., 1., 1.)),</span>
-<span class="c">#        &#39;blue&#39; :  ((0., 0.5, 0.5), (1., 1., 1.))</span>
-<span class="c">#        }</span>
-<span class="c">#        #generate the colormap with 1024 interpolated values</span>
-<span class="c">#        my_cmap = m.colors.LinearSegmentedColormap(&#39;my_colormap&#39;, cdict, 1024)</span>
-<span class="c">#</span>
-<span class="c">#        if polar==&#39;o&#39;:</span>
-<span class="c">#            prdbm=self.prdbmo</span>
-<span class="c">#        if polar==&#39;p&#39;:</span>
-<span class="c">#            prdbm=self.prdbmp</span>
-<span class="c">#</span>
-<span class="c">#</span>
-<span class="c">#</span>
-<span class="c">#        if polar==&#39;o&#39;:</span>
-<span class="c">#            mcEdof = np.ma.masked_where(prdbm &lt; self.rxsens,self.Edo)</span>
-<span class="c">#</span>
-<span class="c">#            cov=ax.imshow(mcEdof.reshape((self.nx,self.ny)).T,</span>
-<span class="c">#                             extent=(l,r,b,t),cmap = &#39;jet&#39;,</span>
-<span class="c">#                             origin=&#39;lower&#39;)</span>
-<span class="c">#</span>
-<span class="c">#</span>
-<span class="c">#</span>
-<span class="c">#            # cov=ax.imshow(self.Edo.reshape((self.nx,self.ny)).T,</span>
-<span class="c">#            #           extent=(l,r,b,t),</span>
-<span class="c">#            #           origin=&#39;lower&#39;)</span>
-<span class="c">#            titre = &quot;Map of LOS excess delay, polar orthogonal&quot;</span>
-<span class="c">#</span>
-<span class="c">#        if polar==&#39;p&#39;:</span>
-<span class="c">#            mcEdpf = np.ma.masked_where(prdbm &lt; self.rxsens,self.Edp)</span>
-<span class="c">#</span>
-<span class="c">#            cov=ax.imshow(mcEdpf.reshape((self.nx,self.ny)).T,</span>
-<span class="c">#                             extent=(l,r,b,t),cmap = &#39;jet&#39;,</span>
-<span class="c">#                             origin=&#39;lower&#39;)</span>
-<span class="c">#</span>
-<span class="c">#            # cov=ax.imshow(self.Edp.reshape((self.nx,self.ny)).T,</span>
-<span class="c">#            #           extent=(l,r,b,t),</span>
-<span class="c">#            #           origin=&#39;lower&#39;)</span>
-<span class="c">#            titre = &quot;Map of LOS excess delay, polar parallel&quot;</span>
-<span class="c">#</span>
-<span class="c">#        ax.scatter(self.tx[0],self.tx[1],linewidth=0)</span>
-<span class="c">#        ax.set_title(titre)</span>
-<span class="c">#</span>
-<span class="c">#        divider = make_axes_locatable(ax)</span>
-<span class="c">#        cax = divider.append_axes(&quot;right&quot;, size=&quot;5%&quot;, pad=0.05)</span>
-<span class="c">#        clb = fig.colorbar(cov,cax)</span>
-<span class="c">#        clb.set_label(&#39;excess delay (ns)&#39;)</span>
-<span class="c">#</span>
-<span class="c">#        if self.show:</span>
-<span class="c">#            plt.show()</span>
-<span class="c">#        return fig,ax</span>
-<span class="c">#</span>
-<span class="c">#    def showPower(self,rxsens=True,nfl=True,polar=&#39;o&#39;,**kwargs):</span>
-<span class="c">#        &quot;&quot;&quot; show the map of received power</span>
-<span class="c">#</span>
-<span class="c">#        Parameters</span>
-<span class="c">#        ----------</span>
-<span class="c">#</span>
-<span class="c">#        rxsens : bool</span>
-<span class="c">#              clip the map with rx sensitivity set in self.rxsens</span>
-<span class="c">#        nfl : bool</span>
-<span class="c">#              clip the map with noise floor set in self.pndbm</span>
-<span class="c">#        polar : string</span>
-<span class="c">#            &#39;o&#39;|&#39;p&#39;</span>
-<span class="c">#</span>
-<span class="c">#        Examples</span>
-<span class="c">#        --------</span>
-<span class="c">#</span>
-<span class="c">#        .. plot::</span>
-<span class="c">#            :include-source:</span>
-<span class="c">#</span>
-<span class="c">#            &gt; from pylayers.antprop.coverage import *</span>
-<span class="c">#            &gt; C = Coverage()</span>
-<span class="c">#            &gt; C.cover()</span>
-<span class="c">#            &gt; C.showPower()</span>
-<span class="c">#</span>
-<span class="c">#        &quot;&quot;&quot;</span>
-<span class="c">#</span>
-<span class="c">#        if not kwargs.has_key(&#39;alphacy&#39;):</span>
-<span class="c">#            kwargs[&#39;alphacy&#39;]=0.0</span>
-<span class="c">#        if not kwargs.has_key(&#39;colorcy&#39;):</span>
-<span class="c">#            kwargs[&#39;colorcy&#39;]=&#39;w&#39;</span>
-<span class="c">#        if not kwargs.has_key(&#39;nodes&#39;):</span>
-<span class="c">#            kwargs[&#39;nodes&#39;]=False</span>
-<span class="c">#        fig,ax = self.L.showG(&#39;s&#39;,**kwargs)</span>
-<span class="c">#</span>
-<span class="c">#        l = self.grid[0,0]</span>
-<span class="c">#        r = self.grid[-1,0]</span>
-<span class="c">#        b = self.grid[0,1]</span>
-<span class="c">#        t = self.grid[-1,-1]</span>
-<span class="c">#</span>
-<span class="c">#        if polar==&#39;o&#39;:</span>
-<span class="c">#            prdbm=self.prdbmo</span>
-<span class="c">#        if polar==&#39;p&#39;:</span>
-<span class="c">#            prdbm=self.prdbmp</span>
-<span class="c">#</span>
-<span class="c">##        tCM = plt.cm.get_cmap(&#39;jet&#39;)</span>
-<span class="c">##        tCM._init()</span>
-<span class="c">##        alphas = np.abs(np.linspace(.0,1.0, tCM.N))</span>
-<span class="c">##        tCM._lut[:-3,-1] = alphas</span>
-<span class="c">#</span>
-<span class="c">#        title=&#39;Map of received power - Pt = &#39; + str(self.ptdbm) + &#39; dBm&#39;+str(&#39; fGHz =&#39;) + str(self.fGHz) + &#39; polar = &#39;+polar</span>
-<span class="c">#</span>
-<span class="c">#        cdict = {</span>
-<span class="c">#        &#39;red&#39;  :  ((0., 0.5, 0.5), (1., 1., 1.)),</span>
-<span class="c">#        &#39;green&#39;:  ((0., 0.5, 0.5), (1., 1., 1.)),</span>
-<span class="c">#        &#39;blue&#39; :  ((0., 0.5, 0.5), (1., 1., 1.))</span>
-<span class="c">#        }</span>
-<span class="c">#</span>
-<span class="c">#        if not kwargs.has_key(&#39;cmap&#39;):</span>
-<span class="c">#        # generate the colormap with 1024 interpolated values</span>
-<span class="c">#            cmap = m.colors.LinearSegmentedColormap(&#39;my_colormap&#39;, cdict, 1024)</span>
-<span class="c">#        else:</span>
-<span class="c">#            cmap = kwargs[&#39;cmap&#39;]</span>
-<span class="c">#        #my_cmap = cm.copper</span>
-<span class="c">#</span>
-<span class="c">#</span>
-<span class="c">#        if rxsens :</span>
-<span class="c">#</span>
-<span class="c">#            ## values between the rx sensitivity and noise floor</span>
-<span class="c">#            mcPrf = np.ma.masked_where((prdbm &gt; self.rxsens)</span>
-<span class="c">#                                     &amp; (prdbm &lt; self.pndbm),prdbm)</span>
-<span class="c">#            # mcPrf = np.ma.masked_where((prdbm &gt; self.rxsens) ,prdbm)</span>
-<span class="c">#</span>
-<span class="c">#            cov1 = ax.imshow(mcPrf.reshape((self.nx,self.ny)).T,</span>
-<span class="c">#                             extent=(l,r,b,t),cmap = cm.copper,</span>
-<span class="c">#                             vmin=self.rxsens,origin=&#39;lower&#39;)</span>
-<span class="c">#</span>
-<span class="c">#            ### values above the sensitivity</span>
-<span class="c">#            mcPrs = np.ma.masked_where(prdbm &lt; self.rxsens,prdbm)</span>
-<span class="c">#            cov = ax.imshow(mcPrs.reshape((self.nx,self.ny)).T,</span>
-<span class="c">#                            extent=(l,r,b,t),</span>
-<span class="c">#                            cmap = cmap,</span>
-<span class="c">#                            vmin=self.rxsens,origin=&#39;lower&#39;)</span>
-<span class="c">#            title=title + &#39;\n black : Pr (dBm) &lt; %.2f&#39; % self.rxsens + &#39; dBm&#39;</span>
-<span class="c">#</span>
-<span class="c">#        else :</span>
-<span class="c">#            cov=ax.imshow(prdbm.reshape((self.nx,self.ny)).T,</span>
-<span class="c">#                          extent=(l,r,b,t),</span>
-<span class="c">#                          cmap = cmap,</span>
-<span class="c">#                          vmin=self.pndbm,origin=&#39;lower&#39;)</span>
-<span class="c">#</span>
-<span class="c">#        if nfl:</span>
-<span class="c">#            ### values under the noise floor</span>
-<span class="c">#            ### we first clip the value below the noise floor</span>
-<span class="c">#            cl = np.nonzero(prdbm&lt;=self.pndbm)</span>
-<span class="c">#            cPr = prdbm</span>
-<span class="c">#            cPr[cl] = self.pndbm</span>
-<span class="c">#            mcPruf = np.ma.masked_where(cPr &gt; self.pndbm,cPr)</span>
-<span class="c">#            cov2 = ax.imshow(mcPruf.reshape((self.nx,self.ny)).T,</span>
-<span class="c">#                             extent=(l,r,b,t),cmap = &#39;binary&#39;,</span>
-<span class="c">#                             vmax=self.pndbm,origin=&#39;lower&#39;)</span>
-<span class="c">#            title=title + &#39;\n white : Pr (dBm) &lt; %.2f&#39; % self.pndbm + &#39; dBm&#39;</span>
-<span class="c">#</span>
-<span class="c">#</span>
-<span class="c">#        ax.scatter(self.tx[0],self.tx[1],s=10,c=&#39;k&#39;,linewidth=0)</span>
-<span class="c">#</span>
-<span class="c">#        ax.set_title(title)</span>
-<span class="c">#        divider = make_axes_locatable(ax)</span>
-<span class="c">#        cax = divider.append_axes(&quot;right&quot;, size=&quot;5%&quot;, pad=0.05)</span>
-<span class="c">#        clb = fig.colorbar(cov,cax)</span>
-<span class="c">#        clb.set_label(&#39;Power (dBm)&#39;)</span>
-<span class="c">#</span>
-<span class="c">#        if self.show:</span>
-<span class="c">#            plt.show()</span>
-<span class="c">#</span>
-<span class="c">#        return fig,ax</span>
-<span class="c">#</span>
-<span class="c">#</span>
-<span class="c">#    def showTransistionRegion(self,polar=&#39;o&#39;):</span>
-<span class="c">#        &quot;&quot;&quot;</span>
-<span class="c">#</span>
-<span class="c">#        Notes</span>
-<span class="c">#        -----</span>
-<span class="c">#</span>
-<span class="c">#        See  : &quot;Analyzing the Transitional Region in Low Power Wireless Links&quot;</span>
-<span class="c">#                Marco Zuniga and Bhaskar Krishnamachari</span>
-<span class="c">#</span>
-<span class="c">#        Examples</span>
-<span class="c">#        --------</span>
-<span class="c">#</span>
-<span class="c">#        .. plot::</span>
-<span class="c">#            :include-source:</span>
-<span class="c">#</span>
-<span class="c">#            &gt; from pylayers.antprop.coverage import *</span>
-<span class="c">#            &gt; C = Coverage()</span>
-<span class="c">#            &gt; C.cover()</span>
-<span class="c">#            &gt; C.showTransitionRegion()</span>
-<span class="c">#</span>
-<span class="c">#        &quot;&quot;&quot;</span>
-<span class="c">#</span>
-<span class="c">#        frameLength = self.framelengthbytes</span>
-<span class="c">#</span>
-<span class="c">#        PndBm = self.pndbm</span>
-<span class="c">#        gammaU = 10*np.log10(-1.28*np.log(2*(1-0.9**(1./(8*frameLength)))))</span>
-<span class="c">#        gammaL = 10*np.log10(-1.28*np.log(2*(1-0.1**(1./(8*frameLength)))))</span>
-<span class="c">#</span>
-<span class="c">#        PrU = PndBm + gammaU</span>
-<span class="c">#        PrL = PndBm + gammaL</span>
-<span class="c">#</span>
-<span class="c">#        fig,ax = self.L.showGs()</span>
-<span class="c">#</span>
-<span class="c">#        l = self.grid[0,0]</span>
-<span class="c">#        r = self.grid[-1,0]</span>
-<span class="c">#        b = self.grid[0,1]</span>
-<span class="c">#        t = self.grid[-1,-1]</span>
-<span class="c">#</span>
-<span class="c">#        if polar==&#39;o&#39;:</span>
-<span class="c">#            prdbm=self.prdbmo</span>
-<span class="c">#        if polar==&#39;p&#39;:</span>
-<span class="c">#            prdbm=self.prdbmp</span>
-<span class="c">#</span>
-<span class="c">#        zones = np.zeros(np.shape(prdbm))</span>
-<span class="c">#        #pdb.set_trace()</span>
-<span class="c">#</span>
-<span class="c">#        uconnected  = np.nonzero(prdbm&gt;PrU)</span>
-<span class="c">#        utransition = np.nonzero((prdbm &lt; PrU)&amp;(prdbm &gt; PrL))</span>
-<span class="c">#        udisconnected = np.nonzero(prdbm &lt; PrL)</span>
-<span class="c">#</span>
-<span class="c">#        zones[uconnected] = 1</span>
-<span class="c">#        zones[utransition] = (prdbm[utransition]-PrL)/(PrU-PrL)</span>
-<span class="c">#        cov = ax.imshow(zones.reshape((self.nx,self.ny)).T,</span>
-<span class="c">#                             extent=(l,r,b,t),cmap = &#39;BuGn&#39;,origin=&#39;lower&#39;)</span>
-<span class="c">#</span>
-<span class="c">#        title=&#39;PDR region&#39;</span>
-<span class="c">#        ax.scatter(self.tx[0],self.tx[1],linewidth=0)</span>
-<span class="c">#</span>
-<span class="c">#        ax.set_title(title)</span>
-<span class="c">#        divider = make_axes_locatable(ax)</span>
-<span class="c">#        cax = divider.append_axes(&quot;right&quot;, size=&quot;5%&quot;, pad=0.05)</span>
-<span class="c">#        fig.colorbar(cov,cax)</span>
-<span class="c">#        if self.show:</span>
-<span class="c">#            plt.show()</span>
-<span class="c">#</span>
+<span class="c1">#    def showEd(self,polar=&#39;o&#39;,**kwargs):</span>
+<span class="c1">#        &quot;&quot;&quot; shows a map of direct path excess delay</span>
+<span class="c1">#</span>
+<span class="c1">#        Parameters</span>
+<span class="c1">#        ----------</span>
+<span class="c1">#</span>
+<span class="c1">#        polar : string</span>
+<span class="c1">#        &#39;o&#39; | &#39;p&#39;</span>
+<span class="c1">#</span>
+<span class="c1">#        Examples</span>
+<span class="c1">#        --------</span>
+<span class="c1">#</span>
+<span class="c1">#        .. plot::</span>
+<span class="c1">#            :include-source:</span>
+<span class="c1">#</span>
+<span class="c1">#            &gt;&gt; from pylayers.antprop.coverage import *</span>
+<span class="c1">#            &gt;&gt; C = Coverage()</span>
+<span class="c1">#            &gt;&gt; C.cover()</span>
+<span class="c1">#            &gt;&gt; C.showEd(polar=&#39;o&#39;)</span>
+<span class="c1">#</span>
+<span class="c1">#        &quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1">#        if not kwargs.has_key(&#39;alphacy&#39;):</span>
+<span class="c1">#            kwargs[&#39;alphacy&#39;]=0.0</span>
+<span class="c1">#        if not kwargs.has_key(&#39;colorcy&#39;):</span>
+<span class="c1">#            kwargs[&#39;colorcy&#39;]=&#39;w&#39;</span>
+<span class="c1">#        if not kwargs.has_key(&#39;nodes&#39;):</span>
+<span class="c1">#            kwargs[&#39;nodes&#39;]=False</span>
+<span class="c1">#</span>
+<span class="c1">#        fig,ax = self.L.showG(&#39;s&#39;,**kwargs)</span>
+<span class="c1">#        l = self.grid[0,0]</span>
+<span class="c1">#        r = self.grid[-1,0]</span>
+<span class="c1">#        b = self.grid[0,1]</span>
+<span class="c1">#        t = self.grid[-1,-1]</span>
+<span class="c1">#</span>
+<span class="c1">#        cdict = {</span>
+<span class="c1">#        &#39;red&#39;  :  ((0., 0.5, 0.5), (1., 1., 1.)),</span>
+<span class="c1">#        &#39;green&#39;:  ((0., 0.5, 0.5), (1., 1., 1.)),</span>
+<span class="c1">#        &#39;blue&#39; :  ((0., 0.5, 0.5), (1., 1., 1.))</span>
+<span class="c1">#        }</span>
+<span class="c1">#        #generate the colormap with 1024 interpolated values</span>
+<span class="c1">#        my_cmap = m.colors.LinearSegmentedColormap(&#39;my_colormap&#39;, cdict, 1024)</span>
+<span class="c1">#</span>
+<span class="c1">#        if polar==&#39;o&#39;:</span>
+<span class="c1">#            prdbm=self.prdbmo</span>
+<span class="c1">#        if polar==&#39;p&#39;:</span>
+<span class="c1">#            prdbm=self.prdbmp</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#        if polar==&#39;o&#39;:</span>
+<span class="c1">#            mcEdof = np.ma.masked_where(prdbm &lt; self.rxsens,self.Edo)</span>
+<span class="c1">#</span>
+<span class="c1">#            cov=ax.imshow(mcEdof.reshape((self.nx,self.ny)).T,</span>
+<span class="c1">#                             extent=(l,r,b,t),cmap = &#39;jet&#39;,</span>
+<span class="c1">#                             origin=&#39;lower&#39;)</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#            # cov=ax.imshow(self.Edo.reshape((self.nx,self.ny)).T,</span>
+<span class="c1">#            #           extent=(l,r,b,t),</span>
+<span class="c1">#            #           origin=&#39;lower&#39;)</span>
+<span class="c1">#            titre = &quot;Map of LOS excess delay, polar orthogonal&quot;</span>
+<span class="c1">#</span>
+<span class="c1">#        if polar==&#39;p&#39;:</span>
+<span class="c1">#            mcEdpf = np.ma.masked_where(prdbm &lt; self.rxsens,self.Edp)</span>
+<span class="c1">#</span>
+<span class="c1">#            cov=ax.imshow(mcEdpf.reshape((self.nx,self.ny)).T,</span>
+<span class="c1">#                             extent=(l,r,b,t),cmap = &#39;jet&#39;,</span>
+<span class="c1">#                             origin=&#39;lower&#39;)</span>
+<span class="c1">#</span>
+<span class="c1">#            # cov=ax.imshow(self.Edp.reshape((self.nx,self.ny)).T,</span>
+<span class="c1">#            #           extent=(l,r,b,t),</span>
+<span class="c1">#            #           origin=&#39;lower&#39;)</span>
+<span class="c1">#            titre = &quot;Map of LOS excess delay, polar parallel&quot;</span>
+<span class="c1">#</span>
+<span class="c1">#        ax.scatter(self.tx[0],self.tx[1],linewidth=0)</span>
+<span class="c1">#        ax.set_title(titre)</span>
+<span class="c1">#</span>
+<span class="c1">#        divider = make_axes_locatable(ax)</span>
+<span class="c1">#        cax = divider.append_axes(&quot;right&quot;, size=&quot;5%&quot;, pad=0.05)</span>
+<span class="c1">#        clb = fig.colorbar(cov,cax)</span>
+<span class="c1">#        clb.set_label(&#39;excess delay (ns)&#39;)</span>
+<span class="c1">#</span>
+<span class="c1">#        if self.show:</span>
+<span class="c1">#            plt.show()</span>
+<span class="c1">#        return fig,ax</span>
+<span class="c1">#</span>
+<span class="c1">#    def showPower(self,rxsens=True,nfl=True,polar=&#39;o&#39;,**kwargs):</span>
+<span class="c1">#        &quot;&quot;&quot; show the map of received power</span>
+<span class="c1">#</span>
+<span class="c1">#        Parameters</span>
+<span class="c1">#        ----------</span>
+<span class="c1">#</span>
+<span class="c1">#        rxsens : bool</span>
+<span class="c1">#              clip the map with rx sensitivity set in self.rxsens</span>
+<span class="c1">#        nfl : bool</span>
+<span class="c1">#              clip the map with noise floor set in self.pndbm</span>
+<span class="c1">#        polar : string</span>
+<span class="c1">#            &#39;o&#39;|&#39;p&#39;</span>
+<span class="c1">#</span>
+<span class="c1">#        Examples</span>
+<span class="c1">#        --------</span>
+<span class="c1">#</span>
+<span class="c1">#        .. plot::</span>
+<span class="c1">#            :include-source:</span>
+<span class="c1">#</span>
+<span class="c1">#            &gt; from pylayers.antprop.coverage import *</span>
+<span class="c1">#            &gt; C = Coverage()</span>
+<span class="c1">#            &gt; C.cover()</span>
+<span class="c1">#            &gt; C.showPower()</span>
+<span class="c1">#</span>
+<span class="c1">#        &quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1">#        if not kwargs.has_key(&#39;alphacy&#39;):</span>
+<span class="c1">#            kwargs[&#39;alphacy&#39;]=0.0</span>
+<span class="c1">#        if not kwargs.has_key(&#39;colorcy&#39;):</span>
+<span class="c1">#            kwargs[&#39;colorcy&#39;]=&#39;w&#39;</span>
+<span class="c1">#        if not kwargs.has_key(&#39;nodes&#39;):</span>
+<span class="c1">#            kwargs[&#39;nodes&#39;]=False</span>
+<span class="c1">#        fig,ax = self.L.showG(&#39;s&#39;,**kwargs)</span>
+<span class="c1">#</span>
+<span class="c1">#        l = self.grid[0,0]</span>
+<span class="c1">#        r = self.grid[-1,0]</span>
+<span class="c1">#        b = self.grid[0,1]</span>
+<span class="c1">#        t = self.grid[-1,-1]</span>
+<span class="c1">#</span>
+<span class="c1">#        if polar==&#39;o&#39;:</span>
+<span class="c1">#            prdbm=self.prdbmo</span>
+<span class="c1">#        if polar==&#39;p&#39;:</span>
+<span class="c1">#            prdbm=self.prdbmp</span>
+<span class="c1">#</span>
+<span class="c1">##        tCM = plt.cm.get_cmap(&#39;jet&#39;)</span>
+<span class="c1">##        tCM._init()</span>
+<span class="c1">##        alphas = np.abs(np.linspace(.0,1.0, tCM.N))</span>
+<span class="c1">##        tCM._lut[:-3,-1] = alphas</span>
+<span class="c1">#</span>
+<span class="c1">#        title=&#39;Map of received power - Pt = &#39; + str(self.ptdbm) + &#39; dBm&#39;+str(&#39; fGHz =&#39;) + str(self.fGHz) + &#39; polar = &#39;+polar</span>
+<span class="c1">#</span>
+<span class="c1">#        cdict = {</span>
+<span class="c1">#        &#39;red&#39;  :  ((0., 0.5, 0.5), (1., 1., 1.)),</span>
+<span class="c1">#        &#39;green&#39;:  ((0., 0.5, 0.5), (1., 1., 1.)),</span>
+<span class="c1">#        &#39;blue&#39; :  ((0., 0.5, 0.5), (1., 1., 1.))</span>
+<span class="c1">#        }</span>
+<span class="c1">#</span>
+<span class="c1">#        if not kwargs.has_key(&#39;cmap&#39;):</span>
+<span class="c1">#        # generate the colormap with 1024 interpolated values</span>
+<span class="c1">#            cmap = m.colors.LinearSegmentedColormap(&#39;my_colormap&#39;, cdict, 1024)</span>
+<span class="c1">#        else:</span>
+<span class="c1">#            cmap = kwargs[&#39;cmap&#39;]</span>
+<span class="c1">#        #my_cmap = cm.copper</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#        if rxsens :</span>
+<span class="c1">#</span>
+<span class="c1">#            ## values between the rx sensitivity and noise floor</span>
+<span class="c1">#            mcPrf = np.ma.masked_where((prdbm &gt; self.rxsens)</span>
+<span class="c1">#                                     &amp; (prdbm &lt; self.pndbm),prdbm)</span>
+<span class="c1">#            # mcPrf = np.ma.masked_where((prdbm &gt; self.rxsens) ,prdbm)</span>
+<span class="c1">#</span>
+<span class="c1">#            cov1 = ax.imshow(mcPrf.reshape((self.nx,self.ny)).T,</span>
+<span class="c1">#                             extent=(l,r,b,t),cmap = cm.copper,</span>
+<span class="c1">#                             vmin=self.rxsens,origin=&#39;lower&#39;)</span>
+<span class="c1">#</span>
+<span class="c1">#            ### values above the sensitivity</span>
+<span class="c1">#            mcPrs = np.ma.masked_where(prdbm &lt; self.rxsens,prdbm)</span>
+<span class="c1">#            cov = ax.imshow(mcPrs.reshape((self.nx,self.ny)).T,</span>
+<span class="c1">#                            extent=(l,r,b,t),</span>
+<span class="c1">#                            cmap = cmap,</span>
+<span class="c1">#                            vmin=self.rxsens,origin=&#39;lower&#39;)</span>
+<span class="c1">#            title=title + &#39;\n black : Pr (dBm) &lt; %.2f&#39; % self.rxsens + &#39; dBm&#39;</span>
+<span class="c1">#</span>
+<span class="c1">#        else :</span>
+<span class="c1">#            cov=ax.imshow(prdbm.reshape((self.nx,self.ny)).T,</span>
+<span class="c1">#                          extent=(l,r,b,t),</span>
+<span class="c1">#                          cmap = cmap,</span>
+<span class="c1">#                          vmin=self.pndbm,origin=&#39;lower&#39;)</span>
+<span class="c1">#</span>
+<span class="c1">#        if nfl:</span>
+<span class="c1">#            ### values under the noise floor</span>
+<span class="c1">#            ### we first clip the value below the noise floor</span>
+<span class="c1">#            cl = np.nonzero(prdbm&lt;=self.pndbm)</span>
+<span class="c1">#            cPr = prdbm</span>
+<span class="c1">#            cPr[cl] = self.pndbm</span>
+<span class="c1">#            mcPruf = np.ma.masked_where(cPr &gt; self.pndbm,cPr)</span>
+<span class="c1">#            cov2 = ax.imshow(mcPruf.reshape((self.nx,self.ny)).T,</span>
+<span class="c1">#                             extent=(l,r,b,t),cmap = &#39;binary&#39;,</span>
+<span class="c1">#                             vmax=self.pndbm,origin=&#39;lower&#39;)</span>
+<span class="c1">#            title=title + &#39;\n white : Pr (dBm) &lt; %.2f&#39; % self.pndbm + &#39; dBm&#39;</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#        ax.scatter(self.tx[0],self.tx[1],s=10,c=&#39;k&#39;,linewidth=0)</span>
+<span class="c1">#</span>
+<span class="c1">#        ax.set_title(title)</span>
+<span class="c1">#        divider = make_axes_locatable(ax)</span>
+<span class="c1">#        cax = divider.append_axes(&quot;right&quot;, size=&quot;5%&quot;, pad=0.05)</span>
+<span class="c1">#        clb = fig.colorbar(cov,cax)</span>
+<span class="c1">#        clb.set_label(&#39;Power (dBm)&#39;)</span>
+<span class="c1">#</span>
+<span class="c1">#        if self.show:</span>
+<span class="c1">#            plt.show()</span>
+<span class="c1">#</span>
+<span class="c1">#        return fig,ax</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#    def showTransistionRegion(self,polar=&#39;o&#39;):</span>
+<span class="c1">#        &quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1">#        Notes</span>
+<span class="c1">#        -----</span>
+<span class="c1">#</span>
+<span class="c1">#        See  : &quot;Analyzing the Transitional Region in Low Power Wireless Links&quot;</span>
+<span class="c1">#                Marco Zuniga and Bhaskar Krishnamachari</span>
+<span class="c1">#</span>
+<span class="c1">#        Examples</span>
+<span class="c1">#        --------</span>
+<span class="c1">#</span>
+<span class="c1">#        .. plot::</span>
+<span class="c1">#            :include-source:</span>
+<span class="c1">#</span>
+<span class="c1">#            &gt; from pylayers.antprop.coverage import *</span>
+<span class="c1">#            &gt; C = Coverage()</span>
+<span class="c1">#            &gt; C.cover()</span>
+<span class="c1">#            &gt; C.showTransitionRegion()</span>
+<span class="c1">#</span>
+<span class="c1">#        &quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1">#        frameLength = self.framelengthbytes</span>
+<span class="c1">#</span>
+<span class="c1">#        PndBm = self.pndbm</span>
+<span class="c1">#        gammaU = 10*np.log10(-1.28*np.log(2*(1-0.9**(1./(8*frameLength)))))</span>
+<span class="c1">#        gammaL = 10*np.log10(-1.28*np.log(2*(1-0.1**(1./(8*frameLength)))))</span>
+<span class="c1">#</span>
+<span class="c1">#        PrU = PndBm + gammaU</span>
+<span class="c1">#        PrL = PndBm + gammaL</span>
+<span class="c1">#</span>
+<span class="c1">#        fig,ax = self.L.showGs()</span>
+<span class="c1">#</span>
+<span class="c1">#        l = self.grid[0,0]</span>
+<span class="c1">#        r = self.grid[-1,0]</span>
+<span class="c1">#        b = self.grid[0,1]</span>
+<span class="c1">#        t = self.grid[-1,-1]</span>
+<span class="c1">#</span>
+<span class="c1">#        if polar==&#39;o&#39;:</span>
+<span class="c1">#            prdbm=self.prdbmo</span>
+<span class="c1">#        if polar==&#39;p&#39;:</span>
+<span class="c1">#            prdbm=self.prdbmp</span>
+<span class="c1">#</span>
+<span class="c1">#        zones = np.zeros(np.shape(prdbm))</span>
+<span class="c1">#        #pdb.set_trace()</span>
+<span class="c1">#</span>
+<span class="c1">#        uconnected  = np.nonzero(prdbm&gt;PrU)</span>
+<span class="c1">#        utransition = np.nonzero((prdbm &lt; PrU)&amp;(prdbm &gt; PrL))</span>
+<span class="c1">#        udisconnected = np.nonzero(prdbm &lt; PrL)</span>
+<span class="c1">#</span>
+<span class="c1">#        zones[uconnected] = 1</span>
+<span class="c1">#        zones[utransition] = (prdbm[utransition]-PrL)/(PrU-PrL)</span>
+<span class="c1">#        cov = ax.imshow(zones.reshape((self.nx,self.ny)).T,</span>
+<span class="c1">#                             extent=(l,r,b,t),cmap = &#39;BuGn&#39;,origin=&#39;lower&#39;)</span>
+<span class="c1">#</span>
+<span class="c1">#        title=&#39;PDR region&#39;</span>
+<span class="c1">#        ax.scatter(self.tx[0],self.tx[1],linewidth=0)</span>
+<span class="c1">#</span>
+<span class="c1">#        ax.set_title(title)</span>
+<span class="c1">#        divider = make_axes_locatable(ax)</span>
+<span class="c1">#        cax = divider.append_axes(&quot;right&quot;, size=&quot;5%&quot;, pad=0.05)</span>
+<span class="c1">#        fig.colorbar(cov,cax)</span>
+<span class="c1">#        if self.show:</span>
+<span class="c1">#            plt.show()</span>
+<span class="c1">#</span>
     <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#39;typ&#39;</span><span class="p">:</span> <span class="s">&#39;pr&#39;</span><span class="p">,</span>
-                     <span class="s">&#39;grid&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-                     <span class="s">&#39;f&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                     <span class="s">&#39;a&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                     <span class="s">&#39;db&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
-                     <span class="s">&#39;col&#39;</span><span class="p">:</span><span class="s">&#39;b&#39;</span>
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;typ&#39;</span><span class="p">:</span> <span class="s1">&#39;pr&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;grid&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                     <span class="s1">&#39;f&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                     <span class="s1">&#39;a&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                     <span class="s1">&#39;db&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                     <span class="s1">&#39;col&#39;</span><span class="p">:</span><span class="s1">&#39;b&#39;</span>
                    <span class="p">}</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="s">&#39;fig&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">fig</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;fig&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">fig</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="s">&#39;ax&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">ax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;ax&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;typ&#39;</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;pr&#39;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]</span><span class="o">&lt;&gt;-</span><span class="mi">1</span><span class="p">:</span>
-                <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmW</span><span class="p">[</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;f&#39;</span><span class="p">],:,</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;typ&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;pr&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">&lt;&gt;-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmW</span><span class="p">[</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">],:,</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]]</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmW</span><span class="p">[</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;f&#39;</span><span class="p">],:,:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">na</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ng</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;db&#39;</span><span class="p">]:</span>
+                <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmW</span><span class="p">[</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">],:,:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">na</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ng</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;db&#39;</span><span class="p">]:</span>
                 <span class="n">U</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
 
         <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pg</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pg</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]</span><span class="o">&lt;&gt;-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">&lt;&gt;-</span><span class="mi">1</span><span class="p">:</span>
             <span class="n">D</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">na</span><span class="p">)</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">D</span><span class="p">[:,</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]],</span><span class="n">U</span><span class="p">,</span><span class="s">&#39;.&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;col&#39;</span><span class="p">])</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">D</span><span class="p">[:,</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]],</span><span class="n">U</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;col&#39;</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">D</span><span class="p">,</span><span class="n">U</span><span class="p">,</span><span class="s">&#39;.&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;col&#39;</span><span class="p">])</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">D</span><span class="p">,</span><span class="n">U</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;col&#39;</span><span class="p">])</span>
 
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
 
@@ -947,123 +961,123 @@
 <span class="sd">        pylayers.gis.layout.Layout.showG</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#39;typ&#39;</span><span class="p">:</span> <span class="s">&#39;pr&#39;</span><span class="p">,</span>
-                     <span class="s">&#39;grid&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-                     <span class="s">&#39;polar&#39;</span><span class="p">:</span><span class="s">&#39;p&#39;</span><span class="p">,</span>
-                     <span class="s">&#39;f&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                     <span class="s">&#39;a&#39;</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
-                     <span class="s">&#39;db&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
-                     <span class="s">&#39;cmap&#39;</span> <span class="p">:</span><span class="n">cm</span><span class="o">.</span><span class="n">jet</span><span class="p">,</span>
-                     <span class="s">&#39;best&#39;</span><span class="p">:</span><span class="bp">True</span>
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;typ&#39;</span><span class="p">:</span> <span class="s1">&#39;pr&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;grid&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                     <span class="s1">&#39;polar&#39;</span><span class="p">:</span><span class="s1">&#39;p&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;f&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                     <span class="s1">&#39;a&#39;</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+                     <span class="s1">&#39;db&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                     <span class="s1">&#39;cmap&#39;</span> <span class="p">:</span><span class="n">cm</span><span class="o">.</span><span class="n">jet</span><span class="p">,</span>
+                     <span class="s1">&#39;best&#39;</span><span class="p">:</span><span class="bp">True</span>
                    <span class="p">}</span>
 
-        <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">name</span><span class="o">+</span> <span class="s">&#39; : &#39;</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">name</span><span class="o">+</span> <span class="s1">&#39; : &#39;</span>
 
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-        <span class="n">polar</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;polar&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s">&#39;fig&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s">&#39;ax&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-                <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">],</span><span class="n">ax</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">])</span>
+        <span class="n">polar</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;polar&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;fig&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;ax&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">],</span><span class="n">ax</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;ax&#39;</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">])</span>
+                <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fig&#39;</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s">&#39;figsize&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-                <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;figsize&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="s1">&#39;figsize&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;figsize&#39;</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">)</span>
+                <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
 
-        <span class="c"># plot the grid</span>
-        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;grid&#39;</span><span class="p">]:</span>
+        <span class="c1"># plot the grid</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;grid&#39;</span><span class="p">]:</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">:</span>
                 <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">p</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;or&#39;</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;or&#39;</span><span class="p">)</span>
 
-        <span class="n">f</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;f&#39;</span><span class="p">]</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]</span>
-        <span class="n">typ</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;typ&#39;</span><span class="p">]</span>
-        <span class="n">best</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;best&#39;</span><span class="p">]</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">]</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>
+        <span class="n">typ</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;typ&#39;</span><span class="p">]</span>
+        <span class="n">best</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;best&#39;</span><span class="p">]</span>
 
-        <span class="n">dB</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;db&#39;</span><span class="p">]</span>
+        <span class="n">dB</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;db&#39;</span><span class="p">]</span>
 
-        <span class="c"># setting the grid</span>
+        <span class="c1"># setting the grid</span>
 
         <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;best&#39;</span><span class="p">:</span>
-            <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="o">+</span> <span class="s">&#39;Best server&#39;</span><span class="o">+</span><span class="s">&#39; fc = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="n">f</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; GHz&#39;</span><span class="o">+</span> <span class="s">&#39; polar : &#39;</span><span class="o">+</span><span class="n">polar</span>
+        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;best&#39;</span><span class="p">:</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="o">+</span> <span class="s1">&#39;Best server&#39;</span><span class="o">+</span><span class="s1">&#39; fc = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="n">f</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39; GHz&#39;</span><span class="o">+</span> <span class="s1">&#39; polar : &#39;</span><span class="o">+</span><span class="n">polar</span>
             <span class="k">for</span> <span class="n">ka</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">na</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;p&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s1">&#39;p&#39;</span><span class="p">:</span>
                     <span class="n">bestsv</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">bestsvp</span><span class="p">[</span><span class="n">f</span><span class="p">,:,</span><span class="n">ka</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;o&#39;</span><span class="p">:</span>    
+                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s1">&#39;o&#39;</span><span class="p">:</span>    
                     <span class="n">bestsv</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">bestsvo</span><span class="p">[</span><span class="n">f</span><span class="p">,:,</span><span class="n">ka</span><span class="p">]</span>
                 <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">bestsv</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span><span class="n">bestsv</span><span class="p">)</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">&lt;&gt;</span><span class="s">&#39;file&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">&lt;&gt;</span><span class="s1">&#39;file&#39;</span><span class="p">:</span>
                     <span class="n">W</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
                     <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">t</span><span class="p">),</span>
-                            <span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">,</span>
+                            <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span>
                             <span class="n">vmin</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                             <span class="n">vmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">na</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="n">c</span><span class="o">=</span><span class="n">m</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;egd&#39;</span><span class="p">:</span>
-                <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="o">+</span> <span class="s">&#39;excess group delay : &#39;</span><span class="o">+</span><span class="s">&#39; fc = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="n">f</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; GHz&#39;</span><span class="o">+</span> <span class="s">&#39; polar : &#39;</span><span class="o">+</span><span class="n">polar</span>
+            <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;egd&#39;</span><span class="p">:</span>
+                <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="o">+</span> <span class="s1">&#39;excess group delay : &#39;</span><span class="o">+</span><span class="s1">&#39; fc = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="n">f</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39; GHz&#39;</span><span class="o">+</span> <span class="s1">&#39; polar : &#39;</span><span class="o">+</span><span class="n">polar</span>
                 <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ed</span>
                 <span class="n">dB</span> <span class="o">=</span> <span class="bp">False</span>
-                <span class="n">legcb</span> <span class="o">=</span>  <span class="s">&#39;Delay (ns)&#39;</span>
-            <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;sinr&#39;</span><span class="p">:</span>
-                <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="o">+</span> <span class="s">&#39;SINR : &#39;</span><span class="o">+</span><span class="s">&#39; fc = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="n">f</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; GHz&#39;</span><span class="o">+</span> <span class="s">&#39; polar : &#39;</span><span class="o">+</span><span class="n">polar</span>
+                <span class="n">legcb</span> <span class="o">=</span>  <span class="s1">&#39;Delay (ns)&#39;</span>
+            <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;sinr&#39;</span><span class="p">:</span>
+                <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="o">+</span> <span class="s1">&#39;SINR : &#39;</span><span class="o">+</span><span class="s1">&#39; fc = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="n">f</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39; GHz&#39;</span><span class="o">+</span> <span class="s1">&#39; polar : &#39;</span><span class="o">+</span><span class="n">polar</span>
                 <span class="k">if</span> <span class="n">dB</span><span class="p">:</span>
-                    <span class="n">legcb</span> <span class="o">=</span> <span class="s">&#39;dB&#39;</span>
+                    <span class="n">legcb</span> <span class="o">=</span> <span class="s1">&#39;dB&#39;</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">legcb</span> <span class="o">=</span> <span class="s">&#39;Linear scale&#39;</span>
-                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;o&#39;</span><span class="p">:</span>        
+                    <span class="n">legcb</span> <span class="o">=</span> <span class="s1">&#39;Linear scale&#39;</span>
+                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s1">&#39;o&#39;</span><span class="p">:</span>        
                     <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sinro</span>
-                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;p&#39;</span><span class="p">:</span>    
+                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s1">&#39;p&#39;</span><span class="p">:</span>    
                     <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sinrp</span>
-            <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;snr&#39;</span><span class="p">:</span>
-                <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="o">+</span> <span class="s">&#39;SNR : &#39;</span><span class="o">+</span><span class="s">&#39; fc = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="n">f</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; GHz&#39;</span><span class="o">+</span> <span class="s">&#39; polar : &#39;</span><span class="o">+</span><span class="n">polar</span>
+            <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;snr&#39;</span><span class="p">:</span>
+                <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="o">+</span> <span class="s1">&#39;SNR : &#39;</span><span class="o">+</span><span class="s1">&#39; fc = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="n">f</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39; GHz&#39;</span><span class="o">+</span> <span class="s1">&#39; polar : &#39;</span><span class="o">+</span><span class="n">polar</span>
                 <span class="k">if</span> <span class="n">dB</span><span class="p">:</span>
-                    <span class="n">legcb</span> <span class="o">=</span> <span class="s">&#39;dB&#39;</span>
+                    <span class="n">legcb</span> <span class="o">=</span> <span class="s1">&#39;dB&#39;</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">legcb</span> <span class="o">=</span> <span class="s">&#39;Linear scale&#39;</span>
-                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;o&#39;</span><span class="p">:</span>
+                    <span class="n">legcb</span> <span class="o">=</span> <span class="s1">&#39;Linear scale&#39;</span>
+                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s1">&#39;o&#39;</span><span class="p">:</span>
                     <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">snro</span>
-                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;p&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s1">&#39;p&#39;</span><span class="p">:</span>
                     <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">snrp</span>
-            <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;capacity&#39;</span><span class="p">:</span>
-                <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="o">+</span> <span class="s">&#39;Capacity : &#39;</span><span class="o">+</span><span class="s">&#39; fc = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="n">f</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; GHz&#39;</span><span class="o">+</span> <span class="s">&#39; polar : &#39;</span><span class="o">+</span><span class="n">polar</span>
-                <span class="n">legcb</span> <span class="o">=</span> <span class="s">&#39;Mbit/s&#39;</span>
-                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;o&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;capacity&#39;</span><span class="p">:</span>
+                <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="o">+</span> <span class="s1">&#39;Capacity : &#39;</span><span class="o">+</span><span class="s1">&#39; fc = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="n">f</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39; GHz&#39;</span><span class="o">+</span> <span class="s1">&#39; polar : &#39;</span><span class="o">+</span><span class="n">polar</span>
+                <span class="n">legcb</span> <span class="o">=</span> <span class="s1">&#39;Mbit/s&#39;</span>
+                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s1">&#39;o&#39;</span><span class="p">:</span>
                     <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmhz</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">sinro</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;p&#39;</span><span class="p">:</span>
-                    <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmhz</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">sinrp</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>    
-            <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;pr&#39;</span><span class="p">:</span>
-                <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="o">+</span> <span class="s">&#39;Pr : &#39;</span><span class="o">+</span><span class="s">&#39; fc = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="n">f</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; GHz&#39;</span><span class="o">+</span> <span class="s">&#39; polar : &#39;</span><span class="o">+</span><span class="n">polar</span>
+                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s1">&#39;p&#39;</span><span class="p">:</span>
+                    <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmhz</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">sinrp</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;pr&#39;</span><span class="p">:</span>
+                <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="o">+</span> <span class="s1">&#39;Pr : &#39;</span><span class="o">+</span><span class="s1">&#39; fc = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="n">f</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39; GHz&#39;</span><span class="o">+</span> <span class="s1">&#39; polar : &#39;</span><span class="o">+</span><span class="n">polar</span>
                 <span class="k">if</span> <span class="n">dB</span><span class="p">:</span>
-                    <span class="n">legcb</span> <span class="o">=</span> <span class="s">&#39;dBm&#39;</span>
+                    <span class="n">legcb</span> <span class="o">=</span> <span class="s1">&#39;dBm&#39;</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">lgdcb</span> <span class="o">=</span> <span class="s">&#39;mW&#39;</span>
-                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;o&#39;</span><span class="p">:</span>    
+                    <span class="n">lgdcb</span> <span class="o">=</span> <span class="s1">&#39;mW&#39;</span>
+                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s1">&#39;o&#39;</span><span class="p">:</span>
                     <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmWo</span>
-                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;p&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s1">&#39;p&#39;</span><span class="p">:</span>
                     <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmWp</span>
 
-            <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;loss&#39;</span><span class="p">:</span>
-                <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="o">+</span> <span class="s">&#39;Loss : &#39;</span><span class="o">+</span><span class="s">&#39; fc = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="n">f</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; GHz&#39;</span><span class="o">+</span> <span class="s">&#39; polar : &#39;</span><span class="o">+</span><span class="n">polar</span>
+            <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s1">&#39;loss&#39;</span><span class="p">:</span>
+                <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="o">+</span> <span class="s1">&#39;Loss : &#39;</span><span class="o">+</span><span class="s1">&#39; fc = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="n">f</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39; GHz&#39;</span><span class="o">+</span> <span class="s1">&#39; polar : &#39;</span><span class="o">+</span><span class="n">polar</span>
                 <span class="k">if</span> <span class="n">dB</span><span class="p">:</span>
-                    <span class="n">legcb</span> <span class="o">=</span> <span class="s">&#39;dB&#39;</span>
+                    <span class="n">legcb</span> <span class="o">=</span> <span class="s1">&#39;dB&#39;</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">legcb</span> <span class="o">=</span> <span class="s">&#39;Linear scale&#39;</span>
-                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;o&#39;</span><span class="p">:</span>    
+                    <span class="n">legcb</span> <span class="o">=</span> <span class="s1">&#39;Linear scale&#39;</span>
+                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s1">&#39;o&#39;</span><span class="p">:</span>
                     <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lwo</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">freespace</span>
-                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;p&#39;</span><span class="p">:</span>    
+                <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s1">&#39;p&#39;</span><span class="p">:</span>
                     <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lwp</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">freespace</span>
 
             <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
@@ -1071,8 +1085,8 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">V</span> <span class="o">=</span> <span class="n">V</span><span class="p">[</span><span class="n">f</span><span class="p">,:,</span><span class="n">a</span><span class="p">]</span>
 
-            <span class="c"># reshaping the data on the grid</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">!=</span><span class="s">&#39;file&#39;</span><span class="p">:</span>
+            <span class="c1"># reshaping the data on the grid</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">!=</span><span class="s1">&#39;file&#39;</span><span class="p">:</span>
                 <span class="n">U</span> <span class="o">=</span> <span class="n">V</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">U</span> <span class="o">=</span> <span class="n">V</span>
@@ -1080,23 +1094,23 @@
             <span class="k">if</span> <span class="n">dB</span><span class="p">:</span>
                 <span class="n">U</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="s">&#39;vmin&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-                <span class="n">vmin</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;vmin&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s1">&#39;vmin&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">vmin</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;vmin&#39;</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">vmin</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
 
-            <span class="k">if</span> <span class="s">&#39;vmax&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-                <span class="n">vmax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;vmax&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s1">&#39;vmax&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">vmax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;vmax&#39;</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">vmax</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">!=</span><span class="s">&#39;file&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">!=</span><span class="s1">&#39;file&#39;</span><span class="p">:</span>
                 <span class="n">img</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">U</span><span class="p">,</span>
                             <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">t</span><span class="p">),</span>
-                            <span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">,</span>
+                            <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span>
                             <span class="n">vmin</span> <span class="o">=</span> <span class="n">vmin</span><span class="p">,</span>
                             <span class="n">vmax</span> <span class="o">=</span> <span class="n">vmax</span><span class="p">,</span>
-                            <span class="n">cmap</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cmap&#39;</span><span class="p">])</span>
+                            <span class="n">cmap</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cmap&#39;</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">img</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="n">c</span><span class="o">=</span><span class="n">U</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
@@ -1105,95 +1119,96 @@
             <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
 
             <span class="n">divider</span> <span class="o">=</span> <span class="n">make_axes_locatable</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-            <span class="n">cax</span> <span class="o">=</span> <span class="n">divider</span><span class="o">.</span><span class="n">append_axes</span><span class="p">(</span><span class="s">&quot;right&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s">&quot;5%&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+            <span class="n">cax</span> <span class="o">=</span> <span class="n">divider</span><span class="o">.</span><span class="n">append_axes</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s2">&quot;5%&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
             <span class="n">clb</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">img</span><span class="p">,</span><span class="n">cax</span><span class="p">)</span>
             <span class="n">clb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">legcb</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">best</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">&lt;&gt;</span><span class="s">&#39;file&#39;</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;o&#39;</span><span class="p">:</span>
-                        <span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bestsvo</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)[</span><span class="n">f</span><span class="p">,:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">t</span><span class="p">),</span><span class="n">linestyles</span><span class="o">=</span><span class="s">&#39;dotted&#39;</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;p&#39;</span><span class="p">:</span>
-                        <span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bestsvp</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)[</span><span class="n">f</span><span class="p">,:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">t</span><span class="p">),</span><span class="n">linestyles</span><span class="o">=</span><span class="s">&#39;dotted&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">&lt;&gt;</span><span class="s1">&#39;file&#39;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s1">&#39;o&#39;</span><span class="p">:</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bestsvo</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)[</span><span class="n">f</span><span class="p">,:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">t</span><span class="p">),</span><span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;dotted&#39;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s1">&#39;p&#39;</span><span class="p">:</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bestsvp</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)[</span><span class="n">f</span><span class="p">,:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">t</span><span class="p">),</span><span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;dotted&#39;</span><span class="p">)</span>
 
-        <span class="c"># display access points</span>
+        <span class="c1"># display access points</span>
         <span class="k">if</span> <span class="n">a</span><span class="o">==-</span><span class="mi">1</span><span class="p">:</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">a</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">a</span><span class="p">],</span><span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">a</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">a</span><span class="p">],</span><span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span></div>
 
-<span class="c">#    def showLoss(self,polar=&#39;o&#39;,**kwargs):</span>
-<span class="c">#        &quot;&quot;&quot; show losses map</span>
-<span class="c">#</span>
-<span class="c">#        Parameters</span>
-<span class="c">#        ----------</span>
-<span class="c">#</span>
-<span class="c">#        polar : string</span>
-<span class="c">#            &#39;o&#39;|&#39;p&#39;|&#39;both&#39;</span>
-<span class="c">#</span>
-<span class="c">#        Examples</span>
-<span class="c">#        --------</span>
-<span class="c">#</span>
-<span class="c">#        .. plot::</span>
-<span class="c">#            :include-source:</span>
-<span class="c">#</span>
-<span class="c">#            &gt;&gt;&gt; from pylayers.antprop.coverage import *</span>
-<span class="c">#            &gt;&gt;&gt; C = Coverage()</span>
-<span class="c">#            &gt;&gt;&gt; C.cover(polar=&#39;o&#39;)</span>
-<span class="c">#            &gt;&gt;&gt; f,a = C.show(typ=&#39;pr&#39;,figsize=(10,8))</span>
-<span class="c">#            &gt;&gt;&gt; plt.show()</span>
-<span class="c">#        &quot;&quot;&quot;</span>
-<span class="c">#</span>
-<span class="c">#        fig = plt.figure()</span>
-<span class="c">#        fig,ax=self.L.showGs(fig=fig)</span>
-<span class="c">#</span>
-<span class="c">#        # setting the grid</span>
-<span class="c">#</span>
-<span class="c">#        l = self.grid[0,0]</span>
-<span class="c">#        r = self.grid[-1,0]</span>
-<span class="c">#        b = self.grid[0,1]</span>
-<span class="c">#        t = self.grid[-1,-1]</span>
-<span class="c">#</span>
-<span class="c">#        Lo = self.freespace+self.Lwo</span>
-<span class="c">#        Lp = self.freespace+self.Lwp</span>
-<span class="c">#</span>
-<span class="c">#        # orthogonal polarization</span>
-<span class="c">#</span>
-<span class="c">#        if polar==&#39;o&#39;:</span>
-<span class="c">#            cov = ax.imshow(Lo.reshape((self.nx,self.ny)).T,</span>
-<span class="c">#                            extent=(l,r,b,t),</span>
-<span class="c">#                            origin=&#39;lower&#39;,</span>
-<span class="c">#                            vmin = 40,</span>
-<span class="c">#                            vmax = 130)</span>
-<span class="c">#            str1 = &#39;Map of losses, orthogonal (V) polarization, fGHz=&#39;+str(self.fGHz)</span>
-<span class="c">#            title = (str1)</span>
-<span class="c">#</span>
-<span class="c">#        # parallel polarization</span>
-<span class="c">#        if polar==&#39;p&#39;:</span>
-<span class="c">#            cov = ax.imshow(Lp.reshape((self.nx,self.ny)).T,</span>
-<span class="c">#                            extent=(l,r,b,t),</span>
-<span class="c">#                            origin=&#39;lower&#39;,</span>
-<span class="c">#                            vmin = 40,</span>
-<span class="c">#                            vmax = 130)</span>
-<span class="c">#            str2 = &#39;Map of losses, orthogonal (V) polarization, fGHz=&#39;+str(self.fGHz)</span>
-<span class="c">#            title = (str2)</span>
-<span class="c">#</span>
-<span class="c">#        ax.scatter(self.tx[0],self.tx[1],s=10,c=&#39;k&#39;,linewidth=0)</span>
-<span class="c">#        ax.set_title(title)</span>
-<span class="c">#</span>
-<span class="c">#        divider = make_axes_locatable(ax)</span>
-<span class="c">#        cax = divider.append_axes(&quot;right&quot;, size=&quot;5%&quot;, pad=0.05)</span>
-<span class="c">#        clb = fig.colorbar(cov,cax)</span>
-<span class="c">#        clb.set_label(&#39;Loss (dB)&#39;)</span>
-<span class="c">#</span>
-<span class="c">#        if self.show:</span>
-<span class="c">#            plt.show()</span>
+<span class="c1">#    def showLoss(self,polar=&#39;o&#39;,**kwargs):</span>
+<span class="c1">#        &quot;&quot;&quot; show losses map</span>
+<span class="c1">#</span>
+<span class="c1">#        Parameters</span>
+<span class="c1">#        ----------</span>
+<span class="c1">#</span>
+<span class="c1">#        polar : string</span>
+<span class="c1">#            &#39;o&#39;|&#39;p&#39;|&#39;both&#39;</span>
+<span class="c1">#</span>
+<span class="c1">#        Examples</span>
+<span class="c1">#        --------</span>
+<span class="c1">#</span>
+<span class="c1">#        .. plot::</span>
+<span class="c1">#            :include-source:</span>
+<span class="c1">#</span>
+<span class="c1">#            &gt;&gt;&gt; from pylayers.antprop.coverage import *</span>
+<span class="c1">#            &gt;&gt;&gt; C = Coverage()</span>
+<span class="c1">#            &gt;&gt;&gt; C.cover(polar=&#39;o&#39;)</span>
+<span class="c1">#            &gt;&gt;&gt; f,a = C.show(typ=&#39;pr&#39;,figsize=(10,8))</span>
+<span class="c1">#            &gt;&gt;&gt; plt.show()</span>
+<span class="c1">#        &quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1">#        fig = plt.figure()</span>
+<span class="c1">#        fig,ax=self.L.showGs(fig=fig)</span>
+<span class="c1">#</span>
+<span class="c1">#        # setting the grid</span>
+<span class="c1">#</span>
+<span class="c1">#        l = self.grid[0,0]</span>
+<span class="c1">#        r = self.grid[-1,0]</span>
+<span class="c1">#        b = self.grid[0,1]</span>
+<span class="c1">#        t = self.grid[-1,-1]</span>
+<span class="c1">#</span>
+<span class="c1">#        Lo = self.freespace+self.Lwo</span>
+<span class="c1">#        Lp = self.freespace+self.Lwp</span>
+<span class="c1">#</span>
+<span class="c1">#        # orthogonal polarization</span>
+<span class="c1">#</span>
+<span class="c1">#        if polar==&#39;o&#39;:</span>
+<span class="c1">#            cov = ax.imshow(Lo.reshape((self.nx,self.ny)).T,</span>
+<span class="c1">#                            extent=(l,r,b,t),</span>
+<span class="c1">#                            origin=&#39;lower&#39;,</span>
+<span class="c1">#                            vmin = 40,</span>
+<span class="c1">#                            vmax = 130)</span>
+<span class="c1">#            str1 = &#39;Map of losses, orthogonal (V) polarization, fGHz=&#39;+str(self.fGHz)</span>
+<span class="c1">#            title = (str1)</span>
+<span class="c1">#</span>
+<span class="c1">#        # parallel polarization</span>
+<span class="c1">#        if polar==&#39;p&#39;:</span>
+<span class="c1">#            cov = ax.imshow(Lp.reshape((self.nx,self.ny)).T,</span>
+<span class="c1">#                            extent=(l,r,b,t),</span>
+<span class="c1">#                            origin=&#39;lower&#39;,</span>
+<span class="c1">#                            vmin = 40,</span>
+<span class="c1">#                            vmax = 130)</span>
+<span class="c1">#            str2 = &#39;Map of losses, orthogonal (V) polarization, fGHz=&#39;+str(self.fGHz)</span>
+<span class="c1">#            title = (str2)</span>
+<span class="c1">#</span>
+<span class="c1">#        ax.scatter(self.tx[0],self.tx[1],s=10,c=&#39;k&#39;,linewidth=0)</span>
+<span class="c1">#        ax.set_title(title)</span>
+<span class="c1">#</span>
+<span class="c1">#        divider = make_axes_locatable(ax)</span>
+<span class="c1">#        cax = divider.append_axes(&quot;right&quot;, size=&quot;5%&quot;, pad=0.05)</span>
+<span class="c1">#        clb = fig.colorbar(cov,cax)</span>
+<span class="c1">#        clb.set_label(&#39;Loss (dB)&#39;)</span>
+<span class="c1">#</span>
+<span class="c1">#        if self.show:</span>
+<span class="c1">#            plt.show()</span>
 
 
-</div>
-<span class="k">if</span> <span class="p">(</span><span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">):</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">):</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+
 </pre></div>
 
           </div>
@@ -1206,8 +1221,8 @@
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 29, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on févr. 23, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     </div>
      <div class="rel">
     

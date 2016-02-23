@@ -128,7 +128,7 @@
           <div class="body" role="main">
             
   <p>Robust Geometric Positioning Algorithm</p>
-<div class="code python highlight-python"><div class="highlight"><pre>from pylayers.location.geometric.constraints.cla import *
+<div class="code python highlight-python"><div class="highlight"><pre><span></span>from pylayers.location.geometric.constraints.cla import *
 from pylayers.location.geometric.constraints.toa import *
 from pylayers.location.geometric.constraints.tdoa import *
 from pylayers.location.geometric.constraints.rss import *
@@ -139,32 +139,32 @@ import matplotlib.pyplot as plt
 </pre></div>
 </div>
 <p>Let&#8217;s define 4 anchors in the plane.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">pt1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]))</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">pt1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]))</span>
 <span class="n">pt2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">]))</span>
 <span class="n">pt3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">5</span><span class="p">,</span><span class="mi">28</span><span class="p">]))</span>
 <span class="n">pt4</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="o">-</span><span class="mi">10</span><span class="p">]))</span>
-<span class="c"># the unknown point is p</span>
+<span class="c1"># the unknown point is p</span>
 <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>Then displaying the scene with ancho nodes (in red) and blind nodes in
 blue</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">ax</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pt1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pt1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;or&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;anchor 1&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pt2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pt2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;or&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;anchor 2&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pt3</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pt3</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;or&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;anchor 3&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pt4</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pt4</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;or&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;anchor 4&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;xb&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
-<span class="c">#ax.legend(loc=&#39;best&#39;)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pt1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pt1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;or&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;anchor 1&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pt2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pt2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;or&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;anchor 2&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pt3</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pt3</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;or&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;anchor 3&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pt4</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pt4</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;or&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;anchor 4&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;xb&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;p&#39;</span><span class="p">)</span>
+<span class="c1">#ax.legend(loc=&#39;best&#39;)</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="mi">40</span><span class="p">])</span>
 </pre></div>
 </div>
 <img alt="../../_images/LOC-rgpa_5_0.png" src="../../_images/LOC-rgpa_5_0.png" />
-<p>The euclidian distance <img src="../../_images/mathmpl/math-eb6bd6e7ff.png" style="position: relative; bottom: -10px"/> between the blind node
-<img src="../../_images/mathmpl/math-59f463efb7.png" style="position: relative; bottom: -7px"/> and anchors <img src="../../_images/mathmpl/math-bb7f67c6e1.png" style="position: relative; bottom: -10px"/> are then evaluated.</p>
+<p>The euclidian distance <img src="../../_images/mathmpl/math-eb6bd6e7ff.png" style="position: relative; bottom: -9px"/> between the blind node
+<img src="../../_images/mathmpl/math-59f463efb7.png" style="position: relative; bottom: -7px"/> and anchors <img src="../../_images/mathmpl/math-bb7f67c6e1.png" style="position: relative; bottom: -9px"/> are then evaluated.</p>
 <p>The associated time of flight is</p>
-<img src="../../_images/mathmpl/math-4553b31524.png" class="center" /><div class="code python highlight-python"><div class="highlight"><pre><span class="n">d1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt1</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+<img src="../../_images/mathmpl/math-4553b31524.png" class="center" /><div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">d1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt1</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 <span class="n">d2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt2</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 <span class="n">d3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt3</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 <span class="n">d4</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt4</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
@@ -174,13 +174,13 @@ blue</p>
 <span class="n">toa3</span><span class="o">=</span><span class="n">d3</span><span class="o">/</span><span class="mf">0.3</span>
 <span class="n">toa4</span><span class="o">=</span><span class="n">d4</span><span class="o">/</span><span class="mf">0.3</span>
 
-<span class="k">print</span> <span class="s">&#39;distance p1=&#39;</span><span class="p">,</span><span class="n">d1</span><span class="p">,</span> <span class="s">&#39; m&#39;</span> <span class="p">,</span> <span class="s">&#39;/ toa1=&#39;</span><span class="p">,</span><span class="n">toa1</span><span class="p">,</span> <span class="s">&#39;ns&#39;</span>
-<span class="k">print</span> <span class="s">&#39;distance p2=&#39;</span><span class="p">,</span><span class="n">d2</span><span class="p">,</span> <span class="s">&#39; m&#39;</span> <span class="p">,</span><span class="s">&#39;/ toa2=&#39;</span><span class="p">,</span><span class="n">toa2</span><span class="p">,</span> <span class="s">&#39;ns&#39;</span>
-<span class="k">print</span> <span class="s">&#39;distance p3=&#39;</span><span class="p">,</span><span class="n">d3</span><span class="p">,</span> <span class="s">&#39; m&#39;</span> <span class="p">,</span><span class="s">&#39;/ toa3=&#39;</span><span class="p">,</span><span class="n">toa3</span><span class="p">,</span> <span class="s">&#39;ns&#39;</span>
-<span class="k">print</span> <span class="s">&#39;distance p4=&#39;</span><span class="p">,</span><span class="n">d4</span><span class="p">,</span> <span class="s">&#39; m&#39;</span> <span class="p">,</span><span class="s">&#39;/ toa3=&#39;</span><span class="p">,</span><span class="n">toa4</span><span class="p">,</span> <span class="s">&#39;ns&#39;</span>
+<span class="k">print</span> <span class="s1">&#39;distance p1=&#39;</span><span class="p">,</span><span class="n">d1</span><span class="p">,</span> <span class="s1">&#39; m&#39;</span> <span class="p">,</span> <span class="s1">&#39;/ toa1=&#39;</span><span class="p">,</span><span class="n">toa1</span><span class="p">,</span> <span class="s1">&#39;ns&#39;</span>
+<span class="k">print</span> <span class="s1">&#39;distance p2=&#39;</span><span class="p">,</span><span class="n">d2</span><span class="p">,</span> <span class="s1">&#39; m&#39;</span> <span class="p">,</span><span class="s1">&#39;/ toa2=&#39;</span><span class="p">,</span><span class="n">toa2</span><span class="p">,</span> <span class="s1">&#39;ns&#39;</span>
+<span class="k">print</span> <span class="s1">&#39;distance p3=&#39;</span><span class="p">,</span><span class="n">d3</span><span class="p">,</span> <span class="s1">&#39; m&#39;</span> <span class="p">,</span><span class="s1">&#39;/ toa3=&#39;</span><span class="p">,</span><span class="n">toa3</span><span class="p">,</span> <span class="s1">&#39;ns&#39;</span>
+<span class="k">print</span> <span class="s1">&#39;distance p4=&#39;</span><span class="p">,</span><span class="n">d4</span><span class="p">,</span> <span class="s1">&#39; m&#39;</span> <span class="p">,</span><span class="s1">&#39;/ toa3=&#39;</span><span class="p">,</span><span class="n">toa4</span><span class="p">,</span> <span class="s1">&#39;ns&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>distance p1= 5.0  m / toa1= 16.6666666667 ns
+<div class="highlight-python"><div class="highlight"><pre><span></span>distance p1= 5.0  m / toa1= 16.6666666667 ns
 distance p2= 14.1421356237  m / toa2= 47.1404520791 ns
 distance p3= 23.5372045919  m / toa3= 78.4573486396 ns
 distance p4= 18.0277563773  m / toa3= 60.0925212577 ns
@@ -192,28 +192,28 @@ distance p4= 18.0277563773  m / toa3= 60.0925212577 ns
 <h2>Exploiting Time of Arrival (ToA) only<a class="headerlink" href="#exploiting-time-of-arrival-toa-only" title="Permalink to this headline">¶</a></h2>
 <p>We call <code class="docutils literal"><span class="pre">Constraint</span> <span class="pre">Layer</span> <span class="pre">Array</span></code> (CLA), the object which gathers all
 the geometric constraints of a considered scenario.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">=</span><span class="n">CLA</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">C</span><span class="o">=</span><span class="n">CLA</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Instanciate TOA constraints, notice that their id are differents</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">T1</span><span class="o">=</span><span class="n">TOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">pt1</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">T1</span><span class="o">=</span><span class="n">TOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">pt1</span><span class="p">)</span>
 <span class="n">T2</span><span class="o">=</span><span class="n">TOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa2</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">pt2</span><span class="p">)</span>
 <span class="n">T3</span><span class="o">=</span><span class="n">TOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa3</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">pt3</span><span class="p">)</span>
 <span class="n">T4</span><span class="o">=</span><span class="n">TOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa4</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">pt4</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Add TOA contraints to the CLA</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">T1</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">C</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">T1</span><span class="p">)</span>
 <span class="n">C</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">T2</span><span class="p">)</span>
 <span class="n">C</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">T3</span><span class="p">)</span>
 <span class="n">C</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">T4</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>All the constraints of the CLA can be listed as follows</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">c</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">C</span><span class="o">.</span><span class="n">c</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[node | peer   |type | rat  | p              | value    | std  | runable| usable|
+<div class="highlight-python"><div class="highlight"><pre><span></span>[node | peer   |type | rat  | p              | value    | std  | runable| usable|
     0 |        |TOA  |      | [0 0]          | [ 16.667]| [ 1.]|       1|      1|,
  node | peer   |type | rat  | p              | value    | std  | runable| usable|
     1 |        |TOA  |      | [10 15]        | [ 47.14] | [ 1.]|       1|      1|,
@@ -234,10 +234,10 @@ the geometric constraints of a considered scenario.</p>
 <li>usuable : runbale AND NOT obsolete</li>
 <li>evlauated : obsolete</li>
 </ul>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">C</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>type , p              , value, std  , runable, usable, obsolete, evaluated
+<div class="highlight-python"><div class="highlight"><pre><span></span>type , p              , value, std  , runable, usable, obsolete, evaluated
 TOA  , [0 0]          , [ 16.667], [ 1.],       1,      1,        0,         0
 type , p              , value, std  , runable, usable, obsolete, evaluated
 TOA  , [10 15]        , [ 47.14], [ 1.],       1,      1,        0,         0
@@ -248,32 +248,32 @@ TOA  , [-10 -10]      , [ 60.093], [ 1.],       1,      1,        0,         0
 </pre></div>
 </div>
 <p>Update the CLA</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">C</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Compute the cla</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">C</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 </pre></div>
 </div>
 <pre class="literal-block">
 /home/uguen/Documents/rch/devel/pylayers/pylayers/location/geometric/util/boxn.py:92: FutureWarning: comparison to <cite>None</cite> will result in an elementwise object comparison in the future.
   if Lb==None:
 </pre>
-<div class="highlight-python"><div class="highlight"><pre><span class="bp">True</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="bp">True</span>
 </pre></div>
 </div>
 <p>show the estimated position</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">pe</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">C</span><span class="o">.</span><span class="n">pe</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span> <span class="o">-</span><span class="mf">4.735e-03</span><span class="p">,</span>   <span class="mf">4.992e+00</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span> <span class="o">-</span><span class="mf">4.735e-03</span><span class="p">,</span>   <span class="mf">4.992e+00</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>to be compare with the actual position value</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">p</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">p</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -285,47 +285,47 @@ inference about tthe associated distance. In that purpose, the Path Loss
 shadowing model is a widely used model.</p>
 <p>To define the classical path loss shadowing model widely used in this
 context the <code class="docutils literal"><span class="pre">PLSmodel</span></code> class has been defined.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">M</span> <span class="o">=</span> <span class="n">PLSmodel</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span><span class="n">rssnp</span><span class="o">=</span><span class="mf">2.64</span><span class="p">,</span><span class="n">d0</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="n">sigrss</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s">&#39;mode&#39;</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">M</span> <span class="o">=</span> <span class="n">PLSmodel</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span><span class="n">rssnp</span><span class="o">=</span><span class="mf">2.64</span><span class="p">,</span><span class="n">d0</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="n">sigrss</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;mode&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>For simulation purpose : get RSS from distances (or associated delay)
 with the above model</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">toa1</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">toa1</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="mf">16.666666666666668</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mf">16.666666666666668</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">M</span><span class="o">.</span><span class="n">getPL</span><span class="p">(</span><span class="n">toa1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">M</span><span class="o">.</span><span class="n">getPL</span><span class="p">(</span><span class="n">toa1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="mf">10.417410332020003</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mf">10.417410332020003</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="tdoa">
 <h2>TDOA<a class="headerlink" href="#tdoa" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Td1</span><span class="o">=</span><span class="n">TDOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="o">-</span><span class="n">toa2</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pt1</span><span class="p">,</span><span class="n">pt2</span><span class="p">]))</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Td1</span><span class="o">=</span><span class="n">TDOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="o">-</span><span class="n">toa2</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pt1</span><span class="p">,</span><span class="n">pt2</span><span class="p">]))</span>
 <span class="n">Td2</span><span class="o">=</span><span class="n">TDOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="o">-</span><span class="n">toa3</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pt1</span><span class="p">,</span><span class="n">pt3</span><span class="p">]))</span>
 <span class="n">Td3</span><span class="o">=</span><span class="n">TDOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="o">-</span><span class="n">toa4</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pt1</span><span class="p">,</span><span class="n">pt4</span><span class="p">]))</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">=</span><span class="n">CLA</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">C</span><span class="o">=</span><span class="n">CLA</span><span class="p">()</span>
 <span class="n">C</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Td1</span><span class="p">)</span>
 <span class="n">C</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Td2</span><span class="p">)</span>
 <span class="n">C</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Td3</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">C</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="bp">True</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="bp">True</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">pe</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">C</span><span class="o">.</span><span class="n">pe</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span> <span class="mf">0.021</span><span class="p">,</span>  <span class="mf">4.987</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span> <span class="mf">0.021</span><span class="p">,</span>  <span class="mf">4.987</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -342,8 +342,8 @@ with the above model</p>
 
     <div class="footer">
         &copy; 2015, PyLayers developer team.
-      Last updated on nov. 28, 2015.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1. Design by <a href="http://desgrana.es">Desgrana</a>.
+      Last updated on févr. 23, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.5. Design by <a href="http://desgrana.es">Desgrana</a>.
     <span style="padding-left: 5ex;">
     <a href="../../_sources/notebook/7-APP/LOC-rgpa.txt"
 	    rel="nofollow">Show this page source</a>
