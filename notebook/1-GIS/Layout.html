@@ -145,7 +145,8 @@ import os
 %matplotlib inline
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>WARNING:traits.has_traits:DEPRECATED: traits.has_traits.wrapped_class, &#39;the &#39;implements&#39; class advisor has been deprecated. Use the &#39;provides&#39; class decorator.
+<div class="highlight-python"><div class="highlight"><pre><span></span>Warning : OSM Parser seems to be not installed
+Layout:Mayavi is not installed
 </pre></div>
 </div>
 <div class="section" id="getting-the-list-of-all-available-layouts-the-ls-method">
@@ -155,47 +156,49 @@ import os
 <span class="n">L</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>----------------
+defstr.ini
+----------------
 
-AssertionError                            Traceback (most recent call last)
+Number of points  : 8
+Number of segments  : 9
+Number of sub segments  : 3
+Number of cycles  : 3
+Number of rooms  : 2
+degree 0 : []
+degree 1 : [-8 -7]
+number of node point of degree 2 : 4
+number of node point of degree 3 : 2
 
-&lt;ipython-input-2-4b3f1bfec774&gt; in &lt;module&gt;()
-----&gt; 1 L=Layout()
-      2 L
+xrange :(758.49, 768.516)
+yrange :(1111.9, 1115.963)
 
+Useful dictionnaries
+----------------
+dca {cycle : []} cycle with an airwall
+sl {slab name : slab dictionary}
+name :  {slab :seglist}
 
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in __init__(self, _filename, _filematini, _fileslabini, _filefur, force, check)
-    410         # check layout integrity (default)
-    411         if check:
---&gt; 412             self.check()
-    413         #self.boundary()
-    414
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in check(self, level)
-    719             deg0 = filter(lambda x: nx.degree(self.Gs,x)==0,upnt)
-    720             deg1 = filter(lambda x: nx.degree(self.Gs,x)==1,upnt)
---&gt; 721             assert (len(deg0)==0), &quot;It exists degree 0 points :  %r&quot; % deg0
-    722             assert (len(deg1)==0), &quot;It exists degree 1 points : %r&quot; % deg1
-    723
-
-
-AssertionError: It exists degree 0 points :  [-18, -17, -16, -15, -14]
+Useful arrays
+----------------
+pt : numpy array of points
+normal : numpy array of normal
+offset : numpy array of offset
+tsg : get segment index in Gs from tahe
+isss :  sub-segment index above Nsmax
+tgs : get segment index in tahe from self.Gs
+upnt : get point id index from self.pt
+iupnt : get point index in self.pt from point id
+lsss : list of segments with sub-segment
+sla : list of all slab names (Nsmax+Nss+1)
+degree : degree of nodes
 </pre></div>
 </div>
 <p>Querying the file name associated with the Layout</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">filename</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-3-36a5ea73efc8&gt; in &lt;module&gt;()
-----&gt; 1 L.filename
-
-
-NameError: name &#39;L&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s1">&#39;defstr.ini&#39;</span>
 </pre></div>
 </div>
 <p>The Layout is described in an <code class="docutils literal"><span class="pre">.ini</span></code> file.The <code class="docutils literal"><span class="pre">ls()</span></code> method lists
@@ -206,221 +209,235 @@ the good directories.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s1">&#39;ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-4-a4548d0b11b7&gt; in &lt;module&gt;()
-----&gt; 1 L.ls(&#39;ini&#39;)
-
-
-NameError: name &#39;L&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;11Dbibli.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;CORM1.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DLR-bug.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DLR.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;DLR2.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;Jimmy.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;MOCAP-small.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;MOCAP-small2.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;MOCAP.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;MOCAPext.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;Scene.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;TA-Office.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;W2PTIN.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;WHERE1.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;defdiff.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;defsthdiff.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;defstr.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;defstr3.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;edge.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;klepal.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;scattering.ini&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;test.ini&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;defstr.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-AssertionError                            Traceback (most recent call last)
-
-&lt;ipython-input-5-10f6c3bf7bcc&gt; in &lt;module&gt;()
-----&gt; 1 L=Layout(&#39;defstr.ini&#39;)
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in __init__(self, _filename, _filematini, _fileslabini, _filefur, force, check)
-    410         # check layout integrity (default)
-    411         if check:
---&gt; 412             self.check()
-    413         #self.boundary()
-    414
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in check(self, level)
-    719             deg0 = filter(lambda x: nx.degree(self.Gs,x)==0,upnt)
-    720             deg1 = filter(lambda x: nx.degree(self.Gs,x)==1,upnt)
---&gt; 721             assert (len(deg0)==0), &quot;It exists degree 0 points :  %r&quot; % deg0
-    722             assert (len(deg1)==0), &quot;It exists degree 1 points : %r&quot; % deg1
-    723
-
-
-AssertionError: It exists degree 0 points :  [-18, -17, -16, -15, -14]
-</pre></div>
-</div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>----------------
+defstr.ini
+----------------
 
-NameError                                 Traceback (most recent call last)
+Number of points  : 8
+Number of segments  : 9
+Number of sub segments  : 3
+Number of cycles  : 3
+Number of rooms  : 2
+degree 0 : []
+degree 1 : [-8 -7]
+number of node point of degree 2 : 4
+number of node point of degree 3 : 2
 
-&lt;ipython-input-6-42f463c84796&gt; in &lt;module&gt;()
-----&gt; 1 L
+xrange :(758.49, 768.516)
+yrange :(1111.9, 1115.963)
 
+Useful dictionnaries
+----------------
+dca {cycle : []} cycle with an airwall
+sl {slab name : slab dictionary}
+name :  {slab :seglist}
 
-NameError: name &#39;L&#39; is not defined
+Useful arrays
+----------------
+pt : numpy array of points
+normal : numpy array of normal
+offset : numpy array of offset
+tsg : get segment index in Gs from tahe
+isss :  sub-segment index above Nsmax
+tgs : get segment index in tahe from self.Gs
+upnt : get point id index from self.pt
+iupnt : get point index in self.pt from point id
+lsss : list of segments with sub-segment
+sla : list of all slab names (Nsmax+Nss+1)
+degree : degree of nodes
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">nodes</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">slab</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">subseg</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="n">labels</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-7-9089d3fb96cc&gt; in &lt;module&gt;()
-----&gt; 1 f,a=L.showG(&#39;s&#39;,nodes=True,slab=True,subseg=True,figsize=(10,10),labels=True)
-
-
-NameError: name &#39;L&#39; is not defined
-</pre></div>
-</div>
+<img alt="../../_images/Layout_12_0.png" src="../../_images/Layout_12_0.png" />
 <p>L.ax is : (xmin,xmax,ymin,ymax)</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">ax</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-8-4cef54f9e780&gt; in &lt;module&gt;()
-----&gt; 1 L.ax
-
-
-NameError: name &#39;L&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mf">758.49</span><span class="p">,</span> <span class="mf">768.516</span><span class="p">,</span> <span class="mf">1111.9</span><span class="p">,</span> <span class="mf">1115.963</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">master</span>
-<span class="go">L.build()</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-9-dc10cc3800f0&gt; in &lt;module&gt;()
-----&gt; 1 master
-      2 L.build()
-
-
-NameError: name &#39;master&#39; is not defined
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">ma</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-10-8bbc923f35f6&gt; in &lt;module&gt;()
-----&gt; 1 L.ma
-
-
-NameError: name &#39;L&#39; is not defined
-</pre></div>
-</div>
-<p>This Layout has 3 cycles. Negative index cycle are outdoor and positive
+<img src="../../_images/Layout_16_0.svg" /><p>This Layout has 3 cycles. Negative index cycle are outdoor and positive
 index cycle are indoor. The list of diffraction point for indoor is in
 ldiffin and the list of diffraction points for outdoor diffraction is in
 ldiffout. These two listr are</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">Gv</span><span class="o">.</span><span class="n">node</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-11-2410118535a2&gt; in &lt;module&gt;()
-----&gt; 1 L.Gv.node
-
-
-NameError: name &#39;L&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="o">-</span><span class="mi">8</span><span class="p">:</span> <span class="p">{},</span> <span class="o">-</span><span class="mi">7</span><span class="p">:</span> <span class="p">{},</span> <span class="mi">1</span><span class="p">:</span> <span class="p">{},</span> <span class="mi">2</span><span class="p">:</span> <span class="p">{},</span> <span class="mi">3</span><span class="p">:</span> <span class="p">{},</span> <span class="mi">4</span><span class="p">:</span> <span class="p">{},</span> <span class="mi">5</span><span class="p">:</span> <span class="p">{},</span> <span class="mi">6</span><span class="p">:</span> <span class="p">{},</span> <span class="mi">7</span><span class="p">:</span> <span class="p">{},</span> <span class="mi">8</span><span class="p">:</span> <span class="p">{},</span> <span class="mi">9</span><span class="p">:</span> <span class="p">{}}</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">ldiff</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-12-b30e8b34fd33&gt; in &lt;module&gt;()
-----&gt; 1 L.ldiff
-
-
-NameError: name &#39;L&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">7</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">ldiffin</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-13-6a5009a37627&gt; in &lt;module&gt;()
-----&gt; 1 L.ldiffin
-
-
-NameError: name &#39;L&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">7</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">ldiffout</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-14-37138f509339&gt; in &lt;module&gt;()
-----&gt; 1 L.ldiffout
-
-
-NameError: name &#39;L&#39; is not defined
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>{0: {&#39;indoor&#39;: False,
+  &#39;inter&#39;: [(6, 0),
+   (6, 0, 1),
+   (6, 1, 0),
+   (7, 0),
+   (7, 0, 1),
+   (7, 1, 0),
+   (8, 0),
+   (8, 0, 1),
+   (8, 1, 0),
+   (9, 0),
+   (9, 0, 2),
+   (9, 2, 0),
+   (4, 0),
+   (4, 0, 2),
+   (4, 2, 0),
+   (5, 0),
+   (5, 0, 2),
+   (5, 2, 0),
+   (-4,),
+   (-3,),
+   (-1,),
+   (-6,)],
+  &#39;isopen&#39;: True,
+  &#39;polyg&#39;: (753.49,1106.9)
+  (753.49,1120.963)
+  (773.516,1120.963)
+  (773.516,1106.9)
 
-NameError                                 Traceback (most recent call last)
+  vnodes : (-5 6 -4 7 -3 8 -2 9 -1 4 -6 5 )},
+ 1: {&#39;cycle&#39;: cycle nstr[-8  2 -2  8 -3  7 -4  6 -5  3 -7  1]
+  point number 6
+  segment number 6
+  area : 19.995824
+  centroid : [  766.00300113  1113.94747911],
+  &#39;indoor&#39;: True,
+  &#39;inter&#39;: [(2, 1),
+   (2, 1, 2),
+   (2, 2, 1),
+   (8, 1),
+   (8, 1, 0),
+   (8, 0, 1),
+   (7, 1),
+   (7, 1, 0),
+   (7, 0, 1),
+   (6, 1),
+   (6, 1, 0),
+   (6, 0, 1),
+   (3, 1),
+   (3, 1, 2),
+   (3, 2, 1),
+   (1, 1),
+   (1, 1, 2),
+   (1, 2, 1),
+   (-8,),
+   (-7,)],
+  &#39;isopen&#39;: True,
+  &#39;polyg&#39;: (763.506,1113.432)
+  (763.516,1111.932)
+  (768.516,1111.964)
+  (768.49,1115.963)
+  (763.49,1115.931)
+  (763.5,1114.432)
 
-&lt;ipython-input-15-9e66036d2465&gt; in &lt;module&gt;()
-----&gt; 1 L.Gt.node
+  vnodes : (-8 2 -2 8 -3 7 -4 6 -5 3 -7 1 )},
+ 2: {&#39;cycle&#39;: cycle nstr[-8  2 -2  9 -1  4 -6  5 -5  3 -7  1]
+  point number 6
+  segment number 6
+  area : -19.998327
+  centroid : [  761.0028967   1113.91576981],
+  &#39;indoor&#39;: True,
+  &#39;inter&#39;: [(2, 2),
+   (2, 2, 1),
+   (2, 1, 2),
+   (9, 2),
+   (9, 2, 0),
+   (9, 0, 2),
+   (4, 2),
+   (4, 2, 0),
+   (4, 0, 2),
+   (5, 2),
+   (5, 2, 0),
+   (5, 0, 2),
+   (3, 2),
+   (3, 2, 1),
+   (3, 1, 2),
+   (1, 2),
+   (1, 2, 1),
+   (1, 1, 2),
+   (-8,),
+   (-7,)],
+  &#39;isopen&#39;: True,
+  &#39;polyg&#39;: (763.506,1113.432)
+  (763.516,1111.932)
+  (758.516,1111.9)
+  (758.49,1115.9)
+  (763.49,1115.931)
+  (763.5,1114.432)
 
-
-NameError: name &#39;L&#39; is not defined
+  vnodes : (-8 2 -2 9 -1 4 -6 5 -5 3 -7 1 )}}
 </pre></div>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-16-ab53c04c2744&gt; in &lt;module&gt;()
-----&gt; 1 f,a=L.showG
-
-
-NameError: name &#39;L&#39; is not defined
-</pre></div>
-</div>
+<img alt="../../_images/Layout_23_0.png" src="../../_images/Layout_23_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;DLR.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/collections.py:650: FutureWarning: elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison
-  if self._edgecolors_original != str(&#39;face&#39;):
-/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/collections.py:590: FutureWarning: elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison
-  if self._edgecolors == str(&#39;face&#39;):
-</pre></div>
-</div>
-<img alt="../../_images/Layout_26_1.png" src="../../_images/Layout_26_1.png" />
+<img alt="../../_images/Layout_25_0.png" src="../../_images/Layout_25_0.png" />
 <p>To check which are the used slabs :</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">Slabs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">sla</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">Slabs</span><span class="p">:</span>
@@ -449,41 +466,11 @@ WALL : BRICK | [0.07]
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">airwalls</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="../../_images/Layout_32_0.png" src="../../_images/Layout_32_0.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s1">&#39;W2PTIN.ini&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------
-
-AssertionError                            Traceback (most recent call last)
-
-&lt;ipython-input-22-366aeaf5fde2&gt; in &lt;module&gt;()
-----&gt; 1 L=Layout(&#39;W2PTIN.ini&#39;)
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in __init__(self, _filename, _filematini, _fileslabini, _filefur, force, check)
-    410         # check layout integrity (default)
-    411         if check:
---&gt; 412             self.check()
-    413         #self.boundary()
-    414
-
-
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in check(self, level)
-    719             deg0 = filter(lambda x: nx.degree(self.Gs,x)==0,upnt)
-    720             deg1 = filter(lambda x: nx.degree(self.Gs,x)==1,upnt)
---&gt; 721             assert (len(deg0)==0), &quot;It exists degree 0 points :  %r&quot; % deg0
-    722             assert (len(deg1)==0), &quot;It exists degree 1 points : %r&quot; % deg1
-    723
-
-
-AssertionError: It exists degree 0 points :  [-110, -109, -108, -103]
-</pre></div>
-</div>
+<img alt="../../_images/Layout_31_0.png" src="../../_images/Layout_31_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Layout_34_0.png" src="../../_images/Layout_34_0.png" />
+<img alt="../../_images/Layout_32_0.png" src="../../_images/Layout_32_0.png" />
 </div>
 <div class="section" id="the-useful-numpy-arrays-of-the-layout">
 <h2>The useful numpy arrays of the Layout<a class="headerlink" href="#the-useful-numpy-arrays-of-the-layout" title="Permalink to this headline">¶</a></h2>
@@ -528,23 +515,6 @@ calculated at the end of the edition in the <code class="docutils literal"><span
 number of segment. The first line is the tail index of the segment
 <img src="../../_images/mathmpl/math-21e8759df3.png" style="position: relative; bottom: -3px"/> and the second line is the head of the segment <img src="../../_images/mathmpl/math-21e8759df3.png" style="position: relative; bottom: -3px"/>.
 Where <img src="../../_images/mathmpl/math-21e8759df3.png" style="position: relative; bottom: -3px"/> is the index of a given segment (starting in 0).</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">merge</span>
-<span class="n">merge</span>
-<span class="n">merge</span>
-<span class="n">merge</span>
-<span class="n">merge</span>
-<span class="n">merge</span>
-<span class="n">merge</span>
-<span class="n">merge</span>
-<span class="n">merge</span>
-<span class="n">merge</span>
-<span class="n">merge</span>
-<span class="n">merge</span>
-</pre></div>
-</div>
 <p>The figure below illustrates a Layout and a surimposition of the graph
 of cycles <img src="../../_images/mathmpl/math-7ab57d2327.png" style="position: relative; bottom: -6px"/>. Those cycles are automatically
 extracted from a well defined layout. This concept of <strong>cycles</strong> is
@@ -556,15 +526,15 @@ connected to the origin (corresponding to exterior cycle).</p>
 <span class="n">nx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gc</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gc</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Layout_47_0.png" src="../../_images/Layout_47_0.png" />
+<img alt="../../_images/Layout_44_0.png" src="../../_images/Layout_44_0.png" />
 <div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_nodes</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span><span class="n">node_color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="n">node_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span><span class="n">node_color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="n">node_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.LineCollection at 0x2b181feccf10&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.LineCollection at 0x7f1b7d559590&gt;
 </pre></div>
 </div>
-<img alt="../../_images/Layout_48_1.png" src="../../_images/Layout_48_1.png" />
+<img alt="../../_images/Layout_45_1.png" src="../../_images/Layout_45_1.png" />
 </div>
 </div>
 <div class="section" id="tgs-trancodage-from-graph-indexing-to-numpy-array-indexing">
@@ -599,7 +569,7 @@ because none segment has 0 as an index.</p>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">286</span><span class="p">,</span> <span class="o">-</span><span class="mi">292</span><span class="p">],</span>
  <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;CONCRETE_20CM3D&#39;</span><span class="p">,</span>
- <span class="s1">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+ <span class="s1">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
  <span class="s1">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.99995577</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00940477</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
  <span class="s1">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
  <span class="s1">&#39;ss_name&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">],</span>
@@ -663,7 +633,7 @@ because none segment has 0 as an index.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">-</span><span class="mf">30.0</span><span class="p">,</span> <span class="mf">40.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">18.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Layout_66_1.png" src="../../_images/Layout_66_1.png" />
+<img alt="../../_images/Layout_63_1.png" src="../../_images/Layout_63_1.png" />
 </div>
 </div>
 
