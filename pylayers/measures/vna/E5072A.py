@@ -17,6 +17,7 @@ import pylayers.antprop.channel as ch
 from pylayers.util import pyutil as pyu
 from pylayers.measures.exploith5 import Mesh5 
 import pylayers.measures.switch.ni_usb_6501 as sw
+#from  pylayers.measures.parker.smparker import *
 from time import sleep
 import seaborn as sns
 import os
@@ -96,10 +97,9 @@ class SCPI(PyLayers):
             if self._verbose:
                 print 'SCPI>> connect({:s}:{:d}) failed {:s}', format(host, port, e)
             else:
+                pass
                 #self.emulated = True
-                self.emulated = False
-
-
+            
         
         self.Nf   = 201
         self.getIdent()
@@ -482,13 +482,8 @@ class SCPI(PyLayers):
             com = 'CALC'+str(chan)+':DATA:SDAT?'  #This command sets/gets the corrected data array.
             for k in  range(Nmeas):
                 buff = ''
-<<<<<<< HEAD
-
-                while len(buff) != (self.Nf*16+8):
-=======
                 while len(buff) != (self.Nf*16+8):
                     self.trigger(cmd='test')
->>>>>>> 1c9780440e143894caf09e713b1795cfce395b49
                     buff = self.read(com)
                     #print"buffer size :",len(buff)
                 #ipdb.set_trace()
@@ -663,12 +658,6 @@ class SCPI(PyLayers):
                 self.s.send(com)
 
 
-<<<<<<< HEAD
-    def calibh5(self,
-                 Nr = 8,
-                 Nt = 4,
-                 _filemesh5 = 'measure',
-=======
     def sweep_mode(self,sens=1,cmd='get'):
         """ 
         """
@@ -687,7 +676,6 @@ class SCPI(PyLayers):
                  Nr = 8,
                  Nt = 4,
                  _filemesh5 = 'measures',
->>>>>>> 1c9780440e143894caf09e713b1795cfce395b49
                  _filecalh5 = 'mcalib',
                  _filecal = 'cal_config.ini',
                  _filevna='vna_config.ini',
@@ -726,10 +714,6 @@ class SCPI(PyLayers):
         # File from : ~/Pylayers_project/meas
 
         switch = sw.get_adapter()
-<<<<<<< HEAD
-        reattach=False
-=======
->>>>>>> 1c9780440e143894caf09e713b1795cfce395b49
         if not switch:
             raise Exception("No device found")
         switch.set_io_mode(0b11111111, 0b11111111, 0b00000000) #set the NI USB mode in order to use
@@ -764,12 +748,6 @@ class SCPI(PyLayers):
             if typ=='single':
                 Mr = 1
                 Mt = 1
-<<<<<<< HEAD
-                fileh5w = pyu.getlong(_filemesh5, pstruc['DIRMES'])+'.h5'
-                # dcal is obtained from _filecalh5 and gcal
-                #pdb.set_trace()
-                dcal = Mesh5(_filecalh5).get_dcal(gcalm)
-=======
 
                 fileh5w = pyu.getlong(_filemesh5, pstruc['DIRMES'])+'.h5'
                 # dcal is obtained from _filecalh5 and gcal
@@ -778,7 +756,6 @@ class SCPI(PyLayers):
                 # parameter which are in the MIMO calibration file instead 
                 # of thevna_config
                 self.load_config_vna(_filename=_filevna)
->>>>>>> 1c9780440e143894caf09e713b1795cfce395b49
 
         f = h5py.File(fileh5w, "a")
         try:
@@ -792,19 +769,6 @@ class SCPI(PyLayers):
 
         tic = time.time()
 
-<<<<<<< HEAD
-        for iR in range(Mr):
-            print "connect receiver :", iR +1
-            switch.write_port(0,iR)
-            for iT in range(Mt):
-                switch.write_port(1,iT)
-                print "connect transmitter :", iT + 1
-                c = ""
-                while "g" not in c:
-                    c = raw_input("Hit g key ")
-                for k in dcal:
-                    time.sleep(2)
-=======
         for iT in range(Mt):
             print "connect transmitter :", iT +1
             switch.write_port(0,iT)
@@ -816,27 +780,10 @@ class SCPI(PyLayers):
                     c = raw_input("Hit g key ")
 
                 for k in dcal:
->>>>>>> 1c9780440e143894caf09e713b1795cfce395b49
                     print "---------------------------------------------------------------------"
                     print "                 Configuration Parameters                            "
                     print   dcal[k]
                     print "---------------------------------------------------------------------"
-<<<<<<< HEAD
-                    for k2 in dcal[k]:
-                        if k2=='nf':
-                            self.points(dcal[k]['nf'], cmd='set')
-                            print "set number of number  :",dcal[k]['nf']
-                        if k2=='ifbhz':
-                            self.ifband(ifbHz=dcal[k]['ifbhz'], cmd='set')
-                            print "set number of ifbHz   :",dcal[k]['ifbhz']
-                        if k2=='navrg':
-                            self.avrg(navrg=dcal[k]['navrg'],cmd='setavrg')
-                            print "set number of average :",dcal[k]['navrg']
-
-                    # get Nmeas calibration vector
-                    #pdb.set_trace()
-                    Dmeas = self.getdata(chan=1,Nmeas=dcal[k]['nmeas'],calibration=True)
-=======
                     
                     t1 = time.time()
                     for k2 in dcal[k]:
@@ -888,34 +835,7 @@ class SCPI(PyLayers):
         print "                   END of calibration                    "
         print " measurement time (s)                     :",toc-tic
         print "---------------------------------------------------------"
->>>>>>> 1c9780440e143894caf09e713b1795cfce395b49
 
-                    if ((iR==0) and (iT==0)):
-                        cal.create_dataset(k, (dcal[k]['nmeas'], Mr, Mt, self.Nf), dtype=np.complex64)
-                        cal[k].attrs['fminghz']   = self.fGHz[0]
-                        cal[k].attrs['fmaxghz']   = self.fGHz[-1]
-                        cal[k].attrs['time']      = time.ctime()
-                        cal[k].attrs['author']    = author
-                        cal[k].attrs['cables']    = cables
-                        cal[k].attrs['comment']   = comment
-                        cal[k].attrs['param']     = self.param
-                        cal[k].attrs['nt']        = Nt
-                        cal[k].attrs['nr']        = Nr
-                        cal[k].attrs['nmeas']     = dcal[k]['nmeas']
-                        if typ=='single':
-                            cal[k].attrs['_filecalh5'] =_filecalh5 
-                            cal[k].attrs['gcalm']= gcalm
-                            
-                    cal[k][:,iR,iT,:] = Dmeas[:,0,0,:]
-                    cal[k].attrs['nf']        = self.Nf
-                    cal[k].attrs['ifbhz']     = self.ifbHz
-                    cal[k].attrs['navrg']     = self.navrg
-
-        toc = time.time()
-        print "------------------------------------------"
-        print "         END of calibration          "
-        print " measurement time (s): ",toc-tic
-        print "------------------------------------------"
         f.close()
 
     def meastime(self):

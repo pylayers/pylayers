@@ -424,9 +424,14 @@ class Coverage(PyLayers):
 
         """
 
+        # na : number of access point
         na = self.na
 
+        # U : 1 x 1 x na x na
         U = (np.ones((na,na))-np.eye(na))[np.newaxis,np.newaxis,:,:]
+
+        # CmWo : received power in mW orthogonal polarization
+        # CmWp : received power in mW parallel polarization
 
         ImWo = np.einsum('ijkl,ijl->ijk',U,self.CmWo)
         ImWp = np.einsum('ijkl,ijl->ijk',U,self.CmWp)
@@ -438,7 +443,7 @@ class Coverage(PyLayers):
         self.sinrp = self.CmWp/(ImWp+NmW)
 
     def evbestsv(self):
-        """ determine best server map
+        """ determine the best server map
 
         Notes
         -----
@@ -913,14 +918,14 @@ class Coverage(PyLayers):
                 if polar=='o':
                     V = self.bmhz.T[np.newaxis,:]*np.log(1+self.sinro)/np.log(2)
                 if polar=='p':
-                    V = self.bmhz.T[np.newaxis,:]*np.log(1+self.sinrp)/np.log(2)    
+                    V = self.bmhz.T[np.newaxis,:]*np.log(1+self.sinrp)/np.log(2)
             if typ=='pr':
                 title = title + 'Pr : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+polar
                 if dB:
                     legcb = 'dBm'
                 else:
                     lgdcb = 'mW'
-                if polar=='o':    
+                if polar=='o':
                     V = self.CmWo
                 if polar=='p':
                     V = self.CmWp
@@ -931,9 +936,9 @@ class Coverage(PyLayers):
                     legcb = 'dB'
                 else:
                     legcb = 'Linear scale'
-                if polar=='o':    
+                if polar=='o':
                     V = self.Lwo*self.freespace
-                if polar=='p':    
+                if polar=='p':
                     V = self.Lwp*self.freespace
 
             if a == -1:
