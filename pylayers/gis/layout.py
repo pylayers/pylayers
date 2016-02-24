@@ -775,15 +775,19 @@ class Layout(PyLayers):
                         logging.critical("segment %d has no cycle",s)
                     if len(cycle)==3:
                         logging.critical("segment %d has cycle %s",s,str(cycle))
+        #
+        # check if Gs points are unique 
+        #
+        P = np.array(self.Gs.pos.values())
+        similar = geu.check_point_unicity(P)
+        if len(similar) !=0:
+            logging.critical("points at index(es) %s in self.Gs.pos are similar",str(similar))
+            consistent =False
 
         return(consistent)
 
 
-    def _check_point_unicity(self):
-        points = np.array(L.Gs.pos.values())
-        for up in xrange(len(points)):
-            P=np.roll(points,-up)
-            print any((points[up] == x).all() for x in P[1:])
+
 
     def clip(self, xmin, xmax, ymin, ymax):
         """ return the list of edges which cross or belong to the clipping zone
@@ -6109,7 +6113,6 @@ class Layout(PyLayers):
                             self.Gt.node[cyid]['indoor']=True
                             self.Gt.node[cyid]['isopen']=True
                             self.Gt.pos[cyid] = tuple(cy.g)
-
         for k in combinations(self.Gt.nodes(), 2):
             if not 0 in k:
                 vnodes0 = np.array(self.Gt.node[k[0]]['cycle'].cycle)
@@ -7299,7 +7302,7 @@ class Layout(PyLayers):
                     'alphae': 1.0,
                     'width': 2,
                     'node_color':'w',
-                    'edge_color':'k',
+                    'edge_color':'',
                     'node_size':20,
                     'font_size':15,
                     'nodelist': [],

@@ -147,6 +147,9 @@ def draw(G,**kwargs):
                                 font_size=kwargs['font_size'],ax=ax)
 
     if kwargs['edges']:
+        if kwargs['edge_color'] == '':
+            kwargs['edge_color']='k'
+
         nx.draw_networkx_edges(G, G.pos,
                                edgelist = edgelist,
                                edge_color = kwargs['edge_color'],
