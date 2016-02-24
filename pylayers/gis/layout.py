@@ -778,6 +778,13 @@ class Layout(PyLayers):
 
         return(consistent)
 
+
+    def _check_point_unicity(self):
+        points = np.array(L.Gs.pos.values())
+        for up in xrange(len(points)):
+            P=np.roll(points,-up)
+            print any((points[up] == x).all() for x in P[1:])
+
     def clip(self, xmin, xmax, ymin, ymax):
         """ return the list of edges which cross or belong to the clipping zone
 
@@ -5339,7 +5346,7 @@ class Layout(PyLayers):
                 # but the partial rebuild coded & comment at the end in _convexify
                 # causes crash in buildGc at 2nd run of build(convex=True) on the layout
                 #
-                self.buildGt()
+                # self.buildGt()
 
             self.lbltg.extend('t')
 
@@ -6103,35 +6110,35 @@ class Layout(PyLayers):
                             self.Gt.node[cyid]['isopen']=True
                             self.Gt.pos[cyid] = tuple(cy.g)
 
-        # for k in combinations(self.Gt.nodes(), 2):
-        #     if not 0 in k:
-        #         vnodes0 = np.array(self.Gt.node[k[0]]['cycle'].cycle)
-        #         vnodes1 = np.array(self.Gt.node[k[1]]['cycle'].cycle)
-        #         #
-        #         # Connect Cycles if they share at least one segments
-        #         #
-        #         intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
+        for k in combinations(self.Gt.nodes(), 2):
+            if not 0 in k:
+                vnodes0 = np.array(self.Gt.node[k[0]]['cycle'].cycle)
+                vnodes1 = np.array(self.Gt.node[k[1]]['cycle'].cycle)
+                #
+                # Connect Cycles if they share at least one segments
+                #
+                intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
 
-        #         if len(intersection_vnodes) > 1:
-        #             segment = intersection_vnodes[np.where(intersection_vnodes>0)]
-        #             self.Gt.add_edge(k[0], k[1],segment= segment)
-        #     else:
+                if len(intersection_vnodes) > 1:
+                    segment = intersection_vnodes[np.where(intersection_vnodes>0)]
+                    self.Gt.add_edge(k[0], k[1],segment= segment)
+            else:
 
-        #         vnodes0 = self.Gt.node[k[0]]['polyg'].vnodes
-        #         vnodes1 = self.Gt.node[k[1]]['polyg'].vnodes
-        #         intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
+                vnodes0 = self.Gt.node[k[0]]['polyg'].vnodes
+                vnodes1 = self.Gt.node[k[1]]['polyg'].vnodes
+                intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
 
-        #         if len(intersection_vnodes) > 1:
-        #             segment = intersection_vnodes[np.where(intersection_vnodes>0)]
-        #             self.Gt.add_edge(k[0], k[1],segment= segment)
+                if len(intersection_vnodes) > 1:
+                    segment = intersection_vnodes[np.where(intersection_vnodes>0)]
+                    self.Gt.add_edge(k[0], k[1],segment= segment)
 
 
-        # # #update self.Gs.node[x]['ncycles']
-        # self._updGsncy()
-        # # #add outside cycle to Gs.node[x]['ncycles']
-        # self._addoutcy()
-        # # #update interaction list into Gt.nodes (cycles)
-        # self._interlist(nodelist=lacy)
+        # #update self.Gs.node[x]['ncycles']
+        self._updGsncy()
+        # #add outside cycle to Gs.node[x]['ncycles']
+        self._addoutcy()
+        # #update interaction list into Gt.nodes (cycles)
+        self._interlist(nodelist=lacy)
 
 
     def buildGw(self):

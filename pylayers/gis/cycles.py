@@ -232,6 +232,8 @@ class Cycles(nx.DiGraph):
                 cyinc1 = self.node[ninc]['cycle'] # cycle included
                 punctual,cyinc2 = cybig.split(cyinc1) # small cycle
                 if punctual:
+                    import ipdb
+                    ipdb.set_trace()
                     reloop = True
                     logging.warning("punctual contact detected proceed in reverse order")
                 if cyinc2 !=None: # divide again with updated big cycle
@@ -731,7 +733,8 @@ class Cycle(object):
             diffarea = abs(self.area)-(abs(cyin.area)+abs(cyout.area))
             if diffarea>1e-10:
                 print "area error",diffarea
-                pdb.set_trace()
+                # import ipdb
+                # ipdb.set_trace()
 
             return(False,cyout)
         if (incl) & (len(v)>0):
