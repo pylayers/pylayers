@@ -5408,11 +5408,11 @@ class Layout(PyLayers):
                     except:
                         self.dca[cy[1]]=[cy[0]]
 
-        f=os.path.splitext(self.filename)
-        if f[1] =='.ini':
-            self.saveini(self.filename)
-        else :
-            self.saveini(f[0] +'.ini')
+        # f=os.path.splitext(self.filename)
+        # if f[1] =='.ini':
+        #     self.saveini(self.filename)
+        # else :
+        #     self.saveini(f[0] +'.ini')
 
 
     def dumpw(self):
