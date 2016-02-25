@@ -4573,6 +4573,48 @@ def qrdecomp(V):
 
 
 
+
+def check_point_unicity(A):
+    """ check if all rows of an array are unique
+
+    Parameters
+    ----------
+
+        A : np.ndarray (Npt, 2|3)
+
+    Return
+    ------
+        similar : list
+        list of index of similar points
+        if void list, all poitns are differents
+
+    Example
+    -------
+
+    >>> import numpy as np
+    >>> a = np.arange(10)
+    >>> a = np.np.vstack((a,a))
+    >>> check_point_unicity(a.T)
+    []
+    >>> b=np.array([4,4])
+    >>> aa=np.concatenate((a,b[:,None]),axis=1)
+    >>> check_point_unicity(aa.T)
+    [4, 10]
+
+
+
+
+
+    """
+    similar = []
+    for ua in xrange(len(A)):
+        rA=np.roll(A,-ua,axis=0)
+        # print rA
+        if any((A[ua] == x).all() for x in rA[1:]):
+            similar.append(ua)
+    return similar
+
+
 if __name__ == "__main__":
     plt.ion()
     doctest.testmod()

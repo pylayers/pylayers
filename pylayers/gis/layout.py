@@ -775,8 +775,19 @@ class Layout(PyLayers):
                         logging.critical("segment %d has no cycle",s)
                     if len(cycle)==3:
                         logging.critical("segment %d has cycle %s",s,str(cycle))
+        #
+        # check if Gs points are unique 
+        #
+        P = np.array(self.Gs.pos.values())
+        similar = geu.check_point_unicity(P)
+        if len(similar) !=0:
+            logging.critical("points at index(es) %s in self.Gs.pos are similar",str(similar))
+            consistent =False
 
         return(consistent)
+
+
+
 
     def clip(self, xmin, xmax, ymin, ymax):
         """ return the list of edges which cross or belong to the clipping zone
@@ -5345,7 +5356,7 @@ class Layout(PyLayers):
                 # but the partial rebuild coded & comment at the end in _convexify
                 # causes crash in buildGc at 2nd run of build(convex=True) on the layout
                 #
-                self.buildGt()
+                # self.buildGt()
 
             self.lbltg.extend('t')
 
@@ -5403,11 +5414,11 @@ class Layout(PyLayers):
                     except:
                         self.dca[cy[1]]=[cy[0]]
 
-        f=os.path.splitext(self.filename)
-        if f[1] =='.ini':
-            self.saveini(self.filename)
-        else :
-            self.saveini(f[0] +'.ini')
+        # f=os.path.splitext(self.filename)
+        # if f[1] =='.ini':
+        #     self.saveini(self.filename)
+        # else :
+        #     self.saveini(f[0] +'.ini')
 
     
 
@@ -5579,18 +5590,19 @@ class Layout(PyLayers):
         Gt = Gt.decompose()
         degrees = nx.degree(Gt)
         #
-        # At that point the degree of every nodes of Gt should be 0 
+        # At that point the degree of every nodes of Gt should be 0
         # meaning that there is no more cycles inclusion
-        # 
+        #
         # cycle_basis is a topological property
-        # inclusion is a metric property 
+        # inclusion is a metric property
         #
         #pdb.set_trace()
         assert(np.sum(degrees.values())==0)
+        # import ipdb
+        # ipdb.set_trace()
         #
         # 3 - check integrity of algorithm output (should be avoided)
         #
-
         Gt.inclusion()
         if len(Gt.edges())>0:
             #logging.warning("first decompose run failed")
@@ -5684,8 +5696,16 @@ class Layout(PyLayers):
         boundary = geu.Polygon(p2)
         boundary.vnodes = self.ma.vnodes
         self.Gt.add_node(0,polyg=boundary)
+        self.Gt.add_node(0,polyg=boundary)
         self.Gt.add_node(0,indoor=False,isopen=True)
         self.Gt.pos[0]=(self.ax[0],self.ax[2])
+        # add cycle associated to cycle0
+        G = nx.subgraph(self.Gs,self.ma.vnodes)
+        G.pos = {}
+        G.pos.update({l: self.Gs.pos[l] for l in self.ma.vnodes})
+        C=cycl.Cycle(G,lnode=self.ma.vnodes)
+        self.Gt.add_node(0,cycle=C)
+
 
 
         #
@@ -6120,35 +6140,35 @@ class Layout(PyLayers):
                             self.Gt.node[cyid]['isopen']=True
                             self.Gt.pos[cyid] = tuple(cy.g)
 
-        # for k in combinations(self.Gt.nodes(), 2):
-        #     if not 0 in k:
-        #         vnodes0 = np.array(self.Gt.node[k[0]]['cycle'].cycle)
-        #         vnodes1 = np.array(self.Gt.node[k[1]]['cycle'].cycle)
-        #         #
-        #         # Connect Cycles if they share at least one segments
-        #         #
-        #         intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
+        for k in combinations(self.Gt.nodes(), 2):
+            if not 0 in k:
+                vnodes0 = np.array(self.Gt.node[k[0]]['cycle'].cycle)
+                vnodes1 = np.array(self.Gt.node[k[1]]['cycle'].cycle)
+                #
+                # Connect Cycles if they share at least one segments
+                #
+                intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
 
-        #         if len(intersection_vnodes) > 1:
-        #             segment = intersection_vnodes[np.where(intersection_vnodes>0)]
-        #             self.Gt.add_edge(k[0], k[1],segment= segment)
-        #     else:
+                if len(intersection_vnodes) > 1:
+                    segment = intersection_vnodes[np.where(intersection_vnodes>0)]
+                    self.Gt.add_edge(k[0], k[1],segment= segment)
+            else:
 
-        #         vnodes0 = self.Gt.node[k[0]]['polyg'].vnodes
-        #         vnodes1 = self.Gt.node[k[1]]['polyg'].vnodes
-        #         intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
+                vnodes0 = self.Gt.node[k[0]]['polyg'].vnodes
+                vnodes1 = self.Gt.node[k[1]]['polyg'].vnodes
+                intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
 
-        #         if len(intersection_vnodes) > 1:
-        #             segment = intersection_vnodes[np.where(intersection_vnodes>0)]
-        #             self.Gt.add_edge(k[0], k[1],segment= segment)
+                if len(intersection_vnodes) > 1:
+                    segment = intersection_vnodes[np.where(intersection_vnodes>0)]
+                    self.Gt.add_edge(k[0], k[1],segment= segment)
 
 
-        # # #update self.Gs.node[x]['ncycles']
-        # self._updGsncy()
-        # # #add outside cycle to Gs.node[x]['ncycles']
-        # self._addoutcy()
-        # # #update interaction list into Gt.nodes (cycles)
-        # self._interlist(nodelist=lacy)
+        # #update self.Gs.node[x]['ncycles']
+        self._updGsncy()
+        # #add outside cycle to Gs.node[x]['ncycles']
+        self._addoutcy()
+        # #update interaction list into Gt.nodes (cycles)
+        self._interlist(nodelist=lacy)
 
 
     def buildGw(self):
@@ -7309,7 +7329,7 @@ class Layout(PyLayers):
                     'alphae': 1.0,
                     'width': 2,
                     'node_color':'w',
-                    'edge_color':'k',
+                    'edge_color':'',
                     'node_size':20,
                     'font_size':15,
                     'nodelist': [],
@@ -8061,6 +8081,7 @@ class Layout(PyLayers):
         #
         # Create a graph of adjascent cycles
         #
+
         Ga = nx.Graph()
         Ga.pos ={}
         for k in self.Gt.edge:
@@ -8135,6 +8156,7 @@ class Layout(PyLayers):
                 ncy = tomerge.pop()
                 #print "ncy = ",ncy
                 # testing cycle contiguity before merging
+
                 try:
                     croot = self.Gc.node[root]['cycle']
                 except:
@@ -9470,7 +9492,7 @@ class Layout(PyLayers):
         fig,ax = plu.displot(pt,ph,fig=fig,ax=ax,color=kwargs['color'])
 
         return fig,ax
-    def showSig(self, sigarr, Tx=None, Rx=None, fig=plt.figure(), ax=None):
+    def showSig(self, sigarr, Tx=None, Rx=None, fig=[], ax=None):
         """ Show signature
 
         Parameters
@@ -9493,7 +9515,7 @@ class Layout(PyLayers):
 
         """
         sig =sigarr[0]
-        if fig is None:
+        if fig == []:
             fig = plt.figure()
             ax = fig.add_subplot(111)
         elif ax is None:

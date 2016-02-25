@@ -132,6 +132,7 @@ class Cycles(nx.DiGraph):
         #print lcyt
         #
         # loop on all cycle in list of cycles
+
         for k in lcyt:
             ck = self.node[k]['cycle']
             for l in self:
@@ -182,6 +183,7 @@ class Cycles(nx.DiGraph):
                 self.l2[l]=[k]
         #pdb.set_trace()
         # for all inclusion length (starting in 0) 
+
         for l in self.l2.keys():
             # retrieve the list of included cycles of length l
             lnode = self.l2[l]
@@ -198,15 +200,18 @@ class Cycles(nx.DiGraph):
                     # c includes cy1
                     self.add_edge(c,cy1)
 
-
     def decompose(self):
         """ recursive function to transform the cycle basis
 
         """
         #
-        # root if degree == number of successors
+        # a cycle is a root cycle if its degree equals its number of successors
+        # In a DiGraph if nx.neighbors(A)=B then nx.neighbors(B)=[]
         #
         #
+        # if len(self.edges())==0:
+        #     return self
+
         self.lcyroot =[k for k in nx.degree(self)
                   if (((nx.degree(self)[k]==len(self.neighbors(k)))) and
                   (nx.degree(self)[k]>0))]
@@ -217,6 +222,8 @@ class Cycles(nx.DiGraph):
             ncyroot = self.lcyroot.pop()
             cybig = self.node[ncyroot]['cycle']
             # get the list of the successor cycle indices
+
+
             lninc = nx.neighbors(self,ncyroot)
             #
             # reduce to the smallest cycle
@@ -231,6 +238,8 @@ class Cycles(nx.DiGraph):
                 cyinc1 = self.node[ninc]['cycle'] # cycle included
                 punctual,cyinc2 = cybig.split(cyinc1) # small cycle
                 if punctual:
+                    import ipdb
+                    ipdb.set_trace()
                     reloop = True
                     logging.warning("punctual contact detected proceed in reverse order")
                 if cyinc2 !=None: # divide again with updated big cycle
@@ -274,7 +283,6 @@ class Cycles(nx.DiGraph):
             #plt.show()
             for ninc in lninc:
                 self.remove_edge(ncyroot,ninc)
-
             #
             # recursive call
             #
@@ -282,7 +290,7 @@ class Cycles(nx.DiGraph):
             #
             # Two lines to kill the monster
             #
-            if len(self.lcyroot)==0:
+            if len(self.lcyroot)==0 :
                 return(self)
         return(self)
 
@@ -593,14 +601,28 @@ class Cycle(object):
                         else:
                             return False,path
                 else: #cycles share a point 
-                    areabig   = abs(self.area)
-                    #areasmall = abs(Cy.area)
-                    cycomb    = self + Cy
-                    areacomb  = abs(cycomb.area)
-                    if areacomb < areabig:
-                        return True,path
-                    else:
+                    # signed area is not sufficent to determien if 
+                    # 2 polygon connect by a single point 
+                    # are inclusive or external
+
+                    # areabig   = abs(self.area)
+                    # #areasmall = abs(Cy.area)
+                    # cycomb    = self + Cy
+                    # areacomb  = abs(cycomb.area)
+                    # if areacomb < areabig:
+                    #     return True,path
+                    # else:
+                    #     return False,np.array([])
+
+                    PCy = geu.Polygon(p=Cy.p,vnodes=Cy.cycle)
+                    Pself = geu.Polygon(p=self.p,vnodes=self.cycle)
+                    inter = PCy.intersection(Pself)
+                    # if intesection is a point, Cy not subset of self 
+                    if isinstance(inter,sh.Point):
                         return False,np.array([])
+                    else:
+                        return True,path
+
             else:
                 return False,np.array([])
         else:
@@ -653,6 +675,7 @@ class Cycle(object):
         path is the common path along the cycle
 
         """
+
         #
         # segment number
         #
@@ -762,7 +785,8 @@ class Cycle(object):
             diffarea = abs(self.area)-(abs(cyin.area)+abs(cyout.area))
             if diffarea>1e-10:
                 print "area error",diffarea
-                pdb.set_trace()
+                # import ipdb
+                # ipdb.set_trace()
 
             return(False,cyout)
         if (incl) & (len(v)>0):
