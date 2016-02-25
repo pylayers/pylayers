@@ -5308,7 +5308,7 @@ class Layout(PyLayers):
 
         return fig,ax
 
-    def build(self, graph='tcvirw',verbose=False,convex=True):
+    def build(self, graph='tcvirw',verbose=False,convexify=True):
         """ build graphs
 
         Parameters
@@ -5322,6 +5322,12 @@ class Layout(PyLayers):
             'r' : Gr
             'w" : Gw
 
+        Notes
+        -----
+
+        This function can build all the graph associated with the Layout. 
+        Warning by default the layout is saved after each build
+
         """
         # list of built graphs
 
@@ -5329,7 +5335,7 @@ class Layout(PyLayers):
             if verbose:
                 print "Gt"
             self.buildGt()
-            if convex :
+            if convexify :
                 #Make the layout convex the outddor
                 self._convex_hull()
                 # Ensure convexity of all cycles
@@ -5402,6 +5408,8 @@ class Layout(PyLayers):
             self.saveini(self.filename)
         else :
             self.saveini(f[0] +'.ini')
+
+    
 
 
     def dumpw(self):
@@ -5499,7 +5507,7 @@ class Layout(PyLayers):
                                 logging.warning('dumpr : a segment cannot relate more than 2 cycles')
         # if ncycles is a list with only one element the other cycle is the
         # outside region (cycle -1)
-        for k in self.Gs.node:
+        for k in sebuildGtlf.Gs.node:
             if k>0:
                 if len(self.Gs.node[k]['ncycles'])==1:
                     self.Gs.node[k]['ncycles'].append(-1)
@@ -5569,7 +5577,16 @@ class Layout(PyLayers):
 
         Gt.inclusion(full=True)
         Gt = Gt.decompose()
-
+        degrees = nx.degree(Gt)
+        #
+        # At that point the degree of every nodes of Gt should be 0 
+        # meaning that there is no more cycles inclusion
+        # 
+        # cycle_basis is a topological property
+        # inclusion is a metric property 
+        #
+        #pdb.set_trace()
+        assert(np.sum(degrees.values())==0)
         #
         # 3 - check integrity of algorithm output (should be avoided)
         #
@@ -5928,7 +5945,7 @@ class Layout(PyLayers):
     def _convexify(self):
         """ determine which cycles are not convex and convexify it.
 
-            if a cycle is tagged as non convex
+            if a cycle is non convex
 
             1- find its polygon
             2- partition polygon into convex polygons (Delaunay)

@@ -55,7 +55,7 @@ def PL0(fGHz,GtdB=0,GrdB=0,R=1):
     GrdB: float
           receiving antenna gain dB (default 0 dB)
     R   : float
-        distance in m ( because f is in GHz)
+        distance in m
 
 
     Returns

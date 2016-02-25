@@ -32,6 +32,7 @@ Cycle Class
     Cycle.inclusion
     Cycle.simplify
     Cycle.intersect
+    Cycle.reverberation
     Cycle.split
     Cycle.corrcy
     Cycle.show
@@ -73,17 +74,15 @@ class Cycles(nx.DiGraph):
         """ object representation
         """
         s = ''
-        s = s + 'Number of cycles :' +str(len(self.node)) + '\n'
+        s = s + 'Number of cycles : ' +str(len(self.node)) + '\n\n'
         for k in self:
             s = s + str(self.node[k]['cycle']) + '\n'
         return(s)
 
-    def info(self):
-        """ get info from Cycles object
-        """
-        print "Number of cycles : ",len(self)
-        for k in self.Gi:
-            print k , self.Gi.neighbors(k)
+    def check(self):
+        self.lcyroot =[k for k in nx.degree(self)
+                  if (((nx.degree(self)[k]==len(self.neighbors(k)))) and
+                  (nx.degree(self)[k]>0))]
 
     def inclusion(self,full=True):
         """  Inform the inclusion relations between cycles
@@ -102,7 +101,7 @@ class Cycles(nx.DiGraph):
                     if ck <> cl
                         check inclusion of Ck in Cl
                         If Inclusion detected
-                            update graphe
+                            update graph
 
         Warning
         -------
@@ -207,7 +206,7 @@ class Cycles(nx.DiGraph):
         #
         # root if degree == number of successors
         #
-        plt.ion()
+        #
         self.lcyroot =[k for k in nx.degree(self)
                   if (((nx.degree(self)[k]==len(self.neighbors(k)))) and
                   (nx.degree(self)[k]>0))]
@@ -440,7 +439,22 @@ class Cycle(object):
     def reverberation(self,fGHz,L):
         """ calculate reverberation time of the cycle
 
+        Parameters
+        ----------
+
+        fGHz : frequency GHz
+        L : Layout 
+
+        Returns
+        -------
+
+        V    : Volume 
+        A    : Area
+        eta  : absorption coefficient 
+        tau  : 
+
         $$\tau_g = \frac{4V}{c\eta A}$$
+        Sabine's Model 
         where $\eta$ is the absorbtion coefficient  
 
         """
@@ -503,8 +517,9 @@ class Cycle(object):
         etaFloor = S*10**(-Lofloor[0]/10.)
         etaCeil  = S*10**(-Loceil[0]/10.)
         eta = (sum(AS1)+sum(AS2)+etaFloor+etaCeil)/A
-        tau = 4*V/(0.3*A*eta)
-        return(V,A,eta,tau)
+        tau_sab = 4*V/(0.3*A*eta)
+        tau_eyr = -4*V/(0.3*A*np.log(1-eta))
+        return(V,A,eta,tau_sab,tau_eyr)
 
     def info(self):
         """
@@ -524,6 +539,20 @@ class Cycle(object):
         self.p        = self.p[:,::-1]
         self.area     = geu.SignedArea(self.p)
 
+    def inc(self,cy):
+        """ Returns True if self includes cy 
+
+        """
+        npoints = filter(lambda x : x <0 ,self.cycle)
+        coords  = map(lambda x : self.G.pos[x],npoints)
+        polyself  = geu.Polygon(sh.MultiPoint(tuple(coords)),self.cycle)
+        npoints = filter(lambda x : x <0 ,cy.cycle)
+        coords  = map(lambda x : cy.G.pos[x],npoints)
+        polycy  = geu.Polygon(sh.MultiPoint(tuple(coords)),cy.cycle)
+        pdb.set_trace()
+        bool = polyself.intersect(polycy)
+        return(bool)
+
     def inclusion(self,Cy):
         """  Return True if self includes Cy
 
@@ -533,6 +562,7 @@ class Cycle(object):
 
         Returns
         -------
+
         boolean  : True if Cy \subset self
         path     : path
 
@@ -694,6 +724,7 @@ class Cycle(object):
 
           Returns
           -------
+
           cyout : list of output cycles
           punctual : boolean
               True if punctual connection
