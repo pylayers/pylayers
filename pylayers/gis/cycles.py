@@ -451,19 +451,19 @@ class Cycle(object):
         ----------
 
         fGHz : frequency GHz
-        L : Layout 
+        L : Layout
 
         Returns
         -------
 
-        V    : Volume 
+        V    : Volume
         A    : Area
-        eta  : absorption coefficient 
-        tau  : 
+        eta  : absorption coefficient
+        tau  :
 
         $$\tau_g = \frac{4V}{c\eta A}$$
-        Sabine's Model 
-        where $\eta$ is the absorbtion coefficient  
+        Sabine's Model
+        where $\eta$ is the absorbtion coefficient
 
         """
         # get the sequence of segments 
