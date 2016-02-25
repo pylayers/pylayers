@@ -283,9 +283,6 @@ class Cycles(nx.DiGraph):
             #plt.show()
             for ninc in lninc:
                 self.remove_edge(ncyroot,ninc)
-            plt.cla()
-            plt.draw()
-            nx.draw_networkx(self,self.pos,fig=plt.gcf(),ax=plt.gca())
             #
             # recursive call
             #
