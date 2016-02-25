@@ -5580,7 +5580,8 @@ class Layout(PyLayers):
 
         Gt.inclusion(full=True)
         Gt = Gt.decompose()
-
+        # import ipdb
+        # ipdb.set_trace()
         #
         # 3 - check integrity of algorithm output (should be avoided)
         #
@@ -9463,7 +9464,7 @@ class Layout(PyLayers):
         fig,ax = plu.displot(pt,ph,fig=fig,ax=ax,color=kwargs['color'])
 
         return fig,ax
-    def showSig(self, sigarr, Tx=None, Rx=None, fig=plt.figure(), ax=None):
+    def showSig(self, sigarr, Tx=None, Rx=None, fig=[], ax=None):
         """ Show signature
 
         Parameters
@@ -9486,7 +9487,7 @@ class Layout(PyLayers):
 
         """
         sig =sigarr[0]
-        if fig is None:
+        if fig == []:
             fig = plt.figure()
             ax = fig.add_subplot(111)
         elif ax is None:

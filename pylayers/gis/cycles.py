@@ -218,6 +218,8 @@ class Cycles(nx.DiGraph):
             ncyroot = self.lcyroot.pop()
             cybig = self.node[ncyroot]['cycle']
             # get the list of the successor cycle indices
+
+
             lninc = nx.neighbors(self,ncyroot)
             #
             # reduce to the smallest cycle
