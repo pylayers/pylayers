@@ -5585,7 +5585,6 @@ class Layout(PyLayers):
         #
         # 3 - check integrity of algorithm output (should be avoided)
         #
-
         Gt.inclusion()
         if len(Gt.edges())>0:
             #logging.warning("first decompose run failed")
@@ -5679,8 +5678,16 @@ class Layout(PyLayers):
         boundary = geu.Polygon(p2)
         boundary.vnodes = self.ma.vnodes
         self.Gt.add_node(0,polyg=boundary)
+        self.Gt.add_node(0,polyg=boundary)
         self.Gt.add_node(0,indoor=False,isopen=True)
         self.Gt.pos[0]=(self.ax[0],self.ax[2])
+        # add cycle associated to cycle0
+        G = nx.subgraph(self.Gs,self.ma.vnodes)
+        G.pos = {}
+        G.pos.update({l: self.Gs.pos[l] for l in self.ma.vnodes})
+        C=cycl.Cycle(G,lnode=self.ma.vnodes)
+        self.Gt.add_node(0,cycle=C)
+
 
 
         #
@@ -6114,6 +6121,7 @@ class Layout(PyLayers):
                             self.Gt.node[cyid]['indoor']=True
                             self.Gt.node[cyid]['isopen']=True
                             self.Gt.pos[cyid] = tuple(cy.g)
+
         for k in combinations(self.Gt.nodes(), 2):
             if not 0 in k:
                 vnodes0 = np.array(self.Gt.node[k[0]]['cycle'].cycle)
@@ -8055,6 +8063,7 @@ class Layout(PyLayers):
         #
         # Create a graph of adjascent cycles
         #
+
         Ga = nx.Graph()
         Ga.pos ={}
         for k in self.Gt.edge:
@@ -8129,6 +8138,7 @@ class Layout(PyLayers):
                 ncy = tomerge.pop()
                 #print "ncy = ",ncy
                 # testing cycle contiguity before merging
+
                 try:
                     croot = self.Gc.node[root]['cycle']
                 except:

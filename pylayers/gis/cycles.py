@@ -209,8 +209,8 @@ class Cycles(nx.DiGraph):
         # root if degree == number of successors
         #
         plt.ion()
-        if len(self.edges())==0:
-            return self
+        # if len(self.edges())==0:
+        #     return self
 
         self.lcyroot =[k for k in nx.degree(self)
                   if (((nx.degree(self)[k]==len(self.neighbors(k)))) and
@@ -225,7 +225,6 @@ class Cycles(nx.DiGraph):
 
 
             lninc = nx.neighbors(self,ncyroot)
-            print 'lninc',lninc
             #
             # reduce to the smallest cycle
             #
