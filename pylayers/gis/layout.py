@@ -7362,8 +7362,11 @@ class Layout(PyLayers):
             labels = kwargs['labels']
         elif kwargs['labels'] == True:
             labels=['s','t','v','c','i','w']
+        elif isinstance(kwargs['labels'],str):
+            labels=kwargs['labels']
         else:
             labels=[]
+        print labels
         #
         # s : structure graph
         #
@@ -7433,7 +7436,7 @@ class Layout(PyLayers):
         #
         # t : graph of cycles
         #
-
+        print labels
         if 't' in graph:
             G = self.Gt
             if not kwargs['show0']:
