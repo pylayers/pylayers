@@ -7523,15 +7523,22 @@ class Layout(PyLayers):
             G = self.Gc
 
             if kwargs['edge_color']=='':
-                kwargs['edge_color'] ='k'
+                kwargs['edge_color'] ='g'
             if 'c' in labels:
                 kwargs['labels']=True
             else:
                 kwargs['labels']=False
+            # filter cycle 0
+            edgelistbkup = kwargs['edgelist']
+            edges = G.edges()
+            rle = range(len(edges))
+            edlist = filter(lambda x: (edges[x][0] !=0) and (edges[x][1] !=0), rle)
+            kwargs['edgelist']=edlist 
+
             fig,ax = gru.draw(G,**kwargs)
             kwargs['fig']=fig
             kwargs['ax']=ax
-        #
+            kwargs['edgelist']=edgelistbkup 
         # i :  interaction graph
         #
         if 'i' in graph:
@@ -8060,8 +8067,141 @@ class Layout(PyLayers):
         # list of cycles which are already involved in rooms
         alreadythere = filter(lambda x: x in cycleroom.keys(),involvedcycles)
 
+
     def buildGc(self):
         """ build the graph of cycles
+
+        Returns
+        -------
+
+        Ga : graph of adjascent rooms
+
+        Notes
+        -----
+
+        An adjascent graph (connecting cycle sharing airwalls) is created.
+        This graph contains multiples sub-graph which are not connected with each others
+
+        lGa is a list of each of thoose subgraphs
+
+        For each of those sub graphs, all their nodes are merged until they only have a single node.
+        The main difficulty here , is to merge the polygons of those nodes.
+        Because GeomUtil.Polygon, does not support multiple Polygons, nodes of a graph Ga must be 
+        merged into a specific order.
+        This exaplains the dfs_successors and following in the code !:w
+
+
+
+        """
+
+        #
+        # Create a graph of adjascent cycles
+        #
+
+        Ga = nx.Graph()
+        Ga.pos ={}
+        for k in self.Gt.edge:
+            dk = self.Gt.edge[k]
+            for cy in dk:
+                try:
+                    segs = dk[cy]['segment']
+                except:
+                    segs=[]
+                for s in segs:
+                    if self.Gs.node[s]['name']=='AIR':
+                        if k not in Ga.node:
+                            Ga.add_node(k)
+                            Ga.pos[k]=self.Gt.pos[k]
+                        if cy not in Ga.node:
+                            Ga.add_node(cy)
+                            Ga.pos[cy]=self.Gt.pos[cy]
+                        Ga.add_edge(k,cy)
+
+        # deep copy of Gt
+        self.Gc = copy.deepcopy(self.Gt)
+
+        # list of connected subgraphs of Gt
+        lGa = nx.connected_component_subgraphs(Ga)
+
+        #dictionnary mapping
+        # key = old cycle ID :  value =new cycle ID
+        dmap={x:x for x in self.Gc.nodes()}
+
+
+        def merge_cycle(root,child):
+            """ method to merge a child cycle into a root cycle
+            """
+            try:
+                self.Gc.node[root]['polyg']+=self.Gc.node[child]['polyg'] # here the merging
+                self.Gc.node[root]['cycle']+=self.Gc.node[child]['cycle'] # here the merging
+            except:
+                import ipdb
+                ipdb.set_trace()
+            try:
+                self.Gc.node[root]['merged'].append(child)
+            except:
+                self.Gc.node[root]['merged']=[child]
+
+            dmap[child] = root
+
+            
+            self.Gc.add_edges_from([(root,x) for x in self.Gc.edge[child].keys()])
+            # update Gt
+            self.Gt.node[child]['merged'] = root
+            # a merged cycle is open
+            self.Gt.node[child]['isopen'] = True
+            self.Gt.node[root]['merged'] = root
+            self.Gc.remove_node(child)
+            self.Gc.pos[root]=tuple(self.Gc.node[root]['cycle'].g)
+
+
+        for Ga in lGa:
+
+            # root node of subgraph
+            r = Ga.nodes()[0]
+            cnctd = [r]
+            # depth first search successors tree rooted on r
+            # this return dict where keys are cycles and values
+            # are list of cycle (a.k.a. child ) connected to the key cycle
+            dn = nx.dfs_successors(Ga,r)
+
+            # merge 
+
+            # loop on each root cycles
+            for uk,k in enumerate(dn.keys()):
+                # loop on child cycles
+                for v in dn[k]:
+                    # 
+                    root =dmap[k]
+                    # if the child cycle has already been merged in a previous
+                    # loop; its ID has changed but thoose of its childs too. 
+                    # This update the ID of childs of v
+                    if v in dn.keys()[:uk]:
+                        # list of cycle to be modified
+                        lcy = dn[v]
+                        [dmap.update({c:root}) for c in lcy]
+
+                    merge_cycle(root,v)
+
+        # find diffractions of the layout
+        self._find_diffractions()
+
+
+
+
+
+    def buildGc_old(self):
+        """ 
+        DEPRECATED
+
+        This version of buildGc do not works well with
+        large layout. 
+        Indeed, the algorithm cannot merge large room
+        with multiple airwalls
+
+        build the graph of cycles
+
+
 
         Returns
         -------
@@ -8114,24 +8254,41 @@ class Layout(PyLayers):
             # depth first search successors tree rooted on r
             dn = nx.dfs_successors(Ga,r)
             Nlevel = len(dn)
+
             #
             # Probably it exists a simpler manner to obtain
             # the sequence of connected nodes
             #
             succ =[]
+
             while dn.keys()!=[]:
-                succ = succ+ dn.pop(r)
-                n = succ.pop()
-                if n in dn.keys():
-                    r = n
-                    cnctd.append(r)
-                else:
-                    cnctd.append(n)
+                
+                try:
+                    succ = succ+ dn.pop(r)
+                except:
+                    r = dn.pop()
+                if r ==102:
+                    import ipdb
+                    ipdb.set_trace()
+
+
+                for i in range(len(succ)):
                     try:
+                        n = succ.pop()
+                    except:
                         r = succ.pop()
                         cnctd.append(r)
-                    except:
                         break
+                    if n in dn.keys():
+                        r = n
+                        cnctd.append(r)
+                    else:
+                        cnctd.append(n)
+                        # try:
+                        #     r = succ.pop()
+                        #     cnctd.append(r)
+                        # except:
+                        #     break
             #for i in range(Nlevel):
             #    succ = dn.pop(r)
             #    cnctd = cnctd + succ
@@ -8145,6 +8302,8 @@ class Layout(PyLayers):
         #  for all conected components
         #  example licy = [[22,78,5],[3,4]] 2 cycles are connected
         #
+        import ipdb
+        ipdb.set_trace()
         merge2c=[]
         for licy in connected:
             root = licy[0]      # pick the first cycle as root
@@ -8195,6 +8354,30 @@ class Layout(PyLayers):
             # update pos of root cycle with new center of gravity
             self.Gc.pos[root]=tuple(self.Gc.node[root]['cycle'].g)
 
+        self._find_diffractions()
+
+
+
+
+        return(Ga)
+
+
+
+    def _find_diffractions(self):
+        """ Find diffractions points of the Layout
+            based on the angles in Gc
+
+            Returns
+            -------
+
+            Void
+
+            but update: 
+                self.ldiffin : list of diffractions points inside of the layout
+                self.ldiffout : list of diffractions points outside of the layout
+                self.ldiff : self.ldiffin+self.ldiffout
+
+        """
         #FIND DIFFRACTION POINTS 
         dangles = self.get_Gc_angles()
         # look for in the dictionnary 
@@ -8214,11 +8397,6 @@ class Layout(PyLayers):
         # This corresponds to degree 2 point with an adjascent airwall
         # (half-plane diffraction)
         self.ldiff = self.ldiff+list(self.degree[1])
-
-
-
-        return(Ga)
-
 
     def updatediff(self):
         """
