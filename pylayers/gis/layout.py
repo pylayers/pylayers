@@ -2400,11 +2400,12 @@ class Layout(PyLayers):
         #
 
         norm = np.array([t[1], -t[0], 0])
-        self.Gs.add_node(num, name=name)
-        self.Gs.add_node(num, z=z)
-        self.Gs.add_node(num, norm=norm)
-        self.Gs.add_node(num, transition=transition)
-        self.Gs.add_node(num, offset=offset)
+        self.Gs.add_node(num, name=name, 
+                              z=z,
+                              norm=norm,
+                              transition=transition,
+                              offset=offset,
+                              connect=[n1,n2])
 
         self.Gs.pos[num] = tuple((p1 + p2) / 2.)
         self.Gs.add_edge(n1, num)
@@ -5529,6 +5530,214 @@ class Layout(PyLayers):
         setattr(self,'dca', read_gpickle(os.path.join(path,'dca.gpickle')))
 
 
+    def buildGt_sh(self):
+        # I. get cycle bais
+        C = nx.algorithms.cycles.cycle_basis(self.Gs)
+        if C==[]:
+            C = [self.Gs]
+
+        # II. create the hull of the layout by merging all polygons 
+        # corresponding to cycles basis
+        poly=[]
+        for k,lnode in enumerate(C):
+            npoints = filter(lambda x : x <0 ,lnode)
+            coords  = map(lambda x : self.Gs.pos[x],npoints)
+            poly.append(sh.Polygon(coords))
+        # union all polygons
+        ma = cascaded_union(poly)
+        # transform into geomutil polygon
+        ma = geu.Polygon(ma)
+        ma.setvnodes(self)
+        self.ma = ma
+
+
+        ###### III .FIND POLYGONS
+        ###
+        # polygons of each cycle are found by finding the interesection between 
+        # all segments of the layout and the layout hull.
+        # The shapely diff return a multipolygon where all polygons corresponds to 
+        # a cycle
+        #
+
+        # get connected points from segments
+        connect = [self.Gs.node[i]['connect'] for i in self.Gs.nodes() if i>0]
+        # get their coordinates
+        lpos = np.array([(self.Gs.pos[i[0]],self.Gs.pos[i[1]]) for i in connect])
+        pp=[]
+        lines = []
+        for l in lpos:
+            line = sh.LineString([l[0], l[1]])
+            lines.append(line)
+        # create associated multilines (to the points)
+        ml = sh.MultiLineString(lines)
+        # create polygon from multiline by given a width to lines
+        mlp = ml.buffer(1e-9)
+        # difference between hull and linepolygones returns desired multipolygon
+        R=self.ma.difference(mlp)
+
+        # NOTE : At this points, polygons are separated but does not touches themself.
+        # There are not the polygons which are used in Gtbut temporary polygons to
+        # help the decompositions
+        # polygon will be corrected thereafter
+
+        self.Gt=nx.Graph()
+        self.Gt.pos={}
+
+
+
+
+        #### IV FIND VNODES and FINAL POLYGONS
+
+        # get allcoordinates of all pt and seg of the layout
+        Gsnodes = np.array(self.Gs.nodes())
+        # get node coordinates
+        nodept = [self.Gs.pos[i] for i in Gsnodes]
+        # transform into shapely points
+        shpt  = [sh.Point(pt) for pt in nodept]
+
+        # IV 1 get nodes and vnodes
+        for ui,r in enumerate(R):
+
+            # IV 1.a get vnode associated to the polygon
+            # get vnodes not in the correct order
+            uvn = np.where([r.buffer(1e-3).contains(p) for p in shpt])[0]
+            vnodes = Gsnodes[uvn]
+
+            # IV 1.b transform vnodes to an ordered cycle with Cycle class 
+            S = nx.subgraph(self.Gs,vnodes)
+            S.pos={}
+            S.pos.update({i:self.Gs.pos[i] for i in S.nodes()})
+            cycle = cycl.Cycle(S,vnodes)
+
+            # IV 1.c create a new polygon with correct vnodes and correct points
+            P = geu.Polygon(p=cycle.p,vnodes=cycle.cycle)
+
+            # IV 1.d add node to Gt + position
+            # By default a Layout cycle is defined as indoor
+            # unless it is separated from the outside cycle by an airwall
+            #
+            # The user should be able to set this boolean to false for a patio
+            #
+            # An outdoor cycle has no ceil reflection
+            lair = [x in self.name['AIR'] for x in vnodes if x >0]
+            if sum(lair)>0:
+                isopen = True
+            else:
+                isopen = False
+            # IV 1.e add node to Gt + position
+            # WARNING node id id ui +1 because cycle 0 is reserved to boundary cycle
+            self.Gt.add_node(ui+1,cycle=cycle,polyg=P,isopen=isopen,indoor=True)
+            self.Gt.pos.update({ui+1:np.array(P.centroid.xy)[:,0]})
+
+            
+
+
+        # IV 2. get edges
+        for n1 in self.Gt.nodes():
+            for n2 in self.Gt.nodes():
+                if n1!= n2:
+                    if self.Gt.node[n1]['polyg'].touches(self.Gt.node[n2]['polyg']):
+                        # find common segments
+                        seg = np.array([n for n in self.Gt.node[n1]['cycle'].cycle if (n in self.Gt.node[n2]['cycle'].cycle) and (n>0)])
+                        # if cycle are connected by at least a segmnet but not a point
+                        if len(seg)>0:
+                            self.Gt.add_edge(n1,n2,segment=seg)
+
+
+
+
+        #  V update Gs
+        #   V 1.Update graph Gs segment with their 2 cycles information
+        #
+        #   initialize a void list 'ncycles' for each segment of Gs
+        #
+        self._updGsncy()
+
+        #   V 2. add outside cycle (absorbant region index 0 )
+        #   if ncycles is a list which has only one element then the adjascent cycle is the
+        #   outside region (cycle 0)
+        self._addoutcy()
+
+
+        # VI  add node 0
+        #     add cycle <0 outside polygon
+        #
+        #   This shapely polygon has an interior ( TODO add hole vizualization
+        #   in Polygon object)
+        #
+        #    Cycles < 0 are outdoor
+        #    Cycles > 0 are indoor
+        #    Cycles = 0 exterior cycle (assumed outdoor)
+        S = nx.subgraph(self.Gs,self.ma.vnodes)
+        S.pos={}
+        S.pos.update({i:self.Gs.pos[i] for i in S.nodes()})
+        cycle = cycl.Cycle(S,self.ma.vnodes)
+        # in my comprehension, polygon associated to cycle 0 should be Layout.ma (layout mask)
+        # previosu code prefers a non valid polygon based on boundaries of axes
+        # with vnodes of the layout mask.
+        # For the moment I kept the previosu solution but the following comment line should be better
+        # self.Gt.add_node(0,polyg=self.ma,cycle=cycle,indoor=False,isopen=True)
+        boundary = geu.Polygon(tuple(self.ax),delta=5)
+        boundary.vnodes = self.ma.vnodes
+        self.Gt.add_node(0,polyg=self.ma,cycle=cycle,indoor=False,isopen=True)
+
+        self.Gt.pos[0]=(self.ax[0],self.ax[2])
+
+
+        #
+        #   VII - Connect cycle -1 to each cycle connected to the layout
+        #   boundary
+        #
+
+        # all segments of the Layout boundary
+        nseg = filter(lambda x : x >0 , boundary.vnodes)
+        # air segments of the Layout boundary
+        nsegair = filter(lambda x : x in self.name['AIR'],nseg)
+        # wall segments of the Layout boundary
+        nsegwall = filter(lambda x : x not in self.name['AIR'],nseg)
+
+        #
+        # ldiffin  : list of indoor diffraction points
+        # ldiffout : list of outdoor diffraction points (belong to layout boundary)
+        #
+
+        # self.ldiffin  = filter(lambda x : x not in boundary.vnodes,self.ldiff)
+        # self.ldiffout = filter(lambda x : x in boundary.vnodes,self.ldiff)
+
+        #
+        # boundary adjascent cycles
+        #
+
+        adjcyair = np.unique(np.array(map(lambda x : filter(lambda y: y!=0,
+                                      self.Gs.node[x]['ncycles'])[0],nsegair)))
+        adjcwall = np.unique(np.array(map(lambda x : filter(lambda y: y!=0,
+                                      self.Gs.node[x]['ncycles'])[0],nsegwall)))
+
+        for cy in adjcyair:
+            self.Gt.node[cy]['indoor'] = False
+            self.Gt.node[cy]['isopen'] = True
+            self.Gt.add_edge(0,cy)
+
+        for cy in adjcwall:
+            self.Gt.add_edge(0,cy)
+
+        #
+        #   VIII -  Construct the list of interactions associated to each cycle
+        #
+        # Interaction labeling convention
+        #
+        #   tuple (npoint,)  : Diffraction on point npoint
+        #   tuple (nseg,ncycle) : Reflection on nseg toward cycle ncycle
+        #   tuple (nseg,cy0,cy1) : Transmission from cy0 to cy1 through nseg
+        #
+        #   At that stage the diffraction points are not included
+        #   not enough information available.
+        #   The diffraction points are not known yet
+        #
+        self._interlist()
+
+
+
     def buildGt(self):
         """ Built topological graph Gt
 
@@ -5621,7 +5830,6 @@ class Layout(PyLayers):
         #
         #  5 - connect cycle which share at least one segment
         #
-
         for k in combinations(self.Gt.nodes(), 2):
 
             vnodes0 = np.array(self.Gt.node[k[0]]['cycle'].cycle)
@@ -5690,12 +5898,13 @@ class Layout(PyLayers):
         #    Cycles = 0 exterior cycle (assumed outdoor)
 
         # build a polygon including all the layout + 5 meters
+        import ipdb
+        ipdb.set_trace()
         p1 = geu.Polygon(tuple(self.ax),delta=5)
         self.ma = self.mask()
         p2 = p1.difference(self.ma)
         boundary = geu.Polygon(p2)
         boundary.vnodes = self.ma.vnodes
-        self.Gt.add_node(0,polyg=boundary)
         self.Gt.add_node(0,polyg=boundary)
         self.Gt.add_node(0,indoor=False,isopen=True)
         self.Gt.pos[0]=(self.ax[0],self.ax[2])
