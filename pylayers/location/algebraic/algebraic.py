@@ -1078,6 +1078,7 @@ class algloc(object):
                 for i in range(sh1[1]):
                     f1 = P - rn_toa[:, i:i + 1]
                     FIM += np.dot(f1 , f1.T) / ((rg_std[i] ** 2) *np.dot(f1.T , f1))
+                    FIM += np.dot(f1 , f1.T) / ((rg_ramerstd[i] ** 2) *np.dot(f1.T , f1))
 
             elif toa == 0 and tdoa == 0:
                 rn_rss = self.nodes['RN_RSS']

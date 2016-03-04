@@ -294,6 +294,29 @@ class Cycles(nx.DiGraph):
                 return(self)
         return(self)
 
+
+    def show(self,**kwargs):
+        """ show cycles
+
+
+        """
+
+        #nx.draw_networkx_edges(self.G,self.G.pos,width=2,edge_color=color,alpha=0.4)
+        if 'fig' in kwargs:
+            fig = kwargs['fig']
+        else:
+            fig = plt.figure()
+        if 'ax' in kwargs:
+            ax=kwargs['ax']
+        else:
+            ax = fig.add_subplot(111)
+        
+        [self.node[c]['cycle'].show(fig=fig,ax=ax) for c in self.nodes()]
+
+        return fig,ax
+
+
+
 class Cycle(object):
     """ Graph cycle class
 
@@ -771,9 +794,9 @@ class Cycle(object):
         if (incl) & (len(u)>0):
             ee1   = e1[~np.in1d(e1,path)]
             ee2   = e2[~np.in1d(e2,path)]
-            r     = np.hstack((ee1,ee2))
+            hs     = np.hstack((ee1,ee2))
             cycle = np.array([],dtype=int)
-            for kt in r:
+            for kt in hs:
                 nb = Gunion.neighbors(kt)
                 cycle = np.hstack((cycle,nb[0],kt,nb[1]))
             cycle = np.unique(cycle)
@@ -790,7 +813,21 @@ class Cycle(object):
 
             return(False,cyout)
         if (incl) & (len(v)>0):
-            return(True,None)
+            # seek where punctual is in both cycles
+            unc1 = np.where(self.cycle==path)[0]
+            unc2 = np.where(cyin.cycle==path)[0]
+            # to pu the punctual point as 1st node of the cycle
+            cyinr = np.roll(cyin.cycle,-unc2-1)
+            cycle = np.insert(self.cycle,unc1+1,cyinr)
+            G     = nx.subgraph(Gunion,cycle)
+            G.pos = {}
+            G.pos.update({node: Gunion.pos[node] for node in Gunion})
+            cyout = Cycle(G)
+            cyout.G=G
+            cyout.cycle=cycle
+            # import ipdb
+            # ipdb.set_trace()
+            return(True,cyout)
         else:
             return(False,None)
 

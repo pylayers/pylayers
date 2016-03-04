@@ -4601,10 +4601,6 @@ def check_point_unicity(A):
     >>> check_point_unicity(aa.T)
     [4, 10]
 
-
-
-
-
     """
     similar = []
     for ua in xrange(len(A)):
