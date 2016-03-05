@@ -5357,10 +5357,9 @@ class Layout(PyLayers):
                 # but the partial rebuild coded & comment at the end in _convexify
                 # causes crash in buildGc at 2nd run of build(convex=True) on the layout
                 #
-                # self.buildGt()
+                self.buildGt()
 
             self.lbltg.extend('t')
-
         if 'c' in graph:
             if verbose:
                 print "Gc"
@@ -5559,11 +5558,13 @@ class Layout(PyLayers):
 
         # II. create the hull of the layout by merging all polygons
         # corresponding to cycles basis
+
         poly=[]
         for k,lnode in enumerate(C):
             npoints = filter(lambda x : x <0 ,lnode)
             coords  = map(lambda x : self.Gs.pos[x],npoints)
             poly.append(sh.Polygon(coords))
+
         # union all polygons
         ma = cascaded_union(poly)
         # transform into geomutil polygon
@@ -5574,9 +5575,9 @@ class Layout(PyLayers):
 
         ###### III .FIND POLYGONS
         ###
-        # polygons of each cycle are found by finding the interesection between
+        # polygons of each cycle are determined by finding the intersection between
         # all segments of the layout and the layout hull.
-        # The shapely diff return a multipolygon where all polygons corresponds to
+        # The shapely difference function returns a multipolygon which all polygons corresponds to
         # a cycle
         #
 
@@ -5654,7 +5655,6 @@ class Layout(PyLayers):
             self.Gt.add_node(ui+1,cycle=cycle,polyg=P,isopen=isopen,indoor=True)
             self.Gt.pos.update({ui+1:np.array(P.centroid.xy)[:,0]})
 
-            
         # IV 2. get edges
         for n1 in self.Gt.nodes():
             for n2 in self.Gt.nodes():
@@ -5676,8 +5676,6 @@ class Layout(PyLayers):
         #   initialize a void list 'ncycles' for each segment of Gs
         #
         self._updGsncy()
-
-        
 
         # get segments of the mask ( equivalent to thoose connected to 0)
         # seg0 = [i for i in self.ma.vnodes if i >0]
