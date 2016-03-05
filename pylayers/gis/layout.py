@@ -5557,7 +5557,7 @@ class Layout(PyLayers):
         if C==[]:
             C = [self.Gs]
 
-        # II. create the hull of the layout by merging all polygons 
+        # II. create the hull of the layout by merging all polygons
         # corresponding to cycles basis
         poly=[]
         for k,lnode in enumerate(C):
@@ -5574,9 +5574,9 @@ class Layout(PyLayers):
 
         ###### III .FIND POLYGONS
         ###
-        # polygons of each cycle are found by finding the interesection between 
+        # polygons of each cycle are found by finding the interesection between
         # all segments of the layout and the layout hull.
-        # The shapely diff return a multipolygon where all polygons corresponds to 
+        # The shapely diff return a multipolygon where all polygons corresponds to
         # a cycle
         #
 
