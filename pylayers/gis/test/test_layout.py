@@ -7,7 +7,9 @@ import matplotlib.pyplot as plt
 L = Layout()
 lL = L.ls()
 for tL in lL:
-    print tL 
+    print  'Layout :',tL
+    L=Layout(tL)
+    L.build()
 #f = plt.figure(figsize=(20,10))
 #plt.axis('off')
 #f,a = L.showG('s',nodes=False,fig=f)
