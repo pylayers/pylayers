@@ -5572,6 +5572,7 @@ class Layout(PyLayers):
         self.ma = ma
 
 
+
         ###### III .FIND POLYGONS
         ###
         # polygons of each cycle are found by finding the interesection between 
@@ -5605,9 +5606,19 @@ class Layout(PyLayers):
 
         assert isinstance(R,sh.MultiPolygon), "Shapely.MultiPolygon decomposition Failed"
 
+        ####################
+        ### This part manage layout not well described, where 
+        ### polygons remains in the middle of others
+        ######
+        # if !=0 it means some polygons are inside of others
+        # which is not allowed. some Layout modification will be perofmed
+        uin = np.where([(p.area!=sh.Polygon(p.exterior).area) for p in R])[0]
+
+
+        
 
         # NOTE : At this points, polygons are separated but does not touches themself.
-        # There are not the polygons which are used in Gtbut temporary polygons to
+        # There are not the polygons which are used in Gt but temporary polygons to
         # help the decompositions
         # polygon will be corrected thereafter
 
@@ -5615,7 +5626,8 @@ class Layout(PyLayers):
         self.Gt.pos={}
 
 
-
+        import ipdb
+        ipdb.set_trace()
 
         #### IV FIND VNODES and FINAL POLYGONS
 
@@ -5627,7 +5639,9 @@ class Layout(PyLayers):
         shpt  = [sh.Point(pt) for pt in nodept]
         # IV 1 get nodes and vnodes
         for ui,r in enumerate(R):
-
+            if ui in uin:
+                import ipdb
+                ipdb.set_trace()
             # IV 1.a get vnode associated to the polygon
             # get vnodes not in the correct order
             uvn = np.where([r.buffer(1e-3).contains(p) for p in shpt])[0]
@@ -5676,7 +5690,8 @@ class Layout(PyLayers):
                             self.Gt.add_edge(n1,n2,segment=seg)
 
 
-
+        import ipdb
+        ipdb.set_trace()
 
 
         #  V update Gs
@@ -5746,7 +5761,8 @@ class Layout(PyLayers):
         #
         # boundary adjascent cycles
         #
-
+        import ipdb
+        ipdb.set_trace()
         adjcyair = np.unique(np.array(map(lambda x : filter(lambda y: y!=0,
                                       self.Gs.node[x]['ncycles'])[0],nsegair)))
         adjcwall = np.unique(np.array(map(lambda x : filter(lambda y: y!=0,
@@ -6272,7 +6288,8 @@ class Layout(PyLayers):
                 ####
                 #### 1 Determine if pt convex in cycle
                 ####
-
+                import ipdb
+                ipdb.set_trace()
                 if not self.Gt.node[n]['polyg'].isconvex():#self.Gt.node[n]['indoor']:
                     no = self.Gt.node[n]['cycle'].cycle
                     cvex,ccve= self.Gt.node[n]['polyg'].ptconvex2()
