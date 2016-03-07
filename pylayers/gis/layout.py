@@ -6263,6 +6263,7 @@ class Layout(PyLayers):
         # lacy : list of added cycles
         lacy =[]
         Gt=copy.deepcopy(self.Gt)
+        self.showG('s',aw=1)
         for n in self.Gt.nodes():
             #if indoor cycle
             if n > 0:
@@ -6314,6 +6315,7 @@ class Layout(PyLayers):
                         #
                         cpolys = []
                         nbpolys = len(polys)
+
                         while polys !=[]:
                             p = polys.pop(0)
                             for ip2,p2 in enumerate(polys):
@@ -6363,6 +6365,27 @@ class Layout(PyLayers):
                             ptmp.setvnodes(self)
                             ncpol.append(ptmp)
                             vnodes.extend(ptmp.vnodes)
+
+                        ### 4bis 
+                        # Check if all the original area is covered 
+                        # sometimes, area surrounded by 2 new airwalls is not found
+                        # the following code re-add it.
+                        cpdiff=self.Gt.node[n]['polyg'].difference(cascaded_union(cpolys))
+                        if isinstance(cpdiff,sh.Polygon):
+                            cpdiff=sh.MultiPolygon([cpdiff])
+                        if isinstance(cpdiff,sh.MultiPolygon):
+                            for cp in cpdiff:
+                                ptmp = geu.Polygon(cp)
+                                ptmp.setvnodes(self)
+                                ncpol.append(ptmp)
+                                vnodes.extend(ptmp.vnodes)
+
+
+
+
+                        # [i.plot(fig=plt.gcf(),ax=plt.gca(),color='g') for i in ncpol]
+                        # plt.draw()
+
                         #air walls to be deleted (because origin Delaunay triangle
                         # has been merged )
                         daw = filter(lambda x: x not in vnodes,naw)
@@ -6377,6 +6400,7 @@ class Layout(PyLayers):
                         lcyid = [n] + range(ncy+1,ncy+(nbpolys))
                         lacy.extend(lcyid)
                         for ip,p in enumerate(ncpol):
+
                             # in order to obtain p.xy
                             cyid = lcyid[ip]
                             # replace by new ones
