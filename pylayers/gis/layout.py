@@ -5357,9 +5357,10 @@ class Layout(PyLayers):
                 # but the partial rebuild coded & comment at the end in _convexify
                 # causes crash in buildGc at 2nd run of build(convex=True) on the layout
                 #
-                self.buildGt()
+                # self.buildGt()
 
             self.lbltg.extend('t')
+
         if 'c' in graph:
             if verbose:
                 print "Gc"
@@ -5531,40 +5532,38 @@ class Layout(PyLayers):
 
     def buildGt(self,check=True):
 
-        # def pltpoly(poly,fig=[],ax=[]):
-        #     if fig == []:
-        #         fig=plt.gcf()
-        #     if ax == []:
-        #         ax=plt.gca()
-        #     mpl = [PolygonPatch(x) for x in poly]
-        #     [ax.add_patch(x) for x in mpl]
-        #     plt.axis(self.ax)
-        #     plt.draw()
+        def pltpoly(poly,fig=[],ax=[]):
+            if fig == []:
+                fig=plt.gcf()
+            if ax == []:
+                ax=plt.gca()
+            mpl = [PolygonPatch(x) for x in poly]
+            [ax.add_patch(x) for x in mpl]
+            plt.axis(self.ax)
+            plt.draw()
 
 
-        # def pltGt(Gt,fig=[],ax=[]):
-        #     if fig == []:
-        #         fig=plt.gcf()
-        #     if ax == []:
-        #         ax=plt.gca()
-        #     [Gt.node[x]['poly'].plot(fig=fig,ax=ax,alpha=0.2) for x in Gt.nodes()]
-        #     plt.axis(self.ax)
-        #     plt.draw()
+        def pltGt(Gt,fig=[],ax=[]):
+            if fig == []:
+                fig=plt.gcf()
+            if ax == []:
+                ax=plt.gca()
+            [Gt.node[x]['poly'].plot(fig=fig,ax=ax,alpha=0.2) for x in Gt.nodes()]
+            plt.axis(self.ax)
+            plt.draw()
 
         # I. get cycle bais
         C = nx.algorithms.cycles.cycle_basis(self.Gs)
         if C==[]:
             C = [self.Gs]
 
-        # II. create the hull of the layout by merging all polygons
+        # II. create the hull of the layout by merging all polygons 
         # corresponding to cycles basis
-
         poly=[]
         for k,lnode in enumerate(C):
             npoints = filter(lambda x : x <0 ,lnode)
             coords  = map(lambda x : self.Gs.pos[x],npoints)
             poly.append(sh.Polygon(coords))
-
         # union all polygons
         ma = cascaded_union(poly)
         # transform into geomutil polygon
@@ -5575,9 +5574,9 @@ class Layout(PyLayers):
 
         ###### III .FIND POLYGONS
         ###
-        # polygons of each cycle are determined by finding the intersection between
+        # polygons of each cycle are found by finding the interesection between 
         # all segments of the layout and the layout hull.
-        # The shapely difference function returns a multipolygon which all polygons corresponds to
+        # The shapely diff return a multipolygon where all polygons corresponds to 
         # a cycle
         #
 
@@ -5592,10 +5591,20 @@ class Layout(PyLayers):
             lines.append(line)
         # create associated multilines (to the points)
         ml = sh.MultiLineString(lines)
-        # create polygon from multiline by given a width to lines
-        mlp = ml.buffer(1e-9)
-        # difference between hull and linepolygones returns desired multipolygon
-        R=self.ma.difference(mlp)
+
+        # increase buffer size ( width of polyline) to create a multipolygon
+        R= []
+        buffersize = 1e-9
+        while  not isinstance(R ,sh.MultiPolygon) and buffersize<1e-3  :
+            # create polygon from multiline by given a width to lines
+            mlp = ml.buffer(buffersize)
+            # difference between hull and linepolygones returns desired multipolygon
+            R=self.ma.difference(mlp)
+            # increase size of the buffer
+            buffersize = buffersize*10
+
+        assert isinstance(R,sh.MultiPolygon), "Shapely.MultiPolygon decomposition Failed"
+
 
         # NOTE : At this points, polygons are separated but does not touches themself.
         # There are not the polygons which are used in Gtbut temporary polygons to
@@ -5616,7 +5625,6 @@ class Layout(PyLayers):
         nodept = [self.Gs.pos[i] for i in Gsnodes]
         # transform into shapely points
         shpt  = [sh.Point(pt) for pt in nodept]
-
         # IV 1 get nodes and vnodes
         for ui,r in enumerate(R):
 
@@ -5655,6 +5663,7 @@ class Layout(PyLayers):
             self.Gt.add_node(ui+1,cycle=cycle,polyg=P,isopen=isopen,indoor=True)
             self.Gt.pos.update({ui+1:np.array(P.centroid.xy)[:,0]})
 
+            
         # IV 2. get edges
         for n1 in self.Gt.nodes():
             for n2 in self.Gt.nodes():
@@ -5677,17 +5686,14 @@ class Layout(PyLayers):
         #
         self._updGsncy()
 
+        
+
         # get segments of the mask ( equivalent to thoose connected to 0)
         # seg0 = [i for i in self.ma.vnodes if i >0]
         # [self.Gs.node[i]['ncycles'].append(0) for i in seg0]
 
-        self._addoutcy()
-        if check :
-            print "check len(ncycles) == 2",
-            cncy = np.array([len(self.Gs.node[i]['ncycles']) for i in self.Gs.nodes() if i >0 ])
-            ucncy = np.where(cncy!=2)[0]
-            assert len(ucncy)==0,"Some segments are connected to more than 2 cycles"
-            print "passed"
+        self._addoutcy(check)
+
         #   V 2. add outside cycle (absorbant region index 0 )
         #   if ncycles is a list which has only one element then the adjascent cycle is the
         #   outside region (cycle 0)
@@ -6034,13 +6040,22 @@ class Layout(PyLayers):
 
 
 
-    def _addoutcy(self):
+    def _addoutcy(self,check=False):
         """ add outside cycle (absorbant region index 0 )
         #   if ncycles is a list which has only one element then the adjascent
         #   cycle is the  outside region (cycle 0)
         """
         seg0 = [i for i in self.ma.vnodes if i >0]
         [self.Gs.node[i]['ncycles'].append(0) for i in seg0]
+        if check :
+            print "check len(ncycles) == 2",
+            nodes = self.Gs.nodes()
+            cncy = np.array([len(self.Gs.node[i]['ncycles']) for i in nodes if i >0 ])
+            ucncyl = np.where(cncy<2)[0]
+            ucncym = np.where(cncy>2)[0]
+            assert len(ucncyl)==0,"Some segments are connected to LESS than 2 cycles" + str(np.array(nodes)[ucncyl])
+            assert len(ucncym)==0,"Some segments are connected to MORE than 2 cycles" + str(np.array(nodes)[ucncym])
+            print "passed"
         # for ns in self.Gs.node:
         #     if ns>0: #segment number
         #         if len(self.Gs.node[ns]['ncycles'])==1:
@@ -6209,7 +6224,7 @@ class Layout(PyLayers):
         self._interlist(nodelist=lncy)
 
 
-    def _convexify(self):
+    def _convexify(self,check=False):
         """ determine which cycles are not convex and convexify it.
 
             if a cycle is non convex
@@ -6410,10 +6425,11 @@ class Layout(PyLayers):
                     self.Gt.add_edge(k[0], k[1],segment= segment)
 
 
+        self.mask()
         # #update self.Gs.node[x]['ncycles']
         self._updGsncy()
         # #add outside cycle to Gs.node[x]['ncycles']
-        self._addoutcy()
+        self._addoutcy(check)
         # #update interaction list into Gt.nodes (cycles)
         self._interlist(nodelist=lacy)
 
