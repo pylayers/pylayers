@@ -6049,8 +6049,8 @@ class Layout(PyLayers):
         [self.Gs.node[i]['ncycles'].append(0) for i in seg0]
         if check :
             print "check len(ncycles) == 2",
-            nodes = self.Gs.nodes()
-            cncy = np.array([len(self.Gs.node[i]['ncycles']) for i in nodes if i >0 ])
+            nodes = [i for i in self.Gs.nodes() if i>0]
+            cncy = np.array([len(self.Gs.node[i]['ncycles']) for i in nodes])
             ucncyl = np.where(cncy<2)[0]
             ucncym = np.where(cncy>2)[0]
             assert len(ucncyl)==0,"Some segments are connected to LESS than 2 cycles" + str(np.array(nodes)[ucncyl])
@@ -6263,7 +6263,6 @@ class Layout(PyLayers):
         # lacy : list of added cycles
         lacy =[]
         Gt=copy.deepcopy(self.Gt)
-        self.showG('s',aw=1)
         for n in self.Gt.nodes():
             #if indoor cycle
             if n > 0:
