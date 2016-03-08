@@ -676,7 +676,8 @@ class Polygon(PyLayers,shg.Polygon):
             default #abcdef"
         alpha :  float
             transparency   (default 0.8)
-
+        vnodes : bool
+            display vnodes
         Examples
         --------
 
@@ -702,7 +703,7 @@ class Polygon(PyLayers,shg.Polygon):
         defaults = {'show': False,
                 'fig': [],
                 'ax': [],
-                'label':False,
+                'vnodes':False,
                 'color':'#abcdef',
                 'edgecolor':'#000000',
                 'alpha':0.8 ,
@@ -735,7 +736,7 @@ class Polygon(PyLayers,shg.Polygon):
                 color = kwargs['color'],
                 alpha = kwargs['alpha'],
                 ec = kwargs['edgecolor'])
-        if kwargs['label']:
+        if kwargs['vnodes']:
             for k in range(len(numpt)):
                 ax.text(x[k],y[k],numpt[k])
 

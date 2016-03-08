@@ -5530,6 +5530,291 @@ class Layout(PyLayers):
         setattr(self,'dca', read_gpickle(os.path.join(path,'dca.gpickle')))
 
 
+
+    def polysh2geu(self,poly):
+        """ transform sh.Polygon into geu.Polygon
+        """
+
+        Gsnodes = np.array(self.Gs.nodes())
+        # get node coordinates
+        nodept = [self.Gs.pos[i] for i in Gsnodes]
+        # transform into shapely points
+        shpt  = [sh.Point(pt) for pt in nodept]
+        # IV 1 get nodes and vnodes
+        # Create a ring to avoid taking points inside the polygon.
+        # This helps to avoid polygon inside polygons
+        # take exterior of polygon. embose it with buffer and find difference with original polygon*.
+        polye = poly.intersection((poly.exterior).buffer(1e-3))
+
+        uvn = np.where([polye.buffer(1e-3).contains(p) for p in shpt])[0]
+        vnodes = Gsnodes[uvn]
+        # IV 1.b transform vnodes to an ordered cycle with Cycle class 
+        # NOTE ! Using class cycle is MANDATORY
+        # because, some extra vnodes can be pickup during the contain 
+        # process before
+        S = nx.subgraph(self.Gs,vnodes)
+        S.pos={}
+        S.pos.update({i:self.Gs.pos[i] for i in S.nodes()})
+
+        cycle = cycl.Cycle(S)
+        # IV 1.c create a new polygon with correct vnodes and correct points
+        P = geu.Polygon(p=cycle.p,vnodes=cycle.cycle)
+        return P
+
+    def getangles(self,poly, unit= 'rad', inside=True):
+
+        """ find angles of a single Gc cycle of the layout. This is
+            based on merged cycle (cycles of Gc a.k.a. airwall merged
+            cycles) 
+
+        Parameters
+        ----------
+        c : int
+            Gc cyle number
+        unit : str
+            'deg' : degree values
+            'rad' : radian values
+        inside : bollean
+            True :  compute the inside angles of the cycle.
+                    (a.k.a. in regard of the interior of the polygon) 
+            False : compute the outside angles of the cycle.
+                    (a.k.a.  in regard of the exterior of the polygon)
+
+        Return
+        ------
+
+        (u,a)
+        u : int (Np)
+            point number
+        a : float (Np)
+            associated angle to the point
+
+
+        Notes
+        -----
+
+        http://www.mathopenref.com/polygonexteriorangles.html
+
+        """
+
+        if isinstance(poly,sh.Polygon):
+            poly = polysh2geu(poly)
+        
+        cycle=poly.vnodes
+
+
+
+        upt = cycle[cycle<0]
+
+        # rupt=np.roll(upt,1)         # for debug
+        # rupt2=np.roll(upt,-1)         # for debug
+        pt = self.pt[:,self.iupnt[-upt]]
+        if geu.SignedArea(pt)<0:
+            upt = upt[::-1]
+            pt = pt [:,::-1]
+
+
+        ptroll = np.roll(pt,1,axis=1)
+
+        v = pt-ptroll
+        v = np.hstack((v,v[:,0][:,None]))
+        vn = v / np.sqrt(np.sum((v)*(v),axis=0))
+        v0 = vn[:,:-1]
+        v1 = vn[:,1:]
+        cross = np.cross(v0.T,v1.T)
+        dot = np.sum(v0*v1,axis=0)
+        ang = np.arctan2(cross,dot)
+        uneg = ang <0
+        ang[uneg] = -ang[uneg]+np.pi
+        ang[~uneg] = np.pi-ang[~uneg]
+
+        if not inside : 
+            ang = 2*np.pi-ang
+
+
+        if unit == 'deg':
+            return upt,ang*180/np.pi
+        elif unit == 'rad':
+            return upt,ang
+            # atan2(cross(a,b)), dot(a,b))
+
+
+    def _delaunay(self,poly,polyholes=[]):
+        """ make a delaunay paritioning on poly.
+
+            If polynole == []
+
+                       
+                if a cycle is non convex
+
+                1- find its polygon
+                2- partition polygon into convex polygons (Delaunay)
+                3- try to merge partitioned polygons in order to obtain
+                   the minimal number of convex polygons
+                4- re-number/re-create Gt by creating  new 'convex' cycles
+                   from those convex polygons
+
+
+
+
+            If Polyhole != []
+            polygon poly contains holes (polyholes)
+
+            This return a partioning of poly into convex polygon
+            without holes ( voronoi)
+
+        Parameters
+        ----------
+            poly : geu.Polygon
+            polyhole : list of geu.Polygons
+
+
+        Notes
+        -----
+
+        The algorithm updates the Gt nodes and edges created into self.buildGt
+        by adding new nodes and connnections
+
+        See Also
+        --------
+
+        pylayers.gis.layout.buildGt
+        pylayers.gis.layout.add_segment
+        pylayers.gis.layout.del_segment
+        pylayers.util.geomutil.Polygon
+        sp.spatial.Delaunay
+        """
+        cvex,ccve= poly.ptconvex2()
+        ucs= cvex+ccve
+
+        # keep all convex point (in + out) to build teh delaunay triangulation
+
+        if polyholes != []:
+            tmp=[]
+            for p in polyholes:
+                cvexh,ccveh = p.ptconvex2()
+                tmp = tmp + cvexh +ccveh
+
+            ucs=ucs+tmp
+
+
+        if len(ucs) !=0 :
+            pucs = array(map(lambda x: self.Gs.pos[x], ucs))
+            pucs = np.vstack((pucs,pucs[-1]))
+            ####
+            #### 2 perform a Delaunay Partioning
+            ####
+            if len(ucs) >2:
+                trid=sp.spatial.Delaunay(pucs)
+                tri =trid.simplices
+                polys = []
+                naw = []
+                for t in tri:
+                    ts = geu.Polygon(pucs[t])
+                    # check if the new polygon is contained into
+                    #the original polygon (non guaratee by Delaunay)
+                    C0 = poly.contains(ts)
+                    if polyholes == []:
+                        C=[False]
+                    else: 
+                        C = [ii.contains(ts) for ii in polyholes]
+
+                    # if poly contains triangle but note the polyholes
+                    if C0 and not np.any(C):
+                        cp =ts
+                        cp.setvnodes(self)
+                        uaw = np.where(cp.vnodes == 0)[0]
+                        lvn = len(cp.vnodes)
+                        for i in uaw:
+                            #keep trace of created airwalls, because some
+                            #of them will be destroyed in step 3.
+                            naw.append(self.add_segment(
+                                       cp.vnodes[np.mod(i-1,lvn)],
+                                       cp.vnodes[np.mod(i+1,lvn)]
+                                       ,name='AIR'))
+                        polys.append(cp)
+            #
+            # 3. merge delaunay triangulation in order to obtain
+            #   the larger convex polygons partioning
+            #
+            cpolys = []
+            nbpolys = len(polys)
+
+            while polys !=[]:
+                p = polys.pop(0)
+                for ip2,p2 in enumerate(polys):
+                    conv=False
+                    inter = p.intersection(p2)
+                    #if 2 triangles have a common segment
+                    pold = p
+                    if isinstance(inter,sh.LineString):
+                        p = p + p2
+                        if p.isconvex():
+                            polys.pop(ip2)
+                            polys.insert(0, p)
+                            conv=True
+                            break
+                        else:
+                            # if pold not in cpolys:
+                            #     cpolys.append(pold)
+                            p = pold
+                # if (ip2 >= len(polys)):# and (conv):
+                # if conv :
+                #     if p not in cpolys:
+                #         cpolys.append(p)
+                if not conv:#else:
+                    if pold not in cpolys:
+                        cpolys.append(pold)
+                if len(polys) == 0:
+                    cpolys.append(p)
+
+            #### 4. ensure the correct vnode numerotaion of the polygons
+            #### and remove unecessary airwalls
+
+            # ncpol : new created polygons
+            ncpol = []
+            vnodes=[]
+
+            for p in cpolys:
+                interpoly = poly.intersection(p)
+                if isinstance(interpoly,sh.MultiPolygon):
+                    raise AttributeError('multi polygon encountered')
+                else :
+                    try:
+                        ptmp = geu.Polygon(interpoly)
+                    except:
+                        import ipdb
+                        ipdb.set_trace()
+
+                ptmp.setvnodes(self)
+                ncpol.append(ptmp)
+                vnodes.extend(ptmp.vnodes)
+
+
+            # if no polyholes
+            if polyholes == []:
+                ### 4bis 
+                # Check if all the original area is covered 
+                # sometimes, area surrounded by 2 new airwalls is not found
+                # the following code re-add it.
+                cpdiff=poly.difference(cascaded_union(cpolys))
+                if isinstance(cpdiff,sh.Polygon):
+                    cpdiff=sh.MultiPolygon([cpdiff])
+                if isinstance(cpdiff,sh.MultiPolygon):
+                    for cp in cpdiff:
+                        ptmp = geu.Polygon(cp)
+                        ptmp.setvnodes(self)
+                        ncpol.append(ptmp)
+                        vnodes.extend(ptmp.vnodes)
+
+
+
+            daw = filter(lambda x: x not in vnodes,naw)
+
+            for d in daw:
+                self.del_segment(d,verbose=False)
+        return ncpol
+
     def buildGt(self,check=True):
 
         def pltpoly(poly,fig=[],ax=[]):
@@ -5537,7 +5822,7 @@ class Layout(PyLayers):
                 fig=plt.gcf()
             if ax == []:
                 ax=plt.gca()
-            mpl = [PolygonPatch(x) for x in poly]
+            mpl = [PolygonPatch(x,alpha=0.2) for x in poly]
             [ax.add_patch(x) for x in mpl]
             plt.axis(self.ax)
             plt.draw()
@@ -5551,6 +5836,9 @@ class Layout(PyLayers):
             [Gt.node[x]['poly'].plot(fig=fig,ax=ax,alpha=0.2) for x in Gt.nodes()]
             plt.axis(self.ax)
             plt.draw()
+
+
+
 
         # I. get cycle bais
         C = nx.algorithms.cycles.cycle_basis(self.Gs)
@@ -5570,7 +5858,6 @@ class Layout(PyLayers):
         ma = geu.Polygon(ma)
         ma.setvnodes(self)
         self.ma = ma
-
 
 
         ###### III .FIND POLYGONS
@@ -5606,60 +5893,88 @@ class Layout(PyLayers):
 
         assert isinstance(R,sh.MultiPolygon), "Shapely.MultiPolygon decomposition Failed"
 
+
+
         ####################
+        #### Manage inner hole in polygons
+        #### ------------------------------
         ### This part manage layout not well described, where 
         ### polygons remains in the middle of others
         ######
         # if !=0 it means some polygons are inside of others
         # which is not allowed. some Layout modification will be perofmed
-        uin = np.where([(p.area!=sh.Polygon(p.exterior).area) for p in R])[0]
+        Rgeu = []
+        contain={}
+        for ur,r in enumerate(R):
+            Rgeu.append(self.polysh2geu(r))
+            # if area are not the same, it means that there is inner holes in r
+            if not np.allclose(Rgeu[ur].area,r.area):
+                # detect inclusion
+                uc = np.where([Rgeu[ur].contains(i) for i in R])[0]
+                contain[ur]=[c for c in uc if c != ur]
+
+        # split polygone with holes into several polygons without holes
+        for k in contain:
+            polyholes=[Rgeu[i] for i in contain[k]]
+            ncpol = self._delaunay(Rgeu[k],polyholes=polyholes)
+            Rgeu.pop(k)
+            Rgeu.extend(ncpol)
 
 
+
+        ####################
+        #### Manage Non convex polygons
+        #### -------------------
+        #### 1 . determine which polygons are not convex
+        #### 2 . apply a delaunay and tranform a single non convexpolygon
+        ###      into several convex ( self.delaunay)
+        ###  3. remove old non convex polygon and readd new convex ones.
+        ncpol={}
+        for ur,r in enumerate(Rgeu):
+            if not r.isconvex():
+                ncpol[ur] = self._delaunay(r)
+        Rgeu = np.delete(Rgeu,ncpol.keys()).tolist()
+        for k in ncpol:
+            Rgeu.extend(ncpol[k])
         
+        ####################
+        #### Manage  convex hull of the layout
+        #### -------------------
 
-        # NOTE : At this points, polygons are separated but does not touches themself.
-        # There are not the polygons which are used in Gt but temporary polygons to
-        # help the decompositions
-        # polygon will be corrected thereafter
+
+
 
         self.Gt=nx.Graph()
         self.Gt.pos={}
 
 
-        import ipdb
-        ipdb.set_trace()
-
         #### IV FIND VNODES and FINAL POLYGONS
 
-        # get allcoordinates of all pt and seg of the layout
-        Gsnodes = np.array(self.Gs.nodes())
-        # get node coordinates
-        nodept = [self.Gs.pos[i] for i in Gsnodes]
-        # transform into shapely points
-        shpt  = [sh.Point(pt) for pt in nodept]
+        for n in self.Gs.node:
+            if n>0:
+                self.Gs.node[n]['ncycles']=[]
         # IV 1 get nodes and vnodes
-        for ui,r in enumerate(R):
-            if ui in uin:
-                import ipdb
-                ipdb.set_trace()
-            # IV 1.a get vnode associated to the polygon
-            # get vnodes not in the correct order
-            uvn = np.where([r.buffer(1e-3).contains(p) for p in shpt])[0]
-            vnodes = Gsnodes[uvn]
+        for ui,p in enumerate(Rgeu):
 
-            # IV 1.b transform vnodes to an ordered cycle with Cycle class 
-            # NOTE ! Using class cycle is MANDATORY
-            # because, some extra vnodes can be pickup during the contain 
-            # process before
-            S = nx.subgraph(self.Gs,vnodes)
+
+            # # IV 1.a get vnode associated to the polygon
+            # # get vnodes not in the correct order
+            # uvn = np.where([r.buffer(1e-3).contains(p) for p in shpt])[0]
+            # vnodes = Gsnodes[uvn]
+
+            # # IV 1.b transform vnodes to an ordered cycle with Cycle class 
+            # # NOTE ! Using class cycle is MANDATORY
+            # # because, some extra vnodes can be pickup during the contain 
+            # # process before
+            S = nx.subgraph(self.Gs,p.vnodes)
             S.pos={}
             S.pos.update({i:self.Gs.pos[i] for i in S.nodes()})
-
             cycle = cycl.Cycle(S)
 
             # IV 1.c create a new polygon with correct vnodes and correct points
-            P = geu.Polygon(p=cycle.p,vnodes=cycle.cycle)
-
+            # P = geu.Polygon(p=cycle.p,vnodes=cycle.cycle)
+            # import ipdb
+            # ipdb.set_trace()
             # IV 1.d add node to Gt + position
             # By default a Layout cycle is defined as indoor
             # unless it is separated from the outside cycle by an airwall
@@ -5667,15 +5982,15 @@ class Layout(PyLayers):
             # The user should be able to set this boolean to false for a patio
             #
             # An outdoor cycle has no ceil reflection
-            lair = [x in self.name['AIR'] for x in vnodes if x >0]
+            lair = [x in self.name['AIR'] for x in p.vnodes if x >0]
             if sum(lair)>0:
                 isopen = True
             else:
                 isopen = False
             # IV 1.e add node to Gt + position
             # WARNING node id id ui +1 because cycle 0 is reserved to boundary cycle
-            self.Gt.add_node(ui+1,cycle=cycle,polyg=P,isopen=isopen,indoor=True)
-            self.Gt.pos.update({ui+1:np.array(P.centroid.xy)[:,0]})
+            self.Gt.add_node(ui+1,cycle=cycle,polyg=p,isopen=isopen,indoor=True)
+            self.Gt.pos.update({ui+1:np.array(p.centroid.xy)[:,0]})
 
             
         # IV 2. get edges
@@ -5688,11 +6003,11 @@ class Layout(PyLayers):
                         # if cycle are connected by at least a segmnet but not a point
                         if len(seg)>0:
                             self.Gt.add_edge(n1,n2,segment=seg)
-
-
-        import ipdb
-        ipdb.set_trace()
-
+                            # try:
+                            #     [self.Gs.node[s]['ncycles'].append([n1,n2]) for s in seg]
+                            # except:
+                            #     import ipdb
+                            #     ipdb.set_trace()
 
         #  V update Gs
         #   V 1.Update graph Gs segment with their 2 cycles information
@@ -5700,9 +6015,9 @@ class Layout(PyLayers):
         #   initialize a void list 'ncycles' for each segment of Gs
         #
         self._updGsncy()
-
-        
-
+        import ipdb
+        ipdb.set_trace()
+        # make a convex hull of layout
         # get segments of the mask ( equivalent to thoose connected to 0)
         # seg0 = [i for i in self.ma.vnodes if i >0]
         # [self.Gs.node[i]['ncycles'].append(0) for i in seg0]
@@ -5761,8 +6076,7 @@ class Layout(PyLayers):
         #
         # boundary adjascent cycles
         #
-        import ipdb
-        ipdb.set_trace()
+
         adjcyair = np.unique(np.array(map(lambda x : filter(lambda y: y!=0,
                                       self.Gs.node[x]['ncycles'])[0],nsegair)))
         adjcwall = np.unique(np.array(map(lambda x : filter(lambda y: y!=0,
@@ -6051,6 +6365,8 @@ class Layout(PyLayers):
                     if k not in self.Gs.node[n]['ncycles']:
                         self.Gs.node[n]['ncycles'].append(k)
                         if len(self.Gs.node[n]['ncycles'])>2:
+                            import ipdb
+                            ipdb.set_trace()
                             print n,self.Gs.node[n]['ncycles']
                             logging.warning('A segment cannot relate more than 2 cycles')
 
@@ -6240,7 +6556,7 @@ class Layout(PyLayers):
         self._interlist(nodelist=lncy)
 
 
-    def _convexify(self,check=False):
+    def _convexify_old(self,check=False):
         """ determine which cycles are not convex and convexify it.
 
             if a cycle is non convex
