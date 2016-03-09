@@ -18,6 +18,8 @@ Utility functions
 
     Layout.__init__
     Layout.__repr__
+    Layout.__add__
+    Layout.__mul__
     Layout.info
     Layout.ls
     Layout.delete
@@ -10394,18 +10396,17 @@ class Layout(PyLayers):
 
 
         """
-        pp = Point(p[0], p[1])
+        pp = sh.Point(p[0], p[1])
 
         dist = []
         p0_xy = []
         p1_xy = []
 
-        Nc = self.Gr.node[nroom]['cycle']
-        #vnode = self.Gt.node[Nc]['vnodes']
-        vnode = self.Gt.node[Nc]['cycle'].cycle
+    
+        vnode = self.Gr.node[nroom]['cycle'].cycle
 
         #for j in range(len(Gr[nroom]['vnodes'])):
-        for j in range(len(self.Gr[nroom]['vnodes'])):
+        for j in range(len(vnodes)):
             nn = self.b_Gr[5]['vnodes'][j]
             nta = G1.tahe[0, nn - 1]
             nhe = G1.tahe[1, nn - 1]
@@ -10418,7 +10419,7 @@ class Layout(PyLayers):
         pfinwll = np.array(p1_xy)
 
         for i in range(len(self.b_Gr[nroom]['vnodes'])):
-            line_wall = LineString([(pstartwll[i, 0],
+            line_wall = sh.LineString([(pstartwll[i, 0],
                 pstartwll[i, 1]), (pfinwll[i, 0], pfinwll[i, 1])])
             dist.insert(i, line_wall.distance(pp))
         return(dist)
