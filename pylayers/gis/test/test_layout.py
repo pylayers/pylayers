@@ -8,8 +8,15 @@ L = Layout()
 lL = L.ls()
 for tL in lL:
     print  'Layout :',tL
-    L=Layout(tL)
-    L.build()
+    try:
+        L=Layout(tL)
+        L.build()
+    except:
+        print 'Layout :',tL ,' problem'
+
+    
+
+
 #f = plt.figure(figsize=(20,10))
 #plt.axis('off')
 #f,a = L.showG('s',nodes=False,fig=f)
