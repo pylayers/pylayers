@@ -5964,6 +5964,7 @@ class Layout(PyLayers):
         # IV 1 get nodes and vnodes
         for ui,p in enumerate(Rgeu):
             cyid=ui+1
+            outdoor = False
             # # IV 1.a get vnode associated to the polygon
             # # get vnodes not in the correct order
             # uvn = np.where([r.buffer(1e-3).contains(p) for p in shpt])[0]
