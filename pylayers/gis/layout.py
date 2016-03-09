@@ -5320,7 +5320,7 @@ class Layout(PyLayers):
 
         return fig,ax
 
-    def build(self, graph='tcvirw',verbose=False,convexify=True):
+    def build(self, graph='tcvirw',verbose=False):
         """ build graphs
 
         Parameters
@@ -5347,17 +5347,17 @@ class Layout(PyLayers):
             if verbose:
                 print "Gt"
             self.buildGt()
-            if convexify :
-                #Make the layout convex the outddor
-                self._convex_hull()
-                # Ensure convexity of all cycles
-                self._convexify()
-                # # re-attach new cycles
-                # complete rebuild is not the best option
-                # but the partial rebuild coded & comment at the end in _convexify
-                # causes crash in buildGc at 2nd run of build(convex=True) on the layout
-                #
-                # self.buildGt()
+            # if convexify :
+            #     #Make the layout convex the outddor
+            #     self._convex_hull()
+            #     # Ensure convexity of all cycles
+            #     self._convexify()
+            #     # # re-attach new cycles
+            #     # complete rebuild is not the best option
+            #     # but the partial rebuild coded & comment at the end in _convexify
+            #     # causes crash in buildGc at 2nd run of build(convex=True) on the layout
+            #     #
+            #     # self.buildGt()
 
             self.lbltg.extend('t')
 
@@ -5774,7 +5774,6 @@ class Layout(PyLayers):
             # ncpol : new created polygons
             ncpol = []
             vnodes=[]
-
             for p in cpolys:
                 interpoly = poly.intersection(p)
                 if isinstance(interpoly,sh.MultiPolygon):
@@ -5782,6 +5781,7 @@ class Layout(PyLayers):
                 else :
                     try:
                         ptmp = geu.Polygon(interpoly)
+                        # ptmp = self.polysh2geu(interpoly)
                     except:
                         import ipdb
                         ipdb.set_trace()
@@ -5921,6 +5921,12 @@ class Layout(PyLayers):
             Rgeu.extend(ncpol)
 
 
+        ####################
+        #### Manage  convex hull of the layout
+        #### -------------------
+        polys = self._convex_hull()
+
+        Rgeu.extend(polys)
 
         ####################
         #### Manage Non convex polygons
@@ -5934,12 +5940,8 @@ class Layout(PyLayers):
             if not r.isconvex():
                 ncpol[ur] = self._delaunay(r)
         Rgeu = np.delete(Rgeu,ncpol.keys()).tolist()
-        for k in ncpol:
-            Rgeu.extend(ncpol[k])
+        [Rgeu.extend(ncpol[k]) for k in ncpol]
         
-        ####################
-        #### Manage  convex hull of the layout
-        #### -------------------
 
 
 
@@ -5953,10 +5955,15 @@ class Layout(PyLayers):
         for n in self.Gs.node:
             if n>0:
                 self.Gs.node[n]['ncycles']=[]
+
+
+        ncyid = -1
+        sma = self.ma.vnodes[self.ma.vnodes>0]
+        smac = self.macvx.vnodes[self.macvx.vnodes>0]
+        segma = np.unique(np.concatenate((sma,smac)))
         # IV 1 get nodes and vnodes
         for ui,p in enumerate(Rgeu):
-
-
+            cyid=ui+1
             # # IV 1.a get vnode associated to the polygon
             # # get vnodes not in the correct order
             # uvn = np.where([r.buffer(1e-3).contains(p) for p in shpt])[0]
@@ -5982,17 +5989,23 @@ class Layout(PyLayers):
             # The user should be able to set this boolean to false for a patio
             #
             # An outdoor cycle has no ceil reflection
-            lair = [x in self.name['AIR'] for x in p.vnodes if x >0]
+            seg = p.vnodes[p.vnodes>0]
+            lair = [x in self.name['AIR'] for x in seg]
+
             if sum(lair)>0:
                 isopen = True
+                aseg = seg[np.where(lair)]
+                outdoor = np.any([s in segma for s in aseg])
+                if outdoor :
+                    cyid = ncyid
+                    ncyid = ncyid -1
             else:
                 isopen = False
             # IV 1.e add node to Gt + position
             # WARNING node id id ui +1 because cycle 0 is reserved to boundary cycle
-            self.Gt.add_node(ui+1,cycle=cycle,polyg=p,isopen=isopen,indoor=True)
-            self.Gt.pos.update({ui+1:np.array(p.centroid.xy)[:,0]})
+            self.Gt.add_node(cyid,cycle=cycle,polyg=p,isopen=isopen,indoor=~outdoor)
+            self.Gt.pos.update({cyid:np.array(p.centroid.xy)[:,0]})
 
-            
         # IV 2. get edges
         for n1 in self.Gt.nodes():
             for n2 in self.Gt.nodes():
@@ -6015,8 +6028,6 @@ class Layout(PyLayers):
         #   initialize a void list 'ncycles' for each segment of Gs
         #
         self._updGsncy()
-        import ipdb
-        ipdb.set_trace()
         # make a convex hull of layout
         # get segments of the mask ( equivalent to thoose connected to 0)
         # seg0 = [i for i in self.ma.vnodes if i >0]
@@ -6355,7 +6366,7 @@ class Layout(PyLayers):
             if k>0:
                 self.Gs.node[k]['ncycles']=[]
         # remove node 0
-        Gtnodes = filter(lambda x: x > 0, self.Gt.nodes())
+        Gtnodes = filter(lambda x: x != 0, self.Gt.nodes())
         for k in Gtnodes:
             #vnodes = np.array(self.Gt.node[k]['vnodes'])
             vnodes = np.array(self.Gt.node[k]['cycle'].cycle)
@@ -6377,8 +6388,9 @@ class Layout(PyLayers):
         #   if ncycles is a list which has only one element then the adjascent
         #   cycle is the  outside region (cycle 0)
         """
-        seg0 = [i for i in self.ma.vnodes if i >0]
+        seg0 = [i for i in self.macvx.vnodes if i >0]
         [self.Gs.node[i]['ncycles'].append(0) for i in seg0]
+
         if check :
             print "check len(ncycles) == 2",
             nodes = [i for i in self.Gs.nodes() if i>0]
@@ -6490,7 +6502,6 @@ class Layout(PyLayers):
                     polys[-1].setvnodes(self)
 
 
-        ncy = max(self.Gt.nodes())+1
         lncy=[]
         for p in polys:
             # p.coorddeter()
@@ -6499,61 +6510,64 @@ class Layout(PyLayers):
                 #2 - non existing segments are created as airwalls
                 awid = self.add_segment(p.vnodes[aw-1][0], p.vnodes[aw+1][0], name='AIR')
                 p.vnodes[aw] = awid
-                G = nx.subgraph(self.Gs,p.vnodes)
-                G.pos = {}
-                G.pos.update({l: self.Gs.pos[l] for l in p.vnodes})
-                cy  = cycl.Cycle(G,lnode=p.vnodes)
-                self.Gt.add_node(ncy,cycle=cy)
-                self.Gt.pos[ncy] = tuple(cy.g)
+                # G = nx.subgraph(self.Gs,p.vnodes)
+                # G.pos = {}
+                # G.pos.update({l: self.Gs.pos[l] for l in p.vnodes})
+                # cy  = cycl.Cycle(G,lnode=p.vnodes)
+                # self.Gt.add_node(ncy,cycle=cy)
+                # self.Gt.pos[ncy] = tuple(cy.g)
                 # WARNING
                 # recreate polygon is mandatory otherwise cycle.cycle and polygon.vnodes
                 #are shifted.
-                self.Gt.node[ncy]['polyg'] = p#geu.Polygon(p.xy,cy.cycle)
-                self.Gt.node[ncy]['isopen'] = True
-                self.Gt.node[ncy]['indoor'] = False
-                #3 - add link between created cycle and outdoor
-                self.Gt.add_edge(ncy, 0)
+                # self.Gt.node[ncy]['polyg'] = p#geu.Polygon(p.xy,cy.cycle)
+                # self.Gt.node[ncy]['isopen'] = True
+                # self.Gt.node[ncy]['indoor'] = False
+                # #3 - add link between created cycle and outdoor
+                # self.Gt.add_edge(ncy, 0)
 
-                # 4 - search and add link between the created cycle and indoor cycles
-                for k in self.Gt.nodes():
-                    if (k != ncy) and (k != 0):
-                        vnodes0 = np.array(self.Gt.node[ncy]['cycle'].cycle)
-                        vnodes1 = np.array(self.Gt.node[k]['cycle'].cycle)
-                        intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
-                        # Connect Cycles if they share at least one segments
-                        if len(intersection_vnodes) > 1:
-                            segment = \
-                            intersection_vnodes[np.where(intersection_vnodes>0)]
-                            self.Gt.add_edge(ncy, k,segment= segment)
-                            # remove previous connection to 0
-                            try:
-                                self.Gt.remove_edge(0, k)
-                            except:
-                                pass
-                #5 - Update Gs
-                for v in filter(lambda x: x>0,p.vnodes):
+                # # 4 - search and add link between the created cycle and indoor cycles
+                # for k in self.Gt.nodes():
+                #     if (k != ncy) and (k != 0):
+                #         vnodes0 = np.array(self.Gt.node[ncy]['cycle'].cycle)
+                #         vnodes1 = np.array(self.Gt.node[k]['cycle'].cycle)
+                #         intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
+                #         # Connect Cycles if they share at least one segments
+                #         if len(intersection_vnodes) > 1:
+                #             segment = \
+                #             intersection_vnodes[np.where(intersection_vnodes>0)]
+                #             self.Gt.add_edge(ncy, k,segment= segment)
+                #             # remove previous connection to 0
+                #             try:
+                #                 self.Gt.remove_edge(0, k)
+                #             except:
+                #                 pass
+                # #5 - Update Gs
+                # for v in filter(lambda x: x>0,p.vnodes):
 
-                    # add new ncycle to Gs for the new airwall
-                    #that new airwall always separate the new created cycle
-                    #and the outdoor cycle
-                    if v == awid :
-                        self.Gs.node[awid]['ncycles']=[ncy,0]
-                    # other wise update the cycles seen by segments
-                    else :
-                        cy = self.Gs.node[v]['ncycles'].pop()
-                        #if the pop cycle is the outdoor cycle,
-                        # replace it with the new cycle
-                        if cy == 0:
-                            self.Gs.node[v]['ncycles'].append(ncy)
-                        #else replace old value with [pos cycle , new cycle]
-                        else:
-                            self.Gs.node[v]['ncycles']=[cy,ncy]
-                lncy.append(ncy)
-                ncy=ncy+1
+                #     # add new ncycle to Gs for the new airwall
+                #     #that new airwall always separate the new created cycle
+                #     #and the outdoor cycle
+                #     if v == awid :
+                #         self.Gs.node[awid]['ncycles']=[ncy,0]
+                #     # other wise update the cycles seen by segments
+                #     else :
+                #         cy = self.Gs.node[v]['ncycles'].pop()
+                #         #if the pop cycle is the outdoor cycle,
+                #         # replace it with the new cycle
+                #         if cy == 0:
+                #             self.Gs.node[v]['ncycles'].append(ncy)
+                #         #else replace old value with [pos cycle , new cycle]
+                #         else:
+                #             self.Gs.node[v]['ncycles']=[cy,ncy]
+                # lncy.append(ncy)
+               # ncy=ncy+1
 
-        self.ma = self.mask()
+        U = cascaded_union([self.ma]+polys)
+        self.macvx = geu.Polygon(U)
+        self.macvx.setvnodes(self)
         # 6- Determine interaction into the new created cycles
-        self._interlist(nodelist=lncy)
+        # self._interlist(nodelist=lncy)
+        return polys
 
 
     def _convexify_old(self,check=False):
