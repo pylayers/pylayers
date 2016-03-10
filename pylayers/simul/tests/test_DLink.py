@@ -4,9 +4,9 @@ import pdb
 DL=DLink(L=Layout('defstr.ini'))
 DL.Aa=Antenna(typ='Omni')
 DL.Ab=Antenna(typ='Omni')
-DL.fGHz=np.arange(2.41,2.43,0.01)
+DL.fGHz=np.arange(2.41,10.,0.05)
 DL.b=DL.b+1
-DL.eval(force=['sig','ray','Ct','H'])
+DL.eval(force=['sig','ray','Ct','H'],ra_vectorized=True,diffraction=True)
 dist_a_b = np.sqrt(np.sum((DL.a-DL.b)**2))
 #
 if DL.R.los:
