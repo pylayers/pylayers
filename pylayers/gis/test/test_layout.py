@@ -10,9 +10,13 @@ for tL in lL:
     print  'Layout :',tL
     try:
         L=Layout(tL)
-        L.build()
     except:
         print 'Layout :',tL ,' problem'
+    try:
+        L.build()
+    except:
+        print 'Build issue in Layout :',tL 
+
 
     
 
