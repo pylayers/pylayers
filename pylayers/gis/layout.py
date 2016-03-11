@@ -5856,11 +5856,42 @@ class Layout(PyLayers):
             poly.append(sh.Polygon(coords))
         # union all polygons
         ma = cascaded_union(poly)
-        # transform into geomutil polygon
-        ma = geu.Polygon(ma)
-        ma.setvnodes(self)
-        self.ma = ma
 
+        # transform into geomutil polygon
+        # if  polygon is a layout
+        if not isinstance(ma,sh.MultiPolygon):
+            ma = geu.Polygon(ma)
+            ma.setvnodes(self)
+
+        else :
+            # This is a fix wfor non enclosed layouts 
+            # with multiple non joint polygons (a.k.a. a city)
+            # raise AttributeError('this is a city')
+            macvx = ma.convex_hull
+
+            streets = geu.Polygon(macvx.difference(ma))
+            streets.setvnodes(self)
+
+
+            # add air walls where to close the street & ma polygon
+            uaw = np.where(streets.vnodes == 0)[0]
+            lvn = len(streets.vnodes)
+            for i in uaw:
+                #keep trace of created airwalls, because some
+                #of them will be destroyed in step 3.
+                self.add_segment(
+                           streets.vnodes[np.mod(i-1,lvn)],
+                           streets.vnodes[np.mod(i+1,lvn)]
+                           ,name='AIR')
+
+
+            ma= self.polysh2geu(macvx)
+            ma.setvnodes(self)
+            streets.setvnodes(self)
+            ma.setvnodes(self)
+
+
+        self.ma = ma
 
         ###### III .FIND POLYGONS
         ###
@@ -5899,7 +5930,6 @@ class Layout(PyLayers):
         # assert isinstance(R,sh.MultiPolygon), "Shapely.MultiPolygon decomposition Failed"
 
 
-
         ####################
         #### Manage inner hole in polygons
         #### ------------------------------
@@ -5911,7 +5941,11 @@ class Layout(PyLayers):
         Rgeu = []
         contain={}
         for ur,r in enumerate(R):
-            Rgeu.append(self.polysh2geu(r))
+            try:
+                Rgeu.append(self.polysh2geu(r))
+            except:
+                import ipdb
+                ipdb.set_trace()
             # if area are not the same, it means that there is inner holes in r
             if not np.allclose(Rgeu[ur].area,r.area):
                 # detect inclusion
@@ -5930,7 +5964,6 @@ class Layout(PyLayers):
         #### Manage  convex hull of the layout
         #### -------------------
         polys = self._convex_hull()
-
         Rgeu.extend(polys)
 
         ####################
@@ -5982,6 +6015,7 @@ class Layout(PyLayers):
             S = nx.subgraph(self.Gs,p.vnodes)
             S.pos={}
             S.pos.update({i:self.Gs.pos[i] for i in S.nodes()})
+
             cycle = cycl.Cycle(S)
 
             # IV 1.c create a new polygon with correct vnodes and correct points
@@ -6009,7 +6043,7 @@ class Layout(PyLayers):
                 isopen = False
             # IV 1.e add node to Gt + position
             # WARNING node id id ui +1 because cycle 0 is reserved to boundary cycle
-            self.Gt.add_node(cyid,cycle=cycle,polyg=p,isopen=isopen,indoor=~outdoor)
+            self.Gt.add_node(cyid,cycle=cycle,polyg=p,isopen=isopen,indoor= not outdoor)
             self.Gt.pos.update({cyid:np.array(p.centroid.xy)[:,0]})
 
         # IV 2. get edges
@@ -6022,6 +6056,7 @@ class Layout(PyLayers):
                         # if cycle are connected by at least a segmnet but not a point
                         if len(seg)>0:
                             self.Gt.add_edge(n1,n2,segment=seg)
+
                             # try:
                             #     [self.Gs.node[s]['ncycles'].append([n1,n2]) for s in seg]
                             # except:
@@ -7117,6 +7152,35 @@ class Layout(PyLayers):
                                                 self.ldiffout,vnodes))
             for k in idiff:
                 self.Gt.node[c]['inter']+= [(k,)]
+
+    def filterGi(self, situ = 'outdoor'):
+        """ Filter Gi to manage indoor/ outdoor situations
+        """
+
+        # get outdoor notes
+        cy = np.array(self.Gt.nodes())
+        uout = np.where([not self.Gt.node[i]['indoor'] for i in cy])
+        cyout = cy[uout]
+
+        inter = self.Gi.nodes()
+        Ti = [i for i in inter if len(i) == 3]
+        Ri = [i for i in inter if len(i) == 2]
+        Di = [i for i in inter if len(i) == 1]
+
+        Ti = [i for i in Ti if ((i[1] in cyout) and (i[2] in cyout))]
+        Ri = [i for i in Ri if (i[1] in cyout) ]
+        Di = [i for i in Di if (i in self.ldiffout) ]
+
+        rinter = Ti + Ri + Di
+
+        rGi = nx.subgraph(self.Gi,rinter)
+        rGi.pos={i:self.Gi.pos[i] for i in self.Gi.nodes()}
+
+        self.Gi = rGi
+        self.Gi.pos = rGi.pos
+
+
+
 
 
     def outputGi(self):
@@ -8496,6 +8560,11 @@ class Layout(PyLayers):
             try:
                 self.Gc.node[root]['polyg']+=self.Gc.node[child]['polyg'] # here the merging
                 self.Gc.node[root]['cycle']+=self.Gc.node[child]['cycle'] # here the merging
+                # import ipdb
+                # ipdb.set_trace()
+                # self.Gc.node[root]['polyg'].plot(fig=plt.gcf(),ax=plt.gca(),color='g')
+                # self.Gc.node[root]['cycle'].show(fig=plt.gcf(),ax=plt.gca())
+                # plt.draw()
             except:
                 import ipdb
                 ipdb.set_trace()
@@ -8514,9 +8583,10 @@ class Layout(PyLayers):
             self.Gt.node[child]['isopen'] = True
             self.Gt.node[root]['merged'] = root
             self.Gc.remove_node(child)
-            self.Gc.pos[root]=tuple(self.Gc.node[root]['cycle'].g)
+            # self.Gc.pos[root]=tuple(self.Gc.node[root]['cycle'].g)
+            self.Gc.pos[root]=tuple(np.array(self.Gc.node[1]['polyg'].centroid.xy)[:,0])
 
- 
+
         for Ga in lGa:
 
 
@@ -8547,7 +8617,6 @@ class Layout(PyLayers):
                         [dmap.update({c:root}) for c in lcy]
 
                     merge_cycle(root,v)
-
         # find diffractions of the layout
         self._find_diffractions()
 
