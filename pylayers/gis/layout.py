@@ -249,7 +249,7 @@ import matplotlib.colors as clr
 import networkx as nx
 from networkx.readwrite import write_gpickle,read_gpickle
 import shapely.geometry as sh
-from shapely.ops import cascaded_union
+import shapely.ops as sho
 from descartes.patch import PolygonPatch
 from numpy import array
 import PIL.Image as Image
@@ -357,6 +357,9 @@ class Layout(PyLayers):
         self.Gs.pos = {}
         self.tahe = np.zeros(([2, 0]), dtype=int)
         self.lbltg = []
+
+        # shapely segments
+        self._shseg={}
 
         #
         # related file names
@@ -1391,6 +1394,28 @@ class Layout(PyLayers):
             else:
                 self.name[name] = [eval(ns)]
         self.Nss = Nss
+
+
+
+        if config.has_section('cycles'):
+            # READ CYCLE CODE TO BE IMPLEMENTED
+            raise AttributeError('cycle section NOT YET IMPLEMENTED')
+        else :
+            seg_connect = {x:self.Gs.edge[x].keys() for x in self.Gs.nodes() if x >0}
+
+            dpts = {x[0]:(self.Gs.pos[x[1][0]],self.Gs.pos[x[1][1]]) for x in seg_connect.items() }
+            self._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
+            X=sho.polygonize(self._shseg.values())
+            # create geu polygons
+            P=[geu.Polygon(x) for x in X]
+            [x.setvnodes(self) for x in P]
+            # create Gt
+            N = [(ux+1,{'polyg':x}) 
+                for ux,x in enumerate(P)]
+            self.Gt.add_nodes_from(N)
+            self.Gt.pos={pid:np.array(self.Gt.node[pid]['polyg'].centroid.xy)[:,0] 
+                        for pid in self.Gt.nodes()}
+
         # compliant with config file without  material/slab information
         if config.has_section('files'):
             self.filematini=config.get('files','materials')
@@ -2413,6 +2438,9 @@ class Layout(PyLayers):
         self.Gs.add_edge(n1, num)
         self.Gs.add_edge(n2, num)
         self.Ns = self.Ns + 1
+
+        self._shseg[num]=sh.LineString((self.Gs.pos[n1],self.Gs.pos[n2]))
+
         # update slab name <-> edge number dictionnary
         try:
             self.name[name].append(num)
@@ -5799,7 +5827,7 @@ class Layout(PyLayers):
                 # Check if all the original area is covered 
                 # sometimes, area surrounded by 2 new airwalls is not found
                 # the following code re-add it.
-                cpdiff=poly.difference(cascaded_union(cpolys))
+                cpdiff=poly.difference(sho.cascaded_union(cpolys))
                 if isinstance(cpdiff,sh.Polygon):
                     cpdiff=sh.MultiPolygon([cpdiff])
                 if isinstance(cpdiff,sh.MultiPolygon):
@@ -5855,7 +5883,7 @@ class Layout(PyLayers):
             coords  = map(lambda x : self.Gs.pos[x],npoints)
             poly.append(sh.Polygon(coords))
         # union all polygons
-        ma = cascaded_union(poly)
+        ma = sho.cascaded_union(poly)
 
         # transform into geomutil polygon
         # if  polygon is a layout
@@ -6325,7 +6353,7 @@ class Layout(PyLayers):
                 p.vnodes[aw] = awid
 
 
-        U = cascaded_union([self.ma]+polys)
+        U = sho.cascaded_union([self.ma]+polys)
         self.macvx = geu.Polygon(U)
         self.macvx.setvnodes(self)
 
@@ -6478,7 +6506,7 @@ class Layout(PyLayers):
                         # Check if all the original area is covered 
                         # sometimes, area surrounded by 2 new airwalls is not found
                         # the following code re-add it.
-                        cpdiff=self.Gt.node[n]['polyg'].difference(cascaded_union(cpolys))
+                        cpdiff=self.Gt.node[n]['polyg'].difference(sho.cascaded_union(cpolys))
                         if isinstance(cpdiff,sh.Polygon):
                             cpdiff=sh.MultiPolygon([cpdiff])
                         if isinstance(cpdiff,sh.MultiPolygon):
