@@ -360,7 +360,8 @@ class Layout(PyLayers):
 
         # shapely segments
         self._shseg={}
-
+        # old polygons
+        self.polcold=[]
         #
         # related file names
         #
@@ -1396,7 +1397,7 @@ class Layout(PyLayers):
         self.Nss = Nss
 
 
-
+        # MANAGE CYCLES
         if config.has_section('cycles'):
             # READ CYCLE CODE TO BE IMPLEMENTED
             raise AttributeError('cycle section NOT YET IMPLEMENTED')
@@ -1409,12 +1410,27 @@ class Layout(PyLayers):
             # create geu polygons
             P=[geu.Polygon(x) for x in X]
             [x.setvnodes(self) for x in P]
+
+
             # create Gt
             N = [(ux+1,{'polyg':x}) 
                 for ux,x in enumerate(P)]
             self.Gt.add_nodes_from(N)
             self.Gt.pos={pid:np.array(self.Gt.node[pid]['polyg'].centroid.xy)[:,0] 
                         for pid in self.Gt.nodes()}
+
+
+
+            # update Gs, n_cycles
+            for n in self.Gs.nodes():
+                if n>0:
+                    self.Gs.node[n]['ncycles']=[]
+            for p in self.Gt.nodes():
+                vn = self.Gt.node[p]['polyg'].vnodes
+                
+                [self.Gs.node[i]['ncycles'].append(p) for i in vn if i >0]
+
+
 
         # compliant with config file without  material/slab information
         if config.has_section('files'):
@@ -1436,6 +1452,8 @@ class Layout(PyLayers):
             self.saveini(_fileini)
         # convert graph Gs to numpy arrays for faster post processing
         self.g2npy()
+        import ipdb
+        ipdb.set_trace()
         # 
 
 
@@ -2432,13 +2450,17 @@ class Layout(PyLayers):
                               norm=norm,
                               transition=transition,
                               offset=offset,
-                              connect=[n1,n2])
+                              connect=[n1,n2],
+                              ncycles=[])
 
         self.Gs.pos[num] = tuple((p1 + p2) / 2.)
         self.Gs.add_edge(n1, num)
         self.Gs.add_edge(n2, num)
         self.Ns = self.Ns + 1
 
+        # manage line list of shapely        
+        X=sho.polygonize(self._shseg.values())
+        self.polcold = sho.cascaded_union(list(X))
         self._shseg[num]=sh.LineString((self.Gs.pos[n1],self.Gs.pos[n2]))
 
         # update slab name <-> edge number dictionnary
@@ -2451,6 +2473,59 @@ class Layout(PyLayers):
         if name not in self.display['layers']:
             self.display['layers'].append(name)
         return(num)
+
+    def pltpoly(self,poly,fig=[],ax=[]):
+        if fig == []:
+            fig=plt.gcf()
+        if ax == []:
+            ax=plt.gca()
+        mpl = [PolygonPatch(x,alpha=0.2) for x in poly]
+        [ax.add_patch(x) for x in mpl]
+        plt.axis(self.ax)
+        plt.draw()
+
+    def _updateGt(self):
+        # create multipolygon of layout
+        MP=sho.polygonize(self._shseg.values())
+        # make union
+        polsnew = sho.cascaded_union(list(MP))
+    
+        NP = polsnew.symmetric_difference(self.polcold)
+
+        if isinstance(NP,sh.Polygon):
+            NP=sh.MultiPolygon([NP])
+        if isinstance(NP,sh.MultiPolygon):
+            for p in NP:
+                #a polygon has been added
+                if polsnew.area > self.polcold.area:
+                    pid = max(self.Gt.node)+1
+                    P = geu.Polygon(p)
+                    P.setvnodes(self)
+                    seg = P.vnodes[P.vnodes>0]
+                    print seg
+                    [self.Gs.node[s]['ncycles'].append(pid) for s in seg if pid not in self.Gs.node[s]['ncycles']]
+                    self.Gt.add_node(pid,polyg=P)
+                    self.Gt.pos[pid]=np.array(self.Gt.node[pid]['polyg'].centroid.xy)[:,0] 
+                # segment has been removed, polygon is destroyed
+                elif polsnew.area < self.polcold.area:
+                    cent = np.array(p.centroid.xy)[:,0]
+                    # find position in Gt.pos values
+                    ulc = (cent - np.array(self.Gt.pos.values())).argmin()
+                    pid = self.Gt.pos.keys()[ulc]
+                    vn = self.Gt.node[pid]['polyg'].vnodes
+                    seg = vn[vn>0]
+                    seg = [s for s in seg if s in self.Gs.nodes()]
+                    self.Gt.remove_node(pid)
+                    self.Gt.pos.pop(pid)
+                    # remove Gt node in involved segmensncycles 
+                    [self.Gs.node[s]['ncycles'].remove(pid) for s in seg if (pid in self.Gs.node[s]['ncycles'])]
+                    
+
+
+
+
+
+
 
     def wedge2(self,apnt):
         """ calculate wedge angle of a point
@@ -2859,7 +2934,13 @@ class Layout(PyLayers):
             # update slab name <-> edge number dictionnary
             self.name[name].remove(e)
             # delete subseg if required
-        self.g2npy()
+
+            # manage line list of shapely        
+            X=sho.polygonize(self._shseg.values())
+            self.polcold = sho.cascaded_union(list(X))
+            self._shseg.pop(e)
+
+            self.g2npy()
 
 
     def mask(self):
