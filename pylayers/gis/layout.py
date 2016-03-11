@@ -5912,7 +5912,6 @@ class Layout(PyLayers):
             lines.append(line)
         # create associated multilines (to the points)
         ml = sh.MultiLineString(lines)
-
         # increase buffer size ( width of polyline) to create a multipolygon
         R= []
         buffersize = 1e-9
