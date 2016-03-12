@@ -14,18 +14,22 @@ from pylayers.gis.layout import *
 
 L=Layout('Luebbers.ini',force=True)
 
-L.add_pons(6)
-L.add_pons(8)
-
-
-L.add_segment(-21,-22)
-
-L._updateGt()
 # L.add_segment(-2,-5)
 # L.add_segment(-3,-8)
+
+L.add_pons(6)
+L.add_pons(8)
+L.add_segment(-21,-22)
+
+
+#L.del_segment(18)
+
+
+
 # L._updateGt()
 
-# L.del_segment(18)
+# L._updateGt()
+
 # L._updateGt()
 
 # seg_connect = [L.Gs.edge[x].keys() for x in L.Gs.nodes() if x >0]
