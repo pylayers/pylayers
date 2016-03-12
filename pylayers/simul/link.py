@@ -1070,7 +1070,7 @@ class DLink(Link):
             u = umap
             u_opt='r'
         else :
-            u = self.stack(key,array)
+            u = self.stack(key,array)abafaeab
             u_opt='s'
         return u_opt,u[0]
 

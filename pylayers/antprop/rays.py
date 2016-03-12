@@ -463,7 +463,7 @@ class Rays(PyLayers,dict):
         """
         u = np.argsort(self.dis)
 
-    def extract(self,ni,nr):
+    def extract(self,ni,nr,L):
         """ Extract a single ray
 
         Parameters
@@ -471,6 +471,7 @@ class Rays(PyLayers,dict):
 
         ni : group of interactions
         nr : ray index in group of interactions
+        L  : Layout
 
         """
 
@@ -481,10 +482,18 @@ class Rays(PyLayers,dict):
         r[ni] = {}
 
         for k in self[ni].keys():
-            tab  = self[ni][k]
-            if type(tab)==np.ndarray:
-                r[ni][k] = tab[...,nr][...,np.newaxis]
-        r[ni]['nrays']=1
+            if k not in ['nbrays','rayidx','dis','nstrwall','nstrswall']:
+                tab  = self[ni][k]
+                if type(tab)==np.ndarray:
+                    #print k,tab.shape
+                    r[ni][k] = tab[...,nr][...,np.newaxis]
+        r[ni]['nrays']=1 # keep only one ray
+        r.nray = 1
+        #r[ni]['rayidx']=np.array([self[ni]['rayidx'][nr]]) # ray index in the whole structure
+        r[ni]['rayidx']=np.array([0])
+        r[ni]['dis']=np.array([self[ni]['dis'][nr]])
+        r.locbas(L)
+        r.fillinter(L)
         return(r)
 
     def show(self,**kwargs):
@@ -1321,8 +1330,8 @@ class Rays(PyLayers,dict):
                 ufloor= np.where((ityp == 4))
                 uceil = np.where((ityp == 5))
 
-                nstrwall  = nstr[uwall[0], uwall[1]]   # nstr of walls
-                nstrswall = nstrs[uwall[0], uwall[1]]   # nstrs of walls
+                nstrwall  = nstr[uwall[0], uwall[1]]   # nstr of walls without subsegment
+                nstrswall = nstrs[uwall[0], uwall[1]]   # nstrs of walls with subsegment
 
                 self[k]['nstrwall']  = nstrwall    # store nstr without subsegment
                 self[k]['nstrswall'] = nstrswall   # store nstr with subsegment
