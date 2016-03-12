@@ -1452,8 +1452,7 @@ class Layout(PyLayers):
             self.saveini(_fileini)
         # convert graph Gs to numpy arrays for faster post processing
         self.g2npy()
-        import ipdb
-        ipdb.set_trace()
+
         # 
 
 
@@ -2393,6 +2392,9 @@ class Layout(PyLayers):
             pts = [self.Gs.pos[x] for x in cyc.cycle if x<0]
             self.Gt.node[c]['polyg'] = geu.Polygon(pts)
             self.Gt.node[c]['polyg'].setvnodes(self)
+            seg = self.Gt.node[c]['polyg'].vnodes
+            seg = seg[seg>0]
+            [self.Gs.node[s]['ncycles'].append(c) for s in seg if c not in self.Gs.node[s]['ncycles']]
 
         
 
@@ -2481,7 +2483,7 @@ class Layout(PyLayers):
 
         # manage line list of shapely        
         X=sho.polygonize(self._shseg.values())
-        self.polcold = sho.cascaded_union(list(X))
+        self.polcold = sh.MultiPolygon(list(X))
         self._shseg[num]=sh.LineString((self.Gs.pos[n1],self.Gs.pos[n2]))
 
         # update slab name <-> edge number dictionnary
@@ -2504,12 +2506,19 @@ class Layout(PyLayers):
         [ax.add_patch(x) for x in mpl]
         plt.axis(self.ax)
         plt.draw()
-
+    def pltlines(self,lines,fig=[],ax=[]):
+        if fig == []:
+            fig=plt.gcf()
+        if ax == []:
+            ax=plt.gca()
+        [ax.plot(x.xy[0],x.xy[1]) for x in lines]
+        plt.axis(self.ax)
+        plt.draw()
     def _updateGt(self):
         # create multipolygon of layout
         MP=sho.polygonize(self._shseg.values())
         # make union
-        polsnew = sho.cascaded_union(list(MP))
+        polsnew = sh.MultiPolygon(list(MP))
     
         NP = polsnew.symmetric_difference(self.polcold)
 
@@ -2523,7 +2532,6 @@ class Layout(PyLayers):
                     P = geu.Polygon(p)
                     P.setvnodes(self)
                     seg = P.vnodes[P.vnodes>0]
-                    print seg
                     [self.Gs.node[s]['ncycles'].append(pid) for s in seg if pid not in self.Gs.node[s]['ncycles']]
                     self.Gt.add_node(pid,polyg=P)
                     self.Gt.pos[pid]=np.array(self.Gt.node[pid]['polyg'].centroid.xy)[:,0] 
@@ -2540,7 +2548,38 @@ class Layout(PyLayers):
                     self.Gt.pos.pop(pid)
                     # remove Gt node in involved segmensncycles 
                     [self.Gs.node[s]['ncycles'].remove(pid) for s in seg if (pid in self.Gs.node[s]['ncycles'])]
-                    
+        if isinstance(NP,sh.LineString):
+            # a polygon has been split
+            pts = np.array(NP.xy)
+            segpos = np.mean(pts,axis=1)
+            (segpos - np.array(self.Gs.pos.values())).argmin()
+            useg = np.sum((abs(segpos - np.array(self.Gs.pos.values()))),axis=1).argmin() 
+            # ulc are the 2 point idx in Gs of the linestring
+            seg = np.array(self.Gs.pos.keys())[useg]
+            #fing which poly/Gt cycle has been split
+            ucy = np.where([self.Gt.node[i]['polyg'].contains(NP) for i in self.Gt.nodes()])
+            ucy = np.array(self.Gt.nodes())[ucy][0]
+
+            vn = self.Gt.node[ucy]['polyg'].vnodes
+            # get segments of polugon to be split
+            vn = vn[vn>0].tolist()
+            [self.Gs.node[s]['ncycles'].remove(ucy) for s in vn if (ucy in self.Gs.node[s]['ncycles'])]
+
+            # take polygon seg + the new cutting seg
+            vn = vn + [seg]
+            lines = [self._shseg[i] for i in vn]
+            npolys = list(sho.polygonize(lines))
+            assert len(npolys) == 2
+            # the first created polygon has the id of the prvious one , the second take a free id 
+            pid = [ucy, max(self.Gt.node)+1]
+            for up, p in enumerate(npolys):
+                P = geu.Polygon(p)
+                P.setvnodes(self)
+                seg = P.vnodes[P.vnodes>0]
+                [self.Gs.node[s]['ncycles'].append(pid[up]) for s in seg if pid[up] not in self.Gs.node[s]['ncycles']]
+                self.Gt.add_node(pid[up],polyg=P)
+                self.Gt.pos[pid[up]]=np.array(self.Gt.node[pid[up]]['polyg'].centroid.xy)[:,0] 
+
 
 
 
@@ -2958,7 +2997,7 @@ class Layout(PyLayers):
 
             # manage line list of shapely        
             X=sho.polygonize(self._shseg.values())
-            self.polcold = sho.cascaded_union(list(X))
+            self.polcold = sh.MultiPolygon(list(X))
             self._shseg.pop(e)
 
             self.g2npy()
