@@ -476,7 +476,8 @@ class Rays(PyLayers,dict):
 
 
         r = Rays(self.pTx,self.pRx)
-        r.is3d = self.is3D
+        r.is3D = self.is3D
+       
         r[ni] = {}
 
         for k in self[ni].keys():
