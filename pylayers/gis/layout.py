@@ -2369,11 +2369,32 @@ class Layout(PyLayers):
         p = tuple(alpha * p1 + (1 - alpha) * p2)
         num = self.add_fnod(p)
         # delete old edge ns
+        ncy = self.Gs.node[ns]['ncycles']
         self.del_segment(ns)
         # add new edge np[0] num
-        self.add_segment(nop[0], num, name=namens, z = [zminns,zmaxns], offset=0)
+        seg1 = self.add_segment(nop[0], num, name=namens, z = [zminns,zmaxns], offset=0)
         # add new edge num np[1]
-        self.add_segment(num, nop[1], name=namens, z = [zminns,zmaxns], offset=0)
+        seg2 = self.add_segment(num, nop[1], name=namens, z = [zminns,zmaxns], offset=0)
+
+        new_pts = self.Gs.node[seg1]['connect'] + self.Gs.node[seg2]['connect'] +[seg1]+[seg2]
+        # new_pts = [n for n in new_pts if n < 0]
+        # newnp.unique(new_pts).tolist()
+        # import ipdb
+        # ipdb.set_trace()
+        for c in ncy:
+            vn = self.Gt.node[c]['polyg'].vnodes
+            # vn = vn[vn<0]
+            npts = vn.tolist() + new_pts
+            npts = np.unique(npts)
+            S=nx.subgraph(self.Gs,npts)
+            S.pos={}
+            S.pos.update({i:self.Gs.pos[i] for i in S.nodes()})   
+            cyc = cycl.Cycle(S,npts) 
+            pts = [self.Gs.pos[x] for x in cyc.cycle if x<0]
+            self.Gt.node[c]['polyg'] = geu.Polygon(pts)
+            self.Gt.node[c]['polyg'].setvnodes(self)
+
+        
 
     def add_segment(self, n1, n2, name='PARTITION',z=[0.0,3.0],offset=0):
         """  add segment between node n1 and node n2
