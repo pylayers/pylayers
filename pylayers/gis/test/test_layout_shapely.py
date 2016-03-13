@@ -16,9 +16,11 @@ L=Layout('Luebbers.ini',force=True)
 
 # L.add_segment(-2,-5)
 # L.add_segment(-3,-8)
-
+print "\nadd_pons"
 L.add_pons(6)
+print "\nadd_pons"
 L.add_pons(8)
+print "\nadd_seg"
 L.add_segment(-21,-22)
 
 

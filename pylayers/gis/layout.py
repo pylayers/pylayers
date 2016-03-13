@@ -2489,10 +2489,34 @@ class Layout(PyLayers):
         gtnodes = np.array(self.Gt.nodes())
         u = [self.Gt.node[i]['polyg'].contains(self._shseg[num]) for i in gtnodes]
         uu = np.where(u)[0]
-        if len(uu)>0:
-            split_cy = gtnodes[uu]
-            split = True
-        self._updateGt(split)
+
+        MP=sho.polygonize(self._shseg.values())
+        # make union
+        polsnew = sh.MultiPolygon(list(MP))
+        print "addseg"
+        print "old:",len(self.polcold),'new:',len(polsnew)
+        if len(polsnew)  > len(self.polcold):
+            print 'create GT'
+            #self._create_Gtpol(NP)
+                # NP = self.polcold.symmetric_difference(polsnew)
+        # # seg is inside a polygon => need to split cycle
+        # if len(uu)>0:
+        #     split_cy = gtnodes[uu]
+        #     self._split_Gtpol(split_cy) # to be written
+        
+        # else :
+        #     # create multipolygon of layout
+        #     MP=sho.polygonize(self._shseg.values())
+        #     # make union
+        #     polsnew = sh.MultiPolygon(list(MP))
+        #     NP = self.polcold.symmetric_difference(polsnew)
+            
+        #     if isinstance(NP,sh.Polygon):
+        #         NP=sh.MultiPolygon([NP])
+        #     if isinstance(NP,sh.MultiPolygon):
+        #         self._create_Gtpol(NP) # to be written
+        #         # for p in NP:
+
         # update slab name <-> edge number dictionnary
         try:
             self.name[name].append(num)
@@ -2537,6 +2561,7 @@ class Layout(PyLayers):
             if isinstance(NP,sh.Polygon):
                 NP=sh.MultiPolygon([NP])
             if isinstance(NP,sh.MultiPolygon):
+                #thisis the future self._create_GT_pol
                 for p in NP:
                     #a polygon has been added
                     if polsnew.area > self.polcold.area:
@@ -3028,6 +3053,9 @@ class Layout(PyLayers):
             assert(e>0)
             self.del_subseg(e,verbose=verbose)
             name = self.Gs.node[e]['name']
+            # saveinfo
+            pose = self.Gs.pos[e]
+            ncye =  self.Gs.node[e]['ncycles']
             del self.Gs.pos[e] # delete edge position
             self.Gs.remove_node(e)
             self.labels.pop(e)
@@ -3036,13 +3064,32 @@ class Layout(PyLayers):
             self.name[name].remove(e)
             # delete subseg if required
 
+
+
             # manage line list of shapely        
             X=sho.polygonize(self._shseg.values())
             self.polcold = sh.MultiPolygon(list(X))
             self._shseg.pop(e)
 
+            # create multipolygon of layout
+            MP=sho.polygonize(self._shseg.values())
+            # make union
+            polsnew = sh.MultiPolygon(list(MP))
+
+            NP = self.polcold.symmetric_difference(polsnew)
+            print "delseg"
+            print "old:",len(self.polcold),'new:',len(polsnew)
+            if len(self.polcold)>len(polsnew):
+                #self._del_Gtpol(NP)
+                print "delGt"
+                #do somthing 
+                pass
+
+
+
+
             self.g2npy()
-            self._updateGt()
+            # self._updateGt()
 
     def mask(self):
         """  returns the polygonal mask of the building
