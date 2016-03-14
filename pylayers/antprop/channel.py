@@ -112,7 +112,7 @@ class TBchannel(bs.TBsignal):
 
 
     def tau_Emax(self):
-        """ calculate the delay of max energy peak
+        """ calculate the delay of max energy pildeeak
 
         .. math::
             \max_{\tau} y^{2}(\tau)
@@ -1302,11 +1302,12 @@ class Tchannel(bs.FUsignal):
 
 
     def __repr__(self):
-        st = ''
+        st = 'Tchannel : Ray transfer function (Nray x Nr x Nt x Nf)\n'
+        st = st+'-----------------------------------------------------\n'
         st = st + 'freq : '+str(self.x[0])+' '+str(self.x[-1])+' '+str(len(self.x))+"\n"
         st = st + 'shape  : '+str(np.shape(self.y))+"\n"
         st = st + 'tau (min, max) : '+str(min(self.taud))+' '+str(max(self.taud))+"\n"
-        st = st + 'dist :'+str(min(0.3*self.taud))+' '+str(max(0.3*self.taud))+"\n"
+        st = st + 'dist (min,max) : '+str(min(0.3*self.taud))+' '+str(max(0.3*self.taud))+"\n"
         if self.isFriis:
             st = st + 'Friis factor -j c/(4 pi f) has been applied'
 
@@ -1774,7 +1775,9 @@ class Tchannel(bs.FUsignal):
                     'edgecolors':'none',
                     'polar':False,
                     'colorbar':False,
-                    'title':False
+                    'title':False,
+                    'xa':[],
+                    'xb':[]
                     }
 
         for key, value in defaults.items():
@@ -2536,7 +2539,7 @@ class Tchannel(bs.FUsignal):
 
 
     def totime(self, Nz=1, ffts=0):
-        """ transform to TUDsignal
+        """ transform to TUDchannel
 
         Parameters
         ----------
@@ -2568,7 +2571,7 @@ class Tchannel(bs.FUsignal):
         """
         Nray = len(self.taud)
         s = self.ift(Nz, ffts)
-        h = bs.TUDsignal(s.x, fft.fftshift(s.y), self.taud,self.taue)
+        h = TUDchannel(s.x, fft.fftshift(s.y), self.taud,self.taue)
         return(h)
 
 
@@ -2982,7 +2985,7 @@ class Ctilde(PyLayers):
         self.Tr = np.eye(3)
 
     def __repr__(self):
-        s = 'Ctilde'+'\n---------\n'
+        s = 'Ctilde : Ray Propagation Channel Matrices'+'\n---------\n'
         if hasattr(self, 'Cpp'):
             s = s + str(np.shape(self.Cpp.y))+'\n'
         if hasattr(self, 'nray'):
@@ -2992,17 +2995,7 @@ class Ctilde(PyLayers):
             s = s + 'Nfreq : ' + str(self.nfreq)+'\n'
         return(s)
 
-    def choose(self):
-        """ Choose a field file in tud directory
-
-        DEPRECATED
-        """
-        import tkFileDialog as FD
-        filefield = FD.askopenfilename(filetypes=[("Files field  ", "*.field"),
-                                                  ("All", "*")],
-                                       title="Please choose a .field file",
-                                       initialdir=tuddir)
-        self.load(filefield, transpose=False)
+    
 
 
     def saveh5(self,Lfilename,idx,a,b):
@@ -4202,21 +4195,6 @@ maicher
         H.tk = H.taud
 
         return(H)
-
-    def info(self):
-        """ Info (Nf,Nray,shape(y))
-        """
-
-        print "Nfreq  :", self.nfreq
-        print "Nray :", self.nray
-        print "shape Ctt :", np.shape(self.Ctt.y)
-        print "shape Ctp :", np.shape(self.Ctp.y)
-        print "shape Cpt :", np.shape(self.Cpt.y)
-        print "shape Cpp :", np.shape(self.Cpp.y)
-
-
-
-
 
 if __name__ == "__main__":
     plt.ion()

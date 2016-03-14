@@ -346,8 +346,8 @@ class DLink(Link):
         defaults={ 'L':Layout(),
                    'a':np.array(()),
                    'b':np.array(()),
-                   'Aa':Antenna(typ='Omni'),
-                   'Ab':Antenna(typ='Omni'),
+                   'Aa':[],
+                   'Ab':[],
                    'Ta':np.eye(3),
                    'Tb':np.eye(3),
                    'fGHz':[],
@@ -374,38 +374,35 @@ class DLink(Link):
             else :
                 if key in specset :
                     setattr(self,'_'+key,kwargs[key])
+
                 else :
                     setattr(self,key,kwargs[key])
 
+    
         force=self.force_create
         delattr(self,'force_create')
+
+       
+        if self.Aa==[]:
+            self.Aa=Antenna(typ='Omni',fGHz=self.fGHz)
+        if self.Ab==[]:
+            self.Ab=Antenna(typ='Omni',fGHz=self.fGHz)
+        
+
+        # The frequency range is dependent from the antenna frequency range
 
         if self.fGHz == []:
             self.initfreq()
         else :
             pass
 
+
         try:
             self._Lname = self._L.filename
         except:
             self._L=Layout(self._L)
             self._Lname = self._L.filename
-
-        ###########
-        # Transmitter and Receiver positions
-        ###########
-
-        self.tx = RadioNode(name = '',
-                            typ = 'tx',
-                            _fileini = 'radiotx.ini',
-                            )
-
-        self.rx = RadioNode(name = '',
-                            typ = 'rx',
-                            _fileini = 'radiorx.ini',
-                            )
-
-
+    
 
         self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5'
         filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
@@ -421,8 +418,6 @@ class DLink(Link):
                      'Ct':{'exist':False,'grpname':''},
                      'H':{'exist':False,'grpname':''}
                     }
-
-
 
         try:
             self.L.dumpr()
@@ -465,6 +460,7 @@ class DLink(Link):
             # self.cb = self.L.pt2cy(self.b)
 
 
+       
         ###########
         # init freq
         # TODO Check where it is used redundant with fGHz
@@ -550,7 +546,7 @@ class DLink(Link):
         if not self.L.pt2cy(position) == self.ca:
             self.ca = self.L.pt2cy(position)
         self._a = position
-        self.tx.position = position
+        
 
     @b.setter
     def b(self,position):
@@ -559,7 +555,7 @@ class DLink(Link):
         if not self.L.pt2cy(position) == self.cb:
             self.cb = self.L.pt2cy(position)
         self._b = position
-        self.rx.position = position
+        
 
     @ca.setter
     def ca(self,cycle):
@@ -578,29 +574,21 @@ class DLink(Link):
 
     @Aa.setter
     def Aa(self,Ant):
-        position = self.a
+       
         rot = self.Ta
-        self.tx = RadioNode(name = '',
-                            typ = 'tx',
-                            _fileini = 'radiotx.ini',
-                            )
+        
         self._Aa = Ant
-        #to be removed when radionode will be updated
-        self.a = position
+       
         self.Ta = rot
         self.initfreq()
 
     @Ab.setter
     def Ab(self,Ant):
-        position = self.b
+       
         rot = self.Tb
-        self.rx = RadioNode(name = '',
-                            typ = 'rx',
-                            _fileini = 'radiorx.ini',
-                            )
+        
         self._Ab = Ant
-        #to be removed when radionode will be updated
-        self.b = position
+        
         self.Tb = rot
         self.initfreq()
 
@@ -608,22 +596,22 @@ class DLink(Link):
     @Ta.setter
     def Ta(self,orientation):
         self._Ta = orientation
-        self.tx.orientation = orientation
+        
 
     @Tb.setter
     def Tb(self,orientation):
         self._Tb = orientation
-        self.rx.orientation = orientation
+        
 
     @fGHz.setter
     def fGHz(self,freq):
         if not isinstance(freq,np.ndarray):
             freq=np.array([freq])
         self._fGHz = freq
-        if self.Aa.typ == 'Omni':
-            self.Aa.fGHz = self.fGHz
-        if self.Ab.typ == 'Omni':
-            self.Ab.fGHz = self.fGHz
+        # if self.Aa.typ == 'Omni':
+        #     self.Aa.fGHz = self.fGHz
+        # if self.Ab.typ == 'Omni':
+        #     self.Ab.fGHz = self.fGHz
         #if len(freq)>1:
         #    self.fmin = freq[0]
         #    self.fmax = freq[-1]
@@ -686,26 +674,36 @@ class DLink(Link):
         """ Automatic freq determination from
             Antennas
         """
-        fa = self.Aa.fGHz
-        fb = self.Ab.fGHz
-    
-        if len(fa)==0 or len(fb)==0:
-            raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz") 
-        try:
-            sa = fa[1]-fa[0]
-        except: #single frequency
-            sa = fa[0]
+        sf = self.fGHz[1]-self.fGHz[0]
+        if hasattr(self.Aa,'fGHz'):
+            fa = self.Aa.fGHz
+            if len(fa)==0:
+                raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz") 
+            try:
+                sa = fa[1]-fa[0]  # step frequecy 
+            except: #single frequency
+                sa = fa[0]
             # step
-        try:
-            sb = fb[1]-fb[0]
-        except:
-            sb = fb[0]
+            minfa = max(min(fa),min(self.fGHz))
+            maxfa = min(max(fa),max(self.fGHz))
+            sf = min(sa,sf)
+            self.fGHz = np.arange(minfa,maxfa+sf,sf)
 
-        minf = max(min(fa),min(fb))
-        maxf = min(max(fa),max(fb))
+        if hasattr(self.Ab,'fGHz'):
+            fb = self.Ab.fGHz
+            if len(fb)==0:
+                raise AttributeError("Incompatible frequency range in Antenna. Consider change Dlink.fGHz")
+        
+            try:
+                sb = fb[1]-fb[0] # step frequency 
+            except:
+                sb = fb[0]
 
-        sf = min(sa,sb)
-        self.fGHz = np.arange(minf,maxf+sf,sf)
+            minfb = max(min(self.fGHz),min(fb))
+            maxfb = min(max(self.fGHz),max(fb))
+
+            sf = min(sf,sb)
+            self.fGHz = np.arange(minfb,maxfb+sf,sf)
 
 
     def reset_config(self):
@@ -1070,7 +1068,7 @@ class DLink(Link):
             u = umap
             u_opt='r'
         else :
-            u = self.stack(key,array)abafaeab
+            u = self.stack(key,array)
             u_opt='s'
         return u_opt,u[0]
 
@@ -1387,9 +1385,9 @@ class DLink(Link):
             self.load(C,self.dexist['Ct']['grpname'])
 
         else :
-            if not hasattr(R,'I'):
+            #if not hasattr(R,'I'):
             # Ctilde...
-                C = R.eval(self.fGHz)
+            C = R.eval(self.fGHz)
             # ...save Ct
             self.save(C,'Ct',self.dexist['Ct']['grpname'],force = kwargs['force'])
 
@@ -1606,17 +1604,17 @@ class DLink(Link):
 
 
         if centered :
-            ptx = self.tx.position-pg
-            prx = self.rx.position-pg
+            ptx = self.a-pg
+            prx = self.b-pg
         else :
-            ptx = self.tx.position
-            prx = self.rx.position
+            ptx = self.a
+            prx = self.b
 
         if ant :
             Atx = self.Aa
             Arx = self.Ab
-            Ttx = self.tx.orientation
-            Trx = self.rx.orientation
+            Ttx = self.Ta
+            Trx = self.Tb
 
             # evaluate antenna if required
             if not Atx.evaluated:

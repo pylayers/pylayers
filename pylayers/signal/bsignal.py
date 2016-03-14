@@ -2768,7 +2768,7 @@ class FUsignal(FBsignal,Usignal):
         print 'Duration (ns) :', T
         print 'Frequency sampling step : ', df
 
-    def energy(self,axis=1,Friis=False,mode='mean'):
+    def energy(self,axis=-1,Friis=False,mode='mean'):
         r""" calculate energy along given axis
 
         Parameters
@@ -2814,24 +2814,24 @@ class FUsignal(FBsignal,Usignal):
 
         if Friis:
             factor = -1.j*0.3/(4*np.pi*self.x)
-            H = H*factor[np.newaxis,:]
+            H = H*factor[...,:]
 
         MH2 = abs(H * np.conjugate(H))
 
         if mode=='mean':
-            EMH2  = MH2.mean(axis=axis)
+            EMH2  = MH2.mean(axis=-1)
 
         if mode=='integ':
-            EMH2  = MH2.sum(axis=axis)*(self.x[1]-self.x[0])
+            EMH2  = MH2.sum(axis=-1)*(self.x[1]-self.x[0])
 
         if mode=='center':
-            EMH2  = MH2[:,len(self.x)/2]
+            EMH2  = MH2[...,len(self.x)/2]
 
         if mode=='first':
-            EMH2  = MH2[:,0]
+            EMH2  = MH2[...,0]
 
         if mode=='last':
-            EMH2  = MH2[:,-1]
+            EMH2  = MH2[...,-1]
 
         return(EMH2)
 
