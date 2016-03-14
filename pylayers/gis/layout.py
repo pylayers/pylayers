@@ -1226,8 +1226,10 @@ class Layout(PyLayers):
         config.add_section("info")
         config.add_section("points")
         config.add_section("segments")
+        config.add_section("cycles")
         config.add_section("display")
         config.add_section("files")
+        config.set("info",'version',1.0)
         config.set("info",'Npoints',self.Np)
         config.set("info",'Nsegments',self.Ns)
         config.set("info",'Nsubsegments',self.Nss)
@@ -1269,6 +1271,14 @@ class Layout(PyLayers):
                     except:
                         pass
                 config.set("segments",str(n),d)
+        # manage cycle section
+        for c in self.Gt.node:
+            d={}
+            vnodes = self.Gt.node[c]['polyg'].vnodes
+            d['vnodes']=vnodes
+            d['ceil']=self.Gt.node[c]['ceil']
+            d['floor']=self.Gt.node[c]['floor']
+            config.set("cycles",str(c),d)
         config.set("files",'materials',self.filematini)
         config.set("files",'slab',self.fileslabini)
         config.set("files",'furniture',self.filefur)
@@ -1399,9 +1409,27 @@ class Layout(PyLayers):
 
         # MANAGE CYCLES
         if config.has_section('cycles'):
+            self.Gt.pos={}
             # READ CYCLE CODE TO BE IMPLEMENTED
-            raise AttributeError('cycle section NOT YET IMPLEMENTED')
+            for c in di['cycles']:
+                cy =eval(c)
+                dcy = eval(di['cycles'][c])
+                vn = dcy.pop('vnodes')
+                upts = vn[vn<0]
+                pts = [self.Gs.pos[p] for p in upts]
+                polyg = geu.Polygon(pts) 
+                polyg.setvnodes(self)
+                dcy.update({'polyg':polyg})
+                self.Gt.add_node(cy,dcy)
+                self.Gt.pos[cy]= np.array(polyg.centroid.xy)[:,0]
+
+            seg_connect = {x:self.Gs.edge[x].keys() for x in self.Gs.nodes() if x >0}
+
+            dpts = {x[0]:(self.Gs.pos[x[1][0]],self.Gs.pos[x[1][1]]) for x in seg_connect.items() }
+            self._shseg = {p[0]:sh.LineString(p[1]) for p in dpts.items()}
+
         else :
+            # This part manage old .ini file without cycles
             seg_connect = {x:self.Gs.edge[x].keys() for x in self.Gs.nodes() if x >0}
 
             dpts = {x[0]:(self.Gs.pos[x[1][0]],self.Gs.pos[x[1][1]]) for x in seg_connect.items() }
@@ -1426,6 +1454,8 @@ class Layout(PyLayers):
                 if n>0:
                     self.Gs.node[n]['ncycles']=[]
             for p in self.Gt.nodes():
+                self.Gt.node[p]['ceil']='CEIL'
+                self.Gt.node[p]['floor']='FLOOR'
                 vn = self.Gt.node[p]['polyg'].vnodes
                 [self.Gs.node[i]['ncycles'].append(p) for i in vn if i >0]
 
@@ -2431,120 +2461,163 @@ class Layout(PyLayers):
 
         """
 
-        # if 2 points are selected
-        if ((n1 < 0) & (n2 < 0) & (n1 != n2)):
-            nn = np.array(self.Gs.node.keys())  ## nn : node list array     (can be empty)
-            up = np.nonzero(nn > 0)[0]          ## up : segment index (>O)  (can be empty)
-            lp = len(up)                        ## lp : number of segments  (can be zero)
-            if lp>0:
-                e1 = np.arange(lp) + 1          ## e1 : ordered list of segment number
+        # check the segment does not already exists
+        if not np.any([s1 in self.Gs[n2].keys() for s1 in self.Gs[n1].keys()]):
+            # if 2 points are selected
+            if ((n1 < 0) & (n2 < 0) & (n1 != n2)):
+                nn = np.array(self.Gs.node.keys())  ## nn : node list array     (can be empty)
+                up = np.nonzero(nn > 0)[0]          ## up : segment index (>O)  (can be empty)
+                lp = len(up)                        ## lp : number of segments  (can be zero)
+                if lp>0:
+                    e1 = np.arange(lp) + 1          ## e1 : ordered list of segment number
+                else:
+                    e1 = np.array([1])
+                e2 = nn[up]                         ## e2 : current list of segment number
+                c = ~np.in1d(e1, e2)                ## c  : e1 not in e2 (free segment number)
+                tn = e1[c]                          ## tn[c] free segment number
+                #print tn
+                try:
+                    num = tn[0]
+                except:
+                    num = max(self.Gs.node.keys()) + 1
+                    if num == 0:
+                        num = 1
             else:
-                e1 = np.array([1])
-            e2 = nn[up]                         ## e2 : current list of segment number
-            c = ~np.in1d(e1, e2)                ## c  : e1 not in e2 (free segment number)
-            tn = e1[c]                          ## tn[c] free segment number
-            #print tn
+                print "add_segment : error not a node", n1, n2
+                return
+            transition = False
+            if name == 'AIR':
+                transition=True
+
+            p1 = np.array(self.Gs.pos[n1])
+            p2 = np.array(self.Gs.pos[n2])
+            p2mp1 = p2 - p1
+            t = p2mp1 / np.sqrt(np.dot(p2mp1, p2mp1))
+
+            #
+            # n = t x z
+            #
+
+            norm = np.array([t[1], -t[0], 0])
+            self.Gs.add_node(num, name=name, 
+                                  z=z,
+                                  norm=norm,
+                                  transition=transition,
+                                  offset=offset,
+                                  connect=[n1,n2],
+                                  ncycles=[])
+
+            self.Gs.pos[num] = tuple((p1 + p2) / 2.)
+            self.Gs.add_edge(n1, num)
+            self.Gs.add_edge(n2, num)
+            self.Ns = self.Ns + 1
+
+            # manage line list of shapely        
+            X=sho.polygonize(self._shseg.values())
+            self.polcold = sh.MultiPolygon(list(X))
+            self._shseg[num]=sh.LineString((self.Gs.pos[n1],self.Gs.pos[n2]))
+            # check line inside an existing polygon
+
+            MP=sho.polygonize(self._shseg.values())
+            # make union
+            polsnew = sh.MultiPolygon(list(MP))
+            # print "addseg"
+            # print "old:",len(self.polcold),'new:',len(polsnew)
+            # new polygon detected
+
+
+
+            previous = sh.MultiPolygon(nx.get_node_attributes(self.Gt,'polyg').values())
+            # p = previous.symmetric_difference(polsnew)
+            p=[]
+            for pp in polsnew:
+
+                if not pp.centroid.xy in [z.centroid.xy for z in previous]: 
+                    p.append(pp)
+
+
+
+            # if there is Polygon creation
+            if len(polsnew)  > len(self.polcold):
+
+                # find if line split existing polygon
+                gtnodes = np.array(self.Gt.nodes())
+                u = [self.Gt.node[i]['polyg'].contains(self._shseg[num]) for i in gtnodes]
+                uu = np.where(u)[0]
+
+                # seg is inside a polygon => need to 
+                # # SPLIT Pol
+                if len(uu)>0:
+                    print "split"
+                    ucy = gtnodes[uu[0]]
+                    vn = self.Gt.node[ucy]['polyg'].vnodes
+                    pt = vn[vn<0]
+
+                    # get segments of polugon to be split
+                    vn = vn[vn>0].tolist()
+                    [self.Gs.node[s]['ncycles'].remove(ucy) for s in vn if (ucy in self.Gs.node[s]['ncycles'])]
+
+                    # take polygon seg + the new cutting seg
+                    vn = vn + [num]
+                    lines = [self._shseg[i] for i in vn]
+                    npolys = list(sho.polygonize(lines))
+                    assert len(npolys) == 2
+                    # the first created polygon has the id of the prvious one , the second take a free id 
+                    pid = [ucy, max(self.Gt.node)+1]
+
+                    
+
+                    for up, p in enumerate(npolys):
+                        P = geu.Polygon(p)
+                        P.setvnodes(self)
+                        seg = P.vnodes[P.vnodes>0]
+                        [self.Gs.node[s]['ncycles'].append(pid[up]) for s in seg if pid[up] not in self.Gs.node[s]['ncycles']]
+                        self.Gt.add_node(pid[up],polyg=P)
+                        self.Gt.pos[pid[up]]=np.array(self.Gt.node[pid[up]]['polyg'].centroid.xy)[:,0]
+
+                    
+            
+                # CREATE Pol
+                else :
+                    print "create"
+                    
+                    for pp in p:
+                    
+                        self._createGtpol(pp)
+                    
+                    # self._create_Gtpol(NP) # to be written
+                        # for p in NP:
+
+            # the segment which ahas been created not create a valid polygon. remove the one
+            # which its belong ( no valid anymore)
+            else:
+                print "remove not valid"
+                gtnodes = np.array(self.Gt.nodes())
+                u = [self.Gt.node[i]['polyg'].contains(self._shseg[num]) for i in gtnodes]
+                uu = np.where(u)[0]
+
+                if len(uu)>0:
+                    ucy = gtnodes[uu[0]]
+                    vn = self.Gt.node[ucy]['polyg'].vnodes
+                    seg = vn[vn>0]
+                    seg = [s for s in seg if s in self.Gs.nodes()]
+                    self.Gt.remove_node(ucy)
+                    self.Gt.pos.pop(ucy)
+                    # remove Gt node in involved segmensncycles 
+                    [self.Gs.node[s]['ncycles'].remove(ucy) for s in seg if (ucy in self.Gs.node[s]['ncycles'])]
+
+            # update slab name <-> edge number dictionnary
             try:
-                num = tn[0]
+                self.name[name].append(num)
             except:
-                num = max(self.Gs.node.keys()) + 1
-                if num == 0:
-                    num = 1
+                self.name[name] = [num]
+            # update label
+            self.labels[num] = str(num)
+            if name not in self.display['layers']:
+                self.display['layers'].append(name)
+            return(num)
         else:
-            print "add_segment : error not a node", n1, n2
-            return
-        transition = False
-        if name == 'AIR':
-            transition=True
-
-        p1 = np.array(self.Gs.pos[n1])
-        p2 = np.array(self.Gs.pos[n2])
-        p2mp1 = p2 - p1
-        t = p2mp1 / np.sqrt(np.dot(p2mp1, p2mp1))
-
-        #
-        # n = t x z
-        #
-
-        norm = np.array([t[1], -t[0], 0])
-        self.Gs.add_node(num, name=name, 
-                              z=z,
-                              norm=norm,
-                              transition=transition,
-                              offset=offset,
-                              connect=[n1,n2],
-                              ncycles=[])
-
-        self.Gs.pos[num] = tuple((p1 + p2) / 2.)
-        self.Gs.add_edge(n1, num)
-        self.Gs.add_edge(n2, num)
-        self.Ns = self.Ns + 1
-
-        # manage line list of shapely        
-        X=sho.polygonize(self._shseg.values())
-        self.polcold = sh.MultiPolygon(list(X))
-        self._shseg[num]=sh.LineString((self.Gs.pos[n1],self.Gs.pos[n2]))
-        # check line inside an existing polygon
-
-
-        MP=sho.polygonize(self._shseg.values())
-        # make union
-        polsnew = sh.MultiPolygon(list(MP))
-        # print "addseg"
-        # print "old:",len(self.polcold),'new:',len(polsnew)
-        # new polygon detected
-        if len(polsnew)  > len(self.polcold):
-            p = self.polcold.symmetric_difference(polsnew)
-
-
-            gtnodes = np.array(self.Gt.nodes())
-            u = [self.Gt.node[i]['polyg'].contains(self._shseg[num]) for i in gtnodes]
-            uu = np.where(u)[0]
-
-            # seg is inside a polygon => need to 
-            # # SPLIT Pol
-            if len(uu)>0:
-                ucy = gtnodes[uu[0]]
-
-                vn = self.Gt.node[ucy]['polyg'].vnodes
-                # get segments of polugon to be split
-                vn = vn[vn>0].tolist()
-                [self.Gs.node[s]['ncycles'].remove(ucy) for s in vn if (ucy in self.Gs.node[s]['ncycles'])]
-
-                # take polygon seg + the new cutting seg
-                vn = vn + [num]
-                lines = [self._shseg[i] for i in vn]
-                npolys = list(sho.polygonize(lines))
-                assert len(npolys) == 2
-                # the first created polygon has the id of the prvious one , the second take a free id 
-                pid = [ucy, max(self.Gt.node)+1]
-                for up, p in enumerate(npolys):
-                    P = geu.Polygon(p)
-                    P.setvnodes(self)
-                    seg = P.vnodes[P.vnodes>0]
-                    [self.Gs.node[s]['ncycles'].append(pid[up]) for s in seg if pid[up] not in self.Gs.node[s]['ncycles']]
-                    self.Gt.add_node(pid[up],polyg=P)
-                    self.Gt.pos[pid[up]]=np.array(self.Gt.node[pid[up]]['polyg'].centroid.xy)[:,0]
-
-                
-        
-            # CREATE Pol
-            else :
-                self._createGtpol(p)
-                
-                # self._create_Gtpol(NP) # to be written
-                    # for p in NP:
-
-        # update slab name <-> edge number dictionnary
-        try:
-            self.name[name].append(num)
-        except:
-            self.name[name] = [num]
-        # update label
-        self.labels[num] = str(num)
-        if name not in self.display['layers']:
-            self.display['layers'].append(name)
-        return(num)
+            print "seg already exists"
 
 
     def _createGtpol(self,p):
