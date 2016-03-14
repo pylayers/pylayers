@@ -12,6 +12,7 @@ from pylayers.gis.layout import *
 # P=[x for x in X]
 # pols = sho.cascaded_union(P)
 
+<<<<<<< HEAD
 # L=Layout('Luebbers_raw.ini',force=True)
 
 # L.add_segment(-2,-5)
@@ -27,6 +28,29 @@ L.add_pons(8,0.5)
 L._updateGt()
 L.add_pons(6,0.5)
 L._updateGt()
+=======
+L=Layout('Luebbers.ini',force=True)
+
+# L.add_segment(-2,-5)
+# L.add_segment(-3,-8)
+print "\nadd_pons"
+L.add_pons(6)
+print "\nadd_pons"
+L.add_pons(8)
+print "\nadd_seg"
+L.add_segment(-21,-22)
+
+
+#L.del_segment(18)
+
+
+
+# L._updateGt()
+
+# L._updateGt()
+
+# L._updateGt()
+>>>>>>> a8374cf928c0a484bc9bb568d4056868d9f823a2
 
 L.add_segment(-17,-18)
 L._updateGt()

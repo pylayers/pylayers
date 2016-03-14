@@ -2368,11 +2368,35 @@ class Layout(PyLayers):
         p = tuple(alpha * p1 + (1 - alpha) * p2)
         num = self.add_fnod(p)
         # delete old edge ns
+        ncy = self.Gs.node[ns]['ncycles']
         self.del_segment(ns)
         # add new edge np[0] num
-        self.add_segment(nop[0], num, name=namens, z = [zminns,zmaxns], offset=0)
+        seg1 = self.add_segment(nop[0], num, name=namens, z = [zminns,zmaxns], offset=0)
         # add new edge num np[1]
-        self.add_segment(num, nop[1], name=namens, z = [zminns,zmaxns], offset=0)
+        seg2 = self.add_segment(num, nop[1], name=namens, z = [zminns,zmaxns], offset=0)
+
+        new_pts = self.Gs.node[seg1]['connect'] + self.Gs.node[seg2]['connect'] +[seg1]+[seg2]
+        # new_pts = [n for n in new_pts if n < 0]
+        # newnp.unique(new_pts).tolist()
+        # import ipdb
+        # ipdb.set_trace()
+        for c in ncy:
+            vn = self.Gt.node[c]['polyg'].vnodes
+            # vn = vn[vn<0]
+            npts = vn.tolist() + new_pts
+            npts = np.unique(npts)
+            S=nx.subgraph(self.Gs,npts)
+            S.pos={}
+            S.pos.update({i:self.Gs.pos[i] for i in S.nodes()})   
+            cyc = cycl.Cycle(S,npts) 
+            pts = [self.Gs.pos[x] for x in cyc.cycle if x<0]
+            self.Gt.node[c]['polyg'] = geu.Polygon(pts)
+            self.Gt.node[c]['polyg'].setvnodes(self)
+            seg = self.Gt.node[c]['polyg'].vnodes
+            seg = seg[seg>0]
+            [self.Gs.node[s]['ncycles'].append(c) for s in seg if c not in self.Gs.node[s]['ncycles']]
+
+        
 
     def add_segment(self, n1, n2, name='PARTITION',z=[0.0,3.0],offset=0):
         """  add segment between node n1 and node n2
@@ -2459,8 +2483,39 @@ class Layout(PyLayers):
 
         # manage line list of shapely        
         X=sho.polygonize(self._shseg.values())
-        self.polcold = sho.cascaded_union(list(X))
+        self.polcold = sh.MultiPolygon(list(X))
         self._shseg[num]=sh.LineString((self.Gs.pos[n1],self.Gs.pos[n2]))
+        # check line inside an existing polygon
+        gtnodes = np.array(self.Gt.nodes())
+        u = [self.Gt.node[i]['polyg'].contains(self._shseg[num]) for i in gtnodes]
+        uu = np.where(u)[0]
+
+        MP=sho.polygonize(self._shseg.values())
+        # make union
+        polsnew = sh.MultiPolygon(list(MP))
+        print "addseg"
+        print "old:",len(self.polcold),'new:',len(polsnew)
+        if len(polsnew)  > len(self.polcold):
+            print 'create GT'
+            #self._create_Gtpol(NP)
+                # NP = self.polcold.symmetric_difference(polsnew)
+        # # seg is inside a polygon => need to split cycle
+        # if len(uu)>0:
+        #     split_cy = gtnodes[uu]
+        #     self._split_Gtpol(split_cy) # to be written
+        
+        # else :
+        #     # create multipolygon of layout
+        #     MP=sho.polygonize(self._shseg.values())
+        #     # make union
+        #     polsnew = sh.MultiPolygon(list(MP))
+        #     NP = self.polcold.symmetric_difference(polsnew)
+            
+        #     if isinstance(NP,sh.Polygon):
+        #         NP=sh.MultiPolygon([NP])
+        #     if isinstance(NP,sh.MultiPolygon):
+        #         self._create_Gtpol(NP) # to be written
+        #         # for p in NP:
 
         # update slab name <-> edge number dictionnary
         try:
@@ -2482,8 +2537,15 @@ class Layout(PyLayers):
         [ax.add_patch(x) for x in mpl]
         plt.axis(self.ax)
         plt.draw()
-
-    def _updateGt(self):
+    def pltlines(self,lines,fig=[],ax=[]):
+        if fig == []:
+            fig=plt.gcf()
+        if ax == []:
+            ax=plt.gca()
+        [ax.plot(x.xy[0],x.xy[1]) for x in lines]
+        plt.axis(self.ax)
+        plt.draw()
+    def _updateGt(self,split=False,merge=False):
         # create multipolygon of layout
         MP=sho.polygonize(self._shseg.values())
         # make union
@@ -2520,6 +2582,103 @@ class Layout(PyLayers):
                     # remove Gt node in involved segmensncycles 
                     [self.Gs.node[s]['ncycles'].remove(pid) for s in seg if (pid in self.Gs.node[s]['ncycles'])]
                     
+        polsnew = sh.MultiPolygon(list(MP))
+
+
+        try:    
+
+
+            NP = self.polcold.symmetric_difference(polsnew)
+            
+
+            if isinstance(NP,sh.Polygon):
+                NP=sh.MultiPolygon([NP])
+            if isinstance(NP,sh.MultiPolygon):
+                #thisis the future self._create_GT_pol
+                for p in NP:
+                    #a polygon has been added
+                    if polsnew.area > self.polcold.area:
+                        pid = max(self.Gt.node)+1
+                        P = geu.Polygon(p)
+                        P.setvnodes(self)
+                        seg = P.vnodes[P.vnodes>0]
+                        [self.Gs.node[s]['ncycles'].append(pid) for s in seg if pid not in self.Gs.node[s]['ncycles']]
+                        self.Gt.add_node(pid,polyg=P)
+                        self.Gt.pos[pid]=np.array(self.Gt.node[pid]['polyg'].centroid.xy)[:,0] 
+                    # segment has been removed, polygon is destroyed
+                    elif polsnew.area < self.polcold.area:
+                        cent = np.array(p.centroid.xy)[:,0]
+                        # find position in Gt.pos values
+                        ulc = (cent - np.array(self.Gt.pos.values())).argmin()
+                        pid = self.Gt.pos.keys()[ulc]
+                        vn = self.Gt.node[pid]['polyg'].vnodes
+                        seg = vn[vn>0]
+                        seg = [s for s in seg if s in self.Gs.nodes()]
+                        self.Gt.remove_node(pid)
+                        self.Gt.pos.pop(pid)
+                        # remove Gt node in involved segmensncycles 
+                        [self.Gs.node[s]['ncycles'].remove(pid) for s in seg if (pid in self.Gs.node[s]['ncycles'])]
+
+            # a polygon has been split the line string correspond to a new segment
+            if isinstance(NP,sh.LineString):
+                
+                addseg=True
+                NP = self.polcold.difference(polsnew)
+                # if np line : line segment delete -> polygone to bcombine
+                if isinstance(NP,sh.GeometryCollection):
+                    NP = polsnew.difference(self.polcold)
+                    addseg=False
+                print NP,addseg
+
+                # if addseg :
+                pts = np.array(NP.xy)
+                segpos = np.mean(pts,axis=1)
+                (segpos - np.array(self.Gs.pos.values())).argmin()
+                useg = np.sum((abs(segpos - np.array(self.Gs.pos.values()))),axis=1).argmin() 
+                # ulc are the 2 point idx in Gs of the linestring
+                seg = np.array(self.Gs.pos.keys())[useg]
+                #fing which poly/Gt cycle has been split
+                ucy = np.where([self.Gt.node[i]['polyg'].contains(NP) for i in self.Gt.nodes()])
+                if len(ucy[0])!=0:
+                    ucy = np.array(self.Gt.nodes())[ucy][0]
+
+                    vn = self.Gt.node[ucy]['polyg'].vnodes
+                    # get segments of polugon to be split
+                    vn = vn[vn>0].tolist()
+                    [self.Gs.node[s]['ncycles'].remove(ucy) for s in vn if (ucy in self.Gs.node[s]['ncycles'])]
+
+                    # take polygon seg + the new cutting seg
+                    vn = vn + [seg]
+                    lines = [self._shseg[i] for i in vn]
+                    npolys = list(sho.polygonize(lines))
+                    assert len(npolys) == 2
+                    # the first created polygon has the id of the prvious one , the second take a free id 
+                    pid = [ucy, max(self.Gt.node)+1]
+                    for up, p in enumerate(npolys):
+                        P = geu.Polygon(p)
+                        P.setvnodes(self)
+                        seg = P.vnodes[P.vnodes>0]
+                        [self.Gs.node[s]['ncycles'].append(pid[up]) for s in seg if pid[up] not in self.Gs.node[s]['ncycles']]
+                        self.Gt.add_node(pid[up],polyg=P)
+                        self.Gt.pos[pid[up]]=np.array(self.Gt.node[pid[up]]['polyg'].centroid.xy)[:,0]
+
+                # # 2 polygon must be merged due do segmnt deletion
+                # else:
+                #     # identify cycle containg line
+                #     ucy = np.where([self.Gt.node[i]['polyg'].contains(NP) for i in self.Gt.nodes()])
+                #     import ipdb
+                #     ipdb.set_trace()
+                #     # pts = np.array(NP.xy)
+                #     # segpos = np.mean(pts,axis=1)
+                #     # vn = self.Gt.node[ucy]['polyg'].vnodes
+                #     # # get segments of polygon to be split
+                #     # vn = vn[vn>0].tolist()
+                #     # # keep only segments existing in Gs 
+                #     # nvn = [v for v in vn if v in self.L.Gs.keys()]
+
+
+        except:
+            pass
 
 
 
@@ -2927,6 +3086,9 @@ class Layout(PyLayers):
             assert(e>0)
             self.del_subseg(e,verbose=verbose)
             name = self.Gs.node[e]['name']
+            # saveinfo
+            pose = self.Gs.pos[e]
+            ncye =  self.Gs.node[e]['ncycles']
             del self.Gs.pos[e] # delete edge position
             self.Gs.remove_node(e)
             self.labels.pop(e)
@@ -2935,13 +3097,32 @@ class Layout(PyLayers):
             self.name[name].remove(e)
             # delete subseg if required
 
+
+
             # manage line list of shapely        
             X=sho.polygonize(self._shseg.values())
-            self.polcold = sho.cascaded_union(list(X))
+            self.polcold = sh.MultiPolygon(list(X))
             self._shseg.pop(e)
 
-            self.g2npy()
+            # create multipolygon of layout
+            MP=sho.polygonize(self._shseg.values())
+            # make union
+            polsnew = sh.MultiPolygon(list(MP))
 
+            NP = self.polcold.symmetric_difference(polsnew)
+            print "delseg"
+            print "old:",len(self.polcold),'new:',len(polsnew)
+            if len(self.polcold)>len(polsnew):
+                #self._del_Gtpol(NP)
+                print "delGt"
+                #do somthing 
+                pass
+
+
+
+
+            self.g2npy()
+            # self._updateGt()
 
     def mask(self):
         """  returns the polygonal mask of the building
