@@ -576,7 +576,8 @@ class Bsignal(PyLayers):
 
         # shape of y and number of dimensions
 
-        shy = self.y.shape
+        sely = np.squeeze(self.y)
+        shy = sely.shape
         naxy = len(shy)
 
         # 2 axis selection
@@ -619,18 +620,18 @@ class Bsignal(PyLayers):
             dt = self.y[us:uf,vs:vf]
         elif naxy==3:
             if ((ax[0]==0) & (ax[1]==1)):
-                dt = self.y[us:uf,vs:vf,ik]
+                dt = sely[us:uf,vs:vf,ik]
             if ((ax[0]==0) & (ax[1]==2)):
-                dt = self.y[us:uf,ik,vs:vf]
+                dt = sely[us:uf,ik,vs:vf]
             if ((ax[0]==1) & (ax[1]==2)):
-                dt = self.y[ik,us:uf,vs:vf]
+                dt = sely[ik,us:uf,vs:vf]
         elif naxy==4:
             if ((ax[0]==0) & (ax[1]==1)):
-                dt = self.y[0,us:uf,vs:vf,ik]
+                dt = sely[0,us:uf,vs:vf,ik]
             if ((ax[0]==0) & (ax[1]==2)):
-                dt = self.y[0,us:uf,ik,vs:vf]
+                dt = sely[0,us:uf,ik,vs:vf]
             if ((ax[0]==1) & (ax[1]==2)):
-                dt = self.y[0,ik,us:uf,vs:vf]
+                dt = sely[0,ik,us:uf,vs:vf]
 
         if t=='m':
             ylabels='Magnitude'
@@ -738,7 +739,7 @@ class Bsignal(PyLayers):
                 vmax = kwargs['vmax']
 
             if kwargs['function']=='imshow':
-                im = ax.imshow(dt,
+                im = ax.imshow(np.squeeze(dt),
                            origin = 'lower',
                            vmin = vmin,
                            vmax = vmax,
@@ -858,15 +859,20 @@ class Bsignal(PyLayers):
         #
         # if ndim(y) > 1
         #
+        
         if ndim == 4:
             Nmeas = self.y.shape[0]
             Nr = self.y.shape[1]
             Nt = self.y.shape[2]
             fig,ax = plt.subplots(Nr,Nt)
+            if ((Nr==1) and (Nt==1)):
+                ax = np.array([[ax]])    
+    
             for k in range(Nr):
                 for l in range(Nt):
-                    yx = self.y[idx[0],k,l,u]
-                    fig,a = mulcplot(self.x[u],yx*conversion,fig=fig,ax=ax[k,l],**args)
+                    for ix in idx:
+                        yx = self.y[ix,k,l,u]
+                        fig,a = mulcplot(self.x[u],yx*conversion,fig=fig,ax=ax[k,l],**args)
 
         if ndim == 3:
             shy = self.y.shape
@@ -2827,7 +2833,7 @@ class FUsignal(FBsignal,Usignal):
         if mode=='center':
             EMH2  = MH2[...,len(self.x)/2]
 
-        if mode=='first':
+        if mode=='fi13 iirst':
             EMH2  = MH2[...,0]
 
         if mode=='last':
