@@ -1452,8 +1452,7 @@ class Layout(PyLayers):
             self.saveini(_fileini)
         # convert graph Gs to numpy arrays for faster post processing
         self.g2npy()
-        import ipdb
-        ipdb.set_trace()
+
         # 
 
 
@@ -2491,7 +2490,8 @@ class Layout(PyLayers):
         polsnew = sho.cascaded_union(list(MP))
     
         NP = polsnew.symmetric_difference(self.polcold)
-
+        import ipdb
+        ipdb.set_trace()
         if isinstance(NP,sh.Polygon):
             NP=sh.MultiPolygon([NP])
         if isinstance(NP,sh.MultiPolygon):
