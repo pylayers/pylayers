@@ -2463,9 +2463,14 @@ class Layout(PyLayers):
         connect : list of point number
 
         """
+        # check if seg already exists
+        exists = np.any([s1 in self.Gs[n2].keys() for s1 in self.Gs[n1].keys()])
+        # check created seg will not cross existing segs
+        line = sh.LineString((self.Gs.pos[n1],self.Gs.pos[n2]))
+        crosses = np.any([line.crosses(i) for i in self._shseg.values()])
 
         # check the segment does not already exists
-        if not np.any([s1 in self.Gs[n2].keys() for s1 in self.Gs[n1].keys()]):
+        if (not exists) and (not crosses):
             # if 2 points are selected
             if ((n1 < 0) & (n2 < 0) & (n1 != n2)):
                 nn = np.array(self.Gs.node.keys())  ## nn : node list array     (can be empty)
@@ -2518,7 +2523,7 @@ class Layout(PyLayers):
             # manage line list of shapely        
             X=sho.polygonize(self._shseg.values())
             self.polcold = sh.MultiPolygon(list(X))
-            self._shseg[num]=sh.LineString((self.Gs.pos[n1],self.Gs.pos[n2]))
+            self._shseg[num]=line
             # check line inside an existing polygon
 
             MP=sho.polygonize(self._shseg.values())
@@ -2620,7 +2625,10 @@ class Layout(PyLayers):
                 self.display['layers'].append(name)
             return(num)
         else:
-            print "seg already exists"
+            if crosses:
+                print "seg cross existing segment"
+            elif exists:
+                print "seg already exists"
 
 
     def _createGtpol(self,p,ceil='CEIL',floor='FLOOR'):
