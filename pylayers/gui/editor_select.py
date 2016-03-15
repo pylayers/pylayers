@@ -8,9 +8,13 @@ from pylayers.util import geomutil as geu
 from pylayers.util import pyutil as pyu
 import pylayers.util.plotutil as plu
 
+import shapely.geometry as sh
+
+
 import matplotlib.pyplot as plt
 from pylayers.util.easygui import *
 from matplotlib.widgets import RectangleSelector
+import networkx as nx 
 
 import copy
 
@@ -183,7 +187,7 @@ class SelectL2(object):
         self.L.display['clear'] = clear
         self.L.display['fontsize'] = font_size
         self.L.display['title'] = title
-        self.fig,self.ax = self.L.showGs(fig=self.fig,ax=self.ax,axis=axis,subsegnb=True)
+        self.fig,self.ax = self.L.showGs(fig=self.fig,ax=self.ax,axis=axis,subsegnb=True,polyg=True)
         if self.gridOn:
             self.setgrid()
         else:
@@ -515,6 +519,9 @@ class SelectL2(object):
 
         if event.button == 1 and self.ptmove and not ('SM' in self.state):
             # print 'move release'
+            # MOVE POINT SITUATION
+
+        
             if self.shift_is_held:
                 x = self.L.Gs.pos[self.nsel][0]
             else :
@@ -526,21 +533,40 @@ class SelectL2(object):
             if self.snapgridOn:
                 x=self.gridx[np.where(x<=self.gridx)[0][0]]
                 y=self.gridy[np.where(y<=self.gridy)[0][0]]
-            self.L.Gs.pos[self.nsel]=(x,y)
-            segs = self.L.Gs[self.nsel]
-            for s in segs:
-                n1,n2=self.L.Gs[s].keys()
-                p1 = np.array(self.L.Gs.pos[n1])
-                p2 = np.array(self.L.Gs.pos[n2])
-                p2mp1 = p2 - p1
-                t = p2mp1 / np.sqrt(np.dot(p2mp1, p2mp1))
-                norm = np.array([t[1], -t[0], 0])
-                self.L.Gs.node[s]['norm']=norm
-                self.L.Gs.pos[s]=tuple((p1 + p2) / 2.)
-            self.L.g2npy()
-            self.modeIni()
-            self.new_state()
 
+            # check not move in another cycle
+            Pt = sh.Point(x,y)
+            # point can be moved only if they remain in their original polygon
+            cond = [self.L.Gt.node[p]['polyg'].contains(Pt) 
+                    for p in self.L.Gt.nodes()
+                    if self.nsel not in self.L.Gt.node[p]['polyg'].vnodes]
+            if not np.any(cond):
+                self.L.Gs.pos[self.nsel]=(x,y)
+                segs = self.L.Gs[self.nsel]
+                # UPDATE SEGS
+                for s in segs:
+                    n1,n2=self.L.Gs[s].keys()
+                    p1 = np.array(self.L.Gs.pos[n1])
+                    p2 = np.array(self.L.Gs.pos[n2])
+                    p2mp1 = p2 - p1
+                    t = p2mp1 / np.sqrt(np.dot(p2mp1, p2mp1))
+                    norm = np.array([t[1], -t[0], 0])
+                    self.L.Gs.node[s]['norm']=norm
+                    self.L.Gs.pos[s]=tuple((p1 + p2) / 2.)
+                    # update polygon
+                    cy = self.L.Gs.node[s]['ncycles']
+                    for c in cy:
+                        vn = self.L.Gt.node[c]['polyg'].vnodes
+                        pts = [self.L.Gs.pos[v] for v in vn if v <0]
+                        self.L.Gt.node[c]['polyg'] = geu.Polygon(pts)
+                        self.L.Gt.node[c]['polyg'].setvnodes(self.L)
+                        self.L.Gt.pos[c] = np.array(self.L.Gt.node[c]['polyg'].centroid.xy)[:,0] 
+                self.L.g2npy()
+                self.modeIni()
+                self.new_state()
+            else:
+                self.modeIni()
+                self.new_state()
         if self.evt=='rclic':
             self.modeIni()
             self.new_state()

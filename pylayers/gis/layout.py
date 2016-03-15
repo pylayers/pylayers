@@ -358,6 +358,7 @@ class Layout(PyLayers):
         self.tahe = np.zeros(([2, 0]), dtype=int)
         self.lbltg = []
 
+        self.Gt.pos = {}
         # shapely segments
         self._shseg={}
         # old polygons
@@ -2634,14 +2635,17 @@ class Layout(PyLayers):
         """
         # manage numbering
         # find free id in Gt
-        idmax=max(self.Gt.node)
-        possid = np.arange(1,idmax)
-        upossid = [i not in self.Gt.node for i in possid]
-        ufreeid = np.where(upossid)[0]
-        if len(ufreeid) == 0:
-            pid = max(self.Gt.node)+1
-        else:
-            pid = possid[ufreeid[0]]
+        if len(self.Gt.node)!=0:
+            idmax=max(self.Gt.node)
+            possid = np.arange(1,idmax)
+            upossid = [i not in self.Gt.node for i in possid]
+            ufreeid = np.where(upossid)[0]
+            if len(ufreeid) == 0:
+                pid = max(self.Gt.node)+1
+            else:
+                pid = possid[ufreeid[0]]
+        else: 
+            pid=1
         if not isinstance(p,geu.Polygon):
             P = geu.Polygon(p)
             P.setvnodes(self)
@@ -2661,6 +2665,7 @@ class Layout(PyLayers):
         [ax.add_patch(x) for x in mpl]
         plt.axis(self.ax)
         plt.draw()
+        
     def pltlines(self,lines,fig=[],ax=[]):
         if fig == []:
             fig=plt.gcf()
@@ -5626,6 +5631,7 @@ class Layout(PyLayers):
                     'fGHz' : [],
                     'show':False,
                     'furniture':False,
+                    'polyg':False
                     }
 
         for k in defaults:
@@ -5648,8 +5654,8 @@ class Layout(PyLayers):
             ax = kwargs['ax']
 
         if self.display['clear']:
+            [a.remove() for a in ax.patches]
             ax.cla()
-
         # display overlay image
         if self.display['overlay']:
             # imok : Image is OK
@@ -5767,6 +5773,11 @@ class Layout(PyLayers):
             else:
                 print "Warning : no furniture file loaded"
 
+        if kwargs['polyg']:
+
+            pol = nx.get_node_attributes(self.Gt,'polyg').values()
+            for p in pol:
+                fig,ax = p.plot(fig=fig,ax=ax,alpha=0.3)
 
         for nr in kwargs['roomlist']:
             ncy = self.Gr.node[nr]['cycle']

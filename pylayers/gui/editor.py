@@ -1007,10 +1007,10 @@ class AppForm(QMainWindow):
 
         if filename != '':
             _filename = pyu.getshort(str(filename))
-            self.L = Layout(_filename)
+            self.L = Layout(_filename,force=True)
             self.filename = self.L.filename
             self.create_main_frame()
-            self.on_draw()
+            # self.on_draw()
             self.setWindowTitle(self.L.filename + '- Pylayers : Stand Alone Editor (Beta)')
             self.resize(self.fig.canvas.width(),self.fig.canvas.height())
             print 'loaded'
@@ -1205,26 +1205,28 @@ class AppForm(QMainWindow):
         # self.axes.clear()
 
         # self.axes.grid(self.grid_cb.isChecked())
-        self.L.display['nodes']=True
-        self.L.display['ednodes']=True
-        self.L.display['subseg']=False
-        self.L.display['subsegnb']=True
-        self.L.display['ticksoff']=False
+        self.selectl.refresh()
+        # self.L.display['nodes']=True
+        # self.L.display['ednodes']=True
+        # self.L.display['subseg']=False
+        # self.L.display['subsegnb']=True
+        # self.L.display['ticksoff']=False
 
 
-        self.fig,self.axes = self.selectl.show(self.fig,self.axes,clear=True)
-        # self.axes.text(10,10,str(self.properties.currentText()))
+        # self.fig,self.axes = self.selectl.show(self.fig,self.axes,clear=True)
 
-        # self.L.showGs(fig=self.fig,ax=self.axes)
-        # self.axes.bar(
-        #     left=x,
-        #     height=self.data,
-        #     width=self.slider.value() / 100.0,
-        #     align='center',
-        #     alpha=0.44,
-        #     picker=5)
+        # # self.axes.text(10,10,str(self.properties.currentText()))
 
-        self.fig.canvas.draw()
+        # # self.L.showGs(fig=self.fig,ax=self.axes)
+        # # self.axes.bar(
+        # #     left=x,
+        # #     height=self.data,
+        # #     width=self.slider.value() / 100.0,
+        # #     align='center',
+        # #     alpha=0.44,
+        # #     picker=5)
+
+        # self.fig.canvas.draw()
 
     def on_release(self,event):
         string=''
@@ -1282,7 +1284,6 @@ class AppForm(QMainWindow):
             self.axes.axis(self.L.display['overlay_axis'])
         except:
             self.axes.axis(self.L.display['box'])
-
         # Bind the 'pick' event for clicking on one of the bars
         #
         # self.canvas.mpl_connect('pick_event', self.on_pick)
