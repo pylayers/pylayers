@@ -2537,11 +2537,10 @@ class Layout(PyLayers):
 
             previous = sh.MultiPolygon(nx.get_node_attributes(self.Gt,'polyg').values())
             # p = previous.symmetric_difference(polsnew)
-            p=[]
+            pnew=[]
             for pp in polsnew:
-
                 if not pp.centroid.xy in [z.centroid.xy for z in previous]: 
-                    p.append(pp)
+                    pnew.append(pp)
 
 
 
@@ -2571,27 +2570,26 @@ class Layout(PyLayers):
                     npolys = list(sho.polygonize(lines))
                     assert len(npolys) == 2
                     # the first created polygon has the id of the prvious one , the second take a free id 
-                    pid = [ucy, max(self.Gt.node)+1]
+                    # pid = [ucy, max(self.Gt.node)+1]
 
-                    
-
+                    self.Gt.remove_node(ucy)
+                    self.Gt.pos.pop(ucy)
+                    # Create 2 polygon from the single one
                     for up, p in enumerate(npolys):
-                        P = geu.Polygon(p)
-                        P.setvnodes(self)
-                        seg = P.vnodes[P.vnodes>0]
-                        [self.Gs.node[s]['ncycles'].append(pid[up]) for s in seg if pid[up] not in self.Gs.node[s]['ncycles']]
-                        self.Gt.add_node(pid[up],polyg=P,ceil=ceil,floor=floor)
-                        self.Gt.pos[pid[up]]=np.array(self.Gt.node[pid[up]]['polyg'].centroid.xy)[:,0]
+                        self._createGtpol(p)
+                        # P = geu.Polygon(p)
+                        # P.setvnodes(self)
+                        # seg = P.vnodes[P.vnodes>0]
+                        # [self.Gs.node[s]['ncycles'].append(pid[up]) for s in seg if pid[up] not in self.Gs.node[s]['ncycles']]
+                        # self.Gt.add_node(pid[up],polyg=P,ceil=ceil,floor=floor)
+                        # self.Gt.pos[pid[up]]=np.array(self.Gt.node[pid[up]]['polyg'].centroid.xy)[:,0]
 
                     
             
                 # CREATE Pol
                 else :
-                    print "create"
-                    
-                    for pp in p:
-                    
-                        self._createGtpol(pp,ceil=ceil,floor=floor)
+                    for p in pnew:
+                        self._createGtpol(p,ceil=ceil,floor=floor)
                     
                     # self._create_Gtpol(NP) # to be written
                         # for p in NP:
@@ -2626,9 +2624,9 @@ class Layout(PyLayers):
             return(num)
         else:
             if crosses:
-                print "seg cross existing segment"
+                print "the segment crosses existing segment(s)"
             elif exists:
-                print "seg already exists"
+                print "this segment already exists"
 
 
     def _createGtpol(self,p,ceil='CEIL',floor='FLOOR'):
